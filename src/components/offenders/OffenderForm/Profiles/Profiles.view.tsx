@@ -359,8 +359,8 @@ const Profiles = ({
                         key: 'totalTheftSuccess',
                         dataIndex: 'totalTheftSuccess',
                         title: intl.formatMessage({
-                          id: 'IaZkrc',
-                          defaultMessage: 'Success Rate',
+                          id: 'mQPFSj',
+                          defaultMessage: 'Loss Rate',
                         }),
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                         render: (value) => `${value?.toFixed(0) || 0}%`,

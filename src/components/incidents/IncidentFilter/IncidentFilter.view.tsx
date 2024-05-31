@@ -346,7 +346,9 @@ const IncidentFilter = ({
             loading={tagsLoading}
           >
             {crimeTypes.map((tag) => (
-              <Select.Option value={tag.value}>{tag.label}</Select.Option>
+              <Select.Option value={tag.value} key={tag.value}>
+                {tag.label}
+              </Select.Option>
             ))}
           </Select>
         </Col>
@@ -377,7 +379,9 @@ const IncidentFilter = ({
             loading={goodsLoading}
           >
             {goods.map((good) => (
-              <Select.Option value={good.value}>{good.label}</Select.Option>
+              <Select.Option key={good.value} value={good.value}>
+                {good.label}
+              </Select.Option>
             ))}
           </Select>
         </Col>

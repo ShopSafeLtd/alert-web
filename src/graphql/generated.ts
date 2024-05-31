@@ -6316,6 +6316,7 @@ export type Image = {
   scheme: Scheme;
   schemeDark: Array<Scheme>;
   schemeId: Scalars['String'];
+  totalFaces: Scalars['Int'];
   update?: Maybe<Update>;
   updateId?: Maybe<Scalars['String']>;
   updatedAt: Scalars['Date'];
@@ -6478,6 +6479,7 @@ export type ImageOrderByWithRelationInput = {
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeDark?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   schemeId?: InputMaybe<SortOrder>;
+  totalFaces?: InputMaybe<SortOrder>;
   update?: InputMaybe<UpdateOrderByWithRelationInput>;
   updateId?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
@@ -6520,6 +6522,7 @@ export enum ImageScalarFieldEnum {
   RekImage = 'rekImage',
   Rotation = 'rotation',
   SchemeId = 'schemeId',
+  TotalFaces = 'totalFaces',
   UpdateId = 'updateId',
   UpdatedAt = 'updatedAt',
   Uploaded = 'uploaded',
@@ -6534,6 +6537,7 @@ export type ImageUpdateDataWithoutIncidentInput = {
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableSetBooleanHelper>;
   rotation?: InputMaybe<SetIntHelper>;
+  totalFaces?: InputMaybe<SetIntHelper>;
 };
 
 export type ImageUpdateDataWithoutOffenderInput = {
@@ -6615,6 +6619,7 @@ export type ImageWhereInput = {
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeDark?: InputMaybe<SchemeListRelationFilter>;
   schemeId?: InputMaybe<StringFilter>;
+  totalFaces?: InputMaybe<IntFilter>;
   update?: InputMaybe<UpdateWhereInput>;
   updateId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -6662,6 +6667,7 @@ export type ImageWhereUniqueInput = {
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeDark?: InputMaybe<SchemeListRelationFilter>;
   schemeId?: InputMaybe<StringFilter>;
+  totalFaces?: InputMaybe<IntFilter>;
   update?: InputMaybe<UpdateWhereInput>;
   updateId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -9835,6 +9841,7 @@ export type Mutation = {
   updateOneWorkflow: Workflow;
   updatePassword: User;
   updateQuestionOnTag: TagQuestion;
+  /** Only use this to update the layout of template, provide all the layout data as it will delete all old data and recreate */
   updateReportTemplate: ReportTemplate;
   updateScheme: Scheme;
   updateSharingConfig: SharingConfig;
@@ -18515,6 +18522,7 @@ export type UploadIncidentImage = {
   position?: InputMaybe<ImagePosition>;
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
+  totalFaces?: InputMaybe<Scalars['Int']>;
   url?: InputMaybe<UrlImage>;
   vehicles?: InputMaybe<Array<ImageOffender>>;
 };

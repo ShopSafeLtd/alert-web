@@ -226,9 +226,12 @@ const useViewOffender = (offenderId: string): Return => {
     open: false,
     index: 0,
   });
+
+  // eslint-disable-next-line func-call-spacing
   const [associateFilters, setAssociatedFilters] = useState<
     (string | undefined)[]
   >([]);
+
   const [viewAssociate, setViewAssociate] = useState<ViewAssociate | null>(
     null
   );
@@ -1912,7 +1915,7 @@ const useViewOffender = (offenderId: string): Return => {
     lightBoxOpen,
     optionRowShow,
     setOptionRowShow,
-    publicOffenderDOB: defaultPublicOffenderDOB && role !== Role.User,
+    publicOffenderDOB: defaultPublicOffenderDOB || role !== Role.User,
     onDelete,
     associatesData,
     associatesLoading: data?.offender ? associatesLoading : true,

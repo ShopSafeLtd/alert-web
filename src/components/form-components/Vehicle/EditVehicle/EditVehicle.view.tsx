@@ -209,7 +209,7 @@ const EditVehicle = ({
                       value: crimeGroup.id,
                       label: intl.formatMessage(
                         {
-                          defaultMessage: `CG-{ref}`,
+                          defaultMessage: 'CG-{ref}',
                           id: 'h/qDZq',
                         },
                         {
@@ -251,7 +251,11 @@ const EditVehicle = ({
                       // onChange={onSelectCustomGallery}
                     >
                       {customGalleries.map((el) => (
-                        <Select.Option value={el.value} label={el.label}>
+                        <Select.Option
+                          key={el.value}
+                          value={el.value}
+                          label={el.label}
+                        >
                           {el.label}
                         </Select.Option>
                       ))}

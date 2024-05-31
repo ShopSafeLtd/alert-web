@@ -82,6 +82,7 @@ export interface ImageData {
   primary?: boolean | null | undefined;
   policeImage?: boolean | null | undefined;
   rotation?: number;
+  totalFaces?: number;
   boundingBox?: {
     height: string;
     left: string;
@@ -234,7 +235,10 @@ const ImageSelectAnalyse = ({
           uid: info.file.uid,
           file: info.file,
           optimised: uploadImage.url,
-          // faces: uploadImage.faces,
+          totalFaces:
+            uploadImage.faces && uploadImage.faces.length > 0
+              ? uploadImage.faces.length
+              : 0,
         },
       ]);
       setSelected([

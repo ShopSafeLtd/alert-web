@@ -15,18 +15,18 @@ const Checklists = (): JSX.Element => {
     createChecklistOpen,
     toggleCreateChecklistDrawer,
     selectedChecklist,
-    checklistSort,
+    // checklistSort,
     activeChecklistSort,
-    setChecklistSort,
+    // setChecklistSort,
     setActiveChecklistSort,
     deleteTemplate,
   } = useChecklists();
 
   return (
     <View
-      checklistSort={checklistSort}
+      // checklistSort={checklistSort}
       activeChecklistSort={activeChecklistSort}
-      setChecklistSort={setChecklistSort}
+      // setChecklistSort={setChecklistSort}
       setActiveChecklistSort={setActiveChecklistSort}
       selectedChecklist={selectedChecklist}
       createChecklistOpen={createChecklistOpen}

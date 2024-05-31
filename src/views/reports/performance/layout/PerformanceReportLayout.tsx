@@ -414,6 +414,73 @@ const PerformanceReportLayout = ({
           </Card>
         );
       }
+      case 'basicPoliceSummary': {
+        return (
+          <Card
+            style={{ width: '100%' }}
+            bodyStyle={{ width: '100%' }}
+            loading={loading}
+            key="basicPoliceSummary"
+          >
+            <Button
+              type="text"
+              shape="circle"
+              className="card-remove no-print"
+              hidden={!editMode}
+              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+              size="small"
+              onClick={() => removeItem('policeSummary')}
+            />
+            <Row>
+              <Col span={12}>
+                <Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Basic Police Engagement Summary',
+                    id: 'Qoktvg',
+                  })}
+                </Title>
+              </Col>
+              <Row className="stats-row">
+                <Statistic
+                  className={classes.stats}
+                  title={intl.formatMessage({
+                    defaultMessage: 'Reported to Police',
+                    id: 'LhTpVN',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary
+                      ?.totalReportedIncidents || 0
+                  }
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      icon={faUserPolice}
+                    />
+                  }
+                />
+
+                <Statistic
+                  className={classes.stats}
+                  title={intl.formatMessage({
+                    defaultMessage: 'Police Attended',
+                    id: 'ES0Nc8',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary
+                      ?.totalAttendedIncidents || 0
+                  }
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      icon={faUserPoliceTie}
+                    />
+                  }
+                />
+              </Row>
+            </Row>
+          </Card>
+        );
+      }
       case 'policeSummary': {
         return (
           <Card
@@ -499,6 +566,7 @@ const PerformanceReportLayout = ({
           </Card>
         );
       }
+
       case 'investigationSummary': {
         return (
           <Card
@@ -1910,7 +1978,7 @@ const PerformanceReportLayout = ({
               editMode={editMode}
               isPrinting={isPrinting}
               removeItem={() => removeItem(key)}
-              onNavigate={() => navigate(`/app/reports/user-engagement`)}
+              onNavigate={() => navigate('/app/reports/user-engagement')}
             />
           </Card>
         );
@@ -1951,7 +2019,7 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
-              onNavigate={() => navigate(`/app/reports/user-engagement`)}
+              onNavigate={() => navigate('/app/reports/user-engagement')}
             />
           </Card>
         );
@@ -1983,7 +2051,7 @@ const PerformanceReportLayout = ({
               metaData={generateDefaultMetaData(key, 'donut', metadata)}
               setMetaData={setMetadata}
               allMeta={metadata}
-              onNavigate={() => navigate(`/app/reports/business-engagement`)}
+              onNavigate={() => navigate('/app/reports/business-engagement')}
             />
           </Card>
         );
@@ -2012,7 +2080,7 @@ const PerformanceReportLayout = ({
               isPrinting={isPrinting}
               editMode={editMode}
               removeItem={() => removeItem(key)}
-              onNavigate={() => navigate(`/app/reports/business-engagement`)}
+              onNavigate={() => navigate('/app/reports/business-engagement')}
             />
           </Card>
         );
@@ -2041,7 +2109,7 @@ const PerformanceReportLayout = ({
               }}
               editMode={editMode}
               removeItem={() => removeItem(key)}
-              onNavigate={() => navigate(`/app/reports/business-engagement`)}
+              onNavigate={() => navigate('/app/reports/business-engagement')}
               isPrinting={isPrinting}
             />
           </Card>

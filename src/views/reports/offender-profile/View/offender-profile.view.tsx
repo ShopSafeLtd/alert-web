@@ -294,8 +294,8 @@ const OffenderProfile = ({
                           offenderProfileData?.offender?.totalTheftSuccess || 0
                         }%`}
                         title={intl.formatMessage({
-                          defaultMessage: 'Success Rate',
-                          id: 'IaZkrc',
+                          defaultMessage: 'Loss Rate',
+                          id: 'mQPFSj',
                         })}
                       />
                     </Card>
@@ -778,8 +778,8 @@ const OffenderProfile = ({
                         key: 'successRate',
                         dataIndex: 'successRate',
                         title: intl.formatMessage({
-                          defaultMessage: 'Success Rate',
-                          id: 'IaZkrc',
+                          defaultMessage: 'Loss Rate',
+                          id: 'mQPFSj',
                         }),
                         render: (value: number) => `${value.toFixed(0)}%`,
                       },

@@ -32,7 +32,7 @@ import { ChecklistStatus } from '../../../graphql/generated';
 import useStyles from './ListChcklists.styles';
 import type {
   ActiveChecklistSortOptions,
-  ChecklistSortOptions,
+  // ChecklistSortOptions,
   ChecklistSortOrder,
   FilterModelValues,
   SetChecklistFilterModel,
@@ -61,18 +61,18 @@ interface ChecklistsViewProps {
     args: { checklistId: string; title: string } | null
   ) => void;
   selectedChecklist: { id: string; title: string } | null;
-  setChecklistSort: (args: {
-    field: ChecklistSortOptions;
-    order: ChecklistSortOrder;
-  }) => void;
+  // setChecklistSort: (args: {
+  //   field: ChecklistSortOptions;
+  //   order: ChecklistSortOrder;
+  // }) => void;
   setActiveChecklistSort: (args: {
     field: ActiveChecklistSortOptions;
     order: ChecklistSortOrder;
   }) => void;
-  checklistSort: {
-    field: ChecklistSortOptions;
-    order: ChecklistSortOrder;
-  };
+  // checklistSort: {
+  //   field: ChecklistSortOptions;
+  //   order: ChecklistSortOrder;
+  // };
   activeChecklistSort: {
     field: ActiveChecklistSortOptions;
     order: ChecklistSortOrder;
@@ -92,9 +92,9 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
   createChecklistOpen,
   toggleCreateChecklistDrawer,
   selectedChecklist,
-  checklistSort,
+  // checklistSort,
   activeChecklistSort,
-  setChecklistSort,
+  // setChecklistSort,
   setActiveChecklistSort,
   deleteTemplate,
 }) => {
@@ -144,6 +144,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                       value={checklistFilter.ownUser}
                       optionType="button"
                       buttonStyle="solid"
+                      key={0}
                     />,
                   ]}
                 />
@@ -306,6 +307,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         ],
                         filterMultiple: true,
                         filteredValue: checklistFilter.activeStatus,
+                        // eslint-disable-next-line no-confusing-arrow
                         render: (value: ChecklistStatus) =>
                           value === ChecklistStatus.InProgress ? (
                             <Typography.Text type="warning">
@@ -349,7 +351,8 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         width: 100,
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
-                        onCellClick: (e) => e.stopPropagation(),
+                        // ???
+                        // onCellClick: (e) => e.stopPropagation(),
                         render: (
                           _,
                           record: {
@@ -427,10 +430,12 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                       value={checklistFilter.ownUser}
                       optionType="button"
                       buttonStyle="solid"
+                      key={0}
                     />,
                     <Button
                       type="primary"
-                      onClick={() => navigate(`/app/checklists/add`)}
+                      key={1}
+                      onClick={() => navigate('/app/checklists/add')}
                     >
                       <FormattedMessage
                         defaultMessage="Create New Template"

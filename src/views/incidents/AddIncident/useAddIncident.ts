@@ -225,8 +225,10 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const [isTheft] = useState(false);
   const [descriptionPristine, setDescriptionPristine] = useState(true);
   const [saving, setSaving] = useState(false);
+  // eslint-disable-next-line array-bracket-newline
   const [incidentForm, setIncidentForm] = useState<IncidentFormField[]>([
     IncidentFormField.Types,
+    // eslint-disable-next-line array-bracket-newline
   ]);
   const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
   const showSiteNumber = requireSiteNumberForUsers && role === Role.User;
@@ -699,6 +701,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     primary: item.uid === primaryImage,
                     policeImage: item.policeImage,
                     rotation: item.rotation || 0,
+                    totalFaces: item.totalFaces || 0,
                   };
                 })
                 .filter((object) => object.url !== undefined)

@@ -19,7 +19,9 @@ const IncidentGoods = ({
   goodsMode,
   form,
 }: Props) => {
-  const { goodsTypesData, onAddItem, division } = useIncidentGoods({ form });
+  const { goodsTypesData, onAddItem, division, goods } = useIncidentGoods({
+    form,
+  });
   return (
     <View
       goodsTypesData={goodsTypesData}
@@ -29,6 +31,7 @@ const IncidentGoods = ({
       goodsMode={goodsMode}
       onAddItem={onAddItem}
       division={division}
+      goods={goods}
     />
   );
 };

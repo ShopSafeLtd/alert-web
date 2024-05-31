@@ -8,11 +8,14 @@ import update from 'immutability-helper';
 import { useIntl } from 'react-intl';
 import { ImagePosition } from 'graphql/generated';
 import { compressImage } from '../../../utils/compress-images';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { StateImageData } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
 
 interface Props {
   onClose: () => void;
   update: (value: ImageCardData[]) => void;
   images: ImageCardData[] | undefined | null;
+  facialDet?: boolean;
 }
 
 export interface FormData {
@@ -47,6 +50,7 @@ interface Return {
 const useEditImagesList = ({
   update: updateImageList,
   images,
+  facialDet,
 }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
@@ -107,6 +111,7 @@ const useEditImagesList = ({
           primary: item.uid === primaryImage,
           policeImage: item.policeImage || false,
           rotation: item.rotation,
+
           edited:
             (item.edited && !item.new && !item.deleted) ||
             (findPrimaryId === item.uid && findPrimaryId !== primaryImage),
@@ -133,8 +138,12 @@ const useEditImagesList = ({
     }
     return compressImage(file);
   };
-  const imgChange: UploadProps['onChange'] = (info) => {
+  const imgChange: UploadProps['onChange'] = (
+    info: UploadChangeParam<StateImageData>
+  ) => {
     if (info.file.response && info.file.status === 'done') {
+      const uploadImage = info.file.response[0];
+
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
@@ -144,6 +153,10 @@ const useEditImagesList = ({
           type: info.file.response[0].mimetype,
           position: ImagePosition.CenterCenter,
           rotation: 0,
+          totalFaces:
+            facialDet && uploadImage.faces && uploadImage.faces.length > 0
+              ? uploadImage.faces.length
+              : 0,
           edited: false,
           new: true,
         },

@@ -109,8 +109,8 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
             key: 'totalTheftSuccess',
             dataIndex: 'totalTheftSuccess',
             title: intl.formatMessage({
-              defaultMessage: 'Success Rate',
-              id: 'IaZkrc',
+              defaultMessage: 'Loss Rate',
+              id: 'mQPFSj',
             }),
             render: (value: number | undefined) => `${value?.toFixed(0) || 0}%`,
           },

@@ -246,7 +246,11 @@ const AddVehicle = ({
                         // onChange={onSelectCustomGallery}
                       >
                         {customGalleries.map((el) => (
-                          <Select.Option value={el.value} label={el.label}>
+                          <Select.Option
+                            value={el.value}
+                            label={el.label}
+                            key={el.value}
+                          >
                             {el.label}
                           </Select.Option>
                         ))}
@@ -522,8 +526,8 @@ const AddVehicle = ({
                               key: 'totalTheftSuccess',
                               dataIndex: 'totalTheftSuccess',
                               title: intl.formatMessage({
-                                id: 'IaZkrc',
-                                defaultMessage: 'Success Rate',
+                                id: 'mQPFSj',
+                                defaultMessage: 'Loss Rate',
                               }),
                               // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-template-expressions
                               render: (value) => `${value?.toFixed(0) || 0}%`,

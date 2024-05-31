@@ -14,6 +14,16 @@ interface Return {
   goodsTypesData: ListGoodsTypesQuery | undefined;
   onAddItem: (data: StockItemValue) => void;
   division: string | undefined;
+  goods: {
+    goodsType?: string;
+    value?: number;
+    recoveredValue?: number;
+    quantity?: number;
+    recoveredQuantity?: number;
+    sku?: string;
+    name?: string;
+    stockItem?: string;
+  }[];
 }
 
 const useIncidentGoods = ({
@@ -47,6 +57,7 @@ const useIncidentGoods = ({
   });
   const [division, setDivision] = useState<string | undefined>(undefined);
   const business = Form.useWatch('business', form);
+
   useEffect(() => {
     if (businessesData && business) {
       const fullBusiness = businessesData.listBusinesses.businesses.find(
@@ -76,6 +87,7 @@ const useIncidentGoods = ({
     goodsTypesData,
     onAddItem,
     division,
+    goods,
   };
 };
 

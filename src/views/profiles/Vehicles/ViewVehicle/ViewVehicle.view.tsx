@@ -876,6 +876,7 @@ const ViewVehicle = ({
               defaultMessage: 'vehicle',
               id: 'qcNaCj',
             })}
+            saving={saving}
           />
         ) : (
           <div />

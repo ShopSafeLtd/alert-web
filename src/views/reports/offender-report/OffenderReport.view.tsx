@@ -306,7 +306,7 @@ const PerformanceReport = ({
               value={selectedTemplate}
             >
               {templates.map((template) => (
-                <Select.Option value={template.id}>
+                <Select.Option key={template.id} value={template.id}>
                   {template.name}
                   {template.default
                     ? intl.formatMessage({

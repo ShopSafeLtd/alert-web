@@ -82,7 +82,7 @@ interface Return {
 
 const useIncidentFeed = (): Return => {
   const navigate = useNavigate();
-  const onNavigate = () => navigate(`/app/incidents/add`);
+  const onNavigate = () => navigate('/app/incidents/add');
 
   // Global State
   const { id: schemeId } = useStoreState((state) => state.scheme);
@@ -265,6 +265,16 @@ const useIncidentFeed = (): Return => {
                 },
                 {
                   offenders: {
+                    some: {
+                      name: {
+                        contains: search,
+                        mode: QueryMode.Insensitive,
+                      },
+                    },
+                  },
+                },
+                {
+                  crimeTypes: {
                     some: {
                       name: {
                         contains: search,

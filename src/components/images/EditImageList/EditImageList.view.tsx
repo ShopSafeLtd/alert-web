@@ -19,6 +19,7 @@ interface Props {
   onRemoveImage: (imageId: string) => void;
   toggleEditImage: (value?: Image) => void;
   title: string;
+  facialDet: boolean;
 }
 
 const EditImageList = ({
@@ -35,6 +36,7 @@ const EditImageList = ({
   setPrimaryImage,
   onClose,
   title,
+  facialDet,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -51,6 +53,7 @@ const EditImageList = ({
         primaryImage={primaryImage}
         setPrimaryImage={setPrimaryImage}
         title={title}
+        facialRec={facialDet}
       />
 
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">
