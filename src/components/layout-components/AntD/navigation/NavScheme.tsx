@@ -128,6 +128,8 @@ export const NavScheme = () => {
           maxHeight: 400,
           overflowY: 'auto',
           colorScheme: currentTheme,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
         },
         items:
           filteredSchemes.length > 0
@@ -229,6 +231,13 @@ export const NavScheme = () => {
                 })}
                 style={{
                   width: '100%',
+                  borderWidth: 0,
+                  borderTopRightRadius: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopWidth: 1,
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  paddingLeft: 30,
                 }}
               />
             )}
