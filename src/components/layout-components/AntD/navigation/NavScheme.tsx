@@ -221,8 +221,9 @@ export const NavScheme = () => {
             {menu}
 
             {schemes.length > 5 && (
-              <Input
+              <Input.Search
                 allowClear
+                enterButton
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={intl.formatMessage({
