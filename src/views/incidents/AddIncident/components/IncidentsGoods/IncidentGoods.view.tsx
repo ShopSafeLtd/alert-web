@@ -4,20 +4,20 @@ import {
   Button,
   Card,
   Col,
+  Empty,
   Form,
   InputNumber,
   Row,
   Select,
   Typography,
-  Empty,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import type { ListGoodsTypesQuery } from 'graphql/generated';
-import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/generated';
+import Input from 'antd/es/input/Input';
 import useStyles from '../../AddIncident.styles';
 import type { StockItemValue } from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
 import StockItemSearch from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
@@ -56,7 +56,6 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -92,7 +91,8 @@ const IncidentGoods = ({
           name="goods"
           rules={[
             {
-              validator: (rule, value) => {
+              // eslint-disable-next-line @typescript-eslint/require-await
+              validator: async (rule, value) => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 if (value && value.length === 0)
                   throw new Error(
@@ -283,7 +283,7 @@ const IncidentGoods = ({
                             prefix="£"
                             precision={2}
                             min={0}
-                            max={goods[index].value}
+                            max={goods[index]?.value ?? undefined}
                           />
                         </Form.Item>
                       </Col>
