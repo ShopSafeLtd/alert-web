@@ -56,7 +56,6 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -92,7 +91,8 @@ const IncidentGoods = ({
           name="goods"
           rules={[
             {
-              validator: (rule, value) => {
+              // eslint-disable-next-line @typescript-eslint/require-await
+              validator: async (rule, value) => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 if (value && value.length === 0)
                   throw new Error(
