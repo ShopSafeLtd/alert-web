@@ -269,8 +269,8 @@ const CrimeGroupReport = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
-                defaultMessage: 'Average Success Rate',
-                id: 'G+JbdY',
+                defaultMessage: 'Average Loss Rate',
+                id: 'VSxLGp',
               })}
               value={`${(
                 (data?.crimeGroupReport?.lossTotals?.averageSuccessRate || 0) *

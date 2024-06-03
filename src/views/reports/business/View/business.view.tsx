@@ -17,6 +17,7 @@ import moment from 'moment';
 import BusinessSideList from 'components/businesses/BusinessSideList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';
+// eslint-disable-next-line import/default
 import Chart from 'react-apexcharts';
 import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './business.styles';
@@ -115,8 +116,8 @@ const Business = ({
                       }
                       suffix="%"
                       title={intl.formatMessage({
-                        defaultMessage: 'Success Rate',
-                        id: 'IaZkrc',
+                        defaultMessage: 'Loss Rate',
+                        id: 'mQPFSj',
                       })}
                     />
                   </Card>
@@ -217,8 +218,8 @@ const Business = ({
                       key: 'successRate',
                       dataIndex: 'successRate',
                       title: intl.formatMessage({
-                        defaultMessage: 'Success Rate',
-                        id: 'IaZkrc',
+                        defaultMessage: 'Loss Rate',
+                        id: 'mQPFSj',
                       }),
                       render: (value: number) => `${value.toFixed(0)}%`,
                     },

@@ -81,6 +81,7 @@ export interface ImageValue {
   primary?: boolean | null | undefined;
   policeImage?: boolean | null | undefined;
   rotation?: number;
+  totalFaces?: number;
   boundingBox?: {
     height: string;
     left: string;

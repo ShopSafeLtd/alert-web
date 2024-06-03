@@ -3,7 +3,6 @@ import type {
   CreateDocumentMutation,
   CreateTodoMutation,
   DeleteDocumentMutation,
-  Role,
   ViewIncidentQuery,
   QuestionGroupOnSchemeQuery,
   UpdateTaskMutation,
@@ -11,7 +10,7 @@ import type {
   UpdateSimpleOffenderMutation,
   CreateSimpleOffenderMutation,
 } from 'graphql/generated';
-import { GoodsMode, IncidentPriority } from 'graphql/generated';
+import { Role, GoodsMode, IncidentPriority } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -239,6 +238,7 @@ interface Props {
   hasConnectedSchemes: boolean;
   shareOpen: boolean;
   toggleShareOpen: () => void;
+  facialDetection: boolean;
 }
 
 const ViewIncident = ({
@@ -352,12 +352,13 @@ const ViewIncident = ({
   hasConnectedSchemes,
   toggleShareOpen,
   shareOpen,
+  facialDetection,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   const navigate = useNavigate();
 
-  if (userRole === 'USER' && data?.incident?.approved === false) {
+  if (userRole === Role.User && data?.incident?.approved === false) {
     navigate('/app/incidents');
     return <div />;
   }
@@ -375,36 +376,37 @@ const ViewIncident = ({
           <div className={classes.viewIncident}>
             <Row className={classes.content}>
               <Col span={16} className={classes.detailsContainer}>
-                {data?.incident?.approved === false && userRole !== 'USER' && (
-                  <div className={classes.approveBar}>
-                    <Row gutter={8} justify="end">
-                      <Col>
-                        <Button
-                          type="ghost"
-                          onClick={onReject}
-                          disabled={approving}
-                        >
-                          <FormattedMessage
-                            defaultMessage="Reject Incident"
-                            id="O9bahm"
-                          />
-                        </Button>
-                      </Col>
-                      <Col>
-                        <Button
-                          type="primary"
-                          onClick={onApprove}
-                          disabled={approving}
-                        >
-                          <FormattedMessage
-                            defaultMessage="Approve Incident"
-                            id="Y6VB57"
-                          />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </div>
-                )}
+                {data?.incident?.approved === false &&
+                  userRole !== Role.User && (
+                    <div className={classes.approveBar}>
+                      <Row gutter={8} justify="end">
+                        <Col>
+                          <Button
+                            type="ghost"
+                            onClick={onReject}
+                            disabled={approving}
+                          >
+                            <FormattedMessage
+                              defaultMessage="Reject Incident"
+                              id="O9bahm"
+                            />
+                          </Button>
+                        </Col>
+                        <Col>
+                          <Button
+                            type="primary"
+                            onClick={onApprove}
+                            disabled={approving}
+                          >
+                            <FormattedMessage
+                              defaultMessage="Approve Incident"
+                              id="Y6VB57"
+                            />
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
                 <div className={classes.detailsContent}>
                   <Row gutter={8} className={classes.headerBar} justify="end">
                     <Col>
@@ -611,7 +613,7 @@ const ViewIncident = ({
 
                           <Descriptions column={1} className={classes.desc}>
                             {data?.incident.priority ===
-                            'NORMAL' ? undefined : (
+                            IncidentPriority.Normal ? undefined : (
                               <Descriptions.Item
                                 className={classes.detail}
                                 label={
@@ -1175,6 +1177,7 @@ const ViewIncident = ({
                               {data.incident.answers.map((answer) => (
                                 <Descriptions.Item
                                   label={answer.tagQuestion?.question.question}
+                                  key={answer.tagQuestion?.question.id}
                                 >
                                   {formatAnswer(answer.answer, answer.type)}
                                 </Descriptions.Item>
@@ -1825,6 +1828,8 @@ const ViewIncident = ({
               defaultMessage: 'incidnet',
               id: 'PjFIWc',
             })}
+            saving={saving}
+            facialDet={facialDetection}
           />
         ) : (
           <div />

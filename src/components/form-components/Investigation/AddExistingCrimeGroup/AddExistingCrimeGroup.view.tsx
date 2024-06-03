@@ -99,8 +99,8 @@ const AddExistingCrimeGroup = ({
             key: 'totalTheftSuccess',
             dataIndex: 'totalTheftSuccess',
             title: intl.formatMessage({
-              defaultMessage: 'Success Rate',
-              id: 'IaZkrc',
+              defaultMessage: 'Loss Rate',
+              id: 'mQPFSj',
             }),
             render: (value) => `${value?.toFixed(0) || 0}%`,
           },

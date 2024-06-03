@@ -69,6 +69,7 @@ export interface StateImageData extends UploadFile<ImageResponseType[]> {
   primary?: boolean;
   policeImage?: boolean;
   rotation?: number;
+  totalFaces?: number;
   isFace?: boolean;
 }
 
@@ -131,6 +132,7 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
         file.position = ImagePosition.CenterCenter;
         // Component will show file.url as link
         file.url = file.response[0].url;
+        file.totalFaces = file.response[0].faces?.length || 0;
       }
       return file;
     });

@@ -63,6 +63,7 @@ interface Props {
   onEditOffender?: (value: AddOffenderData) => void;
   onImagesUploaded?: (value: StateImageData[]) => void;
   incidentBusinessId?: string;
+  facialDet?: boolean;
 }
 
 export interface FormData {
@@ -154,20 +155,13 @@ const useEditOffender = ({
       id: item.id || '',
       url: item.url,
       optimised: item.optimised,
-      // fileName: ,
-      // type: item.file?.response && item.file.response[0].mimetype,
-      // fileName: item.file
-      //   ? item.file?.response && item.file.response[0].blobName
-      //   : item.fileName,
-      // type: item.file
-      //   ? item.file?.response && item.file.response[0].mimetype
-      //   : item.type,
       fileName: item.fileName,
       type: item.type,
       position: item.position,
       primary: item.primary || false,
       policeImage: item.policeImage || false,
       rotation: item.rotation,
+      totalFaces: item.totalFaces,
       new: !!item.file || item.new,
       isFace: item.isFace || false,
     }));
@@ -286,6 +280,7 @@ const useEditOffender = ({
                         primary: item.primary,
                         policeImage: item.policeImage,
                         rotation: item.rotation || 0,
+                        totalFaces: item.totalFaces || 0,
                         isFace: item.isFace,
                       }))
                       .filter((obj) => obj.url !== undefined),
