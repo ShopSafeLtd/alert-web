@@ -2,13 +2,16 @@
 import { useEffect, useState } from 'react';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateTodoMutation, QuestionGroupOnSchemeQuery } from 'graphql/generated';
+import type {
+  CreateTodoMutation,
+  QuestionGroupOnSchemeQuery,
+} from 'graphql/generated';
 import {
-  AnswerType,
   Role,
+  AnswerType,
   SortOrder,
-  useAddTodoUsersQuery,
   useCreateTodoMutation,
+  useAddTodoUsersQuery,
   useQuestionGroupOnSchemeQuery,
 } from 'graphql/generated';
 import errorNotification from 'types/mutation_notifications/error_notification';
