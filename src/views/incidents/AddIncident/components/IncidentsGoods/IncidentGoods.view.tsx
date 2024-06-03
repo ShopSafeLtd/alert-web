@@ -4,20 +4,20 @@ import {
   Button,
   Card,
   Col,
+  Empty,
   Form,
   InputNumber,
   Row,
   Select,
   Typography,
-  Empty,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import type { ListGoodsTypesQuery } from 'graphql/generated';
-import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/generated';
+import Input from 'antd/es/input/Input';
 import useStyles from '../../AddIncident.styles';
 import type { StockItemValue } from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
 import StockItemSearch from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
@@ -283,7 +283,7 @@ const IncidentGoods = ({
                             prefix="£"
                             precision={2}
                             min={0}
-                            max={goods[index].value}
+                            max={goods[index]?.value ?? undefined}
                           />
                         </Form.Item>
                       </Col>
