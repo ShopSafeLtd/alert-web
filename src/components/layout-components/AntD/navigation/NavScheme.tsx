@@ -128,6 +128,8 @@ export const NavScheme = () => {
           maxHeight: 400,
           overflowY: 'auto',
           colorScheme: currentTheme,
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
         },
         items:
           filteredSchemes.length > 0
@@ -219,8 +221,9 @@ export const NavScheme = () => {
             {menu}
 
             {schemes.length > 5 && (
-              <Input
+              <Input.Search
                 allowClear
+                enterButton
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={intl.formatMessage({
@@ -229,6 +232,13 @@ export const NavScheme = () => {
                 })}
                 style={{
                   width: '100%',
+                  borderWidth: 0,
+                  borderTopRightRadius: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopWidth: 1,
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  paddingLeft: 30,
                 }}
               />
             )}
