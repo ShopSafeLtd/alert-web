@@ -42,6 +42,7 @@ export enum BadgeTypes {
   notification = 'NOTIFICATION',
   message = 'MESSAGE',
 }
+
 export interface MenuItem {
   key: string;
   path: string;
@@ -70,7 +71,7 @@ export interface NavItem extends MenuItem {
 
 export type NavTree = NavItem[];
 
-const userOnlyItems: NavItem[] = [
+const navigationConfig: NavItem[] = [
   {
     key: 'dashboard',
     path: `${APP_PREFIX_PATH}/dashboard`,
@@ -78,13 +79,6 @@ const userOnlyItems: NavItem[] = [
     icon: faHome,
     breadcrumb: false,
     submenu: [],
-    roles: [
-      Role.User,
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     permission: [
       {
         model: PermissionModel.Dashboard,
@@ -102,7 +96,6 @@ const userOnlyItems: NavItem[] = [
     icon: faCalendarCheck,
     breadcrumb: false,
     submenu: [],
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
     badge: BadgeTypes.todo,
     permission: [
       {
@@ -125,13 +118,6 @@ const userOnlyItems: NavItem[] = [
       id: 'incidents',
       defaultMessage: 'Incidents',
     }),
-    roles: [
-      Role.User,
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     permission: [
       {
         model: PermissionModel.Incidents,
@@ -144,13 +130,6 @@ const userOnlyItems: NavItem[] = [
     title: 'Profiles',
     icon: faAddressCard,
     breadcrumb: true,
-    roles: [
-      Role.User,
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     intl: defineMessage({
       id: 'profiles',
       defaultMessage: 'Profiles',
@@ -172,13 +151,6 @@ const userOnlyItems: NavItem[] = [
           id: 'offenders',
           defaultMessage: 'Offenders',
         }),
-        roles: [
-          Role.User,
-          Role.ContentAdmin,
-          Role.SchemeAdmin,
-          Role.GroupAdmin,
-          Role.ShopsafeAdmin,
-        ],
         permission: [
           {
             model: PermissionModel.Offenders,
@@ -196,13 +168,6 @@ const userOnlyItems: NavItem[] = [
           id: 'crime-groups',
           defaultMessage: 'Crime Groups',
         }),
-        roles: [
-          Role.User,
-          Role.ContentAdmin,
-          Role.SchemeAdmin,
-          Role.ShopsafeAdmin,
-          Role.GroupAdmin,
-        ],
         permission: [
           {
             model: PermissionModel.CrimeGroups,
@@ -220,13 +185,6 @@ const userOnlyItems: NavItem[] = [
         }),
         breadcrumb: true,
         submenu: [],
-        roles: [
-          Role.User,
-          Role.ContentAdmin,
-          Role.SchemeAdmin,
-          Role.ShopsafeAdmin,
-          Role.GroupAdmin,
-        ],
         permission: [
           {
             model: PermissionModel.Vehicles,
@@ -247,13 +205,6 @@ const userOnlyItems: NavItem[] = [
       id: 'chat',
       defaultMessage: 'Chat',
     }),
-    roles: [
-      Role.User,
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     permission: [
       {
         model: PermissionModel.Chat,
@@ -271,13 +222,6 @@ const userOnlyItems: NavItem[] = [
       defaultMessage: 'Bulletins',
     }),
     submenu: [],
-    roles: [
-      Role.User,
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     permission: [
       {
         model: PermissionModel.Articles,
@@ -295,7 +239,6 @@ const userOnlyItems: NavItem[] = [
     }),
     breadcrumb: true,
     submenu: [],
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
     permission: [
       {
         model: PermissionModel.Investigations,
@@ -318,18 +261,10 @@ const userOnlyItems: NavItem[] = [
     icon: faPlayCircle,
     breadcrumb: false,
     submenu: [],
-
     intl: defineMessage({
       id: 'evidence',
       defaultMessage: 'Evidence',
     }),
-    roles: [
-      Role.User,
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     permission: [
       {
         model: PermissionModel.Evidence,
@@ -343,17 +278,10 @@ const userOnlyItems: NavItem[] = [
     icon: faClipboardListCheck,
     breadcrumb: false,
     submenu: [],
-
     intl: defineMessage({
       id: 'checklists',
       defaultMessage: 'Checklists',
     }),
-    roles: [
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     permission: [
       {
         model: PermissionModel.Checklist,
@@ -371,13 +299,6 @@ const userOnlyItems: NavItem[] = [
       defaultMessage: 'Resources',
     }),
     breadcrumb: true,
-    roles: [
-      Role.User,
-      Role.ContentAdmin,
-      Role.SchemeAdmin,
-      Role.ShopsafeAdmin,
-      Role.GroupAdmin,
-    ],
     submenu: [
       {
         key: 'training',
@@ -390,13 +311,6 @@ const userOnlyItems: NavItem[] = [
         icon: faChalkboard,
         breadcrumb: true,
         submenu: [],
-        roles: [
-          Role.User,
-          Role.ContentAdmin,
-          Role.SchemeAdmin,
-          Role.ShopsafeAdmin,
-          Role.GroupAdmin,
-        ],
       },
       {
         key: 'documents',
@@ -409,13 +323,6 @@ const userOnlyItems: NavItem[] = [
         icon: faFile,
         breadcrumb: true,
         submenu: [],
-        roles: [
-          Role.User,
-          Role.ContentAdmin,
-          Role.SchemeAdmin,
-          Role.ShopsafeAdmin,
-          Role.GroupAdmin,
-        ],
         permission: [
           {
             model: PermissionModel.Documents,
@@ -424,9 +331,6 @@ const userOnlyItems: NavItem[] = [
       },
     ],
   },
-];
-
-const adminOnlyItems: NavItem[] = [
   {
     key: 'reports',
     path: `${APP_PREFIX_PATH}/reports`,
@@ -437,7 +341,6 @@ const adminOnlyItems: NavItem[] = [
       id: 'reports',
       defaultMessage: 'Reports',
     }),
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
     permission: [
       {
         model: PermissionModel.Reports,
@@ -552,7 +455,6 @@ const adminOnlyItems: NavItem[] = [
       id: 'settings',
       defaultMessage: 'Settings',
     }),
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
     permission: [
       {
         model: PermissionModel.Settings,
@@ -561,7 +463,5 @@ const adminOnlyItems: NavItem[] = [
     submenu: [],
   },
 ];
-
-const navigationConfig = [...userOnlyItems, ...adminOnlyItems];
 
 export default navigationConfig;

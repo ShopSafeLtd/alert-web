@@ -20803,6 +20803,15 @@ export type ShareDataMutationVariables = Exact<{
 
 export type ShareDataMutation = { __typename?: 'Mutation', shareData: { __typename?: 'SystemTask', success: boolean } };
 
+export type AddTodoUsersQueryVariables = Exact<{
+  where?: InputMaybe<UserWhereInput>;
+  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
+  after?: InputMaybe<UserWhereUniqueInput>;
+}>;
+
+
+export type AddTodoUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string }> };
+
 export type UpdateTaskMutationVariables = Exact<{
   data: TodoUpdateInput;
   where: UniqueId;
@@ -24281,6 +24290,25 @@ export function useShareDataMutation(baseOptions?: Apollo.MutationHookOptions<Sh
 export type ShareDataMutationHookResult = ReturnType<typeof useShareDataMutation>;
 export type ShareDataMutationResult = Apollo.MutationResult<ShareDataMutation>;
 export type ShareDataMutationOptions = Apollo.BaseMutationOptions<ShareDataMutation, ShareDataMutationVariables>;
+export const AddTodoUsersDocument = gql`
+    query AddTodoUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput) {
+  users(where: $where, orderBy: $orderBy, after: $after) {
+    id
+    fullName
+  }
+}
+    `;
+export function useAddTodoUsersQuery(baseOptions?: Apollo.QueryHookOptions<AddTodoUsersQuery, AddTodoUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AddTodoUsersQuery, AddTodoUsersQueryVariables>(AddTodoUsersDocument, options);
+      }
+export function useAddTodoUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddTodoUsersQuery, AddTodoUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AddTodoUsersQuery, AddTodoUsersQueryVariables>(AddTodoUsersDocument, options);
+        }
+export type AddTodoUsersQueryHookResult = ReturnType<typeof useAddTodoUsersQuery>;
+export type AddTodoUsersLazyQueryHookResult = ReturnType<typeof useAddTodoUsersLazyQuery>;
+export type AddTodoUsersQueryResult = Apollo.QueryResult<AddTodoUsersQuery, AddTodoUsersQueryVariables>;
 export const UpdateTaskDocument = gql`
     mutation UpdateTask($data: TodoUpdateInput!, $where: UniqueId!) {
   updateTodo(data: $data, where: $where) {

@@ -7,11 +7,11 @@ import type {
   QuestionGroupOnSchemeQuery,
 } from 'graphql/generated';
 import {
-  AnswerType,
   Role,
+  AnswerType,
   SortOrder,
   useCreateTodoMutation,
-  useListSchemeUsersQuery,
+  useAddTodoUsersQuery,
   useQuestionGroupOnSchemeQuery,
 } from 'graphql/generated';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -32,6 +32,7 @@ export interface FormData {
   dueDate: Moment;
   assignedUsers: string[];
   questionGroup?: string;
+
   [answer: string]: string | string[] | undefined | Moment | number;
 }
 
@@ -174,7 +175,7 @@ const useAddTodo = ({
     }
   }, [questionGroup, templatesData]);
 
-  const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
+  const { data: usersData, loading: usersLoading } = useAddTodoUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -192,29 +193,30 @@ const useAddTodo = ({
                 role: activityAssignToUser
                   ? undefined
                   : {
-                      in: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+                      in: [
+                        Role.ContentAdmin,
+                        Role.SchemeAdmin,
+                        Role.ShopsafeAdmin,
+                      ],
                     },
               },
             ],
           },
         },
-      },
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        groups: {
+          some: {
+            users: {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            },
           },
         },
       },
       orderBy: {
         fullName: SortOrder.Asc,
-      },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
       },
     },
   });
