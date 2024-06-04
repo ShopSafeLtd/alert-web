@@ -15,6 +15,7 @@ import {
   useEditIncidentFeedQuery,
   useTagsQuery,
   useUpdateIncidentMutation,
+  useUpdateIncidentBusinessMutation,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -48,10 +49,12 @@ export interface FormData {
   tagsInvolved: string[];
   tagsImpact: string[];
 }
+
 interface Props {
   onClose: () => void;
   incidentId: string;
 }
+
 interface Return {
   onSubmit: (value: FormData) => void;
   data:
@@ -86,7 +89,6 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
     },
   });
   const { groups, groupsLoading } = useGroupsContext();
-
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -127,6 +129,7 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
           },
         },
       })
+      // eslint-disable-next-line no-confusing-arrow
       .then((response) =>
         response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
@@ -145,6 +148,7 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
               },
             ]
       );
+  const [updateIncidentBusiness] = useUpdateIncidentBusinessMutation();
   const [updateIncident] = useUpdateIncidentMutation({
     onCompleted: () => {
       setSaving(false);
@@ -169,7 +173,7 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (incidentId)
+    if (incidentId) {
       void updateIncident({
         variables: {
           where: {
@@ -195,6 +199,21 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                 ...data.tagsInvolved.map((id) => ({ id })),
               ],
             },
+            policeInvolved: { set: data.policeInvolved || false },
+            policeRef: { set: data.policeRef || '' },
+            policeNo: { set: data.policeNo || '' },
+            policeReported: { set: data.policeReported || false },
+          },
+        },
+      });
+    }
+    if (
+      incidentData?.incident.business &&
+      incidentData?.incident.business.id !== data.business?.value
+    ) {
+      void updateIncidentBusiness({
+        variables: {
+          data: {
             business: {
               connect: data.business?.value
                 ? {
@@ -212,13 +231,13 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                     }
                   : undefined,
             },
-            policeInvolved: { set: data.policeInvolved || false },
-            policeRef: { set: data.policeRef || '' },
-            policeNo: { set: data.policeNo || '' },
-            policeReported: { set: data.policeReported || false },
+          },
+          where: {
+            id: incidentId,
           },
         },
       });
+    }
   };
 
   return {

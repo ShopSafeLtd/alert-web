@@ -9831,6 +9831,7 @@ export type Mutation = {
   updateFlow: Flow;
   updateGroup: Group;
   updateIncident: Incident;
+  updateIncidentBusiness: Incident;
   updateIncidentBusinesses: SystemTask;
   updateInvestigation: Investigation;
   updateMessage: Message;
@@ -10632,6 +10633,12 @@ export type MutationUpdateGroupArgs = {
 
 export type MutationUpdateIncidentArgs = {
   data: IncidentUpdateInput;
+  where: UniqueId;
+};
+
+
+export type MutationUpdateIncidentBusinessArgs = {
+  data: UpdateIncidentBusinessInput;
   where: UniqueId;
 };
 
@@ -18256,6 +18263,10 @@ export enum UpdateIcon {
   Updated = 'UPDATED'
 }
 
+export type UpdateIncidentBusinessInput = {
+  business: NullableConnectDisconnectHelper;
+};
+
 export type UpdateInvestigationInput = {
   crimeGroupIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description?: InputMaybe<Scalars['String']>;
@@ -21627,6 +21638,14 @@ export type UpdateIncidentMutationVariables = Exact<{
 
 
 export type UpdateIncidentMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime: string, date: Date, time: Date, value?: number | null, recoveredValue?: number | null, policeReported: boolean, policeRef?: string | null, policeInvolved: boolean, subscribed: boolean, priority: IncidentPriority, customerRef?: string | null, approved?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: ImagePosition, rotation: number, url?: string | null, card?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', isFace?: boolean | null, id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+
+export type UpdateIncidentBusinessMutationVariables = Exact<{
+  data: UpdateIncidentBusinessInput;
+  where: UniqueId;
+}>;
+
+
+export type UpdateIncidentBusinessMutation = { __typename?: 'Mutation', updateIncidentBusiness: { __typename?: 'Incident', id: string, business?: { __typename?: 'Business', id: string, name: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 export type UpdateIncidentGoodsMutationVariables = Exact<{
   id: Scalars['String'];
@@ -27410,6 +27429,29 @@ export function useUpdateIncidentMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateIncidentMutationHookResult = ReturnType<typeof useUpdateIncidentMutation>;
 export type UpdateIncidentMutationResult = Apollo.MutationResult<UpdateIncidentMutation>;
 export type UpdateIncidentMutationOptions = Apollo.BaseMutationOptions<UpdateIncidentMutation, UpdateIncidentMutationVariables>;
+export const UpdateIncidentBusinessDocument = gql`
+    mutation UpdateIncidentBusiness($data: UpdateIncidentBusinessInput!, $where: UniqueId!) {
+  updateIncidentBusiness(data: $data, where: $where) {
+    id
+    business {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdateIncidentBusinessMutationFn = Apollo.MutationFunction<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>;
+export function useUpdateIncidentBusinessMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>(UpdateIncidentBusinessDocument, options);
+      }
+export type UpdateIncidentBusinessMutationHookResult = ReturnType<typeof useUpdateIncidentBusinessMutation>;
+export type UpdateIncidentBusinessMutationResult = Apollo.MutationResult<UpdateIncidentBusinessMutation>;
+export type UpdateIncidentBusinessMutationOptions = Apollo.BaseMutationOptions<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>;
 export const UpdateIncidentGoodsDocument = gql`
     mutation UpdateIncidentGoods($id: String!, $incidentItems: IncidentItemUpdateManyWithoutIncidentInput) {
   updateIncident(where: {id: $id}, data: {incidentItems: $incidentItems}) {
