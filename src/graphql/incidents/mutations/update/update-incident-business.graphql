@@ -1,0 +1,13 @@
+mutation UpdateIncidentBusiness($data: UpdateIncidentBusinessInput!, $where: UniqueId!) {
+    updateIncidentBusiness(data: $data, where: $where) {
+        id
+        business {
+            id
+            name
+        }
+        groups {
+            id
+            name
+        }
+    }
+}
