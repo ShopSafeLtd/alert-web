@@ -140,7 +140,11 @@ const useAdminTodos = ({ templateData }: Props): Return => {
       query: ListTodosDocument,
       data: {
         listTodos: {
-          todos: [...(<[]>existingData.listTodos.todos), res.createTodo],
+          // TODO: add groups to create response if you can add groups on creation
+          todos: [
+            ...(<[]>existingData.listTodos.todos),
+            { ...res.createTodo, groups: [] },
+          ],
           total: existingData.listTodos.total + 1,
           uncompletedTotal: res.createTodo.completed
             ? existingData.listTodos.uncompletedTotal

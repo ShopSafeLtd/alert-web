@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Select, Typography, Row, Col } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type {
   ReportsCentreQuery,
@@ -102,6 +102,7 @@ const CreateReport = ({ onClose }: Props) => {
                   name: d.createReportTemplate.name,
                   description: d.createReportTemplate.description,
                   id: d.createReportTemplate.id,
+                  type: ReportType.Performance,
                 },
               ]
             : [];
@@ -112,6 +113,7 @@ const CreateReport = ({ onClose }: Props) => {
                   name: d.createReportTemplate.name,
                   description: d.createReportTemplate.description,
                   id: d.createReportTemplate.id,
+                  type: ReportType.Offender,
                 },
               ]
             : [];
@@ -122,6 +124,7 @@ const CreateReport = ({ onClose }: Props) => {
                   name: d.createReportTemplate.name,
                   description: d.createReportTemplate.description,
                   id: d.createReportTemplate.id,
+                  type: ReportType.Business,
                 },
               ]
             : [];
@@ -132,6 +135,7 @@ const CreateReport = ({ onClose }: Props) => {
                   name: d.createReportTemplate.name,
                   description: d.createReportTemplate.description,
                   id: d.createReportTemplate.id,
+                  type: ReportType.CrimeGroup,
                 },
               ]
             : [];
