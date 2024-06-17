@@ -80,7 +80,6 @@ const PerformanceLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
   },
-
   {
     w: 1,
     h: 10,

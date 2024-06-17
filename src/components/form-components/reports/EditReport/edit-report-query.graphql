@@ -1,0 +1,11 @@
+query EditReportTemplate($where: ReportTemplateWhereUniqueInput!) {
+    reportTemplate(where: $where) {
+        id
+        name
+        description
+        groups {
+            id
+            name
+        }
+    }
+}

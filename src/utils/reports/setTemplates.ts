@@ -18,7 +18,6 @@ type IExtendedTemplate = Omit<ReportTemplatesFragment, 'layout'> & {
 
 const arrangeTemplates = (
   data: IExtendedTemplate[],
-  defaultTemplate: IReportTemplate,
   setTemplates: (templates: IReportTemplate[]) => void
 ) => {
   const importedTemplates: IReportTemplate[] = (
@@ -39,15 +38,7 @@ const arrangeTemplates = (
     })) as IReportTemplate[]) || []
   ).sort((a) => (a.default ? -1 : 1));
 
-  const hasDefaultTemplate = importedTemplates.some(
-    (template) => template.default
-  );
-
-  if (hasDefaultTemplate) {
-    setTemplates(importedTemplates);
-  } else {
-    setTemplates([defaultTemplate, ...importedTemplates]);
-  }
+  setTemplates(importedTemplates);
 };
 
 export default arrangeTemplates;

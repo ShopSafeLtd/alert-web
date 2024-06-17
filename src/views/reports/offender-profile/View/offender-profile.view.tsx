@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Card,
@@ -25,6 +25,7 @@ import { useStoreState } from 'state';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import useStyles from './offender-profile.styles';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 
 const { Title, Text } = Typography;
 
@@ -46,8 +47,13 @@ const OffenderProfile = ({
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
     role !== Role.User;
   const intl = useIntl();
+  const [collapsed, setCollapsed] = useState(true);
+
   return (
     <Row wrap={false}>
+      <Col>
+        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+      </Col>
       <Col>
         <OffenderSideList
           to="/app/reports/offender-profile/"

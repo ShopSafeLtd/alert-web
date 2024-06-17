@@ -16,6 +16,7 @@ import PermissionCheckWrapper from '../../../components/PermissionCheck/Permissi
 import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
 import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import ReportCentre from '#/views/reports/reports-centre/ReportsCentre.container';
 
 const Reports = (): JSX.Element => {
   const intl = useIntl();
@@ -28,7 +29,20 @@ const Reports = (): JSX.Element => {
     >
       <Routes>
         <Route
-          path="performance-report"
+          index
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                model: PermissionModel.Reports,
+                method: PermissionMethod.Read,
+              }}
+            >
+              <ReportCentre />
+            </PermissionCheckWrapper>
+          }
+        />
+        <Route
+          path="summary-report/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
@@ -41,7 +55,7 @@ const Reports = (): JSX.Element => {
           }
         />
         <Route
-          path="offender-profile"
+          path="offender-profile/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
@@ -54,7 +68,7 @@ const Reports = (): JSX.Element => {
           }
         />
         <Route
-          path="offender-profile/:id"
+          path="offender-profile/:reportId/:id"
           element={
             <PermissionCheckWrapper
               permission={{
@@ -80,7 +94,7 @@ const Reports = (): JSX.Element => {
           }
         />
         <Route
-          path="business"
+          path="business/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
@@ -132,7 +146,7 @@ const Reports = (): JSX.Element => {
           }
         />
         <Route
-          path="crime-groups"
+          path="crime-groups/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
@@ -145,7 +159,7 @@ const Reports = (): JSX.Element => {
           }
         />
         <Route
-          path="crime-groups/:id"
+          path="crime-groups/:reportId/:id"
           element={
             <PermissionCheckWrapper
               permission={{
@@ -158,7 +172,7 @@ const Reports = (): JSX.Element => {
           }
         />
         <Route
-          path="business/:id"
+          path="business/:reportId/:id"
           element={
             <PermissionCheckWrapper
               permission={{

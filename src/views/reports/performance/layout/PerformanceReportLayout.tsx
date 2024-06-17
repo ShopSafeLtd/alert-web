@@ -166,6 +166,12 @@ const PerformanceReportLayout = ({
     component: AllowedValue;
   }
 
+  console.log(
+    'crimeTypesDonut',
+    metadata,
+    metadata.find((item) => item.key === 'crimeTypesDonut')
+  );
+
   const getComponent = ({ key, component }: GetComponentArgs) => {
     // eslint-disable-next-line sonarjs/max-switch-cases
     switch (component) {
@@ -430,7 +436,7 @@ const PerformanceReportLayout = ({
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
               size="small"
-              onClick={() => removeItem('policeSummary')}
+              onClick={() => removeItem('basicPoliceSummary')}
             />
             <Row>
               <Col span={12}>
@@ -583,7 +589,7 @@ const PerformanceReportLayout = ({
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
               size="small"
-              onClick={() => removeItem('incidentsSummary')}
+              onClick={() => removeItem('investigationSummary')}
             />
             <Row>
               <Col span={12}>
@@ -761,8 +767,8 @@ const PerformanceReportLayout = ({
                   })}
                   value={intl.formatMessage(
                     {
-                      defaultMessage: '{value} months',
-                      id: 'Cc1A8J',
+                      defaultMessage: '{value} weeks',
+                      id: '4ouuyu',
                     },
                     {
                       value:
@@ -1028,6 +1034,7 @@ const PerformanceReportLayout = ({
                   }
                   return item;
                 }) satisfies MetaData[];
+
                 setMetadata(updatedMetadata);
               }}
             />

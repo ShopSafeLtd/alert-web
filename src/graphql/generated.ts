@@ -7882,13 +7882,18 @@ export type IntelOneImportDataInput = {
 };
 
 export type IntelOneImportIncidents = {
+  colour?: InputMaybe<Scalars['String']>;
   crimeRef?: InputMaybe<Scalars['String']>;
   description: Scalars['String'];
+  group?: InputMaybe<Scalars['String']>;
   lat?: InputMaybe<Scalars['String']>;
   lng?: InputMaybe<Scalars['String']>;
+  make?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
   offenderName: Array<Scalars['String']>;
   postcode?: InputMaybe<Scalars['String']>;
   reference: Scalars['String'];
+  registration?: InputMaybe<Scalars['String']>;
   reportDate: Scalars['Date'];
   siteName: Scalars['String'];
   type: Scalars['String'];
@@ -15112,6 +15117,7 @@ export type ReportTemplate = {
   createdAt: Scalars['Date'];
   default: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
+  groups: Array<Group>;
   id: Scalars['String'];
   layout: Array<ReportLayout>;
   metaData: Array<Scalars['JSON']>;
@@ -15124,6 +15130,8 @@ export type ReportTemplate = {
 export type ReportTemplateCreateInput = {
   createdAt?: InputMaybe<Scalars['Date']>;
   default?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<ConnectArrayHelper>;
   id?: InputMaybe<Scalars['String']>;
   layout?: InputMaybe<ReportLayoutCreateNestedManyWithoutTemplateInput>;
   metaData?: InputMaybe<Array<Scalars['JSON']>>;
@@ -15131,6 +15139,10 @@ export type ReportTemplateCreateInput = {
   schemes?: InputMaybe<ConnectArrayHelper>;
   type: ReportType;
   updatedAt?: InputMaybe<Scalars['Date']>;
+};
+
+export type ReportTemplateGroup = {
+  set?: InputMaybe<Array<UniqueId>>;
 };
 
 export type ReportTemplateListRelationFilter = {
@@ -15189,6 +15201,8 @@ export type ReportTemplateScalarWhereWithAggregatesInput = {
 
 export type ReportTemplateUpdateInput = {
   default?: InputMaybe<SetBooleanHelper>;
+  description?: InputMaybe<NullableSetStringHelper>;
+  groups?: InputMaybe<ReportTemplateGroup>;
   layout?: InputMaybe<ReportLayoutUpdateManyWithoutTemplateNestedInput>;
   metaData?: InputMaybe<Array<Scalars['JSON']>>;
   name?: InputMaybe<NullableSetStringHelper>;
@@ -17791,7 +17805,7 @@ export type Todo = {
   __typename?: 'Todo';
   answers?: Maybe<Array<Answer>>;
   assignedUsers: Array<User>;
-  business: Business;
+  business?: Maybe<Business>;
   chatId?: Maybe<Scalars['String']>;
   completed?: Maybe<Scalars['Boolean']>;
   completedBy?: Maybe<User>;
@@ -17826,7 +17840,12 @@ export type Todo = {
 
 
 export type TodoGroupsArgs = {
-  where?: InputMaybe<TodoWhereInput>;
+  cursor?: InputMaybe<GroupWhereUniqueInput>;
+  distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<GroupWhereInput>;
 };
 
 export type TodoCreateInput = {
@@ -17855,6 +17874,7 @@ export type TodoListRelationFilter = {
 
 export type TodoOrderBy = {
   createdAt?: InputMaybe<SortOrder>;
+  groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
 };
 
 export type TodoOrderByRelationAggregateInput = {
@@ -20967,6 +20987,13 @@ export type UpdateOffenderNameMutationVariables = Exact<{
 
 export type UpdateOffenderNameMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', id: string, name?: string | null, infoSource?: string | null } };
 
+export type EditReportTemplateQueryVariables = Exact<{
+  where: ReportTemplateWhereUniqueInput;
+}>;
+
+
+export type EditReportTemplateQuery = { __typename?: 'Query', reportTemplate: { __typename?: 'ReportTemplate', id: string, name?: string | null, description?: string | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+
 export type QuestionDetailsQueryVariables = Exact<{
   where: QuestionWhereUniqueInput;
 }>;
@@ -22391,9 +22418,16 @@ export type CreateReportTemplateMutationVariables = Exact<{
 }>;
 
 
-export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, description?: string | null, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
 
-export type ReportTemplatesFragment = { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> };
+export type ReportTemplatesFragment = { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, description?: string | null, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> };
+
+export type DeleteReportTemplateMutationVariables = Exact<{
+  where: ReportTemplateWhereUniqueInput;
+}>;
+
+
+export type DeleteReportTemplateMutation = { __typename?: 'Mutation', deleteReportTemplate?: { __typename?: 'ReportTemplate', id: string } | null };
 
 export type SetDefaultTemplateMutationVariables = Exact<{
   data: SetDefaultTemplateInput;
@@ -22408,7 +22442,7 @@ export type UpdateReportTemplateMutationVariables = Exact<{
 }>;
 
 
-export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', description?: string | null, id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
 
 export type BusinessEngagementQueryVariables = Exact<{
   where: UserContributionWhereInput;
@@ -22498,7 +22532,7 @@ export type SchemeReportDetailsQueryVariables = Exact<{
 }>;
 
 
-export type SchemeReportDetailsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, approver: Array<{ __typename?: 'User', id: string, fullName: string }> }>, scheme: { __typename?: 'Scheme', reportIcons: Array<{ __typename?: 'Image', optimisedPersisted?: string | null }>, reportTemplates: Array<{ __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> }> } };
+export type SchemeReportDetailsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, approver: Array<{ __typename?: 'User', id: string, fullName: string }> }>, scheme: { __typename?: 'Scheme', reportIcons: Array<{ __typename?: 'Image', optimisedPersisted?: string | null }>, reportTemplates: Array<{ __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, description?: string | null, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> }> } };
 
 export type SchemeReportFiltersQueryVariables = Exact<{
   where?: InputMaybe<SchemeWhereInput>;
@@ -23300,6 +23334,13 @@ export type SearchOffenderReportsQueryVariables = Exact<{
 
 
 export type SearchOffenderReportsQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, totalValue: number, latestIncident?: { __typename?: 'Incident', id: string, dayTime: string } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+
+export type ReportsCentreQueryVariables = Exact<{
+  where: ReportsCentreWhereInput;
+}>;
+
+
+export type ReportsCentreQuery = { __typename?: 'Query', reportsCentre: { __typename?: 'ReportsCentre', businessReports: Array<{ __typename?: 'ReportTemplate', id: string, name?: string | null, description?: string | null, type: ReportType }>, crimeGroupReports: Array<{ __typename?: 'ReportTemplate', id: string, name?: string | null, description?: string | null, type: ReportType }>, offenderReports: Array<{ __typename?: 'ReportTemplate', id: string, name?: string | null, description?: string | null, type: ReportType }>, summaryReports: Array<{ __typename?: 'ReportTemplate', id: string, name?: string | null, description?: string | null, type: ReportType }> } };
 
 export type UpsertPermissionMutationVariables = Exact<{
   data: UpsertRole;
@@ -24139,6 +24180,7 @@ export const ReportTemplatesFragmentDoc = gql`
   id
   metaData
   default
+  description
   layout {
     id
     createdAt
@@ -24730,6 +24772,30 @@ export function useUpdateOffenderNameMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateOffenderNameMutationHookResult = ReturnType<typeof useUpdateOffenderNameMutation>;
 export type UpdateOffenderNameMutationResult = Apollo.MutationResult<UpdateOffenderNameMutation>;
 export type UpdateOffenderNameMutationOptions = Apollo.BaseMutationOptions<UpdateOffenderNameMutation, UpdateOffenderNameMutationVariables>;
+export const EditReportTemplateDocument = gql`
+    query EditReportTemplate($where: ReportTemplateWhereUniqueInput!) {
+  reportTemplate(where: $where) {
+    id
+    name
+    description
+    groups {
+      id
+      name
+    }
+  }
+}
+    `;
+export function useEditReportTemplateQuery(baseOptions: Apollo.QueryHookOptions<EditReportTemplateQuery, EditReportTemplateQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EditReportTemplateQuery, EditReportTemplateQueryVariables>(EditReportTemplateDocument, options);
+      }
+export function useEditReportTemplateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EditReportTemplateQuery, EditReportTemplateQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EditReportTemplateQuery, EditReportTemplateQueryVariables>(EditReportTemplateDocument, options);
+        }
+export type EditReportTemplateQueryHookResult = ReturnType<typeof useEditReportTemplateQuery>;
+export type EditReportTemplateLazyQueryHookResult = ReturnType<typeof useEditReportTemplateLazyQuery>;
+export type EditReportTemplateQueryResult = Apollo.QueryResult<EditReportTemplateQuery, EditReportTemplateQueryVariables>;
 export const QuestionDetailsDocument = gql`
     query QuestionDetails($where: QuestionWhereUniqueInput!) {
   question(where: $where) {
@@ -31427,6 +31493,21 @@ export function useCreateReportTemplateMutation(baseOptions?: Apollo.MutationHoo
 export type CreateReportTemplateMutationHookResult = ReturnType<typeof useCreateReportTemplateMutation>;
 export type CreateReportTemplateMutationResult = Apollo.MutationResult<CreateReportTemplateMutation>;
 export type CreateReportTemplateMutationOptions = Apollo.BaseMutationOptions<CreateReportTemplateMutation, CreateReportTemplateMutationVariables>;
+export const DeleteReportTemplateDocument = gql`
+    mutation DeleteReportTemplate($where: ReportTemplateWhereUniqueInput!) {
+  deleteReportTemplate(where: $where) {
+    id
+  }
+}
+    `;
+export type DeleteReportTemplateMutationFn = Apollo.MutationFunction<DeleteReportTemplateMutation, DeleteReportTemplateMutationVariables>;
+export function useDeleteReportTemplateMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReportTemplateMutation, DeleteReportTemplateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReportTemplateMutation, DeleteReportTemplateMutationVariables>(DeleteReportTemplateDocument, options);
+      }
+export type DeleteReportTemplateMutationHookResult = ReturnType<typeof useDeleteReportTemplateMutation>;
+export type DeleteReportTemplateMutationResult = Apollo.MutationResult<DeleteReportTemplateMutation>;
+export type DeleteReportTemplateMutationOptions = Apollo.BaseMutationOptions<DeleteReportTemplateMutation, DeleteReportTemplateMutationVariables>;
 export const SetDefaultTemplateDocument = gql`
     mutation SetDefaultTemplate($data: SetDefaultTemplateInput!) {
   setDefaultTemplate(data: $data) {
@@ -31447,6 +31528,7 @@ export const UpdateReportTemplateDocument = gql`
     mutation UpdateReportTemplate($data: ReportTemplateUpdateInput!, $where: ReportTemplateWhereUniqueInput!) {
   updateReportTemplate(data: $data, where: $where) {
     ...ReportTemplates
+    description
   }
 }
     ${ReportTemplatesFragmentDoc}`;
@@ -35354,6 +35436,47 @@ export function useSearchOffenderReportsLazyQuery(baseOptions?: Apollo.LazyQuery
 export type SearchOffenderReportsQueryHookResult = ReturnType<typeof useSearchOffenderReportsQuery>;
 export type SearchOffenderReportsLazyQueryHookResult = ReturnType<typeof useSearchOffenderReportsLazyQuery>;
 export type SearchOffenderReportsQueryResult = Apollo.QueryResult<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>;
+export const ReportsCentreDocument = gql`
+    query ReportsCentre($where: ReportsCentreWhereInput!) {
+  reportsCentre(where: $where) {
+    businessReports {
+      id
+      name
+      description
+      type
+    }
+    crimeGroupReports {
+      id
+      name
+      description
+      type
+    }
+    offenderReports {
+      id
+      name
+      description
+      type
+    }
+    summaryReports {
+      id
+      name
+      description
+      type
+    }
+  }
+}
+    `;
+export function useReportsCentreQuery(baseOptions: Apollo.QueryHookOptions<ReportsCentreQuery, ReportsCentreQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReportsCentreQuery, ReportsCentreQueryVariables>(ReportsCentreDocument, options);
+      }
+export function useReportsCentreLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReportsCentreQuery, ReportsCentreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReportsCentreQuery, ReportsCentreQueryVariables>(ReportsCentreDocument, options);
+        }
+export type ReportsCentreQueryHookResult = ReturnType<typeof useReportsCentreQuery>;
+export type ReportsCentreLazyQueryHookResult = ReturnType<typeof useReportsCentreLazyQuery>;
+export type ReportsCentreQueryResult = Apollo.QueryResult<ReportsCentreQuery, ReportsCentreQueryVariables>;
 export const UpsertPermissionDocument = gql`
     mutation UpsertPermission($data: UpsertRole!) {
   upsertPermission(data: $data) {

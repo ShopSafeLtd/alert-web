@@ -44,6 +44,7 @@ import MySafety from '../../../views/settings/data-import/mysafety/MySafety.view
 import IntelOne from '../../../views/settings/data-import/intel-one/IntelOne.view';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import DashboardManagement from '../dashboard-management/router';
+import SentrysysImport from '#/views/settings/data-import/sentrysys-import/SentrysysImport.container';
 
 const SchemeSettings = (): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);
@@ -419,6 +420,19 @@ const SchemeSettings = (): JSX.Element => {
                 }}
               >
                 <DiscImport />
+              </PermissionCheckWrapper>
+            }
+          />
+          <Route
+            path="data-import/sentrysys"
+            element={
+              <PermissionCheckWrapper
+                permission={{
+                  model: PermissionModel.Settings,
+                  method: PermissionMethod.Read,
+                }}
+              >
+                <SentrysysImport />
               </PermissionCheckWrapper>
             }
           />

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Row } from 'antd';
 import View from './CrimeGroupReport.view';
 import useCrimeGroupReport from './hooks/useCrimeGroupReport';
 import CrimeGroupSideList from '../../../../components/crimeGroups/sidelist';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 
 const CrimeGroupReport = () => {
   const {
@@ -49,8 +50,12 @@ const CrimeGroupReport = () => {
     incidentsTableData,
     setAsDefault,
   } = useCrimeGroupReport();
+  const [collapsed, setCollapsed] = useState(true);
   return (
     <Row wrap={false}>
+      <Col style={{ width: collapsed ? 0 : undefined }}>
+        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+      </Col>
       <Col>
         <CrimeGroupSideList
           to="/app/reports/crime-groups/"

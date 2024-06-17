@@ -10,9 +10,10 @@ import type { Return } from './types';
 import CrimeGroupLayout, { CrimeGroupMetaData } from './initLayout';
 import useReportPrint from '../../../../../utils/reportPrint/usePrintReports';
 import useReportState from '../../../../../utils/reports/useReportState';
+import { useEffect } from 'react';
 
 const useCrimeGroupReport = (): Return => {
-  const { id: selectedCrimeGroup } = useParams();
+  const { id: selectedCrimeGroup, reportId } = useParams();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
 
   const {
@@ -27,7 +28,6 @@ const useCrimeGroupReport = (): Return => {
     setLayout,
     selectedBusiness,
     setSelectedBusiness,
-    defaultTemplate,
     groups,
     setGroups,
     selectedGroups,
@@ -57,6 +57,10 @@ const useCrimeGroupReport = (): Return => {
     InitMetaData: CrimeGroupMetaData,
     ReportType: ReportType.CrimeGroup,
   });
+
+  useEffect(() => {
+    if (templates.length > 0 && reportId) selectTemplate(reportId);
+  }, [templates, reportId]);
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
@@ -92,7 +96,6 @@ const useCrimeGroupReport = (): Return => {
         ]);
         arrangeTemplates(
           groupsData?.scheme?.reportTemplates || [],
-          defaultTemplate,
           setTemplates
         );
       },

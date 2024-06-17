@@ -19,7 +19,12 @@ const IntelOneCSV = ({ onChange }: Props) => {
       data[0][5] === 'Offender Name' &&
       data[0][6] === 'Total Product Stock Value' &&
       data[0][7] === 'Crime Reference' &&
-      data[0][8] === 'Incident Details (MO)';
+      data[0][8] === 'Incident Details (MO)' &&
+      data[0][9] === 'Vehicle Reg' &&
+      data[0][10] === 'Make' &&
+      data[0][11] === 'Model' &&
+      data[0][12] === 'Colour' &&
+      data[0][13] === 'Group Name';
 
     if (!validCSV && inputRef?.current) {
       // @ts-expect-error set string to null
@@ -39,6 +44,11 @@ const IntelOneCSV = ({ onChange }: Props) => {
             value: Number(item[6]),
             crimeRef: item[7],
             description: item[8],
+            registration: item[9],
+            make: item[10],
+            model: item[11],
+            colour: item[12],
+            group: item[13],
           }))
       );
   };

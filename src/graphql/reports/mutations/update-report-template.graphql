@@ -1,6 +1,6 @@
 mutation UpdateReportTemplate($data: ReportTemplateUpdateInput!, $where: ReportTemplateWhereUniqueInput!) {
   updateReportTemplate(data: $data, where: $where) {
         ...ReportTemplates
-
+        description
   }
 }

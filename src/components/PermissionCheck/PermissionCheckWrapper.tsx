@@ -53,8 +53,6 @@ const PermissionCheckWrapper = ({
     return false;
   }, [permissions, permission]);
 
-  console.log(isAuthorized);
-
   return isAuthorized ? children : unauthorizedElement;
 };
 

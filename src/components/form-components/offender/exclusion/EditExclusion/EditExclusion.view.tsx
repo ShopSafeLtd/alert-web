@@ -88,8 +88,8 @@ const EditExclusion = ({
               <Form.Item
                 name="months"
                 label={intl.formatMessage({
-                  defaultMessage: 'Duration (Months)',
-                  id: 'u5MbA8',
+                  defaultMessage: 'Duration (Weeks)',
+                  id: 'J+Eyds',
                 })}
               >
                 <InputNumber style={{ width: 120 }} disabled={saving} />

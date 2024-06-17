@@ -1,15 +1,16 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  page: {
-    padding: 20,
-  },
+  page: {},
   headerRow: {
     marginBottom: 20,
   },
   loadingPage: {
     display: 'flex',
     alignItems: 'center',
+  },
+  titleContainer: {
+    padding: '10px 20px',
   },
   title: {
     marginBottom: '0px !important',

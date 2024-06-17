@@ -1533,14 +1533,19 @@ const ViewOffender = ({
                                 duration: [
                                   BanType.Cbo,
                                   BanType.PrisonSentence,
+                                  BanType.SuspendedSentence,
                                 ].includes(ban.type as BanType)
                                   ? intl.formatMessage(
                                       {
-                                        defaultMessage: '{months} months',
-                                        id: 'GM3YzV',
+                                        defaultMessage: '{months} {b}',
+                                        id: 'olWCo1',
                                       },
                                       {
                                         months: ban.months,
+                                        b:
+                                          BanType.Cbo === (ban.type as BanType)
+                                            ? 'months'
+                                            : 'weeks',
                                       }
                                     )
                                   : `${FormatCalendar(
