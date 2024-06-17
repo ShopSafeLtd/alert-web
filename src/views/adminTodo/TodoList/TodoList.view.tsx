@@ -15,6 +15,7 @@ import {
   Skeleton,
   Table,
   Tooltip,
+  Typography,
 } from 'antd';
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -191,6 +192,14 @@ const AdminTodos = ({
     .map((id) => userData?.find((el) => el.id === id))
     .map((el) => ({ text: el?.fullName || '', value: el?.id || '' }));
 
+  const groupIds = new Set(
+    data?.todos.flatMap((todo) => todo.groups?.map(({ id }) => id))
+  );
+  const groupData = data?.todos.flatMap(({ groups }) => groups);
+  const groupFilter = [...groupIds]
+    .map((id) => groupData?.find((el) => el.id === id))
+    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
+
   const completeTodo = (value: boolean, id?: string) => {
     if (value && id) {
       onCompletedTodo(id);
@@ -299,6 +308,7 @@ const AdminTodos = ({
               dueDate: todo.dueDate,
               completed: todo.completed,
               assignedUsers: todo.assignedUsers,
+              groups: todo.groups || [],
               todo,
               linkedItem: getLinkedItemId(todo),
             }))}
@@ -393,6 +403,31 @@ const AdminTodos = ({
                 ),
               },
               {
+                key: 'groups',
+                title: intl.formatMessage({
+                  defaultMessage: 'Groups',
+                  id: 'hzmswI',
+                }),
+                dataIndex: 'groups',
+                filters: groupFilter,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onFilter: (
+                  value: string | number | boolean,
+                  record: { groups: { id: string; name: string }[] }
+                ) => record.groups.some(({ id }) => id === value),
+                render: (value: { id: string; name: string }[]) => (
+                  <Typography.Text>
+                    {value
+                      // eslint-disable-next-line no-confusing-arrow
+                      .map(({ name }, index) =>
+                        index === 0 ? name : ` ${name}`
+                      )
+                      .toString()}
+                  </Typography.Text>
+                ),
+              },
+              {
                 key: 'linkedItem',
                 dataIndex: 'linkedItem',
                 title: intl.formatMessage({
@@ -437,6 +472,7 @@ const AdminTodos = ({
                 // @ts-ignore
                 onFilter: (value: boolean, record) =>
                   record.completed === value,
+                // eslint-disable-next-line no-confusing-arrow
                 render: (_, record) =>
                   record.completed ? (
                     <Popconfirm

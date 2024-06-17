@@ -130,6 +130,7 @@ export interface Scheme {
       name: string;
     }[];
     activityAssignToUser: boolean;
+    useBusinessGroupsOnIncident: boolean;
   };
 }
 

@@ -11,8 +11,9 @@ import type {
   VehicleCreateWithoutCrimeGroupInput,
 } from 'graphql/generated';
 import {
+  PermissionMethod,
+  PermissionModel,
   CrimeGroupDocument,
-  Role,
   SuggestedCrimeGroupMembersDocument,
   TagType,
   useCrimeGroupQuery,
@@ -24,7 +25,7 @@ import {
   useUpdateCrimeGroupMutation,
   useUpdateUpdateMutation,
 } from 'graphql/generated';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import type { VehicleData } from 'types/DataType';
@@ -37,6 +38,7 @@ import {
   ProfileUpdatedType,
 } from '#/types/enums/profile-update-type';
 import { useGroupsContext } from '#/context/groups-context';
+import hasPermission from '#/utils/has-permission';
 
 const { confirm } = Modal;
 interface Return {
@@ -112,8 +114,13 @@ const onCompletedAddOffender = () => {
 };
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const intl = useIntl();
-  const { id: userId, role } = useStoreState((state) => state.user);
+  const { id: userId, schemes } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
@@ -808,7 +815,13 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const toggleShowIntel = () => {
     setShowIntel(!showIntel);
   };
-
+  const editRights = hasPermission({
+    permissions,
+    permission: {
+      model: PermissionModel.CrimeGroups,
+      method: PermissionMethod.Edit,
+    },
+  });
   return {
     data: crimeGroupsData,
     loading:
@@ -827,7 +840,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     addAlias,
     toggleAddAlias,
     onDeleteCrimeGroup,
-    editRights: role !== Role.User,
+    editRights,
     optionRowShow,
     setOptionRowShow,
     userId,

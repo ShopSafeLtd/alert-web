@@ -1,0 +1,9 @@
+query TotalUserSessionsGraph(
+  $where: UserIncidentsCountGraphInput!
+  $take: Int
+) {
+  totalUserSessionsGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}

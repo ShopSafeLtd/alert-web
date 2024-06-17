@@ -169,7 +169,7 @@ const EditExclusion = ({
                 dependencies={['endDate']}
                 rules={[
                   {
-                    required: true,
+                    required: type !== BanType.Other,
                     message: intl.formatMessage({
                       defaultMessage: 'Please select a start date',
                       id: 'dKMbT0',
@@ -212,7 +212,7 @@ const EditExclusion = ({
               })}
               rules={[
                 {
-                  required: true,
+                  required: type !== BanType.Other,
                   message: intl.formatMessage({
                     defaultMessage: 'Please select a end date for the outcome.',
                     id: 'r/aQ+Q',

@@ -11,7 +11,8 @@ import type {
   VehicleUpdateInput,
 } from 'graphql/generated';
 import {
-  Role,
+  PermissionMethod,
+  PermissionModel,
   useDeleteUpdateMutation,
   useDeleteVehicleMutation,
   useSubscribeToVehicleMutation,
@@ -23,7 +24,7 @@ import {
   useVehicleQuery,
   VehicleDocument,
 } from 'graphql/generated';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -41,6 +42,7 @@ import {
   ProfileUpdatedType,
 } from 'types/enums/profile-update-type';
 import successNotification from 'types/mutation_notifications/success_notification';
+import hasPermission from '#/utils/has-permission';
 
 const { confirm } = Modal;
 
@@ -131,10 +133,13 @@ const onCompletedAddOffender = () => {
 };
 const useViewVehicle = (vehicleId: string): Return => {
   const intl = useIntl();
-  const userId = useStoreState((state) => state.user.id);
-  const role = useStoreState((state) => state.user.role);
+  const { id: userId, schemes } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
-
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
   const [saving, setSaving] = useState(false);
   const [editVehicle, setEditVehicle] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -158,6 +163,7 @@ const useViewVehicle = (vehicleId: string): Return => {
   const [editOffenderData, setEditOffenderData] = useState<OffenderData | null>(
     null
   );
+
   // const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
 
   const [replyTo, setReplyTo] = useState<{
@@ -1178,6 +1184,13 @@ const useViewVehicle = (vehicleId: string): Return => {
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
   };
+  const editRights = hasPermission({
+    permissions,
+    permission: {
+      model: PermissionModel.Vehicles,
+      method: PermissionMethod.Edit,
+    },
+  });
   return {
     data: vehicleData,
     loading: (vehicleData === null || vehicleData === undefined) && loading,
@@ -1185,7 +1198,7 @@ const useViewVehicle = (vehicleId: string): Return => {
     toggleEditVehicle,
     saving,
     onDeleteVehicle,
-    editRights: role !== Role.User,
+    editRights,
     optionRowShow,
     setOptionRowShow,
     userId,

@@ -51,6 +51,10 @@ query listTodos(
         id
         fullName
       }
+      groups {
+        id
+        name
+      }
     }
     total
     uncompletedTotal

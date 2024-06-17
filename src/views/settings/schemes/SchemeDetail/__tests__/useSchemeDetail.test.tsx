@@ -109,6 +109,7 @@ const UseRecycledItemListTest = () => {
               url: 's',
             },
             activityAssignToUser: true,
+            useBusinessGroupsOnIncident: true,
             facialDetection: true,
           })
         }

@@ -33,6 +33,7 @@ describe('List Officer View', () => {
               facialRecognition: true,
               facialDetection: false,
               activityAssignToUser: false,
+              useBusinessGroupsOnIncident: false,
               imagesRequiredOnOffenders: true,
               defaultGroups: [],
               members: [

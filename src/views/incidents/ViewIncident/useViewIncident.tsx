@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type {
   CreateDocumentMutation,
   CreateInvestigationMutation,
@@ -17,6 +17,8 @@ import type {
   ViewIncidentQueryVariables,
 } from 'graphql/generated';
 import {
+  PermissionMethod,
+  PermissionModel,
   ListIncidentsAllSchemesDocument,
   QueryMode,
   Role,
@@ -62,6 +64,7 @@ import {
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import successNotification from 'types/mutation_notifications/success_notification';
+import hasPermission from '#/utils/has-permission';
 
 const { confirm } = Modal;
 
@@ -202,24 +205,28 @@ interface Return {
 const useViewIncident = (incidentId: string): Return => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
-  const { languageCount, facialDetection } = useStoreState(
-    (state) => state.scheme
-  );
-  const filterVariables = useStoreState(
-    (state) => state.data.incidents.variables
-  );
-
-  const order = useStoreState((state) => state.data.incidents.order);
-
-  const userId = useStoreState((state) => state.user.id);
   const {
+    languageCount,
+    facialDetection,
     restrictIncidentAccess,
     id: schemeId,
     goodsMode,
   } = useStoreState((state) => state.scheme);
+  const { id: userId, schemes } = useStoreState((state) => state.user);
+
+  const filterVariables = useStoreState(
+    (state) => state.data.incidents.variables
+  );
+  const order = useStoreState((state) => state.data.incidents.order);
+
   const hasConnectedSchemes = useStoreState(
     (state) => state.scheme.hasConnectedSchemes
   );
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
 
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -1996,16 +2003,22 @@ const useViewIncident = (incidentId: string): Return => {
   const toggleShareOpen = () => {
     setShareOpen(!shareOpen);
   };
+  const editRights = hasPermission({
+    permissions,
+    permission: {
+      model: PermissionModel.Incidents,
+      method: PermissionMethod.Edit,
+    },
+  });
 
   return {
     addImages,
-    addOffenderRights: role !== Role.User,
+    addOffenderRights: editRights,
     closeAddImages,
     confirmDeleteUpdate,
     data,
-    deleteRights: role !== Role.User,
-    // ||(userId === data?.incident?.createdBy.id && !data?.incident?.approved),
-    editRights: role !== Role.User,
+    deleteRights: editRights,
+    editRights,
     editUpdate,
     editUpdateInput,
     handleEditUpdate,

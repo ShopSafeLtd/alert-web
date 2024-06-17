@@ -23,6 +23,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     facialRecognition
     facialDetection
     activityAssignToUser
+    useBusinessGroupsOnIncident
     imagesRequiredOnOffenders
     requireSiteNumberForUsers
     oneSelectedIncidentTypeOnly

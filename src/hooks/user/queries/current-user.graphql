@@ -52,6 +52,7 @@ query currentUser(
         facialRecognition
         facialDetection
         activityAssignToUser
+        useBusinessGroupsOnIncident
         imagesRequiredOnOffenders
         taskTimeTracking
         languageCount

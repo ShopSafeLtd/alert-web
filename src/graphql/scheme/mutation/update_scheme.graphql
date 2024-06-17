@@ -22,6 +22,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     facialRecognition
     facialDetection
     activityAssignToUser
+    useBusinessGroupsOnIncident
     imagesRequiredOnOffenders
     incidentRetention
     offenderRetention

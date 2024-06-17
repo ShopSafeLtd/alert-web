@@ -61,12 +61,13 @@ import UserIncidentCountGraph from '#/components/reports/components/UserIncident
 import BusinessCrimeTypeGraph from '#/components/reports/components/BusinessCrimeTypeGraph/BusinessCrimeTypeGraph';
 import { useNavigate } from 'react-router';
 import BusinessLossRecoveredGraph from '#/components/reports/components/BusinessLossRecoveredGraph/BusinessCrimeTypeGraph';
-import UserSessionsGraph from '#/components/reports/components/UserSessionsGraph/UserSessionsGraph';
+// import UserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import { LanguageCode } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
 import type { AllowedValue, MetaData, ReportItemTypes } from '../../types';
 import type { Props as HookProps } from '../hooks/types';
+import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
 
 interface ContributorTable {
   key: string;
@@ -1954,6 +1955,35 @@ const PerformanceReportLayout = ({
           </Card>
         );
       }
+      // case 'userSessionsDonut': {
+      //   return (
+      //     <Card
+      //       className="no-break"
+      //       loading={loading}
+      //       style={{ height: calculateHeight(key) }}
+      //       bodyStyle={{ height: '90%' }}
+      //       key={key}
+      //     >
+      //       <UserSessionsGraph
+      //         variables={{
+      //           where: {
+      //             brandIds: filters.selectedBrands,
+      //             dateRange: filters.dateRange,
+      //             groupIds: filters.selectedGroups,
+      //             industryIds: filters.selectedIndustries,
+      //             roleIds: filters.selectedRoles,
+      //             schemeIds: [filters.schemeId],
+      //           },
+      //           take: 10,
+      //         }}
+      //         editMode={editMode}
+      //         isPrinting={isPrinting}
+      //         removeItem={() => removeItem(key)}
+      //         onNavigate={() => navigate('/app/reports/user-engagement')}
+      //       />
+      //     </Card>
+      //   );
+      // }
       case 'userSessionsDonut': {
         return (
           <Card
@@ -1963,7 +1993,7 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             key={key}
           >
-            <UserSessionsGraph
+            <TotalUserSessionsGraph
               variables={{
                 where: {
                   brandIds: filters.selectedBrands,

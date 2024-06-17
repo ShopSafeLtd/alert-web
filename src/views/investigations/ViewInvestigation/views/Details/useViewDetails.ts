@@ -5,8 +5,9 @@ import type {
   ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import {
+  PermissionMethod,
+  PermissionModel,
   InvestigationSuggestionsDocument,
-  Role,
   TagType,
   useDeleteUpdateMutation,
   useInvestigationSuggestionsQuery,
@@ -14,11 +15,12 @@ import {
   useUpdateUpdateMutation,
   ViewInvestigationDocument,
 } from 'graphql/generated';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import update from 'immutability-helper';
 import { Modal } from 'antd';
 import { useIntl } from 'react-intl';
 import { useStoreState } from '#/state';
+import hasPermission from '#/utils/has-permission';
 
 const { confirm } = Modal;
 
@@ -79,8 +81,15 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const [viewSuggestedOffenders, setViewSuggestedOffenders] = useState(false);
   const [viewSuggestedIncidents, setViewSuggestedIncidents] = useState(false);
   const [viewSuggestedVehicles, setViewSuggestedVehicles] = useState(false);
-  const role = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
+  const { id: userId, schemes } = useStoreState((state) => state.user);
+  const { id: schemeId } = useStoreState((state) => state.scheme);
+
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
+
   const [editIncidentId, setEditIncidentId] = useState('');
 
   const [replyTo, setReplyTo] = useState<{
@@ -466,12 +475,19 @@ const useViewDetails = ({ investigationId }: Props): Return => {
       },
     });
   };
+  const editRights = hasPermission({
+    permissions,
+    permission: {
+      model: PermissionModel.Investigations,
+      method: PermissionMethod.Edit,
+    },
+  });
 
   return {
     confirmDeleteUpdate,
     scrolledToTop,
     loadMore,
-    editRights: role !== Role.User,
+    editRights,
     replyTo,
     setEditUpdate,
     setReplyTo,
