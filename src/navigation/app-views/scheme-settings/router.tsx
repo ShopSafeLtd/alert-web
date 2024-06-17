@@ -1,49 +1,79 @@
-import React, { useState } from 'react';
+import React, { lazy, useState } from 'react';
 import { Route, Routes } from 'react-router';
 
 import SettingsHome from '#/views/settings/settings-home/SettingsHome.view';
 
-import UserList from 'views/settings/users/UserList';
-import ViewUser from 'views/settings/users/UserDetail';
-
-import GroupList from 'views/settings/groups/GroupList';
-import ViewGroup from 'views/settings/groups/GroupDetail';
-
-import ChatGroupsList from 'views/settings/chats/ChatList';
-import ViewChatGroup from 'views/settings/chats/ChatDetail';
-
-import SchemeDetails from 'views/settings/schemes/SchemeDetail';
-
-import OffenderWarnings from 'views/settings/tags/OffenderWarning';
-import CrimeTypes from 'views/settings/tags/CrimeTypes';
-
-import Terms from 'views/settings/terms/TermList';
-import UserTerms from 'views/settings/terms/UserTerms';
-import SchemeTerms from 'views/settings/terms/SchemeTerms';
-import CreateTermsContainer from 'views/settings/terms/CreateTerms/CreateTerms.container';
-import RecycleBin from 'views/settings/recycled/RecycleBin';
-import SchemeSharing from 'views/settings/schemes/SchemeSharing';
-import ListBusinesses from 'views/settings/businesses/ListBusinesses';
-import ViewBusiness from 'views/settings/businesses/ViewBusiness';
-import DiscMenu from 'views/settings/data-import/menu/Menu.view';
-import DiscImport from 'views/settings/data-import/disc-import/DiscImport.container';
-import CSVImport from 'views/settings/data-import/csv/data-import/ImportData.container';
-import CustomGalleries from 'views/settings/customGallery';
 import { Col, Row } from 'antd';
 import SettingsSideMenu from '#/components/settings/SettingSideMenu/SettingsSideMenu.view';
 import { PermissionMethod, PermissionModel } from 'graphql/generated';
-import BrandList from '#/views/settings/brands/ListBrands';
-import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
-import ListStatements from '../../../views/settings/statements/ListStatements';
-import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
-import Workflows from '../workflow/router';
-import DataExport from '../data-management/router';
-import RolesContainer from '../../../views/roles/roles/Roles.container';
-import Role from '../../../views/roles/role/ViewRole.container';
-import MySafety from '../../../views/settings/data-import/mysafety/MySafety.view';
-import IntelOne from '../../../views/settings/data-import/intel-one/IntelOne.view';
-import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import DashboardManagement from '../dashboard-management/router';
+
+const UserList = lazy(() => import('views/settings/users/UserList'));
+const ViewUser = lazy(() => import('views/settings/users/UserDetail'));
+const GroupList = lazy(() => import('views/settings/groups/GroupList'));
+const ViewGroup = lazy(() => import('views/settings/groups/GroupDetail'));
+const ChatGroupsList = lazy(() => import('views/settings/chats/ChatList'));
+const ViewChatGroup = lazy(() => import('views/settings/chats/ChatDetail'));
+const SchemeDetails = lazy(() => import('views/settings/schemes/SchemeDetail'));
+const OffenderWarnings = lazy(
+  () => import('views/settings/tags/OffenderWarning')
+);
+const CrimeTypes = lazy(() => import('views/settings/tags/CrimeTypes'));
+const Terms = lazy(() => import('views/settings/terms/TermList'));
+const UserTerms = lazy(() => import('views/settings/terms/UserTerms'));
+const SchemeTerms = lazy(() => import('views/settings/terms/SchemeTerms'));
+const CreateTermsContainer = lazy(
+  () => import('views/settings/terms/CreateTerms/CreateTerms.container')
+);
+const RecycleBin = lazy(() => import('views/settings/recycled/RecycleBin'));
+const SchemeSharing = lazy(
+  () => import('views/settings/schemes/SchemeSharing')
+);
+const ListBusinesses = lazy(
+  () => import('views/settings/businesses/ListBusinesses')
+);
+const ViewBusiness = lazy(
+  () => import('views/settings/businesses/ViewBusiness')
+);
+const DiscMenu = lazy(
+  () => import('views/settings/data-import/menu/Menu.view')
+);
+const DiscImport = lazy(
+  () => import('views/settings/data-import/disc-import/DiscImport.container')
+);
+const CSVImport = lazy(
+  () =>
+    import('views/settings/data-import/csv/data-import/ImportData.container')
+);
+const CustomGalleries = lazy(() => import('views/settings/customGallery'));
+const BrandList = lazy(() => import('#/views/settings/brands/ListBrands'));
+const CustomSchemeTerms = lazy(
+  () =>
+    import('../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer')
+);
+const ListStatements = lazy(
+  () => import('../../../views/settings/statements/ListStatements')
+);
+const TagView = lazy(
+  () => import('../../../views/settings/tags/ViewTag/ViewTag.container')
+);
+const Workflows = lazy(() => import('../workflow/router'));
+const DataExport = lazy(() => import('../data-management/router'));
+const RolesContainer = lazy(
+  () => import('../../../views/roles/roles/Roles.container')
+);
+const Role = lazy(() => import('../../../views/roles/role/ViewRole.container'));
+const MySafety = lazy(
+  () => import('../../../views/settings/data-import/mysafety/MySafety.view')
+);
+const IntelOne = lazy(
+  () => import('../../../views/settings/data-import/intel-one/IntelOne.view')
+);
+const PermissionCheckWrapper = lazy(
+  () => import('../../../components/PermissionCheck/PermissionCheckWrapper')
+);
+const DashboardManagement = lazy(
+  () => import('../dashboard-management/router')
+);
 
 const SchemeSettings = (): JSX.Element => {
   const [collapsed, setCollapsed] = useState(false);

@@ -287,6 +287,7 @@ const useAddNewOffender = ({
               policeImage: false,
               primary: false,
               isFace: image.isFace || false,
+              totalFaces: image.totalFaces || 0,
               rotation: 0,
               position: ImagePosition.CenterCenter,
             } as StateImageData)

@@ -110,6 +110,8 @@ const SchemeDetail = ({
             defaultPublicOffenderDOB: data?.scheme?.defaultPublicOffenderDOB,
             facialRecognition: data?.scheme?.facialRecognition,
             activityAssignToUser: data?.scheme?.activityAssignToUser,
+            useBusinessGroupsOnIncident:
+              data?.scheme?.useBusinessGroupsOnIncident,
             imagesRequiredOnOffenders: data?.scheme?.imagesRequiredOnOffenders,
             goodsMode: data?.scheme?.goodsMode,
           }}
@@ -780,10 +782,27 @@ const SchemeDetail = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage:
+                  // eslint-disable-next-line quotes
                   "Images of incident are available for offenders' faces detection",
                 id: 'C9IU0k',
               })}
               name="facialDetection"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Set selected business groups as default groups for incident',
+                id: 'RzLs6v',
+              })}
+              name="useBusinessGroupsOnIncident"
               valuePropName="checked"
               style={{ marginBottom: 0 }}
             >
@@ -818,27 +837,6 @@ const SchemeDetail = ({
                   })}
                 </Radio.Button>
               </Radio.Group>
-
-              {/* <Select disabled={saving}>
-                    <Select.Option
-                      key={GoodsMode.Generic}
-                      value={GoodsMode.Generic}
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'Generic',
-                        id: 'IL4EQo',
-                      })}
-                    </Select.Option>
-                    <Select.Option
-                      key={GoodsMode.Specific}
-                      value={GoodsMode.Specific}
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'Specific',
-                        id: 'Ky5YNj',
-                      })}
-                    </Select.Option>
-                  </Select> */}
             </Form.Item>
           </Card>
 

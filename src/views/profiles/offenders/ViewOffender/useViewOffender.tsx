@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type {
   AssociatedOffendersQuery,
   CreateDocumentMutation,
@@ -13,6 +13,8 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  PermissionMethod,
+  PermissionModel,
   Role,
   TagType,
   useAddImagesToIncidentMutation,
@@ -54,6 +56,7 @@ import type {
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useGroupsContext } from '#/context/groups-context';
+import hasPermission from '#/utils/has-permission';
 
 const { confirm } = Modal;
 
@@ -198,19 +201,22 @@ interface Return {
 }
 
 const useViewOffender = (offenderId: string): Return => {
-  const { languageCount } = useStoreState((state) => state.scheme);
-
+  const intl = useIntl();
   const navigate = useNavigate();
-  const { id: schemeId, defaultPublicOffenderDOB } = useStoreState(
-    (state) => state.scheme
-  );
+  const {
+    id: schemeId,
+    defaultPublicOffenderDOB,
+    languageCount,
+  } = useStoreState((state) => state.scheme);
   const hasConnectedSchemes = useStoreState(
     (state) => state.scheme.hasConnectedSchemes
   );
-
-  const { role, id: userId } = useStoreState((state) => state.user);
-  const intl = useIntl();
-
+  const { role, id: userId, schemes } = useStoreState((state) => state.user);
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -1878,16 +1884,23 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleShareOpen = () => {
     setShareOpen(!shareOpen);
   };
+  const editRights = hasPermission({
+    permissions,
+    permission: {
+      model: PermissionModel.Offenders,
+      method: PermissionMethod.Edit,
+    },
+  });
 
   return {
     data,
     loading: data?.offender ? false : loading,
     saving,
     deleteRights:
-      role !== Role.User ||
+      editRights ||
       (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
     editRights:
-      role !== Role.User ||
+      editRights ||
       (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
     linkIncident,
     toggleLinkIncident,

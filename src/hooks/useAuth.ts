@@ -126,6 +126,7 @@ const useAuth = (): Return => {
         languageCount: schemeDetails?.languageCount || 0,
         connectedToSchemes: schemeDetails?.connectedToSchemes || [],
         activityAssignToUser: schemeDetails?.activityAssignToUser,
+        useBusinessGroupsOnIncident: schemeDetails?.useBusinessGroupsOnIncident,
       });
       setFilterDefaultGroup({
         filterDefaultGroups: defaultGroups.filter(
@@ -178,6 +179,8 @@ const useAuth = (): Return => {
           languageCount: schemeDetails.scheme.languageCount || 0,
           connectedToSchemes: schemeDetails.scheme.connectedToSchemes || [],
           activityAssignToUser: schemeDetails.scheme.activityAssignToUser,
+          useBusinessGroupsOnIncident:
+            schemeDetails.scheme.useBusinessGroupsOnIncident,
         });
         setFilterDefaultGroup({
           filterDefaultGroups: defaultGroups.filter(

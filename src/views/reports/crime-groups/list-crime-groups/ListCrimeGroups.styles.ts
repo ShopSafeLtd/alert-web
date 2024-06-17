@@ -3,6 +3,8 @@ import { createUseStyles } from 'react-jss';
 const useStyles = createUseStyles({
   page: {
     padding: 20,
+    height: '100vh',
+    overflow: 'auto',
   },
   headerRow: {
     marginBottom: 10,

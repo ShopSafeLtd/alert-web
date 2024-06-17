@@ -10,4 +10,9 @@ export interface IntelOneCSVData {
   lat?: string;
   description: string;
   crimeRef?: string;
+  registration?: string;
+  model?: string;
+  make?: string;
+  colour?: string;
+  group?: string;
 }

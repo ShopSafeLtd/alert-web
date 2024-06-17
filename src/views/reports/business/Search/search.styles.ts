@@ -3,6 +3,8 @@ import { createUseStyles } from 'react-jss';
 const useStyles = createUseStyles({
   searchPage: {
     padding: 20,
+    height: '100vh',
+    overflow: 'auto',
   },
   toolbar: {
     marginBottom: 10,

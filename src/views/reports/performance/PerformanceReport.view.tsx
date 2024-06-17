@@ -1,22 +1,9 @@
-import React, { useMemo } from 'react';
-import type { MenuProps } from 'antd';
-import {
-  Badge,
-  Button,
-  Col,
-  Drawer,
-  Dropdown,
-  Form,
-  Row,
-  Select,
-  Switch,
-  Typography,
-} from 'antd';
+import React, { useMemo, useState } from 'react';
+import { Badge, Button, Col, Drawer, Form, Row, Typography } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import { Page } from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
-
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -28,13 +15,14 @@ import IndustrySelect from '#/components/industry/IndustrySelect';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
-import { ReportType } from 'graphql/generated';
 import AddLogo from '../../../components/reports/addLogo';
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
-import { PerformanceDrawerLayout } from './hooks/initLayout';
 import SaveAs from '../../../components/reports/saveAs';
 import type { Props } from './hooks/types';
-import { layoutMap } from '../types';
+import { LayoutToReadable } from '../types';
+import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -65,18 +53,9 @@ const FilterOptions = ({
   filterCount,
 }: FilterProps) => (
   <Form layout="vertical">
-    <Row
-      className="no-print"
-      style={{ marginBottom: 10, justifyContent: 'center' }}
-      gutter={8}
-    >
-      <Col span={6}>
-        <Form.Item
-          label={intl.formatMessage({
-            defaultMessage: 'Groups',
-            id: 'hzmswI',
-          })}
-        >
+    <Row className="no-print" gutter={8} wrap={false}>
+      <Col span={8}>
+        <Form.Item style={{ marginBottom: 0 }}>
           <GroupsSelect
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Groups',
@@ -93,13 +72,8 @@ const FilterOptions = ({
           />
         </Form.Item>
       </Col>
-      <Col span={4}>
-        <Form.Item
-          label={intl.formatMessage({
-            defaultMessage: 'Date Range',
-            id: '52QtMe',
-          })}
-        >
+      <Col span={8}>
+        <Form.Item style={{ marginBottom: 0 }}>
           <DatePicker.RangePicker
             style={{ width: '100%' }}
             defaultValue={[dateRange.startDate, dateRange.endDate]}
@@ -132,7 +106,7 @@ const FilterOptions = ({
         </Form.Item>
       </Col>
       <Col>
-        <Button onClick={toggleFiltersOpen} style={{ marginTop: 29 }}>
+        <Button onClick={toggleFiltersOpen}>
           <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
           <Badge count={filterCount} showZero={false} offset={[8, 0]}>
             {intl.formatMessage({
@@ -179,10 +153,7 @@ const PerformanceReport = ({
   addLogoDrawer,
   addLogo,
   logos,
-  templates,
-  selectTemplate,
   saveTemplate,
-  selectedTemplate,
   setSaveAsDrawer,
   saveAsDrawer,
   setSelectedBrands,
@@ -198,280 +169,219 @@ const PerformanceReport = ({
   selectedRoles,
   filterCount,
   schemeId,
-  setAsDefault,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
-  const handleMenuClick: MenuProps['onClick'] = (e) => {
-    if (e.key === '1') {
-      setSaveAsDrawer(true);
-    }
-    if (e.key === '2') {
-      saveTemplate('', 'update');
-    }
-    if (e.key === '3') {
-      setAsDefault({
-        templateId: selectedTemplate,
-        type: ReportType.Performance,
-        default: true,
-      });
-    }
-  };
+  const [collapsed, setCollapsed] = useState(false);
 
   const intl = useIntl();
 
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: intl.formatMessage({
-        defaultMessage: 'Save as',
-        id: 'nCsL6d',
-      }),
-    },
-    {
-      key: '2',
-      disabled: selectedTemplate === 'default',
-      label: intl.formatMessage({
-        defaultMessage: 'Update template',
-        id: 'jS/UOn',
-      }),
-    },
-    {
-      key: '3',
-      label: intl.formatMessage({
-        defaultMessage: 'Set as default',
-        id: 'z+Zrln',
-      }),
-      disabled:
-        templates.find((template) => template.id === selectedTemplate)
-          ?.default ||
-        selectedTemplate === 'default' ||
-        false,
-    },
-  ];
-
   return (
-    <Page>
-      {!groupsLoading && selectedTemplate !== '' && (
-        <>
-          <div
+    <Row wrap={false}>
+      <Col style={{ width: collapsed ? 0 : undefined }}>
+        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+      </Col>
+      <Col flex={1}>
+        <Page>
+          <Row
+            className="no-print"
             style={{
               position: 'absolute',
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'center',
               top: 20,
+              left: 20,
               right: 20,
+              zIndex: 1000,
             }}
           >
-            <div
-              style={{
-                display: editMode ? 'block' : 'none',
-                zIndex: 1000,
-              }}
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Redact on print?',
-                id: '7D0dTR',
-              })}
+            <Col flex={1}>
+              <FilterOptions
+                groups={groups}
+                intl={intl}
+                setSelectedGroups={setSelectedGroups}
+                selectedGroups={selectedGroups}
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                groupsLoading={groupsLoading}
+                toggleFiltersOpen={toggleFiltersOpen}
+                filterCount={filterCount}
+              />
+            </Col>
+            <Col>
+              <ReportToolbar
+                handlePrint={handlePrint}
+                setMinDrawer={setMinDrawer}
+                editMode={editMode}
+                minDrawer={minDrawer}
+                redactOnPrint={redactOnPrint}
+                saveTemplate={saveTemplate}
+                setEditMode={setEditMode}
+                setRedactOnPrint={setRedactOnPrint}
+                setSaveAsDrawer={setSaveAsDrawer}
+              />
+            </Col>
+          </Row>
+
+          {editMode ? (
+            <div style={{ paddingTop: 60 }} className="print-page">
+              <div className="logo">
+                {metadata
+                  ?.find((item) => item.key === 'logo')
+                  ?.urls?.map((url, _i, array) => (
+                    <>
+                      <Button
+                        type="text"
+                        className="no-print"
+                        hidden={!editMode}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            color="red"
+                            size="lg"
+                          />
+                        }
+                        onClick={() => removeLogo(_i)}
+                      />
+                      <img
+                        style={{
+                          height: '100%',
+                          width: '25 %',
+                          marginRight: array.length - 1 === _i ? 0 : 10,
+                        }}
+                        src={url || ''}
+                        // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                        alt="logo"
+                      />
+                    </>
+                  ))}
+                <Button
+                  className="no-print"
+                  hidden={!editMode}
+                  onClick={() => setAddLogoDrawer(true)}
+                  type="primary"
+                  style={{ marginLeft: 10 }}
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'Add Logo',
+                    id: 'pn9DSF',
+                  })}
+                </Button>
+              </div>
+              <Title level={2} className="print-title">
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Summary Report: {startDate} - {endDate}',
+                    id: 'CT8UPX',
+                  },
+                  {
+                    startDate: dateRange.startDate.toLocaleDateString(),
+                    endDate: dateRange.endDate.toLocaleDateString(),
+                  }
+                )}
+              </Title>
+
+              <div className="print-container">
+                <div className="print-body">
+                  <ReactGridLayout
+                    layout={layout}
+                    cols={2}
+                    rowHeight={rowHeight}
+                    width={400}
+                    isDraggable={editMode}
+                    isResizable={editMode}
+                    autoSize
+                    margin={margin}
+                    onLayoutChange={(newLayout) => setLayout(newLayout)}
+                    useCSSTransforms={!isPrinting}
+                  >
+                    {...PerformanceReportLayout({
+                      data,
+                      loading,
+                      offendersTableData,
+                      businessContributionTableData,
+                      userContributionTableData,
+                      crimeGroupPerformanceTableData,
+                      targetedBusinessData,
+                      targetedGoodsData,
+                      removeItem,
+                      layout,
+                      margin,
+                      rowHeight,
+                      editMode,
+                      changeSize,
+                      isPrinting,
+                      metadata,
+                      setMetadata,
+                      investigationsData,
+                      filters: {
+                        selectedBrands,
+                        selectedIndustries,
+                        selectedRoles,
+                        dateRange,
+                        selectedGroups,
+                        schemeId,
+                      },
+                    })}
+                  </ReactGridLayout>
+                </div>
+              </div>
             </div>
-
-            <Switch
-              style={{
-                marginRight: 10,
-                marginLeft: 10,
-                zIndex: 1000,
-                display: editMode ? 'block' : 'none',
-              }}
-              key="3"
-              checked={redactOnPrint}
-              onChange={(checked) => setRedactOnPrint(checked)}
-            />
-            <Button
-              style={{ marginRight: 10, zIndex: 1000 }}
-              key="2"
-              onClick={() => setMinDrawer(!minDrawer)}
-              type="default"
-              hidden={!editMode}
-            >
-              {minDrawer
-                ? intl.formatMessage({
-                    defaultMessage: 'Hide Drawer',
-                    id: 'bfZEmd',
-                  })
-                : intl.formatMessage({
-                    defaultMessage: 'Show Drawer',
-                    id: 'Ri86Tj',
-                  })}
-            </Button>
-            <Button
-              style={{ marginRight: 10, zIndex: 1000 }}
-              key="1"
-              onClick={() => setEditMode(!editMode)}
-              type={editMode ? 'primary' : 'default'}
-            >
-              {editMode
-                ? intl.formatMessage({
-                    defaultMessage: 'Lock',
-                    id: 'Zl4/y9',
-                  })
-                : intl.formatMessage({
-                    defaultMessage: 'Edit',
-                    id: 'wEQDC6',
-                  })}
-            </Button>
-            <Button
-              style={{ zIndex: 1000 }}
-              type="primary"
-              onClick={handlePrint}
-              disabled={editMode}
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Print',
-                id: 'CXRlIo',
-              })}
-            </Button>
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              top: 80,
-              right: 20,
-            }}
-          >
-            <Select
-              style={{
-                width: 200,
-                marginLeft: 10,
-                marginRight: 10,
-                zIndex: 1000,
-              }}
-              onChange={(value) => selectTemplate(value)}
-              defaultValue={templates[0]?.id}
-              value={selectedTemplate}
-            >
-              {templates.map((template) => (
-                <Select.Option key={template.id} value={template.id}>
-                  {template.name}
-                  {template.default
-                    ? intl.formatMessage({
-                        defaultMessage: ' (Default)',
-                        id: 'G16X1c',
-                      })
-                    : ''}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              top: 130,
-              right: 20,
-            }}
-          >
-            <Dropdown
-              menu={{ items, onClick: handleMenuClick }}
-              placement="bottomLeft"
-              overlayStyle={{ zIndex: 1000 }}
-              className="no-print overlay"
-            >
-              <Button>
-                {intl.formatMessage({
-                  defaultMessage: 'Save',
-                  id: 'jvo0vs',
-                })}
-              </Button>
-            </Dropdown>
-          </div>
-        </>
-      )}
-
-      {editMode ? (
-        <div className="print-page">
-          <div className="logo">
-            {metadata
-              ?.find((item) => item.key === 'logo')
-              ?.urls?.map((url, _i, array) => (
-                <>
-                  <Button
-                    type="text"
-                    className="no-print"
-                    hidden={!editMode}
-                    icon={
-                      <FontAwesomeIcon icon={faTrash} color="red" size="lg" />
-                    }
-                    onClick={() => removeLogo(_i)}
-                  />
-                  <img
-                    style={{
-                      height: '100%',
-                      width: '25 %',
-                      marginRight: array.length - 1 === _i ? 0 : 10,
-                    }}
-                    src={url || ''}
-                    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                    alt="logo"
-                  />
-                </>
-              ))}
-            <Button
-              className="no-print"
-              hidden={!editMode}
-              onClick={() => setAddLogoDrawer(true)}
-              type="primary"
-              style={{ marginLeft: 10 }}
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Add Logo',
-                id: 'pn9DSF',
-              })}
-            </Button>
-          </div>
-          <Title level={2} className="print-title">
-            {intl.formatMessage(
-              {
-                defaultMessage: 'Summary Report: {startDate} - {endDate}',
-                id: 'CT8UPX',
-              },
-              {
-                startDate: dateRange.startDate.toLocaleDateString(),
-                endDate: dateRange.endDate.toLocaleDateString(),
-              }
-            )}
-          </Title>
-          <FilterOptions
-            groups={groups}
-            intl={intl}
-            setSelectedGroups={setSelectedGroups}
-            selectedGroups={selectedGroups}
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-            groupsLoading={groupsLoading}
-            toggleFiltersOpen={toggleFiltersOpen}
-            filterCount={filterCount}
-          />
-
-          <div className="print-container">
-            <div className="print-body">
-              <ReactGridLayout
-                layout={layout}
-                cols={2}
-                rowHeight={rowHeight}
-                width={400}
-                isDraggable={editMode}
-                isResizable={editMode}
-                autoSize
-                margin={margin}
-                onLayoutChange={(newLayout) => setLayout(newLayout)}
-                useCSSTransforms={!isPrinting}
-              >
-                {...PerformanceReportLayout({
+          ) : (
+            <div>
+              <GeneratePrintPage
+                componentRef={componentRef}
+                logo={
+                  <>
+                    <div className="logo">
+                      {metadata
+                        ?.find((item) => item.key === 'logo')
+                        ?.urls?.map((url, _i, array) => (
+                          <>
+                            <Button
+                              type="text"
+                              className="no-print"
+                              hidden={!editMode}
+                              icon={
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  color="red"
+                                  size="lg"
+                                />
+                              }
+                              onClick={() => removeLogo(_i)}
+                            />
+                            <img
+                              style={{
+                                height: '100%',
+                                width: '25 %',
+                                marginRight: array.length - 1 === _i ? 0 : 10,
+                              }}
+                              src={url || ''}
+                              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                              alt="logo"
+                            />
+                          </>
+                        ))}
+                    </div>
+                  </>
+                }
+                title={
+                  <Title level={2} className="print-title">
+                    {intl.formatMessage(
+                      {
+                        defaultMessage:
+                          'Summary Report: {startDate} - {endDate}',
+                        id: 'CT8UPX',
+                      },
+                      {
+                        startDate: dateRange.startDate.toLocaleDateString(),
+                        endDate: dateRange.endDate.toLocaleDateString(),
+                      }
+                    )}
+                  </Title>
+                }
+                elements={PerformanceReportLayout({
                   data,
                   loading,
                   offendersTableData,
@@ -499,265 +409,164 @@ const PerformanceReport = ({
                     schemeId,
                   },
                 })}
-              </ReactGridLayout>
+                layout={layout}
+              />
             </div>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <GeneratePrintPage
-            componentRef={componentRef}
-            logo={
-              <>
-                <div className="logo">
-                  {metadata
-                    ?.find((item) => item.key === 'logo')
-                    ?.urls?.map((url, _i, array) => (
-                      <>
-                        <Button
-                          type="text"
-                          className="no-print"
-                          hidden={!editMode}
-                          icon={
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              color="red"
-                              size="lg"
-                            />
-                          }
-                          onClick={() => removeLogo(_i)}
-                        />
-                        <img
-                          style={{
-                            height: '100%',
-                            width: '25 %',
-                            marginRight: array.length - 1 === _i ? 0 : 10,
-                          }}
-                          src={url || ''}
-                          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                          alt="logo"
-                        />
-                      </>
-                    ))}
-                </div>
-                <FilterOptions
-                  groups={groups}
-                  intl={intl}
-                  setSelectedGroups={setSelectedGroups}
-                  selectedGroups={selectedGroups}
-                  dateRange={dateRange}
-                  setDateRange={setDateRange}
-                  groupsLoading={groupsLoading}
-                  toggleFiltersOpen={toggleFiltersOpen}
-                  filterCount={filterCount}
-                />
-              </>
-            }
-            title={
-              <Title level={2} className="print-title">
-                {intl.formatMessage(
-                  {
-                    defaultMessage: 'Summary Report: {startDate} - {endDate}',
-                    id: 'CT8UPX',
-                  },
-                  {
-                    startDate: dateRange.startDate.toLocaleDateString(),
-                    endDate: dateRange.endDate.toLocaleDateString(),
-                  }
-                )}
-              </Title>
-            }
-            elements={PerformanceReportLayout({
-              data,
-              loading,
-              offendersTableData,
-              businessContributionTableData,
-              userContributionTableData,
-              crimeGroupPerformanceTableData,
-              targetedBusinessData,
-              targetedGoodsData,
-              removeItem,
-              layout,
-              margin,
-              rowHeight,
-              editMode,
-              changeSize,
-              isPrinting,
-              metadata,
-              setMetadata,
-              investigationsData,
-              filters: {
-                selectedBrands,
-                selectedIndustries,
-                selectedRoles,
-                dateRange,
-                selectedGroups,
-                schemeId,
-              },
-            })}
-            layout={layout}
-          />
-        </div>
-      )}
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Charts available to add',
-          id: 'zNsljc',
-        })}
-        placement="right"
-        mask={false}
-        closable
-        open={editMode && minDrawer}
-        width={400}
-        onClose={() => setMinDrawer(!minDrawer)}
-      >
-        <Row gutter={[6, 6]} wrap>
-          {PerformanceDrawerLayout.filter(
-            (item) =>
-              !layout.some((i) => i.i === item.i) || item.allowDuplicates
-          ).map((item) => (
-            <Col key={item.i}>
-              <Button
-                type="primary"
-                style={{ width: 'min-content' }}
-                onClick={() => {
-                  setLayout([
-                    ...layout,
-                    {
-                      ...item,
-                      i: item.allowDuplicates
-                        ? `${item.i}_${
-                            layout
-                              .map(({ i }) => i)
-                              .filter((i) => i.includes(item.i)).length
-                          }`
-                        : item.i,
-                    },
-                  ]);
-                }}
-              >
-                {layoutMap.get(item.i) || ''}
-              </Button>
-            </Col>
-          ))}
-          {layout.length === PerformanceDrawerLayout.length && (
-            <Col>
-              <Typography.Title level={5}>
-                {intl.formatMessage({
-                  defaultMessage: 'No more charts to add',
-                  id: '2vcxv5',
-                })}
-              </Typography.Title>
-            </Col>
           )}
-        </Row>
-      </Drawer>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Add Logo',
-          id: 'pn9DSF',
-        })}
-        placement="right"
-        closable
-        open={editMode && addLogoDrawer}
-        width={700}
-        onClose={() => setAddLogoDrawer(!addLogoDrawer)}
-        destroyOnClose
-      >
-        <AddLogo
-          logos={logos}
-          onClose={() => setAddLogoDrawer(false)}
-          onSubmit={addLogo}
-        />
-      </Drawer>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Save As',
-          id: '/XPfp1',
-        })}
-        placement="right"
-        closable
-        open={saveAsDrawer}
-        width={700}
-        onClose={() => setSaveAsDrawer(false)}
-        destroyOnClose
-      >
-        <div>
-          <SaveAs
-            onSubmit={saveTemplate}
-            onClose={() => setSaveAsDrawer(false)}
-          />
-        </div>
-      </Drawer>
 
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Report Filters',
-          id: 'QxpB9+',
-        })}
-        open={filtersOpen}
-        onClose={toggleFiltersOpen}
-      >
-        <Form layout="vertical">
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Brands',
-              id: 'jWfWEA',
+          <Drawer
+            title={intl.formatMessage({
+              defaultMessage: 'Components available to add',
+              id: 'OJhI0K',
             })}
+            placement="right"
+            closable
+            open={editMode && minDrawer}
+            width={600}
+            onClose={() => setMinDrawer(!minDrawer)}
+            bodyStyle={{ padding: 0 }}
           >
-            <BrandsSelect
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Brands',
-                id: 'XfiiaU',
-              })}
-              mode="multiple"
-              maxTagCount="responsive"
-              onChange={(value) => {
-                setSelectedBrands(value || []);
-              }}
-              value={selectedBrands}
-              style={{ width: '100%' }}
+            <ComponentList
+              components={LayoutToReadable.filter(
+                (item) =>
+                  !layout.some((i) => i.i === item.i) || item.allowDuplicates
+              )
+                .filter(({ reportViews }) => reportViews.includes('summary'))
+                .map((item) => ({
+                  key: item.i,
+                  onAdd: () => {
+                    setLayout([
+                      ...layout,
+                      {
+                        ...item.item,
+                        i: item.item.allowDuplicates
+                          ? `${item.item.i}_${
+                              layout
+                                .map(({ i }) => i)
+                                .filter((i) => i.includes(item.item.i)).length
+                            }`
+                          : item.i,
+                      },
+                    ]);
+                    setMetadata([
+                      ...metadata,
+                      { key: item.i, type: item.reportItemTypes[0] },
+                    ]);
+                  },
+                  description: item.description,
+                  name: item.readable,
+                  reportItemTypes: item.reportItemTypes,
+                }))}
             />
-          </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Industries',
-              id: 'lINmqu',
+          </Drawer>
+          <Drawer
+            title={intl.formatMessage({
+              defaultMessage: 'Add Logo',
+              id: 'pn9DSF',
             })}
+            placement="right"
+            closable
+            open={editMode && addLogoDrawer}
+            width={700}
+            onClose={() => setAddLogoDrawer(!addLogoDrawer)}
+            destroyOnClose
           >
-            <IndustrySelect
-              value={selectedIndustries}
-              onChange={(value) => {
-                setSelectedIndustries(value || []);
-              }}
-              mode="multiple"
-              maxTagCount="responsive"
-              style={{ width: '100%' }}
+            <AddLogo
+              logos={logos}
+              onClose={() => setAddLogoDrawer(false)}
+              onSubmit={addLogo}
             />
-          </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'User Role',
-              id: 'lBxkBr',
+          </Drawer>
+          <Drawer
+            title={intl.formatMessage({
+              defaultMessage: 'Save As',
+              id: '/XPfp1',
             })}
+            placement="right"
+            closable
+            open={saveAsDrawer}
+            width={700}
+            onClose={() => setSaveAsDrawer(false)}
+            destroyOnClose
           >
-            <RolesSelect
-              value={selectedRoles}
-              onChange={(value) => {
-                setSelectedRoles(value || []);
-              }}
-              mode="multiple"
-              maxTagCount="responsive"
-              style={{ width: '100%' }}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select User Roles',
-                id: 'q0cO2B',
-              })}
-            />
-          </Form.Item>
-        </Form>
-      </Drawer>
-    </Page>
+            <div>
+              <SaveAs
+                onSubmit={saveTemplate}
+                onClose={() => setSaveAsDrawer(false)}
+              />
+            </div>
+          </Drawer>
+
+          <Drawer
+            title={intl.formatMessage({
+              defaultMessage: 'Report Filters',
+              id: 'QxpB9+',
+            })}
+            open={filtersOpen}
+            onClose={toggleFiltersOpen}
+          >
+            <Form layout="vertical">
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Brands',
+                  id: 'jWfWEA',
+                })}
+              >
+                <BrandsSelect
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Brands',
+                    id: 'XfiiaU',
+                  })}
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  onChange={(value) => {
+                    setSelectedBrands(value || []);
+                  }}
+                  value={selectedBrands}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Industries',
+                  id: 'lINmqu',
+                })}
+              >
+                <IndustrySelect
+                  value={selectedIndustries}
+                  onChange={(value) => {
+                    setSelectedIndustries(value || []);
+                  }}
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'User Role',
+                  id: 'lBxkBr',
+                })}
+              >
+                <RolesSelect
+                  value={selectedRoles}
+                  onChange={(value) => {
+                    setSelectedRoles(value || []);
+                  }}
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  style={{ width: '100%' }}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select User Roles',
+                    id: 'q0cO2B',
+                  })}
+                />
+              </Form.Item>
+            </Form>
+          </Drawer>
+        </Page>
+      </Col>
+    </Row>
   );
 };
 

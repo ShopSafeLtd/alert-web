@@ -37,6 +37,7 @@ export interface SetSchemePayload {
     name: string;
   }[];
   activityAssignToUser: boolean;
+  useBusinessGroupsOnIncident: boolean;
 }
 
 export interface SchemeModel {
@@ -70,6 +71,7 @@ export interface SchemeModel {
   }[];
   hasConnectedSchemes: boolean;
   activityAssignToUser: boolean;
+  useBusinessGroupsOnIncident: boolean;
 }
 
 const userModel: SchemeModel = {
@@ -89,6 +91,7 @@ const userModel: SchemeModel = {
   facialRecognition: false,
   facialDetection: false,
   activityAssignToUser: false,
+  useBusinessGroupsOnIncident: false,
   imagesRequiredOnOffenders: false,
   taskTimeTracking: false,
   languageCount: 0,
@@ -115,6 +118,7 @@ const userModel: SchemeModel = {
     state.facialRecognition = payload.facialRecognition;
     state.imagesRequiredOnOffenders = payload.imagesRequiredOnOffenders;
     state.activityAssignToUser = payload.activityAssignToUser;
+    state.useBusinessGroupsOnIncident = payload.useBusinessGroupsOnIncident;
     state.taskTimeTracking = payload.taskTimeTracking;
     state.languageCount = payload.languageCount;
     state.autoPopulateDescription = payload.autoPopulateDescription;
@@ -142,6 +146,7 @@ const userModel: SchemeModel = {
     state.goodsMode = GoodsMode.Generic;
     state.facialRecognition = false;
     state.activityAssignToUser = false;
+    state.useBusinessGroupsOnIncident = false;
     state.imagesRequiredOnOffenders = false;
     state.taskTimeTracking = false;
     state.languageCount = 0;

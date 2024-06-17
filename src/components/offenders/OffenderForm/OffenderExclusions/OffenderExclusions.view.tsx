@@ -149,8 +149,8 @@ const OffenderExclusions = ({
               {
                 key: 'months',
                 title: intl.formatMessage({
-                  defaultMessage: 'Months',
-                  id: 'AxDOiG',
+                  defaultMessage: 'Duration',
+                  id: 'IuFETn',
                 }),
                 dataIndex: 'months',
               },
@@ -161,6 +161,7 @@ const OffenderExclusions = ({
                   id: 'QirE3M',
                 }),
                 dataIndex: 'startDate',
+                // eslint-disable-next-line
                 render: (value: Moment) =>
                   value ? value.format('DD/MM/YYYY') : undefined,
               },
@@ -171,6 +172,7 @@ const OffenderExclusions = ({
                   id: 'T4GOiX',
                 }),
                 dataIndex: 'endDate',
+                // eslint-disable-next-line
                 render: (value: Moment) =>
                   value ? value.format('DD/MM/YYYY') : undefined,
               },

@@ -367,7 +367,9 @@ const ViewInvestigation = ({
               <div className={classes.table}>
                 <OffenderTable
                   offenders={data?.investigation?.offenders || []}
-                  deleteRights
+                  deleteRights={editRights}
+                  editRights={editRights}
+                  saving={saving}
                   onDeleteOffender={onDeleteOffender}
                   setEditOffenderData={setEditOffenderData}
                   hasNavigation
@@ -463,7 +465,7 @@ const ViewInvestigation = ({
                   // className={classes.table}
                   setEditData={setEditIncidentId}
                   incidents={data?.investigation?.incidents}
-                  deleteRights
+                  deleteRights={editRights}
                   onDelete={onDeleteIncident}
                   hasNavigation
                 />
@@ -571,8 +573,8 @@ const ViewInvestigation = ({
                   setEditVehicleData={setEditVehicleData}
                   onDeleteVehicle={onDeleteVehicle}
                   saving={saving}
-                  editRights
-                  deleteRights
+                  editRights={editRights}
+                  deleteRights={editRights}
                   hasNavigation
                 />
               </div>
@@ -649,7 +651,7 @@ const ViewInvestigation = ({
                   setEditData={setEditCrimeGroupData}
                   onDelete={onDeleteCrimeGroup}
                   saving={saving}
-                  deleteRights
+                  deleteRights={editRights}
                   hasNavigation
                 />
               </div>

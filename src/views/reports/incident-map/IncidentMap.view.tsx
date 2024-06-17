@@ -26,6 +26,7 @@ import mapboxgl from 'mapbox-gl';
 import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './IncidentMap.styles';
 import policeJSON from './police-areas';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -273,60 +274,92 @@ const IncidentMap = ({
   }, [showHeatmap, showMarkers]);
 
   const intl = useIntl();
+  const [collapsed, setCollapsed] = useState(false);
 
   const classes = useStyles();
   return (
-    <div className={classes.page}>
-      <Row gutter={16} style={{ marginBottom: 20 }}>
-        <Col flex={1}>
-          <Title className={classes.title} level={3}>
-            {intl.formatMessage({
-              defaultMessage: 'Incident Map',
-              id: '8vWvqg',
-            })}
-          </Title>
-        </Col>
-        <Col>
-          <Button onClick={toggleDrawerOpen}>
-            <FormattedMessage id="i2gKJi" defaultMessage="Mapping Options" />
-          </Button>
-        </Col>
-      </Row>
+    <Row>
+      <Col style={{ width: collapsed ? 0 : undefined }}>
+        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+      </Col>
+      <Col flex={1} className={classes.page}>
+        <Row align="middle" gutter={16} className={classes.titleContainer}>
+          <Col flex={1}>
+            <Title className={classes.title} level={3}>
+              {intl.formatMessage({
+                defaultMessage: 'Incident Map',
+                id: '8vWvqg',
+              })}
+            </Title>
+          </Col>
+          <Col>
+            <Button onClick={toggleDrawerOpen}>
+              <FormattedMessage id="i2gKJi" defaultMessage="Mapping Options" />
+            </Button>
+          </Col>
+        </Row>
 
-      {loading && data?.incidents ? (
-        <div className={classes.loadingPage}>
-          <Spin />
-        </div>
-      ) : (
-        <div className={classes.mapContainer}>
-          <Map
-            onError={() => {}}
-            ref={mapRef}
-            mapLib={mapboxgl}
-            mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-            style={{ width: '100%', height: '85vh' }}
-            mapStyle={
-              currentTheme === 'dark'
-                ? 'mapbox://styles/wgarrod/clua60bxj016401qse8vj1qfu'
-                : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
-            }
-            initialViewState={{
-              longitude: 3.43,
-              latitude: 55.37,
-              zoom: 5,
-            }}
-          >
-            {showPolice && (
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore Polygon / multipolygon issue
-              <Source id="police-data" type="geojson" data={policeJSON}>
-                {PoliceDataLayer}
-                {PoliceLineLayer}
-              </Source>
-            )}
-            {showMarkers && (
+        {loading && data?.incidents ? (
+          <div className={classes.loadingPage}>
+            <Spin />
+          </div>
+        ) : (
+          <div className={classes.mapContainer}>
+            <Map
+              onError={() => {}}
+              ref={mapRef}
+              mapLib={mapboxgl}
+              mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+              style={{ width: '100%', height: 'calc(100vh - 60px)' }}
+              mapStyle={
+                currentTheme === 'dark'
+                  ? 'mapbox://styles/wgarrod/clua60bxj016401qse8vj1qfu'
+                  : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
+              }
+              initialViewState={{
+                longitude: 3.43,
+                latitude: 55.37,
+                zoom: 5,
+              }}
+            >
+              {showPolice && (
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore Polygon / multipolygon issue
+                <Source id="police-data" type="geojson" data={policeJSON}>
+                  {PoliceDataLayer}
+                  {PoliceLineLayer}
+                </Source>
+              )}
+              {showMarkers && (
+                <Source
+                  id="incidents"
+                  type="geojson"
+                  data={{
+                    type: 'FeatureCollection',
+                    features:
+                      data?.incidents.map((incident) => ({
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                          type: 'Point',
+                          coordinates: [
+                            incident.location?.geoLng || 0,
+                            incident.location?.geoLat || 0,
+                          ],
+                        },
+                      })) || [],
+                  }}
+                  cluster={cluster}
+                  clusterMaxZoom={14}
+                  clusterRadius={50}
+                >
+                  {ClusterLayer}
+                  {ClusterCountLayer}
+                  {UnClusteredLayer}
+                </Source>
+              )}
               <Source
-                id="incidents"
+                id="incidents-heatmap"
                 type="geojson"
                 data={{
                   type: 'FeatureCollection',
@@ -343,251 +376,230 @@ const IncidentMap = ({
                       },
                     })) || [],
                 }}
-                cluster={cluster}
-                clusterMaxZoom={14}
-                clusterRadius={50}
               >
-                {ClusterLayer}
-                {ClusterCountLayer}
-                {UnClusteredLayer}
+                {showHeatmap && HeatMapLayer}
               </Source>
-            )}
-            <Source
-              id="incidents-heatmap"
-              type="geojson"
-              data={{
-                type: 'FeatureCollection',
-                features:
-                  data?.incidents.map((incident) => ({
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                      type: 'Point',
-                      coordinates: [
-                        incident.location?.geoLng || 0,
-                        incident.location?.geoLat || 0,
-                      ],
-                    },
-                  })) || [],
-              }}
-            >
-              {showHeatmap && HeatMapLayer}
-            </Source>
-            {showBusinesses && (
-              <Source
-                id="businesses"
-                type="geojson"
-                cluster={cluster}
-                clusterMaxZoom={14}
-                clusterRadius={50}
-                data={{
-                  type: 'FeatureCollection',
-                  features:
-                    businessData?.listBusinesses.businesses.map((business) => ({
-                      type: 'Feature',
-                      properties: {},
-                      geometry: {
-                        type: 'Point',
-                        coordinates: [
-                          business.locations[0]?.geoLng || 0,
-                          business.locations[0]?.geoLat || 0,
-                        ],
-                      },
-                    })) || [],
-                }}
-              >
-                {BusinessClusterLayer}
-                {BusinessClusterCountLayer}
-                {BusinessUnClusteredLayer}
-              </Source>
-            )}
-          </Map>
-        </div>
-      )}
-
-      <Drawer visible={drawerOpen} onClose={toggleDrawerOpen}>
-        <Form layout="vertical">
-          <Row>
-            <Col flex={1}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Show Businesses',
-                  id: 'NOT1VO',
-                })}
-              >
-                <Switch onClick={toggleBusinesses} checked={showBusinesses} />
-              </Form.Item>
-            </Col>
-            <Col flex={1}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Show Incidents',
-                  id: 'RVBwrX',
-                })}
-              >
-                <Switch onClick={toggleMarkers} checked={showMarkers} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col flex={1}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Show Heatmap',
-                  id: 'JNbVtq',
-                })}
-              >
-                <Switch onClick={toggleHeatmap} checked={showHeatmap} />
-              </Form.Item>
-            </Col>
-            <Col flex={1}>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Show Police Areas',
-                  id: 'rZNlFU',
-                })}
-              >
-                <Switch onClick={togglePolice} checked={showPolice} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Cluster Points',
-                  id: 'qXZqPu',
-                })}
-              >
-                <Switch onClick={toggleCluster} checked={cluster} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Schemes',
-              id: 'QgGevU',
-            })}
-          >
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Scheme',
-                id: 'bfRA48',
-              })}
-              className={classes.groupSelect}
-              onChange={onChangeSchemes}
-              value={selectedSchemes}
-              mode="multiple"
-              maxTagCount={2}
-              style={{ minWidth: 150 }}
-            >
-              {schemes.map((scheme) => (
-                <Select.Option key={scheme.scheme.id} value={scheme.scheme.id}>
-                  {scheme.scheme.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Groups',
-              id: 'hzmswI',
-            })}
-          >
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Groups',
-                id: 'q2cuIU',
-              })}
-              className={classes.groupSelect}
-              style={{ minWidth: 150 }}
-              onChange={onChangeGroups}
-              value={selectedGroups}
-              mode="multiple"
-              maxTagCount={1}
-            >
-              {groupsData?.groups.map((group) => (
-                <Select.Option
-                  loading={groupsLoading}
-                  key={group.id}
-                  value={group.id}
+              {showBusinesses && (
+                <Source
+                  id="businesses"
+                  type="geojson"
+                  cluster={cluster}
+                  clusterMaxZoom={14}
+                  clusterRadius={50}
+                  data={{
+                    type: 'FeatureCollection',
+                    features:
+                      businessData?.listBusinesses.businesses.map(
+                        (business) => ({
+                          type: 'Feature',
+                          properties: {},
+                          geometry: {
+                            type: 'Point',
+                            coordinates: [
+                              business.locations[0]?.geoLng || 0,
+                              business.locations[0]?.geoLat || 0,
+                            ],
+                          },
+                        })
+                      ) || [],
+                  }}
                 >
-                  {group.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Date Filter',
-              id: 'cMfoug',
-            })}
-          >
-            <RangePicker
-              onChange={(value) => {
-                if (value && value[0] && value[1])
-                  onChangeDateRange({
-                    startDate: new Date(value[0].valueOf()),
-                    endDate: new Date(value[1].valueOf()),
-                  });
-              }}
-            />
-          </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Brands',
-              id: 'jWfWEA',
-            })}
-          >
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Brands Groups',
-                id: 'nlQzOH',
+                  {BusinessClusterLayer}
+                  {BusinessClusterCountLayer}
+                  {BusinessUnClusteredLayer}
+                </Source>
+              )}
+            </Map>
+          </div>
+        )}
+
+        <Drawer visible={drawerOpen} onClose={toggleDrawerOpen}>
+          <Form layout="vertical">
+            <Row>
+              <Col flex={1}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Show Businesses',
+                    id: 'NOT1VO',
+                  })}
+                >
+                  <Switch onClick={toggleBusinesses} checked={showBusinesses} />
+                </Form.Item>
+              </Col>
+              <Col flex={1}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Show Incidents',
+                    id: 'RVBwrX',
+                  })}
+                >
+                  <Switch onClick={toggleMarkers} checked={showMarkers} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col flex={1}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Show Heatmap',
+                    id: 'JNbVtq',
+                  })}
+                >
+                  <Switch onClick={toggleHeatmap} checked={showHeatmap} />
+                </Form.Item>
+              </Col>
+              <Col flex={1}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Show Police Areas',
+                    id: 'rZNlFU',
+                  })}
+                >
+                  <Switch onClick={togglePolice} checked={showPolice} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Cluster Points',
+                    id: 'qXZqPu',
+                  })}
+                >
+                  <Switch onClick={toggleCluster} checked={cluster} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Schemes',
+                id: 'QgGevU',
               })}
-              className={classes.groupSelect}
-              style={{ minWidth: 150 }}
-              onChange={onChangeBrands}
-              value={selectedBrands}
-              mode="multiple"
-              maxTagCount={1}
-              loading={brandsLoading}
             >
-              {brandsData?.brands.edges.map(({ node: group }) => (
-                <Select.Option key={group.id} value={group.id}>
-                  {group.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({
-              defaultMessage: 'Industries',
-              id: 'lINmqu',
-            })}
-          >
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Industries Groups',
-                id: 'bkQwcu',
+              <Select
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select Scheme',
+                  id: 'bfRA48',
+                })}
+                className={classes.groupSelect}
+                onChange={onChangeSchemes}
+                value={selectedSchemes}
+                mode="multiple"
+                maxTagCount={2}
+                style={{ minWidth: 150 }}
+              >
+                {schemes.map((scheme) => (
+                  <Select.Option
+                    key={scheme.scheme.id}
+                    value={scheme.scheme.id}
+                  >
+                    {scheme.scheme.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Groups',
+                id: 'hzmswI',
               })}
-              className={classes.groupSelect}
-              style={{ minWidth: 150 }}
-              onChange={onChangeIndustries}
-              value={selectedIndustries}
-              mode="multiple"
-              maxTagCount={1}
-              loading={industriesLoading}
             >
-              {industriesData?.industries.map((group) => (
-                <Select.Option key={group.id} value={group.id}>
-                  {group.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Form>
-      </Drawer>
-    </div>
+              <Select
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select Groups',
+                  id: 'q2cuIU',
+                })}
+                className={classes.groupSelect}
+                style={{ minWidth: 150 }}
+                onChange={onChangeGroups}
+                value={selectedGroups}
+                mode="multiple"
+                maxTagCount={1}
+              >
+                {groupsData?.groups.map((group) => (
+                  <Select.Option
+                    loading={groupsLoading}
+                    key={group.id}
+                    value={group.id}
+                  >
+                    {group.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Date Filter',
+                id: 'cMfoug',
+              })}
+            >
+              <RangePicker
+                onChange={(value) => {
+                  if (value && value[0] && value[1])
+                    onChangeDateRange({
+                      startDate: new Date(value[0].valueOf()),
+                      endDate: new Date(value[1].valueOf()),
+                    });
+                }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Brands',
+                id: 'jWfWEA',
+              })}
+            >
+              <Select
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Brands Groups',
+                  id: 'nlQzOH',
+                })}
+                className={classes.groupSelect}
+                style={{ minWidth: 150 }}
+                onChange={onChangeBrands}
+                value={selectedBrands}
+                mode="multiple"
+                maxTagCount={1}
+                loading={brandsLoading}
+              >
+                {brandsData?.brands.edges.map(({ node: group }) => (
+                  <Select.Option key={group.id} value={group.id}>
+                    {group.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Industries',
+                id: 'lINmqu',
+              })}
+            >
+              <Select
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Industries Groups',
+                  id: 'bkQwcu',
+                })}
+                className={classes.groupSelect}
+                style={{ minWidth: 150 }}
+                onChange={onChangeIndustries}
+                value={selectedIndustries}
+                mode="multiple"
+                maxTagCount={1}
+                loading={industriesLoading}
+              >
+                {industriesData?.industries.map((group) => (
+                  <Select.Option key={group.id} value={group.id}>
+                    {group.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Form>
+        </Drawer>
+      </Col>
+    </Row>
   );
 };
 

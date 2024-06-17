@@ -334,6 +334,7 @@ const useNotificationLists = (): Return => {
       taskTimeTracking: scheme.taskTimeTracking,
       connectedToSchemes: scheme.connectedToSchemes,
       activityAssignToUser: scheme.activityAssignToUser,
+      useBusinessGroupsOnIncident: scheme.useBusinessGroupsOnIncident,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(

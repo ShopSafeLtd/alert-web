@@ -46,6 +46,7 @@ export interface FormData {
   facialRecognition: boolean;
   facialDetection: boolean;
   activityAssignToUser: boolean;
+  useBusinessGroupsOnIncident: boolean;
   imagesRequiredOnOffenders: boolean;
   goodsMode: GoodsMode;
 }
@@ -197,6 +198,9 @@ const useSchemeDetail = (): Return => {
           facialRecognition: { set: data.facialRecognition },
           facialDetection: { set: data.facialDetection },
           activityAssignToUser: { set: data.activityAssignToUser },
+          useBusinessGroupsOnIncident: {
+            set: data.useBusinessGroupsOnIncident,
+          },
           imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
           goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
           // ???

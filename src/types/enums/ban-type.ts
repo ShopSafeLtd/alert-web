@@ -3,11 +3,11 @@ import { BanType } from 'graphql/generated';
 const BanTypeValues = [
   {
     value: BanType.Cbo,
-    label: 'CBO',
+    label: 'Criminal Behaviour Order',
   },
   {
     value: BanType.CommunityBan,
-    label: 'Community_Ban',
+    label: 'Community Ban',
   },
   {
     value: BanType.Other,
@@ -15,19 +15,19 @@ const BanTypeValues = [
   },
   {
     value: BanType.Cpn,
-    label: 'CPN',
+    label: 'Community Protection Notice',
   },
   {
     value: BanType.Cpw,
-    label: 'CPW',
+    label: 'Community Protection Warning',
   },
   {
     value: BanType.Pspo,
-    label: 'PSPO',
+    label: 'Public Space Protection Order',
   },
   {
     value: BanType.Wip,
-    label: 'WIP',
+    label: 'Withdrawal of Implied Permission',
   },
   {
     value: BanType.Arrest,

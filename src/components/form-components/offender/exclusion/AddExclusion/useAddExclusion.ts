@@ -25,7 +25,7 @@ const useAddExclusion = ({ update, onClose }: Props): Return => {
     if (startDate && startDate?.valueOf() > Date.now()) {
       return current && current.valueOf() < startDate.valueOf();
     }
-    return current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
+    return false;
   };
 
   const onSubmit = (data: BanData) => {

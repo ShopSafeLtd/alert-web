@@ -9,7 +9,9 @@ interface Return {
 }
 
 const useOffenderProfile = (): Return => {
-  const { id: selectedOffender } = useParams();
+  const { id: selectedOffender, reportId } = useParams();
+
+  console.log(reportId);
 
   const { data: offenderProfileData, loading: offenderProfileLoading } =
     useOffenderProfileQuery({

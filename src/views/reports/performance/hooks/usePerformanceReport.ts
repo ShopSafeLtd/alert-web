@@ -11,8 +11,11 @@ import PerformanceLayout, { PerformanceMetaData } from './initLayout';
 import { redactedText } from '../../types';
 import type { Props as Return } from './types';
 import useReportState from '../../../../utils/reports/useReportState';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const usePerformanceReport = (): Return => {
+  const { reportId } = useParams();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const {
     currentScheme,
@@ -22,7 +25,6 @@ const usePerformanceReport = (): Return => {
     setMinDrawer,
     layout,
     setLayout,
-    defaultTemplate,
     groups,
     setGroups,
     selectedGroups,
@@ -64,6 +66,10 @@ const usePerformanceReport = (): Return => {
     InitMetaData: PerformanceMetaData,
     ReportType: ReportType.Performance,
   });
+
+  useEffect(() => {
+    if (templates.length > 0 && reportId) selectTemplate(reportId);
+  }, [templates, reportId]);
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
@@ -109,7 +115,6 @@ const usePerformanceReport = (): Return => {
 
         arrangeTemplates(
           groupsData?.scheme?.reportTemplates || [],
-          defaultTemplate,
           setTemplates
         );
       },

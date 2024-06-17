@@ -106,7 +106,7 @@ const CreateChecklistView: React.FC<Props> = ({
   return (
     <div className="page-view">
       <PageHeader
-        onBack={() => navigate(`/app/checklists`)}
+        onBack={() => navigate('/app/checklists')}
         title={
           id
             ? intl.formatMessage({
@@ -220,7 +220,7 @@ const CreateChecklistView: React.FC<Props> = ({
           {(fields) => (
             <>
               {fields.map(({ name }, sectionIndex) => (
-                <Card loading={loading}>
+                <Card loading={loading} key={name}>
                   <Row>
                     <Space>
                       <Form.Item
@@ -365,6 +365,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                   <>
                                     {questionFields.map(
                                       (questionField, questionIndex) => (
+                                        // eslint-disable-next-line react/jsx-key
                                         <Card loading={loading}>
                                           <Row key={questionField.key}>
                                             <Col span={2} />
@@ -1331,6 +1332,7 @@ const CreateChecklistView: React.FC<Props> = ({
             </>
           )}
         </Form.List>
+
         <Row>
           <Col flex={1} />
           <Space>
@@ -1338,7 +1340,7 @@ const CreateChecklistView: React.FC<Props> = ({
               <Form.Item>
                 <Button
                   loading={loading}
-                  onClick={() => navigate(`/app/checklists`)}
+                  onClick={() => navigate('/app/checklists')}
                 >
                   {id
                     ? intl.formatMessage({

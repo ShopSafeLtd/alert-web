@@ -57,6 +57,11 @@ const useIntelOne = (): Return => {
                 siteName: item.siteName,
                 value: item.value,
                 type: item.type,
+                registration: item.registration,
+                make: item.make,
+                model: item.model,
+                colour: item.colour,
+                group: item.group,
               }))
               .filter(
                 (item) => item.description && item.type && item.reportDate

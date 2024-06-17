@@ -69,6 +69,7 @@ describe('Detail Officer View', () => {
             requireSiteNumberForUsers: false,
             facialDetection: false,
             activityAssignToUser: true,
+            useBusinessGroupsOnIncident: true,
           },
 
           permissions: [

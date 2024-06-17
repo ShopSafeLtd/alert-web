@@ -8,6 +8,7 @@ fragment ReportTemplates on ReportTemplate {
  id
      metaData
      default
+     description
      layout {
        id
        createdAt

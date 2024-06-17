@@ -182,6 +182,8 @@
     "prepare": "husky install",
     "start": "vite",
     "build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc && vite build ",
+    "validate-build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc --noEmit && eslint .",
+
     "serve": "vite preview",
     "dev": "concurrently \"vite\" \"gulp watch\"",
     "generate": "graphql-codegen --config codegen.yml",

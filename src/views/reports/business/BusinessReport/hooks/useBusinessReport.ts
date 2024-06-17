@@ -16,7 +16,7 @@ import type { SelectOptions } from '../../../types';
 import useReportState from '../../../../../utils/reports/useReportState';
 
 const useBusinessReport = (): Return => {
-  const { id: selectedBusiness } = useParams();
+  const { id: selectedBusiness, reportId } = useParams();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const {
     currentScheme,
@@ -26,7 +26,6 @@ const useBusinessReport = (): Return => {
     setMinDrawer,
     layout,
     setLayout,
-    defaultTemplate,
     groups,
     setGroups,
     selectedGroups,
@@ -63,6 +62,10 @@ const useBusinessReport = (): Return => {
   const [selectedCrimeGroups, setSelectedCrimeGroups] = useState<string[]>([]);
   const [offenders, setOffenders] = useState<SelectOptions[]>([]);
   const [selectedOffenders, setSelectedOffenders] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (templates.length > 0 && reportId) selectTemplate(reportId);
+  }, [templates, reportId]);
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
@@ -105,7 +108,6 @@ const useBusinessReport = (): Return => {
         ]);
         arrangeTemplates(
           groupsData?.scheme?.reportTemplates || [],
-          defaultTemplate,
           setTemplates
         );
       },

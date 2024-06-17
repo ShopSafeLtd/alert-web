@@ -319,6 +319,7 @@ const useNotificationLists = (): Return => {
       facialRecognition: scheme.facialRecognition,
       facialDetection: scheme.facialDetection,
       activityAssignToUser: scheme.activityAssignToUser,
+      useBusinessGroupsOnIncident: scheme.useBusinessGroupsOnIncident,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
       connectedToSchemes: scheme.connectedToSchemes,

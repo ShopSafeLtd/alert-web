@@ -94,6 +94,7 @@ export const NavScheme = () => {
       goodsMode: scheme.scheme.goodsMode,
       facialRecognition: scheme.scheme.facialRecognition,
       activityAssignToUser: scheme.scheme.activityAssignToUser,
+      useBusinessGroupsOnIncident: scheme.scheme.useBusinessGroupsOnIncident,
       imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.scheme.taskTimeTracking,
       restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,

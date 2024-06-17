@@ -1,3 +1,4 @@
+/* eslint-disable array-bracket-newline */
 import { useEffect, useState } from 'react';
 import type RGL from 'react-grid-layout';
 import arrangeTemplates from '#/utils/reports/setTemplates';
@@ -209,11 +210,9 @@ const useReportState = ({
   const [metadata, setMetadata] = useState<MetaData[]>(
     defaultTemplate.metaData
   );
-  const [templates, setTemplatesState] = useState<IReportTemplate[]>([
-    // defaultTemplate,
-  ]);
+  const [templates, setTemplatesState] = useState<IReportTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
-
+  console.log('state', selectedTemplate);
   const setDateRange = (dateRangeInput: {
     startDate: Date;
     endDate: Date;
@@ -286,6 +285,7 @@ const useReportState = ({
           (item) => item.i !== 'pageBreak' && item.i !== 'pageBreak2'
         )
       );
+      console.log('selectTemplate', newTemplate.metaData);
       setMetadata(newTemplate.metaData);
       setSelectedTemplate(newTemplate.id);
     }
@@ -301,6 +301,7 @@ const useReportState = ({
             (item) => item.i !== 'pageBreak' && item.i !== 'pageBreak2'
           )
         );
+        console.log('setTemplates', newTemplate.metaData);
         setMetadata(newTemplate.metaData);
         setSelectedTemplate(newTemplate.id);
       }
@@ -420,7 +421,7 @@ const useReportState = ({
           };
         }) || []),
       ];
-      arrangeTemplates(updatedTemps, defaultTemplate, setTemplates);
+      arrangeTemplates(updatedTemps, setTemplates);
     },
     update: (cache, { data: d }) => {
       const existingTemplates = cache.readQuery<
@@ -577,7 +578,6 @@ const useReportState = ({
                 })) as RGL.Layout[]) || [],
             },
           ],
-          defaultTemplate,
           setTemplates
         );
 
@@ -748,18 +748,7 @@ const useReportState = ({
             layout: {
               createMany: {
                 data: layout.map((item) => {
-                  const {
-                    i,
-                    x,
-                    y,
-                    w,
-                    h,
-                    minW,
-                    minH,
-                    maxW,
-                    maxH,
-                    moved,
-                  } = item;
+                  const { i, x, y, w, h, minW, minH, maxW, maxH, moved } = item;
 
                   return {
                     i,

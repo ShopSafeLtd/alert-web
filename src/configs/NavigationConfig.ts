@@ -339,111 +339,14 @@ const navigationConfig: NavItem[] = [
     breadcrumb: true,
     intl: defineMessage({
       id: 'reports',
-      defaultMessage: 'Reports',
+      defaultMessage: 'Reports Centre',
     }),
     permission: [
       {
         model: PermissionModel.Reports,
       },
     ],
-    submenu: [
-      {
-        key: 'performance',
-        path: `${APP_PREFIX_PATH}/reports/performance-report`,
-        title: 'Summary',
-        intl: defineMessage({
-          id: 'Summary',
-          defaultMessage: 'Summary',
-        }),
-        icon: faPieChart,
-        breadcrumb: true,
-        submenu: [],
-      },
-      {
-        key: 'offender',
-        path: `${APP_PREFIX_PATH}/reports/offender-profile`,
-        title: 'Offender',
-        icon: faUser,
-        breadcrumb: true,
-        submenu: [],
-        intl: defineMessage({
-          id: 'offender',
-          defaultMessage: 'Offender',
-        }),
-      },
-      {
-        key: 'business',
-        path: `${APP_PREFIX_PATH}/reports/business`,
-        title: 'Business',
-        intl: defineMessage({
-          id: 'business',
-          defaultMessage: 'Business',
-        }),
-        icon: faBuilding,
-        breadcrumb: true,
-        submenu: [],
-      },
-      {
-        key: 'business-engagement',
-        path: `${APP_PREFIX_PATH}/reports/business-engagement`,
-        title: 'Business Engagement',
-        icon: faBuilding,
-        intl: defineMessage({
-          id: 'business-engagement',
-          defaultMessage: 'Business Engagement',
-        }),
-        breadcrumb: true,
-        submenu: [],
-      },
-      {
-        key: 'user-engagement',
-        path: `${APP_PREFIX_PATH}/reports/user-engagement`,
-        title: 'User Engagement',
-        icon: faUsers,
-        intl: defineMessage({
-          id: 'user-engagement',
-          defaultMessage: 'User Engagement',
-        }),
-        breadcrumb: true,
-        submenu: [],
-      },
-      {
-        key: 'incidentMap',
-        intl: defineMessage({
-          id: 'incidentMap',
-          defaultMessage: 'Incident Map',
-        }),
-        path: `${APP_PREFIX_PATH}/reports/incident-map`,
-        title: 'Incident Map',
-        icon: faMapLocationDot,
-        breadcrumb: true,
-        submenu: [],
-      },
-      // {
-      //   key: 'data-audit',
-      //   path: `${APP_PREFIX_PATH}/reports/data-audit`,
-      //   title: 'Data Audit',
-      //   icon: faCalendarLinesPen,
-      //   intl: defineMessage({
-      //     id: 'data-audit',
-      //     defaultMessage: 'Data Audit',
-      //   }),
-      //   breadcrumb: true,
-      //   submenu: [],
-      // },
-      {
-        key: 'crime-groups-report',
-        path: `${APP_PREFIX_PATH}/reports/crime-groups`,
-        title: 'Crime Groups',
-        intl: defineMessage({
-          id: 'crime-groups-report',
-          defaultMessage: 'Crime Groups',
-        }),
-        icon: faPeopleGroup,
-        breadcrumb: true,
-        submenu: [],
-      },
-    ],
+    submenu: [],
   },
   {
     key: 'settings',

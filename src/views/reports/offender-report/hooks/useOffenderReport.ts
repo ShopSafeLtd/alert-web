@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   ReportType,
   useOffenderReportQuery,
@@ -14,7 +15,7 @@ import OffenderLayout, { OffenderMetaData } from './initLayout';
 import useReportState from '../../../../utils/reports/useReportState';
 
 const useOffenderReport = (): Return => {
-  const { id: selectedOffender } = useParams();
+  const { id: selectedOffender, reportId } = useParams();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const {
     currentScheme,
@@ -28,7 +29,6 @@ const useOffenderReport = (): Return => {
     setLayout,
     selectedBusiness,
     setSelectedBusiness,
-    defaultTemplate,
     groups,
     setGroups,
     selectedGroups,
@@ -59,6 +59,10 @@ const useOffenderReport = (): Return => {
     ReportType: ReportType.Offender,
   });
   const userId = useStoreState((state) => state.user.id);
+
+  useEffect(() => {
+    if (templates.length > 0 && reportId) selectTemplate(reportId);
+  }, [templates, reportId]);
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
@@ -101,7 +105,6 @@ const useOffenderReport = (): Return => {
         ]);
         arrangeTemplates(
           groupsData?.scheme?.reportTemplates || [],
-          defaultTemplate,
           setTemplates
         );
       },

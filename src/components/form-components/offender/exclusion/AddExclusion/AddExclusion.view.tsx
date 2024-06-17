@@ -80,8 +80,8 @@ const AddExclusion = ({
               <Form.Item
                 name="months"
                 label={intl.formatMessage({
-                  defaultMessage: 'Duration (Months)',
-                  id: 'u5MbA8',
+                  defaultMessage: 'Duration (Weeks)',
+                  id: 'J+Eyds',
                 })}
               >
                 <InputNumber style={{ width: 120 }} disabled={saving} />
@@ -161,7 +161,7 @@ const AddExclusion = ({
                 dependencies={['endDate']}
                 rules={[
                   {
-                    required: true,
+                    required: type !== BanType.Other,
                     message: intl.formatMessage({
                       defaultMessage: 'Please select a start date',
                       id: 'dKMbT0',
@@ -205,7 +205,7 @@ const AddExclusion = ({
                 })}
                 rules={[
                   {
-                    required: true,
+                    required: type !== BanType.Other,
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select a end date for the outcome.',

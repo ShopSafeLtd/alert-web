@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Row } from 'antd';
 import View from './OffenderReport.view';
 import useOffenderReport from './hooks/useOffenderReport';
 import OffenderSideList from '../../../components/offenders/OffenderSideList';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 
 const OffenderReport = () => {
   const {
@@ -48,8 +49,13 @@ const OffenderReport = () => {
     templates,
     setAsDefault,
   } = useOffenderReport();
+  const [collapsed, setCollapsed] = useState(true);
+
   return (
     <Row wrap={false}>
+      <Col style={{ width: collapsed ? 0 : undefined }}>
+        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+      </Col>
       <Col>
         <OffenderSideList
           to="/app/reports/offender-profile/"

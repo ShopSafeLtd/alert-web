@@ -68,7 +68,7 @@ const EvidenceTable = ({
         }),
         description: intl.formatMessage(
           {
-            defaultMessage: `The document has been deleted from the {title}!`,
+            defaultMessage: 'The document has been deleted from the {title}!',
             id: 'Qr7jBZ',
           },
           { title }
@@ -119,7 +119,7 @@ const EvidenceTable = ({
               return (
                 <>
                   {value?.slice(0, 2).map((el) => (
-                    <Tag>{el}</Tag>
+                    <Tag key={el}>{el}</Tag>
                   ))}
                   <Tooltip title={value.slice(2).join(', ')}>
                     <Tag>
@@ -137,7 +137,7 @@ const EvidenceTable = ({
                 </>
               );
             }
-            return value?.map((el) => <Tag>{el}</Tag>);
+            return value?.map((el) => <Tag key={el}>{el}</Tag>);
           },
         },
         {

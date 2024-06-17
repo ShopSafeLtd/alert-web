@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import type { MenuProps } from 'antd';
-import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
+import { Button, Col, Drawer, Row, Select, Typography } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import Page from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
@@ -10,13 +9,13 @@ import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
-import { ReportType } from 'graphql/generated';
 import OffenderReportLayout from './layout/OffenderReportLayout';
 import OffenderLayout from './hooks/initLayout';
 import type { Props } from './hooks/types';
 import AddLogo from '../../../components/reports/addLogo';
 import SaveAs from '../../../components/reports/saveAs';
 import { layoutMap } from '../types';
+import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
 
 const { Title } = Typography;
 
@@ -45,12 +44,8 @@ const FilterOptions = ({
   setSelectedBusiness,
   businesses,
 }: FilterType) => (
-  <Row
-    gutter={16}
-    className="no-print"
-    style={{ marginBottom: 10, justifyContent: 'center' }}
-  >
-    <Col span={5}>
+  <Row gutter={8} className="no-print" wrap={false}>
+    <Col span={7}>
       <Select
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Groups',
@@ -63,7 +58,7 @@ const FilterOptions = ({
         }}
         value={selectedGroups}
         defaultValue={groups.map((group) => group.value)}
-        style={{ width: '100%', marginRight: 10 }}
+        style={{ width: '100%' }}
       >
         {groups?.map((group) => (
           <Select.Option
@@ -76,7 +71,7 @@ const FilterOptions = ({
         ))}
       </Select>
     </Col>
-    <Col span={5}>
+    <Col span={6}>
       <Select
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Businesses',
@@ -89,7 +84,7 @@ const FilterOptions = ({
         }}
         value={selectedBusiness}
         defaultValue={businesses.map((business) => business.value)}
-        style={{ width: '100%', marginLeft: 10 }}
+        style={{ width: '100%' }}
       >
         {businesses?.map((business) => (
           <Select.Option
@@ -105,7 +100,7 @@ const FilterOptions = ({
 
     <Col span={7}>
       <DatePicker.RangePicker
-        style={{ width: '100%', marginLeft: 10 }}
+        style={{ width: '100%' }}
         defaultValue={[dateRange.startDate, dateRange.endDate]}
         value={[dateRange.startDate, dateRange.endDate]}
         onChange={(value) => {
@@ -170,182 +165,56 @@ const PerformanceReport = ({
   removeLogo,
   saveAsDrawer,
   saveTemplate,
-  selectTemplate,
-  selectedTemplate,
   setMetadata,
   setAddLogoDrawer,
   setSaveAsDrawer,
-  templates,
-  setAsDefault,
 }: Omit<Props, 'selectedOffender'>) => {
   const intl = useIntl();
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
-  const handleMenuClick: MenuProps['onClick'] = (e) => {
-    if (e.key === '1') {
-      setSaveAsDrawer(true);
-    }
-    if (e.key === '2') {
-      saveTemplate('', 'update');
-    }
-    if (e.key === '3') {
-      setAsDefault({
-        templateId: selectedTemplate,
-        type: ReportType.Offender,
-        default: true,
-      });
-    }
-  };
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: intl.formatMessage({
-        defaultMessage: 'Save as',
-        id: 'nCsL6d',
-      }),
-    },
-    {
-      key: '2',
-      disabled: selectedTemplate === 'default',
-      label: intl.formatMessage({
-        defaultMessage: 'Update template',
-        id: 'jS/UOn',
-      }),
-    },
-    {
-      key: '3',
-      label: intl.formatMessage({
-        defaultMessage: 'Set as default',
-        id: 'z+Zrln',
-      }),
-      disabled:
-        templates.find((template) => template.id === selectedTemplate)
-          ?.default ||
-        selectedTemplate === 'default' ||
-        false,
-    },
-  ];
 
   return (
     <Page>
-      {!groupsLoading && selectedTemplate !== '' && (
-        <>
-          <div
-            style={{
-              position: 'absolute',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              top: 20,
-              right: 20,
-            }}
-          >
-            <Button
-              style={{ marginRight: 10, zIndex: 1000 }}
-              key="2"
-              onClick={() => setMinDrawer(!minDrawer)}
-              type="default"
-              hidden={!editMode}
-            >
-              {minDrawer
-                ? intl.formatMessage({
-                    defaultMessage: 'Hide Drawer',
-                    id: 'bfZEmd',
-                  })
-                : intl.formatMessage({
-                    defaultMessage: 'Show Drawer',
-                    id: 'Ri86Tj',
-                  })}
-            </Button>
-            <Button
-              style={{ marginRight: 10, zIndex: 1000 }}
-              key="1"
-              onClick={() => setEditMode(!editMode)}
-              type={editMode ? 'primary' : 'default'}
-            >
-              {editMode
-                ? intl.formatMessage({
-                    defaultMessage: 'Lock',
-                    id: 'Zl4/y9',
-                  })
-                : intl.formatMessage({
-                    defaultMessage: 'Edit',
-                    id: 'wEQDC6',
-                  })}
-            </Button>
-            <Button
-              type="primary"
-              style={{ zIndex: 1000 }}
-              onClick={handlePrint}
-              disabled={editMode}
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Print',
-                id: 'CXRlIo',
-              })}
-            </Button>
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              top: 80,
-              right: 20,
-            }}
-          >
-            <Select
-              style={{
-                width: 200,
-                marginLeft: 10,
-                marginRight: 10,
-                zIndex: 1000,
-              }}
-              onChange={(value) => selectTemplate(value)}
-              defaultValue={templates[0]?.id}
-              value={selectedTemplate}
-            >
-              {templates.map((template) => (
-                <Select.Option key={template.id} value={template.id}>
-                  {template.name}
-                  {template.default
-                    ? intl.formatMessage({
-                        defaultMessage: ' (Default)',
-                        id: 'G16X1c',
-                      })
-                    : ''}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              top: 130,
-              right: 20,
-            }}
-          >
-            <Dropdown
-              menu={{ items, onClick: handleMenuClick }}
-              placement="bottomLeft"
-              overlayStyle={{ zIndex: 1000 }}
-              className="no-print overlay"
-            >
-              <Button>
-                {intl.formatMessage({
-                  defaultMessage: 'Save',
-                  id: 'jvo0vs',
-                })}
-              </Button>
-            </Dropdown>
-          </div>
-        </>
-      )}
+      <Row
+        className="no-print"
+        style={{
+          position: 'absolute',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          top: 20,
+          left: 20,
+          right: 20,
+          zIndex: 1000,
+        }}
+      >
+        <Col flex={1}>
+          <FilterOptions
+            groups={groups}
+            intl={intl}
+            setSelectedGroups={setSelectedGroups}
+            selectedGroups={selectedGroups}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            groupsLoading={groupsLoading}
+            setSelectedBusiness={setSelectedBusiness}
+            selectedBusiness={selectedBusiness}
+            businesses={businesses}
+          />
+        </Col>
+        <Col>
+          <ReportToolbar
+            handlePrint={handlePrint}
+            setMinDrawer={setMinDrawer}
+            editMode={editMode}
+            minDrawer={minDrawer}
+            saveTemplate={saveTemplate}
+            setEditMode={setEditMode}
+            setSaveAsDrawer={setSaveAsDrawer}
+          />
+        </Col>
+      </Row>
       {editMode ? (
-        <div className="print-page">
+        <div style={{ paddingTop: 60 }} className="print-page">
           <div className="logo">
             {metadata
               ?.find((item) => item.key === 'logo')
@@ -397,18 +266,6 @@ const PerformanceReport = ({
               }
             )}
           </Title>
-          <FilterOptions
-            groups={groups}
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-            setSelectedGroups={setSelectedGroups}
-            groupsLoading={groupsLoading}
-            selectedGroups={selectedGroups}
-            selectedBusiness={selectedBusiness}
-            setSelectedBusiness={setSelectedBusiness}
-            businesses={businesses}
-            intl={intl}
-          />
           <div className="print-container">
             <div className="print-body">
               <ReactGridLayout
@@ -565,19 +422,6 @@ const PerformanceReport = ({
                       </>
                     ))}
                 </div>
-
-                <FilterOptions
-                  groups={groups}
-                  dateRange={dateRange}
-                  setDateRange={setDateRange}
-                  setSelectedGroups={setSelectedGroups}
-                  groupsLoading={groupsLoading}
-                  selectedGroups={selectedGroups}
-                  selectedBusiness={selectedBusiness}
-                  setSelectedBusiness={setSelectedBusiness}
-                  businesses={businesses}
-                  intl={intl}
-                />
               </>
             }
             title={
