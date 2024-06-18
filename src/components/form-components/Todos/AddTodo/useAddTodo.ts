@@ -32,7 +32,7 @@ export interface FormData {
   dueDate: Moment;
   assignedUsers: string[];
   questionGroup?: string;
-
+  groups: string[];
   [answer: string]: string | string[] | undefined | Moment | number;
 }
 
@@ -294,6 +294,7 @@ const useAddTodo = ({
             data.assignedUsers && data.assignedUsers.length > 0
               ? { connect: data.assignedUsers.map((id) => ({ id })) }
               : undefined,
+          groups: data.groups.map((id) => ({ id })),
           questions:
             selectedQuestions && selectedQuestions.length > 0
               ? {
