@@ -24,6 +24,7 @@ import {
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import type { Layout } from 'react-grid-layout';
 import GridLayout from 'react-grid-layout';
+import moment from 'moment';
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -35,6 +36,7 @@ import type { OffenderField, Selected } from './useCompareIncident';
 const { Text, Title } = Typography;
 
 type Offender = Exclude<ViewOffenderCompareQuery['offender'], undefined | null>;
+
 interface Props {
   offenders: Offender[];
   preview: Offender;
@@ -388,13 +390,12 @@ const CompareIncident = ({
                     <div className={classes.field}>
                       <div className={classes.text}>
                         <Text>
-                          {getAge(
-                            offender?.dateOfBirth?.toString() ||
-                              intl.formatMessage({
+                          {offender?.dateOfBirth
+                            ? moment(offender?.dateOfBirth).format('DD/MM/YY')
+                            : intl.formatMessage({
                                 defaultMessage: 'Unknown',
                                 id: '5jeq8P',
-                              })
-                          )}
+                              })}
                         </Text>
                       </div>
                       <Checkbox
@@ -532,13 +533,12 @@ const CompareIncident = ({
               <Divider style={{ margin: 0 }} />
               <div className={classes.field}>
                 <Text>
-                  {getAge(
-                    preview?.dateOfBirth?.toString() ||
-                      intl.formatMessage({
+                  {preview?.dateOfBirth
+                    ? moment(preview.dateOfBirth).format('DD/MM/YYYY')
+                    : intl.formatMessage({
                         defaultMessage: 'Unknown',
                         id: '5jeq8P',
-                      })
-                  )}
+                      })}
                 </Text>
               </div>
               <Divider style={{ margin: 0 }} />

@@ -51,7 +51,6 @@ const useCrimeGroupReport = (): Return => {
     addLogo,
     selectTemplate,
     saveTemplate: saveTemplateState,
-    setAsDefault,
   } = useReportState({
     InitLayout: CrimeGroupLayout,
     InitMetaData: CrimeGroupMetaData,
@@ -252,7 +251,6 @@ const useCrimeGroupReport = (): Return => {
     targetedGoodsData,
     offendersTableData,
     incidentsTableData,
-    setAsDefault,
   };
 };
 

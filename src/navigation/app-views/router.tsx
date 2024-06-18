@@ -17,27 +17,27 @@ import type { NavItem as ConfigNavItem } from '../../configs/NavigationConfig';
 import navigationConfig from '../../configs/NavigationConfig';
 import { APP_PREFIX_PATH } from '../../configs/AppConfig';
 
-const Onboarding = lazy(() => import(`./onboarding/router`));
-const Incidents = lazy(() => import(`./incidents/router`));
-const Offenders = lazy(() => import(`./offenders/router`));
-const Chat = lazy(() => import(`./chat/router`));
-const User = lazy(() => import(`./user-settings/router`));
-const Scheme = lazy(() => import(`./scheme-settings/router`));
-const Article = lazy(() => import(`./article/router`));
-const Reports = lazy(() => import(`./reports/router`));
-const Investigations = lazy(() => import(`./investigations/router`));
-const Documents = lazy(() => import(`./documents/router`));
-const Vehicles = lazy(() => import(`./vehicles/router`));
-const CrimeGroups = lazy(() => import(`./crime-groups/router`));
-const FeedItems = lazy(() => import(`./dashboard/router`));
-const Tasks = lazy(() => import(`./tasks/router`));
-const Notifications = lazy(() => import(`./notifications/router`));
-const Mg11 = lazy(() => import(`./mg11/router`));
-const FaceAi = lazy(() => import(`./face-ai/router`));
-const DataManagement = lazy(() => import(`./data-management/router`));
-const Evidence = lazy(() => import(`./evidence/router`));
-const Checklists = lazy(() => import(`./checklist/router`));
-const DashboardManagement = lazy(() => import(`./dashboard-management/router`));
+const Onboarding = lazy(() => import('./onboarding/router'));
+const Incidents = lazy(() => import('./incidents/router'));
+const Offenders = lazy(() => import('./offenders/router'));
+const Chat = lazy(() => import('./chat/router'));
+const User = lazy(() => import('./user-settings/router'));
+const Scheme = lazy(() => import('./scheme-settings/router'));
+const Article = lazy(() => import('./article/router'));
+const Reports = lazy(() => import('./reports/router'));
+const Investigations = lazy(() => import('./investigations/router'));
+const Documents = lazy(() => import('./documents/router'));
+const Vehicles = lazy(() => import('./vehicles/router'));
+const CrimeGroups = lazy(() => import('./crime-groups/router'));
+const FeedItems = lazy(() => import('./dashboard/router'));
+const Tasks = lazy(() => import('./tasks/router'));
+const Notifications = lazy(() => import('./notifications/router'));
+const Mg11 = lazy(() => import('./mg11/router'));
+const FaceAi = lazy(() => import('./face-ai/router'));
+const DataManagement = lazy(() => import('./data-management/router'));
+const Evidence = lazy(() => import('./evidence/router'));
+const Checklists = lazy(() => import('./checklist/router'));
+const DashboardManagement = lazy(() => import('./dashboard-management/router'));
 
 // Define the interface for your navigation items
 interface NavItem {
@@ -139,9 +139,7 @@ export const AppViews = (): JSX.Element => {
           />
 
           <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />
-          {role !== 'USER' && (
-            <Route key="tasks" path="tasks/*" element={<Tasks />} />
-          )}
+          <Route key="tasks" path="tasks/*" element={<Tasks />} />
           <Route key="incidents" path="incidents/*" element={<Incidents />} />
           <Route
             key="crime-groups"
@@ -157,9 +155,7 @@ export const AppViews = (): JSX.Element => {
             element={<Notifications />}
           />
           <Route key="user" path="user-settings/*" element={<User />} />
-          {(role === 'SCHEME_ADMIN' || role === 'GROUP_ADMIN') && (
-            <Route key="scheme" path="scheme-settings/*" element={<Scheme />} />
-          )}
+          <Route key="scheme" path="scheme-settings/*" element={<Scheme />} />
           <Route key="article" path="article/*" element={<Article />} />
           <Route key="evidence" path="evidence/*" element={<Evidence />} />
           <Route

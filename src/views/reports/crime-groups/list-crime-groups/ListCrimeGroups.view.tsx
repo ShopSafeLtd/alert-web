@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Input, Row, Table } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import useStyles from './ListCrimeGroups.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
@@ -17,10 +17,16 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
+  const { reportId } = useParams();
+
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId={reportId ?? ''}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col flex={1} className={classes.page}>
         <Row gutter={16} className={classes.headerRow}>

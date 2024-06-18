@@ -11,9 +11,10 @@ import useStyles from './ReportsSideMenu.style';
 interface Props {
   collapsed: boolean;
   setCollapsed: (value: boolean) => void;
+  selectedId: string;
 }
 
-const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
+const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -61,7 +62,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
             {data?.reportsCentre.summaryReports.map((item) => (
               <Link key={item.id} to={`/app/reports/summary-report/${item.id}`}>
                 <Tooltip title={item.description}>
-                  <div className={classes.item}>
+                  <div
+                    className={
+                      selectedId === item.id
+                        ? classes.selectedItem
+                        : classes.item
+                    }
+                  >
                     <Typography.Text className={classes.text}>
                       {item.name}
                     </Typography.Text>
@@ -81,7 +88,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
                 to={`/app/reports/offender-profile/${item.id}`}
               >
                 <Tooltip title={item.description}>
-                  <div className={classes.item}>
+                  <div
+                    className={
+                      selectedId === item.id
+                        ? classes.selectedItem
+                        : classes.item
+                    }
+                  >
                     <Typography.Text className={classes.text}>
                       {item.name}
                     </Typography.Text>
@@ -98,7 +111,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
             {data?.reportsCentre.businessReports.map((item) => (
               <Link key={item.id} to={`/app/reports/business/${item.id}`}>
                 <Tooltip title={item.description}>
-                  <div className={classes.item}>
+                  <div
+                    className={
+                      selectedId === item.id
+                        ? classes.selectedItem
+                        : classes.item
+                    }
+                  >
                     <Typography.Text className={classes.text}>
                       {item.name}
                     </Typography.Text>
@@ -118,7 +137,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
             {data?.reportsCentre.crimeGroupReports.map((item) => (
               <Link key={item.id} to={`/app/reports/crime-groups/${item.id}`}>
                 <Tooltip title={item.description}>
-                  <div className={classes.item}>
+                  <div
+                    className={
+                      selectedId === item.id
+                        ? classes.selectedItem
+                        : classes.item
+                    }
+                  >
                     <Typography.Text className={classes.text}>
                       {item.name}
                     </Typography.Text>
@@ -143,7 +168,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
                   id: 'VpEQsA',
                 })}
               >
-                <div className={classes.item}>
+                <div
+                  className={
+                    selectedId === 'business-engagement'
+                      ? classes.selectedItem
+                      : classes.item
+                  }
+                >
                   <Typography.Text className={classes.text}>
                     <FormattedMessage
                       defaultMessage="Business Engagement"
@@ -161,7 +192,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
                   id: 'wqY0X0',
                 })}
               >
-                <div className={classes.item}>
+                <div
+                  className={
+                    selectedId === 'user-engagement'
+                      ? classes.selectedItem
+                      : classes.item
+                  }
+                >
                   <Typography.Text className={classes.text}>
                     <FormattedMessage
                       defaultMessage="User Engagement"
@@ -184,7 +221,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed }: Props) => {
                   id: 'N+vDG+',
                 })}
               >
-                <div className={classes.item}>
+                <div
+                  className={
+                    selectedId === 'incident-map'
+                      ? classes.selectedItem
+                      : classes.item
+                  }
+                >
                   <Typography.Text className={classes.text}>
                     <FormattedMessage
                       defaultMessage="Incident Map"

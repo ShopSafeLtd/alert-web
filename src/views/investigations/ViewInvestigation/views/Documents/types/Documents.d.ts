@@ -11,4 +11,5 @@ export interface ViewProps {
   toggleAddDemDocument: () => void;
   toggleAddDocument: () => void;
   demId: string | undefined | null;
+  onDeleteDocument: (id: string) => void;
 }

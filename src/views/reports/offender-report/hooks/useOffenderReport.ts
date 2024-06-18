@@ -51,7 +51,7 @@ const useOffenderReport = (): Return => {
     changeSize,
     addLogo,
     selectTemplate,
-    setAsDefault,
+
     saveTemplate: saveTemplateState,
   } = useReportState({
     InitLayout: OffenderLayout,
@@ -245,7 +245,6 @@ const useOffenderReport = (): Return => {
     setAddLogoDrawer,
     setSaveAsDrawer,
     templates,
-    setAsDefault,
   };
 };
 

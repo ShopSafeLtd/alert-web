@@ -174,6 +174,7 @@ const compareIncident = (): Return => {
   };
 
   const addOffenders = (value: OffenderData) => {
+    console.log(value);
     setOffenders([
       // @ts-expect-error Date or null
       ...offenders,

@@ -12,7 +12,6 @@ import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
-import { ReportType } from 'graphql/generated';
 import BusinessReport from './layout/BusinessReportLayout';
 import BusinessReportLayout from './hooks/initLayout';
 import type { Return as Props } from './hooks/types';
@@ -20,6 +19,7 @@ import AddLogo from '../../../../components/reports/addLogo';
 import SaveAs from '../../../../components/reports/saveAs';
 import { layoutMap } from '../../types';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { useParams } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -215,10 +215,10 @@ const BusinessReportView = ({
   setAddLogoDrawer,
   setSaveAsDrawer,
   templates,
-  setAsDefault,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const [collapsed, setCollapsed] = useState(false);
+  const { reportId } = useParams();
 
   const intl = useIntl();
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -228,13 +228,13 @@ const BusinessReportView = ({
     if (e.key === '2') {
       saveTemplate('', 'update');
     }
-    if (e.key === '3') {
-      setAsDefault({
-        templateId: selectedTemplate,
-        type: ReportType.Business,
-        default: true,
-      });
-    }
+    // if (e.key === '3') {
+    //   setAsDefault({
+    //     templateId: selectedTemplate,
+    //     type: ReportType.Business,
+    //     default: true,
+    //   });
+    // }
   };
   const items: MenuProps['items'] = [
     {
@@ -252,23 +252,27 @@ const BusinessReportView = ({
         id: 'jS/UOn',
       }),
     },
-    {
-      key: '3',
-      label: intl.formatMessage({
-        defaultMessage: 'Set as default',
-        id: 'z+Zrln',
-      }),
-      disabled:
-        templates.find((template) => template.id === selectedTemplate)
-          ?.default ||
-        selectedTemplate === 'default' ||
-        false,
-    },
+    // {
+    //   key: '3',
+    //   label: intl.formatMessage({
+    //     defaultMessage: 'Set as default',
+    //     id: 'z+Zrln',
+    //   }),
+    //   disabled:
+    //     templates.find((template) => template.id === selectedTemplate)
+    //       ?.default ||
+    //     selectedTemplate === 'default' ||
+    //     false,
+    // },
   ];
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId={reportId ?? ''}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col>
         <Page>

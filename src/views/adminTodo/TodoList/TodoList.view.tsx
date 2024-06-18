@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from 'react';
+import type { TableProps } from 'antd';
 import {
   Avatar,
   Button,
   Card,
   Col,
   Drawer,
-  Empty,
   Input,
   Popconfirm,
   Radio,
@@ -17,7 +17,11 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
+import type {
+  CreateTodoMutation,
+  ListTodosQuery,
+  SchemeGroupsSelectQuery,
+} from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,13 +31,24 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
 import { Link } from 'react-router-dom';
 import getTodoUrl from 'utils/get-to-do-url';
-// import useStyles from './TodoList.styles';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 import type { ListData } from '../useActivities';
-
 // const { Panel } = Collapse;
 
 type TemplateData = ListData;
+
+export interface TableItem {
+  key: string;
+  name?: string | null;
+  description?: string | null;
+  dueDate?: Date | null;
+  completed?: boolean | null;
+  assignedUsers: { id: string; fullName: string }[];
+  groups: { id: string; name: string }[];
+  todo: Exclude<ListTodosQuery['listTodos'], undefined | null>['todos'][0];
+  linkedItem?: JSX.Element;
+}
 
 interface Props {
   data:
@@ -58,6 +73,10 @@ interface Props {
   templateData: ListData[];
   selectedTemplate: TemplateData | null;
   selectTemplate: (id: string | null) => void;
+  groupsFilter: string[];
+  setGroupsFilter: (groups: string[]) => void;
+  onTableChange: TableProps<TableItem>['onChange'];
+  groupsData: SchemeGroupsSelectQuery | undefined;
 }
 
 const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
@@ -135,6 +154,10 @@ const AdminTodos = ({
   templateData,
   selectTemplate,
   selectedTemplate,
+  groupsFilter,
+  setGroupsFilter,
+  onTableChange,
+  groupsData,
 }: Props): JSX.Element => {
   // const classes = useStyles();
   const intl = useIntl();
@@ -192,14 +215,6 @@ const AdminTodos = ({
     .map((id) => userData?.find((el) => el.id === id))
     .map((el) => ({ text: el?.fullName || '', value: el?.id || '' }));
 
-  const groupIds = new Set(
-    data?.todos.flatMap((todo) => todo.groups?.map(({ id }) => id))
-  );
-  const groupData = data?.todos.flatMap(({ groups }) => groups);
-  const groupFilter = [...groupIds]
-    .map((id) => groupData?.find((el) => el.id === id))
-    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
-
   const completeTodo = (value: boolean, id?: string) => {
     if (value && id) {
       onCompletedTodo(id);
@@ -209,7 +224,7 @@ const AdminTodos = ({
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 15 }}>
-        <Col span={8}>
+        <Col span={6}>
           <Input
             // value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -218,6 +233,20 @@ const AdminTodos = ({
               defaultMessage: 'Search for a task...',
             })}
             allowClear
+          />
+        </Col>
+        <Col span={5}>
+          <GroupsSelect
+            allowClear
+            onChange={setGroupsFilter}
+            value={groupsFilter}
+            placeholder={intl.formatMessage({
+              id: 'hzmswI',
+              defaultMessage: 'Groups',
+            })}
+            style={{ width: '100%' }}
+            mode="multiple"
+            maxTagCount="responsive"
           />
         </Col>
         <Col flex={1} />
@@ -293,14 +322,14 @@ const AdminTodos = ({
           </Radio.Group>
         </Col>
       </Row>
-      <Card loading={loading}>
+      <Card loading={loading} bodyStyle={{ padding: loading ? 20 : 0 }}>
         {loading ? (
           Array.from({ length: 5 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <Skeleton key={index} />
           ))
-        ) : data?.total ? (
-          <Table
+        ) : (
+          <Table<TableItem>
             dataSource={data?.todos?.map((todo) => ({
               key: todo.id,
               name: todo.name,
@@ -319,6 +348,7 @@ const AdminTodos = ({
             // }
             loading={loading}
             size="small"
+            onChange={onTableChange}
             pagination={{
               hideOnSinglePage: true,
               total: data?.uncompletedTotal,
@@ -409,13 +439,12 @@ const AdminTodos = ({
                   id: 'hzmswI',
                 }),
                 dataIndex: 'groups',
-                filters: groupFilter,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                onFilter: (
-                  value: string | number | boolean,
-                  record: { groups: { id: string; name: string }[] }
-                ) => record.groups.some(({ id }) => id === value),
+                filters:
+                  groupsData?.groups.map(({ id, name }) => ({
+                    text: name,
+                    value: id,
+                  })) ?? [],
+                filteredValue: groupsFilter,
                 render: (value: { id: string; name: string }[]) => (
                   <Typography.Text>
                     {value
@@ -541,23 +570,6 @@ const AdminTodos = ({
               },
             ]}
           />
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description={intl.formatMessage({
-                defaultMessage: 'No Activities',
-                id: 'wndZeG',
-              })}
-            />
-          </div>
         )}
       </Card>
 

@@ -15,7 +15,6 @@ import {
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import type { OffenderFilters } from 'state/data-model';
-import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   order: OffenderSort;
@@ -32,8 +31,6 @@ interface Return {
   setBusinesses: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   variables: OffenderFilters;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   businessData: SearchBusinessesQuery | undefined;
@@ -54,9 +51,6 @@ const useOffenderFilter = (): Return => {
   const publicOffenderDOB =
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
     role !== Role.User;
-  // Queries
-  // Fetch scheme groups if scheme admin
-  const { groups, groupsLoading } = useGroupsContext();
 
   // Fetch scheme tags
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
@@ -232,13 +226,10 @@ const useOffenderFilter = (): Return => {
   return {
     order,
     setOrder,
-    groups,
-    groupsLoading,
     variables,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
-
     clearFilters,
     setAge,
     setBuild,

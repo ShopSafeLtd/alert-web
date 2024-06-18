@@ -53,13 +53,13 @@ const PerformanceReport = (): JSX.Element => {
     toggleFiltersOpen,
     setSelectedRoles,
     selectedRoles,
-    setAsDefault,
     filterCount,
     schemeId,
+    saving,
   } = usePerformanceReport();
   return (
     <View
-      setAsDefault={setAsDefault}
+      saving={saving}
       redactOnPrint={redactOnPrint}
       setRedactOnPrint={setRedactOnPrint}
       selectedTemplate={selectedTemplate}

@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import DebouncedInput from 'utils/debounced-input';
 import useStyles from './search.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { useParams } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -31,11 +32,15 @@ const OffenderProfile = ({
   const classes = useStyles();
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
-
+  const { reportId } = useParams();
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId={reportId ?? ''}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col flex={1} style={{ height: '100vh', overflow: 'auto' }}>
         <div className={classes.searchPage}>

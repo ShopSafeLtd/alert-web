@@ -23,6 +23,7 @@ import { LayoutToReadable } from '../types';
 import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
+import { useParams } from 'react-router-dom';
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -169,7 +170,9 @@ const PerformanceReport = ({
   selectedRoles,
   filterCount,
   schemeId,
+  saving,
 }: Props) => {
+  const { reportId } = useParams();
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -178,7 +181,11 @@ const PerformanceReport = ({
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId={reportId ?? ''}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col flex={1}>
         <Page>
@@ -219,6 +226,7 @@ const PerformanceReport = ({
                 setEditMode={setEditMode}
                 setRedactOnPrint={setRedactOnPrint}
                 setSaveAsDrawer={setSaveAsDrawer}
+                saving={saving}
               />
             </Col>
           </Row>

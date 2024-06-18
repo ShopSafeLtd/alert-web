@@ -31,6 +31,10 @@ const AdminTodos = ({
     selectedTodo,
     selectTemplate,
     selectedTemplate,
+    onTableChange,
+    groupsFilter,
+    setGroupsFilter,
+    groupsData,
   } = useAdminTodos({ templateData });
 
   return (
@@ -54,6 +58,10 @@ const AdminTodos = ({
       toggleAllUsers={toggleAllUsers}
       toggleAllSchemes={toggleAllSchemes}
       templateData={templateData}
+      onTableChange={onTableChange}
+      groupsFilter={groupsFilter}
+      setGroupsFilter={setGroupsFilter}
+      groupsData={groupsData}
     />
   );
 };

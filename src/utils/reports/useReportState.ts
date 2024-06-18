@@ -12,7 +12,6 @@ import { tableLengthToHeight } from '#/components/reports/utils/utils';
 import {
   SchemeReportDetailsDocument,
   useCreateReportTemplateMutation,
-  useSetDefaultTemplateMutation,
   useUpdateReportTemplateMutation,
 } from 'graphql/generated';
 import type {
@@ -78,12 +77,8 @@ interface Return {
   selectedRoles: string[];
   setSelectedRoles: (arg: string[]) => void;
   filterCount: number;
-  setAsDefault: (arg0: {
-    templateId: string;
-    type: IReportType;
-    default: boolean;
-  }) => void;
   userId: string;
+  saving: boolean;
 }
 
 const useReportState = ({
@@ -159,6 +154,7 @@ const useReportState = ({
         item.i !== 'pageBreak4'
     )
   );
+  const [saving, setSaving] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState<string[]>([]);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
@@ -212,7 +208,6 @@ const useReportState = ({
   );
   const [templates, setTemplatesState] = useState<IReportTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
-  console.log('state', selectedTemplate);
   const setDateRange = (dateRangeInput: {
     startDate: Date;
     endDate: Date;
@@ -398,123 +393,6 @@ const useReportState = ({
     },
   });
 
-  const [setAsDefaultMutation] = useSetDefaultTemplateMutation({
-    onCompleted: (d) => {
-      const updatedTemps = [
-        ...(templates?.map((template) => {
-          const isNew = template.id === d?.setDefaultTemplate?.id;
-          return {
-            ...template,
-            id: template.id || '',
-            name: template.name || '',
-            metaData: template.metaData || [],
-            default: isNew ? !!d?.setDefaultTemplate?.default : false,
-            type: ReportType,
-            layout:
-              template.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) || [],
-          };
-        }) || []),
-      ];
-      arrangeTemplates(updatedTemps, setTemplates);
-    },
-    update: (cache, { data: d }) => {
-      const existingTemplates = cache.readQuery<
-        SchemeReportDetailsQuery,
-        SchemeReportDetailsQueryVariables
-      >({
-        query: SchemeReportDetailsDocument,
-        variables: {
-          where: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
-            },
-          },
-          schemeWhere: {
-            id: currentScheme,
-          },
-          reportTemplatesWhere: {
-            type: {
-              equals: ReportType,
-            },
-          },
-        },
-      });
-      if (existingTemplates && d?.setDefaultTemplate) {
-        const updatedTemps = [
-          ...(existingTemplates?.scheme?.reportTemplates.map((template) => {
-            const isNew = template.id === d?.setDefaultTemplate?.id;
-            return {
-              ...template,
-              id: template.id || '',
-              name: template.name || '',
-              metaData: (template.metaData as MetaData[]) || [],
-              default: isNew ? !!d?.setDefaultTemplate?.default : false,
-              type: template.type,
-              layout:
-                template.layout.map((item) => ({
-                  ...item,
-                  maxH: item.maxH ?? undefined,
-                  maxW: item.maxW ?? undefined,
-                  minH: item.minH ?? undefined,
-                  minW: item.minW ?? undefined,
-                })) || [],
-            };
-          }) || []),
-        ];
-
-        cache.writeQuery<
-          SchemeReportDetailsQuery,
-          SchemeReportDetailsQueryVariables
-        >({
-          query: SchemeReportDetailsDocument,
-          data: {
-            groups: existingTemplates.groups,
-            scheme: {
-              ...existingTemplates.scheme,
-              reportIcons: [...(existingTemplates.scheme?.reportIcons || [])],
-              reportTemplates: updatedTemps,
-            },
-          },
-          variables: {
-            where: {
-              scheme: {
-                id: {
-                  equals: currentScheme,
-                },
-              },
-            },
-            schemeWhere: {
-              id: currentScheme,
-            },
-            reportTemplatesWhere: {
-              type: {
-                equals: ReportType,
-              },
-            },
-          },
-        });
-      }
-    },
-  });
-  const setAsDefault = (arg0: {
-    templateId: string;
-    type: IReportType;
-    default: boolean;
-  }) => {
-    void setAsDefaultMutation({
-      variables: {
-        data: arg0,
-      },
-    });
-  };
   const [updateReportTemplate] = useUpdateReportTemplateMutation({
     update: (cache, { data: d }) => {
       const existingTemplates = cache.readQuery<
@@ -628,6 +506,7 @@ const useReportState = ({
     method: 'create' | 'update',
     idsToDelete?: string[]
   ) => {
+    setSaving(true);
     if (method === 'create')
       await createReportTemplate({
         variables: {
@@ -779,6 +658,7 @@ const useReportState = ({
         },
       });
     }
+    setSaving(false);
   };
 
   const toggleFiltersOpen = () => {
@@ -833,8 +713,8 @@ const useReportState = ({
     setSelectedRoles,
     selectedRoles,
     filterCount,
-    setAsDefault,
     userId,
+    saving,
   };
 };
 

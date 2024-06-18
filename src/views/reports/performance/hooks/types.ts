@@ -8,10 +8,7 @@ import type {
   TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from '../../../../components/reports/tableColumns';
-import type {
-  PerformanceReportQuery,
-  ReportType as IReportType,
-} from '../../../../graphql/generated';
+import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import type {
   ExtendedLayout,
   IReportTemplate,
@@ -71,9 +68,5 @@ export interface Props {
   setSelectedRoles: (roles: string[]) => void;
   filterCount: number;
   schemeId: string;
-  setAsDefault: (arg0: {
-    templateId: string;
-    type: IReportType;
-    default: boolean;
-  }) => void;
+  saving: boolean;
 }

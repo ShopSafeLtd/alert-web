@@ -6,13 +6,19 @@ import {
   Dropdown,
   Image,
   Menu,
+  Popconfirm,
   Row,
   Skeleton,
   Table,
 } from 'antd';
 import TabContent from 'components/TabContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
+import {
+  faDownload,
+  faMagnifyingGlass,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 import type { ViewProps } from './types/Documents';
 
@@ -25,6 +31,7 @@ const DocumentsView = ({
   toggleAddDemDocument,
   toggleAddDocument,
   demId,
+  onDeleteDocument,
 }: ViewProps) => {
   const tags = new Set(
     data?.flatMap((document) => document.tags.map((tag) => tag.name)) || []
@@ -104,6 +111,7 @@ const DocumentsView = ({
               }),
               dataIndex: 'thumbnail',
               key: 'thumbnail',
+              // eslint-disable-next-line
               render: (thumbnail: string | null | undefined) =>
                 thumbnail ? (
                   <Image src={thumbnail} width={180} alt="thumbnail" />
@@ -143,18 +151,32 @@ const DocumentsView = ({
               title: '',
               dataIndex: 'fileUrl',
               key: 'fileUrl',
-              render: (fileUrl: string) => (
-                <Button
-                  type="link"
-                  onClick={() => {
-                    window.open(fileUrl);
-                  }}
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'Download',
-                    id: '5q3qC0',
-                  })}
-                </Button>
+              render: (fileUrl: string, item) => (
+                <Row gutter={8}>
+                  <Col>
+                    <Button
+                      onClick={() => {
+                        window.open(fileUrl);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faDownload} />
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Popconfirm
+                      title={intl.formatMessage({
+                        defaultMessage: 'Are you sure?',
+                        id: '2oCaym',
+                      })}
+                      overlayInnerStyle={{ padding: 10 }}
+                      onConfirm={() => onDeleteDocument(item.key)}
+                    >
+                      <Button>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </Popconfirm>
+                  </Col>
+                </Row>
               ),
             },
           ]}

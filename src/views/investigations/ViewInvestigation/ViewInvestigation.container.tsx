@@ -83,6 +83,7 @@ const ViewCustomer: React.FC = () => {
     onCloseInvestigation,
     onReopenInvestigation,
     updateAddOffenderList,
+    onDeleteDocument,
   } = useViewCustomer(id || '');
 
   return (
@@ -162,6 +163,7 @@ const ViewCustomer: React.FC = () => {
       onCompletedAddOffender={onCompletedAddOffender}
       onCloseInvestigation={onCloseInvestigation}
       onReopenInvestigation={onReopenInvestigation}
+      onDeleteDocument={onDeleteDocument}
     />
   );
 };

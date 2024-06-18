@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
       sentryVitePlugin({
         org: 'nvoyy-group',
         project: 'alert-web',
+        disable: mode === 'development' || !env.SENTRY_AUTH_TOKEN,
         // include: './build',
         authToken: env.SENTRY_AUTH_TOKEN,
         sourcemaps: {
