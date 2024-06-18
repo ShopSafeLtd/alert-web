@@ -1,9 +1,6 @@
 import type { RefObject } from 'react';
 import type RGL from 'react-grid-layout';
-import type {
-  ReportType as IReportType,
-  TargetedBusinessReportQuery,
-} from '../../../../../graphql/generated';
+import type { TargetedBusinessReportQuery } from '../../../../../graphql/generated';
 import type {
   IncidentsTableData,
   TargetedGoodsTableData,
@@ -52,9 +49,4 @@ export interface Return {
   setAddLogoDrawer: (arg0: boolean) => void;
   setSaveAsDrawer: (arg0: boolean) => void;
   templates: IReportTemplate[];
-  setAsDefault: (arg0: {
-    templateId: string;
-    type: IReportType;
-    default: boolean;
-  }) => void;
 }

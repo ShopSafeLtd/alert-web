@@ -1,6 +1,11 @@
 import { useStoreActions, useStoreState } from 'state';
-import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
+import type {
+  CreateTodoMutation,
+  ListTodosQuery,
+  SchemeGroupsSelectQuery,
+} from 'graphql/generated';
 import {
+  useSchemeGroupsSelectQuery,
   ListTodosDocument,
   QueryMode,
   SortOrder,
@@ -10,6 +15,8 @@ import {
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListData } from '../useActivities';
+import type { TableProps } from 'antd';
+import type { TableItem } from '#/views/adminTodo/TodoList/TodoList.view';
 
 interface Return {
   data:
@@ -35,6 +42,10 @@ interface Return {
   setSelectedTodo: (id: string | null) => void;
   selectedTemplate: ListData | null;
   selectTemplate: (id: string | null) => void;
+  onTableChange: TableProps<TableItem>['onChange'];
+  groupsFilter: string[];
+  setGroupsFilter: (value: string[]) => void;
+  groupsData: SchemeGroupsSelectQuery | undefined;
 }
 
 interface Props {
@@ -52,6 +63,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
   const [allUsers, setAllUsers] = useState(false);
   const [allSchemes, setAllSchemes] = useState(false);
   const [search, setSearch] = useState('');
+  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
@@ -86,6 +98,16 @@ const useAdminTodos = ({ templateData }: Props): Return => {
               },
         },
       },
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
       assignedUsers: allUsers
         ? undefined
         : {
@@ -246,6 +268,33 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     setAllSchemes(!allSchemes);
   };
 
+  const { data: groupsData } = useSchemeGroupsSelectQuery({
+    fetchPolicy: 'cache-first',
+    variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+        users: {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const onTableChange: TableProps<TableItem>['onChange'] = (_, filters) => {
+    setGroupsFilter((filters.groups as string[]) ?? []);
+  };
+
   return {
     data: data?.listTodos,
     loading: (data === null || data === undefined) && loading,
@@ -267,6 +316,10 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     setSelectedTodo,
     selectTemplate,
     selectedTemplate,
+    onTableChange,
+    setGroupsFilter,
+    groupsFilter,
+    groupsData,
   };
 };
 

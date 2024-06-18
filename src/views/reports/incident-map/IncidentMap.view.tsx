@@ -280,7 +280,11 @@ const IncidentMap = ({
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId="incident-map"
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col flex={1} className={classes.page}>
         <Row align="middle" gutter={16} className={classes.titleContainer}>

@@ -4,6 +4,7 @@ import View from './OffenderReport.view';
 import useOffenderReport from './hooks/useOffenderReport';
 import OffenderSideList from '../../../components/offenders/OffenderSideList';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { useParams } from 'react-router-dom';
 
 const OffenderReport = () => {
   const {
@@ -47,14 +48,17 @@ const OffenderReport = () => {
     setAddLogoDrawer,
     setSaveAsDrawer,
     templates,
-    setAsDefault,
   } = useOffenderReport();
   const [collapsed, setCollapsed] = useState(true);
-
+  const { reportId } = useParams();
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId={reportId ?? ''}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col>
         <OffenderSideList
@@ -64,7 +68,6 @@ const OffenderReport = () => {
       </Col>
       <Col flex={1}>
         <View
-          setAsDefault={setAsDefault}
           editMode={editMode}
           setEditMode={setEditMode}
           targetedGoodsData={targetedGoodsData}

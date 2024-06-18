@@ -942,6 +942,7 @@ export interface MetaData {
   type: ReportItemTypes;
   urls?: string[];
   propId?: string;
+  columns?: string[];
 }
 
 export interface SelectOptions {

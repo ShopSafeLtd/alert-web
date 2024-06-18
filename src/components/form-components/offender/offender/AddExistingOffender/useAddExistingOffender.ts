@@ -374,6 +374,7 @@ const useAddExistingOffender = ({
 
   const onSubmit = () => {
     setSaving(true);
+
     if (
       data?.listOffendersAllSchemes?.offenders &&
       data.listOffendersAllSchemes.offenders.length > 0 &&

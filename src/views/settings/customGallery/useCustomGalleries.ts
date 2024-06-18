@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import type { CustomGalleriesQuery } from 'graphql/generated';
+import type {
+  CustomGalleriesQuery,
+  CustomGalleriesQueryVariables,
+} from 'graphql/generated';
 import {
   CustomGalleriesDocument,
   QueryMode,
+  SortOrder,
   useCreateCustomGalleryMutation,
   useCustomGalleriesQuery,
   useDeleteCustomGalleryMutation,
@@ -44,7 +48,10 @@ const useCustomGalleries = (): Return => {
     CustomGalleryData | undefined
   >();
 
-  const variables = {
+  const variables: CustomGalleriesQueryVariables = {
+    order: {
+      name: SortOrder.Asc,
+    },
     where: {
       schemes: {
         some: {

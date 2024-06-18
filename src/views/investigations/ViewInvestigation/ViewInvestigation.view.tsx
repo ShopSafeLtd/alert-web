@@ -133,6 +133,7 @@ interface Props {
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onCompletedAddOffender: () => void;
   onReopenInvestigation: () => void;
+  onDeleteDocument: (id: string) => void;
 }
 
 const useStyles = createUseStyles({
@@ -227,6 +228,7 @@ const ViewInvestigation = ({
   onCompletedAddOffender,
   updateAddOffenderList,
   onReopenInvestigation,
+  onDeleteDocument,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -423,6 +425,7 @@ const ViewInvestigation = ({
               data={data?.investigation?.documents}
               toggleAddDemDocument={toggleAddDemDocument}
               toggleAddDocument={toggleAddDocument}
+              onDeleteDocument={onDeleteDocument}
             />
           </Tabs.TabPane>
         </Tabs>

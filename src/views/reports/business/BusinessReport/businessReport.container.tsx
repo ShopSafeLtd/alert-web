@@ -45,11 +45,9 @@ const BusinessReport = (): JSX.Element => {
     setAddLogoDrawer,
     setSaveAsDrawer,
     templates,
-    setAsDefault,
   } = useBusinessReport();
   return (
     <View
-      setAsDefault={setAsDefault}
       isPrinting={isPrinting}
       removeItem={removeItem}
       changeSize={changeSize}

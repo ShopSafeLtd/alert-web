@@ -51,7 +51,6 @@ import {
   CrimeGroupPerformanceColumns,
   InvestigationsColumns,
   OffenderColumns,
-  TargetedBusinessColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
 import { useIntl } from 'react-intl';
@@ -68,6 +67,7 @@ import useStyles from '../../styles/report.styles';
 import type { AllowedValue, MetaData, ReportItemTypes } from '../../types';
 import type { Props as HookProps } from '../hooks/types';
 import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
+import TargetedBusinessTable from '#/components/reports/components/TargetedBusinessTable/TargetedBusinessTable.view';
 
 interface ContributorTable {
   key: string;
@@ -352,70 +352,75 @@ const PerformanceReportLayout = ({
                   })}
                 </Title>
               </Col>
-              <Row className="stats-row">
-                <Statistic
-                  className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Last Incident (in range)',
-                    id: 'lI3BDd',
-                  })}
-                  value={
-                    data?.performanceReport?.incidentSummary?.lastIncidentDate
-                      ? new Date(
-                          data?.performanceReport?.incidentSummary?.lastIncidentDate
-                        ).toLocaleDateString()
-                      : 'unknown'
-                  }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faCalendar}
-                    />
-                  }
-                />
-
-                <Statistic
-                  className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Most Common Crime Type',
-                    id: 'jbbNOa',
-                  })}
-                  valueRender={(node) => (
-                    <Typography.Text
-                      ellipsis
-                      style={{ maxWidth: 150, overflow: 'hidden' }}
-                    >
-                      {node}
-                    </Typography.Text>
-                  )}
-                  value={
-                    data?.performanceReport?.incidentSummary
-                      ?.mostCommonCrimeType || ''
-                  }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faClipboard}
-                    />
-                  }
-                />
-
-                <Statistic
-                  className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Crime Groups',
-                    id: 'a0aLil',
-                  })}
-                  value={
-                    data?.performanceReport?.createdDataCounts?.crimeGroups || 0
-                  }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faUsers}
-                    />
-                  }
-                />
+              <Row wrap={false}>
+                <Col>
+                  <Statistic
+                    className={classes.stats}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Last Incident (in range)',
+                      id: 'lI3BDd',
+                    })}
+                    value={
+                      data?.performanceReport?.incidentSummary?.lastIncidentDate
+                        ? new Date(
+                            data?.performanceReport?.incidentSummary?.lastIncidentDate
+                          ).toLocaleDateString()
+                        : 'unknown'
+                    }
+                    prefix={
+                      <FontAwesomeIcon
+                        className={classes.prefixIcon}
+                        icon={faCalendar}
+                      />
+                    }
+                  />
+                </Col>
+                <Col>
+                  <Statistic
+                    className={classes.stats}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Top Incident Type',
+                      id: '7uH5I4',
+                    })}
+                    valueRender={(node) => (
+                      <Typography.Text
+                        ellipsis
+                        style={{ maxWidth: 130, overflow: 'hidden' }}
+                      >
+                        {node}
+                      </Typography.Text>
+                    )}
+                    value={
+                      data?.performanceReport?.incidentSummary
+                        ?.mostCommonCrimeType || ''
+                    }
+                    prefix={
+                      <FontAwesomeIcon
+                        className={classes.prefixIcon}
+                        icon={faClipboard}
+                      />
+                    }
+                  />
+                </Col>
+                <Col>
+                  <Statistic
+                    className={classes.stats}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Crime Groups',
+                      id: 'a0aLil',
+                    })}
+                    value={
+                      data?.performanceReport?.createdDataCounts?.crimeGroups ||
+                      0
+                    }
+                    prefix={
+                      <FontAwesomeIcon
+                        className={classes.prefixIcon}
+                        icon={faUsers}
+                      />
+                    }
+                  />
+                </Col>
               </Row>
             </Row>
           </Card>
@@ -1011,8 +1016,8 @@ const PerformanceReportLayout = ({
         return (
           <Card
             title={intl.formatMessage({
-              defaultMessage: 'Crime Types',
-              id: 'Piba4q',
+              defaultMessage: 'Incident Types',
+              id: 'DtIroT',
             })}
             className="no-break"
             loading={loading}
@@ -1073,8 +1078,8 @@ const PerformanceReportLayout = ({
                 isPrinting={isPrinting}
                 data={data?.performanceReport?.crimeTypeDonut}
                 emptyLabel={intl.formatMessage({
-                  defaultMessage: 'No Crime Types',
-                  id: 'BbTEjZ',
+                  defaultMessage: 'No Incident Types',
+                  id: '2+nubw',
                 })}
                 type={
                   metadata.find((item) => item.key === 'crimeTypesDonut')
@@ -1086,8 +1091,8 @@ const PerformanceReportLayout = ({
                 isPrinting={isPrinting}
                 data={data?.performanceReport?.crimeTypeDonut}
                 emptyLabel={intl.formatMessage({
-                  defaultMessage: 'No Crime Types',
-                  id: 'BbTEjZ',
+                  defaultMessage: 'No Incident Types',
+                  id: '2+nubw',
                 })}
                 labelFormat={intl.formatMessage({
                   defaultMessage: 'Incidents',
@@ -1632,40 +1637,19 @@ const PerformanceReportLayout = ({
             bodyStyle={{ overflow: 'auto' }}
             key="targetedBusinessTable"
           >
-            <Button
-              type="text"
-              shape="circle"
-              className="card-remove no-print"
-              hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
-              onClick={() => removeItem('targetedBusinessTable')}
-            />
-            <Title level={4}>
-              {intl.formatMessage({
-                defaultMessage: 'Targeted Business',
-                id: 'CA+Z1B',
-              })}
-            </Title>
-            <Table
-              size="small"
-              className="no-break"
-              pagination={{
-                hideOnSinglePage: true,
-                onChange: (_, pageSize) => {
-                  changeSize('targetedBusinessTable', pageSize);
-                },
-                total:
-                  data?.businessContribution?.businessContributions?.filter(
-                    (business) => business.totalIncidents > 0
-                  ).length || 0,
-                defaultPageSize: 10,
-                showSizeChanger: true,
-                showTotal: (total, range) =>
-                  `${range[0]}-${range[1]} of ${total}`,
-              }}
-              columns={TargetedBusinessColumns}
-              dataSource={targetedBusinessData}
+            <TargetedBusinessTable
+              key="targetedBusinessTable"
+              editMode={editMode}
+              removeItem={() => removeItem('targetedBusinessTable')}
+              changeSize={changeSize}
+              total={
+                data?.businessContribution?.businessContributions?.filter(
+                  (business) => business.totalIncidents > 0
+                ).length ?? 0
+              }
+              targetedBusinessData={targetedBusinessData}
+              metadata={metadata}
+              setMetadata={setMetadata}
             />
           </Card>
         );

@@ -13,18 +13,22 @@ interface Props {
   toggleAddDemDocument: () => void;
   toggleAddDocument: () => void;
   demId: string | undefined | null;
+  onDeleteDocument: (id: string) => void;
 }
+
 const DocumentsContainer = ({
   data,
   demId,
   toggleAddDemDocument,
   toggleAddDocument,
+  onDeleteDocument,
 }: Props) => (
   <View
     data={data}
     demId={demId}
     toggleAddDemDocument={toggleAddDemDocument}
     toggleAddDocument={toggleAddDocument}
+    onDeleteDocument={onDeleteDocument}
   />
 );
 

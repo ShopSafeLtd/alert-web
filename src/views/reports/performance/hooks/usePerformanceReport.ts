@@ -7,7 +7,6 @@ import {
 import useReportPrint from 'utils/reportPrint/usePrintReports';
 import type { InvestigationsTableData } from '#/components/reports/tableColumns';
 import arrangeTemplates from '#/utils/reports/setTemplates';
-import PerformanceLayout, { PerformanceMetaData } from './initLayout';
 import { redactedText } from '../../types';
 import type { Props as Return } from './types';
 import useReportState from '../../../../utils/reports/useReportState';
@@ -59,11 +58,11 @@ const usePerformanceReport = (): Return => {
     selectedRoles,
     setSelectedRoles,
     filterCount,
-    setAsDefault,
     userId,
+    saving,
   } = useReportState({
-    InitLayout: PerformanceLayout,
-    InitMetaData: PerformanceMetaData,
+    InitLayout: [],
+    InitMetaData: [],
     ReportType: ReportType.Performance,
   });
 
@@ -312,7 +311,7 @@ const usePerformanceReport = (): Return => {
     setSelectedRoles,
     filterCount,
     schemeId: currentScheme,
-    setAsDefault,
+    saving,
   };
 };
 

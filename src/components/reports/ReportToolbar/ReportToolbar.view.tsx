@@ -22,6 +22,7 @@ interface ReportToolbarProps {
   redactOnPrint?: boolean;
   setRedactOnPrint?: (value: boolean) => void;
   handlePrint: () => void;
+  saving?: boolean;
 }
 
 const ReportToolbar = ({
@@ -34,6 +35,7 @@ const ReportToolbar = ({
   setRedactOnPrint,
   redactOnPrint,
   handlePrint,
+  saving = false,
 }: ReportToolbarProps) => {
   const intl = useIntl();
   return (
@@ -116,6 +118,8 @@ const ReportToolbar = ({
                 paddingRight: 10,
               }}
               onClick={() => saveTemplate('', 'update')}
+              loading={saving}
+              disabled={saving}
             >
               <FontAwesomeIcon size="lg" icon={faFloppyDisk} />
             </Button>
@@ -140,6 +144,7 @@ const ReportToolbar = ({
                 paddingLeft: 10,
                 paddingRight: 10,
               }}
+              disabled={saving}
             >
               <FontAwesomeIcon size="lg" icon={faFloppyDiskPen} />
             </Button>

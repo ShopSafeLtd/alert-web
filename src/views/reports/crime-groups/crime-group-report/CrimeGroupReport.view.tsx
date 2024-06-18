@@ -9,7 +9,6 @@ import RGL, { WidthProvider } from 'react-grid-layout';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
-import { ReportType } from 'graphql/generated';
 import { margin, rowHeight } from '../../../../components/reports/utils/utils';
 import AddLogo from '../../../../components/reports/addLogo';
 import SaveAs from '../../../../components/reports/saveAs';
@@ -175,7 +174,6 @@ const CrimeGroupReportView = ({
   targetedGoodsData,
   incidentsTableData,
   targetedBusinessData,
-  setAsDefault,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const intl = useIntl();
@@ -185,13 +183,6 @@ const CrimeGroupReportView = ({
     }
     if (e.key === '2') {
       saveTemplate('', 'update');
-    }
-    if (e.key === '3') {
-      setAsDefault({
-        templateId: selectedTemplate,
-        type: ReportType.CrimeGroup,
-        default: true,
-      });
     }
   };
   const items: MenuProps['items'] = [
@@ -206,18 +197,6 @@ const CrimeGroupReportView = ({
         defaultMessage: 'Update current template',
         id: 'ej3o9X',
       }),
-    },
-    {
-      key: '3',
-      label: intl.formatMessage({
-        defaultMessage: 'Set as default',
-        id: 'z+Zrln',
-      }),
-      disabled:
-        templates.find((template) => template.id === selectedTemplate)
-          ?.default ||
-        selectedTemplate === 'default' ||
-        false,
     },
   ];
 
@@ -288,7 +267,7 @@ const CrimeGroupReportView = ({
               value={selectedTemplate}
             >
               {templates.map((template) => (
-                <Select.Option value={template.id}>
+                <Select.Option value={template.id} key={template.id}>
                   {template.name}
                   {template.default
                     ? intl.formatMessage({

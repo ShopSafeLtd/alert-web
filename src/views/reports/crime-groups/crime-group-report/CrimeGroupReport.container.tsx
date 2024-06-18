@@ -4,6 +4,7 @@ import View from './CrimeGroupReport.view';
 import useCrimeGroupReport from './hooks/useCrimeGroupReport';
 import CrimeGroupSideList from '../../../../components/crimeGroups/sidelist';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { useParams } from 'react-router-dom';
 
 const CrimeGroupReport = () => {
   const {
@@ -48,13 +49,18 @@ const CrimeGroupReport = () => {
     targetedGoodsData,
     offendersTableData,
     incidentsTableData,
-    setAsDefault,
   } = useCrimeGroupReport();
   const [collapsed, setCollapsed] = useState(true);
+  const { reportId } = useParams();
+
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId={reportId ?? ''}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col>
         <CrimeGroupSideList
@@ -64,7 +70,6 @@ const CrimeGroupReport = () => {
       </Col>
       <Col flex={1}>
         <View
-          setAsDefault={setAsDefault}
           targetedBusinessData={targetedBusinessData}
           targetedGoodsData={targetedGoodsData}
           offendersTableData={offendersTableData}

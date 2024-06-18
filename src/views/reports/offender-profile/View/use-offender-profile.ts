@@ -6,6 +6,7 @@ interface Return {
   offenderProfileData: OffenderProfileQuery | undefined;
   offenderProfileLoading: boolean;
   selectedOffender: string | undefined;
+  reportId: string | undefined;
 }
 
 const useOffenderProfile = (): Return => {
@@ -28,6 +29,7 @@ const useOffenderProfile = (): Return => {
     offenderProfileData,
     offenderProfileLoading,
     selectedOffender,
+    reportId,
   };
 };
 

@@ -17,12 +17,15 @@ import { useIntl } from 'react-intl';
 import type { OffenderFilters } from 'state/data-model';
 import moment from 'moment';
 import useStyles from './OffenderFilter.styles';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
+
 interface FormData {
   createdAt: Date;
 }
+
 interface Props {
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
@@ -38,8 +41,6 @@ interface Props {
   setBusinesses: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   variables: OffenderFilters;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   businessData: SearchBusinessesQuery | undefined;
@@ -50,8 +51,6 @@ interface Props {
 const OffenderFilter = ({
   order,
   setOrder,
-  groups,
-  groupsLoading,
   tags,
   tagsLoading,
   clearFilters,
@@ -197,7 +196,7 @@ const OffenderFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
           </Typography.Paragraph>
-          <Select
+          <GroupsSelect
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
@@ -207,16 +206,9 @@ const OffenderFilter = ({
             size="small"
             maxTagCount={2}
             allowClear
-            loading={groupsLoading}
             onChange={setGroupsFilter}
             value={groupsFilter}
-          >
-            {groups.map((group) => (
-              <Select.Option value={group.value} key={group.value}>
-                {group.label}
-              </Select.Option>
-            ))}
-          </Select>
+          />
         </Col>
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>

@@ -4,6 +4,7 @@ import type { SearchBusinessesQuery } from 'graphql/generated';
 import { useIntl } from 'react-intl';
 import useStyles from './search.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { useParams } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -29,11 +30,16 @@ const SearchBusiness = ({
   const classes = useStyles();
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
+  const { reportId } = useParams();
 
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          selectedId={reportId ?? ''}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </Col>
       <Col flex={1} className={classes.searchPage}>
         <Title level={3}>

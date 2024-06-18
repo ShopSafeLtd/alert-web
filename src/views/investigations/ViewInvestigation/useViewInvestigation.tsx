@@ -10,6 +10,7 @@ import type {
   ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import {
+  useDeleteDocumentMutation,
   useCreateCrimeGroupSuggestedDataMutation,
   useCreateSimpleVehicleMutation,
   useDeleteInvestigationMutation,
@@ -123,6 +124,7 @@ interface Return {
   onCompletedAddOffender: () => void;
   onCloseInvestigation: () => void;
   onReopenInvestigation: () => void;
+  onDeleteDocument: (id: string) => void;
 }
 
 const onCompletedEditOffender = () => {
@@ -1358,6 +1360,7 @@ const useViewInvestigation = (investigationId: string): Return => {
       });
     }
   };
+
   const onDeleteIncident = (value: string) => {
     setSaving(true);
     if (value)
@@ -1402,6 +1405,54 @@ const useViewInvestigation = (investigationId: string): Return => {
       }).finally(() => {
         setSaving(false);
       });
+  };
+
+  const [deleteDocument] = useDeleteDocumentMutation({
+    onCompleted: () => {
+      notification.success({
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The document has been deleted.',
+          id: 'xrfOQH',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      const existingData = store.readQuery<ViewInvestigationQuery>({
+        query: ViewInvestigationDocument,
+        variables,
+      });
+
+      if (!existingData?.investigation) return;
+      store.writeQuery<ViewInvestigationQuery>({
+        query: ViewInvestigationDocument,
+        data: {
+          investigation: {
+            ...existingData.investigation,
+            documents: existingData.investigation.documents.filter(
+              ({ id }) => id !== res?.deleteDocument.id
+            ),
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
+
+  const onDeleteDocument = (documentId: string) => {
+    void deleteDocument({
+      variables: {
+        id: documentId,
+      },
+    });
   };
 
   const [deleteInvestigation] = useDeleteInvestigationMutation({
@@ -1606,6 +1657,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     updateAddOffenderList,
     onCloseInvestigation,
     onReopenInvestigation,
+    onDeleteDocument,
   };
 };
 

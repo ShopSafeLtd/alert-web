@@ -101,7 +101,10 @@ const ReportCard = ({
 
   return (
     <Col key={item.id}>
-      <Card className={classes.reportCard} bodyStyle={{ padding: '15px 20px' }}>
+      <Card
+        className={classes.reportCard}
+        bodyStyle={{ padding: '15px 20px', height: '100%' }}
+      >
         <Dropdown
           menu={{
             items: [

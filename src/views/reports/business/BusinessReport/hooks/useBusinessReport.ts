@@ -48,7 +48,7 @@ const useBusinessReport = (): Return => {
     changeSize,
     addLogo,
     selectTemplate,
-    setAsDefault,
+
     saveTemplate: saveTemplateState,
   } = useReportState({
     InitLayout: BusinessReportLayout,
@@ -256,7 +256,6 @@ const useBusinessReport = (): Return => {
     selectTemplate,
     setAddLogoDrawer,
     setSaveAsDrawer,
-    setAsDefault,
   };
 };
 

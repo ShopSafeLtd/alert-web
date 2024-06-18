@@ -5,12 +5,12 @@ import {
   Card,
   Col,
   Drawer,
+  Form,
+  Input,
   Row,
   Table,
   Tag,
   Typography,
-  Form,
-  Input,
 } from 'antd';
 import type { UserEngagementQuery } from 'graphql/generated';
 import DatePicker from 'components/util-components/DatePicker';
@@ -72,7 +72,11 @@ const PerformanceReport = ({
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          selectedId={'user-engagement'}
+        />
       </Col>
       <Col flex={1} className={classes.page} ref={componentRef}>
         <div className="logo">

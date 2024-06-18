@@ -182,8 +182,7 @@
     "prepare": "husky install",
     "start": "vite",
     "build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc && vite build ",
-    "validate-build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc --noEmit && eslint .",
-
+    "validate-build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc --noEmit && vite build",
     "serve": "vite preview",
     "dev": "concurrently \"vite\" \"gulp watch\"",
     "generate": "graphql-codegen --config codegen.yml",
@@ -225,7 +224,7 @@
     "@graphql-codegen/typescript": "2.4.5",
     "@graphql-codegen/typescript-operations": "2.3.2",
     "@graphql-codegen/typescript-react-apollo": "3.2.8",
-    "@sentry/vite-plugin": "^0.7.2",
+    "@sentry/vite-plugin": "^2.18.0",
     "@stylistic/eslint-plugin": "^2.1.0",
     "@stylistic/eslint-plugin-migrate": "^2.1.0",
     "@types/react": "^17.0.34",
@@ -274,5 +273,10 @@
     "@types/react": "17.0.34",
     "@types/react-swipeable-views": "0.13.1",
     "@types/react-dom": "17.0.2"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

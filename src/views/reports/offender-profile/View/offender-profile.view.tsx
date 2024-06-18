@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import type { OffenderProfileQuery } from 'graphql/generated';
-import { Role, Age, Build, Gender, Race } from 'graphql/generated';
+import { Age, Build, Gender, Race, Role } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsivePie } from '@nivo/pie';
@@ -33,12 +33,14 @@ interface Props {
   offenderProfileData: OffenderProfileQuery | undefined;
   offenderProfileLoading: boolean;
   selectedOffender: string | undefined;
+  reportId: string | undefined;
 }
 
 const OffenderProfile = ({
   offenderProfileData,
   offenderProfileLoading,
   selectedOffender,
+  reportId,
 }: Props) => {
   const classes = useStyles();
   const theme = useStoreState((state) => state.theme.currentTheme);
@@ -52,7 +54,11 @@ const OffenderProfile = ({
   return (
     <Row wrap={false}>
       <Col>
-        <ReportsSideMenu collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ReportsSideMenu
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          selectedId={reportId ?? ''}
+        />
       </Col>
       <Col>
         <OffenderSideList

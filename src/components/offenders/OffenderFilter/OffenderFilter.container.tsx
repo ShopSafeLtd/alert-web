@@ -6,8 +6,6 @@ const OffenderFilter = (): JSX.Element => {
   const {
     order,
     setOrder,
-    groups,
-    groupsLoading,
     tags,
     tagsLoading,
     clearFilters,
@@ -31,8 +29,6 @@ const OffenderFilter = (): JSX.Element => {
     <View
       order={order}
       setOrder={setOrder}
-      groups={groups}
-      groupsLoading={groupsLoading}
       tags={tags}
       tagsLoading={tagsLoading}
       clearFilters={clearFilters}
