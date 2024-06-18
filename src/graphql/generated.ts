@@ -17856,6 +17856,7 @@ export type TodoCreateInput = {
   description?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<CreateDocument>>;
   dueDate?: InputMaybe<Scalars['Date']>;
+  groups?: InputMaybe<Array<UniqueId>>;
   incident?: InputMaybe<ConnectHelper>;
   investigation?: InputMaybe<ConnectHelper>;
   name?: InputMaybe<Scalars['String']>;
@@ -18037,6 +18038,7 @@ export type TodoWhereInput = {
   description?: InputMaybe<StringNullableFilter>;
   dueDate?: InputMaybe<DateTimeNullableFilter>;
   evidence?: InputMaybe<DocumentListRelationFilter>;
+  groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   incident?: InputMaybe<IncidentWhereInput>;
   incidentId?: InputMaybe<StringNullableFilter>;
@@ -18489,6 +18491,7 @@ export type UpdateTagQuestionInput = {
 export type UpdateTodoMention = {
   chatId?: InputMaybe<Scalars['String']>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
   offenderId?: InputMaybe<Scalars['String']>;

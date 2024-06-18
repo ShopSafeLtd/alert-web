@@ -22,6 +22,7 @@ import type { FormData } from './useAddTodo';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
 import type { QuestionGroupOnSchemeQuery } from '../../../../graphql/generated';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Props {
   onClose: () => void;
@@ -78,6 +79,7 @@ const AddTodo = ({
   documentUploadProps,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const { groups, groupsLoading } = useGroupsContext();
 
   return (
     <>
@@ -88,7 +90,7 @@ const AddTodo = ({
         initialValues={{ assignedUsers: [] }}
       >
         <Row gutter={16}>
-          <Col span={16}>
+          <Col span={9}>
             <Form.Item
               name="name"
               label={intl.formatMessage({
@@ -108,7 +110,7 @@ const AddTodo = ({
               <Input disabled={saving} />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={9}>
             <Form.Item
               name="questionGroup"
               label={intl.formatMessage({
@@ -133,8 +135,6 @@ const AddTodo = ({
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={6}>
             <Form.Item
               name="dueDate"
@@ -160,7 +160,9 @@ const AddTodo = ({
               />
             </Form.Item>
           </Col>
-          <Col span={17}>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
             <Form.Item
               name="assignedUsers"
               label={intl.formatMessage({
@@ -184,6 +186,35 @@ const AddTodo = ({
                 mode="multiple"
                 maxTagCount={3}
                 options={adminUsersData}
+                optionFilterProp="label"
+                optionLabelProp="label"
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="groups"
+              label={intl.formatMessage({
+                defaultMessage: 'Groups',
+                id: 'hzmswI',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Please select at least one group for a user.',
+                    id: '0h0TWW',
+                  }),
+                },
+              ]}
+            >
+              <Select
+                loading={groupsLoading}
+                disabled={saving}
+                mode="multiple"
+                maxTagCount={3}
+                options={groups}
                 optionFilterProp="label"
                 optionLabelProp="label"
               />
@@ -268,6 +299,7 @@ const AddTodo = ({
                     label={user.name}
                     name={user.id}
                     colon
+                    key={user.id}
                     required={false}
                     rules={[
                       {
