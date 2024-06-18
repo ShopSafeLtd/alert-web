@@ -5,7 +5,6 @@ import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { CurrentSchemeTermsQuery } from 'graphql/generated';
 import {
-  // UserStatus,
   useCurrentSchemeTermsQuery,
   useSignTermsMutation,
   useUpdateUserMutation,
@@ -58,11 +57,6 @@ const useOnboarding = (): Return => {
     }
   };
 
-  const updateAccountDetail = (value: AccountData | undefined) => {
-    setAccountDetail(value);
-    onNext();
-  };
-
   const updateTermsSigned = () => setTermsSigned(!termsSigned);
   const updateSchemeTermsSigned = (arg0: unknown) =>
     setSchemeTermsSigned(arg0 as string);
@@ -77,7 +71,19 @@ const useOnboarding = (): Return => {
         },
       },
     });
-
+  const name = useMemo(
+    () => accountDetail?.fullName || '',
+    [accountDetail?.fullName]
+  );
+  const updateAccountDetail = (value: AccountData | undefined) => {
+    setAccountDetail(value);
+    if (SchemeTerms?.scheme?.currentTerms?.id && (value?.fullName || name)) {
+      setSchemeTermsSigned(`<svg xmlns="http://www.w3.org/2000/svg" style="background:#ffffff00" height="100" width="300" viewBox="0 0 300 100" class="signature-svg" data-reactroot=""><text x="20" y="60" font-family="Caveat" font-size="30" fill="black">
+      ${value?.fullName || name}
+</text></svg>`);
+    }
+    onNext();
+  };
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
       setSaving(false);
@@ -124,7 +130,11 @@ const useOnboarding = (): Return => {
         navigate('/app/onboarding/scheme-terms-conditions');
         setTermsSigned(false);
       }
-    } else if (termsSigned && accountDetail) {
+    } else if (
+      termsSigned &&
+      accountDetail &&
+      !SchemeTerms?.scheme?.currentTerms?.id
+    ) {
       void updateUser({
         variables: {
           where: {
@@ -199,11 +209,6 @@ const useOnboarding = (): Return => {
       });
     }
   };
-
-  const name = useMemo(
-    () => accountDetail?.fullName || '',
-    [accountDetail?.fullName]
-  );
 
   return {
     onSubmit,
