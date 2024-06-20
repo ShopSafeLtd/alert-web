@@ -1,5 +1,9 @@
 import { BanType } from 'graphql/generated';
 // wait to check
+
+export const formatBanType = (value?: BanType | null) =>
+  BanTypeValues.find((item) => item.value === value)?.label ?? '';
+
 const BanTypeValues = [
   {
     value: BanType.Cbo,

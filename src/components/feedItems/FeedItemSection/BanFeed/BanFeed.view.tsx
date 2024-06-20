@@ -1,10 +1,8 @@
 import React from 'react';
-import { Button, Col, Divider, Modal, Row, Tag, Typography } from 'antd';
+import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
 import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCalendarPen,
-  faCalendarStar,
   faClock,
   faLocationDot,
   faTrash,
@@ -14,6 +12,7 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import ImageContainer from '../ImageContainer';
 import useStyles from './BanFeed.styles';
+import { formatBanType } from '#/types/enums/ban-type';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -38,16 +37,7 @@ const BanFeed = ({
 }: Props): JSX.Element => {
   // const offender?.imagesRef = useRef<CarouselRef>(null);
 
-  const {
-    endDate,
-    startDate,
-    // updatedAt,
-    title,
-    expired,
-    location,
-    offender,
-    feedImage,
-  } = feedItem?.ban || {};
+  const { type, title, location, offender, feedImage } = feedItem?.ban || {};
   const intl = useIntl();
   const classes = useStyles();
 
@@ -124,101 +114,18 @@ const BanFeed = ({
                   {title || offender?.name}
                 </Title>
               </Col>
-              <Col
-                style={{ marginTop: -5, marginBottom: 10, marginRight: -10 }}
-              >
-                {expired ? (
-                  <Tag color="red">
-                    {intl.formatMessage({
-                      defaultMessage: 'EXPIRED',
-                      id: 'GftNg3',
-                    })}
-                  </Tag>
-                ) : (
-                  <Tag color="green">
-                    {intl.formatMessage({
-                      defaultMessage: 'ACTIVE',
-                      id: 'LQPOVs',
-                    })}
-                  </Tag>
-                )}
-              </Col>
-              {/* <Col>
-                <Text style={{ fontSize: 14 }} type="secondary">
-                  {intl.formatMessage(
-                    {
-                      defaultMessage: 'Alert ID: {reference}',
-                      id: '377fsC',
-                    },
-                    {
-                      reference: offender.,
-                    }
-                  )}
-                </Text>
-              </Col> */}
             </Row>
-
-            <Row gutter={8} style={{ marginBottom: 10 }}>
-              <Col>
-                <FontAwesomeIcon
-                  size="sm"
-                  className={classes.icon}
-                  icon={faCalendarPen}
-                />
-                <Text style={{ fontSize: 14 }} type="secondary">
-                  {intl.formatMessage(
-                    {
-                      defaultMessage: 'Start: {date} ',
-                      id: 'IUhT8d',
-                    },
-                    {
-                      date: FormatCalendar(startDate || new Date()),
-                    }
-                  )}
-                </Text>
-              </Col>
+            <Row style={{ height: 35 }}>
               <Col>
                 <Text style={{ fontSize: 14 }} type="secondary">
                   {intl.formatMessage({
-                    defaultMessage: '-- --',
-                    id: 'TWi2vv',
+                    defaultMessage: 'Type:',
+                    id: 'uS4sop',
                   })}
-                </Text>
-              </Col>
-              <Col>
-                <FontAwesomeIcon
-                  size="sm"
-                  className={classes.icon}
-                  icon={faCalendarStar}
-                />
-                <Text style={{ fontSize: 14 }} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'End: ',
-                    id: 'bOhJPQ',
-                  })}
-                  {FormatCalendar(endDate || new Date())}
+                  {formatBanType(type)}
                 </Text>
               </Col>
             </Row>
-            {/* {type && (
-              <Row>
-                <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    className={classes.icon}
-                    
-                    icon={faUserClock}
-                  />
-                  <Text style={{ fontSize: 14 }} type="secondary">
-                    {intl.formatMessage({
-                      defaultMessage: 'Type: ',
-                      id: 'iAfc5K',
-                    })}
-                    {type}
-                  </Text>
-                </Col>
-              </Row>
-            )} */}
 
             <Row wrap={false} className={classes.bottomRow}>
               {location ? (

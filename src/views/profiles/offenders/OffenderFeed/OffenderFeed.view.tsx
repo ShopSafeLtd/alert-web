@@ -130,7 +130,7 @@ const OffenderFeed = ({
     },
   ];
   const menu = () => (
-    <Menu>
+    <Menu style={{ height: '85vh', overflowY: 'auto' }}>
       {customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: { id, name } }) => (
           <Menu.Item key={id}>

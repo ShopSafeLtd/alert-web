@@ -22,10 +22,8 @@ query FeedItems(
     feedItems {
       type
       ban {
-        endDate
-        startDate
         title
-        expired
+        type
         location
         feedImage {
           ...FeedImage
