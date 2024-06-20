@@ -367,7 +367,7 @@ const ViewIncident = ({
     <div className="page-container">
       <Row wrap={false}>
         {!hideIncident && (
-          <Col>
+          <Col className="no-print">
             <IncidentSideList current={incidentId} />
           </Col>
         )}
@@ -875,8 +875,8 @@ const ViewIncident = ({
                                   label={
                                     <span>
                                       {intl.formatMessage({
-                                        defaultMessage: 'Police Attenteded',
-                                        id: 'qT9KAx',
+                                        defaultMessage: 'Police Attended',
+                                        id: 'ES0Nc8',
                                       })}
                                     </span>
                                   }
@@ -1644,7 +1644,7 @@ const ViewIncident = ({
                   </div>
                 </div>
               </Col>
-              <Col span={8}>
+              <Col span={8} className="no-print">
                 <div className={classes.updatesContainer}>
                   <IntelSection
                     updates={data?.incident?.updates}

@@ -13,15 +13,15 @@ import {
   Typography,
 } from 'antd';
 import type { UserEngagementQuery } from 'graphql/generated';
-import DatePicker from 'components/util-components/DatePicker';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilters } from '@fortawesome/pro-light-svg-icons';
+import { faFileDownload, faFilters } from '@fortawesome/pro-light-svg-icons';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
 import useStyles from './UserEngagement.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 
 const { Title } = Typography;
 
@@ -100,89 +100,48 @@ const PerformanceReport = ({
           )}
         </Title>
         <Row
-          style={{ position: 'absolute', top: 20, right: 20 }}
+          gutter={6}
+          style={{ position: 'absolute', top: 20, right: 20, left: 20 }}
           className="no-print"
-          gutter={8}
         >
           <Col>
-            <Button onClick={handlePrint}>
+            <Input
+              style={{ width: 350 }}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Search for users...',
+                id: 'nS06zC',
+              })}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Col>
+          <Col>
+            <DateSelect onChange={setDateRange} defaultRange="last30Days" />
+          </Col>
+          <Col>
+            <Button onClick={toggleFiltersOpen}>
+              <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
               {intl.formatMessage({
-                defaultMessage: 'Print',
-                id: 'CXRlIo',
+                defaultMessage: 'More Filters',
+                id: 'stWNQ/',
+              })}
+            </Button>
+          </Col>
+          <Col flex={1} />
+          <Col>
+            <Button onClick={handlePrint}>
+              <FontAwesomeIcon
+                size="lg"
+                style={{ marginRight: 10 }}
+                icon={faFileDownload}
+              />
+              {intl.formatMessage({
+                defaultMessage: 'Download',
+                id: '5q3qC0',
               })}
             </Button>
           </Col>
         </Row>
-        <Form layout="vertical">
-          <Row gutter={8}>
-            <Col>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Search',
-                  id: 'xmcVZ0',
-                })}
-              >
-                <Input
-                  style={{ width: 350 }}
-                  placeholder={intl.formatMessage({
-                    defaultMessage: 'Search for users...',
-                    id: 'nS06zC',
-                  })}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </Form.Item>
-            </Col>
-            <Col flex={1} />
-            <Col>
-              <Form.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Date Range',
-                  id: '52QtMe',
-                })}
-              >
-                <DatePicker.RangePicker
-                  defaultValue={[dateRange.startDate, dateRange.endDate]}
-                  value={[dateRange.startDate, dateRange.endDate]}
-                  onChange={(value) => {
-                    setDateRange(
-                      value
-                        ? {
-                            startDate:
-                              value?.[0] ||
-                              new Date(
-                                new Date(
-                                  new Date().setMonth(new Date().getMonth() - 1)
-                                ).setHours(0, 0, 59)
-                              ),
-                            endDate:
-                              value?.[1] ||
-                              new Date(new Date().setHours(23, 59, 59)),
-                          }
-                        : {
-                            startDate: new Date(
-                              new Date(
-                                new Date().setMonth(new Date().getMonth() - 1)
-                              ).setHours(0, 0, 59)
-                            ),
-                            endDate: new Date(new Date().setHours(23, 59, 59)),
-                          }
-                    );
-                  }}
-                />
-              </Form.Item>
-            </Col>
-            <Col>
-              <Button onClick={toggleFiltersOpen} style={{ marginTop: 29 }}>
-                <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
-                {intl.formatMessage({
-                  defaultMessage: 'More Filters',
-                  id: 'stWNQ/',
-                })}
-              </Button>
-            </Col>
-          </Row>
-        </Form>
         <Row gutter={16}>
           <Col span={24}>
             <Card loading={loading} style={{ height: '100%' }}>

@@ -36,6 +36,7 @@ export interface StockItemValue {
   sku?: string | null;
   barcode?: string | null;
   costPriceLocal?: number | null;
+  salesPriceLocal?: number | null;
 }
 
 const StockItemSearch = ({
@@ -162,32 +163,59 @@ const StockItemSearch = ({
                 </Col>
               </Row>
             </Col>
-            <Col>
-              <Row gutter={4}>
-                <Col>
-                  <Typography.Text type="secondary" strong>
-                    <FormattedMessage id="KFjD/N" defaultMessage="Cost:" />
-                  </Typography.Text>
-                </Col>
-                <Col>
-                  <Typography.Text>{option.costPriceLocal}</Typography.Text>
-                </Col>
-              </Row>
-            </Col>
+            {option.costPriceLocal && (
+              <Col>
+                <Row gutter={4}>
+                  <Col>
+                    <Typography.Text type="secondary" strong>
+                      <FormattedMessage id="KFjD/N" defaultMessage="Cost:" />
+                    </Typography.Text>
+                  </Col>
+                  <Col>
+                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                    <Typography.Text>
+                      £{option.costPriceLocal.toFixed(2)}
+                    </Typography.Text>
+                  </Col>
+                </Row>
+              </Col>
+            )}
+            {option.salesPriceLocal && (
+              <Col>
+                <Row gutter={4}>
+                  <Col>
+                    <Typography.Text type="secondary" strong>
+                      <FormattedMessage
+                        id="Dkp1fL"
+                        defaultMessage="Retail Price:"
+                      />
+                    </Typography.Text>
+                  </Col>
+                  <Col>
+                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                    <Typography.Text>
+                      £{option.salesPriceLocal.toFixed(2)}
+                    </Typography.Text>
+                  </Col>
+                </Row>
+              </Col>
+            )}
           </Row>
           <Row gutter={8} style={{ marginTop: 5 }}>
-            <Col>
-              <Row gutter={4}>
-                <Col>
-                  <Typography.Text type="secondary" strong>
-                    <FormattedMessage id="204/FC" defaultMessage="Brand:" />
-                  </Typography.Text>
-                </Col>
-                <Col>
-                  <Typography.Text>{option.brand}</Typography.Text>
-                </Col>
-              </Row>
-            </Col>
+            {option.brand && (
+              <Col>
+                <Row gutter={4}>
+                  <Col>
+                    <Typography.Text type="secondary" strong>
+                      <FormattedMessage id="204/FC" defaultMessage="Brand:" />
+                    </Typography.Text>
+                  </Col>
+                  <Col>
+                    <Typography.Text>{option.brand}</Typography.Text>
+                  </Col>
+                </Row>
+              </Col>
+            )}
             <Col>
               <Row gutter={4}>
                 <Col>
@@ -200,18 +228,20 @@ const StockItemSearch = ({
                 </Col>
               </Row>
             </Col>
-            <Col>
-              <Row gutter={4}>
-                <Col>
-                  <Typography.Text type="secondary" strong>
-                    <FormattedMessage id="eRnT7x" defaultMessage="Barcode:" />
-                  </Typography.Text>
-                </Col>
-                <Col>
-                  <Typography.Text>{option.barcode}</Typography.Text>
-                </Col>
-              </Row>
-            </Col>
+            {option.barcode && (
+              <Col>
+                <Row gutter={4}>
+                  <Col>
+                    <Typography.Text type="secondary" strong>
+                      <FormattedMessage id="eRnT7x" defaultMessage="Barcode:" />
+                    </Typography.Text>
+                  </Col>
+                  <Col>
+                    <Typography.Text>{option.barcode}</Typography.Text>
+                  </Col>
+                </Row>
+              </Col>
+            )}
           </Row>
         </Select.Option>
       ))}

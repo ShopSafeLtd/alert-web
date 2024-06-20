@@ -2,7 +2,7 @@
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useMemo } from 'react';
 import { useStoreState } from '#/state';
-import { Role, SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
+import { SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
 
 interface GroupsContextT {
   children?: ReactNode;
@@ -26,7 +26,7 @@ export const GroupsProvider: React.FC<{
   children?: ReactNode;
 }> = ({ children }) => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { id: userId, role } = useStoreState((state) => state.user);
+  const { id: userId } = useStoreState((state) => state.user);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
@@ -36,16 +36,13 @@ export const GroupsProvider: React.FC<{
             equals: schemeId,
           },
         },
-        users:
-          role === Role.SchemeAdmin
-            ? undefined
-            : {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              },
+        users: {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        },
       },
       orderBy: {
         name: SortOrder.Asc,

@@ -64,7 +64,7 @@ const CrimeGroupReport = () => {
       </Col>
       <Col>
         <CrimeGroupSideList
-          to="/app/reports/crime-groups/"
+          to={`/app/reports/crime-groups/${reportId}/`}
           current={selectedCrimeGroup || ''}
         />
       </Col>

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Button, Col, Drawer, Row, Select, Typography } from 'antd';
-import DatePicker from 'components/util-components/DatePicker';
 import Page from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import { margin, rowHeight } from 'components/reports/utils/utils';
@@ -10,12 +9,14 @@ import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
 import OffenderReportLayout from './layout/OffenderReportLayout';
-import OffenderLayout from './hooks/initLayout';
 import type { Props } from './hooks/types';
 import AddLogo from '../../../components/reports/addLogo';
 import SaveAs from '../../../components/reports/saveAs';
-import { layoutMap } from '../types';
+import { LayoutToReadable } from '../types';
 import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
 
 const { Title } = Typography;
 
@@ -35,10 +36,8 @@ type FilterType = Pick<
 const FilterOptions = ({
   intl,
   groups,
-  dateRange,
   setDateRange,
   setSelectedGroups,
-  groupsLoading,
   selectedGroups,
   selectedBusiness,
   setSelectedBusiness,
@@ -46,7 +45,7 @@ const FilterOptions = ({
 }: FilterType) => (
   <Row gutter={8} className="no-print" wrap={false}>
     <Col span={7}>
-      <Select
+      <GroupsSelect
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Groups',
           id: 'q2cuIU',
@@ -59,17 +58,7 @@ const FilterOptions = ({
         value={selectedGroups}
         defaultValue={groups.map((group) => group.value)}
         style={{ width: '100%' }}
-      >
-        {groups?.map((group) => (
-          <Select.Option
-            loading={groupsLoading}
-            key={group.value}
-            value={group.value}
-          >
-            {group.label}
-          </Select.Option>
-        ))}
-      </Select>
+      />
     </Col>
     <Col span={6}>
       <Select
@@ -87,47 +76,15 @@ const FilterOptions = ({
         style={{ width: '100%' }}
       >
         {businesses?.map((business) => (
-          <Select.Option
-            loading={groupsLoading}
-            key={business.value}
-            value={business.value}
-          >
+          <Select.Option key={business.value} value={business.value}>
             {business.label}
           </Select.Option>
         ))}
       </Select>
     </Col>
 
-    <Col span={7}>
-      <DatePicker.RangePicker
-        style={{ width: '100%' }}
-        defaultValue={[dateRange.startDate, dateRange.endDate]}
-        value={[dateRange.startDate, dateRange.endDate]}
-        onChange={(value) => {
-          setDateRange(
-            value
-              ? {
-                  startDate:
-                    value?.[0] ||
-                    new Date(
-                      new Date(
-                        new Date().setMonth(new Date().getMonth() - 1)
-                      ).setHours(0, 0, 59)
-                    ),
-                  endDate:
-                    value?.[1] || new Date(new Date().setHours(23, 59, 59)),
-                }
-              : {
-                  startDate: new Date(
-                    new Date(
-                      new Date().setMonth(new Date().getMonth() - 1)
-                    ).setHours(0, 0, 59)
-                  ),
-                  endDate: new Date(new Date().setHours(23, 59, 59)),
-                }
-          );
-        }}
-      />
+    <Col>
+      <DateSelect onChange={setDateRange} defaultRange="last30Days" />
     </Col>
   </Row>
 );
@@ -302,50 +259,48 @@ const PerformanceReport = ({
           </div>
           <Drawer
             title={intl.formatMessage({
-              defaultMessage: 'Charts available to add',
-              id: 'zNsljc',
+              defaultMessage: 'Components available to add',
+              id: 'OJhI0K',
             })}
-            placement="bottom"
-            mask={false}
+            placement="right"
             closable
             open={editMode && minDrawer}
-            height={200}
+            width={600}
             onClose={() => setMinDrawer(!minDrawer)}
+            bodyStyle={{ padding: 0 }}
           >
-            <Row gutter={[6, 6]}>
-              {OffenderLayout.filter(
-                (item) => !layout.some((i) => i.i === item.i)
-              ).map((item) => (
-                <Col key={item.i}>
-                  <Button
-                    type="primary"
-                    style={{ width: 'min-content' }}
-                    onClick={() => {
-                      setLayout([
-                        ...layout,
-                        {
-                          ...item,
-                          x: 0,
-                          y: 0,
-                        },
-                      ]);
-                    }}
-                  >
-                    {layoutMap.get(item.i) || ''}
-                  </Button>
-                </Col>
-              ))}
-              {layout.length === OffenderLayout.length && (
-                <Col>
-                  <Typography.Title level={5}>
-                    {intl.formatMessage({
-                      defaultMessage: 'No more charts to add',
-                      id: '2vcxv5',
-                    })}
-                  </Typography.Title>
-                </Col>
-              )}
-            </Row>
+            <ComponentList
+              components={LayoutToReadable.filter(
+                (item) =>
+                  !layout.some((i) => i.i === item.i) || item.allowDuplicates
+              )
+                .filter(({ reportViews }) => reportViews.includes('business'))
+                .map((item) => ({
+                  key: item.i,
+                  onAdd: () => {
+                    setLayout([
+                      ...layout,
+                      {
+                        ...item.item,
+                        i: item.item.allowDuplicates
+                          ? `${item.item.i}_${
+                              layout
+                                .map(({ i }) => i)
+                                .filter((i) => i.includes(item.item.i)).length
+                            }`
+                          : item.i,
+                      },
+                    ]);
+                    setMetadata([
+                      ...metadata,
+                      { key: item.i, type: item.reportItemTypes[0] },
+                    ]);
+                  },
+                  description: item.description,
+                  name: item.readable,
+                  reportItemTypes: item.reportItemTypes,
+                }))}
+            />
           </Drawer>
           <Drawer
             title={intl.formatMessage({

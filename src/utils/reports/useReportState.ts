@@ -19,6 +19,8 @@ import type {
   SchemeReportDetailsQuery,
   SchemeReportDetailsQueryVariables,
 } from '../../graphql/generated';
+import { notification } from 'antd';
+import { useIntl } from 'react-intl';
 
 interface Props {
   InitLayout: RGL.Layout[];
@@ -86,6 +88,7 @@ const useReportState = ({
   InitMetaData,
   ReportType,
 }: Props): Return => {
+  const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
   const isDemo =
@@ -543,6 +546,14 @@ const useReportState = ({
               },
             },
           },
+        },
+        onCompleted: () => {
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Report Saved',
+              id: '8RXDD1',
+            }),
+          });
         },
         update: (cache, { data: d }) => {
           const existingTemplates = cache.readQuery<

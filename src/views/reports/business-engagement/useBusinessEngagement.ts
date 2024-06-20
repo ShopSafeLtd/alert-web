@@ -50,23 +50,20 @@ const useBusinessEngagement = (): Return => {
     if (groupsData) {
       const groupsFormatted = groupsData;
       setGroups(groupsFormatted);
-      setSelectedGroups(groupsFormatted.map((item) => item.value));
     }
   }, [groupsData]);
 
   const { data, loading } = useBusinessEngagementQuery({
     fetchPolicy: 'cache-and-network',
-    skip:
-      !currentScheme ||
-      !groups ||
-      groupsLoading ||
-      !selectedGroups ||
-      selectedGroups.filter(Boolean).length === 0,
+    skip: !currentScheme,
     variables: {
       where: {
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
       },
     },
   });

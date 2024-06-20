@@ -45,6 +45,9 @@ const BusinessReport = (): JSX.Element => {
     setAddLogoDrawer,
     setSaveAsDrawer,
     templates,
+    filterCount,
+    toggleFiltersOpen,
+    filtersOpen,
   } = useBusinessReport();
   return (
     <View
@@ -89,6 +92,9 @@ const BusinessReport = (): JSX.Element => {
       setAddLogoDrawer={setAddLogoDrawer}
       setSaveAsDrawer={setSaveAsDrawer}
       templates={templates}
+      filterCount={filterCount}
+      toggleFiltersOpen={toggleFiltersOpen}
+      filtersOpen={filtersOpen}
     />
   );
 };
