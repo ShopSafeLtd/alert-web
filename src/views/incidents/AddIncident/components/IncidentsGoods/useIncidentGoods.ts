@@ -73,7 +73,7 @@ const useIncidentGoods = ({
         ...goods,
         {
           sku: data.sku || '',
-          value: data.costPriceLocal || 0,
+          value: data.salesPriceLocal ?? data.costPriceLocal ?? 0,
           quantity: undefined,
           recoveredQuantity: 0,
           name: data.name || '',
