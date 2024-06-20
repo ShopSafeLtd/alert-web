@@ -222,21 +222,20 @@ export const NavScheme = () => {
             {menu}
 
             {schemes.length > 5 && (
-              <Input.Search
-                allowClear
-                enterButton
+              <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={intl.formatMessage({
-                  defaultMessage: 'Search',
-                  id: 'xmcVZ0',
+                  defaultMessage: 'Search schemes...',
+                  id: 'ipYreq',
                 })}
                 style={{
                   width: '100%',
                   borderWidth: 0,
+                  borderTopWidth: 2.5,
                   borderTopRightRadius: 0,
                   borderTopLeftRadius: 0,
-                  borderTopWidth: 1,
+                  borderBottomLeftRadius: 0,
                   paddingTop: 10,
                   paddingBottom: 10,
                   paddingLeft: 30,

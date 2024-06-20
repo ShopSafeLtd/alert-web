@@ -102,6 +102,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
     useListCustomGalleriesQuery({
       fetchPolicy: 'cache-and-network',
       variables: {
+        take: 100,
         where: {
           schemes: {
             some: {

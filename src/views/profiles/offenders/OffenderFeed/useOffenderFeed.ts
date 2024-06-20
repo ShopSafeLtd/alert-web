@@ -52,7 +52,7 @@ interface Return {
 
 const useOffenderFeed = (): Return => {
   const navigate = useNavigate();
-  const onNavigate = () => navigate(`/app/offenders/add`);
+  const onNavigate = () => navigate('/app/offenders/add');
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -341,6 +341,7 @@ const useOffenderFeed = (): Return => {
       order: {
         name: SortOrder.Asc,
       },
+      take: 100,
       where: {
         schemes: {
           some: {
