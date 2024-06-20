@@ -9,7 +9,6 @@ const PerformanceReport = () => {
     setDateRange,
     dateRange,
     groups,
-    groupsLoading,
     setSelectedGroups,
     selectedGroups,
     handlePrint,
@@ -24,7 +23,6 @@ const PerformanceReport = () => {
       setDateRange={setDateRange}
       dateRange={dateRange}
       groups={groups}
-      groupsLoading={groupsLoading}
       handlePrint={handlePrint}
       componentRef={componentRef}
     />
