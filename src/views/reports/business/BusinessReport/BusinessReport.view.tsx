@@ -1,25 +1,35 @@
 import React, { useMemo, useState } from 'react';
-import type { MenuProps } from 'antd';
-import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
-import DatePicker from 'components/util-components/DatePicker';
+import {
+  Badge,
+  Button,
+  Col,
+  Drawer,
+  Row,
+  Select,
+  Typography,
+  Form,
+} from 'antd';
 import { Page } from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
 import BusinessReport from './layout/BusinessReportLayout';
-import BusinessReportLayout from './hooks/initLayout';
 import type { Return as Props } from './hooks/types';
 import AddLogo from '../../../../components/reports/addLogo';
 import SaveAs from '../../../../components/reports/saveAs';
-import { layoutMap } from '../../types';
+import { LayoutToReadable } from '../../types';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import { useParams } from 'react-router-dom';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
+import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
 
 const { Title } = Typography;
 
@@ -31,41 +41,27 @@ type FilterProps = Pick<
   | 'setSelectedGroups'
   | 'groupsLoading'
   | 'selectedGroups'
-  | 'crimeGroups'
-  | 'setSelectedCrimeGroups'
-  | 'selectedCrimeGroups'
-  | 'offenders'
-  | 'setSelectedOffenders'
-  | 'selectedOffenders'
+  | 'toggleFiltersOpen'
+  | 'filterCount'
 > & {
   intl: IntlShape;
 };
 
 const FilterOptions = ({
   setDateRange,
-  dateRange,
   groups,
   setSelectedGroups,
-  groupsLoading,
   selectedGroups,
   intl,
-  crimeGroups,
-  setSelectedCrimeGroups,
-  selectedCrimeGroups,
-  offenders,
-  setSelectedOffenders,
-  selectedOffenders,
+  filterCount,
+  toggleFiltersOpen,
 }: FilterProps) => (
-  <Row
-    className="no-print"
-    style={{ marginBottom: 10, justifyContent: 'center' }}
-    gutter={10}
-  >
+  <Row className="no-print" gutter={10}>
     <Col span={6}>
-      <Select
+      <GroupsSelect
         placeholder={intl.formatMessage({
-          defaultMessage: 'Select Content Groups',
-          id: '5D6XJu',
+          defaultMessage: 'Select Groups',
+          id: 'q2cuIU',
         })}
         mode="multiple"
         maxTagCount="responsive"
@@ -75,100 +71,21 @@ const FilterOptions = ({
         value={selectedGroups}
         defaultValue={groups.map((group) => group.value)}
         style={{ width: '100%' }}
-      >
-        {groups?.map((group) => (
-          <Select.Option
-            loading={groupsLoading}
-            key={group.value}
-            value={group.value}
-          >
-            {group.label}
-          </Select.Option>
-        ))}
-      </Select>
-    </Col>
-    <Col span={6}>
-      <Select
-        placeholder={intl.formatMessage({
-          defaultMessage: 'Select Crime Groups',
-          id: 'Ze/CG9',
-        })}
-        mode="multiple"
-        allowClear
-        maxTagCount="responsive"
-        onChange={(value) => {
-          setSelectedCrimeGroups(value || []);
-        }}
-        value={selectedCrimeGroups}
-        defaultValue={crimeGroups.map((group) => group.value)}
-        style={{ width: '100%' }}
-      >
-        {crimeGroups?.map((group) => (
-          <Select.Option
-            loading={groupsLoading}
-            key={group.value}
-            value={group.value}
-          >
-            {group.label}
-          </Select.Option>
-        ))}
-      </Select>
-    </Col>
-    <Col span={6}>
-      <Select
-        placeholder={intl.formatMessage({
-          defaultMessage: 'Select Offenders',
-          id: 'nNFHrE',
-        })}
-        mode="multiple"
-        maxTagCount="responsive"
-        onChange={(value) => {
-          setSelectedOffenders(value || []);
-        }}
-        value={selectedOffenders}
-        style={{ width: '100%' }}
-      >
-        {offenders?.map((offender) => (
-          <Select.Option
-            loading={groupsLoading}
-            key={offender.value}
-            value={offender.value}
-          >
-            {offender.label}
-          </Select.Option>
-        ))}
-      </Select>
-    </Col>
-    <Col span={6}>
-      <DatePicker.RangePicker
-        style={{ marginLeft: 10, width: '100%' }}
-        defaultValue={[dateRange.startDate, dateRange.endDate]}
-        value={[dateRange.startDate, dateRange.endDate]}
-        onChange={(value) => {
-          setDateRange(
-            value
-              ? {
-                  startDate:
-                    value?.[0] ||
-                    new Date(
-                      new Date(
-                        new Date().setMonth(new Date().getMonth() - 1)
-                      ).setHours(0, 0, 59)
-                    ),
-                  endDate:
-                    value?.[1] || new Date(new Date().setHours(23, 59, 59)),
-                }
-              : {
-                  startDate: new Date(
-                    new Date(
-                      new Date().setMonth(new Date().getMonth() - 1)
-                    ).setHours(0, 0, 59)
-                  ),
-                  endDate: new Date(new Date().setHours(23, 59, 59)),
-                }
-          );
-        }}
       />
+    </Col>
+    <Col>
+      <DateSelect onChange={setDateRange} defaultRange="last30Days" />
+    </Col>
+    <Col>
+      <Button onClick={toggleFiltersOpen}>
+        <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
+        <Badge count={filterCount} showZero={false} offset={[8, 0]}>
+          {intl.formatMessage({
+            defaultMessage: 'More Filters',
+            id: 'stWNQ/',
+          })}
+        </Badge>
+      </Button>
     </Col>
   </Row>
 );
@@ -209,62 +126,18 @@ const BusinessReportView = ({
   removeLogo,
   saveAsDrawer,
   saveTemplate,
-  selectTemplate,
-  selectedTemplate,
   setMetadata,
   setAddLogoDrawer,
   setSaveAsDrawer,
-  templates,
+  filterCount,
+  toggleFiltersOpen,
+  filtersOpen,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const [collapsed, setCollapsed] = useState(false);
   const { reportId } = useParams();
-
   const intl = useIntl();
-  const handleMenuClick: MenuProps['onClick'] = (e) => {
-    if (e.key === '1') {
-      setSaveAsDrawer(true);
-    }
-    if (e.key === '2') {
-      saveTemplate('', 'update');
-    }
-    // if (e.key === '3') {
-    //   setAsDefault({
-    //     templateId: selectedTemplate,
-    //     type: ReportType.Business,
-    //     default: true,
-    //   });
-    // }
-  };
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: intl.formatMessage({
-        defaultMessage: 'Save as',
-        id: 'nCsL6d',
-      }),
-    },
-    {
-      key: '2',
-      disabled: selectedTemplate === 'default',
-      label: intl.formatMessage({
-        defaultMessage: 'Update template',
-        id: 'jS/UOn',
-      }),
-    },
-    // {
-    //   key: '3',
-    //   label: intl.formatMessage({
-    //     defaultMessage: 'Set as default',
-    //     id: 'z+Zrln',
-    //   }),
-    //   disabled:
-    //     templates.find((template) => template.id === selectedTemplate)
-    //       ?.default ||
-    //     selectedTemplate === 'default' ||
-    //     false,
-    // },
-  ];
+
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -274,122 +147,48 @@ const BusinessReportView = ({
           setCollapsed={setCollapsed}
         />
       </Col>
-      <Col>
+      <Col style={{ width: 'calc(100vw - 371px)' }}>
         <Page>
-          {!groupsLoading && selectedTemplate !== '' && (
-            <>
-              <div
-                style={{
-                  position: 'absolute',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  top: 20,
-                  right: 20,
-                }}
-              >
-                <Button
-                  style={{ marginRight: 10, zIndex: 1000 }}
-                  key="2"
-                  onClick={() => setMinDrawer(!minDrawer)}
-                  type="default"
-                  hidden={!editMode}
-                >
-                  {minDrawer
-                    ? intl.formatMessage({
-                        defaultMessage: 'Hide Drawer',
-                        id: 'bfZEmd',
-                      })
-                    : intl.formatMessage({
-                        defaultMessage: 'Show Drawer',
-                        id: 'Ri86Tj',
-                      })}
-                </Button>
-                <Button
-                  style={{ marginRight: 10, zIndex: 1000 }}
-                  key="1"
-                  onClick={() => setEditMode(!editMode)}
-                  type={editMode ? 'primary' : 'default'}
-                >
-                  {editMode
-                    ? intl.formatMessage({
-                        defaultMessage: 'Lock',
-                        id: 'Zl4/y9',
-                      })
-                    : intl.formatMessage({
-                        defaultMessage: 'Edit',
-                        id: 'wEQDC6',
-                      })}
-                </Button>
-                <Button type="primary" onClick={handlePrint}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Print',
-                    id: 'CXRlIo',
-                  })}
-                </Button>
-              </div>
-              <div
-                style={{
-                  position: 'absolute',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  top: 80,
-                  right: 20,
-                }}
-              >
-                <Select
-                  style={{
-                    width: 200,
-                    marginLeft: 10,
-                    marginRight: 10,
-                    zIndex: 1000,
-                  }}
-                  onChange={(value) => selectTemplate(value)}
-                  defaultValue={templates[0]?.id}
-                  value={selectedTemplate}
-                >
-                  {templates.map((template) => (
-                    <Select.Option key={template.id} value={template.id}>
-                      {template.name}
-                      {template.default
-                        ? intl.formatMessage({
-                            defaultMessage: ' (Default)',
-                            id: 'G16X1c',
-                          })
-                        : ''}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </div>
-              <div
-                style={{
-                  position: 'absolute',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  top: 130,
-                  right: 20,
-                }}
-              >
-                <Dropdown
-                  menu={{ items, onClick: handleMenuClick }}
-                  placement="bottomLeft"
-                  overlayStyle={{ zIndex: 1000 }}
-                  className="no-print overlay"
-                >
-                  <Button>
-                    {intl.formatMessage({
-                      defaultMessage: 'Save',
-                      id: 'jvo0vs',
-                    })}
-                  </Button>
-                </Dropdown>
-              </div>
-            </>
-          )}
+          <Row
+            className="no-print"
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              top: 20,
+              left: 20,
+              right: 20,
+              zIndex: 1000,
+            }}
+          >
+            <Col flex={1}>
+              <FilterOptions
+                groups={groups}
+                intl={intl}
+                setSelectedGroups={setSelectedGroups}
+                selectedGroups={selectedGroups}
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                groupsLoading={groupsLoading}
+                toggleFiltersOpen={toggleFiltersOpen}
+                filterCount={filterCount}
+              />
+            </Col>
+            <Col>
+              <ReportToolbar
+                handlePrint={handlePrint}
+                setMinDrawer={setMinDrawer}
+                editMode={editMode}
+                minDrawer={minDrawer}
+                saveTemplate={saveTemplate}
+                setEditMode={setEditMode}
+                setSaveAsDrawer={setSaveAsDrawer}
+              />
+            </Col>
+          </Row>
           {editMode ? (
-            <div className="print-page">
+            <div style={{ paddingTop: 60 }} className="print-page">
               <div className="logo">
                 {metadata
                   ?.find((item) => item.key === 'logo')
@@ -447,21 +246,6 @@ const BusinessReportView = ({
                   }
                 )}
               </Title>
-              <FilterOptions
-                setDateRange={setDateRange}
-                dateRange={dateRange}
-                groups={groups}
-                setSelectedGroups={setSelectedGroups}
-                groupsLoading={groupsLoading}
-                selectedGroups={selectedGroups}
-                intl={intl}
-                crimeGroups={crimeGroups}
-                setSelectedCrimeGroups={setSelectedCrimeGroups}
-                selectedCrimeGroups={selectedCrimeGroups}
-                offenders={offenders}
-                setSelectedOffenders={setSelectedOffenders}
-                selectedOffenders={selectedOffenders}
-              />
               <div className="print-container">
                 <div className="print-body">
                   <ReactGridLayout
@@ -532,21 +316,6 @@ const BusinessReportView = ({
                           </>
                         ))}
                     </div>
-                    <FilterOptions
-                      setDateRange={setDateRange}
-                      dateRange={dateRange}
-                      groups={groups}
-                      setSelectedGroups={setSelectedGroups}
-                      groupsLoading={groupsLoading}
-                      selectedGroups={selectedGroups}
-                      intl={intl}
-                      crimeGroups={crimeGroups}
-                      setSelectedCrimeGroups={setSelectedCrimeGroups}
-                      selectedCrimeGroups={selectedCrimeGroups}
-                      offenders={offenders}
-                      setSelectedOffenders={setSelectedOffenders}
-                      selectedOffenders={selectedOffenders}
-                    />
                   </>
                 }
                 title={
@@ -587,43 +356,122 @@ const BusinessReportView = ({
 
           <Drawer
             title={intl.formatMessage({
-              defaultMessage: 'Charts available to add',
-              id: 'zNsljc',
+              defaultMessage: 'Filters',
+              id: 'zSOvI0',
             })}
-            placement="bottom"
-            mask={false}
+            open={filtersOpen}
+            onClose={toggleFiltersOpen}
+          >
+            <Form layout="vertical">
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Offenders',
+                  id: 'xb54TN',
+                })}
+              >
+                <Select
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Offenders',
+                    id: 'nNFHrE',
+                  })}
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  onChange={(value) => {
+                    setSelectedOffenders(value || []);
+                  }}
+                  value={selectedOffenders}
+                  style={{ width: '100%' }}
+                >
+                  {offenders?.map((offender) => (
+                    <Select.Option
+                      loading={groupsLoading}
+                      key={offender.value}
+                      value={offender.value}
+                    >
+                      {offender.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Crime Groups',
+                  id: 'a0aLil',
+                })}
+              >
+                <Select
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Crime Groups',
+                    id: 'Ze/CG9',
+                  })}
+                  mode="multiple"
+                  allowClear
+                  maxTagCount="responsive"
+                  onChange={(value) => {
+                    setSelectedCrimeGroups(value || []);
+                  }}
+                  value={selectedCrimeGroups}
+                  defaultValue={crimeGroups.map((group) => group.value)}
+                  style={{ width: '100%' }}
+                >
+                  {crimeGroups?.map((group) => (
+                    <Select.Option
+                      loading={groupsLoading}
+                      key={group.value}
+                      value={group.value}
+                    >
+                      {group.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Form>
+          </Drawer>
+
+          <Drawer
+            title={intl.formatMessage({
+              defaultMessage: 'Components available to add',
+              id: 'OJhI0K',
+            })}
+            placement="right"
             closable
             open={editMode && minDrawer}
-            height={200}
+            width={600}
             onClose={() => setMinDrawer(!minDrawer)}
+            bodyStyle={{ padding: 0 }}
           >
-            <Row gutter={[6, 6]}>
-              {BusinessReportLayout.filter(
-                (item) => !layout.some((i) => i.i === item.i)
-              ).map((item) => (
-                <Col key={item.i}>
-                  <Button
-                    type="primary"
-                    style={{ width: 'min-content' }}
-                    onClick={() => {
-                      setLayout([...layout, item]);
-                    }}
-                  >
-                    {layoutMap.get(item.i) || ''}
-                  </Button>
-                </Col>
-              ))}
-              {layout.length === BusinessReportLayout.length && (
-                <Col>
-                  <Typography.Title level={5}>
-                    {intl.formatMessage({
-                      defaultMessage: 'No more charts to add',
-                      id: '2vcxv5',
-                    })}
-                  </Typography.Title>
-                </Col>
-              )}
-            </Row>
+            <ComponentList
+              components={LayoutToReadable.filter(
+                (item) =>
+                  !layout.some((i) => i.i === item.i) || item.allowDuplicates
+              )
+                .filter(({ reportViews }) => reportViews.includes('business'))
+                .map((item) => ({
+                  key: item.i,
+                  onAdd: () => {
+                    setLayout([
+                      ...layout,
+                      {
+                        ...item.item,
+                        i: item.item.allowDuplicates
+                          ? `${item.item.i}_${
+                              layout
+                                .map(({ i }) => i)
+                                .filter((i) => i.includes(item.item.i)).length
+                            }`
+                          : item.i,
+                      },
+                    ]);
+                    setMetadata([
+                      ...metadata,
+                      { key: item.i, type: item.reportItemTypes[0] },
+                    ]);
+                  },
+                  description: item.description,
+                  name: item.readable,
+                  reportItemTypes: item.reportItemTypes,
+                }))}
+            />
           </Drawer>
           <Drawer
             title={intl.formatMessage({

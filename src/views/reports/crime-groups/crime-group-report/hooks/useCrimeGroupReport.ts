@@ -51,6 +51,7 @@ const useCrimeGroupReport = (): Return => {
     addLogo,
     selectTemplate,
     saveTemplate: saveTemplateState,
+    userId,
   } = useReportState({
     InitLayout: CrimeGroupLayout,
     InitMetaData: CrimeGroupMetaData,
@@ -70,6 +71,13 @@ const useCrimeGroupReport = (): Return => {
               equals: currentScheme,
             },
           },
+          users: {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          },
         },
         schemeWhere: {
           id: currentScheme,
@@ -86,7 +94,6 @@ const useCrimeGroupReport = (): Return => {
           value: group.id,
         }));
         setGroups(groupsFormatted);
-        setSelectedGroups(groupsFormatted.map((item) => item.value));
         setLogos([
           ...logos,
           ...(groupsData.scheme?.reportIcons?.map(
@@ -110,20 +117,17 @@ const useCrimeGroupReport = (): Return => {
   };
   const { data, loading } = useCrimeGroupReportQuery({
     fetchPolicy: 'cache-and-network',
-    skip:
-      !currentScheme ||
-      !groups ||
-      !selectedCrimeGroup ||
-      groupsLoading ||
-      !selectedGroups ||
-      selectedGroups.filter(Boolean).length === 0,
+    skip: !currentScheme,
     variables: {
       where: {
         crimeGroupId: selectedCrimeGroup || '',
         businessIds: selectedBusiness,
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
       },
       whereCrimeGroup: {
         id: selectedCrimeGroup || '',

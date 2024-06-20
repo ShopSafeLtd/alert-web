@@ -62,7 +62,7 @@ const OffenderReport = () => {
       </Col>
       <Col>
         <OffenderSideList
-          to="/app/reports/offender-profile/"
+          to={`/app/reports/offender-profile/${reportId}/`}
           current={selectedOffender || ''}
         />
       </Col>

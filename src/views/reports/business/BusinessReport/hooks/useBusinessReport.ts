@@ -9,7 +9,6 @@ import useReportPrint from 'utils/reportPrint/usePrintReports';
 import { useParams } from 'react-router-dom';
 import moment from 'moment/moment';
 import arrangeTemplates from '#/utils/reports/setTemplates';
-import { useStoreState } from '#/state';
 import BusinessReportLayout, { BusinessReportMetaData } from './initLayout';
 import type { Return } from './types';
 import type { SelectOptions } from '../../../types';
@@ -48,15 +47,16 @@ const useBusinessReport = (): Return => {
     changeSize,
     addLogo,
     selectTemplate,
-
     saveTemplate: saveTemplateState,
+    filterCount,
+    filtersOpen,
+    toggleFiltersOpen,
+    userId,
   } = useReportState({
     InitLayout: BusinessReportLayout,
     InitMetaData: BusinessReportMetaData,
     ReportType: ReportType.Business,
   });
-
-  const userId = useStoreState((state) => state.user.id);
 
   const [crimeGroups, setCrimeGroups] = useState<SelectOptions[]>([]);
   const [selectedCrimeGroups, setSelectedCrimeGroups] = useState<string[]>([]);
@@ -99,7 +99,6 @@ const useBusinessReport = (): Return => {
           value: group.id,
         }));
         setGroups(groupsFormatted);
-        setSelectedGroups(groupsFormatted.map((item) => item.value));
         setLogos([
           ...logos,
           ...(groupsData.scheme?.reportIcons?.map(
@@ -123,16 +122,15 @@ const useBusinessReport = (): Return => {
     saveTemplateState(name, method, idsToDelete);
   };
 
-  const { data: filterData, loading: filterLoading } =
-    useSchemeReportFiltersQuery({
-      variables: {
-        where: {
-          id: {
-            in: [currentScheme],
-          },
+  const { data: filterData } = useSchemeReportFiltersQuery({
+    variables: {
+      where: {
+        id: {
+          in: [currentScheme],
         },
       },
-    });
+    },
+  });
 
   useEffect(() => {
     if (filterData) {
@@ -157,18 +155,15 @@ const useBusinessReport = (): Return => {
 
   const { data, loading } = useTargetedBusinessReportQuery({
     fetchPolicy: 'cache-and-network',
-    skip:
-      !currentScheme ||
-      !groups ||
-      groupsLoading ||
-      filterLoading ||
-      !selectedGroups ||
-      selectedGroups.filter(Boolean).length === 0,
+    skip: !currentScheme,
     variables: {
       where: {
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
         businessId: selectedBusiness || '',
         crimeGroupIds: selectedCrimeGroups || [],
         offenderIds:
@@ -256,6 +251,9 @@ const useBusinessReport = (): Return => {
     selectTemplate,
     setAddLogoDrawer,
     setSaveAsDrawer,
+    filterCount,
+    filtersOpen,
+    toggleFiltersOpen,
   };
 };
 

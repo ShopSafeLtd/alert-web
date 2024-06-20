@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { Badge, Button, Col, Drawer, Form, Row, Typography } from 'antd';
-import DatePicker from 'components/util-components/DatePicker';
 import { Page } from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
@@ -24,6 +23,7 @@ import ComponentList from '#/components/reports/ComponentList/ComponentList.view
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
 import { useParams } from 'react-router-dom';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -48,7 +48,6 @@ const FilterOptions = ({
   intl,
   setSelectedGroups,
   selectedGroups,
-  dateRange,
   setDateRange,
   toggleFiltersOpen,
   filterCount,
@@ -73,37 +72,9 @@ const FilterOptions = ({
           />
         </Form.Item>
       </Col>
-      <Col span={8}>
+      <Col>
         <Form.Item style={{ marginBottom: 0 }}>
-          <DatePicker.RangePicker
-            style={{ width: '100%' }}
-            defaultValue={[dateRange.startDate, dateRange.endDate]}
-            value={[dateRange.startDate, dateRange.endDate]}
-            onChange={(value) => {
-              setDateRange(
-                value
-                  ? {
-                      startDate:
-                        value?.[0] ||
-                        new Date(
-                          new Date(
-                            new Date().setMonth(new Date().getMonth() - 1)
-                          ).setHours(0, 0, 59)
-                        ),
-                      endDate:
-                        value?.[1] || new Date(new Date().setHours(23, 59, 59)),
-                    }
-                  : {
-                      startDate: new Date(
-                        new Date(
-                          new Date().setMonth(new Date().getMonth() - 1)
-                        ).setHours(0, 0, 59)
-                      ),
-                      endDate: new Date(new Date().setHours(23, 59, 59)),
-                    }
-              );
-            }}
-          />
+          <DateSelect onChange={setDateRange} defaultRange="last30Days" />
         </Form.Item>
       </Col>
       <Col>

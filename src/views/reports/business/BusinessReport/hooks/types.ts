@@ -49,4 +49,7 @@ export interface Return {
   setAddLogoDrawer: (arg0: boolean) => void;
   setSaveAsDrawer: (arg0: boolean) => void;
   templates: IReportTemplate[];
+  filtersOpen: boolean;
+  toggleFiltersOpen: () => void;
+  filterCount: number;
 }

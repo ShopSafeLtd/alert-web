@@ -1,4 +1,7 @@
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
+import type {
+  ListCrimeGroupsQuery,
+  ListCrimeGroupsQueryVariables,
+} from 'graphql/generated';
 import {
   QueryMode,
   SortOrder,
@@ -61,7 +64,7 @@ const useListCrimeGroups = (): Return => {
     gallery,
     order,
   } = filterVariables;
-  const variables = {
+  const variables: ListCrimeGroupsQueryVariables = {
     order: {
       updatedAt: order,
     },
@@ -88,7 +91,17 @@ const useListCrimeGroups = (): Return => {
                 },
               },
             }
-          : undefined,
+          : {
+              some: {
+                users: {
+                  some: {
+                    id: {
+                      equals: userId,
+                    },
+                  },
+                },
+              },
+            },
       createdBy: gallery.includes('MYDATA')
         ? {
             id: {

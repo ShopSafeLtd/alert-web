@@ -1,12 +1,15 @@
 import type { RefObject } from 'react';
 import React, { useState } from 'react';
-import { Button, Card, Col, Row, Select, Table, Typography } from 'antd';
+import { Button, Card, Col, Row, Table, Typography } from 'antd';
 import type { BusinessEngagementQuery } from 'graphql/generated';
-import DatePicker from 'components/util-components/DatePicker';
 import { useIntl } from 'react-intl';
 import useStyles from './performance-report.styles';
 import type { SelectOptions } from './useBusinessEngagement';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileDownload } from '@fortawesome/pro-light-svg-icons';
 
 const { Title } = Typography;
 
@@ -14,7 +17,6 @@ interface Props {
   loading: boolean;
   data: BusinessEngagementQuery | undefined;
   groups: SelectOptions[];
-  groupsLoading: boolean;
   dateRange: { startDate: Date; endDate: Date };
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
   setSelectedGroups: (groups: string[]) => void;
@@ -30,7 +32,6 @@ const PerformanceReport = ({
   dateRange,
   groups,
   setSelectedGroups,
-  groupsLoading,
   selectedGroups,
   handlePrint,
   componentRef,
@@ -70,12 +71,12 @@ const PerformanceReport = ({
             }
           )}
         </Title>
-        <Row className="no-print" style={{ marginBottom: 10 }}>
+        <Row className="no-print" style={{ marginBottom: 10 }} gutter={8}>
           <Col span={6}>
-            <Select
+            <GroupsSelect
               placeholder={intl.formatMessage({
-                defaultMessage: 'Select Content Groups',
-                id: '5D6XJu',
+                defaultMessage: 'Select Groups',
+                id: 'q2cuIU',
               })}
               mode="multiple"
               maxTagCount="responsive"
@@ -85,55 +86,22 @@ const PerformanceReport = ({
               value={selectedGroups}
               defaultValue={groups.map((group) => group.value)}
               style={{ width: '100%' }}
-            >
-              {groups?.map((group) => (
-                <Select.Option
-                  loading={groupsLoading}
-                  key={group.value}
-                  value={group.value}
-                >
-                  {group.label}
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col span={12}>
-            <DatePicker.RangePicker
-              style={{ marginLeft: 10 }}
-              defaultValue={[dateRange.startDate, dateRange.endDate]}
-              value={[dateRange.startDate, dateRange.endDate]}
-              onChange={(value) => {
-                setDateRange(
-                  value
-                    ? {
-                        startDate:
-                          value?.[0] ||
-                          new Date(
-                            new Date(
-                              new Date().setMonth(new Date().getMonth() - 1)
-                            ).setHours(0, 0, 59)
-                          ),
-                        endDate:
-                          value?.[1] ||
-                          new Date(new Date().setHours(23, 59, 59)),
-                      }
-                    : {
-                        startDate: new Date(
-                          new Date(
-                            new Date().setMonth(new Date().getMonth() - 1)
-                          ).setHours(0, 0, 59)
-                        ),
-                        endDate: new Date(new Date().setHours(23, 59, 59)),
-                      }
-                );
-              }}
             />
           </Col>
           <Col>
-            <Button type="primary" onClick={handlePrint}>
+            <DateSelect onChange={setDateRange} defaultRange="last30Days" />
+          </Col>
+          <Col flex={1} />
+          <Col>
+            <Button onClick={handlePrint}>
+              <FontAwesomeIcon
+                size="lg"
+                style={{ marginRight: 10 }}
+                icon={faFileDownload}
+              />
               {intl.formatMessage({
-                defaultMessage: 'Print',
-                id: 'CXRlIo',
+                defaultMessage: 'Download',
+                id: '5q3qC0',
               })}
             </Button>
           </Col>

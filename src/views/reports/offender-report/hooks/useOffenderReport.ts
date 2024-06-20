@@ -51,7 +51,6 @@ const useOffenderReport = (): Return => {
     changeSize,
     addLogo,
     selectTemplate,
-
     saveTemplate: saveTemplateState,
   } = useReportState({
     InitLayout: OffenderLayout,
@@ -96,7 +95,6 @@ const useOffenderReport = (): Return => {
           value: group.id,
         }));
         setGroups(groupsFormatted);
-        setSelectedGroups(groupsFormatted.map((item) => item.value));
         setLogos([
           ...logos,
           ...(groupsData.scheme?.reportIcons?.map(
@@ -112,20 +110,17 @@ const useOffenderReport = (): Return => {
 
   const { data, loading } = useOffenderReportQuery({
     fetchPolicy: 'cache-and-network',
-    skip:
-      !currentScheme ||
-      !groups ||
-      !selectedOffender ||
-      groupsLoading ||
-      !selectedGroups ||
-      selectedGroups.filter(Boolean).length === 0,
+    skip: !currentScheme,
     variables: {
       where: {
         offenderId: selectedOffender || '',
         businessIds: selectedBusiness,
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
       },
       targetedWhere: {
         offenderId: selectedOffender || '',
