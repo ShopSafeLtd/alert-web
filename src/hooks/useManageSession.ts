@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
-import { AppType, useCreateSessionMutation } from 'graphql/generated';
+import { useCreateSessionMutation } from 'graphql/sessions/create-session.generated';
+import { AppType } from 'graphql/types';
 
 const useManageSession = () => {
   const globalStateSchemeId = useStoreState((state) => state.scheme.id);

@@ -1,11 +1,9 @@
 import React from 'react';
-import type {
-  RestoreOffenderMutation,
-  DeleteOffenderMutation,
-} from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './RestoreOffender.view';
 import useRestoreOffender from './useRestoreOffender';
+import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
+import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
 
 interface Props {
   onClose: () => void;

@@ -9,8 +9,7 @@ import {
   Row,
   Typography,
 } from 'antd';
-import type { ListArticlesQuery } from 'graphql/generated';
-import { ArticlePriority } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -32,6 +31,8 @@ import SkeletonImage from 'components/images/SkeletonImage.view';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './ArticleCard.styles';
+import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
+import { ArticlePriority } from 'graphql/types';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -83,40 +84,22 @@ const ArticleCard = ({
               items={[
                 {
                   key: 0,
-                  label: (
-                    <FormattedMessage
-                      id="oZPIFV"
-                      defaultMessage="Edit Article"
-                    />
-                  ),
+                  label: <FormattedMessage defaultMessage="Edit Article" />,
                   onClick: () => onNavigate(id || ''),
                   icon: <FontAwesomeIcon icon={faEdit} />,
                 },
                 {
                   key: 1,
-                  label: (
-                    <FormattedMessage
-                      id="fbn/t1"
-                      defaultMessage="Delete Article"
-                    />
-                  ),
+                  label: <FormattedMessage defaultMessage="Delete Article" />,
                   onClick: () =>
                     confirm({
                       title: (
-                        <FormattedMessage
-                          id="2oCaym"
-                          defaultMessage="Are you sure?"
-                        />
+                        <FormattedMessage defaultMessage="Are you sure?" />
                       ),
                       content: (
-                        <FormattedMessage
-                          id="sZjntV"
-                          defaultMessage="Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted."
-                        />
+                        <FormattedMessage defaultMessage="Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted." />
                       ),
-                      okText: (
-                        <FormattedMessage id="K3r6DQ" defaultMessage="Delete" />
-                      ),
+                      okText: <FormattedMessage defaultMessage="Delete" />,
                       onOk: () => onDelete(id || ''),
                     }),
                   icon: <FontAwesomeIcon icon={faTrash} />,
@@ -275,7 +258,6 @@ const ArticleCard = ({
               <Button size="small" type="text">
                 {intl.formatMessage({
                   defaultMessage: 'View Full Article',
-                  id: 'Pgum6c',
                 })}
               </Button>
             </Link>

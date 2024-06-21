@@ -185,7 +185,6 @@ const IncidentFilter = ({
             }}
           >
             {intl.formatMessage({
-              id: 'MsGXc3',
               defaultMessage: 'Clear Filters',
             })}
           </Button>
@@ -195,7 +194,7 @@ const IncidentFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ id: 'Hw6crD', defaultMessage: 'Sort Order' })}
+            {intl.formatMessage({ defaultMessage: 'Sort Order' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -205,14 +204,12 @@ const IncidentFilter = ({
           >
             <Select.Option value={IncidentSort.createdAtDesc}>
               {intl.formatMessage({
-                id: 'dZYazP',
                 defaultMessage: 'Newest First',
               })}
             </Select.Option>
             <Select.Option value={IncidentSort.createdAtAsc}>
               {intl.formatMessage({
                 defaultMessage: 'Oldest First',
-                id: 'FqI37D',
               })}
             </Select.Option>
           </Select>
@@ -223,7 +220,6 @@ const IncidentFilter = ({
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
-              id: 'hGJYON',
               defaultMessage: 'Created Between',
             })}
           </Typography.Paragraph>
@@ -248,7 +244,6 @@ const IncidentFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Occurred Between',
-              id: '2u26fg',
             })}
           </Typography.Paragraph>
           <Form.Item name="date" style={{ marginBottom: 0 }}>
@@ -305,14 +300,13 @@ const IncidentFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
+            {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
 
           <GroupsSelect
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             mode="multiple"
             size="small"
@@ -328,14 +322,12 @@ const IncidentFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Crime Types',
-              id: 'Piba4q',
             })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Crime Types',
-              id: 'Piba4q',
             })}
             mode="multiple"
             size="small"
@@ -354,21 +346,19 @@ const IncidentFilter = ({
         </Col>
       </Row>
       <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Details', id: 'Lv0zJu' })}
+        {intl.formatMessage({ defaultMessage: 'Details' })}
       </Typography.Paragraph>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Goods Involved',
-              id: 'oXvpCQ',
             })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Goods Involved',
-              id: 'oXvpCQ',
             })}
             mode="multiple"
             size="small"
@@ -391,7 +381,6 @@ const IncidentFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Characteristics',
-              id: 'xksukL',
             })}
           </Typography.Paragraph>
           <Input.TextArea
@@ -403,14 +392,13 @@ const IncidentFilter = ({
       </Row>
 
       <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Locations', id: 'qGb+T3' })}
+        {intl.formatMessage({ defaultMessage: 'Locations' })}
       </Typography.Paragraph>
       <Row gutter={16}>
         <Col span={24}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Incident has happened at:',
-              id: 'KxEpX9',
             })}
           </Typography.Paragraph>
           <BusinessesSelect
@@ -421,7 +409,6 @@ const IncidentFilter = ({
             style={{ width: '100%' }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Businesses',
-              id: 'MZynHZ',
             })}
             className={classes.select}
           />
@@ -429,14 +416,13 @@ const IncidentFilter = ({
       </Row>
 
       <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Created By', id: 'uAfuJA' })}
+        {intl.formatMessage({ defaultMessage: 'Created By' })}
       </Typography.Paragraph>
       <Row gutter={16}>
         <Col span={24}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Incident created by:',
-              id: 'bbk5UD',
             })}
           </Typography.Paragraph>
           <UsersSelect
@@ -444,7 +430,6 @@ const IncidentFilter = ({
             allowClear
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Users',
-              id: 'yKXPeG',
             })}
             className={classes.select}
             value={createdBy}

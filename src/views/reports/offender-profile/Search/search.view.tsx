@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Col, Row, Skeleton, Table, Tag, Typography } from 'antd';
-import type { SearchOffenderReportsQuery } from 'graphql/generated';
+
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import DebouncedInput from 'utils/debounced-input';
 import useStyles from './search.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import { useParams } from 'react-router-dom';
+import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/search-offender-report.generated';
 
 const { Title } = Typography;
 
@@ -47,7 +48,6 @@ const OffenderProfile = ({
           <Title level={3}>
             {intl.formatMessage({
               defaultMessage: 'Select an offender to view',
-              id: 'ioDzAV',
             })}
           </Title>
           <Row className={classes.toolbar}>
@@ -55,7 +55,6 @@ const OffenderProfile = ({
               <DebouncedInput
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Search for an offender...',
-                  id: 'KBPSuo',
                 })}
                 allowClear
                 onChange={handleSearchChange}
@@ -89,7 +88,6 @@ const OffenderProfile = ({
                 dataIndex: 'name',
                 title: intl.formatMessage({
                   defaultMessage: 'Name',
-                  id: 'HAlOn1',
                 }),
                 render: (value) => (
                   <Typography.Text style={{ fontSize: 14 }} strong>
@@ -102,7 +100,6 @@ const OffenderProfile = ({
                 dataIndex: 'totalIncidents',
                 title: intl.formatMessage({
                   defaultMessage: 'Incident Count',
-                  id: 'otC1Ao',
                 }),
               },
               {
@@ -110,13 +107,11 @@ const OffenderProfile = ({
                 dataIndex: 'totalValue',
                 title: intl.formatMessage({
                   defaultMessage: 'Total Loss',
-                  id: 'LPr3Nh',
                 }),
                 render: (value: number) =>
                   intl.formatMessage(
                     {
                       defaultMessage: '£{value}',
-                      id: 'pCmP/V',
                     },
                     {
                       value: value.toFixed(0),
@@ -128,7 +123,6 @@ const OffenderProfile = ({
                 dataIndex: 'lastIncident',
                 title: intl.formatMessage({
                   defaultMessage: 'Last Incident',
-                  id: 'kJuP0b',
                 }),
               },
               {
@@ -136,7 +130,6 @@ const OffenderProfile = ({
                 dataIndex: 'tags',
                 title: intl.formatMessage({
                   defaultMessage: 'Tags',
-                  id: '1EYCdR',
                 }),
                 render: (tags: { id: string; name: string }[]) =>
                   tags.map((tag) => <Tag key={tag.id}>{tag.name}</Tag>),
@@ -152,7 +145,6 @@ const OffenderProfile = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'View Report',
-                      id: '9KJQ2Y',
                     })}
                   </Button>
                 ),
@@ -184,7 +176,6 @@ const OffenderProfile = ({
                 intl.formatMessage(
                   {
                     defaultMessage: 'Total offenders: {total}',
-                    id: 'LFId63',
                   },
                   {
                     total,

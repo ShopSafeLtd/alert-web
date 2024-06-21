@@ -3,14 +3,12 @@ import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
-import {
-  AnswerType,
-  useBrandsQuery,
-  useQuestionDetailsQuery,
-  useUpdateQuestionOnTagMutation,
-} from 'graphql/generated';
 import errorNotification from '../../../types/mutation_notifications/error_notification';
 import type { TagQuestion } from './UpdateQuestion.container';
+import { AnswerType } from 'graphql/types';
+import { useQuestionDetailsQuery } from '#/components/form-components/update-question-on-tag/graphql/get-question.generated';
+import { useUpdateQuestionOnTagMutation } from '#/components/form-components/update-question-on-tag/graphql/update-question.generated';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
 
 interface Return {
   loading: boolean;
@@ -98,11 +96,9 @@ const useUpdateQuestion = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully updated!',
-          id: 'zJzbfm',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The question has been succesfully updated!',
-          id: 'WKHyMr',
         }),
 
         placement: 'bottomRight',

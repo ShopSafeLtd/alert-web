@@ -44,14 +44,12 @@ const AddTodo = ({
             <Form.Item
               name="name"
               label={intl.formatMessage({
-                id: 'HAlOn1',
                 defaultMessage: 'Name',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: '02vNtJ',
                     defaultMessage:
                       'Please enter a name for the created activity.',
                   }),
@@ -67,14 +65,12 @@ const AddTodo = ({
             <Form.Item
               name="defaultDueDate"
               label={intl.formatMessage({
-                id: 'NQ90za',
                 defaultMessage: 'Default due days',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: '9EDzmS',
                     defaultMessage:
                       'Please select a default number of days the activity should be required to be finished by.',
                   }),
@@ -90,7 +86,6 @@ const AddTodo = ({
             <Form.Item
               name="description"
               label={intl.formatMessage({
-                id: 'Q8Qw5B',
                 defaultMessage: 'Description',
               })}
             >
@@ -103,7 +98,6 @@ const AddTodo = ({
             <Form.Item
               name="questions"
               label={intl.formatMessage({
-                id: 'KV/9Hv',
                 defaultMessage: 'Questions',
               })}
             >
@@ -131,7 +125,6 @@ const AddTodo = ({
             </Form.Item>
             <Button type="dashed" onClick={() => setAddQuestion(true)}>
               {intl.formatMessage({
-                id: 'kgZDDS',
                 defaultMessage: 'New Question',
               })}
             </Button>
@@ -143,7 +136,6 @@ const AddTodo = ({
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
-                  id: '47FYwb',
                   defaultMessage: 'Cancel',
                 })}
               </Button>
@@ -156,7 +148,6 @@ const AddTodo = ({
                 loading={saving}
               >
                 {intl.formatMessage({
-                  id: 'jvo0vs',
                   defaultMessage: 'Save',
                 })}
               </Button>
@@ -167,7 +158,6 @@ const AddTodo = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add/Create Question',
-          id: '/vx2Ey',
         })}
         open={addQuestion}
         width="800"

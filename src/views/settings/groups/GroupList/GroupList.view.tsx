@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table } from 'antd';
-import type { CreateGroupMutation, SchemeGroupsQuery } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import AddGroup from 'components/form-components/group/AddGroup';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FormattedMessage, useIntl } from 'react-intl';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
 
 interface Props {
   data: SchemeGroupsQuery | undefined;
@@ -37,7 +39,6 @@ const GroupList = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a group...',
-              id: 'UaavNU',
             })}
             allowClear
           />
@@ -55,7 +56,7 @@ const GroupList = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="New Content Group" id="EjgE/i" />
+            <FormattedMessage defaultMessage="New Content Group" />
           </Button>
         </Col>
       </Row>
@@ -75,7 +76,6 @@ const GroupList = ({
             key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             dataIndex: 'name',
             width: 300,
@@ -89,7 +89,6 @@ const GroupList = ({
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             }),
             dataIndex: 'description',
             ellipsis: true,
@@ -105,7 +104,6 @@ const GroupList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Create New Content Group',
-          id: 'pTLcTT',
         })}
         open={addGroup}
         width="400"

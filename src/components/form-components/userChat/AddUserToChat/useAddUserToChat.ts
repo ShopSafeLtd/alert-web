@@ -1,10 +1,7 @@
 import { useStoreState } from 'state';
 import { useState } from 'react';
-import {
-  QueryMode,
-  SortOrder,
-  useListSchemeUsersQuery,
-} from 'graphql/generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 
 interface FormData {
   user: string[];

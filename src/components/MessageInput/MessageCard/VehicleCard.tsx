@@ -46,13 +46,11 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
             trigger="click"
             title={intl.formatMessage({
               defaultMessage: 'Remove the vehicle?',
-              id: 'hHs0lD',
             })}
             onConfirm={() => removeVehicle(vehicle.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
@@ -90,14 +88,12 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
             {vehicle.registration ||
               intl.formatMessage({
                 defaultMessage: 'Unidentified Vehicle',
-                id: 'I3q18K',
               })}
           </Paragraph>
           <Descriptions size="small">
             <Descriptions.Item
               label={intl.formatMessage({
                 defaultMessage: 'Alert ID',
-                id: 'k8ZNgH',
               })}
             >
               {vehicle.reference}
@@ -107,7 +103,6 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
             <Descriptions.Item
               label={intl.formatMessage({
                 defaultMessage: 'Members',
-                id: '+a+2ug',
               })}
             >
               {vehicle?.totalOffenders || 0}

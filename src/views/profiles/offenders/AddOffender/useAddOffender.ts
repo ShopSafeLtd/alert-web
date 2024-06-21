@@ -1,30 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
-import type {
-  Age,
-  Build,
-  CreateOffenderData,
-  CreateOffenderMutation,
-  Gender,
-  Height,
-  IdSource,
-  ListOffendersQuery,
-  ListVehiclesQuery,
-  Race,
-} from 'graphql/generated';
-import {
-  ImagePosition,
-  ListOffendersDocument,
-  Model,
-  QueryMode,
-  Role,
-  useBusinessOffenderSettingsQuery,
-  useCreateOffenderMutation,
-  useListCustomGalleriesQuery,
-  useListVehiclesQuery,
-  useSearchOffendersLazyQuery,
-  useTagsQuery,
-} from 'graphql/generated';
+
 import type { FormInstance, UploadFile } from 'antd';
 import { Form, message, Modal, notification } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
@@ -48,6 +24,26 @@ import { useIntl } from 'react-intl';
 import compressImage from 'utils/compress-images';
 import { useGroupsContext } from '#/context/groups-context';
 import customRequest from '../../../../utils/custom-request';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import type {
+  Age,
+  Build,
+  CreateOffenderData,
+  Gender,
+  Height,
+  IdSource,
+  Race,
+} from 'graphql/types';
+import { ImagePosition, Model, QueryMode, Role } from 'graphql/types';
+import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/business-offender-settings.generated';
+import { useSearchOffendersLazyQuery } from 'graphql/offenders/queries/search-offenders.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import type { CreateOffenderMutation } from 'graphql/offenders/mutations/crreate-offender.generated';
+import { useCreateOffenderMutation } from 'graphql/offenders/mutations/crreate-offender.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import { ListOffendersDocument } from 'graphql/offenders/queries/list-offenders.generated';
 
 const { confirm } = Modal;
 
@@ -396,11 +392,9 @@ const useAddOffender = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been added!',
-          id: '67LUBd',
         }),
         placement: 'bottomRight',
       });
@@ -840,11 +834,9 @@ const useAddOffender = (): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Do you want to delete the exclusion?',
-        id: 'P70g0z',
       }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
       }),
       onOk() {
         onRemoveBan(currentId);

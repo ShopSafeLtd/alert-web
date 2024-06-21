@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import type { OffenderProfileQuery } from 'graphql/generated';
-import { useOffenderProfileQuery } from 'graphql/generated';
+import type { OffenderProfileQuery } from 'graphql/reports/queries/offender-profile.generated';
+import { useOffenderProfileQuery } from 'graphql/reports/queries/offender-profile.generated';
 
 interface Return {
   offenderProfileData: OffenderProfileQuery | undefined;

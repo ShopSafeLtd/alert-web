@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/button-has-type */
 import React, { useEffect, useRef, useState } from 'react';
 import type { DropDownProps } from 'antd';
@@ -91,8 +89,7 @@ const Layout: React.FC<Props> = ({
             <Button type="primary" onClick={toggleOverlay}>
               {intl.formatMessage(
                 {
-                  defaultMessage: `View & Approve {type}`,
-                  id: 'wy4d6A',
+                  defaultMessage: 'View & Approve {type}',
                 },
                 {
                   type: type.toLowerCase(),
@@ -107,7 +104,6 @@ const Layout: React.FC<Props> = ({
                   <Typography.Title level={3}>
                     {intl.formatMessage({
                       defaultMessage: 'Awaiting Approval...',
-                      id: 'YLoz+Y',
                     })}
                   </Typography.Title>
                   <Typography.Text>
@@ -115,7 +111,6 @@ const Layout: React.FC<Props> = ({
                       {
                         defaultMessage:
                           'Your administrator has not yet approved this {type}',
-                        id: 'tYju2G',
                       },
                       {
                         type: type.toLowerCase(),
@@ -133,19 +128,16 @@ const Layout: React.FC<Props> = ({
           <button className="option approve" onClick={approval.approve}>
             {intl.formatMessage({
               defaultMessage: 'APPROVE',
-              id: 'CrPB/+',
             })}
           </button>
           <button className="option decline" onClick={approval.decline}>
             {intl.formatMessage({
               defaultMessage: 'DECLINE',
-              id: '39UGGJ',
             })}
           </button>
           <button className="option cancel" onClick={toggleOverlay}>
             {intl.formatMessage({
               defaultMessage: 'CANCEL',
-              id: 'X5wtUo',
             })}
           </button>
         </div>
@@ -162,7 +154,6 @@ const Layout: React.FC<Props> = ({
             dots={false}
           >
             {images.map((image) => (
-              // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <div
                 key={image.id}
                 onClick={() =>
@@ -193,7 +184,6 @@ const Layout: React.FC<Props> = ({
           <Typography.Text>
             {intl.formatMessage({
               defaultMessage: 'No Images',
-              id: 'SxFGH/',
             })}
           </Typography.Text>
         </div>

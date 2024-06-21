@@ -1,15 +1,4 @@
 import { useState } from 'react';
-import type {
-  BrandQuery,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-} from 'graphql/generated';
-import {
-  QueryMode,
-  SearchBusinessesDocument,
-  useBrandQuery,
-  useUpsertBrandMutation,
-} from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -18,6 +7,15 @@ import type { SelectOptions } from '#/types/DataType';
 import { useStoreState } from '#/state';
 import { useApolloClient } from '@apollo/client';
 import { useForm } from 'antd/lib/form/Form';
+import type { BrandQuery } from '#/views/settings/brands/graphql/queries/brand.generated';
+import { useBrandQuery } from '#/views/settings/brands/graphql/queries/brand.generated';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/businesses/queries/search-businesses.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
+import { QueryMode } from 'graphql/types';
+import { useUpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
 
 export interface FormData {
   name: string;
@@ -97,11 +95,9 @@ const useEditBrand = ({ onClose, brandId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The brand has been updated.',
-          id: 'u8xFGL',
         }),
         placement: 'bottomRight',
       });

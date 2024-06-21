@@ -16,7 +16,6 @@ const SearchRow = () => {
             size="small"
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for anything in alert...',
-              id: 'FZ9gwb',
             })}
             allowClear
             // value={search}
@@ -29,7 +28,6 @@ const SearchRow = () => {
             options={[
               {
                 label: intl.formatMessage({
-                  id: 'VwMCyX',
                   defaultMessage: 'Not Approved',
                 }),
                 value: 'NOT APPROVED',
@@ -37,14 +35,12 @@ const SearchRow = () => {
               },
               {
                 label: intl.formatMessage({
-                  id: 'cPIKU2',
                   defaultMessage: 'Following',
                 }),
                 value: 'FOLLOWING',
               },
               {
                 label: intl.formatMessage({
-                  id: 'dr0ueW',
                   defaultMessage: 'My Data',
                 }),
                 value: 'MYDATA',
@@ -56,7 +52,6 @@ const SearchRow = () => {
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Sort & Filter',
-              id: 'f2g3SM',
             })}
           >
             <Button icon={<FontAwesomeIcon icon={faFilter} size="lg" />} />
@@ -65,7 +60,6 @@ const SearchRow = () => {
         <Col>
           <Button size="small" type="ghost">
             {intl.formatMessage({
-              id: 'E2rh1p',
               defaultMessage: 'Buttons',
             })}
           </Button>

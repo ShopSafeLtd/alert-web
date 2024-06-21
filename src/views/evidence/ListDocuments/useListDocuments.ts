@@ -1,23 +1,26 @@
 import { useMemo, useState } from 'react';
-import type {
-  DocumentsQuery,
-  DocumentsQueryVariables,
-  CreateDocumentMutation,
-} from 'graphql/generated';
-import {
-  DocumentType,
-  DocumentsDocument,
-  QueryMode,
-  useDocumentsQuery,
-  useDeleteDocumentMutation,
-  PermissionMethod,
-  PermissionModel,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
 import hasPermission from '#/utils/has-permission';
+import {
+  DocumentType,
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+} from 'graphql/types';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type {
+  DocumentsQuery,
+  DocumentsQueryVariables,
+} from '#/views/evidence/grapqhl/queries/documents.generated';
+import {
+  DocumentsDocument,
+  useDocumentsQuery,
+} from '#/views/evidence/grapqhl/queries/documents.generated';
+import { useDeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
 // import hasPermission from '#/utils/has-permission';
 
 interface Return {

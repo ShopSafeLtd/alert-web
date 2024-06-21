@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
+
 import { Button, Col, Input, Row, Table } from 'antd';
 import { useIntl } from 'react-intl';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 interface Props {
   onClose: () => void;
@@ -36,7 +37,6 @@ const AddExistingCrimeGroup = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Crime Groups...',
-              id: 'zoBZ7M',
             })}
             allowClear
           />
@@ -50,7 +50,6 @@ const AddExistingCrimeGroup = ({
             dataIndex: 'reference',
             title: intl.formatMessage({
               defaultMessage: 'Alert ID',
-              id: 'k8ZNgH',
             }),
           },
           {
@@ -58,7 +57,6 @@ const AddExistingCrimeGroup = ({
             dataIndex: 'alias',
             title: intl.formatMessage({
               defaultMessage: 'Alias',
-              id: 'Ri9jA7',
             }),
           },
           {
@@ -66,7 +64,6 @@ const AddExistingCrimeGroup = ({
             dataIndex: 'totalOffenders',
             title: intl.formatMessage({
               defaultMessage: 'Members',
-              id: '+a+2ug',
             }),
           },
           {
@@ -74,7 +71,6 @@ const AddExistingCrimeGroup = ({
             dataIndex: 'totalIncidents',
             title: intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             }),
           },
           {
@@ -82,7 +78,6 @@ const AddExistingCrimeGroup = ({
             dataIndex: 'totalValue',
             title: intl.formatMessage({
               defaultMessage: 'Lost Value',
-              id: '3YYDlc',
             }),
             render: (value) => `£${value || 0}`,
           },
@@ -91,7 +86,6 @@ const AddExistingCrimeGroup = ({
             dataIndex: 'totalRecoveredValue',
             title: intl.formatMessage({
               defaultMessage: 'Recovered Value',
-              id: 'bGwFFv',
             }),
             render: (value) => `£${value || 0}`,
           },
@@ -100,7 +94,6 @@ const AddExistingCrimeGroup = ({
             dataIndex: 'totalTheftSuccess',
             title: intl.formatMessage({
               defaultMessage: 'Loss Rate',
-              id: 'mQPFSj',
             }),
             render: (value) => `${value?.toFixed(0) || 0}%`,
           },
@@ -125,7 +118,7 @@ const AddExistingCrimeGroup = ({
       <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -137,7 +130,6 @@ const AddExistingCrimeGroup = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Add Crime Group',
-              id: 'C+eSq0',
             })}
           </Button>
         </Col>

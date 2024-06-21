@@ -62,7 +62,6 @@ const ActivityTemplatesView = ({
           >
             {intl.formatMessage({
               defaultMessage: 'New Template',
-              id: '4jpdwo',
             })}
           </Button>
         </Col>
@@ -80,7 +79,6 @@ const ActivityTemplatesView = ({
               dataIndex: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
             },
             {
@@ -88,7 +86,6 @@ const ActivityTemplatesView = ({
               dataIndex: 'description',
               title: intl.formatMessage({
                 defaultMessage: 'Description',
-                id: 'Q8Qw5B',
               }),
               ellipsis: true,
             },
@@ -98,13 +95,11 @@ const ActivityTemplatesView = ({
               dataIndex: 'defaultDueDays',
               title: intl.formatMessage({
                 defaultMessage: 'Due Date',
-                id: '8XUukm',
               }),
               width: 120,
               render: (value: number) => (
                 <FormattedMessage
                   defaultMessage="{v} days"
-                  id="205ouO"
                   values={{
                     v: value,
                   }}
@@ -116,7 +111,6 @@ const ActivityTemplatesView = ({
               dataIndex: 'questions',
               title: intl.formatMessage({
                 defaultMessage: 'Questions',
-                id: 'KV/9Hv',
               }),
               width: 160,
 
@@ -141,7 +135,6 @@ const ActivityTemplatesView = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Create Activity',
-                        id: '8RIxKm',
                       })}
                     >
                       <Button
@@ -158,7 +151,6 @@ const ActivityTemplatesView = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Edit',
-                        id: 'wEQDC6',
                       })}
                     >
                       <Button
@@ -175,7 +167,6 @@ const ActivityTemplatesView = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Remove Question',
-                        id: 'CvVrAx',
                       })}
                     >
                       <Button
@@ -197,7 +188,6 @@ const ActivityTemplatesView = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Create Activity',
-          id: '8RIxKm',
         })}
         open={addActivity}
         width={800}
@@ -215,7 +205,6 @@ const ActivityTemplatesView = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Create Activity Template',
-          id: '+zA4DH',
         })}
         open={activityTemplateForm}
         width={800}

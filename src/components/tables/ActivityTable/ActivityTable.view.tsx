@@ -40,7 +40,6 @@ const ActivityTable = ({
       {intl.formatMessage(
         {
           defaultMessage: ' Description: {description}',
-          id: 'b/Uf3s',
         },
         {
           description: record.description,
@@ -60,7 +59,6 @@ const ActivityTable = ({
           key: 'name',
           title: intl.formatMessage({
             defaultMessage: 'Name',
-            id: 'HAlOn1',
           }),
           dataIndex: 'name',
         },
@@ -70,7 +68,6 @@ const ActivityTable = ({
           dataIndex: 'description',
           title: intl.formatMessage({
             defaultMessage: 'Description',
-            id: 'Q8Qw5B',
           }),
           ellipsis: true,
         },
@@ -80,7 +77,6 @@ const ActivityTable = ({
           dataIndex: 'dueDate',
           title: intl.formatMessage({
             defaultMessage: 'Due Date',
-            id: '8XUukm',
           }),
           render: (value: Date) => FormatCalendar(new Date(value), true),
         },
@@ -89,7 +85,6 @@ const ActivityTable = ({
           dataIndex: 'assignedUsers',
           title: intl.formatMessage({
             defaultMessage: 'Assigned Users',
-            id: '8oku8d',
           }),
           ellipsis: true,
           render: (value: { id: string; fullName: string }[]) => (
@@ -133,11 +128,9 @@ const ActivityTable = ({
               {value
                 ? intl.formatMessage({
                     defaultMessage: 'View',
-                    id: 'FgydNe',
                   })
                 : intl.formatMessage({
                     defaultMessage: 'Complete',
-                    id: 'U78NhE',
                   })}
             </Button>
           ),

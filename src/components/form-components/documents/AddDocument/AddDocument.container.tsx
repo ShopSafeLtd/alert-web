@@ -1,8 +1,9 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateDocumentMutation } from 'graphql/generated';
+
 import React, { memo } from 'react';
 import View from './AddDocument.view';
 import useAddDocument from './useAddDocument';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
 
 interface Props {
   onClose: () => void;

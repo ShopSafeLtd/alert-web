@@ -1,18 +1,15 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import type {
-  AddUsersToBusinessMutation,
-  ListSchemeUsersQuery,
-} from 'graphql/generated';
-import {
-  SortOrder,
-  useAddUsersToBusinessMutation,
-  useListSchemeUsersQuery,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
+import { useAddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { SortOrder } from 'graphql/types';
 
 interface Row {
   key: string;
@@ -107,12 +104,10 @@ const useAddUserToBusiness = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Users Added!',
-          id: 'nJCL+y',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The users have been successfully added to the business',
-          id: 'd7kC/1',
         }),
         placement: 'bottomRight',
       });

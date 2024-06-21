@@ -1,7 +1,7 @@
 import React from 'react';
 import useUpdateQuestion from './useUpdateQuestion';
 import View from './UpdateQuestion.view';
-import type { AnswerType } from '../../../graphql/generated';
+import type { AnswerType } from 'graphql/types';
 
 export interface TagQuestion {
   questionId: string;

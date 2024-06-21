@@ -1,16 +1,4 @@
 import React from 'react';
-import type {
-  CreateDocumentMutation,
-  CreateTodoMutation,
-  DeleteDocumentMutation,
-  ViewIncidentQuery,
-  QuestionGroupOnSchemeQuery,
-  UpdateTaskMutation,
-  CreateInvestigationMutation,
-  UpdateSimpleOffenderMutation,
-  CreateSimpleOffenderMutation,
-} from 'graphql/generated';
-import { Role, GoodsMode, IncidentPriority } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -38,6 +26,7 @@ import {
   faBuilding,
   faClock,
   faEdit,
+  faExclamationCircle,
   faImage,
   faLanguage,
   faLocationDot,
@@ -45,6 +34,7 @@ import {
   faPage,
   faPenToSquare,
   faPlus,
+  faShareNodes,
   faSirenOn,
   faTags,
   faTrash,
@@ -52,8 +42,6 @@ import {
   faUser,
   faUsers,
   faUserTag,
-  faExclamationCircle,
-  faShareNodes,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
@@ -98,6 +86,16 @@ import EvidenceTable from '../../../components/tables/EvidenceTable';
 import formatAnswer from '../../../utils/format-answer';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 import IncidentPriorityTag from '../../../components/incidents/IncidentPriority/IncidentPriorityTag.view';
+import type { ViewIncidentQuery } from 'graphql/incidents/queries/view-incident.generated';
+import { GoodsMode, IncidentPriority, Role } from 'graphql/types';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -386,10 +384,7 @@ const ViewIncident = ({
                             onClick={onReject}
                             disabled={approving}
                           >
-                            <FormattedMessage
-                              defaultMessage="Reject Incident"
-                              id="O9bahm"
-                            />
+                            <FormattedMessage defaultMessage="Reject Incident" />
                           </Button>
                         </Col>
                         <Col>
@@ -398,10 +393,7 @@ const ViewIncident = ({
                             onClick={onApprove}
                             disabled={approving}
                           >
-                            <FormattedMessage
-                              defaultMessage="Approve Incident"
-                              id="Y6VB57"
-                            />
+                            <FormattedMessage defaultMessage="Approve Incident" />
                           </Button>
                         </Col>
                       </Row>
@@ -416,11 +408,9 @@ const ViewIncident = ({
                             ? intl.formatMessage({
                                 defaultMessage:
                                   'Stop getting notified about updates.',
-                                id: 'WpTY6U',
                               })
                             : intl.formatMessage({
                                 defaultMessage: 'Get notified about updates.',
-                                id: 'icr+Hj',
                               })
                         }
                       >
@@ -443,11 +433,9 @@ const ViewIncident = ({
                           {data?.incident?.subscribed
                             ? intl.formatMessage({
                                 defaultMessage: 'Un-follow',
-                                id: 'U9yypY',
                               })
                             : intl.formatMessage({
                                 defaultMessage: 'Follow',
-                                id: 'ieGrWo',
                               })}
                         </Button>
                       </Tooltip>
@@ -460,10 +448,7 @@ const ViewIncident = ({
                             style={{ marginRight: 8 }}
                             icon={faShareNodes}
                           />
-                          <FormattedMessage
-                            id="OKhRC6"
-                            defaultMessage="Share"
-                          />
+                          <FormattedMessage defaultMessage="Share" />
                         </Button>
                       </Col>
                     )}
@@ -477,7 +462,6 @@ const ViewIncident = ({
                                   key: 0,
                                   label: intl.formatMessage({
                                     defaultMessage: 'Edit Details',
-                                    id: 'A2fHI3',
                                   }),
                                   onClick: () => toggleEditIncident(),
                                   icon: <FontAwesomeIcon icon={faEdit} />,
@@ -489,11 +473,9 @@ const ViewIncident = ({
                                     data?.incident.totalImages > 0
                                       ? intl.formatMessage({
                                           defaultMessage: 'Edit Images',
-                                          id: 'Cs6iOM',
                                         })
                                       : intl.formatMessage({
                                           defaultMessage: 'Add Images',
-                                          id: 'b4GGYZ',
                                         }),
                                   onClick: () => toggleEditImages(),
                                   icon: <FontAwesomeIcon icon={faImage} />,
@@ -502,7 +484,6 @@ const ViewIncident = ({
                                   key: 2,
                                   label: intl.formatMessage({
                                     defaultMessage: 'Edit Address',
-                                    id: 'uSpe21',
                                   }),
                                   onClick: () => toggleEditAddress(),
                                   icon: (
@@ -523,7 +504,6 @@ const ViewIncident = ({
                             />
                             {intl.formatMessage({
                               defaultMessage: 'Edit',
-                              id: 'wEQDC6',
                             })}
                           </Button>
                         </Dropdown>
@@ -543,7 +523,6 @@ const ViewIncident = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Delete',
-                            id: 'K3r6DQ',
                           })}
                         </Button>
                       </Col>
@@ -581,7 +560,6 @@ const ViewIncident = ({
                             {intl.formatMessage(
                               {
                                 defaultMessage: 'Alert ID: {ref}',
-                                id: 'umL9sI',
                               },
                               {
                                 ref: data?.incident?.reference,
@@ -594,7 +572,6 @@ const ViewIncident = ({
                               <Tooltip
                                 title={intl.formatMessage({
                                   defaultMessage: 'Translate',
-                                  id: 'wCy/Tc',
                                 })}
                               >
                                 <FontAwesomeIcon
@@ -624,7 +601,6 @@ const ViewIncident = ({
                                     />
                                     {intl.formatMessage({
                                       defaultMessage: 'Priority',
-                                      id: '8lCjAM',
                                     })}
                                   </span>
                                 }
@@ -648,7 +624,6 @@ const ViewIncident = ({
                                   />
                                   {intl.formatMessage({
                                     defaultMessage: 'Business',
-                                    id: 'w1Fanr',
                                   })}
                                 </span>
                               }
@@ -675,7 +650,6 @@ const ViewIncident = ({
                                   />
                                   {intl.formatMessage({
                                     defaultMessage: 'Created By',
-                                    id: 'uAfuJA',
                                   })}
                                 </span>
                               }
@@ -692,7 +666,6 @@ const ViewIncident = ({
                                   />
                                   {intl.formatMessage({
                                     defaultMessage: 'Date & Time',
-                                    id: 'io/Qlk',
                                   })}
                                 </span>
                               }
@@ -712,7 +685,6 @@ const ViewIncident = ({
                                   />
                                   {intl.formatMessage({
                                     defaultMessage: 'Groups',
-                                    id: 'hzmswI',
                                   })}
                                 </span>
                               }
@@ -735,7 +707,6 @@ const ViewIncident = ({
                                   />
                                   {intl.formatMessage({
                                     defaultMessage: 'Crime Types',
-                                    id: 'Piba4q',
                                   })}
                                 </span>
                               }
@@ -752,7 +723,6 @@ const ViewIncident = ({
                                 )) ||
                                   intl.formatMessage({
                                     defaultMessage: 'None',
-                                    id: '450Fty',
                                   })}
                               </Row>
                             </Descriptions.Item>
@@ -768,7 +738,6 @@ const ViewIncident = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Involved Tags',
-                                        id: 'hqB+1X',
                                       })}
                                     </span>
                                   }
@@ -785,7 +754,6 @@ const ViewIncident = ({
                                     )) ||
                                       intl.formatMessage({
                                         defaultMessage: 'None',
-                                        id: '450Fty',
                                       })}
                                   </Row>
                                 </Descriptions.Item>
@@ -803,7 +771,6 @@ const ViewIncident = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Impact Tags',
-                                        id: 'JZVMXj',
                                       })}
                                     </span>
                                   }
@@ -820,7 +787,6 @@ const ViewIncident = ({
                                     )) ||
                                       intl.formatMessage({
                                         defaultMessage: 'None',
-                                        id: '450Fty',
                                       })}
                                   </Row>
                                 </Descriptions.Item>
@@ -841,7 +807,6 @@ const ViewIncident = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Police Information',
-                                  id: 'bhVnhl',
                                 })}
                               </Title>
                               <Descriptions
@@ -855,7 +820,6 @@ const ViewIncident = ({
                                     <span>
                                       {intl.formatMessage({
                                         defaultMessage: 'Police Reported',
-                                        id: 'KrBn25',
                                       })}
                                     </span>
                                   }
@@ -863,11 +827,9 @@ const ViewIncident = ({
                                   {data?.incident?.policeReported
                                     ? intl.formatMessage({
                                         defaultMessage: 'Yes',
-                                        id: 'a5msuh',
                                       })
                                     : intl.formatMessage({
                                         defaultMessage: 'No',
-                                        id: 'oUWADl',
                                       })}
                                 </Descriptions.Item>
                                 <Descriptions.Item
@@ -876,7 +838,6 @@ const ViewIncident = ({
                                     <span>
                                       {intl.formatMessage({
                                         defaultMessage: 'Police Attended',
-                                        id: 'ES0Nc8',
                                       })}
                                     </span>
                                   }
@@ -884,24 +845,20 @@ const ViewIncident = ({
                                   {data?.incident?.policeInvolved
                                     ? intl.formatMessage({
                                         defaultMessage: 'Yes',
-                                        id: 'a5msuh',
                                       })
                                     : intl.formatMessage({
                                         defaultMessage: 'No',
-                                        id: 'oUWADl',
                                       })}
                                 </Descriptions.Item>
                                 <Descriptions.Item
                                   className={classes.detail}
                                   label={intl.formatMessage({
                                     defaultMessage: 'Crime Ref',
-                                    id: '03pSDv',
                                   })}
                                 >
                                   {data?.incident?.policeRef ||
                                     intl.formatMessage({
                                       defaultMessage: 'Not Provided',
-                                      id: 'rVkCib',
                                     })}
                                 </Descriptions.Item>
                                 <Descriptions.Item
@@ -910,7 +867,6 @@ const ViewIncident = ({
                                     <span>
                                       {intl.formatMessage({
                                         defaultMessage: 'Officer Collar Number',
-                                        id: 'r4EMV1',
                                       })}
                                     </span>
                                   }
@@ -918,7 +874,6 @@ const ViewIncident = ({
                                   {data?.incident?.policeNo ||
                                     intl.formatMessage({
                                       defaultMessage: 'Not Provided',
-                                      id: 'rVkCib',
                                     })}
                                 </Descriptions.Item>
                               </Descriptions>
@@ -936,7 +891,6 @@ const ViewIncident = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Items',
-                                  id: 'yNmV/R',
                                 })}
                               </Title>
                             </Col>
@@ -954,7 +908,6 @@ const ViewIncident = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Item',
-                                    id: 'kNLPWW',
                                   })}
                                 </Button>
                               </Col>
@@ -972,7 +925,6 @@ const ViewIncident = ({
                                       {
                                         title: intl.formatMessage({
                                           defaultMessage: 'Name',
-                                          id: 'HAlOn1',
                                         }),
                                         dataIndex: 'name',
                                         key: 'name',
@@ -980,7 +932,6 @@ const ViewIncident = ({
                                       {
                                         title: intl.formatMessage({
                                           defaultMessage: 'Value',
-                                          id: 'GufXy5',
                                         }),
                                         dataIndex: 'value',
                                         key: 'value',
@@ -990,7 +941,6 @@ const ViewIncident = ({
                                       {
                                         title: intl.formatMessage({
                                           defaultMessage: 'Recovered Value',
-                                          id: 'bGwFFv',
                                         }),
                                         dataIndex: 'recoveredValue',
                                         key: 'recoveredValue',
@@ -1009,7 +959,6 @@ const ViewIncident = ({
                                                 <Tooltip
                                                   title={intl.formatMessage({
                                                     defaultMessage: 'Edit Item',
-                                                    id: 'Jm7MY5',
                                                   })}
                                                 >
                                                   <Button
@@ -1035,7 +984,6 @@ const ViewIncident = ({
                                                   title={intl.formatMessage({
                                                     defaultMessage:
                                                       'Remove Item',
-                                                    id: 'BBWWVV',
                                                   })}
                                                 >
                                                   <Popconfirm
@@ -1044,19 +992,16 @@ const ViewIncident = ({
                                                     title={intl.formatMessage({
                                                       defaultMessage:
                                                         'Remove the item?',
-                                                      id: 'NKL3Y8',
                                                     })}
                                                     onConfirm={() =>
                                                       onDeleteGoods(record.key)
                                                     }
                                                     okText={intl.formatMessage({
                                                       defaultMessage: 'Yes',
-                                                      id: 'a5msuh',
                                                     })}
                                                     cancelText={intl.formatMessage(
                                                       {
                                                         defaultMessage: 'No',
-                                                        id: 'oUWADl',
                                                       }
                                                     )}
                                                     overlayInnerStyle={{
@@ -1087,7 +1032,6 @@ const ViewIncident = ({
                                       {
                                         title: intl.formatMessage({
                                           defaultMessage: 'SKU',
-                                          id: 'k4brJy',
                                         }),
                                         dataIndex: 'sku',
                                         key: 'name',
@@ -1095,7 +1039,6 @@ const ViewIncident = ({
                                       {
                                         title: intl.formatMessage({
                                           defaultMessage: 'Quantity',
-                                          id: 'qVGRIE',
                                         }),
                                         dataIndex: 'quantity',
                                         key: 'quantity',
@@ -1103,7 +1046,6 @@ const ViewIncident = ({
                                       {
                                         title: intl.formatMessage({
                                           defaultMessage: 'Recovered Quantity',
-                                          id: '+30ZkY',
                                         }),
                                         dataIndex: 'recoveredQuantity',
                                         key: 'recoveredQuantity',
@@ -1139,7 +1081,6 @@ const ViewIncident = ({
                                     <Table.Summary.Cell index={0}>
                                       {intl.formatMessage({
                                         defaultMessage: 'Total: ',
-                                        id: 'ILhZuX',
                                       })}
                                     </Table.Summary.Cell>
                                     {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
@@ -1158,7 +1099,6 @@ const ViewIncident = ({
                             <Empty
                               description={intl.formatMessage({
                                 defaultMessage: 'No items for this incident',
-                                id: 'A993Ny',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1170,7 +1110,6 @@ const ViewIncident = ({
                             <Title level={4}>
                               {intl.formatMessage({
                                 defaultMessage: 'Incident Details',
-                                id: 'Imc8gS',
                               })}
                             </Title>
                             <Descriptions column={1}>
@@ -1196,7 +1135,6 @@ const ViewIncident = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Offenders',
-                                  id: 'xb54TN',
                                 })}
                               </Title>
                             </Col>
@@ -1208,7 +1146,6 @@ const ViewIncident = ({
                                       items={[
                                         {
                                           label: intl.formatMessage({
-                                            id: 'w4XD3a',
                                             defaultMessage:
                                               'Add Existing Offender',
                                           }),
@@ -1224,7 +1161,6 @@ const ViewIncident = ({
                                         },
                                         {
                                           label: intl.formatMessage({
-                                            id: '58ir77',
                                             defaultMessage:
                                               'Create New Offender',
                                           }),
@@ -1252,7 +1188,6 @@ const ViewIncident = ({
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Offenders',
-                                      id: 'KaNxum',
                                     })}
                                   </Button>
                                 </Dropdown>
@@ -1275,7 +1210,6 @@ const ViewIncident = ({
                               description={intl.formatMessage({
                                 defaultMessage:
                                   'No offenders for this incident',
-                                id: '+qw0ns',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1292,7 +1226,6 @@ const ViewIncident = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Vehicles',
-                                  id: 'r6wuJ3',
                                 })}
                               </Title>
                             </Col>
@@ -1306,7 +1239,6 @@ const ViewIncident = ({
                                           label: intl.formatMessage({
                                             defaultMessage:
                                               'Add Existing Vehicles',
-                                            id: 'goP1s6',
                                           }),
                                           key: '1',
                                           icon: (
@@ -1322,7 +1254,6 @@ const ViewIncident = ({
                                           label: intl.formatMessage({
                                             defaultMessage:
                                               'Create New Vehicle',
-                                            id: 'xiAZxN',
                                           }),
                                           key: '2',
                                           icon: (
@@ -1348,7 +1279,6 @@ const ViewIncident = ({
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Vehicles',
-                                      id: 'iKGwyV',
                                     })}
                                   </Button>
                                 </Dropdown>
@@ -1370,7 +1300,6 @@ const ViewIncident = ({
                             <Empty
                               description={intl.formatMessage({
                                 defaultMessage: 'No vehicles for this incident',
-                                id: 'EOkcI5',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1387,7 +1316,6 @@ const ViewIncident = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Evidence',
-                                  id: '6g7+6N',
                                 })}
                               </Title>
                             </Col>
@@ -1401,7 +1329,6 @@ const ViewIncident = ({
                                           {
                                             label: intl.formatMessage({
                                               defaultMessage: 'Create MG11',
-                                              id: 'CpvwMZ',
                                             }),
                                             key: '1',
                                             icon: (
@@ -1421,7 +1348,6 @@ const ViewIncident = ({
                                             label: intl.formatMessage({
                                               defaultMessage:
                                                 'Create Business Impact Statement',
-                                              id: 'PPTlxg',
                                             }),
                                             key: '2',
                                             icon: (
@@ -1442,7 +1368,6 @@ const ViewIncident = ({
                                           {
                                             label: intl.formatMessage({
                                               defaultMessage: 'Upload',
-                                              id: 'p4N05H',
                                             }),
                                             key: '3',
                                             icon: (
@@ -1470,7 +1395,6 @@ const ViewIncident = ({
                                     >
                                       {intl.formatMessage({
                                         defaultMessage: 'Add Evidence',
-                                        id: 'vgVasT',
                                       })}
                                     </Button>
                                   </Dropdown>
@@ -1487,7 +1411,6 @@ const ViewIncident = ({
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Evidence',
-                                      id: 'vgVasT',
                                     })}
                                   </Button>
                                 )}
@@ -1525,7 +1448,6 @@ const ViewIncident = ({
                             <Empty
                               description={intl.formatMessage({
                                 defaultMessage: 'No evidence for this incident',
-                                id: 'GkZRlh',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1543,7 +1465,6 @@ const ViewIncident = ({
                                 <Title level={4}>
                                   {intl.formatMessage({
                                     defaultMessage: 'Activities',
-                                    id: 'UmEsZF',
                                   })}
                                 </Title>
                               </Col>
@@ -1563,7 +1484,6 @@ const ViewIncident = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Activity',
-                                    id: 'VOiupa',
                                   })}
                                 </Button>
                               </Col>
@@ -1580,7 +1500,6 @@ const ViewIncident = ({
                                 description={intl.formatMessage({
                                   defaultMessage:
                                     'No activities for this incident',
-                                  id: 'JLTkJo',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
@@ -1599,7 +1518,6 @@ const ViewIncident = ({
                                 <Title level={4}>
                                   {intl.formatMessage({
                                     defaultMessage: 'Investigations',
-                                    id: 'juQ8mz',
                                   })}
                                 </Title>
                               </Col>
@@ -1617,7 +1535,6 @@ const ViewIncident = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Investigation',
-                                    id: 'U5+v9Y',
                                   })}
                                 </Button>
                               </Col>
@@ -1632,7 +1549,6 @@ const ViewIncident = ({
                                 description={intl.formatMessage({
                                   defaultMessage:
                                     'No investigations for this incident',
-                                  id: 'nLJULF',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
@@ -1682,7 +1598,6 @@ const ViewIncident = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Select Images To Add',
-          id: 'eSO3MA',
         })}
         open={addImages !== null}
         onOk={() => {
@@ -1693,7 +1608,6 @@ const ViewIncident = ({
         width={addImages ? addImages.length * 250 : 400}
         okText={intl.formatMessage({
           defaultMessage: 'Add Images',
-          id: 'b4GGYZ',
         })}
       >
         <Row justify="center" gutter={8}>
@@ -1714,7 +1628,6 @@ const ViewIncident = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Select an offender to add the update images',
-          id: 'JiCzW0',
         })}
         open={showOffenderOptions}
         onOk={() => {
@@ -1729,7 +1642,6 @@ const ViewIncident = ({
         width={700}
         okText={intl.formatMessage({
           defaultMessage: 'Add Offender',
-          id: 'm3ChN4',
         })}
       >
         <Row gutter={8}>
@@ -1757,12 +1669,11 @@ const ViewIncident = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Edit Update Content',
-          id: '8sZeJM',
         })}
         open={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
-        okText={intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+        okText={intl.formatMessage({ defaultMessage: 'Save' })}
       >
         <Input
           value={editUpdateInput}
@@ -1773,7 +1684,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
-          id: 'UhSUQG',
         })}
         open={linkOffender}
         width="1000"
@@ -1793,7 +1703,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident Details',
-          id: 'XU7doq',
         })}
         open={editIncident}
         width="600"
@@ -1812,7 +1721,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident Images',
-          id: 'BqhA0W',
         })}
         open={editImages}
         width="800"
@@ -1826,7 +1734,6 @@ const ViewIncident = ({
             images={data?.incident?.images}
             title={intl.formatMessage({
               defaultMessage: 'incidnet',
-              id: 'PjFIWc',
             })}
             saving={saving}
             facialDet={facialDetection}
@@ -1840,7 +1747,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
-          id: '+OfJ4/',
         })}
         open={!!editOffenderData}
         width="700"
@@ -1862,7 +1768,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
-          id: 'V+RsEq',
         })}
         open={addOffender}
         width="700"
@@ -1886,7 +1791,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Offenders',
-          id: '1FbM4r',
         })}
         open={addExistingOffender}
         width="1000"
@@ -1908,7 +1812,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
-          id: 'goP1s6',
         })}
         open={addExistingVehicle}
         width="800"
@@ -1929,7 +1832,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
-          id: 'cHbTr7',
         })}
         open={addVehicle}
         width="700"
@@ -1949,7 +1851,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Vehicle',
-          id: 'X/6z9r',
         })}
         open={!!editVehicleData}
         width="800"
@@ -1971,7 +1872,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Item',
-          id: '4CZFEs',
         })}
         open={addGoods}
         width="400"
@@ -1987,7 +1887,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Item',
-          id: 'Jm7MY5',
         })}
         open={!!editGoodsData}
         width="400"
@@ -2009,7 +1908,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Activity',
-          id: 'VOiupa',
         })}
         open={addTodo}
         width="600"
@@ -2036,7 +1934,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Complete Activity',
-          id: '8fwjt4',
         })}
         open={completeTodoVisible !== null}
         width={800}
@@ -2056,7 +1953,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'View Activity',
-          id: 'swvNLe',
         })}
         open={!!viewTodoVisible}
         width={800}
@@ -2068,7 +1964,6 @@ const ViewIncident = ({
             onClose={() => setViewTodoVisible(null)}
             confirmText={intl.formatMessage({
               defaultMessage: 'Save Activity',
-              id: 'Z6L1UV',
             })}
             updateQuery={updateTodo}
             updateTodo={() => {}}
@@ -2082,7 +1977,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
-          id: 'vgVasT',
         })}
         open={addDocument}
         width="600"
@@ -2103,7 +1997,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={addInvestigation}
         width="500"
@@ -2123,7 +2016,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident Address',
-          id: 'Lnv8OW',
         })}
         open={editAddress}
         width="600"
@@ -2144,7 +2036,6 @@ const ViewIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Share Incident',
-          id: 'zaEkJH',
         })}
         bodyStyle={{ padding: 0 }}
         visible={shareOpen}

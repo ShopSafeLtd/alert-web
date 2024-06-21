@@ -2,9 +2,9 @@ import React from 'react';
 import { Card, Col, Form, Row, Typography } from 'antd';
 import { useIntl } from 'react-intl';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import type { ListIncidentTagsQuery } from 'graphql/generated';
-import { IncidentFormField, TagType } from 'graphql/generated';
 import useStyles from '../../AddIncident.styles';
+import type { ListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
+import { IncidentFormField, TagType } from 'graphql/types';
 
 const { Paragraph, Title } = Typography;
 
@@ -35,7 +35,6 @@ const IncidentTypes = ({
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
             {intl.formatMessage({
               defaultMessage: 'What incident are you reporting?',
-              id: 'hyvrCv',
             })}
           </Title>
         </Col>
@@ -47,7 +46,6 @@ const IncidentTypes = ({
           >
             {intl.formatMessage({
               defaultMessage: '- Select the types that apply to this incident.',
-              id: '1VKite',
             })}
           </Paragraph>
         </Col>
@@ -57,20 +55,17 @@ const IncidentTypes = ({
         tooltip={intl.formatMessage({
           defaultMessage:
             'Select the relevant incident type; this helps to categorise the incident',
-          id: 'wgsAeG',
         })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'Please add at least one crime type.',
-              id: 'eSRsUW',
             }),
           },
         ]}
         label={intl.formatMessage({
           defaultMessage: 'Incident Type',
-          id: '3OwM2P',
         })}
       >
         <CheckTags
@@ -85,18 +80,15 @@ const IncidentTypes = ({
           tooltip={intl.formatMessage({
             defaultMessage:
               'Select the relevant crime types for this incident, these help to categorize the incident.',
-            id: 'KxHHjU',
           })}
           label={intl.formatMessage({
             defaultMessage: 'Did this incident involve any of the following?',
-            id: 'cSg8/M',
           })}
           rules={[
             {
               required: true,
               message: intl.formatMessage({
                 defaultMessage: 'Please select an option for this field',
-                id: '1f5eBz',
               }),
             },
           ]}
@@ -115,18 +107,15 @@ const IncidentTypes = ({
           tooltip={intl.formatMessage({
             defaultMessage:
               'Select the relevant crime types for this incident, these help to categorize the incident.',
-            id: 'KxHHjU',
           })}
           label={intl.formatMessage({
             defaultMessage: 'How did this make you feel?',
-            id: '05xT64',
           })}
           rules={[
             {
               required: true,
               message: intl.formatMessage({
                 defaultMessage: 'Please select an option for this field',
-                id: '1f5eBz',
               }),
             },
           ]}

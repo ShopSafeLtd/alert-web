@@ -1,7 +1,8 @@
 import React from 'react';
-import type { ListDemCompaniesQuery } from 'graphql/generated';
+
 import { Button, Col, Row, Table } from 'antd';
 import { useIntl } from 'react-intl';
+import type { ListDemCompaniesQuery } from 'graphql/dem/queries/list-companies.generated';
 
 interface Props {
   onClose: () => void;
@@ -27,7 +28,7 @@ const LinkDemCompany = ({
       <Table
         columns={[
           {
-            title: intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' }),
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
             dataIndex: 'name',
             key: 'name',
           },
@@ -54,7 +55,7 @@ const LinkDemCompany = ({
       <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -66,7 +67,6 @@ const LinkDemCompany = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Link DEM Company',
-              id: 'EDcXmf',
             })}
           </Button>
         </Col>

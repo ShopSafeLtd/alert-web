@@ -1,14 +1,15 @@
 import { useStoreActions, useStoreState } from '#/state';
-import type { CreateTodoMutation, FeedTodosQuery } from 'graphql/generated';
-import {
-  FeedTodosDocument,
-  QueryMode,
-  SortOrder,
-  useFeedTodosQuery,
-  useUpdateTodoMutation,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { FeedTodosQuery } from 'graphql/feedItems/queries/feed-todos.generated';
+import {
+  FeedTodosDocument,
+  useFeedTodosQuery,
+} from 'graphql/feedItems/queries/feed-todos.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useUpdateTodoMutation } from 'graphql/todos/mutations/update_todo.generated';
 
 interface Props {
   fullSearch: string;

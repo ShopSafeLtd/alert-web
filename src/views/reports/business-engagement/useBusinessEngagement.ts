@@ -1,10 +1,10 @@
-import type { BusinessEngagementQuery } from 'graphql/generated';
-import { useBusinessEngagementQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { RefObject } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useGroupsContext } from '#/context/groups-context';
+import type { BusinessEngagementQuery } from 'graphql/reports/queries/business-engagement.generated';
+import { useBusinessEngagementQuery } from 'graphql/reports/queries/business-engagement.generated';
 
 interface Return {
   loading: boolean;

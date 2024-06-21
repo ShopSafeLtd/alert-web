@@ -141,7 +141,6 @@ const AddVehicle = ({
           onBack={reportOnly ? undefined : () => window.history.back()}
           title={intl.formatMessage({
             defaultMessage: 'Add Vehicle',
-            id: '7vPZdr',
           })}
         />
         {/* vehicle details */}
@@ -157,7 +156,6 @@ const AddVehicle = ({
               <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 {intl.formatMessage({
                   defaultMessage: 'Vehicle Details',
-                  id: 'uEyWls',
                 })}
               </Title>
             </Col>
@@ -170,7 +168,6 @@ const AddVehicle = ({
                 {intl.formatMessage({
                   defaultMessage:
                     '- Please complete the basic details for the vehicle.',
-                  id: 'sTEPUO',
                 })}
               </Paragraph>
             </Col>
@@ -181,7 +178,6 @@ const AddVehicle = ({
                 name="registration"
                 label={intl.formatMessage({
                   defaultMessage: 'Registration',
-                  id: 'qv7ied',
                 })}
               >
                 <Input disabled={saving} />
@@ -192,7 +188,6 @@ const AddVehicle = ({
                 name="make"
                 label={intl.formatMessage({
                   defaultMessage: 'Make',
-                  id: '6AAM0P',
                 })}
               >
                 <Input disabled={saving} />
@@ -203,7 +198,6 @@ const AddVehicle = ({
                 name="model"
                 label={intl.formatMessage({
                   defaultMessage: 'Model',
-                  id: 'rhSI1/',
                 })}
               >
                 <Input disabled={saving} />
@@ -214,7 +208,6 @@ const AddVehicle = ({
                 name="colour"
                 label={intl.formatMessage({
                   defaultMessage: 'Colour',
-                  id: '+e8vAT',
                 })}
               >
                 <Input disabled={saving} />
@@ -228,12 +221,10 @@ const AddVehicle = ({
                       name="customGalleries"
                       label={intl.formatMessage({
                         defaultMessage: 'Custom Galleries',
-                        id: 'bzpFEk',
                       })}
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           'select any custom galleries that are relevant to this vehicle or add your own.',
-                        id: 'sgPUe8',
                       })}
                     >
                       <Select
@@ -271,7 +262,6 @@ const AddVehicle = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Custom Gallery',
-                        id: 'rLyRNN',
                       })}
                     </Button>
                   </Col>
@@ -353,7 +343,6 @@ const AddVehicle = ({
               <Col>
                 <Title style={{ marginBottom: 0 }} level={4}>
                   {intl.formatMessage({
-                    id: '2zJXeA',
                     defaultMessage: 'Profiles',
                   })}
                 </Title>
@@ -361,7 +350,6 @@ const AddVehicle = ({
               <Col style={{ marginRight: 20 }}>
                 <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
                   {intl.formatMessage({
-                    id: 'PBMkNx',
                     defaultMessage:
                       '- Please add the profiles that were involved in the vehicle.',
                   })}
@@ -382,7 +370,6 @@ const AddVehicle = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Incidents',
-                    id: 'mtr3R4',
                   })}
                 </Button>
               </Col>
@@ -401,7 +388,6 @@ const AddVehicle = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Offenders',
-                    id: 'xb54TN',
                   })}
                 </Button>
               </Col>
@@ -415,7 +401,6 @@ const AddVehicle = ({
                   }
                 >
                   {intl.formatMessage({
-                    id: 'a0aLil',
                     defaultMessage: 'Crime Groups',
                   })}
                 </Button>
@@ -432,7 +417,6 @@ const AddVehicle = ({
                         <Divider>
                           {intl.formatMessage({
                             defaultMessage: 'Incidents',
-                            id: 'mtr3R4',
                           })}
                         </Divider>
                         <IncidentTable
@@ -449,7 +433,6 @@ const AddVehicle = ({
                         <Divider>
                           {intl.formatMessage({
                             defaultMessage: 'Offenders',
-                            id: 'xb54TN',
                           })}
                         </Divider>
                         <OffenderTable
@@ -464,7 +447,6 @@ const AddVehicle = ({
                       <>
                         <Divider>
                           {intl.formatMessage({
-                            id: 'a0aLil',
                             defaultMessage: 'Crime Groups',
                           })}
                         </Divider>
@@ -474,7 +456,6 @@ const AddVehicle = ({
                               key: 'reference',
                               dataIndex: 'reference',
                               title: intl.formatMessage({
-                                id: 'k8ZNgH',
                                 defaultMessage: 'Alert ID',
                               }),
                             },
@@ -482,7 +463,6 @@ const AddVehicle = ({
                               key: 'alias',
                               dataIndex: 'alias',
                               title: intl.formatMessage({
-                                id: 'Ri9jA7',
                                 defaultMessage: 'Alias',
                               }),
                             },
@@ -490,7 +470,6 @@ const AddVehicle = ({
                               key: 'totalOffenders',
                               dataIndex: 'totalOffenders',
                               title: intl.formatMessage({
-                                id: '+a+2ug',
                                 defaultMessage: 'Members',
                               }),
                             },
@@ -498,7 +477,6 @@ const AddVehicle = ({
                               key: 'totalIncidents',
                               dataIndex: 'totalIncidents',
                               title: intl.formatMessage({
-                                id: 'mtr3R4',
                                 defaultMessage: 'Incidents',
                               }),
                             },
@@ -506,7 +484,6 @@ const AddVehicle = ({
                               key: 'totalValue',
                               dataIndex: 'totalValue',
                               title: intl.formatMessage({
-                                id: '3YYDlc',
                                 defaultMessage: 'Lost Value',
                               }),
                               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -516,7 +493,6 @@ const AddVehicle = ({
                               key: 'totalRecoveredValue',
                               dataIndex: 'totalRecoveredValue',
                               title: intl.formatMessage({
-                                id: 'bGwFFv',
                                 defaultMessage: 'Recovered Value',
                               }),
                               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -526,7 +502,6 @@ const AddVehicle = ({
                               key: 'totalTheftSuccess',
                               dataIndex: 'totalTheftSuccess',
                               title: intl.formatMessage({
-                                id: 'mQPFSj',
                                 defaultMessage: 'Loss Rate',
                               }),
                               // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-template-expressions
@@ -535,7 +510,6 @@ const AddVehicle = ({
                             {
                               key: 'delete',
                               title: intl.formatMessage({
-                                id: 'K3r6DQ',
                                 defaultMessage: 'Delete',
                               }),
                               dataIndex: 'delete',
@@ -544,18 +518,15 @@ const AddVehicle = ({
                                 <Popconfirm
                                   placement="topLeft"
                                   title={intl.formatMessage({
-                                    id: 'Ek+T43',
                                     defaultMessage: 'Remove the crime group?',
                                   })}
                                   onConfirm={() => {
                                     removeCrimeGroup(record.key);
                                   }}
                                   okText={intl.formatMessage({
-                                    id: 'a5msuh',
                                     defaultMessage: 'Yes',
                                   })}
                                   cancelText={intl.formatMessage({
-                                    id: 'oUWADl',
                                     defaultMessage: 'No',
                                   })}
                                   overlayInnerStyle={{ padding: 10 }}
@@ -595,7 +566,6 @@ const AddVehicle = ({
                     <Empty
                       image={Empty.PRESENTED_IMAGE_SIMPLE}
                       description={intl.formatMessage({
-                        id: 'PNTO/p',
                         defaultMessage: 'No profiles added yet.',
                       })}
                     />
@@ -619,7 +589,6 @@ const AddVehicle = ({
               <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'Images & Other Media',
-                  id: 'OR3nwV',
                 })}
               </Title>
             </Col>
@@ -632,7 +601,6 @@ const AddVehicle = ({
                 {intl.formatMessage({
                   defaultMessage:
                     '- Please add any images & media that you have of the vehicle.',
-                  id: 'mvb6VV',
                 })}
               </Paragraph>
             </Col>
@@ -649,7 +617,6 @@ const AddVehicle = ({
                   title={intl.formatMessage({
                     defaultMessage:
                       'Upload any images you have for the vehicle.',
-                    id: 'Jp+g66',
                   })}
                   placement="bottom"
                 >
@@ -664,7 +631,6 @@ const AddVehicle = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Upload Image',
-                      id: 'MntrZe',
                     })}
                   </Button>
                 </Tooltip>
@@ -683,7 +649,6 @@ const AddVehicle = ({
                   title={intl.formatMessage({
                     defaultMessage:
                       'Add documents to the vehicle such as PDFs or videos.',
-                    id: 'oLjdVh',
                   })}
                   placement="bottom"
                 >
@@ -698,7 +663,6 @@ const AddVehicle = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Upload Document',
-                      id: 'Kc9MAV',
                     })}
                   </Button>
                 </Tooltip>
@@ -713,7 +677,6 @@ const AddVehicle = ({
                   name="images"
                   label={intl.formatMessage({
                     defaultMessage: 'Images',
-                    id: 'Fip4H8',
                   })}
                 >
                   <Upload
@@ -752,16 +715,13 @@ const AddVehicle = ({
                             trigger="hover"
                             title={intl.formatMessage({
                               defaultMessage: 'Remove the image?',
-                              id: 'bRha+v',
                             })}
                             onConfirm={() => onRemoveImage(file.uid)}
                             okText={intl.formatMessage({
                               defaultMessage: 'Yes',
-                              id: 'a5msuh',
                             })}
                             cancelText={intl.formatMessage({
                               defaultMessage: 'No',
-                              id: 'oUWADl',
                             })}
                             overlayInnerStyle={{ padding: 10 }}
                           >
@@ -801,7 +761,6 @@ const AddVehicle = ({
                     name="documents"
                     label={intl.formatMessage({
                       defaultMessage: 'Other Media',
-                      id: 'w9BFSc',
                     })}
                   >
                     <Upload
@@ -828,7 +787,6 @@ const AddVehicle = ({
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={intl.formatMessage({
                   defaultMessage: 'No images & media added yet.',
-                  id: 'EgTScc',
                 })}
               />
             </Row>
@@ -857,7 +815,6 @@ const AddVehicle = ({
                   <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                     {intl.formatMessage({
                       defaultMessage: 'Who is it visible to?',
-                      id: 'wvg3HJ',
                     })}
                   </Title>
                 </Col>
@@ -870,7 +827,6 @@ const AddVehicle = ({
                     {intl.formatMessage({
                       defaultMessage:
                         '- Please select the content groups that this vehicle is for',
-                      id: 'aLOtmG',
                     })}
                   </Paragraph>
                 </Col>
@@ -881,12 +837,10 @@ const AddVehicle = ({
                     name="groups"
                     label={intl.formatMessage({
                       defaultMessage: 'Groups',
-                      id: 'hzmswI',
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'Please select the relevant groups that you would like this vehicle to be visible to.',
-                      id: 'cz35+X',
                     })}
                     rules={[
                       {
@@ -894,7 +848,6 @@ const AddVehicle = ({
                         message: intl.formatMessage({
                           defaultMessage:
                             'Please select at least one group for the vehicle.',
-                          id: 'QVpuqK',
                         }),
                       },
                     ]}
@@ -906,7 +859,6 @@ const AddVehicle = ({
                       maxTagCount={3}
                       placeholder={intl.formatMessage({
                         defaultMessage: 'Select groups...',
-                        id: 'aVKXev',
                       })}
                     >
                       {groups.map((group) => (
@@ -929,7 +881,6 @@ const AddVehicle = ({
                 <Button disabled={saving} onClick={() => window.history.back()}>
                   {intl.formatMessage({
                     defaultMessage: 'Cancel',
-                    id: '47FYwb',
                   })}
                 </Button>
               </Col>
@@ -943,7 +894,6 @@ const AddVehicle = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Save',
-                  id: 'jvo0vs',
                 })}
               </Button>
             </Col>
@@ -954,7 +904,6 @@ const AddVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
-          id: 'UhSUQG',
         })}
         open={linkOffender}
         width="800"
@@ -973,7 +922,6 @@ const AddVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Incidents',
-          id: '1Vs3Qr',
         })}
         open={linkIncident}
         width="800"
@@ -992,7 +940,6 @@ const AddVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',
-          id: 'rLyRNN',
         })}
         open={addCustomGallery}
         width="800"
@@ -1006,7 +953,6 @@ const AddVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Crime Groups',
-          id: 'mYgStg',
         })}
         open={addCrimeGroup}
         width="800"

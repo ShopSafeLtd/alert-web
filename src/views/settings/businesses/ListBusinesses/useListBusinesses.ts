@@ -1,25 +1,24 @@
 import { useMemo, useState } from 'react';
-import type {
-  BusinessesListQuery,
-  BusinessesListQueryVariables,
-} from 'graphql/generated';
-import {
-  BusinessesListDocument,
-  Model,
-  QueryMode,
-  SortOrder,
-  useBusinessesListQuery,
-  useBusinessTagsQuery,
-  useCreateBusinessMutation,
-  useDeleteBusinessMutation,
-  useListGroupsQuery,
-  useParentBusinessesListQuery,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { BusinessData } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type {
+  BusinessesListQuery,
+  BusinessesListQueryVariables,
+} from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-businesses.generated';
+import {
+  BusinessesListDocument,
+  useBusinessesListQuery,
+} from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-businesses.generated';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
+import { useListGroupsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-groups.generated';
+import { useParentBusinessesListQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-parent-business-ids.generated';
+import { useBusinessTagsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-business-tags.generated';
+import { useCreateBusinessMutation } from 'graphql/businesses/mutations/create-business.generated';
+import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/delete-business.generated';
 
 export interface FilterLabels {
   label: string;
@@ -155,11 +154,9 @@ const useListBusinesses = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Business has been created',
-          id: 'uILUkO',
         }),
         description: intl.formatMessage({
           defaultMessage: 'You new business has been add to alert.',
-          id: 'sJoRW/',
         }),
         placement: 'bottomRight',
       });
@@ -200,11 +197,9 @@ const useListBusinesses = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Removed!',
-          id: 'U0zgbv',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The business has been removed!',
-          id: 'mSae6x',
         }),
         placement: 'bottomRight',
       });
@@ -247,11 +242,9 @@ const useListBusinesses = (): Return => {
     Modal.confirm({
       title: intl.formatMessage({
         defaultMessage: 'Do you want to delete this business?',
-        id: 'e1WPCT',
       }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
       }),
       onOk() {
         setSaving(true);

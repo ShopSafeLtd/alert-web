@@ -1,8 +1,9 @@
 import React from 'react';
-import { useIndustriesQuery } from 'graphql/generated';
+
 import { Select } from 'antd';
 import { useIntl } from 'react-intl';
 import type { SelectProps } from 'antd/lib/select';
+import { useIndustriesQuery } from 'graphql/industry/industries.generated';
 
 interface Props {
   value?: string[];
@@ -20,7 +21,6 @@ const IndustrySelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
     <Select
       placeholder={intl.formatMessage({
         defaultMessage: 'Select Industries',
-        id: '7Yehsy',
       })}
       mode="multiple"
       maxTagCount="responsive"

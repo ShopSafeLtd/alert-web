@@ -25,8 +25,9 @@ import {
 import { useIntl } from 'react-intl';
 import useStyles from '../../../styles/report.styles';
 import RadialGraph from '../../../../../components/reports/graphs/radialGraph';
-import type { TargetedBusinessReportQuery } from '../../../../../graphql/generated';
+
 import type { AllowedValue, Elements, MetaData } from '../../../types';
+import type { TargetedBusinessReportQuery } from 'graphql/reports/queries/business-report.generated';
 
 const { Title } = Typography;
 
@@ -93,7 +94,6 @@ const BusinessReport = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Incidents Summary',
-                id: 'DGld1Y',
               })}
             </Title>
           </Col>
@@ -102,7 +102,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total Incidents',
-                id: 'pUlxda',
               })}
               value={data?.businessReport?.incidentSummary?.totalIncidents || 0}
               prefix={
@@ -116,7 +115,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Last Incident (in range)',
-                id: 'lI3BDd',
               })}
               value={
                 data?.businessReport?.incidentSummary?.lastIncidentDate
@@ -125,7 +123,6 @@ const BusinessReport = ({
                     ).toLocaleDateString()
                   : intl.formatMessage({
                       defaultMessage: 'unknown',
-                      id: 'uo8NOT',
                     })
               }
               prefix={
@@ -140,7 +137,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Reported to Police',
-                id: 'LhTpVN',
               })}
               value={
                 data?.businessReport?.incidentSummary
@@ -158,7 +154,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Police Attended',
-                id: 'ES0Nc8',
               })}
               value={
                 data?.businessReport?.incidentSummary
@@ -176,7 +171,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Most common crime type',
-                id: 'cY8TMo',
               })}
               value={
                 data?.businessReport?.incidentSummary?.mostCommonCrimeType || ''
@@ -213,7 +207,6 @@ const BusinessReport = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Loss Summary',
-                id: 'O0DXtz',
               })}
             </Title>
           </Col>
@@ -222,7 +215,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total lost value',
-                id: 'xhO9Od',
               })}
               value={
                 data?.businessReport?.lossTotals?.totalLostValue
@@ -231,7 +223,6 @@ const BusinessReport = ({
                     )}`
                   : intl.formatMessage({
                       defaultMessage: 'No Losses',
-                      id: '9RLqIM',
                     })
               }
               prefix={
@@ -246,7 +237,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total recovered value',
-                id: 'OorvGS',
               })}
               value={
                 data?.businessReport?.lossTotals?.totalRecoveredValue
@@ -255,7 +245,6 @@ const BusinessReport = ({
                     )}`
                   : intl.formatMessage({
                       defaultMessage: 'No Recoveries',
-                      id: 'i7IHf9',
                     })
               }
               prefix={
@@ -270,7 +259,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss Rate',
-                id: 'VSxLGp',
               })}
               value={`${(
                 (data?.businessReport?.lossTotals?.averageSuccessRate || 0) *
@@ -287,7 +275,6 @@ const BusinessReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss per Incident',
-                id: 'k62cVY',
               })}
               value={
                 `£${(
@@ -310,7 +297,6 @@ const BusinessReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Crime Types',
-          id: 'Piba4q',
         })}
         className="no-break"
         loading={loading}
@@ -371,7 +357,6 @@ const BusinessReport = ({
             data={data?.businessReport?.crimeTypeDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Crime Types',
-              id: 'BbTEjZ',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -385,11 +370,9 @@ const BusinessReport = ({
             data={data?.businessReport?.crimeTypeDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Crime Types',
-              id: 'BbTEjZ',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -399,7 +382,6 @@ const BusinessReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Involved Tags',
-          id: 'hqB+1X',
         })}
         className="no-break"
         loading={loading}
@@ -461,7 +443,6 @@ const BusinessReport = ({
             data={data?.businessReport?.involvedTagDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Involved Tags',
-              id: 'N26vgU',
             })}
             type={
               metadata.find((item) => item.key === 'involvedTagsDonut')
@@ -474,11 +455,9 @@ const BusinessReport = ({
             data={data?.businessReport?.involvedTagDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Involved Tags',
-              id: 'N26vgU',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -505,16 +484,13 @@ const BusinessReport = ({
           isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents by day of week',
-            id: 'LPtzWr',
           })}
           data={data?.businessReport?.incidentDayOfWeekGraph}
           dataLabel={intl.formatMessage({
             defaultMessage: 'incidents',
-            id: 'Xk++Mj',
           })}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
-            id: '7UNuAl',
           })}
         />
       </Card>
@@ -523,7 +499,6 @@ const BusinessReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Loss/Recovered by Goods Type',
-          id: 'PziBb1',
         })}
         className="no-break"
         loading={loading}
@@ -548,7 +523,6 @@ const BusinessReport = ({
           data={data?.businessReport?.goodsTypeLossRecovered}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types',
-            id: 'BbTEjZ',
           })}
         />
       </Card>
@@ -558,7 +532,6 @@ const BusinessReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Incidents Time of Day',
-          id: 'TQgPcd',
         })}
         className="no-break"
         loading={loading}
@@ -619,7 +592,6 @@ const BusinessReport = ({
             data={data?.businessReport?.incidentTimeOfDayDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
-              id: '2t8hXG',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -633,11 +605,9 @@ const BusinessReport = ({
             data={data?.businessReport?.incidentTimeOfDayDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
-              id: '2t8hXG',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -648,7 +618,6 @@ const BusinessReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Incidents Month',
-          id: 'a3slTY',
         })}
         className="no-break"
         loading={loading}
@@ -709,7 +678,6 @@ const BusinessReport = ({
             isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No incidents',
-              id: '7UNuAl',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -723,11 +691,9 @@ const BusinessReport = ({
             isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No incidents',
-              id: '7UNuAl',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -754,7 +720,6 @@ const BusinessReport = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Targeted Goods',
-            id: 'dLBbg0',
           })}
         </Title>
         <Table
@@ -771,7 +736,6 @@ const BusinessReport = ({
             showTotal: (total, range) =>
               `${range[0]}-${range[1]} ${intl.formatMessage({
                 defaultMessage: 'of',
-                id: 'C9WGEu',
               })} ${total}`,
           }}
           columns={TargetGoodsColumns}
@@ -798,7 +762,7 @@ const BusinessReport = ({
           onClick={() => removeItem('incidentsTable')}
         />
         <Title level={4}>
-          {intl.formatMessage({ defaultMessage: 'Incidents', id: 'mtr3R4' })}
+          {intl.formatMessage({ defaultMessage: 'Incidents' })}
         </Title>
         <Table
           size="small"
@@ -814,7 +778,6 @@ const BusinessReport = ({
             showTotal: (total, range) =>
               `${range[0]}-${range[1]} ${intl.formatMessage({
                 defaultMessage: 'of',
-                id: 'C9WGEu',
               })} ${total}`,
           }}
           columns={IncidentsColumns}
@@ -835,7 +798,7 @@ const BusinessReport = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 1', id: 'hEAGzW' })}
+          {intl.formatMessage({ defaultMessage: 'Page 1' })}
         </Typography.Paragraph>
       </div>
     ),
@@ -852,7 +815,7 @@ const BusinessReport = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 2', id: 'Q3p9d3' })}
+          {intl.formatMessage({ defaultMessage: 'Page 2' })}
         </Typography.Paragraph>
       </div>
     ),
@@ -868,7 +831,7 @@ const BusinessReport = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+          {intl.formatMessage({ defaultMessage: 'Page 3' })}
         </Typography.Paragraph>
       </div>
     ),
@@ -884,7 +847,7 @@ const BusinessReport = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
+          {intl.formatMessage({ defaultMessage: 'Page 4' })}
         </Typography.Paragraph>
       </div>
     ),

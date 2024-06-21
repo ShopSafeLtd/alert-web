@@ -1,8 +1,5 @@
 import React from 'react';
-import type {
-  DeleteArticleMutation,
-  ListArticlesFeedQuery,
-} from 'graphql/generated';
+
 import { Button, Card, Col, Drawer, Empty, Input, Row, Tooltip } from 'antd';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +17,8 @@ import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { ArticleFilters } from 'state/data-model';
 import Loading from '../../../components/shared-components/AntD/Loading';
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
+import type { DeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
 
 interface Props {
   data:
@@ -91,7 +90,6 @@ const Article = ({
               // style={{ width: 350 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search Bulletins...',
-                id: 'bIrv01',
               })}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -107,7 +105,6 @@ const Article = ({
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'My Data',
-                    id: 'dr0ueW',
                   }),
                   value: 'MYDATA',
                 },
@@ -118,7 +115,6 @@ const Article = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
-                id: 'f2g3SM',
               })}
             >
               <Button
@@ -148,7 +144,6 @@ const Article = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Bulletin',
-                  id: 'x52+I1',
                 })}
               </Button>
             </Col>
@@ -224,11 +219,9 @@ const Article = ({
                 search === ''
                   ? intl.formatMessage({
                       defaultMessage: 'No Bulletins',
-                      id: '7Pv3BL',
                     })
                   : intl.formatMessage({
                       defaultMessage: 'No bulletins match your search criteria',
-                      id: 'pZaTHe',
                     })
               }
             />
@@ -257,7 +250,6 @@ const Article = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
-          id: 'o9w9ud',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}

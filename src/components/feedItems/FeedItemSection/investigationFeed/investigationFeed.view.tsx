@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { Button, Col, Row, Typography, Modal, Divider } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -15,6 +15,7 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import UpdateContent from '../UpdateContent';
 import ImageContainer from '../ImageContainer';
 import useStyles from './investigationFeed.styles';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -100,11 +101,9 @@ const InvestigationFeed = ({
                   confirm({
                     title: intl.formatMessage({
                       defaultMessage: 'Do you want to delete the feed item?',
-                      id: 'VZeM4L',
                     }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
-                      id: 'JDJoIZ',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
@@ -134,7 +133,6 @@ const InvestigationFeed = ({
                       {intl.formatMessage(
                         {
                           defaultMessage: 'Alert ID: {reference}',
-                          id: '377fsC',
                         },
                         {
                           reference,
@@ -153,7 +151,7 @@ const InvestigationFeed = ({
                     />
                     <Text style={{ fontSize: 14 }} type="secondary">
                       {intl.formatMessage(
-                        { defaultMessage: 'Members: {members}', id: '8gjK3b' },
+                        { defaultMessage: 'Members: {members}' },
                         {
                           members: totalOffenders || 0,
                         }
@@ -198,7 +196,6 @@ const InvestigationFeed = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Total Incidents: {members}',
-                      id: 'yEyRrH',
                     },
                     {
                       members: totalIncidents || 0,

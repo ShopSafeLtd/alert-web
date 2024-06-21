@@ -1,10 +1,11 @@
 import { useStoreActions, useStoreState } from 'state';
+
+import { useEffect, useState } from 'react';
 import type {
   ListArticlesQuery,
   ListArticlesQueryVariables,
-} from 'graphql/generated';
-import { useListArticlesQuery } from 'graphql/generated';
-import { useEffect, useState } from 'react';
+} from 'graphql/article/queries/list_articles.generated';
+import { useListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
 
 interface Return {
   data:

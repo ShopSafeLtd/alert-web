@@ -21,14 +21,15 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
-import type { IncidentFormField } from 'graphql/generated';
-import { ImagePosition } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import type { StateImageData } from './useImageSection';
 import useImageSection from './useImageSection';
 import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
 import { compressImage } from '../../../../utils/compress-images';
+import type { IncidentFormField } from 'graphql/types';
+import { ImagePosition } from 'graphql/types';
 
 const { Title, Paragraph } = Typography;
 
@@ -80,7 +81,6 @@ const ImageSection = ({
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
             {intl.formatMessage({
               defaultMessage: 'Images & Other Media',
-              id: 'OR3nwV',
             })}
           </Title>
         </Col>
@@ -93,7 +93,6 @@ const ImageSection = ({
             {intl.formatMessage({
               defaultMessage:
                 '- Please add other images & media that you have related to this incident.',
-              id: 'Fm/tL0',
             })}
           </Paragraph>
         </Col>
@@ -116,7 +115,6 @@ const ImageSection = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Upload any images you have for the offender.',
-                id: 's30QVQ',
               })}
               placement="bottom"
             >
@@ -128,7 +126,6 @@ const ImageSection = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Upload Image',
-                  id: 'MntrZe',
                 })}
               </Button>
             </Tooltip>
@@ -139,7 +136,6 @@ const ImageSection = ({
             title={intl.formatMessage({
               defaultMessage:
                 'Add documents to the offender such as PDFs or videos.',
-              id: 'zYeqDc',
             })}
             placement="bottom"
           >
@@ -162,7 +158,6 @@ const ImageSection = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Upload Document',
-                  id: 'Kc9MAV',
                 })}
               </Button>
             </Upload>
@@ -175,7 +170,6 @@ const ImageSection = ({
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
               defaultMessage: 'No images & media added yet.',
-              id: 'EgTScc',
             })}
           />
         </Row>
@@ -187,7 +181,6 @@ const ImageSection = ({
             ? undefined
             : intl.formatMessage({
                 defaultMessage: 'Images',
-                id: 'Fip4H8',
               })
         }
         style={
@@ -243,16 +236,13 @@ const ImageSection = ({
                         trigger="hover"
                         title={intl.formatMessage({
                           defaultMessage: 'Remove the image?',
-                          id: 'bRha+v',
                         })}
                         onConfirm={() => onRemoveImage(file.uid)}
                         okText={intl.formatMessage({
                           defaultMessage: 'Yes',
-                          id: 'a5msuh',
                         })}
                         cancelText={intl.formatMessage({
                           defaultMessage: 'No',
-                          id: 'oUWADl',
                         })}
                         overlayInnerStyle={{ padding: 10 }}
                       >
@@ -276,7 +266,6 @@ const ImageSection = ({
             name="documents"
             label={intl.formatMessage({
               defaultMessage: 'Other Media',
-              id: 'w9BFSc',
             })}
           >
             <Upload

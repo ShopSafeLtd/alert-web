@@ -1,10 +1,10 @@
+import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
+import { useEffect, useMemo, useState } from 'react';
 import type {
   LatestIncidentsQuery,
   LatestIncidentsQueryVariables,
-} from 'graphql/generated';
-import { useLatestIncidentsQuery } from 'graphql/generated';
-import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-import { useEffect, useMemo, useState } from 'react';
+} from '#/views/dashboard/graphql/queries/latest-incidents.generated';
+import { useLatestIncidentsQuery } from '#/views/dashboard/graphql/queries/latest-incidents.generated';
 
 interface Return {
   data: LatestIncidentsQuery | undefined;

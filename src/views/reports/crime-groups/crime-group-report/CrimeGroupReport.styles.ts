@@ -9,9 +9,9 @@ const useStyles = createUseStyles({
     alignItems: 'center',
   },
   '@media print': {
-    page: `overflowY: unset !important; height: unset !important;`,
-    actionBar: `display: none !important;`,
-    dateRow: `clear: both; page-break-after: always;`,
+    page: 'overflowY: unset !important; height: unset !important;',
+    actionBar: 'display: none !important;',
+    dateRow: 'clear: both; page-break-after: always;',
   },
   page: {
     width: '100%',

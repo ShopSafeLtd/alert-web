@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/pro-solid-svg-icons';
 import { useIntl } from 'react-intl';
 import type { UploadChangeParam } from 'antd/lib/upload';
-import type { ImagePosition } from 'graphql/generated';
+import type { ImagePosition } from 'graphql/types';
 import WatermarkImage from '../../images/WatermarkImage.view';
 import type { StateImageData } from '../../incidents/IncidentForm/ImageSection/useImageSection';
 import customRequest from '../../../utils/custom-request';
@@ -195,7 +195,6 @@ const ImageSelect = ({
           <FontAwesomeIcon icon={faUpload} className={classes.uploadIcon} />
           {intl.formatMessage({
             defaultMessage: 'Upload Image',
-            id: 'MntrZe',
           })}
         </Button>
       </Upload>

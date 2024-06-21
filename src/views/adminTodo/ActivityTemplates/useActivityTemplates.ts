@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ListData } from '../useActivities';
-import { useDeleteQuestionGroupMutation } from '../../../graphql/generated';
+import { useDeleteQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/deleteQuestionGroup.generated';
 
 interface Return {
   toggleAddTemplate: () => void;

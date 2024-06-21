@@ -16,7 +16,7 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import { ArticlePriority } from 'graphql/generated';
+
 import { UploadOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 import type { ViewProps } from './types/CreateArticle';
@@ -25,6 +25,7 @@ import LinkIncident from '../../../components/form-components/linkOptions/LinkIn
 import type { FormData } from './hooks/useCreateEditArticle';
 import { useStoreState } from '../../../state';
 import Loading from '../../../components/shared-components/AntD/Loading';
+import { ArticlePriority } from 'graphql/types';
 
 const CreateEditArticleView = ({
   // log,
@@ -78,7 +79,6 @@ const CreateEditArticleView = ({
           {intl.formatMessage({
             defaultMessage:
               'At the moment adding an incident to a multi-scheme article is not supported.',
-            id: '1rIGfA',
           })}
         </div>
       ),
@@ -96,7 +96,6 @@ const CreateEditArticleView = ({
           {intl.formatMessage({
             defaultMessage:
               'At the moment adding an incident to a multi-scheme article is not supported.',
-            id: '1rIGfA',
           })}
         </div>
       ),
@@ -121,11 +120,9 @@ const CreateEditArticleView = ({
             id
               ? intl.formatMessage({
                   defaultMessage: 'Edit Article',
-                  id: 'oZPIFV',
                 })
               : intl.formatMessage({
                   defaultMessage: 'Create Article',
-                  id: 'lpKDhF',
                 })
           }
         />
@@ -172,14 +169,12 @@ const CreateEditArticleView = ({
                   name="title"
                   label={intl.formatMessage({
                     defaultMessage: 'Title',
-                    id: '9a9+ww',
                   })}
                   rules={[
                     {
                       required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Please input title!',
-                        id: 'ZU9Wjz',
                       }),
                     },
                   ]}
@@ -187,7 +182,6 @@ const CreateEditArticleView = ({
                   <Input
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Title',
-                      id: '9a9+ww',
                     })}
                   />
                 </Form.Item>
@@ -199,14 +193,12 @@ const CreateEditArticleView = ({
                   name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Content Groups',
-                    id: '3lRewT',
                   })}
                   rules={[
                     {
                       required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Please select groups!',
-                        id: 'dPaSVi',
                       }),
                     },
                   ]}
@@ -214,7 +206,6 @@ const CreateEditArticleView = ({
                   <Select
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Content Groups',
-                      id: '3lRewT',
                     })}
                     mode="multiple"
                     size="small"
@@ -237,14 +228,12 @@ const CreateEditArticleView = ({
                   name="importance"
                   label={intl.formatMessage({
                     defaultMessage: 'Importance',
-                    id: 'DBZGY7',
                   })}
                   rules={[
                     {
                       required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Please select importance!',
-                        id: 'ZUR1Zs',
                       }),
                     },
                   ]}
@@ -253,7 +242,6 @@ const CreateEditArticleView = ({
                     loading={loading}
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Type',
-                      id: '+U6ozc',
                     })}
                     style={{ minWidth: 200 }}
                   >
@@ -268,14 +256,12 @@ const CreateEditArticleView = ({
                   name="category"
                   label={intl.formatMessage({
                     defaultMessage: 'Category',
-                    id: 'ccXLVi',
                   })}
                 >
                   <Select
                     // select mutliple, category, can create new
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Category',
-                      id: 'ccXLVi',
                     })}
                     mode="tags"
                     size="small"
@@ -296,7 +282,6 @@ const CreateEditArticleView = ({
                   valuePropName="checked"
                   label={intl.formatMessage({
                     defaultMessage: 'Watermark Preview',
-                    id: 'DmBmJf',
                   })}
                 >
                   <Checkbox />
@@ -323,13 +308,11 @@ const CreateEditArticleView = ({
                             type: 'menuitem',
                             text: intl.formatMessage({
                               defaultMessage: 'Add Incident',
-                              id: 'kG1p3q',
                             }),
                             onAction() {
                               drawer.open({
                                 defaultTitle: intl.formatMessage({
                                   defaultMessage: 'Add Incident',
-                                  id: 'kG1p3q',
                                 }),
                                 id: 'addIncident',
                               });
@@ -339,13 +322,11 @@ const CreateEditArticleView = ({
                             type: 'menuitem',
                             text: intl.formatMessage({
                               defaultMessage: 'Add Offender',
-                              id: 'm3ChN4',
                             }),
                             onAction() {
                               drawer.open({
                                 defaultTitle: intl.formatMessage({
                                   defaultMessage: 'Add Offender',
-                                  id: 'm3ChN4',
                                 }),
                                 id: 'addOffender',
                               });
@@ -355,7 +336,6 @@ const CreateEditArticleView = ({
                             type: 'menuitem',
                             text: intl.formatMessage({
                               defaultMessage: 'Add Document Link',
-                              id: 'F8UHCF',
                             }),
                             onAction() {
                               filePickerCallback(
@@ -432,7 +412,6 @@ const CreateEditArticleView = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Incidents:',
-                    id: '+nRUf9',
                   })}
                 </Typography.Title>
                 <Row>
@@ -451,7 +430,6 @@ const CreateEditArticleView = ({
                           >
                             {intl.formatMessage({
                               defaultMessage: 'remove',
-                              id: '1LmW+v',
                             })}
                           </Button>,
                         ]}
@@ -460,7 +438,6 @@ const CreateEditArticleView = ({
                           title={intl.formatMessage(
                             {
                               defaultMessage: 'Incident: {reference}',
-                              id: 'vNNXAE',
                             },
                             {
                               reference: item.incident.reference,
@@ -482,7 +459,6 @@ const CreateEditArticleView = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Offenders:',
-                    id: 'HEnuMU',
                   })}
                 </Typography.Title>
                 <Row>
@@ -500,7 +476,6 @@ const CreateEditArticleView = ({
                           >
                             {intl.formatMessage({
                               defaultMessage: 'remove:',
-                              id: 'ppHb/S',
                             })}
                           </Button>,
                         ]}
@@ -532,7 +507,6 @@ const CreateEditArticleView = ({
                 <Button icon={<UploadOutlined />}>
                   {intl.formatMessage({
                     defaultMessage: 'Upload Document',
-                    id: 'Kc9MAV',
                   })}
                 </Button>
               </Upload>
@@ -543,7 +517,6 @@ const CreateEditArticleView = ({
                   <Button onClick={() => window.history.back()}>
                     {intl.formatMessage({
                       defaultMessage: 'Cancel',
-                      id: '47FYwb',
                     })}
                   </Button>
                 </Col>
@@ -557,11 +530,9 @@ const CreateEditArticleView = ({
                     {id
                       ? intl.formatMessage({
                           defaultMessage: 'Save',
-                          id: 'jvo0vs',
                         })
                       : intl.formatMessage({
                           defaultMessage: 'Create Article',
-                          id: 'lpKDhF',
                         })}
                   </Button>
                 </Col>

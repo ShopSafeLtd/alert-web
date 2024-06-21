@@ -1,8 +1,8 @@
-import type { UpsertBrandMutation } from '#/graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import React from 'react';
 import View from './AddBrand.view';
 import useAddBrand from './useAddBrand';
+import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
 
 interface Props {
   onClose: () => void;

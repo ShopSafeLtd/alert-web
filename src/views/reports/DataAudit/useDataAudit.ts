@@ -1,11 +1,8 @@
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import { useEffect, useState } from 'react';
-import type { ListOffendersAllSchemesQuery } from 'graphql/generated';
-import {
-  SortOrder,
-  QueryMode,
-  useListOffendersAllSchemesQuery,
-} from 'graphql/generated';
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
+import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Return {
   loading: boolean;

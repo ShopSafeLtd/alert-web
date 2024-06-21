@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
 import { useIntl } from 'react-intl';
-import { Role } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,6 +10,7 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
+import { Role } from 'graphql/types';
 
 const useStyles = createUseStyles({
   row: {
@@ -73,7 +73,6 @@ const IncidentTable = ({
           key: 'reference',
           dataIndex: 'reference',
           title: intl.formatMessage({
-            id: 'k8ZNgH',
             defaultMessage: 'Alert ID',
           }),
           render: (
@@ -96,7 +95,6 @@ const IncidentTable = ({
           dataIndex: 'policeRef',
           title: intl.formatMessage({
             defaultMessage: 'Crime No.',
-            id: 'B0ihHq',
           }),
         },
         {
@@ -104,7 +102,6 @@ const IncidentTable = ({
           dataIndex: 'subject',
           title: intl.formatMessage({
             defaultMessage: 'Subject',
-            id: 'LLtKhp',
           }),
         },
         {
@@ -112,7 +109,6 @@ const IncidentTable = ({
           dataIndex: 'date',
           title: intl.formatMessage({
             defaultMessage: 'Date',
-            id: 'P7PLVj',
           }),
         },
         {
@@ -120,7 +116,6 @@ const IncidentTable = ({
           dataIndex: 'loss',
           title: intl.formatMessage({
             defaultMessage: 'Loss',
-            id: 'mv038n',
           }),
           render: (value: number) => `£${value.toLocaleString()}`,
         },
@@ -129,7 +124,6 @@ const IncidentTable = ({
           dataIndex: 'location',
           title: intl.formatMessage({
             defaultMessage: 'Location',
-            id: 'rvirM2',
           }),
         },
         {
@@ -144,7 +138,6 @@ const IncidentTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'View Incident',
-                      id: 'f4Tgpp',
                     })}
                   >
                     <Link to={`/app/incidents/view/${record.key}`}>
@@ -162,7 +155,6 @@ const IncidentTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit Incident',
-                      id: 'E6VJFN',
                     })}
                   >
                     <Button
@@ -181,25 +173,21 @@ const IncidentTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove Incident',
-                      id: 'NhpFO7',
                     })}
                   >
                     <Popconfirm
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the incident?',
-                        id: '+pfPgu',
                       })}
                       onConfirm={() => {
                         onDelete(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >

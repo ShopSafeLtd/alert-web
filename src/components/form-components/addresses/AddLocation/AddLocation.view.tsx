@@ -42,7 +42,6 @@ const AddLocation = ({
         name="location"
         label={intl.formatMessage({
           defaultMessage: 'Location',
-          id: 'rvirM2',
         })}
       >
         <LocatingCard
@@ -60,12 +59,10 @@ const AddLocation = ({
               name="alias"
               label={intl.formatMessage({
                 defaultMessage: 'Label',
-                id: '753yX5',
               })}
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'A friendly name for the address to identify it, such as home',
-                id: 'YI+p4u',
               })}
             >
               <Input />
@@ -77,7 +74,6 @@ const AddLocation = ({
             name="building"
             label={intl.formatMessage({
               defaultMessage: 'Building',
-              id: 'oS/nae',
             })}
           >
             <Input disabled={saving} />
@@ -88,14 +84,12 @@ const AddLocation = ({
             name="street"
             label={intl.formatMessage({
               defaultMessage: 'Street',
-              id: 'BaIwdV',
             })}
             rules={[
               {
                 required: !location,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a street for the new location.',
-                  id: 'LDupfj',
                 }),
               },
             ]}
@@ -109,7 +103,6 @@ const AddLocation = ({
             name="townCity"
             label={intl.formatMessage({
               defaultMessage: 'Town/City',
-              id: 'byaTQZ',
             })}
             rules={[
               {
@@ -117,7 +110,6 @@ const AddLocation = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a town/city for the new location.',
-                  id: 'MVCGSr',
                 }),
               },
             ]}
@@ -130,7 +122,6 @@ const AddLocation = ({
             name="county"
             label={intl.formatMessage({
               defaultMessage: 'County',
-              id: 'B+KJhc',
             })}
           >
             <Input disabled={saving} />
@@ -142,7 +133,6 @@ const AddLocation = ({
             name="postcode"
             label={intl.formatMessage({
               defaultMessage: 'Postcode',
-              id: 'FJhjgz',
             })}
             rules={[
               {
@@ -150,7 +140,6 @@ const AddLocation = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a postcode for the new location.',
-                  id: 'NwJPpe',
                 }),
               },
             ]}
@@ -164,7 +153,7 @@ const AddLocation = ({
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -174,7 +163,7 @@ const AddLocation = ({
               type="primary"
               htmlType="submit"
             >
-              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+              {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
           </Col>
         </Row>

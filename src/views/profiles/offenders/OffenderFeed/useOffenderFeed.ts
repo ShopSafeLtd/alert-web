@@ -1,19 +1,3 @@
-import type {
-  InputMaybe,
-  ListCustomGalleriesQuery,
-  ListOffendersRelayQuery,
-  ListOffendersRelayQueryVariables,
-  OffenderOrderByWithRelationInput,
-  RecycleOffenderMutation,
-} from 'graphql/generated';
-import {
-  ListOffendersRelayDocument,
-  QueryMode,
-  Role,
-  SortOrder,
-  useListCustomGalleriesQuery,
-  useListOffendersRelayQuery,
-} from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -21,6 +5,22 @@ import { useNavigate } from 'react-router-dom';
 import type { OffenderFilters } from 'state/data-model';
 import cacheOrLoading from 'utils/cache-or-loading';
 import { useGroupsContext } from '#/context/groups-context';
+import type {
+  ListOffendersRelayQuery,
+  ListOffendersRelayQueryVariables,
+} from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import {
+  ListOffendersRelayDocument,
+  useListOffendersRelayQuery,
+} from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import type {
+  InputMaybe,
+  OffenderOrderByWithRelationInput,
+} from 'graphql/types';
+import { QueryMode, Role, SortOrder } from 'graphql/types';
 
 interface Return {
   data: ListOffendersRelayQuery | undefined;

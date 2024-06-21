@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from 'antd';
-import type { UpdateType } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessageDots } from '@fortawesome/pro-light-svg-icons';
 import type {
@@ -16,6 +16,7 @@ import CrimeGroupList from 'components/MessageInput/MessageCard/CrimeGroupList';
 import { useIntl } from 'react-intl';
 import ArticleCard from 'components/MessageInput/MessageCard/ArticleCard';
 import useStyles from './UpdateContent.styles';
+import type { UpdateType } from 'graphql/types';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -83,7 +84,6 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
               ? getContent(update?.text)
               : intl.formatMessage({
                   defaultMessage: 'Link an incident',
-                  id: 'SeBe5K',
                 })}
           </Title>
           <IncidentCard incident={update.linkedIncidents[0]} />
@@ -101,7 +101,6 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
               ? getContent(update?.text)
               : intl.formatMessage({
                   defaultMessage: 'Link an offender',
-                  id: 'BxIzUN',
                 })}
           </Title>
           <OffenderCard offender={update.linkedOffenders[0]} />
@@ -119,7 +118,6 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
               ? getContent(update?.text)
               : intl.formatMessage({
                   defaultMessage: 'Link a vehicle',
-                  id: '1lpfu7',
                 })}
           </Title>
           <VehicleCard vehicle={update.linkedVehicles[0]} />
@@ -137,7 +135,6 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
               ? getContent(update?.text)
               : intl.formatMessage({
                   defaultMessage: 'Link crime groups',
-                  id: 'j6a7pa',
                 })}
           </Title>
           <CrimeGroupList crimeGroups={update.linkedCrimeGroups} isIntel />
@@ -155,7 +152,6 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
               ? getContent(update?.text)
               : intl.formatMessage({
                   defaultMessage: 'Link an article',
-                  id: 'IyYrMy',
                 })}
           </Title>
           <ArticleCard article={update.linkedArticles[0]} />

@@ -26,7 +26,6 @@ const LinkIncident = ({
           <Row gutter={16}>
             {offender.images?.map(({ url }) => (
               <Col span={6}>
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
                   onClick={() => onSubmit({ key: url })}
                   style={{
@@ -44,7 +43,7 @@ const LinkIncident = ({
     <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
       <Col>
         <Button onClick={onClose} type="text">
-          <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
+          <FormattedMessage defaultMessage="Cancel" />
         </Button>
       </Col>
     </Row>

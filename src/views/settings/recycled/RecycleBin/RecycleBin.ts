@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import type {
-  RecycledItemsQuery,
-  RestoreIncidentMutation,
-  DeleteIncidentMutation,
-  RestoreOffenderMutation,
-  DeleteOffenderMutation,
-} from 'graphql/generated';
-import {
-  useRecycledItemsQuery,
-  SortOrder,
-  RecycledItemsDocument,
-} from 'graphql/generated';
 import { useStoreState } from 'state';
 
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { RecycledItemsQuery } from 'graphql/recycled/queries/recycled-items.generated';
+import {
+  RecycledItemsDocument,
+  useRecycledItemsQuery,
+} from 'graphql/recycled/queries/recycled-items.generated';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
+import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
+import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
+import { SortOrder } from 'graphql/types';
 
 interface Return {
   data: RecycledItemsQuery | undefined;

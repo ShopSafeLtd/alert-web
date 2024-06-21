@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { TodoType } from 'graphql/generated';
+
+import { TodoType } from 'graphql/types';
 
 export interface TodoData {
   type?: TodoType | null;
@@ -45,7 +46,7 @@ const getTodoUrl = (todo: TodoData) => {
     }
 
     default: {
-      return `/app/tasks`;
+      return '/app/tasks';
     }
   }
 };

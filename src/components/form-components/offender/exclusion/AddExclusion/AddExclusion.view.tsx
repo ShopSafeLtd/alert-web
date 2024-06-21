@@ -5,9 +5,9 @@ import {
   DatePicker,
   Form,
   Input,
+  InputNumber,
   Row,
   Select,
-  InputNumber,
 } from 'antd';
 import type { Moment } from 'moment';
 
@@ -15,7 +15,7 @@ import type { RangePickerProps } from 'antd/es/date-picker';
 import type { BanData } from 'types/DataType';
 import BanTypeValues from 'types/enums/ban-type';
 import { useIntl } from 'react-intl';
-import { BanType } from 'graphql/generated';
+import { BanType } from 'graphql/types';
 
 // interface FormData {
 //   endDate: Date;
@@ -50,10 +50,9 @@ const AddExclusion = ({
         <Col span={21}>
           <Form.Item
             name="type"
-            label={intl.formatMessage({ defaultMessage: 'Type', id: '+U6ozc' })}
+            label={intl.formatMessage({ defaultMessage: 'Type' })}
             tooltip={intl.formatMessage({
               defaultMessage: 'select a type for the outcome',
-              id: 'WI+gQZ',
             })}
           >
             <Select options={BanTypeValues} disabled={saving} />
@@ -66,7 +65,6 @@ const AddExclusion = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea disabled={saving} />
@@ -81,7 +79,6 @@ const AddExclusion = ({
                 name="months"
                 label={intl.formatMessage({
                   defaultMessage: 'Duration (Weeks)',
-                  id: 'J+Eyds',
                 })}
               >
                 <InputNumber style={{ width: 120 }} disabled={saving} />
@@ -98,7 +95,6 @@ const AddExclusion = ({
                 name="fineValue"
                 label={intl.formatMessage({
                   defaultMessage: 'Fine Value',
-                  id: 'l2lAwm',
                 })}
               >
                 <InputNumber style={{ width: 120 }} disabled={saving} />
@@ -126,7 +122,6 @@ const AddExclusion = ({
                     name="months"
                     label={intl.formatMessage({
                       defaultMessage: 'Duration (Months)',
-                      id: 'u5MbA8',
                     })}
                   >
                     <InputNumber style={{ width: 120 }} disabled={saving} />
@@ -151,11 +146,9 @@ const AddExclusion = ({
                   BanType.CourtData === type
                     ? intl.formatMessage({
                         defaultMessage: 'Date',
-                        id: 'P7PLVj',
                       })
                     : intl.formatMessage({
                         defaultMessage: 'Start Date',
-                        id: 'QirE3M',
                       })
                 }
                 dependencies={['endDate']}
@@ -164,7 +157,6 @@ const AddExclusion = ({
                     required: type !== BanType.Other,
                     message: intl.formatMessage({
                       defaultMessage: 'Please select a start date',
-                      id: 'dKMbT0',
                     }),
                   },
                   ({ getFieldValue }) => ({
@@ -175,7 +167,6 @@ const AddExclusion = ({
                             intl.formatMessage({
                               defaultMessage:
                                 'The start date cannot be later than the end date!',
-                              id: 'djQusS',
                             })
                           )
                         );
@@ -201,7 +192,6 @@ const AddExclusion = ({
                 name="endDate"
                 label={intl.formatMessage({
                   defaultMessage: 'End Date',
-                  id: 'T4GOiX',
                 })}
                 rules={[
                   {
@@ -209,7 +199,6 @@ const AddExclusion = ({
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select a end date for the outcome.',
-                      id: 'r/aQ+Q',
                     }),
                   },
                 ]}
@@ -225,7 +214,7 @@ const AddExclusion = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -237,7 +226,6 @@ const AddExclusion = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Outcome',
-                id: 'HQnZ2l',
               })}
             </Button>
           </Col>

@@ -1,7 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useRef } from 'react';
-import type { ListOffendersSelectQuery } from 'graphql/generated';
 import { Button, Carousel, Col, Descriptions, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -33,6 +30,7 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { FormattedMessage, useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
+import type { ListOffendersSelectQuery } from 'graphql/offenders/queries/list-offenders-select.generated';
 
 const { Title } = Typography;
 
@@ -103,7 +101,7 @@ const AddExistingOffender = ({
       <Row justify="center" align="middle" className="no-offenders">
         <Col>
           <Title level={4}>
-            <FormattedMessage defaultMessage="No Offenders Found" id="IhHcoJ" />
+            <FormattedMessage defaultMessage="No Offenders Found" />
           </Title>
         </Col>
       </Row>
@@ -179,7 +177,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Last updated',
-                          id: '0ICwq5',
                         })}
                       </span>
                     }
@@ -195,7 +192,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Age',
-                          id: '9oNQSC',
                         })}
                       </span>
                     }
@@ -213,7 +209,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Sex',
-                          id: 'eWJHGp',
                         })}
                       </span>
                     }
@@ -231,7 +226,6 @@ const AddExistingOffender = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Hair',
-                            id: 'e4YBbX',
                           })}
                         </span>
                       }
@@ -248,7 +242,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Build',
-                          id: 'RSctv1',
                         })}
                       </span>
                     }
@@ -264,7 +257,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Ethnicity',
-                          id: 'XtCAFo',
                         })}
                       </span>
                     }
@@ -282,7 +274,6 @@ const AddExistingOffender = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Additional Info',
-                            id: '3XOciw',
                           })}
                         </span>
                       }
@@ -301,7 +292,6 @@ const AddExistingOffender = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Last offence',
-                            id: 'A0w5MM',
                           })}
                         </span>
                       }
@@ -317,7 +307,6 @@ const AddExistingOffender = ({
                 <Button onClick={onClose}>
                   {intl.formatMessage({
                     defaultMessage: 'Cancel',
-                    id: '47FYwb',
                   })}
                 </Button>
               </Col>
@@ -328,7 +317,6 @@ const AddExistingOffender = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Offender',
-                    id: 'm3ChN4',
                   })}
                 </Button>
               </Col>

@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   '@media print': {
-    offenderSideList: `display: none !important;`,
+    offenderSideList: 'display: none !important;',
   },
   offenderSideList: {
     display: 'flex',

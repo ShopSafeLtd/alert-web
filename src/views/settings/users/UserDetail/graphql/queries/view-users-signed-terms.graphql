@@ -1,0 +1,6 @@
+query Term($where: UniqueId!) {
+  term(where: $where) {
+    content
+    version
+  }
+}

@@ -1,9 +1,10 @@
 import { useStoreState } from 'state';
 import { useMemo } from 'react';
 import { type IntlShape, useIntl } from 'react-intl';
-import type { Model } from '../../../graphql/generated';
-import { useWorkflowsQuery, WorkflowTrigger } from '../../../graphql/generated';
+
 import type { WorkflowItem } from './types';
+import { Model, WorkflowTrigger } from '#/graphql/types';
+import { useWorkflowsQuery } from '#/views/workflows/graphql/queries/list-workflows.generated';
 
 interface Return {
   data: WorkflowItem[];
@@ -19,39 +20,38 @@ const worflowTriggerToReadable = ({
   triggerModels: Model;
   intl: IntlShape;
 }) => {
-  if (triggerModels === 'OFFENDER')
+  if (triggerModels === Model.Offender)
     return intl.formatMessage({
       defaultMessage: 'When an offender is added to an incident',
-      id: 'MYTuQh',
     });
   switch (trigger) {
     case WorkflowTrigger.Created: {
       return intl.formatMessage(
-        { defaultMessage: 'When a {triggerModel} is created', id: 'Qjmksz' },
+        { defaultMessage: 'When a {triggerModel} is created' },
         { triggerModel: triggerModels.toLowerCase() }
       );
     }
     case WorkflowTrigger.Updated: {
       return intl.formatMessage(
-        { defaultMessage: 'When a {triggerModel} is updated', id: 'LNGjPe' },
+        { defaultMessage: 'When a {triggerModel} is updated' },
         { triggerModel: triggerModels.toLowerCase() }
       );
     }
     case WorkflowTrigger.Approved: {
       return intl.formatMessage(
-        { defaultMessage: 'When a {triggerModel} is approved', id: 'AsU0X4' },
+        { defaultMessage: 'When a {triggerModel} is approved' },
         { triggerModel: triggerModels.toLowerCase() }
       );
     }
     case WorkflowTrigger.Assigned: {
       return intl.formatMessage(
-        { defaultMessage: 'When a {triggerModel} is assigned', id: 'v4v120' },
+        { defaultMessage: 'When a {triggerModel} is assigned' },
         { triggerModel: triggerModels.toLowerCase() }
       );
     }
     case WorkflowTrigger.Completed: {
       return intl.formatMessage(
-        { defaultMessage: 'When a {triggerModel} is completed', id: 'HFWH8J' },
+        { defaultMessage: 'When a {triggerModel} is completed' },
         { triggerModel: triggerModels.toLowerCase() }
       );
     }

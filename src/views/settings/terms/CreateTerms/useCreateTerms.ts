@@ -5,10 +5,8 @@ import { useNavigate } from 'react-router';
 import { notification } from 'antd';
 import { useIntl } from 'react-intl';
 import { useStoreState } from '../../../../state';
-import {
-  useCreateTermsAndConditionsMutation,
-  useCurrentSchemeTermsQuery,
-} from '../../../../graphql/generated';
+import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
+import { useCreateTermsAndConditionsMutation } from 'graphql/scheme/mutation/create-terms.generated';
 
 interface Return {
   onSubmit: () => void;
@@ -35,11 +33,9 @@ const useCreateTerms = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The terms has been updated.',
-          id: 'TL13W1',
         }),
         placement: 'bottomRight',
       });
@@ -49,7 +45,7 @@ const useCreateTerms = (): Return => {
     navigate('/app/scheme-settings/terms');
   };
   const onSubmit = () => {
-    saveTerms({
+    void saveTerms({
       variables: {
         data: {
           content: editorRef.current?.getContent() ?? '',

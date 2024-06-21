@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import type {
-  Age,
-  Build,
-  Gender,
-  ListOffendersSelectQuery,
-  Race,
-} from 'graphql/generated';
-import { SortOrder, useListOffendersSelectQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
+import type { ListOffendersSelectQuery } from 'graphql/offenders/queries/list-offenders-select.generated';
+import { useListOffendersSelectQuery } from 'graphql/offenders/queries/list-offenders-select.generated';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+import { SortOrder } from 'graphql/types';
 
 export interface Offender {
   images:

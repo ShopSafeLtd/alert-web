@@ -1,9 +1,4 @@
 import { useEffect } from 'react';
-import {
-  ReportType,
-  useOffenderReportQuery,
-  useSchemeReportDetailsQuery,
-} from 'graphql/generated';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import arrangeTemplates from '#/utils/reports/setTemplates';
@@ -13,6 +8,9 @@ import type { Props as Return } from './types';
 
 import OffenderLayout, { OffenderMetaData } from './initLayout';
 import useReportState from '../../../../utils/reports/useReportState';
+import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/scheme-details.generated';
+import { ReportType } from 'graphql/types';
+import { useOffenderReportQuery } from 'graphql/reports/queries/offender-report.generated';
 
 const useOffenderReport = (): Return => {
   const { id: selectedOffender, reportId } = useParams();

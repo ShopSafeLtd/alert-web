@@ -1,7 +1,5 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useRef } from 'react';
-import type { ListOffendersQuery } from 'graphql/generated';
+
 import {
   Button,
   Carousel,
@@ -41,6 +39,7 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
 
 const { Title } = Typography;
 
@@ -123,7 +122,6 @@ const AddExistingOffender = ({
           <Title level={4}>
             {intl.formatMessage({
               defaultMessage: 'No Offenders Found',
-              id: 'IhHcoJ',
             })}
           </Title>
         </Col>
@@ -139,7 +137,6 @@ const AddExistingOffender = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Offenders...',
-              id: 'mCDjFM',
             })}
             allowClear
           />
@@ -231,7 +228,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Last updated',
-                          id: '0ICwq5',
                         })}
                       </span>
                     }
@@ -248,7 +244,6 @@ const AddExistingOffender = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Age',
-                            id: '9oNQSC',
                           })}
                         </span>
                       }
@@ -267,7 +262,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Sex',
-                          id: 'eWJHGp',
                         })}
                       </span>
                     }
@@ -285,7 +279,6 @@ const AddExistingOffender = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Hair',
-                            id: 'e4YBbX',
                           })}
                         </span>
                       }
@@ -302,7 +295,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Build',
-                          id: 'RSctv1',
                         })}
                       </span>
                     }
@@ -318,7 +310,6 @@ const AddExistingOffender = ({
                         />
                         {intl.formatMessage({
                           defaultMessage: 'Ethnicity',
-                          id: 'XtCAFo',
                         })}
                       </span>
                     }
@@ -336,7 +327,6 @@ const AddExistingOffender = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Additional Info',
-                            id: '3XOciw',
                           })}
                         </span>
                       }
@@ -355,7 +345,6 @@ const AddExistingOffender = ({
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Last offence',
-                            id: 'A0w5MM',
                           })}
                         </span>
                       }
@@ -371,7 +360,6 @@ const AddExistingOffender = ({
                 <Button disabled={saving} onClick={onClose}>
                   {intl.formatMessage({
                     defaultMessage: 'Cancel',
-                    id: '47FYwb',
                   })}
                 </Button>
               </Col>
@@ -384,7 +372,6 @@ const AddExistingOffender = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Offender',
-                    id: 'm3ChN4',
                   })}
                 </Button>
               </Col>

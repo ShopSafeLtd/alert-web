@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { ImagePosition } from 'graphql/generated';
+import { ImagePosition } from 'graphql/types';
 import AddExistingOffender from '../SelectOffenders.view';
 
 describe('Detail Officer View', () => {

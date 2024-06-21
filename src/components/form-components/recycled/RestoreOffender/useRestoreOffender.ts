@@ -1,18 +1,14 @@
 import { useState } from 'react';
-import type {
-  RecycledItemQuery,
-  RestoreOffenderMutation,
-  DeleteOffenderMutation,
-} from 'graphql/generated';
-import {
-  useRecycledItemQuery,
-  useRestoreOffenderMutation,
-  useDeleteOffenderMutation,
-} from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
+import { useRestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
+import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
+import { useDeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
+import type { RecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
+import { useRecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
 
 interface Props {
   onClose: () => void;
@@ -55,11 +51,9 @@ const useRestoreOffender = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Restored!',
-          id: 'aJnSOt',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been restored! ',
-          id: 'VJOuAZ',
         }),
         placement: 'bottomRight',
       });
@@ -88,11 +82,9 @@ const useRestoreOffender = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been deleted.',
-          id: 'Q0ebRS',
         }),
         placement: 'bottomRight',
       });

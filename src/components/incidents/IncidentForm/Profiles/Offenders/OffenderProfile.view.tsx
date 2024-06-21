@@ -23,10 +23,11 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Role } from 'graphql/generated';
+
 import useStyles from '../Profiles.styles';
 import type { StateOffenderData } from './useOffenders';
 import type { StateImageData } from '../../ImageSection/useImageSection';
+import { Role } from 'graphql/types';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -124,7 +125,6 @@ const OffenderProfile = ({
                 <Text>
                   <FormattedMessage
                     defaultMessage="Sex: {gender}"
-                    id="ulwh+J"
                     values={{
                       gender: getOffenderGender(offender.gender),
                     }}
@@ -136,7 +136,6 @@ const OffenderProfile = ({
                   <Text>
                     <FormattedMessage
                       defaultMessage="Age: {age}"
-                      id="9kQMmf"
                       values={{
                         age: getOffenderAge(offender.age),
                       }}
@@ -148,7 +147,6 @@ const OffenderProfile = ({
                 <Text>
                   <FormattedMessage
                     defaultMessage="Build: {age}"
-                    id="ahvubL"
                     values={{
                       age: getOffenderBuild(offender.build),
                     }}
@@ -159,7 +157,6 @@ const OffenderProfile = ({
                 <Text>
                   <FormattedMessage
                     defaultMessage="Height: {age}"
-                    id="f74aYV"
                     values={{
                       age: getOffenderHeight(offender.height),
                     }}
@@ -170,7 +167,6 @@ const OffenderProfile = ({
                 <Text>
                   <FormattedMessage
                     defaultMessage="Ethnicity: {age}"
-                    id="rFiqok"
                     values={{
                       age: getOffenderRace(offender.race),
                     }}
@@ -182,7 +178,6 @@ const OffenderProfile = ({
                   <Text>
                     <FormattedMessage
                       defaultMessage="Characteristics: {peculiarities}"
-                      id="b0wnxq"
                       values={{
                         peculiarities: offender.peculiarities,
                       }}
@@ -211,9 +206,9 @@ const OffenderProfile = ({
                     }}
                   >
                     {mergeSelected === offender.id ? (
-                      <FormattedMessage defaultMessage="Selected" id="byP6IC" />
+                      <FormattedMessage defaultMessage="Selected" />
                     ) : (
-                      <FormattedMessage defaultMessage="Merge" id="NLSvjh" />
+                      <FormattedMessage defaultMessage="Merge" />
                     )}
                   </Button>
                 </Col>
@@ -223,7 +218,6 @@ const OffenderProfile = ({
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
-                      id: 'H+JgLj',
                       defaultMessage: 'Add or edit details for this offender.',
                     })}
                   >
@@ -233,10 +227,7 @@ const OffenderProfile = ({
                       onClick={() => setUpdateOpen(offender)}
                       disabled={saving}
                     >
-                      <FormattedMessage
-                        defaultMessage="Add Details"
-                        id="g5aL72"
-                      />
+                      <FormattedMessage defaultMessage="Add Details" />
                     </Button>
                   </Tooltip>
                 </Col>
@@ -244,7 +235,6 @@ const OffenderProfile = ({
                   <Col>
                     <Tooltip
                       title={intl.formatMessage({
-                        id: 'lXviWk',
                         defaultMessage:
                           'Search existing offenders if this person already exists in the system.',
                       })}
@@ -254,10 +244,7 @@ const OffenderProfile = ({
                         onClick={() => setMatchExistingOpen(offender)}
                         disabled={saving}
                       >
-                        <FormattedMessage
-                          defaultMessage="Match Offender"
-                          id="n446LP"
-                        />
+                        <FormattedMessage defaultMessage="Match Offender" />
                       </Button>
                     </Tooltip>
                   </Col>
@@ -266,18 +253,15 @@ const OffenderProfile = ({
                   <Popconfirm
                     placement="topLeft"
                     title={intl.formatMessage({
-                      id: 'ttuPSC',
                       defaultMessage: 'Remove the offender?',
                     })}
                     onConfirm={() => {
                       onRemoveOffender(offender.id);
                     }}
                     okText={intl.formatMessage({
-                      id: 'a5msuh',
                       defaultMessage: 'Yes',
                     })}
                     cancelText={intl.formatMessage({
-                      id: 'oUWADl',
                       defaultMessage: 'No',
                     })}
                     overlayInnerStyle={{ padding: 10 }}
@@ -306,13 +290,10 @@ const OffenderProfile = ({
                     danger
                     disabled={!mergeSelected}
                   >
-                    <FormattedMessage
-                      defaultMessage="Merge People"
-                      id="FX2Nbd"
-                    />
+                    <FormattedMessage defaultMessage="Merge People" />
                   </Button>
                   <Button size="small" onClick={() => toggleMerge(null)}>
-                    <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
+                    <FormattedMessage defaultMessage="Cancel" />
                   </Button>
                 </>
               ) : (
@@ -329,15 +310,9 @@ const OffenderProfile = ({
                         }}
                       >
                         {mergeSelected === offender.id ? (
-                          <FormattedMessage
-                            defaultMessage="Selected"
-                            id="byP6IC"
-                          />
+                          <FormattedMessage defaultMessage="Selected" />
                         ) : (
-                          <FormattedMessage
-                            defaultMessage="Merge"
-                            id="NLSvjh"
-                          />
+                          <FormattedMessage defaultMessage="Merge" />
                         )}
                       </Button>
                     </Col>
@@ -347,10 +322,7 @@ const OffenderProfile = ({
             ) : (
               <>
                 <Paragraph className={classes.involvedQuestion}>
-                  <FormattedMessage
-                    defaultMessage="Was this person involved in the incident?"
-                    id="CPLvWq"
-                  />
+                  <FormattedMessage defaultMessage="Was this person involved in the incident?" />
                 </Paragraph>
                 <Radio.Group>
                   <Radio.Button
@@ -359,49 +331,42 @@ const OffenderProfile = ({
                       onConfirmOffender(offender.id);
                     }}
                   >
-                    <FormattedMessage defaultMessage="Yes" id="a5msuh" />
+                    <FormattedMessage defaultMessage="Yes" />
                   </Radio.Button>
                   <Popconfirm
                     placement="topLeft"
                     title={intl.formatMessage({
-                      id: 'MBmijh',
                       defaultMessage: 'Remove person from incident?',
                     })}
                     onConfirm={() => {
                       onRemoveOffender(offender.id);
                     }}
                     okText={intl.formatMessage({
-                      id: 'a5msuh',
                       defaultMessage: 'Yes',
                     })}
                     cancelText={intl.formatMessage({
-                      id: 'oUWADl',
                       defaultMessage: 'No',
                     })}
                     overlayInnerStyle={{ padding: 10 }}
                   >
                     <Radio.Button value={false} disabled={saving}>
-                      <FormattedMessage defaultMessage="No" id="oUWADl" />
+                      <FormattedMessage defaultMessage="No" />
                     </Radio.Button>
                   </Popconfirm>
                 </Radio.Group>
                 <Divider style={{ marginTop: 10, marginBottom: 10 }}>
                   <Text className={classes.dividerText}>
-                    <FormattedMessage defaultMessage="OR" id="INlWvJ" />
+                    <FormattedMessage defaultMessage="OR" />
                   </Text>
                 </Divider>
                 <Tooltip
                   title={intl.formatMessage({
                     defaultMessage:
                       'Merge this offender with another offender on this incident',
-                    id: 'BNOiMW',
                   })}
                 >
                   <Button size="small" onClick={() => toggleMerge(offender.id)}>
-                    <FormattedMessage
-                      defaultMessage="Merge Person"
-                      id="J2W0xX"
-                    />
+                    <FormattedMessage defaultMessage="Merge Person" />
                   </Button>
                 </Tooltip>
               </>
@@ -415,15 +380,11 @@ const OffenderProfile = ({
                 <Title level={4}>
                   <FormattedMessage
                     defaultMessage="Offender {index}"
-                    id="hO4ExD"
                     values={{ index: index + 1 }}
                   />
                 </Title>
                 <Paragraph className={classes.involvedQuestion}>
-                  <FormattedMessage
-                    defaultMessage="Do you have an image for this offender?"
-                    id="PNMvor"
-                  />
+                  <FormattedMessage defaultMessage="Do you have an image for this offender?" />
                 </Paragraph>
                 <Row>
                   <Col>
@@ -446,7 +407,7 @@ const OffenderProfile = ({
                         size="small"
                         className={classes.buttonLeft}
                       >
-                        <FormattedMessage defaultMessage="Yes" id="a5msuh" />
+                        <FormattedMessage defaultMessage="Yes" />
                       </Button>
                     </Upload>
                   </Col>
@@ -455,7 +416,6 @@ const OffenderProfile = ({
                       <Popconfirm
                         placement="topLeft"
                         title={intl.formatMessage({
-                          id: 'zM0KJt',
                           defaultMessage:
                             'If you have no image the offender will be removed',
                         })}
@@ -463,17 +423,15 @@ const OffenderProfile = ({
                           onRemoveOffender(offender.id);
                         }}
                         okText={intl.formatMessage({
-                          id: 'a5msuh',
                           defaultMessage: 'Yes',
                         })}
                         cancelText={intl.formatMessage({
-                          id: 'oUWADl',
                           defaultMessage: 'No',
                         })}
                         overlayInnerStyle={{ padding: 10 }}
                       >
                         <Button size="small" className={classes.buttonRight}>
-                          <FormattedMessage defaultMessage="No" id="oUWADl" />
+                          <FormattedMessage defaultMessage="No" />
                         </Button>
                       </Popconfirm>
                     )}
@@ -483,7 +441,7 @@ const OffenderProfile = ({
                         className={classes.buttonRight}
                         onClick={() => onNoImages(offender.id)}
                       >
-                        <FormattedMessage defaultMessage="No" id="oUWADl" />
+                        <FormattedMessage defaultMessage="No" />
                       </Button>
                     )}
                   </Col>
@@ -495,18 +453,12 @@ const OffenderProfile = ({
       </div>
       {!offender.confirmedInIncident && (
         <Paragraph type="danger" style={{ marginTop: 5 }}>
-          <FormattedMessage
-            defaultMessage="Please confirm if this person was involved"
-            id="Ej8PCR"
-          />
+          <FormattedMessage defaultMessage="Please confirm if this person was involved" />
         </Paragraph>
       )}
       {!offender.imageConfirmed && (
         <Paragraph type="danger" style={{ marginTop: 5 }}>
-          <FormattedMessage
-            defaultMessage="Confirm there is an image."
-            id="VbQ5f+"
-          />
+          <FormattedMessage defaultMessage="Confirm there is an image." />
         </Paragraph>
       )}
     </>

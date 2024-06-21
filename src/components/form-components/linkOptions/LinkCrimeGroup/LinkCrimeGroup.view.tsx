@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React from 'react';
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
+
 import { Row, Col, Input, Table, Button } from 'antd';
 import { useIntl } from 'react-intl';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 interface Props {
   onClose: () => void;
@@ -38,7 +39,6 @@ const LinkCrimeGroup = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Crime Groups...',
-              id: 'zoBZ7M',
             })}
             allowClear
           />
@@ -52,7 +52,6 @@ const LinkCrimeGroup = ({
             dataIndex: 'reference',
             title: intl.formatMessage({
               defaultMessage: 'Alert ID',
-              id: 'k8ZNgH',
             }),
           },
           {
@@ -60,7 +59,6 @@ const LinkCrimeGroup = ({
             dataIndex: 'totalOffenders',
             title: intl.formatMessage({
               defaultMessage: 'Members',
-              id: '+a+2ug',
             }),
           },
           {
@@ -68,7 +66,6 @@ const LinkCrimeGroup = ({
             dataIndex: 'totalIncidents',
             title: intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             }),
           },
           {
@@ -76,7 +73,6 @@ const LinkCrimeGroup = ({
             dataIndex: 'totalValue',
             title: intl.formatMessage({
               defaultMessage: 'Lost Value',
-              id: '3YYDlc',
             }),
             render: (value) => `£${value || 0}`,
           },
@@ -85,7 +81,6 @@ const LinkCrimeGroup = ({
             dataIndex: 'totalRecoveredValue',
             title: intl.formatMessage({
               defaultMessage: 'Recovered Value',
-              id: 'bGwFFv',
             }),
             render: (value) => `£${value || 0}`,
           },
@@ -116,7 +111,7 @@ const LinkCrimeGroup = ({
       <Row gutter={16} style={{ marginTop: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -128,7 +123,6 @@ const LinkCrimeGroup = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Link Crime Group',
-              id: 'cpKYXQ',
             })}
           </Button>
         </Col>

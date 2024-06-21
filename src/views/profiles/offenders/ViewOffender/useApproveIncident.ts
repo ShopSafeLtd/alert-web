@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import {
-  useRecycleOffenderMutation,
-  useUpdateOffenderMutation,
-} from 'graphql/generated';
+
 import { notification, Modal } from 'antd';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
 
 const { confirm } = Modal;
 
@@ -32,11 +31,9 @@ const useApproveOffender = ({ offenderId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Approved',
-          id: 'DWgpGc',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The Offender has been approved!',
-          id: 'ZU5DGM',
         }),
         placement: 'bottomRight',
       });
@@ -51,16 +48,14 @@ const useApproveOffender = ({ offenderId }: Props): Return => {
   const [recycleOffender] = useRecycleOffenderMutation({
     onCompleted: () => {
       setApproving(false);
-      navigate(`/app/offenders`);
+      navigate('/app/offenders');
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Rejected!',
-          id: 'C0DMPx',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
-          id: 'nQ1eW+',
         }),
         placement: 'bottomRight',
       });
@@ -74,14 +69,12 @@ const useApproveOffender = ({ offenderId }: Props): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: '5YfZun',
       }),
-      okText: intl.formatMessage({ defaultMessage: 'Reject', id: 'VzIOKf' }),
+      okText: intl.formatMessage({ defaultMessage: 'Reject' }),
       onOk() {
         setApproving(true);
         void recycleOffender({

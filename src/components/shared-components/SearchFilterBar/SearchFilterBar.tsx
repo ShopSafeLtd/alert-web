@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { Input } from 'antd';
 import {
@@ -37,7 +35,6 @@ const SearchFilterBar: React.FC<Props> = ({
         <Input
           placeholder={intl.formatMessage({
             defaultMessage: 'Search...',
-            id: '0BUTMv',
           })}
           size="large"
           prefix={<SearchOutlined className="search-icon" />}

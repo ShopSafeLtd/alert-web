@@ -13,14 +13,10 @@ const ImportMenu = () => {
             <Card
               title={intl.formatMessage({
                 defaultMessage: 'CSV Import',
-                id: 'kvnrW/',
               })}
             >
               <Typography.Text type="secondary">
-                <FormattedMessage
-                  defaultMessage="Import data from a csv file into alert."
-                  id="82WowD"
-                />
+                <FormattedMessage defaultMessage="Import data from a csv file into alert." />
               </Typography.Text>
             </Card>
           </Link>
@@ -30,14 +26,10 @@ const ImportMenu = () => {
             <Card
               title={intl.formatMessage({
                 defaultMessage: 'DISC Import',
-                id: '1BX5Wp',
               })}
             >
               <Typography.Text type="secondary">
-                <FormattedMessage
-                  defaultMessage="Import data from a disc data dump into alert."
-                  id="m7BIIE"
-                />
+                <FormattedMessage defaultMessage="Import data from a disc data dump into alert." />
               </Typography.Text>
             </Card>
           </Link>
@@ -47,14 +39,10 @@ const ImportMenu = () => {
             <Card
               title={intl.formatMessage({
                 defaultMessage: 'MySafety Import',
-                id: '2HeyWv',
               })}
             >
               <Typography.Text type="secondary">
-                <FormattedMessage
-                  defaultMessage="Import data from a mysafety export into alert."
-                  id="dsmmty"
-                />
+                <FormattedMessage defaultMessage="Import data from a mysafety export into alert." />
               </Typography.Text>
             </Card>
           </Link>
@@ -64,14 +52,10 @@ const ImportMenu = () => {
             <Card
               title={intl.formatMessage({
                 defaultMessage: 'Intel One Import',
-                id: '0gOWfx',
               })}
             >
               <Typography.Text type="secondary">
-                <FormattedMessage
-                  defaultMessage="Import data from a intel one export into alert."
-                  id="qYoS6H"
-                />
+                <FormattedMessage defaultMessage="Import data from a intel one export into alert." />
               </Typography.Text>
             </Card>
           </Link>

@@ -17,9 +17,10 @@ import {
 import { faTrash, faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddUserToChat from 'components/form-components/userChat/AddUserToChat';
-import type { ListSchemeUsersQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import type { MemberData } from './useManageChatMember';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 
 const { Title } = Typography;
 
@@ -109,16 +110,13 @@ const EditChat = ({
                           trigger="click"
                           title={intl.formatMessage({
                             defaultMessage: 'Remove this member from the chat?',
-                            id: 'DbUQdV',
                           })}
                           onConfirm={() => deleteConfirm(id)}
                           okText={intl.formatMessage({
                             defaultMessage: 'Yes',
-                            id: 'a5msuh',
                           })}
                           cancelText={intl.formatMessage({
                             defaultMessage: 'No',
-                            id: 'oUWADl',
                           })}
                           overlayInnerStyle={{ padding: 10 }}
                         >
@@ -152,7 +150,6 @@ const EditChat = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Chat Members',
-                  id: '74pOam',
                 })}
               </Button>
             </Col>
@@ -162,7 +159,7 @@ const EditChat = ({
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>
             </Col>
             <Col>
@@ -172,7 +169,7 @@ const EditChat = ({
                 type="primary"
                 htmlType="submit"
               >
-                {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+                {intl.formatMessage({ defaultMessage: 'Save' })}
               </Button>
             </Col>
           </Row>
@@ -182,7 +179,6 @@ const EditChat = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Chat Members',
-          id: '74pOam',
         })}
         open={addMember}
         width="400"

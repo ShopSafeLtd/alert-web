@@ -1,12 +1,13 @@
 import type { Image } from 'components/images/LightBox/LightBox.types';
-import type { ViewOffenderMatchesQuery } from 'graphql/generated';
-import {
-  SortOrder,
-  ViewOffenderMatchesDocument,
-  useDismissMatchMutation,
-  useViewOffenderMatchesQuery,
-} from 'graphql/generated';
+
 import { useState } from 'react';
+import type { ViewOffenderMatchesQuery } from 'graphql/offenders/queries/offender-macthes.generated';
+import {
+  useViewOffenderMatchesQuery,
+  ViewOffenderMatchesDocument,
+} from 'graphql/offenders/queries/offender-macthes.generated';
+import { SortOrder } from 'graphql/types';
+import { useDismissMatchMutation } from 'graphql/rekognition/mutations/dismiss-match.generated';
 
 interface LightBoxState {
   index: number;

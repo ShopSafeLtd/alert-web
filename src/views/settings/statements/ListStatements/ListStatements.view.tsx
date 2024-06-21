@@ -1,11 +1,12 @@
 import React from 'react';
-import type { ListStatementTemplatesQuery } from 'graphql/generated';
+
 import { Button, Col, Drawer, Row, Table } from 'antd';
 import { faEdit, faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useIntl } from 'react-intl';
 import useStyles from './ListBusinesses.styles';
 import CreateEditStatementContainer from '../../../../components/form-components/statements/createEditStatement.container';
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
 
 interface TableData {
   key: string;
@@ -50,7 +51,6 @@ const ListBusinesses = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Create statement',
-              id: 'UE8z9N',
             })}
           </Button>
         </Col>
@@ -62,7 +62,6 @@ const ListBusinesses = ({
             dataIndex: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
           },
           {
@@ -106,7 +105,6 @@ const ListBusinesses = ({
         onClose={toggleCreate}
         title={intl.formatMessage({
           defaultMessage: 'Create statement',
-          id: 'UE8z9N',
         })}
         width={600}
       >
@@ -122,7 +120,6 @@ const ListBusinesses = ({
         onClose={() => toggleEdit(null)}
         title={intl.formatMessage({
           defaultMessage: 'Edit statement',
-          id: 'e++XV+',
         })}
         width={600}
       >

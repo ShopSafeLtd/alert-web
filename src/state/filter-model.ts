@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
-import { ChecklistStatus } from '../graphql/generated';
+import { ChecklistStatus } from 'graphql/types';
 
 export interface SetFilterModel {
   groups: string[];

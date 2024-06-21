@@ -2,34 +2,7 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
 import { Form, Modal, notification } from 'antd';
-import type {
-  AddressesQuery,
-  Age,
-  Build,
-  CreateIncidentData,
-  CreateIncidentMutation,
-  Gender,
-  Height,
-  IdSource,
-  ListIncidentsQuery,
-  PoliceResponseTime,
-  Race,
-  ViewInvestigationQuery,
-} from 'graphql/generated';
-import {
-  AnswerType,
-  GoodsMode,
-  IncidentFormField,
-  ListIncidentsDocument,
-  Model,
-  Role,
-  useAddressesQuery,
-  useCreateIncidentMutation,
-  useListGoodsTypesQuery,
-  useListIncidentTagsQuery,
-  useTagsQuery,
-  ViewInvestigationDocument,
-} from 'graphql/generated';
+
 import moment from 'moment';
 import type React from 'react';
 import { useEffect, useState } from 'react';
@@ -42,6 +15,34 @@ import type { StateOffenderData } from 'components/incidents/IncidentForm/Profil
 import type { StateVehicleData } from 'components/incidents/IncidentForm/Profiles/Vehicles/useVehicles';
 import type { StateImageData } from 'components/incidents/IncidentForm/ImageSection/useImageSection';
 import { useGroupsContext } from '#/context/groups-context';
+import type {
+  Age,
+  Build,
+  CreateIncidentData,
+  Gender,
+  Height,
+  IdSource,
+  PoliceResponseTime,
+  Race,
+} from 'graphql/types';
+import {
+  AnswerType,
+  GoodsMode,
+  IncidentFormField,
+  Model,
+  Role,
+} from 'graphql/types';
+import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
+import { useAddressesQuery } from 'graphql/incidents/queries/address.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
+import type { CreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
+import { useCreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import { ListIncidentsDocument } from 'graphql/incidents/queries/list-incidents.generated';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
 
 const { useForm } = Form;
 const { confirm } = Modal;
@@ -430,11 +431,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The Incident has been added!',
-          id: 'R+HTBd',
         }),
         placement: 'bottomRight',
       });
@@ -454,11 +453,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       notification.error({
         message: intl.formatMessage({
           defaultMessage: 'Error!',
-          id: 'DIDBlF',
         }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors. Please try again.',
-          id: 'tPB3Wl',
         }),
         placement: 'bottomRight',
       });
@@ -868,7 +865,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               item.name ===
               intl.formatMessage({
                 defaultMessage: 'Unidentified Offender',
-                id: 'tHTxaO',
               })
           )) ||
         [];
@@ -879,7 +875,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               item.name !==
               intl.formatMessage({
                 defaultMessage: 'Unidentified Offender',
-                id: 'tHTxaO',
               })
           )) ||
         [];
@@ -888,7 +883,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         {
           defaultMessage:
             'The incident involved {offenderCount, plural, one {offender} other {offenders}} {knownOffenders}{unknownCount, plural, =0 {.} other { and}} {unknownCount, plural, =0 {} 1 {unidentified offender} other {unidentified offenders.}}',
-          id: 'cF5joO',
         },
         {
           offenderCount: offenders.length,
@@ -930,7 +924,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             {
               defaultMessage:
                 'An incident of {tags} occurred at {time} on {date}. {goods, plural, =0 {} other {The goods lost in this incident total {totalLoss} of which a value of {recovered} was recovered.}}',
-              id: 'J5ne/R',
             },
             {
               tags: tags

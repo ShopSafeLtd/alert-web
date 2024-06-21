@@ -1,7 +1,8 @@
 import React from 'react';
-import type { IncidentFormField } from 'graphql/generated';
+
 import View from './IncidentTypes.view';
 import useIncidentTypes from './useIncidentTypes';
+import type { IncidentFormField } from 'graphql/types';
 
 interface Props {
   incidentForm: IncidentFormField[];

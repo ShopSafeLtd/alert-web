@@ -7,7 +7,7 @@ const ViewTerms = ({ data, loading, isAdmin, editTerms }: Props) => (
   <div className="page-view">
     {isAdmin && (
       <Button onClick={editTerms} type="primary" style={{ margin: 15 }}>
-        <FormattedMessage defaultMessage="Edit" id="wEQDC6" />
+        <FormattedMessage defaultMessage="Edit" />
       </Button>
     )}
     <Card style={{ marginLeft: 20, marginRight: 20 }} loading={loading}>

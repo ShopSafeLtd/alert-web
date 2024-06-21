@@ -1,5 +1,5 @@
-import type { PermissionModel } from '../../graphql/generated';
-import { PermissionMethod } from '../../graphql/generated';
+import type { PermissionModel } from 'graphql/types';
+import { PermissionMethod } from 'graphql/types';
 
 export type DataType = PermissionModel;
 

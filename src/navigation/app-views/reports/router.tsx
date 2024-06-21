@@ -13,7 +13,7 @@ import BusinessReport from 'views/reports/business/BusinessReport';
 import UserEngagement from 'views/reports/UserEngagement';
 import DataAudit from 'views/reports/DataAudit';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
 import ReportCentre from '#/views/reports/reports-centre/ReportsCentre.container';
@@ -24,7 +24,6 @@ const Reports = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Reports',
-        id: 'Ppx673',
       })}
     >
       <Routes>

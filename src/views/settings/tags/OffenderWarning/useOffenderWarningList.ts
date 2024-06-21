@@ -1,19 +1,22 @@
 import { useState } from 'react';
-import type { TagsQuery, TagsQueryVariables } from 'graphql/generated';
-import {
-  useRecycleTagMutation,
-  Model,
-  QueryMode,
-  TagsDocument,
-  useCreateTagMutation,
-  useTagsQuery,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import { Model, QueryMode } from 'graphql/types';
+import type {
+  TagsQuery,
+  TagsQueryVariables,
+} from 'graphql/tags/queries/tags.generated';
+import {
+  TagsDocument,
+  useTagsQuery,
+} from 'graphql/tags/queries/tags.generated';
+import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { useRecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
 
 const { confirm } = Modal;
 
@@ -85,11 +88,9 @@ const useOffenderWarningList = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender warning has been added.',
-          id: 'aV3tF0',
         }),
         placement: 'bottomRight',
       });
@@ -120,7 +121,7 @@ const useOffenderWarningList = (): Return => {
   });
 
   const onAddOffenderWarning = (value: TagData) => {
-    createTag({
+    void createTag({
       variables: {
         data: {
           name: value.name,
@@ -192,11 +193,9 @@ const useOffenderWarningList = (): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Do you want to delete the offender warning?',
-        id: 'NCxXub',
       }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
       }),
       onOk() {
         setSaving(true);

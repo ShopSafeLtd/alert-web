@@ -51,7 +51,7 @@ const AddLogoView = ({
               }}
             >
               <Button type="primary" onClick={() => selectLogo(logo)}>
-                <FormattedMessage id="kQAf2d" defaultMessage="Select" />
+                <FormattedMessage defaultMessage="Select" />
               </Button>
             </div>
           </Col>
@@ -72,7 +72,7 @@ const AddLogoView = ({
           maxCount={1}
         >
           <Button icon={<UploadOutlined />}>
-            <FormattedMessage id="4VDu+5" defaultMessage="Upload Logo" />
+            <FormattedMessage defaultMessage="Upload Logo" />
           </Button>
         </Upload>
       </Row>
@@ -80,7 +80,7 @@ const AddLogoView = ({
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              <FormattedMessage id="47FYwb" defaultMessage="Cancel" />
+              <FormattedMessage defaultMessage="Cancel" />
             </Button>
           </Col>
           <Col>
@@ -90,7 +90,7 @@ const AddLogoView = ({
               type="primary"
               htmlType="submit"
             >
-              <FormattedMessage id="wSZR47" defaultMessage="Submit" />
+              <FormattedMessage defaultMessage="Submit" />
             </Button>
           </Col>
         </Row>

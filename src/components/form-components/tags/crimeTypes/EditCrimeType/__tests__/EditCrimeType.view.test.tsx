@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { TagType } from 'graphql/generated';
+import { TagType } from 'graphql/types';
 import EditCrimeType from '../EditCrimeType.view';
 
 describe('List Officer View', () => {

@@ -50,7 +50,7 @@ export const StandardForm = <T,>({
     onClose();
   };
 
-  const handleSubmit = async (inputData: T) => {
+  const handleSubmit = (inputData: T) => {
     onSubmit(inputData);
   };
   const intl = useIntl();
@@ -91,7 +91,6 @@ export const StandardForm = <T,>({
           >
             {intl.formatMessage({
               defaultMessage: 'Cancel',
-              id: '47FYwb',
             })}
           </Button>
           <Button
@@ -102,7 +101,6 @@ export const StandardForm = <T,>({
           >
             {intl.formatMessage({
               defaultMessage: 'Submit',
-              id: 'wSZR47',
             })}
           </Button>
         </Row>

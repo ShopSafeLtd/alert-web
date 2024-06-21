@@ -58,7 +58,6 @@ const LatestIncidentsTemplate = ({
             <Title className={classes.title} style={{ fontSize: 16 }}>
               {intl.formatMessage({
                 defaultMessage: 'Incidents',
-                id: 'mtr3R4',
               })}
             </Title>
           </Col>

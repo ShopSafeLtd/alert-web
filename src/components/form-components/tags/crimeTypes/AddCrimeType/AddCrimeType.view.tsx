@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
-import type { ListSchemeTagsQuery } from 'graphql/generated';
-import { CrimeType, TagType } from 'graphql/generated';
 import type { Scheme } from 'state';
 import { useIntl } from 'react-intl';
+import { CrimeType, TagType } from 'graphql/types';
+import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
 
 const { Text } = Typography;
 
@@ -48,7 +48,6 @@ const AddCrimeType = ({
             {intl.formatMessage({
               defaultMessage:
                 'Crime types are used to categorize incidents that are submitted by members.',
-              id: 'd4sshx',
             })}
           </Text>
         </Col>
@@ -57,13 +56,12 @@ const AddCrimeType = ({
         <Col span={24}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the new crime type.',
-                  id: 'GnoNcT',
                 }),
               },
             ]}
@@ -77,7 +75,6 @@ const AddCrimeType = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea rows={10} disabled={saving} />
@@ -91,7 +88,6 @@ const AddCrimeType = ({
                 name="parentTagId"
                 label={intl.formatMessage({
                   defaultMessage: 'Parent Tag',
-                  id: 'wlAaAz',
                 })}
               >
                 <Select
@@ -107,7 +103,6 @@ const AddCrimeType = ({
                 name="crimeType"
                 label={intl.formatMessage({
                   defaultMessage: 'Crime Type Category',
-                  id: 'vXvK25',
                 })}
                 rules={[
                   {
@@ -115,7 +110,6 @@ const AddCrimeType = ({
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select a category for the new crime type.',
-                      id: 'bav6vT',
                     }),
                   },
                 ]}
@@ -127,63 +121,54 @@ const AddCrimeType = ({
                       value: CrimeType.Burglary,
                       label: intl.formatMessage({
                         defaultMessage: 'Burglary',
-                        id: 'f2A9g8',
                       }),
                     },
                     {
                       value: CrimeType.CriminalDamage,
                       label: intl.formatMessage({
                         defaultMessage: 'Criminal Damage',
-                        id: 'FAQLEy',
                       }),
                     },
                     {
                       value: CrimeType.Drugs,
                       label: intl.formatMessage({
                         defaultMessage: 'Drugs',
-                        id: '8xjLZ0',
                       }),
                     },
                     {
                       value: CrimeType.FraudForgery,
                       label: intl.formatMessage({
                         defaultMessage: 'Fraud & Forgery',
-                        id: 'zAWiMb',
                       }),
                     },
                     {
                       value: CrimeType.Robbery,
                       label: intl.formatMessage({
                         defaultMessage: 'Robbery',
-                        id: 'wHRKby',
                       }),
                     },
                     {
                       value: CrimeType.SexualOffences,
                       label: intl.formatMessage({
                         defaultMessage: 'Sexual Offences',
-                        id: 'znM5dX',
                       }),
                     },
                     {
                       value: CrimeType.TheftHandling,
                       label: intl.formatMessage({
                         defaultMessage: 'Theft & Handling',
-                        id: 'WD3oHm',
                       }),
                     },
                     {
                       value: CrimeType.Violence,
                       label: intl.formatMessage({
                         defaultMessage: 'Violence Against The Person',
-                        id: 'oOGhLO',
                       }),
                     },
                     {
                       value: CrimeType.Other,
                       label: intl.formatMessage({
                         defaultMessage: 'Other',
-                        id: '/VnDMl',
                       }),
                     },
                   ]}
@@ -197,14 +182,12 @@ const AddCrimeType = ({
             name="schemes"
             label={intl.formatMessage({
               defaultMessage: 'Schemes',
-              id: 'QgGevU',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please select at least one scheme.',
-                  id: 'iiG8RT',
                 }),
               },
             ]}
@@ -225,7 +208,7 @@ const AddCrimeType = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -235,7 +218,7 @@ const AddCrimeType = ({
               disabled={saving}
               loading={saving}
             >
-              {intl.formatMessage({ defaultMessage: 'Create', id: 'VzzYJk' })}
+              {intl.formatMessage({ defaultMessage: 'Create' })}
             </Button>
           </Col>
         </Row>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -12,7 +12,6 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import { Link } from 'react-router-dom';
 import ReactDOMServer from 'react-dom/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
@@ -21,23 +20,73 @@ import SignatureInput from '../../../SignBox';
 import FONT_FAMILIES from './utils/Fonts';
 import SigSeal from './SigSeal';
 
+import styled from 'styled-components';
+import { useStoreState } from '#/state';
+
 const { Text, Title } = Typography;
 
 interface Props {
   onSubmit: () => void;
   update: (value: unknown) => void;
   saving: boolean;
-  setCurrent: (value: number) => void;
+
   content: string;
   updateBox: () => void;
   name: string;
+  onBack: () => void;
 }
+
+const DarkModeContent = styled.div`
+  color: white !important;
+  background-color: transparent !important;
+
+  * {
+    color: white !important;
+    background-color: transparent !important;
+  }
+`;
+
+const LightModeContent = styled.div`
+  color: black !important;
+  background-color: transparent !important;
+
+  * {
+    color: black !important;
+    background-color: transparent !important;
+  }
+`;
+
+export const CustomTermsView = ({
+  terms,
+  isPrinting = false,
+}: {
+  terms: string;
+  isPrinting?: boolean;
+}) => {
+  const theme = useStoreState((state) => state.theme.currentTheme);
+  const darkMode = theme === 'dark' && !isPrinting;
+  return darkMode ? (
+    <DarkModeContent
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: terms || '',
+      }}
+    />
+  ) : (
+    <LightModeContent
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: terms || '',
+      }}
+    />
+  );
+};
 
 const SchemeTerms = ({
   onSubmit,
   update,
   saving,
-  setCurrent,
+  onBack,
   content,
   updateBox,
   name,
@@ -50,7 +99,11 @@ const SchemeTerms = ({
     file: string;
     name: string;
   } | null>(null);
-  setCurrent(2);
+
+  useEffect(() => {
+    // /scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   return (
     <div className="list-view">
@@ -59,7 +112,6 @@ const SchemeTerms = ({
           <Title level={3}>
             {intl.formatMessage({
               defaultMessage: 'Terms of Use',
-              id: 'UhkSyx',
             })}
           </Title>
 
@@ -67,23 +119,13 @@ const SchemeTerms = ({
             {intl.formatMessage({
               defaultMessage:
                 'Please read through the terms and conditions and accept them to continue.',
-              id: '6L0SzA',
             })}
           </Text>
-
-          {/* <Text>
-              Please read through our terms and conditions and accept them to
-              continue.
-            </Text> */}
         </Col>
       </Row>
       <Card style={{ width: '98%' }}>
         <Space direction="vertical" style={{ fontSize: 12 }} size={1}>
-          <div // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{
-              __html: content || '',
-            }}
-          />
+          <CustomTermsView terms={content} />
         </Space>
       </Card>
       <Form onFinish={onSubmit}>
@@ -94,6 +136,7 @@ const SchemeTerms = ({
               valuePropName="checked"
               rules={[
                 {
+                  // eslint-disable-next-line no-confusing-arrow
                   validator: (_, value) =>
                     value
                       ? Promise.resolve()
@@ -106,8 +149,8 @@ const SchemeTerms = ({
               <Checkbox onChange={updateBox}>
                 <Title level={4}>
                   {intl.formatMessage({
-                    defaultMessage: `I confirm that I have read and agree to the above terms and conditions.`,
-                    id: 'EbrzL+',
+                    defaultMessage:
+                      'I confirm that I have read and agree to the above terms and conditions.',
                   })}
                 </Title>
               </Checkbox>
@@ -277,7 +320,6 @@ const SchemeTerms = ({
                             />
                             {intl.formatMessage({
                               defaultMessage: 'Upload',
-                              id: 'p4N05H',
                             })}
                           </Button>
                         </Upload>
@@ -312,21 +354,18 @@ const SchemeTerms = ({
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
-              <Link to="/app/onboarding/terms-conditions">
-                <Button
-                  disabled={saving}
-                  type="primary"
-                  onClick={() => {
-                    // window.history.back();
-                    setCurrent(1);
-                  }}
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'Back',
-                    id: 'cyR7Kh',
-                  })}
-                </Button>
-              </Link>
+              <Button
+                disabled={saving}
+                type="primary"
+                onClick={() => {
+                  // window.history.back();
+                  onBack();
+                }}
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Back',
+                })}
+              </Button>
             </Col>
 
             <Col>
@@ -338,7 +377,6 @@ const SchemeTerms = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Next',
-                  id: '9+Ddtu',
                 })}
               </Button>
             </Col>

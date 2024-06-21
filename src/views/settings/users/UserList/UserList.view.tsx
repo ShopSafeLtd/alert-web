@@ -1,12 +1,5 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table, Tag, Typography } from 'antd';
-import { UserStatus } from 'graphql/generated';
-import type {
-  CreateUserInDatabaseMutation,
-  InviteExistingUserMutation,
-  UserListQuery,
-  Role,
-} from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddUser from 'components/form-components/user/AddUser';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -17,6 +10,11 @@ import type { UserSort } from 'types/enums/user_sort';
 import UserFilter from 'components/users/UserFilter';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { GetUserStatusValues, userStatusValues } from 'types/enums/user_status';
+import type { Role } from 'graphql/types';
+import { UserStatus } from 'graphql/types';
+import type { UserListQuery } from '#/views/settings/users/UserList/UserList.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
 
 interface Props {
   data: UserListQuery | undefined;
@@ -104,7 +102,6 @@ const UserList = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a user...',
-              id: 'jNlSdL',
             })}
             allowClear
           />
@@ -121,7 +118,7 @@ const UserList = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Sort & filter" id="ndDyqZ" />
+            <FormattedMessage defaultMessage="Sort & filter" />
           </Button>
         </Col>
 
@@ -137,7 +134,7 @@ const UserList = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Invite New User" id="EbeHm3" />
+            <FormattedMessage defaultMessage="Invite New User" />
           </Button>
         </Col>
       </Row>
@@ -159,7 +156,6 @@ const UserList = ({
             key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             dataIndex: 'name',
             render: (value, record) => (
@@ -172,7 +168,6 @@ const UserList = ({
             key: 'status',
             title: intl.formatMessage({
               defaultMessage: 'Status',
-              id: 'tzMNF3',
             }),
             dataIndex: 'status',
             filters: userStatusValues.map((el) => ({
@@ -193,7 +188,6 @@ const UserList = ({
             key: 'emailAddress',
             title: intl.formatMessage({
               defaultMessage: 'Email Address',
-              id: 'xxQxLE',
             }),
             dataIndex: 'emailAddress',
           },
@@ -201,7 +195,6 @@ const UserList = ({
             key: 'business',
             title: intl.formatMessage({
               defaultMessage: 'Business',
-              id: 'w1Fanr',
             }),
             dataIndex: 'business',
             filters: businessFilter,
@@ -213,7 +206,10 @@ const UserList = ({
             ) => record.businesses.some(({ id }) => id === value),
             render: (_, record) =>
               record.businesses.map(({ id, name }) => (
-                <Link to={`/app/scheme-settings/businesses/view/${id}`}>
+                <Link
+                  to={`/app/scheme-settings/businesses/view/${id}`}
+                  key={id}
+                >
                   <Tag color="red">{name}</Tag>
                 </Link>
               )),
@@ -222,7 +218,6 @@ const UserList = ({
             key: 'groups',
             title: intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             }),
             dataIndex: 'groups',
             filters: groupFilter,
@@ -271,7 +266,6 @@ const UserList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'User Filters',
-          id: 'cmwbt4',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}
@@ -294,7 +288,6 @@ const UserList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Invite New User',
-          id: 'EbeHm3',
         })}
         open={addUser}
         width="600"
@@ -313,7 +306,6 @@ const UserList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit User',
-          id: 'tT2D9t',
         })}
         open={editUser !== undefined}
         width="600"

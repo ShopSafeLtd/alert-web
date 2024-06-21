@@ -6,7 +6,7 @@ const downloadImage = async (imageSrc: string, imageName: string) => {
   const link = document.createElement('a');
   link.href = URL.createObjectURL(imageBlob);
   const parts = imageSrc.split('?')[0].split('.');
-  const imageType = parts[parts.length - 1];
+  const imageType = parts.at(-1);
   const fileName = `${imageName}.${imageType}`;
 
   link.download = fileName;

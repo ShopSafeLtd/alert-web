@@ -11,11 +11,7 @@ import {
   Spin,
   Typography,
 } from 'antd';
-import type {
-  ListOffendersQuery,
-  SearchOffendersQuery,
-} from 'graphql/generated';
-import { Role, Age, Build, Gender, Race } from 'graphql/generated';
+
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import {
   getAge,
@@ -31,6 +27,9 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl'; // Import the useIntl hook
 import { useStoreState } from 'state';
 import useStyles from './CreateCrimeGroup.styles';
+import type { SearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
 
 const { Title, Text } = Typography;
 
@@ -71,7 +70,6 @@ const CreateCrimeGroup = ({
         <Col flex={1}>
           <Title style={{ margin: 0 }} level={3}>
             {intl.formatMessage({
-              id: 'QHtzUS',
               defaultMessage:
                 'Select the offenders to be in the new crime group',
             })}
@@ -85,7 +83,6 @@ const CreateCrimeGroup = ({
             type="primary"
           >
             {intl.formatMessage({
-              id: 'Bju8fW',
               defaultMessage: 'Create Crime Group',
             })}
           </Button>
@@ -128,7 +125,6 @@ const CreateCrimeGroup = ({
                         <Col>
                           <Popconfirm
                             title={intl.formatMessage({
-                              id: '2oCaym',
                               defaultMessage: 'Are you sure?',
                             })}
                             disabled={submitting}
@@ -150,7 +146,6 @@ const CreateCrimeGroup = ({
                         <div className={classes.field}>
                           <Text>
                             {intl.formatMessage({
-                              id: 'S9GJ93',
                               defaultMessage: 'Age:',
                             })}
                           </Text>
@@ -163,14 +158,12 @@ const CreateCrimeGroup = ({
                       <div className={classes.field}>
                         <Text>
                           {intl.formatMessage({
-                            id: '2yJ7Rj',
                             defaultMessage: 'Date Of Birth:',
                           })}
                         </Text>
                         <Text type="secondary">
                           {moment(offender.dateOfBirth).format('DD/MM/YYYY') ||
                             intl.formatMessage({
-                              id: '5jeq8P',
                               defaultMessage: 'Unknown',
                             })}
                         </Text>
@@ -179,14 +172,12 @@ const CreateCrimeGroup = ({
                       <div className={classes.field}>
                         <Text>
                           {intl.formatMessage({
-                            id: '+WLvff',
                             defaultMessage: 'DoB Source:',
                           })}
                         </Text>
                         <Text type="secondary">
                           {offender.dateSource ||
                             intl.formatMessage({
-                              id: '450Fty',
                               defaultMessage: 'None',
                             })}
                         </Text>
@@ -195,7 +186,6 @@ const CreateCrimeGroup = ({
                       <div className={classes.field}>
                         <Text>
                           {intl.formatMessage({
-                            id: '0qjl3+',
                             defaultMessage: 'Build:',
                           })}
                         </Text>
@@ -207,7 +197,6 @@ const CreateCrimeGroup = ({
                       <div className={classes.field}>
                         <Text>
                           {intl.formatMessage({
-                            id: 'JzYph5',
                             defaultMessage: 'Ethnicity:',
                           })}
                         </Text>
@@ -219,7 +208,6 @@ const CreateCrimeGroup = ({
                       <div className={classes.field}>
                         <Text>
                           {intl.formatMessage({
-                            id: 'Oz0DsA',
                             defaultMessage: 'Sex:',
                           })}
                         </Text>
@@ -231,14 +219,12 @@ const CreateCrimeGroup = ({
                       <div className={classes.field}>
                         <Text>
                           {intl.formatMessage({
-                            id: 'UNesYg',
                             defaultMessage: 'Last Active:',
                           })}
                         </Text>
                         <Text type="secondary">
                           {offender.lastActive?.dayTime ||
                             intl.formatMessage({
-                              id: 'du1laW',
                               defaultMessage: 'Never',
                             })}
                         </Text>
@@ -255,7 +241,6 @@ const CreateCrimeGroup = ({
                   type="primary"
                 >
                   {intl.formatMessage({
-                    id: 'm3ChN4',
                     defaultMessage: 'Add Offender',
                   })}
                 </Button>
@@ -285,7 +270,6 @@ const CreateCrimeGroup = ({
                         <Col>
                           <Text className={classes.offenderDetail}>
                             {intl.formatMessage({
-                              id: 'anqdpr',
                               defaultMessage: 'Age: ',
                             })}
                           </Text>
@@ -299,7 +283,6 @@ const CreateCrimeGroup = ({
                         <Col>
                           <Text className={classes.offenderDetail}>
                             {intl.formatMessage({
-                              id: 'iXQkAi',
                               defaultMessage: 'Build: ',
                             })}
                           </Text>
@@ -315,7 +298,6 @@ const CreateCrimeGroup = ({
                         <Col>
                           <Text className={classes.offenderDetail}>
                             {intl.formatMessage({
-                              id: 'j3ULId',
                               defaultMessage: 'Sex: ',
                             })}
                           </Text>
@@ -329,7 +311,6 @@ const CreateCrimeGroup = ({
                         <Col>
                           <Text className={classes.offenderDetail}>
                             {intl.formatMessage({
-                              id: 'H+Sv5C',
                               defaultMessage: 'Ethnicity: ',
                             })}
                           </Text>
@@ -365,7 +346,6 @@ const CreateCrimeGroup = ({
 
       <Drawer
         title={intl.formatMessage({
-          id: 'KaNxum',
           defaultMessage: 'Add Offenders',
         })}
         open={addOffender}

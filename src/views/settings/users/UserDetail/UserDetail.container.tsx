@@ -23,10 +23,18 @@ const UserDetailContainer = (): JSX.Element => {
     userRole,
     editPassword,
     toggleEditPassword,
+    isOwn,
+    componentRef,
+    handlePrint,
+    isPrinting,
   } = useUserDetail(userId);
 
   return (
     <View
+      isPrinting={isPrinting}
+      componentRef={componentRef}
+      handlePrint={handlePrint}
+      isOwn={isOwn}
       demId={demId}
       demLink={demLink}
       toggleDemLink={toggleDemLink}

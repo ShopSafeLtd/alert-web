@@ -1,83 +1,39 @@
 /* eslint-disable no-irregular-whitespace,formatjs/no-literal-string-in-jsx */
 import React from 'react';
-import styled from 'styled-components';
-import { Typography } from 'antd';
-import { useStoreState } from 'state';
+import { Card } from 'antd';
 import logo from '../../../images/icon-192.png';
+import useStyles from './Terms.styles';
 
-const Page = styled.div`
-  width: 100%;
-  padding: 0px 0px 60px;
-  overflow: auto;
-  @media (min-width: 1024px) {
-    padding: 0px;
-  }
-`;
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  margin: 12px 0 12px 12px;
-`;
-const HeaderText = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
-const Container = styled.div`
-  margin: 24px 0;
-  width: 60%;
-  border-radius: 8px;
-  background-color: #fff;
-`;
-
-const TermsText = styled(Typography)`
-  color: rgba(0, 0, 0, 0.54);
-  padding: 1rem;
-  padding-top: 0;
-  overflow: auto;
-  font-size: 12px;
-`;
-const TermsContainer = styled.div`
-  height: calc(100vh - 64px - 48px - 24px);
-  padding: 0 24px 24px 24px;
-  overflow: auto;
-`;
-const TermSubHeader = styled.div`
-  font-weight: 600;
-`;
-
-// eslint-disable-next-line react/prop-types
 const BoldItalic: React.FC = ({ children }) => (
   <strong>
     <em>{children}</em>
   </strong>
 );
 
-const Terms = (): JSX.Element => {
-  const theme = useStoreState((state) => state.theme.currentTheme);
-  const backgroundStyle = {
-    background:
-      theme === 'dark'
-        ? 'linear-gradient(to right, #cb2d3e, #ef473b)'
-        : 'linear-gradient(to right, #cb2d3e, #ef473a)',
-    display: 'flex',
-    justifyContent: 'center',
-    height: '100vh',
-  };
+export const TermsCard = () => {
+  const classes = useStyles();
+
   return (
-    <div style={backgroundStyle}>
-      <Container>
-        <Page>
-          <Header>
+    <div className={classes.cover}>
+      <Card
+        className={classes.container}
+        bodyStyle={{
+          height: 'calc(100vh - 64px)',
+        }}
+      >
+        <div className={classes.page}>
+          <div className={classes.header}>
             <img
               style={{ height: '40px', marginRight: '12px' }}
               alt="Alert logo"
               src={logo}
             />
-            <HeaderText>ShopSafe Alert! Terms of Use</HeaderText>
-          </Header>
-          <TermsContainer>
-            <TermsText>
+            <div className={classes.headerText}>
+              ShopSafe Alert! Terms of Use
+            </div>
+          </div>
+          <div className={classes.termsContainer}>
+            <div className={classes.termsText}>
               <div style={{ lineHeight: '18px' }}>
                 <strong>
                   By accessing Alert! you have entered into an Agreement to
@@ -112,7 +68,7 @@ const Terms = (): JSX.Element => {
                 <strong>You are over 16 years of age.</strong>
                 <br />
                 <br />
-                <TermSubHeader>1 The Services</TermSubHeader>
+                <div className={classes.termSubHeader}>1 The Services</div>
                 <br />
                 1.1 Alert! is a cloud-based secure information sharing and
                 management system designed specifically for crime prevention,
@@ -127,7 +83,9 @@ const Terms = (): JSX.Element => {
                 the first time they are used in Section 11 Definitions
                 <br />
                 <br />
-                <TermSubHeader>2 Your User Obligations</TermSubHeader>
+                <div className={classes.termSubHeader}>
+                  2 Your User Obligations
+                </div>
                 <br />
                 2.1 Whenever you access Alert! or use the information or data
                 contained therein you accept and agree to comply with these
@@ -171,7 +129,7 @@ const Terms = (): JSX.Element => {
                 (BID) in respect of the operation of the Services.
                 <br />
                 <br />
-                <TermSubHeader>3 Security</TermSubHeader>
+                <div className={classes.termSubHeader}>3 Security</div>
                 <br />
                 3.1 Your password is personal to you. Your transactions are
                 logged throughout your visits to Alert! You must use all
@@ -193,9 +151,9 @@ const Terms = (): JSX.Element => {
                 circumstances you must immediately change your User password.
                 <br />
                 <br />
-                <TermSubHeader>
+                <div className={classes.termSubHeader}>
                   4 Confidentiality and Non-Disclosure
-                </TermSubHeader>
+                </div>
                 <br />
                 4.1 Users may not disclose any Alert!{' '}
                 <BoldItalic>Confidential Information</BoldItalic> for a period
@@ -216,7 +174,7 @@ const Terms = (): JSX.Element => {
                 Authority with competent jurisdiction.
                 <br />
                 <br />
-                <TermSubHeader>5 Uploads</TermSubHeader>
+                <div className={classes.termSubHeader}>5 Uploads</div>
                 <br />
                 5.1 All uploaded data, reports and images are considered
                 confidential to Alert!
@@ -243,7 +201,7 @@ const Terms = (): JSX.Element => {
                 so that it can be corrected.
                 <br />
                 <br />
-                <TermSubHeader>6 Termination</TermSubHeader>
+                <div className={classes.termSubHeader}>6 Termination</div>
                 <br />
                 6.1 ShopSafe may suspend the Service immediately if any of these
                 Terms of Use are not complied with by the User.
@@ -261,9 +219,9 @@ const Terms = (): JSX.Element => {
                 will be deleted as it exceeds the time limits for that data.
                 <br />
                 <br />
-                <TermSubHeader>
+                <div className={classes.termSubHeader}>
                   7 Intellectual Property, Service and Software Security
-                </TermSubHeader>
+                </div>
                 <br />
                 7.1 All the rights in respect of Intellectual Property in the
                 Service and the Alert! App are owned by ShopSafe Limited.
@@ -302,7 +260,7 @@ const Terms = (): JSX.Element => {
                   software or infrastructure.
                 </div>
                 <br />
-                <TermSubHeader>8 Data Protection</TermSubHeader>
+                <div className={classes.termSubHeader}>8 Data Protection</div>
                 <br />
                 8.1 Your Personal Data:
                 <br />
@@ -369,9 +327,9 @@ const Terms = (): JSX.Element => {
                   and images are considered Confidential Information.
                 </div>
                 <br />
-                <TermSubHeader>
+                <div className={classes.termSubHeader}>
                   9 Alert! Data Ownership and Data Protection Law
-                </TermSubHeader>
+                </div>
                 <br />
                 9.1 The Organisation owns the User data and supplies it via the
                 Alert! App to ShopSafe to manage and process.
@@ -388,16 +346,16 @@ const Terms = (): JSX.Element => {
                 <BoldItalic>Data Processor</BoldItalic>.
                 <br />
                 <br />
-                <TermSubHeader>10 Contact Alert!</TermSubHeader>
+                <div className={classes.termSubHeader}>10 Contact Alert!</div>
                 <br />
                 10.1 If you have any questions or comments, or wish to report
                 any errors, we welcome your contact via our website on
                 shopsafealert.co.uk.
                 <br />
                 <br />
-                <TermSubHeader>
+                <div className={classes.termSubHeader}>
                   11 Definitions Used within the Terms of Use
-                </TermSubHeader>
+                </div>
                 <br />
                 11.1 <BoldItalic>“Agreement”</BoldItalic> Means the agreement
                 between ShopSafe, the Organisation and their Members who are
@@ -464,10 +422,20 @@ const Terms = (): JSX.Element => {
                 anti-social behaviour.
                 <br />
               </div>
-            </TermsText>
-          </TermsContainer>
-        </Page>
-      </Container>
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+const Terms = (): JSX.Element => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.background}>
+      <TermsCard />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Drawer, Form, Input, Row, Select, Skeleton } from 'antd';
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 
@@ -12,6 +11,7 @@ import AddCustomGallery from 'components/form-components/customGalleries/AddCust
 import { useIntl } from 'react-intl';
 // import useStyles from './EditVehicle.styles';
 import type { FormData } from './useEditVehicle';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 interface Props {
   onClose: () => void;
@@ -101,7 +101,6 @@ const EditVehicle = ({
               name="make"
               label={intl.formatMessage({
                 defaultMessage: 'Make',
-                id: '6AAM0P',
               })}
             >
               <Input disabled={saving} />
@@ -112,7 +111,6 @@ const EditVehicle = ({
               name="model"
               label={intl.formatMessage({
                 defaultMessage: 'Model',
-                id: 'rhSI1/',
               })}
             >
               <Input disabled={saving} />
@@ -125,7 +123,6 @@ const EditVehicle = ({
               name="colour"
               label={intl.formatMessage({
                 defaultMessage: 'Colour',
-                id: '+e8vAT',
               })}
             >
               <Input disabled={saving} />
@@ -136,7 +133,6 @@ const EditVehicle = ({
               name="registration"
               label={intl.formatMessage({
                 defaultMessage: 'Registration',
-                id: 'qv7ied',
               })}
             >
               <Input disabled={saving} />
@@ -151,12 +147,10 @@ const EditVehicle = ({
                 name="groups"
                 label={intl.formatMessage({
                   defaultMessage: 'Groups',
-                  id: 'hzmswI',
                 })}
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'Please select the relevant groups that you would like this vehicle to be visible to.',
-                  id: 'cz35+X',
                 })}
                 rules={[
                   {
@@ -164,7 +158,6 @@ const EditVehicle = ({
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select at least one group for the vehicle.',
-                      id: 'QVpuqK',
                     }),
                   },
                 ]}
@@ -176,7 +169,6 @@ const EditVehicle = ({
                   maxTagCount={3}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select groups...',
-                    id: 'aVKXev',
                   })}
                 >
                   {groups.map((group) => (
@@ -194,7 +186,6 @@ const EditVehicle = ({
                 name="crimeGroup"
                 label={intl.formatMessage({
                   defaultMessage: 'Crime Groups',
-                  id: 'a0aLil',
                 })}
               >
                 <Select
@@ -210,7 +201,6 @@ const EditVehicle = ({
                       label: intl.formatMessage(
                         {
                           defaultMessage: 'CG-{ref}',
-                          id: 'h/qDZq',
                         },
                         {
                           ref: crimeGroup.reference,
@@ -233,12 +223,10 @@ const EditVehicle = ({
                     name="customGalleries"
                     label={intl.formatMessage({
                       defaultMessage: 'Custom Galleries',
-                      id: 'bzpFEk',
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'Select any custom galleries that are relevant to this vehicle or add your own.',
-                      id: '2pmewe',
                     })}
                   >
                     <Select
@@ -276,7 +264,6 @@ const EditVehicle = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Custom Gallery',
-                      id: 'rLyRNN',
                     })}
                   </Button>
                 </Col>
@@ -296,7 +283,6 @@ const EditVehicle = ({
           setPrimaryImage={setPrimaryImage}
           title={intl.formatMessage({
             defaultMessage: 'vehicle',
-            id: 'qcNaCj',
           })}
         />
 
@@ -304,7 +290,7 @@ const EditVehicle = ({
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>
             </Col>
             <Col>
@@ -314,7 +300,7 @@ const EditVehicle = ({
                 disabled={saving}
                 loading={saving}
               >
-                {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+                {intl.formatMessage({ defaultMessage: 'Save' })}
               </Button>
             </Col>
           </Row>
@@ -324,7 +310,6 @@ const EditVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',
-          id: 'rLyRNN',
         })}
         open={addCustomGallery}
         width="400"

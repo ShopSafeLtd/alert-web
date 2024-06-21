@@ -1,17 +1,11 @@
-import type { ViewOffendersCompareQuery } from 'graphql/generated';
-import {
-  Age,
-  Build,
-  Gender,
-  Race,
-  Role,
-  useMergeOffendersMutation,
-  useViewOffendersCompareLazyQuery,
-} from 'graphql/generated';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import { useStoreState } from 'state';
+import type { ViewOffendersCompareQuery } from 'graphql/offenders/queries/compare-offenders.generated';
+import { useViewOffendersCompareLazyQuery } from 'graphql/offenders/queries/compare-offenders.generated';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import { useMergeOffendersMutation } from 'graphql/offenders/mutations/merge-offenders.generated';
 
 function useQuery() {
   const { search } = useLocation();

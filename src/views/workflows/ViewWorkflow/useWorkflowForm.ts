@@ -5,25 +5,25 @@ import { useStoreState } from 'state';
 import { useParams } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { useIntl } from 'react-intl';
-import type {
-  AnswerType,
-  IncidentPriority,
-  WorkflowDataQuery,
-} from 'graphql/generated';
+import type { ListData } from '../../adminTodo/useActivities';
+import useActivityTemplates from '../../adminTodo/useActivities';
+import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/create-workflow.generated';
+import type { AnswerType, IncidentPriority } from 'graphql/types';
 import {
   Model,
   QuestionModel,
-  useCreateOneWorkflowMutation,
-  useListGoodsTypesQuery,
-  useUpdateOneWorkflowMutation,
-  useViewWorkflowQuery,
-  useWorkflowDataQuery,
+  Role,
   WorkflowActionType,
-  WorkflowDataDocument,
   WorkflowTrigger,
-} from 'graphql/generated';
-import type { ListData } from '../../adminTodo/useActivities';
-import useActivityTemplates from '../../adminTodo/useActivities';
+} from 'graphql/types';
+import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/workflow-data.generated';
+import {
+  useWorkflowDataQuery,
+  WorkflowDataDocument,
+} from '#/views/workflows/graphql/queries/workflow-data.generated';
+import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/view-workflow.generated';
+import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/update-workflow.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
 
 interface WorkflowData {
   autoApprove?: boolean;
@@ -220,11 +220,9 @@ const useWorkflowForm = (): Return => {
       notification.error({
         message: intl.formatMessage({
           defaultMessage: 'Error!',
-          id: 'DIDBlF',
         }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors.',
-          id: 'B7tmCj',
         }),
         placement: 'bottomRight',
       });
@@ -411,7 +409,7 @@ const useWorkflowForm = (): Return => {
       return data.scheme.members
         .sort((a, b) => a.user.fullName.localeCompare(b.user.fullName))
         .map(({ userId, role, user: { fullName } }) => ({
-          label: `${fullName} (${role === 'USER' ? 'User' : 'Admin'})`,
+          label: `${fullName} (${role === Role.User ? 'User' : 'Admin'})`,
           value: userId,
         }));
     }
@@ -544,11 +542,9 @@ const useWorkflowForm = (): Return => {
       notification.error({
         message: intl.formatMessage({
           defaultMessage: 'Error!',
-          id: 'DIDBlF',
         }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there was an error.',
-          id: 'gfkeSL',
         }),
         placement: 'bottomRight',
       });

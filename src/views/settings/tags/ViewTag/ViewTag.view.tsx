@@ -12,8 +12,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { ViewTagQuery } from 'graphql/generated';
-import { IncidentFormField } from 'graphql/generated';
 import { FormattedMessage, useIntl } from 'react-intl';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,8 +22,8 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import EditCrimeType from 'components/form-components/tags/crimeTypes/EditCrimeType';
-import { margin, rowHeight } from '../../../../components/reports/utils/utils';
-import type { ExtendedLayout } from '../../../reports/types';
+import { margin, rowHeight } from '#/components/reports/utils/utils';
+import type { ExtendedLayout } from '#/views/reports/types';
 import 'react-grid-layout/css/styles.css';
 import AddQuestionContainer from '../../../../components/form-components/addQuestion/AddQuestion.container';
 import BuildTree from '../../../../utils/tags/tree-helper';
@@ -35,6 +33,8 @@ import type {
   IncidentFormFieldState,
 } from './useViewTag';
 import UpdateQuestionContainer from '../../../../components/form-components/update-question-on-tag/UpdateQuestion.container';
+import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/view-tag.generated';
+import { IncidentFormField } from 'graphql/types';
 
 interface Props {
   toggleAddQuestion: () => void;
@@ -154,17 +154,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Tags" id="1EYCdR" />}
+          title={<FormattedMessage defaultMessage="Tags" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Tags" id="1EYCdR" />
+              <FormattedMessage defaultMessage="Tags" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Is required',
-                  id: 'kWXp6p',
                 })}
               >
                 <Checkbox checked={incidentFormFields.TYPES} disabled />
@@ -173,13 +172,12 @@ const ViewTag = ({
           </Row>
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Impact" id="W2JBdp" />
+              <FormattedMessage defaultMessage="Impact" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -193,13 +191,12 @@ const ViewTag = ({
           </Row>
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Involved" id="YSNAqY" />
+              <FormattedMessage defaultMessage="Involved" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -223,17 +220,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="When/Where" id="d7OWp+" />}
+          title={<FormattedMessage defaultMessage="When/Where" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="When/Where" id="d7OWp+" />
+              <FormattedMessage defaultMessage="When/Where" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -257,17 +253,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Goods" id="u5dS1t" />}
+          title={<FormattedMessage defaultMessage="Goods" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Goods" id="u5dS1t" />
+              <FormattedMessage defaultMessage="Goods" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -291,17 +286,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Profiles" id="2zJXeA" />}
+          title={<FormattedMessage defaultMessage="Profiles" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Offenders" id="xb54TN" />
+              <FormattedMessage defaultMessage="Offenders" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -336,13 +330,12 @@ const ViewTag = ({
           {/* </Row> */}
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Witnesses" id="sjTqbX" />
+              <FormattedMessage defaultMessage="Witnesses" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -356,13 +349,12 @@ const ViewTag = ({
           </Row>
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Victims" id="PAMKVQ" />
+              <FormattedMessage defaultMessage="Victims" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -386,17 +378,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Images" id="Fip4H8" />}
+          title={<FormattedMessage defaultMessage="Images" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Images" id="Fip4H8" />
+              <FormattedMessage defaultMessage="Images" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -420,19 +411,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={
-            <FormattedMessage defaultMessage="Details/Police" id="dosgOV" />
-          }
+          title={<FormattedMessage defaultMessage="Details/Police" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Police" id="f53wTf" />
+              <FormattedMessage defaultMessage="Police" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -446,13 +434,12 @@ const ViewTag = ({
           </Row>
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Details" id="Lv0zJu" />
+              <FormattedMessage defaultMessage="Details" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Is required',
-                  id: 'kWXp6p',
                 })}
               >
                 <Checkbox checked={incidentFormFields.DETAILS} disabled />
@@ -471,17 +458,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Groups" id="hzmswI" />}
+          title={<FormattedMessage defaultMessage="Groups" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Groups" id="hzmswI" />
+              <FormattedMessage defaultMessage="Groups" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Is required',
-                  id: 'kWXp6p',
                 })}
               >
                 <Checkbox
@@ -504,17 +490,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="Custom" id="Sjo1P4" />}
+          title={<FormattedMessage defaultMessage="Custom" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Custom" id="Sjo1P4" />
+              <FormattedMessage defaultMessage="Custom" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -538,17 +523,16 @@ const ViewTag = ({
       >
         <Card
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
-          title={<FormattedMessage defaultMessage="CCTV" id="r9rHbW" />}
+          title={<FormattedMessage defaultMessage="CCTV" />}
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="CCTV" id="r9rHbW" />
+              <FormattedMessage defaultMessage="CCTV" />
             </Col>
             <Col>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
                 })}
               >
                 <Checkbox
@@ -632,7 +616,6 @@ const ViewTag = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Dependent',
-                        id: 'R1OkyM',
                       })}
                     </Typography.Text>
                   </Tooltip>
@@ -642,7 +625,6 @@ const ViewTag = ({
                 <Tooltip
                   title={intl.formatMessage({
                     defaultMessage: 'Edit Question',
-                    id: 'Pa9Li0',
                   })}
                 >
                   <Button
@@ -659,7 +641,6 @@ const ViewTag = ({
                 <Tooltip
                   title={intl.formatMessage({
                     defaultMessage: 'Remove Question',
-                    id: 'CvVrAx',
                   })}
                 >
                   <Button
@@ -695,7 +676,7 @@ const ViewTag = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Add question" id="0eJKDI" />
+            <FormattedMessage defaultMessage="Add question" />
           </Button>,
           <Button
             key="2"
@@ -711,7 +692,6 @@ const ViewTag = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Edit Crime Type',
-              id: 'zwQmkF',
             })}
           </Button>,
           <Button
@@ -729,7 +709,6 @@ const ViewTag = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Delete Crime Type',
-              id: 'uymNG3',
             })}
           </Button>,
         ]}
@@ -737,7 +716,7 @@ const ViewTag = ({
       <Row gutter={[8, 8]}>
         <Col span={16}>
           <Card loading={loading}>
-            <FormattedMessage defaultMessage="Parent Tag:" id="TqRfhz" />
+            <FormattedMessage defaultMessage="Parent Tag:" />
             <Select
               style={{ width: '100%', marginTop: 5 }}
               value={parentTag}
@@ -760,15 +739,12 @@ const ViewTag = ({
           >
             <Row>
               <Col flex={1}>
-                <FormattedMessage
-                  defaultMessage="Custom Questions"
-                  id="QUZrro"
-                />
+                <FormattedMessage defaultMessage="Custom Questions" />
               </Col>
               <Col>
                 {questionLayoutChanged && (
                   <Button onClick={() => saveQOrder()} type="primary">
-                    <FormattedMessage defaultMessage="Save Order" id="qXJOUd" />
+                    <FormattedMessage defaultMessage="Save Order" />
                   </Button>
                 )}
               </Col>
@@ -804,15 +780,12 @@ const ViewTag = ({
           >
             <Row>
               <Col flex={1}>
-                <FormattedMessage
-                  defaultMessage="Custom Incident Form"
-                  id="TQS/+P"
-                />
+                <FormattedMessage defaultMessage="Custom Incident Form" />
               </Col>
               <Col>
                 {incidentFormLayoutChanged && (
                   <Button onClick={() => saveIncidentForm()} type="primary">
-                    <FormattedMessage defaultMessage="Save Order" id="qXJOUd" />
+                    <FormattedMessage defaultMessage="Save Order" />
                   </Button>
                 )}
               </Col>
@@ -846,7 +819,7 @@ const ViewTag = ({
             }}
             loading={loading}
           >
-            <FormattedMessage defaultMessage="Tag hierarchy" id="I5HrhC" />
+            <FormattedMessage defaultMessage="Tag hierarchy" />
             <BuildTree
               InitData={
                 data?.listTags.tags.map((tag) => ({
@@ -863,7 +836,6 @@ const ViewTag = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add/Create Question',
-          id: '/vx2Ey',
         })}
         open={addQuestion}
         width={800}
@@ -881,7 +853,6 @@ const ViewTag = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add/Create Question',
-          id: '/vx2Ey',
         })}
         open={!!selectedQuestion}
         width={800}
@@ -908,7 +879,6 @@ const ViewTag = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident Type',
-          id: 'xTR8wo',
         })}
         open={!!editIncidentType}
         width="400"

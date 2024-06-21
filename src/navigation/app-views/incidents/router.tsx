@@ -4,7 +4,7 @@ import IncidentFeed from 'views/incidents/IncidentFeed';
 import ViewIncident from 'views/incidents/ViewIncident';
 import AddIncident from 'views/incidents/AddIncident';
 import EditIncident from 'views/incidents/EditIncident';
-import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
@@ -16,7 +16,6 @@ const Incidents = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Incidents',
-        id: 'mtr3R4',
       })}
     >
       <Routes>

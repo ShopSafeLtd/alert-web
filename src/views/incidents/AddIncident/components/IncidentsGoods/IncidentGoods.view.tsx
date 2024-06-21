@@ -15,12 +15,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListGoodsTypesQuery } from 'graphql/generated';
-import { GoodsMode } from 'graphql/generated';
+
 import Input from 'antd/es/input/Input';
 import useStyles from '../../AddIncident.styles';
 import type { StockItemValue } from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
 import StockItemSearch from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { GoodsMode } from 'graphql/types';
 
 const { Paragraph, Title } = Typography;
 
@@ -64,11 +65,9 @@ const IncidentGoods = ({
             {goodsVisible
               ? intl.formatMessage({
                   defaultMessage: 'What goods were involved?',
-                  id: '6L5/Qv',
                 })
               : intl.formatMessage({
                   defaultMessage: 'Do you know what goods were involved?',
-                  id: '+eY3nZ',
                 })}
           </Title>
         </Col>
@@ -81,7 +80,6 @@ const IncidentGoods = ({
             {intl.formatMessage({
               defaultMessage:
                 '- Please provide information about the lost/recovered goods.',
-              id: '3kptQz',
             })}
           </Paragraph>
         </Col>
@@ -98,7 +96,6 @@ const IncidentGoods = ({
                   throw new Error(
                     intl.formatMessage({
                       defaultMessage: 'Something wrong!',
-                      id: 'QL7Ixv',
                     })
                   );
               },
@@ -115,7 +112,6 @@ const IncidentGoods = ({
                   placeholder={intl.formatMessage({
                     defaultMessage:
                       'Search for an item to add to the incident...',
-                    id: 'kK3vTg',
                   })}
                   style={{ width: 500, marginBottom: 20 }}
                   onAddItem={onAddItem}
@@ -127,7 +123,6 @@ const IncidentGoods = ({
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description={intl.formatMessage({
-                    id: '9mMWzj',
                     defaultMessage:
                       'Search for an item to add to this incident.',
                   })}
@@ -138,7 +133,6 @@ const IncidentGoods = ({
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description={intl.formatMessage({
-                    id: 'yjhOzY',
                     defaultMessage: 'No goods added to incident',
                   })}
                 >
@@ -161,7 +155,6 @@ const IncidentGoods = ({
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Add Item',
-                            id: 'kNLPWW',
                           })}
                         </Button>
                       </Col>
@@ -182,7 +175,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'Type of Goods',
-                                  id: 'awr2tc',
                                 })
                           }
                           name={[name, 'goodsType']}
@@ -191,7 +183,6 @@ const IncidentGoods = ({
                               required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a type',
-                                id: 'pd8FHc',
                               }),
                             },
                           ]}
@@ -199,7 +190,6 @@ const IncidentGoods = ({
                           <Select
                             placeholder={intl.formatMessage({
                               defaultMessage: 'Select goods...',
-                              id: 'p4Hiyr',
                             })}
                             style={{ width: 300 }}
                             allowClear
@@ -225,7 +215,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'Value',
-                                  id: 'GufXy5',
                                 })
                           }
                           rules={[
@@ -233,14 +222,12 @@ const IncidentGoods = ({
                               required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a value',
-                                id: 'Umf5pG',
                               }),
                             },
                           ]}
                           tooltip={intl.formatMessage({
                             defaultMessage:
                               'The value of the goods involved in the incident, both lost and recovered.',
-                            id: 'MPzA66',
                           })}
                         >
                           <InputNumber
@@ -260,7 +247,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'Value Recovered',
-                                  id: 'FqEGSY',
                                 })
                           }
                           rules={[
@@ -268,14 +254,12 @@ const IncidentGoods = ({
                               required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a value',
-                                id: 'Umf5pG',
                               }),
                             },
                           ]}
                           tooltip={intl.formatMessage({
                             defaultMessage:
                               'The value of the goods that were recovered.',
-                            id: 'JuhI7q',
                           })}
                         >
                           <InputNumber
@@ -301,7 +285,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'Item Name',
-                                  id: 'd0Q+yP',
                                 })
                           }
                           rules={[
@@ -309,13 +292,11 @@ const IncidentGoods = ({
                               required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the name',
-                                id: '42iFTN',
                               }),
                             },
                           ]}
                           tooltip={intl.formatMessage({
                             defaultMessage: 'The SKU of the name.',
-                            id: 'XKEvdm',
                           })}
                         >
                           <Input readOnly style={{ width: 250 }} />
@@ -330,7 +311,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'SKU',
-                                  id: 'k4brJy',
                                 })
                           }
                           rules={[
@@ -338,13 +318,11 @@ const IncidentGoods = ({
                               required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the SKU',
-                                id: '0WNVIn',
                               }),
                             },
                           ]}
                           tooltip={intl.formatMessage({
                             defaultMessage: 'The SKU of the item.',
-                            id: 'rrLaZs',
                           })}
                         >
                           <Input readOnly style={{ width: 250 }} />
@@ -359,7 +337,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'Value',
-                                  id: 'GufXy5',
                                 })
                           }
                           rules={[
@@ -367,13 +344,11 @@ const IncidentGoods = ({
                               required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the value',
-                                id: 'wP/hlO',
                               }),
                             },
                           ]}
                           tooltip={intl.formatMessage({
                             defaultMessage: 'The value of the item.',
-                            id: 'xYuu48',
                           })}
                         >
                           <InputNumber
@@ -393,7 +368,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'Quantity',
-                                  id: 'qVGRIE',
                                 })
                           }
                           rules={[
@@ -401,14 +375,12 @@ const IncidentGoods = ({
                               required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a quantity.',
-                                id: 'KEVIs3',
                               }),
                             },
                           ]}
                           tooltip={intl.formatMessage({
                             defaultMessage:
                               'The quantity of the items involved.',
-                            id: 'X3X/lp',
                           })}
                         >
                           <InputNumber
@@ -427,7 +399,6 @@ const IncidentGoods = ({
                               ? ''
                               : intl.formatMessage({
                                   defaultMessage: 'Quantity Recovered',
-                                  id: 'vQz41I',
                                 })
                           }
                           rules={[
@@ -436,14 +407,12 @@ const IncidentGoods = ({
                               message: intl.formatMessage({
                                 defaultMessage:
                                   'Please enter a recovered quantity.',
-                                id: 'CZemdW',
                               }),
                             },
                           ]}
                           tooltip={intl.formatMessage({
                             defaultMessage:
                               'The quantity of the goods that were recovered.',
-                            id: '00WDlL',
                           })}
                         >
                           <InputNumber
@@ -491,7 +460,6 @@ const IncidentGoods = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Item',
-                          id: 'kNLPWW',
                         })}
                       </Button>
                     </Col>
@@ -508,7 +476,6 @@ const IncidentGoods = ({
               <Button onClick={knowGoods} danger>
                 {intl.formatMessage({
                   defaultMessage: 'I know the goods involved',
-                  id: '5RSz8i',
                 })}
               </Button>
             </Col>
@@ -516,7 +483,6 @@ const IncidentGoods = ({
               <Button onClick={dontKnowGoods}>
                 {intl.formatMessage({
                   defaultMessage: "I don't know the goods involved",
-                  id: 'Syf67T',
                 })}
               </Button>
             </Col>

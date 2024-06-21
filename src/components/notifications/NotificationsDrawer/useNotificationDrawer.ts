@@ -1,19 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
-import type {
-  ListUserNotificationsQuery,
-  ListUserNotificationsQueryVariables,
-  UpdateUserNotificationsMutation,
-  UserNotificationsQuery,
-} from 'graphql/generated';
-import {
-  Model,
-  QueryMode,
-  SortOrder,
-  useListUserNotificationsQuery,
-  UserNotificationsDocument,
-  useUpdateUserNotificationsMutation,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
@@ -21,6 +8,16 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useNavigate } from 'react-router';
 import { LocalStorageKeys } from 'types';
 import { useIntl } from 'react-intl';
+import type {
+  ListUserNotificationsQuery,
+  ListUserNotificationsQueryVariables,
+} from 'graphql/userNotification/queries/list-user-notifications.generated';
+import { useListUserNotificationsQuery } from 'graphql/userNotification/queries/list-user-notifications.generated';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
+import type { UpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
+import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
+import type { UserNotificationsQuery } from 'graphql/userNotification/queries/user_notifications.generated';
+import { UserNotificationsDocument } from 'graphql/userNotification/queries/user_notifications.generated';
 
 export interface NotificationData {
   id: string;
@@ -268,11 +265,9 @@ const useNotificationLists = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'All notifications have been updated to read!',
-          id: 'dI0d71',
         }),
         placement: 'bottomRight',
       });

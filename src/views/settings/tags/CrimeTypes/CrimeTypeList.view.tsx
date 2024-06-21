@@ -10,8 +10,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { CreateTagMutation, TagsQuery } from 'graphql/generated';
-import { TagType } from 'graphql/generated';
+
 import AddIncident from 'components/form-components/tags/crimeTypes/AddCrimeType';
 import EditIncident from 'components/form-components/tags/crimeTypes/EditCrimeType';
 
@@ -24,6 +23,9 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FormattedMessage, useIntl } from 'react-intl';
 import BuildTree from '../../../../utils/tags/tree-helper';
+import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { TagType } from 'graphql/types';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -85,7 +87,7 @@ const CrimeTypeList = ({
         <Row align="middle" gutter={16} style={{ marginBottom: 10 }}>
           <Col>
             <Typography.Title style={{ margin: 0 }} level={4}>
-              <FormattedMessage defaultMessage="Crime Types" id="Piba4q" />
+              <FormattedMessage defaultMessage="Crime Types" />
             </Typography.Title>
           </Col>
           {/* <Col span={8}> */}
@@ -112,7 +114,7 @@ const CrimeTypeList = ({
                 />
               }
             >
-              <FormattedMessage defaultMessage="Add Crime Type" id="OAVeBQ" />
+              <FormattedMessage defaultMessage="Add Crime Type" />
             </Button>
           </Col>
         </Row>
@@ -225,7 +227,7 @@ const CrimeTypeList = ({
         <Row gutter={16} align="middle" style={{ marginBottom: 10 }}>
           <Col>
             <Typography.Title style={{ margin: 0 }} level={4}>
-              <FormattedMessage defaultMessage="Involved Tags" id="hqB+1X" />
+              <FormattedMessage defaultMessage="Involved Tags" />
             </Typography.Title>
           </Col>
           <Col span={8}>
@@ -234,7 +236,6 @@ const CrimeTypeList = ({
               onChange={(event) => setSearch(event.target.value)}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search involved tags...',
-                id: '5Tbx28',
               })}
               allowClear
             />
@@ -252,7 +253,7 @@ const CrimeTypeList = ({
                 />
               }
             >
-              <FormattedMessage defaultMessage="Add Involved Tag" id="Hnfici" />
+              <FormattedMessage defaultMessage="Add Involved Tag" />
             </Button>
           </Col>
         </Row>
@@ -269,7 +270,6 @@ const CrimeTypeList = ({
               key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               width: 250,
@@ -289,7 +289,6 @@ const CrimeTypeList = ({
               key: 'description',
               title: intl.formatMessage({
                 defaultMessage: 'Description',
-                id: 'Q8Qw5B',
               }),
               dataIndex: 'description',
               ellipsis: true,
@@ -305,7 +304,6 @@ const CrimeTypeList = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Edit Crime Type',
-                        id: 'zwQmkF',
                       })}
                     >
                       <Button
@@ -323,7 +321,6 @@ const CrimeTypeList = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Remove Crime Type',
-                        id: 'qHTdPQ',
                       })}
                     >
                       <Button
@@ -352,7 +349,7 @@ const CrimeTypeList = ({
         <Row align="middle" gutter={16} style={{ marginBottom: 10 }}>
           <Col>
             <Typography.Title style={{ margin: 0 }} level={4}>
-              <FormattedMessage defaultMessage="Impact Tags" id="JZVMXj" />
+              <FormattedMessage defaultMessage="Impact Tags" />
             </Typography.Title>
           </Col>
           <Col span={8}>
@@ -361,7 +358,6 @@ const CrimeTypeList = ({
               onChange={(event) => setSearch(event.target.value)}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search impact tags...',
-                id: 'PYBHmx',
               })}
               allowClear
             />
@@ -379,7 +375,7 @@ const CrimeTypeList = ({
                 />
               }
             >
-              <FormattedMessage defaultMessage="Add Impact Type" id="bnHbBx" />
+              <FormattedMessage defaultMessage="Add Impact Type" />
             </Button>
           </Col>
         </Row>
@@ -396,7 +392,6 @@ const CrimeTypeList = ({
               key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               width: 250,
@@ -416,7 +411,6 @@ const CrimeTypeList = ({
               key: 'description',
               title: intl.formatMessage({
                 defaultMessage: 'Description',
-                id: 'Q8Qw5B',
               }),
 
               dataIndex: 'description',
@@ -433,7 +427,6 @@ const CrimeTypeList = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Edit Crime Type',
-                        id: 'zwQmkF',
                       })}
                     >
                       <Button
@@ -451,7 +444,6 @@ const CrimeTypeList = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Remove Crime Type',
-                        id: 'qHTdPQ',
                       })}
                     >
                       <Button
@@ -479,7 +471,6 @@ const CrimeTypeList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Crime Types',
-          id: 'hm9cEh',
         })}
         open={addIncident}
         width="800"
@@ -498,7 +489,6 @@ const CrimeTypeList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Involved Tag',
-          id: 'Hnfici',
         })}
         open={addInvolved}
         width="400"
@@ -517,7 +507,6 @@ const CrimeTypeList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Impact Tag',
-          id: 'sl+yfu',
         })}
         open={addImpact}
         width="400"
@@ -536,7 +525,6 @@ const CrimeTypeList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Tag',
-          id: 'uJkv2X',
         })}
         open={editIncident}
         width="400"

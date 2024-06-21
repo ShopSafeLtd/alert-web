@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Navigate } from 'react-router-dom';
-import type { PermissionMethod, PermissionModel } from 'graphql/generated';
+import type { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useStoreState } from '#/state';
 import hasPermission from '../../utils/has-permission';
 

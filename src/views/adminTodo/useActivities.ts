@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import { useApolloClient } from '@apollo/client';
-import type { QuestionGroupOnSchemeQuery } from '../../graphql/generated';
+
+import { useStoreState } from '../../state';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import {
   QuestionGroupOnSchemeDocument,
   useQuestionGroupOnSchemeQuery,
-} from '../../graphql/generated';
-import { useStoreState } from '../../state';
+} from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 
 interface Return {
   templateData: ListData[];

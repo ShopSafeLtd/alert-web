@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
-import { SortOrder } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
 import { FormattedMessage } from 'react-intl';
 import type { VehicleFilters } from 'state/data-model';
 import moment from 'moment';
 import useStyles from './VehicleFilter.styles';
+import { SortOrder } from 'graphql/types';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -61,7 +61,7 @@ const VehicleFilter = ({
               });
             }}
           >
-            <FormattedMessage id="MsGXc3" defaultMessage="Clear Filters" />
+            <FormattedMessage defaultMessage="Clear Filters" />
           </Button>
         </Col>
       </Row>
@@ -69,7 +69,7 @@ const VehicleFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            <FormattedMessage id="Hw6crD" defaultMessage="Sort Order" />
+            <FormattedMessage defaultMessage="Sort Order" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -78,10 +78,10 @@ const VehicleFilter = ({
             size="small"
           >
             <Select.Option value={SortOrder.Desc}>
-              <FormattedMessage id="dZYazP" defaultMessage="Newest First" />
+              <FormattedMessage defaultMessage="Newest First" />
             </Select.Option>
             <Select.Option value={SortOrder.Asc}>
-              <FormattedMessage id="FqI37D" defaultMessage="Oldest First" />
+              <FormattedMessage defaultMessage="Oldest First" />
             </Select.Option>
           </Select>
         </Col>
@@ -89,7 +89,7 @@ const VehicleFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            <FormattedMessage id="hGJYON" defaultMessage="Created Between" />
+            <FormattedMessage defaultMessage="Created Between" />
           </Typography.Paragraph>
 
           <Form.Item name="createdAt" style={{ marginBottom: 0 }}>
@@ -109,13 +109,11 @@ const VehicleFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            <FormattedMessage id="hzmswI" defaultMessage="Groups" />
+            <FormattedMessage defaultMessage="Groups" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder={
-              <FormattedMessage id="hzmswI" defaultMessage="Groups" />
-            }
+            placeholder={<FormattedMessage defaultMessage="Groups" />}
             mode="multiple"
             size="small"
             maxTagCount={2}

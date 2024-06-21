@@ -13,7 +13,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { OffenderCardFragment } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTags,
@@ -48,6 +47,7 @@ import type { EditFeedImage } from 'types/DataType';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import KnowOffender from 'components/form-components/offender/KnowOffender';
 import useStyles from './OffenderCard.styles';
+import type { OffenderCardFragment } from 'graphql/fragments/offender-card.generated';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -120,7 +120,6 @@ const OffenderCard = ({
                   <Title level={4} style={{ color: '#fff' }}>
                     {intl.formatMessage({
                       defaultMessage: 'This offender is awaiting approval',
-                      id: 'Om/2W/',
                     })}
                   </Title>
                 </Col>
@@ -132,7 +131,6 @@ const OffenderCard = ({
                       <Button>
                         {intl.formatMessage({
                           defaultMessage: 'Review Offender',
-                          id: 'i7Qzld',
                         })}
                       </Button>
                     </Link>
@@ -220,7 +218,6 @@ const OffenderCard = ({
                               key: 0,
                               label: intl.formatMessage({
                                 defaultMessage: 'Edit Offender',
-                                id: '+OfJ4/',
                               }),
                               onClick: () => toggleEditOffenderFeed(),
                               icon: <FontAwesomeIcon icon={faEdit} />,
@@ -230,7 +227,6 @@ const OffenderCard = ({
                                   key: 1,
                                   label: intl.formatMessage({
                                     defaultMessage: 'Edit Image',
-                                    id: '9UlLIw',
                                   }),
                                   onClick: () => toggleEditImage(),
                                   icon: <FontAwesomeIcon icon={faImage} />,
@@ -240,7 +236,6 @@ const OffenderCard = ({
                               key: 2,
                               label: intl.formatMessage({
                                 defaultMessage: 'Compare Offender',
-                                id: 'Y64oGy',
                               }),
                               onClick: () =>
                                 onNavigate(
@@ -255,22 +250,18 @@ const OffenderCard = ({
                               key: 3,
                               label: intl.formatMessage({
                                 defaultMessage: 'Delete Offender',
-                                id: 'IyEJgq',
                               }),
                               onClick: () =>
                                 confirm({
                                   title: intl.formatMessage({
                                     defaultMessage: 'Are you sure?',
-                                    id: '2oCaym',
                                   }),
                                   content: intl.formatMessage({
                                     defaultMessage:
                                       'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                                    id: 'J35F/I',
                                   }),
                                   okText: intl.formatMessage({
                                     defaultMessage: 'Delete',
-                                    id: 'K3r6DQ',
                                   }),
                                   onOk: () => onDelete(offender?.id || ''),
                                 }),
@@ -282,7 +273,6 @@ const OffenderCard = ({
                               key: 4,
                               label: intl.formatMessage({
                                 defaultMessage: 'Add Investigation',
-                                id: 'U5+v9Y',
                               }),
                               onClick: () => toggleAddInvestigation(),
                               icon: <FontAwesomeIcon icon={faPlus} />,
@@ -303,7 +293,7 @@ const OffenderCard = ({
               <Link to={`/app/offenders/view/${offender?.id}`}>
                 <Text type="secondary" className={classes.alertId}>
                   {intl.formatMessage(
-                    { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+                    { defaultMessage: 'Alert ID: {ref}' },
                     { ref: offender?.reference }
                   )}
                 </Text>
@@ -343,7 +333,6 @@ const OffenderCard = ({
                         <Text type="secondary">
                           {intl.formatMessage({
                             defaultMessage: 'Incidents:',
-                            id: '+nRUf9',
                           })}
                         </Text>
                       </Col>
@@ -365,7 +354,6 @@ const OffenderCard = ({
                           <Text ellipsis type="secondary">
                             {intl.formatMessage({
                               defaultMessage: 'Total Loss:',
-                              id: 'qc2QFx',
                             })}
                           </Text>
                         </Col>
@@ -374,7 +362,6 @@ const OffenderCard = ({
                             {intl.formatMessage(
                               {
                                 defaultMessage: '£{total}',
-                                id: '5vPUPO',
                               },
                               {
                                 total: offender.totalValue
@@ -404,7 +391,6 @@ const OffenderCard = ({
                       <Text ellipsis type="secondary">
                         {intl.formatMessage({
                           defaultMessage: 'Known for: ',
-                          id: 'L+EzyI',
                         })}
                       </Text>
                     </Col>
@@ -436,7 +422,6 @@ const OffenderCard = ({
                       <Text ellipsis type="secondary">
                         {intl.formatMessage({
                           defaultMessage: 'Targeted: ',
-                          id: 'bSKtXw',
                         })}
                       </Text>
                     </Col>
@@ -466,7 +451,6 @@ const OffenderCard = ({
                       <Text type="secondary" ellipsis>
                         {intl.formatMessage({
                           defaultMessage: 'Last Incident: ',
-                          id: 'wMliQr',
                         })}
                       </Text>
                     </Col>
@@ -479,7 +463,6 @@ const OffenderCard = ({
                         ).message ||
                           intl.formatMessage({
                             defaultMessage: 'Unknown',
-                            id: '5jeq8P',
                           })}
                       </Text>
                     </Col>
@@ -505,7 +488,6 @@ const OffenderCard = ({
               <Title level={4} className="offender-card-approval-title">
                 {intl.formatMessage({
                   defaultMessage: 'This offender is awaiting approval',
-                  id: 'Om/2W/',
                 })}
               </Title>
               {approvalRights && (
@@ -513,7 +495,6 @@ const OffenderCard = ({
                   <Button>
                     {intl.formatMessage({
                       defaultMessage: 'Review Offender',
-                      id: 'i7Qzld',
                     })}
                   </Button>
                 </Link>
@@ -530,7 +511,6 @@ const OffenderCard = ({
                       key: 0,
                       label: intl.formatMessage({
                         defaultMessage: 'Edit Offender',
-                        id: '+OfJ4/',
                       }),
                       onClick: () => toggleEditOffenderFeed(),
                       icon: <FontAwesomeIcon icon={faEdit} />,
@@ -540,7 +520,6 @@ const OffenderCard = ({
                           key: 1,
                           label: intl.formatMessage({
                             defaultMessage: 'Edit Image',
-                            id: '9UlLIw',
                           }),
                           onClick: () => toggleEditImage(),
                           icon: <FontAwesomeIcon icon={faImage} />,
@@ -550,7 +529,6 @@ const OffenderCard = ({
                       key: 2,
                       label: intl.formatMessage({
                         defaultMessage: 'Compare Offender',
-                        id: 'Y64oGy',
                       }),
                       onClick: () =>
                         onNavigate(
@@ -563,22 +541,18 @@ const OffenderCard = ({
                       key: 3,
                       label: intl.formatMessage({
                         defaultMessage: 'Delete Offender',
-                        id: 'IyEJgq',
                       }),
                       onClick: () =>
                         confirm({
                           title: intl.formatMessage({
                             defaultMessage: 'Are you sure?',
-                            id: '2oCaym',
                           }),
                           content: intl.formatMessage({
                             defaultMessage:
                               'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                            id: 'J35F/I',
                           }),
                           okText: intl.formatMessage({
                             defaultMessage: 'Delete',
-                            id: 'K3r6DQ',
                           }),
                           onOk: () => onDelete(offender?.id || ''),
                         }),
@@ -588,7 +562,6 @@ const OffenderCard = ({
                       key: 4,
                       label: intl.formatMessage({
                         defaultMessage: 'Add Investigation',
-                        id: 'U5+v9Y',
                       }),
                       onClick: () => toggleAddInvestigation(),
                       icon: <FontAwesomeIcon icon={faPlus} />,
@@ -728,7 +701,6 @@ const OffenderCard = ({
                         <Tooltip
                           title={intl.formatMessage({
                             defaultMessage: 'Verified ID',
-                            id: '0lpcfx',
                           })}
                         >
                           <FontAwesomeIcon size="xl" icon={faShieldCheck} />
@@ -739,7 +711,7 @@ const OffenderCard = ({
 
                   <Text type="secondary">
                     {intl.formatMessage(
-                      { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+                      { defaultMessage: 'Alert ID: {ref}' },
                       { ref: offender?.reference }
                     )}
                   </Text>
@@ -758,7 +730,6 @@ const OffenderCard = ({
                         <Text type="secondary">
                           {intl.formatMessage({
                             defaultMessage: 'Incidents:',
-                            id: '+nRUf9',
                           })}
                         </Text>
                       </Col>
@@ -780,7 +751,6 @@ const OffenderCard = ({
                           <Text type="secondary">
                             {intl.formatMessage({
                               defaultMessage: 'Total Loss:',
-                              id: 'qc2QFx',
                             })}
                           </Text>
                         </Col>
@@ -789,7 +759,6 @@ const OffenderCard = ({
                             {intl.formatMessage(
                               {
                                 defaultMessage: '£{total}',
-                                id: '5vPUPO',
                               },
                               {
                                 total: offender.totalValue
@@ -819,7 +788,6 @@ const OffenderCard = ({
                       <Text ellipsis type="secondary">
                         {intl.formatMessage({
                           defaultMessage: 'Known for: ',
-                          id: 'L+EzyI',
                         })}
                       </Text>
                     </Col>
@@ -850,7 +818,6 @@ const OffenderCard = ({
                       <Text ellipsis type="secondary">
                         {intl.formatMessage({
                           defaultMessage: 'Targeted: ',
-                          id: 'bSKtXw',
                         })}
                       </Text>
                     </Col>
@@ -906,7 +873,6 @@ const OffenderCard = ({
                     <Text ellipsis type="secondary">
                       {intl.formatMessage({
                         defaultMessage: 'Last offence: ',
-                        id: 'ncfw94',
                       })}
                     </Text>
                   </Col>
@@ -919,7 +885,6 @@ const OffenderCard = ({
                       ).message ||
                         intl.formatMessage({
                           defaultMessage: 'Unknown',
-                          id: '5jeq8P',
                         })}
                     </Text>
                   </Col>
@@ -939,7 +904,6 @@ const OffenderCard = ({
                   <Button size="small" type="text" style={{ marginTop: 10 }}>
                     {intl.formatMessage({
                       defaultMessage: 'View Full Offender',
-                      id: 'm94i2s',
                     })}
                   </Button>
                 </Link>
@@ -951,7 +915,6 @@ const OffenderCard = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
-          id: '+OfJ4/',
         })}
         open={editOffenderFeed}
         width="600"
@@ -969,7 +932,6 @@ const OffenderCard = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Know This Offender',
-          id: '1EqoEi',
         })}
         open={knowOffender}
         width="400"
@@ -988,7 +950,6 @@ const OffenderCard = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={addInvestigation}
         width="500"

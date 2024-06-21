@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ListOffendersRelayQuery } from 'graphql/generated';
 import { Col, Row, Skeleton, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl'; // Import the useIntl hook
@@ -7,6 +6,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import SideListItem from 'components/side-list/SideListItem.view';
 import useStyles from './OffenderSideList.styles';
 import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
+import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
 
 const { Text } = Typography;
 
@@ -65,7 +65,6 @@ const OffenderSideList = ({
                 <Text className={classes.reference} ellipsis type="secondary">
                   {intl.formatMessage(
                     {
-                      id: '377fsC',
                       defaultMessage: 'Alert ID: {reference}',
                     },
                     { reference: offender.reference }
@@ -77,14 +76,12 @@ const OffenderSideList = ({
               <Text style={{ fontSize: 12 }} type="success" ellipsis>
                 {intl.formatMessage({
                   defaultMessage: 'Approved',
-                  id: '6XFO/C',
                 })}
               </Text>
             ) : (
               <Text style={{ fontSize: 12 }} type="warning" ellipsis>
                 {intl.formatMessage({
                   defaultMessage: 'Unapproved',
-                  id: 'vfWKA1',
                 })}
               </Text>
             )}
@@ -93,7 +90,6 @@ const OffenderSideList = ({
                 <Text style={{ fontSize: 12 }} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Incidents:',
-                    id: '+nRUf9',
                   })}
                 </Text>
               </Col>

@@ -2,18 +2,18 @@ import React from 'react';
 import type { FormInstance } from 'antd';
 import {
   Button,
+  Col,
+  Form,
+  Statistic,
+  Table,
   Card,
   Checkbox,
-  Col,
   Collapse,
-  Form,
   Input,
   PageHeader,
   Row,
   Select,
   Space,
-  Statistic,
-  Table,
   Typography,
 } from 'antd';
 import type { CheckboxValueType } from 'antd/lib/checkbox/Group';
@@ -21,17 +21,14 @@ import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/pro-light-svg-icons';
-import type { RoleQuery } from '../../../graphql/generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  Role,
-} from '../../../graphql/generated';
+
 import type { DataType } from '../types';
 import { availableCheckBoxes, ViewRequired } from '../types';
 import ViewRoleSidelist from './ViewRole.Sidelist';
 import useStyles from './ViewRole.styles';
 import type { FormValues } from './useRole';
+import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
+import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
 
 interface Props {
   id?: string;
@@ -80,7 +77,6 @@ const RoleView = ({
     [PermissionMethod.Read]: (
       <Checkbox value={PermissionMethod.Read}>
         {formatMessage({
-          id: 'FgydNe',
           defaultMessage: 'View',
         })}
       </Checkbox>
@@ -88,7 +84,6 @@ const RoleView = ({
     [PermissionMethod.Write]: (
       <Checkbox value={PermissionMethod.Write}>
         {formatMessage({
-          id: 'VzzYJk',
           defaultMessage: 'Create',
         })}
       </Checkbox>
@@ -96,7 +91,6 @@ const RoleView = ({
     [PermissionMethod.Edit]: (
       <Checkbox value={PermissionMethod.Edit}>
         {formatMessage({
-          id: 'wEQDC6',
           defaultMessage: 'Edit',
         })}
       </Checkbox>
@@ -104,7 +98,6 @@ const RoleView = ({
     [PermissionMethod.Delete]: (
       <Checkbox value={PermissionMethod.Delete}>
         {formatMessage({
-          id: 'K3r6DQ',
           defaultMessage: 'Delete',
         })}
       </Checkbox>
@@ -112,7 +105,6 @@ const RoleView = ({
     [PermissionMethod.Approve]: (
       <Checkbox value={PermissionMethod.Approve}>
         {formatMessage({
-          id: 'WCaf5C',
           defaultMessage: 'Approve',
         })}
       </Checkbox>
@@ -121,71 +113,54 @@ const RoleView = ({
 
   const labels: Labels = {
     ARTICLES: formatMessage({
-      id: 'tgD5sa',
       defaultMessage: 'Bulletins',
     }),
     CRIME_GROUPS: formatMessage({
-      id: 'a0aLil',
       defaultMessage: 'Crime Groups',
     }),
     DASHBOARD: formatMessage({
-      id: 'hzSNj4',
       defaultMessage: 'Dashboard',
     }),
     GROUPS: formatMessage({
-      id: 'hzmswI',
       defaultMessage: 'Groups',
     }),
     INCIDENTS: formatMessage({
-      id: 'mtr3R4',
       defaultMessage: 'Incidents',
     }),
     INVESTIGATIONS: formatMessage({
-      id: 'juQ8mz',
       defaultMessage: 'Investigations',
     }),
     OFFENDERS: formatMessage({
-      id: 'xb54TN',
       defaultMessage: 'Offenders',
     }),
     VEHICLES: formatMessage({
-      id: 'r6wuJ3',
       defaultMessage: 'Vehicles',
     }),
     SETTINGS: formatMessage({
-      id: 'D3idYv',
       defaultMessage: 'Settings',
     }),
     TASKS: formatMessage({
-      id: 'yhU1et',
       defaultMessage: 'Tasks',
     }),
     CHAT: formatMessage({
-      id: 'WTrOy3',
       defaultMessage: 'Chat',
     }),
     CHECKLIST: formatMessage({
-      id: 'soCLV+',
       defaultMessage: 'Checklist',
     }),
     DOCUMENTS: formatMessage({
-      id: 'vBlT6y',
       defaultMessage: 'Documents',
     }),
     REPORTS: formatMessage({
-      id: 'Ppx673',
       defaultMessage: 'Reports',
     }),
     USERS: formatMessage({
-      id: 'YDMrKK',
       defaultMessage: 'Users',
     }),
     BUSINESSES: formatMessage({
-      id: 'D0tMhW',
       defaultMessage: 'Businesses',
     }),
     EVIDENCE: formatMessage({
-      id: '6g7+6N',
       defaultMessage: 'Evidence',
     }),
   };
@@ -240,7 +215,6 @@ const RoleView = ({
             title={
               roleName ||
               formatMessage({
-                id: 'c35gM5',
                 defaultMessage: 'Roles',
               })
             }
@@ -254,7 +228,6 @@ const RoleView = ({
                       <Collapse.Panel
                         header={formatMessage({
                           defaultMessage: 'Permissions',
-                          id: 'SFuk1v',
                         })}
                         key="1"
                       >
@@ -277,7 +250,6 @@ const RoleView = ({
                                 <Form.Item
                                   name="name"
                                   label={formatMessage({
-                                    id: 'HAlOn1',
                                     defaultMessage: 'Name',
                                   })}
                                   labelAlign="left"
@@ -286,7 +258,6 @@ const RoleView = ({
                                     {
                                       required: true,
                                       message: formatMessage({
-                                        id: 'HAlOn1',
                                         defaultMessage: 'Name',
                                       }),
                                     },
@@ -297,7 +268,6 @@ const RoleView = ({
                                 <Form.Item
                                   name="type"
                                   label={formatMessage({
-                                    id: '+U6ozc',
                                     defaultMessage: 'Type',
                                   })}
                                   labelAlign="left"
@@ -308,7 +278,6 @@ const RoleView = ({
                                       message: intl.formatMessage({
                                         defaultMessage:
                                           'Please select a role for the user.',
-                                        id: 'vJrE3G',
                                       }),
                                     },
                                   ]}
@@ -321,7 +290,6 @@ const RoleView = ({
                                       <Typography.Text>
                                         {intl.formatMessage({
                                           defaultMessage: 'User',
-                                          id: 'EwRIOm',
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
@@ -334,7 +302,6 @@ const RoleView = ({
                                         {intl.formatMessage({
                                           defaultMessage:
                                             'A basic user account that can submit data but has no admin features.',
-                                          id: 'CA2t76',
                                         })}
                                       </Typography.Paragraph>
                                     </Select.Option>
@@ -345,7 +312,6 @@ const RoleView = ({
                                       <Typography.Text>
                                         {intl.formatMessage({
                                           defaultMessage: 'Content Admin',
-                                          id: 'juchkY',
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
@@ -359,7 +325,6 @@ const RoleView = ({
                                         {intl.formatMessage({
                                           defaultMessage:
                                             'An account that allows for submitting and administering data but has no access to settings.',
-                                          id: 'Cv0frO',
                                         })}
                                       </Typography.Paragraph>
                                     </Select.Option>
@@ -370,7 +335,6 @@ const RoleView = ({
                                       <Typography.Text>
                                         {intl.formatMessage({
                                           defaultMessage: 'Group Admin',
-                                          id: 'UmJl0N',
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
@@ -384,7 +348,6 @@ const RoleView = ({
                                         {intl.formatMessage({
                                           defaultMessage:
                                             'An account that allows for submitting and administering data and limited access to settings within their group.',
-                                          id: 'Y3CqF1',
                                         })}
                                       </Typography.Paragraph>
                                     </Select.Option>
@@ -396,7 +359,6 @@ const RoleView = ({
                                       <Typography.Text>
                                         {intl.formatMessage({
                                           defaultMessage: 'Scheme Admin',
-                                          id: 'ZENz1B',
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
@@ -409,7 +371,6 @@ const RoleView = ({
                                         {intl.formatMessage({
                                           defaultMessage:
                                             'A full administrator account with access to all settings.',
-                                          id: 'k5jo6H',
                                         })}
                                       </Typography.Paragraph>
                                     </Select.Option>
@@ -435,7 +396,6 @@ const RoleView = ({
                                       htmlType="submit"
                                     >
                                       {formatMessage({
-                                        id: 'jvo0vs',
                                         defaultMessage: 'Save',
                                       })}
                                     </Button>
@@ -449,7 +409,6 @@ const RoleView = ({
                       <Collapse.Panel
                         header={formatMessage({
                           defaultMessage: 'Users',
-                          id: 'YDMrKK',
                         })}
                         key="2"
                         disabled={create}
@@ -464,7 +423,6 @@ const RoleView = ({
                             {
                               title: formatMessage({
                                 defaultMessage: 'Name',
-                                id: 'HAlOn1',
                               }),
                               dataIndex: 'name',
                               key: 'name',
@@ -472,7 +430,6 @@ const RoleView = ({
                             {
                               title: formatMessage({
                                 defaultMessage: 'Email',
-                                id: 'sy+pv5',
                               }),
                               dataIndex: 'email',
                               key: 'email',
@@ -495,7 +452,6 @@ const RoleView = ({
                         className={classes.stats}
                         title={formatMessage({
                           defaultMessage: 'Total Users',
-                          id: '/VwiLT',
                         })}
                         value={data?.role.usersCount || 0}
                         prefix={

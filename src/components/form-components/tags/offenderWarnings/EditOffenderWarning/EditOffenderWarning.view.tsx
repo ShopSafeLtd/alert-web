@@ -1,7 +1,7 @@
 import React from 'react';
-import type { TagQuery } from 'graphql/generated';
 import { Button, Col, Form, Input, Row, Skeleton, Typography } from 'antd';
 import { useIntl } from 'react-intl';
+import type { TagQuery } from 'graphql/tag/queries/tag.generated';
 
 const { Text } = Typography;
 
@@ -43,7 +43,6 @@ const EditOffenderWarning = ({
             {intl.formatMessage({
               defaultMessage:
                 'Update the necessary fields for the offender warning.',
-              id: 'UHXcnM',
             })}
           </Text>
         </Col>
@@ -52,14 +51,13 @@ const EditOffenderWarning = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a name for the offender warning.',
-                  id: '5988Gb',
                 }),
               },
             ]}
@@ -74,7 +72,6 @@ const EditOffenderWarning = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea rows={10} disabled={saving} />
@@ -86,7 +83,7 @@ const EditOffenderWarning = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -96,7 +93,7 @@ const EditOffenderWarning = ({
               type="primary"
               htmlType="submit"
             >
-              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+              {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
           </Col>
         </Row>

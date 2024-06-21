@@ -52,7 +52,6 @@ const EditVehicle = ({
               name="make"
               label={intl.formatMessage({
                 defaultMessage: 'Make',
-                id: '6AAM0P',
               })}
             >
               <Input disabled={saving} />
@@ -63,7 +62,6 @@ const EditVehicle = ({
               name="model"
               label={intl.formatMessage({
                 defaultMessage: 'Model',
-                id: 'rhSI1/',
               })}
             >
               <Input disabled={saving} />
@@ -76,7 +74,6 @@ const EditVehicle = ({
               name="colour"
               label={intl.formatMessage({
                 defaultMessage: 'Colour',
-                id: '+e8vAT',
               })}
             >
               <Input disabled={saving} />
@@ -87,7 +84,6 @@ const EditVehicle = ({
               name="registration"
               label={intl.formatMessage({
                 defaultMessage: 'Registration',
-                id: 'qv7ied',
               })}
             >
               <Input disabled={saving} />
@@ -99,11 +95,9 @@ const EditVehicle = ({
           name="images"
           label={intl.formatMessage({
             defaultMessage: 'Images',
-            id: 'Fip4H8',
           })}
           tooltip={intl.formatMessage({
             defaultMessage: 'Select the images that the vehicle is in.',
-            id: '+sAAjK',
           })}
         >
           <ImageSelect images={allImages} value={editData.images} />
@@ -112,7 +106,7 @@ const EditVehicle = ({
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>
             </Col>
             <Col>
@@ -122,7 +116,7 @@ const EditVehicle = ({
                 disabled={saving}
                 loading={saving}
               >
-                {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+                {intl.formatMessage({ defaultMessage: 'Save' })}
               </Button>
             </Col>
           </Row>

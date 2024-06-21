@@ -1,12 +1,5 @@
 import React from 'react';
-import type {
-  AssociatedOffendersQuery,
-  CreateDocumentMutation,
-  CreateInvestigationMutation,
-  DeleteDocumentMutation,
-  ViewOffenderQuery,
-} from 'graphql/generated';
-import { BanType } from 'graphql/generated';
+
 import {
   Badge,
   Button,
@@ -114,6 +107,12 @@ import ShareData from '#/components/form-components/ShareData/ShareData';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
+import type { AssociatedOffendersQuery } from 'graphql/offenders/queries/associated-offenders.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import { BanType } from 'graphql/types';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -361,7 +360,6 @@ const ViewOffender = ({
       {intl.formatMessage(
         {
           defaultMessage: ' Description: {description}',
-          id: 'b/Uf3s',
         },
         {
           description: record.description,
@@ -391,7 +389,6 @@ const ViewOffender = ({
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Reject Offender',
-                            id: 'gsETg6',
                           })}
                         </Button>
                       </Col>
@@ -403,7 +400,6 @@ const ViewOffender = ({
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Approve Offender',
-                            id: '9DBhJs',
                           })}
                         </Button>
                       </Col>
@@ -423,7 +419,6 @@ const ViewOffender = ({
                               {
                                 defaultMessage:
                                   '{itemCount} {itemCount, plural, one {Face ID Match} other {Face ID Matches}}',
-                                id: '0ZRYJ5',
                               },
                               {
                                 itemCount: data.offender.searchedMatches.length,
@@ -441,12 +436,10 @@ const ViewOffender = ({
                                 ? intl.formatMessage({
                                     defaultMessage:
                                       'Stop getting notified about updates.',
-                                    id: 'WpTY6U',
                                   })
                                 : intl.formatMessage({
                                     defaultMessage:
                                       'Get notified about updates.',
-                                    id: 'icr+Hj',
                                   })
                             }
                           >
@@ -484,7 +477,6 @@ const ViewOffender = ({
                             <Tooltip
                               title={intl.formatMessage({
                                 defaultMessage: 'Share offender with a scheme',
-                                id: '9GJrnj',
                               })}
                             >
                               <Button
@@ -510,7 +502,6 @@ const ViewOffender = ({
                             <Tooltip
                               title={intl.formatMessage({
                                 defaultMessage: 'Compare offender',
-                                id: 'TODim8',
                               })}
                             >
                               <Button
@@ -549,7 +540,6 @@ const ViewOffender = ({
                                       key: 0,
                                       label: intl.formatMessage({
                                         defaultMessage: 'Edit Details',
-                                        id: 'A2fHI3',
                                       }),
                                       onClick: () => toggleEditOffender(),
                                       icon: <FontAwesomeIcon icon={faEdit} />,
@@ -561,11 +551,9 @@ const ViewOffender = ({
                                         data?.offender.totalImages > 0
                                           ? intl.formatMessage({
                                               defaultMessage: 'Edit Images',
-                                              id: 'Cs6iOM',
                                             })
                                           : intl.formatMessage({
                                               defaultMessage: 'Add Images',
-                                              id: 'b4GGYZ',
                                             }),
                                       onClick: () => toggleEditImages(),
                                       icon: <FontAwesomeIcon icon={faImage} />,
@@ -594,7 +582,6 @@ const ViewOffender = ({
                             <Tooltip
                               title={intl.formatMessage({
                                 defaultMessage: 'Recycle offender',
-                                id: 'qFx1KB',
                               })}
                             >
                               <Button
@@ -655,7 +642,6 @@ const ViewOffender = ({
                                     {intl.formatMessage(
                                       {
                                         defaultMessage: 'Alert ID: {ref}',
-                                        id: 'umL9sI',
                                       },
                                       {
                                         ref: data?.offender?.reference,
@@ -691,7 +677,6 @@ const ViewOffender = ({
                                           />
                                           {intl.formatMessage({
                                             defaultMessage: 'Alias',
-                                            id: 'Ri9jA7',
                                           })}
                                         </span>
                                       }
@@ -717,7 +702,6 @@ const ViewOffender = ({
                                         />
                                         {intl.formatMessage({
                                           defaultMessage: 'Information Source',
-                                          id: 'LUqHSz',
                                         })}
                                       </span>
                                     }
@@ -737,7 +721,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Verified ID',
-                                        id: '0lpcfx',
                                       })}
                                     </span>
                                   }
@@ -747,7 +730,6 @@ const ViewOffender = ({
                                       {intl.formatMessage(
                                         {
                                           defaultMessage: 'Verified{source}',
-                                          id: 'ZdZaQ7',
                                         },
                                         {
                                           source: getIdSource(
@@ -760,7 +742,6 @@ const ViewOffender = ({
                                     <Typography.Text type="warning">
                                       {intl.formatMessage({
                                         defaultMessage: 'Not Verified',
-                                        id: 'r+TWun',
                                       })}
                                     </Typography.Text>
                                   )}
@@ -775,7 +756,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Last updated',
-                                        id: '0ICwq5',
                                       })}
                                     </span>
                                   }
@@ -794,7 +774,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Created By',
-                                        id: 'uAfuJA',
                                       })}
                                     </span>
                                   }
@@ -813,7 +792,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Groups',
-                                        id: 'hzmswI',
                                       })}
                                     </span>
                                   }
@@ -842,7 +820,6 @@ const ViewOffender = ({
                                           />
                                           {intl.formatMessage({
                                             defaultMessage: 'Targeted Goods',
-                                            id: 'dLBbg0',
                                           })}
                                         </span>
                                       }
@@ -873,7 +850,6 @@ const ViewOffender = ({
                                           />
                                           {intl.formatMessage({
                                             defaultMessage: 'Known For',
-                                            id: 'aHKuCI',
                                           })}
                                         </span>
                                       }
@@ -899,7 +875,6 @@ const ViewOffender = ({
                                           />
                                           {intl.formatMessage({
                                             defaultMessage: 'Justification',
-                                            id: 'i0xkcf',
                                           })}
                                         </span>
                                       }
@@ -919,7 +894,6 @@ const ViewOffender = ({
                               <Title level={4} style={{ marginBottom: 10 }}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Physical Description',
-                                  id: 'rXybms',
                                 })}
                               </Title>
                               <Descriptions column={1}>
@@ -934,7 +908,6 @@ const ViewOffender = ({
                                         />
                                         {intl.formatMessage({
                                           defaultMessage: 'Age',
-                                          id: '9oNQSC',
                                         })}
                                       </span>
                                     }
@@ -954,7 +927,6 @@ const ViewOffender = ({
                                           />
                                           {intl.formatMessage({
                                             defaultMessage: 'Date of Birth',
-                                            id: 'e9Z+tg',
                                           })}
                                         </span>
                                       }
@@ -974,7 +946,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Sex',
-                                        id: 'eWJHGp',
                                       })}
                                     </span>
                                   }
@@ -991,7 +962,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Build',
-                                        id: 'RSctv1',
                                       })}
                                     </span>
                                   }
@@ -1008,7 +978,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Height',
-                                        id: 'teLZyZ',
                                       })}
                                     </span>
                                   }
@@ -1025,7 +994,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Ethnicity',
-                                        id: 'XtCAFo',
                                       })}
                                     </span>
                                   }
@@ -1043,7 +1011,6 @@ const ViewOffender = ({
                                         />
                                         {intl.formatMessage({
                                           defaultMessage: 'Hair',
-                                          id: 'e4YBbX',
                                         })}
                                       </span>
                                     }
@@ -1062,7 +1029,6 @@ const ViewOffender = ({
                                       />
                                       {intl.formatMessage({
                                         defaultMessage: 'Characteristics:',
-                                        id: 'BxC/6v',
                                       })}
                                     </Text>
                                   </div>
@@ -1086,7 +1052,6 @@ const ViewOffender = ({
                                         />
                                         {intl.formatMessage({
                                           defaultMessage: 'Comment:',
-                                          id: '4FQrdH',
                                         })}
                                       </Text>
                                     </div>
@@ -1125,7 +1090,6 @@ const ViewOffender = ({
                                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                                   description={intl.formatMessage({
                                     defaultMessage: 'No incidents found',
-                                    id: '312q4w',
                                   })}
                                 />
                               </Card>
@@ -1141,7 +1105,6 @@ const ViewOffender = ({
                               >
                                 {intl.formatMessage({
                                   defaultMessage: 'Known Associates',
-                                  id: 'Nnl9rH',
                                 })}
                               </Title>
                             </Col>
@@ -1151,14 +1114,12 @@ const ViewOffender = ({
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'Linked Incidents',
-                                      id: 'RDsV4v',
                                     }),
                                     value: 'LINKED_INCIDENTS',
                                   },
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'Linked OCG',
-                                      id: 'qhTnhR',
                                     }),
                                     value: 'LINKED_OCG',
                                   },
@@ -1198,7 +1159,6 @@ const ViewOffender = ({
                                       description={intl.formatMessage({
                                         defaultMessage:
                                           'No known associates found',
-                                        id: '835oG/',
                                       })}
                                     />
                                   </Col>
@@ -1240,7 +1200,6 @@ const ViewOffender = ({
                                                   {
                                                     defaultMessage:
                                                       'Incidents: {totalAssociatedIncidents}',
-                                                    id: 'r4UaZo',
                                                   },
                                                   {
                                                     totalAssociatedIncidents:
@@ -1285,7 +1244,6 @@ const ViewOffender = ({
                                       {intl.formatMessage(
                                         {
                                           defaultMessage: 'Alert Id: {ref}',
-                                          id: '9GD9D0',
                                         },
                                         {
                                           ref: associate.reference,
@@ -1317,7 +1275,6 @@ const ViewOffender = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Outcomes',
-                                  id: 'h5J5Su',
                                 })}
                               </Title>
                             </Col>
@@ -1335,7 +1292,6 @@ const ViewOffender = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Outcome',
-                                    id: 'HQnZ2l',
                                   })}
                                 </Button>
                               </Col>
@@ -1362,7 +1318,6 @@ const ViewOffender = ({
                                   key: 'type',
                                   title: intl.formatMessage({
                                     defaultMessage: 'Type',
-                                    id: '+U6ozc',
                                   }),
                                   dataIndex: 'type',
                                   ellipsis: true,
@@ -1371,7 +1326,6 @@ const ViewOffender = ({
                                   key: 'duration',
                                   title: intl.formatMessage({
                                     defaultMessage: 'Duration',
-                                    id: 'IuFETn',
                                   }),
                                   dataIndex: 'duration',
                                   width: 110,
@@ -1393,7 +1347,6 @@ const ViewOffender = ({
                                   key: 'status',
                                   title: intl.formatMessage({
                                     defaultMessage: 'Status',
-                                    id: 'tzMNF3',
                                   }),
                                   dataIndex: 'status',
                                   render: (value, record) =>
@@ -1413,14 +1366,12 @@ const ViewOffender = ({
                                           <Tag color="red">
                                             {intl.formatMessage({
                                               defaultMessage: 'EXPIRED',
-                                              id: 'GftNg3',
                                             })}
                                           </Tag>
                                         ) : (
                                           <Tag color="success">
                                             {intl.formatMessage({
                                               defaultMessage: 'ACTIVE',
-                                              id: 'LQPOVs',
                                             })}
                                           </Tag>
                                         )}
@@ -1431,7 +1382,6 @@ const ViewOffender = ({
                                   key: 'fineValue',
                                   title: intl.formatMessage({
                                     defaultMessage: 'Fine Value',
-                                    id: 'l2lAwm',
                                   }),
                                   dataIndex: 'fineValue',
                                   ellipsis: true,
@@ -1448,7 +1398,6 @@ const ViewOffender = ({
                                           <Tooltip
                                             title={intl.formatMessage({
                                               defaultMessage: 'Edit Exclusion',
-                                              id: '22olP0',
                                             })}
                                           >
                                             <Button
@@ -1472,7 +1421,6 @@ const ViewOffender = ({
                                             title={intl.formatMessage({
                                               defaultMessage:
                                                 'Remove Exclusion',
-                                              id: '8y70Xm',
                                             })}
                                           >
                                             <Popconfirm
@@ -1481,18 +1429,15 @@ const ViewOffender = ({
                                               title={intl.formatMessage({
                                                 defaultMessage:
                                                   'Remove the exclusion?',
-                                                id: 'Dc7IO/',
                                               })}
                                               onConfirm={() =>
                                                 onDeleteBan(record.key)
                                               }
                                               okText={intl.formatMessage({
                                                 defaultMessage: 'Yes',
-                                                id: 'a5msuh',
                                               })}
                                               cancelText={intl.formatMessage({
                                                 defaultMessage: 'No',
-                                                id: 'oUWADl',
                                               })}
                                               overlayInnerStyle={{
                                                 padding: 10,
@@ -1524,7 +1469,6 @@ const ViewOffender = ({
                                     : intl.formatMessage(
                                         {
                                           defaultMessage: '£{value}',
-                                          id: 'pCmP/V',
                                         },
                                         {
                                           value: ban.fineValue,
@@ -1538,7 +1482,6 @@ const ViewOffender = ({
                                   ? intl.formatMessage(
                                       {
                                         defaultMessage: '{months} {b}',
-                                        id: 'olWCo1',
                                       },
                                       {
                                         months: ban.months,
@@ -1576,7 +1519,6 @@ const ViewOffender = ({
                               description={intl.formatMessage({
                                 defaultMessage:
                                   'No exclusions for this offender',
-                                id: 'OCazY3',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1586,7 +1528,6 @@ const ViewOffender = ({
                           <Title level={4}>
                             {intl.formatMessage({
                               defaultMessage: 'Incidents',
-                              id: 'mtr3R4',
                             })}
                           </Title>
                           {data?.offender?.incidents.length && !loading ? (
@@ -1599,7 +1540,6 @@ const ViewOffender = ({
                               description={intl.formatMessage({
                                 defaultMessage:
                                   'No incidents for this offender',
-                                id: 'wOpY6l',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1617,7 +1557,6 @@ const ViewOffender = ({
                                 <Title level={4}>
                                   {intl.formatMessage({
                                     defaultMessage: 'Addresses',
-                                    id: 'xBrtnx',
                                   })}
                                 </Title>
                               </Col>
@@ -1635,7 +1574,6 @@ const ViewOffender = ({
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Address',
-                                      id: 'xg14pg',
                                     })}
                                   </Button>
                                 </Col>
@@ -1659,7 +1597,6 @@ const ViewOffender = ({
                                     key: 'alias',
                                     title: intl.formatMessage({
                                       defaultMessage: 'Alias',
-                                      id: 'Ri9jA7',
                                     }),
                                     dataIndex: 'alias',
                                   },
@@ -1667,7 +1604,6 @@ const ViewOffender = ({
                                     key: 'full',
                                     title: intl.formatMessage({
                                       defaultMessage: 'Full Address',
-                                      id: 'RbRvWj',
                                     }),
                                     dataIndex: 'full',
                                   },
@@ -1683,7 +1619,6 @@ const ViewOffender = ({
                                             <Tooltip
                                               title={intl.formatMessage({
                                                 defaultMessage: 'Edit Address',
-                                                id: 'uSpe21',
                                               })}
                                             >
                                               <Button
@@ -1711,7 +1646,6 @@ const ViewOffender = ({
                                               title={intl.formatMessage({
                                                 defaultMessage:
                                                   'Remove Address',
-                                                id: 'r3DjS/',
                                               })}
                                             >
                                               <Popconfirm
@@ -1720,18 +1654,15 @@ const ViewOffender = ({
                                                 title={intl.formatMessage({
                                                   defaultMessage:
                                                     'Remove the Address?',
-                                                  id: 'y/xSXA',
                                                 })}
                                                 onConfirm={() =>
                                                   onDeleteAddress(record.key)
                                                 }
                                                 okText={intl.formatMessage({
                                                   defaultMessage: 'Yes',
-                                                  id: 'a5msuh',
                                                 })}
                                                 cancelText={intl.formatMessage({
                                                   defaultMessage: 'No',
-                                                  id: 'oUWADl',
                                                 })}
                                                 overlayInnerStyle={{
                                                   padding: 10,
@@ -1768,7 +1699,6 @@ const ViewOffender = ({
                                 description={intl.formatMessage({
                                   defaultMessage:
                                     'No addresses for this offender',
-                                  id: 'UFKxSJ',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
@@ -1785,7 +1715,6 @@ const ViewOffender = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Vehicles',
-                                  id: 'r6wuJ3',
                                 })}
                               </Title>
                             </Col>
@@ -1799,7 +1728,6 @@ const ViewOffender = ({
                                           label: intl.formatMessage({
                                             defaultMessage:
                                               'Add Existing Vehicles',
-                                            id: 'goP1s6',
                                           }),
                                           key: '1',
                                           icon: (
@@ -1815,7 +1743,6 @@ const ViewOffender = ({
                                           label: intl.formatMessage({
                                             defaultMessage:
                                               'Create New Vehicle',
-                                            id: 'xiAZxN',
                                           }),
                                           key: '2',
                                           icon: (
@@ -1841,7 +1768,6 @@ const ViewOffender = ({
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Vehicles',
-                                      id: 'iKGwyV',
                                     })}
                                   </Button>
                                 </Dropdown>
@@ -1863,7 +1789,6 @@ const ViewOffender = ({
                             <Empty
                               description={intl.formatMessage({
                                 defaultMessage: 'No vehicles for this offender',
-                                id: 'mc7u7d',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1873,7 +1798,6 @@ const ViewOffender = ({
                           <Title level={4}>
                             {intl.formatMessage({
                               defaultMessage: 'Crime Groups',
-                              id: 'a0aLil',
                             })}
                           </Title>
                           {data?.offender?.crimeGroups.length && !loading ? (
@@ -1889,7 +1813,6 @@ const ViewOffender = ({
                               description={intl.formatMessage({
                                 defaultMessage:
                                   'No crime groups for this offender',
-                                id: 'BIRzsQ',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1906,7 +1829,6 @@ const ViewOffender = ({
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Evidence',
-                                  id: '6g7+6N',
                                 })}
                               </Title>
                             </Col>
@@ -1924,7 +1846,6 @@ const ViewOffender = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Evidence',
-                                    id: 'vgVasT',
                                   })}
                                 </Button>
                               </Col>
@@ -1944,7 +1865,6 @@ const ViewOffender = ({
                             <Empty
                               description={intl.formatMessage({
                                 defaultMessage: 'No evidence for this offender',
-                                id: 'jOOKhL',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
@@ -1961,7 +1881,6 @@ const ViewOffender = ({
                                 <Title level={4}>
                                   {intl.formatMessage({
                                     defaultMessage: 'Investigations',
-                                    id: 'juQ8mz',
                                   })}
                                 </Title>
                               </Col>
@@ -1979,7 +1898,6 @@ const ViewOffender = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Investigation',
-                                    id: 'U5+v9Y',
                                   })}
                                 </Button>
                               </Col>
@@ -1994,7 +1912,6 @@ const ViewOffender = ({
                                 description={intl.formatMessage({
                                   defaultMessage:
                                     'No investigations for this offender',
-                                  id: 'uK+FKa',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
@@ -2382,7 +2299,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Incident',
-          id: '4sHDoC',
         })}
         open={linkIncident}
         width="800"
@@ -2402,7 +2318,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Associate Offender',
-          id: 'O0iq2y',
         })}
         onClose={() => toggleViewAssociate(null)}
         width="800"
@@ -2419,7 +2334,6 @@ const ViewOffender = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Select images to add',
-          id: 'AmI4Rg',
         })}
         open={addImages !== null}
         onOk={() => {
@@ -2431,7 +2345,6 @@ const ViewOffender = ({
         width={addImages ? addImages.length * 250 : 400}
         okText={intl.formatMessage({
           defaultMessage: 'Add Images',
-          id: 'b4GGYZ',
         })}
       >
         <Row justify="center" gutter={8}>
@@ -2452,7 +2365,6 @@ const ViewOffender = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Select an incident to add the update images',
-          id: 'aEYfE5',
         })}
         open={showIncidentOptions}
         onOk={() => {
@@ -2467,7 +2379,6 @@ const ViewOffender = ({
         width={600}
         okText={intl.formatMessage({
           defaultMessage: 'Add Incident',
-          id: 'kG1p3q',
         })}
       >
         <Table
@@ -2478,7 +2389,6 @@ const ViewOffender = ({
               width: 65,
               title: intl.formatMessage({
                 defaultMessage: 'Alert ID',
-                id: 'k8ZNgH',
               }),
             },
             {
@@ -2486,7 +2396,6 @@ const ViewOffender = ({
               dataIndex: 'subject',
               title: intl.formatMessage({
                 defaultMessage: 'Subject',
-                id: 'LLtKhp',
               }),
               ellipsis: {
                 showTitle: false,
@@ -2502,7 +2411,6 @@ const ViewOffender = ({
               dataIndex: 'date',
               title: intl.formatMessage({
                 defaultMessage: 'Date',
-                id: 'P7PLVj',
               }),
               ellipsis: {
                 showTitle: false,
@@ -2536,14 +2444,12 @@ const ViewOffender = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Edit update content',
-          id: 'rgtCL5',
         })}
         open={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
         okText={intl.formatMessage({
           defaultMessage: 'Save',
-          id: 'jvo0vs',
         })}
       >
         <Input
@@ -2579,7 +2485,6 @@ const ViewOffender = ({
         onClose={() => toggleViewMatches(null)}
         title={intl.formatMessage({
           defaultMessage: 'View face AI matches',
-          id: 'VDl5h/',
         })}
         width={800}
       >
@@ -2588,7 +2493,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender Details',
-          id: 'DomujL',
         })}
         open={editOffender}
         width="600"
@@ -2606,7 +2510,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Know This Offender',
-          id: '1EqoEi',
         })}
         open={knowOffender}
         width="400"
@@ -2624,7 +2527,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Copy Offender To Another Scheme',
-          id: 'cMu3Y5',
         })}
         open={copyOffender}
         width="600"
@@ -2643,7 +2545,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender Images',
-          id: 'd7OJx8',
         })}
         open={editImages}
         width="800"
@@ -2657,7 +2558,6 @@ const ViewOffender = ({
             images={data?.offender?.images}
             title={intl.formatMessage({
               defaultMessage: 'offender',
-              id: 'ZkfGxM',
             })}
             saving={saving}
           />
@@ -2670,7 +2570,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
-          id: 'goP1s6',
         })}
         open={addExistingVehicle}
         width="800"
@@ -2691,7 +2590,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
-          id: 'cHbTr7',
         })}
         open={addVehicle}
         width="700"
@@ -2711,7 +2609,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Update Vehicle',
-          id: 'BBPVid',
         })}
         open={!!editVehicleData}
         width="800"
@@ -2733,7 +2630,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Crime Groups',
-          id: 'mYgStg',
         })}
         open={addCrimeGroup}
         width="800"
@@ -2773,7 +2669,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Address',
-          id: 'xg14pg',
         })}
         open={addAddress}
         width="600"
@@ -2794,7 +2689,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Address',
-          id: 'uSpe21',
         })}
         open={!!editAddressData}
         width="600"
@@ -2820,7 +2714,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Outcome',
-          id: 'HQnZ2l',
         })}
         open={addBan}
         width="400"
@@ -2835,7 +2728,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Outcome',
-          id: '8FYJTj',
         })}
         open={!!editBanData}
         width="400"
@@ -2855,7 +2747,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
-          id: 'vgVasT',
         })}
         open={addDocument}
         width="600"
@@ -2876,7 +2767,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={addInvestigation}
         width="500"
@@ -2896,7 +2786,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Share Incident',
-          id: 'zaEkJH',
         })}
         bodyStyle={{ padding: 0 }}
         visible={shareOpen}

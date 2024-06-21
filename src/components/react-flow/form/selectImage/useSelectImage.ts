@@ -1,4 +1,4 @@
-import { useViewInvestigationQuery } from 'graphql/generated';
+import { useViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
 
 interface Props {
   onClose: () => void;

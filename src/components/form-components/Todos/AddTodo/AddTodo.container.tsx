@@ -1,9 +1,9 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateTodoMutation } from 'graphql/generated';
 import React from 'react';
 
 import View from './AddTodo.view';
 import useAddTodo from './useAddTodo';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 
 interface Props {
   onClose: () => void;

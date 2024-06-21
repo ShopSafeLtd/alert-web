@@ -113,12 +113,10 @@ const EditOffender = ({
                   name="knownFor"
                   label={intl.formatMessage({
                     defaultMessage: 'Crime Types',
-                    id: 'Piba4q',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the relevant crime types for this offender, these help to categorize the offender.',
-                    id: 'ly6B/b',
                   })}
                 >
                   <Select mode="multiple" maxTagCount={3}>
@@ -139,12 +137,10 @@ const EditOffender = ({
                   name="targetedGoods"
                   label={intl.formatMessage({
                     defaultMessage: 'Goods',
-                    id: 'u5dS1t',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the Goods that this offender stole.',
-                    id: 'cjsTZ/',
                   })}
                 >
                   <Select mode="multiple" maxTagCount={3}>
@@ -165,12 +161,10 @@ const EditOffender = ({
                   name="infoSource"
                   label={intl.formatMessage({
                     defaultMessage: 'Information Source',
-                    id: 'LUqHSz',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       "Enter the information source of the offender's name",
-                    id: 'WYJoK2',
                   })}
                 >
                   <Input.TextArea disabled={saving} />
@@ -184,12 +178,10 @@ const EditOffender = ({
                   name="justification"
                   label={intl.formatMessage({
                     defaultMessage: 'Justification',
-                    id: 'i0xkcf',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       "Enter a justification to explain why this offender doesn't connect with an incident.",
-                    id: 'P7rUrU',
                   })}
                   rules={[
                     {
@@ -197,7 +189,6 @@ const EditOffender = ({
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a justification for the offender.',
-                        id: '11rxZC',
                       }),
                     },
                   ]}
@@ -216,18 +207,15 @@ const EditOffender = ({
               name="images"
               label={intl.formatMessage({
                 defaultMessage: 'Images',
-                id: 'Fip4H8',
               })}
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select the images that the offender is in.',
-                id: 'LQT0YO',
               })}
               rules={[
                 {
                   required: imagesRequired,
                   message: intl.formatMessage({
                     defaultMessage: 'Images are required for offenders.',
-                    id: 'UwlDA8',
                   }),
                 },
               ]}
@@ -247,7 +235,6 @@ const EditOffender = ({
                 <Button onClick={onClose}>
                   {intl.formatMessage({
                     defaultMessage: 'Cancel',
-                    id: '47FYwb',
                   })}
                 </Button>
               </Col>
@@ -255,7 +242,6 @@ const EditOffender = ({
                 <Button type="primary" htmlType="submit">
                   {intl.formatMessage({
                     defaultMessage: 'Save',
-                    id: 'jvo0vs',
                   })}
                 </Button>
               </Col>

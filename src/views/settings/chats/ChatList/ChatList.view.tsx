@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table } from 'antd';
-import type { CreateChatMutation, SchemeChatsQuery } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import AddChat from 'components/form-components/chat/AddChat';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
+import type { SchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
+import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
 
 interface Props {
   data: SchemeChatsQuery | undefined;
@@ -37,7 +39,6 @@ const ChatList = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a chat group...',
-              id: 'FbQY8L',
             })}
             allowClear
           />
@@ -57,7 +58,6 @@ const ChatList = ({
           >
             {intl.formatMessage({
               defaultMessage: 'New Chat Group',
-              id: 'bekTqS',
             })}
           </Button>
         </Col>
@@ -75,7 +75,6 @@ const ChatList = ({
             key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             dataIndex: 'name',
             width: 300,
@@ -89,7 +88,6 @@ const ChatList = ({
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             }),
             dataIndex: 'description',
             ellipsis: true,
@@ -105,7 +103,6 @@ const ChatList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'New Chat Group',
-          id: 'bekTqS',
         })}
         open={addChat}
         width="400"

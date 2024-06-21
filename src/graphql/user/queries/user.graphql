@@ -36,6 +36,7 @@ query User(
         id
         version
       }
+      signedAt
     }
     groups(where: $groupWhere) {
       id

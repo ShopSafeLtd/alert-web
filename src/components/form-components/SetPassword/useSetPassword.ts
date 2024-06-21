@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSetPasswordMutation } from 'graphql/generated';
+import { useSetPasswordMutation } from './graphql/mutations/set-password.generated';
 import { notification } from 'antd';
 import { useIntl } from 'react-intl';
 
@@ -24,11 +24,9 @@ const useSetPassword = ({ userId, onClose }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The password has been successfully updated.',
-          id: 'ueGWXg',
         }),
         placement: 'bottomRight',
       });
@@ -40,7 +38,7 @@ const useSetPassword = ({ userId, onClose }: Props): Return => {
     },
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = (data: FormData) => {
     setSaving(true);
     void updatePassword({
       variables: {
@@ -51,11 +49,7 @@ const useSetPassword = ({ userId, onClose }: Props): Return => {
       },
     });
   };
-  return {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onSubmit,
-    saving,
-  };
+  return { onSubmit, saving };
 };
 
 export default useSetPassword;

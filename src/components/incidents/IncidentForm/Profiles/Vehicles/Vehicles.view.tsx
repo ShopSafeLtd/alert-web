@@ -66,21 +66,16 @@ const Vehicles = ({
           <Paragraph className={classes.subHeader}>
             {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
             <span className={classes.subHeaderRequired}>*</span>
-            <FormattedMessage
-              defaultMessage="How many vehicles were involved in the incident?"
-              id="Vlg3h/"
-            />
+            <FormattedMessage defaultMessage="How many vehicles were involved in the incident?" />
           </Paragraph>
           <Row gutter={8}>
             <Col>
               <CountButton
                 tooltip={intl.formatMessage({
                   defaultMessage: "Don't add any vehicles to this incident",
-                  id: '+qwThC',
                 })}
                 text={intl.formatMessage({
                   defaultMessage: 'None',
-                  id: '450Fty',
                 })}
                 onClick={toggleNoVehicles}
                 selected={noVehicles}
@@ -93,7 +88,6 @@ const Vehicles = ({
                     {
                       defaultMessage:
                         'Add {count} {count, plural, one {vehicle} other {vehicles}} to the incident',
-                      id: 'KylvfF',
                     },
                     {
                       count,
@@ -103,7 +97,6 @@ const Vehicles = ({
                     {
                       defaultMessage:
                         '{count} {count, plural, one {Vehicle} other {Vehicles}}',
-                      id: '7g/xvk',
                     },
                     {
                       count,
@@ -117,7 +110,6 @@ const Vehicles = ({
               <CounterButton
                 onClick={onAddBlankVehicles}
                 dataName={intl.formatMessage({
-                  id: 'r6wuJ3',
                   defaultMessage: 'Vehicles',
                 })}
               />
@@ -129,7 +121,6 @@ const Vehicles = ({
         <>
           <Divider>
             {intl.formatMessage({
-              id: 'r6wuJ3',
               defaultMessage: 'Vehicles',
             })}
           </Divider>
@@ -152,7 +143,6 @@ const Vehicles = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
-          id: 'goP1s6',
         })}
         open={addExistingOpen}
         width="800"
@@ -173,7 +163,6 @@ const Vehicles = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Search & Match Vehicle',
-          id: 'IiCPGz',
         })}
         open={!!matchExistingOpen}
         width="800"
@@ -194,7 +183,6 @@ const Vehicles = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Update Vehicle',
-          id: 'BBPVid',
         })}
         open={!!updateOpen}
         width="800"
@@ -218,7 +206,6 @@ const Vehicles = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
-          id: 'cHbTr7',
         })}
         open={addNewOpen}
         width="700"

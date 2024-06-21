@@ -3,19 +3,15 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type {
-  TodoQuery,
-  UpdateTaskMutation,
-} from '../../../../graphql/generated';
-import {
-  Role,
-  SortOrder,
-  useListSchemeUsersQuery,
-  useTodoQuery,
-  useUpdateTaskMutation,
-} from '../../../../graphql/generated';
+
 import { useStoreState } from '../../../../state';
 import customRequest from '../../../../utils/custom-request';
+import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
+import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { Role, SortOrder } from 'graphql/types';
 
 export interface FormData {
   [key: string]: string | number | boolean | undefined;

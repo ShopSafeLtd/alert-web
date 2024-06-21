@@ -4,12 +4,11 @@ import type { IFileInfo } from 'react-csv-reader';
 import { useNavigate } from 'react-router';
 import { notification } from 'antd';
 import { useIntl } from 'react-intl';
-import {
-  CsvType,
-  useCreateCsvImportMutation,
-  useGoodsTypesQuery,
-} from '../../../../../graphql/generated';
+
 import { useStoreState } from '../../../../../state';
+import { useGoodsTypesQuery } from '#/views/settings/data-import/csv/data-import/graphql/queries/goods-types.generated';
+import { CsvType } from 'graphql/types';
+import { useCreateCsvImportMutation } from '#/views/settings/data-import/csv/data-import/graphql/mutation/create-csv.generated';
 
 export type CSVData = string[][];
 export type DataType =
@@ -53,7 +52,7 @@ export type Action = {
     | boolean
     | string[]
     | null
-    | DataType
+    // | DataType
     | AdditionalInfo
     | TableData[]
     | SelectValue[];
@@ -203,7 +202,6 @@ const useImport = (): Return => {
     onCompleted: () => {
       notification.success({
         message: intl.formatMessage({
-          id: 'F5AODM',
           defaultMessage: 'Csv import started successfully',
         }),
         placement: 'bottomRight',
@@ -218,7 +216,6 @@ const useImport = (): Return => {
     onError: () => {
       notification.error({
         message: intl.formatMessage({
-          id: '36zS8S',
           defaultMessage: 'An errer occurred while creating the import',
         }),
         placement: 'bottomRight',

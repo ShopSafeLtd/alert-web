@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Descriptions, Row, Typography } from 'antd';
-import type { AssociatedOffendersQuery } from 'graphql/generated';
-import { Role } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -29,6 +27,8 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { useIntl } from 'react-intl';
 import useStyles from './AssociatedOffender.style';
+import type { AssociatedOffendersQuery } from 'graphql/offenders/queries/associated-offenders.generated';
+import { Role } from 'graphql/types';
 
 const { Paragraph, Title, Text } = Typography;
 
@@ -101,7 +101,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
       </Title>
       <Text>
         {intl.formatMessage(
-          { defaultMessage: 'Alert ID: {alertID}', id: 'XO+QG8' },
+          { defaultMessage: 'Alert ID: {alertID}' },
           { alertID: offender.reference }
         )}
       </Text>
@@ -110,7 +110,6 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
           <Descriptions.Item
             label={intl.formatMessage({
               defaultMessage: 'Alias',
-              id: 'Ri9jA7',
             })}
           >
             {offender.alias.map((item) => (
@@ -126,7 +125,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                   className={classes.descIcon}
                   icon={faUserClock}
                 />
-                {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
+                {intl.formatMessage({ defaultMessage: 'Age' })}
               </span>
             }
           >
@@ -142,7 +141,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                 className={classes.descIcon}
                 icon={faMarsAndVenus}
               />
-              {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
+              {intl.formatMessage({ defaultMessage: 'Sex' })}
             </span>
           }
         >
@@ -152,7 +151,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
           label={
             <span>
               <FontAwesomeIcon className={classes.descIcon} icon={faUserTag} />
-              {intl.formatMessage({ defaultMessage: 'Build', id: 'RSctv1' })}
+              {intl.formatMessage({ defaultMessage: 'Build' })}
             </span>
           }
         >
@@ -164,7 +163,6 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
               <FontAwesomeIcon className={classes.descIcon} icon={faEarth} />
               {intl.formatMessage({
                 defaultMessage: 'Ethnicity',
-                id: 'XtCAFo',
               })}
             </span>
           }
@@ -179,7 +177,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                   className={classes.descIcon}
                   icon={faUserHair}
                 />
-                {intl.formatMessage({ defaultMessage: 'Hair', id: 'e4YBbX' })}
+                {intl.formatMessage({ defaultMessage: 'Hair' })}
               </span>
             }
           >
@@ -198,7 +196,6 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Additional Info',
-                  id: '3XOciw',
                 })}
               </span>
             }
@@ -215,7 +212,6 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                 {
                   defaultMessage:
                     'This offender shares {incidentCount} incidents',
-                  id: 'YHoR/W',
                 },
                 {
                   incidentCount: offender.totalAssociatedIncidents,
@@ -236,7 +232,6 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                 {
                   defaultMessage:
                     'This offender shares {crimeGroupCount} crime groups',
-                  id: '56zjV6',
                 },
                 {
                   crimeGroupCount: offender.totalAssociatedCrimeGroups,
@@ -252,7 +247,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
       <Row gutter={8} justify="end">
         <Col>
           <Button onClick={onClose}>
-            {intl.formatMessage({ defaultMessage: 'Close', id: 'rbrahO' })}
+            {intl.formatMessage({ defaultMessage: 'Close' })}
           </Button>
         </Col>
         <Col>
@@ -260,7 +255,6 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
             <Button>
               {intl.formatMessage({
                 defaultMessage: 'View Offender',
-                id: 'GszQTo',
               })}
             </Button>
           </Link>

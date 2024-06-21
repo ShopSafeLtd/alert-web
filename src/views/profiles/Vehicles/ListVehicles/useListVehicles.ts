@@ -1,18 +1,6 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import type {
-  CreateVehicleMutation,
-  ListCustomGalleriesQuery,
-  ListVehiclesQuery,
-} from 'graphql/generated';
-import {
-  ListVehiclesDocument,
-  QueryMode,
-  SortOrder,
-  useCreateVehicleMutation,
-  useListCustomGalleriesQuery,
-  useListVehiclesQuery,
-} from 'graphql/generated';
+
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 import type { DateType, VehicleData } from 'types/DataType';
@@ -21,6 +9,16 @@ import { useIntl } from 'react-intl';
 import type { VehicleFilters } from 'state/data-model';
 import { useNavigate } from 'react-router';
 import { useGroupsContext } from '#/context/groups-context';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import {
+  ListVehiclesDocument,
+  useListVehiclesQuery,
+} from 'graphql/vehicles/queries/list-vehicles.generated';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import type { CreateVehicleMutation } from 'graphql/vehicles/mutations/create-vehicle.generated';
+import { useCreateVehicleMutation } from 'graphql/vehicles/mutations/create-vehicle.generated';
 
 interface Return {
   data: ListVehiclesQuery | undefined;
@@ -55,7 +53,7 @@ const getSizeOptions = () => {
 const useListVehicles = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const onNavigate = () => navigate(`/app/vehicles/add`);
+  const onNavigate = () => navigate('/app/vehicles/add');
   const schemeId = useStoreState((state) => state.scheme.id);
   const { id: userId, filterDefaultGroups: defaultGroups } = useStoreState(
     (state) => state.user
@@ -255,11 +253,9 @@ const useListVehicles = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added!',
-          id: 'htkq75',
         }),
         placement: 'bottomRight',
       });

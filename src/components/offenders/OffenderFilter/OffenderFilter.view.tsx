@@ -9,8 +9,6 @@ import {
   Select,
   Typography,
 } from 'antd';
-import type { SearchBusinessesQuery } from 'graphql/generated';
-import { Age, Build, Gender, Race } from 'graphql/generated';
 import { OffenderSort } from 'state';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
@@ -18,6 +16,8 @@ import type { OffenderFilters } from 'state/data-model';
 import moment from 'moment';
 import useStyles from './OffenderFilter.styles';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import type { SearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
+import { Age, Build, Gender, Race } from 'graphql/types';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -111,7 +111,6 @@ const OffenderFilter = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
-              id: 'MsGXc3',
             })}
           </Button>
         </Col>
@@ -119,7 +118,7 @@ const OffenderFilter = ({
       <Row gutter={16}>
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Sort Order', id: 'Hw6crD' })}
+            {intl.formatMessage({ defaultMessage: 'Sort Order' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -130,39 +129,33 @@ const OffenderFilter = ({
             <Select.Option value={OffenderSort.updatedAtDesc}>
               {intl.formatMessage({
                 defaultMessage: 'Newest First',
-                id: 'dZYazP',
               })}
             </Select.Option>
             <Select.Option value={OffenderSort.updatedAtAsc}>
               {intl.formatMessage({
                 defaultMessage: 'Oldest First',
-                id: 'FqI37D',
               })}
             </Select.Option>
             <Select.Option value={OffenderSort.incidentValueDesc}>
               {intl.formatMessage({
                 defaultMessage: 'Most Incidents First',
-                id: 't7yodd',
               })}
             </Select.Option>
             <Select.Option value={OffenderSort.incidentValueAsc}>
               {intl.formatMessage({
                 defaultMessage: 'Least Incidents First',
-                id: 'xLxcIT',
               })}
             </Select.Option>
 
             <Select.Option value={OffenderSort.noIncidentDesc}>
               {intl.formatMessage({
                 defaultMessage: 'Highest Loss First',
-                id: 'o7pS/n',
               })}
             </Select.Option>
 
             <Select.Option value={OffenderSort.noIncidentAsc}>
               {intl.formatMessage({
                 defaultMessage: 'Lowest Loss First',
-                id: 'FhEjF7',
               })}
             </Select.Option>
           </Select>
@@ -173,7 +166,6 @@ const OffenderFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Created Between',
-              id: 'hGJYON',
             })}
           </Typography.Paragraph>
 
@@ -194,13 +186,12 @@ const OffenderFilter = ({
       <Row gutter={16}>
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
+            {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
           <GroupsSelect
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             mode="multiple"
             size="small"
@@ -214,14 +205,12 @@ const OffenderFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Offender Warnings',
-              id: '1jRWJS',
             })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Offender Warnings',
-              id: '1jRWJS',
             })}
             mode="multiple"
             size="small"
@@ -240,17 +229,16 @@ const OffenderFilter = ({
         </Col>
       </Row>
       <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Description', id: 'Q8Qw5B' })}
+        {intl.formatMessage({ defaultMessage: 'Description' })}
       </Typography.Paragraph>
       <Row gutter={16}>
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Ethnicity', id: 'XtCAFo' })}
+            {intl.formatMessage({ defaultMessage: 'Ethnicity' })}
           </Typography.Paragraph>
           <Select
             placeholder={intl.formatMessage({
               defaultMessage: 'Ethnicity',
-              id: 'XtCAFo',
             })}
             className={classes.select}
             mode="multiple"
@@ -261,70 +249,63 @@ const OffenderFilter = ({
             <Select.Option value={Race.Ic1}>
               {intl.formatMessage({
                 defaultMessage: 'IC1 - North European',
-                id: 'ZbGHgq',
               })}
             </Select.Option>
             <Select.Option value={Race.Ic2}>
               {intl.formatMessage({
                 defaultMessage: 'IC2 - South European',
-                id: 'qDNJ3C',
               })}
             </Select.Option>
             <Select.Option value={Race.Ic3}>
               {intl.formatMessage({
                 defaultMessage: 'IC3 - Black',
-                id: 'k0NwMh',
               })}
             </Select.Option>
             <Select.Option value={Race.Ic4}>
               {intl.formatMessage({
                 defaultMessage: 'IC4 - South Asian',
-                id: 'nok2Wh',
               })}
             </Select.Option>
             <Select.Option value={Race.Ic5}>
               {intl.formatMessage({
                 defaultMessage: 'IC5 - Southeast Asian',
-                id: 'u7exuh',
               })}
             </Select.Option>
             <Select.Option value={Race.Ic6}>
               {intl.formatMessage({
                 defaultMessage: 'IC6 - North African or Arab',
-                id: 'V2hDQr',
               })}
             </Select.Option>
             <Select.Option value={Race.Unknown}>
-              {intl.formatMessage({ defaultMessage: 'Unknown', id: '5jeq8P' })}
+              {intl.formatMessage({ defaultMessage: 'Unknown' })}
             </Select.Option>
           </Select>
         </Col>
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Build', id: 'RSctv1' })}
+            {intl.formatMessage({ defaultMessage: 'Build' })}
           </Typography.Paragraph>
           <Select
             mode="multiple"
             allowClear
             placeholder={intl.formatMessage({
               defaultMessage: 'Build',
-              id: 'RSctv1',
             })}
             className={classes.select}
             value={build}
             onChange={setBuild}
           >
             <Select.Option value={Build.Small}>
-              {intl.formatMessage({ defaultMessage: 'Small', id: 'BPnT3T' })}
+              {intl.formatMessage({ defaultMessage: 'Small' })}
             </Select.Option>
             <Select.Option value={Build.Medium}>
-              {intl.formatMessage({ defaultMessage: 'Medium', id: 'ovJ26C' })}
+              {intl.formatMessage({ defaultMessage: 'Medium' })}
             </Select.Option>
             <Select.Option value={Build.Large}>
-              {intl.formatMessage({ defaultMessage: 'Large', id: '/06iwc' })}
+              {intl.formatMessage({ defaultMessage: 'Large' })}
             </Select.Option>
             <Select.Option value={Build.Unknown}>
-              {intl.formatMessage({ defaultMessage: 'Unknown', id: '5jeq8P' })}
+              {intl.formatMessage({ defaultMessage: 'Unknown' })}
             </Select.Option>
           </Select>
         </Col>
@@ -333,14 +314,13 @@ const OffenderFilter = ({
         {publicOffenderDOB && (
           <Col span={12}>
             <Typography.Paragraph className={classes.selectTitle}>
-              {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
+              {intl.formatMessage({ defaultMessage: 'Age' })}
             </Typography.Paragraph>
             <Select
               mode="multiple"
               allowClear
               placeholder={intl.formatMessage({
                 defaultMessage: 'Age',
-                id: '9oNQSC',
               })}
               className={classes.select}
               value={age}
@@ -349,55 +329,46 @@ const OffenderFilter = ({
               <Select.Option value={Age.UnderEighteen}>
                 {intl.formatMessage({
                   defaultMessage: 'Under 18',
-                  id: 'Cwx1GS',
                 })}
               </Select.Option>
               <Select.Option value={Age.EighteenThirty}>
                 {intl.formatMessage({
                   defaultMessage: '18 - 30',
-                  id: '088rlR',
                 })}
               </Select.Option>
               <Select.Option value={Age.ThirtyForty}>
                 {intl.formatMessage({
                   defaultMessage: '30 - 40',
-                  id: 'cENhUd',
                 })}
               </Select.Option>
               <Select.Option value={Age.FortyFifty}>
                 {intl.formatMessage({
                   defaultMessage: '40 - 50',
-                  id: 'FEg968',
                 })}
               </Select.Option>
               <Select.Option value={Age.FiftySixty}>
                 {intl.formatMessage({
                   defaultMessage: '50 - 60',
-                  id: 'xuMURn',
                 })}
               </Select.Option>
               <Select.Option value={Age.SixtySeventy}>
                 {intl.formatMessage({
                   defaultMessage: '60 - 70',
-                  id: 'W8pA9z',
                 })}
               </Select.Option>
               <Select.Option value={Age.SeventyEighty}>
                 {intl.formatMessage({
                   defaultMessage: '70 - 80',
-                  id: 'yjJSPV',
                 })}
               </Select.Option>
               <Select.Option value={Age.OverEighty}>
                 {intl.formatMessage({
                   defaultMessage: 'Over 80',
-                  id: 'oFu9sf',
                 })}
               </Select.Option>
               <Select.Option value={Age.Unknown}>
                 {intl.formatMessage({
                   defaultMessage: 'Unknown',
-                  id: '5jeq8P',
                 })}
               </Select.Option>
             </Select>
@@ -405,27 +376,26 @@ const OffenderFilter = ({
         )}
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
+            {intl.formatMessage({ defaultMessage: 'Sex' })}
           </Typography.Paragraph>
           <Select
             mode="multiple"
             allowClear
             placeholder={intl.formatMessage({
               defaultMessage: 'Sex',
-              id: 'eWJHGp',
             })}
             className={classes.select}
             value={sex}
             onChange={setSex}
           >
             <Select.Option value={Gender.Female}>
-              {intl.formatMessage({ defaultMessage: 'Female', id: '74BYXL' })}
+              {intl.formatMessage({ defaultMessage: 'Female' })}
             </Select.Option>
             <Select.Option value={Gender.Male}>
-              {intl.formatMessage({ defaultMessage: 'Male', id: 'jIbAky' })}
+              {intl.formatMessage({ defaultMessage: 'Male' })}
             </Select.Option>
             <Select.Option value={Gender.Unknown}>
-              {intl.formatMessage({ defaultMessage: 'Unknown', id: '5jeq8P' })}
+              {intl.formatMessage({ defaultMessage: 'Unknown' })}
             </Select.Option>
           </Select>
         </Col>
@@ -433,7 +403,7 @@ const OffenderFilter = ({
       <Row gutter={16}>
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Hair', id: 'e4YBbX' })}
+            {intl.formatMessage({ defaultMessage: 'Hair' })}
           </Typography.Paragraph>
           <Input.TextArea
             value={hair}
@@ -445,7 +415,6 @@ const OffenderFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Characteristics',
-              id: 'xksukL',
             })}
           </Typography.Paragraph>
           <Input.TextArea
@@ -456,14 +425,13 @@ const OffenderFilter = ({
         </Col>
       </Row>
       <Typography.Paragraph className={classes.filtersTitle}>
-        {intl.formatMessage({ defaultMessage: 'Incidents', id: 'mtr3R4' })}
+        {intl.formatMessage({ defaultMessage: 'Incidents' })}
       </Typography.Paragraph>
       <Row gutter={16}>
         <Col span={24}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Offender has incidents at...',
-              id: 'xPGy5S',
             })}
           </Typography.Paragraph>
           <Select
@@ -471,7 +439,6 @@ const OffenderFilter = ({
             allowClear
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Businesses',
-              id: 'MZynHZ',
             })}
             className={classes.select}
             value={businesses}

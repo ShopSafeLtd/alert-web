@@ -12,48 +12,38 @@ const FormatCalendar = (date: Moment | Date, hideTime?: boolean): string => {
     return moment(date).calendar(null, {
       sameDay: `[${intl.formatMessage({
         defaultMessage: 'Today',
-        id: 'zWgbGg',
       })}]`,
       nextDay: `[${intl.formatMessage({
         defaultMessage: 'Tomorrow',
-        id: 'MtrTNy',
       })}]`,
-      nextWeek: intl.formatMessage({ defaultMessage: 'dddd', id: '0yYUWg' }),
+      nextWeek: intl.formatMessage({ defaultMessage: 'dddd' }),
       lastDay: `[${intl.formatMessage({
         defaultMessage: 'Yesterday',
-        id: '6dIxDP',
       })}]`,
       lastWeek: `[${intl.formatMessage({
         defaultMessage: 'Last',
-        id: '8nvhZ9',
-      })}] ${intl.formatMessage({ defaultMessage: 'dddd', id: '0yYUWg' })}`,
+      })}] ${intl.formatMessage({ defaultMessage: 'dddd' })}`,
       sameElse: `[${moment(date).format('DD/MM/YYYY')}]`,
     });
   }
   return moment(date).calendar(null, {
     sameDay: `[${intl.formatMessage({
       defaultMessage: 'Today',
-      id: 'zWgbGg',
     })} ${timeIn24HourFormat}]`,
     nextDay: `[${intl.formatMessage({
       defaultMessage: 'Tomorrow',
-      id: 'MtrTNy',
     })} ${timeIn24HourFormat}]`,
     // nextWeek: `dddd [at] ${timeIn24HourFormat}`,
     nextWeek: `${intl.formatMessage({
       defaultMessage: 'dddd',
-      id: '0yYUWg',
     })} ${timeIn24HourFormat}`,
     lastDay: `[${intl.formatMessage({
       defaultMessage: 'Yesterday',
-      id: '6dIxDP',
     })} ${timeIn24HourFormat}]`,
     lastWeek: `[${intl.formatMessage({
       defaultMessage: 'Last',
-      id: '8nvhZ9',
     })}] ${intl.formatMessage({
       defaultMessage: 'dddd',
-      id: '0yYUWg',
     })} [${timeIn24HourFormat}]`,
     sameElse: `[${moment(date).format('DD/MM/YYYY')}]`,
   });

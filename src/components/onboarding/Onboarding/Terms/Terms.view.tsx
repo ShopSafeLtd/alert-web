@@ -1,16 +1,6 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  Form,
-  Row,
-  Space,
-  Typography,
-} from 'antd';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Button, Card, Checkbox, Col, Form, Row, Space, Typography } from 'antd';
 // wait to check
 const { Text, Title, Paragraph } = Typography;
 
@@ -19,7 +9,6 @@ interface Props {
   update: () => void;
   saving: boolean;
   onBack: () => void;
-  setCurrent: (value: number) => void;
 }
 
 const SchemeTerms = ({
@@ -27,9 +16,12 @@ const SchemeTerms = ({
   update,
   saving,
   onBack,
-  setCurrent,
 }: Props): JSX.Element => {
-  setCurrent(1);
+  useEffect(() => {
+    // /scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   return (
     <div className="list-view">
       <Row style={{ margin: 15 }}>
@@ -42,9 +34,9 @@ const SchemeTerms = ({
           </Text>
 
           {/* <Text>
-            Please read through our terms and conditions and accept them to
-            continue.
-          </Text> */}
+              Please read through our terms and conditions and accept them to
+              continue.
+            </Text> */}
         </Col>
       </Row>
       <Card style={{ width: '98%' }}>
@@ -687,11 +679,11 @@ const SchemeTerms = ({
               rules={[
                 {
                   validator: (_, value) =>
-                    value
+                    (value
                       ? Promise.resolve()
                       : Promise.reject(
                           new Error('Please agree to the terms and conditions!')
-                        ),
+                        )),
                 },
               ]}
             >
@@ -707,20 +699,16 @@ const SchemeTerms = ({
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
-              <Link to="/app/onboarding">
-                <Button
-                  disabled={saving}
-                  type="primary"
-                  onClick={() => {
-                    // window.history.back();
-                    onBack();
-                  }}
-                >
-                  Back
-                </Button>
-              </Link>
+              <Button
+                disabled={saving}
+                type="primary"
+                onClick={() => {
+                  onBack();
+                }}
+              >
+                Back
+              </Button>
             </Col>
-
             <Col>
               <Button
                 disabled={saving}

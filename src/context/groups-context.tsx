@@ -2,10 +2,10 @@
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useMemo } from 'react';
 import { useStoreState } from '#/state';
-import { SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { SortOrder } from 'graphql/types';
 
 interface GroupsContextT {
-  children?: ReactNode;
   schemeId: string;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -13,7 +13,6 @@ interface GroupsContextT {
 
 const GroupsContext = createContext<GroupsContextT | undefined>(undefined);
 
-// Create a custom hook to use the context
 export const useGroupsContext = () => {
   const context = useContext(GroupsContext);
   if (context === undefined) {
@@ -22,9 +21,7 @@ export const useGroupsContext = () => {
   return context;
 };
 
-export const GroupsProvider: React.FC<{
-  children?: ReactNode;
-}> = ({ children }) => {
+const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const { id: userId } = useStoreState((state) => state.user);
 
@@ -48,7 +45,8 @@ export const GroupsProvider: React.FC<{
         name: SortOrder.Asc,
       },
     },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
+    skip: !schemeId,
   });
 
   const groups = useMemo(
@@ -60,18 +58,18 @@ export const GroupsProvider: React.FC<{
     [groupsData]
   );
 
-  // Value to be provided through context
   const value = useMemo(
     () => ({
       schemeId,
       groups,
-      userId,
       groupsLoading,
     }),
-    [schemeId, groups, userId, groupsLoading]
+    [schemeId, groups, groupsLoading]
   );
 
   return (
     <GroupsContext.Provider value={value}>{children}</GroupsContext.Provider>
   );
 };
+
+export default React.memo(GroupsProvider);

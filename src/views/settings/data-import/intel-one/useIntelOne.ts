@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useIntelOneImportDataMutation } from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import type { IntelOneCSVData } from '#/components/form-components/IntelOneCSV/IntelOneCSV.types';
+import { useIntelOneImportDataMutation } from 'graphql/imports/intel-one-import.generated';
 
 interface FormData {
   groups: string[];

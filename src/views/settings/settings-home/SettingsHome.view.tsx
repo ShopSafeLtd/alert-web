@@ -11,7 +11,7 @@ const SettingsHome = () => {
   return (
     <div className={classes.page}>
       <Typography.Title level={3} style={{ marginBottom: 20 }}>
-        <FormattedMessage id="xTQDJF" defaultMessage="Admin Home" />
+        <FormattedMessage defaultMessage="Admin Home" />
       </Typography.Title>
       <Row wrap={false} gutter={16} style={{}}>
         <Col span={8}>
@@ -24,26 +24,20 @@ const SettingsHome = () => {
               </Col>
               <Col>
                 <Typography.Text className={classes.cardTitle}>
-                  <FormattedMessage id="ShE8aY" defaultMessage="Add Users" />
+                  <FormattedMessage defaultMessage="Add Users" />
                 </Typography.Text>
               </Col>
             </Row>
             <div>
               <Typography.Text>
-                <FormattedMessage
-                  id="R7Jc2D"
-                  defaultMessage="Add people to your alert organisation and start collaberating."
-                />
+                <FormattedMessage defaultMessage="Add people to your alert organisation and start collaberating." />
               </Typography.Text>
             </div>
             <Row justify="end">
               <Col>
                 <Link to="/app/scheme-settings/users">
                   <Button size="small">
-                    <FormattedMessage
-                      id="mJk+ls"
-                      defaultMessage="Manage users"
-                    />
+                    <FormattedMessage defaultMessage="Manage users" />
                   </Button>
                 </Link>
               </Col>
@@ -60,29 +54,20 @@ const SettingsHome = () => {
               </Col>
               <Col>
                 <Typography.Text className={classes.cardTitle}>
-                  <FormattedMessage
-                    id="2hZ6rA"
-                    defaultMessage="Incident Settings"
-                  />
+                  <FormattedMessage defaultMessage="Incident Settings" />
                 </Typography.Text>
               </Col>
             </Row>
             <div>
               <Typography.Text>
-                <FormattedMessage
-                  id="Bn2KTC"
-                  defaultMessage="Configure your incident form structure and enable reporting features."
-                />
+                <FormattedMessage defaultMessage="Configure your incident form structure and enable reporting features." />
               </Typography.Text>
             </div>
             <Row justify="end">
               <Col>
                 <Link to="/app/scheme-settings/crime-types">
                   <Button size="small">
-                    <FormattedMessage
-                      id="iubKfx"
-                      defaultMessage="Open settings"
-                    />
+                    <FormattedMessage defaultMessage="Open settings" />
                   </Button>
                 </Link>
               </Col>
@@ -99,29 +84,20 @@ const SettingsHome = () => {
               </Col>
               <Col>
                 <Typography.Text className={classes.cardTitle}>
-                  <FormattedMessage
-                    id="RCKxnY"
-                    defaultMessage="Create Workflows"
-                  />
+                  <FormattedMessage defaultMessage="Create Workflows" />
                 </Typography.Text>
               </Col>
             </Row>
             <div>
               <Typography.Text>
-                <FormattedMessage
-                  id="6mosFm"
-                  defaultMessage="Create workflows that tigger from data events and automate actions."
-                />
+                <FormattedMessage defaultMessage="Create workflows that tigger from data events and automate actions." />
               </Typography.Text>
             </div>
             <Row justify="end">
               <Col>
                 <Link to="/app/scheme-settings/workflow">
                   <Button size="small">
-                    <FormattedMessage
-                      id="4s+f7f"
-                      defaultMessage="Create workflow"
-                    />
+                    <FormattedMessage defaultMessage="Create workflow" />
                   </Button>
                 </Link>
               </Col>

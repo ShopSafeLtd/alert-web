@@ -1,5 +1,6 @@
-import { BanType } from 'graphql/generated';
 // wait to check
+
+import { BanType } from 'graphql/types';
 
 export const formatBanType = (value?: BanType | null) =>
   BanTypeValues.find((item) => item.value === value)?.label ?? '';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -15,6 +15,7 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import UpdateContent from '../UpdateContent';
 import useStyles from './CrimeGroupFeed.styles';
 import ImageContainer from '../ImageContainer';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -102,11 +103,9 @@ const CrimeGroupFeed = ({
                   confirm({
                     title: intl.formatMessage({
                       defaultMessage: 'Do you want to delete the feed item?',
-                      id: 'VZeM4L',
                     }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
-                      id: 'JDJoIZ',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
@@ -127,7 +126,7 @@ const CrimeGroupFeed = ({
                 title={
                   alias ||
                   intl.formatMessage(
-                    { defaultMessage: 'Alert ID: {reference}', id: '377fsC' },
+                    { defaultMessage: 'Alert ID: {reference}' },
                     {
                       reference,
                     }
@@ -144,7 +143,6 @@ const CrimeGroupFeed = ({
                         intl.formatMessage(
                           {
                             defaultMessage: 'Alert ID: {reference}',
-                            id: '377fsC',
                           },
                           {
                             reference,
@@ -158,7 +156,6 @@ const CrimeGroupFeed = ({
                         {intl.formatMessage(
                           {
                             defaultMessage: 'Alert ID: {reference}',
-                            id: '377fsC',
                           },
                           {
                             reference,
@@ -178,7 +175,7 @@ const CrimeGroupFeed = ({
                     />
                     <Text style={{ fontSize: 14 }} type="secondary">
                       {intl.formatMessage(
-                        { defaultMessage: 'Members: {members}', id: '8gjK3b' },
+                        { defaultMessage: 'Members: {members}' },
                         {
                           members: totalOffenders || 0,
                         }
@@ -201,7 +198,6 @@ const CrimeGroupFeed = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Total Incidents: {members}',
-                      id: 'yEyRrH',
                     },
                     {
                       members: totalIncidents || 0,

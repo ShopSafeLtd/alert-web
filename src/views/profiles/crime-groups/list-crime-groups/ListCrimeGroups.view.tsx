@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
-import type { ListCrimeGroupsQuery, SortOrder } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import type { Moment } from 'moment';
 import moment from 'moment';
@@ -14,6 +14,8 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import type { CrimeGroupFilters } from 'state/data-model';
 import useStyles from './ListCrimeGroups.styles';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import type { SortOrder } from 'graphql/types';
 
 interface Props {
   data: ListCrimeGroupsQuery | undefined;
@@ -57,14 +59,12 @@ const ListCrimeGroups = ({
     {
       label: intl.formatMessage({
         defaultMessage: 'Followed Groups',
-        id: 'Ly+ku5',
       }),
       value: 'FOLLOWED_GROUPS',
     },
     {
       label: intl.formatMessage({
         defaultMessage: 'My Groups',
-        id: 'kkghcT',
       }),
       value: 'MY_GROUPS',
     },
@@ -80,7 +80,6 @@ const ListCrimeGroups = ({
             allowClear
             placeholder={intl.formatMessage({
               defaultMessage: 'Search crime groups...',
-              id: 'q5vT3Z',
             })}
           />
         </Col>
@@ -97,7 +96,6 @@ const ListCrimeGroups = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Sort & Filter',
-              id: 'f2g3SM',
             })}
           >
             <Button
@@ -111,7 +109,6 @@ const ListCrimeGroups = ({
             <Button type="primary">
               {intl.formatMessage({
                 defaultMessage: 'Create Crime Group',
-                id: 'Bju8fW',
               })}
             </Button>
           </Link>
@@ -137,7 +134,6 @@ const ListCrimeGroups = ({
             dataIndex: 'reference',
             title: intl.formatMessage({
               defaultMessage: 'Alert ID',
-              id: 'k8ZNgH',
             }),
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
@@ -148,7 +144,6 @@ const ListCrimeGroups = ({
             dataIndex: 'alias',
             title: intl.formatMessage({
               defaultMessage: 'Alias',
-              id: 'Ri9jA7',
             }),
           },
           {
@@ -156,7 +151,6 @@ const ListCrimeGroups = ({
             dataIndex: 'totalOffenders',
             title: intl.formatMessage({
               defaultMessage: 'Members',
-              id: '+a+2ug',
             }),
           },
           {
@@ -164,7 +158,6 @@ const ListCrimeGroups = ({
             dataIndex: 'totalIncidents',
             title: intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             }),
           },
           {
@@ -172,7 +165,6 @@ const ListCrimeGroups = ({
             dataIndex: 'totalValue',
             title: intl.formatMessage({
               defaultMessage: 'Lost Value',
-              id: '3YYDlc',
             }),
             render: (value: number | undefined) => `£${value || 0}`,
           },
@@ -181,7 +173,6 @@ const ListCrimeGroups = ({
             dataIndex: 'totalRecoveredValue',
             title: intl.formatMessage({
               defaultMessage: 'Recovered Value',
-              id: 'bGwFFv',
             }),
             render: (value: number | undefined) => `£${value || 0}`,
           },
@@ -190,7 +181,6 @@ const ListCrimeGroups = ({
             dataIndex: 'totalTheftSuccess',
             title: intl.formatMessage({
               defaultMessage: 'Loss Rate',
-              id: 'mQPFSj',
             }),
             render: (value: number | undefined) => `${value?.toFixed(0) || 0}%`,
           },
@@ -199,7 +189,6 @@ const ListCrimeGroups = ({
             dataIndex: 'updatedAt',
             title: intl.formatMessage({
               defaultMessage: 'Updated At',
-              id: 'ECx6bx',
             }),
             render: (value: Date | Moment) => FormatCalendar(value || moment()),
             sorter: (a, b) =>
@@ -226,7 +215,6 @@ const ListCrimeGroups = ({
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Investigation',
-                  id: 'tNseQe',
                 })}
               </Button>
             ),
@@ -241,7 +229,6 @@ const ListCrimeGroups = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Crime Group Filters',
-          id: 'Dz/qC3',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}
@@ -261,7 +248,6 @@ const ListCrimeGroups = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={!!addInvestigation}
         width="500"

@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useMySafetyImportDataMutation } from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import type { MySafetyCSVData } from '#/components/form-components/MySafetyCSV/MySafetyCSV.types';
+import { useMySafetyImportDataMutation } from 'graphql/imports/mysafety-import.generated';
 
 interface FormData {
   groups: string[];

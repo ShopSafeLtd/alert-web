@@ -1,11 +1,12 @@
 import React from 'react';
-import { useRolesQuery } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import { Col, Divider, Row, Typography } from 'antd';
 import InfiniteSideScrollList from '../../../components/side-list/InfiniteSideList';
 import SideListItem from '../../../components/side-list/SideListItem.view';
 import { useStoreState } from '../../../state';
 import useStyles from './ViewRole.styles';
+import { useRolesQuery } from '#/views/roles/graphql/queries/roles.generated';
 
 const ViewRoleSidelist = ({ current }: { current?: string }): JSX.Element => {
   const { id: currentSchemeId } = useStoreState((state) => state.scheme);

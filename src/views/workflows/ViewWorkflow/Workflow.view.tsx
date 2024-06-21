@@ -19,7 +19,6 @@ import {
 } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { AnswerType, IncidentPriority, Model } from 'graphql/generated';
 import type { ListData } from '../../adminTodo/useActivities';
 import ActivityTemplateForm from '../../../components/form-components/ActivityTemplate';
 import type {
@@ -31,6 +30,7 @@ import type {
 } from './useWorkflowForm';
 import CreateQuestionContainer from '../../../components/form-components/createQuestion/CreateQuestion.container';
 import Loading from '../../../components/shared-components/AntD/Loading';
+import { AnswerType, IncidentPriority, Model } from 'graphql/types';
 
 interface WorkflowProps {
   form: FormInstance<FormData>;
@@ -132,11 +132,9 @@ const WorkflowView: React.FC<WorkflowProps> = ({
             {editId
               ? intl.formatMessage({
                   defaultMessage: 'Edit Workflow',
-                  id: 'wIrGg7',
                 })
               : intl.formatMessage({
                   defaultMessage: 'Create Workflow',
-                  id: 'GBCpm7',
                 })}
           </Typography.Title>
         }
@@ -161,19 +159,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
         >
           <Card>
             <Form.Item
-              label={
-                <FormattedMessage
-                  defaultMessage="Name for workflow"
-                  id="asVXa7"
-                />
-              }
+              label={<FormattedMessage defaultMessage="Name for workflow" />}
               name="name"
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a name',
-                    id: 'PVXd+T',
                   }),
                 },
               ]}
@@ -182,10 +174,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
             </Form.Item>
             <Form.Item
               label={
-                <FormattedMessage
-                  defaultMessage="If any or all the selected checks are present for the outcome to happen"
-                  id="LDnUcJ"
-                />
+                <FormattedMessage defaultMessage="If any or all the selected checks are present for the outcome to happen" />
               }
               name="option"
               rules={[
@@ -193,7 +182,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please select an option',
-                    id: 'PPLP3R',
                   }),
                 },
               ]}
@@ -203,14 +191,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   {
                     label: intl.formatMessage({
                       defaultMessage: 'Any',
-                      id: 'ToO3/h',
                     }),
                     value: 'any',
                   },
                   {
                     label: intl.formatMessage({
                       defaultMessage: 'All',
-                      id: 'zQvVDJ',
                     }),
                     value: 'all',
                   },
@@ -219,19 +205,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               />
             </Form.Item>
             <Form.Item
-              label={
-                <FormattedMessage
-                  defaultMessage="Type of Workflow"
-                  id="CRVAC8"
-                />
-              }
+              label={<FormattedMessage defaultMessage="Type of Workflow" />}
               name="workflowType"
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please select an option',
-                    id: 'PPLP3R',
                   }),
                 },
               ]}
@@ -241,14 +221,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   {
                     label: intl.formatMessage({
                       defaultMessage: 'Incident',
-                      id: 'zaYxwd',
                     }),
                     value: Model.Incident,
                   },
                   {
                     label: intl.formatMessage({
                       defaultMessage: 'Offender',
-                      id: 'AN7Aru',
                     }),
                     value: Model.Offender,
                   },
@@ -261,7 +239,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
             <>
               <Divider />
               <Typography.Title level={3}>
-                <FormattedMessage defaultMessage="Conditions" id="S8kqP9" />
+                <FormattedMessage defaultMessage="Conditions" />
               </Typography.Title>
               {modelSelected === Model.Incident && (
                 <>
@@ -282,10 +260,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 paddingTop: 8,
                               }}
                             >
-                              <FormattedMessage
-                                defaultMessage="Tags Check"
-                                id="Fhryya"
-                              />
+                              <FormattedMessage defaultMessage="Tags Check" />
                             </Typography.Title>
                           </Col>
 
@@ -299,10 +274,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <>
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="If any or all the selected tags are present"
-                                  id="MHUUBE"
-                                />
+                                <FormattedMessage defaultMessage="If any or all the selected tags are present" />
                               }
                               name="tagMethod"
                               rules={[
@@ -310,7 +282,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
-                                    id: 'PPLP3R',
                                   }),
                                 },
                               ]}
@@ -320,14 +291,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'Any',
-                                      id: 'ToO3/h',
                                     }),
                                     value: 'any',
                                   },
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'All',
-                                      id: 'zQvVDJ',
                                     }),
                                     value: 'all',
                                   },
@@ -336,12 +305,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               />
                             </Form.Item>
                             <Form.Item
-                              label={
-                                <FormattedMessage
-                                  defaultMessage="Tags"
-                                  id="1EYCdR"
-                                />
-                              }
+                              label={<FormattedMessage defaultMessage="Tags" />}
                               name="tagOptions"
                             >
                               <Select
@@ -370,10 +334,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 paddingTop: 8,
                               }}
                             >
-                              <FormattedMessage
-                                defaultMessage="Value Check"
-                                id="m2EUUQ"
-                              />
+                              <FormattedMessage defaultMessage="Value Check" />
                             </Typography.Title>
                           </Col>
 
@@ -389,10 +350,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         {valueSelected && (
                           <Form.Item
                             label={
-                              <FormattedMessage
-                                defaultMessage="If the total value of items is over"
-                                id="/3qAXO"
-                              />
+                              <FormattedMessage defaultMessage="If the total value of items is over" />
                             }
                             name="valuePrice"
                           >
@@ -413,10 +371,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 paddingTop: 8,
                               }}
                             >
-                              <FormattedMessage
-                                defaultMessage="Lower Than Check"
-                                id="yNk9nw"
-                              />
+                              <FormattedMessage defaultMessage="Lower Than Check" />
                             </Typography.Title>
                           </Col>
 
@@ -432,10 +387,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         {lessThanSelected && (
                           <Form.Item
                             label={
-                              <FormattedMessage
-                                defaultMessage="If the total value of items is less than"
-                                id="sjlnww"
-                              />
+                              <FormattedMessage defaultMessage="If the total value of items is less than" />
                             }
                             name="lessThanPrice"
                           >
@@ -471,10 +423,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 paddingTop: 8,
                               }}
                             >
-                              <FormattedMessage
-                                defaultMessage="Goods Check"
-                                id="EEh/Fd"
-                              />
+                              <FormattedMessage defaultMessage="Goods Check" />
                             </Typography.Title>
                           </Col>
 
@@ -491,10 +440,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <>
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="If any or all the selected goods types are present"
-                                  id="zBrGQl"
-                                />
+                                <FormattedMessage defaultMessage="If any or all the selected goods types are present" />
                               }
                               name="goodsTypeCondition"
                               rules={[
@@ -502,7 +448,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
-                                    id: 'PPLP3R',
                                   }),
                                 },
                               ]}
@@ -512,14 +457,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'Any',
-                                      id: 'ToO3/h',
                                     }),
                                     value: 'any',
                                   },
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'All',
-                                      id: 'zQvVDJ',
                                     }),
                                     value: 'all',
                                   },
@@ -529,10 +472,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             </Form.Item>
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Goods"
-                                  id="u5dS1t"
-                                />
+                                <FormattedMessage defaultMessage="Goods" />
                               }
                               name="goodsType"
                             >
@@ -562,10 +502,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 paddingTop: 8,
                               }}
                             >
-                              <FormattedMessage
-                                defaultMessage="Description"
-                                id="Q8Qw5B"
-                              />
+                              <FormattedMessage defaultMessage="Description" />
                             </Typography.Title>
                           </Col>
 
@@ -582,10 +519,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <>
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="If any or all the selected words are present"
-                                  id="JxjhBc"
-                                />
+                                <FormattedMessage defaultMessage="If any or all the selected words are present" />
                               }
                               name="descriptionCondition"
                               rules={[
@@ -593,7 +527,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
-                                    id: 'PPLP3R',
                                   }),
                                 },
                               ]}
@@ -603,14 +536,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'Any',
-                                      id: 'ToO3/h',
                                     }),
                                     value: 'any',
                                   },
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'All',
-                                      id: 'zQvVDJ',
                                     }),
                                     value: 'all',
                                   },
@@ -620,10 +551,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             </Form.Item>
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Words"
-                                  id="a014eD"
-                                />
+                                <FormattedMessage defaultMessage="Words" />
                               }
                               name="descriptionWords"
                             >
@@ -657,10 +585,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 paddingTop: 8,
                               }}
                             >
-                              <FormattedMessage
-                                defaultMessage="Questions Check"
-                                id="zL1kRs"
-                              />
+                              <FormattedMessage defaultMessage="Questions Check" />
                             </Typography.Title>
                           </Col>
 
@@ -677,10 +602,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <>
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="If any or all the selected questions are present and answered"
-                                  id="otvaN6"
-                                />
+                                <FormattedMessage defaultMessage="If any or all the selected questions are present and answered" />
                               }
                               name="questionMethod"
                               rules={[
@@ -688,7 +610,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
-                                    id: 'PPLP3R',
                                   }),
                                 },
                               ]}
@@ -701,14 +622,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'Any',
-                                      id: 'ToO3/h',
                                     }),
                                     value: 'any',
                                   },
                                   {
                                     label: intl.formatMessage({
                                       defaultMessage: 'All',
-                                      id: 'zQvVDJ',
                                     }),
                                     value: 'all',
                                   },
@@ -718,10 +637,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             </Form.Item>
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Add question to check"
-                                  id="c5rXL2"
-                                />
+                                <FormattedMessage defaultMessage="Add question to check" />
                               }
                               name="qs"
                               style={{
@@ -733,7 +649,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   placeholder={intl.formatMessage({
                                     defaultMessage:
                                       'Select a question from the list...',
-                                    id: 'JnKRw2',
                                   })}
                                   value={null}
                                   style={{ width: '100%' }}
@@ -765,10 +680,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
                             <Form.Item
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Checked Questions"
-                                  id="cY+KmR"
-                                />
+                                <FormattedMessage defaultMessage="Checked Questions" />
                               }
                               name="placeholder"
                             >
@@ -836,14 +748,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                               {
                                                 label: intl.formatMessage({
                                                   defaultMessage: 'Yes',
-                                                  id: 'a5msuh',
                                                 }),
                                                 value: 'true',
                                               },
                                               {
                                                 label: intl.formatMessage({
                                                   defaultMessage: 'No',
-                                                  id: 'oUWADl',
                                                 }),
                                                 value: 'false',
                                               },
@@ -904,14 +814,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                               {
                                                 label: intl.formatMessage({
                                                   defaultMessage: 'Over',
-                                                  id: 'ZMDaHM',
                                                 }),
                                                 value: 'over',
                                               },
                                               {
                                                 label: intl.formatMessage({
                                                   defaultMessage: 'Under',
-                                                  id: 'uhROer',
                                                 }),
                                                 value: 'under',
                                               },
@@ -968,10 +876,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                           );
                                         }}
                                       >
-                                        <FormattedMessage
-                                          defaultMessage="Remove"
-                                          id="G/yZLu"
-                                        />
+                                        <FormattedMessage defaultMessage="Remove" />
                                       </Button>
                                     </Col>
                                   </Row>
@@ -1003,10 +908,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               paddingTop: 8,
                             }}
                           >
-                            <FormattedMessage
-                              defaultMessage="No. of Offences in X days"
-                              id="+oxdt3"
-                            />
+                            <FormattedMessage defaultMessage="No. of Offences in X days" />
                           </Typography.Title>
                         </Col>
 
@@ -1023,10 +925,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <>
                           <Form.Item
                             label={
-                              <FormattedMessage
-                                defaultMessage="No. of days"
-                                id="Sm7H2q"
-                              />
+                              <FormattedMessage defaultMessage="No. of days" />
                             }
                             name="incidentTimeCountDays"
                             rules={[
@@ -1034,7 +933,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 required: true,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please select an option',
-                                  id: 'PPLP3R',
                                 }),
                               },
                             ]}
@@ -1044,10 +942,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           </Form.Item>
                           <Form.Item
                             label={
-                              <FormattedMessage
-                                defaultMessage="No. of incidents"
-                                id="C3iH7c"
-                              />
+                              <FormattedMessage defaultMessage="No. of incidents" />
                             }
                             initialValue={1}
                             name="incidentTimeCountIncidents"
@@ -1056,7 +951,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 required: true,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please select an option',
-                                  id: 'PPLP3R',
                                 }),
                               },
                             ]}
@@ -1083,10 +977,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               paddingTop: 8,
                             }}
                           >
-                            <FormattedMessage
-                              defaultMessage="Offense while banned"
-                              id="N/9lCH"
-                            />
+                            <FormattedMessage defaultMessage="Offense while banned" />
                           </Typography.Title>
                           <Typography.Paragraph
                             style={{
@@ -1097,7 +988,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <FormattedMessage
                               defaultMessage="Triggers when an incident happens ?
 "
-                              id="KttRmc"
                             />
                           </Typography.Paragraph>
                         </Col>
@@ -1117,7 +1007,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               )}
               <Divider style={{ marginTop: 10 }} />
               <Typography.Title level={3}>
-                <FormattedMessage defaultMessage="Outcomes" id="h5J5Su" />
+                <FormattedMessage defaultMessage="Outcomes" />
               </Typography.Title>
               {/* Outcomes */}
               <Row gutter={[8, 8]}>
@@ -1133,10 +1023,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             paddingTop: 8,
                           }}
                         >
-                          <FormattedMessage
-                            defaultMessage="Create Activity"
-                            id="8RIxKm"
-                          />
+                          <FormattedMessage defaultMessage="Create Activity" />
                         </Typography.Title>
                         <Typography.Paragraph
                           style={{
@@ -1147,7 +1034,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <FormattedMessage
                             defaultMessage="What activity to create when the above conditions are met?
 "
-                            id="s+hLaC"
                           />
                         </Typography.Paragraph>
                       </Col>
@@ -1162,10 +1048,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       <>
                         <Form.Item
                           label={
-                            <FormattedMessage
-                              defaultMessage="Select an activity template"
-                              id="KGFiql"
-                            />
+                            <FormattedMessage defaultMessage="Select an activity template" />
                           }
                           name="selectedGroup"
                         >
@@ -1198,21 +1081,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <Button
                                 onClick={() => setActivityTemplateForm(true)}
                               >
-                                <FormattedMessage
-                                  defaultMessage="New Template"
-                                  id="4jpdwo"
-                                />
+                                <FormattedMessage defaultMessage="New Template" />
                               </Button>
                             </Col>
                           </Row>
                         </Form.Item>
                         <Form.Item
-                          label={
-                            <FormattedMessage
-                              defaultMessage="Name"
-                              id="HAlOn1"
-                            />
-                          }
+                          label={<FormattedMessage defaultMessage="Name" />}
                           name="taskName"
                         >
                           <Input />
@@ -1220,10 +1095,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
                         <Form.Item
                           label={
-                            <FormattedMessage
-                              defaultMessage="Default due days"
-                              id="NQ90za"
-                            />
+                            <FormattedMessage defaultMessage="Default due days" />
                           }
                           name="taskDueDays"
                         >
@@ -1235,10 +1107,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Form.Item
                               name="taskQuestions"
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Questions"
-                                  id="KV/9Hv"
-                                />
+                                <FormattedMessage defaultMessage="Questions" />
                               }
                             >
                               <Select
@@ -1263,10 +1132,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 style={{ paddingBottom: 24 }}
                                 onClick={() => setNewQuestion(true)}
                               >
-                                <FormattedMessage
-                                  defaultMessage="New Question"
-                                  id="kgZDDS"
-                                />
+                                <FormattedMessage defaultMessage="New Question" />
                               </Button>
                             </Form.Item>
                           </Col>
@@ -1277,10 +1143,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Form.Item
                               name="assigneeGroups"
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Select groups to get users from"
-                                  id="zf6eoB"
-                                />
+                                <FormattedMessage defaultMessage="Select groups to get users from" />
                               }
                             >
                               <Select
@@ -1294,10 +1157,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Form.Item
                               name="taskAssignee"
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Additional users to create activity for"
-                                  id="IIj/Zm"
-                                />
+                                <FormattedMessage defaultMessage="Additional users to create activity for" />
                               }
                             >
                               <Select
@@ -1325,10 +1185,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             paddingTop: 8,
                           }}
                         >
-                          <FormattedMessage
-                            defaultMessage="Create Notification"
-                            id="TJob1U"
-                          />
+                          <FormattedMessage defaultMessage="Create Notification" />
                         </Typography.Title>
                         <Typography.Paragraph
                           style={{
@@ -1339,7 +1196,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <FormattedMessage
                             defaultMessage="What notification to create when the above conditions are met?
 "
-                            id="YCuueF"
                           />
                         </Typography.Paragraph>
                       </Col>
@@ -1357,10 +1213,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       <>
                         <Form.Item
                           label={
-                            <FormattedMessage
-                              defaultMessage="Notification Title"
-                              id="/eTheI"
-                            />
+                            <FormattedMessage defaultMessage="Notification Title" />
                           }
                           name="sendNotificationTitle"
                         >
@@ -1369,10 +1222,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
                         <Form.Item
                           label={
-                            <FormattedMessage
-                              defaultMessage="Notification text"
-                              id="jeDdMk"
-                            />
+                            <FormattedMessage defaultMessage="Notification text" />
                           }
                           name="sendNotificationMessage"
                         >
@@ -1384,10 +1234,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Form.Item
                               name="sendNotificationUsers"
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Additional users to send notification to. If none selected will use scheme users"
-                                  id="GgFNnc"
-                                />
+                                <FormattedMessage defaultMessage="Additional users to send notification to. If none selected will use scheme users" />
                               }
                             >
                               <Select
@@ -1415,10 +1262,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             paddingTop: 8,
                           }}
                         >
-                          <FormattedMessage
-                            defaultMessage="Create Email"
-                            id="kZtLca"
-                          />
+                          <FormattedMessage defaultMessage="Create Email" />
                         </Typography.Title>
                         <Typography.Paragraph
                           style={{
@@ -1429,7 +1273,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <FormattedMessage
                             defaultMessage="What email to create when the above conditions are met?
 "
-                            id="c8KLBi"
                           />
                         </Typography.Paragraph>
                       </Col>
@@ -1447,10 +1290,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       <>
                         <Form.Item
                           label={
-                            <FormattedMessage
-                              defaultMessage="Email Subject"
-                              id="2af/fK"
-                            />
+                            <FormattedMessage defaultMessage="Email Subject" />
                           }
                           name="sendEmailTitle"
                         >
@@ -1459,10 +1299,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
                         <Form.Item
                           label={
-                            <FormattedMessage
-                              defaultMessage="Email body text"
-                              id="dSS9lD"
-                            />
+                            <FormattedMessage defaultMessage="Email body text" />
                           }
                           name="sendEmailMessage"
                         >
@@ -1474,10 +1311,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Form.Item
                               name="sendEmailUsers"
                               label={
-                                <FormattedMessage
-                                  defaultMessage="Additional users to send email to"
-                                  id="GJ9+pp"
-                                />
+                                <FormattedMessage defaultMessage="Additional users to send email to" />
                               }
                             >
                               <Select
@@ -1497,17 +1331,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                     <Card
                       title={intl.formatMessage({
                         defaultMessage: 'Update Incident',
-                        id: 'ROm47+',
                       })}
                     >
                       <Row gutter={[8, 8]}>
                         <Col span={10}>
                           <Form.Item
                             label={
-                              <FormattedMessage
-                                defaultMessage="Select an priority to set the incident to"
-                                id="d+Gqof"
-                              />
+                              <FormattedMessage defaultMessage="Select an priority to set the incident to" />
                             }
                             name="setPriority"
                           >
@@ -1524,10 +1354,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       </Row>
                       <Form.Item
                         label={
-                          <FormattedMessage
-                            defaultMessage="Auto Approve incident?"
-                            id="pSiJhc"
-                          />
+                          <FormattedMessage defaultMessage="Auto Approve incident?" />
                         }
                         valuePropName="checked"
                         name="autoApprove"
@@ -1545,7 +1372,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               <Col>
                 <Button disabled={saving} onClick={() => window.history.back()}>
                   {intl.formatMessage({
-                    id: 'cyR7Kh',
                     defaultMessage: 'Back',
                   })}
                 </Button>
@@ -1554,7 +1380,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                 <Button disabled={saving} type="primary" htmlType="submit">
                   {intl.formatMessage({
                     defaultMessage: 'Save',
-                    id: 'jvo0vs',
                   })}
                 </Button>
               </Col>
@@ -1564,7 +1389,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
         <Drawer
           title={intl.formatMessage({
             defaultMessage: 'Create Activity Template',
-            id: '+zA4DH',
           })}
           open={activityTemplateForm}
           width={800}
@@ -1584,7 +1408,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
         <Drawer
           title={intl.formatMessage({
             defaultMessage: 'Add/Create Question',
-            id: '/vx2Ey',
           })}
           open={newQuestion}
           width="800"

@@ -3,9 +3,9 @@ import { faLanguage } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 import { Tooltip } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { LanguageCode } from '../../graphql/generated';
-import { useTranslateLazyQuery } from '../../graphql/generated';
 import { useStoreState } from '../../state';
+import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
+import type { LanguageCode } from 'graphql/types';
 
 const TranslateButton = ({
   text,
@@ -47,7 +47,6 @@ const TranslateButton = ({
         <Tooltip
           title={intl.formatMessage({
             defaultMessage: 'Translate',
-            id: 'wCy/Tc',
           })}
         >
           <FontAwesomeIcon

@@ -61,7 +61,6 @@ const FilterOptions = ({
       <GroupsSelect
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Groups',
-          id: 'q2cuIU',
         })}
         mode="multiple"
         maxTagCount="responsive"
@@ -82,7 +81,6 @@ const FilterOptions = ({
         <Badge count={filterCount} showZero={false} offset={[8, 0]}>
           {intl.formatMessage({
             defaultMessage: 'More Filters',
-            id: 'stWNQ/',
           })}
         </Badge>
       </Button>
@@ -228,7 +226,6 @@ const BusinessReportView = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Logo',
-                    id: 'pn9DSF',
                   })}
                 </Button>
               </div>
@@ -237,7 +234,6 @@ const BusinessReportView = ({
                   {
                     defaultMessage:
                       'Business Report: {businessName} {startDate} - {endDate}',
-                    id: 'URt/QV',
                   },
                   {
                     businessName,
@@ -324,7 +320,6 @@ const BusinessReportView = ({
                       {
                         defaultMessage:
                           'Business Report: {businessName} {startDate} - {endDate}',
-                        id: 'URt/QV',
                       },
                       {
                         businessName,
@@ -357,7 +352,6 @@ const BusinessReportView = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Filters',
-              id: 'zSOvI0',
             })}
             open={filtersOpen}
             onClose={toggleFiltersOpen}
@@ -366,13 +360,11 @@ const BusinessReportView = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Offenders',
-                  id: 'xb54TN',
                 })}
               >
                 <Select
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select Offenders',
-                    id: 'nNFHrE',
                   })}
                   mode="multiple"
                   maxTagCount="responsive"
@@ -396,13 +388,11 @@ const BusinessReportView = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Crime Groups',
-                  id: 'a0aLil',
                 })}
               >
                 <Select
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select Crime Groups',
-                    id: 'Ze/CG9',
                   })}
                   mode="multiple"
                   allowClear
@@ -431,7 +421,6 @@ const BusinessReportView = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Components available to add',
-              id: 'OJhI0K',
             })}
             placement="right"
             closable
@@ -476,7 +465,6 @@ const BusinessReportView = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Add Logo',
-              id: 'pn9DSF',
             })}
             placement="right"
             closable
@@ -494,7 +482,6 @@ const BusinessReportView = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Save As',
-              id: '/XPfp1',
             })}
             placement="right"
             closable

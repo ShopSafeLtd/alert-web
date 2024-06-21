@@ -40,18 +40,14 @@ const ActivitiesView = ({ templateData, loading, updateTemplates }: Props) => {
           items={[
             {
               key: 'Activities',
-              label: (
-                <FormattedMessage defaultMessage="Activities" id="UmEsZF" />
-              ),
+              label: <FormattedMessage defaultMessage="Activities" />,
               children: (
                 <ViewActivities templateData={templateData} loading={loading} />
               ),
             },
             {
               key: 'Templates',
-              label: (
-                <FormattedMessage defaultMessage="Templates" id="A3ptul" />
-              ),
+              label: <FormattedMessage defaultMessage="Templates" />,
               children: (
                 <ActivitiesTemplates
                   tableData={templateData}

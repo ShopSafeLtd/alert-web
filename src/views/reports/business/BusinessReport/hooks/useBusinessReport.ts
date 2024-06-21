@@ -1,9 +1,3 @@
-import {
-  ReportType,
-  useSchemeReportDetailsQuery,
-  useSchemeReportFiltersQuery,
-  useTargetedBusinessReportQuery,
-} from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import useReportPrint from 'utils/reportPrint/usePrintReports';
 import { useParams } from 'react-router-dom';
@@ -13,6 +7,10 @@ import BusinessReportLayout, { BusinessReportMetaData } from './initLayout';
 import type { Return } from './types';
 import type { SelectOptions } from '../../../types';
 import useReportState from '../../../../../utils/reports/useReportState';
+import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/scheme-details.generated';
+import { ReportType } from 'graphql/types';
+import { useTargetedBusinessReportQuery } from 'graphql/reports/queries/business-report.generated';
+import { useSchemeReportFiltersQuery } from 'graphql/reports/queries/scheme-filter-query.generated';
 
 const useBusinessReport = (): Return => {
   const { id: selectedBusiness, reportId } = useParams();

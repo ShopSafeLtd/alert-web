@@ -20,7 +20,8 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import type { OffenderData } from 'types/DataType';
 import { useStoreState } from 'state';
-import { Role } from 'graphql/generated';
+import { Role } from 'graphql/types';
+
 import AddExistingOffender from '../../../offender/offender/AddExistingOffender';
 import AddOffender from '../../../offender/offender/AddNewOffender';
 
@@ -105,16 +106,13 @@ const AssignImageOffender = ({
       open={image !== undefined}
       title={intl.formatMessage({
         defaultMessage: 'Are there offenders in your image?',
-        id: 'cLrIqr',
       })}
       bodyStyle={{ padding: 0 }}
       okText={intl.formatMessage({
         defaultMessage: 'Assign Offenders',
-        id: 'GFrwvj',
       })}
       cancelText={intl.formatMessage({
         defaultMessage: 'No Offenders',
-        id: 'hO5g1p',
       })}
       width={900}
       zIndex={1000}
@@ -130,11 +128,9 @@ const AssignImageOffender = ({
             {offendersData && offendersData.length > 0
               ? intl.formatMessage({
                   defaultMessage: 'Select Offenders',
-                  id: 'nNFHrE',
                 })
               : intl.formatMessage({
                   defaultMessage: 'Add Offenders',
-                  id: 'KaNxum',
                 })}
           </Title>
           {offendersData && offendersData.length === 0 && (
@@ -142,7 +138,6 @@ const AssignImageOffender = ({
               {intl.formatMessage({
                 defaultMessage:
                   'You have not added any offenders to the incident yet, please add offenders if any are present in the image.',
-                id: 'mjoJ/I',
               })}
             </Paragraph>
           )}
@@ -172,7 +167,6 @@ const AssignImageOffender = ({
                       {
                         defaultMessage:
                           'Age: {age}, Build: {build}, Ethnicity: {ethnicity}, Sex: {sex}',
-                        id: 'RkYfRn',
                       },
                       {
                         age:
@@ -180,25 +174,21 @@ const AssignImageOffender = ({
                             ? getOffenderAge(offender.age)
                             : intl.formatMessage({
                                 defaultMessage: 'Unknown',
-                                id: '5jeq8P',
                               }),
                         build: offender.build
                           ? getOffenderBuild(offender.build)
                           : intl.formatMessage({
                               defaultMessage: 'Unknown',
-                              id: '5jeq8P',
                             }),
                         ethnicity: offender.race
                           ? getOffenderRace(offender.race, true)
                           : intl.formatMessage({
                               defaultMessage: 'Unknown',
-                              id: '5jeq8P',
                             }),
                         sex: offender.gender
                           ? getOffenderGender(offender.gender)
                           : intl.formatMessage({
                               defaultMessage: 'Unknown',
-                              id: '5jeq8P',
                             }),
                       }
                     )}
@@ -222,7 +212,6 @@ const AssignImageOffender = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add New Offender',
-                  id: 'V+RsEq',
                 })}
               </Button>
             </Col>
@@ -234,7 +223,6 @@ const AssignImageOffender = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Existing Offender',
-                  id: 'w4XD3a',
                 })}
               </Button>
             </Col>
@@ -246,7 +234,6 @@ const AssignImageOffender = ({
           onClose={toggleAddOffender}
           title={intl.formatMessage({
             defaultMessage: 'Add New Offender',
-            id: 'V+RsEq',
           })}
           width="600"
           zIndex={1001}
@@ -264,7 +251,6 @@ const AssignImageOffender = ({
           onClose={toggleAddExistingOffender}
           title={intl.formatMessage({
             defaultMessage: 'Add Existing Offenders',
-            id: '1FbM4r',
           })}
           width="1000"
           zIndex={1001}

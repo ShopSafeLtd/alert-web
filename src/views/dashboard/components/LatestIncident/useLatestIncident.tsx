@@ -1,6 +1,6 @@
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import { useEffect, useMemo, useState } from 'react';
-import { useLatestIncidentQuery } from 'graphql/generated';
+import { useLatestIncidentQuery } from '#/views/dashboard/graphql/queries/latest-incident.generated';
 
 const useLatestIncident = (): {
   data: {

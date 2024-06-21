@@ -1,11 +1,10 @@
 import type { Dispatch } from 'react';
 import { useEffect, useReducer, useRef } from 'react';
-import {
-  useCreateCsvZipMutation,
-  useExportFiltersQuery,
-  usePreviewIncidentExportQuery,
-} from '../../../graphql/generated';
+
 import { useStoreState } from '../../../state';
+import { usePreviewIncidentExportQuery } from '#/views/data-management/export-incidents/graphql/queries/export-incidents-preview.generated';
+import { useExportFiltersQuery } from '#/views/data-management/export-incidents/graphql/queries/scheme-details.generated';
+import { useCreateCsvZipMutation } from '#/views/data-management/export-incidents/graphql/mutations/create-zip.generated';
 
 interface Return {
   loading: boolean;

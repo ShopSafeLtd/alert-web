@@ -1,12 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import type {
-  CreateTagMutation,
-  EditIncidentQuery,
-  ListGoodsTypesQuery,
-  ListOffendersQuery,
-} from 'graphql/generated';
-import { CrimeType } from 'graphql/generated';
 
 import {
   Button,
@@ -50,6 +43,11 @@ import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import type { EditImage } from './useEditIncident';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import type { EditIncidentQuery } from 'graphql/incidents/queries/edit-incident.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { CrimeType } from 'graphql/types';
 
 const { Title, Paragraph } = Typography;
 
@@ -190,11 +188,9 @@ const EditIncident = ({
           reviewed
             ? intl.formatMessage({
                 defaultMessage: 'Review Incident',
-                id: 'c+kQCf',
               })
             : intl.formatMessage({
                 defaultMessage: 'Edit Incident',
-                id: 'E6VJFN',
               })
         }
       />
@@ -260,7 +256,6 @@ const EditIncident = ({
               <Col>
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                   {intl.formatMessage({
-                    id: 'Imc8gS',
                     defaultMessage: 'Incident Details',
                   })}
                 </Title>
@@ -271,11 +266,9 @@ const EditIncident = ({
                 <Form.Item
                   name="tagsCrimeTypes"
                   label={intl.formatMessage({
-                    id: '3OwM2P',
                     defaultMessage: 'Incident Type',
                   })}
                   tooltip={intl.formatMessage({
-                    id: 'j/5VxV',
                     defaultMessage:
                       'Select the relevant crime types for this incident, these help to categorise the incident.',
                   })}
@@ -283,7 +276,6 @@ const EditIncident = ({
                     {
                       required: true,
                       message: intl.formatMessage({
-                        id: 'eSRsUW',
                         defaultMessage: 'Please add at least one crime type.',
                       }),
                     },
@@ -295,7 +287,6 @@ const EditIncident = ({
                     mode="multiple"
                     maxTagCount={3}
                     placeholder={intl.formatMessage({
-                      id: 'y7GECT',
                       defaultMessage: 'Search for a crime type...',
                     })}
                   >
@@ -311,7 +302,6 @@ const EditIncident = ({
                 <Form.Item
                   name="tagsInvolved"
                   label={intl.formatMessage({
-                    id: 'tEuhMY',
                     defaultMessage: 'Aggravating Factors',
                   })}
                 >
@@ -321,7 +311,6 @@ const EditIncident = ({
                     mode="multiple"
                     maxTagCount={3}
                     placeholder={intl.formatMessage({
-                      id: 'y7GECT',
                       defaultMessage: 'Search for a crime type...',
                     })}
                   >
@@ -337,7 +326,6 @@ const EditIncident = ({
                 <Form.Item
                   name="tagsImpact"
                   label={intl.formatMessage({
-                    id: 'KxS/zg',
                     defaultMessage: 'Incident Impact',
                   })}
                 >
@@ -347,7 +335,6 @@ const EditIncident = ({
                     mode="multiple"
                     maxTagCount={3}
                     placeholder={intl.formatMessage({
-                      id: 'y7GECT',
                       defaultMessage: 'Search for a crime type...',
                     })}
                   >
@@ -366,7 +353,6 @@ const EditIncident = ({
                 <Form.Item
                   name="subject"
                   label={intl.formatMessage({
-                    id: 'LLtKhp',
                     defaultMessage: 'Subject',
                   })}
                 >
@@ -377,11 +363,9 @@ const EditIncident = ({
                 <Form.Item
                   name="date"
                   label={intl.formatMessage({
-                    id: 'rXTgTq',
                     defaultMessage: 'Time & Date',
                   })}
                   tooltip={intl.formatMessage({
-                    id: '4eTajC',
                     defaultMessage:
                       'The date and time that the incident occurred.',
                   })}
@@ -389,7 +373,6 @@ const EditIncident = ({
                     {
                       required: true,
                       message: intl.formatMessage({
-                        id: 'Cgy3GX',
                         defaultMessage:
                           'Please select a date for the incident.',
                       }),
@@ -404,7 +387,6 @@ const EditIncident = ({
                     format="HH:mm - DD/MM/YY"
                     showTime={{ showSecond: false, showNow: true }}
                     placeholder={intl.formatMessage({
-                      id: 'hQHL0E',
                       defaultMessage: 'Set Date & Time',
                     })}
                   />
@@ -414,18 +396,15 @@ const EditIncident = ({
             <Form.Item
               name="description"
               label={intl.formatMessage({
-                id: 'Q8Qw5B',
                 defaultMessage: 'Description',
               })}
               tooltip={intl.formatMessage({
-                id: 'gL4S9+',
                 defaultMessage: 'A more detailed description of the incident.',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: 'AIkkvf',
                     defaultMessage:
                       'Please enter a description for the incident.',
                   }),
@@ -447,7 +426,6 @@ const EditIncident = ({
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Location',
-                    id: 'rvirM2',
                   })}
                 </Title>
               </Col>
@@ -458,7 +436,6 @@ const EditIncident = ({
                   name="business"
                   label={intl.formatMessage({
                     defaultMessage: 'Business',
-                    id: 'w1Fanr',
                   })}
                 >
                   <DebounceSelect
@@ -467,7 +444,6 @@ const EditIncident = ({
                     disabled={saving}
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Search for a business...',
-                      id: 'qaJxSS',
                     })}
                     fetchOptions={onSearchBusiness}
                     style={{ width: 300 }}
@@ -478,7 +454,6 @@ const EditIncident = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Address',
-                id: 'e6Ph5+',
               })}
             </Title>
             <Row gutter={16}>
@@ -487,7 +462,6 @@ const EditIncident = ({
                   name="building"
                   label={intl.formatMessage({
                     defaultMessage: 'Building',
-                    id: 'oS/nae',
                   })}
                 >
                   <Input />
@@ -498,7 +472,6 @@ const EditIncident = ({
                   name="street"
                   label={intl.formatMessage({
                     defaultMessage: 'Street',
-                    id: 'BaIwdV',
                   })}
                   rules={[
                     {
@@ -506,7 +479,6 @@ const EditIncident = ({
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a street for the incident.',
-                        id: '+dEOlx',
                       }),
                     },
                   ]}
@@ -519,7 +491,6 @@ const EditIncident = ({
                   name="townCity"
                   label={intl.formatMessage({
                     defaultMessage: 'Town/City',
-                    id: 'byaTQZ',
                   })}
                   rules={[
                     {
@@ -527,7 +498,6 @@ const EditIncident = ({
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a town/city for the incident.',
-                        id: 'A3DgcN',
                       }),
                     },
                   ]}
@@ -540,7 +510,6 @@ const EditIncident = ({
                   name="county"
                   label={intl.formatMessage({
                     defaultMessage: 'County',
-                    id: 'B+KJhc',
                   })}
                 >
                   <Input />
@@ -551,7 +520,6 @@ const EditIncident = ({
                   name="postcode"
                   label={intl.formatMessage({
                     defaultMessage: 'Postcode',
-                    id: 'FJhjgz',
                   })}
                   rules={[
                     {
@@ -559,7 +527,6 @@ const EditIncident = ({
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a postcode for the incident.',
-                        id: '2S6C4z',
                       }),
                     },
                   ]}
@@ -584,7 +551,6 @@ const EditIncident = ({
                   <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'What goods were involved?',
-                      id: '6L5/Qv',
                     })}
                   </Title>
                 </Col>
@@ -593,13 +559,12 @@ const EditIncident = ({
                 name="goods"
                 rules={[
                   {
-                    validator: async (rule, value) => {
+                    validator: (rule, value) => {
                       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                       if (value.length === 0)
                         throw new Error(
                           intl.formatMessage({
                             defaultMessage: 'Something wrong!',
-                            id: 'QL7Ixv',
                           })
                         );
                     },
@@ -618,7 +583,6 @@ const EditIncident = ({
                                 ? ''
                                 : intl.formatMessage({
                                     defaultMessage: 'Type of Goods',
-                                    id: 'awr2tc',
                                   })
                             }
                             name={[name, 'goodsType']}
@@ -627,7 +591,6 @@ const EditIncident = ({
                                 required: index === 0,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please enter a type',
-                                  id: 'pd8FHc',
                                 }),
                               },
                             ]}
@@ -635,7 +598,6 @@ const EditIncident = ({
                             <Select
                               placeholder={intl.formatMessage({
                                 defaultMessage: 'Select goods...',
-                                id: 'p4Hiyr',
                               })}
                               style={{ width: 300 }}
                               allowClear
@@ -657,7 +619,6 @@ const EditIncident = ({
                                 ? ''
                                 : intl.formatMessage({
                                     defaultMessage: 'Value',
-                                    id: 'GufXy5',
                                   })
                             }
                             rules={[
@@ -665,14 +626,12 @@ const EditIncident = ({
                                 required: index === 0,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please enter a value',
-                                  id: 'Umf5pG',
                                 }),
                               },
                             ]}
                             tooltip={intl.formatMessage({
                               defaultMessage:
                                 'The value of the goods involved in the incident, both lost and recovered.',
-                              id: 'MPzA66',
                             })}
                           >
                             <InputNumber
@@ -692,7 +651,6 @@ const EditIncident = ({
                                 ? ''
                                 : intl.formatMessage({
                                     defaultMessage: 'Value Recovered',
-                                    id: 'FqEGSY',
                                   })
                             }
                             rules={[
@@ -700,14 +658,12 @@ const EditIncident = ({
                                 required: index === 0,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please enter a value',
-                                  id: 'Umf5pG',
                                 }),
                               },
                             ]}
                             tooltip={intl.formatMessage({
                               defaultMessage:
                                 'The value of the goods that were recovered.',
-                              id: 'JuhI7q',
                             })}
                           >
                             <InputNumber
@@ -750,7 +706,6 @@ const EditIncident = ({
                           >
                             {intl.formatMessage({
                               defaultMessage: 'Add Item',
-                              id: 'kNLPWW',
                             })}
                           </Button>
                         </Col>
@@ -773,7 +728,6 @@ const EditIncident = ({
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Police involvement',
-                    id: 'eMpXMz',
                   })}
                 </Title>
               </Col>
@@ -785,11 +739,9 @@ const EditIncident = ({
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The incident has been reported to the police',
-                    id: 'hLeud7',
                   })}
                   label={intl.formatMessage({
                     defaultMessage: 'Was this incident reported to the police?',
-                    id: 'dVzhQl',
                   })}
                 >
                   <Radio.Group
@@ -797,14 +749,12 @@ const EditIncident = ({
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Yes',
-                          id: 'a5msuh',
                         }),
                         value: true,
                       },
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'No',
-                          id: 'oUWADl',
                         }),
                         value: false,
                       },
@@ -818,12 +768,10 @@ const EditIncident = ({
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The police have been involved in the incident.',
-                    id: 'ymfx6F',
                   })}
                   label={intl.formatMessage({
                     defaultMessage:
                       'Were the police involved in this incident?',
-                    id: 'hXJRLT',
                   })}
                 >
                   <Radio.Group
@@ -831,14 +779,12 @@ const EditIncident = ({
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Yes',
-                          id: 'a5msuh',
                         }),
                         value: true,
                       },
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'No',
-                          id: 'oUWADl',
                         }),
                         value: false,
                       },
@@ -854,12 +800,10 @@ const EditIncident = ({
                   name="policeRef"
                   label={intl.formatMessage({
                     defaultMessage: 'Crime Ref No.',
-                    id: 'lXj6/P',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The crime reference number provided by the police.',
-                    id: 'tMiPZU',
                   })}
                 >
                   <Input disabled={saving} />
@@ -868,12 +812,10 @@ const EditIncident = ({
                   name="policeNo"
                   label={intl.formatMessage({
                     defaultMessage: 'Officer Collar No.',
-                    id: '6gfZFu',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The collar number of the officer(s) involved.',
-                    id: 'eo8Q5+',
                   })}
                 >
                   <Input disabled={saving} />
@@ -893,7 +835,6 @@ const EditIncident = ({
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Who is it visible to?',
-                    id: 'wvg3HJ',
                   })}
                 </Title>
               </Col>
@@ -906,7 +847,6 @@ const EditIncident = ({
                   {intl.formatMessage({
                     defaultMessage:
                       '- Please select the groups that this incident is for.',
-                    id: 'gVNXsT',
                   })}
                 </Paragraph>
               </Col>
@@ -917,12 +857,10 @@ const EditIncident = ({
                   name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Groups',
-                    id: 'hzmswI',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
-                    id: 'vi+XKb',
                   })}
                   rules={[
                     {
@@ -930,7 +868,6 @@ const EditIncident = ({
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please add at least one group that you would like this incident to be visible to.',
-                        id: 'ukeLzq',
                       }),
                     },
                   ]}
@@ -943,7 +880,6 @@ const EditIncident = ({
                     placeholder={intl.formatMessage({
                       defaultMessage:
                         'Select the groups that you would like this incident to be visible to.',
-                      id: '13MEnK',
                     })}
                   >
                     {groups.map((group) => (
@@ -968,11 +904,9 @@ const EditIncident = ({
                   {reviewed
                     ? intl.formatMessage({
                         defaultMessage: 'Reject',
-                        id: 'VzIOKf',
                       })
                     : intl.formatMessage({
                         defaultMessage: 'Cancel',
-                        id: '47FYwb',
                       })}
                 </Button>
               </Col>
@@ -986,11 +920,9 @@ const EditIncident = ({
                   {reviewed
                     ? intl.formatMessage({
                         defaultMessage: 'Approve',
-                        id: 'WCaf5C',
                       })
                     : intl.formatMessage({
                         defaultMessage: 'Save',
-                        id: 'jvo0vs',
                       })}
                 </Button>
               </Col>
@@ -1001,7 +933,6 @@ const EditIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Crime Type',
-          id: 'OAVeBQ',
         })}
         open={addIncidentTag}
         width="400"
@@ -1038,12 +969,10 @@ const EditIncident = ({
         }}
         okText={intl.formatMessage({
           defaultMessage: 'Add to incident',
-          id: 'd1U1M+',
         })}
         title={intl.formatMessage(
           {
-            defaultMessage: `Are you sure you want to add {name}?`,
-            id: 'CTToP/',
+            defaultMessage: 'Are you sure you want to add {name}?',
           },
           {
             name: addRecentOffender?.name,
@@ -1071,7 +1000,6 @@ const EditIncident = ({
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Age',
-                  id: '9oNQSC',
                 })}
               >
                 {getOffenderAge(addRecentOffender?.age)}
@@ -1079,19 +1007,16 @@ const EditIncident = ({
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Build',
-                  id: 'RSctv1',
                 })}
               >
                 {getOffenderBuild(addRecentOffender?.build) ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Ethnicity',
-                  id: 'XtCAFo',
                 })}
               >
                 {getOffenderRace(addRecentOffender?.race)}
@@ -1099,37 +1024,31 @@ const EditIncident = ({
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Sex',
-                  id: 'eWJHGp',
                 })}
               >
                 {getOffenderGender(addRecentOffender?.gender) ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Hair',
-                  id: 'e4YBbX',
                 })}
               >
                 {addRecentOffender?.hair ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Characteristics',
-                  id: 'xksukL',
                 })}
               >
                 {addRecentOffender?.peculiarities ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
             </Descriptions>

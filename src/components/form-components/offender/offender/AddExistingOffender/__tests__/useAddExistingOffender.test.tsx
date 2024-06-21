@@ -4,8 +4,9 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { OffenderSort, storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import { ListOffendersDocument, QueryMode, SortOrder } from 'graphql/generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 import useAddExistingOffender from '../useAddExistingOffender';
+import { ListOffendersDocument } from 'graphql/offenders/queries/list-offenders.generated';
 
 const mocks = [
   {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Table, Typography } from 'antd';
 import { useIntl } from 'react-intl';
-import type { InvestigationStatus } from 'graphql/generated';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
 import moment from 'moment';
+import type { InvestigationStatus } from 'graphql/types';
 
 const useStyles = createUseStyles({
   row: {
@@ -49,7 +49,6 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           key: 'name',
           title: intl.formatMessage({
             defaultMessage: 'Name',
-            id: 'HAlOn1',
           }),
           dataIndex: 'name',
         },
@@ -58,7 +57,6 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           dataIndex: 'reference',
           title: intl.formatMessage({
             defaultMessage: 'Alert ID',
-            id: 'k8ZNgH',
           }),
         },
         {
@@ -66,7 +64,6 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           dataIndex: 'status',
           title: intl.formatMessage({
             defaultMessage: 'Status',
-            id: 'tzMNF3',
           }),
           render: (value: InvestigationStatus) => (
             <Typography.Text>
@@ -79,7 +76,6 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           dataIndex: 'createdAt',
           title: intl.formatMessage({
             defaultMessage: 'Date Opened',
-            id: 'zQ9i1N',
           }),
           render: (value: string) => moment(value).format('DD/MM/YYYY'),
         },
@@ -88,7 +84,6 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           dataIndex: 'closedAt',
           title: intl.formatMessage({
             defaultMessage: 'Date Closed',
-            id: 'CkpoSI',
           }),
           render: (value: string) =>
             value ? moment(value).format('DD/MM/YYYY') : undefined,
@@ -98,7 +93,6 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           dataIndex: 'description',
           title: intl.formatMessage({
             defaultMessage: 'Description',
-            id: 'Q8Qw5B',
           }),
         },
       ]}

@@ -16,8 +16,9 @@ import {
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { ArticleData } from 'types/DataType';
 import { useIntl } from 'react-intl';
-import { ArticlePriority } from 'graphql/generated';
+
 import FormatCalendar from 'utils/format-calendar-24h';
+import { ArticlePriority } from 'graphql/types';
 
 const { Title } = Typography;
 
@@ -51,13 +52,11 @@ const ArticleCard = ({ article, removeArticle, saving }: Props) => {
             trigger="click"
             title={intl.formatMessage({
               defaultMessage: 'Remove the article?',
-              id: 'JF7p9y',
             })}
             onConfirm={() => removeArticle(article.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
@@ -119,7 +118,6 @@ const ArticleCard = ({ article, removeArticle, saving }: Props) => {
                   {/* <FontAwesomeIcon className={classes.descIcon} icon={faUser} /> */}
                   {intl.formatMessage({
                     defaultMessage: 'Created By',
-                    id: 'uAfuJA',
                   })}
                 </span>
               }
@@ -136,7 +134,6 @@ const ArticleCard = ({ article, removeArticle, saving }: Props) => {
                   /> */}
                   {intl.formatMessage({
                     defaultMessage: 'Updated At',
-                    id: 'ECx6bx',
                   })}
                 </span>
               }

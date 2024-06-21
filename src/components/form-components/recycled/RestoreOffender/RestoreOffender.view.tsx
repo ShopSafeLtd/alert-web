@@ -1,7 +1,8 @@
 import React from 'react';
-import type { RecycledItemQuery } from 'graphql/generated';
+
 import { Button, Col, Row, Skeleton, Descriptions, Popconfirm } from 'antd';
 import { useIntl } from 'react-intl';
+import type { RecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
 
 interface Props {
   onSubmit: () => void;
@@ -30,20 +31,19 @@ const RestoreOffender = ({
         contentStyle={{ fontSize: 15 }}
       >
         <Descriptions.Item
-          label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+          label={intl.formatMessage({ defaultMessage: 'Name' })}
         >
           {data?.recycledItem?.offender?.name}
         </Descriptions.Item>
 
         <Descriptions.Item
-          label={intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
+          label={intl.formatMessage({ defaultMessage: 'Sex' })}
         >
           {data?.recycledItem?.offender?.gender}
         </Descriptions.Item>
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Ethnicity',
-            id: 'XtCAFo',
           })}
         >
           {data?.recycledItem?.offender?.race}
@@ -56,20 +56,17 @@ const RestoreOffender = ({
             title={intl.formatMessage({
               defaultMessage:
                 'Are you sure to permanently delete this offender?',
-              id: '8swx2J',
             })}
             onConfirm={onDelete}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
             <Button disabled={saving} loading={saving}>
               {intl.formatMessage({
                 defaultMessage: 'Delete Now',
-                id: '77+H1T',
               })}
             </Button>
           </Popconfirm>
@@ -78,13 +75,11 @@ const RestoreOffender = ({
           <Popconfirm
             title={intl.formatMessage({
               defaultMessage: 'Are you sure to restore this offender?',
-              id: 'SstHAZ',
             })}
             onConfirm={onSubmit}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
@@ -96,7 +91,6 @@ const RestoreOffender = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Restore Item',
-                id: 'vnYVwS',
               })}
             </Button>
           </Popconfirm>

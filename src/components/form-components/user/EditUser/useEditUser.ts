@@ -1,14 +1,5 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import type { UserQuery, UserUpdateInput } from 'graphql/generated';
-import {
-  Model,
-  SortOrder,
-  useSchemeChatsQuery,
-  useUpdateUserMutation,
-  useUserQuery,
-  useUserRolesQuery,
-} from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import type { BusinessData, SelectOptions } from 'types/DataType';
@@ -16,6 +7,13 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useGroupsContext } from '#/context/groups-context';
 import { stringOrOption } from '#/components/form-components/user/AddUser/useAddUser';
+import type { UserQuery } from 'graphql/user/queries/user.generated';
+import { useUserQuery } from 'graphql/user/queries/user.generated';
+import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
+import { useSchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
+import type { UserUpdateInput } from 'graphql/types';
+import { Model, SortOrder } from 'graphql/types';
+import { useUpdateUserMutation } from 'graphql/user/mutation/update_user.generated';
 
 export interface FormData {
   fullName: string;
@@ -149,11 +147,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The user has been updated.',
-          id: 'm0wU41',
         }),
         placement: 'bottomRight',
       });

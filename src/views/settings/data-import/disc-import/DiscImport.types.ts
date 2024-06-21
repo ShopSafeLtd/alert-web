@@ -1,5 +1,5 @@
-import type { Age, Build, Gender, Height, Race, Role } from 'graphql/generated';
 import type { Moment } from 'moment';
+import type { Age, Build, Gender, Height, Race, Role } from 'graphql/types';
 
 export interface KnownSubject {
   workspaceId: string;

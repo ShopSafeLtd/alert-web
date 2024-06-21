@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Drawer, Tooltip } from 'antd';
-import type { ListArticlesQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
@@ -8,6 +8,7 @@ import ArticleCard from '#/components/feedItems/Articles/ArticleCard';
 import ArticleFilter from '#/components/Articles/ArticleFilter';
 import InfiniteSideScrollList from '#/components/side-list/InfiniteSideList';
 import SideListItem from 'components/side-list/SideListItem.view';
+import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
 
 interface Props {
   data:
@@ -42,7 +43,6 @@ const ArticlesSection = ({
     <Tooltip
       title={intl.formatMessage({
         defaultMessage: 'Filters & sorting',
-        id: 'dy5NrW',
       })}
     >
       <Button
@@ -73,7 +73,6 @@ const ArticlesSection = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
-          id: 'o9w9ud',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}

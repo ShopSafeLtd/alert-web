@@ -49,7 +49,6 @@ const DocumentsView = ({
     {
       label: intl.formatMessage({
         defaultMessage: 'Add Document',
-        id: 'r9vGqd',
       }),
       key: '5',
       icon: (
@@ -62,7 +61,6 @@ const DocumentsView = ({
     {
       label: intl.formatMessage({
         defaultMessage: 'Upload',
-        id: 'p4N05H',
       }),
       key: '3',
       icon: (
@@ -75,7 +73,6 @@ const DocumentsView = ({
   const mg11Button = {
     label: intl.formatMessage({
       defaultMessage: 'Create MG11',
-      id: 'CpvwMZ',
     }),
     key: '1',
     icon: (
@@ -83,7 +80,7 @@ const DocumentsView = ({
     ),
 
     // disabled: !listVehiclesData?.listVehicles.total,
-    onClick: () => navigate(`/app/mg11/create/`),
+    onClick: () => navigate('/app/mg11/create/'),
   };
 
   return (
@@ -117,7 +114,6 @@ const DocumentsView = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Document',
-                    id: 'r9vGqd',
                   })}
                 </Button>
               </Dropdown>
@@ -130,7 +126,6 @@ const DocumentsView = ({
             {
               title: intl.formatMessage({
                 defaultMessage: 'Thumbnail',
-                id: 'RGYBjE',
               }),
               dataIndex: 'thumbnail',
               key: 'thumbnail',
@@ -144,7 +139,6 @@ const DocumentsView = ({
             {
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               key: 'name',
@@ -152,7 +146,6 @@ const DocumentsView = ({
             {
               title: intl.formatMessage({
                 defaultMessage: 'Tags',
-                id: '1EYCdR',
               }),
               dataIndex: 'tags',
               key: 'tags',
@@ -182,7 +175,6 @@ const DocumentsView = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Download',
-                    id: '5q3qC0',
                   })}
                 </Button>
               ),
@@ -208,7 +200,6 @@ const DocumentsView = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
-          id: 'vgVasT',
         })}
         open={addDocument}
         width="800"

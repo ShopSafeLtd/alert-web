@@ -12,13 +12,14 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
-import { Role } from 'graphql/generated';
+
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl'; // Import useIntl hook
 import { createUseStyles } from 'react-jss';
 import type { ReturnProps as Props } from './types/ViewArticle';
 import IncidentCard from '../../../components/incidents/IncidentCard';
 import OffenderCard from '../../../components/offenders/OffenderCard';
+import { Role } from 'graphql/types';
 
 const { Title, Text } = Typography;
 
@@ -69,7 +70,6 @@ const ViewArticleView = ({
                       icon={faPrint}
                     />
                     {intl.formatMessage({
-                      id: 'CXRlIo',
                       defaultMessage: 'Print',
                     })}
                   </Button>
@@ -81,7 +81,6 @@ const ViewArticleView = ({
                       icon={faEdit}
                     />
                     {intl.formatMessage({
-                      id: 'zTaC7h',
                       defaultMessage: 'Edit Bulletin',
                     })}
                   </Button>
@@ -93,7 +92,6 @@ const ViewArticleView = ({
                       icon={faTrash}
                     />
                     {intl.formatMessage({
-                      id: 'yTVc8S',
                       defaultMessage: 'Delete Bulletin',
                     })}
                   </Button>
@@ -123,7 +121,6 @@ const ViewArticleView = ({
                     }}
                   >
                     {intl.formatMessage({
-                      id: 'Q8XddZ',
                       defaultMessage: 'Author:',
                     })}
                   </Text>
@@ -142,7 +139,6 @@ const ViewArticleView = ({
                     }}
                   >
                     {intl.formatMessage({
-                      id: '7iDdU4',
                       defaultMessage: 'Published:',
                     })}
                   </Text>
@@ -158,7 +154,6 @@ const ViewArticleView = ({
                         }}
                       >
                         {intl.formatMessage({
-                          id: '9apQnO',
                           defaultMessage: '| Updated:',
                         })}
                       </Text>
@@ -200,7 +195,6 @@ const ViewArticleView = ({
                 >
                   <Typography.Title level={2}>
                     {intl.formatMessage({
-                      id: 'mtr3R4',
                       defaultMessage: 'Incidents',
                     })}
                   </Typography.Title>
@@ -229,7 +223,6 @@ const ViewArticleView = ({
                 >
                   <Typography.Title level={2}>
                     {intl.formatMessage({
-                      id: 'xb54TN',
                       defaultMessage: 'Offenders',
                     })}
                   </Typography.Title>

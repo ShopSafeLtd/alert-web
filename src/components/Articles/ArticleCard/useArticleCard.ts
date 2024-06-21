@@ -1,12 +1,13 @@
 import { useStoreState } from 'state';
 
-import type { DeleteArticleMutation } from 'graphql/generated';
-import { useDeleteArticleMutation, Role } from 'graphql/generated';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { DeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
+import { useDeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
+import { Role } from 'graphql/types';
 
 interface Props {
   createdById: string | undefined;
@@ -34,11 +35,9 @@ const useArticleCard = ({ createdById, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The article has been deleted.',
-          id: 'Bwx7T/',
         }),
         placement: 'bottomRight',
       });

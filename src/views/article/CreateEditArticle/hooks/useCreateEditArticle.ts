@@ -6,22 +6,19 @@ import type { Editor } from 'tinymce';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { useNavigate, useParams } from 'react-router';
 import type { Props } from '../types/CreateArticle';
-import {
-  ArticlePriority,
-  Model,
-  Role,
-  useArticleQuery,
-  useCreateArticleMutation,
-  useCreateTagMutation,
-  useEditArticleMutation,
-  useSchemeGroupsQuery,
-  useTagsQuery,
-} from '../../../../graphql/generated';
+
 import { useStoreState } from '../../../../state';
 import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
 import extracted from '../../../../utils/add-default-to-article';
 import customRequest from '../../../../utils/custom-request';
+import { ArticlePriority, Model, Role } from 'graphql/types';
+import { useArticleQuery } from 'graphql/article/queries/view-article.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useCreateArticleMutation } from 'graphql/article/mutations/create-article.generated';
+import { useEditArticleMutation } from 'graphql/article/mutations/edit-article.generated';
 
 const { useForm } = Form;
 
@@ -358,10 +355,10 @@ const useCreateEditArticle = (): Props => {
       const imageSrcs = [...images].map((image) => image.src);
 
       // remove all new lines from innerHTML
-      doc.body.innerHTML = doc.body.innerHTML.replace(/&nbsp;/g, '');
+      doc.body.innerHTML = doc.body.innerHTML.replaceAll('&nbsp;', '');
 
       // remove all new lines from innerText
-      doc.body.innerText = doc.body.innerText.replace(/(\r\n|\n|\r)/gm, '');
+      doc.body.innerText = doc.body.innerText.replaceAll(/(\r\n|\n|\r)/gm, '');
       const innerText =
         doc.body.innerText.length > 120
           ? `${doc.body.innerText.slice(0, 120)}...`

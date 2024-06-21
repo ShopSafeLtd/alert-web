@@ -2,18 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type {
-  CreateTodoMutation,
-  QuestionGroupOnSchemeQuery,
-} from 'graphql/generated';
-import {
-  Role,
-  AnswerType,
-  SortOrder,
-  useCreateTodoMutation,
-  useAddTodoUsersQuery,
-  useQuestionGroupOnSchemeQuery,
-} from 'graphql/generated';
+
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { FormInstance, UploadFile } from 'antd';
 import { Form, notification } from 'antd';
@@ -23,6 +12,12 @@ import { useIntl } from 'react-intl';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import customRequest from '../../../../utils/custom-request';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import { useCreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import { AnswerType, Role, SortOrder } from 'graphql/types';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/AddTodoUsers.generated';
 
 const { useForm } = Form;
 
@@ -256,11 +251,9 @@ const useAddTodo = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The activity has been added.',
-          id: 'hDZLqK',
         }),
         placement: 'bottomRight',
       });

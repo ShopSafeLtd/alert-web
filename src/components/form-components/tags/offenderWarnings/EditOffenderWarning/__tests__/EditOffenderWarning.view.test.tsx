@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { TagType } from 'graphql/generated';
+
 import EditOffenderWarning from '../EditOffenderWarning.view';
+import { TagType } from 'graphql/types';
 
 describe('List Officer View', () => {
   const data = {

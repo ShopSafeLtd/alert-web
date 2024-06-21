@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import type { ListIncidentsQuery } from 'graphql/generated';
-import { QueryMode, SortOrder, useListIncidentsQuery } from 'graphql/generated';
-
 import { useStoreActions, useStoreState } from 'state';
 import type { Incident } from 'components/react-flow/nodes/incident-details-node';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import { useListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Props {
   onClose: () => void;

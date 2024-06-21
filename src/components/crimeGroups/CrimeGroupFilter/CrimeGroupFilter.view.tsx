@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
-import { SortOrder } from 'graphql/generated';
+
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { CrimeGroupFilters } from 'state/data-model';
 import moment from 'moment';
 import useStyles from './CrimeGroupFilter.styles';
+import { SortOrder } from 'graphql/types';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -61,7 +62,6 @@ const CrimeGroupFilter = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
-              id: 'MsGXc3',
             })}
           </Button>
         </Col>
@@ -70,7 +70,7 @@ const CrimeGroupFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Sort Order', id: 'Hw6crD' })}
+            {intl.formatMessage({ defaultMessage: 'Sort Order' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -81,13 +81,11 @@ const CrimeGroupFilter = ({
             <Select.Option value={SortOrder.Desc}>
               {intl.formatMessage({
                 defaultMessage: 'Newest First',
-                id: 'dZYazP',
               })}
             </Select.Option>
             <Select.Option value={SortOrder.Asc}>
               {intl.formatMessage({
                 defaultMessage: 'Oldest First',
-                id: 'FqI37D',
               })}
             </Select.Option>
           </Select>
@@ -98,7 +96,6 @@ const CrimeGroupFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Created Between',
-              id: 'hGJYON',
             })}
           </Typography.Paragraph>
 
@@ -119,13 +116,12 @@ const CrimeGroupFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
+            {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             mode="multiple"
             size="small"

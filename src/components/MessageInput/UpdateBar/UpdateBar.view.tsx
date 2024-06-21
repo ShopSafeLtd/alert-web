@@ -183,7 +183,6 @@ const UpdateBar = ({
           console.log('moused over');
         }}
         onFocus={() => {
-          console.log('foucesed');
           handleMarkAsRead();
         }}
       >
@@ -196,7 +195,6 @@ const UpdateBar = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Replying to: {createdBy}',
-                      id: 'wrBzdH',
                     },
                     { createdBy: replyTo.createdBy }
                   )}
@@ -205,7 +203,7 @@ const UpdateBar = ({
               <Col flex={1}>
                 <Text type="secondary" ellipsis>
                   {intl.formatMessage(
-                    { defaultMessage: '- {text}', id: 'HyaDMq' },
+                    { defaultMessage: '- {text}' },
                     { text: replyTo.text }
                   )}
                 </Text>
@@ -259,16 +257,13 @@ const UpdateBar = ({
                       trigger="click"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the image?',
-                        id: 'bRha+v',
                       })}
                       onConfirm={() => removeUpdateImage(file.uid)}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >
@@ -370,7 +365,6 @@ const UpdateBar = ({
                     <Option key={id} value={fullName}>
                       {intl.formatMessage(
                         {
-                          id: 'hK8+eV',
                           defaultMessage: '{fullName} ({businessName})',
                         },
                         {
@@ -387,7 +381,7 @@ const UpdateBar = ({
           <Col style={{ height: '40px' }}>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                <FormattedMessage id="9WRlF4" defaultMessage="Send" />
+                <FormattedMessage defaultMessage="Send" />
               </Button>
             </Form.Item>
           </Col>
@@ -453,7 +447,6 @@ const UpdateBar = ({
                     items={[
                       {
                         label: intl.formatMessage({
-                          id: '1Vs3Qr',
                           defaultMessage: 'Link Incidents',
                         }),
                         key: '1',
@@ -475,7 +468,6 @@ const UpdateBar = ({
                       },
                       {
                         label: intl.formatMessage({
-                          id: 'UhSUQG',
                           defaultMessage: 'Link Offenders',
                         }),
                         key: '2',
@@ -497,7 +489,6 @@ const UpdateBar = ({
 
                       {
                         label: intl.formatMessage({
-                          id: 'rmI5oX',
                           defaultMessage: 'Link Vehicles',
                         }),
                         key: '3',
@@ -518,7 +509,6 @@ const UpdateBar = ({
                       },
                       {
                         label: intl.formatMessage({
-                          id: 'nsggw+',
                           defaultMessage: 'Link Crime Groups',
                         }),
                         key: '4',
@@ -541,7 +531,6 @@ const UpdateBar = ({
 
                       {
                         label: intl.formatMessage({
-                          id: '5KxsaV',
                           defaultMessage: 'Link Bulletins',
                         }),
                         key: '5',
@@ -564,7 +553,7 @@ const UpdateBar = ({
                 }
               >
                 <Button>
-                  <FormattedMessage id="JBWS0c" defaultMessage="Link" />
+                  <FormattedMessage defaultMessage="Link" />
                 </Button>
               </Dropdown>
             </Col>
@@ -575,7 +564,6 @@ const UpdateBar = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
-          id: 'UhSUQG',
         })}
         open={linkOffender}
         width="800"
@@ -594,7 +582,6 @@ const UpdateBar = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Incidents',
-          id: '1Vs3Qr',
         })}
         open={linkIncident}
         width="1000"
@@ -613,7 +600,6 @@ const UpdateBar = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link CrimeGroups',
-          id: 'S+q256',
         })}
         open={linkCrimeGroup}
         width="800"
@@ -632,7 +618,6 @@ const UpdateBar = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Vehicles',
-          id: 'rmI5oX',
         })}
         open={linkVehicle}
         width="800"
@@ -652,7 +637,6 @@ const UpdateBar = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Bulletins',
-          id: '5KxsaV',
         })}
         open={linkArticle}
         width="1000"

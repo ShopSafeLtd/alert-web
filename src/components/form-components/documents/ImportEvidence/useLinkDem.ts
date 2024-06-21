@@ -1,7 +1,6 @@
+import type { ListDemEvidenceQuery } from '#/graphql/dem/queries/list-evidence.generated';
+import { useListDemEvidenceQuery } from '#/graphql/dem/queries/list-evidence.generated';
 import { useState } from 'react';
-
-import type { ListDemEvidenceQuery } from 'graphql/generated';
-import { useListDemEvidenceQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 
 interface Props {

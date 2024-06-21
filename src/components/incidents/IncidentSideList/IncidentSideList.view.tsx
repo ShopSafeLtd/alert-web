@@ -1,12 +1,12 @@
 import React from 'react';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/generated';
 import { Col, Row, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import SideListItem from 'components/side-list/SideListItem.view';
 import { useIntl } from 'react-intl';
-import { IncidentPriority } from 'graphql/generated';
 import useStyles from './IncidentSideList.styles';
 import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
+import { IncidentPriority } from 'graphql/types';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
 
 const getPriorityBorder = (value: IncidentPriority) => {
   if (value === IncidentPriority.High) return '5px solid rgb(222, 68, 54)';
@@ -59,14 +59,12 @@ const IncidentSideList = ({
                   <Typography.Text type="success">
                     {intl.formatMessage({
                       defaultMessage: 'Approved',
-                      id: '6XFO/C',
                     })}
                   </Typography.Text>
                 ) : (
                   <Typography.Text type="warning">
                     {intl.formatMessage({
                       defaultMessage: 'Unapproved',
-                      id: 'vfWKA1',
                     })}
                   </Typography.Text>
                 )}

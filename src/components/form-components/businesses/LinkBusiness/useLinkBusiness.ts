@@ -1,17 +1,15 @@
+import { useState } from 'react';
+import { useStoreState } from 'state';
 import type {
   ListBusinessesQuery,
   ListBusinessesQueryVariables,
-} from 'graphql/generated';
+} from 'graphql/businesses/queries/list-businesses.generated';
 import {
   ListBusinessesDocument,
-  QueryMode,
-  Role,
-  SortOrder,
-  useLinkBusinessToSchemeMutation,
   useListBusinessesQuery,
-} from 'graphql/generated';
-import { useState } from 'react';
-import { useStoreState } from 'state';
+} from 'graphql/businesses/queries/list-businesses.generated';
+import { QueryMode, Role, SortOrder } from 'graphql/types';
+import { useLinkBusinessToSchemeMutation } from 'graphql/businesses/mutations/link-business-to-scheme.generated';
 
 interface Props {
   onClose: () => void;

@@ -69,14 +69,12 @@ const DashboardSelectorDrawer = ({
       >
         {intl.formatMessage({
           defaultMessage: 'Open component drawer',
-          id: 'mkwoZM',
         })}
       </Button>
 
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Drag Items to Add',
-          id: '7v0cSn',
         })}
         placement="left"
         width={400}
@@ -87,7 +85,7 @@ const DashboardSelectorDrawer = ({
         extra={
           <Space>
             <Button type="primary" onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Close', id: 'rbrahO' })}
+              {intl.formatMessage({ defaultMessage: 'Close' })}
             </Button>
           </Space>
         }

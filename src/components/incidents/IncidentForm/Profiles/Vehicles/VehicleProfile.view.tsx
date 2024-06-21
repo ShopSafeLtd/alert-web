@@ -40,12 +40,10 @@ const VehicleProfileView = ({
             <Text>
               <FormattedMessage
                 defaultMessage="Registration: {registration}"
-                id="ykRerG"
                 values={{
                   registration:
                     vehicle.registration ||
                     intl.formatMessage({
-                      id: '5jeq8P',
                       defaultMessage: 'Unknown',
                     }),
                 }}
@@ -56,12 +54,10 @@ const VehicleProfileView = ({
             <Text>
               <FormattedMessage
                 defaultMessage="Make: {make}"
-                id="cPuur1"
                 values={{
                   make:
                     vehicle.make ||
                     intl.formatMessage({
-                      id: '5jeq8P',
                       defaultMessage: 'Unknown',
                     }),
                 }}
@@ -72,12 +68,10 @@ const VehicleProfileView = ({
             <Text>
               <FormattedMessage
                 defaultMessage="Model: {model}"
-                id="6gT5ZW"
                 values={{
                   model:
                     vehicle.model ||
                     intl.formatMessage({
-                      id: '5jeq8P',
                       defaultMessage: 'Unknown',
                     }),
                 }}
@@ -88,12 +82,10 @@ const VehicleProfileView = ({
             <Text>
               <FormattedMessage
                 defaultMessage="Colour: {colour}"
-                id="pukOve"
                 values={{
                   colour:
                     vehicle.colour ||
                     intl.formatMessage({
-                      id: '5jeq8P',
                       defaultMessage: 'Unknown',
                     }),
                 }}
@@ -106,7 +98,6 @@ const VehicleProfileView = ({
           <Col>
             <Tooltip
               title={intl.formatMessage({
-                id: 'JKhQNG',
                 defaultMessage:
                   'Change values or add new details this this vehicle.',
               })}
@@ -117,7 +108,7 @@ const VehicleProfileView = ({
                 className={vehicle.blank ? classes.redButton : ''}
                 disabled={saving}
               >
-                <FormattedMessage defaultMessage="Add Details" id="g5aL72" />
+                <FormattedMessage defaultMessage="Add Details" />
               </Button>
             </Tooltip>
           </Col>
@@ -125,7 +116,6 @@ const VehicleProfileView = ({
             <Col>
               <Tooltip
                 title={intl.formatMessage({
-                  id: '/h1vw6',
                   defaultMessage:
                     'Search existing vehicles if this vehicle already exists in the system.',
                 })}
@@ -135,10 +125,7 @@ const VehicleProfileView = ({
                   onClick={() => setMatchExistingOpen(vehicle)}
                   disabled={saving}
                 >
-                  <FormattedMessage
-                    defaultMessage="Match Vehicle"
-                    id="/utTvH"
-                  />
+                  <FormattedMessage defaultMessage="Match Vehicle" />
                 </Button>
               </Tooltip>
             </Col>
@@ -147,18 +134,15 @@ const VehicleProfileView = ({
             <Popconfirm
               placement="topLeft"
               title={intl.formatMessage({
-                id: 'hHs0lD',
                 defaultMessage: 'Remove the vehicle?',
               })}
               onConfirm={() => {
                 onRemoveVehicle(vehicle.id);
               }}
               okText={intl.formatMessage({
-                id: 'a5msuh',
                 defaultMessage: 'Yes',
               })}
               cancelText={intl.formatMessage({
-                id: 'oUWADl',
                 defaultMessage: 'No',
               })}
               overlayInnerStyle={{ padding: 10 }}

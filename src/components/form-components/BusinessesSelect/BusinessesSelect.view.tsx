@@ -1,16 +1,14 @@
 import React, { useCallback } from 'react';
-import type { BusinessesSelectQueryVariables } from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useBusinessesSideListQuery,
-} from 'graphql/generated';
+import type { BusinessesSelectQueryVariables } from './BusinessSelectQuery.generated';
+
 import { Select, Typography } from 'antd';
 import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 import { useIntl } from 'react-intl';
 import debounce from 'lodash/debounce';
+import { useBusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Props {
   value?: string[];
@@ -239,9 +237,7 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
         }
       }}
       notFoundContent={
-        loading
-          ? intl.formatMessage({ defaultMessage: 'loading', id: '8LHz4z' })
-          : null
+        loading ? intl.formatMessage({ defaultMessage: 'loading' }) : null
       }
       onClear={() => {
         if (onChange) onChange([]);

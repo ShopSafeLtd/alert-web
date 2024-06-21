@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { CreateInvestigationMutation } from 'graphql/generated';
-import { useCreateInvestigationMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import { useCreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
 
 export interface InvestigationData {
   id?: string;
@@ -46,11 +46,9 @@ const useAddInvestigation = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The investigation has been added! ',
-          id: 'Y0ftuc',
         }),
         placement: 'bottomRight',
       });

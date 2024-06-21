@@ -16,10 +16,10 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
 import { UploadOutlined } from '@ant-design/icons';
-import type { TodoQuery } from '../../../../graphql/generated';
 import type { CustomQuestion } from '../../../../types/DataType';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 import type { FormData } from './useTodo';
+import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
 
 interface Props {
   todo: TodoQuery | undefined;
@@ -82,14 +82,12 @@ const TodoView = ({
       <Typography.Title level={4}>
         {intl.formatMessage({
           defaultMessage: 'Details',
-          id: 'Lv0zJu',
         })}
       </Typography.Title>
       <Descriptions>
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Name',
-            id: 'HAlOn1',
           })}
         >
           {loading ? (
@@ -101,7 +99,6 @@ const TodoView = ({
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Created At',
-            id: 'wittYy',
           })}
         >
           {todo?.todo ? moment(todo.todo.createdAt).format('DD/MM/YY') : null}
@@ -109,7 +106,6 @@ const TodoView = ({
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Due Date',
-            id: '8XUukm',
           })}
         >
           {todo?.todo ? moment(todo.todo.dueDate).format('DD/MM/YY') : null}
@@ -117,7 +113,6 @@ const TodoView = ({
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Description',
-            id: 'Q8Qw5B',
           })}
         >
           {todo?.todo?.description}
@@ -134,7 +129,6 @@ const TodoView = ({
           <Typography.Title level={4}>
             {intl.formatMessage({
               defaultMessage: 'Questions',
-              id: 'KV/9Hv',
             })}
           </Typography.Title>
         ) : null}
@@ -149,7 +143,6 @@ const TodoView = ({
             <Typography.Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Time Tracking',
-                id: 'm1/6Jj',
               })}
             </Typography.Title>
             <Row>
@@ -167,7 +160,6 @@ const TodoView = ({
                       min={0}
                       addonAfter={intl.formatMessage({
                         defaultMessage: 'mins',
-                        id: '6G3yvH',
                       })}
                     />
                   </Form.Item>
@@ -179,7 +171,6 @@ const TodoView = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Another User',
-                    id: 'sy3PlZ',
                   })}
                 </Typography.Paragraph>
                 <Select
@@ -207,7 +198,6 @@ const TodoView = ({
           name="documents"
           label={intl.formatMessage({
             defaultMessage: 'Evidence',
-            id: '6g7+6N',
           })}
         >
           <Upload
@@ -220,7 +210,6 @@ const TodoView = ({
             <Button icon={<UploadOutlined />}>
               {intl.formatMessage({
                 defaultMessage: 'Upload Document',
-                id: 'Kc9MAV',
               })}
             </Button>
           </Upload>
@@ -236,7 +225,6 @@ const TodoView = ({
                 }}
               >
                 {intl.formatMessage({
-                  id: '47FYwb',
                   defaultMessage: 'Cancel',
                 })}
               </Button>
@@ -250,7 +238,6 @@ const TodoView = ({
               >
                 {confirmText ||
                   intl.formatMessage({
-                    id: '8fwjt4',
                     defaultMessage: 'Complete Activity',
                   })}
               </Button>

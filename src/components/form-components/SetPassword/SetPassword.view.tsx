@@ -21,7 +21,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
             name="password"
             label={intl.formatMessage({
               defaultMessage: 'New Password',
-              id: 'Ev6SEF',
             })}
             hasFeedback
             rules={[
@@ -29,7 +28,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please set a password for the account.',
-                  id: '87+qJ4',
                 }),
               },
               {
@@ -37,7 +35,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
                 message: intl.formatMessage({
                   defaultMessage:
                     'Password must contain upper and lower case letters, a number, and be at least 8 characters long.',
-                  id: 'v0ZJr7',
                 }),
               },
             ]}
@@ -46,7 +43,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
               size="large"
               placeholder={intl.formatMessage({
                 defaultMessage: 'Input Password',
-                id: 'nB3dy0',
               })}
               disabled={saving}
             />
@@ -55,7 +51,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
             name="confirmPassword"
             label={intl.formatMessage({
               defaultMessage: 'Confirm Password',
-              id: 'vfG+nh',
             })}
             dependencies={['password']}
             hasFeedback
@@ -64,7 +59,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please confirm your password!',
-                  id: 'CuXG65',
                 }),
               },
               ({ getFieldValue }) => ({
@@ -77,7 +71,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
                       intl.formatMessage({
                         defaultMessage:
                           'The two passwords that you entered do not match!',
-                        id: 'ou6i2r',
                       })
                     )
                   );
@@ -90,7 +83,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
               disabled={saving}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Confirm Password',
-                id: 'vfG+nh',
               })}
             />
           </Form.Item>
@@ -103,7 +95,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -116,7 +107,6 @@ const SetPassword = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
             >
               {intl.formatMessage({
                 defaultMessage: 'Set Password',
-                id: '9YK+Sa',
               })}
             </Button>
           </Col>

@@ -160,7 +160,6 @@ const LocatingCard = ({ height, width, markers }: Props) => {
         <Text className={classes.mapText}>
           {intl.formatMessage({
             defaultMessage: 'View Larger Map',
-            id: '3LkujO',
           })}
         </Text>
       </div>
@@ -219,7 +218,7 @@ const LocatingCard = ({ height, width, markers }: Props) => {
         bodyStyle={{ padding: 0, borderRadius: 10, overflow: 'hidden' }}
         open={largeOpen}
         onOk={toggleLargeOpen}
-        okText={intl.formatMessage({ defaultMessage: 'Close', id: 'rbrahO' })}
+        okText={intl.formatMessage({ defaultMessage: 'Close' })}
         onCancel={toggleLargeOpen}
         width="95vw"
         cancelButtonProps={{
@@ -293,7 +292,6 @@ const LocatingCard = ({ height, width, markers }: Props) => {
                 style={{ margin: 0 }}
                 label={intl.formatMessage({
                   defaultMessage: 'Show Heat Map',
-                  id: 'anpRhM',
                 })}
               >
                 <Switch
@@ -306,7 +304,6 @@ const LocatingCard = ({ height, width, markers }: Props) => {
                 style={{ margin: 0 }}
                 label={intl.formatMessage({
                   defaultMessage: 'Show Markers',
-                  id: '3AXahR',
                 })}
               >
                 <Switch

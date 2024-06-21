@@ -16,14 +16,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type {
-  CreateDocumentMutation,
-  CreateInvestigationMutation,
-  CreateSimpleOffenderMutation,
-  DeleteDocumentMutation,
-  UpdateSimpleOffenderMutation,
-  VehicleQuery,
-} from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
@@ -62,6 +55,12 @@ import AddExistingOffender from 'components/form-components/offender/offender/Ad
 import ImagesList from 'components/ViewPage/ImagesList';
 import IntelSection from 'components/ViewPage/IntelSection';
 import useStyles from './ViewVehicle.styles';
+import type { VehicleQuery } from 'graphql/vehicles/queries/view-vehicle.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
 
 const { Title } = Typography;
 const { confirm } = Modal;
@@ -200,7 +199,6 @@ const ViewVehicle = ({
 
   const unknown = intl.formatMessage({
     defaultMessage: 'Unknown',
-    id: '5jeq8P',
   });
 
   return (
@@ -217,11 +215,9 @@ const ViewVehicle = ({
                   data?.vehicle?.subscribed
                     ? intl.formatMessage({
                         defaultMessage: 'Stop getting notified about updates.',
-                        id: 'WpTY6U',
                       })
                     : intl.formatMessage({
                         defaultMessage: 'Get notified about updates.',
-                        id: 'icr+Hj',
                       })
                 }
               >
@@ -240,11 +236,9 @@ const ViewVehicle = ({
                   {data?.vehicle?.subscribed
                     ? intl.formatMessage({
                         defaultMessage: 'Un-follow',
-                        id: 'U9yypY',
                       })
                     : intl.formatMessage({
                         defaultMessage: 'Follow',
-                        id: 'ieGrWo',
                       })}
                 </Button>
               </Tooltip>
@@ -260,7 +254,6 @@ const ViewVehicle = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Edit',
-                    id: 'wEQDC6',
                   })}
                 </Button>
                 {/* <Dropdown
@@ -321,11 +314,9 @@ const ViewVehicle = ({
                     confirm({
                       title: intl.formatMessage({
                         defaultMessage: 'Do you want to delete the vehicle?',
-                        id: 'dZ4nD4',
                       }),
                       content: intl.formatMessage({
                         defaultMessage: 'This action cannot be undone.',
-                        id: 'JDJoIZ',
                       }),
                       onOk() {
                         onDeleteVehicle();
@@ -340,7 +331,6 @@ const ViewVehicle = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Delete',
-                    id: 'K3r6DQ',
                   })}
                 </Button>
               </Col>
@@ -375,7 +365,6 @@ const ViewVehicle = ({
                           <Descriptions.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Alert ID',
-                              id: 'k8ZNgH',
                             })}
                           >
                             {data?.vehicle?.reference}
@@ -383,7 +372,6 @@ const ViewVehicle = ({
                           <Descriptions.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Registration',
-                              id: 'qv7ied',
                             })}
                           >
                             {data?.vehicle?.registration || unknown}
@@ -391,7 +379,6 @@ const ViewVehicle = ({
                           <Descriptions.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Make',
-                              id: '6AAM0P',
                             })}
                           >
                             {data?.vehicle?.make || unknown}
@@ -399,7 +386,6 @@ const ViewVehicle = ({
                           <Descriptions.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Model',
-                              id: 'rhSI1/',
                             })}
                           >
                             {data?.vehicle?.model || unknown}
@@ -407,7 +393,6 @@ const ViewVehicle = ({
                           <Descriptions.Item
                             label={intl.formatMessage({
                               defaultMessage: 'Colour',
-                              id: '+e8vAT',
                             })}
                           >
                             {data?.vehicle?.colour || unknown}
@@ -417,7 +402,6 @@ const ViewVehicle = ({
                             <Descriptions.Item
                               label={intl.formatMessage({
                                 defaultMessage: 'Updated At',
-                                id: 'ECx6bx',
                               })}
                               span={2}
                             >
@@ -453,7 +437,6 @@ const ViewVehicle = ({
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                               description={intl.formatMessage({
                                 defaultMessage: 'No incidents found',
-                                id: '312q4w',
                               })}
                             />
                           </Card>
@@ -474,10 +457,7 @@ const ViewVehicle = ({
                       <Col>
                         <Statistic
                           title={
-                            <FormattedMessage
-                              defaultMessage="Total Incidents"
-                              id="pUlxda"
-                            />
+                            <FormattedMessage defaultMessage="Total Incidents" />
                           }
                           value={data?.vehicle?.totalIncidents || 0}
                         />
@@ -485,10 +465,7 @@ const ViewVehicle = ({
                       <Col>
                         <Statistic
                           title={
-                            <FormattedMessage
-                              defaultMessage="Total Offenders"
-                              id="Pyo0l3"
-                            />
+                            <FormattedMessage defaultMessage="Total Offenders" />
                           }
                           value={data?.vehicle?.totalOffenders || 0}
                         />
@@ -496,10 +473,7 @@ const ViewVehicle = ({
                       <Col>
                         <Statistic
                           title={
-                            <FormattedMessage
-                              defaultMessage="Total Crime Groups"
-                              id="PwRU00"
-                            />
+                            <FormattedMessage defaultMessage="Total Crime Groups" />
                           }
                           value={data?.vehicle?.totalCrimeGroups || 0}
                         />
@@ -515,7 +489,6 @@ const ViewVehicle = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Offenders',
-                      id: 'xb54TN',
                     })}
                   </Title>
                 </Col>
@@ -527,7 +500,6 @@ const ViewVehicle = ({
                           items={[
                             {
                               label: intl.formatMessage({
-                                id: 'w4XD3a',
                                 defaultMessage: 'Add Existing Offender',
                               }),
                               key: '1',
@@ -541,7 +513,6 @@ const ViewVehicle = ({
                             },
                             {
                               label: intl.formatMessage({
-                                id: '58ir77',
                                 defaultMessage: 'Create New Offender',
                               }),
                               key: '2',
@@ -568,7 +539,6 @@ const ViewVehicle = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Offenders',
-                          id: 'KaNxum',
                         })}
                       </Button>
                     </Dropdown>
@@ -588,10 +558,7 @@ const ViewVehicle = ({
               ) : (
                 <Empty
                   description={
-                    <FormattedMessage
-                      defaultMessage="No offenders for this vehicle"
-                      id="R72ORA"
-                    />
+                    <FormattedMessage defaultMessage="No offenders for this vehicle" />
                   }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
@@ -599,7 +566,7 @@ const ViewVehicle = ({
             </Card>
             <Card loading={loading}>
               <Title level={4}>
-                <FormattedMessage defaultMessage="Incidents" id="mtr3R4" />
+                <FormattedMessage defaultMessage="Incidents" />
               </Title>
               {data?.vehicle?.incidents.length && !loading ? (
                 <IncidentTable
@@ -609,10 +576,7 @@ const ViewVehicle = ({
               ) : (
                 <Empty
                   description={
-                    <FormattedMessage
-                      defaultMessage="No incidents for this vehicle"
-                      id="eMIzkc"
-                    />
+                    <FormattedMessage defaultMessage="No incidents for this vehicle" />
                   }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
@@ -620,7 +584,7 @@ const ViewVehicle = ({
             </Card>
             <Card loading={loading}>
               <Title level={4}>
-                <FormattedMessage defaultMessage="Crime Groups" id="a0aLil" />
+                <FormattedMessage defaultMessage="Crime Groups" />
               </Title>
               {data?.vehicle?.crimeGroup.length && !loading ? (
                 <CrimeGroupTable
@@ -630,10 +594,7 @@ const ViewVehicle = ({
               ) : (
                 <Empty
                   description={
-                    <FormattedMessage
-                      defaultMessage="No crime groups for this vehicle"
-                      id="yhLYu7"
-                    />
+                    <FormattedMessage defaultMessage="No crime groups for this vehicle" />
                   }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
@@ -646,7 +607,6 @@ const ViewVehicle = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Evidence',
-                      id: '6g7+6N',
                     })}
                   </Title>
                 </Col>
@@ -664,7 +624,6 @@ const ViewVehicle = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Evidence',
-                        id: 'vgVasT',
                       })}
                     </Button>
                   </Col>
@@ -682,7 +641,6 @@ const ViewVehicle = ({
                 <Empty
                   description={intl.formatMessage({
                     defaultMessage: 'No evidence for this vehicle',
-                    id: 'Ca6r3Z',
                   })}
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
@@ -695,7 +653,6 @@ const ViewVehicle = ({
                     <Title level={4}>
                       {intl.formatMessage({
                         defaultMessage: 'Investigations',
-                        id: 'juQ8mz',
                       })}
                     </Title>
                   </Col>
@@ -713,7 +670,6 @@ const ViewVehicle = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Investigation',
-                        id: 'U5+v9Y',
                       })}
                     </Button>
                   </Col>
@@ -726,7 +682,6 @@ const ViewVehicle = ({
                   <Empty
                     description={intl.formatMessage({
                       defaultMessage: 'No investigations for this vehicle',
-                      id: 'Dcp2gy',
                     })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
@@ -760,12 +715,7 @@ const ViewVehicle = ({
         </Col>
 
         <Drawer
-          title={
-            <FormattedMessage
-              defaultMessage="Edit Vehicle Details"
-              id="AWN+hV"
-            />
-          }
+          title={<FormattedMessage defaultMessage="Edit Vehicle Details" />}
           open={editVehicle}
           width={700}
           zIndex={999}
@@ -798,16 +748,11 @@ const ViewVehicle = ({
           )}
         </Drawer>
         <Modal
-          title={
-            <FormattedMessage
-              defaultMessage="Edit Update Content"
-              id="8sZeJM"
-            />
-          }
+          title={<FormattedMessage defaultMessage="Edit Update Content" />}
           open={editUpdate !== null}
           onOk={handleEditUpdate}
           onCancel={() => setEditUpdate(null)}
-          okText={<FormattedMessage defaultMessage="Save" id="jvo0vs" />}
+          okText={<FormattedMessage defaultMessage="Save" />}
         >
           <Input
             value={editUpdateInput}
@@ -819,7 +764,6 @@ const ViewVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
-          id: 'vgVasT',
         })}
         open={addDocument}
         width="600"
@@ -840,7 +784,6 @@ const ViewVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={addInvestigation}
         width="500"
@@ -860,7 +803,6 @@ const ViewVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Vehicle Images',
-          id: 'd9vpDB',
         })}
         open={editImages}
         width="800"
@@ -874,7 +816,6 @@ const ViewVehicle = ({
             images={data?.vehicle?.images}
             title={intl.formatMessage({
               defaultMessage: 'vehicle',
-              id: 'qcNaCj',
             })}
             saving={saving}
           />
@@ -887,7 +828,6 @@ const ViewVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
-          id: '+OfJ4/',
         })}
         open={!!editOffenderData}
         width="700"
@@ -908,7 +848,6 @@ const ViewVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
-          id: 'V+RsEq',
         })}
         open={addOffender}
         width="700"
@@ -931,7 +870,6 @@ const ViewVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Offenders',
-          id: '1FbM4r',
         })}
         open={addExistingOffender}
         width="1000"

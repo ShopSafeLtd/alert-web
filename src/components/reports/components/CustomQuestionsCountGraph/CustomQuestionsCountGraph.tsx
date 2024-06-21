@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { DonutGraph } from '#/components/reports/graphs';
 import { Button, Typography, Empty, Modal, Select } from 'antd';
-import type { CustomQuestionsCountGraphQueryVariables } from 'graphql/generated';
-import {
-  useCustomQuestionsCountGraphQuery,
-  useAvailableQuestionsQuery,
-} from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCogs, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { MetaData } from '#/views/reports/types';
 
+import type { CustomQuestionsCountGraphQueryVariables } from './CustomQuestionsCountGraph.generated';
+import { useCustomQuestionsCountGraphQuery } from './CustomQuestionsCountGraph.generated';
+import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
 interface Props {
   isPrinting: boolean;
   editMode: boolean;
@@ -73,7 +72,6 @@ const CustomQuestionsCountGraph = ({
           data={data?.customQuestionsCountGraph.data}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Data',
-            id: 'D3rOMr',
           })}
           type="donut"
         />
@@ -81,7 +79,6 @@ const CustomQuestionsCountGraph = ({
         <Empty
           description={intl.formatMessage({
             defaultMessage: 'No question set for graph',
-            id: 'Pqy7pi',
           })}
         />
       )}
@@ -89,7 +86,6 @@ const CustomQuestionsCountGraph = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Select Question',
-          id: 'yV1hME',
         })}
         open={selectOpen}
         onCancel={toggleSelectOpen}

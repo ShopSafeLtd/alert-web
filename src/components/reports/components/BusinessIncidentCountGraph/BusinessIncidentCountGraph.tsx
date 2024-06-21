@@ -1,8 +1,7 @@
 import React from 'react';
 import { BarGraph, DonutGraph } from '#/components/reports/graphs';
 import { Button, Typography } from 'antd';
-import type { BusinessIncidentCountGraphQueryVariables } from 'graphql/generated';
-import { useBusinessIncidentCountGraphQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,6 +10,8 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import type { MetaData } from '#/views/reports/types';
+import type { BusinessIncidentCountGraphQueryVariables } from './BusinessIncidentCountGraph.generated';
+import { useBusinessIncidentCountGraphQuery } from './BusinessIncidentCountGraph.generated';
 
 interface Props {
   isPrinting: boolean;
@@ -48,7 +49,6 @@ const BusinessIncidentCountGraph = ({
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
           defaultMessage: 'Business Incidents Count',
-          id: '+mhkDm',
         })}
       </Typography.Title>
       {editMode ? (
@@ -124,7 +124,6 @@ const BusinessIncidentCountGraph = ({
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
-            id: 'QQSdHP',
           })}
         </Button>
       )}
@@ -134,7 +133,6 @@ const BusinessIncidentCountGraph = ({
           data={data?.businessIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
-            id: '7UNuAl',
           })}
         />
       ) : (
@@ -143,7 +141,6 @@ const BusinessIncidentCountGraph = ({
           data={data?.businessIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
-            id: '7UNuAl',
           })}
           type={metaData?.type as 'donut' | 'pie'}
         />

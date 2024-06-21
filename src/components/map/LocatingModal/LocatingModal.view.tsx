@@ -93,12 +93,10 @@ const LocatingModal = ({
       bodyStyle={{ padding: 0, borderRadius: 10, overflow: 'hidden' }}
       open={open}
       title={intl.formatMessage({
-        id: 'iUn355',
         defaultMessage: 'Pin an Location -- click to pin a location on the map',
       })}
       okText={intl.formatMessage({
         defaultMessage: 'Save Location',
-        id: 'w/HiaX',
       })}
       onOk={onSubmit}
       onCancel={() => {
@@ -165,7 +163,6 @@ const LocatingModal = ({
               style={{ margin: 0 }}
               label={intl.formatMessage({
                 defaultMessage: 'Show Heat Map',
-                id: 'anpRhM',
               })}
             >
               <Switch
@@ -178,7 +175,6 @@ const LocatingModal = ({
               style={{ margin: 0 }}
               label={intl.formatMessage({
                 defaultMessage: 'Show Markers',
-                id: '3AXahR',
               })}
             >
               <Switch

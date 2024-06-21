@@ -3,16 +3,15 @@ import { useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import { useIntl } from 'react-intl';
-import type { AvailableQuestionsQuery } from '../../../graphql/generated';
-import {
-  AnswerType,
-  useAvailableQuestionsQuery,
-  useBrandsQuery,
-  useCreateOrAddQuestionMutation,
-} from '../../../graphql/generated';
+
 import errorNotification from '../../../types/mutation_notifications/error_notification';
 import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
 import { useStoreState } from '../../../state';
+import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
+import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
+import { AnswerType } from 'graphql/types';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/create-question.generated';
 
 interface Return {
   questionData: AvailableQuestionsQuery | undefined;
@@ -88,11 +87,9 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully created/added!',
-          id: 'Qdgb9w',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The question has been succesfully created/added!',
-          id: '1UtqCZ',
         }),
 
         placement: 'bottomRight',

@@ -48,7 +48,6 @@ const FilterOptions = ({
       <GroupsSelect
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Groups',
-          id: 'q2cuIU',
         })}
         mode="multiple"
         maxTagCount="responsive"
@@ -64,7 +63,6 @@ const FilterOptions = ({
       <Select
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Businesses',
-          id: 'MZynHZ',
         })}
         mode="multiple"
         maxTagCount="responsive"
@@ -207,7 +205,6 @@ const PerformanceReport = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Logo',
-                id: 'pn9DSF',
               })}
             </Button>
           </div>
@@ -215,7 +212,6 @@ const PerformanceReport = ({
             {intl.formatMessage(
               {
                 defaultMessage: 'Offender Report: {startDate} - {endDate}',
-                id: 'tsUrpI',
               },
               {
                 startDate: dateRange.startDate.toLocaleDateString(),
@@ -260,7 +256,6 @@ const PerformanceReport = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Components available to add',
-              id: 'OJhI0K',
             })}
             placement="right"
             closable
@@ -305,7 +300,6 @@ const PerformanceReport = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Add Logo',
-              id: 'pn9DSF',
             })}
             placement="right"
             closable
@@ -323,7 +317,6 @@ const PerformanceReport = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Save As',
-              id: '/XPfp1',
             })}
             placement="right"
             closable
@@ -384,7 +377,6 @@ const PerformanceReport = ({
                 {intl.formatMessage(
                   {
                     defaultMessage: 'Offender Report: {startDate} - {endDate}',
-                    id: 'tsUrpI',
                   },
                   {
                     startDate: dateRange.startDate.toLocaleDateString(),

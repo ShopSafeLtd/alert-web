@@ -23,12 +23,7 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import type {
-  ActiveChecklistsQuery,
-  ChecklistsQuery,
-  CreateActiveChecklistMutation,
-} from '../../../graphql/generated';
-import { ChecklistStatus } from '../../../graphql/generated';
+
 import useStyles from './ListChcklists.styles';
 import type {
   ActiveChecklistSortOptions,
@@ -38,6 +33,10 @@ import type {
   SetChecklistFilterModel,
 } from '../../../state/filter-model';
 import CreateActiveChecklist from './drawer/create-active-checklist';
+import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/list-active-checklists.generated';
+import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/list-checklists.generated';
+import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/create-active-checklist.generated';
+import { ChecklistStatus } from 'graphql/types';
 
 interface ChecklistsViewProps {
   data: ChecklistsQuery | undefined;
@@ -114,7 +113,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
         items={[
           {
             key: 'Checklists',
-            label: <FormattedMessage defaultMessage="Checklists" id="ICqy9/" />,
+            label: <FormattedMessage defaultMessage="Checklists" />,
             children: (
               <div className={classes.innerPage}>
                 <PageHeader
@@ -124,14 +123,12 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         {
                           label: intl.formatMessage({
                             defaultMessage: 'All',
-                            id: 'zQvVDJ',
                           }),
                           value: false,
                         },
                         {
                           label: intl.formatMessage({
                             defaultMessage: 'Personal',
-                            id: 'NDx+B0',
                           }),
                           value: true,
                         },
@@ -219,12 +216,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                               ? 'ascend'
                               : 'descend'
                             : undefined,
-                        title: (
-                          <FormattedMessage
-                            defaultMessage="Title"
-                            id="9a9+ww"
-                          />
-                        ),
+                        title: <FormattedMessage defaultMessage="Title" />,
                         render: (value, item) => (
                           <Link to={`/app/checklists/active/${item.key}`}>
                             {value}
@@ -235,12 +227,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         key: 'businessName',
                         dataIndex: 'businessName',
                         width: 200,
-                        title: (
-                          <FormattedMessage
-                            defaultMessage="Business"
-                            id="w1Fanr"
-                          />
-                        ),
+                        title: <FormattedMessage defaultMessage="Business" />,
                       },
                       {
                         key: 'percentComplete',
@@ -254,10 +241,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                               : 'descend'
                             : undefined,
                         title: (
-                          <FormattedMessage
-                            defaultMessage="Completion (%)"
-                            id="ZDpoRo"
-                          />
+                          <FormattedMessage defaultMessage="Completion (%)" />
                         ),
                       },
                       {
@@ -265,12 +249,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         dataIndex: 'score',
                         width: 200,
 
-                        title: (
-                          <FormattedMessage
-                            defaultMessage="Score (%)"
-                            id="qcR99J"
-                          />
-                        ),
+                        title: <FormattedMessage defaultMessage="Score (%)" />,
                       },
                       {
                         key: 'status',
@@ -283,24 +262,17 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                               ? 'ascend'
                               : 'descend'
                             : undefined,
-                        title: (
-                          <FormattedMessage
-                            defaultMessage="Status"
-                            id="tzMNF3"
-                          />
-                        ),
+                        title: <FormattedMessage defaultMessage="Status" />,
                         filters: [
                           {
                             text: intl.formatMessage({
                               defaultMessage: 'In Progress',
-                              id: 'B487HA',
                             }),
                             value: ChecklistStatus.InProgress,
                           },
                           {
                             text: intl.formatMessage({
                               defaultMessage: 'Completed',
-                              id: '95stPq',
                             }),
                             value: ChecklistStatus.Completed,
                           },
@@ -311,17 +283,11 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         render: (value: ChecklistStatus) =>
                           value === ChecklistStatus.InProgress ? (
                             <Typography.Text type="warning">
-                              <FormattedMessage
-                                defaultMessage="In Progress"
-                                id="B487HA"
-                              />
+                              <FormattedMessage defaultMessage="In Progress" />
                             </Typography.Text>
                           ) : (
                             <Typography.Text type="success">
-                              <FormattedMessage
-                                defaultMessage="Completed"
-                                id="95stPq"
-                              />
+                              <FormattedMessage defaultMessage="Completed" />
                             </Typography.Text>
                           ),
                       },
@@ -337,10 +303,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         dataIndex: 'completedAt',
                         width: 100,
                         title: (
-                          <FormattedMessage
-                            defaultMessage="Completed Date"
-                            id="DFG3iK"
-                          />
+                          <FormattedMessage defaultMessage="Completed Date" />
                         ),
                       },
 
@@ -368,7 +331,6 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                               <Space>
                                 <Tooltip
                                   title={intl.formatMessage({
-                                    id: 'rggueN',
                                     defaultMessage: 'Download Pdf',
                                   })}
                                 >
@@ -400,7 +362,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
           },
           {
             key: 'Templates',
-            label: <FormattedMessage defaultMessage="Templates" id="A3ptul" />,
+            label: <FormattedMessage defaultMessage="Templates" />,
             children: (
               <div className={classes.innerPage}>
                 <PageHeader
@@ -410,14 +372,12 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         {
                           label: intl.formatMessage({
                             defaultMessage: 'All',
-                            id: 'zQvVDJ',
                           }),
                           value: false,
                         },
                         {
                           label: intl.formatMessage({
                             defaultMessage: 'Personal',
-                            id: 'NDx+B0',
                           }),
                           value: true,
                         },
@@ -437,10 +397,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                       key={1}
                       onClick={() => navigate('/app/checklists/add')}
                     >
-                      <FormattedMessage
-                        defaultMessage="Create New Template"
-                        id="KEGSVQ"
-                      />
+                      <FormattedMessage defaultMessage="Create New Template" />
                     </Button>,
                   ]}
                 />
@@ -460,12 +417,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                       {
                         key: 'title',
                         dataIndex: 'title',
-                        title: (
-                          <FormattedMessage
-                            defaultMessage="Title"
-                            id="9a9+ww"
-                          />
-                        ),
+                        title: <FormattedMessage defaultMessage="Title" />,
                         render: (value, item) => (
                           <Link to={`edit/${item.key}`}>{value}</Link>
                         ),
@@ -474,10 +426,7 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         key: 'description',
                         dataIndex: 'description',
                         title: (
-                          <FormattedMessage
-                            defaultMessage="Description"
-                            id="Q8Qw5B"
-                          />
+                          <FormattedMessage defaultMessage="Description" />
                         ),
                       },
                       {
@@ -489,7 +438,6 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                           <Space>
                             <Tooltip
                               title={intl.formatMessage({
-                                id: 'Pajv+D',
                                 defaultMessage:
                                   'Create active checklist from template',
                               })}
@@ -511,7 +459,6 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                             </Tooltip>
                             <Tooltip
                               title={intl.formatMessage({
-                                id: 'hQ4Jcl',
                                 defaultMessage: 'Edit template',
                               })}
                             >
@@ -531,18 +478,15 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                             </Tooltip>
                             <Tooltip
                               title={intl.formatMessage({
-                                id: 'AghqfS',
                                 defaultMessage: 'Delete template',
                               })}
                             >
                               <Popconfirm
                                 title={intl.formatMessage({
                                   defaultMessage: 'Are you sure?',
-                                  id: '2oCaym',
                                 })}
                                 okText={intl.formatMessage({
                                   defaultMessage: 'Delete',
-                                  id: 'K3r6DQ',
                                 })}
                                 onConfirm={() => deleteTemplate(record.key)}
                                 overlayInnerStyle={{ padding: 10 }}
@@ -566,7 +510,6 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Checklist',
-          id: 'gV8AIA',
         })}
         width={1000}
         open={createChecklistOpen}

@@ -1,6 +1,6 @@
 import React from 'react';
-import type { TagQuery } from 'graphql/generated';
-import { CrimeType, TagType } from 'graphql/generated';
+
+import { CrimeType, TagType } from 'graphql/types';
 import {
   Button,
   Col,
@@ -12,6 +12,7 @@ import {
   Typography,
 } from 'antd';
 import { useIntl } from 'react-intl';
+import type { TagQuery } from 'graphql/tag/queries/tag.generated';
 
 const { Text } = Typography;
 
@@ -55,7 +56,6 @@ const EditCrimeType = ({
             {intl.formatMessage({
               defaultMessage:
                 'Crime types are used to categorize incidents that are submitted by members.',
-              id: 'd4sshx',
             })}
           </Text>
         </Col>
@@ -64,13 +64,12 @@ const EditCrimeType = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the crime type.',
-                  id: 'H+p9nh',
                 }),
               },
             ]}
@@ -85,7 +84,6 @@ const EditCrimeType = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea rows={10} disabled={saving} />
@@ -97,7 +95,6 @@ const EditCrimeType = ({
               name="crimeType"
               label={intl.formatMessage({
                 defaultMessage: 'Crime Type Category',
-                id: 'vXvK25',
               })}
               rules={[
                 {
@@ -105,7 +102,6 @@ const EditCrimeType = ({
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select a category for the new crime type.',
-                    id: 'bav6vT',
                   }),
                 },
               ]}
@@ -114,55 +110,46 @@ const EditCrimeType = ({
                 <Select.Option value={CrimeType.Burglary}>
                   {intl.formatMessage({
                     defaultMessage: 'Burglary',
-                    id: 'f2A9g8',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.CriminalDamage}>
                   {intl.formatMessage({
                     defaultMessage: 'Criminal Damage',
-                    id: 'FAQLEy',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.Drugs}>
                   {intl.formatMessage({
                     defaultMessage: 'Drugs',
-                    id: '8xjLZ0',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.FraudForgery}>
                   {intl.formatMessage({
                     defaultMessage: 'Fraud & Forgery',
-                    id: 'zAWiMb',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.Robbery}>
                   {intl.formatMessage({
                     defaultMessage: 'Robbery',
-                    id: 'wHRKby',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.SexualOffences}>
                   {intl.formatMessage({
                     defaultMessage: 'Sexual Offences',
-                    id: 'znM5dX',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.TheftHandling}>
                   {intl.formatMessage({
                     defaultMessage: 'Theft & Handling',
-                    id: 'WD3oHm',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.Violence}>
                   {intl.formatMessage({
                     defaultMessage: 'Violence Against The Person',
-                    id: 'oOGhLO',
                   })}
                 </Select.Option>
                 <Select.Option value={CrimeType.Other}>
                   {intl.formatMessage({
                     defaultMessage: 'Other',
-                    id: '/VnDMl',
                   })}
                 </Select.Option>
               </Select>
@@ -175,7 +162,7 @@ const EditCrimeType = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -185,7 +172,7 @@ const EditCrimeType = ({
               type="primary"
               htmlType="submit"
             >
-              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+              {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
           </Col>
         </Row>

@@ -46,12 +46,11 @@ const UploadImage = ({
             name="images"
             label={intl.formatMessage({
               defaultMessage: 'Images',
-              id: 'Fip4H8',
             })}
             tooltip={intl.formatMessage(
               {
-                defaultMessage: `Please add any images that you have of the {title}.`,
-                id: 'zBoD8y',
+                defaultMessage:
+                  'Please add any images that you have of the {title}.',
               },
               { title }
             )}
@@ -99,18 +98,15 @@ const UploadImage = ({
                       trigger="hover"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the image?',
-                        id: 'bRha+v',
                       })}
                       onConfirm={() => {
                         onRemoveImage(file.uid);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >
@@ -140,7 +136,6 @@ const UploadImage = ({
                 // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                 `+ ${intl.formatMessage({
                   defaultMessage: 'Upload',
-                  id: 'p4N05H',
                 })}`}
             </Upload>
           </Form.Item>

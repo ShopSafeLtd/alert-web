@@ -18,25 +18,25 @@ type SelectedType =
 const selectedToText = (value: SelectedType) => {
   switch (value) {
     case 'last7Days': {
-      return <FormattedMessage defaultMessage="Last 7 Days" id="jnzQzj" />;
+      return <FormattedMessage defaultMessage="Last 7 Days" />;
     }
     case 'last1Years': {
-      return <FormattedMessage defaultMessage="Last 12 Months" id="GX2x7C" />;
+      return <FormattedMessage defaultMessage="Last 12 Months" />;
     }
     case 'yearToDate': {
-      return <FormattedMessage defaultMessage="Year To Date" id="yq0PyW" />;
+      return <FormattedMessage defaultMessage="Year To Date" />;
     }
     case 'prev1Years': {
-      return <FormattedMessage defaultMessage="Previous Year" id="TOXvuK" />;
+      return <FormattedMessage defaultMessage="Previous Year" />;
     }
     case 'monthToDate': {
-      return <FormattedMessage defaultMessage="Month To Date" id="EPs0pl" />;
+      return <FormattedMessage defaultMessage="Month To Date" />;
     }
     case 'prevMonth': {
-      return <FormattedMessage defaultMessage="Previous Month" id="8RT/mJ" />;
+      return <FormattedMessage defaultMessage="Previous Month" />;
     }
     default: {
-      return <FormattedMessage defaultMessage="Last 30 Days" id="brX8Pt" />;
+      return <FormattedMessage defaultMessage="Last 30 Days" />;
     }
   }
 };
@@ -211,7 +211,6 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
         <Tooltip
           title={intl.formatMessage({
             defaultMessage: 'Use a predefined range.',
-            id: 's1T2WW',
           })}
         >
           <Button
@@ -269,12 +268,7 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
             onClick: () => setSelected('prev1Years'),
           },
           {
-            label: (
-              <FormattedMessage
-                defaultMessage="Custom Date Range"
-                id="HyIRsT"
-              />
-            ),
+            label: <FormattedMessage defaultMessage="Custom Date Range" />,
             key: 'custom',
             onClick: toggleCustomRange,
           },
@@ -284,7 +278,6 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
       <Button>
         <FormattedMessage
           defaultMessage="Date Range: {value1}"
-          id="WXJjsy"
           values={{ value1: selectedToText(selected) }}
         />
         <FontAwesomeIcon

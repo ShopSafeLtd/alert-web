@@ -49,13 +49,11 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
             trigger="click"
             title={intl.formatMessage({
               defaultMessage: 'Remove the offender?',
-              id: 'ttuPSC',
             })}
             onConfirm={() => removeOffender(offender.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
@@ -89,7 +87,6 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
             <Descriptions.Item
               label={intl.formatMessage({
                 defaultMessage: 'Last Active',
-                id: 'l/6hum',
               })}
             >
               {FormatCalendar(offender.updatedAt || moment())}

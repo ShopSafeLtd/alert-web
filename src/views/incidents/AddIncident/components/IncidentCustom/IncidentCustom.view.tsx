@@ -23,7 +23,6 @@ const IncidentCustom = ({ questions, saving }: Props) => {
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
             {intl.formatMessage({
               defaultMessage: 'Incident Data',
-              id: 'Tspk1p',
             })}
           </Title>
         </Col>
@@ -35,7 +34,6 @@ const IncidentCustom = ({ questions, saving }: Props) => {
           >
             {intl.formatMessage({
               defaultMessage: '- Complete all required fields.',
-              id: 'EneTec',
             })}
           </Paragraph>
         </Col>

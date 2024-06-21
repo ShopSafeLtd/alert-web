@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import type { ChatQuery } from 'graphql/generated';
-import { useChatQuery, useDeleteChatMutation } from 'graphql/generated';
 
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
+import { useChatQuery } from 'graphql/chat/queries/chat.generated';
+import { useDeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
 
 const { confirm } = Modal;
 interface Return {
@@ -41,11 +42,9 @@ const useChatDetail = (chatId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The chat group has been deleted.',
-          id: 'FT0guS',
         }),
         placement: 'bottomRight',
       });
@@ -59,15 +58,12 @@ const useChatDetail = (chatId: string): Return => {
   const deleteConfirm = () => {
     confirm({
       title: intl.formatMessage({
-        id: 'QA9jAK',
         defaultMessage: 'Do you want to delete the chat group?',
       }),
       content: intl.formatMessage({
-        id: 'JDJoIZ',
         defaultMessage: 'This action cannot be undone.',
       }),
       okText: intl.formatMessage({
-        id: 'K3r6DQ',
         defaultMessage: 'Delete',
       }),
 

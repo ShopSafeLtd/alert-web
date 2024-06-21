@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
-import type { InvestigationSuggestionsQuery } from 'graphql/generated';
-import { Role } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -29,6 +27,8 @@ import CrimeGroupTable from 'components/tables/CrimeGroupTable/CrimeGroupTable.v
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { useIntl } from 'react-intl';
 import useStyles from './SuggestedOffenders.style';
+import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
+import { Role } from 'graphql/types';
 
 const { Paragraph, Title, Text } = Typography;
 
@@ -103,7 +103,7 @@ const SuggestedOffenders = ({
           </Title>
           <Text>
             {intl.formatMessage(
-              { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+              { defaultMessage: 'Alert ID: {ref}' },
               { ref: offender.reference }
             )}
           </Text>
@@ -112,7 +112,6 @@ const SuggestedOffenders = ({
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Alias: ',
-                  id: 'eZm/Sa',
                 })}
               >
                 {offender.alias.map((item) => (
@@ -130,7 +129,6 @@ const SuggestedOffenders = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Age',
-                      id: '9oNQSC',
                     })}
                   </span>
                 }
@@ -147,7 +145,7 @@ const SuggestedOffenders = ({
                     className={classes.descIcon}
                     icon={faMarsAndVenus}
                   />
-                  {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
+                  {intl.formatMessage({ defaultMessage: 'Sex' })}
                 </span>
               }
             >
@@ -162,7 +160,6 @@ const SuggestedOffenders = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Build',
-                    id: 'RSctv1',
                   })}
                 </span>
               }
@@ -178,7 +175,6 @@ const SuggestedOffenders = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Ethnicity',
-                    id: 'XtCAFo',
                   })}
                 </span>
               }
@@ -195,7 +191,6 @@ const SuggestedOffenders = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Hair',
-                      id: 'e4YBbX',
                     })}
                   </span>
                 }
@@ -215,7 +210,6 @@ const SuggestedOffenders = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Additional Information',
-                      id: 'laUK3e',
                     })}
                   </span>
                 }
@@ -232,7 +226,6 @@ const SuggestedOffenders = ({
                     {
                       defaultMessage:
                         'This offender shares {noIncidents} incidents with offenders in this investigation',
-                      id: 'p6oMeZ',
                     },
                     {
                       noIncidents: offender.totalAssociatedIncidents,
@@ -253,7 +246,6 @@ const SuggestedOffenders = ({
                     {
                       defaultMessage:
                         'This offender shares {total} crime groups with offenders in this investigation',
-                      id: 'JBGYtO',
                     },
                     {
                       total: offender.totalAssociatedCrimeGroups,
@@ -272,7 +264,6 @@ const SuggestedOffenders = ({
                 <Button>
                   {intl.formatMessage({
                     defaultMessage: 'View Offender',
-                    id: 'GszQTo',
                   })}
                 </Button>
               </Link>
@@ -285,7 +276,6 @@ const SuggestedOffenders = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add To Investigation',
-                  id: 'zEXZIx',
                 })}
               </Button>
             </Col>

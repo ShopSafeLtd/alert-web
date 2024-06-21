@@ -1,17 +1,14 @@
 import { useState } from 'react';
 
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListCrimeGroupsQuery,
-  useUpdateInvestigationMutation,
-} from 'graphql/generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import { useParams } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
 
 interface Props {
   onClose: () => void;
@@ -75,11 +72,9 @@ const useAddExistingCrimeGroup = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added to the crime group.',
-          id: 'FZF+UQ',
         }),
 
         placement: 'bottomRight',

@@ -1,6 +1,7 @@
-import type { ListVehiclesQuery } from 'graphql/generated';
-import { QueryMode, useListVehiclesQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import { QueryMode } from 'graphql/types';
 
 interface Return {
   data:

@@ -12,8 +12,6 @@ import {
   Tooltip,
 } from 'antd';
 
-import type { UpsertBrandMutation } from 'graphql/generated';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPenToSquare,
@@ -25,6 +23,7 @@ import AddBrand from '#/components/form-components/brands/AddBrand';
 import type { MutationUpdaterFn } from '@apollo/client';
 import EditBrand from '#/components/form-components/brands/EditBrand';
 import { Link } from 'react-router-dom';
+import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
 
 const { confirm } = Modal;
 
@@ -90,7 +89,6 @@ const BrandList = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Brands...',
-              id: 'u125nc',
             })}
             allowClear
           />
@@ -108,7 +106,7 @@ const BrandList = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Add Brand" id="DlvnPs" />
+            <FormattedMessage defaultMessage="Add Brand" />
           </Button>
         </Col>
       </Row>
@@ -126,7 +124,6 @@ const BrandList = ({
             key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             dataIndex: 'name',
             width: 200,
@@ -145,7 +142,6 @@ const BrandList = ({
             key: 'businesses',
             title: intl.formatMessage({
               defaultMessage: 'Businesses',
-              id: 'D0tMhW',
             }),
             dataIndex: 'businesses',
             filters: businessFilter,
@@ -167,7 +163,6 @@ const BrandList = ({
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             }),
             dataIndex: 'description',
             ellipsis: true,
@@ -184,7 +179,6 @@ const BrandList = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit Brand',
-                      id: '70ndxR',
                     })}
                   >
                     <Button
@@ -201,7 +195,6 @@ const BrandList = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove Brand',
-                      id: 'ddZwFA',
                     })}
                   >
                     {/* <Popconfirm
@@ -224,16 +217,13 @@ const BrandList = ({
                           title: intl.formatMessage({
                             defaultMessage:
                               'Do you want to delete this business?',
-                            id: 'e1WPCT',
                           }),
                           content: intl.formatMessage({
                             defaultMessage:
                               'Click delete if you wish to delete this brand. It will be removed from the list and added to the recycle bin for 30 days before being permanently deleted.',
-                            id: 't1C5iv',
                           }),
                           okText: intl.formatMessage({
                             defaultMessage: 'Delete',
-                            id: 'K3r6DQ',
                           }),
                           onOk: () => onDelete(record.key),
                         })
@@ -258,7 +248,6 @@ const BrandList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Brand',
-          id: 'DlvnPs',
         })}
         open={addBrand}
         width="400"
@@ -273,7 +262,6 @@ const BrandList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Brand',
-          id: '70ndxR',
         })}
         open={!!brandId}
         width="400"

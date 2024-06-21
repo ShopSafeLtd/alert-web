@@ -1,10 +1,11 @@
-import type { ArticlePriority } from 'graphql/generated';
-import { SortOrder } from 'graphql/generated';
 import { useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import type { ArticleFilters } from 'state/data-model';
 import { useGroupsContext } from '#/context/groups-context';
+
+import type { ArticlePriority } from 'graphql/types';
+import { SortOrder } from 'graphql/types';
 
 interface Return {
   clearFilters: () => void;

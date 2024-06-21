@@ -1,5 +1,5 @@
 import React from 'react';
-import type { BusinessesListQuery } from 'graphql/generated';
+
 import {
   Button,
   Col,
@@ -21,6 +21,7 @@ import { useIntl } from 'react-intl';
 import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/useListBusinesses';
 import DebouncedInput from '#/utils/debounced-input';
 import useStyles from './ListBusinesses.styles';
+import type { BusinessesListQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-businesses.generated';
 
 interface TableData {
   key: string;
@@ -103,7 +104,6 @@ const ListBusinesses = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Link Existing Business',
-              id: '50iYmp',
             })}
           >
             <Button
@@ -123,7 +123,6 @@ const ListBusinesses = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Existing',
-                id: 'LHF3Za',
               })}
             </Button>
           </Tooltip>
@@ -131,7 +130,6 @@ const ListBusinesses = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Add New Business',
-              id: 'p47asT',
             })}
           >
             <Button
@@ -152,7 +150,6 @@ const ListBusinesses = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'New',
-                id: 'bW7B87',
               })}
             </Button>
           </Tooltip>
@@ -162,14 +159,12 @@ const ListBusinesses = ({
           <Tag color="red">
             {intl.formatMessage({
               defaultMessage: 'Search',
-              id: 'xmcVZ0',
             })}
           </Tag>
           <DebouncedInput
             size="small"
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a business...',
-              id: 'qaJxSS',
             })}
             allowClear
             defaultValue={searchValue || ''}
@@ -183,7 +178,6 @@ const ListBusinesses = ({
           <Tag color="red">
             {intl.formatMessage({
               defaultMessage: 'Select Parent',
-              id: '5hxiFS',
             })}
           </Tag>
           <Select
@@ -191,7 +185,6 @@ const ListBusinesses = ({
             style={{ width: '100%' }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Parent',
-              id: '5hxiFS',
             })}
             value={parentFilter}
             onChange={(value: string[]) => {
@@ -209,7 +202,6 @@ const ListBusinesses = ({
           <Tag color="red">
             {intl.formatMessage({
               defaultMessage: 'Select Group',
-              id: 'UHsAfL',
             })}
           </Tag>
           <Select
@@ -217,7 +209,6 @@ const ListBusinesses = ({
             style={{ width: '100%' }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Group',
-              id: 'UHsAfL',
             })}
             value={groupFilter}
             maxTagCount={4}
@@ -235,7 +226,6 @@ const ListBusinesses = ({
           <Tag color="red">
             {intl.formatMessage({
               defaultMessage: 'Select Tag',
-              id: 'npEBoK',
             })}
           </Tag>
           <Select
@@ -243,7 +233,6 @@ const ListBusinesses = ({
             style={{ width: '100%' }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Tag',
-              id: 'npEBoK',
             })}
             maxTagCount={4}
             value={tagFilter}
@@ -265,7 +254,6 @@ const ListBusinesses = ({
             dataIndex: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
@@ -276,7 +264,6 @@ const ListBusinesses = ({
             dataIndex: 'totalUsers',
             title: intl.formatMessage({
               defaultMessage: 'Total Users',
-              id: '/VwiLT',
             }),
           },
           {
@@ -284,7 +271,6 @@ const ListBusinesses = ({
             dataIndex: 'parent',
             title: intl.formatMessage({
               defaultMessage: 'Parent',
-              id: 'zTbLfn',
             }),
             render: (value, item) =>
               value ? <Link to={`/${item.parentId || ''}`}>{value}</Link> : '',
@@ -294,14 +280,12 @@ const ListBusinesses = ({
             dataIndex: 'location',
             title: intl.formatMessage({
               defaultMessage: 'Location',
-              id: 'rvirM2',
             }),
           },
           {
             key: 'tags',
             title: intl.formatMessage({
               defaultMessage: 'Tags',
-              id: '1EYCdR',
             }),
             dataIndex: 'tags',
             // filters: tagFilter,
@@ -317,7 +301,6 @@ const ListBusinesses = ({
             key: 'groups',
             title: intl.formatMessage({
               defaultMessage: 'Content Groups',
-              id: '3lRewT',
             }),
             dataIndex: 'groups',
             render: (value: { id: string; name: string }[]) => (
@@ -336,7 +319,6 @@ const ListBusinesses = ({
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Remove Business',
-                  id: 'fDBTeJ',
                 })}
               >
                 <Button
@@ -378,7 +360,6 @@ const ListBusinesses = ({
         onClose={toggleAddVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
-          id: 'p47asT',
         })}
         width={600}
       >
@@ -395,7 +376,6 @@ const ListBusinesses = ({
         onClose={toggleLinkVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
-          id: 'p47asT',
         })}
         width={600}
       >

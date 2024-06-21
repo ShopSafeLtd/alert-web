@@ -1,17 +1,14 @@
-import type {
-  ListCrimeGroupsQuery,
-  ListCrimeGroupsQueryVariables,
-} from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListCrimeGroupsQuery,
-} from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 import type { CrimeGroupFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
+import type {
+  ListCrimeGroupsQuery,
+  ListCrimeGroupsQueryVariables,
+} from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Return {
   data: ListCrimeGroupsQuery | undefined;

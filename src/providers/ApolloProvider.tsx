@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ApolloClient, ApolloProvider, split } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { useAuth0 } from '@auth0/auth0-react';
 import { onError } from '@apollo/client/link/error';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
@@ -15,79 +14,53 @@ import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { sha256 } from 'crypto-hash';
 import { cache } from '#/providers/cache';
 import { useStoreState } from '../state';
+import { useAuth } from '@clerk/clerk-react';
+
+import { useNavigate } from 'react-router';
+import { useTokenContext } from '#/context/token-context';
+import { useLocation } from 'react-router-dom';
+import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
 
 interface Props {
   children: React.ReactNode;
 }
 
 const Apollo = ({ children }: Props): JSX.Element => {
-  const accessToken = localStorage.getItem('accessToken');
+  const navigate = useNavigate();
+  const { getToken, isLoaded, isSignedIn } = useAuth();
 
-  const { getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
-    useAuth0();
-  const getNewToken = async () =>
-    getAccessTokenSilently({
-      audience: `https://app.shopsafealert.co.uk`,
-      scope: 'openid read:current_user',
-    }).catch((error) => {
-      if (error === 'login_required') {
-        if (localStorage.getItem('logo')?.endsWith('.webp')) {
-          void loginWithRedirect({
-            'ext-logo': localStorage.getItem('logo'),
-          });
-        } else {
-          void loginWithRedirect();
-        }
+  const { token, setToken } = useTokenContext();
+
+  const location = useLocation();
+  const currentRoute = location.pathname;
+  useEffect(() => {
+    async function getSetToken() {
+      console.log('getting token 2');
+
+      const t = await getToken({
+        leewayInSeconds: 1800,
+        template: 'test',
+      });
+      if (!t && !isSignedIn) {
+        navigate(GenerateSignInRedirect());
       }
-    });
+      setToken(t);
+    }
+
+    if (!token) {
+      void getSetToken();
+    }
+  }, [token]);
 
   const currentScheme = useStoreState((state) => state.scheme.id);
   const localLang = useStoreState((state) => state.theme.locale);
-  // const wsClient = new SubscriptionClient(
-  //   import.meta.env.VITE_GRAPHQL_WS_URL,
-  //   // "wss://alert-api-dev.azurewebsites.net/graphql",
-  //   // 'wss://alert-dev-api.herokuapp.com/graphql',
-  //   // 'ws://localhost:4000/graphql',
-  //   {
-  //     reconnect: true,
-  //     // timeout: 20_000,
-  //     connectionParams: {
-  //       ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
-  //     },
-  //   }
-  // );
 
-  // const wsLink = new WebSocketLink(wsClient);
-  //
-  // function fetchWithTimeout(uri, options = {}, time): Promise<Response> {
-  //   return new Promise((resolve, reject) => {
-  //     const timer = setTimeout(() => {
-  //       reject(new Error('Request timed out.'));
-  //     }, time);
-  //     fetch(uri, options).then(
-  //       (response) => {
-  //         clearTimeout(timer);
-  //         resolve(response);
-  //       },
-  //       (error) => {
-  //         clearTimeout(timer);
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // }
-
-  // const httpLink = new HttpLink({
-  //   uri: import.meta.env.VITE_GRAPHQL_URL,
-  //   // fetch: (uri, options) => {
-  //   //   const timeoutFromHeader = options?.headers?.['x-timeout'];
-  //   //   const timeout = timeoutFromHeader || 1;
-  //   //   return fetchWithTimeout(uri, options, timeout);
-  //   // },
-  // });
+  const defaultHeaders = {
+    type: 'clerk',
+  };
   const httpLink = new BatchHttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
-    batchMax: 8, // No more than 8 operations per batch
+    batchMax: 1, // No more than 8 operations per batch
     batchInterval: 50, // Wait no more than 50ms after first batched operation
   });
 
@@ -121,25 +94,13 @@ const Apollo = ({ children }: Props): JSX.Element => {
           clearTimeout(timedOut);
         },
         error: (error) => {
-          if (error === 'Login required') {
-            if (localStorage.getItem('logo')?.endsWith('.webp')) {
-              void loginWithRedirect({
-                'ext-logo': localStorage.getItem('logo'),
-              });
-            } else {
-              void loginWithRedirect();
-            }
-          }
           console.error(`WebSocket error: ${error}`);
         },
       },
       url: import.meta.env.VITE_GRAPHQL_WS_URL,
-      connectionParams: async () => {
-        const token = await getNewToken();
-        return {
-          authorization: `Bearer ${token}`,
-        };
-      },
+      connectionParams: () => ({
+        authorization: `Bearer ${token}`,
+      }),
       lazy: true,
     })
   );
@@ -165,11 +126,16 @@ const Apollo = ({ children }: Props): JSX.Element => {
             extensions?.code === '401'
           ) {
             const oldHeaders = operation.getContext().headers;
-            void getNewToken().then((token) => {
+            console.log('getting token 1');
+            void getToken({
+              leewayInSeconds: 1800,
+              skipCache: true,
+              template: 'test',
+            }).then((t) => {
               operation.setContext({
                 headers: {
                   ...oldHeaders,
-                  authorization: `bearer ${token}`,
+                  authorization: `bearer ${t}`,
                 },
               });
               // Retry the request, returning the new observable
@@ -203,40 +169,24 @@ const Apollo = ({ children }: Props): JSX.Element => {
     }
   );
 
-  const middlewareLink = setContext(async (_, { headers, ...context }) => {
-    if (isAuthenticated) {
+  const middlewareLink = setContext((_, { headers, ...context }) => {
+    const initAuth = headers?.Authorization;
+    if (token) {
       try {
-        const authToken = await getNewToken();
         return {
           ...context,
           http: { includeExtensions: true, includeQuery: false },
           headers: {
             ...headers,
-            Authorization: authToken ? `Bearer ${authToken}` : '',
+            ...defaultHeaders,
+            Authorization: initAuth ?? `Bearer ${token}`,
             language: localLang,
             currentScheme: currentScheme ?? null,
           },
         };
       } catch (error) {
         if (error instanceof Error) {
-          if (error.message === 'login_required') {
-            if (localStorage.getItem('logo')?.endsWith('.webp')) {
-              void loginWithRedirect({
-                'ext-logo': localStorage.getItem('logo'),
-              });
-            } else {
-              void loginWithRedirect();
-            }
-          }
-          if (error.message === 'consent_required') {
-            if (localStorage.getItem('logo')?.endsWith('.webp')) {
-              void loginWithRedirect({
-                'ext-logo': localStorage.getItem('logo'),
-              });
-            } else {
-              void loginWithRedirect();
-            }
-          }
+          // handle new token logic
         }
       }
     }
@@ -245,20 +195,14 @@ const Apollo = ({ children }: Props): JSX.Element => {
       http: { includeExtensions: true, includeQuery: false },
       headers: {
         ...headers,
-        Authorization: `Bearer ''`,
+        ...defaultHeaders,
+        // eslint-disable-next-line quotes
+        Authorization: initAuth ?? `Bearer ""`,
         language: localLang,
         currentScheme: currentScheme ?? null,
       },
     };
   });
-
-  // const middlewareLink = setContext((_, { headers, ...context }) => ({
-  //   headers: {
-  //     ...headers,
-  //     ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
-  //   },
-  //   ...context,
-  // }));
 
   const persistedQueryLink = createPersistedQueryLink({
     sha256,
@@ -284,13 +228,6 @@ const Apollo = ({ children }: Props): JSX.Element => {
     wsLink,
     authHttp
   );
-
-  // (async () => {
-  //   await persistCache({
-  //     cache,
-  //     storage: window.localStorage,
-  //   });
-  // })();
 
   const client = new ApolloClient({
     link,

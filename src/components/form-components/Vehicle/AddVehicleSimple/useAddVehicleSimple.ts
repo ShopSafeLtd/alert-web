@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
-import { ImagePosition } from '../../../../graphql/generated';
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 import type { ImageValue } from '../../ImageSelect/ImageSelect.view';
+
+import { ImagePosition } from 'graphql/types';
 
 export interface AddVehicleData {
   id: string;

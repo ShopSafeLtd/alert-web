@@ -17,8 +17,9 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { CustomGalleryData } from 'types/DataType';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { CustomGalleriesQuery } from 'graphql/generated';
+
 import AddNewCustomGallery from 'components/form-components/customGalleries/AddNewCustomGallery';
+import type { CustomGalleriesQuery } from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
 
 interface Props {
   data: CustomGalleriesQuery | undefined;
@@ -59,7 +60,6 @@ const CustomGalleries = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search custom gallery...',
-              id: 'Aud+9b',
             })}
             allowClear
           />
@@ -77,7 +77,7 @@ const CustomGalleries = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Add Custom Gallery" id="rLyRNN" />
+            <FormattedMessage defaultMessage="Add Custom Gallery" />
           </Button>
         </Col>
       </Row>
@@ -95,7 +95,6 @@ const CustomGalleries = ({
             key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             dataIndex: 'name',
             width: 300,
@@ -117,7 +116,6 @@ const CustomGalleries = ({
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             }),
             dataIndex: 'description',
             ellipsis: true,
@@ -134,7 +132,6 @@ const CustomGalleries = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit CustomGallery',
-                      id: 'p0qnzz',
                     })}
                   >
                     <Button
@@ -156,7 +153,6 @@ const CustomGalleries = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove CustomGallery',
-                      id: 'S6J+c2',
                     })}
                   >
                     <Button
@@ -186,7 +182,6 @@ const CustomGalleries = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',
-          id: 'rLyRNN',
         })}
         open={addCustomGallery}
         width="400"
@@ -205,7 +200,6 @@ const CustomGalleries = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Custom Gallery',
-          id: 'CugUH2',
         })}
         open={!!editCustomGallery}
         width="400"

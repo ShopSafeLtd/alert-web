@@ -5,8 +5,9 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
-import { CreateTagDocument, Model } from 'graphql/generated';
+import { Model } from 'graphql/types';
 import useAddOffenderWarning from '../useAddOffenderWarning';
+import { CreateTagDocument } from '#/graphql/tags/mutations/create-tag.generated';
 
 const mocks = [
   {

@@ -1,29 +1,5 @@
 import { Modal, notification } from 'antd';
 
-import type {
-  CreateDocumentMutation,
-  CreateInvestigationMutation,
-  CreateSimpleOffenderMutation,
-  DeleteDocumentMutation,
-  UpdateSimpleOffenderMutation,
-  VehicleQuery,
-  VehicleQueryVariables,
-  VehicleUpdateInput,
-} from 'graphql/generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  useDeleteUpdateMutation,
-  useDeleteVehicleMutation,
-  useSubscribeToVehicleMutation,
-  useUnsubscribeToVehicleMutation,
-  useUpdateUpdateMutation,
-  useUpdateVehicleDetailsMutation,
-  useUpdateVehicleImagesMutation,
-  useUpdateVehicleOffendersMutation,
-  useVehicleQuery,
-  VehicleDocument,
-} from 'graphql/generated';
 import { useEffect, useMemo, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
@@ -43,6 +19,29 @@ import {
 } from 'types/enums/profile-update-type';
 import successNotification from 'types/mutation_notifications/success_notification';
 import hasPermission from '#/utils/has-permission';
+import type {
+  VehicleQuery,
+  VehicleQueryVariables,
+} from 'graphql/vehicles/queries/view-vehicle.generated';
+import {
+  useVehicleQuery,
+  VehicleDocument,
+} from 'graphql/vehicles/queries/view-vehicle.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import { useUpdateVehicleDetailsMutation } from 'graphql/vehicles/mutations/update/update_vehicle_details.generated';
+import type { VehicleUpdateInput } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useDeleteVehicleMutation } from 'graphql/vehicles/mutations/delete_vehicle.generated';
+import { useUpdateVehicleImagesMutation } from 'graphql/vehicles/mutations/update/update-vehicle-images.generated';
+import { useUpdateVehicleOffendersMutation } from 'graphql/vehicles/mutations/update/update-vehicle-offenders.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
+import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/subscribe-to-vehicle.generated';
+import { useUnsubscribeToVehicleMutation } from 'graphql/vehicles/mutations/unsubscribe-from-vehicle.generated';
 
 const { confirm } = Modal;
 
@@ -204,11 +203,9 @@ const useViewVehicle = (vehicleId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been updated!',
-          id: 'xEl97U',
         }),
         placement: 'bottomRight',
       });
@@ -351,11 +348,9 @@ const useViewVehicle = (vehicleId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been deleted!',
-          id: 'QPIR1s',
         }),
         placement: 'bottomRight',
       });
@@ -435,11 +430,9 @@ const useViewVehicle = (vehicleId: string): Return => {
         notification.success({
           message: intl.formatMessage({
             defaultMessage: 'Successfully updated!',
-            id: 'zJzbfm',
           }),
           description: intl.formatMessage({
             defaultMessage: 'The images have been updated',
-            id: 'yRfbZE',
           }),
           placement: 'bottomRight',
         });
@@ -518,11 +511,9 @@ const useViewVehicle = (vehicleId: string): Return => {
         notification.success({
           message: intl.formatMessage({
             defaultMessage: 'Successfully deleted!',
-            id: 'RFD+id',
           }),
           description: intl.formatMessage({
             defaultMessage: 'The image/s have been deleted',
-            id: '65D7dw',
           }),
           placement: 'bottomRight',
         });
@@ -999,12 +990,12 @@ const useViewVehicle = (vehicleId: string): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: 'ZYrND5',
+
         description: 'Confirmation dialog title',
       }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
-        id: 'ZWk4fq',
+
         description: 'Confirmation dialog content',
       }),
       onOk() {
@@ -1012,7 +1003,7 @@ const useViewVehicle = (vehicleId: string): Return => {
       },
       okText: intl.formatMessage({
         defaultMessage: 'Delete',
-        id: '5qRFq/',
+
         description: 'Delete button text',
       }),
     });

@@ -27,7 +27,6 @@ const IncidentCard = ({ incident }: Props): JSX.Element => {
           {intl.formatMessage(
             {
               defaultMessage: 'Alert ID: {ref}',
-              id: 'umL9sI',
             },
             {
               ref: incident?.reference,

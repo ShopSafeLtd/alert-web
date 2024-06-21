@@ -12,7 +12,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { UserEngagementQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileDownload, faFilters } from '@fortawesome/pro-light-svg-icons';
@@ -22,6 +22,7 @@ import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.vi
 import useStyles from './UserEngagement.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import type { UserEngagementQuery } from 'graphql/reports/queries/list-user-engagement.generated';
 
 const { Title } = Typography;
 
@@ -91,7 +92,6 @@ const PerformanceReport = ({
           {intl.formatMessage(
             {
               defaultMessage: ' User Engagement: {startDate} - {endDate}',
-              id: 'zon0QS',
             },
             {
               startDate: dateRange.startDate.toLocaleDateString(),
@@ -109,7 +109,6 @@ const PerformanceReport = ({
               style={{ width: 350 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for users...',
-                id: 'nS06zC',
               })}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -123,7 +122,6 @@ const PerformanceReport = ({
               <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
               {intl.formatMessage({
                 defaultMessage: 'More Filters',
-                id: 'stWNQ/',
               })}
             </Button>
           </Col>
@@ -137,7 +135,6 @@ const PerformanceReport = ({
               />
               {intl.formatMessage({
                 defaultMessage: 'Download',
-                id: '5q3qC0',
               })}
             </Button>
           </Col>
@@ -148,7 +145,6 @@ const PerformanceReport = ({
               <Title className="no-print" level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'User Contributions',
-                  id: '6VIhyo',
                 })}
               </Title>
               <Table
@@ -167,7 +163,6 @@ const PerformanceReport = ({
                     dataIndex: 'name',
                     title: intl.formatMessage({
                       defaultMessage: 'Name',
-                      id: 'HAlOn1',
                     }),
                   },
                   {
@@ -175,7 +170,6 @@ const PerformanceReport = ({
                     dataIndex: 'businesses',
                     title: intl.formatMessage({
                       defaultMessage: 'Businesses',
-                      id: 'D0tMhW',
                     }),
                     render: (value: string[]) => {
                       if (value.length > 2) {
@@ -188,7 +182,6 @@ const PerformanceReport = ({
                               {intl.formatMessage(
                                 {
                                   defaultMessage: '+ {num} more',
-                                  id: 'fi2Xie',
                                 },
                                 {
                                   num: value.length - 1,
@@ -206,7 +199,6 @@ const PerformanceReport = ({
                     dataIndex: 'incidentsCreated',
                     title: intl.formatMessage({
                       defaultMessage: 'Incidents',
-                      id: 'mtr3R4',
                     }),
                     defaultSortOrder: 'descend',
                     sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
@@ -216,7 +208,6 @@ const PerformanceReport = ({
                     dataIndex: 'offendersCreated',
                     title: intl.formatMessage({
                       defaultMessage: 'Offenders',
-                      id: 'xb54TN',
                     }),
                     sorter: (a, b) => a.offendersCreated - b.offendersCreated,
                   },
@@ -225,7 +216,6 @@ const PerformanceReport = ({
                     dataIndex: 'updatesCreated',
                     title: intl.formatMessage({
                       defaultMessage: 'Updates',
-                      id: 'recCg9',
                     }),
                     sorter: (a, b) => a.updatesCreated - b.updatesCreated,
                   },
@@ -234,7 +224,6 @@ const PerformanceReport = ({
                     dataIndex: 'messagesSent',
                     title: intl.formatMessage({
                       defaultMessage: 'Messages',
-                      id: 'hMzcSq',
                     }),
                     sorter: (a, b) => a.messagesSent - b.messagesSent,
                   },
@@ -243,7 +232,6 @@ const PerformanceReport = ({
                     dataIndex: 'logins',
                     title: intl.formatMessage({
                       defaultMessage: 'Logins',
-                      id: '+vA//S',
                     }),
                     sorter: (a, b) => a.logins - b.logins,
                   },
@@ -252,7 +240,6 @@ const PerformanceReport = ({
                     dataIndex: 'lastLogin',
                     title: intl.formatMessage({
                       defaultMessage: 'Last Login',
-                      id: 'LPUHNC',
                     }),
                     // sorter: (a, b) => a.lastLogin - b.lastLogin,
                   },
@@ -275,7 +262,6 @@ const PerformanceReport = ({
 
         <Drawer
           title={intl.formatMessage({
-            id: 'QxpB9+',
             defaultMessage: 'Report Filters',
           })}
           onClose={toggleFiltersOpen}
@@ -286,7 +272,6 @@ const PerformanceReport = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
             >
               <GroupsSelect
@@ -302,7 +287,6 @@ const PerformanceReport = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Businesses',
-                id: 'D0tMhW',
               })}
             >
               <BusinessesSelect
@@ -318,7 +302,6 @@ const PerformanceReport = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Roles',
-                id: 'c35gM5',
               })}
             >
               <RolesSelect

@@ -17,14 +17,13 @@ import LatestIncident from '#/views/dashboard/components/LatestIncident/LatestIn
 import LatestIncidentsTemplate from '#/views/dashboard/components/LatestIncidents/LatestIncidentsTemplate';
 import TargetedGoodsGraph from '#/views/dashboard/components/TargetedGoods/TargetedGoodsTemplate';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  useDashboardTemplateQuery,
-  useUpdateDashboardTemplateMutation,
-} from 'graphql/generated';
+
 import Loading from '#/components/shared-components/AntD/Loading';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
 import DashboardSelectorDrawer from '../../../components/dashboard/elements/DashboardElementSelector.view';
 import TimeOfDay from '../../dashboard/components/TimeOfDay/TimeOfDayTemplate.view';
+import { useDashboardTemplateQuery } from '#/views/dashboard-management/graphql/queries/dashboard-template.generated';
+import { useUpdateDashboardTemplateMutation } from '#/views/dashboard-management/graphql/mutations/dashboard.generated';
 
 const ViewDashboardEditor = () => {
   const { id: DashboardId } = useParams();
@@ -44,6 +43,7 @@ const ViewDashboardEditor = () => {
   };
   const intl = useIntl();
   const [marquee, setMarquee] = useState<string | null>(null);
+  // eslint-disable-next-line func-call-spacing
   const [layout, setLayout] = useState<
     (RGL.Layout & {
       i: AvailableDashboardElements;
@@ -340,7 +340,6 @@ const ViewDashboardEditor = () => {
       >
         {intl.formatMessage({
           defaultMessage: 'Back',
-          id: 'cyR7Kh',
         })}
       </Button>
       <Button
@@ -355,7 +354,6 @@ const ViewDashboardEditor = () => {
       >
         {intl.formatMessage({
           defaultMessage: 'Save',
-          id: 'jvo0vs',
         })}
       </Button>
       <Button
@@ -370,14 +368,12 @@ const ViewDashboardEditor = () => {
       >
         {intl.formatMessage({
           defaultMessage: 'Edit/Add banner',
-          id: 'B8Opq6',
         })}
       </Button>
 
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Dashboard Banner',
-          id: '6UK4Rk',
         })}
         placement="left"
         width={400}
@@ -388,14 +384,13 @@ const ViewDashboardEditor = () => {
         extra={
           <Space>
             <Button type="primary" onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Close', id: 'rbrahO' })}
+              {intl.formatMessage({ defaultMessage: 'Close' })}
             </Button>
           </Space>
         }
       >
         {intl.formatMessage({
           defaultMessage: 'Banner Text:',
-          id: 'C21dmP',
         })}
 
         <Input

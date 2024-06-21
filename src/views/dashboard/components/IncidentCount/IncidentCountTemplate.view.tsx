@@ -24,7 +24,6 @@ const IncidentCount = ({
       <Statistic
         title={intl.formatMessage({
           defaultMessage: 'Incident Count',
-          id: 'otC1Ao',
         })}
         value={data}
         loading={loading}

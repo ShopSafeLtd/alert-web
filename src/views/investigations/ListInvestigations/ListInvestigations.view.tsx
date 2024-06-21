@@ -9,11 +9,7 @@ import {
   Table,
   Typography,
 } from 'antd';
-import type {
-  CreateInvestigationMutation,
-  ListInvestigationsAllSchemesQuery,
-} from 'graphql/generated';
-import { InvestigationStatus } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
@@ -25,6 +21,9 @@ import { useStoreActions, useStoreState } from '#/state';
 import { FormattedList } from 'react-intl/lib';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
+import type { ListInvestigationsAllSchemesQuery } from 'graphql/investigations/queries/list-investigations-all-schemes.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import { InvestigationStatus } from 'graphql/types';
 
 interface Props {
   data: ListInvestigationsAllSchemesQuery | undefined;
@@ -75,7 +74,6 @@ const ListInvestigations = ({
         <Col>
           <Input
             placeholder={intl.formatMessage({
-              id: 'l9jnOx',
               defaultMessage: 'Search investigations...',
             })}
             style={{ width: 400 }}
@@ -91,7 +89,6 @@ const ListInvestigations = ({
             allowClear
             style={{ minWidth: 200, maxWidth: 400 }}
             placeholder={intl.formatMessage({
-              id: 'aVKXev',
               defaultMessage: 'Select groups...',
             })}
             mode="multiple"
@@ -106,7 +103,6 @@ const ListInvestigations = ({
             mode="multiple"
             style={{ width: 200 }}
             placeholder={intl.formatMessage({
-              id: 'j79nzi',
               defaultMessage: 'Select status...',
             })}
             options={[
@@ -114,14 +110,12 @@ const ListInvestigations = ({
                 value: InvestigationStatus.Open,
                 label: intl.formatMessage({
                   defaultMessage: 'Open',
-                  id: 'JfG49w',
                 }),
               },
               {
                 value: InvestigationStatus.Closed,
                 label: intl.formatMessage({
                   defaultMessage: 'Closed',
-                  id: 'Fv1ZSz',
                 }),
               },
             ]}
@@ -130,10 +124,7 @@ const ListInvestigations = ({
         <Col flex={1} />
         <Col>
           <Button type="primary" onClick={toggleAddInvestigation}>
-            <FormattedMessage
-              defaultMessage="Create Investigation"
-              id="cihgU6"
-            />
+            <FormattedMessage defaultMessage="Create Investigation" />
           </Button>
         </Col>
         {/* <Col> */}
@@ -208,7 +199,7 @@ const ListInvestigations = ({
           {
             key: 'name',
             dataIndex: 'name',
-            title: <FormattedMessage defaultMessage="Name" id="HAlOn1" />,
+            title: <FormattedMessage defaultMessage="Name" />,
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
@@ -216,12 +207,12 @@ const ListInvestigations = ({
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: <FormattedMessage defaultMessage="Alert ID" id="k8ZNgH" />,
+            title: <FormattedMessage defaultMessage="Alert ID" />,
           },
           {
             key: 'status',
             dataIndex: 'status',
-            title: <FormattedMessage defaultMessage="Status" id="tzMNF3" />,
+            title: <FormattedMessage defaultMessage="Status" />,
             render: (value: InvestigationStatus) => (
               <Typography.Text type={getTextStatus(value)}>
                 {GetInvestigationStatusValues[value]}
@@ -231,24 +222,20 @@ const ListInvestigations = ({
           {
             key: 'createdAt',
             dataIndex: 'createdAt',
-            title: (
-              <FormattedMessage defaultMessage="Date Opened" id="zQ9i1N" />
-            ),
+            title: <FormattedMessage defaultMessage="Date Opened" />,
             render: (value: string) => moment(value).format('DD/MM/YYYY'),
           },
           {
             key: 'closedAt',
             dataIndex: 'closedAt',
-            title: (
-              <FormattedMessage defaultMessage="Date Closed" id="CkpoSI" />
-            ),
+            title: <FormattedMessage defaultMessage="Date Closed" />,
             render: (value: string) =>
               value ? moment(value).format('DD/MM/YYYY') : undefined,
           },
           {
             key: 'groups',
             dataIndex: 'groups',
-            title: <FormattedMessage defaultMessage="Groups" id="hzmswI" />,
+            title: <FormattedMessage defaultMessage="Groups" />,
             render: (value, item) => (
               <div>
                 <FormattedList
@@ -261,19 +248,12 @@ const ListInvestigations = ({
           {
             key: 'description',
             dataIndex: 'description',
-            title: (
-              <FormattedMessage defaultMessage="Description" id="Q8Qw5B" />
-            ),
+            title: <FormattedMessage defaultMessage="Description" />,
           },
         ]}
       />
       <Drawer
-        title={
-          <FormattedMessage
-            defaultMessage="Add New Investigation"
-            id="QaKS9A"
-          />
-        }
+        title={<FormattedMessage defaultMessage="Add New Investigation" />}
         open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}

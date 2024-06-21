@@ -1,20 +1,17 @@
 import { useStoreState } from 'state';
-import type {
-  IncidentCardFragment,
-  RecycleIncidentMutation,
-  ImagePosition,
-} from 'graphql/generated';
-import {
-  Role,
-  useRecycleIncidentMutation,
-  useUpdateIncidentImagesMutation,
-} from 'graphql/generated';
+
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useState } from 'react';
 import type { EditFeedImage } from 'types/DataType';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type { ImagePosition } from 'graphql/types';
+import { Role } from 'graphql/types';
+import type { IncidentCardFragment } from 'graphql/fragments/incident-card.generated';
+import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/update-incident-images.generated';
 
 interface Props {
   incident: IncidentCardFragment;
@@ -60,12 +57,10 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted',
-          id: 'zJsyF1',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been deleted from the feed and moved to the recycle bin.',
-          id: 'YagqVR',
         }),
         placement: 'bottomRight',
       });
@@ -81,11 +76,9 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated',
-          id: 'ryTk34',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The image of the incident has been updated.',
-          id: 'fwVovV',
         }),
         placement: 'bottomRight',
       });

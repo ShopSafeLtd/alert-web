@@ -1,8 +1,5 @@
 import React from 'react';
-import type {
-  IncidentsFeedQuery,
-  RecycleIncidentMutation,
-} from 'graphql/generated';
+
 import {
   Button,
   Card,
@@ -41,6 +38,8 @@ import { createUseStyles } from 'react-jss';
 import { PrioButtonFilter } from '#/components/incidents/IncidentFilter/PrioFilter';
 import Loading from '../../../components/shared-components/AntD/Loading';
 import DebouncedInput from '../../../utils/debounced-input';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type { IncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
 
 const useStyles = createUseStyles({
   row: {
@@ -129,7 +128,6 @@ const IncidentFeed = ({
               // style={{ width: 350 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search Incidents...',
-                id: 'gvqTQ8',
               })}
               allowClear
               defaultValue={search || ''}
@@ -146,7 +144,6 @@ const IncidentFeed = ({
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'Following',
-                    id: 'cPIKU2',
                   }),
                   value: 'FOLLOWING',
                 },
@@ -160,7 +157,6 @@ const IncidentFeed = ({
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'Not Approved',
-                    id: 'VwMCyX',
                   }),
                   value: 'NOT APPROVED',
                   needAdminRight: true,
@@ -178,11 +174,9 @@ const IncidentFeed = ({
                 compactView
                   ? intl.formatMessage({
                       defaultMessage: 'Present incidents in normal normal',
-                      id: 'vSF3nN',
                     })
                   : intl.formatMessage({
                       defaultMessage: 'Present incidents in compact card',
-                      id: 'tga/q5',
                     })
               }
             >
@@ -204,7 +198,6 @@ const IncidentFeed = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Switch to table view',
-                id: 'hSNkxw',
               })}
             >
               <Button
@@ -219,7 +212,6 @@ const IncidentFeed = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
-                id: 'f2g3SM',
               })}
             >
               <Button
@@ -233,7 +225,6 @@ const IncidentFeed = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Add new incident',
-                id: 'zd2wAz',
               })}
             >
               <Button
@@ -254,7 +245,6 @@ const IncidentFeed = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Incident',
-                  id: 'zaYxwd',
                 })}
               </Button>
             </Tooltip>
@@ -347,12 +337,10 @@ const IncidentFeed = ({
                     search === ''
                       ? intl.formatMessage({
                           defaultMessage: 'No Incidents',
-                          id: '+nJOH5',
                         })
                       : intl.formatMessage({
                           defaultMessage:
                             'No incidents match your search criteria',
-                          id: '3vA0/l',
                         })
                   }
                 />
@@ -387,7 +375,6 @@ const IncidentFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Alert ID',
-                        id: 'k8ZNgH',
                       })}
                     </Typography.Text>
                   ),
@@ -399,7 +386,6 @@ const IncidentFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Type',
-                        id: '+U6ozc',
                       })}
                     </Typography.Text>
                   ),
@@ -411,7 +397,6 @@ const IncidentFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Time & Date',
-                        id: 'rXTgTq',
                       })}
                     </Typography.Text>
                   ),
@@ -423,7 +408,6 @@ const IncidentFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Offenders',
-                        id: 'xb54TN',
                       })}
                     </Typography.Text>
                   ),
@@ -439,7 +423,6 @@ const IncidentFeed = ({
                   dataIndex: 'description',
                   title: intl.formatMessage({
                     defaultMessage: 'Description',
-                    id: 'Q8Qw5B',
                   }),
                   render: (value: string) => (
                     <Tooltip title={value}>
@@ -474,7 +457,6 @@ const IncidentFeed = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Incident Filters',
-          id: 'd3tEdR',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}

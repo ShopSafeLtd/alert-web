@@ -1,9 +1,10 @@
 import React from 'react';
-import type { BusinessesSideListQuery } from 'graphql/generated';
+
 import { Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import useStyles from './BusinessSideList.styles';
 import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
+import type { BusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
 
 const { Text, Paragraph } = Typography;
 

@@ -1,4 +1,4 @@
-import type { ViewInvestigationQuery } from '../../../../../../graphql/generated';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
 
 export interface ViewProps {
   data:

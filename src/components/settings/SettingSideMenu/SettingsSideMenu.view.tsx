@@ -3,10 +3,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useStoreState } from '#/state';
-import { PermissionModel } from '#/graphql/generated';
+
 import Sider from 'antd/lib/layout/Sider';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import useStyles from './SettingsSideMenu.style';
+import { PermissionModel } from 'graphql/types';
 
 const SettingsSideMenu = ({
   collapsed,
@@ -26,13 +27,12 @@ const SettingsSideMenu = ({
 
   const settings = [
     {
-      title: intl.formatMessage({ id: 'YDMrKK', defaultMessage: 'Users' }),
+      title: intl.formatMessage({ defaultMessage: 'Users' }),
       to: '/app/scheme-settings/users',
       permissions: [PermissionModel.Settings, PermissionModel.Users],
     },
     {
       title: intl.formatMessage({
-        id: 'D0tMhW',
         defaultMessage: 'Businesses',
       }),
       to: '/app/scheme-settings/businesses',
@@ -40,20 +40,18 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: 'jWfWEA',
         defaultMessage: 'Brands',
       }),
       to: '/app/scheme-settings/brands',
       permissions: [PermissionModel.Settings, PermissionModel.Businesses],
     },
     {
-      title: intl.formatMessage({ id: 'c35gM5', defaultMessage: 'Roles' }),
+      title: intl.formatMessage({ defaultMessage: 'Roles' }),
       to: '/app/scheme-settings/roles',
       permissions: [PermissionModel.Settings, PermissionModel.Groups],
     },
     {
       title: intl.formatMessage({
-        id: '3lRewT',
         defaultMessage: 'Content Groups',
       }),
       to: '/app/scheme-settings/groups',
@@ -61,7 +59,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: '8TntzL',
         defaultMessage: 'Chat Groups',
       }),
       permissions: [PermissionModel.Settings, PermissionModel.Chat],
@@ -69,7 +66,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: 'yuiyES',
         defaultMessage: 'General Settings',
       }),
       to: '/app/scheme-settings/scheme-settings',
@@ -77,20 +73,18 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: '0yyHLp',
         defaultMessage: 'Sharing Settings',
       }),
       to: '/app/scheme-settings/scheme-sharing',
       permissions: [PermissionModel.Settings],
     },
     {
-      title: intl.formatMessage({ id: 'nwqt7T', defaultMessage: 'Dashboards' }),
+      title: intl.formatMessage({ defaultMessage: 'Dashboards' }),
       to: '/app/manage-dashboard/',
       permissions: [PermissionModel.Settings],
     },
     {
       title: intl.formatMessage({
-        id: 'yqMG5f',
         defaultMessage: 'Incident Options',
       }),
       to: '/app/scheme-settings/crime-types',
@@ -98,7 +92,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: '1jRWJS',
         defaultMessage: 'Offender Warnings',
       }),
       to: '/app/scheme-settings/offender-warnings',
@@ -106,7 +99,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: 'tT/4is',
         defaultMessage: 'Offender Galleries',
       }),
       to: '/app/scheme-settings/custom-galleries',
@@ -114,7 +106,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: '6La3aS',
         defaultMessage: 'Workflows',
       }),
       to: '/app/scheme-settings/workflow',
@@ -122,7 +113,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: '75itGg',
         defaultMessage: 'Statement Templates',
       }),
       to: '/app/scheme-settings/statement-templates',
@@ -130,7 +120,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: 'arPp4e',
         defaultMessage: 'Terms & Conditions',
       }),
       to: '/app/scheme-settings/terms',
@@ -138,7 +127,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: 'rKcpai',
         defaultMessage: 'Data Import',
       }),
       to: '/app/scheme-settings/data-import',
@@ -146,7 +134,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: 'zWElXZ',
         defaultMessage: 'Data Export',
       }),
       to: '/app/scheme-settings/data-export/export-incidents',
@@ -154,7 +141,6 @@ const SettingsSideMenu = ({
     },
     {
       title: intl.formatMessage({
-        id: 'Qc/Mx7',
         defaultMessage: 'Recycle Bin',
       }),
       to: '/app/scheme-settings/recycle-bin',
@@ -176,7 +162,7 @@ const SettingsSideMenu = ({
           left: collapsed ? -18 : undefined,
           right: collapsed ? undefined : -18,
           fontSize: '16px',
-          zIndex: 99_999,
+          zIndex: 1000,
         }}
       />
       {collapsed ? (
@@ -184,7 +170,7 @@ const SettingsSideMenu = ({
       ) : (
         <div className={classes.container}>
           <Typography.Paragraph className={classes.menuTitle}>
-            <FormattedMessage id="D3idYv" defaultMessage="Settings" />
+            <FormattedMessage defaultMessage="Settings" />
           </Typography.Paragraph>
 
           {settings
@@ -194,7 +180,7 @@ const SettingsSideMenu = ({
                 permissions.some((perm) => item.permissions.includes(perm))
             )
             .map((item) => (
-              <Link to={item.to}>
+              <Link to={item.to} key={item.to}>
                 <div className={classes.item}>
                   <Typography.Text className={classes.text}>
                     {item.title}

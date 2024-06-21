@@ -1,7 +1,7 @@
 import React from 'react';
-import type { ListIncidentsQuery } from 'graphql/generated';
 import { Button, Col, Input, Row, Table } from 'antd';
 import { useIntl } from 'react-intl';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
 
 interface Props {
   onClose: () => void;
@@ -51,7 +51,6 @@ const LinkIncident = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Incidents...',
-              id: 'gvqTQ8',
             })}
             allowClear
           />
@@ -65,7 +64,6 @@ const LinkIncident = ({
             dataIndex: 'reference',
             title: intl.formatMessage({
               defaultMessage: 'Alert ID',
-              id: 'k8ZNgH',
             }),
           },
           {
@@ -73,20 +71,18 @@ const LinkIncident = ({
             dataIndex: 'subject',
             title: intl.formatMessage({
               defaultMessage: 'Subject',
-              id: 'LLtKhp',
             }),
           },
           {
             key: 'date',
             dataIndex: 'date',
-            title: intl.formatMessage({ defaultMessage: 'Date', id: 'P7PLVj' }),
+            title: intl.formatMessage({ defaultMessage: 'Date' }),
           },
           {
             key: 'location',
             dataIndex: 'location',
             title: intl.formatMessage({
               defaultMessage: 'Location',
-              id: 'rvirM2',
             }),
           },
           {
@@ -94,7 +90,6 @@ const LinkIncident = ({
             dataIndex: 'offenders',
             title: intl.formatMessage({
               defaultMessage: 'Offenders',
-              id: 'xb54TN',
             }),
           },
         ]}
@@ -132,7 +127,7 @@ const LinkIncident = ({
       <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -144,7 +139,6 @@ const LinkIncident = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Add Incidents',
-              id: 'kKj7sq',
             })}
           </Button>
         </Col>

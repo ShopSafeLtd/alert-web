@@ -1,9 +1,10 @@
+import { useStoreState } from 'state';
 import type {
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables,
-} from 'graphql/generated';
-import { QueryMode, useListCrimeGroupsQuery } from 'graphql/generated';
-import { useStoreState } from 'state';
+} from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { QueryMode } from 'graphql/types';
 
 interface Return {
   data:

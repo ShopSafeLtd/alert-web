@@ -1,9 +1,10 @@
 import type React from 'react';
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import type { ListDemEvidenceExtendedWithoutUserQuery } from '../../../../graphql/generated';
-import { useListDemEvidenceExtendedWithoutUserQuery } from '../../../../graphql/generated';
+
 import type { TableItem } from '../EvidenceList.view';
+import type { ListDemEvidenceExtendedWithoutUserQuery } from '#/views/evidence/grapqhl/queries/list-evidence.generated';
+import { useListDemEvidenceExtendedWithoutUserQuery } from '#/views/evidence/grapqhl/queries/list-evidence.generated';
 
 interface Return {
   data: ListDemEvidenceExtendedWithoutUserQuery | undefined;

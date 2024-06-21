@@ -5,17 +5,17 @@ import type { FormInstance } from 'antd';
 import {
   Button,
   Card,
-  Col,
   Collapse,
-  Descriptions,
   Form,
+  Tabs,
+  Upload,
+  Col,
+  Descriptions,
   Input,
   PageHeader,
   Radio,
   Row,
   Select,
-  Tabs,
-  Upload,
 } from 'antd';
 import ReactDOMServer from 'react-dom/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

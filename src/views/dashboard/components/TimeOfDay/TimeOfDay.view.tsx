@@ -16,14 +16,12 @@ const DayOfWeekBar = ({ data, loading }: Props) => {
       bodyStyle={{ height: '90%' }}
       title={intl.formatMessage({
         defaultMessage: 'Incidents by time of day',
-        id: '9rgowk',
       })}
     >
       <BarGraph
         data={data}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No incidents',
-          id: '7UNuAl',
         })}
         margin={{
           bottom: 40,

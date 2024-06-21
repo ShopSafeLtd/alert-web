@@ -14,14 +14,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type {
-  CreateDocumentMutation,
-  CreateInvestigationMutation,
-  CreateSimpleOffenderMutation,
-  CrimeGroupQuery,
-  DeleteDocumentMutation,
-  SuggestedCrimeGroupMembersQuery,
-} from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
@@ -54,6 +47,12 @@ import IntelSection from 'components/ViewPage/IntelSection';
 import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
 import OffenderGrid from '../../../../components/offenders/OffenderGrid';
 import useStyles from './ViewCrimeGroup.styles';
+import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/view-crime-group.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/suggested-memebrs.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
 
 const { Title } = Typography;
 const { confirm } = Modal;
@@ -220,11 +219,9 @@ const ViewCrimeGroup = ({
                   data?.crimeGroup?.subscribed
                     ? intl.formatMessage({
                         defaultMessage: 'Stop getting notified about updates.',
-                        id: 'WpTY6U',
                       })
                     : intl.formatMessage({
                         defaultMessage: 'Get notified about updates.',
-                        id: 'icr+Hj',
                       })
                 }
               >
@@ -243,11 +240,9 @@ const ViewCrimeGroup = ({
                   {data?.crimeGroup?.subscribed
                     ? intl.formatMessage({
                         defaultMessage: 'Un-follow',
-                        id: 'U9yypY',
                       })
                     : intl.formatMessage({
                         defaultMessage: 'Follow',
-                        id: 'ieGrWo',
                       })}
                 </Button>
               </Tooltip>
@@ -277,7 +272,6 @@ const ViewCrimeGroup = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Edit',
-                    id: 'wEQDC6',
                   })}
                 </Button>
               </Col>
@@ -291,11 +285,9 @@ const ViewCrimeGroup = ({
                       title: intl.formatMessage({
                         defaultMessage:
                           'Do you want to delete the crime group?',
-                        id: 'sozjTX',
                       }),
                       content: intl.formatMessage({
                         defaultMessage: 'This action cannot be undone.',
-                        id: 'JDJoIZ',
                       }),
                       onOk() {
                         onDeleteCrimeGroup();
@@ -310,7 +302,6 @@ const ViewCrimeGroup = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Delete',
-                    id: 'K3r6DQ',
                   })}
                 </Button>
               </Col>
@@ -323,7 +314,6 @@ const ViewCrimeGroup = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Alert ID: {ref} {alias}',
-                      id: 'FGm79Y',
                     },
                     {
                       ref: data?.crimeGroup?.reference || '',
@@ -338,7 +328,6 @@ const ViewCrimeGroup = ({
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Total Incidents',
-                        id: 'pUlxda',
                       })}
                       value={data?.crimeGroup?.totalIncidents || 0}
                     />
@@ -347,7 +336,6 @@ const ViewCrimeGroup = ({
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Total Offenders',
-                        id: 'Pyo0l3',
                       })}
                       value={data?.crimeGroup?.totalOffenders || 0}
                     />
@@ -356,7 +344,6 @@ const ViewCrimeGroup = ({
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Total Loss',
-                        id: 'LPr3Nh',
                       })}
                       value={`£${
                         data?.crimeGroup?.totalValue?.toLocaleString() || 0
@@ -367,7 +354,6 @@ const ViewCrimeGroup = ({
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Total Value Recovered',
-                        id: 't+iLve',
                       })}
                       value={`£${
                         data?.crimeGroup?.totalRecoveredValue?.toLocaleString() ||
@@ -379,7 +365,6 @@ const ViewCrimeGroup = ({
                     <Statistic
                       title={intl.formatMessage({
                         defaultMessage: 'Loss Rate',
-                        id: 'mQPFSj',
                       })}
                       value={`${
                         data?.crimeGroup?.totalTheftSuccess?.toFixed(0) || 0
@@ -395,7 +380,6 @@ const ViewCrimeGroup = ({
                       {intl.formatMessage(
                         {
                           defaultMessage: 'Offenders ({offenders})',
-                          id: 'lVaHn1',
                         },
                         {
                           offenders: data?.crimeGroup.totalOffenders || 0,
@@ -415,7 +399,6 @@ const ViewCrimeGroup = ({
                           {suggestedData.crimeGroup.suggestedMembers.length}
                           {intl.formatMessage({
                             defaultMessage: 'Suggested Members',
-                            id: 'TxnvVF',
                           })}
                         </Button>
                       </Col>
@@ -428,7 +411,6 @@ const ViewCrimeGroup = ({
                             {
                               label: intl.formatMessage({
                                 defaultMessage: 'Add Existing Offenders',
-                                id: '1FbM4r',
                               }),
                               key: '1',
                               icon: (
@@ -442,7 +424,6 @@ const ViewCrimeGroup = ({
                             {
                               label: intl.formatMessage({
                                 defaultMessage: 'Create New Offender',
-                                id: '58ir77',
                               }),
                               key: '2',
                               icon: (
@@ -468,7 +449,6 @@ const ViewCrimeGroup = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Offenders',
-                          id: 'xb54TN',
                         })}
                       </Button>
                     </Dropdown>
@@ -481,7 +461,6 @@ const ViewCrimeGroup = ({
                   <Empty
                     description={intl.formatMessage({
                       defaultMessage: 'No offenders for this crime group',
-                      id: '3x8wG/',
                     })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
@@ -506,7 +485,6 @@ const ViewCrimeGroup = ({
                     <Title level={4}>
                       {intl.formatMessage({
                         defaultMessage: 'Vehicles',
-                        id: 'r6wuJ3',
                       })}
                     </Title>
                   </Col>
@@ -518,7 +496,6 @@ const ViewCrimeGroup = ({
                             {
                               label: intl.formatMessage({
                                 defaultMessage: 'Add Existing Vehicles',
-                                id: 'goP1s6',
                               }),
                               key: '1',
                               icon: (
@@ -532,7 +509,6 @@ const ViewCrimeGroup = ({
                             {
                               label: intl.formatMessage({
                                 defaultMessage: 'Create New Vehicle',
-                                id: 'xiAZxN',
                               }),
                               key: '2',
                               icon: (
@@ -558,7 +534,6 @@ const ViewCrimeGroup = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Vehicles',
-                          id: 'r6wuJ3',
                         })}
                       </Button>
                     </Dropdown>
@@ -574,7 +549,6 @@ const ViewCrimeGroup = ({
                   <Empty
                     description={intl.formatMessage({
                       defaultMessage: 'No vehicles for this crime group',
-                      id: 'dtAhMN',
                     })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
@@ -584,7 +558,6 @@ const ViewCrimeGroup = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Incidents',
-                    id: 'mtr3R4',
                   })}
                 </Title>
                 {data?.crimeGroup?.incidents &&
@@ -601,7 +574,6 @@ const ViewCrimeGroup = ({
                   <Empty
                     description={intl.formatMessage({
                       defaultMessage: 'No incidents for this crime group',
-                      id: 'uFO+ib',
                     })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
@@ -613,7 +585,6 @@ const ViewCrimeGroup = ({
                     <Title level={4}>
                       {intl.formatMessage({
                         defaultMessage: 'Evidence',
-                        id: '6g7+6N',
                       })}
                     </Title>
                   </Col>
@@ -631,7 +602,6 @@ const ViewCrimeGroup = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Evidence',
-                          id: 'vgVasT',
                         })}
                       </Button>
                     </Col>
@@ -649,7 +619,6 @@ const ViewCrimeGroup = ({
                   <Empty
                     description={intl.formatMessage({
                       defaultMessage: 'No evidence for this crimeGroup',
-                      id: 'BKR0xN',
                     })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
@@ -663,7 +632,6 @@ const ViewCrimeGroup = ({
                       <Title level={4}>
                         {intl.formatMessage({
                           defaultMessage: 'Investigations',
-                          id: 'juQ8mz',
                         })}
                       </Title>
                     </Col>
@@ -681,7 +649,6 @@ const ViewCrimeGroup = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Investigation',
-                          id: 'U5+v9Y',
                         })}
                       </Button>
                     </Col>
@@ -695,7 +662,6 @@ const ViewCrimeGroup = ({
                       description={intl.formatMessage({
                         defaultMessage:
                           'No investigations for this crime group',
-                        id: 'FCzPwl',
                       })}
                       image={Empty.PRESENTED_IMAGE_SIMPLE}
                     />
@@ -706,14 +672,12 @@ const ViewCrimeGroup = ({
 
             <Modal
               title={intl.formatMessage({
-                id: '8sZeJM',
                 defaultMessage: 'Edit Update Content',
               })}
               open={editUpdate !== null}
               onOk={handleEditUpdate}
               onCancel={() => setEditUpdate(null)}
               okText={intl.formatMessage({
-                id: 'jvo0vs',
                 defaultMessage: 'Save',
               })}
             >
@@ -766,7 +730,6 @@ const ViewCrimeGroup = ({
 
       <Drawer
         title={intl.formatMessage({
-          id: 'V+RsEq',
           defaultMessage: 'Add New Offender',
         })}
         open={addOffender}
@@ -789,7 +752,6 @@ const ViewCrimeGroup = ({
       </Drawer>
       <Drawer
         title={intl.formatMessage({
-          id: '1FbM4r',
           defaultMessage: 'Add Existing Offenders',
         })}
         open={addExistingOffender}
@@ -811,7 +773,6 @@ const ViewCrimeGroup = ({
       {/* vehicle */}
       <Drawer
         title={intl.formatMessage({
-          id: 'cHbTr7',
           defaultMessage: 'Add New Vehicle',
         })}
         open={addNewVehicle}
@@ -831,7 +792,6 @@ const ViewCrimeGroup = ({
       </Drawer>
       <Drawer
         title={intl.formatMessage({
-          id: 'goP1s6',
           defaultMessage: 'Add Existing Vehicles',
         })}
         open={addExistingVehicle}
@@ -852,7 +812,6 @@ const ViewCrimeGroup = ({
       </Drawer>
       <Drawer
         title={intl.formatMessage({
-          id: '9p+uZ/',
           defaultMessage: 'Add New Alias',
         })}
         open={addAlias}
@@ -863,7 +822,6 @@ const ViewCrimeGroup = ({
       </Drawer>
       <Drawer
         title={intl.formatMessage({
-          id: 'jxHIQ/',
           defaultMessage: 'Suggested Group Members',
         })}
         open={viewSuggestedOpen}
@@ -883,7 +841,6 @@ const ViewCrimeGroup = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
-          id: 'vgVasT',
         })}
         open={addDocument}
         width="600"
@@ -904,7 +861,6 @@ const ViewCrimeGroup = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={addInvestigation}
         width="500"

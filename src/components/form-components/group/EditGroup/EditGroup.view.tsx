@@ -1,5 +1,4 @@
 import React from 'react';
-import type { GroupQuery } from 'graphql/generated';
 import {
   Button,
   Col,
@@ -14,6 +13,7 @@ import {
 import type { SelectOptions } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { FormData } from './useEditGroup';
+import type { GroupQuery } from 'graphql/group/queries/group.generated';
 
 interface Props {
   onSubmit: (value: FormData) => void;
@@ -86,14 +86,12 @@ const EditGroup = ({
             name="name"
             label={intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the group.',
-                  id: 'H2pLHC',
                 }),
               },
             ]}
@@ -108,7 +106,6 @@ const EditGroup = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea disabled={saving} />
@@ -121,7 +118,6 @@ const EditGroup = ({
             name="users"
             label={intl.formatMessage({
               defaultMessage: 'Users',
-              id: 'YDMrKK',
             })}
             rules={[
               {
@@ -129,7 +125,6 @@ const EditGroup = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select at least one user for the new group.',
-                  id: 'mduNlp',
                 }),
               },
             ]}
@@ -155,7 +150,6 @@ const EditGroup = ({
               name="approvers"
               label={intl.formatMessage({
                 defaultMessage: 'Approvers',
-                id: 'Nm9Hsa',
               })}
             >
               <Select
@@ -181,7 +175,6 @@ const EditGroup = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Control Offender Settings',
-              id: 'WXhNrv',
             })}
           </Typography.Title>
         </Col>
@@ -199,7 +192,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Name',
-                id: 'LxDnoc',
               })}
               name="showName"
               valuePropName="checked"
@@ -219,7 +211,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Alias',
-                id: 'jcV2wy',
               })}
               name="showAlias"
               valuePropName="checked"
@@ -239,7 +230,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Ethnicity',
-                id: 'd1HnEr',
               })}
               name="showEthnicity"
               valuePropName="checked"
@@ -259,7 +249,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Gender',
-                id: 'wmoFoM',
               })}
               name="showGender"
               valuePropName="checked"
@@ -279,7 +268,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Build',
-                id: 'NAbrWS',
               })}
               name="showBuild"
               valuePropName="checked"
@@ -299,7 +287,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Height',
-                id: '+MhMte',
               })}
               name="showHeight"
               valuePropName="checked"
@@ -319,7 +306,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Hair',
-                id: '05ZX/k',
               })}
               name="showHair"
               valuePropName="checked"
@@ -339,7 +325,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Age',
-                id: 'To9AO3',
               })}
               name="showAge"
               valuePropName="checked"
@@ -359,7 +344,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Date Of Birth',
-                id: 'RbB1mP',
               })}
               name="showDateOfBirth"
               valuePropName="checked"
@@ -379,7 +363,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Date Of Birth Source',
-                id: '5/YYbb',
               })}
               name="showDateOfBirthSource"
               valuePropName="checked"
@@ -399,7 +382,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Id Verified',
-                id: '1jFhhX',
               })}
               name="showIdVerified"
               valuePropName="checked"
@@ -419,7 +401,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Peculiarities',
-                id: 'e/MoKK',
               })}
               name="showPeculiarities"
               valuePropName="checked"
@@ -439,7 +420,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Comment',
-                id: 'lyxeeq',
               })}
               name="showComment"
               valuePropName="checked"
@@ -459,7 +439,6 @@ const EditGroup = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Show Images',
-                id: 'YaS9tR',
               })}
               name="showImages"
               valuePropName="checked"
@@ -483,7 +462,6 @@ const EditGroup = ({
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -496,7 +474,6 @@ const EditGroup = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Save',
-                id: 'jvo0vs',
               })}
             </Button>
           </Col>

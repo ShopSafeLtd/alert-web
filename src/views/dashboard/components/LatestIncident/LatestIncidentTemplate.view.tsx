@@ -27,7 +27,6 @@ const LatestIncident = ({
         <Statistic
           title={intl.formatMessage({
             defaultMessage: 'Latest Incident',
-            id: 'iJgFvw',
           })}
           valueStyle={{ color: '#ff0000' }}
           value={new Date(data.date).toLocaleString('en-GB', {
@@ -36,9 +35,7 @@ const LatestIncident = ({
           loading={loading}
         />
       ) : (
-        <div>
-          {intl.formatMessage({ defaultMessage: 'No Incidents', id: '+nJOH5' })}
-        </div>
+        <div>{intl.formatMessage({ defaultMessage: 'No Incidents' })}</div>
       )}
     </Card>
   );

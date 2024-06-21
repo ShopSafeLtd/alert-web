@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { ArticlePriority, ImagePosition } from 'graphql/generated';
+
 import ArticleCard from '../ArticleCard.view';
+import { ArticlePriority, ImagePosition } from 'graphql/types';
 
 describe('Detail Officer View', () => {
   const data = {

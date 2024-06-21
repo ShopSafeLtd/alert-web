@@ -54,7 +54,6 @@ const AddCrimeGroup = ({
               name="alias"
               label={intl.formatMessage({
                 defaultMessage: 'Alias',
-                id: 'Ri9jA7',
               })}
             >
               <Input disabled={saving} />
@@ -67,11 +66,9 @@ const AddCrimeGroup = ({
               name="offenders"
               label={intl.formatMessage({
                 defaultMessage: 'Select Offenders',
-                id: 'nNFHrE',
               })}
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select offenders for the crime group.',
-                id: '39isw9',
               })}
               rules={[
                 {
@@ -79,7 +76,6 @@ const AddCrimeGroup = ({
                   message: intl.formatMessage({
                     defaultMessage:
                       'Select at least one offender for the crime group.',
-                    id: '1rVQVU',
                   }),
                 },
               ]}
@@ -99,7 +95,6 @@ const AddCrimeGroup = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Select Offender',
-                  id: '8e5n4o',
                 })}
               </Button>
             </Form.Item>
@@ -109,11 +104,9 @@ const AddCrimeGroup = ({
               name="offenders"
               label={intl.formatMessage({
                 defaultMessage: 'Select Vehicles',
-                id: '4Cza+w',
               })}
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select vehicle for the crime group.',
-                id: 'VQYGSJ',
               })}
             >
               <Button
@@ -131,7 +124,6 @@ const AddCrimeGroup = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Select Vehicle',
-                  id: 'tnv+4a',
                 })}
               </Button>
             </Form.Item>
@@ -141,7 +133,6 @@ const AddCrimeGroup = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Offenders',
-              id: 'xb54TN',
             })}
             bodyStyle={{ padding: 0 }}
             style={{ marginTop: 10 }}
@@ -158,7 +149,6 @@ const AddCrimeGroup = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Vehicles',
-              id: 'r6wuJ3',
             })}
             headStyle={{ marginBottom: 5 }}
             bodyStyle={{ padding: 0, paddingLeft: 5 }}
@@ -176,7 +166,7 @@ const AddCrimeGroup = ({
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>
             </Col>
             <Col>
@@ -188,7 +178,6 @@ const AddCrimeGroup = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create',
-                  id: 'VzzYJk',
                 })}
               </Button>
             </Col>
@@ -198,7 +187,6 @@ const AddCrimeGroup = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Select Offenders',
-          id: 'nNFHrE',
         })}
         open={linkOffender}
         width="800"
@@ -217,7 +205,6 @@ const AddCrimeGroup = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Select Vehicles',
-          id: '4Cza+w',
         })}
         open={linkVehicle}
         width="800"

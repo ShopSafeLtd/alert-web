@@ -1,10 +1,7 @@
 import { useState } from 'react';
-
-import type { ListDemUsersQuery } from 'graphql/generated';
-import {
-  useLinkUserToDemMutation,
-  useListDemUsersQuery,
-} from 'graphql/generated';
+import type { ListDemUsersQuery } from 'graphql/dem/queries/list-users.generated';
+import { useListDemUsersQuery } from 'graphql/dem/queries/list-users.generated';
+import { useLinkUserToDemMutation } from 'graphql/dem/mutations/link-user-to-dem.generated';
 
 interface Props {
   onClose: () => void;

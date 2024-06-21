@@ -4,13 +4,10 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import {
-  ArticlePriority,
-  ListArticlesDocument,
-  QueryMode,
-  SortOrder,
-} from 'graphql/generated';
+
 import useArticlesSection from '../useArticlesSection';
+import { ListArticlesDocument } from 'graphql/article/queries/list_articles.generated';
+import { ArticlePriority, QueryMode, SortOrder } from 'graphql/types';
 
 const mocks = [
   {

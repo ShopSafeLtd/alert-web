@@ -9,8 +9,7 @@ import React, {
   useState,
 } from 'react';
 import { useStoreActions, useStoreState } from '#/state';
-import type { Model } from 'graphql/generated';
-import { Role, SortOrder } from 'graphql/generated';
+
 import type { DateType } from '#/types/DataType';
 import type { FeedItemFilters } from '#/state/data-model';
 import type { IntlShape } from 'react-intl';
@@ -18,6 +17,8 @@ import { useIntl } from 'react-intl';
 import type RGL from 'react-grid-layout';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
 import { useGroupsContext } from '#/context/groups-context';
+import type { Model } from 'graphql/types';
+import { Role, SortOrder } from 'graphql/types';
 
 interface DashboardContextT {
   children?: ReactNode;

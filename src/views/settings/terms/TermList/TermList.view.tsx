@@ -3,11 +3,9 @@ import { Button, Card, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { FormattedMessage } from 'react-intl';
-import {
-  Role,
-  useCurrentSchemeTermsQuery,
-} from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
+import { Role } from 'graphql/types';
+import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
 
 const Terms = (): JSX.Element => {
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -32,12 +30,9 @@ const Terms = (): JSX.Element => {
           <Button
             style={{ marginBottom: 10 }}
             type="primary"
-            onClick={() => navigate(`/app/scheme-settings/terms/scheme/create`)}
+            onClick={() => navigate('/app/scheme-settings/terms/scheme/create')}
           >
-            <FormattedMessage
-              defaultMessage="Create Terms and Conditions"
-              id="5OwJwf"
-            />
+            <FormattedMessage defaultMessage="Create Terms and Conditions" />
           </Button>
         )}
       <Card>

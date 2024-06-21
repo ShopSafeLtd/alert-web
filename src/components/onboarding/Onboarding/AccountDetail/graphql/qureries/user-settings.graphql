@@ -1,0 +1,12 @@
+query UserSettings {
+  currentUser {
+    id
+    messagePush
+    offenderPush
+    subscribedIncidentOnly
+    incidentEmail
+    incidentPush
+    subscribedOffenderOnly
+    offenderEmail
+  }
+}

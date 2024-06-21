@@ -1,6 +1,7 @@
 import type React from 'react';
-import { AnswerType } from 'graphql/generated';
+
 import moment from 'moment';
+import { AnswerType } from 'graphql/types';
 
 const formatAnswer = (value: string, type: AnswerType): React.ReactNode => {
   if (type === AnswerType.Date) return moment(value).format('DD/MM/YYYY');

@@ -1,11 +1,11 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
-import type { SearchOffendersQuery } from 'graphql/generated';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import { Col, Row, Typography } from 'antd';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import type { SearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
 
 interface Props {
   item: Exclude<

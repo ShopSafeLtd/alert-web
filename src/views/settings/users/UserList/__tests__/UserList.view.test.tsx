@@ -2,8 +2,9 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { UserSort } from 'types/enums/user_sort';
-import { Role, UserStatus } from 'graphql/generated';
+
 import UserList from '../UserList.view';
+import { Role, UserStatus } from 'graphql/types';
 
 describe('List Officer View', () => {
   const data = {

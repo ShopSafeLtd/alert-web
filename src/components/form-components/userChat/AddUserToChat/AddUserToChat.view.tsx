@@ -55,7 +55,6 @@ const AddUserToChat = ({
             }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search users...',
-              id: 'p/iF5T',
             })}
             allowClear
           />
@@ -73,7 +72,6 @@ const AddUserToChat = ({
               message: intl.formatMessage({
                 defaultMessage:
                   'Please at least select an user for the chat group.',
-                id: 'EdVD2H',
               }),
             },
           ]}
@@ -103,7 +101,7 @@ const AddUserToChat = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -115,7 +113,6 @@ const AddUserToChat = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Member',
-                id: 'gcagTt',
               })}
             </Button>
           </Col>

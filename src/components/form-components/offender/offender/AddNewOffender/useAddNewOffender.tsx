@@ -1,20 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import React, { useState } from 'react';
-import type {
-  Age,
-  Build,
-  Gender,
-  Height,
-  IdSource,
-  Race,
-  SearchOffendersQuery,
-  SearchOffendersQueryVariables,
-} from 'graphql/generated';
-import {
-  QueryMode,
-  SearchOffendersDocument,
-  SortOrder,
-} from 'graphql/generated';
+import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
+import { QueryMode, SortOrder } from 'graphql/types';
+
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { FormInstance } from 'antd';
 import { Form, message } from 'antd';
@@ -25,6 +13,11 @@ import type { Image, OffenderData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import { compressImage } from 'utils/compress-images';
 import OffenderItem from './OffenderItem';
+import type {
+  SearchOffendersQuery,
+  SearchOffendersQueryVariables,
+} from 'graphql/offenders/queries/search-offenders.generated';
+import { SearchOffendersDocument } from 'graphql/offenders/queries/search-offenders.generated';
 
 export interface FormData {
   name: string;
@@ -118,7 +111,6 @@ const useAddNewOffender = ({
               {
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
-                  id: 'hX5PAb',
                 }),
                 value: '',
                 disabled: true,

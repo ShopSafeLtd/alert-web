@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import type { GroupQuery } from 'graphql/generated';
-import {
-  Role,
-  SortOrder,
-  useListSchemeUsersQuery,
-  useUpdateGroupMutation,
-  useGroupQuery,
-} from 'graphql/generated';
+
 import { notification } from 'antd';
 import type { SelectOptions } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { GroupQuery } from 'graphql/group/queries/group.generated';
+import { useGroupQuery } from 'graphql/group/queries/group.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { Role, SortOrder } from 'graphql/types';
+import { useUpdateGroupMutation } from 'graphql/group/mutation/update_group.generated';
 
 export interface FormData {
   name: string;
@@ -109,11 +107,9 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The group has been updated.',
-          id: '7dpbD2',
         }),
         placement: 'bottomRight',
       });

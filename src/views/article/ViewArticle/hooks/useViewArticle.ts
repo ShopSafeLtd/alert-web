@@ -3,19 +3,17 @@ import { useStoreState } from 'state';
 import { Modal } from 'antd';
 import { useNavigate } from 'react-router';
 import { useIntl } from 'react-intl';
+
+import type { Props, ReturnProps } from '../types/ViewArticle';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
+import { useArticleQuery } from 'graphql/article/queries/view-article.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useDeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
 import type {
   ListArticlesQuery,
   ListArticlesQueryVariables,
-} from '../../../../graphql/generated';
-import {
-  ListArticlesDocument,
-  QueryMode,
-  SortOrder,
-  useArticleQuery,
-  useDeleteArticleMutation,
-} from '../../../../graphql/generated';
-import type { Props, ReturnProps } from '../types/ViewArticle';
-import useReportPrint from '#/utils/reportPrint/usePrintReports';
+} from 'graphql/article/queries/list_articles.generated';
+import { ListArticlesDocument } from 'graphql/article/queries/list_articles.generated';
 
 const useViewArticle = ({ id }: Props): ReturnProps => {
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
@@ -90,11 +88,9 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     Modal.confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage: 'Are you sure you want to delete this article?',
-        id: 'AjSz/I',
       }),
       onOk() {
         void deleteArticle({

@@ -1,6 +1,5 @@
 import React from 'react';
-import type { ListVehiclesCardQuery } from 'graphql/generated';
-import { SortOrder } from 'graphql/generated';
+import { SortOrder } from 'graphql/types';
 import {
   Button,
   Col,
@@ -26,6 +25,7 @@ import CardSkeleton from 'components/Skeleton/CardSkeleton.view';
 import useStyles from './LinkVehicle.styles';
 import VehicleTile from './VehicleTile';
 import InfiniteSelectScrollList from '../select-list/InfiniteSelectList';
+import type { ListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/list-vehicles-card.generated';
 
 const { Paragraph, Text } = Typography;
 // interface ItemProps {
@@ -163,7 +163,6 @@ const LinkVehicle = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Vehicles...',
-              id: 'LwoWFl',
             })}
             allowClear
           />
@@ -186,13 +185,12 @@ const LinkVehicle = ({
         </Col>
         <Col className={classes.filters} span={6}>
           <Paragraph className={classes.filterTitle}>
-            {intl.formatMessage({ defaultMessage: 'Filters', id: 'zSOvI0' })}
+            {intl.formatMessage({ defaultMessage: 'Filters' })}
           </Paragraph>
           <div className={classes.filter}>
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Sort Order',
-                id: 'Hw6crD',
               })}
             </Text>
             <Select
@@ -205,13 +203,11 @@ const LinkVehicle = ({
               <Select.Option value={SortOrder.Desc}>
                 {intl.formatMessage({
                   defaultMessage: 'Newest First',
-                  id: 'dZYazP',
                 })}
               </Select.Option>
               <Select.Option value={SortOrder.Asc}>
                 {intl.formatMessage({
                   defaultMessage: 'Oldest First',
-                  id: 'FqI37D',
                 })}
               </Select.Option>
             </Select>
@@ -220,13 +216,11 @@ const LinkVehicle = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
             </Text>
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
               mode="multiple"
               className={classes.filterSelect}
@@ -246,7 +240,6 @@ const LinkVehicle = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'createdAt',
-                id: 'F4RJ8y',
               })}
             </Text>
             <DatePicker.RangePicker
@@ -274,7 +267,6 @@ const LinkVehicle = ({
               <Button onClick={clearFilters}>
                 {intl.formatMessage({
                   defaultMessage: 'Clear Filters',
-                  id: 'MsGXc3',
                 })}
               </Button>
             </Col>
@@ -287,14 +279,12 @@ const LinkVehicle = ({
         zIndex={1010}
         okText={intl.formatMessage({
           defaultMessage: 'Add Vehicle',
-          id: '7vPZdr',
         })}
         onOk={onSubmit}
         onCancel={() => setSelectedVehicle(undefined)}
         bodyStyle={{ padding: 0 }}
         title={intl.formatMessage({
           defaultMessage: 'Add this vehicle?',
-          id: 'i1CjZG',
         })}
       >
         <Row wrap={false}>
@@ -319,49 +309,41 @@ const LinkVehicle = ({
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Registration',
-                  id: 'qv7ied',
                 })}
               >
                 {selectedVehicle?.registration ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Make',
-                  id: '6AAM0P',
                 })}
               >
                 {selectedVehicle?.make ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Colour',
-                  id: '+e8vAT',
                 })}
               >
                 {selectedVehicle?.colour ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Model',
-                  id: 'rhSI1/',
                 })}
               >
                 {selectedVehicle?.model ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
             </Descriptions>

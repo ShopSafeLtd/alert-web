@@ -1,6 +1,6 @@
-import React from 'react';
-import type { Role, UserQuery } from 'graphql/generated';
-import { UserStatus } from 'graphql/generated';
+/* eslint-disable formatjs/no-literal-string-in-jsx */
+import type { RefObject } from 'react';
+import React, { useState } from 'react';
 import { RoleValues } from 'types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ import {
   Descriptions,
   Drawer,
   Empty,
+  Modal,
   PageHeader,
   Row,
   Statistic,
@@ -27,6 +28,7 @@ import {
   faLockKeyhole,
   faPaperPlaneTop,
   faPenToSquare,
+  faPrint,
   faTrash,
   faUnlockKeyhole,
 } from '@fortawesome/pro-light-svg-icons';
@@ -35,6 +37,12 @@ import formatLoginTime from 'utils/format-login-time';
 import LinkDem from '../../../../components/form-components/user/LinkDem';
 import useStyles from './UserDetail.styles';
 import SetPassword from '../../../../components/form-components/SetPassword';
+import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
+import { CustomTermsView } from '#/components/onboarding/Onboarding/SchemeTerms/Terms.view';
+import type { Role } from 'graphql/types';
+import { UserStatus } from 'graphql/types';
+import type { UserQuery } from 'graphql/user/queries/user.generated';
+import { useTermQuery } from '#/views/settings/users/UserDetail/graphql/queries/view-users-signed-terms.generated';
 
 interface Props {
   data: UserQuery | undefined;
@@ -52,6 +60,10 @@ interface Props {
   userRole: Role | undefined;
   toggleEditPassword: () => void;
   editPassword: boolean;
+  isOwn: boolean;
+  componentRef: RefObject<HTMLDivElement>;
+  handlePrint: () => void;
+  isPrinting: boolean;
 }
 const getTextStatus = (value: UserStatus) => {
   if (value === UserStatus.Active) return 'green';
@@ -59,6 +71,69 @@ const getTextStatus = (value: UserStatus) => {
   if (value === UserStatus.Disabled) return 'red';
   return 'green';
 };
+
+const UserTermsModal = ({
+  isPrinting,
+  componentRef,
+  termsId,
+  signature,
+  name,
+  date,
+}: {
+  isPrinting: boolean;
+  componentRef: RefObject<HTMLDivElement>;
+  termsId: string;
+  signature: string;
+  name: string;
+  date: string;
+}) => {
+  const { data: termsData, loading } = useTermQuery({
+    skip: !termsId,
+    variables: {
+      where: {
+        id: termsId,
+      },
+    },
+  });
+
+  const terms = termsData?.term?.content || '';
+
+  return (
+    <Card loading={loading}>
+      <div
+        ref={componentRef}
+        style={
+          isPrinting
+            ? undefined
+            : {
+                width: '100%',
+                height: '100%',
+                marginTop: 20,
+              }
+        }
+      >
+        <CustomTermsView isPrinting={isPrinting} terms={terms} />
+        <br />
+        I confirm that I have read and agree to the above terms and conditions.
+        <br />
+        Date: {date}
+        <br />
+        Signed By: {name}
+        <br />
+        <div
+          style={{
+            outline: '1px solid black',
+            width: '300px',
+            height: '100px',
+            marginLeft: 5,
+          }}
+          dangerouslySetInnerHTML={{ __html: signature }}
+        />
+      </div>
+    </Card>
+  );
+};
+
 const userDetail = ({
   data,
   loading,
@@ -75,10 +150,33 @@ const userDetail = ({
   userRole,
   toggleEditPassword,
   editPassword,
+  isOwn,
+  componentRef,
+  handlePrint,
+  isPrinting,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const EditPassword = () => {
+    if (isOwn) {
+      return <EditPasswordButton key="5" saving={saving} />;
+    }
+    return (
+      <Button key="5" disabled={saving} onClick={toggleEditPassword}>
+        <FormattedMessage defaultMessage="Edit Password" />
+      </Button>
+    );
+  };
 
   return (
     <div className="list-view">
@@ -95,17 +193,22 @@ const userDetail = ({
           </Tag>
         }
         extra={[
-          <Button key="5" disabled={saving} onClick={toggleEditPassword}>
-            <FormattedMessage defaultMessage="Edit Password" id="8/FSbQ" />
-          </Button>,
+          <EditPassword key="5" />,
           <Button
             key="3"
             // disabled={saving || !!data?.user?.demId || !demId}
             disabled
             onClick={toggleDemLink}
           >
-            <FormattedMessage defaultMessage="Link Dem User" id="n6qFde" />
+            <FormattedMessage defaultMessage="Link Dem User" />
           </Button>,
+          data?.user.signedTerms?.signature ? (
+            <Button key="userTerms1" onClick={showModal}>
+              {intl.formatMessage({
+                defaultMessage: 'User terms',
+              })}
+            </Button>
+          ) : null,
           <Button
             key="4"
             disabled={saving}
@@ -119,9 +222,9 @@ const userDetail = ({
             }
           >
             {data?.user?.status === UserStatus.NotInvited ? (
-              <FormattedMessage defaultMessage="Send Invite" id="Mn4m0R" />
+              <FormattedMessage defaultMessage="Send Invite" />
             ) : (
-              <FormattedMessage defaultMessage="Resend Invite" id="uVl/Bo" />
+              <FormattedMessage defaultMessage="Resend Invite" />
             )}
           </Button>,
           data?.user?.disabled ? (
@@ -137,7 +240,7 @@ const userDetail = ({
                 />
               }
             >
-              <FormattedMessage defaultMessage="Enable User" id="59gCcZ" />
+              <FormattedMessage defaultMessage="Enable User" />
             </Button>
           ) : (
             <Button
@@ -152,7 +255,7 @@ const userDetail = ({
                 />
               }
             >
-              <FormattedMessage defaultMessage="Disable User" id="ibMD0D" />
+              <FormattedMessage defaultMessage="Disable User" />
             </Button>
           ),
           <Button
@@ -167,7 +270,7 @@ const userDetail = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Delete User" id="mJbA00" />
+            <FormattedMessage defaultMessage="Delete User" />
           </Button>,
         ]}
       />
@@ -184,14 +287,13 @@ const userDetail = ({
                 <Typography.Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'LogIn Event Summary',
-                    id: '1QNy/E',
                   })}
                 </Typography.Title>
               </Col>
               <Col style={{ marginTop: -5 }}>
                 <Button
                   disabled={saving}
-                  onClick={() => navigate(`/app/reports/user-engagement`)}
+                  onClick={() => navigate('/app/reports/user-engagement')}
                   // icon={
                   //   <FontAwesomeIcon
                   //     size="lg"
@@ -200,10 +302,7 @@ const userDetail = ({
                   //   />
                   // }
                 >
-                  <FormattedMessage
-                    defaultMessage="View All Logins"
-                    id="1AU/Ys"
-                  />
+                  <FormattedMessage defaultMessage="View All Logins" />
                 </Button>
               </Col>
             </Row>
@@ -213,14 +312,12 @@ const userDetail = ({
                 className={classes.stats}
                 title={intl.formatMessage({
                   defaultMessage: 'Last Login',
-                  id: 'LPUHNC',
                 })}
                 value={
                   data?.user?.lastLogin?.loginTime
                     ? formatLoginTime(data?.user?.lastLogin?.loginTime)
                     : intl.formatMessage({
                         defaultMessage: 'Unknown',
-                        id: '5jeq8P',
                       })
                 }
                 prefix={
@@ -235,7 +332,6 @@ const userDetail = ({
                 className={classes.stats}
                 title={intl.formatMessage({
                   defaultMessage: 'Total logins in the last 30 Days',
-                  id: 'PfxGeQ',
                 })}
                 value={data?.user?.totalThirtyDaysLogin || 0}
                 prefix={
@@ -250,7 +346,6 @@ const userDetail = ({
                 className={classes.stats}
                 title={intl.formatMessage({
                   defaultMessage: 'Total logins in the last year',
-                  id: 'sM7fV8',
                 })}
                 value={data?.user?.totalLastYearLogin || 0}
                 prefix={
@@ -266,7 +361,7 @@ const userDetail = ({
             <Descriptions
               title={
                 <Typography.Title level={4}>
-                  <FormattedMessage defaultMessage="User Details" id="FyMi+8" />
+                  <FormattedMessage defaultMessage="User Details" />
                 </Typography.Title>
               }
               column={1}
@@ -281,20 +376,18 @@ const userDetail = ({
                   }
                   onClick={toggleEditUser}
                 >
-                  <FormattedMessage defaultMessage="Edit Details" id="A2fHI3" />
+                  <FormattedMessage defaultMessage="Edit Details" />
                 </Button>
               }
             >
               <Descriptions.Item
-                label={
-                  <FormattedMessage defaultMessage="Full Name" id="TemVby" />
-                }
+                label={<FormattedMessage defaultMessage="Full Name" />}
                 style={{ paddingBottom: 8 }}
               >
                 {data?.user?.fullName}
               </Descriptions.Item>
               <Descriptions.Item
-                label={<FormattedMessage defaultMessage="Status" id="tzMNF3" />}
+                label={<FormattedMessage defaultMessage="Status" />}
                 style={{ paddingBottom: 8 }}
               >
                 {/* <Typography.Text
@@ -320,14 +413,12 @@ const userDetail = ({
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item
-                label={
-                  <FormattedMessage defaultMessage="Business" id="w1Fanr" />
-                }
+                label={<FormattedMessage defaultMessage="Business" />}
                 style={{ paddingBottom: 8 }}
               >
                 <Row gutter={16}>
                   {data?.user?.businesses.map(({ id, name }) => (
-                    <Col>
+                    <Col key="business-redirect">
                       <Link
                         to={`/app/scheme-settings/businesses/view/${id || ''}`}
                       >
@@ -338,43 +429,33 @@ const userDetail = ({
                 </Row>
               </Descriptions.Item>
               <Descriptions.Item
-                label={
-                  <FormattedMessage
-                    defaultMessage="Email Address"
-                    id="xxQxLE"
-                  />
-                }
+                label={<FormattedMessage defaultMessage="Email Address" />}
                 style={{ paddingBottom: 8 }}
               >
                 {data?.user?.email}
               </Descriptions.Item>
               <Descriptions.Item
-                label={<FormattedMessage defaultMessage="Role" id="1ZgrhW" />}
+                label={<FormattedMessage defaultMessage="Role" />}
                 style={{ paddingBottom: 8 }}
               >
                 {userRole && RoleValues[userRole]}
               </Descriptions.Item>
               <Descriptions.Item
-                label={<FormattedMessage defaultMessage="Groups" id="hzmswI" />}
+                label={<FormattedMessage defaultMessage="Groups" />}
               >
                 <Row gutter={[0, 8]}>
                   {data?.user?.groups.map(({ name, id }) => (
                     <Col key={id}>
                       <Tag color="blue">{name}</Tag>
                     </Col>
-                  )) || (
-                    <FormattedMessage defaultMessage="No Groups" id="xt8fV1" />
-                  )}
+                  )) || <FormattedMessage defaultMessage="No Groups" />}
                 </Row>
               </Descriptions.Item>
               {data?.user?.approverGroups &&
                 data?.user?.approverGroups.length > 0 && (
                   <Descriptions.Item
                     label={
-                      <FormattedMessage
-                        defaultMessage="Approver Groups"
-                        id="D/FCTs"
-                      />
+                      <FormattedMessage defaultMessage="Approver Groups" />
                     }
                   >
                     <Row gutter={[0, 8]}>
@@ -389,12 +470,7 @@ const userDetail = ({
               {data?.user?.defaultGroups &&
                 data?.user?.defaultGroups.length > 0 && (
                   <Descriptions.Item
-                    label={
-                      <FormattedMessage
-                        defaultMessage="Default Groups"
-                        id="2KZp/e"
-                      />
-                    }
+                    label={<FormattedMessage defaultMessage="Default Groups" />}
                   >
                     <Row gutter={[0, 8]}>
                       {data?.user?.defaultGroups.map(({ name, id }) => (
@@ -407,12 +483,7 @@ const userDetail = ({
                 )}
               {data?.user?.chats && data?.user?.chats.length > 0 && (
                 <Descriptions.Item
-                  label={
-                    <FormattedMessage
-                      defaultMessage="Chat Groups"
-                      id="8TntzL"
-                    />
-                  }
+                  label={<FormattedMessage defaultMessage="Chat Groups" />}
                 >
                   <Row gutter={[0, 8]}>
                     {data?.user?.chats
@@ -442,10 +513,7 @@ const userDetail = ({
           </Card> */}
           <Card>
             <Typography.Title level={4} style={{ marginBottom: 20 }}>
-              <FormattedMessage
-                defaultMessage="Recent Login Activities"
-                id="J1F781"
-              />
+              <FormattedMessage defaultMessage="Recent Login Activities" />
             </Typography.Title>
             {data?.user?.lastTenLogin && data?.user?.lastTenLogin.length > 0 ? (
               <Timeline mode="alternate">
@@ -463,7 +531,6 @@ const userDetail = ({
               <Empty
                 description={intl.formatMessage({
                   defaultMessage: 'No Recent Login Activities',
-                  id: '+FUwLf',
                 })}
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
               />
@@ -501,9 +568,7 @@ const userDetail = ({
       </Row>
 
       <Drawer
-        title={
-          <FormattedMessage defaultMessage="Edit User Details" id="OaNQvU" />
-        }
+        title={<FormattedMessage defaultMessage="Edit User Details" />}
         open={editUser}
         width="600"
         onClose={toggleEditUser}
@@ -511,7 +576,7 @@ const userDetail = ({
         {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}
       </Drawer>
       <Drawer
-        title={<FormattedMessage defaultMessage="Edit Password" id="8/FSbQ" />}
+        title={<FormattedMessage defaultMessage="Edit Password" />}
         open={editPassword}
         width="600"
         onClose={toggleEditPassword}
@@ -522,9 +587,7 @@ const userDetail = ({
         />
       </Drawer>
       <Drawer
-        title={
-          <FormattedMessage defaultMessage="Link to dem user" id="lk9fDC" />
-        }
+        title={<FormattedMessage defaultMessage="Link to dem user" />}
         open={demLink && !!demId}
         width="800"
         onClose={toggleDemLink}
@@ -539,6 +602,38 @@ const userDetail = ({
           <div />
         )}
       </Drawer>
+      <Modal
+        title={intl.formatMessage({
+          defaultMessage: 'User Terms',
+        })}
+        style={{ top: 20 }}
+        open={isModalOpen}
+        onCancel={handleCancel}
+        maskClosable
+        width={900}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Close
+          </Button>,
+          <Button onClick={handlePrint} type="primary" key="printButton">
+            <FontAwesomeIcon style={{ marginRight: 10 }} icon={faPrint} />
+            {intl.formatMessage({
+              defaultMessage: 'Print',
+            })}
+          </Button>,
+        ]}
+      >
+        <UserTermsModal
+          termsId={data?.user.signedTerms?.terms.id || ''}
+          signature={data?.user.signedTerms?.signature || ''}
+          name={data?.user.fullName || ''}
+          date={new Date(
+            data?.user.signedTerms?.signedAt || ''
+          ).toLocaleDateString()}
+          isPrinting={isPrinting}
+          componentRef={componentRef}
+        />
+      </Modal>
     </div>
   );
 };

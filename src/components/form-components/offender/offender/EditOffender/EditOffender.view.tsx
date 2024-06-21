@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ViewOffenderQuery, BanType } from 'graphql/generated';
+import type { BanType } from 'graphql/types';
 
 import type { FormInstance } from 'antd';
 import {
@@ -39,6 +39,7 @@ import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { FormData } from './useEditOffender';
 import customRequest from '../../../../../utils/custom-request';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
 
 const { Title, Paragraph } = Typography;
 
@@ -171,14 +172,13 @@ const EditOffender = ({
             <Row align="bottom" style={{ marginBottom: 30 }}>
               <Col>
                 <Title style={{ marginBottom: 0 }} level={4}>
-                  {intl.formatMessage({ defaultMessage: '1. ', id: 'UNK6Ao' })}
+                  {intl.formatMessage({ defaultMessage: '1. ' })}
                 </Title>
               </Col>
               <Col>
                 <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Offender Details',
-                    id: 'fQT6Wx',
                   })}
                 </Title>
               </Col>
@@ -191,7 +191,6 @@ const EditOffender = ({
                   {intl.formatMessage({
                     defaultMessage:
                       '- Please complete the basic details for the offender.',
-                    id: 'tY/jAs',
                   })}
                 </Paragraph>
               </Col>
@@ -202,11 +201,9 @@ const EditOffender = ({
                   name="name"
                   label={intl.formatMessage({
                     defaultMessage: 'Name',
-                    id: 'HAlOn1',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage: 'Enter the offenders name if you know it.',
-                    id: 'N9IX81',
                   })}
                 >
                   <Input disabled={saving} />
@@ -218,12 +215,10 @@ const EditOffender = ({
                   name="build"
                   label={intl.formatMessage({
                     defaultMessage: 'Build',
-                    id: 'RSctv1',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the build of the offender if known.',
-                    id: 'f0WQZR',
                   })}
                 >
                   <Select options={buildValues} disabled={saving} />
@@ -235,12 +230,10 @@ const EditOffender = ({
                   name="gender"
                   label={intl.formatMessage({
                     defaultMessage: 'Sex',
-                    id: 'eWJHGp',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the gender of the offender if known.',
-                    id: 'h04BWW',
                   })}
                 >
                   <Select options={genderValues} disabled={saving} />
@@ -254,12 +247,10 @@ const EditOffender = ({
                   name="race"
                   label={intl.formatMessage({
                     defaultMessage: 'Ethnicity',
-                    id: 'XtCAFo',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the ethnicity of the offender if known.',
-                    id: 'Wv0puZ',
                   })}
                 >
                   <Select options={raceValues} disabled={saving} />
@@ -271,12 +262,10 @@ const EditOffender = ({
                   name="hair"
                   label={intl.formatMessage({
                     defaultMessage: 'Hair',
-                    id: 'e4YBbX',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The style and colour of the offenders hair if known.',
-                    id: 'bnOdvC',
                   })}
                 >
                   <Input disabled={saving} />
@@ -290,12 +279,10 @@ const EditOffender = ({
                       name="tags"
                       label={intl.formatMessage({
                         defaultMessage: 'Offender Warnings',
-                        id: '1jRWJS',
                       })}
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           'Select any warning labels that are relevant to this offender or add your own.',
-                        id: 'DRvp89',
                       })}
                     >
                       <Select
@@ -331,7 +318,6 @@ const EditOffender = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Label',
-                          id: 'sKEGIM',
                         })}
                       </Button>
                     </Col>
@@ -346,7 +332,6 @@ const EditOffender = ({
                   name="ageCheck"
                   label={intl.formatMessage({
                     defaultMessage: "Do you know the offender's date of birth?",
-                    id: 'nRYjxK',
                   })}
                 >
                   <Switch
@@ -354,11 +339,9 @@ const EditOffender = ({
                     checked={ageCheck}
                     checkedChildren={intl.formatMessage({
                       defaultMessage: 'Yes',
-                      id: 'a5msuh',
                     })}
                     unCheckedChildren={intl.formatMessage({
                       defaultMessage: 'No',
-                      id: 'oUWADl',
                     })}
                     onChange={() => {
                       setAgeCheck(!ageCheck);
@@ -374,12 +357,10 @@ const EditOffender = ({
                       name="dateOfBirth"
                       label={intl.formatMessage({
                         defaultMessage: 'Date of Birth',
-                        id: 'e9Z+tg',
                       })}
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           "Enter the offender's date of birth if known.",
-                        id: 'Yt1WCY',
                       })}
                     >
                       <DatePicker
@@ -395,12 +376,10 @@ const EditOffender = ({
                       name="dateSource"
                       label={intl.formatMessage({
                         defaultMessage: 'Information Source',
-                        id: 'LUqHSz',
                       })}
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           "Enter the information source of the offender's date of birth range of the offender.",
-                        id: '3Jk/hp',
                       })}
                     >
                       <Input.TextArea disabled={saving} />
@@ -413,12 +392,10 @@ const EditOffender = ({
                     name="age"
                     label={intl.formatMessage({
                       defaultMessage: 'Age',
-                      id: '9oNQSC',
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'Select an estimated age range of the offender if known.',
-                      id: 'w+tgOS',
                     })}
                   >
                     <Select options={ageValues} disabled={saving} />
@@ -432,12 +409,10 @@ const EditOffender = ({
                   name="peculiarities"
                   label={intl.formatMessage({
                     defaultMessage: 'Characteristics',
-                    id: 'xksukL',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Enter any distinctive features of the offender.',
-                    id: 'jISH3I',
                   })}
                 >
                   <Input.TextArea disabled={saving} />
@@ -452,12 +427,10 @@ const EditOffender = ({
                     name="groups"
                     label={intl.formatMessage({
                       defaultMessage: 'Groups',
-                      id: 'hzmswI',
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'Select the groups that you would like this offender to be visible to.',
-                      id: '/oJY/I',
                     })}
                     rules={[
                       {
@@ -465,7 +438,6 @@ const EditOffender = ({
                         message: intl.formatMessage({
                           defaultMessage:
                             'Please select at least one group for the offender.',
-                          id: 'hK3zLA',
                         }),
                       },
                     ]}
@@ -490,14 +462,13 @@ const EditOffender = ({
             <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
               <Col>
                 <Title style={{ marginBottom: 0 }} level={4}>
-                  {intl.formatMessage({ defaultMessage: '2.', id: 'VLt5sV' })}
+                  {intl.formatMessage({ defaultMessage: '2.' })}
                 </Title>
               </Col>
               <Col>
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Exclusions',
-                    id: 'jjBvFh',
                   })}
                 </Title>
               </Col>
@@ -510,7 +481,6 @@ const EditOffender = ({
                   {intl.formatMessage({
                     defaultMessage:
                       '- Create exclusions for this offender to exclusion them from areas or premises.',
-                    id: 'nBsI+u',
                   })}
                 </Paragraph>
               </Col>
@@ -525,7 +495,6 @@ const EditOffender = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Exclusion',
-                    id: 'QPeZMN',
                   })}
                 </Button>
               </Col>
@@ -545,7 +514,6 @@ const EditOffender = ({
                         key: 'location',
                         title: intl.formatMessage({
                           defaultMessage: 'Location',
-                          id: 'rvirM2',
                         }),
                         dataIndex: 'location',
                         ellipsis: true,
@@ -554,7 +522,6 @@ const EditOffender = ({
                         key: 'description',
                         title: intl.formatMessage({
                           defaultMessage: 'Description',
-                          id: 'Q8Qw5B',
                         }),
                         dataIndex: 'description',
                         ellipsis: true,
@@ -563,7 +530,6 @@ const EditOffender = ({
                         key: 'Options',
                         title: intl.formatMessage({
                           defaultMessage: 'Options',
-                          id: 'NDV5Mq',
                         }),
                         dataIndex: 'Options',
                         width: 100,
@@ -616,7 +582,6 @@ const EditOffender = ({
                     description={intl.formatMessage({
                       defaultMessage:
                         'There are no exclusions for this offender.',
-                      id: '4J6DZ4',
                     })}
                   />
                 </Row>
@@ -636,7 +601,6 @@ const EditOffender = ({
                     <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                       {intl.formatMessage({
                         defaultMessage: 'Images',
-                        id: 'Fip4H8',
                       })}
                     </Title>
                   </Col>
@@ -649,7 +613,6 @@ const EditOffender = ({
                       {intl.formatMessage({
                         defaultMessage:
                           '- Please add any images that you have of the offender.',
-                        id: 'REcCeM',
                       })}
                     </Paragraph>
                   </Col>
@@ -672,7 +635,6 @@ const EditOffender = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Upload Image',
-                          id: 'MntrZe',
                         })}
                       </Button>
                     </Upload>
@@ -691,7 +653,6 @@ const EditOffender = ({
                     {fileList.length < 10 &&
                       intl.formatMessage({
                         defaultMessage: '+ Upload',
-                        id: '3QJWLZ',
                       })}
                   </Upload>
                 </Form.Item>
@@ -704,7 +665,6 @@ const EditOffender = ({
                   <Button disabled={saving} onClick={onClose}>
                     {intl.formatMessage({
                       defaultMessage: 'Cancel',
-                      id: '47FYwb',
                     })}
                   </Button>
                 </Col>
@@ -717,7 +677,6 @@ const EditOffender = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Save',
-                      id: 'jvo0vs',
                     })}
                   </Button>
                 </Col>
@@ -727,7 +686,6 @@ const EditOffender = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Add Offender Warning',
-              id: 'JQTlrb',
             })}
             open={addOffenderTag}
             width="400"
@@ -745,7 +703,6 @@ const EditOffender = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Add Exclusion',
-              id: 'QPeZMN',
             })}
             open={addExclusion}
             width="400"
@@ -763,7 +720,6 @@ const EditOffender = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Edit Exclusion',
-              id: '22olP0',
             })}
             open={editExclusion}
             width="400"

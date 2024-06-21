@@ -30,7 +30,6 @@ const CounterButtonView = ({ onClick, dataName }: CounterButtonProps) => {
           title={intl.formatMessage(
             {
               defaultMessage: 'Add {count} {dataName} to the incident',
-              id: 'Gcokjn',
             },
             { count, dataName: dataName.toLowerCase() }
           )}
@@ -42,7 +41,6 @@ const CounterButtonView = ({ onClick, dataName }: CounterButtonProps) => {
             <Text className={classes.countText}>
               <FormattedMessage
                 defaultMessage="{count} {dataName}"
-                id="CICKyM"
                 values={{ count, dataName }}
               />
             </Text>

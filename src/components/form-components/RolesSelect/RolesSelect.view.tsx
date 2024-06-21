@@ -1,10 +1,10 @@
 import React from 'react';
-import type { UserRolesQueryVariables } from 'graphql/generated';
-import { useUserRolesQuery } from 'graphql/generated';
 import { Select } from 'antd';
 import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
+import type { UserRolesQueryVariables } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
+import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
 
 interface Props {
   value?: string[];

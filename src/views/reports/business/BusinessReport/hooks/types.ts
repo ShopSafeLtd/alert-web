@@ -1,11 +1,11 @@
 import type { RefObject } from 'react';
 import type RGL from 'react-grid-layout';
-import type { TargetedBusinessReportQuery } from '../../../../../graphql/generated';
 import type {
   IncidentsTableData,
   TargetedGoodsTableData,
 } from '../../../../../components/reports/tableColumns';
 import type { IReportTemplate, MetaData, SelectOptions } from '../../../types';
+import type { TargetedBusinessReportQuery } from 'graphql/reports/queries/business-report.generated';
 
 export interface Return {
   loading: boolean;

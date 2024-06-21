@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import {
-  ImagePosition,
-  Role,
-  useListCrimeGroupsQuery,
-  useListCustomGalleriesQuery,
-} from 'graphql/generated';
+
 import type { FormInstance } from 'antd';
 import { Form, message } from 'antd';
 import { useStoreState } from 'state';
@@ -20,7 +14,11 @@ import type {
 } from 'types/DataType';
 import update from 'immutability-helper';
 import { useGroupsContext } from '#/context/groups-context';
-import { compressImage } from '../../../../utils/compress-images';
+import { compressImage } from '#/utils/compress-images';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { ImagePosition, Role } from 'graphql/types';
 
 interface Props {
   onClose: () => void;

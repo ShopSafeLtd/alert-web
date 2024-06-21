@@ -15,10 +15,10 @@ const ListWorkflowView = ({ data, loading }: Props) => {
   return (
     <div>
       <PageHeader
-        title={<FormattedMessage defaultMessage="Workflow" id="pv1lF7" />}
+        title={<FormattedMessage defaultMessage="Workflow" />}
         extra={[
           <Button type="primary" key="1" onClick={() => navigate('add')}>
-            <FormattedMessage defaultMessage="Create Workflow" id="GBCpm7" />
+            <FormattedMessage defaultMessage="Create Workflow" />
           </Button>,
         ]}
       />

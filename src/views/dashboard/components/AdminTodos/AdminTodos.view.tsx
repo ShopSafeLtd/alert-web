@@ -12,7 +12,7 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
-import type { CreateTodoMutation, FeedTodosQuery } from 'graphql/generated';
+
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from '#/components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,6 +24,8 @@ import FormatCalendar from '#/utils/format-calendar-24h';
 import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
 import getTodoUrl from '../../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
+import type { FeedTodosQuery } from 'graphql/feedItems/queries/feed-todos.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 
 const { Title, Text } = Typography;
 
@@ -105,7 +107,6 @@ const AdminTodos = ({
             <Title className={classes.title} style={{ fontSize: 16 }}>
               {intl.formatMessage({
                 defaultMessage: 'Activities',
-                id: 'UmEsZF',
               })}
             </Title>
           </Col>
@@ -113,7 +114,6 @@ const AdminTodos = ({
             <Input
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for a activity...',
-                id: '8KsNIu',
               })}
               onChange={(e) => setSearch(e.target.value)}
               allowClear
@@ -132,7 +132,6 @@ const AdminTodos = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'New',
-                id: 'bW7B87',
               })}
             </Button>
           </Col>
@@ -162,13 +161,11 @@ const AdminTodos = ({
           <Row wrap={false} className={classes.header}>
             <Col flex={1}>
               {intl.formatMessage({
-                id: 'HAlOn1',
                 defaultMessage: 'Name',
               })}
             </Col>
             <Col>
               {intl.formatMessage({
-                id: '8XUukm',
                 defaultMessage: 'Due Date',
               })}
             </Col>
@@ -211,7 +208,6 @@ const AdminTodos = ({
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
               defaultMessage: 'You have no open activities',
-              id: '/grXWE',
             })}
           />
         </div>
@@ -219,7 +215,6 @@ const AdminTodos = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'New Activity',
-          id: '6kyt/v',
         })}
         open={addTodo}
         width="400"

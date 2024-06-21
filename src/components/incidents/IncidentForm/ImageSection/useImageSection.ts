@@ -2,21 +2,22 @@
 import { useEffect, useState } from 'react';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import { Form } from 'antd';
-import {
-  Age,
-  Build,
-  Gender,
-  Height,
-  ImagePosition,
-  IncidentFormField,
-  Race,
-} from 'graphql/generated';
+
 import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
 import customRequest from '../../../../utils/custom-request';
+import {
+  Age,
+  Build,
+  Gender,
+  ImagePosition,
+  IncidentFormField,
+  Race,
+  Height,
+} from 'graphql/types';
 
 export const getClosestAgeRange = (high: number, low: number) => {
   const middle = high - (high - low) / 2;

@@ -1,17 +1,17 @@
-import type {
-  DeleteFeedItemMutation,
-  FeedItemsQuery,
-  FeedItemsQueryVariables,
-} from 'graphql/generated';
-import {
-  FeedItemsDocument,
-  useDeleteFeedItemMutation,
-  useFeedItemsQuery,
-} from 'graphql/generated';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type {
+  FeedItemsQuery,
+  FeedItemsQueryVariables,
+} from 'graphql/feedItems/queries/feed-items.generated';
+import {
+  FeedItemsDocument,
+  useFeedItemsQuery,
+} from 'graphql/feedItems/queries/feed-items.generated';
+import type { DeleteFeedItemMutation } from 'graphql/feedItems/mutations/delete_feed_item.generated';
+import { useDeleteFeedItemMutation } from 'graphql/feedItems/mutations/delete_feed_item.generated';
 
 interface Return {
   loading: boolean;
@@ -235,11 +235,9 @@ const useFeedItems = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The message has been deleted!',
-          id: 'IGVq4m',
         }),
         placement: 'bottomRight',
       });

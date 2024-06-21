@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, Col, Drawer, Empty, Input, Row, Typography } from 'antd';
-import type { ListArticlesQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
@@ -9,6 +9,7 @@ import ArticleCard from '#/components/feedItems/Articles/ArticleCard';
 import ArticleFilter from '#/components/Articles/ArticleFilter';
 import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
 import useStyles from './ArticlesSection.styles';
+import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
 
 const { Title } = Typography;
 
@@ -65,7 +66,6 @@ const ArticlesSection = ({
             <Title className={classes.title} level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Recent Bulletins',
-                id: 'H40AZz',
               })}
             </Title>
           </Col>
@@ -74,7 +74,6 @@ const ArticlesSection = ({
               size="small"
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for Bulletins...',
-                id: '6PU5qG',
               })}
               // value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -147,11 +146,9 @@ const ArticlesSection = ({
                 search === ''
                   ? intl.formatMessage({
                       defaultMessage: 'No Bulletins',
-                      id: '7Pv3BL',
                     })
                   : intl.formatMessage({
                       defaultMessage: 'No bulletins match your search criteria',
-                      id: 'pZaTHe',
                     })
               }
             />
@@ -162,7 +159,6 @@ const ArticlesSection = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
-          id: 'o9w9ud',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}

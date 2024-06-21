@@ -1,7 +1,7 @@
 import type { RefObject } from 'react';
 import React, { useState } from 'react';
 import { Button, Card, Col, Row, Table, Typography } from 'antd';
-import type { BusinessEngagementQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import useStyles from './performance-report.styles';
 import type { SelectOptions } from './useBusinessEngagement';
@@ -10,6 +10,7 @@ import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileDownload } from '@fortawesome/pro-light-svg-icons';
+import type { BusinessEngagementQuery } from 'graphql/reports/queries/business-engagement.generated';
 
 const { Title } = Typography;
 
@@ -63,7 +64,6 @@ const PerformanceReport = ({
           {intl.formatMessage(
             {
               defaultMessage: ' Business Engagement: {startDate} - {endDate}',
-              id: 'OgG2/I',
             },
             {
               startDate: dateRange.startDate.toLocaleDateString(),
@@ -76,7 +76,6 @@ const PerformanceReport = ({
             <GroupsSelect
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select Groups',
-                id: 'q2cuIU',
               })}
               mode="multiple"
               maxTagCount="responsive"
@@ -101,7 +100,6 @@ const PerformanceReport = ({
               />
               {intl.formatMessage({
                 defaultMessage: 'Download',
-                id: '5q3qC0',
               })}
             </Button>
           </Col>
@@ -112,7 +110,6 @@ const PerformanceReport = ({
               <Title className="no-print" level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'Business Contributions',
-                  id: 'ZwVlvA',
                 })}
               </Title>
               <Table
@@ -131,7 +128,6 @@ const PerformanceReport = ({
                     dataIndex: 'fullName',
                     title: intl.formatMessage({
                       defaultMessage: 'Name',
-                      id: 'HAlOn1',
                     }),
                   },
                   {
@@ -139,7 +135,6 @@ const PerformanceReport = ({
                     dataIndex: 'incidentsCreated',
                     title: intl.formatMessage({
                       defaultMessage: 'Incidents',
-                      id: 'mtr3R4',
                     }),
                     defaultSortOrder: 'descend',
                     sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
@@ -149,7 +144,6 @@ const PerformanceReport = ({
                     dataIndex: 'offendersCreated',
                     title: intl.formatMessage({
                       defaultMessage: 'Offenders',
-                      id: 'xb54TN',
                     }),
                     sorter: (a, b) => a.offendersCreated - b.offendersCreated,
                   },
@@ -158,7 +152,6 @@ const PerformanceReport = ({
                     dataIndex: 'updatesCreated',
                     title: intl.formatMessage({
                       defaultMessage: 'Updates',
-                      id: 'recCg9',
                     }),
                     sorter: (a, b) => a.updatesCreated - b.updatesCreated,
                   },
@@ -167,7 +160,6 @@ const PerformanceReport = ({
                     dataIndex: 'messagesSent',
                     title: intl.formatMessage({
                       defaultMessage: 'Messages',
-                      id: 'hMzcSq',
                     }),
                     sorter: (a, b) => a.messagesSent - b.messagesSent,
                   },
@@ -176,7 +168,6 @@ const PerformanceReport = ({
                     dataIndex: 'logins',
                     title: intl.formatMessage({
                       defaultMessage: 'Logins',
-                      id: '+vA//S',
                     }),
                     sorter: (a, b) => a.logins - b.logins,
                   },
@@ -185,7 +176,6 @@ const PerformanceReport = ({
                     dataIndex: 'users',
                     title: intl.formatMessage({
                       defaultMessage: 'Users',
-                      id: 'YDMrKK',
                     }),
                     sorter: (a, b) => a.users - b.users,
                   },

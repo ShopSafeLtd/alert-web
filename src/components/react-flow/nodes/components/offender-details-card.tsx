@@ -1,8 +1,6 @@
 import React, { useRef } from 'react';
 import { Card, Carousel, Col, Row, Skeleton, Typography } from 'antd';
 
-import type { Age, Build, Gender, Race } from 'graphql/generated';
-import { Role } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -31,6 +29,8 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import FormatCalendar from 'utils/format-calendar-24h';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+import { Role } from 'graphql/types';
 
 const { Title, Text } = Typography;
 
@@ -135,7 +135,6 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
           <Text type="secondary">
             {intl.formatMessage(
               {
-                id: 'umL9sI',
                 defaultMessage: 'Alert ID: {ref}',
               },
               {
@@ -153,7 +152,6 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               <Text type="secondary">
                 {intl.formatMessage(
                   {
-                    id: 'ZdCdo5',
                     defaultMessage: 'Last updated: {date}',
                   },
                   {
@@ -176,7 +174,6 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               <Text type="secondary">
                 {intl.formatMessage({
                   defaultMessage: 'Age: ',
-                  id: 'anqdpr',
                 })}
                 {offender.dateOfBirth
                   ? calcAge(offender.dateOfBirth)
@@ -193,7 +190,6 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
             <Text type="secondary">
               {intl.formatMessage({
                 defaultMessage: 'Build: ',
-                id: 'iXQkAi',
               })}
               {getOffenderBuild(offender.build)}
             </Text>
@@ -207,7 +203,6 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
             <Text type="secondary">
               {intl.formatMessage({
                 defaultMessage: 'Sex: ',
-                id: 'j3ULId',
               })}
               {getOffenderGender(offender.gender)}
             </Text>
@@ -223,7 +218,6 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
             <Text type="secondary">
               {intl.formatMessage({
                 defaultMessage: 'Ethnicity: ',
-                id: 'H+Sv5C',
               })}
               {getOffenderRace(offender.race, false)}
             </Text>

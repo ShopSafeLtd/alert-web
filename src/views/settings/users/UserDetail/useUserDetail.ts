@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import type { Role, UserQuery } from 'graphql/generated';
-import {
-  useDeleteUserFromSchemeMutation,
-  UserStatus,
-  useSendInviteMutation,
-  useUpdateUserDisableMutation,
-  useUserQuery,
-} from 'graphql/generated';
+import { type RefObject, useState } from 'react';
+
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
+import type { UserQuery } from 'graphql/user/queries/user.generated';
+import { useUserQuery } from 'graphql/user/queries/user.generated';
+import type { Role } from 'graphql/types';
+import { UserStatus } from 'graphql/types';
+import { useSendInviteMutation } from 'graphql/user/mutation/send_invite.generated';
+import { useUpdateUserDisableMutation } from 'graphql/user/mutation/update_user_disable.generated';
+import { useDeleteUserFromSchemeMutation } from 'graphql/user/mutation/delete_user_from_scheme.generated';
 
 const { confirm } = Modal;
 
@@ -20,6 +21,7 @@ interface Return {
   loading: boolean;
   saving: boolean;
   editUser: boolean;
+  isOwn: boolean;
   demLink: boolean;
   demId: string | undefined | null;
   toggleDemLink: () => void;
@@ -31,10 +33,15 @@ interface Return {
   userRole: Role | undefined;
   editPassword: boolean;
   toggleEditPassword: () => void;
+  componentRef: RefObject<HTMLDivElement>;
+  handlePrint: () => void;
+  isPrinting: boolean;
 }
 
 const useUserDetail = (userId: string): Return => {
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const navigate = useNavigate();
+  const { id: currentUserId } = useStoreState((state) => state.user);
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -46,7 +53,7 @@ const useUserDetail = (userId: string): Return => {
   // TODO: need to change this to be based on current business
   const business = useStoreState((state) => state.user.businesses);
   const demId = business.map((item) => item.demId)[0];
-
+  const isOwn = currentUserId === userId;
   const [editPassword, setEditPassword] = useState(false);
   const toggleEditPassword = () => {
     setEditPassword(!editPassword);
@@ -96,7 +103,7 @@ const useUserDetail = (userId: string): Return => {
   const openInvite = () => {
     setSaving(true);
     if (userId)
-      sendInvite({
+      void sendInvite({
         variables: {
           user: userId,
         },
@@ -107,11 +114,9 @@ const useUserDetail = (userId: string): Return => {
   const inviteConfirm = () => {
     confirm({
       title: intl.formatMessage({
-        id: 'acB6rj',
         defaultMessage: 'Do you want to send the invite?',
       }),
       content: intl.formatMessage({
-        id: 'z2ZctF',
         defaultMessage:
           'Resending the invite will reset the users password and send them an new invite containing the new password.',
       }),
@@ -128,11 +133,9 @@ const useUserDetail = (userId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The status of user has been updated.',
-          id: 'yca5dF',
         }),
         placement: 'bottomRight',
       });
@@ -146,7 +149,7 @@ const useUserDetail = (userId: string): Return => {
   const openDisableUser = (disabled: boolean) => {
     setSaving(true);
     if (userId)
-      updateUser({
+      void updateUser({
         variables: {
           where: {
             id: userId,
@@ -165,11 +168,9 @@ const useUserDetail = (userId: string): Return => {
   const enableConfirm = () => {
     confirm({
       title: intl.formatMessage({
-        id: 'PsfdcH',
         defaultMessage: 'Do you want to enable the user?',
       }),
       content: intl.formatMessage({
-        id: 'LH0sQ4',
         defaultMessage:
           'Enabling this user will allow them to log back into the system.',
       }),
@@ -182,11 +183,9 @@ const useUserDetail = (userId: string): Return => {
   const disableConfirm = () => {
     confirm({
       title: intl.formatMessage({
-        id: '53q2Zw',
         defaultMessage: 'Do you want to disable the user?',
       }),
       content: intl.formatMessage({
-        id: 'bvUFwi',
         defaultMessage:
           'Disabling this user will prevent them from logging into alert but will not delete them or any content they have added.',
       }),
@@ -206,11 +205,9 @@ const useUserDetail = (userId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The user has been deleted.',
-          id: '7+Rwjf',
         }),
         placement: 'bottomRight',
       });
@@ -224,7 +221,7 @@ const useUserDetail = (userId: string): Return => {
   const openDelete = () => {
     setSaving(true);
     if (userId)
-      deleteUserFromScheme({
+      void deleteUserFromScheme({
         variables: {
           id: userId,
           scheme: schemeId,
@@ -237,11 +234,9 @@ const useUserDetail = (userId: string): Return => {
   const deleteConfirm = () => {
     confirm({
       title: intl.formatMessage({
-        id: 'Q3pVMD',
         defaultMessage: 'Do you want to delete the user from the scheme?',
       }),
       content: intl.formatMessage({
-        id: 'qhIvoi',
         defaultMessage:
           'Deleting this user will remove them from the scheme and any groups, it will not remove any content that they have submitted. This action can not be undone.',
       }),
@@ -267,6 +262,10 @@ const useUserDetail = (userId: string): Return => {
     userRole: data?.user?.schemes.find((el) => el.schemeId === schemeId)?.role,
     editPassword,
     toggleEditPassword,
+    isOwn,
+    componentRef,
+    handlePrint,
+    isPrinting,
   };
 };
 

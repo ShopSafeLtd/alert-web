@@ -40,20 +40,19 @@ import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
 import EditInvestigation from 'components/form-components/Investigation/EditInvestigation';
 import SelectIncidents from 'components/form-components/linkOptions/SelectIncidents';
 import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
-import type {
-  CreateSimpleOffenderMutation,
-  CreateTodoMutation,
-  QuestionGroupOnSchemeQuery,
-  UpdateSimpleOffenderMutation,
-  UpdateTaskMutation,
-  ViewInvestigationQuery,
-} from 'graphql/generated';
-import { InvestigationStatus } from 'graphql/generated';
+
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';
 import AddDocument from '../../../components/form-components/documents/AddDocument';
 import AddEvidence from '../../../components/form-components/documents/AddEvidence';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import { InvestigationStatus } from 'graphql/types';
 
 const { confirm } = Modal;
 
@@ -246,11 +245,9 @@ const ViewInvestigation = ({
                       ? intl.formatMessage({
                           defaultMessage:
                             'Stop getting notified about updates.',
-                          id: 'WpTY6U',
                         })
                       : intl.formatMessage({
                           defaultMessage: 'Get notified about updates.',
-                          id: 'icr+Hj',
                         })
                   }
                 >
@@ -283,11 +280,9 @@ const ViewInvestigation = ({
                       title: intl.formatMessage({
                         defaultMessage:
                           'Do you want to delete the investigation?',
-                        id: '6U5FpD',
                       }),
                       content: intl.formatMessage({
                         defaultMessage: 'This action cannot be undone.',
-                        id: 'JDJoIZ',
                       }),
                       onOk() {
                         onDeleteInvestigation();
@@ -306,7 +301,6 @@ const ViewInvestigation = ({
                         title: intl.formatMessage({
                           defaultMessage:
                             'Do you want to close the investigation?',
-                          id: '0EE9W/',
                         }),
                         onOk() {
                           onCloseInvestigation();
@@ -325,7 +319,6 @@ const ViewInvestigation = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Close Investigation',
-                      id: 'x/TlDy',
                     })}
                   </Button>
                 </Col>
@@ -338,7 +331,6 @@ const ViewInvestigation = ({
                         title: intl.formatMessage({
                           defaultMessage:
                             'Do you want to reopen the investigation?',
-                          id: 'gDEfW1',
                         }),
                         onOk() {
                           onReopenInvestigation();
@@ -357,7 +349,6 @@ const ViewInvestigation = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Reopen',
-                      id: '8ujEro',
                     })}
                   </Button>
                 </Col>
@@ -367,7 +358,7 @@ const ViewInvestigation = ({
         >
           <Tabs.TabPane
             key="Dashboard"
-            tab={<FormattedMessage defaultMessage="Details" id="Lv0zJu" />}
+            tab={<FormattedMessage defaultMessage="Details" />}
           >
             <ViewDetails
               data={data}
@@ -399,7 +390,7 @@ const ViewInvestigation = ({
             key="Flow"
             tab={
               <Typography.Text>
-                <FormattedMessage defaultMessage="Flow Map" id="Xq/6U0" />
+                <FormattedMessage defaultMessage="Flow Map" />
               </Typography.Text>
             }
           >
@@ -415,7 +406,7 @@ const ViewInvestigation = ({
                 showZero
               >
                 <Typography.Text>
-                  <FormattedMessage defaultMessage="Evidence" id="6g7+6N" />
+                  <FormattedMessage defaultMessage="Evidence" />
                 </Typography.Text>
               </Badge>
             }
@@ -433,10 +424,7 @@ const ViewInvestigation = ({
       {/* details */}
       <Drawer
         title={
-          <FormattedMessage
-            defaultMessage="Update Investigation Details"
-            id="6lYiJV"
-          />
+          <FormattedMessage defaultMessage="Update Investigation Details" />
         }
         open={editInvestigation}
         width="500"
@@ -459,12 +447,7 @@ const ViewInvestigation = ({
       </Drawer>
       {/* offenders */}
       <Drawer
-        title={
-          <FormattedMessage
-            defaultMessage="Add Existing Offenders"
-            id="1FbM4r"
-          />
-        }
+        title={<FormattedMessage defaultMessage="Add Existing Offenders" />}
         open={addExistingOffender}
         width="1000"
         onClose={toggleAddExistingOffender}
@@ -484,7 +467,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
-          id: 'V+RsEq',
         })}
         open={addOffender}
         width="700"
@@ -506,7 +488,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
-          id: '+OfJ4/',
         })}
         open={!!editOffenderData}
         width="700"
@@ -525,12 +506,7 @@ const ViewInvestigation = ({
       </Drawer>
       {/* vehicles */}
       <Drawer
-        title={
-          <FormattedMessage
-            defaultMessage="Add Existing Vehicles"
-            id="goP1s6"
-          />
-        }
+        title={<FormattedMessage defaultMessage="Add Existing Vehicles" />}
         open={addExistingVehicle}
         width="800"
         onClose={toggleAddExistingVehicle}
@@ -551,7 +527,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
-          id: 'cHbTr7',
         })}
         open={addVehicle}
         width="700"
@@ -568,7 +543,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Vehicle',
-          id: 'X/6z9r',
         })}
         open={!!editVehicleData}
         width="800"
@@ -587,12 +561,7 @@ const ViewInvestigation = ({
       </Drawer>
       {/* crime Group  */}
       <Drawer
-        title={
-          <FormattedMessage
-            defaultMessage="Add Existing Crime Groups"
-            id="3HDZC+"
-          />
-        }
+        title={<FormattedMessage defaultMessage="Add Existing Crime Groups" />}
         open={addExistingCrimeGroup}
         width="800"
         onClose={toggleAddExistingCrimeGroup}
@@ -613,7 +582,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Crime Group',
-          id: 'Ya+GhB',
         })}
         open={addCrimeGroup}
         width="700"
@@ -633,7 +601,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Crime Group',
-          id: 'uK1ewV',
         })}
         open={!!editCrimeGroupData}
         width="700"
@@ -651,12 +618,7 @@ const ViewInvestigation = ({
       </Drawer>
       {/* incident */}
       <Drawer
-        title={
-          <FormattedMessage
-            defaultMessage="Add Existing incident"
-            id="1GC81u"
-          />
-        }
+        title={<FormattedMessage defaultMessage="Add Existing incident" />}
         open={addExistingIncident}
         width="1000"
         onClose={toggleAddExistingIncident}
@@ -676,7 +638,7 @@ const ViewInvestigation = ({
 
       {/*  document */}
       <Drawer
-        title={<FormattedMessage defaultMessage="Add Document" id="r9vGqd" />}
+        title={<FormattedMessage defaultMessage="Add Document" />}
         open={addDocument}
         width="800"
         onClose={toggleAddDocument}
@@ -692,9 +654,7 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title={
-          <FormattedMessage defaultMessage="Add DEM Document" id="gDnUVp" />
-        }
+        title={<FormattedMessage defaultMessage="Add DEM Document" />}
         open={addDemDocument}
         width="800"
         onClose={toggleAddDemDocument}
@@ -713,7 +673,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Activity',
-          id: 'VOiupa',
         })}
         open={addTodo}
         width="600"
@@ -740,7 +699,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Complete Activity',
-          id: '8fwjt4',
         })}
         open={completeTodoVisible !== null}
         width={800}
@@ -760,7 +718,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'View Activity',
-          id: 'swvNLe',
         })}
         open={!!viewTodoVisible}
         width={800}
@@ -772,7 +729,6 @@ const ViewInvestigation = ({
             onClose={() => setViewTodoVisible(null)}
             confirmText={intl.formatMessage({
               defaultMessage: 'Save Activity',
-              id: 'Z6L1UV',
             })}
             updateQuery={updateTodo}
             updateTodo={() => {}}
@@ -787,7 +743,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Suggested Offenders',
-          id: '5UuihT',
         })}
         open={showSuggestedOffenders}
         onClose={toggleCloseSuggestedOffenders}
@@ -802,7 +757,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Suggested Vehicles',
-          id: 'fzU5Bx',
         })}
         open={showSuggestedVehicles}
         onClose={toggleCloseSuggestedVehicles}
@@ -823,7 +777,6 @@ const ViewInvestigation = ({
         // zIndex={1010}
         cancelText={intl.formatMessage({
           defaultMessage: 'Close',
-          id: 'rbrahO',
         })}
         onCancel={() => {
           toggleCloseSuggestedVehicles();
@@ -837,7 +790,6 @@ const ViewInvestigation = ({
         title={intl.formatMessage({
           defaultMessage:
             'Add suggested offenders and vehicles to the investigation?',
-          id: 'zYlYqu',
         })}
       >
         <Row gutter={16}>
@@ -850,7 +802,6 @@ const ViewInvestigation = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Suggested Offedners',
-                id: 'IuW3g5',
               })}
             </Button>
           </Col>
@@ -863,7 +814,6 @@ const ViewInvestigation = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Suggested Vehicles',
-                id: 'Tl5uyE',
               })}
             </Button>
           </Col>

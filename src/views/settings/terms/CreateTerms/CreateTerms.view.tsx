@@ -54,10 +54,10 @@ const EditText = ({
     <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
       <Col>
         <Button onClick={onClose} type="default" style={{ marginRight: 10 }}>
-          <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
+          <FormattedMessage defaultMessage="Cancel" />
         </Button>
         <Button onClick={onSubmit} type="primary">
-          <FormattedMessage defaultMessage="Submit" id="wSZR47" />
+          <FormattedMessage defaultMessage="Submit" />
         </Button>
       </Col>
     </Row>

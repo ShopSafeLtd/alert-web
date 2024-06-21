@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCar,
@@ -18,6 +18,7 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import UpdateContent from '../UpdateContent';
 import ImageContainer from '../ImageContainer';
 import useStyles from './VehicleFeed.styles';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -127,11 +128,9 @@ const VehicleFeed = ({
                   confirm({
                     title: intl.formatMessage({
                       defaultMessage: 'Do you want to delete the feed item?',
-                      id: 'VZeM4L',
                     }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
-                      id: 'JDJoIZ',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
@@ -154,7 +153,6 @@ const VehicleFeed = ({
                   intl.formatMessage(
                     {
                       defaultMessage: 'Alert ID: {reference}',
-                      id: '377fsC',
                     },
                     {
                       reference,
@@ -172,7 +170,6 @@ const VehicleFeed = ({
                         intl.formatMessage(
                           {
                             defaultMessage: 'Alert ID: {reference}',
-                            id: '377fsC',
                           },
                           {
                             reference,
@@ -186,7 +183,6 @@ const VehicleFeed = ({
                         {intl.formatMessage(
                           {
                             defaultMessage: 'Alert ID: {reference}',
-                            id: '377fsC',
                           },
                           {
                             reference,
@@ -206,13 +202,12 @@ const VehicleFeed = ({
                     />
                     <Text style={{ fontSize: 14 }} type="secondary" ellipsis>
                       {intl.formatMessage(
-                        { defaultMessage: 'Make: {make}', id: 'cPuur1' },
+                        { defaultMessage: 'Make: {make}' },
                         {
                           make:
                             make ||
                             intl.formatMessage({
                               defaultMessage: 'Unknown',
-                              id: '5jeq8P',
                             }),
                         }
                       )}
@@ -226,13 +221,12 @@ const VehicleFeed = ({
                     />
                     <Text style={{ fontSize: 14 }} type="secondary" ellipsis>
                       {intl.formatMessage(
-                        { defaultMessage: 'Model: {model}', id: '6gT5ZW' },
+                        { defaultMessage: 'Model: {model}' },
                         {
                           model:
                             model ||
                             intl.formatMessage({
                               defaultMessage: 'Unknown',
-                              id: '5jeq8P',
                             }),
                         }
                       )}
@@ -248,13 +242,12 @@ const VehicleFeed = ({
                     />
                     <Text style={{ fontSize: 14 }} type="secondary" ellipsis>
                       {intl.formatMessage(
-                        { defaultMessage: 'Colour: {colour}', id: 'pukOve' },
+                        { defaultMessage: 'Colour: {colour}' },
                         {
                           colour:
                             colour ||
                             intl.formatMessage({
                               defaultMessage: 'Unknown',
-                              id: '5jeq8P',
                             }),
                         }
                       )}
@@ -274,7 +267,7 @@ const VehicleFeed = ({
               <Col flex={1}>
                 <Text style={{ fontSize: 14 }} ellipsis type="secondary">
                   {intl.formatMessage(
-                    { defaultMessage: 'Members: {members}', id: '8gjK3b' },
+                    { defaultMessage: 'Members: {members}' },
                     {
                       members: totalOffenders || 0,
                     }

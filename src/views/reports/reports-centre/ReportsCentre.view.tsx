@@ -13,8 +13,7 @@ import {
 } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import type { ReportsCentreQuery } from 'graphql/generated';
-import { ReportType } from 'graphql/generated';
+import { ReportType } from 'graphql/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleEllipsis,
@@ -25,6 +24,7 @@ import CreateReport from '#/components/form-components/reports/CreateReport/Crea
 import type { Theme } from '#/configs/ThemeConfig';
 import EditReport from '#/components/form-components/reports/EditReport/EditReport.view';
 import { Link } from 'react-router-dom';
+import type { ReportsCentreQuery } from '#/views/reports/reports-centre/reports-centre.generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   page: {
@@ -113,7 +113,6 @@ const ReportCard = ({
                 icon: <FontAwesomeIcon icon={faEdit} />,
                 label: intl.formatMessage({
                   defaultMessage: 'Edit Report',
-                  id: 'wOa42g',
                 }),
                 onClick: () => toggleEditOpen(item.id),
                 // @ts-expect-error issue with antd types for dropdown
@@ -124,7 +123,6 @@ const ReportCard = ({
                 icon: <FontAwesomeIcon icon={faTrash} />,
                 label: intl.formatMessage({
                   defaultMessage: 'Delete Report',
-                  id: 's8R8id',
                 }),
                 // @ts-expect-error issue with antd types for dropdown
                 children: null,
@@ -132,17 +130,14 @@ const ReportCard = ({
                   Modal.confirm({
                     title: intl.formatMessage({
                       defaultMessage: 'Are you sure?',
-                      id: '2oCaym',
                     }),
                     onOk: () => onDeleteReportTemplate(item.id),
                     okText: intl.formatMessage({
                       defaultMessage: 'Delete',
-                      id: 'K3r6DQ',
                     }),
                     content: intl.formatMessage({
                       defaultMessage:
                         'Once deleted a  report cannot be restored.',
-                      id: 'z5ptVj',
                     }),
                   }),
               },
@@ -223,7 +218,7 @@ const ReportsCentre = ({
         <Row align="middle">
           <Col>
             <Typography.Title level={3} className={classes.pageTitle}>
-              <FormattedMessage defaultMessage="Reports Centre" id="6MXa5r" />
+              <FormattedMessage defaultMessage="Reports Centre" />
             </Typography.Title>
           </Col>
           <Col flex={1}>
@@ -233,7 +228,6 @@ const ReportsCentre = ({
                   className={classes.search}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Search reports',
-                    id: '56tlGn',
                   })}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -243,16 +237,13 @@ const ReportsCentre = ({
           </Col>
           <Col>
             <Button type={'primary'} onClick={toggleCreateOpen}>
-              <FormattedMessage
-                defaultMessage="Create New Report"
-                id="Y92GJc"
-              />
+              <FormattedMessage defaultMessage="Create New Report" />
             </Button>
           </Col>
         </Row>
       </Card>
       <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Summary Reports" id="Mk3lXF" />
+        <FormattedMessage defaultMessage="Summary Reports" />
       </Typography.Title>
       {loading && <LoadingRow />}
       {!loading && (
@@ -269,7 +260,7 @@ const ReportsCentre = ({
       )}
 
       <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Offender Reports" id="u9fC2r" />
+        <FormattedMessage defaultMessage="Offender Reports" />
       </Typography.Title>
       {loading && <LoadingRow />}
       {!loading && (
@@ -286,7 +277,7 @@ const ReportsCentre = ({
       )}
 
       <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Business Reports" id="Mx+X4o" />
+        <FormattedMessage defaultMessage="Business Reports" />
       </Typography.Title>
       {loading && <LoadingRow />}
       {!loading && (
@@ -303,7 +294,7 @@ const ReportsCentre = ({
       )}
 
       <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Crime Group Reports" id="MSLXPl" />
+        <FormattedMessage defaultMessage="Crime Group Reports" />
       </Typography.Title>
       {loading && <LoadingRow />}
       {!loading && (
@@ -320,7 +311,7 @@ const ReportsCentre = ({
       )}
 
       <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Engagement Reports" id="7DwulR" />
+        <FormattedMessage defaultMessage="Engagement Reports" />
       </Typography.Title>
       <Row gutter={16}>
         <Col>
@@ -330,19 +321,13 @@ const ReportsCentre = ({
               bodyStyle={{ padding: '15px 20px' }}
             >
               <Typography.Text className={classes.reportTitle} strong>
-                <FormattedMessage
-                  defaultMessage="User Engagement Table"
-                  id="KvzmVk"
-                />
+                <FormattedMessage defaultMessage="User Engagement Table" />
               </Typography.Text>
               <Typography.Paragraph
                 type="secondary"
                 className={classes.reportText}
               >
-                <FormattedMessage
-                  defaultMessage="Summary of all data added into the system."
-                  id="ZpapCJ"
-                />
+                <FormattedMessage defaultMessage="Summary of all data added into the system." />
               </Typography.Paragraph>
             </Card>
           </Link>
@@ -354,19 +339,13 @@ const ReportsCentre = ({
               bodyStyle={{ padding: '15px 20px' }}
             >
               <Typography.Text className={classes.reportTitle} strong>
-                <FormattedMessage
-                  defaultMessage="Business Engagement Table"
-                  id="qxxIJW"
-                />
+                <FormattedMessage defaultMessage="Business Engagement Table" />
               </Typography.Text>
               <Typography.Paragraph
                 type="secondary"
                 className={classes.reportText}
               >
-                <FormattedMessage
-                  defaultMessage="Analysis and breakdown of incident data over time."
-                  id="FQ0QHC"
-                />
+                <FormattedMessage defaultMessage="Analysis and breakdown of incident data over time." />
               </Typography.Paragraph>
             </Card>
           </Link>
@@ -374,7 +353,7 @@ const ReportsCentre = ({
       </Row>
 
       <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Mapping Reports" id="1Uo6oc" />
+        <FormattedMessage defaultMessage="Mapping Reports" />
       </Typography.Title>
       <Link to="/app/reports/incident-map">
         <Card
@@ -382,13 +361,10 @@ const ReportsCentre = ({
           bodyStyle={{ padding: '15px 20px' }}
         >
           <Typography.Text className={classes.reportTitle} strong>
-            <FormattedMessage defaultMessage="Incident Map" id="8vWvqg" />
+            <FormattedMessage defaultMessage="Incident Map" />
           </Typography.Text>
           <Typography.Paragraph type="secondary" className={classes.reportText}>
-            <FormattedMessage
-              defaultMessage="Plotting of incident data on a map."
-              id="N+vDG+"
-            />
+            <FormattedMessage defaultMessage="Plotting of incident data on a map." />
           </Typography.Paragraph>
         </Card>
       </Link>
@@ -396,7 +372,6 @@ const ReportsCentre = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Create Report',
-          id: 'xUcQWH',
         })}
         open={createOpen}
         width={500}
@@ -407,7 +382,6 @@ const ReportsCentre = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Report',
-          id: 'wOa42g',
         })}
         open={!!editOpen}
         onClose={() => toggleEditOpen(null)}

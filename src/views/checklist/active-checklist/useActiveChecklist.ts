@@ -2,17 +2,16 @@
 import { Form, type FormInstance } from 'antd';
 import { useParams } from 'react-router';
 import { useState } from 'react';
-import type {
-  ActiveChecklist,
-  ActiveChecklistQuery,
-} from '../../../graphql/generated';
+
+import { useStoreState } from '../../../state';
+import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
 import {
   ActiveChecklistDocument,
   useActiveChecklistQuery,
-  useCompleteChecklistMutation,
-} from '../../../graphql/generated';
-import { useStoreState } from '../../../state';
-import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+} from '#/views/checklist/graphql/queries/view-active-checklist.generated';
+import { useCompleteChecklistMutation } from '#/views/checklist/graphql/mutations/complete-checklist.generated';
+import type { ActiveChecklist } from 'graphql/types';
 
 interface Return {
   id: string | undefined;
@@ -107,7 +106,7 @@ const generateDefaultSign = (name: string) =>
 
 const useActiveChecklist = (): Return => {
   const { id } = useParams();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormData>();
   const [sections, setSections] = useState<ActiveChecklistSection[]>([]);
   const { fullName: name } = useStoreState((state) => state.user);
   const [sign, setSign] = useState(generateDefaultSign(name));
@@ -211,6 +210,7 @@ const useActiveChecklist = (): Return => {
         });
 
         form.setFieldsValue({
+          // @ts-expect-error type error with generics
           sections: sectionsAndSubsections,
           additionalInfo: initData?.activeChecklist?.comments || '',
         });
@@ -264,7 +264,7 @@ const useActiveChecklist = (): Return => {
 
   const saveChecklist = (draft: boolean, formData?: FormData) => {
     setSubmitting(true);
-    const completedData = formData || (form.getFieldsValue() as FormData);
+    const completedData = formData || form.getFieldsValue();
 
     let total = 0;
     let maxTotal = 0;

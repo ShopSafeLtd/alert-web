@@ -72,7 +72,6 @@ const OffenderImage = ({
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Images & Other Media',
-                id: 'OR3nwV',
               })}
             </Title>
           </Col>
@@ -85,7 +84,6 @@ const OffenderImage = ({
               {intl.formatMessage({
                 defaultMessage:
                   '- Please add any images & media that you have of the offender.',
-                id: 'MrwgkZ',
               })}
             </Paragraph>
           </Col>
@@ -102,7 +100,6 @@ const OffenderImage = ({
                 title={intl.formatMessage({
                   defaultMessage:
                     'Upload any images you have for the offender.',
-                  id: 's30QVQ',
                 })}
                 placement="bottom"
               >
@@ -117,7 +114,6 @@ const OffenderImage = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Upload Image',
-                    id: 'MntrZe',
                   })}
                 </Button>
               </Tooltip>
@@ -136,7 +132,6 @@ const OffenderImage = ({
                 title={intl.formatMessage({
                   defaultMessage:
                     'Add documents to the offender such as PDFs or videos.',
-                  id: 'zYeqDc',
                 })}
                 placement="bottom"
               >
@@ -151,7 +146,6 @@ const OffenderImage = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Upload Document',
-                    id: 'Kc9MAV',
                   })}
                 </Button>
               </Tooltip>
@@ -166,7 +160,6 @@ const OffenderImage = ({
                 name="images"
                 label={intl.formatMessage({
                   defaultMessage: 'Images',
-                  id: 'Fip4H8',
                 })}
               >
                 <Upload
@@ -205,16 +198,13 @@ const OffenderImage = ({
                           trigger="hover"
                           title={intl.formatMessage({
                             defaultMessage: 'Remove the image?',
-                            id: 'bRha+v',
                           })}
                           onConfirm={() => onRemoveImage(file.uid)}
                           okText={intl.formatMessage({
                             defaultMessage: 'Yes',
-                            id: 'a5msuh',
                           })}
                           cancelText={intl.formatMessage({
                             defaultMessage: 'No',
-                            id: 'oUWADl',
                           })}
                           overlayInnerStyle={{ padding: 10 }}
                         >
@@ -254,7 +244,6 @@ const OffenderImage = ({
                   name="documents"
                   label={intl.formatMessage({
                     defaultMessage: 'Other Media',
-                    id: 'w9BFSc',
                   })}
                 >
                   <Upload
@@ -281,7 +270,6 @@ const OffenderImage = ({
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={intl.formatMessage({
                 defaultMessage: 'No images & media added yet.',
-                id: 'EgTScc',
               })}
             />
           </Row>

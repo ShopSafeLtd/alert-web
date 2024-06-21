@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import type { ListArticlesQuery } from 'graphql/generated';
-import { ArticlePriority } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,6 +15,8 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import FormatCalendar from 'utils/format-calendar-24h';
 import moment from 'moment';
 import useStyles from './ArticleCard.styles';
+import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
+import { ArticlePriority } from 'graphql/types';
 
 const { Title, Paragraph, Text } = Typography;
 

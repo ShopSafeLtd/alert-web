@@ -1,14 +1,5 @@
 import { useStoreState } from 'state';
-import type {
-  OffenderCardFragment,
-  RecycleOffenderMutation,
-  ImagePosition,
-} from 'graphql/generated';
-import {
-  Role,
-  useRecycleOffenderMutation,
-  useUpdateOffenderImagesMutation,
-} from 'graphql/generated';
+
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
@@ -16,6 +7,12 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import type { EditFeedImage } from 'types/DataType';
+import type { OffenderCardFragment } from 'graphql/fragments/offender-card.generated';
+import { useUpdateOffenderImagesMutation } from 'graphql/offenders/mutations/update/update-offender-images.generated';
+import type { ImagePosition } from 'graphql/types';
+import { Role } from 'graphql/types';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
 
 interface Props {
   offender: OffenderCardFragment;
@@ -69,12 +66,10 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted',
-          id: 'zJsyF1',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
-          id: 'nQ1eW+',
         }),
         placement: 'bottomRight',
       });
@@ -89,11 +84,9 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated',
-          id: 'ryTk34',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The image of the offender has been updated.',
-          id: 'adSBwZ',
         }),
         placement: 'bottomRight',
       });

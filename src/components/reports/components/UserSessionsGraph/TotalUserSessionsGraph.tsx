@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Typography } from 'antd';
-import type { TotalUserSessionsGraphQueryVariables } from 'graphql/generated';
-import { useTotalUserSessionsGraphQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { DonutGraph } from '../../graphs';
+import type { TotalUserSessionsGraphQueryVariables } from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph.generated';
+import { useTotalUserSessionsGraphQuery } from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph.generated';
 
 interface Props {
   editMode: boolean;
@@ -33,7 +34,6 @@ const TotalUserSessionsGraph = ({
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
           defaultMessage: 'User Sessions',
-          id: 'IS4S3Y',
         })}
       </Typography.Title>
 
@@ -58,7 +58,6 @@ const TotalUserSessionsGraph = ({
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
-            id: 'QQSdHP',
           })}
         </Button>
       )}
@@ -68,7 +67,6 @@ const TotalUserSessionsGraph = ({
         data={data?.totalUserSessionsGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Users',
-          id: 'XisWAX',
         })}
       />
     </>

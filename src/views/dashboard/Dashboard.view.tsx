@@ -172,7 +172,6 @@ const FeedItem = (): JSX.Element => {
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Feed Item Filters',
-          id: 'SYqxvY',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}

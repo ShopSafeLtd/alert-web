@@ -7,11 +7,12 @@ import Picker from 'emoji-picker-react';
 import type { FormInstance } from 'antd';
 import {
   Button,
-  Col,
-  Divider,
   Drawer,
   Form,
   Mentions,
+  Upload,
+  Col,
+  Divider,
   PageHeader,
   Popconfirm,
   Popover,
@@ -20,7 +21,6 @@ import {
   Spin,
   Tag,
   Typography,
-  Upload,
 } from 'antd';
 import {
   faCar,
@@ -32,15 +32,7 @@ import {
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type {
-  Age,
-  Build,
-  ChatMessagesQuery,
-  ChatQuery,
-  Gender,
-  Race,
-} from 'graphql/generated';
-import { MessageItemType } from 'graphql/generated';
+
 import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -68,6 +60,10 @@ import { useIntl } from 'react-intl';
 import LinkArticle from 'components/form-components/linkOptions/LinkArticle';
 import Content from '../Message/Message.view';
 import customRequest from '../../../utils/custom-request';
+import type { ChatMessagesQuery } from 'graphql/messages/queries/chat-messages.generated';
+import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+import { MessageItemType } from 'graphql/types';
 
 const { Option, getMentions } = Mentions;
 const { Text } = Typography;
@@ -300,7 +296,6 @@ const ViewMessages = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Delete Chat',
-                id: 'NMr04q',
               })}
             </Button>,
           ]
@@ -375,7 +370,6 @@ const ViewMessages = ({
                           >
                             {intl.formatMessage({
                               defaultMessage: 'Delete Message',
-                              id: 'TwEM4f',
                             })}
                           </Button>
                         )
@@ -469,16 +463,13 @@ const ViewMessages = ({
                       placement="topLeft"
                       trigger="click"
                       title={intl.formatMessage({
-                        id: 'bRha+v',
                         defaultMessage: 'Remove the image?',
                       })}
                       onConfirm={() => removeImage(file.uid)}
                       okText={intl.formatMessage({
-                        id: 'a5msuh',
                         defaultMessage: 'Yes',
                       })}
                       cancelText={intl.formatMessage({
-                        id: 'oUWADl',
                         defaultMessage: 'No',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
@@ -603,7 +594,6 @@ const ViewMessages = ({
                 htmlType="submit"
               >
                 {intl.formatMessage({
-                  id: '9WRlF4',
                   defaultMessage: 'Send',
                 })}
               </Button>
@@ -687,7 +677,6 @@ const ViewMessages = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Offender',
-                  id: 'AN7Aru',
                 })}
               </Button>
             </div>
@@ -713,7 +702,6 @@ const ViewMessages = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Incident',
-                  id: 'zaYxwd',
                 })}
               </Button>
             </Col>
@@ -736,7 +724,6 @@ const ViewMessages = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Crime Group',
-                id: 'FY/YfT',
               })}
             </Button>
           </Col>
@@ -756,7 +743,6 @@ const ViewMessages = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Vehicle',
-                id: '4T7son',
               })}
             </Button>
           </Col>
@@ -777,7 +763,6 @@ const ViewMessages = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Bulletins',
-                id: 'tgD5sa',
               })}
             </Button>
           </Col>
@@ -787,7 +772,6 @@ const ViewMessages = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Manage Chat Members',
-          id: 'eVn+j4',
         })}
         open={manageChat}
         width="600"
@@ -803,7 +787,6 @@ const ViewMessages = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
-          id: 'UhSUQG',
         })}
         open={linkOffender}
         width="800"
@@ -822,7 +805,6 @@ const ViewMessages = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Incidents',
-          id: '1Vs3Qr',
         })}
         open={linkIncident}
         width="1000"
@@ -841,7 +823,6 @@ const ViewMessages = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Crime Groups',
-          id: 'nsggw+',
         })}
         open={linkCrimeGroup}
         width="800"
@@ -860,7 +841,6 @@ const ViewMessages = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Vehicles',
-          id: 'rmI5oX',
         })}
         open={linkVehicle}
         width="800"
@@ -881,7 +861,6 @@ const ViewMessages = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Bulletins',
-          id: '5KxsaV',
         })}
         open={linkArticle}
         width="1000"

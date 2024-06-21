@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, Col, Row, Table, Typography } from 'antd';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import type { RolesQuery } from '../../../graphql/generated';
+import type { RolesQuery } from '#/views/roles/graphql/queries/roles.generated';
 
 interface Props {
   data: RolesQuery | undefined;
@@ -25,7 +25,7 @@ const RolesView = ({ data, loading, fetchPage }: Props) => {
       <Row style={{ marginBottom: 10 }}>
         <Col>
           <Typography.Title level={2} style={{ marginLeft: 10 }}>
-            {intl.formatMessage({ defaultMessage: 'Roles', id: 'c35gM5' })}
+            {intl.formatMessage({ defaultMessage: 'Roles' })}
           </Typography.Title>
         </Col>
         <Col flex={1} />
@@ -36,7 +36,6 @@ const RolesView = ({ data, loading, fetchPage }: Props) => {
           >
             {intl.formatMessage({
               defaultMessage: 'Create Role',
-              id: 'WK6TBs',
             })}
           </Button>
         </Col>
@@ -51,7 +50,7 @@ const RolesView = ({ data, loading, fetchPage }: Props) => {
               // eslint-disable-next-line no-unsafe-optional-chaining
               role?.type?.charAt(0).toUpperCase() +
               // eslint-disable-next-line no-unsafe-optional-chaining
-              role?.type?.slice(1).toLowerCase().replace(/_/g, ' '),
+              role?.type?.slice(1).toLowerCase().replaceAll('_', ' '),
             noUsers: role?.usersCount || 0,
           }))}
           pagination={{
@@ -71,7 +70,6 @@ const RolesView = ({ data, loading, fetchPage }: Props) => {
             {
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               key: 'name',
@@ -79,7 +77,6 @@ const RolesView = ({ data, loading, fetchPage }: Props) => {
             {
               title: intl.formatMessage({
                 defaultMessage: 'Type',
-                id: '+U6ozc',
               }),
               dataIndex: 'type',
               key: 'type',
@@ -87,7 +84,6 @@ const RolesView = ({ data, loading, fetchPage }: Props) => {
             {
               title: intl.formatMessage({
                 defaultMessage: 'No. Users',
-                id: '3wk6K/',
               }),
               dataIndex: 'noUsers',
               key: 'noUsers',

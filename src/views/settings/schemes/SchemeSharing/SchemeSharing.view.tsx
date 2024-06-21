@@ -1,11 +1,11 @@
 import React from 'react';
 import { Col, Row, Typography, Card, Button, Drawer, Table } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { SchemeSharingQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd } from '@fortawesome/pro-light-svg-icons';
 import ConnectScheme from '#/components/form-components/ConnectScheme/ConnectScheme';
 import { createUseStyles } from 'react-jss';
+import type { SchemeSharingQuery } from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
 
 const { Title, Text } = Typography;
 const useStyles = createUseStyles({
@@ -37,10 +37,7 @@ const SchemeDetail = ({
       <Row style={{ margin: 15 }}>
         <Col>
           <Title level={3}>
-            <FormattedMessage
-              defaultMessage="Scheme Sharing Settings"
-              id="j+w+xC"
-            />
+            <FormattedMessage defaultMessage="Scheme Sharing Settings" />
           </Title>
         </Col>
       </Row>
@@ -48,10 +45,7 @@ const SchemeDetail = ({
         <Row style={{ marginBottom: 10 }} align="middle">
           <Col flex={1}>
             <Title level={4} style={{ marginBottom: 0 }}>
-              <FormattedMessage
-                defaultMessage="Connected Schemes"
-                id="Mjpea9"
-              />
+              <FormattedMessage defaultMessage="Connected Schemes" />
             </Title>
           </Col>
           <Col>
@@ -61,17 +55,14 @@ const SchemeDetail = ({
                   <FontAwesomeIcon icon={faAdd} />
                 </Col>
                 <Col>
-                  <FormattedMessage defaultMessage="Link Scheme" id="KM64DB" />
+                  <FormattedMessage defaultMessage="Link Scheme" />
                 </Col>
               </Row>
             </Button>
           </Col>
         </Row>
         <Text>
-          <FormattedMessage
-            defaultMessage="Conencted schemes allow for sharing of incidents, offenders, vehicles and crime groups where data is shared directly instead of duplicated. This allows you have central data that is avaliable across these connected schemes."
-            id="GK8ull"
-          />
+          <FormattedMessage defaultMessage="Conencted schemes allow for sharing of incidents, offenders, vehicles and crime groups where data is shared directly instead of duplicated. This allows you have central data that is avaliable across these connected schemes." />
         </Text>
         {loading ? undefined : (
           <div className={classes.schemes}>
@@ -90,7 +81,7 @@ const SchemeDetail = ({
                   width: 150,
                   render: (_, item: { key: string }) => (
                     <Button onClick={() => onUnlink(item.key)}>
-                      <FormattedMessage id="4PKxPs" defaultMessage="Unlink" />
+                      <FormattedMessage defaultMessage="Unlink" />
                     </Button>
                   ),
                 },
@@ -106,7 +97,6 @@ const SchemeDetail = ({
 
       <Drawer
         title={intl.formatMessage({
-          id: 'TunerB',
           defaultMessage: 'Connect Scheme',
         })}
         visible={connectOpen}

@@ -11,7 +11,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { BusinessReportQuery } from 'graphql/generated';
+
 import type { Moment } from 'moment';
 import moment from 'moment';
 import BusinessSideList from 'components/businesses/BusinessSideList';
@@ -21,6 +21,7 @@ import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import Chart from 'react-apexcharts';
 import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './business.styles';
+import type { BusinessReportQuery } from 'graphql/businesses/queries/business-report.generated';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -70,7 +71,6 @@ const Business = ({
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Download Report',
-                  id: 'iHdvdj',
                 })}
               </Button>
             </Col>
@@ -89,7 +89,6 @@ const Business = ({
                       value={data?.business?.valueStats?.totalLostValue || 0}
                       title={intl.formatMessage({
                         defaultMessage: 'Total Lost Value',
-                        id: '3LZ6MG',
                       })}
                     />
                   </Card>
@@ -103,7 +102,6 @@ const Business = ({
                       }
                       title={intl.formatMessage({
                         defaultMessage: 'Total Recovered Value',
-                        id: 'pambF6',
                       })}
                     />
                   </Card>
@@ -117,7 +115,6 @@ const Business = ({
                       suffix="%"
                       title={intl.formatMessage({
                         defaultMessage: 'Loss Rate',
-                        id: 'mQPFSj',
                       })}
                     />
                   </Card>
@@ -129,7 +126,6 @@ const Business = ({
                       prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Avg Lost Value',
-                        id: 'lpKwSc',
                       })}
                     />
                   </Card>
@@ -141,7 +137,6 @@ const Business = ({
                       prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Avg Recovered Value',
-                        id: 'PbCwq9',
                       })}
                     />
                   </Card>
@@ -151,10 +146,7 @@ const Business = ({
                 <Col span={12}>
                   <Card>
                     <Title level={4}>
-                      <FormattedMessage
-                        defaultMessage="Goods Types By Value Lost"
-                        id="Iyt31T"
-                      />
+                      <FormattedMessage defaultMessage="Goods Types By Value Lost" />
                     </Title>
                     <Chart
                       options={{
@@ -184,7 +176,7 @@ const Business = ({
               </Row>
               <Card>
                 <Title level={4}>
-                  <FormattedMessage defaultMessage="Goods Types" id="Ewh6rQ" />
+                  <FormattedMessage defaultMessage="Goods Types" />
                 </Title>
                 <Table
                   columns={[
@@ -193,7 +185,6 @@ const Business = ({
                       dataIndex: 'name',
                       title: intl.formatMessage({
                         defaultMessage: 'Name',
-                        id: 'HAlOn1',
                       }),
                     },
                     {
@@ -201,7 +192,6 @@ const Business = ({
                       dataIndex: 'lost',
                       title: intl.formatMessage({
                         defaultMessage: 'Total Lost',
-                        id: 'TpqK2W',
                       }),
                       render: (value: number) => `£${value.toFixed(2)}`,
                     },
@@ -210,7 +200,6 @@ const Business = ({
                       dataIndex: 'recovered',
                       title: intl.formatMessage({
                         defaultMessage: 'Total Recovered',
-                        id: '/YBJ85',
                       }),
                       render: (value: number) => `£${value.toFixed(2)}`,
                     },
@@ -219,7 +208,6 @@ const Business = ({
                       dataIndex: 'successRate',
                       title: intl.formatMessage({
                         defaultMessage: 'Loss Rate',
-                        id: 'mQPFSj',
                       }),
                       render: (value: number) => `${value.toFixed(0)}%`,
                     },
@@ -228,7 +216,6 @@ const Business = ({
                       dataIndex: 'avgLost',
                       title: intl.formatMessage({
                         defaultMessage: 'Avg Lost',
-                        id: 'C70bmG',
                       }),
                       render: (value: number) => `£${value.toFixed(2)}`,
                     },
@@ -259,7 +246,6 @@ const Business = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'All Incidents',
-                    id: 'wE2z2t',
                   })}
                 </Title>
                 <Table
@@ -269,7 +255,6 @@ const Business = ({
                       dataIndex: 'reference',
                       title: intl.formatMessage({
                         defaultMessage: 'Alert ID',
-                        id: 'k8ZNgH',
                       }),
                     },
                     {
@@ -277,7 +262,6 @@ const Business = ({
                       dataIndex: 'date',
                       title: intl.formatMessage({
                         defaultMessage: 'Date',
-                        id: 'P7PLVj',
                       }),
                       render: (value: Date) => moment(value).format('DD/MM/YY'),
                     },
@@ -286,7 +270,6 @@ const Business = ({
                       dataIndex: 'value',
                       title: intl.formatMessage({
                         defaultMessage: 'Value',
-                        id: 'GufXy5',
                       }),
                       render: (value: number) => `£${value}`,
                     },
@@ -295,7 +278,6 @@ const Business = ({
                       dataIndex: 'recoveredValue',
                       title: intl.formatMessage({
                         defaultMessage: 'Recovered Value',
-                        id: 'bGwFFv',
                       }),
                       render: (value: number) => `£${value}`,
                     },
@@ -304,7 +286,6 @@ const Business = ({
                       dataIndex: 'createdBy',
                       title: intl.formatMessage({
                         defaultMessage: 'Created By',
-                        id: 'uAfuJA',
                       }),
                     },
                     {
@@ -312,7 +293,6 @@ const Business = ({
                       dataIndex: 'crimeTypes',
                       title: intl.formatMessage({
                         defaultMessage: 'Types',
-                        id: 'kxP9GJ',
                       }),
                       render: (value: { id: string; name: string }[]) =>
                         value.map(

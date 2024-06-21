@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
-import { SortOrder, Model } from 'graphql/generated';
+
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { FeedItemFilters } from 'state/data-model';
 import moment from 'moment';
 import useStyles from './FeedItemFilter.styles';
+import { Model, SortOrder } from 'graphql/types';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -69,7 +70,6 @@ const FeedItemFilter = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
-              id: 'MsGXc3',
             })}
           </Button>
         </Col>
@@ -77,7 +77,7 @@ const FeedItemFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Sort Order', id: 'Hw6crD' })}
+            {intl.formatMessage({ defaultMessage: 'Sort Order' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -88,13 +88,11 @@ const FeedItemFilter = ({
             <Select.Option value={SortOrder.Desc}>
               {intl.formatMessage({
                 defaultMessage: 'Newest First',
-                id: 'dZYazP',
               })}
             </Select.Option>
             <Select.Option value={SortOrder.Asc}>
               {intl.formatMessage({
                 defaultMessage: 'Oldest First',
-                id: 'FqI37D',
               })}
             </Select.Option>
           </Select>
@@ -105,7 +103,6 @@ const FeedItemFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Created Between',
-              id: 'hGJYON',
             })}
           </Typography.Paragraph>
 
@@ -126,13 +123,12 @@ const FeedItemFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
+            {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             mode="multiple"
             size="small"
@@ -153,13 +149,12 @@ const FeedItemFilter = ({
       <Row>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Types', id: 'kxP9GJ' })}
+            {intl.formatMessage({ defaultMessage: 'Types' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Types',
-              id: 'kxP9GJ',
             })}
             mode="multiple"
             size="small"
@@ -169,31 +164,29 @@ const FeedItemFilter = ({
             value={typesFilter}
           >
             <Select.Option value={Model.Incident}>
-              {intl.formatMessage({ defaultMessage: 'Incident', id: 'zaYxwd' })}
+              {intl.formatMessage({ defaultMessage: 'Incident' })}
             </Select.Option>
             <Select.Option value={Model.Offender}>
-              {intl.formatMessage({ defaultMessage: 'Offender', id: 'AN7Aru' })}
+              {intl.formatMessage({ defaultMessage: 'Offender' })}
             </Select.Option>
             <Select.Option value={Model.Investigation}>
               {intl.formatMessage({
                 defaultMessage: 'Investigation',
-                id: 'tNseQe',
               })}
             </Select.Option>
             <Select.Option value={Model.Vehicle}>
-              {intl.formatMessage({ defaultMessage: 'Vehicle', id: '4T7son' })}
+              {intl.formatMessage({ defaultMessage: 'Vehicle' })}
             </Select.Option>
             <Select.Option value={Model.CrimeGroup}>
               {intl.formatMessage({
                 defaultMessage: 'CrimeGroup',
-                id: 'zbPKYg',
               })}
             </Select.Option>
             <Select.Option value={Model.Article}>
-              {intl.formatMessage({ defaultMessage: 'Article', id: 'jx7Hn3' })}
+              {intl.formatMessage({ defaultMessage: 'Article' })}
             </Select.Option>
             <Select.Option value={Model.Ban}>
-              {intl.formatMessage({ defaultMessage: 'Ban', id: 'XtUrMc' })}
+              {intl.formatMessage({ defaultMessage: 'Ban' })}
             </Select.Option>
           </Select>
         </Col>

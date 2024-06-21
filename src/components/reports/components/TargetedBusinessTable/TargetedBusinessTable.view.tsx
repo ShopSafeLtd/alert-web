@@ -34,7 +34,7 @@ const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
-    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+    title: <FormattedMessage defaultMessage="Name" />,
     render: (text: string) => (
       <Tooltip title={text}>
         <Paragraph
@@ -51,7 +51,7 @@ const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'incidentsCreated',
     dataIndex: 'incidentsCreated',
-    title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+    title: <FormattedMessage defaultMessage="Incidents" />,
     defaultSortOrder: 'descend' as SortOrder,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.incidentsCreated - b.incidentsCreated,
@@ -59,14 +59,14 @@ const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'offendersCreated',
     dataIndex: 'offendersCreated',
-    title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
+    title: <FormattedMessage defaultMessage="Offenders" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.offendersCreated - b.offendersCreated,
   },
   {
     key: 'lostValue',
     dataIndex: 'lostValue',
-    title: <FormattedMessage id="LPr3Nh" defaultMessage="Total Loss" />,
+    title: <FormattedMessage defaultMessage="Total Loss" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
@@ -80,7 +80,7 @@ const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'recoveredValue',
     dataIndex: 'recoveredValue',
-    title: <FormattedMessage id="oVyEbU" defaultMessage="Recovered value" />,
+    title: <FormattedMessage defaultMessage="Recovered value" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
@@ -94,7 +94,7 @@ const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="qKkLk4" defaultMessage="Recovery Rate" />,
+    title: <FormattedMessage defaultMessage="Recovery Rate" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -104,14 +104,14 @@ const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'commonLost',
     dataIndex: 'commonLost',
-    title: <FormattedMessage id="dyJm3W" defaultMessage="Top Item" />,
+    title: <FormattedMessage defaultMessage="Top Item" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.commonLost.localeCompare(b.commonLost),
   },
   {
     key: 'highestValueLost',
     dataIndex: 'highestValueLost',
-    title: <FormattedMessage id="8UWqAL" defaultMessage="Highest Value" />,
+    title: <FormattedMessage defaultMessage="Highest Value" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.highestValueLost - b.highestValueLost,
     // eslint-disable-next-line formatjs/no-literal-string-in-jsx
@@ -120,7 +120,7 @@ const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'avgLost',
     dataIndex: 'avgLost',
-    title: <FormattedMessage id="wZGB42" defaultMessage="Average Loss" />,
+    title: <FormattedMessage defaultMessage="Average Loss" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
       Number.parseInt(b.avgLost || '0', 10),
@@ -238,7 +238,6 @@ const TargetedBusinessTable = ({
       <Title level={4}>
         {intl.formatMessage({
           defaultMessage: 'Targeted Business',
-          id: 'CA+Z1B',
         })}
       </Title>
       <Table
@@ -263,7 +262,6 @@ const TargetedBusinessTable = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Select Table Columns',
-          id: 'B6EYXD',
         })}
         open={columnDrawerOpen}
         onClose={toggleColumnDrawer}
@@ -289,7 +287,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage defaultMessage="Business Name" id="pGwRxT" />
+                <FormattedMessage defaultMessage="Business Name" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -298,7 +296,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage defaultMessage="Incident Count" id="otC1Ao" />
+                <FormattedMessage defaultMessage="Incident Count" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -307,10 +305,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage
-                  defaultMessage="Offenders Count"
-                  id="9TzYo2"
-                />
+                <FormattedMessage defaultMessage="Offenders Count" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -319,7 +314,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage defaultMessage="Total Loss" id="LPr3Nh" />
+                <FormattedMessage defaultMessage="Total Loss" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -328,10 +323,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage
-                  defaultMessage="Recovered Value"
-                  id="bGwFFv"
-                />
+                <FormattedMessage defaultMessage="Recovered Value" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -340,7 +332,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage defaultMessage="Recovery Rate" id="qKkLk4" />
+                <FormattedMessage defaultMessage="Recovery Rate" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -349,7 +341,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage defaultMessage="Top Lost Item" id="UnwXnj" />
+                <FormattedMessage defaultMessage="Top Lost Item" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -358,10 +350,7 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage
-                  defaultMessage="Highest Incident Value"
-                  id="EqA+0L"
-                />
+                <FormattedMessage defaultMessage="Highest Incident Value" />
               </Checkbox>
             </Form.Item>
             <Form.Item
@@ -370,19 +359,19 @@ const TargetedBusinessTable = ({
               valuePropName="checked"
             >
               <Checkbox>
-                <FormattedMessage defaultMessage="Average Loss" id="wZGB42" />
+                <FormattedMessage defaultMessage="Average Loss" />
               </Checkbox>
             </Form.Item>
             <Form.Item style={{ marginTop: 30 }}>
               <Row gutter={8} justify="end">
                 <Col>
                   <Button>
-                    <FormattedMessage defaultMessage="Close" id="rbrahO" />
+                    <FormattedMessage defaultMessage="Close" />
                   </Button>
                 </Col>
                 <Col>
                   <Button type="primary" htmlType="submit">
-                    <FormattedMessage defaultMessage="Submit" id="wSZR47" />
+                    <FormattedMessage defaultMessage="Submit" />
                   </Button>
                 </Col>
                 <Col />

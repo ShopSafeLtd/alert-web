@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
+
+import type { DateType } from 'types/DataType';
 import type {
   Age,
   ArticlePriority,
@@ -10,9 +12,8 @@ import type {
   Model,
   Race,
   Role,
-} from 'graphql/generated';
-import { IncidentPriority, SortOrder } from 'graphql/generated';
-import type { DateType } from 'types/DataType';
+} from 'graphql/types';
+import { IncidentPriority, SortOrder } from 'graphql/types';
 
 export enum IncidentSort {
   createdAtDesc = 'CREATED_AT_DESC',

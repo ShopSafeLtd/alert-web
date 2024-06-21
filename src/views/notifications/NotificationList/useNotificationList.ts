@@ -1,18 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
-import type {
-  UpdateUserNotificationsMutation,
-  UserNotificationsQuery,
-  UserNotificationsQueryVariables,
-} from 'graphql/generated';
-import {
-  Model,
-  QueryMode,
-  SortOrder,
-  UserNotificationsDocument,
-  useUpdateUserNotificationsMutation,
-  useUserNotificationsQuery,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
@@ -20,6 +8,17 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useNavigate } from 'react-router';
 import { LocalStorageKeys } from 'types';
 import { useIntl } from 'react-intl';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
+import type {
+  UserNotificationsQuery,
+  UserNotificationsQueryVariables,
+} from 'graphql/userNotification/queries/user_notifications.generated';
+import {
+  UserNotificationsDocument,
+  useUserNotificationsQuery,
+} from 'graphql/userNotification/queries/user_notifications.generated';
+import type { UpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
+import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
 
 export interface NotificationData {
   id: string;
@@ -201,11 +200,9 @@ const useNotificationLists = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'All notifications have been updated to read!',
-          id: 'dI0d71',
         }),
         placement: 'bottomRight',
       });

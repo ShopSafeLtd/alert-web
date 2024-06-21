@@ -1,25 +1,29 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import { useAuth0 } from '@auth0/auth0-react';
 import SignMg11 from '../../../views/mg11/GuestSignMg11';
 import Loading from '../../../components/loading';
+import { SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
+import { Navigate } from 'react-router-dom';
+import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
 
 const Mg11 = (): JSX.Element => {
-  const { user, loginWithRedirect, isLoading, isAuthenticated } = useAuth0();
-  if (!isAuthenticated && !isLoading) {
-    void loginWithRedirect({
-      appState: { returnTo: window.location.pathname },
-      connection: 'email',
-    });
-  }
-  if (!user) {
+  const { isLoaded } = useAuth();
+
+  if (!isLoaded) {
     return <Loading />;
   }
 
   return (
-    <Routes>
-      <Route path="sign/:id" element={<SignMg11 />} />
-    </Routes>
+    <>
+      <SignedOut>
+        <Navigate to={GenerateSignInRedirect(window.location.pathname)} />
+      </SignedOut>
+      <SignedIn>
+        <Routes>
+          <Route path="sign/:id" element={<SignMg11 />} />
+        </Routes>
+      </SignedIn>
+    </>
   );
 };
 

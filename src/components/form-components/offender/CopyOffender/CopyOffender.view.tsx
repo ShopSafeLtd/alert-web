@@ -38,7 +38,6 @@ const CopyOffender = ({
           <Text type="secondary">
             {intl.formatMessage({
               defaultMessage: 'Copy offender details to another scheme.',
-              id: 'CGV/n+',
             })}
           </Text>
         </Col>
@@ -49,14 +48,12 @@ const CopyOffender = ({
             name="scheme"
             label={intl.formatMessage({
               defaultMessage: 'Scheme',
-              id: 'C357Ss',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please select one scheme.',
-                  id: 'VJ3QNh',
                 }),
               },
             ]}
@@ -79,12 +76,10 @@ const CopyOffender = ({
               name="groups"
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'Select the groups that you would like this offender to be visible to .',
-                id: 'Z7d+BS',
               })}
               rules={[
                 {
@@ -92,7 +87,6 @@ const CopyOffender = ({
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select at least one group for the offender.',
-                    id: 'hK3zLA',
                   }),
                 },
               ]}
@@ -113,7 +107,7 @@ const CopyOffender = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -123,7 +117,7 @@ const CopyOffender = ({
               disabled={saving}
               loading={saving}
             >
-              {intl.formatMessage({ defaultMessage: 'Copy', id: '4l6vz1' })}
+              {intl.formatMessage({ defaultMessage: 'Copy' })}
             </Button>
           </Col>
         </Row>

@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ListVehiclesQuery } from 'graphql/generated';
 import { Col, Row, Skeleton, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl'; // Import the useIntl hook
@@ -7,6 +6,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import SideListItem from 'components/side-list/SideListItem.view';
 import InfiniteSideScrollList from 'components/side-list/InfiniteSideList';
 import useStyles from './VehicleSideListList.styles';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
 const { Text, Paragraph } = Typography;
 
@@ -63,7 +63,6 @@ const VehicleSideList = ({
             >
               {intl.formatMessage(
                 {
-                  id: '377fsC',
                   defaultMessage: 'Alert ID: {reference}',
                 },
                 { reference: vehicle.reference }

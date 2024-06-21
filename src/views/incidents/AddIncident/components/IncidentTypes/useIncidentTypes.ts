@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
-import type { ListIncidentTagsQuery, TagType } from 'graphql/generated';
-import {
-  Model,
-  useListIncidentTagsQuery,
-  useTagsQuery,
-} from 'graphql/generated';
 import { useStoreState } from 'state';
+import type { ListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import type { TagType } from 'graphql/types';
+import { Model } from 'graphql/types';
 
 interface Return {
   incidentTagsLoading: boolean;

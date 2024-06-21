@@ -1,43 +1,65 @@
-import { useState } from 'react';
-import type { CurrentUserQuery } from 'graphql/generated';
-import { useCurrentUserQuery } from 'graphql/generated';
-import { useNavigate } from 'react-router-dom';
+import { useStoreState } from '#/state';
+import { useUserSettingsQuery } from '#/components/onboarding/Onboarding/AccountDetail/graphql/qureries/user-settings.generated';
 
-interface AccountData {
+export interface AccountData {
   fullName: string;
+  subscribedIncidentOnly: boolean;
+  incidentEmail: boolean;
+  incidentPush: boolean;
+  subscribedOffenderOnly: boolean;
+  offenderEmail: boolean;
+  offenderPush: boolean;
 }
 interface Props {
   update: (value: AccountData | undefined) => void;
-  setCurrent: (value: number) => void;
+  accountDetail: AccountData | undefined;
 }
 interface Return {
   onSubmit: (value: AccountData) => void;
-  data: CurrentUserQuery | undefined;
+  data: AccountData;
   loading: boolean;
-  saving: boolean;
 }
 
-const useEditUser = ({ update, setCurrent }: Props): Return => {
-  setCurrent(0);
-  const navigate = useNavigate();
-  const [saving, setSaving] = useState(false);
-
+const useEditUser = ({ update, accountDetail }: Props): Return => {
+  const { fullName } = useStoreState((state) => state.user);
   const onSubmit = (data: AccountData) => {
-    setSaving(true);
     update(data);
-    navigate('/app/onboarding/terms-conditions');
-    setSaving(false);
   };
 
-  const { data: userData, loading } = useCurrentUserQuery({
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data: userData, loading } = useUserSettingsQuery();
 
+  const {
+    subscribedIncidentOnly,
+    incidentEmail,
+    incidentPush,
+    subscribedOffenderOnly,
+    offenderEmail,
+    offenderPush,
+  } = accountDetail ||
+    userData?.currentUser || {
+      subscribedIncidentOnly: true,
+      incidentEmail: false,
+      incidentPush: true,
+      subscribedOffenderOnly: true,
+      offenderEmail: false,
+      offenderPush: true,
+      messagePush: true,
+    };
+  const data = {
+    fullName,
+    subscribedIncidentOnly,
+    incidentEmail,
+    incidentPush,
+    subscribedOffenderOnly,
+    offenderEmail,
+    offenderPush,
+  };
+
+  //   messagePush: true,
   return {
+    data,
     onSubmit,
-    data: userData,
     loading,
-    saving,
   };
 };
 

@@ -172,7 +172,6 @@ const LightBox = ({
                   {
                     defaultMessage:
                       '{showboxes, plural, =0 {Hide Boxes} =1{Show Boxes} other{}}',
-                    id: '1EYWsE',
                   },
                   {
                     showboxes: showBoxes ? 0 : 1,
@@ -189,7 +188,6 @@ const LightBox = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Search Image',
-                    id: 'EwWYUF',
                   })}
                 </Button>
               </Col>
@@ -223,7 +221,6 @@ const LightBox = ({
         width={linkNewOffender ? 600 : 1000}
         title={intl.formatMessage({
           defaultMessage: 'Link an offender to face',
-          id: '70s5j7',
         })}
         open={linkOffender !== null}
         onClose={() => toggleLinkOffender(null)}
@@ -232,11 +229,9 @@ const LightBox = ({
             {linkNewOffender
               ? intl.formatMessage({
                   defaultMessage: 'Search Existing Offenders',
-                  id: 'VGN48N',
                 })
               : intl.formatMessage({
                   defaultMessage: 'Add A New Offender',
-                  id: '89cjOr',
                 })}
           </Button>
         }
@@ -263,7 +258,6 @@ const LightBox = ({
         onClose={() => toggleViewMatches(null)}
         title={intl.formatMessage({
           defaultMessage: 'View Face AI matches',
-          id: 'weQa+I',
         })}
         width={800}
       >

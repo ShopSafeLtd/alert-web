@@ -1,6 +1,7 @@
-import { Role, useIndexImageMutation } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
+import { Role } from 'graphql/types';
+import { useIndexImageMutation } from 'graphql/rekognition/mutations/index-image.generated';
 
 interface Return {
   onReIndex: (imageId?: string) => void;

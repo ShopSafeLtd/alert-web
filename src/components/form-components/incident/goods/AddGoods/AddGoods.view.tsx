@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, Form, Row, Col, Select, InputNumber } from 'antd';
+import { Button, Col, Form, InputNumber, Row, Select } from 'antd';
 import { useIntl } from 'react-intl';
 import type { GoodsData } from 'types/DataType';
-import type { ListGoodsTypesQuery } from 'graphql/generated';
-import { GoodsMode } from 'graphql/generated';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { GoodsMode } from 'graphql/types';
 
 interface Props {
   onClose: () => void;
@@ -29,14 +29,12 @@ const AddGoods = ({
               name="goodsTypeId"
               label={intl.formatMessage({
                 defaultMessage: 'Type of Goods',
-                id: 'awr2tc',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a type',
-                    id: 'pd8FHc',
                   }),
                 },
               ]}
@@ -44,7 +42,6 @@ const AddGoods = ({
               <Select
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select goods...',
-                  id: 'p4Hiyr',
                 })}
                 allowClear
                 options={
@@ -66,21 +63,18 @@ const AddGoods = ({
               name="value"
               label={intl.formatMessage({
                 defaultMessage: 'Value',
-                id: 'GufXy5',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a value',
-                    id: 'Umf5pG',
                   }),
                 },
               ]}
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The value of the goods involved in the incident, both lost and recovered.',
-                id: 'MPzA66',
               })}
             >
               <InputNumber
@@ -96,20 +90,17 @@ const AddGoods = ({
               name="recoveredValue"
               label={intl.formatMessage({
                 defaultMessage: 'Value Recovered',
-                id: 'FqEGSY',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a value',
-                    id: 'Umf5pG',
                   }),
                 },
               ]}
               tooltip={intl.formatMessage({
                 defaultMessage: 'The value of the goods that were recovered.',
-                id: 'JuhI7q',
               })}
             >
               <InputNumber
@@ -129,21 +120,18 @@ const AddGoods = ({
               name="recoveredQuantity"
               label={intl.formatMessage({
                 defaultMessage: 'Quantity Recovered',
-                id: 'vQz41I',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a recovered quantity.',
-                    id: 'CZemdW',
                   }),
                 },
               ]}
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The quantity of the goods that were recovered.',
-                id: '00WDlL',
               })}
             >
               <InputNumber style={{ width: '100%' }} precision={0} min={0} />
@@ -156,12 +144,12 @@ const AddGoods = ({
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
             <Button type="primary" htmlType="submit">
-              {intl.formatMessage({ defaultMessage: 'Create', id: 'VzzYJk' })}
+              {intl.formatMessage({ defaultMessage: 'Create' })}
             </Button>
           </Col>
         </Row>

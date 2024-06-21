@@ -50,7 +50,6 @@ const MultiBarGraph = ({
                 // label: 'No Data',
                 label: intl.formatMessage({
                   defaultMessage: 'No Data',
-                  id: 'D3rOMr',
                 }),
               },
             ]

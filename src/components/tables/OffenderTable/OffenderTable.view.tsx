@@ -9,13 +9,7 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type {
-  Age,
-  Build,
-  Gender,
-  ImagePosition,
-  Race,
-} from 'graphql/generated';
+
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,6 +21,7 @@ import {
 import type { OffenderData } from 'types/DataType';
 import { useStoreState } from 'state';
 import { Link } from 'react-router-dom';
+import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
 
 const useStyles = createUseStyles({
   row: {
@@ -121,7 +116,6 @@ const OffenderTable = ({
           key: 'reference',
           dataIndex: 'reference',
           title: intl.formatMessage({
-            id: 'k8ZNgH',
             defaultMessage: 'Alert ID',
           }),
           width: 80,
@@ -141,30 +135,29 @@ const OffenderTable = ({
         },
 
         {
-          title: intl.formatMessage({ id: 'HAlOn1', defaultMessage: 'Name' }),
+          title: intl.formatMessage({ defaultMessage: 'Name' }),
           dataIndex: 'name',
           key: 'name',
         },
         {
-          title: intl.formatMessage({ id: 'm8/n8c', defaultMessage: 'Gender' }),
+          title: intl.formatMessage({ defaultMessage: 'Gender' }),
           dataIndex: 'gender',
           key: 'gender',
         },
         {
           title: intl.formatMessage({
-            id: 'XtCAFo',
             defaultMessage: 'Ethnicity',
           }),
           dataIndex: 'ethnicity',
           key: 'ethnicity',
         },
         {
-          title: intl.formatMessage({ id: '9oNQSC', defaultMessage: 'Age' }),
+          title: intl.formatMessage({ defaultMessage: 'Age' }),
           dataIndex: 'age',
           key: 'age',
         },
         {
-          title: intl.formatMessage({ id: 'RSctv1', defaultMessage: 'Build' }),
+          title: intl.formatMessage({ defaultMessage: 'Build' }),
           dataIndex: 'build',
           key: 'build',
         },
@@ -183,7 +176,6 @@ const OffenderTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'View Offender',
-                      id: 'GszQTo',
                     })}
                   >
                     <Link to={`/app/offenders/view/${record.key}`}>
@@ -201,7 +193,6 @@ const OffenderTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit Offender',
-                      id: '+OfJ4/',
                     })}
                   >
                     <Button
@@ -221,25 +212,21 @@ const OffenderTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove Offender',
-                      id: 'cZH2Kj',
                     })}
                   >
                     <Popconfirm
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the offender?',
-                        id: 'ttuPSC',
                       })}
                       onConfirm={() => {
                         onDeleteOffender(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >

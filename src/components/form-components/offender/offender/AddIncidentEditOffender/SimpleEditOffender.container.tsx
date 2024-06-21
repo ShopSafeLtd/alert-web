@@ -1,12 +1,12 @@
 import React from 'react';
 import type { ImageValue } from 'components/form-components/ImageSelect/ImageSelect.view';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { UpdateSimpleOffenderMutation } from 'graphql/generated';
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import View from './SimpleEditOffender.view';
 import type { OffenderData } from './useEditOffender';
 import useEditOffender from './useEditOffender';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
 
 interface Props {
   data: OffenderData;

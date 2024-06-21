@@ -1,8 +1,9 @@
 import React from 'react';
-import { SortOrder, useUsersSelectQuery } from 'graphql/generated';
+import { SortOrder } from 'graphql/types';
 import { Select } from 'antd';
 import { useStoreState } from 'state';
 import { useGroupsContext } from '#/context/groups-context';
+import { useUsersSelectQuery } from '#/components/form-components/UsersSelect/users-select-query.generated';
 
 interface Props {
   value?: string[];

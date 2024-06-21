@@ -28,7 +28,7 @@ export const appendDuplicates = (arr: SchemeUserData[]) => {
       fullNames
         .find((name) => name.split('[')[1].split(']')[0] === item.id)
         ?.split(']')[1]
-        .replace(/ /g, '_') || '',
+        .replaceAll(' ', '_') || '',
   }));
 };
 
@@ -67,4 +67,4 @@ export const getText = (
   return newText;
 };
 export const getChatListContent = (content: string) =>
-  content.replace(/@\[([^]+?)]/g, '@$1');
+  content.replaceAll(/@\[([^]+?)]/g, '@$1');

@@ -1,6 +1,6 @@
 import type { IReportTemplate } from '#/views/reports/types';
 import type RGL from 'react-grid-layout';
-import type { ReportTemplatesFragment } from 'graphql/generated';
+import type { ReportTemplatesFragment } from 'graphql/reports/mutations/create-report-template.generated';
 
 // create a new type that is ReportTemplatesFragment with the layout inside it being of type RGL.Layout
 

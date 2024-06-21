@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import type { ArticlePriority, ListArticlesFeedQuery } from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListArticlesFeedQuery,
-} from 'graphql/generated';
+
+import type { ArticlePriority } from 'graphql/types';
+import { QueryMode, SortOrder } from 'graphql/types';
 import { useStoreActions, useStoreState } from 'state';
 import type { ArticleData, DateType } from 'types/DataType';
 import type { ArticleFilters } from 'state/data-model';
 import { useGroupsContext } from '#/context/groups-context';
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
+import { useListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
 
 interface Props {
   onClose: () => void;

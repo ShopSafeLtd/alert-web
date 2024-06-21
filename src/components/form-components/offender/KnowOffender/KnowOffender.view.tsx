@@ -20,18 +20,15 @@ const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
               name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               })}
               tooltip={intl.formatMessage({
-                defaultMessage: `Enter the name of the offender`,
-                id: 'EbPy/z',
+                defaultMessage: 'Enter the name of the offender',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: 'SvRg2+',
-                    defaultMessage: `Please enter the name of the offender.`,
+                    defaultMessage: 'Please enter the name of the offender.',
                   }),
                 },
               ]}
@@ -45,18 +42,17 @@ const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
               name="infoSource"
               label={intl.formatMessage({
                 defaultMessage: 'Information Source',
-                id: 'LUqHSz',
               })}
               tooltip={intl.formatMessage({
-                defaultMessage: `Enter the information source of the offender's name`,
-                id: 'WYJoK2',
+                defaultMessage:
+                  "Enter the information source of the offender's name",
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: 'GF+F7n',
-                    defaultMessage: `Please enter the information source of the offender's name.`,
+                    defaultMessage:
+                      "Please enter the information source of the offender's name.",
                   }),
                 },
               ]}
@@ -72,7 +68,6 @@ const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
                   defaultMessage: 'Cancel',
-                  id: '47FYwb',
                 })}
               </Button>
             </Col>
@@ -85,7 +80,6 @@ const KnowOffender = ({ onSubmit, saving, onClose }: Props): JSX.Element => {
               >
                 {intl.formatMessage({
                   defaultMessage: 'Save',
-                  id: 'jvo0vs',
                 })}
               </Button>
             </Col>

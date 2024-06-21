@@ -1,33 +1,3 @@
-import type {
-  CreateSimpleOffenderMutation,
-  CreateTodoMutation,
-  QuestionGroupOnSchemeQuery,
-  UpdateInvestigationOffendersMutation,
-  UpdateInvestigationVehiclesMutation,
-  UpdateSimpleOffenderMutation,
-  UpdateTaskMutation,
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
-} from 'graphql/generated';
-import {
-  useDeleteDocumentMutation,
-  useCreateCrimeGroupSuggestedDataMutation,
-  useCreateSimpleVehicleMutation,
-  useDeleteInvestigationMutation,
-  useQuestionGroupOnSchemeQuery,
-  useSubscribeToInvestigationMutation,
-  useUnsubscribeToInvestigationMutation,
-  useUpdateCrimeGroupMutation,
-  useUpdateInvestigationCrimeGroupsMutation,
-  useUpdateInvestigationIncidentsMutation,
-  useUpdateInvestigationOffendersMutation,
-  useUpdateInvestigationVehiclesMutation,
-  useUpdateSimpleVehicleMutation,
-  useViewInvestigationQuery,
-  ViewInvestigationDocument,
-  useCloseInvestigationMutation,
-  useReopenInvestigationMutation,
-} from 'graphql/generated';
 import { useState } from 'react';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -45,6 +15,36 @@ import {
 import { notification } from 'antd';
 import { useIntl } from 'react-intl';
 import { useStoreState } from '../../../state';
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/investigations/queries/view-investigation.generated';
+import {
+  useViewInvestigationQuery,
+  ViewInvestigationDocument,
+} from 'graphql/investigations/queries/view-investigation.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import { useSubscribeToInvestigationMutation } from 'graphql/investigations/mutations/subscribe-to-investigation.generated';
+import { useUnsubscribeToInvestigationMutation } from 'graphql/investigations/mutations/unsubscribe-from-incident.generated';
+import type { UpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/update-investigation-offenders.generated';
+import { useUpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/update-investigation-offenders.generated';
+import { useCloseInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/close-investigation.generated';
+import { useReopenInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/reopen-investigation.generated';
+import type { UpdateInvestigationVehiclesMutation } from 'graphql/investigations/mutations/update/update-investigation-vehicles.generated';
+import { useUpdateInvestigationVehiclesMutation } from 'graphql/investigations/mutations/update/update-investigation-vehicles.generated';
+import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
+import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
+import { useUpdateInvestigationCrimeGroupsMutation } from 'graphql/investigations/mutations/update/update-investigation-crime-group.generated';
+import { useCreateCrimeGroupSuggestedDataMutation } from 'graphql/crime-groups/mutations/create-crime-group-suggested-data.generated';
+import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/update_crime_group.generated';
+import { useUpdateInvestigationIncidentsMutation } from 'graphql/investigations/mutations/update/update-investigation-incidents.generated';
+import { useDeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import { useDeleteInvestigationMutation } from 'graphql/investigations/mutations/delete-investigation.generated';
 
 interface Return {
   data: ViewInvestigationQuery | undefined;
@@ -1412,11 +1412,9 @@ const useViewInvestigation = (investigationId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The document has been deleted.',
-          id: 'xrfOQH',
         }),
         placement: 'bottomRight',
       });
@@ -1462,11 +1460,9 @@ const useViewInvestigation = (investigationId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The investigation has been deleted!',
-          id: 'GtLkNt',
         }),
         placement: 'bottomRight',
       });

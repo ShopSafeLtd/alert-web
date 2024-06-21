@@ -1,31 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { useEffect, useState } from 'react';
-import type {
-  CreateTagMutation,
-  EditIncidentQuery,
-  IncidentUpdateInput,
-  ListGoodsTypesQuery,
-  ListOffendersQuery,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-  TagsQuery,
-} from 'graphql/generated';
-import {
-  ImagePosition,
-  Model,
-  QueryMode,
-  Role,
-  SearchBusinessesDocument,
-  SortOrder,
-  TagsDocument,
-  TagType,
-  useEditIncidentQuery,
-  useListGoodsTypesQuery,
-  useListOffendersQuery,
-  useRecycleIncidentMutation,
-  useTagsQuery,
-  useUpdateIncidentMutation,
-} from 'graphql/generated';
+
 import { message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -42,6 +17,34 @@ import type {
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useGroupsContext } from '#/context/groups-context';
+import type { EditIncidentQuery } from 'graphql/incidents/queries/edit-incident.generated';
+import { useEditIncidentQuery } from 'graphql/incidents/queries/edit-incident.generated';
+import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import {
+  TagsDocument,
+  useTagsQuery,
+} from 'graphql/tags/queries/tags.generated';
+import type { IncidentUpdateInput } from 'graphql/types';
+import {
+  ImagePosition,
+  Model,
+  QueryMode,
+  Role,
+  SortOrder,
+  TagType,
+} from 'graphql/types';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import { useListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/businesses/queries/search-businesses.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
 
 const { confirm } = Modal;
 
@@ -376,16 +379,13 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: reviewed
           ? intl.formatMessage({
               defaultMessage: 'The Incident has been approved!',
-              id: '05bSdr',
             })
           : intl.formatMessage({
               defaultMessage: 'The Incident has been updated!',
-              id: 'OkjwIC',
             }),
         placement: 'bottomRight',
       });
@@ -400,16 +400,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   // delete incident
   const [recycleIncident] = useRecycleIncidentMutation({
     onCompleted: () => {
-      navigate(`/app/incidents`);
+      navigate('/app/incidents');
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Rejected!',
-          id: 'C0DMPx',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been deleted from the feed and moved to the recycle bin.',
-          id: 'YagqVR',
         }),
         placement: 'bottomRight',
       });
@@ -422,14 +420,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: '51xeBs',
       }),
-      okText: intl.formatMessage({ defaultMessage: 'Reject', id: 'VzIOKf' }),
+      okText: intl.formatMessage({ defaultMessage: 'Reject' }),
       onOk() {
         void recycleIncident({
           variables: {
@@ -446,7 +442,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     if (isFileDuplicate) {
       void message.error(
         intl.formatMessage({
-          id: 'ILB9M+',
           defaultMessage:
             'This image already exists, please choose another one.',
         })
@@ -1098,21 +1093,17 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     } else {
       confirm({
         title: intl.formatMessage({
-          id: 'hO5g1p',
           defaultMessage: 'No Offenders',
         }),
         content: intl.formatMessage({
-          id: 'o0nzyY',
           defaultMessage:
             'Please select or add at least one offender for the incident.',
         }),
         cancelText: intl.formatMessage({
-          id: 'c1BgIE',
           defaultMessage: 'Find Offenders',
         }),
         onCancel: toggleAddExistingOffender,
         okText: intl.formatMessage({
-          id: 'V+RsEq',
           defaultMessage: 'Add New Offender',
         }),
         onOk: toggleAddOffender,
@@ -1167,7 +1158,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           : [
               {
                 label: intl.formatMessage({
-                  id: 'hX5PAb',
                   defaultMessage: 'No results found',
                 }),
                 value: '',

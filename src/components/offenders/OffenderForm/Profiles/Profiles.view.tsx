@@ -20,9 +20,9 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
 
-import type { ListVehiclesQuery } from 'graphql/generated';
 import { useIntl } from 'react-intl';
 import ProfileDrawer from '../ProfileDrawer';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
 const { Title, Paragraph } = Typography;
 
@@ -81,7 +81,6 @@ const Profiles = ({
         <Col>
           <Title style={{ marginBottom: 0 }} level={4}>
             {intl.formatMessage({
-              id: '2zJXeA',
               defaultMessage: 'Profiles',
             })}
           </Title>
@@ -89,7 +88,6 @@ const Profiles = ({
         <Col style={{ marginRight: 20 }}>
           <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
             {intl.formatMessage({
-              id: 'anuHw8',
               defaultMessage:
                 '- Please add the profiles that were involved in the offender.',
             })}
@@ -103,7 +101,6 @@ const Profiles = ({
                 items={[
                   {
                     label: intl.formatMessage({
-                      id: 'goP1s6',
                       defaultMessage: 'Add Existing Vehicles',
                     }),
                     key: '1',
@@ -118,7 +115,6 @@ const Profiles = ({
                   },
                   {
                     label: intl.formatMessage({
-                      id: 'xiAZxN',
                       defaultMessage: 'Create New Vehicle',
                     }),
                     key: '2',
@@ -141,7 +137,6 @@ const Profiles = ({
               }
             >
               {intl.formatMessage({
-                id: 'r6wuJ3',
                 defaultMessage: 'Vehicles',
               })}
             </Button>
@@ -154,7 +149,6 @@ const Profiles = ({
             icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
           >
             {intl.formatMessage({
-              id: 'a0aLil',
               defaultMessage: 'Crime Groups',
             })}
           </Button>
@@ -170,7 +164,6 @@ const Profiles = ({
                 <>
                   <Divider>
                     {intl.formatMessage({
-                      id: 'r6wuJ3',
                       defaultMessage: 'Vehicles',
                     })}
                   </Divider>
@@ -180,7 +173,6 @@ const Profiles = ({
                         key: 'reference',
                         dataIndex: 'reference',
                         title: intl.formatMessage({
-                          id: 'k8ZNgH',
                           defaultMessage: 'Alert ID',
                         }),
                         width: 100,
@@ -188,7 +180,6 @@ const Profiles = ({
                       {
                         key: 'images',
                         title: intl.formatMessage({
-                          id: '+0zv6g',
                           defaultMessage: 'Image',
                         }),
                         dataIndex: 'images',
@@ -211,7 +202,6 @@ const Profiles = ({
                         key: 'registration',
                         dataIndex: 'registration',
                         title: intl.formatMessage({
-                          id: 'qv7ied',
                           defaultMessage: 'Registration',
                         }),
                       },
@@ -219,7 +209,6 @@ const Profiles = ({
                         key: 'make',
                         dataIndex: 'make',
                         title: intl.formatMessage({
-                          id: '6AAM0P',
                           defaultMessage: 'Make',
                         }),
                       },
@@ -227,7 +216,6 @@ const Profiles = ({
                         key: 'model',
                         dataIndex: 'model',
                         title: intl.formatMessage({
-                          id: 'rhSI1/',
                           defaultMessage: 'Model',
                         }),
                       },
@@ -235,14 +223,12 @@ const Profiles = ({
                         key: 'colour',
                         dataIndex: 'colour',
                         title: intl.formatMessage({
-                          id: '+e8vAT',
                           defaultMessage: 'Colour',
                         }),
                       },
                       {
                         key: 'delete',
                         title: intl.formatMessage({
-                          id: 'K3r6DQ',
                           defaultMessage: 'Delete',
                         }),
                         dataIndex: 'delete',
@@ -251,18 +237,15 @@ const Profiles = ({
                           <Popconfirm
                             placement="topLeft"
                             title={intl.formatMessage({
-                              id: 'hHs0lD',
                               defaultMessage: 'Remove the vehicle?',
                             })}
                             onConfirm={() => {
                               onRemoveVehicle(record.key);
                             }}
                             okText={intl.formatMessage({
-                              id: 'a5msuh',
                               defaultMessage: 'Yes',
                             })}
                             cancelText={intl.formatMessage({
-                              id: 'oUWADl',
                               defaultMessage: 'No',
                             })}
                             overlayInnerStyle={{ padding: 10 }}
@@ -299,7 +282,6 @@ const Profiles = ({
                 <>
                   <Divider>
                     {intl.formatMessage({
-                      id: 'a0aLil',
                       defaultMessage: 'Crime Groups',
                     })}
                   </Divider>
@@ -309,7 +291,6 @@ const Profiles = ({
                         key: 'reference',
                         dataIndex: 'reference',
                         title: intl.formatMessage({
-                          id: 'k8ZNgH',
                           defaultMessage: 'Alert ID',
                         }),
                       },
@@ -317,7 +298,6 @@ const Profiles = ({
                         key: 'alias',
                         dataIndex: 'alias',
                         title: intl.formatMessage({
-                          id: 'Ri9jA7',
                           defaultMessage: 'Alias',
                         }),
                       },
@@ -325,7 +305,6 @@ const Profiles = ({
                         key: 'totalOffenders',
                         dataIndex: 'totalOffenders',
                         title: intl.formatMessage({
-                          id: '+a+2ug',
                           defaultMessage: 'Members',
                         }),
                       },
@@ -333,7 +312,6 @@ const Profiles = ({
                         key: 'totalIncidents',
                         dataIndex: 'totalIncidents',
                         title: intl.formatMessage({
-                          id: 'mtr3R4',
                           defaultMessage: 'Incidents',
                         }),
                       },
@@ -341,7 +319,6 @@ const Profiles = ({
                         key: 'totalValue',
                         dataIndex: 'totalValue',
                         title: intl.formatMessage({
-                          id: '3YYDlc',
                           defaultMessage: 'Lost Value',
                         }),
                         render: (value) => `£${value || 0}`,
@@ -350,7 +327,6 @@ const Profiles = ({
                         key: 'totalRecoveredValue',
                         dataIndex: 'totalRecoveredValue',
                         title: intl.formatMessage({
-                          id: 'bGwFFv',
                           defaultMessage: 'Recovered Value',
                         }),
                         render: (value) => `£${value || 0}`,
@@ -359,7 +335,6 @@ const Profiles = ({
                         key: 'totalTheftSuccess',
                         dataIndex: 'totalTheftSuccess',
                         title: intl.formatMessage({
-                          id: 'mQPFSj',
                           defaultMessage: 'Loss Rate',
                         }),
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -368,7 +343,6 @@ const Profiles = ({
                       {
                         key: 'delete',
                         title: intl.formatMessage({
-                          id: 'K3r6DQ',
                           defaultMessage: 'Delete',
                         }),
                         dataIndex: 'delete',
@@ -377,18 +351,15 @@ const Profiles = ({
                           <Popconfirm
                             placement="topLeft"
                             title={intl.formatMessage({
-                              id: 'Ek+T43',
                               defaultMessage: 'Remove the crime group?',
                             })}
                             onConfirm={() => {
                               onRemoveCrimeGroup(record.key);
                             }}
                             okText={intl.formatMessage({
-                              id: 'a5msuh',
                               defaultMessage: 'Yes',
                             })}
                             cancelText={intl.formatMessage({
-                              id: 'oUWADl',
                               defaultMessage: 'No',
                             })}
                             overlayInnerStyle={{ padding: 10 }}
@@ -428,7 +399,6 @@ const Profiles = ({
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={intl.formatMessage({
-                  id: 'PNTO/p',
                   defaultMessage: 'No profiles added yet.',
                 })}
               />

@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import type { SchemeGroupsQuery, CreateGroupMutation } from 'graphql/generated';
-import {
-  QueryMode,
-  useSchemeGroupsQuery,
-  SchemeGroupsDocument,
-} from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import {
+  SchemeGroupsDocument,
+  useSchemeGroupsQuery,
+} from 'graphql/groups/queries/scheme-groups.generated';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
+import { QueryMode } from 'graphql/types';
 
 interface Return {
   data: SchemeGroupsQuery | undefined;

@@ -6,10 +6,11 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { Image, ImageCardData } from 'types/DataType';
 import update from 'immutability-helper';
 import { useIntl } from 'react-intl';
-import { ImagePosition } from 'graphql/generated';
+
 import { compressImage } from '../../../utils/compress-images';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { StateImageData } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
+import { ImagePosition } from 'graphql/types';
 
 interface Props {
   onClose: () => void;
@@ -132,7 +133,6 @@ const useEditImagesList = ({
         intl.formatMessage({
           defaultMessage:
             'This image already exists, please choose another one.',
-          id: 'ILB9M+',
         })
       );
     }

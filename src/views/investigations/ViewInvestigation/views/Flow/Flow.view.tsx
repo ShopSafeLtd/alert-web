@@ -148,30 +148,25 @@ FlowProps) => {
             >
               {intl.formatMessage({
                 defaultMessage: 'Print',
-                id: 'CXRlIo',
               })}
             </Button>
             <Button className="download-btn" onClick={onSave} type="primary">
               {intl.formatMessage({
                 defaultMessage: 'Save',
-                id: 'jvo0vs',
               })}
             </Button>
             <p className="info">
               {intl.formatMessage({
                 defaultMessage: 'Synced: ',
-                id: 'ytshKn',
               })}
               <Status success={isSynced || clientCount === 0} />
               {intl.formatMessage({
                 defaultMessage: 'Last Saved: ',
-                id: 'H7OJNn',
               })}
               {saving || loading ? (
                 <Spin style={{ marginLeft: 5 }} indicator={antIcon} />
               ) : (
-                savedWhen ||
-                intl.formatMessage({ defaultMessage: 'never', id: 'md4Qkb' })
+                savedWhen || intl.formatMessage({ defaultMessage: 'never' })
               )}
             </p>
             <Sidebar />
@@ -212,7 +207,6 @@ FlowProps) => {
                       onClick={setFullScreen}
                       title={intl.formatMessage({
                         defaultMessage: 'Full Screen',
-                        id: 'bRjypX',
                       })}
                     >
                       <FontAwesomeIcon

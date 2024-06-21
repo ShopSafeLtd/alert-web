@@ -57,7 +57,6 @@ const DocumentsView = ({
                     {
                       label: intl.formatMessage({
                         defaultMessage: 'Add Evidence',
-                        id: 'vgVasT',
                       }),
                       key: '5',
                       icon: (
@@ -71,7 +70,6 @@ const DocumentsView = ({
                     {
                       label: intl.formatMessage({
                         defaultMessage: 'Import DEM Evidence',
-                        id: 'MSPOxg',
                       }),
                       key: '6',
                       disabled: !demId,
@@ -96,7 +94,6 @@ const DocumentsView = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Documents',
-                  id: 'vBlT6y',
                 })}
               </Button>
             </Dropdown>
@@ -107,7 +104,6 @@ const DocumentsView = ({
             {
               title: intl.formatMessage({
                 defaultMessage: 'Thumbnail',
-                id: 'RGYBjE',
               }),
               dataIndex: 'thumbnail',
               key: 'thumbnail',
@@ -122,7 +118,6 @@ const DocumentsView = ({
             {
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               key: 'name',
@@ -130,7 +125,6 @@ const DocumentsView = ({
             {
               title: intl.formatMessage({
                 defaultMessage: 'Tags',
-                id: '1EYCdR',
               }),
               dataIndex: 'tags',
               key: 'tags',
@@ -166,7 +160,6 @@ const DocumentsView = ({
                     <Popconfirm
                       title={intl.formatMessage({
                         defaultMessage: 'Are you sure?',
-                        id: '2oCaym',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                       onConfirm={() => onDeleteDocument(item.key)}

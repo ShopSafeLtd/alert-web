@@ -1,5 +1,6 @@
-import type { ArticleQuery, Role } from '../../../../graphql/generated';
 import type { RefObject } from 'react';
+import type { ArticleQuery } from 'graphql/article/queries/view-article.generated';
+import type { Role } from 'graphql/types';
 
 export interface Props {
   id: string;

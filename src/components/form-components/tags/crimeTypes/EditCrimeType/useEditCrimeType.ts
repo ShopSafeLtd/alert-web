@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import type { TagQuery, CrimeType } from 'graphql/generated';
-import { useUpdateTagMutation, useTagQuery } from 'graphql/generated';
+import type { CrimeType } from 'graphql/types';
+
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { TagQuery } from 'graphql/tag/queries/tag.generated';
+import { useTagQuery } from 'graphql/tag/queries/tag.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
 
 interface FormData {
   name: string;
@@ -41,11 +44,9 @@ const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The crime type has been updated.',
-          id: '/Gih2b',
         }),
         placement: 'bottomRight',
       });

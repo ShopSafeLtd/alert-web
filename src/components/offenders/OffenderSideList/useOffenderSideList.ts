@@ -1,11 +1,7 @@
-import type { ListOffendersRelayQuery } from 'graphql/generated';
-import {
-  QueryMode,
-  useListOffendersRelayQuery,
-  SortOrder,
-  Role,
-} from 'graphql/generated';
 import { OffenderSort, useStoreState } from 'state';
+import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import { useListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import { QueryMode, Role, SortOrder } from 'graphql/types';
 
 interface Return {
   data:
@@ -137,7 +133,7 @@ const useOffenderSideList = (): Return => {
           }
         : undefined,
       approved:
-        role === 'USER'
+        role === Role.User
           ? {
               equals: true,
             }

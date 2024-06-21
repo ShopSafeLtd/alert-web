@@ -77,10 +77,7 @@ export const LayoutToReadable: {
     i: 'createdSummary',
     readable: 'Created Summary',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing incidents, offenders, updates, messages, vehicles, bulletins and crime groups created in Alert."
-        id="93e7vh"
-      />
+      <FormattedMessage defaultMessage="Summary component showing incidents, offenders, updates, messages, vehicles, bulletins and crime groups created in Alert." />
     ),
     allowDuplicates: false,
     item: {
@@ -100,10 +97,7 @@ export const LayoutToReadable: {
     i: 'basicPoliceSummary',
     readable: 'Police Summary',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing the number of incidents reported to the police and the number of times the police attended incidents."
-        id="UumxTT"
-      />
+      <FormattedMessage defaultMessage="Summary component showing the number of incidents reported to the police and the number of times the police attended incidents." />
     ),
     allowDuplicates: false,
     item: {
@@ -124,10 +118,7 @@ export const LayoutToReadable: {
     i: 'policeSummary',
     readable: 'Police Summary (Extended)',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing the number of incidents reported to the police, number of times the police attended incidents as well as custody images shared."
-        id="wVofKn"
-      />
+      <FormattedMessage defaultMessage="Summary component showing the number of incidents reported to the police, number of times the police attended incidents as well as custody images shared." />
     ),
     allowDuplicates: false,
     item: {
@@ -148,10 +139,7 @@ export const LayoutToReadable: {
     i: 'investigationSummary',
     readable: 'Investigation Summary',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing a breakdown of investigation data in alert including currently open, closed and opened investigations."
-        id="NYwcgl"
-      />
+      <FormattedMessage defaultMessage="Summary component showing a breakdown of investigation data in alert including currently open, closed and opened investigations." />
     ),
     allowDuplicates: false,
     item: {
@@ -172,10 +160,7 @@ export const LayoutToReadable: {
     i: 'outcomeSummary',
     readable: 'Outcome Summary',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing an overview of outcomes for offenders in alert including verified ids, arrests, CBOs, prison sentences, rehbilitation orders and fines."
-        id="bV3jnY"
-      />
+      <FormattedMessage defaultMessage="Summary component showing an overview of outcomes for offenders in alert including verified ids, arrests, CBOs, prison sentences, rehbilitation orders and fines." />
     ),
     allowDuplicates: false,
     item: {
@@ -195,10 +180,7 @@ export const LayoutToReadable: {
     i: 'crimeTypesDonut',
     readable: 'Crime Types Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Graph component showing the breakdown of different incident types reported, avaliable as a bar and a a donut graph."
-        id="M6NNP1"
-      />
+      <FormattedMessage defaultMessage="Graph component showing the breakdown of different incident types reported, avaliable as a bar and a a donut graph." />
     ),
     allowDuplicates: false,
     item: {
@@ -218,10 +200,7 @@ export const LayoutToReadable: {
     i: 'involvedTagsDonut',
     readable: 'Involved Tags Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Graph component showing the breakdown of different invoved tags reported on incidents, avaliable as a bar and a a donut graph."
-        id="cZxGHR"
-      />
+      <FormattedMessage defaultMessage="Graph component showing the breakdown of different invoved tags reported on incidents, avaliable as a bar and a a donut graph." />
     ),
     allowDuplicates: false,
     item: {
@@ -241,10 +220,7 @@ export const LayoutToReadable: {
     i: 'goodsTypeDonut',
     readable: 'Goods Type Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Graph component showing a breakdown of groods types by number of incidents, avaliable as a bar and a a donut graph."
-        id="JqLVs9"
-      />
+      <FormattedMessage defaultMessage="Graph component showing a breakdown of groods types by number of incidents, avaliable as a bar and a a donut graph." />
     ),
     allowDuplicates: false,
     item: {
@@ -264,10 +240,7 @@ export const LayoutToReadable: {
     i: 'goodsValueDonut',
     readable: 'Goods Value Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Graph component showing a breakdown of goods types by loss values, avaliable as a bar and a a donut graph."
-        id="Qoc4jp"
-      />
+      <FormattedMessage defaultMessage="Graph component showing a breakdown of goods types by loss values, avaliable as a bar and a a donut graph." />
     ),
     allowDuplicates: false,
     item: {
@@ -287,10 +260,7 @@ export const LayoutToReadable: {
     i: 'incidentsDayOfWeekGraph',
     readable: 'Incidents Day of Week Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Line graph plotting the number of incidents by day of the week."
-        id="IJYt0f"
-      />
+      <FormattedMessage defaultMessage="Line graph plotting the number of incidents by day of the week." />
     ),
     allowDuplicates: false,
     item: {
@@ -310,10 +280,7 @@ export const LayoutToReadable: {
     i: 'businessContributionTable',
     readable: 'Business Contribution Table',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing the created Alert data for each business giving an idea of engagement with the system."
-        id="WpB5Oz"
-      />
+      <FormattedMessage defaultMessage="Table component showing the created Alert data for each business giving an idea of engagement with the system." />
     ),
     allowDuplicates: false,
     item: {
@@ -334,10 +301,7 @@ export const LayoutToReadable: {
     i: 'topContributors',
     readable: 'Top Contributors Table',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing the top contributing users in Alert and a summary of their created data."
-        id="0sgISv"
-      />
+      <FormattedMessage defaultMessage="Table component showing the top contributing users in Alert and a summary of their created data." />
     ),
     allowDuplicates: false,
     item: {
@@ -357,10 +321,7 @@ export const LayoutToReadable: {
     i: 'offendersTable',
     readable: 'Offenders Table',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing data for offenders in Alert including incident count, last incident date, total lost and recovered values. By default ordered by incident count to show prolific offenders."
-        id="0qNgTJ"
-      />
+      <FormattedMessage defaultMessage="Table component showing data for offenders in Alert including incident count, last incident date, total lost and recovered values. By default ordered by incident count to show prolific offenders." />
     ),
     allowDuplicates: false,
     item: {
@@ -381,10 +342,7 @@ export const LayoutToReadable: {
     i: 'crimeGroupTable',
     readable: 'Crime Group Table',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing data for crime groups in Alert including incident count, last incident date, total lost and recovered values. By default ordered by incident count to show the most harmfull groups."
-        id="RUnKVB"
-      />
+      <FormattedMessage defaultMessage="Table component showing data for crime groups in Alert including incident count, last incident date, total lost and recovered values. By default ordered by incident count to show the most harmfull groups." />
     ),
     allowDuplicates: false,
     item: {
@@ -405,10 +363,7 @@ export const LayoutToReadable: {
     i: 'targetedBusinessTable',
     readable: 'Targeted Business Table',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing incident data for business inclunding incident coount, loss values statistics and last incident date. By defaut ordered by incident count by can be ordered by all columns to highlight most impacted businesses."
-        id="8RZVcy"
-      />
+      <FormattedMessage defaultMessage="Table component showing incident data for business inclunding incident coount, loss values statistics and last incident date. By defaut ordered by incident count by can be ordered by all columns to highlight most impacted businesses." />
     ),
     allowDuplicates: false,
     item: {
@@ -428,10 +383,7 @@ export const LayoutToReadable: {
   {
     i: 'targetedGoodsTable',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing highest targeted goods, includes a incident count and loss values statistics. By defaut ordered by incident count by can be ordered by all columns to highlight most targeted goods."
-        id="gIQVxQ"
-      />
+      <FormattedMessage defaultMessage="Table component showing highest targeted goods, includes a incident count and loss values statistics. By defaut ordered by incident count by can be ordered by all columns to highlight most targeted goods." />
     ),
     readable: 'Targeted Goods Table',
     allowDuplicates: false,
@@ -453,10 +405,7 @@ export const LayoutToReadable: {
     i: 'offenderSummary',
     readable: 'Offender Summary',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing basic identity information for an offender, including name, Alert ID, image and description."
-        id="SW8lv1"
-      />
+      <FormattedMessage defaultMessage="Summary component showing basic identity information for an offender, including name, Alert ID, image and description." />
     ),
     allowDuplicates: false,
     item: {
@@ -477,10 +426,7 @@ export const LayoutToReadable: {
     i: 'incidentsSummary',
     readable: 'Incidents Summary',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing an overview of incident data in Alert."
-        id="esb2oI"
-      />
+      <FormattedMessage defaultMessage="Summary component showing an overview of incident data in Alert." />
     ),
     allowDuplicates: false,
     item: {
@@ -501,10 +447,7 @@ export const LayoutToReadable: {
     i: 'lossSummary',
     readable: 'Loss Summary',
     description: (
-      <FormattedMessage
-        defaultMessage="Summary component showing an overview of incident loss statistics in Alert."
-        id="UdLFEe"
-      />
+      <FormattedMessage defaultMessage="Summary component showing an overview of incident loss statistics in Alert." />
     ),
     allowDuplicates: false,
     item: {
@@ -524,10 +467,7 @@ export const LayoutToReadable: {
     i: 'crimeTypesByBusinessRadial',
     readable: 'Crime Types By Business Radial',
     description: (
-      <FormattedMessage
-        defaultMessage="Radial graph showing a breakdown of the incident types by number of incidents for the business with the highest incident counts."
-        id="Yt8ZUe"
-      />
+      <FormattedMessage defaultMessage="Radial graph showing a breakdown of the incident types by number of incidents for the business with the highest incident counts." />
     ),
     allowDuplicates: false,
     item: {
@@ -549,10 +489,7 @@ export const LayoutToReadable: {
     readable: 'Goods Type Loss Recovered Radial',
     allowDuplicates: false,
     description: (
-      <FormattedMessage
-        defaultMessage="Radial graph showing a breakdown of loss vs recovered values for each of the higest targeted goods items."
-        id="tIi91V"
-      />
+      <FormattedMessage defaultMessage="Radial graph showing a breakdown of loss vs recovered values for each of the higest targeted goods items." />
     ),
     item: {
       w: 2,
@@ -572,10 +509,7 @@ export const LayoutToReadable: {
     i: 'crimeTypesByOffender',
     readable: 'Incident Types By Offender',
     description: (
-      <FormattedMessage
-        defaultMessage="Bar graph showing the count for each incident type by offender."
-        id="kAA3xD"
-      />
+      <FormattedMessage defaultMessage="Bar graph showing the count for each incident type by offender." />
     ),
     allowDuplicates: false,
     item: {
@@ -596,10 +530,7 @@ export const LayoutToReadable: {
     i: 'offenderGoodsTypeValue',
     readable: 'Offender Goods Type Value',
     description: (
-      <FormattedMessage
-        defaultMessage="Bar graph showing the loss value for goods types by offender."
-        id="yYJgLV"
-      />
+      <FormattedMessage defaultMessage="Bar graph showing the loss value for goods types by offender." />
     ),
     allowDuplicates: false,
     item: {
@@ -620,10 +551,7 @@ export const LayoutToReadable: {
     i: 'incidentTimeOfDayDonut',
     readable: 'Incident Time Of Day Donut',
     description: (
-      <FormattedMessage
-        defaultMessage="Bar graph showing the loss value for goods types by offender."
-        id="yYJgLV"
-      />
+      <FormattedMessage defaultMessage="Bar graph showing the loss value for goods types by offender." />
     ),
     allowDuplicates: false,
     item: {
@@ -644,10 +572,7 @@ export const LayoutToReadable: {
     i: 'incidentMonthDonut',
     readable: 'Incident Month Donut',
     description: (
-      <FormattedMessage
-        defaultMessage="Bar graph showing the loss value for goods types by offender."
-        id="yYJgLV"
-      />
+      <FormattedMessage defaultMessage="Bar graph showing the loss value for goods types by offender." />
     ),
     allowDuplicates: false,
     item: {
@@ -668,10 +593,7 @@ export const LayoutToReadable: {
     i: 'incidentsHeatMap',
     readable: 'Incidents Heat Map',
     description: (
-      <FormattedMessage
-        defaultMessage="Map showing a heatmap of incident data based on the count of incidents reported at businesses."
-        id="J19IC+"
-      />
+      <FormattedMessage defaultMessage="Map showing a heatmap of incident data based on the count of incidents reported at businesses." />
     ),
     allowDuplicates: false,
     item: {
@@ -690,10 +612,7 @@ export const LayoutToReadable: {
     i: 'incidentsTable',
     readable: 'Incidents Table',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing a summary of recorded incident data."
-        id="Pmg2SD"
-      />
+      <FormattedMessage defaultMessage="Table component showing a summary of recorded incident data." />
     ),
     allowDuplicates: false,
     item: {
@@ -714,10 +633,7 @@ export const LayoutToReadable: {
     i: 'investigationsTable',
     readable: 'Investigations Table',
     description: (
-      <FormattedMessage
-        defaultMessage="Table component showing a summary of open investigations."
-        id="WA5zZT"
-      />
+      <FormattedMessage defaultMessage="Table component showing a summary of open investigations." />
     ),
     allowDuplicates: false,
     item: {
@@ -738,10 +654,7 @@ export const LayoutToReadable: {
     i: 'priorityGraph',
     readable: 'Priority Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Bar graph component showming a breakdown of reported incidents by assigned priotity."
-        id="2eWPRl"
-      />
+      <FormattedMessage defaultMessage="Bar graph component showming a breakdown of reported incidents by assigned priotity." />
     ),
     allowDuplicates: false,
     item: {
@@ -762,10 +675,7 @@ export const LayoutToReadable: {
     i: 'timeHeatMap',
     readable: 'Time Heat Map',
     description: (
-      <FormattedMessage
-        defaultMessage="Heat map component showing incident count broken down by day and hour."
-        id="ZhoCrQ"
-      />
+      <FormattedMessage defaultMessage="Heat map component showing incident count broken down by day and hour." />
     ),
     allowDuplicates: false,
     item: {
@@ -786,10 +696,7 @@ export const LayoutToReadable: {
     i: 'customQuestionsCountGraph',
     readable: 'Incident Answer Count',
     description: (
-      <FormattedMessage
-        defaultMessage="Graph component that shows the results from custom incident questions. Once added to the report you can select the question to base the data on."
-        id="ZrJ6Yq"
-      />
+      <FormattedMessage defaultMessage="Graph component that shows the results from custom incident questions. Once added to the report you can select the question to base the data on." />
     ),
     allowDuplicates: true,
     item: {
@@ -810,10 +717,7 @@ export const LayoutToReadable: {
     i: 'userSessionsDonut',
     readable: 'User Session Radial Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Radial graph showing the breakdown of sessions across the web and mobile apps for the most active users."
-        id="3Vzg3a"
-      />
+      <FormattedMessage defaultMessage="Radial graph showing the breakdown of sessions across the web and mobile apps for the most active users." />
     ),
     allowDuplicates: false,
     item: {
@@ -834,10 +738,7 @@ export const LayoutToReadable: {
     i: 'userIncidentCountGraph',
     readable: 'User Incidents Count',
     description: (
-      <FormattedMessage
-        defaultMessage="Graph component showing the reported incident count for the top 10 users. Avaliable as a donut and bar graph."
-        id="q4jCRI"
-      />
+      <FormattedMessage defaultMessage="Graph component showing the reported incident count for the top 10 users. Avaliable as a donut and bar graph." />
     ),
     allowDuplicates: false,
     item: {
@@ -858,10 +759,7 @@ export const LayoutToReadable: {
     i: 'businessIncidentCountGraph',
     readable: 'Business Incidents Count',
     description: (
-      <FormattedMessage
-        defaultMessage="Graph component showing the incident count for the top 10 impacted business. Avaliable as a donut and bar graph."
-        id="JSXtuT"
-      />
+      <FormattedMessage defaultMessage="Graph component showing the incident count for the top 10 impacted business. Avaliable as a donut and bar graph." />
     ),
     allowDuplicates: false,
     item: {
@@ -882,10 +780,7 @@ export const LayoutToReadable: {
     i: 'businessLossRecoveredGraph',
     readable: 'Businesses Loss Recovered Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Bar graph component showing the incident loss values for the top 10 impacted business."
-        id="VMhJso"
-      />
+      <FormattedMessage defaultMessage="Bar graph component showing the incident loss values for the top 10 impacted business." />
     ),
     allowDuplicates: false,
     item: {
@@ -906,10 +801,7 @@ export const LayoutToReadable: {
     i: 'businessCrimeTypeGraph',
     readable: 'Business Crime Type Graph',
     description: (
-      <FormattedMessage
-        defaultMessage="Stacked bar graph component showing breackdown of incident types for the top 10 impacted business."
-        id="MB5ApS"
-      />
+      <FormattedMessage defaultMessage="Stacked bar graph component showing breackdown of incident types for the top 10 impacted business." />
     ),
     allowDuplicates: false,
     item: {

@@ -17,17 +17,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type {
-  AddUsersToBusinessMutation,
-  BusinessQuery,
-  CreateTodoMutation,
-  CreateUserInDatabaseMutation,
-  InviteExistingUserMutation,
-  ListActionsQuery,
-  ListBusinessUsersQuery,
-  QuestionGroupOnSchemeQuery,
-  UpdateTaskMutation,
-} from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEdit,
@@ -52,6 +42,15 @@ import LocatingCard from 'components/map/LocatingCard';
 import type { LocationData } from 'types/DataType';
 import useStyles from './ViewBusiness.styles';
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import type { BusinessQuery } from 'graphql/businesses/queries/business.generated';
+import type { ListBusinessUsersQuery } from 'graphql/users/queries/list-business-users.generated';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
+import type { ListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 
 interface UserTable {
   key: string;
@@ -147,7 +146,6 @@ const ViewBusiness = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Link to DEM',
-                  id: '14N7fW',
                 })}
               </Button>
             </Col>
@@ -160,7 +158,6 @@ const ViewBusiness = ({
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Edit Business',
-                  id: '9k1Jt/',
                 })}
               </Button>
             </Col>
@@ -176,7 +173,6 @@ const ViewBusiness = ({
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Delete',
-                  id: 'K3r6DQ',
                 })}
               </Button>
             </Col>
@@ -186,7 +182,6 @@ const ViewBusiness = ({
               <Typography.Title level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'Details',
-                  id: 'Lv0zJu',
                 })}
               </Typography.Title>
 
@@ -194,7 +189,6 @@ const ViewBusiness = ({
                 <Descriptions.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Name',
-                    id: 'HAlOn1',
                   })}
                   // style={{ paddingBottom: 8 }}
                 >
@@ -203,7 +197,6 @@ const ViewBusiness = ({
                 <Descriptions.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Site Number',
-                    id: 'rAGVXn',
                   })}
                 >
                   {loading ? (
@@ -212,7 +205,6 @@ const ViewBusiness = ({
                     data?.business?.siteNumber ||
                     intl.formatMessage({
                       defaultMessage: 'None',
-                      id: '450Fty',
                     })
                   )}
                 </Descriptions.Item>
@@ -229,7 +221,6 @@ const ViewBusiness = ({
                   <Descriptions.Item
                     label={intl.formatMessage({
                       defaultMessage: 'Parent',
-                      id: 'zTbLfn',
                     })}
                   >
                     <Link
@@ -243,7 +234,6 @@ const ViewBusiness = ({
                         data?.business?.parent?.name ||
                         intl.formatMessage({
                           defaultMessage: 'None',
-                          id: '450Fty',
                         })
                       )}
                     </Link>
@@ -253,7 +243,6 @@ const ViewBusiness = ({
                 <Descriptions.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Brands',
-                    id: 'jWfWEA',
                   })}
                 >
                   <Row>
@@ -266,10 +255,7 @@ const ViewBusiness = ({
                         </Tag>
                       ))
                     ) : (
-                      <FormattedMessage
-                        defaultMessage="No Brands"
-                        id="ZEz/PB"
-                      />
+                      <FormattedMessage defaultMessage="No Brands" />
                     )}
                   </Row>
                 </Descriptions.Item>
@@ -277,7 +263,6 @@ const ViewBusiness = ({
                 <Descriptions.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Groups',
-                    id: 'hzmswI',
                   })}
                 >
                   <Row gutter={[0, 8]}>
@@ -289,17 +274,13 @@ const ViewBusiness = ({
                         </Col>
                       ))
                     ) : (
-                      <FormattedMessage
-                        defaultMessage="No Groups"
-                        id="xt8fV1"
-                      />
+                      <FormattedMessage defaultMessage="No Groups" />
                     )}
                   </Row>
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Tags',
-                    id: '1EYCdR',
                   })}
                 >
                   <Row gutter={[0, 8]}>
@@ -310,14 +291,13 @@ const ViewBusiness = ({
                         </Col>
                       ))
                     ) : (
-                      <FormattedMessage defaultMessage="No Tag" id="hRci4c" />
+                      <FormattedMessage defaultMessage="No Tag" />
                     )}
                   </Row>
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Address',
-                    id: 'e6Ph5+',
                   })}
                   style={{ paddingBottom: 8 }}
                 >
@@ -340,7 +320,6 @@ const ViewBusiness = ({
                   <Typography.Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Users',
-                      id: 'YDMrKK',
                     })}
                   </Typography.Title>
                 </Col>
@@ -352,7 +331,6 @@ const ViewBusiness = ({
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'Add Existing',
-                              id: 'tUOcWp',
                             }),
                             key: '1',
                             onClick: toggleAddUser,
@@ -366,7 +344,6 @@ const ViewBusiness = ({
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'Invite New User',
-                              id: 'EbeHm3',
                             }),
                             key: '2',
                             onClick: toggleInviteUser,
@@ -392,7 +369,6 @@ const ViewBusiness = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add User',
-                        id: '7c3ANV',
                       })}
                     </Button>
                   </Dropdown>
@@ -406,7 +382,6 @@ const ViewBusiness = ({
                     dataIndex: 'name',
                     title: intl.formatMessage({
                       defaultMessage: 'Name',
-                      id: 'HAlOn1',
                     }),
                     render: (value, item) => (
                       <Link to={`/app/scheme-settings/users/view/${item.key}`}>
@@ -419,7 +394,6 @@ const ViewBusiness = ({
                     dataIndex: 'status',
                     title: intl.formatMessage({
                       defaultMessage: 'Status',
-                      id: 'tzMNF3',
                     }),
                     render: (value) => (
                       <Typography.Text
@@ -434,7 +408,6 @@ const ViewBusiness = ({
                     dataIndex: 'lastLogin',
                     title: intl.formatMessage({
                       defaultMessage: 'Last Login',
-                      id: 'LPUHNC',
                     }),
                   },
                   {
@@ -442,7 +415,6 @@ const ViewBusiness = ({
                     dataIndex: 'groups',
                     title: intl.formatMessage({
                       defaultMessage: 'Groups',
-                      id: 'hzmswI',
                     }),
                     render: (values: { id: string; name: string }[]) =>
                       values.map((group) => (
@@ -456,7 +428,6 @@ const ViewBusiness = ({
                       <Popconfirm
                         title={intl.formatMessage({
                           defaultMessage: 'Are you sure?',
-                          id: '2oCaym',
                         })}
                         onConfirm={() => onRemoveBusiness(item.key)}
                         overlayInnerStyle={{ padding: 10 }}
@@ -464,7 +435,6 @@ const ViewBusiness = ({
                         <Tooltip
                           title={intl.formatMessage({
                             defaultMessage: 'Remove From Business',
-                            id: 'NuAnYs',
                           })}
                         >
                           <Button
@@ -505,7 +475,6 @@ const ViewBusiness = ({
               <Typography.Title level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               </Typography.Title>
               <IncidentTable
@@ -520,7 +489,6 @@ const ViewBusiness = ({
                   <Typography.Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Activities',
-                      id: 'UmEsZF',
                     })}
                   </Typography.Title>
                 </Col>
@@ -539,7 +507,6 @@ const ViewBusiness = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Activity',
-                      id: 'VOiupa',
                     })}
                   </Button>
                 </Col>
@@ -561,7 +528,6 @@ const ViewBusiness = ({
               <Typography.Title level={4} style={{ marginBottom: 30 }}>
                 {intl.formatMessage({
                   defaultMessage: 'Recent Activity',
-                  id: 'nc8QpJ',
                 })}
               </Typography.Title>
 
@@ -598,7 +564,6 @@ const ViewBusiness = ({
                 <Empty
                   description={intl.formatMessage({
                     defaultMessage: 'No Recent Activity',
-                    id: 'oN/glA',
                   })}
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
@@ -611,7 +576,6 @@ const ViewBusiness = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Business',
-          id: '9k1Jt/',
         })}
         open={editVisible}
         onClose={toggleEdit}
@@ -625,7 +589,6 @@ const ViewBusiness = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link DEM',
-          id: 'Ag64m0',
         })}
         open={linkDemVisible}
         onClose={toggleLinkDem}
@@ -641,7 +604,6 @@ const ViewBusiness = ({
         width={700}
         title={intl.formatMessage({
           defaultMessage: 'Invite Existing User',
-          id: 'McI49v',
         })}
       >
         {inviteUserVisible && (
@@ -663,7 +625,6 @@ const ViewBusiness = ({
         width={700}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing User',
-          id: '5J4hv4',
         })}
       >
         {addUserVisible && (
@@ -678,7 +639,6 @@ const ViewBusiness = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Activity',
-          id: 'VOiupa',
         })}
         open={addTodo}
         width="600"
@@ -705,7 +665,6 @@ const ViewBusiness = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Complete Activity',
-          id: '8fwjt4',
         })}
         open={completeTodoVisible !== null}
         width={800}
@@ -725,7 +684,6 @@ const ViewBusiness = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'View Activity',
-          id: 'swvNLe',
         })}
         open={!!viewTodoVisible}
         width={800}
@@ -737,7 +695,6 @@ const ViewBusiness = ({
             onClose={() => setViewTodoVisible(null)}
             confirmText={intl.formatMessage({
               defaultMessage: 'Save Activity',
-              id: 'Z6L1UV',
             })}
             updateQuery={updateTodo}
             updateTodo={() => {}}

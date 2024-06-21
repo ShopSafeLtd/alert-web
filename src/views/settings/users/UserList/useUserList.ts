@@ -1,21 +1,16 @@
 import { useState } from 'react';
-import type {
-  CreateUserInDatabaseMutation,
-  InviteExistingUserMutation,
-  UserListQuery,
-  UserStatus,
-} from 'graphql/generated';
-import {
-  ListUsersDocument,
-  QueryMode,
-  Role,
-  SortOrder,
-  useSchemeGroupsQuery,
-  useUserListQuery,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { UserSort } from 'types/enums/user_sort';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type { UserListQuery } from '#/views/settings/users/UserList/UserList.generated';
+import { useUserListQuery } from '#/views/settings/users/UserList/UserList.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import type { UserStatus } from 'graphql/types';
+import { QueryMode, Role, SortOrder } from 'graphql/types';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { ListUsersDocument } from 'graphql/users/queries/list-users.generated';
 
 interface Return {
   data: UserListQuery | undefined;

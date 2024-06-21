@@ -16,8 +16,6 @@ import {
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { FormData } from './useAddQuestion';
-import type { AvailableQuestionsQuery } from '../../../graphql/generated';
-import { AnswerType } from '../../../graphql/generated';
 import {
   DatePreview,
   NumberPreview,
@@ -27,6 +25,8 @@ import {
   YesNoPreview,
 } from './previews';
 import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
+import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
+import { AnswerType } from 'graphql/types';
 
 interface AddQuestionViewProps {
   questionData: AvailableQuestionsQuery | undefined;
@@ -100,10 +100,10 @@ const AddQuestionView = ({
         return (
           <Radio.Group size="small">
             <Radio.Button value="true">
-              <FormattedMessage defaultMessage="Yes" id="a5msuh" />
+              <FormattedMessage defaultMessage="Yes" />
             </Radio.Button>
             <Radio.Button value="false">
-              <FormattedMessage defaultMessage="No" id="oUWADl" />
+              <FormattedMessage defaultMessage="No" />
             </Radio.Button>
           </Radio.Group>
         );
@@ -144,7 +144,6 @@ const AddQuestionView = ({
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Select Question',
-            id: 'yV1hME',
           })}
           name="selectedId"
         >
@@ -175,7 +174,6 @@ const AddQuestionView = ({
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Question',
-            id: 'kgOBET',
           })}
           name="question"
           hidden={!!selectedId}
@@ -186,7 +184,6 @@ const AddQuestionView = ({
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Required',
-            id: 'Seanpx',
           })}
           name="required"
           valuePropName="checked"
@@ -199,7 +196,6 @@ const AddQuestionView = ({
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Select type for answer',
-            id: 'pC1/Sb',
           })}
           name="type"
           hidden={!!selectedId || !question}
@@ -209,42 +205,36 @@ const AddQuestionView = ({
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Text',
-                  id: 'aA8bDw',
                 }),
                 value: AnswerType.String,
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Number',
-                  id: 'kFkPWB',
                 }),
                 value: AnswerType.Number,
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Yes/No',
-                  id: 'KgcF6B',
                 }),
                 value: AnswerType.Boolean,
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Date',
-                  id: 'P7PLVj',
                 }),
                 value: AnswerType.Date,
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Time',
-                  id: 'ug01Mk',
                 }),
                 value: AnswerType.Time,
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Select',
-                  id: 'kQAf2d',
                 }),
                 value: AnswerType.Select,
               },
@@ -261,7 +251,6 @@ const AddQuestionView = ({
           }}
           title={intl.formatMessage({
             defaultMessage: 'Options',
-            id: 'NDV5Mq',
           })}
           hidden={!!selectedId}
         >
@@ -276,7 +265,6 @@ const AddQuestionView = ({
                       new Error(
                         intl.formatMessage({
                           defaultMessage: 'Please add at least 2 options',
-                          id: 'VdoV2m',
                         })
                       )
                     );
@@ -286,7 +274,6 @@ const AddQuestionView = ({
                       new Error(
                         intl.formatMessage({
                           defaultMessage: 'Please fill all options',
-                          id: 'FyntBD',
                         })
                       )
                     );
@@ -312,7 +299,6 @@ const AddQuestionView = ({
                       <Button onClick={() => remove(field.name)}>
                         {intl.formatMessage({
                           defaultMessage: 'Remove',
-                          id: 'G/yZLu',
                         })}
                       </Button>
                     </Col>
@@ -333,7 +319,6 @@ const AddQuestionView = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Option',
-                      id: 'MMOk0m',
                     })}
                   </Button>
                   <Form.ErrorList errors={errors} />
@@ -347,7 +332,6 @@ const AddQuestionView = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Preview',
-          id: 'TJo5E6',
         })}
       >
         {generatePreview()}
@@ -357,7 +341,6 @@ const AddQuestionView = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Dependent Question',
-              id: 'GH/JnG',
             })}
             name="dependentOn"
           >
@@ -372,7 +355,6 @@ const AddQuestionView = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Dependent Answer',
-              id: 'uVG0Go',
             })}
             rules={[
               {
@@ -380,7 +362,6 @@ const AddQuestionView = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select an answer that this question will depend on to show in the form',
-                  id: 'DigMoX',
                 }),
               },
             ]}
@@ -393,7 +374,6 @@ const AddQuestionView = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Dependent Brands',
-              id: 'Lw8lSX',
             })}
             name="dependentBrands"
             hidden={brands?.length === 0}
@@ -408,7 +388,6 @@ const AddQuestionView = ({
             <Button disabled={saving || loading} onClick={() => onClose()}>
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -421,7 +400,6 @@ const AddQuestionView = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Submit',
-                id: 'wSZR47',
               })}
             </Button>
           </Col>

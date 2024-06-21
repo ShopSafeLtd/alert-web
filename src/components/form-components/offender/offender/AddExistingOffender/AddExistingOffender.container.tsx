@@ -1,14 +1,8 @@
 import React from 'react';
-import type {
-  Age,
-  Build,
-  Gender,
-  ImagePosition,
-  Race,
-} from 'graphql/generated';
 
 import View from './AddExistingOffender.view';
 import useAddExistingOffender from './useAddExistingOffender';
+import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
 
 export interface OffenderData {
   id: string;

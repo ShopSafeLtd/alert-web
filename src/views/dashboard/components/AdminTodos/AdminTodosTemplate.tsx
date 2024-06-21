@@ -58,7 +58,6 @@ const AdminTodosTemplate = ({
             <Title className={classes.title} style={{ fontSize: 16 }}>
               {intl.formatMessage({
                 defaultMessage: 'Activities',
-                id: 'UmEsZF',
               })}
             </Title>
           </Col>
@@ -75,7 +74,6 @@ const AdminTodosTemplate = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'New',
-                id: 'bW7B87',
               })}
             </Button>
           </Col>

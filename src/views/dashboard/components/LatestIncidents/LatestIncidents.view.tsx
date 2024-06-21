@@ -1,11 +1,12 @@
 import React from 'react';
 import { Card, Col, Divider, Row, Skeleton, Typography } from 'antd';
-import type { LatestIncidentsQuery } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import FormatCalendar from '#/utils/format-calendar-24h';
 import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
 import useStyles from './LatestIncidents.styles';
+import type { LatestIncidentsQuery } from '#/views/dashboard/graphql/queries/latest-incidents.generated';
 
 const { Title, Text } = Typography;
 
@@ -47,7 +48,6 @@ const LatestIncidents = ({
             <Title className={classes.title} style={{ fontSize: 16 }}>
               {intl.formatMessage({
                 defaultMessage: 'Latest Incidents',
-                id: 'O0r6mR',
               })}
             </Title>
           </Col>
@@ -75,13 +75,11 @@ const LatestIncidents = ({
           <Row wrap={false} className={classes.header}>
             <Col flex={1}>
               {intl.formatMessage({
-                id: 'Q8Qw5B',
                 defaultMessage: 'Description',
               })}
             </Col>
             <Col>
               {intl.formatMessage({
-                id: 'P7PLVj',
                 defaultMessage: 'Date',
               })}
             </Col>

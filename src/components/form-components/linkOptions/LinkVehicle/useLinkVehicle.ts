@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import type { ListVehiclesCardQuery } from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListVehiclesCardQuery,
-} from 'graphql/generated';
+
+import { QueryMode, SortOrder } from 'graphql/types';
 import { useStoreActions, useStoreState } from 'state';
 import type { DateType, VehicleData } from 'types/DataType';
 import type { VehicleFilters } from 'state/data-model';
 import { useGroupsContext } from '#/context/groups-context';
+import type { ListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/list-vehicles-card.generated';
+import { useListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/list-vehicles-card.generated';
 
 interface Props {
   onClose: () => void;

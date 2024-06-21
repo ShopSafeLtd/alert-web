@@ -1,6 +1,6 @@
-import type { RolesQuery } from 'graphql/generated';
-import { useRolesQuery } from 'graphql/generated';
 import { useStoreState } from '../../../state';
+import type { RolesQuery } from '#/views/roles/graphql/queries/roles.generated';
+import { useRolesQuery } from '#/views/roles/graphql/queries/roles.generated';
 
 interface Return {
   data: RolesQuery | undefined;

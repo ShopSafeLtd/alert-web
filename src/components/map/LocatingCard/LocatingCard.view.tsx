@@ -156,7 +156,6 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
             <Text className={classes.mapText}>
               {intl.formatMessage({
                 defaultMessage: 'View Larger Map',
-                id: '3LkujO',
               })}
             </Text>
           </div>

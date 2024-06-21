@@ -1,22 +1,20 @@
 import { useStoreActions, useStoreState } from 'state';
-import type {
-  CreateTodoMutation,
-  ListTodosQuery,
-  SchemeGroupsSelectQuery,
-} from 'graphql/generated';
-import {
-  useSchemeGroupsSelectQuery,
-  ListTodosDocument,
-  QueryMode,
-  SortOrder,
-  useListTodosQuery,
-  useUpdateTodoMutation,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListData } from '../useActivities';
 import type { TableProps } from 'antd';
 import type { TableItem } from '#/views/adminTodo/TodoList/TodoList.view';
+import type { ListTodosQuery } from 'graphql/todos/queries/list_todos.generated';
+import {
+  ListTodosDocument,
+  useListTodosQuery,
+} from 'graphql/todos/queries/list_todos.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { SchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
+import { useSchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useUpdateTodoMutation } from 'graphql/todos/mutations/update_todo.generated';
 
 interface Return {
   data:

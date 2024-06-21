@@ -2,16 +2,17 @@
 import React from 'react';
 import './styles.css';
 import type { FormInstance } from 'antd';
-import { Button, Col, Form, Row, Select, Tabs, Upload } from 'antd';
+import { Button, Col, Form, Tabs, Upload, Row, Select } from 'antd';
 import ReactDOMServer from 'react-dom/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
-import { Mg11Status } from 'graphql/generated';
+
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import SignatureInput from '../../../components/SignBox';
 import processText from '../../../utils/generate-text';
+import { Mg11Status } from 'graphql/types';
 
 interface Props {
   onSubmit: () => void;

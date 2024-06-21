@@ -5,11 +5,10 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
-import {
-  RecycledItemDocument,
-  RestoreOffenderDocument,
-} from 'graphql/generated';
+
 import useRestoreOffender from '../useRestoreOffender';
+import { RecycledItemDocument } from 'graphql/recycled/queries/recycled-item.generated';
+import { RestoreOffenderDocument } from 'graphql/recycled/mutations/restore-offender.generated';
 
 const mocks = [
   {

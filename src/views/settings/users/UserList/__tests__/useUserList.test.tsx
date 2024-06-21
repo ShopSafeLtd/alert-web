@@ -4,13 +4,11 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import {
-  ListSchemeUsersDocument,
-  QueryMode,
-  SchemeGroupsDocument,
-} from 'graphql/generated';
 import { FormattedMessage } from 'react-intl';
 import useUserList from '../useUserList';
+import { ListSchemeUsersDocument } from 'graphql/users/queries/list-scheme-users.generated';
+import { QueryMode } from 'graphql/types';
+import { SchemeGroupsDocument } from 'graphql/groups/queries/scheme-groups.generated';
 
 const mocks = [
   {

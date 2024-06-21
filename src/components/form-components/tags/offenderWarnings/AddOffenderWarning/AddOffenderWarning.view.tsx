@@ -41,7 +41,6 @@ const AddOffenderWarning = ({
             {intl.formatMessage({
               defaultMessage:
                 'Offender warnings are added to offenders to highlight important things about them, for example that they are prone to violence.',
-              id: 'qeYxWJ',
             })}
           </Text>
         </Col>
@@ -50,14 +49,13 @@ const AddOffenderWarning = ({
         <Col span={24}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a name for the new offender warning.',
-                  id: 'owzkCW',
                 }),
               },
             ]}
@@ -71,7 +69,6 @@ const AddOffenderWarning = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea rows={10} disabled={saving} />
@@ -83,14 +80,12 @@ const AddOffenderWarning = ({
             name="schemes"
             label={intl.formatMessage({
               defaultMessage: 'Schemes',
-              id: 'QgGevU',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please select at least one scheme.',
-                  id: 'iiG8RT',
                 }),
               },
             ]}
@@ -111,7 +106,7 @@ const AddOffenderWarning = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -121,7 +116,7 @@ const AddOffenderWarning = ({
               disabled={saving}
               loading={saving}
             >
-              {intl.formatMessage({ defaultMessage: 'Create', id: 'VzzYJk' })}
+              {intl.formatMessage({ defaultMessage: 'Create' })}
             </Button>
           </Col>
         </Row>

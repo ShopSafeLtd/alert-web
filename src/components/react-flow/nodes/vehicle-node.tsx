@@ -96,7 +96,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         >
           {intl.formatMessage({
             defaultMessage: 'Select Vehicle',
-            id: 'tnv+4a',
           })}
         </Button>
       </NodeToolbar>
@@ -125,7 +124,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
                     <Descriptions.Item
                       label={intl.formatMessage({
                         defaultMessage: 'Colour',
-                        id: '+e8vAT',
                       })}
                     >
                       {data?.vehicle?.colour}
@@ -135,7 +133,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
                     <Descriptions.Item
                       label={intl.formatMessage({
                         defaultMessage: 'Model',
-                        id: 'rhSI1/',
                       })}
                     >
                       {data?.vehicle?.model}
@@ -148,7 +145,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             <div style={{ height: '100%', zIndex: 6, position: 'relative' }}>
               {intl.formatMessage({
                 defaultMessage: 'Vehicle: Please select a vehicle',
-                id: 'tu6WTo',
               })}
             </div>
           )}

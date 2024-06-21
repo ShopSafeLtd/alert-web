@@ -66,7 +66,7 @@ const EditImageAnalyseList = ({
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">
         <Col>
           <Button disabled={saving} onClick={onClose}>
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -77,7 +77,7 @@ const EditImageAnalyseList = ({
             disabled={saving}
             loading={saving}
           >
-            {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+            {intl.formatMessage({ defaultMessage: 'Save' })}
           </Button>
         </Col>
       </Row>

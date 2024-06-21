@@ -11,7 +11,6 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:sonarjs/recommended-legacy',
     'plugin:unicorn/recommended',
     'plugin:import/recommended',
     'prettier',
@@ -26,6 +25,9 @@ module.exports = {
     project: './tsconfig.json',
   },
   settings: {
+    react: {
+      version: 'detect',
+    },
     'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -46,14 +48,12 @@ module.exports = {
   plugins: [
     '@stylistic/migrate',
     '@stylistic',
-    'sonarjs',
     'unicorn',
     'formatjs',
     'import',
   ],
   ignorePatterns: ['.eslintrc.js', '.postInstall.js'],
   rules: {
-    quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'block-scoped-var': 'error',
     eqeqeq: 'error',
@@ -67,15 +67,10 @@ module.exports = {
     'no-self-compare': 'error',
     'wrap-iife': 'error',
     yoda: 'error',
+    'no-confusing-arrow': 'warn',
     'no-shadow': 1,
     'no-undef-init': 'error',
     'no-label-var': 'error',
-    'array-bracket-newline': [
-      'error',
-      {
-        multiline: true,
-      },
-    ],
     'array-bracket-spacing': ['error', 'never'],
     'block-spacing': ['error', 'never'],
     'comma-spacing': [
@@ -164,6 +159,7 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'react/jsx-key': 'warn',
     'formatjs/no-offset': 'error',
     'formatjs/enforce-default-message': ['error', 'literal'],
     'formatjs/no-literal-string-in-jsx': [
@@ -184,13 +180,14 @@ module.exports = {
         },
       },
     ],
-    'formatjs/enforce-id': [
-      'error',
-      {
-        idInterpolationPattern: '[sha512:contenthash:base64:6]',
-        idWhitelist: ['^const_.*'],
-      },
-    ],
+    // 'formatjs/enforce-id': [
+    //   'error',
+    //   {
+    //     idInterpolationPattern: '[sha512:contenthash:base64:6]',
+    //     idWhitelist: ['^const_.*'],
+    //   },
+    // ],
+    'formatjs/no-id': 'error',
     'formatjs/enforce-placeholders': ['error'],
     '@typescript-eslint/no-unused-vars': [
       'error',
@@ -222,11 +219,10 @@ module.exports = {
         allowForLoopAfterthoughts: true,
       },
     ],
+    '@typescript-eslint/no-unsafe-enum-comparison': 'warn', // TODO turn back on
     'no-void': ['error', { allowAsStatement: true }],
     'import/no-named-as-default': 0,
     'react/require-default-props': 'off',
-    'sonarjs/no-duplicate-string': 1,
-    'sonarjs/cognitive-complexity': 'warn',
     'react-hooks/rules-of-hooks': 'warn',
     '@typescript-eslint/space-before-blocks': 'off',
     'unicorn/filename-case': 'off',
@@ -241,7 +237,7 @@ module.exports = {
     'unicorn/prefer-query-selector': 'off',
     'no-restricted-exports': 'off',
     'unicorn/expiring-todo-comments': 'off',
-
+    'react/display-name': 'warn',
     '@typescript-eslint/consistent-type-imports': [
       'error',
       {

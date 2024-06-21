@@ -39,12 +39,12 @@ import {
 import moment from 'moment';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
-import type { OffenderReportQuery } from '../../../../graphql/generated';
-import { Age, Build, Gender, Race, Role } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
 import WatermarkImage from '../../../../components/images/WatermarkImage.view';
 import RadialGraph from '../../../../components/reports/graphs/radialGraph';
 import type { AllowedValue, Elements, MetaData } from '../../types';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import type { OffenderReportQuery } from 'graphql/reports/queries/offender-report.generated';
 
 const { Title, Text } = Typography;
 
@@ -138,7 +138,6 @@ const OffenderReportLayout = ({
               {intl.formatMessage(
                 {
                   defaultMessage: 'Alert ID: {ref}',
-                  id: 'umL9sI',
                 },
                 {
                   ref: data?.offenderReport?.offenderSummary?.reference,
@@ -148,7 +147,6 @@ const OffenderReportLayout = ({
             <Title level={4} type="secondary">
               {intl.formatMessage({
                 defaultMessage: 'Details',
-                id: 'Lv0zJu',
               })}
             </Title>
             <Descriptions column={2} className={classes.descriptions}>
@@ -156,7 +154,6 @@ const OffenderReportLayout = ({
                 className={classes.descItem}
                 label={intl.formatMessage({
                   defaultMessage: 'Gender',
-                  id: 'm8/n8c',
                 })}
               >
                 {getSex(
@@ -170,7 +167,6 @@ const OffenderReportLayout = ({
                     className={classes.descItem}
                     label={intl.formatMessage({
                       defaultMessage: 'Age',
-                      id: '9oNQSC',
                     })}
                   >
                     {getAge(
@@ -184,7 +180,6 @@ const OffenderReportLayout = ({
                     className={classes.descItem}
                     label={intl.formatMessage({
                       defaultMessage: 'Date of Birth',
-                      id: 'e9Z+tg',
                     })}
                   >
                     {moment(
@@ -197,7 +192,6 @@ const OffenderReportLayout = ({
                   className={classes.descItem}
                   label={intl.formatMessage({
                     defaultMessage: 'DoB Source',
-                    id: 'buqD4b',
                   })}
                 >
                   {data?.offenderReport?.offenderSummary?.dateSource}
@@ -207,7 +201,6 @@ const OffenderReportLayout = ({
                 className={classes.descItem}
                 label={intl.formatMessage({
                   defaultMessage: 'Build',
-                  id: 'RSctv1',
                 })}
               >
                 {getBuild(
@@ -218,7 +211,6 @@ const OffenderReportLayout = ({
                 className={classes.descItem}
                 label={intl.formatMessage({
                   defaultMessage: 'Ethnicity',
-                  id: 'XtCAFo',
                 })}
               >
                 {getEthnicity(
@@ -231,26 +223,22 @@ const OffenderReportLayout = ({
                 className={classes.descItem}
                 label={intl.formatMessage({
                   defaultMessage: 'Hair',
-                  id: 'e4YBbX',
                 })}
               >
                 {data?.offenderReport?.offenderSummary?.hair ||
                   intl.formatMessage({
                     defaultMessage: 'Unknown',
-                    id: '5jeq8P',
                   })}
               </Descriptions.Item>
               <Descriptions.Item
                 className={classes.descItem}
                 label={intl.formatMessage({
                   defaultMessage: 'Characteristics',
-                  id: 'xksukL',
                 })}
               >
                 {data?.offenderReport?.offenderSummary?.peculiarities ||
                   intl.formatMessage({
                     defaultMessage: 'None documented',
-                    id: '+CkDvs',
                   })}
               </Descriptions.Item>
             </Descriptions>
@@ -279,7 +267,6 @@ const OffenderReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Incidents Summary',
-                id: 'DGld1Y',
               })}
             </Title>
           </Col>
@@ -288,7 +275,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total Incidents',
-                id: 'pUlxda',
               })}
               value={data?.offenderReport?.incidentSummary?.totalIncidents || 0}
               prefix={
@@ -302,7 +288,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Last Incident (in range)',
-                id: 'lI3BDd',
               })}
               value={
                 data?.offenderReport?.incidentSummary?.lastIncidentDate
@@ -311,7 +296,6 @@ const OffenderReportLayout = ({
                     ).toLocaleDateString()
                   : intl.formatMessage({
                       defaultMessage: 'Unknown',
-                      id: '5jeq8P',
                     })
               }
               prefix={
@@ -326,7 +310,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Reported to Police',
-                id: 'LhTpVN',
               })}
               value={
                 data?.offenderReport?.incidentSummary
@@ -344,7 +327,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Police Attended',
-                id: 'ES0Nc8',
               })}
               value={
                 data?.offenderReport?.incidentSummary
@@ -362,7 +344,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Most Common Crime Type',
-                id: 'jbbNOa',
               })}
               value={
                 data?.offenderReport?.incidentSummary?.mostCommonCrimeType || ''
@@ -400,7 +381,6 @@ const OffenderReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Loss Summary',
-                id: 'O0DXtz',
               })}
             </Title>
           </Col>
@@ -409,7 +389,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total lost value',
-                id: 'xhO9Od',
               })}
               value={
                 data?.offenderReport?.lossTotals?.totalLostValue
@@ -419,7 +398,6 @@ const OffenderReportLayout = ({
                     )
                   : intl.formatMessage({
                       defaultMessage: 'No Losses',
-                      id: '9RLqIM',
                     })
               }
               prefix={
@@ -434,7 +412,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total recovered value',
-                id: 'OorvGS',
               })}
               value={
                 data?.offenderReport?.lossTotals?.totalRecoveredValue
@@ -445,7 +422,6 @@ const OffenderReportLayout = ({
                     )
                   : intl.formatMessage({
                       defaultMessage: 'No Recoveries',
-                      id: 'i7IHf9',
                     })
               }
               prefix={
@@ -460,7 +436,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss Rate',
-                id: 'VSxLGp',
               })}
               value={`${(
                 (data?.offenderReport?.lossTotals?.averageSuccessRate || 0) *
@@ -477,7 +452,6 @@ const OffenderReportLayout = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss per Incident',
-                id: 'k62cVY',
               })}
               value={
                 `£${(
@@ -499,7 +473,6 @@ const OffenderReportLayout = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Crime Types',
-          id: 'Piba4q',
         })}
         className="no-break"
         loading={loading}
@@ -560,7 +533,6 @@ const OffenderReportLayout = ({
             data={data?.offenderReport?.crimeTypeDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Crime Types',
-              id: 'BbTEjZ',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -574,11 +546,9 @@ const OffenderReportLayout = ({
             data={data?.offenderReport?.crimeTypeDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Crime Types',
-              id: 'BbTEjZ',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -588,7 +558,6 @@ const OffenderReportLayout = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Crime Types by Business',
-          id: '2pC0Hc',
         })}
         className="no-break"
         loading={loading}
@@ -610,7 +579,6 @@ const OffenderReportLayout = ({
           data={data?.offenderReport?.crimeTypeBusinessRadial}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types',
-            id: 'BbTEjZ',
           })}
         />
       </Card>
@@ -619,7 +587,6 @@ const OffenderReportLayout = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Loss/Recovered by Goods Type',
-          id: 'PziBb1',
         })}
         className="no-break"
         loading={loading}
@@ -643,7 +610,6 @@ const OffenderReportLayout = ({
           data={data?.offenderReport?.goodsTypeLossRecovered}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types',
-            id: 'BbTEjZ',
           })}
         />
       </Card>
@@ -653,7 +619,6 @@ const OffenderReportLayout = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Incident Time of Day',
-          id: 'CPGEqg',
         })}
         className="no-break"
         loading={loading}
@@ -714,7 +679,6 @@ const OffenderReportLayout = ({
             isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Incidents',
-              id: '+nJOH5',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -728,11 +692,9 @@ const OffenderReportLayout = ({
             isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Incidents',
-              id: '+nJOH5',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -743,7 +705,6 @@ const OffenderReportLayout = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Incident Month',
-          id: 'R3Hr1/',
         })}
         className="no-break"
         loading={loading}
@@ -804,7 +765,6 @@ const OffenderReportLayout = ({
             isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Incidents',
-              id: '+nJOH5',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -817,12 +777,10 @@ const OffenderReportLayout = ({
             data={data?.offenderReport?.incidentMonthGraph}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Incidents',
-              id: '+nJOH5',
             })}
             isPrinting={isPrinting}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -849,13 +807,11 @@ const OffenderReportLayout = ({
         <BarGraph
           labelFormat={intl.formatMessage({
             defaultMessage: 'Incidents by Day of Week',
-            id: 'B9s5+4',
           })}
           data={data?.offenderReport?.incidentDayOfWeekGraph}
           isPrinting={isPrinting}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Incidents',
-            id: '+nJOH5',
           })}
         />
       </Card>
@@ -881,7 +837,6 @@ const OffenderReportLayout = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Incidents',
-            id: 'mtr3R4',
           })}
         </Title>
         <Table
@@ -922,7 +877,6 @@ const OffenderReportLayout = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Targeted Businesses',
-            id: 'H79fAf',
           })}
         </Title>
         <Table
@@ -966,7 +920,6 @@ const OffenderReportLayout = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Targeted Goods',
-            id: 'dLBbg0',
           })}
         </Title>
         <Table
@@ -1013,7 +966,6 @@ const OffenderReportLayout = ({
           isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents Heat Map',
-            id: 'q7E1ai',
           })}
           data={
             data?.offenderReport?.incidentsTable?.incidents
@@ -1043,7 +995,6 @@ const OffenderReportLayout = ({
           }
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents to display',
-            id: 'Rp6Hio',
           })}
         />
       </Card>
@@ -1062,7 +1013,6 @@ const OffenderReportLayout = ({
         <Typography.Paragraph>
           {intl.formatMessage({
             defaultMessage: 'Page 1',
-            id: 'hEAGzW',
           })}
         </Typography.Paragraph>
       </div>
@@ -1081,7 +1031,6 @@ const OffenderReportLayout = ({
         <Typography.Paragraph>
           {intl.formatMessage({
             defaultMessage: 'Page 2',
-            id: 'Q3p9d3',
           })}
         </Typography.Paragraph>
       </div>
@@ -1098,7 +1047,7 @@ const OffenderReportLayout = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+          {intl.formatMessage({ defaultMessage: 'Page 3' })}
         </Typography.Paragraph>
       </div>
     ),
@@ -1114,7 +1063,7 @@ const OffenderReportLayout = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
+          {intl.formatMessage({ defaultMessage: 'Page 4' })}
         </Typography.Paragraph>
       </div>
     ),

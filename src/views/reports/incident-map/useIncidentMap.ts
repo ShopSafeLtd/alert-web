@@ -1,20 +1,17 @@
 import type { Scheme } from 'state';
 import { useStoreState } from 'state';
-import type {
-  BrandsQuery,
-  BusinessLocationsQuery,
-  IncidentMapQuery,
-  IndustriesQuery,
-  SchemeGroupsQuery,
-} from 'graphql/generated';
-import {
-  useBrandsQuery,
-  useBusinessLocationsQuery,
-  useIncidentMapQuery,
-  useIndustriesQuery,
-  useSchemeGroupsQuery,
-} from 'graphql/generated';
+
 import { useState } from 'react';
+import type { IncidentMapQuery } from 'graphql/reports/queries/incident-map.generated';
+import { useIncidentMapQuery } from 'graphql/reports/queries/incident-map.generated';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import type { BusinessLocationsQuery } from 'graphql/businesses/queries/business-locations.generated';
+import { useBusinessLocationsQuery } from 'graphql/businesses/queries/business-locations.generated';
+import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+import type { IndustriesQuery } from 'graphql/industry/industries.generated';
+import { useIndustriesQuery } from 'graphql/industry/industries.generated';
 
 interface Return {
   data: IncidentMapQuery | undefined;

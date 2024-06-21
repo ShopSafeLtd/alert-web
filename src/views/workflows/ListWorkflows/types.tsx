@@ -17,17 +17,17 @@ const useCreateColumns = () => {
   const navigate = useNavigate();
   const coloumns: ColumnsType<WorkflowItem> = [
     {
-      title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+      title: <FormattedMessage defaultMessage="Name" />,
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: <FormattedMessage id="grJVon" defaultMessage="Triggered Off" />,
+      title: <FormattedMessage defaultMessage="Triggered Off" />,
       dataIndex: 'triggeredOff',
       key: 'triggeredOff',
     },
     {
-      title: <FormattedMessage id="2cwtxb" defaultMessage="Times Run" />,
+      title: <FormattedMessage defaultMessage="Times Run" />,
       dataIndex: 'timesRun',
       key: 'timesRun',
     },
@@ -37,7 +37,7 @@ const useCreateColumns = () => {
       key: 'action',
       width: 50,
       render: (_, record: WorkflowItem) => (
-        <Tooltip title={<FormattedMessage defaultMessage="Edit" id="wEQDC6" />}>
+        <Tooltip title={<FormattedMessage defaultMessage="Edit" />}>
           <Button
             size="small"
             onClick={() => {

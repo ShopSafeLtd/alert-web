@@ -1,4 +1,4 @@
-import { InvestigationStatus } from 'graphql/generated';
+import { InvestigationStatus } from 'graphql/types';
 
 const GetInvestigationStatusValues = {
   [InvestigationStatus.Open]: 'Open',

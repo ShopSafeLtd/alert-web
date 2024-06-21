@@ -1,11 +1,8 @@
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListCrimeGroupsQuery,
-} from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Return {
   data: ListCrimeGroupsQuery | undefined;

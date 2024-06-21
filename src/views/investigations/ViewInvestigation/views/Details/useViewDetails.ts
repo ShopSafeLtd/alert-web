@@ -1,26 +1,26 @@
-import type {
-  InvestigationSuggestionsQuery,
-  InvestigationSuggestionsQueryVariables,
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
-} from 'graphql/generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  InvestigationSuggestionsDocument,
-  TagType,
-  useDeleteUpdateMutation,
-  useInvestigationSuggestionsQuery,
-  useUpdateInvestigationMutation,
-  useUpdateUpdateMutation,
-  ViewInvestigationDocument,
-} from 'graphql/generated';
 import { useEffect, useMemo, useState } from 'react';
 import update from 'immutability-helper';
 import { Modal } from 'antd';
 import { useIntl } from 'react-intl';
 import { useStoreState } from '#/state';
 import hasPermission from '#/utils/has-permission';
+import type {
+  InvestigationSuggestionsQuery,
+  InvestigationSuggestionsQueryVariables,
+} from 'graphql/investigations/queries/investigation-suggestions.generated';
+import {
+  InvestigationSuggestionsDocument,
+  useInvestigationSuggestionsQuery,
+} from 'graphql/investigations/queries/investigation-suggestions.generated';
+import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
+import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/investigations/queries/view-investigation.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
 
 const { confirm } = Modal;
 
@@ -255,15 +255,12 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
       title: intl.formatMessage({
-        id: '2oCaym',
         defaultMessage: 'Are you sure?',
       }),
       content: intl.formatMessage({
-        id: 'gwznO0',
         defaultMessage: 'The update will be permanently deleted.',
       }),
       okText: intl.formatMessage({
-        id: 'K3r6DQ',
         defaultMessage: 'Delete',
       }),
 

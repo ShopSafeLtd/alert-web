@@ -41,13 +41,11 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
             trigger="click"
             title={intl.formatMessage({
               defaultMessage: 'Remove the crime group?',
-              id: 'Ek+T43',
             })}
             onConfirm={() => removeCrimeGroup(crimeGroup.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
@@ -68,7 +66,6 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
               intl.formatMessage(
                 {
                   defaultMessage: 'Alert ID: {ref}',
-                  id: 'umL9sI',
                 },
                 { ref: crimeGroup.reference }
               )}
@@ -80,7 +77,6 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
                 style={{ paddingBottom: 0 }}
                 label={intl.formatMessage({
                   defaultMessage: 'Alert ID',
-                  id: 'k8ZNgH',
                 })}
               >
                 {crimeGroup.reference}
@@ -90,7 +86,6 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
             <Descriptions.Item
               label={intl.formatMessage({
                 defaultMessage: 'Members',
-                id: '+a+2ug',
               })}
             >
               {crimeGroup?.totalOffenders || 0}

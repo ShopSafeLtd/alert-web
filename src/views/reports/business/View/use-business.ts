@@ -1,9 +1,10 @@
 import { useParams } from 'react-router-dom';
-import type { BusinessReportQuery } from 'graphql/generated';
-import { useBusinessReportQuery } from 'graphql/generated';
+
 import type { Moment } from 'moment';
 import moment from 'moment';
 import { useState } from 'react';
+import type { BusinessReportQuery } from 'graphql/businesses/queries/business-report.generated';
+import { useBusinessReportQuery } from 'graphql/businesses/queries/business-report.generated';
 
 interface Return {
   data: BusinessReportQuery | undefined;

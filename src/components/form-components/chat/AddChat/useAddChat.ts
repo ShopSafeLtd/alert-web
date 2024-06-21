@@ -1,13 +1,4 @@
 import { useState } from 'react';
-import type {
-  CreateChatMutation,
-  ListSchemeUsersQuery,
-} from 'graphql/generated';
-import {
-  SortOrder,
-  useCreateChatMutation,
-  useListSchemeUsersQuery,
-} from 'graphql/generated';
 
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -15,6 +6,11 @@ import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
+import { useCreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { SortOrder } from 'graphql/types';
 
 const { useForm } = Form;
 
@@ -85,11 +81,9 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The Chat has been added!',
-          id: 'qKyEqm',
         }),
         placement: 'bottomRight',
       });

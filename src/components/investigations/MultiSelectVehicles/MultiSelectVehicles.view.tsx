@@ -34,29 +34,27 @@ const SuggestedVehicles = ({
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
+            title: <FormattedMessage defaultMessage="Alert ID" />,
           },
           {
             key: 'registration',
             dataIndex: 'registration',
-            title: (
-              <FormattedMessage id="qv7ied" defaultMessage="Registration" />
-            ),
+            title: <FormattedMessage defaultMessage="Registration" />,
           },
           {
             key: 'make',
             dataIndex: 'make',
-            title: <FormattedMessage id="6AAM0P" defaultMessage="Make" />,
+            title: <FormattedMessage defaultMessage="Make" />,
           },
           {
             key: 'model',
             dataIndex: 'model',
-            title: <FormattedMessage id="rhSI1/" defaultMessage="Model" />,
+            title: <FormattedMessage defaultMessage="Model" />,
           },
           {
             key: 'colour',
             dataIndex: 'colour',
-            title: <FormattedMessage id="+e8vAT" defaultMessage="Colour" />,
+            title: <FormattedMessage defaultMessage="Colour" />,
           },
         ]}
         dataSource={
@@ -82,7 +80,7 @@ const SuggestedVehicles = ({
       <Row gutter={16} style={{ marginTop: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} type="text">
-            <FormattedMessage id="47FYwb" defaultMessage="Cancel" />
+            <FormattedMessage defaultMessage="Cancel" />
           </Button>
         </Col>
         <Col>
@@ -92,7 +90,7 @@ const SuggestedVehicles = ({
             onClick={() => handleAddSuggestion(selected)}
             type="primary"
           >
-            <FormattedMessage id="pooPfm" defaultMessage="Add Vehilces" />
+            <FormattedMessage defaultMessage="Add Vehilces" />
           </Button>
         </Col>
       </Row>

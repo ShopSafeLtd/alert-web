@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
-import type { AddressesQuery } from 'graphql/generated';
-import { useAddressesQuery } from 'graphql/generated';
-
 import { useStoreState } from 'state';
+import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
+import { useAddressesQuery } from 'graphql/incidents/queries/address.generated';
 
 interface FormData {
   selectedLocation: string;

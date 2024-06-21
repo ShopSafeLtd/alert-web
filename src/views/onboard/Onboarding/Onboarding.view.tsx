@@ -1,24 +1,17 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 import { Card, Steps } from 'antd';
-import AccountDetail from 'components/onboarding/Onboarding/AccountDetail';
-import Terms from 'components/onboarding/Onboarding/Terms';
-import { useIntl } from 'react-intl';
-import { Route, Routes } from 'react-router-dom';
-import type { CurrentSchemeTermsQuery } from '../../../graphql/generated';
-import SchemeTerms from '../../../components/onboarding/Onboarding/SchemeTerms';
-
-const { Step } = Steps;
-
-interface AccountData {
-  fullName: string;
-}
+import AccountDetail from '#/components/onboarding/Onboarding/AccountDetail/AccountDetail.container';
+import Terms from '#/components/onboarding/Onboarding/Terms/Terms.view';
+import SchemeTerms from '#/components/onboarding/Onboarding/SchemeTerms';
+import type { AccountData } from './useOnboarding';
+import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
 
 interface Props {
   onSubmit: () => void;
   saving: boolean;
   current: number;
-  setCurrent: (value: number) => void;
   onBack: () => void;
   updateAccountDetail: (value: AccountData | undefined) => void;
   updateTermsSigned: () => void;
@@ -26,13 +19,13 @@ interface Props {
   loading: boolean;
   schemeTerms: CurrentSchemeTermsQuery | undefined;
   name: string;
+  accountDetail: AccountData | undefined;
 }
 
 const Onboarding = ({
   onSubmit,
   saving,
   current,
-  setCurrent,
   onBack,
   updateAccountDetail,
   updateTermsSigned,
@@ -40,6 +33,7 @@ const Onboarding = ({
   schemeTerms,
   updateSchemeTermsSigned,
   name,
+  accountDetail,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -49,75 +43,50 @@ const Onboarding = ({
           type="navigation"
           current={current}
           className="site-navigation-steps"
-        >
-          <Step
-            title={intl.formatMessage({
-              defaultMessage: 'Account Details',
-              id: 'mYx8sv',
-            })}
-          />
-          <Step
-            title={intl.formatMessage({
-              defaultMessage: 'Terms & Conditions',
-              id: 'arPp4e',
-            })}
-          />
-          {schemeTerms?.scheme?.currentTerms?.id && (
-            <Step
-              title={intl.formatMessage({
+          items={[
+            {
+              title: intl.formatMessage({
+                defaultMessage: 'Account Details',
+              }),
+            },
+            {
+              title: intl.formatMessage({
+                defaultMessage: 'Terms & Conditions',
+              }),
+            },
+            {
+              title: intl.formatMessage({
                 defaultMessage: 'Scheme Terms & Conditions',
-                id: 'n6SkPt',
-              })}
-            />
-          )}
-        </Steps>
-        <Routes>
-          <Route
-            index
-            element={
-              <AccountDetail
-                update={updateAccountDetail}
-                setCurrent={setCurrent}
-              />
-            }
+              }),
+            },
+          ]}
+        />
+
+        {current === 0 && (
+          <AccountDetail
+            update={updateAccountDetail}
+            accountDetail={accountDetail}
           />
-          {/* <Route
-            path="/*"
-            element={
-              <Account
-              // handleChange={handleDetailsChange}
-              // values={details}
-              // loading={loading}
-              />
-            }
-          /> */}
-          <Route
-            path="terms-conditions"
-            element={
-              <Terms
-                onSubmit={onSubmit}
-                update={updateTermsSigned}
-                saving={saving}
-                onBack={onBack}
-                setCurrent={setCurrent}
-              />
-            }
+        )}
+        {current === 1 && (
+          <Terms
+            onSubmit={onSubmit}
+            update={updateTermsSigned}
+            saving={saving}
+            onBack={onBack}
           />
-          <Route
-            path="scheme-terms-conditions"
-            element={
-              <SchemeTerms
-                onSubmit={onSubmit}
-                update={updateSchemeTermsSigned}
-                updateBox={updateTermsSigned}
-                saving={saving}
-                setCurrent={setCurrent}
-                content={schemeTerms?.scheme?.currentTerms?.content || ''}
-                name={name}
-              />
-            }
+        )}
+        {current === 2 && (
+          <SchemeTerms
+            onSubmit={onSubmit}
+            update={updateSchemeTermsSigned}
+            updateBox={updateTermsSigned}
+            saving={saving}
+            onBack={onBack}
+            content={schemeTerms?.scheme?.currentTerms?.content || ''}
+            name={name}
           />
-        </Routes>
+        )}
       </Card>
     </div>
   );

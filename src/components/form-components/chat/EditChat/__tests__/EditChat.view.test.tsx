@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditChat from '../EditChat.view';
-import { UserStatus } from '../../../../../graphql/generated';
+import { UserStatus } from 'graphql/types';
 
 describe('Detail Officer View', () => {
   const data = {

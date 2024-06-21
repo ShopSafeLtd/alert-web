@@ -125,7 +125,6 @@ const ImagesList = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Edit Image',
-                        id: '9UlLIw',
                       })}
                     </Button>
 
@@ -133,16 +132,13 @@ const ImagesList = ({
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the image?',
-                        id: 'bRha+v',
                       })}
                       onConfirm={() => onDeleteImage(image.id)}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >
@@ -160,7 +156,6 @@ const ImagesList = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Delete Image',
-                          id: 'u5uVrC',
                         })}
                       </Button>
                     </Popconfirm>
@@ -185,7 +180,6 @@ const ImagesList = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'DownLoad Image',
-                        id: 'F3WRRU',
                       })}
                     </Button>
                   </div>

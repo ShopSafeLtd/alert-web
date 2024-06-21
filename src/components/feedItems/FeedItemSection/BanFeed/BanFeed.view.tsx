@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -13,6 +13,7 @@ import { useIntl } from 'react-intl';
 import ImageContainer from '../ImageContainer';
 import useStyles from './BanFeed.styles';
 import { formatBanType } from '#/types/enums/ban-type';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -89,11 +90,9 @@ const BanFeed = ({
                   confirm({
                     title: intl.formatMessage({
                       defaultMessage: 'Do you want to delete the feed item?',
-                      id: 'VZeM4L',
                     }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
-                      id: 'JDJoIZ',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
@@ -120,7 +119,6 @@ const BanFeed = ({
                 <Text style={{ fontSize: 14 }} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Type:',
-                    id: 'uS4sop',
                   })}
                   {formatBanType(type)}
                 </Text>

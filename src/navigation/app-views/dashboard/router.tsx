@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import { PermissionMethod, PermissionModel } from 'graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import Dashboard from '#/views/dashboard/FeedItems.container';
 import { DashboardProvider } from '#/views/dashboard/Dashboard.context';
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
@@ -15,7 +15,6 @@ const DashboardRouter = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Dashboard',
-        id: 'hzSNj4',
       })}
     >
       <Routes>

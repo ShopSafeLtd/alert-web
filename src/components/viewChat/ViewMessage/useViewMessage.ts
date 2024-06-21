@@ -1,34 +1,5 @@
 import { useEffect, useState } from 'react';
-import type {
-  Age,
-  Build,
-  ChatMessagesQuery,
-  ChatMessagesQueryVariables,
-  ChatQuery,
-  ChatQueryVariables,
-  CreateMessageMutation,
-  DeleteChatMutation,
-  DeleteMessageMutation,
-  Gender,
-  Race,
-  UserChatsQuery,
-  UserChatsQueryVariables,
-} from 'graphql/generated';
-import {
-  ChatDocument,
-  ChatMessagesDocument,
-  ImagePosition,
-  MessageItemType,
-  MessagesSubscriptionDocument,
-  Role,
-  SortOrder,
-  useChatMessagesQuery,
-  useChatQuery,
-  useCreateMessageMutation,
-  useDeleteChatMutation,
-  useDeleteMessageMutation,
-  UserChatsDocument,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import type { FormInstance } from 'antd';
 import { Form, message, Modal, notification, Upload } from 'antd';
@@ -48,6 +19,36 @@ import type {
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
+import type { DeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
+import { useDeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+import { ImagePosition, MessageItemType, Role, SortOrder } from 'graphql/types';
+import type {
+  ChatMessagesQuery,
+  ChatMessagesQueryVariables,
+} from 'graphql/messages/queries/chat-messages.generated';
+import {
+  ChatMessagesDocument,
+  useChatMessagesQuery,
+} from 'graphql/messages/queries/chat-messages.generated';
+import type {
+  ChatQuery,
+  ChatQueryVariables,
+} from 'graphql/chat/queries/chat.generated';
+import {
+  ChatDocument,
+  useChatQuery,
+} from 'graphql/chat/queries/chat.generated';
+import { MessagesSubscriptionDocument } from 'graphql/messages/subscriptions/new_message.generated';
+import type {
+  UserChatsQuery,
+  UserChatsQueryVariables,
+} from 'graphql/userChat/queries/user_chats.generated';
+import { UserChatsDocument } from 'graphql/userChat/queries/user_chats.generated';
+import type { CreateMessageMutation } from 'graphql/messages/mutations/create_message.generated';
+import { useCreateMessageMutation } from 'graphql/messages/mutations/create_message.generated';
+import type { DeleteMessageMutation } from 'graphql/messages/mutations/delete_message.generated';
+import { useDeleteMessageMutation } from 'graphql/messages/mutations/delete_message.generated';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -638,11 +639,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setSaving(false);
       notification.success({
         message: intl.formatMessage({
-          id: 'dvDKi/',
           defaultMessage: 'Successfully Deleted!',
         }),
         description: intl.formatMessage({
-          id: 'ihAHg9',
           defaultMessage: 'The task has been deleted!',
         }),
         placement: 'bottomRight',
@@ -668,11 +667,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const deleteMessageConfirm = (currentId: string) => {
     confirm({
       title: intl.formatMessage({
-        id: 'Dg5ys8',
         defaultMessage: 'Do you want to delete the task?',
       }),
       content: intl.formatMessage({
-        id: 'JDJoIZ',
         defaultMessage: 'This action cannot be undone.',
       }),
       onOk() {
@@ -687,11 +684,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       navigate('/app/chat');
       notification.success({
         message: intl.formatMessage({
-          id: 'dvDKi/',
           defaultMessage: 'Successfully Deleted!',
         }),
         description: intl.formatMessage({
-          id: 'ihAHg9',
           defaultMessage: 'The task has been deleted!',
         }),
         placement: 'bottomRight',
@@ -706,15 +701,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const deleteChatConfirm = () => {
     confirm({
       title: intl.formatMessage({
-        id: 'XX7iFo',
         defaultMessage: 'Do you want to delete the chat?',
       }),
       content: intl.formatMessage({
-        id: 'JDJoIZ',
         defaultMessage: 'This action cannot be undone.',
       }),
       okText: intl.formatMessage({
-        id: 'K3r6DQ',
         defaultMessage: 'Delete',
       }),
       onOk() {
@@ -820,7 +812,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         intl.formatMessage({
           defaultMessage:
             'This image already exists, please choose another one.',
-          id: 'ILB9M+',
         })
       );
     }
@@ -885,7 +876,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     update: updateData,
   });
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (
       inputStr.length === 0 &&
       fileList.length === 0 &&
@@ -898,7 +889,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       void message.info(
         intl.formatMessage({
           defaultMessage: 'The message cannot be empty!',
-          id: 'wkhZ0u',
         })
       );
     } else {

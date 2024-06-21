@@ -13,11 +13,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type {
-  InvestigationSuggestionsQuery,
-  ViewInvestigationQuery,
-} from 'graphql/generated';
-import { InvestigationStatus } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMagnifyingGlass,
@@ -48,6 +44,9 @@ import useStyles from './ViewDetails.styles';
 
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
 import TabContent from '../../../../../components/TabContent';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
+import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
+import { InvestigationStatus } from 'graphql/types';
 
 const { Title, Paragraph } = Typography;
 
@@ -214,7 +213,6 @@ const ViewInvestigation = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Edit Details',
-                      id: 'A2fHI3',
                     })}
                   </Button>
                 </Col>
@@ -230,7 +228,6 @@ const ViewInvestigation = ({
                   <Statistic
                     title={intl.formatMessage({
                       defaultMessage: 'Total Incidents',
-                      id: 'pUlxda',
                     })}
                     value={data?.investigation?.totalIncidents || 0}
                   />
@@ -239,7 +236,6 @@ const ViewInvestigation = ({
                   <Statistic
                     title={intl.formatMessage({
                       defaultMessage: 'Total Offenders',
-                      id: 'Pyo0l3',
                     })}
                     value={data?.investigation?.totalOffenders || 0}
                   />
@@ -248,7 +244,6 @@ const ViewInvestigation = ({
                   <Statistic
                     title={intl.formatMessage({
                       defaultMessage: 'Total Loss',
-                      id: 'LPr3Nh',
                     })}
                     value={`£${
                       data?.investigation?.totalValue?.toLocaleString() || 0
@@ -259,7 +254,6 @@ const ViewInvestigation = ({
                   <Statistic
                     title={intl.formatMessage({
                       defaultMessage: 'Total Value Recovered',
-                      id: 't+iLve',
                     })}
                     value={`£${
                       data?.investigation?.totalRecoveredValue?.toLocaleString() ||
@@ -271,7 +265,6 @@ const ViewInvestigation = ({
                   <Statistic
                     title={intl.formatMessage({
                       defaultMessage: 'Loss Rate',
-                      id: 'mQPFSj',
                     })}
                     value={`${
                       data?.investigation?.totalTheftSuccess?.toFixed(0) || 0
@@ -286,7 +279,6 @@ const ViewInvestigation = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Offenders',
-                      id: 'xb54TN',
                     })}
                   </Title>
                 </Col>
@@ -305,7 +297,6 @@ const ViewInvestigation = ({
                         {suggestedData.investigation?.suggestedOffenders.length}{' '}
                         {intl.formatMessage({
                           defaultMessage: 'Suggested Offenders',
-                          id: '5UuihT',
                         })}
                       </Button>
                     </Col>
@@ -317,7 +308,6 @@ const ViewInvestigation = ({
                         items={[
                           {
                             label: intl.formatMessage({
-                              id: 'w4XD3a',
                               defaultMessage: 'Add Existing Offender',
                             }),
                             key: '1',
@@ -331,7 +321,6 @@ const ViewInvestigation = ({
                           },
                           {
                             label: intl.formatMessage({
-                              id: '58ir77',
                               defaultMessage: 'Create New Offender',
                             }),
                             key: '2',
@@ -358,7 +347,6 @@ const ViewInvestigation = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Offenders',
-                        id: 'KaNxum',
                       })}
                     </Button>
                   </Dropdown>
@@ -382,7 +370,6 @@ const ViewInvestigation = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Incidents',
-                      id: 'mtr3R4',
                     })}
                   </Title>
                 </Col>
@@ -399,7 +386,6 @@ const ViewInvestigation = ({
                         {suggestedData.investigation.suggestedIncidents.length}{' '}
                         {intl.formatMessage({
                           defaultMessage: 'Suggested Incidents',
-                          id: 'CKS/s0',
                         })}
                       </Button>
                     </Col>
@@ -413,7 +399,6 @@ const ViewInvestigation = ({
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'Add Existing Incidents',
-                              id: 'Ppof3h',
                             }),
                             key: '1',
                             icon: (
@@ -427,7 +412,6 @@ const ViewInvestigation = ({
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'Create New Incident',
-                              id: 'eyw+JQ',
                             }),
                             key: '2',
                             icon: (
@@ -454,7 +438,6 @@ const ViewInvestigation = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Incidents',
-                        id: 'kKj7sq',
                       })}
                     </Button>
                   </Dropdown>
@@ -490,7 +473,6 @@ const ViewInvestigation = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Vehicles',
-                      id: 'r6wuJ3',
                     })}
                   </Title>
                 </Col>
@@ -507,7 +489,6 @@ const ViewInvestigation = ({
                         {suggestedData.investigation.suggestedVehicles.length}{' '}
                         {intl.formatMessage({
                           defaultMessage: 'Suggested Vehicles',
-                          id: 'fzU5Bx',
                         })}
                       </Button>
                     </Col>
@@ -520,7 +501,6 @@ const ViewInvestigation = ({
                         items={[
                           {
                             label: intl.formatMessage({
-                              id: 'goP1s6',
                               defaultMessage: 'Add Existing Vehicles',
                             }),
                             key: '1',
@@ -534,7 +514,6 @@ const ViewInvestigation = ({
                           },
                           {
                             label: intl.formatMessage({
-                              id: 'xiAZxN',
                               defaultMessage: 'Create New Vehicle',
                             }),
                             key: '2',
@@ -560,7 +539,6 @@ const ViewInvestigation = ({
                       }
                     >
                       {intl.formatMessage({
-                        id: 'iKGwyV',
                         defaultMessage: 'Add Vehicles',
                       })}
                     </Button>
@@ -586,7 +564,6 @@ const ViewInvestigation = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Crime Groups',
-                      id: 'a0aLil',
                     })}
                   </Title>
                 </Col>
@@ -598,7 +575,6 @@ const ViewInvestigation = ({
                         items={[
                           {
                             label: intl.formatMessage({
-                              id: '3HDZC+',
                               defaultMessage: 'Add Existing Crime Groups',
                             }),
                             key: '1',
@@ -612,7 +588,6 @@ const ViewInvestigation = ({
                           },
                           {
                             label: intl.formatMessage({
-                              id: 'zYHO7w',
                               defaultMessage: 'Create New Crime Group',
                             }),
                             key: '2',
@@ -638,7 +613,6 @@ const ViewInvestigation = ({
                       }
                     >
                       {intl.formatMessage({
-                        id: 'mYgStg',
                         defaultMessage: 'Add Crime Groups',
                       })}
                     </Button>
@@ -662,7 +636,6 @@ const ViewInvestigation = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Activities',
-                      id: 'UmEsZF',
                     })}
                   </Title>
                 </Col>
@@ -683,7 +656,6 @@ const ViewInvestigation = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Activity',
-                      id: 'VOiupa',
                     })}
                   </Button>
                 </Col>
@@ -729,12 +701,11 @@ const ViewInvestigation = ({
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Edit Update Content',
-          id: '8sZeJM',
         })}
         open={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
-        okText={intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+        okText={intl.formatMessage({ defaultMessage: 'Save' })}
       >
         <Input
           value={editUpdateInput}
@@ -745,7 +716,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Suggested Offenders',
-          id: '5UuihT',
         })}
         open={viewSuggestedOffenders}
         onClose={toggleViewSuggestedOffenders}
@@ -761,7 +731,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Suggested Incidents',
-          id: 'CKS/s0',
         })}
         open={viewSuggestedIncidents}
         onClose={toggleViewSuggestedIncidents}
@@ -777,7 +746,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Suggested Vehicles',
-          id: 'fzU5Bx',
         })}
         open={viewSuggestedVehicles}
         onClose={toggleViewSuggestedVehicles}
@@ -793,7 +761,6 @@ const ViewInvestigation = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident',
-          id: 'E6VJFN',
         })}
         open={!!editIncidentId}
         width="600"

@@ -12,22 +12,17 @@ const MySafety = () => {
     <div style={{ padding: 20 }}>
       <Card>
         <Typography.Title level={4}>
-          <FormattedMessage id="0gOWfx" defaultMessage="Intel One Import" />
+          <FormattedMessage defaultMessage="Intel One Import" />
         </Typography.Title>
         <Typography.Text>
-          <FormattedMessage
-            id="BmgGnd"
-            defaultMessage="Select a csv file from Intel One to import it."
-          />
+          <FormattedMessage defaultMessage="Select a csv file from Intel One to import it." />
         </Typography.Text>
         <Form onFinish={onSubmit} layout="vertical">
           <Form.Item
             label={intl.formatMessage({
-              id: '6FC4x9',
               defaultMessage: 'CSV Data',
             })}
             tooltip={intl.formatMessage({
-              id: 'EGnxkC',
               defaultMessage: 'Upload the CSV file from Intel One.',
             })}
             name="intelOne"
@@ -37,11 +32,9 @@ const MySafety = () => {
           </Form.Item>
           <Form.Item
             label={intl.formatMessage({
-              id: 'hzmswI',
               defaultMessage: 'Groups',
             })}
             tooltip={intl.formatMessage({
-              id: 'dh1Etf',
               defaultMessage: 'Select the groups to import the data into.',
             })}
             name="groups"
@@ -56,7 +49,7 @@ const MySafety = () => {
               loading={saving}
               disabled={saving}
             >
-              <FormattedMessage id="cTiCAi" defaultMessage="Import Data" />
+              <FormattedMessage defaultMessage="Import Data" />
             </Button>
           </Form.Item>
         </Form>

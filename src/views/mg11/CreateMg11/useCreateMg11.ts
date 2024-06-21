@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
-import type { ListStatementTemplatesQuery } from 'graphql/generated';
-import {
-  Mg11Status,
-  useCreateMg11Mutation,
-  useListStatementTemplatesQuery,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
+import { useListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
+import { useCreateMg11Mutation } from 'graphql/mg11/mutations/create-mg11.generated';
+import { Mg11Status } from 'graphql/types';
 
 const { useForm } = Form;
 
@@ -121,12 +120,10 @@ const useCreateMg11 = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Created!',
-          id: 'ocw1NP',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The Mg11 has been created and sent to the witness to sign!',
-          id: 'kAfpt1',
         }),
         placement: 'bottomRight',
       });
@@ -171,7 +168,7 @@ const useCreateMg11 = (): Return => {
       ...data
     } = formData;
 
-    createMg11({
+    void createMg11({
       variables: {
         schemeId,
         data: {

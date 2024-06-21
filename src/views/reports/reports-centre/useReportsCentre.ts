@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import type {
-  ReportsCentreQuery,
-  ReportsCentreQueryVariables,
-} from 'graphql/generated';
-import {
-  ReportsCentreDocument,
-  useReportsCentreQuery,
-  useDeleteReportTemplateMutation,
-} from 'graphql/generated';
+
 import { useStoreState } from '#/state';
 import { notification } from 'antd';
 import { useIntl } from 'react-intl';
+import type {
+  ReportsCentreQuery,
+  ReportsCentreQueryVariables,
+} from '#/views/reports/reports-centre/reports-centre.generated';
+import {
+  ReportsCentreDocument,
+  useReportsCentreQuery,
+} from '#/views/reports/reports-centre/reports-centre.generated';
+import { useDeleteReportTemplateMutation } from 'graphql/reports/mutations/delete-report-template.generated';
 
 interface Return {
   data: ReportsCentreQuery | undefined;
@@ -36,7 +37,6 @@ const useReportsCentre = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted',
-          id: 'zJsyF1',
         }),
         placement: 'bottomRight',
       });
@@ -45,7 +45,6 @@ const useReportsCentre = (): Return => {
       notification.error({
         message: intl.formatMessage({
           defaultMessage: 'Could not delete report',
-          id: 'WvBNOw',
         }),
         placement: 'bottomRight',
       });

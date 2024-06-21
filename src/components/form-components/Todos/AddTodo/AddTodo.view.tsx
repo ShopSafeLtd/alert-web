@@ -20,9 +20,9 @@ import { useIntl } from 'react-intl';
 import { UploadOutlined } from '@ant-design/icons';
 import type { FormData } from './useAddTodo';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
-import type { QuestionGroupOnSchemeQuery } from '../../../../graphql/generated';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 import { useGroupsContext } from '#/context/groups-context';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 
 interface Props {
   onClose: () => void;
@@ -94,14 +94,12 @@ const AddTodo = ({
             <Form.Item
               name="name"
               label={intl.formatMessage({
-                id: 'HAlOn1',
                 defaultMessage: 'Name',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: '5Ei/wg',
                     defaultMessage: 'Please enter a name for the new to-do.',
                   }),
                 },
@@ -114,13 +112,11 @@ const AddTodo = ({
             <Form.Item
               name="questionGroup"
               label={intl.formatMessage({
-                id: 'lOuJa8',
                 defaultMessage: 'Activity Template',
               })}
             >
               <Select
                 placeholder={intl.formatMessage({
-                  id: 'C+ZsI4',
                   defaultMessage: 'No template selected',
                 })}
                 disabled={saving}
@@ -139,14 +135,12 @@ const AddTodo = ({
             <Form.Item
               name="dueDate"
               label={intl.formatMessage({
-                id: '8XUukm',
                 defaultMessage: 'Due Date',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: 'G4f9uY',
                     defaultMessage:
                       'Please select a due date for the new to-do.',
                   }),
@@ -166,14 +160,12 @@ const AddTodo = ({
             <Form.Item
               name="assignedUsers"
               label={intl.formatMessage({
-                id: '8oku8d',
                 defaultMessage: 'Assigned Users',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: '/TfPy3',
                     defaultMessage:
                       'Please selected at least one admin for the new to-do.',
                   }),
@@ -196,7 +188,6 @@ const AddTodo = ({
               name="groups"
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
               rules={[
                 {
@@ -204,7 +195,6 @@ const AddTodo = ({
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select at least one group for a user.',
-                    id: '0h0TWW',
                   }),
                 },
               ]}
@@ -226,7 +216,6 @@ const AddTodo = ({
             <Form.Item
               name="description"
               label={intl.formatMessage({
-                id: 'Q8Qw5B',
                 defaultMessage: 'Description',
               })}
             >
@@ -288,7 +277,6 @@ const AddTodo = ({
               <Typography.Title level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'Time Tracking',
-                  id: 'm1/6Jj',
                 })}
               </Typography.Title>
             )}
@@ -306,7 +294,6 @@ const AddTodo = ({
                         required: true,
                         message: intl.formatMessage({
                           defaultMessage: 'Please add a time for this user.',
-                          id: 'VVl5Mn',
                         }),
                       },
                     ]}
@@ -315,7 +302,6 @@ const AddTodo = ({
                       min={0}
                       addonAfter={intl.formatMessage({
                         defaultMessage: 'mins',
-                        id: '6G3yvH',
                       })}
                       disabled={saving}
                     />
@@ -329,7 +315,6 @@ const AddTodo = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Another User',
-                      id: 'sy3PlZ',
                     })}
                   </Typography.Paragraph>
                   <Select
@@ -359,7 +344,6 @@ const AddTodo = ({
           name="documents"
           label={intl.formatMessage({
             defaultMessage: 'Evidence',
-            id: '6g7+6N',
           })}
         >
           <Upload
@@ -372,7 +356,6 @@ const AddTodo = ({
             <Button icon={<UploadOutlined />}>
               {intl.formatMessage({
                 defaultMessage: 'Upload Document',
-                id: 'Kc9MAV',
               })}
             </Button>
           </Upload>
@@ -382,7 +365,6 @@ const AddTodo = ({
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
-                  id: '47FYwb',
                   defaultMessage: 'Cancel',
                 })}
               </Button>
@@ -390,7 +372,6 @@ const AddTodo = ({
             <Col>
               <Tooltip
                 title={intl.formatMessage({
-                  id: 'KF4Xpe',
                   defaultMessage: 'Create activity to be completed later.',
                 })}
               >
@@ -401,7 +382,6 @@ const AddTodo = ({
                   onClick={() => onSubmit(form.getFieldsValue())}
                 >
                   {intl.formatMessage({
-                    id: '8RIxKm',
                     defaultMessage: 'Create Activity',
                   })}
                 </Button>
@@ -415,7 +395,6 @@ const AddTodo = ({
                 loading={saving}
               >
                 {intl.formatMessage({
-                  id: 'svLGby',
                   defaultMessage: 'Create & Complete',
                 })}
               </Button>
@@ -426,7 +405,6 @@ const AddTodo = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add/Create Question',
-          id: '/vx2Ey',
         })}
         open={addQuestion}
         width="800"

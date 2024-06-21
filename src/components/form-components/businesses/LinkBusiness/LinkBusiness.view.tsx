@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Col, Input, Row, Table } from 'antd';
-import type { ListBusinessesQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
+import type { ListBusinessesQuery } from 'graphql/businesses/queries/list-businesses.generated';
 
 interface Props {
   data: ListBusinessesQuery | undefined;
@@ -40,7 +41,6 @@ const AddBusiness = ({
         style={{ marginBottom: 20 }}
         placeholder={intl.formatMessage({
           defaultMessage: 'Search for a business...',
-          id: 'qaJxSS',
         })}
         value={searchValue}
         onChange={(e) => onSearchBusiness(e.target.value)}
@@ -50,14 +50,13 @@ const AddBusiness = ({
           {
             key: 'name',
             dataIndex: 'name',
-            title: intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' }),
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
           },
           {
             key: 'address',
             dataIndex: 'address',
             title: intl.formatMessage({
               defaultMessage: 'Address',
-              id: 'e6Ph5+',
             }),
           },
         ]}
@@ -87,7 +86,7 @@ const AddBusiness = ({
       <Row gutter={16} justify="end">
         <Col>
           <Button onClick={onClose}>
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -99,7 +98,6 @@ const AddBusiness = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Link Business',
-              id: 'G+A6Wv',
             })}
           </Button>
         </Col>

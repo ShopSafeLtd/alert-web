@@ -1,9 +1,10 @@
 import React from 'react';
-import { IncidentPriority } from 'graphql/generated';
+
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 import { Tag } from 'antd';
 import type { IntlShape } from 'react-intl';
 import { useStoreActions, useStoreState } from '#/state';
+import { IncidentPriority } from 'graphql/types';
 
 const { CheckableTag } = Tag;
 
@@ -125,7 +126,7 @@ export const PrioButtonFilter = ({
             : leftStyle
         }
       >
-        {intl.formatMessage({ id: '477I0g', defaultMessage: 'Low' })}
+        {intl.formatMessage({ defaultMessage: 'Low' })}
       </CheckableTag>
 
       <CheckableTag
@@ -141,7 +142,7 @@ export const PrioButtonFilter = ({
             : middleStyle
         }
       >
-        {intl.formatMessage({ id: 'myq2ZL', defaultMessage: 'Normal' })}
+        {intl.formatMessage({ defaultMessage: 'Normal' })}
       </CheckableTag>
 
       <CheckableTag
@@ -157,7 +158,7 @@ export const PrioButtonFilter = ({
             : middleStyle
         }
       >
-        {intl.formatMessage({ id: 'ovJ26C', defaultMessage: 'Medium' })}
+        {intl.formatMessage({ defaultMessage: 'Medium' })}
       </CheckableTag>
 
       <CheckableTag
@@ -173,7 +174,7 @@ export const PrioButtonFilter = ({
             : rightStyle
         }
       >
-        {intl.formatMessage({ id: 'AxMhQr', defaultMessage: 'High' })}
+        {intl.formatMessage({ defaultMessage: 'High' })}
       </CheckableTag>
     </div>
   );

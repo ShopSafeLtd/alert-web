@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
-import { ArticlePriority } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import {
@@ -15,6 +14,8 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import ImageContainer from '../ImageContainer';
 import useStyles from './ArticleFeed.styles';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
+import { ArticlePriority } from 'graphql/types';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -91,11 +92,9 @@ const ArticleFeed = ({
                   confirm({
                     title: intl.formatMessage({
                       defaultMessage: 'Do you want to delete the feed item?',
-                      id: 'VZeM4L',
                     }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
-                      id: 'JDJoIZ',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');

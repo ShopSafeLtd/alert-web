@@ -4,7 +4,7 @@ import ListCrimeGroups from 'views/profiles/crime-groups/list-crime-groups';
 import CreateCrimeGroup from 'views/profiles/crime-groups/create-crime-group';
 import ViewCrimeGroup from 'views/profiles/crime-groups/view-crime-group';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
 
@@ -14,7 +14,6 @@ const CrimeGroups = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Crime groups',
-        id: '9iudu4',
       })}
     >
       <Routes>

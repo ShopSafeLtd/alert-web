@@ -1,4 +1,3 @@
-import { FeedItemType } from 'graphql/generated';
 import FeedItemSkeletonCard from '#/components/feedItems/FeedItemSection/FeedItemSkeletonCard';
 import IncidentFeed from '#/components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from '#/components/feedItems/FeedItemSection/OffenderFeed';
@@ -12,6 +11,7 @@ import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import { Card, Col, Empty } from 'antd';
 import useFeedItems from '#/views/dashboard/components/FeedItems/useFeedItems';
 import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
+import { FeedItemType } from 'graphql/types';
 
 const FeedItemCol = () => {
   const {
@@ -278,11 +278,9 @@ const FeedItemCol = () => {
               search === ''
                 ? intl.formatMessage({
                     defaultMessage: 'No Feed Items',
-                    id: 'mOem22',
                   })
                 : intl.formatMessage({
                     defaultMessage: 'No feed items match your search criteria',
-                    id: 'pQjC2k',
                   })
             }
           />

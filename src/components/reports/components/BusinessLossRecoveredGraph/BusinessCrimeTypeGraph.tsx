@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Typography } from 'antd';
-import type { BusinessLossRecoveredGraphQueryVariables } from 'graphql/generated';
-import { useBusinessLossRecoveredGraphQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import MultiBarGraph from '../../graphs/multiBarGraph';
+import type { BusinessLossRecoveredGraphQueryVariables } from './BusinessLossRecoveredGraph.generated';
+import { useBusinessLossRecoveredGraphQuery } from './BusinessLossRecoveredGraph.generated';
 
 interface Props {
   isPrinting: boolean;
@@ -33,7 +34,6 @@ const BusinessLossRecoveredGraph = ({
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
           defaultMessage: 'Business Loss Recovered Graph',
-          id: 'O7e2dP',
         })}
       </Typography.Title>
 
@@ -58,7 +58,6 @@ const BusinessLossRecoveredGraph = ({
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
-            id: 'QQSdHP',
           })}
         </Button>
       )}
@@ -67,7 +66,6 @@ const BusinessLossRecoveredGraph = ({
         data={data?.businessLossRecoveredGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Crime Types',
-          id: 'BbTEjZ',
         })}
         valueSymbol="£"
       />

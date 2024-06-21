@@ -1,26 +1,23 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import { useApolloClient } from '@apollo/client';
-import type {
-  EditIncidentFeedQuery,
-  IncidentPriority,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-} from 'graphql/generated';
-import {
-  Model,
-  QueryMode,
-  SearchBusinessesDocument,
-  TagType,
-  useEditIncidentFeedQuery,
-  useTagsQuery,
-  useUpdateIncidentMutation,
-  useUpdateIncidentBusinessMutation,
-} from 'graphql/generated';
+
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useGroupsContext } from '#/context/groups-context';
+import type { IncidentPriority } from 'graphql/types';
+import { Model, QueryMode, TagType } from 'graphql/types';
+import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/edit-incident-feed.generated';
+import { useEditIncidentFeedQuery } from 'graphql/incidents/queries/edit-incident-feed.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/businesses/queries/search-businesses.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
+import { useUpdateIncidentBusinessMutation } from 'graphql/incidents/mutations/update/update-incident-business.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
 
 export interface FormData {
   subject: string;
@@ -140,7 +137,6 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
           : [
               {
                 label: intl.formatMessage({
-                  id: 'hX5PAb',
                   defaultMessage: 'No results found',
                 }),
                 value: '',
@@ -156,11 +152,9 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The Incident has been updated!',
-          id: 'OkjwIC',
         }),
         placement: 'bottomRight',
       });

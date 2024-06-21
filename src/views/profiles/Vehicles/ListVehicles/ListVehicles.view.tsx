@@ -11,12 +11,7 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import type {
-  ImagePosition,
-  ListCustomGalleriesQuery,
-  ListVehiclesQuery,
-  SortOrder,
-} from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 // import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -31,6 +26,9 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import FormatCalendar from 'utils/format-calendar-24h';
 import type { Moment } from 'moment';
 import useStyles from './ListVehicles.styles';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import type { ImagePosition, SortOrder } from 'graphql/types';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
 interface Props {
   data: ListVehiclesQuery | undefined;
@@ -119,7 +117,6 @@ const ListVehicles = ({
             allowClear
             placeholder={intl.formatMessage({
               defaultMessage: 'Search vehicles...',
-              id: 'PoSlBr',
             })}
           />
         </Col>
@@ -143,7 +140,6 @@ const ListVehicles = ({
               <Button className={classes.selectBox}>
                 {intl.formatMessage({
                   defaultMessage: 'Custom Gallery',
-                  id: '/b4BmP',
                 })}
                 <FontAwesomeIcon
                   icon={faChevronDown}
@@ -157,7 +153,6 @@ const ListVehicles = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Sort & Filter',
-              id: 'f2g3SM',
             })}
           >
             <Button
@@ -170,7 +165,6 @@ const ListVehicles = ({
           <Button type="primary" onClick={onNavigate}>
             {intl.formatMessage({
               defaultMessage: 'Add New Vehicle',
-              id: 'cHbTr7',
             })}
           </Button>
         </Col>
@@ -220,7 +214,6 @@ const ListVehicles = ({
             dataIndex: 'reference',
             title: intl.formatMessage({
               defaultMessage: 'Alert ID',
-              id: 'k8ZNgH',
             }),
             render: (value, item) => (
               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -233,7 +226,6 @@ const ListVehicles = ({
             dataIndex: 'registration',
             title: intl.formatMessage({
               defaultMessage: 'Registration',
-              id: 'qv7ied',
             }),
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
@@ -242,14 +234,13 @@ const ListVehicles = ({
           {
             key: 'make',
             dataIndex: 'make',
-            title: intl.formatMessage({ defaultMessage: 'Make', id: '6AAM0P' }),
+            title: intl.formatMessage({ defaultMessage: 'Make' }),
           },
           {
             key: 'colour',
             dataIndex: 'colour',
             title: intl.formatMessage({
               defaultMessage: 'Colour',
-              id: '+e8vAT',
             }),
           },
           {
@@ -257,7 +248,6 @@ const ListVehicles = ({
             dataIndex: 'model',
             title: intl.formatMessage({
               defaultMessage: 'Model',
-              id: 'rhSI1/',
             }),
           },
           {
@@ -265,7 +255,6 @@ const ListVehicles = ({
             dataIndex: 'updatedAt',
             title: intl.formatMessage({
               defaultMessage: 'UpdatedAt',
-              id: 'tjQ2Mx',
             }),
             render: (value: Date | Moment) => FormatCalendar(value),
             sorter: (a, b) =>
@@ -304,7 +293,6 @@ const ListVehicles = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Vehicle Filters',
-          id: '1KlEM/',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}
@@ -324,7 +312,6 @@ const ListVehicles = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={!!addInvestigation}
         width="500"

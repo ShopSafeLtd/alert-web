@@ -1,10 +1,10 @@
-import type { UserEngagementQuery } from 'graphql/generated';
-import { useUserEngagementQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { RefObject } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useGroupsContext } from '#/context/groups-context';
+import type { UserEngagementQuery } from 'graphql/reports/queries/list-user-engagement.generated';
+import { useUserEngagementQuery } from 'graphql/reports/queries/list-user-engagement.generated';
 
 interface Return {
   loading: boolean;

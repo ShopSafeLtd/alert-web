@@ -2,7 +2,7 @@ import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './Todo.view';
 import useTodo from './useTodo';
-import type { UpdateTaskMutation } from '../../../../graphql/generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
 
 const ViewTodo = ({
   id,

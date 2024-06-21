@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import {
-  useRecycleIncidentMutation,
-  useUpdateIncidentMutation,
-} from 'graphql/generated';
-import { notification, Modal } from 'antd';
+
+import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
 
 const { confirm } = Modal;
 
@@ -31,11 +30,9 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Approved',
-          id: 'DWgpGc',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The Incident has been approved!',
-          id: '05bSdr',
         }),
         placement: 'bottomRight',
       });
@@ -50,16 +47,14 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
   const [recycleIncident] = useRecycleIncidentMutation({
     onCompleted: () => {
       setApproving(false);
-      navigate(`/app/incidents`);
+      navigate('/app/incidents');
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Rejected!',
-          id: 'C0DMPx',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been deleted from the feed and moved to the recycle bin.',
-          id: 'YagqVR',
         }),
         placement: 'bottomRight',
       });
@@ -73,14 +68,12 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: '51xeBs',
       }),
-      okText: intl.formatMessage({ defaultMessage: 'Reject', id: 'VzIOKf' }),
+      okText: intl.formatMessage({ defaultMessage: 'Reject' }),
       onOk() {
         setApproving(true);
         void recycleIncident({

@@ -1,22 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import { Form } from 'antd';
-import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
-import {
-  Age,
-  Build,
-  Gender,
-  Height,
-  Model,
-  Race,
-  Role,
-  SortOrder,
-  TagType,
-  useDiscImportDataMutation,
-  useListUsersQuery,
-  useSchemeGroupsQuery,
-  useTagsQuery,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
@@ -37,6 +22,23 @@ import type {
   NewOffender,
   NewUser,
 } from './DiscImport.types';
+import { useListUsersQuery } from 'graphql/users/queries/list-users.generated';
+import {
+  Age,
+  Build,
+  Gender,
+  Height,
+  Model,
+  Race,
+  Role,
+  SortOrder,
+  TagType,
+} from 'graphql/types';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useDiscImportDataMutation } from 'graphql/imports/disc-import.generated';
 
 const calcAge = (value: string) => {
   if (value === '45 - 64') return Age.FortyFifty;
@@ -744,7 +746,6 @@ const useDiscImport = (): Return => {
           id: uuidv4(),
           discId: offender.id,
           name:
-            // eslint-disable-next-line sonarjs/no-nested-template-literals
             `${offender.firstName}${
               offender.lastName ? ` ${offender.lastName}` : ''
             }` || 'Unidentified Offender',

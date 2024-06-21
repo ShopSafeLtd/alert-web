@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
-import { Role } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -27,6 +26,7 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { useIntl } from 'react-intl';
 import type { OffenderData } from 'types/DataType';
 import useStyles from './potentialOffenders.style';
+import { Role } from 'graphql/types';
 
 const { Title, Text } = Typography;
 
@@ -112,7 +112,7 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
           </Title>
           <Text>
             {intl.formatMessage(
-              { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+              { defaultMessage: 'Alert ID: {ref}' },
               { ref: offender.reference }
             )}
           </Text>
@@ -121,7 +121,6 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Alias: ',
-                  id: 'eZm/Sa',
                 })}
               >
                 {offender.alias.map((item) => (
@@ -139,7 +138,6 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Age',
-                      id: '9oNQSC',
                     })}
                   </span>
                 }
@@ -156,7 +154,7 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                     className={classes.descIcon}
                     icon={faMarsAndVenus}
                   />
-                  {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
+                  {intl.formatMessage({ defaultMessage: 'Sex' })}
                 </span>
               }
             >
@@ -171,7 +169,6 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Build',
-                    id: 'RSctv1',
                   })}
                 </span>
               }
@@ -187,7 +184,6 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Ethnicity',
-                    id: 'XtCAFo',
                   })}
                 </span>
               }
@@ -204,7 +200,6 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Hair',
-                      id: 'e4YBbX',
                     })}
                   </span>
                 }
@@ -224,7 +219,6 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Additional Information',
-                      id: 'laUK3e',
                     })}
                   </span>
                 }
@@ -240,7 +234,6 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                 <Button>
                   {intl.formatMessage({
                     defaultMessage: 'View Offender',
-                    id: 'GszQTo',
                   })}
                 </Button>
               </Link>

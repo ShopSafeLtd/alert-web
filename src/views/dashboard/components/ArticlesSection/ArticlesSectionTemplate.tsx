@@ -49,7 +49,6 @@ const ArticlesSection = ({
             <Title className={classes.title} level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Recent Bulletins',
-                id: 'H40AZz',
               })}
             </Title>
           </Col>

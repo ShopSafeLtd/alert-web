@@ -7,12 +7,13 @@ import {
   faRotate,
   faSquareCheck,
 } from '@fortawesome/pro-light-svg-icons';
-import type { UserNotificationsQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import DebouncedInput from '#/utils/debounced-input';
 import useStyles from './NotificationList.styles';
 import type { NotificationData } from './useNotificationList';
+import type { UserNotificationsQuery } from 'graphql/userNotification/queries/user_notifications.generated';
 
 interface Props {
   data:
@@ -54,7 +55,6 @@ const NotificationLists = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a notification...',
-              id: '38B8Z+',
             })}
             allowClear
           />
@@ -68,7 +68,6 @@ const NotificationLists = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Current Scheme',
-              id: 'qWFImB',
             })}
           </Button>
         </Col>
@@ -88,7 +87,6 @@ const NotificationLists = ({
           >
             {intl.formatMessage({
               defaultMessage: 'All Schemes',
-              id: '4zN3gE',
             })}
           </Button>
         </Col>
@@ -108,7 +106,6 @@ const NotificationLists = ({
           >
             {intl.formatMessage({
               defaultMessage: 'View ALL',
-              id: 'OIe97A',
             })}
           </Button>
         </Col>
@@ -154,7 +151,6 @@ const NotificationLists = ({
               {
                 title: intl.formatMessage({
                   defaultMessage: 'Read',
-                  id: 'filwqD',
                 }),
                 dataIndex: 'actions',
                 key: 'actions',
@@ -172,7 +168,6 @@ const NotificationLists = ({
                 dataIndex: 'title',
                 title: intl.formatMessage({
                   defaultMessage: 'Title',
-                  id: '9a9+ww',
                 }),
               },
               {
@@ -180,7 +175,6 @@ const NotificationLists = ({
                 dataIndex: 'body',
                 title: intl.formatMessage({
                   defaultMessage: 'Description',
-                  id: 'Q8Qw5B',
                 }),
                 ellipsis: true,
               },
@@ -189,7 +183,6 @@ const NotificationLists = ({
                 dataIndex: 'createdAt',
                 title: intl.formatMessage({
                   defaultMessage: 'Created At',
-                  id: 'wittYy',
                 }),
                 width: 120,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -210,7 +203,6 @@ const NotificationLists = ({
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={intl.formatMessage({
                 defaultMessage: "There's no new notification",
-                id: '7cQ0NO',
               })}
             />
           </div>

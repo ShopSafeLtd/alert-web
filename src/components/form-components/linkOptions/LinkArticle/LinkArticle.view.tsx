@@ -1,6 +1,6 @@
 import React from 'react';
-import type { ListArticlesFeedQuery } from 'graphql/generated';
-import { SortOrder, ArticlePriority } from 'graphql/generated';
+
+import { SortOrder, ArticlePriority } from 'graphql/types';
 import {
   Button,
   Col,
@@ -33,6 +33,7 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import useStyles from './LinkArticle.styles';
 import ArticleTile from './ArticleTile';
 import InfiniteSelectScrollList from '../select-list/InfiniteSelectList';
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -113,7 +114,6 @@ const LinkArticle = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Articles...',
-              id: 'GyFKaQ',
             })}
             allowClear
           />
@@ -128,13 +128,12 @@ const LinkArticle = ({
         </Col>
         <Col className={classes.filters} span={6}>
           <Paragraph className={classes.filterTitle}>
-            {intl.formatMessage({ defaultMessage: 'Filters', id: 'zSOvI0' })}
+            {intl.formatMessage({ defaultMessage: 'Filters' })}
           </Paragraph>
           <div className={classes.filter}>
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Sort Order',
-                id: 'Hw6crD',
               })}
             </Text>
             <Select
@@ -147,13 +146,11 @@ const LinkArticle = ({
               <Select.Option value={SortOrder.Desc}>
                 {intl.formatMessage({
                   defaultMessage: 'Newest First',
-                  id: 'dZYazP',
                 })}
               </Select.Option>
               <Select.Option value={SortOrder.Asc}>
                 {intl.formatMessage({
                   defaultMessage: 'Oldest First',
-                  id: 'FqI37D',
                 })}
               </Select.Option>
             </Select>
@@ -162,13 +159,11 @@ const LinkArticle = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
             </Text>
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
               mode="multiple"
               className={classes.filterSelect}
@@ -190,13 +185,11 @@ const LinkArticle = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Priority',
-                id: '8lCjAM',
               })}
             </Text>
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select Priority',
-                id: 'DdVIRN',
               })}
               mode="multiple"
               className={classes.filterSelect}
@@ -208,13 +201,13 @@ const LinkArticle = ({
               value={priorityFilter}
             >
               <Select.Option value={ArticlePriority.High}>
-                {intl.formatMessage({ defaultMessage: 'High', id: 'AxMhQr' })}
+                {intl.formatMessage({ defaultMessage: 'High' })}
               </Select.Option>
               <Select.Option value={ArticlePriority.Medium}>
-                {intl.formatMessage({ defaultMessage: 'Medium', id: 'ovJ26C' })}
+                {intl.formatMessage({ defaultMessage: 'Medium' })}
               </Select.Option>
               <Select.Option value={ArticlePriority.Normal}>
-                {intl.formatMessage({ defaultMessage: 'Normal', id: 'myq2ZL' })}
+                {intl.formatMessage({ defaultMessage: 'Normal' })}
               </Select.Option>
             </Select>
           </div>
@@ -222,7 +215,6 @@ const LinkArticle = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'createdAt',
-                id: 'F4RJ8y',
               })}
             </Text>
             <DatePicker.RangePicker
@@ -250,7 +242,6 @@ const LinkArticle = ({
               <Button onClick={clearFilters}>
                 {intl.formatMessage({
                   defaultMessage: 'Clear Filters',
-                  id: 'MsGXc3',
                 })}
               </Button>
             </Col>
@@ -263,14 +254,12 @@ const LinkArticle = ({
         zIndex={1010}
         okText={intl.formatMessage({
           defaultMessage: 'Add Article',
-          id: '0orLBH',
         })}
         onOk={onSubmit}
         onCancel={() => setSelectedArticle(undefined)}
         bodyStyle={{ padding: 0 }}
         title={intl.formatMessage({
           defaultMessage: 'Add this article?',
-          id: '9j1vol',
         })}
       >
         <Row gutter={16} wrap={false}>
@@ -323,7 +312,6 @@ const LinkArticle = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Created By',
-                      id: 'uAfuJA',
                     })}
                   </span>
                 }
@@ -340,7 +328,6 @@ const LinkArticle = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Updated At',
-                      id: 'ECx6bx',
                     })}
                   </span>
                 }
@@ -358,7 +345,6 @@ const LinkArticle = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'View Article',
-                  id: 'szxDFV',
                 })}
               </Button>
             </Link>

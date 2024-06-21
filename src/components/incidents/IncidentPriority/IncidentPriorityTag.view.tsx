@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tag } from 'antd';
-import { IncidentPriority } from '../../../graphql/generated';
+import { IncidentPriority } from 'graphql/types';
 
 export const getIncidentPriorityText = (value: IncidentPriority) => {
   if (value === IncidentPriority.Medium) return 'Medium';

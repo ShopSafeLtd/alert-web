@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
+
+import { useNavigate } from 'react-router';
+import type { SearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
+import { useSearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import { useListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import { SortOrder } from 'graphql/types';
+import { useCreateCrimeGroupMutation } from 'graphql/crime-groups/mutations/create-crime-group.generated';
 import type {
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables,
-  ListOffendersQuery,
-  SearchOffendersQuery,
-} from 'graphql/generated';
-import {
-  ListCrimeGroupsDocument,
-  SortOrder,
-  useCreateCrimeGroupMutation,
-  useListOffendersQuery,
-  useSearchOffendersQuery,
-} from 'graphql/generated';
-import { useNavigate } from 'react-router';
+} from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { ListCrimeGroupsDocument } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 interface Return {
   searchData: SearchOffendersQuery | undefined;

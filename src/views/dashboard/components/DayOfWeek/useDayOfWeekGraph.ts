@@ -1,6 +1,6 @@
-import { useIncidentsDayOfWeekQuery } from 'graphql/generated';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import { useEffect, useMemo, useState } from 'react';
+import { useIncidentsDayOfWeekQuery } from '#/views/dashboard/graphql/queries/day-of-week.generated';
 
 interface Return {
   data: { label: string; value: number }[];

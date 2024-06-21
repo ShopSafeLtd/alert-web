@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditGoods from '../EditGoods.view';
-import { GoodsMode } from 'graphql/generated';
+import { GoodsMode } from 'graphql/types';
 
 describe('Detail Officer View', () => {
   it('renders the page', () => {

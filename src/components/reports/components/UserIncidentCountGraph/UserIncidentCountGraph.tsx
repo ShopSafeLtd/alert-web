@@ -1,8 +1,7 @@
 import React from 'react';
 import { BarGraph, DonutGraph } from '#/components/reports/graphs';
 import { Button, Typography } from 'antd';
-import type { UserIncidentCountGraphQueryVariables } from 'graphql/generated';
-import { useUserIncidentCountGraphQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,6 +10,8 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import type { MetaData } from '#/views/reports/types';
+import type { UserIncidentCountGraphQueryVariables } from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph.generated';
+import { useUserIncidentCountGraphQuery } from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph.generated';
 
 interface Props {
   isPrinting: boolean;
@@ -42,7 +43,6 @@ const UserIncidentCountGraph = ({
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
           defaultMessage: 'User Incidents Count',
-          id: '7KHPM1',
         })}
       </Typography.Title>
 
@@ -98,7 +98,6 @@ const UserIncidentCountGraph = ({
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
-            id: 'QQSdHP',
           })}
         </Button>
       )}
@@ -108,7 +107,6 @@ const UserIncidentCountGraph = ({
           data={data?.userIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
-            id: '7UNuAl',
           })}
         />
       ) : (
@@ -117,7 +115,6 @@ const UserIncidentCountGraph = ({
           data={data?.userIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
-            id: '7UNuAl',
           })}
           type={metaData?.type as 'donut' | 'pie'}
         />

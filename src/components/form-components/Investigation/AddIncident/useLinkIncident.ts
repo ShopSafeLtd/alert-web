@@ -1,18 +1,15 @@
 import { useState } from 'react';
 
-import type { ListIncidentsQuery } from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListIncidentsQuery,
-  useUpdateInvestigationMutation,
-} from 'graphql/generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 import { useStoreActions, useStoreState } from 'state';
 import { notification } from 'antd';
 import { useParams } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import { useListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
 
 interface Props {
   onClose: () => void;
@@ -115,11 +112,9 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added to the crime group! ',
-          id: 'u0NtLP',
         }),
         placement: 'bottomRight',
       });

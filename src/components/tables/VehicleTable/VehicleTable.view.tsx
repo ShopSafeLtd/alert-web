@@ -11,7 +11,7 @@ import {
 import { useIntl } from 'react-intl';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { Link } from 'react-router-dom';
-import type { ImagePosition } from 'graphql/generated';
+import type { ImagePosition } from 'graphql/types';
 
 const useStyles = createUseStyles({
   row: {
@@ -92,7 +92,6 @@ const VehicleTable = ({
           dataIndex: 'reference',
           title: intl.formatMessage({
             defaultMessage: 'Alert ID',
-            id: 'k8ZNgH',
           }),
           render: (
             _,
@@ -114,7 +113,6 @@ const VehicleTable = ({
           dataIndex: 'registration',
           title: intl.formatMessage({
             defaultMessage: 'Registration',
-            id: 'qv7ied',
           }),
         },
         {
@@ -122,7 +120,6 @@ const VehicleTable = ({
           dataIndex: 'make',
           title: intl.formatMessage({
             defaultMessage: 'Make',
-            id: '6AAM0P',
           }),
         },
         {
@@ -130,7 +127,6 @@ const VehicleTable = ({
           dataIndex: 'colour',
           title: intl.formatMessage({
             defaultMessage: 'Colour',
-            id: '+e8vAT',
           }),
         },
         {
@@ -138,7 +134,6 @@ const VehicleTable = ({
           dataIndex: 'model',
           title: intl.formatMessage({
             defaultMessage: 'Model',
-            id: 'rhSI1/',
           }),
         },
         {
@@ -153,7 +148,6 @@ const VehicleTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'View Vehicle',
-                      id: '4ePc9G',
                     })}
                   >
                     <Link to={`/app/vehicles/view/${record.key}`}>
@@ -171,7 +165,6 @@ const VehicleTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit Vehicle',
-                      id: 'X/6z9r',
                     })}
                   >
                     <Button
@@ -190,25 +183,21 @@ const VehicleTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove Vehicle',
-                      id: 'Mcn1/c',
                     })}
                   >
                     <Popconfirm
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the vehicle?',
-                        id: 'hHs0lD',
                       })}
                       onConfirm={() => {
                         onDeleteVehicle(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >

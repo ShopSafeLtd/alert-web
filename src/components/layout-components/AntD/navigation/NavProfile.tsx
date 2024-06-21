@@ -3,7 +3,7 @@ import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
-import { useAuth0 } from '@auth0/auth0-react';
+
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -35,24 +35,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
 }));
 
-// interface MenuItem {
-//   title: string;
-//   icon: string;
-//   path: string;
-// }
-
-// const menuItem: MenuItem[] = [
-//   {
-//     title: 'User Settings',
-//     icon: '', // EditOutlined,
-//     path: `${APP_PREFIX_PATH}/user-settings`,
-//   },
-//   {
-//     title: 'Terms & Conditions',
-//     icon: '', // EditOutlined,
-//     path: `${APP_PREFIX_PATH}/user-settings/terms`,
-//   },
-// ];
 
 export const NavProfile = () => {
   const { switcher, themes } = useThemeSwitcher();
@@ -65,62 +47,11 @@ export const NavProfile = () => {
   const switchLocale = useStoreActions((actions) => actions.theme.changeLocale);
   const locale = useStoreState((state) => state.theme.locale);
   const { signOut } = useAuth();
-  const { logout } = useAuth0();
 
   const handleChangeLang = (value: AvailableLanguages) => {
     switchLocale(value as string);
     typedLocalStorage.set(LocalStorageKeys.lang, value as string);
   };
-  // // TODO REMOVE
-  // const profileMenu = (
-  //   <div className="nav-profile nav-dropdown">
-  //     <div className="nav-profile-header">
-  //       <div className="d-flex" style={{ alignItems: 'center' }}>
-  //         <Avatar
-  //           style={{ backgroundColor: 'rgb(222, 68, 54)', minWidth: 35 }}
-  //           size={35}
-  //         >
-  //           {name?.charAt(0)}
-  //         </Avatar>
-  //         <div className="pl-2">
-  //           <h4 className="mb-0">{name}</h4>
-  //           <span className="text-muted">{email}</span>
-  //         </div>
-  //       </div>
-  //     </div>
-  //     <div className="nav-profile-body">
-  //       <Menu>
-  //         {menuItem.map((el, i) => (
-  //           <Menu.Item key={i}>
-  //             <Link to={el.path}>
-  //               <Row>
-  //                 {/* <Icon className="mr-3" type={el.icon} /> */}
-  //                 <span className="font-weight-normal">{el.title}</span>
-  //               </Row>
-  //             </Link>
-  //           </Menu.Item>
-  //         ))}
-  //         <Menu.Item
-  //           key={menuItem.length + 1}
-  //           onClick={() => {
-  //             signOut();
-  //             logout({ returnTo: window.location.origin });
-  //           }}
-  //         >
-  //           <Row>
-  //             <LogoutOutlined className="mr-3" />
-  //             <span className="font-weight-normal">
-  //               {intl.formatMessage({
-  //                 defaultMessage: 'Sign Out',
-  //                 id: 'F62y+K',
-  //               })}
-  //             </span>
-  //           </Row>
-  //         </Menu.Item>
-  //       </Menu>
-  //     </div>
-  //   </div>
-  // );
 
   return (
     <Dropdown
@@ -158,7 +89,6 @@ export const NavProfile = () => {
                   <Typography.Text>
                     {intl.formatMessage({
                       defaultMessage: 'Theme Mode: ',
-                      id: 'QAmP+7',
                     })}
                   </Typography.Text>
                 </Col>
@@ -211,84 +141,72 @@ export const NavProfile = () => {
                       value: 'en',
                       label: intl.formatMessage({
                         defaultMessage: 'English 🇬🇧',
-                        id: 'j66p6j',
                       }),
                     },
                     {
                       value: 'fr',
                       label: intl.formatMessage({
                         defaultMessage: 'French 🇫🇷',
-                        id: '115KOd',
                       }),
                     },
                     {
                       value: 'de',
                       label: intl.formatMessage({
                         defaultMessage: 'German 🇩🇪',
-                        id: 'SjSAxT',
                       }),
                     },
                     {
                       value: 'es',
                       label: intl.formatMessage({
                         defaultMessage: 'Spanish 🇪🇸',
-                        id: 'B+T9Ie',
                       }),
                     },
                     {
                       value: 'da',
                       label: intl.formatMessage({
                         defaultMessage: 'Danish 🇩🇰',
-                        id: 'Xg7VWX',
                       }),
                     },
                     {
                       value: 'it',
                       label: intl.formatMessage({
                         defaultMessage: 'Italian 🇮🇹',
-                        id: 'RVX8BX',
                       }),
                     },
                     {
                       value: 'nl',
                       label: intl.formatMessage({
                         defaultMessage: 'Dutch 🇳🇱',
-                        id: 'kVa3St',
                       }),
                     },
                     {
                       value: 'rbe',
                       label: intl.formatMessage({
                         defaultMessage: 'Flemish 🇧🇪',
-                        id: 'lQ59Z+',
                       }),
                     },
                     {
                       value: 'pt',
                       label: intl.formatMessage({
                         defaultMessage: 'Portuguese 🇵🇹',
-                        id: '7gRkSQ',
                       }),
                     },
                     {
                       value: 'sv',
                       label: intl.formatMessage({
                         defaultMessage: 'Swedish 🇸🇪',
-                        id: 'Sda1tF',
                       }),
                     },
                     {
                       value: 'pl',
                       label: intl.formatMessage({
                         defaultMessage: 'Polish 🇵🇱',
-                        id: 'L66cYZ',
                       }),
                     },
                     {
                       value: 'fi',
                       label: intl.formatMessage({
                         defaultMessage: 'Finnish 🇫🇮',
-                        id: 'TpJCED',
                       }),
                     },
                   ]}
@@ -304,7 +222,6 @@ export const NavProfile = () => {
                   <span className="font-weight-normal">
                     {intl.formatMessage({
                       defaultMessage: 'User Settings',
-                      id: 'jUes8R',
                     })}
                   </span>
                 </Row>
@@ -323,7 +240,6 @@ export const NavProfile = () => {
                     <span className="font-weight-normal">
                       {intl.formatMessage({
                         defaultMessage: 'Terms & Conditions',
-                        id: 'arPp4e',
                       })}
                     </span>
                   </Col>
@@ -338,7 +254,6 @@ export const NavProfile = () => {
                 gutter={8}
                 onClick={() => {
                   signOut();
-                  logout({ returnTo: window.location.origin });
                 }}
               >
                 <Col>
@@ -348,7 +263,6 @@ export const NavProfile = () => {
                   <span className="font-weight-normal">
                     {intl.formatMessage({
                       defaultMessage: 'Sign Out',
-                      id: 'F62y+K',
                     })}
                   </span>
                 </Col>

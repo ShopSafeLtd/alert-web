@@ -4,8 +4,9 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import { AddressesDocument } from 'graphql/generated';
+
 import useAddPreviousLocation from '../useAddPreviousLocation';
+import { AddressesDocument } from 'graphql/incidents/queries/address.generated';
 
 const mocks = [
   {

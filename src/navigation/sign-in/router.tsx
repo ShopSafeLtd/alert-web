@@ -1,10 +1,21 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import SignInView from '#/views/sign-in/signIn.View';
+import LoginView from '#/views/sign-in/Login.View';
+import { useIntl } from 'react-intl';
+import RouteWrapper from '#/navigation/utils/route-wrapper';
 
-const SignInPage = () => (
-  <Routes>
-    <Route index element={<SignInView />} />
-  </Routes>
-);
+const SignInPage = () => {
+  const intl = useIntl();
+  return (
+    <RouteWrapper
+      title={intl.formatMessage({
+        defaultMessage: 'Sign In',
+      })}
+    >
+      <Routes>
+        <Route index element={<LoginView />} />
+      </Routes>
+    </RouteWrapper>
+  );
+};
 export default SignInPage;

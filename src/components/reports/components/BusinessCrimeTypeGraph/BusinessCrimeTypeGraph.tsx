@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Typography } from 'antd';
-import type { BusinessCrimeTypeGraphQueryVariables } from 'graphql/generated';
-import { useBusinessCrimeTypeGraphQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import MultiBarGraph from '../../graphs/multiBarGraph';
+import type { BusinessCrimeTypeGraphQueryVariables } from './BusinessCrimeTypeGraph.generated';
+import { useBusinessCrimeTypeGraphQuery } from './BusinessCrimeTypeGraph.generated';
 
 interface Props {
   editMode: boolean;
@@ -33,7 +34,6 @@ const BusinessCrimeTypeGraph = ({
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
           defaultMessage: 'Business Crime Types',
-          id: 'XzcPPP',
         })}
       </Typography.Title>
 
@@ -58,7 +58,6 @@ const BusinessCrimeTypeGraph = ({
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
-            id: 'QQSdHP',
           })}
         </Button>
       )}
@@ -68,7 +67,6 @@ const BusinessCrimeTypeGraph = ({
         data={data?.businessCrimeTypeGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Crime Types or Incidents',
-          id: 'XENoqE',
         })}
         isStacked
       />

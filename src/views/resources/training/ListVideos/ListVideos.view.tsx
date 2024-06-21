@@ -47,14 +47,12 @@ const ListVideos = () => {
             <Typography.Title className={classes.title} level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Alert Overview',
-                id: 'jd6hP1',
               })}
             </Typography.Title>
             <Typography.Text className={classes.title}>
               {intl.formatMessage({
                 defaultMessage:
                   ' This short video explains the core functionality of alert and how get around the app.',
-                id: 'JdvoY4',
               })}
             </Typography.Text>
           </div>
@@ -71,7 +69,6 @@ const ListVideos = () => {
               src="https://cdn.loom.com/sessions/thumbnails/5f30c94d68a5464c9fa2a1f51edc418a-with-play.gif"
               alt={intl.formatMessage({
                 defaultMessage: 'thumbnail',
-                id: 'eOFf8G',
               })}
             />
           </Row>
@@ -80,7 +77,6 @@ const ListVideos = () => {
               <Tag>
                 {intl.formatMessage({
                   defaultMessage: 'Getting Started',
-                  id: '30VEhM',
                 })}
               </Tag>
             </Col>
@@ -100,14 +96,12 @@ const ListVideos = () => {
             <Typography.Title className={classes.title} level={4}>
               {intl.formatMessage({
                 defaultMessage: 'How to add an incident',
-                id: 'goPt6M',
               })}
             </Typography.Title>
             <Typography.Text className={classes.title}>
               {intl.formatMessage({
                 defaultMessage:
                   'An overview of the incident form and how to add a new incident to alert.',
-                id: 'FXXrSw',
               })}
             </Typography.Text>
           </div>
@@ -124,7 +118,6 @@ const ListVideos = () => {
               src="https://cdn.loom.com/sessions/thumbnails/4112c7ef431b4d19814164fc15754408-with-play.gif"
               alt={intl.formatMessage({
                 defaultMessage: 'thumbnail',
-                id: 'eOFf8G',
               })}
             />
           </Row>
@@ -133,7 +126,6 @@ const ListVideos = () => {
               <Tag>
                 {intl.formatMessage({
                   defaultMessage: 'Getting Started',
-                  id: '30VEhM',
                 })}
               </Tag>
             </Col>
@@ -141,7 +133,6 @@ const ListVideos = () => {
               <Tag>
                 {intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               </Tag>
             </Col>
@@ -192,7 +183,6 @@ const ListVideos = () => {
           <iframe
             title={intl.formatMessage({
               defaultMessage: 'video',
-              id: '4jAirD',
             })}
             src={modalOpen || ''}
             allowFullScreen

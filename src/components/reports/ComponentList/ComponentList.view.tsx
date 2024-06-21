@@ -74,7 +74,6 @@ const ComponentList = ({ components }: Props) => {
         <Input
           className={classes.search}
           placeholder={intl.formatMessage({
-            id: 'IV6+1Z',
             defaultMessage: 'Search report components...',
           })}
           value={search}
@@ -88,42 +87,36 @@ const ComponentList = ({ components }: Props) => {
             {
               label: intl.formatMessage({
                 defaultMessage: 'Pie',
-                id: 'b1QCUJ',
               }),
               value: 'donut',
             },
             {
               label: intl.formatMessage({
                 defaultMessage: 'Bar',
-                id: 'SHryPO',
               }),
               value: 'bar',
             },
             {
               label: intl.formatMessage({
                 defaultMessage: 'Summary',
-                id: 'RrCui3',
               }),
               value: 'summary',
             },
             {
               label: intl.formatMessage({
                 defaultMessage: 'Table',
-                id: 'IeBejt',
               }),
               value: 'table',
             },
             {
               label: intl.formatMessage({
                 defaultMessage: 'Map',
-                id: 'zuqMfZ',
               }),
               value: 'map',
             },
             {
               label: intl.formatMessage({
                 defaultMessage: 'Heatmap',
-                id: 'WEDRDw',
               }),
               value: 'heatmap',
             },
@@ -167,7 +160,7 @@ const ComponentList = ({ components }: Props) => {
                 <Col>
                   <Button onClick={item.onAdd}>
                     <FontAwesomeIcon style={{ marginRight: 5 }} icon={faPlus} />
-                    <FormattedMessage defaultMessage="Add" id="2/2yg+" />
+                    <FormattedMessage defaultMessage="Add" />
                   </Button>
                 </Col>
               </Row>

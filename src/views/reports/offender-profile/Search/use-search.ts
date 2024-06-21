@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
-import type { SearchOffenderReportsQuery } from 'graphql/generated';
-import {
-  useSearchOffenderReportsQuery,
-  SortOrder,
-  QueryMode,
-} from 'graphql/generated';
+import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/search-offender-report.generated';
+import { useSearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/search-offender-report.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Return {
   searchOffendersData: SearchOffenderReportsQuery | undefined;

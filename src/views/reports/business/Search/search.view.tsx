@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Col, Input, Row, Table, Typography } from 'antd';
-import type { SearchBusinessesQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import useStyles from './search.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import { useParams } from 'react-router-dom';
+import type { SearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
 
 const { Title } = Typography;
 
@@ -45,7 +46,6 @@ const SearchBusiness = ({
         <Title level={3}>
           {intl.formatMessage({
             defaultMessage: 'Select an business to view',
-            id: '4Y/QAD',
           })}
         </Title>
         <Row className={classes.toolbar}>
@@ -53,7 +53,6 @@ const SearchBusiness = ({
             <Input
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for an business...',
-                id: 'K/tzzI',
               })}
               value={searchValue}
               onChange={handleSearchChange}
@@ -67,7 +66,6 @@ const SearchBusiness = ({
               dataIndex: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
             },
             {
@@ -75,7 +73,6 @@ const SearchBusiness = ({
               dataIndex: 'location',
               title: intl.formatMessage({
                 defaultMessage: 'Location',
-                id: 'rvirM2',
               }),
             },
             {
@@ -86,7 +83,6 @@ const SearchBusiness = ({
                 <Button onClick={() => setSelectedBusiness(item.key)}>
                   {intl.formatMessage({
                     defaultMessage: 'Select',
-                    id: 'kQAf2d',
                   })}
                 </Button>
               ),
@@ -114,7 +110,6 @@ const SearchBusiness = ({
               intl.formatMessage(
                 {
                   defaultMessage: 'Total businesses: {total}',
-                  id: 'HbFVjB',
                 },
                 {
                   total,

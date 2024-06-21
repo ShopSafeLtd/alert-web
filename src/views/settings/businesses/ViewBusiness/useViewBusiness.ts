@@ -1,32 +1,5 @@
 import { useState } from 'react';
-import type {
-  AddUsersToBusinessMutation,
-  BusinessQuery,
-  BusinessQueryVariables,
-  CreateTodoMutation,
-  CreateUserInDatabaseMutation,
-  InviteExistingUserMutation,
-  ListActionsQuery,
-  ListBusinessUsersQuery,
-  ListBusinessUsersQueryVariables,
-  QuestionGroupOnSchemeQuery,
-  UpdateTaskMutation,
-  BusinessesSideListQuery,
-  BusinessesSideListQueryVariables,
-} from 'graphql/generated';
-import {
-  BusinessesSideListDocument,
-  BusinessDocument,
-  ListBusinessUsersDocument,
-  SortOrder,
-  useBusinessQuery,
-  useDeleteBusinessMutation,
-  useListActionsQuery,
-  useListBusinessUsersQuery,
-  useQuestionGroupOnSchemeQuery,
-  useRemoveUserFromBusinessMutation,
-  useUpdateBusinessLocationMutation,
-} from 'graphql/generated';
+
 import { useNavigate, useParams } from 'react-router';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -35,6 +8,39 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import update from 'immutability-helper';
 import type { LocationData } from 'types/DataType';
+import type {
+  ListBusinessUsersQuery,
+  ListBusinessUsersQueryVariables,
+} from 'graphql/users/queries/list-business-users.generated';
+import { ListBusinessUsersDocument } from 'graphql/users/queries/list-business-users.generated';
+import { useListBusinessUsersQuery } from 'graphql/users/queries/list-business-users.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type {
+  BusinessQuery,
+  BusinessQueryVariables,
+} from 'graphql/businesses/queries/business.generated';
+import {
+  BusinessDocument,
+  useBusinessQuery,
+} from 'graphql/businesses/queries/business.generated';
+
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
+import type { ListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
+import { useListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import { SortOrder } from 'graphql/types';
+import type {
+  BusinessesSideListQuery,
+  BusinessesSideListQueryVariables,
+} from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+import { useUpdateBusinessLocationMutation } from 'graphql/businesses/mutations/update-business-location.generated';
+import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/delete-business.generated';
+import { useRemoveUserFromBusinessMutation } from 'graphql/businesses/mutations/remove-user-from-business.generated';
 
 interface Return {
   data: BusinessQuery | undefined;
@@ -178,7 +184,6 @@ const useViewBusiness = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Location of the shop has been updated',
-          id: 'JEoDSx',
         }),
         placement: 'bottomRight',
       });
@@ -313,11 +318,9 @@ const useViewBusiness = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Business has been created',
-          id: 'uILUkO',
         }),
         description: intl.formatMessage({
           defaultMessage: 'You new business has been add to alert.',
-          id: 'sJoRW/',
         }),
         placement: 'bottomRight',
       });
@@ -413,11 +416,9 @@ const useViewBusiness = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Removed!',
-          id: 'U0zgbv',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The business has been removed!',
-          id: 'mSae6x',
         }),
         placement: 'bottomRight',
       });
@@ -431,11 +432,9 @@ const useViewBusiness = (): Return => {
     Modal.confirm({
       title: intl.formatMessage({
         defaultMessage: 'Do you want to delete this business?',
-        id: 'e1WPCT',
       }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
       }),
       onOk() {
         setSaving(true);

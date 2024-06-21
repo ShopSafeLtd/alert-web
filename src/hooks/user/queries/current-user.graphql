@@ -94,5 +94,8 @@ query currentUser(
     bulletinEmails
     bulletinPush
     messagePush
+    forcePasswordReset
+    hasPassword
+    termsExpired
   }
 }

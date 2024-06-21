@@ -9,8 +9,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-
-import type { TagsQuery } from 'graphql/generated';
 import AddOffenderWarning from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import EditOffenderWarning from 'components/form-components/tags/offenderWarnings/EditOffenderWarning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,6 +19,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { TagData } from 'types/DataType';
 import { FormattedMessage, useIntl } from 'react-intl';
+import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -63,7 +62,6 @@ const OffenderWarningList = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search offender tags...',
-              id: 'lpxqCT',
             })}
             allowClear
           />
@@ -81,10 +79,7 @@ const OffenderWarningList = ({
               />
             }
           >
-            <FormattedMessage
-              defaultMessage="Add Offender Warning"
-              id="JQTlrb"
-            />
+            <FormattedMessage defaultMessage="Add Offender Warning" />
           </Button>
         </Col>
       </Row>
@@ -102,7 +97,6 @@ const OffenderWarningList = ({
             key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             dataIndex: 'name',
             width: 300,
@@ -122,7 +116,6 @@ const OffenderWarningList = ({
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             }),
             dataIndex: 'description',
             ellipsis: true,
@@ -139,7 +132,6 @@ const OffenderWarningList = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit Tag',
-                      id: 'uJkv2X',
                     })}
                   >
                     <Button
@@ -157,7 +149,6 @@ const OffenderWarningList = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove Tag',
-                      id: '5LH37j',
                     })}
                   >
                     <Button
@@ -184,7 +175,6 @@ const OffenderWarningList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Offender Warning',
-          id: 'JQTlrb',
         })}
         open={addOffenderWarning}
         width="400"
@@ -203,7 +193,6 @@ const OffenderWarningList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender Warning',
-          id: 'b/YSMD',
         })}
         open={editOffenderWarning}
         width="400"

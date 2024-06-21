@@ -5,12 +5,11 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
-import {
-  CreateGroupDocument,
-  ListSchemeUsersDocument,
-  SortOrder,
-} from 'graphql/generated';
+
 import useAddGroup from '../useAddGroup';
+import { ListSchemeUsersDocument } from 'graphql/users/queries/list-scheme-users.generated';
+import { CreateGroupDocument } from 'graphql/groups/mutations/create-group.generated';
+import { SortOrder } from 'graphql/types';
 
 const mocks = [
   {

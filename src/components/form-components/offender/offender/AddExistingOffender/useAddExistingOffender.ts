@@ -1,19 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import type {
-  Age,
-  Build,
-  Gender,
-  ImagePosition,
-  ListOffendersAllSchemesQuery,
-  Race,
-} from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListOffendersAllSchemesQuery,
-} from 'graphql/generated';
+import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
+import { QueryMode, SortOrder } from 'graphql/types';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
+import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
 
 export interface OffenderData {
   id: string;

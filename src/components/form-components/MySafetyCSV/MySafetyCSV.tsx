@@ -16,6 +16,7 @@ const MySafetyCSV = ({ onChange }: Props) => {
           .map((item) => ({
             site: item[0],
             dateCreated: new Date(item[1]),
+            // TODO change to dayjs or base
             dateOccurred: moment(
               `${item[3]} ${item[2]}`,
               'HH:mm DD-MMM-YY'

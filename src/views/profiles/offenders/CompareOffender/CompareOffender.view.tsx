@@ -11,8 +11,6 @@ import {
   Row,
   Typography,
 } from 'antd';
-import type { ViewOffenderCompareQuery } from 'graphql/generated';
-import { Role, Age, Build, Gender, Race } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -32,6 +30,8 @@ import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import useStyles from './CompareOffender.styles';
 import type { OffenderField, Selected } from './useCompareIncident';
+import type { ViewOffenderCompareQuery } from 'graphql/offenders/queries/compare-offender.generated';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
 
 const { Text, Title } = Typography;
 
@@ -151,7 +151,6 @@ const CompareIncident = ({
           <Button onClick={toggleAddOffender} type="ghost" danger>
             {intl.formatMessage({
               defaultMessage: 'Add Offender',
-              id: 'm3ChN4',
             })}
           </Button>
         </Col>
@@ -160,7 +159,6 @@ const CompareIncident = ({
             <Button onClick={() => setMode('column')} type="ghost">
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -175,7 +173,6 @@ const CompareIncident = ({
               />
               {intl.formatMessage({
                 defaultMessage: 'Image Comparison',
-                id: 'Ssi2B7',
               })}
             </Button>
           )}
@@ -192,7 +189,6 @@ const CompareIncident = ({
               />
               {intl.formatMessage({
                 defaultMessage: 'Select Images & Compare Fields\n',
-                id: 'GYWlm+',
               })}
             </Button>
           )}
@@ -207,7 +203,6 @@ const CompareIncident = ({
               />
               {intl.formatMessage({
                 defaultMessage: 'Save & Merge',
-                id: 'OvPg13',
               })}
             </Button>
           </Col>
@@ -223,7 +218,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'Offender Name:',
-                    id: 'CqQV1G',
                   })}
                 </Text>
               </div>
@@ -234,7 +228,6 @@ const CompareIncident = ({
                     <Text strong>
                       {intl.formatMessage({
                         defaultMessage: 'Age:',
-                        id: 'S9GJ93',
                       })}
                     </Text>
                   </div>
@@ -245,7 +238,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'Date of Birth:',
-                    id: 'sYTUgV',
                   })}
                 </Text>
               </div>
@@ -254,7 +246,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'DoB Source:',
-                    id: '+WLvff',
                   })}
                 </Text>
               </div>
@@ -263,7 +254,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'Sex:',
-                    id: 'Oz0DsA',
                   })}
                 </Text>
               </div>
@@ -272,7 +262,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'Ethnicity:',
-                    id: 'JzYph5',
                   })}
                 </Text>
               </div>
@@ -281,7 +270,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'Build:',
-                    id: '0qjl3+',
                   })}
                 </Text>
               </div>
@@ -290,7 +278,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'Hair:',
-                    id: '2x7zoS',
                   })}
                 </Text>
               </div>
@@ -299,7 +286,6 @@ const CompareIncident = ({
                 <Text strong>
                   {intl.formatMessage({
                     defaultMessage: 'Characteristics:',
-                    id: 'BxC/6v',
                   })}
                 </Text>
               </div>
@@ -315,7 +301,6 @@ const CompareIncident = ({
                         {intl.formatMessage(
                           {
                             defaultMessage: 'Offender {index}',
-                            id: 'hO4ExD',
                           },
                           {
                             index: index + 1,
@@ -331,7 +316,6 @@ const CompareIncident = ({
                           }}
                           title={intl.formatMessage({
                             defaultMessage: 'Are you sure?',
-                            id: '2oCaym',
                           })}
                           onConfirm={() => removeOffender(offender)}
                         >
@@ -394,7 +378,6 @@ const CompareIncident = ({
                             ? moment(offender?.dateOfBirth).format('DD/MM/YY')
                             : intl.formatMessage({
                                 defaultMessage: 'Unknown',
-                                id: '5jeq8P',
                               })}
                         </Text>
                       </div>
@@ -411,7 +394,6 @@ const CompareIncident = ({
                             offender.dateSource ||
                               intl.formatMessage({
                                 defaultMessage: 'None',
-                                id: '450Fty',
                               })
                           )}
                         </Text>
@@ -460,7 +442,6 @@ const CompareIncident = ({
                           {offender.hair ||
                             intl.formatMessage({
                               defaultMessage: 'None',
-                              id: '450Fty',
                             })}
                         </Text>
                       </div>
@@ -476,7 +457,6 @@ const CompareIncident = ({
                           {offender.peculiarities ||
                             intl.formatMessage({
                               defaultMessage: 'None',
-                              id: '450Fty',
                             })}
                         </Text>
                       </div>
@@ -488,7 +468,6 @@ const CompareIncident = ({
                 <Button onClick={toggleAddOffender} type="primary">
                   {intl.formatMessage({
                     defaultMessage: 'Add Offender',
-                    id: 'm3ChN4',
                   })}
                 </Button>
               </Col>
@@ -500,7 +479,6 @@ const CompareIncident = ({
                 <Title className={classes.cardTitle} level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Preview',
-                    id: 'TJo5E6',
                   })}
                 </Title>
               </Col>
@@ -537,7 +515,6 @@ const CompareIncident = ({
                     ? moment(preview.dateOfBirth).format('DD/MM/YYYY')
                     : intl.formatMessage({
                         defaultMessage: 'Unknown',
-                        id: '5jeq8P',
                       })}
                 </Text>
               </div>
@@ -548,7 +525,6 @@ const CompareIncident = ({
                     preview.dateSource ||
                       intl.formatMessage({
                         defaultMessage: 'None',
-                        id: '450Fty',
                       })
                   )}
                 </Text>
@@ -571,7 +547,6 @@ const CompareIncident = ({
                   {preview.hair ||
                     intl.formatMessage({
                       defaultMessage: 'None',
-                      id: '450Fty',
                     })}
                 </Text>
               </div>
@@ -581,7 +556,6 @@ const CompareIncident = ({
                   {preview.peculiarities ||
                     intl.formatMessage({
                       defaultMessage: 'None',
-                      id: '450Fty',
                     })}
                 </Text>
               </div>
@@ -644,7 +618,6 @@ const CompareIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Offender',
-          id: 'm3ChN4',
         })}
         open={addOffender}
         width="800"

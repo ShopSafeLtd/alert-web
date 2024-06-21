@@ -4,11 +4,10 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import {
-  RecycledItemDocument,
-  RestoreIncidentDocument,
-} from 'graphql/generated';
+
 import useRestoreIncident from '../useRestoreIncident';
+import { RecycledItemDocument } from 'graphql/recycled/queries/recycled-item.generated';
+import { RestoreIncidentDocument } from 'graphql/recycled/mutations/restore-incident.generated';
 
 const mocks = [
   {

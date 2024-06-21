@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import type { ListStatementTemplatesQuery } from 'graphql/generated';
-import { useListStatementTemplatesQuery } from 'graphql/generated';
+
 import { useStoreState } from 'state';
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
+import { useListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
 
 interface Return {
   data: ListStatementTemplatesQuery | undefined;

@@ -1,23 +1,23 @@
 import { useState } from 'react';
-import type {
-  CustomGalleriesQuery,
-  CustomGalleriesQueryVariables,
-} from 'graphql/generated';
-import {
-  CustomGalleriesDocument,
-  QueryMode,
-  SortOrder,
-  useCreateCustomGalleryMutation,
-  useCustomGalleriesQuery,
-  useDeleteCustomGalleryMutation,
-  useUpdateCustomGalleryMutation,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { CustomGalleryData } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type {
+  CustomGalleriesQuery,
+  CustomGalleriesQueryVariables,
+} from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
+import {
+  CustomGalleriesDocument,
+  useCustomGalleriesQuery,
+} from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useCreateCustomGalleryMutation } from 'graphql/customGallery/mutations/create-custom-gallery.generated';
+import { useDeleteCustomGalleryMutation } from 'graphql/customGallery/mutations/delete_custom-gallery.generated';
+import { useUpdateCustomGalleryMutation } from 'graphql/customGallery/mutations/update_custom-gallery.generated';
 
 const { confirm } = Modal;
 
@@ -89,11 +89,9 @@ const useCustomGalleries = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The custom gallery has been added.',
-          id: 'T+shVI',
         }),
         placement: 'bottomRight',
       });
@@ -194,11 +192,9 @@ const useCustomGalleries = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender warning has been updated.',
-          id: 'GI8rR7',
         }),
         placement: 'bottomRight',
       });
@@ -234,11 +230,9 @@ const useCustomGalleries = (): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Do you want to delete the custom gallery?',
-        id: 'vwosFl',
       }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
       }),
       onOk() {
         setSaving(true);

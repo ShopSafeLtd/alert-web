@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import type { CrimeGroupQuery } from 'graphql/generated';
-import {
-  useCrimeGroupQuery,
-  useUpdateCrimeGroupMutation,
-} from 'graphql/generated';
 import { notification } from 'antd';
 
 import { useParams } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/view-crime-group.generated';
+import { useCrimeGroupQuery } from 'graphql/crime-groups/queries/view-crime-group.generated';
+import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/update_crime_group.generated';
 
 interface FormData {
   alias: string;
@@ -45,11 +43,9 @@ const useAddAlias = ({ onClose }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The alias has been added to the crime group! ',
-          id: 'bd2XVk',
         }),
 
         placement: 'bottomRight',

@@ -24,11 +24,10 @@ const AddJustification = ({
               name="justification"
               label={intl.formatMessage({
                 defaultMessage: 'Justification',
-                id: 'i0xkcf',
               })}
               tooltip={intl.formatMessage({
-                defaultMessage: `Enter a justification to explain why this offender doesn't connect with an incident.`,
-                id: 'P7rUrU',
+                defaultMessage:
+                  "Enter a justification to explain why this offender doesn't connect with an incident.",
               })}
               // rules={[
               //   {
@@ -52,7 +51,6 @@ const AddJustification = ({
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
                   defaultMessage: 'Cancel',
-                  id: '47FYwb',
                 })}
               </Button>
             </Col>
@@ -65,7 +63,6 @@ const AddJustification = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Save',
-                  id: 'jvo0vs',
                 })}
               </Button>
             </Col>

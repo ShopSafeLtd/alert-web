@@ -7,13 +7,7 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type {
-  Age,
-  Build,
-  Gender,
-  ImagePosition,
-  Race,
-} from 'graphql/generated';
+
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { OffenderData } from 'types/DataType';
@@ -22,6 +16,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/pro-light-svg-icons';
+import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   offenderCard: {
@@ -226,7 +221,6 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
                 style={{ whiteSpace: 'nowrap' }}
               >
                 {intl.formatMessage({
-                  id: 'tmcdrp',
                   defaultMessage: 'ID:',
                   // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                 })}{' '}
@@ -241,7 +235,6 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
                   style={{ width: '100%' }}
                 >
                   {intl.formatMessage({
-                    id: 'rv0Kg7',
                     defaultMessage: 'Alias:',
                     // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                   })}{' '}
@@ -254,7 +247,6 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
             <Col>
               <Typography.Text type="secondary">
                 {intl.formatMessage({
-                  id: '+nRUf9',
                   defaultMessage: 'Incidents:',
                   // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                 })}{' '}
@@ -266,7 +258,6 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
             <Col>
               <Typography.Text type="secondary">
                 {intl.formatMessage({
-                  id: 'Mhp3U/',
                   defaultMessage: 'Loss:',
                 })}
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
@@ -386,7 +377,6 @@ const OffenderOverlay = ({
                       className={classes.noWrap}
                     >
                       {intl.formatMessage({
-                        id: 'tmcdrp',
                         defaultMessage: 'ID:',
                       })}
                     </Typography.Text>
@@ -407,7 +397,6 @@ const OffenderOverlay = ({
                         className={classes.noWrap}
                       >
                         {intl.formatMessage({
-                          id: 'rv0Kg7',
                           defaultMessage: 'Alias:',
                         })}
                       </Typography.Text>
@@ -425,7 +414,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: 'rcVDrK',
                     defaultMessage: 'Gender:',
                   })}
                 </Typography.Text>
@@ -440,7 +428,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: 'JzYph5',
                     defaultMessage: 'Ethnicity:',
                   })}
                 </Typography.Text>
@@ -455,7 +442,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: 'S9GJ93',
                     defaultMessage: 'Age:',
                   })}
                 </Typography.Text>
@@ -478,7 +464,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: '+nRUf9',
                     defaultMessage: 'Incidents:',
                   })}
                 </Typography.Text>
@@ -495,7 +480,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: 'Mhp3U/',
                     defaultMessage: 'Loss:',
                   })}
                 </Typography.Text>
@@ -514,7 +498,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: 'vE+Slq',
                     defaultMessage: 'Last incident:',
                   })}
                 </Typography.Text>
@@ -524,7 +507,6 @@ const OffenderOverlay = ({
                   {offender.latestIncident
                     ? moment(offender.latestIncident.date).format('DD/MM/YY')
                     : intl.formatMessage({
-                        id: 'q5Op6V',
                         defaultMessage: 'none',
                         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                       })}
@@ -542,7 +524,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: 'MwW671',
                     defaultMessage: 'Known for:',
                   })}
                 </Typography.Text>
@@ -552,7 +533,6 @@ const OffenderOverlay = ({
                   {offender.knownFor && offender.knownFor.length > 0
                     ? offender.knownFor.toString()
                     : intl.formatMessage({
-                        id: '5jeq8P',
                         defaultMessage: 'Unknown',
                       })}
                 </Typography.Text>
@@ -569,7 +549,6 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text type="secondary" className={classes.noWrap}>
                   {intl.formatMessage({
-                    id: '1x5wk1',
                     defaultMessage: 'Businesses:',
                   })}
                 </Typography.Text>
@@ -592,7 +571,6 @@ const OffenderOverlay = ({
             <Col>
               <Typography.Text type="secondary" className={classes.noWrap}>
                 {intl.formatMessage({
-                  id: '6WIx8l',
                   defaultMessage: 'Goods:',
                 })}
               </Typography.Text>
@@ -602,7 +580,6 @@ const OffenderOverlay = ({
                 {offender.targetedGoods && offender.targetedGoods.length > 0
                   ? offender.targetedGoods.toString()
                   : intl.formatMessage({
-                      id: '5jeq8P',
                       defaultMessage: 'Unknown',
                     })}
               </Typography.Text>
@@ -613,7 +590,7 @@ const OffenderOverlay = ({
           <Col>
             <Link to={`/app/offenders/view/${offender.id}`}>
               <Button size="small" type="text">
-                <FormattedMessage id="GszQTo" defaultMessage="View Offender" />
+                <FormattedMessage defaultMessage="View Offender" />
               </Button>
             </Link>
           </Col>
@@ -753,17 +730,9 @@ const OffenderGrid = ({
         <Col>
           <Button danger onClick={toggleShowAll}>
             {!showAll && (
-              <FormattedMessage
-                defaultMessage="Show All Offenders"
-                id="z9JfuQ"
-              />
+              <FormattedMessage defaultMessage="Show All Offenders" />
             )}
-            {showAll && (
-              <FormattedMessage
-                defaultMessage="Minimise Offender"
-                id="/+OrNX"
-              />
-            )}
+            {showAll && <FormattedMessage defaultMessage="Minimise Offender" />}
           </Button>
         </Col>
       </Row>

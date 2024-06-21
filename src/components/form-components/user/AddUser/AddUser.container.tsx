@@ -1,11 +1,9 @@
 import React from 'react';
-import type {
-  CreateUserInDatabaseMutation,
-  InviteExistingUserMutation,
-} from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './AddUser.view';
 import useAddUser from './useAddUser';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
 
 interface Props {
   onClose: () => void;

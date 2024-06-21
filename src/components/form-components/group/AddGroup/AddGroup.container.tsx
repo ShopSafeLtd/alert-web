@@ -1,8 +1,8 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateGroupMutation } from 'graphql/generated';
 import React from 'react';
 import View from './AddGroup.view';
 import useAddGroup from './useAddGroup';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
 
 interface Props {
   onClose: () => void;

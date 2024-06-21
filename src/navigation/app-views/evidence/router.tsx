@@ -1,5 +1,5 @@
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from '#/graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import Evidence from '#/views/evidence/Evidence';
 import React from 'react';
 import { Route, Routes } from 'react-router';
@@ -12,7 +12,6 @@ const Article = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Evidence',
-        id: '6g7+6N',
       })}
     >
       <Routes>

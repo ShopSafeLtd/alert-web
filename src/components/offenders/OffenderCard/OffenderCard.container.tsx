@@ -1,11 +1,10 @@
 import React from 'react';
-import type {
-  OffenderCardFragment,
-  RecycleOffenderMutation,
-} from 'graphql/generated';
+
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './OffenderCard.view';
 import useOffenderCard from './useOffenderCard';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import type { OffenderCardFragment } from 'graphql/fragments/offender-card.generated';
 
 interface Props {
   offender: OffenderCardFragment;

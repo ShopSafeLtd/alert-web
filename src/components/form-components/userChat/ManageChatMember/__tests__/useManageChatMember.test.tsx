@@ -4,13 +4,11 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import {
-  ChatDocument,
-  ListSchemeUsersDocument,
-  SortOrder,
-  UpdateChatDocument,
-} from 'graphql/generated';
+import { SortOrder } from 'graphql/types';
 import useManageChat from '../useManageChatMember';
+import { ChatDocument } from 'graphql/chat/queries/chat.generated';
+import { ListSchemeUsersDocument } from 'graphql/users/queries/list-scheme-users.generated';
+import { UpdateChatDocument } from 'graphql/chat/mutation/update_chat.generated';
 
 const mocks = [
   {

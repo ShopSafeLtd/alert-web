@@ -1,11 +1,10 @@
 import React from 'react';
-import type {
-  ArticlePreviewFragment,
-  DeleteArticleMutation,
-} from 'graphql/generated';
+
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './ArticleCard.view';
 import useArticleCard from './useArticleCard';
+import type { ArticlePreviewFragment } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
+import type { DeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
 
 interface Props {
   article: ArticlePreviewFragment | null | undefined;

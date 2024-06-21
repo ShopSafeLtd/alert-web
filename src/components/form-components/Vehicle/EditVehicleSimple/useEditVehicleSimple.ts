@@ -5,7 +5,7 @@ import { Form } from 'antd';
 import type { VehicleData } from 'types/DataType';
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 import type { ImageValue } from '../../ImageSelect/ImageSelect.view';
-import { ImagePosition } from '../../../../graphql/generated';
+import { ImagePosition } from 'graphql/types';
 
 export interface UpdateVehicleData {
   id: string;

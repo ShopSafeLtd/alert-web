@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Typography } from 'antd';
-import type { UserSessionsGraphQueryVariables } from 'graphql/generated';
-import { useUserSessionsGraphQuery } from 'graphql/generated';
+import type { UserSessionsGraphQueryVariables } from './UserSessionsGraph.generated';
+import { useUserSessionsGraphQuery } from './UserSessionsGraph.generated';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -33,7 +33,6 @@ const UserSessionsGraph = ({
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
           defaultMessage: 'User Sessions',
-          id: 'IS4S3Y',
         })}
       </Typography.Title>
 
@@ -58,7 +57,6 @@ const UserSessionsGraph = ({
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
-            id: 'QQSdHP',
           })}
         </Button>
       )}
@@ -68,7 +66,6 @@ const UserSessionsGraph = ({
         data={data?.userSessionsGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Users',
-          id: 'XisWAX',
         })}
       />
     </>

@@ -17,7 +17,6 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
             {intl.formatMessage({
               defaultMessage: 'Incident Details',
-              id: 'Imc8gS',
             })}
           </Title>
         </Col>
@@ -29,7 +28,6 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
           >
             {intl.formatMessage({
               defaultMessage: '- Please complete the details for the incident.',
-              id: '27//14',
             })}
           </Paragraph>
         </Col>
@@ -38,14 +36,10 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
         <Col span={6}>
           <Form.Item
             name="date"
-            label={intl.formatMessage(
-              { defaultMessage: 'Time & Date', id: 'rXTgTq' },
-              {}
-            )}
+            label={intl.formatMessage({ defaultMessage: 'Time & Date' }, {})}
             tooltip={intl.formatMessage(
               {
                 defaultMessage: 'The date and time that the incident occurred.',
-                id: '4eTajC',
               },
               {}
             )}
@@ -55,7 +49,6 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
                 message: intl.formatMessage(
                   {
                     defaultMessage: 'Please select a date for the incident.',
-                    id: 'Cgy3GX',
                   },
                   {}
                 ),
@@ -70,7 +63,7 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
               format="HH:mm - DD/MM/YY"
               showTime={{ showSecond: false, showNow: true }}
               placeholder={intl.formatMessage(
-                { defaultMessage: 'Set Date & Time', id: 'hQHL0E' },
+                { defaultMessage: 'Set Date & Time' },
                 {}
               )}
             />
@@ -81,11 +74,9 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
             tooltip={intl.formatMessage({
               defaultMessage: 'A more detailed description of the incident.',
-              id: 'gL4S9+',
             })}
             rules={[
               {
@@ -93,7 +84,6 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a description for the incident.',
-                  id: 'AIkkvf',
                 }),
               },
             ]}

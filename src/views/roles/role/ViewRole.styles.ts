@@ -3,7 +3,7 @@ import type { Theme } from '../../../configs/ThemeConfig';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   '@media print': {
-    offenderSideList: `display: none !important;`,
+    offenderSideList: 'display: none !important;',
   },
   content: {
     padding: 10,

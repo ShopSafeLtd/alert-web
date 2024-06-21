@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ListVehiclesQuery } from 'graphql/generated';
 
 import type { FormInstance } from 'antd';
 import {
@@ -34,6 +33,7 @@ import OffenderImage from 'components/offenders/OffenderForm/OffenderImage';
 import { useIntl } from 'react-intl';
 import PotentialOffenders from 'components/offenders/potentialOffenders';
 import type { FormData } from './useAddOffender';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
 const { Title, Paragraph } = Typography;
 
@@ -161,7 +161,6 @@ const AddOffender = ({
         onBack={reportOnly ? undefined : () => window.history.back()}
         title={intl.formatMessage({
           defaultMessage: 'Add Offender',
-          id: 'm3ChN4',
         })}
         // extra={[
         //   <Button
@@ -221,14 +220,13 @@ const AddOffender = ({
             <Row align="middle" style={{ marginBottom: 20 }}>
               <Col>
                 <Title style={{ marginBottom: 0 }} level={4}>
-                  {intl.formatMessage({ defaultMessage: '2. ', id: 'Gi8z4T' })}
+                  {intl.formatMessage({ defaultMessage: '2. ' })}
                 </Title>
               </Col>
               <Col>
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Addresses',
-                    id: 'xBrtnx',
                   })}
                 </Title>
               </Col>
@@ -241,7 +239,6 @@ const AddOffender = ({
                   {intl.formatMessage({
                     defaultMessage:
                       '- If there is a known address for the offender please enter it.',
-                    id: '0u8zRc',
                   })}
                 </Paragraph>
               </Col>
@@ -252,12 +249,10 @@ const AddOffender = ({
                   name="addressAlias"
                   label={intl.formatMessage({
                     defaultMessage: 'Label',
-                    id: '753yX5',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'A friendly name for the address to identify it, such as home',
-                    id: 'YI+p4u',
                   })}
                 >
                   <Input />
@@ -268,7 +263,6 @@ const AddOffender = ({
                   name="building"
                   label={intl.formatMessage({
                     defaultMessage: 'Building',
-                    id: 'oS/nae',
                   })}
                 >
                   <Input />
@@ -279,7 +273,6 @@ const AddOffender = ({
                   name="street"
                   label={intl.formatMessage({
                     defaultMessage: 'Street',
-                    id: 'BaIwdV',
                   })}
                 >
                   <Input />
@@ -290,7 +283,6 @@ const AddOffender = ({
                   name="townCity"
                   label={intl.formatMessage({
                     defaultMessage: 'Town/City',
-                    id: 'byaTQZ',
                   })}
                 >
                   <Input />
@@ -303,7 +295,6 @@ const AddOffender = ({
                   name="county"
                   label={intl.formatMessage({
                     defaultMessage: 'County',
-                    id: 'B+KJhc',
                   })}
                 >
                   <Input />
@@ -314,7 +305,6 @@ const AddOffender = ({
                   name="postcode"
                   label={intl.formatMessage({
                     defaultMessage: 'Postcode',
-                    id: 'FJhjgz',
                   })}
                 >
                   <Input />
@@ -356,7 +346,6 @@ const AddOffender = ({
               emptyDescription={intl.formatMessage({
                 defaultMessage:
                   "You haven't added any outcomes for this offender yet.",
-                id: '3pprLx',
               })}
             />
           )}
@@ -400,7 +389,6 @@ const AddOffender = ({
                     <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                       {intl.formatMessage({
                         defaultMessage: 'Who is it visible to?',
-                        id: 'wvg3HJ',
                       })}
                     </Title>
                   </Col>
@@ -413,7 +401,6 @@ const AddOffender = ({
                       {intl.formatMessage({
                         defaultMessage:
                           '- Please select the content groups that this offender is for',
-                        id: '36xlXI',
                       })}
                     </Paragraph>
                   </Col>
@@ -424,12 +411,10 @@ const AddOffender = ({
                       name="groups"
                       label={intl.formatMessage({
                         defaultMessage: 'Content Groups',
-                        id: '3lRewT',
                       })}
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           'Select the content groups that you would like this offender to be visible to.',
-                        id: 'cfTvTq',
                       })}
                       rules={[
                         {
@@ -437,7 +422,6 @@ const AddOffender = ({
                           message: intl.formatMessage({
                             defaultMessage:
                               'Please select at least one group for the offender.',
-                            id: 'hK3zLA',
                           }),
                         },
                       ]}
@@ -475,7 +459,6 @@ const AddOffender = ({
                       {intl.formatMessage({
                         defaultMessage:
                           'Justification for adding the offender to Alert',
-                        id: '+66o7X',
                       })}
                     </Title>
                   </Col>
@@ -488,7 +471,6 @@ const AddOffender = ({
                       {intl.formatMessage({
                         defaultMessage:
                           '- Please enter a justification for the offender',
-                        id: 'Fraazv',
                       })}
                     </Paragraph>
                   </Col>
@@ -499,11 +481,10 @@ const AddOffender = ({
                       name="justification"
                       label={intl.formatMessage({
                         defaultMessage: 'Justification',
-                        id: 'i0xkcf',
                       })}
                       tooltip={intl.formatMessage({
-                        defaultMessage: `Enter a justification to explain why this offender doesn't connect with an incident.`,
-                        id: 'P7rUrU',
+                        defaultMessage:
+                          "Enter a justification to explain why this offender doesn't connect with an incident.",
                       })}
                       rules={[
                         {
@@ -511,7 +492,6 @@ const AddOffender = ({
                           message: intl.formatMessage({
                             defaultMessage:
                               'Please enter a justification for the offender.',
-                            id: '11rxZC',
                           }),
                         },
                       ]}
@@ -533,7 +513,6 @@ const AddOffender = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Cancel',
-                      id: '47FYwb',
                     })}
                   </Button>
                 </Col>
@@ -545,7 +524,7 @@ const AddOffender = ({
                   type="primary"
                   htmlType="submit"
                 >
-                  {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+                  {intl.formatMessage({ defaultMessage: 'Save' })}
                 </Button>
               </Col>
             </Row>
@@ -555,7 +534,6 @@ const AddOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Potential Offenders',
-          id: 'KMCham',
         })}
         open={viewPotentialOffenders}
         onClose={toggleViewPotentialOffenders}

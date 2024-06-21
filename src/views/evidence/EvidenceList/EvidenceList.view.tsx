@@ -15,9 +15,9 @@ import { faFileAudio } from '@fortawesome/pro-light-svg-icons';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ReactPlayer from 'react-player';
 import Loading from 'components/shared-components/AntD/Loading';
-import type { ListDemEvidenceExtendedWithoutUserQuery } from '../../../graphql/generated';
 
 import useStyles from '../../profiles/crime-groups/list-crime-groups/ListCrimeGroups.styles';
+import type { ListDemEvidenceExtendedWithoutUserQuery } from '#/views/evidence/grapqhl/queries/list-evidence.generated';
 
 interface ViewEvidenceListProps {
   data: ListDemEvidenceExtendedWithoutUserQuery | undefined;
@@ -64,7 +64,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
             // onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Evidence...',
-              id: 'zWBZ1p',
             })}
             allowClear
           />
@@ -132,7 +131,7 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
             width: '20%',
           },
           {
-            title: <FormattedMessage id="q4mEG7" defaultMessage="Officer" />,
+            title: <FormattedMessage defaultMessage="Officer" />,
             dataIndex: 'name',
             key: 'name',
             // filters: [...new Map(officerNames.map((v) => [v.value, v])).values()],
@@ -148,15 +147,13 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
             width: '30%',
           },
           {
-            title: <FormattedMessage id="IuFETn" defaultMessage="Duration" />,
+            title: <FormattedMessage defaultMessage="Duration" />,
             dataIndex: 'duration',
             key: 'duration',
             width: '10%',
           },
           {
-            title: (
-              <FormattedMessage id="voXuR/" defaultMessage="Recorded At" />
-            ),
+            title: <FormattedMessage defaultMessage="Recorded At" />,
             dataIndex: 'date',
             key: 'date',
             // sort by date
@@ -202,7 +199,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                           evidenceList.officerName ??
                           intl.formatMessage({
                             defaultMessage: 'No name provided',
-                            id: 'Qadyhn',
                           }),
                         playbackUrl:
                           evidenceList.playbackUrl ?? 'No playbackUrl provided',
@@ -243,7 +239,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
         open={!!selectedData}
         title={intl.formatMessage({
           defaultMessage: 'View Evidence',
-          id: '0jDp2T',
         })}
         width="80%"
         onCancel={() => setSelectedData(undefined)}
@@ -256,14 +251,12 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Close',
-              id: 'rbrahO',
             })}
           </Button>,
           <Button key="download" type="primary" loading={loading}>
             <a href={selectedData?.playbackUrl} download>
               {intl.formatMessage({
                 defaultMessage: 'Download',
-                id: '5q3qC0',
               })}
             </a>
           </Button>,
@@ -275,7 +268,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
               <Descriptions column={1} bordered>
                 <Descriptions.Item
                   label={intl.formatMessage({
-                    id: 'q4mEG7',
                     defaultMessage: 'Officer',
                   })}
                 >
@@ -283,7 +275,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={intl.formatMessage({
-                    id: 'IuFETn',
                     defaultMessage: 'Duration',
                   })}
                 >
@@ -291,7 +282,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={intl.formatMessage({
-                    id: 'DBZGY7',
                     defaultMessage: 'Importance',
                   })}
                 >
@@ -299,7 +289,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={intl.formatMessage({
-                    id: '+U6ozc',
                     defaultMessage: 'Type',
                   })}
                 >
@@ -314,7 +303,6 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                   width="100%"
                   height="100%"
                   alt={intl.formatMessage({
-                    id: 'EqkwlK',
                     defaultMessage: 'evidence',
                   })}
                   src={selectedData?.playbackUrl || ' '}

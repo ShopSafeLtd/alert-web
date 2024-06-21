@@ -1,10 +1,11 @@
 import React from 'react';
 import { Col, Divider, Row, Typography } from 'antd';
 import { Link } from 'react-router-dom';
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
+
 import SideListItem from 'components/side-list/SideListItem.view';
 import InfiniteSideScrollList from 'components/side-list/InfiniteSideList';
 import useStyles from './CrimeGroupSideList.styles';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 const { Paragraph } = Typography;
 

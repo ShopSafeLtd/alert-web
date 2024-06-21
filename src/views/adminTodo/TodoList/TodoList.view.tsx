@@ -17,11 +17,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type {
-  CreateTodoMutation,
-  ListTodosQuery,
-  SchemeGroupsSelectQuery,
-} from 'graphql/generated';
+
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,6 +30,9 @@ import getTodoUrl from 'utils/get-to-do-url';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 import type { ListData } from '../useActivities';
+import type { ListTodosQuery } from 'graphql/todos/queries/list_todos.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { SchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
 // const { Panel } = Collapse;
 
 type TemplateData = ListData;
@@ -83,7 +82,6 @@ const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
   if (todo.incident)
     return (
       <FormattedMessage
-        id="T3r1oP"
         defaultMessage="Incident: {var1}"
         values={{ var1: todo.incident.reference }}
       />
@@ -91,7 +89,6 @@ const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
   if (todo.offender)
     return (
       <FormattedMessage
-        id="1FqkCb"
         defaultMessage="Offender: {var1}"
         values={{ var1: todo.offender.reference }}
       />
@@ -99,7 +96,6 @@ const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
   if (todo.crimeGroup)
     return (
       <FormattedMessage
-        id="FwiSHz"
         defaultMessage="Crime Group: {var1}"
         values={{ var1: todo.crimeGroup.reference }}
       />
@@ -107,7 +103,6 @@ const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
   if (todo.vehicle)
     return (
       <FormattedMessage
-        id="6aXXS8"
         defaultMessage="Vehicle: {var1}"
         values={{ var1: todo.vehicle.reference }}
       />
@@ -115,7 +110,6 @@ const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
   if (todo.investigation)
     return (
       <FormattedMessage
-        id="a2mKeV"
         defaultMessage="Investigation: {var1}"
         values={{ var1: todo.investigation.reference }}
       />
@@ -166,42 +160,36 @@ const AdminTodos = ({
     {
       text: intl.formatMessage({
         defaultMessage: 'Incident',
-        id: 'zaYxwd',
       }),
       value: 'incident',
     },
     {
       text: intl.formatMessage({
         defaultMessage: 'Offender',
-        id: 'AN7Aru',
       }),
       value: 'offender',
     },
     {
       text: intl.formatMessage({
         defaultMessage: 'Investigation',
-        id: 'tNseQe',
       }),
       value: 'investigation',
     },
     {
       text: intl.formatMessage({
         defaultMessage: 'Vehicle',
-        id: '4T7son',
       }),
       value: 'vehicle',
     },
     {
       text: intl.formatMessage({
         defaultMessage: 'Crime Group',
-        id: 'FY/YfT',
       }),
       value: 'crime group',
     },
     {
       text: intl.formatMessage({
         defaultMessage: 'Chat',
-        id: 'WTrOy3',
       }),
       value: 'chat',
     },
@@ -229,7 +217,6 @@ const AdminTodos = ({
             // value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
-              id: 'jXZqfz',
               defaultMessage: 'Search for a task...',
             })}
             allowClear
@@ -241,7 +228,6 @@ const AdminTodos = ({
             onChange={setGroupsFilter}
             value={groupsFilter}
             placeholder={intl.formatMessage({
-              id: 'hzmswI',
               defaultMessage: 'Groups',
             })}
             style={{ width: '100%' }}
@@ -257,7 +243,6 @@ const AdminTodos = ({
               style={{ width: '100%' }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Create Activity from Template',
-                id: '1RRG2d',
               })}
               onSelect={(value) => selectTemplate(value)}
               value={null}
@@ -283,7 +268,6 @@ const AdminTodos = ({
           >
             {intl.formatMessage({
               defaultMessage: 'New Activity',
-              id: '6kyt/v',
             })}
           </Button>
         </Col>
@@ -293,14 +277,12 @@ const AdminTodos = ({
           <Radio.Group defaultValue="CURRENT" onChange={toggleAllSchemes}>
             <Radio.Button value="CURRENT">
               {intl.formatMessage({
-                id: 'qWFImB',
                 defaultMessage: 'Current Scheme',
               })}
             </Radio.Button>
             <Radio.Button value="ALL">
               {intl.formatMessage({
                 defaultMessage: 'All Schemes',
-                id: '4zN3gE',
               })}
             </Radio.Button>
           </Radio.Group>
@@ -310,13 +292,11 @@ const AdminTodos = ({
             <Radio.Button value="YOUR">
               {intl.formatMessage({
                 defaultMessage: 'Your Activities',
-                id: '401sYO',
               })}
             </Radio.Button>
             <Radio.Button value="ALL">
               {intl.formatMessage({
                 defaultMessage: 'All Activities',
-                id: 'CC/yEt',
               })}
             </Radio.Button>
           </Radio.Group>
@@ -364,7 +344,6 @@ const AdminTodos = ({
                 dataIndex: 'name',
                 title: intl.formatMessage({
                   defaultMessage: 'Name',
-                  id: 'HAlOn1',
                 }),
                 render: (value, record) => (
                   <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
@@ -380,7 +359,6 @@ const AdminTodos = ({
                 dataIndex: 'description',
                 title: intl.formatMessage({
                   defaultMessage: 'Description',
-                  id: 'Q8Qw5B',
                 }),
                 ellipsis: true,
               },
@@ -390,7 +368,6 @@ const AdminTodos = ({
                 dataIndex: 'dueDate',
                 title: intl.formatMessage({
                   defaultMessage: 'Due Date',
-                  id: '8XUukm',
                 }),
                 render: (value: Date) => FormatCalendar(value),
                 sorter: (a, b) =>
@@ -403,7 +380,6 @@ const AdminTodos = ({
                 dataIndex: 'assignedUsers',
                 title: intl.formatMessage({
                   defaultMessage: 'Assigned Users',
-                  id: '8oku8d',
                 }),
                 ellipsis: true,
                 filters: userFilter,
@@ -436,7 +412,6 @@ const AdminTodos = ({
                 key: 'groups',
                 title: intl.formatMessage({
                   defaultMessage: 'Groups',
-                  id: 'hzmswI',
                 }),
                 dataIndex: 'groups',
                 filters:
@@ -461,7 +436,6 @@ const AdminTodos = ({
                 dataIndex: 'linkedItem',
                 title: intl.formatMessage({
                   defaultMessage: 'Linked Item',
-                  id: 'NkD6oV',
                 }),
                 render: (value, todo) => (
                   <Link
@@ -476,7 +450,6 @@ const AdminTodos = ({
               {
                 title: intl.formatMessage({
                   defaultMessage: 'Status',
-                  id: 'tzMNF3',
                 }),
                 dataIndex: 'actions',
                 key: 'actions',
@@ -485,14 +458,12 @@ const AdminTodos = ({
                   {
                     text: intl.formatMessage({
                       defaultMessage: 'Uncompleted',
-                      id: 'vtoZdb',
                     }),
                     value: false,
                   },
                   {
                     text: intl.formatMessage({
                       defaultMessage: 'Completed',
-                      id: '95stPq',
                     }),
                     value: true,
                   },
@@ -507,24 +478,20 @@ const AdminTodos = ({
                     <Popconfirm
                       title={intl.formatMessage({
                         defaultMessage: 'Uncompleted this activity?',
-                        id: 'AN8gwr',
                       })}
                       // description="Do you complete this activity?"
                       onConfirm={() => onUncompletedTodo(record.key)}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >
                       <Button size="small" style={{ width: 110, padding: 2 }}>
                         {intl.formatMessage({
                           defaultMessage: 'Completed',
-                          id: '95stPq',
                         })}
                       </Button>
                     </Popconfirm>
@@ -544,7 +511,6 @@ const AdminTodos = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Uncompleted',
-                        id: 'vtoZdb',
                       })}
                     </Button>
                   ),
@@ -703,7 +669,6 @@ const AdminTodos = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Create Activity',
-          id: '8RIxKm',
         })}
         open={addTodo}
         width={800}
@@ -722,7 +687,6 @@ const AdminTodos = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Complete Activity',
-          id: '8fwjt4',
         })}
         open={!!selectedTodo}
         width={800}

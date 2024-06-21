@@ -1,11 +1,7 @@
-import type { ListIncidentsAllSchemesQuery } from 'graphql/generated';
-import {
-  Role,
-  QueryMode,
-  useListIncidentsAllSchemesQuery,
-  SortOrder,
-} from 'graphql/generated';
 import { IncidentSort, useStoreState } from 'state';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import { QueryMode, Role, SortOrder } from 'graphql/types';
 
 interface Return {
   data:
@@ -106,7 +102,7 @@ const useIncidentSideList = (): Return => {
           }
         : undefined,
       approved:
-        role === 'USER'
+        role === Role.User
           ? {
               equals: true,
             }

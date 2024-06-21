@@ -1,18 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import { useEffect, useState } from 'react';
-import type { AnswerType, ViewTagQuery } from 'graphql/generated';
-import {
-  IncidentFormField,
-  Model,
-  TagType,
-  useRecycleTagMutation,
-  useRemoveQuestionFromTagMutation,
-  useUpdateTagMutation,
-  useUpdateTagQsMutation,
-  useUpsertIncidentFormMutation,
-  useViewTagQuery,
-  ViewTagDocument,
-} from 'graphql/generated';
 import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import { useParams } from 'react-router-dom';
@@ -20,7 +7,19 @@ import { useApolloClient } from '@apollo/client';
 import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import type { ExtendedLayout } from '../../../reports/types';
+import type { ExtendedLayout } from '#/views/reports/types';
+import type { AnswerType } from 'graphql/types';
+import { IncidentFormField, Model, TagType } from 'graphql/types';
+import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/view-tag.generated';
+import {
+  useViewTagQuery,
+  ViewTagDocument,
+} from '#/views/settings/tags/ViewTag/graphql/view-tag.generated';
+import { useUpdateTagQsMutation } from '#/views/settings/tags/ViewTag/graphql/update-question-order.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
+import { useRemoveQuestionFromTagMutation } from '#/views/settings/tags/ViewTag/graphql/remove-question.generated';
+import { useUpsertIncidentFormMutation } from '#/views/settings/tags/ViewTag/graphql/update-incident-form-fields.generated';
+import { useRecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
 
 const { confirm } = Modal;
 
@@ -683,14 +682,12 @@ const useViewTag = (): Return => {
       window.history.back();
       notification.success({
         message: intl.formatMessage({
-          id: 'NzVm0o',
           defaultMessage: 'Successfully Removed',
         }),
         description: intl.formatMessage(
           {
             defaultMessage:
               'The incident type has been removed from {schemeName}',
-            id: 'NoJPMG',
           },
           { schemeName }
         ),
@@ -718,11 +715,9 @@ const useViewTag = (): Return => {
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: intl.formatMessage({
-        id: '2oCaym',
         defaultMessage: 'Are you sure?',
       }),
       content: intl.formatMessage({
-        id: 'Zyk6ao',
         defaultMessage:
           'This will remove this incident type from this scheme, bu not any other schemes you may have added it to.',
       }),

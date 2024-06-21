@@ -1,5 +1,5 @@
 import type { Permissions } from '../state/user-model';
-import type { PermissionMethod, PermissionModel } from '../graphql/generated';
+import type { PermissionMethod, PermissionModel } from 'graphql/types';
 
 interface PermissionMethodModal {
   model: PermissionModel;

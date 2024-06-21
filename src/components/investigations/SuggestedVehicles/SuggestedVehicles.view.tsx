@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Table } from 'antd';
-import type { InvestigationSuggestionsQuery } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { FormattedMessage } from 'react-intl';
 import useStyles from './SuggestedVehicles.style';
+import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
 
 interface Props {
   suggestedData: InvestigationSuggestionsQuery | undefined;
@@ -47,29 +47,27 @@ const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
+            title: <FormattedMessage defaultMessage="Alert ID" />,
           },
           {
             key: 'registration',
             dataIndex: 'registration',
-            title: (
-              <FormattedMessage id="qv7ied" defaultMessage="Registration" />
-            ),
+            title: <FormattedMessage defaultMessage="Registration" />,
           },
           {
             key: 'make',
             dataIndex: 'make',
-            title: <FormattedMessage id="6AAM0P" defaultMessage="Make" />,
+            title: <FormattedMessage defaultMessage="Make" />,
           },
           {
             key: 'model',
             dataIndex: 'model',
-            title: <FormattedMessage id="rhSI1/" defaultMessage="Model" />,
+            title: <FormattedMessage defaultMessage="Model" />,
           },
           {
             key: 'colour',
             dataIndex: 'colour',
-            title: <FormattedMessage id="+e8vAT" defaultMessage="Colour" />,
+            title: <FormattedMessage defaultMessage="Colour" />,
           },
           {
             key: 'actions',
@@ -81,10 +79,7 @@ const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
                 type="ghost"
                 onClick={() => handleAddSuggestion(row.key)}
               >
-                <FormattedMessage
-                  id="zEXZIx"
-                  defaultMessage="Add To Investigation"
-                />
+                <FormattedMessage defaultMessage="Add To Investigation" />
               </Button>
             ),
           },

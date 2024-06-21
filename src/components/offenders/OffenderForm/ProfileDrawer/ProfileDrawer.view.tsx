@@ -40,7 +40,6 @@ const ProfileDrawer = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
-          id: 'goP1s6',
         })}
         open={addExistingVehicle}
         width="800"
@@ -61,7 +60,6 @@ const ProfileDrawer = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
-          id: 'cHbTr7',
         })}
         open={addNewVehicle}
         width="700"
@@ -84,7 +82,6 @@ const ProfileDrawer = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Crime Groups',
-          id: '3HDZC+',
         })}
         open={addExistingCrimeGroup}
         width="800"

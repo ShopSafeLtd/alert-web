@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Col, Input, Row, Table } from 'antd';
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
+
 import { Link, useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import useStyles from './ListCrimeGroups.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 interface Props {
   data: ListCrimeGroupsQuery | undefined;
@@ -38,7 +39,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               className={classes.searchInput}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search crime groups...',
-                id: 'q5vT3Z',
               })}
             />
           </Col>
@@ -62,12 +62,11 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               dataIndex: 'reference',
               title: intl.formatMessage({
                 defaultMessage: 'Alert ID',
-                id: 'k8ZNgH',
               }),
               render: (value: string, item) => (
                 <Link to={`${item.key}`}>
                   {intl.formatMessage(
-                    { defaultMessage: 'CG-{id}', id: 'ryBmoZ' },
+                    { defaultMessage: 'CG-{id}' },
                     {
                       id: value,
                     }
@@ -80,7 +79,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               dataIndex: 'alias',
               title: intl.formatMessage({
                 defaultMessage: 'Alias',
-                id: 'Ri9jA7',
               }),
             },
             {
@@ -88,7 +86,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               dataIndex: 'totalOffenders',
               title: intl.formatMessage({
                 defaultMessage: 'Members',
-                id: '+a+2ug',
               }),
             },
             {
@@ -96,7 +93,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               dataIndex: 'totalIncidents',
               title: intl.formatMessage({
                 defaultMessage: 'Incidents',
-                id: 'mtr3R4',
               }),
             },
             {
@@ -104,7 +100,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               dataIndex: 'totalValue',
               title: intl.formatMessage({
                 defaultMessage: 'Lost Value',
-                id: '3YYDlc',
               }),
               render: (value: number | undefined) => `£${value || 0}`,
             },
@@ -113,7 +108,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               dataIndex: 'totalRecoveredValue',
               title: intl.formatMessage({
                 defaultMessage: 'Recovered Value',
-                id: 'bGwFFv',
               }),
               render: (value: number | undefined) => `£${value || 0}`,
             },
@@ -122,7 +116,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               dataIndex: 'totalTheftSuccess',
               title: intl.formatMessage({
                 defaultMessage: 'Loss Rate',
-                id: 'mQPFSj',
               }),
               render: (value: number | undefined) =>
                 `${value?.toFixed(0) || 0}%`,

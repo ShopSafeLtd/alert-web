@@ -4,20 +4,20 @@ import React from 'react';
 import type { FormInstance } from 'antd';
 import {
   Button,
-  Card,
-  Checkbox,
   Col,
   Empty,
   Form,
+  Space,
+  Tabs,
+  Upload,
+  Card,
+  Checkbox,
   Input,
   PageHeader,
   Radio,
   Row,
   Select,
-  Space,
-  Tabs,
   Typography,
-  Upload,
 } from 'antd';
 import ReactDOMServer from 'react-dom/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,7 +27,7 @@ import type { FormData } from './useCreateMg11';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import SignatureInput from '../../../components/SignBox';
-import type { ListStatementTemplatesQuery } from '../../../graphql/generated';
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -1175,7 +1175,7 @@ const CreateMg11 = ({
                 htmlType="submit"
               >
                 {businessStatement
-                  ? `Create Mg11/Go to business impact statement`
+                  ? 'Create Mg11/Go to business impact statement'
                   : 'Create Mg11'}
               </Button>
             </Col>

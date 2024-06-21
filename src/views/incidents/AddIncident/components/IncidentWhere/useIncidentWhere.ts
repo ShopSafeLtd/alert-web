@@ -1,18 +1,16 @@
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { useApolloClient } from '@apollo/client';
+
+import { useStoreState } from 'state';
+import { useIntl } from 'react-intl';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
-} from 'graphql/generated';
-import {
-  QueryMode,
-  Role,
-  SearchBusinessesDocument,
-  useBusinessBrandsLazyQuery,
-} from 'graphql/generated';
-import { useStoreState } from 'state';
-import { useIntl } from 'react-intl';
+} from 'graphql/businesses/queries/search-businesses.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
+import { QueryMode, Role } from 'graphql/types';
+import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/business-brands.generated';
 
 interface Props {
   showSiteNumber: boolean;
@@ -99,7 +97,6 @@ const useIncidentWhere = ({
               {
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
-                  id: 'hX5PAb',
                 }),
                 value: '',
                 disabled: true,

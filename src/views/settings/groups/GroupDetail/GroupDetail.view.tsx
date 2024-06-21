@@ -1,11 +1,12 @@
 import React from 'react';
-import type { GroupQuery } from 'graphql/generated';
+
 import { Button, Card, Drawer, PageHeader, Table } from 'antd';
 import EditGroup from 'components/form-components/group/EditGroup';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FormattedMessage, useIntl } from 'react-intl';
+import type { GroupQuery } from 'graphql/group/queries/group.generated';
 
 interface Props {
   data: GroupQuery | undefined;
@@ -44,7 +45,7 @@ const GroupDetail = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Edit Group" id="h1fdng" />
+            <FormattedMessage defaultMessage="Edit Group" />
           </Button>,
           <Button
             key="1"
@@ -58,7 +59,7 @@ const GroupDetail = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="Delete Group" id="HC54OB" />
+            <FormattedMessage defaultMessage="Delete Group" />
           </Button>,
         ]}
       />
@@ -77,7 +78,6 @@ const GroupDetail = ({
 
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               width: 300,
@@ -92,7 +92,6 @@ const GroupDetail = ({
 
               title: intl.formatMessage({
                 defaultMessage: 'Business',
-                id: 'w1Fanr',
               }),
               dataIndex: 'business',
             },
@@ -107,7 +106,6 @@ const GroupDetail = ({
         <Drawer
           title={intl.formatMessage({
             defaultMessage: 'Edit Group Details',
-            id: 'mKqoi7',
           })}
           open={editGroup}
           width="400"

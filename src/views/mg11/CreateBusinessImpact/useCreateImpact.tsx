@@ -3,14 +3,13 @@ import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import React, { useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import {
-  useBusinessImpactQuery,
-  useCreateOneBusinessImpactMutation,
-} from '../../../graphql/generated';
+
 import type { FormData, IncidentData } from './CreateImpact.view';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import { useStoreState } from '../../../state';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
+import { useBusinessImpactQuery } from 'graphql/reports/queries/business-impact-statement.generated';
+import { useCreateOneBusinessImpactMutation } from 'graphql/reports/mutations/create-business-impact.generated';
 
 const { useForm } = Form;
 
@@ -108,7 +107,7 @@ const useCreateImpact = (): Return => {
 
   const onSubmit = (value: FormData) => {
     setSaving(true);
-    createImpact({
+    void createImpact({
       variables: {
         data: {
           ...value,

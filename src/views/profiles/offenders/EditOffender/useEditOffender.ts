@@ -1,27 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
-import type {
-  Age,
-  Build,
-  Gender,
-  Height,
-  IdSource,
-  ListVehiclesQuery,
-  OffenderUpdateInput,
-  Race,
-  ViewOffenderQuery,
-} from 'graphql/generated';
-import {
-  ImagePosition,
-  Model,
-  Role,
-  useListCustomGalleriesQuery,
-  useListVehiclesQuery,
-  useRecycleOffenderMutation,
-  useTagsQuery,
-  useUpdateOffenderMutation,
-  useViewOffenderQuery,
-} from 'graphql/generated';
+
 import type { FormInstance } from 'antd';
 import { Form, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
@@ -40,6 +19,24 @@ import update from 'immutability-helper';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useGroupsContext } from '#/context/groups-context';
+import type {
+  Age,
+  Build,
+  Gender,
+  Height,
+  IdSource,
+  OffenderUpdateInput,
+  Race,
+} from 'graphql/types';
+import { ImagePosition, Model, Role } from 'graphql/types';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
+import { useViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
 
 const { confirm } = Modal;
 
@@ -792,7 +789,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
               data.hair ||
               intl.formatMessage({
                 defaultMessage: 'Unknown',
-                id: '5jeq8P',
               }),
           },
           peculiarities: { set: data.peculiarities || '' },
@@ -824,12 +820,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Rejected!',
-          id: 'C0DMPx',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
-          id: 'nQ1eW+',
         }),
         placement: 'bottomRight',
       });
@@ -842,16 +836,13 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: '5YfZun',
       }),
       okText: intl.formatMessage({
         defaultMessage: 'Reject',
-        id: 'VzIOKf',
       }),
       onOk() {
         void recycleOffender({
@@ -871,7 +862,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         intl.formatMessage({
           defaultMessage:
             'This image already exists, please choose another one.',
-          id: 'ILB9M+',
         })
       );
     }
@@ -1077,11 +1067,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const onRemoveImage = (imageId: string) => {
     confirm({
       title: intl.formatMessage({
-        id: 'n0NLsa',
         defaultMessage: 'Do you want to remove the image?',
       }),
       content: intl.formatMessage({
-        id: 'JDJoIZ',
         defaultMessage: 'This action cannot be undone.',
       }),
 
@@ -1109,11 +1097,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: intl.formatMessage({
-        id: 'P70g0z',
         defaultMessage: 'Do you want to delete the exclusion?',
       }),
       content: intl.formatMessage({
-        id: 'JDJoIZ',
         defaultMessage: 'This action cannot be undone.',
       }),
       onOk() {

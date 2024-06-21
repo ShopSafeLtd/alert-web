@@ -1,18 +1,25 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
+import { Route, Routes } from 'react-router';
 
 import Onboarding from 'views/onboard/Onboarding';
-import PrimaryOnboarding from 'views/onboard/SetPassword';
+import { useIntl } from 'react-intl';
+import RouteWrapper from '#/navigation/utils/route-wrapper';
+// import PrimaryOnboarding from 'views/onboard/SetPassword';
 
-const SecondaryOnboarding = (): JSX.Element => (
-  <Routes>
-    <Route path="*" element={<Onboarding />} />
-    <Route
-      // path="onboarding/password"
-      path="password"
-      element={<PrimaryOnboarding userId="newUserId" />}
-    />
-  </Routes>
-);
+const SecondaryOnboarding = (): JSX.Element => {
+  const intl = useIntl();
+
+  return (
+    <RouteWrapper
+      title={intl.formatMessage({
+        defaultMessage: 'Onboarding',
+      })}
+    >
+      <Routes>
+        <Route index element={<Onboarding />} />
+      </Routes>
+    </RouteWrapper>
+  );
+};
 
 export default SecondaryOnboarding;

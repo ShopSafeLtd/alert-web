@@ -1,9 +1,9 @@
 import React from 'react';
-import type { RecycledItemQuery } from 'graphql/generated';
 import { Button, Col, Row, Skeleton, Descriptions, Popconfirm } from 'antd';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
+import type { RecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
 
 interface Props {
   onSubmit: () => void;
@@ -34,7 +34,6 @@ const RestoreIncident = ({
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Subject',
-            id: 'LLtKhp',
           })}
         >
           {data?.recycledItem?.incident?.subject}
@@ -43,18 +42,17 @@ const RestoreIncident = ({
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Location',
-            id: 'rvirM2',
           })}
         >
           {data?.recycledItem?.incident?.location?.full}
         </Descriptions.Item>
         <Descriptions.Item
-          label={intl.formatMessage({ defaultMessage: 'Date', id: 'P7PLVj' })}
+          label={intl.formatMessage({ defaultMessage: 'Date' })}
         >
           {FormatCalendar(data?.recycledItem?.incident?.date || moment())}
         </Descriptions.Item>
         <Descriptions.Item
-          label={intl.formatMessage({ defaultMessage: 'Remark', id: 'fTlL2P' })}
+          label={intl.formatMessage({ defaultMessage: 'Remark' })}
         >
           {data?.recycledItem?.incident?.createdBy.fullName}
         </Descriptions.Item>
@@ -66,20 +64,17 @@ const RestoreIncident = ({
             title={intl.formatMessage({
               defaultMessage:
                 'Are you sure to permanently delete this Incident?',
-              id: 'y5gXPE',
             })}
             onConfirm={onDelete}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
             <Button disabled={saving} loading={saving}>
               {intl.formatMessage({
                 defaultMessage: 'Delete Now',
-                id: '77+H1T',
               })}
             </Button>
           </Popconfirm>
@@ -88,13 +83,11 @@ const RestoreIncident = ({
           <Popconfirm
             title={intl.formatMessage({
               defaultMessage: 'Are you sure to restore this Incident?',
-              id: 'hkUyq1',
             })}
             onConfirm={onSubmit}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
@@ -106,7 +99,6 @@ const RestoreIncident = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Restore Item',
-                id: 'vnYVwS',
               })}
             </Button>
           </Popconfirm>

@@ -15,7 +15,6 @@ const successNotification = (
     message: (
       <FormattedMessage
         defaultMessage="Successfully {type}!"
-        id="cAM3G8"
         values={{ type }}
       />
     ),
@@ -35,7 +34,6 @@ const successNotification = (
     description: (
       <FormattedMessage
         defaultMessage="The {title} of the {subject} have been {type}!"
-        id="q8MJJ6"
         values={{ title, subject, type }}
       />
     ),

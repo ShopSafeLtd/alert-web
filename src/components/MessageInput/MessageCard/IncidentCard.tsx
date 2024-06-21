@@ -44,13 +44,11 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
             trigger="click"
             title={intl.formatMessage({
               defaultMessage: 'Remove the incident?',
-              id: '+pfPgu',
             })}
             onConfirm={() => removeIncident(incident.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
-              id: 'oUWADl',
             })}
             overlayInnerStyle={{ padding: 10 }}
           >
@@ -96,7 +94,6 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
             <Descriptions.Item
               label={intl.formatMessage({
                 defaultMessage: 'Created At',
-                id: 'wittYy',
               })}
             >
               {incident.dayTime}

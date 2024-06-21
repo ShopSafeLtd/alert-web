@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import type { TagQuery } from 'graphql/generated';
-import { useUpdateTagMutation, useTagQuery } from 'graphql/generated';
+
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { TagQuery } from 'graphql/tag/queries/tag.generated';
+import { useTagQuery } from 'graphql/tag/queries/tag.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
 
 interface FormData {
   name: string;
@@ -39,11 +41,9 @@ const useEditOffenderWarning = ({ onClose, offenderId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender warning has been updated.',
-          id: 'GI8rR7',
         }),
         placement: 'bottomRight',
       });

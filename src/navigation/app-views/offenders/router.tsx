@@ -6,7 +6,7 @@ import AddOffender from 'views/profiles/offenders/AddOffender';
 // import EditOffender from 'views/profiles/offenders/EditOffender';
 import CompareOffender from 'views/profiles/offenders/CompareOffender';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
 
@@ -16,7 +16,6 @@ const Offenders = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Offenders',
-        id: 'xb54TN',
       })}
     >
       <Routes>

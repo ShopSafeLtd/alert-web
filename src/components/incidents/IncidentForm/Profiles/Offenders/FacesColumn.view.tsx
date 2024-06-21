@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Col, Row, Typography, Tooltip } from 'antd';
+import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,16 +9,17 @@ import {
 import CropFaceImage from '../../../../images/CropFaceImage';
 import useStyles from '../Profiles.styles';
 import type {
-  FacesOpenData,
   FaceData,
+  FacesOpenData,
   StateOffenderData,
 } from './useOffenders';
-import { Build, Height, Race } from '../../../../../graphql/generated';
+
 import {
   getClosestAgeRange,
   getGenderFromFace,
   getPeculiaritiesFromFace,
 } from '../../ImageSection/useImageSection';
+import { Build, Height, Race } from 'graphql/types';
 
 const { Paragraph, Title } = Typography;
 
@@ -98,16 +99,10 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
             <Col>
               <div className={classes.facesHeaderContainer}>
                 <Title level={4}>
-                  <FormattedMessage
-                    defaultMessage="Select the offender's face from the image"
-                    id="S5DNX2"
-                  />
+                  <FormattedMessage defaultMessage="Select the offender's face from the image" />
                 </Title>
                 <Paragraph className={classes.facesHeader}>
-                  <FormattedMessage
-                    defaultMessage="Select the face for this offender from the list below of people extracted from the image, if the offenders face is not shown skip this step using the button."
-                    id="libd1x"
-                  />
+                  <FormattedMessage defaultMessage="Select the face for this offender from the list below of people extracted from the image, if the offenders face is not shown skip this step using the button." />
                 </Paragraph>
               </div>
             </Col>
@@ -118,10 +113,7 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
             <Col>
               <div className={classes.selectedFace}>
                 <Paragraph className={classes.selectedFaceTitle}>
-                  <FormattedMessage
-                    defaultMessage="Selected Face"
-                    id="wOhlzD"
-                  />
+                  <FormattedMessage defaultMessage="Selected Face" />
                 </Paragraph>
                 <div className={classes.selectedFaceCard}>
                   <div className={classes.overlay} />
@@ -145,10 +137,7 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
             <div className={classes.faces}>
               {selected !== null && facesOpen.faces.length > 1 && (
                 <Paragraph className={classes.selectedFaceTitle} type="danger">
-                  <FormattedMessage
-                    defaultMessage="Select any additional people from this image to include in the incident."
-                    id="LwsW2y"
-                  />
+                  <FormattedMessage defaultMessage="Select any additional people from this image to include in the incident." />
                 </Paragraph>
               )}
               <Row gutter={[8, 8]}>
@@ -190,14 +179,10 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
               title={intl.formatMessage({
                 defaultMessage:
                   'Skip if the offender face is not shown in this image',
-                id: 'H+5CzB',
               })}
             >
               <Button onClick={onClose}>
-                <FormattedMessage
-                  id="MGMrNl"
-                  defaultMessage="Offender's Face Not Shown"
-                />
+                <FormattedMessage defaultMessage="Offender's Face Not Shown" />
               </Button>
             </Tooltip>
           </Col>
@@ -207,7 +192,7 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
               onClick={handleSubmit}
               disabled={selected === null}
             >
-              <FormattedMessage id="krQhSS" defaultMessage="Save Faces" />
+              <FormattedMessage defaultMessage="Save Faces" />
             </Button>
           </Col>
         </Row>

@@ -3,8 +3,8 @@ import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Loading from 'components/shared-components/AntD/Loading';
 
-const Mg11 = lazy(() => import(`./mg11/router`));
-const Generated = lazy(() => import(`./generated/router`));
+const Mg11 = lazy(() => import('./mg11/router'));
+const Generated = lazy(() => import('./generated/router'));
 
 export const GuestViews = (): JSX.Element => (
   <Suspense fallback={<Loading cover="content" />}>

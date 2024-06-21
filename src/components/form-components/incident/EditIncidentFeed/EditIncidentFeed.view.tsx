@@ -1,11 +1,11 @@
 import React from 'react';
-import type { EditIncidentFeedQuery } from 'graphql/generated';
-import { IncidentPriority } from 'graphql/generated';
 import { Button, Col, Form, Input, Radio, Row, Select, Skeleton } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import DatePicker from 'components/util-components/DatePicker';
 import type { FormData } from './useEditIncidentFeed';
+import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/edit-incident-feed.generated';
+import { IncidentPriority } from 'graphql/types';
 
 interface Props {
   onSubmit: (value: FormData) => void;
@@ -88,11 +88,9 @@ const EditGroup = ({
           <Form.Item
             name="tagsCrimeTypes"
             label={intl.formatMessage({
-              id: '3OwM2P',
               defaultMessage: 'Incident Type',
             })}
             tooltip={intl.formatMessage({
-              id: 'j/5VxV',
               defaultMessage:
                 'Select the relevant crime types for this incident, these help to categorise the incident.',
             })}
@@ -100,7 +98,6 @@ const EditGroup = ({
               {
                 required: true,
                 message: intl.formatMessage({
-                  id: 'eSRsUW',
                   defaultMessage: 'Please add at least one crime type.',
                 }),
               },
@@ -112,7 +109,6 @@ const EditGroup = ({
               mode="multiple"
               maxTagCount={2}
               placeholder={intl.formatMessage({
-                id: 'y7GECT',
                 defaultMessage: 'Search for a crime type...',
               })}
             >
@@ -128,7 +124,6 @@ const EditGroup = ({
           <Form.Item
             name="tagsInvolved"
             label={intl.formatMessage({
-              id: 'tEuhMY',
               defaultMessage: 'Aggravating Factors',
             })}
           >
@@ -138,7 +133,6 @@ const EditGroup = ({
               mode="multiple"
               maxTagCount={2}
               placeholder={intl.formatMessage({
-                id: 'y7GECT',
                 defaultMessage: 'Search for a crime type...',
               })}
             >
@@ -154,7 +148,6 @@ const EditGroup = ({
           <Form.Item
             name="tagsImpact"
             label={intl.formatMessage({
-              id: 'KxS/zg',
               defaultMessage: 'Incident Impact',
             })}
           >
@@ -164,7 +157,6 @@ const EditGroup = ({
               mode="multiple"
               maxTagCount={2}
               placeholder={intl.formatMessage({
-                id: 'y7GECT',
                 defaultMessage: 'Search for a crime type...',
               })}
             >
@@ -180,22 +172,21 @@ const EditGroup = ({
           <Form.Item
             name="priority"
             label={intl.formatMessage({
-              id: '8lCjAM',
               defaultMessage: 'Priority',
             })}
           >
             <Select disabled={saving}>
               <Select.Option value={IncidentPriority.Low}>
-                <FormattedMessage id="477I0g" defaultMessage="Low" />
+                <FormattedMessage defaultMessage="Low" />
               </Select.Option>
               <Select.Option value={IncidentPriority.Normal}>
-                <FormattedMessage id="myq2ZL" defaultMessage="Normal" />
+                <FormattedMessage defaultMessage="Normal" />
               </Select.Option>
               <Select.Option value={IncidentPriority.Medium}>
-                <FormattedMessage id="ovJ26C" defaultMessage="Medium" />
+                <FormattedMessage defaultMessage="Medium" />
               </Select.Option>
               <Select.Option value={IncidentPriority.High}>
-                <FormattedMessage id="AxMhQr" defaultMessage="High" />
+                <FormattedMessage defaultMessage="High" />
               </Select.Option>
             </Select>
           </Form.Item>
@@ -206,18 +197,15 @@ const EditGroup = ({
           <Form.Item
             name="date"
             label={intl.formatMessage({
-              id: 'rXTgTq',
               defaultMessage: 'Time & Date',
             })}
             tooltip={intl.formatMessage({
-              id: '4eTajC',
               defaultMessage: 'The date and time that the incident occurred.',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
-                  id: 'Cgy3GX',
                   defaultMessage: 'Please select a date for the incident.',
                 }),
               },
@@ -232,7 +220,6 @@ const EditGroup = ({
               format="HH:mm - DD/MM/YY"
               showTime={{ showSecond: false, showNow: true }}
               placeholder={intl.formatMessage({
-                id: 'hQHL0E',
                 defaultMessage: 'Set Date & Time',
               })}
             />
@@ -242,7 +229,6 @@ const EditGroup = ({
           <Form.Item
             name="subject"
             label={intl.formatMessage({
-              id: 'LLtKhp',
               defaultMessage: 'Subject',
             })}
           >
@@ -253,7 +239,6 @@ const EditGroup = ({
           <Form.Item
             name="customerRef"
             label={intl.formatMessage({
-              id: 'QNmTpb',
               defaultMessage: 'Customer Reference',
             })}
           >
@@ -264,18 +249,15 @@ const EditGroup = ({
       <Form.Item
         name="description"
         label={intl.formatMessage({
-          id: 'Q8Qw5B',
           defaultMessage: 'Description',
         })}
         tooltip={intl.formatMessage({
-          id: 'gL4S9+',
           defaultMessage: 'A more detailed description of the incident.',
         })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
-              id: 'AIkkvf',
               defaultMessage: 'Please enter a description for the incident.',
             }),
           },
@@ -290,12 +272,10 @@ const EditGroup = ({
             name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             tooltip={intl.formatMessage({
               defaultMessage:
                 'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
-              id: 'vi+XKb',
             })}
             rules={[
               {
@@ -303,7 +283,6 @@ const EditGroup = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please add at least one group that you would like this incident to be visible to.',
-                  id: 'ukeLzq',
                 }),
               },
             ]}
@@ -316,7 +295,6 @@ const EditGroup = ({
               placeholder={intl.formatMessage({
                 defaultMessage:
                   'Select the groups that you would like this incident to be visible to.',
-                id: '13MEnK',
               })}
             >
               {groups.map((group) => (
@@ -335,7 +313,6 @@ const EditGroup = ({
             name="business"
             label={intl.formatMessage({
               defaultMessage: 'Business',
-              id: 'w1Fanr',
             })}
           >
             <DebounceSelect
@@ -345,7 +322,6 @@ const EditGroup = ({
               disabled={saving}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for a business...',
-                id: 'qaJxSS',
               })}
               fetchOptions={onSearchBusiness}
             />
@@ -359,11 +335,9 @@ const EditGroup = ({
             name="policeReported"
             tooltip={intl.formatMessage({
               defaultMessage: 'The incident has been reported to the police',
-              id: 'hLeud7',
             })}
             label={intl.formatMessage({
               defaultMessage: 'Was this incident reported to the police?',
-              id: 'dVzhQl',
             })}
           >
             <Radio.Group
@@ -371,14 +345,12 @@ const EditGroup = ({
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'Yes',
-                    id: 'a5msuh',
                   }),
                   value: true,
                 },
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'No',
-                    id: 'oUWADl',
                   }),
                   value: false,
                 },
@@ -394,12 +366,10 @@ const EditGroup = ({
             name="policeRef"
             label={intl.formatMessage({
               defaultMessage: 'Crime Ref No.',
-              id: 'lXj6/P',
             })}
             tooltip={intl.formatMessage({
               defaultMessage:
                 'The crime reference number provided by the police.',
-              id: 'tMiPZU',
             })}
           >
             <Input disabled={saving} style={{ width: 200 }} />
@@ -411,11 +381,9 @@ const EditGroup = ({
             name="policeInvolved"
             tooltip={intl.formatMessage({
               defaultMessage: 'The police have been involved in the incident.',
-              id: 'ymfx6F',
             })}
             label={intl.formatMessage({
               defaultMessage: 'Were the police involved in this incident?',
-              id: 'hXJRLT',
             })}
           >
             <Radio.Group
@@ -423,14 +391,12 @@ const EditGroup = ({
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'Yes',
-                    id: 'a5msuh',
                   }),
                   value: true,
                 },
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'No',
-                    id: 'oUWADl',
                   }),
                   value: false,
                 },
@@ -446,11 +412,9 @@ const EditGroup = ({
             name="policeNo"
             label={intl.formatMessage({
               defaultMessage: 'Officer Collar No.',
-              id: '6gfZFu',
             })}
             tooltip={intl.formatMessage({
               defaultMessage: 'The collar number of the officer(s) involved.',
-              id: 'eo8Q5+',
             })}
           >
             <Input disabled={saving} style={{ width: 200 }} />
@@ -463,7 +427,6 @@ const EditGroup = ({
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -476,7 +439,6 @@ const EditGroup = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Save',
-                id: 'jvo0vs',
               })}
             </Button>
           </Col>

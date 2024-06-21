@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading,@typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx */
 import React from 'react';
-import type { AddressesQuery } from 'graphql/generated';
-import { IncidentFormField } from 'graphql/generated';
+
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import type { FormInstance } from 'antd';
@@ -21,6 +20,8 @@ import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
 import IncidentPolice from './components/IncidentPolice/IncidentPolice.view';
 import IncidentGroups from './components/IncidentGroups/IncidentGroups.container';
 import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
+import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
+import { IncidentFormField } from 'graphql/types';
 
 interface Props {
   form: FormInstance<FormData>;
@@ -79,7 +80,6 @@ const AddIncident = ({
         onBack={reportOnly ? undefined : () => window.history.back()}
         title={intl.formatMessage({
           defaultMessage: 'Add Incident',
-          id: 'kG1p3q',
         })}
       />
       <Form<FormData>
@@ -192,7 +192,6 @@ const AddIncident = ({
                 <Button disabled={saving} onClick={() => window.history.back()}>
                   {intl.formatMessage({
                     defaultMessage: 'Cancel',
-                    id: '47FYwb',
                   })}
                 </Button>
               </Col>
@@ -206,7 +205,6 @@ const AddIncident = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Incident',
-                  id: 'qbNNUK',
                 })}
               </Button>
             </Col>
@@ -217,7 +215,6 @@ const AddIncident = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Enter Address',
-          id: 'kGBG2S',
         })}
         open={addNewAddress}
         width="600"

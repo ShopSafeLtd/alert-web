@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import type {
-  BrandsQuery,
-  BrandsQueryVariables,
-  UpsertBrandMutation,
-} from 'graphql/generated';
-import {
-  BrandsDocument,
-  QueryMode,
-  useBrandsQuery,
-  useDeleteBrandMutation,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
+import { QueryMode } from 'graphql/types';
+import type {
+  BrandsQuery,
+  BrandsQueryVariables,
+} from '#/views/settings/brands/graphql/queries/brands.generated';
+import {
+  BrandsDocument,
+  useBrandsQuery,
+} from '#/views/settings/brands/graphql/queries/brands.generated';
+import { useDeleteBrandMutation } from '#/views/settings/brands/graphql/mutations/delete-brand.generated';
 
 interface Return {
   data:

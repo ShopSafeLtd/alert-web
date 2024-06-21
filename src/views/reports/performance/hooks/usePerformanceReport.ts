@@ -1,9 +1,3 @@
-import {
-  ReportType,
-  SortOrder,
-  usePerformanceReportQuery,
-  useSchemeReportDetailsQuery,
-} from 'graphql/generated';
 import useReportPrint from 'utils/reportPrint/usePrintReports';
 import type { InvestigationsTableData } from '#/components/reports/tableColumns';
 import arrangeTemplates from '#/utils/reports/setTemplates';
@@ -12,6 +6,9 @@ import type { Props as Return } from './types';
 import useReportState from '../../../../utils/reports/useReportState';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { ReportType, SortOrder } from 'graphql/types';
+import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/scheme-details.generated';
+import { usePerformanceReportQuery } from 'graphql/reports/queries/performance-report.generated';
 
 const usePerformanceReport = (): Return => {
   const { reportId } = useParams();

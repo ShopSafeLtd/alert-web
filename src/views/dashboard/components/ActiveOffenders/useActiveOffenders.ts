@@ -1,10 +1,7 @@
-import type { ListOffendersFeedQuery } from 'graphql/generated';
-import {
-  QueryMode,
-  SortOrder,
-  useListOffendersFeedQuery,
-} from 'graphql/generated';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
+import type { ListOffendersFeedQuery } from 'graphql/feedItems/queries/list-offenders.generated';
+import { useListOffendersFeedQuery } from 'graphql/feedItems/queries/list-offenders.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Return {
   recentOffenderData: ListOffendersFeedQuery | undefined;

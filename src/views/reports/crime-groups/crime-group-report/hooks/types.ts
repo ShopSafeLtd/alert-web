@@ -1,6 +1,6 @@
 import type { RefObject } from 'react';
 import type RGL from 'react-grid-layout';
-import type { CrimeGroupReportQuery } from '../../../../../graphql/generated';
+
 import type { IReportTemplate, MetaData, SelectOptions } from '../../../types';
 import type {
   IncidentsTableData,
@@ -8,6 +8,7 @@ import type {
   TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from '../../../../../components/reports/tableColumns';
+import type { CrimeGroupReportQuery } from 'graphql/reports/queries/crime-group-report.generated';
 
 export interface Return {
   addLogo: (arg0: string) => void;

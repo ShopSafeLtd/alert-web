@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -15,6 +15,7 @@ import FormatCalendar from 'utils/format-calendar-24h';
 import useStyles from './OffenderFeed.styles';
 import UpdateContent from '../UpdateContent';
 import ImageContainer from '../ImageContainer';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -135,11 +136,9 @@ const OffenderFeed = ({
                   confirm({
                     title: intl.formatMessage({
                       defaultMessage: 'Do you want to delete the feed item?',
-                      id: 'VZeM4L',
                     }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
-                      id: 'JDJoIZ',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
@@ -160,7 +159,6 @@ const OffenderFeed = ({
                   name ||
                   intl.formatMessage({
                     defaultMessage: 'Unidentified Offender',
-                    id: 'tHTxaO',
                   })
                 }
                 update={latestUpdate}
@@ -178,7 +176,6 @@ const OffenderFeed = ({
                       {intl.formatMessage(
                         {
                           defaultMessage: 'Alert ID: {reference}',
-                          id: '377fsC',
                         },
                         {
                           reference,
@@ -198,7 +195,6 @@ const OffenderFeed = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Last offence: {lastOffence}',
-                      id: '9eFYpD',
                     },
                     {
                       lastOffence:
@@ -209,7 +205,6 @@ const OffenderFeed = ({
                         ).message ||
                         intl.formatMessage({
                           defaultMessage: 'Unknown',
-                          id: '5jeq8P',
                         }),
                     }
                   )}
@@ -229,7 +224,6 @@ const OffenderFeed = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Total Incident: {totalIncidents}',
-                      id: 'gCseaV',
                     },
                     {
                       totalIncidents,

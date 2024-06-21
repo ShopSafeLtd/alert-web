@@ -1,8 +1,10 @@
 import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateTagMutation, TagType } from 'graphql/generated';
+
 import View from './AddCrimeType.view';
 import useAddCrimeType from './useAddCrimeType';
+import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import type { TagType } from 'graphql/types';
 
 interface Props {
   onClose: () => void;

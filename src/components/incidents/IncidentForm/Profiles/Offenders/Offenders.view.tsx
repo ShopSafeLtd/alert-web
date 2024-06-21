@@ -80,7 +80,6 @@ const Offenders = ({
         <>
           <Divider>
             {intl.formatMessage({
-              id: 'xb54TN',
               defaultMessage: 'Offenders',
             })}
           </Divider>
@@ -114,10 +113,7 @@ const Offenders = ({
           <Paragraph className={classes.subHeader}>
             {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
             <span className={classes.subHeaderRequired}>*</span>
-            <FormattedMessage
-              defaultMessage="How many offenders were involved in the incident?"
-              id="Ly8wXs"
-            />
+            <FormattedMessage defaultMessage="How many offenders were involved in the incident?" />
           </Paragraph>
           <Row gutter={8}>
             <Col>
@@ -126,11 +122,9 @@ const Offenders = ({
                 selected={noOffenders}
                 tooltip={intl.formatMessage({
                   defaultMessage: "Don't add any offenders to this incident",
-                  id: 'WyzOhb',
                 })}
                 text={intl.formatMessage({
                   defaultMessage: 'None',
-                  id: '450Fty',
                 })}
               />
             </Col>
@@ -142,7 +136,6 @@ const Offenders = ({
                     {
                       defaultMessage:
                         '{count} {count, plural, one {Offender} other {Offenders}}',
-                      id: 'EmMs+9',
                     },
                     {
                       count,
@@ -152,7 +145,6 @@ const Offenders = ({
                     {
                       defaultMessage:
                         'Add {count} {count, plural, one {offender} other {offenders}} to the incident',
-                      id: 'pgzkcv',
                     },
                     {
                       count,
@@ -164,7 +156,6 @@ const Offenders = ({
             <Col>
               <CounterButton
                 dataName={intl.formatMessage({
-                  id: 'xb54TN',
                   defaultMessage: 'Offenders',
                 })}
                 onClick={onAddBlankOffenders}
@@ -177,7 +168,6 @@ const Offenders = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
-          id: 'V+RsEq',
         })}
         open={addNewOpen}
         width="700"
@@ -199,7 +189,6 @@ const Offenders = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Offenders',
-          id: '1FbM4r',
         })}
         open={addExistingOpen}
         width="1000"
@@ -220,7 +209,6 @@ const Offenders = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Search & Match Offender',
-          id: 'E3wLhk',
         })}
         open={!!matchExistingOpen}
         width="1000"
@@ -243,7 +231,6 @@ const Offenders = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
-          id: '+OfJ4/',
         })}
         open={!!updateOpen}
         width="700"

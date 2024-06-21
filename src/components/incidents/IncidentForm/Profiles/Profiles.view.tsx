@@ -72,7 +72,6 @@ const Profiles = ({
         <Col>
           <Title style={{ marginBottom: 0 }} level={4}>
             {intl.formatMessage({
-              id: '2zJXeA',
               defaultMessage: 'Profiles',
             })}
           </Title>
@@ -80,7 +79,6 @@ const Profiles = ({
         <Col style={{ marginRight: 20 }}>
           <Paragraph style={{ marginBottom: 1 }} type="secondary">
             {intl.formatMessage({
-              id: 'nrfzug',
               defaultMessage:
                 '- Add any offenders or vehicles that were involved in the incident.',
             })}
@@ -94,7 +92,6 @@ const Profiles = ({
                   items={[
                     {
                       label: intl.formatMessage({
-                        id: 'w4XD3a',
                         defaultMessage: 'Add Existing Offender',
                       }),
                       key: '1',
@@ -108,7 +105,6 @@ const Profiles = ({
                     },
                     {
                       label: intl.formatMessage({
-                        id: '58ir77',
                         defaultMessage: 'Create New Offender',
                       }),
                       key: '2',
@@ -131,7 +127,6 @@ const Profiles = ({
                 }
               >
                 {intl.formatMessage({
-                  id: 'aWGZ8c',
                   defaultMessage: 'Add More Offenders',
                 })}
               </Button>
@@ -147,7 +142,6 @@ const Profiles = ({
                   items={[
                     {
                       label: intl.formatMessage({
-                        id: '0Q9dlW',
                         defaultMessage: 'Add Existing Vehicle',
                       }),
                       key: '1',
@@ -161,7 +155,6 @@ const Profiles = ({
                     },
                     {
                       label: intl.formatMessage({
-                        id: 'xiAZxN',
                         defaultMessage: 'Create New Vehicle',
                       }),
                       key: '2',
@@ -184,7 +177,6 @@ const Profiles = ({
                 }
               >
                 {intl.formatMessage({
-                  id: 'b6R/zF',
                   defaultMessage: 'Add More Vehicles',
                 })}
               </Button>
@@ -205,7 +197,6 @@ const Profiles = ({
                       intl.formatMessage({
                         defaultMessage:
                           'Select how many offenders were involved',
-                        id: 'FIjsE1',
                       })
                     )
                   ),
@@ -233,7 +224,6 @@ const Profiles = ({
                       intl.formatMessage({
                         defaultMessage:
                           'Select how many vehicles were involved',
-                        id: 'KEkfC4',
                       })
                     )
                   ),
@@ -254,13 +244,11 @@ const Profiles = ({
           name="witnessesInvolved"
           tooltip={intl.formatMessage({
             defaultMessage: 'Were there any witnesses of the incident?',
-            id: 'U2hv4S',
           })}
           label={
             <Typography.Text>
               {intl.formatMessage({
                 defaultMessage: 'Were any witnesses available?',
-                id: 'skNn/T',
               })}
             </Typography.Text>
           }
@@ -271,14 +259,12 @@ const Profiles = ({
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Yes',
-                  id: 'a5msuh',
                 }),
                 value: true,
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'No',
-                  id: 'oUWADl',
                 }),
                 value: false,
               },
@@ -303,7 +289,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Full Name',
-                          id: 'TemVby',
                         })
                       }
                     >
@@ -317,7 +302,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Phone Number',
-                          id: 'mXiD5u',
                         })
                       }
                     >
@@ -331,7 +315,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Email Address',
-                          id: 'xxQxLE',
                         })
                       }
                     >
@@ -345,7 +328,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Additional Information',
-                          id: 'laUK3e',
                         })
                       }
                     >
@@ -368,10 +350,7 @@ const Profiles = ({
                 <Row justify="center">
                   <Col>
                     <Button onClick={() => add()} block>
-                      <FormattedMessage
-                        id="cvzCJ9"
-                        defaultMessage="Add Witness"
-                      />
+                      <FormattedMessage defaultMessage="Add Witness" />
                     </Button>
                   </Col>
                 </Row>
@@ -385,13 +364,11 @@ const Profiles = ({
           name="victimInvolved"
           tooltip={intl.formatMessage({
             defaultMessage: 'Were the any victims involved in the incident',
-            id: 'FfmoZL',
           })}
           label={
             <Typography.Text>
               {intl.formatMessage({
                 defaultMessage: 'Where there any victims?',
-                id: '17YFkp',
               })}
             </Typography.Text>
           }
@@ -402,14 +379,12 @@ const Profiles = ({
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Yes',
-                  id: 'a5msuh',
                 }),
                 value: true,
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'No',
-                  id: 'oUWADl',
                 }),
                 value: false,
               },
@@ -434,7 +409,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Full Name',
-                          id: 'TemVby',
                         })
                       }
                     >
@@ -448,7 +422,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Phone Number',
-                          id: 'mXiD5u',
                         })
                       }
                     >
@@ -462,7 +435,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Email Address',
-                          id: 'xxQxLE',
                         })
                       }
                     >
@@ -476,7 +448,6 @@ const Profiles = ({
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Additional Information',
-                          id: 'laUK3e',
                         })
                       }
                     >
@@ -499,10 +470,7 @@ const Profiles = ({
                 <Row justify="center">
                   <Col>
                     <Button onClick={() => add()} block>
-                      <FormattedMessage
-                        id="7oOoJb"
-                        defaultMessage="Add Victim"
-                      />
+                      <FormattedMessage defaultMessage="Add Victim" />
                     </Button>
                   </Col>
                 </Row>

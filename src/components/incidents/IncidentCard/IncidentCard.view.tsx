@@ -14,8 +14,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { IncidentCardFragment } from 'graphql/generated';
-import { IncidentPriority } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -42,6 +41,8 @@ import type { EditFeedImage } from 'types/DataType';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 
 import useStyles from './IncidentCard.styles';
+import type { IncidentCardFragment } from 'graphql/fragments/incident-card.generated';
+import { IncidentPriority } from 'graphql/types';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -118,7 +119,6 @@ const IncidentCard = ({
                   <Title level={4} style={{ color: '#fff' }}>
                     {intl.formatMessage({
                       defaultMessage: 'This incident is awaiting approval',
-                      id: 'ONEXvQ',
                     })}
                   </Title>
                 </Col>
@@ -130,7 +130,6 @@ const IncidentCard = ({
                       <Button>
                         {intl.formatMessage({
                           defaultMessage: 'Review Incident',
-                          id: 'c+kQCf',
                         })}
                       </Button>
                     </Link>
@@ -217,7 +216,6 @@ const IncidentCard = ({
                                 key: 0,
                                 label: intl.formatMessage({
                                   defaultMessage: 'Edit Incident',
-                                  id: 'E6VJFN',
                                 }),
                                 onClick: () => toggleEditIncidentFeed(),
                                 icon: <FontAwesomeIcon icon={faEdit} />,
@@ -227,7 +225,6 @@ const IncidentCard = ({
                                     key: 1,
                                     label: intl.formatMessage({
                                       defaultMessage: 'Edit Image',
-                                      id: '9UlLIw',
                                     }),
                                     onClick: () => toggleEditImage(),
                                     icon: <FontAwesomeIcon icon={faImage} />,
@@ -238,22 +235,18 @@ const IncidentCard = ({
                                 key: 2,
                                 label: intl.formatMessage({
                                   defaultMessage: 'Delete Incident',
-                                  id: 's8QPty',
                                 }),
                                 onClick: () =>
                                   confirm({
                                     title: intl.formatMessage({
                                       defaultMessage: 'Are you sure?',
-                                      id: '2oCaym',
                                     }),
                                     content: intl.formatMessage({
                                       defaultMessage:
                                         'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                                      id: 'TNOl3z',
                                     }),
                                     okText: intl.formatMessage({
                                       defaultMessage: 'Delete',
-                                      id: 'K3r6DQ',
                                     }),
                                     onOk: () => onDelete(incident?.id || ''),
                                   }),
@@ -263,7 +256,6 @@ const IncidentCard = ({
                                 key: 3,
                                 label: intl.formatMessage({
                                   defaultMessage: 'Add Investigation',
-                                  id: 'U5+v9Y',
                                 }),
                                 onClick: () => toggleAddInvestigation(),
                                 icon: <FontAwesomeIcon icon={faPlus} />,
@@ -287,7 +279,6 @@ const IncidentCard = ({
                       {
                         defaultMessage:
                           'Alert ID: {incidentReference} {customerRef, plural, =1 {Ref: {customerRefS}} other {}} {policeRef, plural, =1 {Ref: {policeRefS}} other {}}',
-                        id: 'UjJZ/E',
                       },
                       {
                         incidentReference: incident?.reference,
@@ -344,7 +335,6 @@ const IncidentCard = ({
               <Title level={4} className="incident-card-approval-title">
                 {intl.formatMessage({
                   defaultMessage: 'This incident is awaiting approval',
-                  id: 'ONEXvQ',
                 })}
               </Title>
               {approvalRights && (
@@ -352,7 +342,6 @@ const IncidentCard = ({
                   <Button>
                     {intl.formatMessage({
                       defaultMessage: 'Review Incident',
-                      id: 'c+kQCf',
                     })}
                   </Button>
                 </Link>
@@ -369,7 +358,6 @@ const IncidentCard = ({
                       key: 0,
                       label: intl.formatMessage({
                         defaultMessage: 'Edit Incident',
-                        id: 'E6VJFN',
                       }),
                       onClick: () => toggleEditIncidentFeed(),
                       icon: <FontAwesomeIcon icon={faEdit} />,
@@ -379,7 +367,6 @@ const IncidentCard = ({
                           key: 1,
                           label: intl.formatMessage({
                             defaultMessage: 'Edit Image',
-                            id: '9UlLIw',
                           }),
                           onClick: () => toggleEditImage(),
                           icon: <FontAwesomeIcon icon={faImage} />,
@@ -390,22 +377,18 @@ const IncidentCard = ({
                       key: 2,
                       label: intl.formatMessage({
                         defaultMessage: 'Delete Incident',
-                        id: 's8QPty',
                       }),
                       onClick: () =>
                         confirm({
                           title: intl.formatMessage({
                             defaultMessage: 'Are you sure?',
-                            id: '2oCaym',
                           }),
                           content: intl.formatMessage({
                             defaultMessage:
                               'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                            id: 'TNOl3z',
                           }),
                           okText: intl.formatMessage({
                             defaultMessage: 'Delete',
-                            id: 'K3r6DQ',
                           }),
                           onOk: () => onDelete(incident?.id || ''),
                         }),
@@ -415,7 +398,6 @@ const IncidentCard = ({
                       key: 3,
                       label: intl.formatMessage({
                         defaultMessage: 'Add Investigation',
-                        id: 'U5+v9Y',
                       }),
                       onClick: () => toggleAddInvestigation(),
                       icon: <FontAwesomeIcon icon={faPlus} />,
@@ -535,7 +517,6 @@ const IncidentCard = ({
                     {
                       defaultMessage:
                         'Alert ID: {incidentReference} {customerRef, plural, =1 {Ref: {customerRefS}} other {}} {policeRef, plural, =1 {Crime Ref: {policeRefS}} other {}}',
-                      id: 'ZUf1j1',
                     },
                     {
                       incidentReference: incident?.reference,
@@ -555,7 +536,6 @@ const IncidentCard = ({
                         {offender.name ||
                           intl.formatMessage({
                             defaultMessage: 'Unknown Offender',
-                            id: 'wS+Y5g',
                           })}
                       </Tag>
                     </Link>
@@ -574,7 +554,6 @@ const IncidentCard = ({
                         {intl.formatMessage(
                           {
                             defaultMessage: '+ {num} more',
-                            id: 'fi2Xie',
                           },
                           {
                             num: incident.offenders.length - 1,
@@ -643,7 +622,6 @@ const IncidentCard = ({
                   <Button size="small" type="text">
                     {intl.formatMessage({
                       defaultMessage: 'View Incident',
-                      id: 'f4Tgpp',
                     })}
                   </Button>
                 </Link>
@@ -655,7 +633,6 @@ const IncidentCard = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident',
-          id: 'E6VJFN',
         })}
         open={editIncidentFeed}
         width="600"
@@ -674,7 +651,6 @@ const IncidentCard = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
-          id: 'QaKS9A',
         })}
         open={addInvestigation}
         width="500"

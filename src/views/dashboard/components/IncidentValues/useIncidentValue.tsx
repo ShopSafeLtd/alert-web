@@ -1,6 +1,7 @@
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-import { useTotalLossQuery } from 'graphql/generated';
+
 import { useEffect, useMemo, useState } from 'react';
+import { useTotalLossQuery } from '#/views/dashboard/graphql/queries/value-lost.generated';
 
 const useIncidentValue = (): {
   data: number;

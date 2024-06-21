@@ -30,16 +30,13 @@ const FacesSelect = ({ open, submitFace, onClose, faces }: Props) => {
       width={600}
       open={open}
       title={intl.formatMessage({
-        id: 'TzsW3k',
         defaultMessage: 'Select a face that match the offender',
       })}
       bodyStyle={{ padding: 0 }}
       okText={intl.formatMessage({
-        id: 'p4iOC9',
         defaultMessage: 'Save Face',
       })}
       cancelText={intl.formatMessage({
-        id: '/4tOwT',
         defaultMessage: 'Skip',
       })}
       onOk={handleSubmit}

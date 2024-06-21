@@ -3,7 +3,7 @@ import { Card, Tooltip, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import type { Age, Build, Gender, Race } from 'graphql/generated';
+import type { Age, Build, Gender, Race } from 'graphql/types';
 
 const { Paragraph } = Typography;
 
@@ -39,7 +39,6 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
   const classes = useStyles();
   const unknown = intl.formatMessage({
     defaultMessage: 'Unknown',
-    id: '5jeq8P',
   });
 
   return (
@@ -48,7 +47,6 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
       title={intl.formatMessage(
         {
           defaultMessage: 'Add Alert ID: {ref} to incident',
-          id: 'bwgI7n',
         },
         { ref: offender.reference }
       )}
@@ -75,13 +73,13 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
         <div className={classes.details}>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+              { defaultMessage: 'Alert ID: {ref}' },
               { ref: offender.reference }
             )}
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Sex: {gender}', id: 'ulwh+J' },
+              { defaultMessage: 'Sex: {gender}' },
               {
                 gender: offender.gender || unknown,
               }
@@ -89,7 +87,7 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Age: {reg}', id: '5bDbPx' },
+              { defaultMessage: 'Age: {reg}' },
               {
                 reg: offender.age || unknown,
               }
@@ -97,7 +95,7 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Build: {build}', id: 'B0zBf8' },
+              { defaultMessage: 'Build: {build}' },
               {
                 build: offender.build || unknown,
               }
@@ -105,7 +103,7 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Race: {race}', id: 'RGm19s' },
+              { defaultMessage: 'Race: {race}' },
               {
                 race: offender.race || unknown,
               }

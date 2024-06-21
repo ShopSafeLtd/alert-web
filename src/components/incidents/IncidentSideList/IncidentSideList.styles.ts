@@ -17,7 +17,7 @@ const useStyles = createUseStyles(() => ({
     color: 'rgb(222, 68, 54)',
   },
   '@media print': {
-    sideList: `display: none !important;`,
+    sideList: 'display: none !important;',
   },
   infiniteScroll: {
     paddingTop: 10,

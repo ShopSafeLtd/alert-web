@@ -96,7 +96,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         >
           {intl.formatMessage({
             defaultMessage: 'edit text',
-            id: '7sFfvN',
           })}
         </Button>
       </NodeToolbar>
@@ -119,7 +118,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
               {intl.formatMessage(
                 {
                   defaultMessage: '{isEditing} is editing this component',
-                  id: 'fYh1cJ',
                 },
                 {
                   isEditing: data.isEditing.user,

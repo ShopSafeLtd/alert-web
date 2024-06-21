@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import { Role } from 'graphql/generated';
+import { Role } from 'graphql/types';
 import React, { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
 import CheckTag from '../check-tag/CheckTag.view';

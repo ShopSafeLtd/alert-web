@@ -1,6 +1,6 @@
-import { useTargetedGoodsDashboardQuery } from 'graphql/generated';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import { useEffect, useMemo, useState } from 'react';
+import { useTargetedGoodsDashboardQuery } from '#/views/dashboard/graphql/queries/targeted-goods.generated';
 
 interface Return {
   data: { label: string; value: number }[];

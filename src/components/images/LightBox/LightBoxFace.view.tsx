@@ -5,7 +5,8 @@ import { Button, Card, Col, Popconfirm, Row, Tooltip, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useStoreState } from 'state';
-import { Role } from 'graphql/generated';
+import { Role } from 'graphql/types';
+
 import {
   getOffenderAge,
   getOffenderBuild,
@@ -142,7 +143,6 @@ const LightBoxFace = ({
                 : intl.formatMessage(
                     {
                       defaultMessage: 'Face {num}',
-                      id: 'zR1xaG',
                     },
                     {
                       num: faceIndex + 1,
@@ -159,7 +159,6 @@ const LightBoxFace = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Link Offender',
-                      id: 'IWqg0R',
                     })}
                   </Button>
                 </Col>
@@ -167,7 +166,6 @@ const LightBoxFace = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Delete Face',
-                      id: 'f/S/kU',
                     })}
                     placement="top"
                   >
@@ -176,7 +174,6 @@ const LightBoxFace = ({
                       title={intl.formatMessage({
                         defaultMessage:
                           '"Are you sure you want to delete this face?"',
-                        id: 'XtSElZ',
                       })}
                     >
                       <Button size="small" style={{ marginTop: 12 }}>
@@ -196,7 +193,6 @@ const LightBoxFace = ({
                   <Typography.Text>
                     {intl.formatMessage({
                       defaultMessage: 'No Offender linked to this face',
-                      id: 'PTTNcF',
                     })}
                   </Typography.Text>
                 </Col>
@@ -211,7 +207,6 @@ const LightBoxFace = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Alert ID: {ref}',
-                      id: 'umL9sI',
                     },
                     {
                       ref: face.offender.reference,
@@ -227,7 +222,6 @@ const LightBoxFace = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Age: ',
-                          id: 'anqdpr',
                         })}
                         {getOffenderAge(face.offender.age)}
                       </Typography.Paragraph>
@@ -240,7 +234,6 @@ const LightBoxFace = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Gender: ',
-                        id: 'dMrZIO',
                       })}
                       {getOffenderGender(face.offender.gender)}
                     </Typography.Paragraph>
@@ -252,7 +245,6 @@ const LightBoxFace = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Ethnicity: ',
-                        id: 'H+Sv5C',
                       })}
                       {getOffenderRace(face.offender.race, true)}
                     </Typography.Paragraph>
@@ -264,7 +256,6 @@ const LightBoxFace = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Build: ',
-                        id: 'iXQkAi',
                       })}
                       {getOffenderBuild(face.offender.build)}
                     </Typography.Paragraph>
@@ -288,7 +279,6 @@ const LightBoxFace = ({
                   {
                     defaultMessage:
                       '{itemCount} {itemCount, plural, one {Match Found} other {Matches Found}}',
-                    id: 'hv7GuO',
                   },
                   {
                     itemCount: face.rekMatchedSearches.length,

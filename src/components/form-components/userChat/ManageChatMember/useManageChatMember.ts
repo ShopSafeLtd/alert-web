@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import type { ListSchemeUsersQuery } from 'graphql/generated';
-import {
-  SortOrder,
-  useChatQuery,
-  useListSchemeUsersQuery,
-  useUpdateChatMutation,
-} from 'graphql/generated';
+
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useChatQuery } from 'graphql/chat/queries/chat.generated';
+import { SortOrder } from 'graphql/types';
+import { useUpdateChatMutation } from 'graphql/chat/mutation/update_chat.generated';
 
 interface FormData {
   user: string[];
@@ -115,11 +114,9 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The chat group has been updated.',
-          id: 'Mq+ZFn',
         }),
         placement: 'bottomRight',
       });

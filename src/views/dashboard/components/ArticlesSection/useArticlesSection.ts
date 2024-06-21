@@ -1,8 +1,10 @@
 import { useStoreActions, useStoreState } from 'state';
-import type { ListArticlesQuery } from 'graphql/generated';
-import { QueryMode, useListArticlesQuery } from 'graphql/generated';
+
 import { useEffect, useState } from 'react';
 import type { DateType } from 'types/DataType';
+import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
+import { useListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
+import { QueryMode } from 'graphql/types';
 
 interface Props {
   fullSearch: string;

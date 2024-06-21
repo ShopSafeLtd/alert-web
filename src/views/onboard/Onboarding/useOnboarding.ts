@@ -1,19 +1,24 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { notification } from 'antd';
 
-import { useStoreState } from 'state';
-import type { CurrentSchemeTermsQuery } from 'graphql/generated';
-import {
-  useCurrentSchemeTermsQuery,
-  useSignTermsMutation,
-  useUpdateUserMutation,
-} from 'graphql/generated';
+import { useStoreActions, useStoreState } from 'state';
+
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
+import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
+import { useSignTermsMutation } from 'graphql/user/mutation/sign-terms.generated';
+import { useUpdateUserMutation } from 'graphql/user/mutation/update_user.generated';
 
-interface AccountData {
+export interface AccountData {
   fullName: string;
+  subscribedIncidentOnly: boolean;
+  incidentEmail: boolean;
+  incidentPush: boolean;
+  subscribedOffenderOnly: boolean;
+  offenderEmail: boolean;
+  offenderPush: boolean;
 }
 
 interface Return {
@@ -28,6 +33,7 @@ interface Return {
   schemeTerms: CurrentSchemeTermsQuery | undefined;
   updateSchemeTermsSigned: (value: unknown) => void;
   name: string;
+  accountDetail: AccountData | undefined;
 }
 
 const useOnboarding = (): Return => {
@@ -40,7 +46,12 @@ const useOnboarding = (): Return => {
   const [schemeTermsSigned, setSchemeTermsSigned] = useState('');
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
+  const { fullName } = useStoreState((state) => state.user);
+  const markTermsSigned = useStoreActions(
+    (action) => action.user.userOnboarded
+  );
 
+  const name = accountDetail?.fullName || fullName || '';
   const onNext = () => {
     // if (current < 2) {
     setCurrent(current + 1);
@@ -71,15 +82,15 @@ const useOnboarding = (): Return => {
         },
       },
     });
-  const name = useMemo(
-    () => accountDetail?.fullName || '',
-    [accountDetail?.fullName]
-  );
+
   const updateAccountDetail = (value: AccountData | undefined) => {
     setAccountDetail(value);
-    if (SchemeTerms?.scheme?.currentTerms?.id && (value?.fullName || name)) {
+    if (
+      SchemeTerms?.scheme?.currentTerms?.id &&
+      (value?.fullName || fullName)
+    ) {
       setSchemeTermsSigned(`<svg xmlns="http://www.w3.org/2000/svg" style="background:#ffffff00" height="100" width="300" viewBox="0 0 300 100" class="signature-svg" data-reactroot=""><text x="20" y="60" font-family="Caveat" font-size="30" fill="black">
-      ${value?.fullName || name}
+      ${value?.fullName || fullName}
 </text></svg>`);
     }
     onNext();
@@ -90,14 +101,13 @@ const useOnboarding = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'Your account has been updated!',
-          id: 'W19COr',
         }),
         placement: 'bottomRight',
       });
+      markTermsSigned();
       navigate('/app/dashboard');
     },
     onError: () => {
@@ -105,11 +115,9 @@ const useOnboarding = (): Return => {
       notification.error({
         message: intl.formatMessage({
           defaultMessage: 'Error!',
-          id: 'DIDBlF',
         }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors. Please try again.',
-          id: 'tPB3Wl',
         }),
         placement: 'bottomRight',
       });
@@ -126,8 +134,6 @@ const useOnboarding = (): Return => {
       if (termsSigned) {
         onNext();
         setSaving(false);
-
-        navigate('/app/onboarding/scheme-terms-conditions');
         setTermsSigned(false);
       }
     } else if (
@@ -135,6 +141,8 @@ const useOnboarding = (): Return => {
       accountDetail &&
       !SchemeTerms?.scheme?.currentTerms?.id
     ) {
+      const oneYearAway = new Date();
+      oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
       void updateUser({
         variables: {
           where: {
@@ -144,6 +152,7 @@ const useOnboarding = (): Return => {
             fullName: { set: accountDetail?.fullName },
             termsSigned: { set: true },
             newUser: { set: false },
+            termsExpire: { set: oneYearAway },
             // status: { set: UserStatus.Active },
           },
           groupWhere: {
@@ -171,6 +180,8 @@ const useOnboarding = (): Return => {
       current === 2 &&
       SchemeTerms?.scheme?.currentTerms?.id
     ) {
+      const oneYearAway = new Date();
+      oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
       void signTerms({
         variables: {
           data: {
@@ -178,33 +189,36 @@ const useOnboarding = (): Return => {
             termsId: SchemeTerms?.scheme?.currentTerms?.id || '',
           },
         },
-      });
-      void updateUser({
-        variables: {
-          where: {
-            id: userId,
-          },
-          data: {
-            fullName: { set: accountDetail?.fullName || '' },
-            termsSigned: { set: true },
-            newUser: { set: false },
-          },
-          groupWhere: {
-            scheme: {
-              id: {
-                equals: schemeId,
+        onCompleted: () => {
+          void updateUser({
+            variables: {
+              where: {
+                id: userId,
               },
-            },
-          },
-          chatWhere: {
-            chat: {
-              scheme: {
-                id: {
-                  equals: schemeId,
+              data: {
+                fullName: { set: accountDetail?.fullName || '' },
+                termsSigned: { set: true },
+                newUser: { set: false },
+                termsExpire: { set: oneYearAway },
+              },
+              groupWhere: {
+                scheme: {
+                  id: {
+                    equals: schemeId,
+                  },
+                },
+              },
+              chatWhere: {
+                chat: {
+                  scheme: {
+                    id: {
+                      equals: schemeId,
+                    },
+                  },
                 },
               },
             },
-          },
+          });
         },
       });
     }
@@ -222,6 +236,7 @@ const useOnboarding = (): Return => {
     schemeTerms: SchemeTerms,
     updateSchemeTermsSigned,
     name,
+    accountDetail,
   };
 };
 

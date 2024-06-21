@@ -1,3 +1,4 @@
+import React from 'react';
 import View from './Roles.view';
 import useRoles from './useRoles';
 

@@ -1,9 +1,5 @@
 import React from 'react';
-import type {
-  ListCustomGalleriesQuery,
-  ListOffendersRelayQuery,
-  RecycleOffenderMutation,
-} from 'graphql/generated';
+
 import {
   Button,
   Card,
@@ -44,6 +40,9 @@ import DebouncedInput from 'utils/debounced-input';
 import { useNavigate } from 'react-router';
 import useStyles from './OffenderFeed.styles';
 import Loading from '../../../../components/shared-components/AntD/Loading';
+import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
 
 interface Props {
   data: ListOffendersRelayQuery | undefined;
@@ -100,13 +99,12 @@ const OffenderFeed = ({
     {
       label: intl.formatMessage({
         defaultMessage: 'Not Approved',
-        id: 'VwMCyX',
       }),
       value: 'NOT APPROVED',
       needAdminRight: true,
     },
     {
-      label: intl.formatMessage({ defaultMessage: 'Following', id: 'cPIKU2' }),
+      label: intl.formatMessage({ defaultMessage: 'Following' }),
       value: 'FOLLOWING',
     },
     // {
@@ -114,17 +112,16 @@ const OffenderFeed = ({
     //   value: 'MYDATA',
     // },
     {
-      label: intl.formatMessage({ defaultMessage: 'Banned', id: 'xerM7K' }),
+      label: intl.formatMessage({ defaultMessage: 'Banned' }),
       value: 'BANNED',
     },
     {
-      label: intl.formatMessage({ defaultMessage: 'Seeking ID', id: '1zVxRE' }),
+      label: intl.formatMessage({ defaultMessage: 'Seeking ID' }),
       value: 'ID',
     },
     {
       label: intl.formatMessage({
         defaultMessage: 'Verified ID',
-        id: '0lpcfx',
       }),
       value: 'VERIFIED_ID',
     },
@@ -187,7 +184,6 @@ const OffenderFeed = ({
               size="small"
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search Offenders...',
-                id: 'mCDjFM',
               })}
               allowClear
               defaultValue={search || ''}
@@ -241,7 +237,6 @@ const OffenderFeed = ({
                   /> */}
                   {intl.formatMessage({
                     defaultMessage: 'Custom Gallery',
-                    id: '/b4BmP',
                   })}
                   <FontAwesomeIcon
                     icon={faChevronDown}
@@ -258,11 +253,9 @@ const OffenderFeed = ({
                 compactView
                   ? intl.formatMessage({
                       defaultMessage: 'Present offenders card in normal card',
-                      id: 'dcfc8W',
                     })
                   : intl.formatMessage({
                       defaultMessage: 'Present offenders in compact card',
-                      id: 'wctZp9',
                     })
               }
             >
@@ -284,7 +277,6 @@ const OffenderFeed = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Present offenders in a table view',
-                id: 'Ydmrau',
               })}
             >
               <Button
@@ -299,7 +291,6 @@ const OffenderFeed = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
-                id: 'f2g3SM',
               })}
             >
               <Button
@@ -313,7 +304,6 @@ const OffenderFeed = ({
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Add new offender',
-                id: 'GhCPy6',
               })}
             >
               <Button
@@ -334,7 +324,6 @@ const OffenderFeed = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Offender',
-                  id: 'AN7Aru',
                 })}
               </Button>
             </Tooltip>
@@ -429,12 +418,10 @@ const OffenderFeed = ({
                   search === ''
                     ? intl.formatMessage({
                         defaultMessage: 'No Offenders',
-                        id: 'hO5g1p',
                       })
                     : intl.formatMessage({
                         defaultMessage:
                           'No offenders match your search criteria',
-                        id: 'i7eap9',
                       })
                 }
               />
@@ -474,7 +461,6 @@ const OffenderFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Alert ID',
-                        id: 'k8ZNgH',
                       })}
                     </Typography.Text>
                   ),
@@ -486,7 +472,6 @@ const OffenderFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Name',
-                        id: 'HAlOn1',
                       })}
                     </Typography.Text>
                   ),
@@ -498,7 +483,6 @@ const OffenderFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Incident Count',
-                        id: 'otC1Ao',
                       })}
                     </Typography.Text>
                   ),
@@ -510,7 +494,6 @@ const OffenderFeed = ({
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
                         defaultMessage: 'Total Loss',
-                        id: 'LPr3Nh',
                       })}
                     </Typography.Text>
                   ),
@@ -519,7 +502,6 @@ const OffenderFeed = ({
                       {intl.formatMessage(
                         {
                           defaultMessage: '£{value}',
-                          id: 'pCmP/V',
                         },
                         {
                           value: value.toFixed(0),
@@ -533,7 +515,6 @@ const OffenderFeed = ({
                   dataIndex: 'lastIncident',
                   title: intl.formatMessage({
                     defaultMessage: 'Last Incident',
-                    id: 'kJuP0b',
                   }),
                 },
               ]}
@@ -553,7 +534,6 @@ const OffenderFeed = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Offender Filters',
-          id: 'gxEHRQ',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}

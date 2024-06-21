@@ -1,16 +1,6 @@
 import type { FetchResult } from '@apollo/client';
 import { useState } from 'react';
-import type {
-  ActiveChecklistsQuery,
-  ChecklistsQuery,
-  CreateActiveChecklistMutation,
-} from '../../../graphql/generated';
-import {
-  useActiveChecklistsQuery,
-  useChecklistsQuery,
-  useCreateActiveChecklistMutation,
-  useRecycleChecklistMutation,
-} from '../../../graphql/generated';
+
 import { useStoreActions, useStoreState } from '../../../state';
 import type {
   ActiveChecklistSortOptions,
@@ -19,6 +9,13 @@ import type {
   FilterModelValues,
   SetChecklistFilterModel,
 } from '../../../state/filter-model';
+import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/list-active-checklists.generated';
+import { useActiveChecklistsQuery } from '#/views/checklist/graphql/queries/list-active-checklists.generated';
+import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/list-checklists.generated';
+import { useChecklistsQuery } from '#/views/checklist/graphql/queries/list-checklists.generated';
+import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/create-active-checklist.generated';
+import { useCreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/create-active-checklist.generated';
+import { useRecycleChecklistMutation } from '#/views/checklist/graphql/mutations/recycle-checklist.generated';
 
 interface Return {
   data: ChecklistsQuery | undefined;

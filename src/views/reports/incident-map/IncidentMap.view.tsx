@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import type {
-  BrandsQuery,
-  BusinessLocationsQuery,
-  IncidentMapQuery,
-  IndustriesQuery,
-  SchemeGroupsQuery,
-} from 'graphql/generated';
+
 import {
   Button,
   Col,
@@ -27,6 +21,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './IncidentMap.styles';
 import policeJSON from './police-areas';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import type { IncidentMapQuery } from 'graphql/reports/queries/incident-map.generated';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import type { BusinessLocationsQuery } from 'graphql/businesses/queries/business-locations.generated';
+import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+import type { IndustriesQuery } from 'graphql/industry/industries.generated';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -292,13 +291,12 @@ const IncidentMap = ({
             <Title className={classes.title} level={3}>
               {intl.formatMessage({
                 defaultMessage: 'Incident Map',
-                id: '8vWvqg',
               })}
             </Title>
           </Col>
           <Col>
             <Button onClick={toggleDrawerOpen}>
-              <FormattedMessage id="i2gKJi" defaultMessage="Mapping Options" />
+              <FormattedMessage defaultMessage="Mapping Options" />
             </Button>
           </Col>
         </Row>
@@ -424,7 +422,6 @@ const IncidentMap = ({
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Show Businesses',
-                    id: 'NOT1VO',
                   })}
                 >
                   <Switch onClick={toggleBusinesses} checked={showBusinesses} />
@@ -434,7 +431,6 @@ const IncidentMap = ({
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Show Incidents',
-                    id: 'RVBwrX',
                   })}
                 >
                   <Switch onClick={toggleMarkers} checked={showMarkers} />
@@ -446,7 +442,6 @@ const IncidentMap = ({
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Show Heatmap',
-                    id: 'JNbVtq',
                   })}
                 >
                   <Switch onClick={toggleHeatmap} checked={showHeatmap} />
@@ -456,7 +451,6 @@ const IncidentMap = ({
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Show Police Areas',
-                    id: 'rZNlFU',
                   })}
                 >
                   <Switch onClick={togglePolice} checked={showPolice} />
@@ -468,7 +462,6 @@ const IncidentMap = ({
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Cluster Points',
-                    id: 'qXZqPu',
                   })}
                 >
                   <Switch onClick={toggleCluster} checked={cluster} />
@@ -478,13 +471,11 @@ const IncidentMap = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Schemes',
-                id: 'QgGevU',
               })}
             >
               <Select
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select Scheme',
-                  id: 'bfRA48',
                 })}
                 className={classes.groupSelect}
                 onChange={onChangeSchemes}
@@ -506,13 +497,11 @@ const IncidentMap = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
             >
               <Select
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select Groups',
-                  id: 'q2cuIU',
                 })}
                 className={classes.groupSelect}
                 style={{ minWidth: 150 }}
@@ -535,7 +524,6 @@ const IncidentMap = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Date Filter',
-                id: 'cMfoug',
               })}
             >
               <RangePicker
@@ -551,13 +539,11 @@ const IncidentMap = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Brands',
-                id: 'jWfWEA',
               })}
             >
               <Select
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Brands Groups',
-                  id: 'nlQzOH',
                 })}
                 className={classes.groupSelect}
                 style={{ minWidth: 150 }}
@@ -577,13 +563,11 @@ const IncidentMap = ({
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Industries',
-                id: 'lINmqu',
               })}
             >
               <Select
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Industries Groups',
-                  id: 'bkQwcu',
                 })}
                 className={classes.groupSelect}
                 style={{ minWidth: 150 }}

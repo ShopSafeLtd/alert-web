@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Age,
-  Build,
-  Gender,
-  Height,
-  ImagePosition,
-  Race,
-} from 'graphql/generated';
-import type { IdSource } from 'graphql/generated';
+
 import update from 'immutability-helper';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { FormInstance } from 'antd';
@@ -22,6 +14,8 @@ import {
   getGenderFromFace,
   getPeculiaritiesFromFace,
 } from '../../ImageSection/useImageSection';
+import type { IdSource } from 'graphql/types';
+import { Age, Build, Gender, Height, ImagePosition, Race } from 'graphql/types';
 
 export interface FaceData {
   id: string;

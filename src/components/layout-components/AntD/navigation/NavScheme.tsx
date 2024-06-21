@@ -168,7 +168,6 @@ export const NavScheme = () => {
                         <Text type="success">
                           {intl.formatMessage({
                             defaultMessage: 'Selected',
-                            id: 'byP6IC',
                           })}
                         </Text>
                       </Col>
@@ -206,7 +205,6 @@ export const NavScheme = () => {
                         >
                           {intl.formatMessage({
                             defaultMessage: 'No schemes found',
-                            id: 'ym1dBk',
                           })}
                         </Text>
                       </Col>
@@ -227,7 +225,6 @@ export const NavScheme = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Search schemes...',
-                  id: 'ipYreq',
                 })}
                 style={{
                   width: '100%',

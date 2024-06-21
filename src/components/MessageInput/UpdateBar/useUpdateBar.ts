@@ -4,41 +4,7 @@ import { Form, message } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import Upload from 'antd/lib/upload';
 import type { UploadFile, UploadProps } from 'antd/lib/upload/interface';
-import type {
-  CrimeGroupQuery,
-  CrimeGroupQueryVariables,
-  VehicleQuery,
-  VehicleQueryVariables,
-  ViewIncidentQuery,
-  ViewIncidentQueryVariables,
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
-  ViewOffenderQuery,
-  ViewOffenderQueryVariables,
-} from 'graphql/generated';
-import {
-  CrimeGroupDocument,
-  Role,
-  TodoType,
-  UpdateIcon,
-  UpdateType,
-  useCreateUpdateOnCrimeGroupMutation,
-  useCreateUpdateOnIncidentMutation,
-  useCreateUpdateOnInvestigationMutation,
-  useCreateUpdateOnOffenderMutation,
-  useCreateUpdateOnVehicleMutation,
-  useMentionableUsersQuery,
-  useSubscribeToCrimeGroupMutation,
-  useSubscribeToIncidentMutation,
-  useSubscribeToInvestigationMutation,
-  useSubscribeToOffenderMutation,
-  useSubscribeToVehicleMutation,
-  useUpdateTodoMentionMutation,
-  VehicleDocument,
-  ViewIncidentDocument,
-  ViewInvestigationDocument,
-  ViewOffenderDocument,
-} from 'graphql/generated';
+
 import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
 import update from 'immutability-helper';
@@ -54,6 +20,44 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { getText } from 'utils/getMentions/get-mention-text';
 import { useGroupsContext } from '#/context/groups-context';
+import { useMentionableUsersQuery } from '#/components/MessageInput/UpdateBar/graphql/queries/users-to-mention.generated';
+import { useSubscribeToOffenderMutation } from 'graphql/offenders/mutations/subscribe-to-offender.generated';
+import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/subscribe-to-incident.generated';
+import { useSubscribeToInvestigationMutation } from 'graphql/investigations/mutations/subscribe-to-investigation.generated';
+import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/subscribe-to-vehicle.generated';
+import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/subscribe-to-crime-group.generated';
+import { useCreateUpdateOnIncidentMutation } from 'graphql/mutations/create-update-on-incident.generated';
+import { useCreateUpdateOnOffenderMutation } from 'graphql/mutations/create-update-on-offender.generated';
+import { useCreateUpdateOnVehicleMutation } from 'graphql/mutations/create-update-on-vehicle.generated';
+import { useCreateUpdateOnCrimeGroupMutation } from 'graphql/mutations/create-update-on-crime-group.generated';
+import { useCreateUpdateOnInvestigationMutation } from 'graphql/mutations/create-update-on-investigation.generated';
+import { Role, TodoType, UpdateIcon, UpdateType } from 'graphql/types';
+import type {
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
+} from 'graphql/incidents/queries/view-incident.generated';
+import { ViewIncidentDocument } from 'graphql/incidents/queries/view-incident.generated';
+import type {
+  ViewOffenderQuery,
+  ViewOffenderQueryVariables,
+} from 'graphql/offenders/queries/view-offender.generated';
+import { ViewOffenderDocument } from 'graphql/offenders/queries/view-offender.generated';
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/investigations/queries/view-investigation.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
+import type {
+  CrimeGroupQuery,
+  CrimeGroupQueryVariables,
+} from 'graphql/crime-groups/queries/view-crime-group.generated';
+import { CrimeGroupDocument } from 'graphql/crime-groups/queries/view-crime-group.generated';
+import type {
+  VehicleQuery,
+  VehicleQueryVariables,
+} from 'graphql/vehicles/queries/view-vehicle.generated';
+import { VehicleDocument } from 'graphql/vehicles/queries/view-vehicle.generated';
+import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/update_todo_mention.generated';
 
 interface Return {
   beforeUpdateImageUpload: (value: RcFile) => void;
@@ -277,7 +281,6 @@ const useUpdateBar = ({
         intl.formatMessage({
           defaultMessage:
             'This image already exists, please choose another one.',
-          id: 'ILB9M+',
         })
       );
     }
@@ -296,7 +299,6 @@ const useUpdateBar = ({
       void message.info(
         intl.formatMessage({
           defaultMessage: 'The message cannot be empty!',
-          id: 'wkhZ0u',
         })
       );
     } else {

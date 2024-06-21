@@ -25,7 +25,8 @@ src/images/*
 src/setupTests.ts
 src/assets/*
 public
-
+history.js
+*.generated.ts*
 
 *.css
 *.less
@@ -34,4 +35,4 @@ src/graphql/generated/*
 
 postInstall.js
 en/lang.json
-src/components/util-components/DatePicker.tsx
+

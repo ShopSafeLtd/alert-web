@@ -1,7 +1,7 @@
+/* eslint-disable react/jsx-key */
 import React, { useState } from 'react';
 import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
-import type { SuggestedCrimeGroupMembersQuery } from 'graphql/generated';
-import { Role } from 'graphql/generated';
+
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -28,6 +28,8 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { useIntl } from 'react-intl';
 import useStyles from './SuggestedMembers.style';
+import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/suggested-memebrs.generated';
+import { Role } from 'graphql/types';
 
 const { Paragraph, Title, Text } = Typography;
 
@@ -102,7 +104,7 @@ const SuggestedMembers = ({
           </Title>
           <Text>
             {intl.formatMessage(
-              { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+              { defaultMessage: 'Alert ID: {ref}' },
               {
                 ref: offender.reference,
               }
@@ -113,7 +115,6 @@ const SuggestedMembers = ({
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Alias ',
-                  id: 'XbmkWb',
                 })}
               >
                 {offender.alias.map((item) => (
@@ -131,7 +132,6 @@ const SuggestedMembers = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Age',
-                      id: '9oNQSC',
                     })}
                   </span>
                 }
@@ -150,7 +150,6 @@ const SuggestedMembers = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Sex',
-                    id: 'eWJHGp',
                   })}
                 </span>
               }
@@ -166,7 +165,6 @@ const SuggestedMembers = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Build',
-                    id: 'RSctv1',
                   })}
                 </span>
               }
@@ -182,7 +180,6 @@ const SuggestedMembers = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Ethnicity',
-                    id: 'XtCAFo',
                   })}
                 </span>
               }
@@ -199,7 +196,6 @@ const SuggestedMembers = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Hair',
-                      id: 'e4YBbX',
                     })}
                   </span>
                 }
@@ -219,7 +215,6 @@ const SuggestedMembers = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Additional Information',
-                      id: 'laUK3e',
                     })}
                   </span>
                 }
@@ -236,7 +231,6 @@ const SuggestedMembers = ({
                     {
                       defaultMessage:
                         'This offender shares {total} incidents with offenders in this group',
-                      id: 'Q0d8Y6',
                     },
                     {
                       total: offender.totalAssociatedIncidents,
@@ -255,7 +249,6 @@ const SuggestedMembers = ({
                 <Button>
                   {intl.formatMessage({
                     defaultMessage: 'View Offender',
-                    id: 'GszQTo',
                   })}
                 </Button>
               </Link>
@@ -268,7 +261,6 @@ const SuggestedMembers = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Offender',
-                  id: 'm3ChN4',
                 })}
               </Button>
             </Col>

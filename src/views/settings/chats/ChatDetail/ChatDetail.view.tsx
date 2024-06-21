@@ -1,11 +1,12 @@
 import React from 'react';
-import type { ChatQuery } from 'graphql/generated';
+
 import { Button, Card, Drawer, PageHeader, Table } from 'antd';
 import EditChat from 'components/form-components/chat/EditChat';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
+import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
 
 interface Props {
   data: ChatQuery | undefined;
@@ -46,7 +47,6 @@ const ChatDetail = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Edit Chat',
-              id: 'HssoVa',
             })}
           </Button>,
           <Button
@@ -63,7 +63,6 @@ const ChatDetail = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Delete Chat',
-              id: 'NMr04q',
             })}
           </Button>,
         ]}
@@ -82,7 +81,6 @@ const ChatDetail = ({
               key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               width: 300,
@@ -96,7 +94,6 @@ const ChatDetail = ({
               key: 'business',
               title: intl.formatMessage({
                 defaultMessage: 'Business',
-                id: 'w1Fanr',
               }),
               dataIndex: 'business',
             },
@@ -113,7 +110,6 @@ const ChatDetail = ({
         <Drawer
           title={intl.formatMessage({
             defaultMessage: 'Edit Chat Group Details',
-            id: 'DV1/IH',
           })}
           open={editChat}
           width="400"

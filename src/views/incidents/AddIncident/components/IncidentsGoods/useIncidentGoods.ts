@@ -1,14 +1,12 @@
-import type { ListGoodsTypesQuery } from 'graphql/generated';
-import {
-  useListBusinessesDivisionQuery,
-  useListGoodsTypesQuery,
-} from 'graphql/generated';
 import type { StockItemValue } from 'components/form-components/StockItemSearch/StockItemSearch.view';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import { useStoreState } from 'state';
 import { useEffect, useState } from 'react';
 import type { FormData } from '../../useAddIncident';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useListBusinessesDivisionQuery } from 'graphql/businesses/queries/list-businesses-division.generated';
 
 interface Return {
   goodsTypesData: ListGoodsTypesQuery | undefined;

@@ -9,7 +9,6 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { InvestigationSuggestionsQuery } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -19,6 +18,7 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
 import { FormattedMessage } from 'react-intl';
 import useStyles from './SuggestedIncidents.style';
+import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
 
 const { Paragraph, Title, Text } = Typography;
 
@@ -90,7 +90,6 @@ const SuggestedIncidents = ({
           </Title>
           <Text>
             <FormattedMessage
-              id="377fsC"
               defaultMessage="Alert ID: {reference}"
               values={{ reference: incident.reference }}
             />
@@ -98,28 +97,22 @@ const SuggestedIncidents = ({
           <Paragraph>{incident.description}</Paragraph>
           <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
             <Descriptions.Item
-              label={
-                <FormattedMessage id="9RI5n5" defaultMessage="Date/Time" />
-              }
+              label={<FormattedMessage defaultMessage="Date/Time" />}
             >
               {incident.dayTime}
             </Descriptions.Item>
             <Descriptions.Item
-              label={<FormattedMessage id="rvirM2" defaultMessage="Location" />}
+              label={<FormattedMessage defaultMessage="Location" />}
             >
               {incident.location?.full}
             </Descriptions.Item>
             <Descriptions.Item
-              label={
-                <FormattedMessage id="XDjYEW" defaultMessage="Crime Number" />
-              }
+              label={<FormattedMessage defaultMessage="Crime Number" />}
             >
               {incident.policeRef}
             </Descriptions.Item>
             <Descriptions.Item
-              label={
-                <FormattedMessage id="CXUpH7" defaultMessage="Crime Type" />
-              }
+              label={<FormattedMessage defaultMessage="Crime Type" />}
             >
               <Row>
                 {incident.crimeTypes.map((item) => (
@@ -132,9 +125,7 @@ const SuggestedIncidents = ({
           </Descriptions>
           {incident.offenders && incident.offenders.length > 0 && (
             <Card
-              title={
-                <FormattedMessage id="xb54TN" defaultMessage="Offenders" />
-              }
+              title={<FormattedMessage defaultMessage="Offenders" />}
               headStyle={{ marginTop: -5 }}
               bodyStyle={{ padding: 0 }}
               className={classes.tableContainer}
@@ -150,10 +141,7 @@ const SuggestedIncidents = ({
             <Col>
               <Link to={`/app/incidents/view/${incident.id}`} onClick={onClose}>
                 <Button>
-                  <FormattedMessage
-                    id="f4Tgpp"
-                    defaultMessage="View Incident"
-                  />
+                  <FormattedMessage defaultMessage="View Incident" />
                 </Button>
               </Link>
             </Col>
@@ -163,10 +151,7 @@ const SuggestedIncidents = ({
                 type="ghost"
                 onClick={() => handleAddSuggestion(incident.id)}
               >
-                <FormattedMessage
-                  id="zEXZIx"
-                  defaultMessage="Add To Investigation"
-                />
+                <FormattedMessage defaultMessage="Add To Investigation" />
               </Button>
             </Col>
           </Row>

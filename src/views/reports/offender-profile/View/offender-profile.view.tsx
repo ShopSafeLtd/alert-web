@@ -13,8 +13,7 @@ import {
   Typography,
 } from 'antd';
 import OffenderSideList from 'components/offenders/OffenderSideList';
-import type { OffenderProfileQuery } from 'graphql/generated';
-import { Age, Build, Gender, Race, Role } from 'graphql/generated';
+
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsivePie } from '@nivo/pie';
@@ -26,6 +25,8 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import useStyles from './offender-profile.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import type { OffenderProfileQuery } from 'graphql/reports/queries/offender-profile.generated';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
 
 const { Title, Text } = Typography;
 
@@ -82,7 +83,6 @@ const OffenderProfile = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Download Report',
-                    id: 'iHdvdj',
                   })}
                 </Button>
               </Col>
@@ -112,7 +112,6 @@ const OffenderProfile = ({
                       {intl.formatMessage(
                         {
                           defaultMessage: 'Alert ID: {ref}',
-                          id: 'umL9sI',
                         },
                         {
                           ref: offenderProfileData?.offender?.reference,
@@ -122,7 +121,6 @@ const OffenderProfile = ({
                     <Title level={4} type="secondary">
                       {intl.formatMessage({
                         defaultMessage: 'Offender Details',
-                        id: 'fQT6Wx',
                       })}
                     </Title>
                     <Descriptions column={2} className={classes.descriptions}>
@@ -130,7 +128,6 @@ const OffenderProfile = ({
                         className={classes.descItem}
                         label={intl.formatMessage({
                           defaultMessage: 'Gender',
-                          id: 'm8/n8c',
                         })}
                       >
                         {getSex(
@@ -144,7 +141,6 @@ const OffenderProfile = ({
                             className={classes.descItem}
                             label={intl.formatMessage({
                               defaultMessage: 'Age',
-                              id: '9oNQSC',
                             })}
                           >
                             {getAge(
@@ -158,7 +154,6 @@ const OffenderProfile = ({
                             className={classes.descItem}
                             label={intl.formatMessage({
                               defaultMessage: 'Date of Birth',
-                              id: 'e9Z+tg',
                             })}
                           >
                             {moment(
@@ -171,7 +166,6 @@ const OffenderProfile = ({
                           className={classes.descItem}
                           label={intl.formatMessage({
                             defaultMessage: 'DoB Source',
-                            id: 'buqD4b',
                           })}
                         >
                           {offenderProfileData?.offender?.dateSource}
@@ -181,7 +175,6 @@ const OffenderProfile = ({
                         className={classes.descItem}
                         label={intl.formatMessage({
                           defaultMessage: 'Build',
-                          id: 'RSctv1',
                         })}
                       >
                         {getBuild(
@@ -192,7 +185,6 @@ const OffenderProfile = ({
                         className={classes.descItem}
                         label={intl.formatMessage({
                           defaultMessage: 'Ethnicity',
-                          id: 'XtCAFo',
                         })}
                       >
                         {getEthnicity(
@@ -205,26 +197,22 @@ const OffenderProfile = ({
                         className={classes.descItem}
                         label={intl.formatMessage({
                           defaultMessage: 'Hair',
-                          id: 'e4YBbX',
                         })}
                       >
                         {offenderProfileData?.offender?.hair ||
                           intl.formatMessage({
                             defaultMessage: 'Unknown',
-                            id: '5jeq8P',
                           })}
                       </Descriptions.Item>
                       <Descriptions.Item
                         className={classes.descItem}
                         label={intl.formatMessage({
                           defaultMessage: 'Characteristics',
-                          id: 'xksukL',
                         })}
                       >
                         {offenderProfileData?.offender?.peculiarities ||
                           intl.formatMessage({
                             defaultMessage: 'None documented',
-                            id: '+CkDvs',
                           })}
                       </Descriptions.Item>
                     </Descriptions>
@@ -235,7 +223,6 @@ const OffenderProfile = ({
                 <Title level={3}>
                   {intl.formatMessage({
                     defaultMessage: 'Incident Summary',
-                    id: 'OgfKP9',
                   })}
                 </Title>
                 <Row gutter={16}>
@@ -247,7 +234,6 @@ const OffenderProfile = ({
                         }
                         title={intl.formatMessage({
                           defaultMessage: 'Total Incidents',
-                          id: 'pUlxda',
                         })}
                       />
                     </Card>
@@ -262,12 +248,10 @@ const OffenderProfile = ({
                               ).format('DD/MM/YY')
                             : intl.formatMessage({
                                 defaultMessage: 'None',
-                                id: '450Fty',
                               })
                         }
                         title={intl.formatMessage({
                           defaultMessage: 'Last Active',
-                          id: 'l/6hum',
                         })}
                       />
                     </Card>
@@ -280,7 +264,6 @@ const OffenderProfile = ({
                         }`}
                         title={intl.formatMessage({
                           defaultMessage: 'Total Value Lost',
-                          id: 'fWpZ4S',
                         })}
                       />
                     </Card>
@@ -294,7 +277,6 @@ const OffenderProfile = ({
                         }`}
                         title={intl.formatMessage({
                           defaultMessage: 'Total Value Recovered',
-                          id: 't+iLve',
                         })}
                       />
                     </Card>
@@ -307,7 +289,6 @@ const OffenderProfile = ({
                         }%`}
                         title={intl.formatMessage({
                           defaultMessage: 'Loss Rate',
-                          id: 'mQPFSj',
                         })}
                       />
                     </Card>
@@ -317,7 +298,6 @@ const OffenderProfile = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Incidents over the last 12 months',
-                      id: 'I/u2cD',
                     })}
                   </Title>
                   <div
@@ -411,7 +391,6 @@ const OffenderProfile = ({
                         tickRotation: 0,
                         legend: intl.formatMessage({
                           defaultMessage: 'Incidents',
-                          id: 'mtr3R4',
                         }),
                         legendPosition: 'middle',
                         legendOffset: -40,
@@ -474,7 +453,6 @@ const OffenderProfile = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'All Incidents',
-                      id: 'wE2z2t',
                     })}
                   </Title>
                   <Table
@@ -486,7 +464,6 @@ const OffenderProfile = ({
                         dataIndex: 'reference',
                         title: intl.formatMessage({
                           defaultMessage: 'Alert ID',
-                          id: 'k8ZNgH',
                         }),
                       },
                       {
@@ -494,7 +471,6 @@ const OffenderProfile = ({
                         dataIndex: 'date',
                         title: intl.formatMessage({
                           defaultMessage: 'Date',
-                          id: 'P7PLVj',
                         }),
                         render: (value: Date) =>
                           moment(value).format('DD/MM/YY'),
@@ -504,7 +480,6 @@ const OffenderProfile = ({
                         dataIndex: 'value',
                         title: intl.formatMessage({
                           defaultMessage: 'Value',
-                          id: 'GufXy5',
                         }),
                         render: (value: string) => `£${value}`,
                       },
@@ -513,7 +488,6 @@ const OffenderProfile = ({
                         dataIndex: 'recoveredValue',
                         title: intl.formatMessage({
                           defaultMessage: 'Recovered Value',
-                          id: 'bGwFFv',
                         }),
                         render: (value: string) => `£${value}`,
                       },
@@ -522,7 +496,6 @@ const OffenderProfile = ({
                         dataIndex: 'createdBy',
                         title: intl.formatMessage({
                           defaultMessage: 'Created By',
-                          id: 'uAfuJA',
                         }),
                       },
                       {
@@ -530,7 +503,6 @@ const OffenderProfile = ({
                         dataIndex: 'crimeTypes',
                         title: intl.formatMessage({
                           defaultMessage: 'Types',
-                          id: 'kxP9GJ',
                         }),
                         render: (value: { id: string; name: string }[]) =>
                           value.map(
@@ -560,7 +532,6 @@ const OffenderProfile = ({
                       <Title level={4}>
                         {intl.formatMessage({
                           defaultMessage: 'Incidents by Hour',
-                          id: '++g1VR',
                         })}
                       </Title>
                       <div
@@ -625,7 +596,6 @@ const OffenderProfile = ({
                       <Title level={4}>
                         {intl.formatMessage({
                           defaultMessage: 'Incidents by Day',
-                          id: 'YiU0H0',
                         })}
                       </Title>
                       <div
@@ -690,7 +660,6 @@ const OffenderProfile = ({
                       <Title level={4}>
                         {intl.formatMessage({
                           defaultMessage: 'Incidents by Month',
-                          id: '+Prn0X',
                         })}
                       </Title>
                       <div
@@ -755,7 +724,6 @@ const OffenderProfile = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Targeted Goods',
-                      id: 'dLBbg0',
                     })}
                   </Title>
                   <Table
@@ -765,7 +733,6 @@ const OffenderProfile = ({
                         dataIndex: 'name',
                         title: intl.formatMessage({
                           defaultMessage: 'Name',
-                          id: 'HAlOn1',
                         }),
                       },
                       {
@@ -773,7 +740,6 @@ const OffenderProfile = ({
                         dataIndex: 'lost',
                         title: intl.formatMessage({
                           defaultMessage: 'Total Lost',
-                          id: 'TpqK2W',
                         }),
                         render: (value: number) => `£${value.toFixed(2)}`,
                       },
@@ -782,7 +748,6 @@ const OffenderProfile = ({
                         dataIndex: 'recovered',
                         title: intl.formatMessage({
                           defaultMessage: 'Total Recovered',
-                          id: '/YBJ85',
                         }),
                         render: (value: number) => `£${value.toFixed(2)}`,
                       },
@@ -791,7 +756,6 @@ const OffenderProfile = ({
                         dataIndex: 'successRate',
                         title: intl.formatMessage({
                           defaultMessage: 'Loss Rate',
-                          id: 'mQPFSj',
                         }),
                         render: (value: number) => `${value.toFixed(0)}%`,
                       },
@@ -800,7 +764,6 @@ const OffenderProfile = ({
                         dataIndex: 'avgLost',
                         title: intl.formatMessage({
                           defaultMessage: 'Avg Lost',
-                          id: 'C70bmG',
                         }),
                         render: (value: number) => `£${value.toFixed(2)}`,
                       },
@@ -832,7 +795,6 @@ const OffenderProfile = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Crime Groups',
-                      id: 'a0aLil',
                     })}
                   </Title>
                   <Table
@@ -843,7 +805,6 @@ const OffenderProfile = ({
                         dataIndex: 'reference',
                         title: intl.formatMessage({
                           defaultMessage: 'Alert ID',
-                          id: 'k8ZNgH',
                         }),
                       },
                       {
@@ -851,7 +812,6 @@ const OffenderProfile = ({
                         dataIndex: 'alias',
                         title: intl.formatMessage({
                           defaultMessage: 'Alias',
-                          id: 'Ri9jA7',
                         }),
                       },
                       {
@@ -859,7 +819,6 @@ const OffenderProfile = ({
                         dataIndex: 'members',
                         title: intl.formatMessage({
                           defaultMessage: 'Members',
-                          id: '+a+2ug',
                         }),
                       },
                       {
@@ -867,7 +826,6 @@ const OffenderProfile = ({
                         dataIndex: 'value',
                         title: intl.formatMessage({
                           defaultMessage: 'Value',
-                          id: 'GufXy5',
                         }),
                       },
                       {
@@ -875,7 +833,6 @@ const OffenderProfile = ({
                         dataIndex: 'recoveredValue',
                         title: intl.formatMessage({
                           defaultMessage: 'Recovered Value',
-                          id: 'bGwFFv',
                         }),
                       },
                       {
@@ -883,7 +840,6 @@ const OffenderProfile = ({
                         dataIndex: 'lastActivity',
                         title: intl.formatMessage({
                           defaultMessage: 'Last Incident',
-                          id: 'kJuP0b',
                         }),
                       },
                     ]}
@@ -893,7 +849,6 @@ const OffenderProfile = ({
                   <Title level={4}>
                     {intl.formatMessage({
                       defaultMessage: 'Vehicles',
-                      id: 'r6wuJ3',
                     })}
                   </Title>
                   <Table
@@ -904,7 +859,6 @@ const OffenderProfile = ({
                         dataIndex: 'make',
                         title: intl.formatMessage({
                           defaultMessage: 'Make',
-                          id: '6AAM0P',
                         }),
                       },
                       {
@@ -912,7 +866,6 @@ const OffenderProfile = ({
                         dataIndex: 'model',
                         title: intl.formatMessage({
                           defaultMessage: 'Model',
-                          id: 'rhSI1/',
                         }),
                       },
                       {
@@ -920,7 +873,6 @@ const OffenderProfile = ({
                         dataIndex: 'registration',
                         title: intl.formatMessage({
                           defaultMessage: 'Registration',
-                          id: 'qv7ied',
                         }),
                       },
                       {
@@ -928,7 +880,6 @@ const OffenderProfile = ({
                         dataIndex: 'colour',
                         title: intl.formatMessage({
                           defaultMessage: 'Colour',
-                          id: '+e8vAT',
                         }),
                       },
                     ]}

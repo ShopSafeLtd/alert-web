@@ -1,7 +1,5 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import type { ViewOffenderMatchesQuery } from 'graphql/generated';
-import { Role } from 'graphql/generated';
 import { Button, Card, Col, Popconfirm, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import {
@@ -16,6 +14,8 @@ import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import MatchedFace from './MatchedFace.view';
+import type { ViewOffenderMatchesQuery } from 'graphql/offenders/queries/offender-macthes.generated';
+import { Role } from 'graphql/types';
 
 const useStyles = createUseStyles({
   container: {},
@@ -101,7 +101,6 @@ const OffenderMatches = ({
                 {intl.formatMessage(
                   {
                     defaultMessage: 'Alert ID: {reference}',
-                    id: '377fsC',
                   },
                   {
                     reference: data?.offender?.reference,
@@ -114,7 +113,6 @@ const OffenderMatches = ({
                     <Typography.Text>
                       {intl.formatMessage({
                         defaultMessage: 'Age: ',
-                        id: 'anqdpr',
                       })}
                       {getOffenderAge(data?.offender?.age)}
                     </Typography.Text>
@@ -124,7 +122,6 @@ const OffenderMatches = ({
                   <Typography.Text>
                     {intl.formatMessage({
                       defaultMessage: 'Sex: ',
-                      id: 'j3ULId',
                     })}
                     {getOffenderGender(data?.offender?.gender)}
                   </Typography.Text>
@@ -133,7 +130,6 @@ const OffenderMatches = ({
                   <Typography.Text>
                     {intl.formatMessage({
                       defaultMessage: 'Ethnicity: ',
-                      id: 'H+Sv5C',
                     })}
                     {getOffenderRace(data?.offender?.race)}
                   </Typography.Text>
@@ -142,7 +138,6 @@ const OffenderMatches = ({
                   <Typography.Text>
                     {intl.formatMessage({
                       defaultMessage: 'Build: ',
-                      id: 'iXQkAi',
                     })}
                     {getOffenderBuild(data?.offender?.build)}
                   </Typography.Text>
@@ -177,7 +172,6 @@ const OffenderMatches = ({
         <Typography.Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Face AI Matches:',
-            id: 'f92MK9',
           })}
         </Typography.Title>
       )}
@@ -205,7 +199,6 @@ const OffenderMatches = ({
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Alert ID: {reference}',
-                      id: '377fsC',
                     },
                     {
                       reference: match.matchedOffender?.reference,
@@ -217,7 +210,6 @@ const OffenderMatches = ({
                     <Typography.Text>
                       {intl.formatMessage({
                         defaultMessage: 'Age: ',
-                        id: 'anqdpr',
                       })}
                       {getOffenderAge(match.matchedOffender?.age)}
                     </Typography.Text>
@@ -226,7 +218,6 @@ const OffenderMatches = ({
                     <Typography.Text>
                       {intl.formatMessage({
                         defaultMessage: 'Sex: ',
-                        id: 'j3ULId',
                       })}
                       {getOffenderGender(match.matchedOffender?.gender)}
                     </Typography.Text>
@@ -235,7 +226,6 @@ const OffenderMatches = ({
                     <Typography.Text>
                       {intl.formatMessage({
                         defaultMessage: 'Ethnicity: ',
-                        id: 'H+Sv5C',
                       })}
                       {getOffenderRace(match.matchedOffender?.race)}
                     </Typography.Text>
@@ -244,7 +234,6 @@ const OffenderMatches = ({
                     <Typography.Text>
                       {intl.formatMessage({
                         defaultMessage: 'Build: ',
-                        id: 'iXQkAi',
                       })}
                       {getOffenderBuild(match.matchedOffender?.build)}
                     </Typography.Text>
@@ -253,7 +242,6 @@ const OffenderMatches = ({
                 <Typography.Text strong style={{ fontSize: 16 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Matched Images',
-                    id: 'ye5aNf',
                   })}
                 </Typography.Text>
                 <Row
@@ -291,14 +279,12 @@ const OffenderMatches = ({
                 overlayInnerStyle={{ padding: 10 }}
                 title={intl.formatMessage({
                   defaultMessage: 'Are you sure?',
-                  id: '2oCaym',
                 })}
                 onConfirm={() => onDismissMatch(match.id)}
               >
                 <Button size="small">
                   {intl.formatMessage({
                     defaultMessage: 'Dismiss Match',
-                    id: 'z85yDK',
                   })}
                 </Button>
               </Popconfirm>
@@ -311,7 +297,6 @@ const OffenderMatches = ({
                 <Button size="small" danger>
                   {intl.formatMessage({
                     defaultMessage: 'Compare & Merge',
-                    id: 'K3ixDD',
                   })}
                 </Button>
               </Link>

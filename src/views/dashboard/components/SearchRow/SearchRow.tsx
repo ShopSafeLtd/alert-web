@@ -29,7 +29,6 @@ const SearchRow = () => {
             size="small"
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for anything in alert...',
-              id: 'FZ9gwb',
             })}
             allowClear
             // value={search}
@@ -45,7 +44,6 @@ const SearchRow = () => {
             options={[
               {
                 label: intl.formatMessage({
-                  id: 'VwMCyX',
                   defaultMessage: 'Not Approved',
                 }),
                 value: 'NOT APPROVED',
@@ -53,14 +51,12 @@ const SearchRow = () => {
               },
               {
                 label: intl.formatMessage({
-                  id: 'cPIKU2',
                   defaultMessage: 'Following',
                 }),
                 value: 'FOLLOWING',
               },
               {
                 label: intl.formatMessage({
-                  id: 'dr0ueW',
                   defaultMessage: 'My Data',
                 }),
                 value: 'MYDATA',
@@ -72,7 +68,6 @@ const SearchRow = () => {
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Sort & Filter',
-              id: 'f2g3SM',
             })}
           >
             <Button
@@ -89,7 +84,6 @@ const SearchRow = () => {
                 style={{ marginRight: 10 }}
               />
               {intl.formatMessage({
-                id: 'kG1p3q',
                 defaultMessage: 'Add Incident',
               })}
             </Button>
@@ -100,7 +94,6 @@ const SearchRow = () => {
             <Button size="small" type="primary">
               <FontAwesomeIcon icon={faUsers} style={{ marginRight: 10 }} />
               {intl.formatMessage({
-                id: 'm3ChN4',
                 defaultMessage: 'Add Offender',
               })}
             </Button>
@@ -116,7 +109,6 @@ const SearchRow = () => {
                   style={{ marginRight: 10 }}
                 />
                 {intl.formatMessage({
-                  id: 'x52+I1',
                   defaultMessage: 'Add Bulletin',
                 })}
               </Button>

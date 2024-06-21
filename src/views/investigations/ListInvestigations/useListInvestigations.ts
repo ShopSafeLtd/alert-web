@@ -1,15 +1,16 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+
+import { useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 import type {
-  CreateInvestigationMutation,
   ListInvestigationsAllSchemesQuery,
   ListInvestigationsAllSchemesQueryVariables,
-} from 'graphql/generated';
+} from 'graphql/investigations/queries/list-investigations-all-schemes.generated';
 import {
   ListInvestigationsAllSchemesDocument,
   useListInvestigationsAllSchemesQuery,
-} from 'graphql/generated';
-import { useState } from 'react';
-import { useStoreActions, useStoreState } from 'state';
+} from 'graphql/investigations/queries/list-investigations-all-schemes.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
 
 interface Return {
   data: ListInvestigationsAllSchemesQuery | undefined;

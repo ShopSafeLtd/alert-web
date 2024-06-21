@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { Button, Col, Row, Table, Typography } from 'antd';
-import type { ListSchemeUsersQuery } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;
@@ -42,14 +43,13 @@ const AddUserToBusiness = ({
           {
             key: 'fullName',
             dataIndex: 'fullName',
-            title: intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' }),
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
           },
           {
             key: 'status',
             dataIndex: 'status',
             title: intl.formatMessage({
               defaultMessage: 'Status',
-              id: 'tzMNF3',
             }),
             render: (value) => (
               <Typography.Text
@@ -64,7 +64,6 @@ const AddUserToBusiness = ({
             dataIndex: 'business',
             title: intl.formatMessage({
               defaultMessage: 'Business',
-              id: 'w1Fanr',
             }),
             render: (value) => <Typography.Text>{value?.name}</Typography.Text>,
           },
@@ -86,7 +85,7 @@ const AddUserToBusiness = ({
       <Row style={{ marginTop: 30 }} justify="end" gutter={16}>
         <Col>
           <Button onClick={onClose}>
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -96,7 +95,7 @@ const AddUserToBusiness = ({
             type="primary"
             onClick={onSubmit}
           >
-            {intl.formatMessage({ defaultMessage: 'Add Users', id: 'ShE8aY' })}
+            {intl.formatMessage({ defaultMessage: 'Add Users' })}
           </Button>
         </Col>
       </Row>

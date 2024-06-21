@@ -1,17 +1,15 @@
 import { useState } from 'react';
-import type { CreateGroupMutation } from 'graphql/generated';
-import {
-  Role,
-  useCreateGroupMutation,
-  useListSchemeUsersQuery,
-  SortOrder,
-} from 'graphql/generated';
+
 import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { SelectOptions } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { Role, SortOrder } from 'graphql/types';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
+import { useCreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
 
 export interface FormData {
   name: string;
@@ -99,11 +97,9 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The group has been added.',
-          id: 'dJ4Y8x',
         }),
         placement: 'bottomRight',
       });

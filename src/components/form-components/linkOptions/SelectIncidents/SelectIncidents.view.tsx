@@ -1,10 +1,11 @@
 import React from 'react';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/generated';
+
 import { Row, Col, Input, Table, Button, Typography, Select } from 'antd';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import type { IncidentFilters } from 'state/data-model';
 import useStyles from './SelectIncidents.styles';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
 
 const { Paragraph, Text } = Typography;
 
@@ -87,7 +88,6 @@ const SelectIncidents = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Incidents...',
-              id: 'gvqTQ8',
             })}
             allowClear
           />
@@ -100,7 +100,6 @@ const SelectIncidents = ({
                 width: 65,
                 title: intl.formatMessage({
                   defaultMessage: 'Alert ID',
-                  id: 'k8ZNgH',
                 }),
                 render: (value, record) => (
                   <Link to={`/app/incidents/view/${record.incidentId}`}>
@@ -113,7 +112,6 @@ const SelectIncidents = ({
                 dataIndex: 'subject',
                 title: intl.formatMessage({
                   defaultMessage: 'Subject',
-                  id: 'LLtKhp',
                 }),
               },
               {
@@ -121,7 +119,6 @@ const SelectIncidents = ({
                 dataIndex: 'date',
                 title: intl.formatMessage({
                   defaultMessage: 'Date',
-                  id: 'P7PLVj',
                 }),
               },
               {
@@ -129,7 +126,6 @@ const SelectIncidents = ({
                 dataIndex: 'location',
                 title: intl.formatMessage({
                   defaultMessage: 'Location',
-                  id: 'rvirM2',
                 }),
               },
               {
@@ -137,7 +133,6 @@ const SelectIncidents = ({
                 dataIndex: 'offenders',
                 title: intl.formatMessage({
                   defaultMessage: 'Offenders',
-                  id: 'xb54TN',
                 }),
               },
             ]}
@@ -172,19 +167,17 @@ const SelectIncidents = ({
         </Col>
         <Col className={classes.filters} span={5}>
           <Paragraph className={classes.filterTitle}>
-            {intl.formatMessage({ defaultMessage: 'Filters', id: 'zSOvI0' })}
+            {intl.formatMessage({ defaultMessage: 'Filters' })}
           </Paragraph>
           <div className={classes.filter}>
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
             </Text>
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
               mode="multiple"
               className={classes.filterSelect}
@@ -204,13 +197,11 @@ const SelectIncidents = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Crime Types',
-                id: 'Piba4q',
               })}
             </Text>
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Crime Types',
-                id: 'Piba4q',
               })}
               mode="multiple"
               className={classes.filterSelect}
@@ -231,13 +222,11 @@ const SelectIncidents = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Goods Involved',
-                id: 'oXvpCQ',
               })}
             </Text>
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Goods Involved',
-                id: 'oXvpCQ',
               })}
               mode="multiple"
               className={classes.filterSelect}
@@ -258,7 +247,6 @@ const SelectIncidents = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Incident has happened at...',
-                id: 'ZNawcf',
               })}
             </Text>
             <Select
@@ -267,7 +255,6 @@ const SelectIncidents = ({
               allowClear
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select Businesses',
-                id: 'MZynHZ',
               })}
               value={businessesFilter}
               onChange={setBusinessesFilter}
@@ -292,7 +279,6 @@ const SelectIncidents = ({
             <Text>
               {intl.formatMessage({
                 defaultMessage: 'Characteristics',
-                id: 'xksukL',
               })}
             </Text>
             <Input.TextArea
@@ -305,7 +291,6 @@ const SelectIncidents = ({
               <Button onClick={clearFilters}>
                 {intl.formatMessage({
                   defaultMessage: 'Clear Filters',
-                  id: 'MsGXc3',
                 })}
               </Button>
             </Col>
@@ -315,7 +300,7 @@ const SelectIncidents = ({
       <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -327,7 +312,6 @@ const SelectIncidents = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Add Incidents',
-              id: 'kKj7sq',
             })}
           </Button>
         </Col>

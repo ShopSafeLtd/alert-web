@@ -1,21 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { useEffect, useState } from 'react';
-import type {
-  CreateUserData,
-  CreateUserInDatabaseMutation,
-  InviteExistingUserMutation,
-  UserUpdateInput,
-} from 'graphql/generated';
-import {
-  Model,
-  SortOrder,
-  useCreateUserInDatabaseMutation,
-  useInviteExistingUserMutation,
-  useSchemeChatsQuery,
-  useSchemeQuery,
-  useSearchUserQuery,
-  useUserRolesQuery,
-} from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
@@ -23,6 +7,16 @@ import { Form, Modal, notification } from 'antd';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useGroupsContext } from '#/context/groups-context';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import { useCreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import { useInviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
+import { useSearchUserQuery } from 'graphql/users/queries/search-user.generated';
+import { useSchemeQuery } from 'graphql/scheme/queries/scheme.generated';
+import { useSchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
+import type { CreateUserData, UserUpdateInput } from 'graphql/types';
+import { Model, SortOrder } from 'graphql/types';
 
 const { confirm } = Modal;
 const { useForm } = Form;

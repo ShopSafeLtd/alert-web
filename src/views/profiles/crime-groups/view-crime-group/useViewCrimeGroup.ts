@@ -1,30 +1,5 @@
 import { Modal, notification } from 'antd';
-import type {
-  CreateDocumentMutation,
-  CreateInvestigationMutation,
-  CreateSimpleOffenderMutation,
-  CrimeGroupQuery,
-  CrimeGroupQueryVariables,
-  DeleteDocumentMutation,
-  SuggestedCrimeGroupMembersQuery,
-  SuggestedCrimeGroupMembersQueryVariables,
-  VehicleCreateWithoutCrimeGroupInput,
-} from 'graphql/generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  CrimeGroupDocument,
-  SuggestedCrimeGroupMembersDocument,
-  TagType,
-  useCrimeGroupQuery,
-  useDeleteCrimeGroupMutation,
-  useDeleteUpdateMutation,
-  useSubscribeToCrimeGroupMutation,
-  useSuggestedCrimeGroupMembersQuery,
-  useUnsubscribeToCrimeGroupMutation,
-  useUpdateCrimeGroupMutation,
-  useUpdateUpdateMutation,
-} from 'graphql/generated';
+
 import { useEffect, useMemo, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
@@ -39,6 +14,34 @@ import {
 } from '#/types/enums/profile-update-type';
 import { useGroupsContext } from '#/context/groups-context';
 import hasPermission from '#/utils/has-permission';
+import type {
+  CrimeGroupQuery,
+  CrimeGroupQueryVariables,
+} from 'graphql/crime-groups/queries/view-crime-group.generated';
+import {
+  CrimeGroupDocument,
+  useCrimeGroupQuery,
+} from 'graphql/crime-groups/queries/view-crime-group.generated';
+import type {
+  SuggestedCrimeGroupMembersQuery,
+  SuggestedCrimeGroupMembersQueryVariables,
+} from 'graphql/crime-groups/queries/suggested-memebrs.generated';
+import {
+  SuggestedCrimeGroupMembersDocument,
+  useSuggestedCrimeGroupMembersQuery,
+} from 'graphql/crime-groups/queries/suggested-memebrs.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import type { VehicleCreateWithoutCrimeGroupInput } from 'graphql/types';
+import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
+import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/update_crime_group.generated';
+import { useDeleteCrimeGroupMutation } from 'graphql/crime-groups/mutations/delete_crime_group.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
+import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/subscribe-to-crime-group.generated';
+import { useUnsubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/unsubscribe-from-crime-group.generated';
 
 const { confirm } = Modal;
 interface Return {
@@ -207,11 +210,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The crime group has been updated!',
-          id: '3lIfgt',
         }),
         placement: 'bottomRight',
       });
@@ -460,11 +461,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been deleted!',
-          id: 'QPIR1s',
         }),
         placement: 'bottomRight',
       });
@@ -573,16 +572,14 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
-        id: 'gwznO0',
       }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
+      okText: intl.formatMessage({ defaultMessage: 'Delete' }),
     });
   };
 

@@ -35,9 +35,10 @@ import {
 import RadialGraph from 'components/reports/graphs/radialGraph';
 import { useIntl } from 'react-intl';
 import useStyles from '../../../styles/report.styles';
-import type { CrimeGroupReportQuery } from '../../../../../graphql/generated';
+
 import MultiBarGraph from '../../../../../components/reports/graphs/multiBarGraph';
 import type { AllowedValue, Elements, MetaData } from '../../../types';
+import type { CrimeGroupReportQuery } from 'graphql/reports/queries/crime-group-report.generated';
 
 const { Title } = Typography;
 
@@ -106,7 +107,6 @@ const CrimeGroupReport = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Incidents Summary',
-                id: 'DGld1Y',
               })}
             </Title>
           </Col>
@@ -115,7 +115,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Last Incident (in range)',
-                id: 'lI3BDd',
               })}
               value={
                 data?.crimeGroupReport?.incidentSummary?.lastIncidentDate
@@ -124,7 +123,6 @@ const CrimeGroupReport = ({
                     ).toLocaleDateString()
                   : intl.formatMessage({
                       defaultMessage: 'Unknown',
-                      id: '5jeq8P',
                     })
               }
               prefix={
@@ -139,7 +137,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Reported to Police',
-                id: 'LhTpVN',
               })}
               value={
                 data?.crimeGroupReport?.incidentSummary
@@ -157,7 +154,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Police Attended',
-                id: 'ES0Nc8',
               })}
               value={
                 data?.crimeGroupReport?.incidentSummary
@@ -175,7 +171,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Most Common Crime Type',
-                id: 'jbbNOa',
               })}
               value={
                 data?.crimeGroupReport?.incidentSummary?.mostCommonCrimeType ||
@@ -213,7 +208,6 @@ const CrimeGroupReport = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Loss Summary',
-                id: 'O0DXtz',
               })}
             </Title>
           </Col>
@@ -222,7 +216,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total Lost Value',
-                id: '3LZ6MG',
               })}
               value={
                 data?.crimeGroupReport?.lossTotals?.totalLostValue
@@ -231,7 +224,6 @@ const CrimeGroupReport = ({
                     )}`
                   : intl.formatMessage({
                       defaultMessage: 'No Losses',
-                      id: '9RLqIM',
                     })
               }
               prefix={
@@ -246,7 +238,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Total Recovered Value',
-                id: 'pambF6',
               })}
               value={
                 data?.crimeGroupReport?.lossTotals?.totalRecoveredValue
@@ -255,7 +246,6 @@ const CrimeGroupReport = ({
                     )}`
                   : intl.formatMessage({
                       defaultMessage: 'No Recoveries',
-                      id: 'i7IHf9',
                     })
               }
               prefix={
@@ -270,7 +260,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss Rate',
-                id: 'VSxLGp',
               })}
               value={`${(
                 (data?.crimeGroupReport?.lossTotals?.averageSuccessRate || 0) *
@@ -287,7 +276,6 @@ const CrimeGroupReport = ({
               className={classes.stats}
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss Per Incident',
-                id: 'C1FYp6',
               })}
               value={
                 `£${(
@@ -325,7 +313,6 @@ const CrimeGroupReport = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Offenders',
-            id: 'xb54TN',
           })}
         </Title>
         <Table
@@ -349,7 +336,6 @@ const CrimeGroupReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Crime Types',
-          id: 'Piba4q',
         })}
         className="no-break"
         loading={loading}
@@ -370,7 +356,6 @@ const CrimeGroupReport = ({
           data={data?.crimeGroupReport?.crimeTypeByOffender}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types or Offenders',
-            id: 'e3gI+W',
           })}
         />
       </Card>
@@ -379,7 +364,6 @@ const CrimeGroupReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Crime Types',
-          id: 'Piba4q',
         })}
         className="no-break"
         loading={loading}
@@ -400,7 +384,6 @@ const CrimeGroupReport = ({
           data={data?.crimeGroupReport?.offenderGoodsTypeValue}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types or Offenders',
-            id: 'e3gI+W',
           })}
         />
       </Card>
@@ -409,7 +392,6 @@ const CrimeGroupReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Loss/Recovered by Goods Type',
-          id: 'PziBb1',
         })}
         className="no-break"
         loading={loading}
@@ -434,7 +416,6 @@ const CrimeGroupReport = ({
           data={data?.crimeGroupReport?.goodsTypeLossRecovered}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types or Offenders',
-            id: 'e3gI+W',
           })}
         />
       </Card>
@@ -443,7 +424,6 @@ const CrimeGroupReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Incidents Time of Day',
-          id: 'TQgPcd',
         })}
         className="no-break"
         loading={loading}
@@ -504,7 +484,6 @@ const CrimeGroupReport = ({
             data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
-              id: '2t8hXG',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -518,11 +497,9 @@ const CrimeGroupReport = ({
             data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
-              id: '2t8hXG',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -532,7 +509,6 @@ const CrimeGroupReport = ({
       <Card
         title={intl.formatMessage({
           defaultMessage: 'Incidents by Month',
-          id: '+Prn0X',
         })}
         className="no-break"
         loading={loading}
@@ -593,7 +569,6 @@ const CrimeGroupReport = ({
             isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No incidents',
-              id: '7UNuAl',
             })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -607,11 +582,9 @@ const CrimeGroupReport = ({
             isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No incidents',
-              id: '7UNuAl',
             })}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
-              id: 'mtr3R4',
             })}
           />
         )}
@@ -639,16 +612,13 @@ const CrimeGroupReport = ({
           isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents by Day of Week',
-            id: 'B9s5+4',
           })}
           data={data?.crimeGroupReport?.incidentDayOfWeekGraph}
           dataLabel={intl.formatMessage({
             defaultMessage: 'Incidents',
-            id: 'mtr3R4',
           })}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
-            id: '7UNuAl',
           })}
         />
       </Card>
@@ -674,7 +644,6 @@ const CrimeGroupReport = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Incidents',
-            id: 'mtr3R4',
           })}
         </Title>
         <Table
@@ -714,7 +683,6 @@ const CrimeGroupReport = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Targeted Businesses',
-            id: 'H79fAf',
           })}
         </Title>
         <Table
@@ -757,7 +725,6 @@ const CrimeGroupReport = ({
         <Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Targeted Goods',
-            id: 'dLBbg0',
           })}
         </Title>
         <Table
@@ -803,7 +770,6 @@ const CrimeGroupReport = ({
           isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents Heat Map',
-            id: 'q7E1ai',
           })}
           data={
             data?.crimeGroupReport?.crimeGroupMap?.incidentsCoords
@@ -830,7 +796,6 @@ const CrimeGroupReport = ({
           }
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents to display',
-            id: 'Rp6Hio',
           })}
         />
       </Card>
@@ -849,7 +814,6 @@ const CrimeGroupReport = ({
         <Typography.Paragraph>
           {intl.formatMessage({
             defaultMessage: 'Page 1',
-            id: 'hEAGzW',
           })}
         </Typography.Paragraph>
       </div>
@@ -868,7 +832,6 @@ const CrimeGroupReport = ({
         <Typography.Paragraph>
           {intl.formatMessage({
             defaultMessage: 'Page 2',
-            id: 'Q3p9d3',
           })}
         </Typography.Paragraph>
       </div>
@@ -885,7 +848,7 @@ const CrimeGroupReport = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+          {intl.formatMessage({ defaultMessage: 'Page 3' })}
         </Typography.Paragraph>
       </div>
     ),
@@ -901,7 +864,7 @@ const CrimeGroupReport = ({
         }}
       >
         <Typography.Paragraph>
-          {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
+          {intl.formatMessage({ defaultMessage: 'Page 4' })}
         </Typography.Paragraph>
       </div>
     ),

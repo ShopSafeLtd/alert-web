@@ -1,13 +1,6 @@
 import React from 'react';
 import { Button, Col, Drawer, Row, Table, Typography } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
-import type {
-  DeleteIncidentMutation,
-  DeleteOffenderMutation,
-  RecycledItemsQuery,
-  RestoreIncidentMutation,
-  RestoreOffenderMutation,
-} from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import moment from 'moment';
 
@@ -15,6 +8,11 @@ import EditIncident from 'components/form-components/recycled/RestoreIncident';
 import EditOffender from 'components/form-components/recycled/RestoreOffender';
 import type { ColumnsType } from 'antd/es/table/interface';
 import { useIntl } from 'react-intl';
+import type { RecycledItemsQuery } from 'graphql/recycled/queries/recycled-items.generated';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
+import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
+import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
 
 interface Props {
   data: RecycledItemsQuery | undefined;
@@ -139,14 +137,12 @@ const RecycleBin = ({
           <Typography.Title level={3}>
             {intl.formatMessage({
               defaultMessage: 'Recycle Bin',
-              id: 'Qc/Mx7',
             })}
           </Typography.Title>
           <Typography.Text>
             {intl.formatMessage({
               defaultMessage:
                 'Deleted items will be stored here for 30 days, then permanently deleted. Items can be restored at any point before that.',
-              id: 'nOsiXy',
             })}
           </Typography.Text>
         </Col>
@@ -178,7 +174,6 @@ const RecycleBin = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Recycled Incident',
-          id: 'bcJvHG',
         })}
         open={restoreIncident}
         width="400"
@@ -196,7 +191,6 @@ const RecycleBin = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Recycled Offender',
-          id: 'WxqFHl',
         })}
         open={restoreOffender}
         width="400"

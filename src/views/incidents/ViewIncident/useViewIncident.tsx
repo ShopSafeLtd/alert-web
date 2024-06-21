@@ -1,48 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type {
-  CreateDocumentMutation,
-  CreateInvestigationMutation,
-  CreateSimpleOffenderMutation,
-  CreateTodoMutation,
-  DeleteDocumentMutation,
-  GoodsMode,
-  ImageUpdateWhereDataWithoutIncidentInput,
-  LanguageCode,
-  ListIncidentsAllSchemesQuery,
-  QuestionGroupOnSchemeQuery,
-  UpdateIncidentGoodsMutation,
-  UpdateSimpleOffenderMutation,
-  UpdateTaskMutation,
-  ViewIncidentQuery,
-  ViewIncidentQueryVariables,
-} from 'graphql/generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  ListIncidentsAllSchemesDocument,
-  QueryMode,
-  Role,
-  SortOrder,
-  useAddImagesToIncidentMutation,
-  useAddImagesToOffenderMutation,
-  useCreateSimpleVehicleMutation,
-  useDeleteUpdateMutation,
-  useQuestionGroupOnSchemeQuery,
-  useRecycleIncidentMutation,
-  useSubscribeToIncidentMutation,
-  useTranslateLazyQuery,
-  useUnsubscribeFromIncidentMutation,
-  useUpdateIncidentGoodsMutation,
-  useUpdateIncidentImagesMutation,
-  useUpdateIncidentLocationMutation,
-  useUpdateIncidentMutation,
-  useUpdateIncidentOffendersMutation,
-  useUpdateIncidentVehiclesMutation,
-  useUpdateSimpleVehicleMutation,
-  useUpdateUpdateMutation,
-  useViewIncidentQuery,
-  ViewIncidentDocument,
-} from 'graphql/generated';
+
 import update from 'immutability-helper';
 
 import { IncidentSort, useStoreState } from 'state';
@@ -65,6 +22,54 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import successNotification from 'types/mutation_notifications/success_notification';
 import hasPermission from '#/utils/has-permission';
+import type {
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
+} from 'graphql/incidents/queries/view-incident.generated';
+import {
+  useViewIncidentQuery,
+  ViewIncidentDocument,
+} from 'graphql/incidents/queries/view-incident.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type {
+  GoodsMode,
+  ImageUpdateWhereDataWithoutIncidentInput,
+  LanguageCode,
+} from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  Role,
+  SortOrder,
+} from 'graphql/types';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import { ListIncidentsAllSchemesDocument } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/update-incident-images.generated';
+import { useUpdateIncidentVehiclesMutation } from 'graphql/incidents/mutations/update/update-incident-vehicles.generated';
+import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
+import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
+import { useUpdateIncidentOffendersMutation } from 'graphql/incidents/mutations/update/update-incident-offenders.generated';
+import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
+import { useUpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
+import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/update-incident-location.generated';
+import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/subscribe-to-incident.generated';
+import { useUnsubscribeFromIncidentMutation } from 'graphql/incidents/mutations/unsubscribe-from-incident.generated';
+import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/add-images-to-offender.generated';
+import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/add-images-to-incident.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
+import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
 
 const { confirm } = Modal;
 
@@ -338,11 +343,9 @@ const useViewIncident = (incidentId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Linked!',
-          id: 'y2UHQ1',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offenders have been Linked to this incidents!',
-          id: 'fFQgTY',
         }),
         placement: 'bottomRight',
       });
@@ -540,12 +543,10 @@ const useViewIncident = (incidentId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been updated from the feed and moved to the recycle bin.',
-          id: 'eWV47l',
         }),
         placement: 'bottomRight',
       });
@@ -582,14 +583,12 @@ const useViewIncident = (incidentId: string): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage:
           'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: 'TNOl3z',
       }),
-      okText: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
+      okText: intl.formatMessage({ defaultMessage: 'Delete' }),
       onOk() {
         void recycleIncident({
           variables: {
@@ -1070,11 +1069,9 @@ const useViewIncident = (incidentId: string): Return => {
     notification.success({
       message: intl.formatMessage({
         defaultMessage: 'Successfully updated!',
-        id: 'zJzbfm',
       }),
       description: intl.formatMessage({
         defaultMessage: 'The offender has been updated on the incident!',
-        id: 'vx85aW',
       }),
       placement: 'bottomRight',
     });
@@ -1219,11 +1216,9 @@ const useViewIncident = (incidentId: string): Return => {
     notification.success({
       message: intl.formatMessage({
         defaultMessage: 'Successfully added!',
-        id: 'bYuIEA',
       }),
       description: intl.formatMessage({
         defaultMessage: 'The offender has been added to the incident!',
-        id: 'R15r48',
       }),
       placement: 'bottomRight',
     });
@@ -1745,19 +1740,16 @@ const useViewIncident = (incidentId: string): Return => {
           confirm({
             title: intl.formatMessage({
               defaultMessage: 'Are you sure?',
-              id: '2oCaym',
             }),
             content: intl.formatMessage({
               defaultMessage:
                 'Adding this image will notify any other users following the incident.',
-              id: 'qfS4of',
             }),
             onOk() {
               onAddUpdateImagesToOffender(data?.incident.offenders[0].id);
             },
             okText: intl.formatMessage({
               defaultMessage: 'Add Images',
-              id: 'b4GGYZ',
             }),
           });
         }
@@ -1765,19 +1757,16 @@ const useViewIncident = (incidentId: string): Return => {
         confirm({
           title: intl.formatMessage({
             defaultMessage: 'Are you sure?',
-            id: '2oCaym',
           }),
           content: intl.formatMessage({
             defaultMessage:
               'Adding this image will notify any other users following the offender.',
-            id: '8Vqbat',
           }),
           onOk() {
             onAddUpdateImagesToIncident(images.map(({ id }) => ({ id })));
           },
           okText: intl.formatMessage({
             defaultMessage: 'Add Images',
-            id: 'b4GGYZ',
           }),
         });
       }
@@ -1889,16 +1878,14 @@ const useViewIncident = (incidentId: string): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
-        id: 'gwznO0',
       }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
+      okText: intl.formatMessage({ defaultMessage: 'Delete' }),
     });
   };
 

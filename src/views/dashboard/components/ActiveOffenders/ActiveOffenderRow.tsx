@@ -41,7 +41,6 @@ const ActiveOffender = () => {
       >
         {intl.formatMessage({
           defaultMessage: 'Recently Active Offenders',
-          id: '3CqKJ0',
         })}
       </Title>
 
@@ -116,7 +115,6 @@ const ActiveOffender = () => {
                   title={intl.formatMessage(
                     {
                       defaultMessage: 'View {offenderName} ',
-                      id: 'PnleGP',
                     },
                     { offenderName: offender.name }
                   )}
@@ -160,7 +158,6 @@ const ActiveOffender = () => {
                         {intl.formatMessage(
                           {
                             defaultMessage: 'Alert ID: {offenderReference}',
-                            id: 'Rdz6pw',
                           },
                           { offenderReference: offender.reference }
                         )}
@@ -192,12 +189,10 @@ const ActiveOffender = () => {
                   search === ''
                     ? intl.formatMessage({
                         defaultMessage: 'No Offenders',
-                        id: 'hO5g1p',
                       })
                     : intl.formatMessage({
                         defaultMessage:
                           'No offenders match your search criteria',
-                        id: 'i7eap9',
                       })
                 }
               />

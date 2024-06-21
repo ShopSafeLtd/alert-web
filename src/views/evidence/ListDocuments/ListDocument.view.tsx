@@ -12,8 +12,6 @@ import {
   Tooltip,
 } from 'antd';
 
-import type { CreateDocumentMutation } from 'graphql/generated';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileArrowDown,
@@ -25,6 +23,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import AddDocument from '#/components/form-components/documents/AddDocument';
 import useStyles from '../EvidenceList/ListEvidence.styles';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
 
 interface Props {
   data:
@@ -95,7 +94,6 @@ const EvidenceList = ({
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Evidence...',
-              id: 'zWBZ1p',
             })}
             allowClear
           />
@@ -114,7 +112,7 @@ const EvidenceList = ({
                 />
               }
             >
-              <FormattedMessage defaultMessage="Add Evidence" id="vgVasT" />
+              <FormattedMessage defaultMessage="Add Evidence" />
             </Button>
           </Col>
         )}
@@ -133,7 +131,6 @@ const EvidenceList = ({
               key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               dataIndex: 'name',
               // width: 200,
@@ -142,7 +139,6 @@ const EvidenceList = ({
               key: 'tags',
               title: intl.formatMessage({
                 defaultMessage: 'Tags',
-                id: '1EYCdR',
               }),
               dataIndex: 'tags',
               filters: tagFilter.length > 0 ? tagFilter : undefined,
@@ -164,7 +160,6 @@ const EvidenceList = ({
               key: 'description',
               title: intl.formatMessage({
                 defaultMessage: 'Description',
-                id: 'Q8Qw5B',
               }),
               dataIndex: 'description',
               ellipsis: true,
@@ -182,7 +177,6 @@ const EvidenceList = ({
                       <Tooltip
                         title={intl.formatMessage({
                           defaultMessage: 'Download',
-                          id: '5q3qC0',
                         })}
                       >
                         <Button
@@ -201,25 +195,21 @@ const EvidenceList = ({
                       <Tooltip
                         title={intl.formatMessage({
                           defaultMessage: 'Remove Evidence',
-                          id: 'K9MTKE',
                         })}
                       >
                         <Popconfirm
                           placement="topLeft"
                           title={intl.formatMessage({
                             defaultMessage: 'Remove the evidence?',
-                            id: 'IW8b3z',
                           })}
                           onConfirm={() => {
                             onDelete(record.key);
                           }}
                           okText={intl.formatMessage({
                             defaultMessage: 'Yes',
-                            id: 'a5msuh',
                           })}
                           cancelText={intl.formatMessage({
                             defaultMessage: 'No',
-                            id: 'oUWADl',
                           })}
                           overlayInnerStyle={{ padding: 10 }}
                         >
@@ -252,7 +242,6 @@ const EvidenceList = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
-          id: 'vgVasT',
         })}
         open={addEvidence}
         width="600"

@@ -7,6 +7,7 @@ import envCompatible from 'vite-plugin-env-compatible';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import removeConsole from 'vite-plugin-remove-console';
 
+
 // local host launch fix
 import dns from 'node:dns';
 
@@ -18,24 +19,21 @@ const pathResolve = (pathStr: string) => {
 };
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig((configEnv) => {
+  const { mode } = configEnv;
   const env = loadEnv(mode, process.cwd(), '');
-
   return {
     plugins: [
-      React(),
+      React({
+        babel: {
+          babelrc: true,
+        },
+      }),
       envCompatible(),
       viteTsconfigPaths(),
       svgrPlugin(),
       // will remove console from prod builds, remove if testing is needed on live
       removeConsole(),
-      // checker({z
-      //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
-      //   typescript: true,
-      //   eslint: {
-      //     lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
-      //   },
-      // }),
       // must be last
       sentryVitePlugin({
         org: 'nvoyy-group',

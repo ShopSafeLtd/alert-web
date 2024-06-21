@@ -1,4 +1,4 @@
-import type { Age, Build, Gender, Height, Race } from 'graphql/generated';
+import type { Age, Build, Gender, Height, Race } from 'graphql/types';
 
 export interface Face {
   id: string;

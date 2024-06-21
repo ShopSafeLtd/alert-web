@@ -16,7 +16,6 @@ export const calcDuration = (
   if (days <= 365.25)
     return (
       <FormattedMessage
-        id="j3Zy75"
         defaultMessage="{reference, plural, =0 {0 days} one {1 day} other {# days}}"
         values={{
           reference: days,
@@ -27,7 +26,6 @@ export const calcDuration = (
   return (
     <>
       <FormattedMessage
-        id="i9u9wS"
         defaultMessage="{reference, plural, =0 {0 years} one {1 year} other {# years}}"
         values={{
           reference: years,
@@ -35,7 +33,6 @@ export const calcDuration = (
       />
       {remainingDays > 0 && (
         <FormattedMessage
-          id="ANWXuX"
           defaultMessage="{ reference, plural, =1 {1 day} other {# days}}"
           values={{
             reference: remainingDays,

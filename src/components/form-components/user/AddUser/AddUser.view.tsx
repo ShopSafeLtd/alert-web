@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
 import React from 'react';
 
-import { Role } from 'graphql/generated';
+import { Role } from 'graphql/types';
 import type { FormInstance } from 'antd';
 import {
   Button,
@@ -97,7 +97,7 @@ const AddUser = ({
       onValuesChange={onValuesChange}
     >
       <Title level={4} style={{ marginBottom: 15 }}>
-        {intl.formatMessage({ defaultMessage: 'User Detail:', id: 'phPrn9' })}
+        {intl.formatMessage({ defaultMessage: 'User Detail:' })}
       </Title>
       <Row gutter={16}>
         <Col span={12}>
@@ -105,14 +105,12 @@ const AddUser = ({
             name="fullName"
             label={intl.formatMessage({
               defaultMessage: 'Full Name',
-              id: 'TemVby',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the new user.',
-                  id: 'Ev5c0L',
                 }),
               },
             ]}
@@ -125,7 +123,6 @@ const AddUser = ({
             name="email"
             label={intl.formatMessage({
               defaultMessage: 'Email Address',
-              id: 'xxQxLE',
             })}
             rules={[
               {
@@ -133,7 +130,6 @@ const AddUser = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter an email address for the new user.',
-                  id: 'suKy40',
                 }),
               },
             ]}
@@ -149,7 +145,6 @@ const AddUser = ({
               name="businesses"
               label={intl.formatMessage({
                 defaultMessage: 'Businesses',
-                id: 'D0tMhW',
               })}
               rules={[
                 {
@@ -157,7 +152,6 @@ const AddUser = ({
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select at least one business for the new user.',
-                    id: '/OYfH0',
                   }),
                 },
               ]}
@@ -170,7 +164,6 @@ const AddUser = ({
                 disabled={saving || businessProvided}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Search for a business...',
-                  id: 'qaJxSS',
                 })}
                 style={{ width: '100%' }}
               />
@@ -181,14 +174,12 @@ const AddUser = ({
               name="role"
               label={intl.formatMessage({
                 defaultMessage: 'Role',
-                id: '1ZgrhW',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please select a role for the user.',
-                    id: 'vJrE3G',
                   }),
                 },
               ]}
@@ -212,7 +203,6 @@ const AddUser = ({
                     name="businesses"
                     label={intl.formatMessage({
                       defaultMessage: 'Businesses',
-                      id: 'D0tMhW',
                     })}
                     rules={[
                       {
@@ -220,7 +210,6 @@ const AddUser = ({
                         message: intl.formatMessage({
                           defaultMessage:
                             'Please select at least one business for the new user.',
-                          id: '/OYfH0',
                         }),
                       },
                     ]}
@@ -233,7 +222,6 @@ const AddUser = ({
                       disabled={saving || businessProvided}
                       placeholder={intl.formatMessage({
                         defaultMessage: 'Search for a business...',
-                        id: 'qaJxSS',
                       })}
                       style={{ width: '100%' }}
                     />
@@ -254,7 +242,6 @@ const AddUser = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'New Business',
-                      id: 'KepKya',
                     })}
                   </Button>
                 </Col>
@@ -267,14 +254,12 @@ const AddUser = ({
                 name="role"
                 label={intl.formatMessage({
                   defaultMessage: 'Role',
-                  id: '1ZgrhW',
                 })}
                 rules={[
                   {
                     required: true,
                     message: intl.formatMessage({
                       defaultMessage: 'Please select a role for the user.',
-                      id: 'vJrE3G',
                     }),
                   },
                 ]}
@@ -292,7 +277,7 @@ const AddUser = ({
       )}
 
       <Title level={4} style={{ marginBottom: 15 }}>
-        {intl.formatMessage({ defaultMessage: 'User Groups:', id: 'OfXLJQ' })}
+        {intl.formatMessage({ defaultMessage: 'User Groups:' })}
       </Title>
       <Row gutter={16}>
         <Col span={12}>
@@ -300,7 +285,6 @@ const AddUser = ({
             name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             rules={[
               {
@@ -308,7 +292,6 @@ const AddUser = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select at least one group for a user.',
-                  id: '0h0TWW',
                 }),
               },
             ]}
@@ -330,7 +313,6 @@ const AddUser = ({
             name="chats"
             label={intl.formatMessage({
               defaultMessage: 'Chat Groups',
-              id: '8TntzL',
             })}
           >
             <Select
@@ -354,7 +336,6 @@ const AddUser = ({
                 name="approverGroups"
                 label={intl.formatMessage({
                   defaultMessage: 'Approver Groups',
-                  id: 'D/FCTs',
                 })}
               >
                 <Select
@@ -376,7 +357,6 @@ const AddUser = ({
               name="defaultGroups"
               label={intl.formatMessage({
                 defaultMessage: 'Default Groups',
-                id: '2KZp/e',
               })}
             >
               <Select
@@ -399,7 +379,6 @@ const AddUser = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Show user name in the system',
-              id: 'YxFuTi',
             })}
             name="publicName"
             valuePropName="checked"
@@ -420,7 +399,6 @@ const AddUser = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Allow user to report to all businesses',
-              id: 'OILM5t',
             })}
             name="reportToAllBusinesses"
             valuePropName="checked"
@@ -442,20 +420,17 @@ const AddUser = ({
       <Title level={4} style={{ marginBottom: 15 }}>
         {intl.formatMessage({
           defaultMessage: 'Notification Settings:',
-          id: 'op0fQr',
         })}
       </Title>
       <Title style={{ marginBottom: 8, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Incidents:',
-          id: '+nRUf9',
         })}
       </Title>
       <Form.Item
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed incidents:',
-          id: 'q92TAS',
         })}
         name="subscribedIncidentOnly"
         valuePropName="checked"
@@ -475,7 +450,6 @@ const AddUser = ({
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for incidents:',
-          id: 'hwc1SW',
         })}
         name="incidentPush"
         valuePropName="checked"
@@ -495,7 +469,6 @@ const AddUser = ({
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send emails for incidents:',
-          id: 'P8o2fl',
         })}
         name="incidentEmail"
         valuePropName="checked"
@@ -515,7 +488,6 @@ const AddUser = ({
       <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Offenders:',
-          id: 'HEnuMU',
         })}
       </Title>
       <Form.Item
@@ -523,7 +495,6 @@ const AddUser = ({
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed offenders:',
-          id: 'PxTS+p',
         })}
         valuePropName="checked"
         style={{
@@ -543,7 +514,6 @@ const AddUser = ({
         name="offenderPush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for offenders:',
-          id: 'kOXe4z',
         })}
         valuePropName="checked"
         style={{
@@ -563,7 +533,6 @@ const AddUser = ({
         name="offenderEmail"
         label={intl.formatMessage({
           defaultMessage: 'Send emails for offenders:',
-          id: 'jhu5sz',
         })}
         valuePropName="checked"
         style={{
@@ -582,13 +551,11 @@ const AddUser = ({
       <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Bulletins:',
-          id: '3woXlC',
         })}
       </Title>
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for bulletins:',
-          id: 'sXEYqs',
         })}
         name="bulletinPush"
         valuePropName="checked"
@@ -607,7 +574,6 @@ const AddUser = ({
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send emails for bulletins:',
-          id: '6iDV7o',
         })}
         name="bulletinEmails "
         valuePropName="checked"
@@ -626,14 +592,12 @@ const AddUser = ({
       <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Chat Messages:',
-          id: 'UT42Ko',
         })}
       </Title>
       <Form.Item
         name="messagePush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for new chat messages:',
-          id: 'S4ojdm',
         })}
         valuePropName="checked"
         style={{
@@ -654,7 +618,7 @@ const AddUser = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -666,7 +630,6 @@ const AddUser = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Invite User',
-                id: 'Mh7T6y',
               })}
             </Button>
           </Col>
@@ -677,7 +640,6 @@ const AddUser = ({
         onClose={toggleAddBusinessVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
-          id: 'p47asT',
         })}
         width={600}
       >

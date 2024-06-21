@@ -1,11 +1,9 @@
 import React from 'react';
-import type {
-  RestoreIncidentMutation,
-  DeleteIncidentMutation,
-} from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './RestoreIncident.view';
 import useRestoreIncident from './useRestoreIncident';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
 
 interface Props {
   onClose: () => void;

@@ -1,19 +1,3 @@
-import type {
-  IncidentsFeedQuery,
-  IncidentsFeedQueryVariables,
-  RecycleIncidentMutation,
-} from 'graphql/generated';
-import {
-  IncidentsFeedDocument,
-  Model,
-  QueryMode,
-  Role,
-  SortOrder,
-  TagType,
-  useIncidentsFeedQuery,
-  useListGoodsTypesQuery,
-  useTagsQuery,
-} from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -21,6 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import type { DateType } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
 import { useGroupsContext } from '#/context/groups-context';
+import type {
+  IncidentsFeedQuery,
+  IncidentsFeedQueryVariables,
+} from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
+import {
+  IncidentsFeedDocument,
+  useIncidentsFeedQuery,
+} from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
 
 interface Return {
   data: IncidentsFeedQuery | undefined;

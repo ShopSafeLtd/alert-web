@@ -47,7 +47,6 @@ const IncidentWhere = ({
             {intl.formatMessage(
               {
                 defaultMessage: 'Where did this incident happen?',
-                id: 'MUuc1b',
               },
               {}
             )}
@@ -63,7 +62,6 @@ const IncidentWhere = ({
               {
                 defaultMessage:
                   '- Select the business that this incident relates to.',
-                id: '0Q4UI4',
               },
               {}
             )}
@@ -79,7 +77,7 @@ const IncidentWhere = ({
                   <Form.Item
                     name="business"
                     label={intl.formatMessage(
-                      { defaultMessage: 'Business', id: 'w1Fanr' },
+                      { defaultMessage: 'Business' },
                       {}
                     )}
                   >
@@ -90,7 +88,6 @@ const IncidentWhere = ({
                       placeholder={intl.formatMessage(
                         {
                           defaultMessage: 'Search for a business...',
-                          id: 'qaJxSS',
                         },
                         {}
                       )}
@@ -117,7 +114,6 @@ const IncidentWhere = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Use An Address',
-                        id: 'Fbk02A',
                       })}
                     </Button>
                     {/* <Dropdown
@@ -180,10 +176,7 @@ const IncidentWhere = ({
           <Row gutter={8}>
             <Col>
               <Title level={4} style={{ fontSize: 15, marginTop: 5 }}>
-                {intl.formatMessage(
-                  { defaultMessage: 'Location:', id: 'A5vVzY' },
-                  {}
-                )}
+                {intl.formatMessage({ defaultMessage: 'Location:' }, {})}
               </Title>
             </Col>
           </Row>

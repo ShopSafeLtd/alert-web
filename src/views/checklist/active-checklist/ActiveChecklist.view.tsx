@@ -26,12 +26,15 @@ import {
   type ActiveChecklistSection,
   type FormData,
 } from './useActiveChecklist';
-import type { ActiveChecklistQuery } from '../../../graphql/generated';
+
 import useStyles from './ActiveChecklist.styles';
 import SignatureInput from '../../../components/SignBox';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import CompletedChecklistView from '../completed-checklist/CompletedChecklist.view';
 import { useStoreState } from '../../../state';
+import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
+import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
+import { ChecklistStatus } from 'graphql/types';
 
 interface Props {
   id: string | undefined;
@@ -56,6 +59,7 @@ interface Props {
 
 // const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 const normFile = (e: { fileList: never | never[] }) => {
   if (Array.isArray(e)) {
     return e;
@@ -106,23 +110,23 @@ const ActiveChecklistView = ({
         : '',
     })
   );
-  if (data?.activeChecklist.status === 'COMPLETED') {
+  if (data && data?.activeChecklist.status === ChecklistStatus.Completed) {
     return (
       <CompletedChecklistView
         checklistSections={sections}
         title={data?.activeChecklist.name || ''}
         additionalInfo={data?.activeChecklist.comments || ''}
         signature={data?.activeChecklist.signature || ''}
-        completedByUser={data.activeChecklist?.completedBy?.origName || ''}
+        completedByUser={data?.activeChecklist?.completedBy?.origName || ''}
         completedAt={
           data.activeChecklist?.completedAt
-            ? new Date(data.activeChecklist?.completedAt).toLocaleDateString(
-                'en-GB'
-              )
+            ? new Date(
+                data?.activeChecklist?.completedAt || ''
+              ).toLocaleDateString('en-GB')
             : ''
         }
         theme={theme}
-        onBack={() => navigate(`/app/checklists`)}
+        onBack={() => navigate('/app/checklists')}
       />
     );
   }
@@ -130,11 +134,10 @@ const ActiveChecklistView = ({
   return (
     <div className="page-view">
       <PageHeader
-        onBack={() => navigate(`/app/checklists`)}
+        onBack={() => navigate('/app/checklists')}
         title={
           data?.activeChecklist.name ||
           intl.formatMessage({
-            id: 'soCLV+',
             defaultMessage: 'Checklist',
           })
         }
@@ -237,7 +240,6 @@ const ActiveChecklistView = ({
                                                   <Input.TextArea
                                                     placeholder={intl.formatMessage(
                                                       {
-                                                        id: 'oo/ava',
                                                         defaultMessage:
                                                           'Enter your answer here...',
                                                       }
@@ -254,14 +256,14 @@ const ActiveChecklistView = ({
                                                       questionIndex
                                                     ]?.availableAnswers.map(
                                                       (answer) => ({
-                                                        label:
-                                                          // eslint-disable-next-line formatjs/enforce-id
-                                                          intl.formatMessage({
-                                                            id: answer.answer,
-                                                            defaultMessage:
-                                                              // eslint-disable-next-line formatjs/enforce-default-message
-                                                              answer.answer,
-                                                          }),
+                                                        label: (
+                                                          <FormattedMessageFixed
+                                                            id={answer.answer}
+                                                            defaultMessage={
+                                                              answer.answer
+                                                            }
+                                                          />
+                                                        ),
                                                         value: answer.answer,
                                                       })
                                                     )}
@@ -326,7 +328,6 @@ const ActiveChecklistView = ({
                                                       ]}
                                                       label={intl.formatMessage(
                                                         {
-                                                          id: '3XOciw',
                                                           defaultMessage:
                                                             'Additional Info',
                                                         }
@@ -335,7 +336,6 @@ const ActiveChecklistView = ({
                                                       <Input.TextArea
                                                         placeholder={intl.formatMessage(
                                                           {
-                                                            id: 'JGkmCI',
                                                             defaultMessage:
                                                               'Enter your comment here...',
                                                           }
@@ -395,7 +395,6 @@ const ActiveChecklistView = ({
                                                       'images',
                                                     ]}
                                                     label={intl.formatMessage({
-                                                      id: 'Fip4H8',
                                                       defaultMessage: 'Images',
                                                     })}
                                                     className={
@@ -416,7 +415,6 @@ const ActiveChecklistView = ({
                                                         {intl.formatMessage({
                                                           defaultMessage:
                                                             'Upload',
-                                                          id: 'p4N05H',
                                                         })}
                                                       </Button>
                                                     </Upload>
@@ -449,13 +447,11 @@ const ActiveChecklistView = ({
                 shouldUpdate
                 name="additionalInfo"
                 label={intl.formatMessage({
-                  id: 'LVoYO1',
                   defaultMessage: 'Additional Comments:',
                 })}
               >
                 <Input.TextArea
                   placeholder={intl.formatMessage({
-                    id: 'JGkmCI',
                     defaultMessage: 'Enter your comment here...',
                   })}
                 />
@@ -465,7 +461,6 @@ const ActiveChecklistView = ({
           <Col span={24}>
             <Form.Item
               label={intl.formatMessage({
-                id: '/anwxi',
                 defaultMessage: 'Sign here',
               })}
               rules={[
@@ -625,7 +620,6 @@ const ActiveChecklistView = ({
                             style={{ fontSize: 16, marginRight: '10px' }}
                           />
                           {intl.formatMessage({
-                            id: 'p4N05H',
                             defaultMessage: 'Upload',
                           })}
                         </Button>
@@ -665,15 +659,13 @@ const ActiveChecklistView = ({
               <Form.Item>
                 <Button
                   loading={loading || submitting}
-                  onClick={() => navigate(`/app/checklists`)}
+                  onClick={() => navigate('/app/checklists')}
                 >
                   {id
                     ? intl.formatMessage({
-                        id: '47FYwb',
                         defaultMessage: 'Cancel',
                       })
                     : intl.formatMessage({
-                        id: 'cyR7Kh',
                         defaultMessage: 'Back',
                       })}
                 </Button>
@@ -687,7 +679,6 @@ const ActiveChecklistView = ({
                   onClick={() => saveDraft()}
                 >
                   {intl.formatMessage({
-                    id: 'YH2E7O',
                     defaultMessage: 'Save Draft',
                   })}
                 </Button>
@@ -701,7 +692,6 @@ const ActiveChecklistView = ({
                   htmlType="submit"
                 >
                   {intl.formatMessage({
-                    id: 'wSZR47',
                     defaultMessage: 'Submit',
                   })}
                 </Button>

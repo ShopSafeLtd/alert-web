@@ -29,7 +29,6 @@ const DayOfWeekBar = ({
       bodyStyle={{ height: '90%' }}
       title={intl.formatMessage({
         defaultMessage: 'Incidents by day of week',
-        id: 'LPtzWr',
       })}
     >
       <Button
@@ -42,7 +41,6 @@ const DayOfWeekBar = ({
         data={data}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No incidents',
-          id: '7UNuAl',
         })}
         margin={{
           bottom: 30,

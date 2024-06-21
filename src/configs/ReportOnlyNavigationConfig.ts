@@ -4,9 +4,9 @@ import {
   faExclamationCircle,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import { Role } from 'graphql/generated';
 import { defineMessage } from 'react-intl';
 import { NavItem } from './NavigationConfig';
+import { Role } from 'graphql/types';
 
 const ReportOnlyNavigationConfig: NavItem[] = [
   {

@@ -12,16 +12,15 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import type {
-  AvailRolesQuery,
-  CreateDashboardMutationVariables,
-  DashboardTemplatesQuery,
-} from 'graphql/generated';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import useStyles from './ListDashboards.styles';
+import type { CreateDashboardMutationVariables } from '#/views/dashboard-management/graphql/mutations/dashboard.generated';
+import type { DashboardTemplatesQuery } from '#/views/dashboard-management/graphql/queries/dashboard-templates.generated';
+import type { AvailRolesQuery } from '#/views/dashboard-management/graphql/queries/available-roles.generated';
 
 interface Props {
   data: DashboardTemplatesQuery | undefined;
@@ -128,10 +127,7 @@ const Dashboards = ({
       <Row className={classes.headerRow}>
         <Col>
           <Button type="primary" onClick={toggleCreateDashboard}>
-            <FormattedMessage
-              defaultMessage="Create New Dashboard"
-              id="Zb2QC0"
-            />
+            <FormattedMessage defaultMessage="Create New Dashboard" />
           </Button>
         </Col>
         <Col flex={1} />
@@ -151,7 +147,7 @@ const Dashboards = ({
           {
             key: 'name',
             dataIndex: 'name',
-            title: <FormattedMessage defaultMessage="Name" id="HAlOn1" />,
+            title: <FormattedMessage defaultMessage="Name" />,
             render: (name, record) => (
               <Link to={`edit/${record.key}`}> {name} </Link>
             ),
@@ -159,9 +155,7 @@ const Dashboards = ({
           {
             key: 'default',
             dataIndex: 'default',
-            title: (
-              <FormattedMessage defaultMessage="Default For" id="cPPe3q" />
-            ),
+            title: <FormattedMessage defaultMessage="Default For" />,
           },
           {
             dataIndex: 'actions',
@@ -173,7 +167,6 @@ const Dashboards = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit',
-                      id: 'wEQDC6',
                     })}
                   >
                     <Button
@@ -190,25 +183,21 @@ const Dashboards = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Delete dashboad',
-                      id: '54NZUH',
                     })}
                   >
                     <Popconfirm
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Delete the dashboard?',
-                        id: 'CEKS4i',
                       })}
                       onConfirm={() => {
                         deleteDashboard(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >
@@ -226,9 +215,7 @@ const Dashboards = ({
         ]}
       />
       <Drawer
-        title={
-          <FormattedMessage defaultMessage="Create New Dashboard" id="Zb2QC0" />
-        }
+        title={<FormattedMessage defaultMessage="Create New Dashboard" />}
         open={addDashboard}
         width="500"
         onClose={() => {
@@ -264,7 +251,6 @@ const Dashboards = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             })}
             name="name"
             rules={[
@@ -272,7 +258,6 @@ const Dashboards = ({
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name',
-                  id: 'PVXd+T',
                 }),
               },
             ]}
@@ -282,7 +267,6 @@ const Dashboards = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Roles',
-              id: 'c35gM5',
             })}
             name="roles"
           >
@@ -298,7 +282,6 @@ const Dashboards = ({
             <Checkbox name="defaultAdmin">
               {intl.formatMessage({
                 defaultMessage: 'Default for admins',
-                id: 'l2pmuP',
               })}
             </Checkbox>
           </Form.Item>
@@ -306,7 +289,6 @@ const Dashboards = ({
             <Checkbox name="defaultUser">
               {intl.formatMessage({
                 defaultMessage: 'Default for users',
-                id: '1ioG68',
               })}
             </Checkbox>
           </Form.Item>
@@ -314,14 +296,13 @@ const Dashboards = ({
             <Button type="primary" htmlType="submit">
               {intl.formatMessage({
                 defaultMessage: 'Submit',
-                id: 'wSZR47',
               })}
             </Button>
           </Form.Item>
         </Form>
       </Drawer>
       <Drawer
-        title={<FormattedMessage defaultMessage="Edit Dashboard" id="UleMJU" />}
+        title={<FormattedMessage defaultMessage="Edit Dashboard" />}
         open={!!editDashboard}
         width="500"
         onClose={() => {
@@ -351,7 +332,6 @@ const Dashboards = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             })}
             name="name"
             rules={[{ required: true, message: 'Please a name!' }]}
@@ -361,7 +341,6 @@ const Dashboards = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Roles',
-              id: 'c35gM5',
             })}
             name="roles"
           >
@@ -377,7 +356,6 @@ const Dashboards = ({
             <Checkbox name="defaultAdmin">
               {intl.formatMessage({
                 defaultMessage: 'Default for admins',
-                id: 'l2pmuP',
               })}
             </Checkbox>
           </Form.Item>
@@ -385,7 +363,6 @@ const Dashboards = ({
             <Checkbox name="defaultUser">
               {intl.formatMessage({
                 defaultMessage: 'Default for users',
-                id: '1ioG68',
               })}
             </Checkbox>
           </Form.Item>
@@ -393,7 +370,6 @@ const Dashboards = ({
             <Button type="primary" htmlType="submit">
               {intl.formatMessage({
                 defaultMessage: 'Submit',
-                id: 'wSZR47',
               })}
             </Button>
           </Form.Item>

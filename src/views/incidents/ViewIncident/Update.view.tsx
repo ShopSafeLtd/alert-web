@@ -124,7 +124,7 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => (
     <WatermarkImage url={src} />
     <div className="chat-collage-image-overlay">
       <EyeOutlined style={{ marginRight: 5 }} />
-      <FormattedMessage defaultMessage="Preview" id="TJo5E6" />
+      <FormattedMessage defaultMessage="Preview" />
     </div>
     <div>
       <WatermarkImage url={src} />
@@ -202,7 +202,6 @@ const UpdateContent = ({
                   {userId === from?.id
                     ? intl.formatMessage({
                         defaultMessage: 'You',
-                        id: 'kJ5W29',
                       })
                     : // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx
                       `${from?.origName}${

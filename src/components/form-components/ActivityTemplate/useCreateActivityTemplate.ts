@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import {
-  useCreateOneQuestionGroupMutation,
-  useUpdateQuestionGroupMutation,
-} from 'graphql/generated';
+
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
 import type { ListData } from '../../../views/adminTodo/useActivities';
+import { useCreateOneQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/createQuestionGroup.generated';
+import { useUpdateQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/updateQuestionGroup.generated';
 
 const { useForm } = Form;
 
@@ -106,11 +105,9 @@ const useCreateActivityTemplate = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The activity has been added.',
-          id: 'hDZLqK',
         }),
         placement: 'bottomRight',
       });
@@ -128,11 +125,9 @@ const useCreateActivityTemplate = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The activity has been added.',
-          id: 'hDZLqK',
         }),
         placement: 'bottomRight',
       });

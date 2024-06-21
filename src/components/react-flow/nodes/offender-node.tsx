@@ -9,12 +9,12 @@ import '@reactflow/node-resizer/dist/style.css';
 import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import OffenderCard from './components/offender-details-card';
-import type { Age, Build, Gender, Race } from '../../../graphql/generated';
 import useStyles from './style.module';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
 import SelectOffenderDetails from '../form/selectOffenderDetails';
 import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
+import type { Age, Build, Gender, Race } from 'graphql/types';
 
 interface Offender {
   images:
@@ -109,7 +109,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             drawer.open({
               defaultTitle: intl.formatMessage({
                 defaultMessage: 'Select Offender',
-                id: '8e5n4o',
               }),
               id: 'offenderSelect',
             });
@@ -117,7 +116,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         >
           {intl.formatMessage({
             defaultMessage: 'Select Offender',
-            id: '8e5n4o',
           })}
         </Button>
       </NodeToolbar>
@@ -139,7 +137,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
               {intl.formatMessage({
                 defaultMessage: 'Offender: Please choose an offender',
-                id: 'KRHeRo',
               })}
             </div>
           )}

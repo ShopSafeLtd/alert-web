@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
   '@media print': {
-    sideList: `display: none !important;`,
+    sideList: 'display: none !important;',
   },
   sideList: {
     display: 'flex',

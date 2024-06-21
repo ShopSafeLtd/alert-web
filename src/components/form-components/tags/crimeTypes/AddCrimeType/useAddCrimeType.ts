@@ -1,21 +1,17 @@
 import { useState } from 'react';
-import type {
-  CreateTagMutation,
-  CrimeType,
-  ListSchemeTagsQuery,
-} from 'graphql/generated';
-import {
-  useCreateTagMutation,
-  Model,
-  TagType,
-  useListSchemeTagsQuery,
-} from 'graphql/generated';
+
 import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { CrimeType } from 'graphql/types';
+import { Model, TagType } from 'graphql/types';
+import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
+import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
 
 interface FormData {
   name: string;
@@ -78,11 +74,9 @@ const useAddCrimeType = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The crime type has been added! ',
-          id: 'LWKS5X',
         }),
         placement: 'bottomRight',
       });

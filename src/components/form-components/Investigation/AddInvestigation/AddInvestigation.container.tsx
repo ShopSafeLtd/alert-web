@@ -1,8 +1,8 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateInvestigationMutation } from 'graphql/generated';
 import React from 'react';
 import View from './AddInvestigation.view';
 import useAddInvestigation from './useAddInvestigation';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
 
 interface Props {
   onClose: () => void;

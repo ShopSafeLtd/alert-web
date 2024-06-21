@@ -1,12 +1,13 @@
 import type { RefObject } from 'react';
 import type RGL from 'react-grid-layout';
-import type { OffenderReportQuery } from '../../../../graphql/generated';
+
 import type {
   IncidentsTableData,
   TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from '../../../../components/reports/tableColumns';
 import type { IReportTemplate, MetaData, SelectOptions } from '../../types';
+import type { OffenderReportQuery } from 'graphql/reports/queries/offender-report.generated';
 
 export interface Props {
   loading: boolean;

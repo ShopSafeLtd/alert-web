@@ -9,18 +9,16 @@ import type {
   SelectOptions,
 } from '#/views/reports/types';
 import { tableLengthToHeight } from '#/components/reports/utils/utils';
-import {
-  SchemeReportDetailsDocument,
-  useCreateReportTemplateMutation,
-  useUpdateReportTemplateMutation,
-} from 'graphql/generated';
-import type {
-  ReportType as IReportType,
-  SchemeReportDetailsQuery,
-  SchemeReportDetailsQueryVariables,
-} from '../../graphql/generated';
 import { notification } from 'antd';
 import { useIntl } from 'react-intl';
+import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/create-report-template.generated';
+import type {
+  SchemeReportDetailsQuery,
+  SchemeReportDetailsQueryVariables,
+} from 'graphql/reports/queries/scheme-details.generated';
+import { SchemeReportDetailsDocument } from 'graphql/reports/queries/scheme-details.generated';
+import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/update-report-template.generated';
+import type { ReportType as IReportType } from 'graphql/types';
 
 interface Props {
   InitLayout: RGL.Layout[];
@@ -551,7 +549,6 @@ const useReportState = ({
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Report Saved',
-              id: '8RXDD1',
             }),
           });
         },

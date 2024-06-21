@@ -19,10 +19,11 @@ import {
   faMagnifyingGlass,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import { useListBusinessesLocationsQuery } from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
 import type { NewBusiness } from '../DiscImport.types';
+import { useListBusinessesLocationsQuery } from 'graphql/businesses/queries/list-businesses-locations.generated';
 
 const { Text } = Typography;
 
@@ -114,7 +115,6 @@ const NewBusinessRow = React.memo(
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a name',
-                    id: 'uqBy7y',
                   }),
                 },
               ]}
@@ -135,7 +135,6 @@ const NewBusinessRow = React.memo(
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a street',
-                    id: 'M3C0JK',
                   }),
                 },
               ]}
@@ -151,7 +150,6 @@ const NewBusinessRow = React.memo(
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a town/city',
-                    id: '0rPJ0H',
                   }),
                 },
               ]}
@@ -172,7 +170,6 @@ const NewBusinessRow = React.memo(
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a postcode',
-                    id: 'ysScN/',
                   }),
                 },
               ]}
@@ -185,7 +182,6 @@ const NewBusinessRow = React.memo(
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Link to existing business',
-                  id: 'PSUx8Z',
                 })}
               >
                 <Button size="small" onClick={() => setLink(true)}>
@@ -203,7 +199,6 @@ const NewBusinessRow = React.memo(
                         required: true,
                         message: intl.formatMessage({
                           defaultMessage: 'Select a business',
-                          id: 'jkpwh9',
                         }),
                       },
                     ]}
@@ -222,7 +217,6 @@ const NewBusinessRow = React.memo(
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Clear link',
-                      id: 'niNmLF',
                     })}
                   >
                     <Button size="small" onClick={clearLink}>
@@ -239,7 +233,6 @@ const NewBusinessRow = React.memo(
               title={intl.formatMessage({
                 defaultMessage:
                   'Are you sure you want to remove this business?',
-                id: 'sLEQ0e',
               })}
               onConfirm={() => onDelete(business.id)}
             >
@@ -284,13 +277,11 @@ const NewBusinessTable = ({
     <Card
       title={intl.formatMessage({
         defaultMessage: 'Businesses',
-        id: 'D0tMhW',
       })}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
           {intl.formatMessage({
             defaultMessage: 'Add business',
-            id: '5MBl1V',
           })}
         </Button>
       }
@@ -308,7 +299,6 @@ const NewBusinessTable = ({
           <Text style={{ paddingLeft: 5 }} strong>
             {intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             })}
           </Text>
         </Col>
@@ -316,7 +306,6 @@ const NewBusinessTable = ({
           <Text style={{ paddingLeft: 5 }} strong>
             {intl.formatMessage({
               defaultMessage: 'Building',
-              id: 'oS/nae',
             })}
           </Text>
         </Col>
@@ -324,7 +313,6 @@ const NewBusinessTable = ({
           <Text style={{ paddingLeft: 5 }} strong>
             {intl.formatMessage({
               defaultMessage: 'Street',
-              id: 'BaIwdV',
             })}
           </Text>
         </Col>
@@ -332,7 +320,6 @@ const NewBusinessTable = ({
           <Text style={{ paddingLeft: 5 }} strong>
             {intl.formatMessage({
               defaultMessage: 'Town/City',
-              id: 'byaTQZ',
             })}
           </Text>
         </Col>
@@ -340,7 +327,6 @@ const NewBusinessTable = ({
           <Text style={{ paddingLeft: 5 }} strong>
             {intl.formatMessage({
               defaultMessage: 'County',
-              id: 'B+KJhc',
             })}
           </Text>
         </Col>
@@ -348,7 +334,6 @@ const NewBusinessTable = ({
           <Text style={{ paddingLeft: 5 }} strong>
             {intl.formatMessage({
               defaultMessage: 'Postcode',
-              id: 'FJhjgz',
             })}
           </Text>
         </Col>
@@ -370,8 +355,7 @@ const NewBusinessTable = ({
         showTotal={(total) =>
           intl.formatMessage(
             {
-              defaultMessage: `Total Businesses: {total}`,
-              id: 'IU3Z4K',
+              defaultMessage: 'Total Businesses: {total}',
             },
             {
               total,

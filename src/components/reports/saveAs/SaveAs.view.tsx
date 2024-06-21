@@ -28,14 +28,12 @@ const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
             <Form.Item
               name="name"
               label={intl.formatMessage({
-                id: 'HAlOn1',
                 defaultMessage: 'Name',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: '705XBo',
                     defaultMessage: 'Please input a name!',
                   }),
                 },
@@ -43,7 +41,6 @@ const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
             >
               <Input
                 placeholder={intl.formatMessage({
-                  id: 'HAlOn1',
                   defaultMessage: 'Name',
                 })}
               />
@@ -54,7 +51,7 @@ const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                <FormattedMessage id="47FYwb" defaultMessage="Cancel" />
+                <FormattedMessage defaultMessage="Cancel" />
               </Button>
             </Col>
             <Col>
@@ -64,7 +61,7 @@ const SaveAs = ({ onSubmit, saving, onClose }: Props) => {
                 type="primary"
                 htmlType="submit"
               >
-                <FormattedMessage id="/XPfp1" defaultMessage="Save As" />
+                <FormattedMessage defaultMessage="Save As" />
               </Button>
             </Col>
           </Row>

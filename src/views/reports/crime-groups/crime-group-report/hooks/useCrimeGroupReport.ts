@@ -1,8 +1,3 @@
-import {
-  ReportType,
-  useCrimeGroupReportQuery,
-  useSchemeReportDetailsQuery,
-} from 'graphql/generated';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import arrangeTemplates from '#/utils/reports/setTemplates';
@@ -11,6 +6,9 @@ import CrimeGroupLayout, { CrimeGroupMetaData } from './initLayout';
 import useReportPrint from '../../../../../utils/reportPrint/usePrintReports';
 import useReportState from '../../../../../utils/reports/useReportState';
 import { useEffect } from 'react';
+import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/scheme-details.generated';
+import { ReportType } from 'graphql/types';
+import { useCrimeGroupReportQuery } from 'graphql/reports/queries/crime-group-report.generated';
 
 const useCrimeGroupReport = (): Return => {
   const { id: selectedCrimeGroup, reportId } = useParams();

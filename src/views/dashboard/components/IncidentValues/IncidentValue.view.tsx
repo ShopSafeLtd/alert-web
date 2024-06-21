@@ -15,7 +15,6 @@ const IncidentValue = ({
       <Statistic
         title={intl.formatMessage({
           defaultMessage: 'Total Value Lost',
-          id: 'fWpZ4S',
         })}
         value={intl.formatNumber(data, { style: 'currency', currency: 'GBP' })}
         loading={loading}

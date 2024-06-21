@@ -1,4 +1,3 @@
-import { useCopyOffenderMutation } from 'graphql/generated';
 import { useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
@@ -6,6 +5,7 @@ import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useGroupsContext } from '#/context/groups-context';
+import { useCopyOffenderMutation } from 'graphql/offenders/mutations/copy-offender.generated';
 
 const { useForm } = Form;
 
@@ -51,12 +51,10 @@ const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Copied',
-          id: 'a9zFSp',
         }),
         description: intl.formatMessage(
           {
-            defaultMessage: `The offender has been copied to {schemeName}!`,
-            id: 'OROafI',
+            defaultMessage: 'The offender has been copied to {schemeName}!',
           },
           { schemeName }
         ),

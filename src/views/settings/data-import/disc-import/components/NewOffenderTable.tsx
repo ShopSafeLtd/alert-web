@@ -17,10 +17,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { faImages } from '@fortawesome/pro-solid-svg-icons';
 import type { Theme } from 'configs/ThemeConfig';
-import type { SchemeGroupsQuery } from 'graphql/generated';
-import { Age, Build, Gender, Height, Race } from 'graphql/generated';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { NewOffender } from '../DiscImport.types';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { Age, Build, Gender, Height, Race } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   cell: {},
@@ -107,14 +108,12 @@ const NewOffenderRow = React.memo(
                   name="name"
                   label={intl.formatMessage({
                     defaultMessage: 'Name',
-                    id: 'HAlOn1',
                   })}
                   rules={[
                     {
                       required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Enter an name',
-                        id: 'Ju6S8/',
                       }),
                     },
                   ]}
@@ -127,7 +126,6 @@ const NewOffenderRow = React.memo(
                   name="gender"
                   label={intl.formatMessage({
                     defaultMessage: 'Sex',
-                    id: 'eWJHGp',
                   })}
                 >
                   <Select
@@ -136,21 +134,18 @@ const NewOffenderRow = React.memo(
                         value: Gender.Female,
                         label: intl.formatMessage({
                           defaultMessage: 'Female',
-                          id: '74BYXL',
                         }),
                       },
                       {
                         value: Gender.Male,
                         label: intl.formatMessage({
                           defaultMessage: 'Male',
-                          id: 'jIbAky',
                         }),
                       },
                       {
                         value: Gender.Unknown,
                         label: intl.formatMessage({
                           defaultMessage: 'Unknown',
-                          id: '5jeq8P',
                         }),
                       },
                     ]}
@@ -163,7 +158,6 @@ const NewOffenderRow = React.memo(
                   name="race"
                   label={intl.formatMessage({
                     defaultMessage: 'Race',
-                    id: 'jOQGTB',
                   })}
                 >
                   <Select
@@ -195,7 +189,6 @@ const NewOffenderRow = React.memo(
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Unknown',
-                          id: '5jeq8P',
                         }),
                         value: Race.Unknown,
                       },
@@ -211,7 +204,6 @@ const NewOffenderRow = React.memo(
                   name="height"
                   label={intl.formatMessage({
                     defaultMessage: 'Height',
-                    id: 'teLZyZ',
                   })}
                 >
                   <Select
@@ -219,7 +211,6 @@ const NewOffenderRow = React.memo(
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Short',
-                          id: 'juU558',
                         }),
 
                         value: Height.Short,
@@ -227,21 +218,18 @@ const NewOffenderRow = React.memo(
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Average',
-                          id: 'FnRTEV',
                         }),
                         value: Height.Average,
                       },
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Tall',
-                          id: 'hnj65D',
                         }),
                         value: Height.Tall,
                       },
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Unknown',
-                          id: '5jeq8P',
                         }),
                         value: Height.Unknown,
                       },
@@ -255,7 +243,6 @@ const NewOffenderRow = React.memo(
                   name="build"
                   label={intl.formatMessage({
                     defaultMessage: 'Build',
-                    id: 'RSctv1',
                   })}
                 >
                   <Select
@@ -263,28 +250,24 @@ const NewOffenderRow = React.memo(
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Small',
-                          id: 'BPnT3T',
                         }),
                         value: Build.Small,
                       },
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Medium',
-                          id: 'ovJ26C',
                         }),
                         value: Build.Medium,
                       },
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Large',
-                          id: '/06iwc',
                         }),
                         value: Build.Large,
                       },
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Unknown',
-                          id: '5jeq8P',
                         }),
                         value: Build.Unknown,
                       },
@@ -298,7 +281,6 @@ const NewOffenderRow = React.memo(
                   name="age"
                   label={intl.formatMessage({
                     defaultMessage: 'Age',
-                    id: '9oNQSC',
                   })}
                 >
                   <Select
@@ -338,7 +320,6 @@ const NewOffenderRow = React.memo(
                       {
                         label: intl.formatMessage({
                           defaultMessage: 'Unknown',
-                          id: '5jeq8P',
                         }),
                         value: Age.Unknown,
                       },
@@ -352,7 +333,6 @@ const NewOffenderRow = React.memo(
                   name="dateOfBirth"
                   label={intl.formatMessage({
                     defaultMessage: 'Date of Birth',
-                    id: 'e9Z+tg',
                   })}
                 >
                   <DatePicker onBlur={onBlur} format="DD/MM/YYYY" />
@@ -365,7 +345,6 @@ const NewOffenderRow = React.memo(
               name="groups"
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
-                id: 'hzmswI',
               })}
               rules={[{ required: true, message: 'Choose at least one group' }]}
             >
@@ -384,7 +363,6 @@ const NewOffenderRow = React.memo(
               overlayInnerStyle={{ padding: 10 }}
               title={intl.formatMessage({
                 defaultMessage: 'Are you sure you want to remove this user?',
-                id: '2b7AJD',
               })}
               onConfirm={() => onDelete(offender.id)}
             >
@@ -400,7 +378,6 @@ const NewOffenderRow = React.memo(
               name="peculiarities"
               label={intl.formatMessage({
                 defaultMessage: 'Characteristics',
-                id: 'xksukL',
               })}
             >
               <Input.TextArea rows={5} onBlur={onBlur} />
@@ -411,7 +388,6 @@ const NewOffenderRow = React.memo(
               name="comments"
               label={intl.formatMessage({
                 defaultMessage: 'Comments',
-                id: 'wCgTu5',
               })}
             >
               <Input.TextArea rows={5} onBlur={onBlur} />
@@ -453,7 +429,6 @@ const NewOffenderTable = ({
       title={intl.formatMessage(
         {
           defaultMessage: 'Offenders ({offenders})',
-          id: 'lVaHn1',
         },
         {
           offenders: newOffenders.length,
@@ -461,7 +436,7 @@ const NewOffenderTable = ({
       )}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          <FormattedMessage id="m3ChN4" defaultMessage="Add Offender" />
+          <FormattedMessage defaultMessage="Add Offender" />
         </Button>
       }
     >
@@ -481,8 +456,7 @@ const NewOffenderTable = ({
         showTotal={(total) =>
           intl.formatMessage(
             {
-              defaultMessage: `Total Offenders: {total}`,
-              id: '3JpVG2',
+              defaultMessage: 'Total Offenders: {total}',
             },
             {
               total,

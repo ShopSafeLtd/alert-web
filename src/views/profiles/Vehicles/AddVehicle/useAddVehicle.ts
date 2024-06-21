@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useState } from 'react';
-import type { CreateVehicleDataInput } from 'graphql/generated';
-import {
-  ImagePosition,
-  Role,
-  useCreateVehicleMutation,
-  useListCustomGalleriesQuery,
-} from 'graphql/generated';
+
 import type { FormInstance, UploadFile } from 'antd';
 import { Form, message, notification } from 'antd';
 import { useStoreState } from 'state';
@@ -25,6 +19,10 @@ import { useNavigate } from 'react-router';
 import { compressImage } from 'utils/compress-images';
 import customRequest from 'utils/custom-request';
 import { useGroupsContext } from '#/context/groups-context';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { useCreateVehicleMutation } from 'graphql/vehicles/mutations/create-vehicle.generated';
+import type { CreateVehicleDataInput } from 'graphql/types';
+import { ImagePosition, Role } from 'graphql/types';
 
 export interface FormData {
   name: string;
@@ -128,11 +126,9 @@ const useAddVehicle = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added!',
-          id: 'htkq75',
         }),
         placement: 'bottomRight',
       });

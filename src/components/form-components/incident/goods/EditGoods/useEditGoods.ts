@@ -1,7 +1,8 @@
-import type { GoodsMode, ListGoodsTypesQuery } from 'graphql/generated';
-import { useListGoodsTypesQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { GoodsData } from 'types/DataType';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import type { GoodsMode } from 'graphql/types';
 
 interface Props {
   update: (value: GoodsData) => void;

@@ -48,7 +48,7 @@ const SignatureInput = ({
         />
       </div>
       <Button hidden={hidden} size="small" onClick={onClear}>
-        <FormattedMessage defaultMessage="Clear" id="/GCoTA" />
+        <FormattedMessage defaultMessage="Clear" />
       </Button>
     </>
   );

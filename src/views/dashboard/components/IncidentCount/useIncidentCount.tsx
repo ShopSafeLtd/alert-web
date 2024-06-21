@@ -1,6 +1,7 @@
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-import { useIncidentCountQuery } from 'graphql/generated';
+
 import { useEffect, useMemo, useState } from 'react';
+import { useIncidentCountQuery } from '#/views/dashboard/graphql/queries/incident-counts.generated';
 
 const useIncidentCount = (): {
   data: number;

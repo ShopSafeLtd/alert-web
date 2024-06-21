@@ -1,9 +1,10 @@
 import React from 'react';
-import type { ListDemEvidenceQuery } from 'graphql/generated';
+
 import { Button, Col, Row, Skeleton, Table } from 'antd';
 import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
+import type { ListDemEvidenceQuery } from '#/graphql/dem/queries/list-evidence.generated';
 
 interface Props {
   onClose: () => void;
@@ -31,7 +32,6 @@ const LinkDemCompany = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Thumbnail',
-              id: 'RGYBjE',
             }),
             dataIndex: 'thumbnail',
             key: 'thumbnail',
@@ -47,7 +47,6 @@ const LinkDemCompany = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Type',
-              id: '+U6ozc',
             }),
             dataIndex: 'type',
             key: 'type',
@@ -55,7 +54,6 @@ const LinkDemCompany = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Importance',
-              id: 'DBZGY7',
             }),
             dataIndex: 'importance',
             key: 'importance',
@@ -63,7 +61,6 @@ const LinkDemCompany = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Recorded On',
-              id: '2Rpk/e',
             }),
             dataIndex: 'createdAt',
             key: 'createdAt',
@@ -98,7 +95,6 @@ const LinkDemCompany = ({
           <Button onClick={onClose} disabled={saving} type="text">
             {intl.formatMessage({
               defaultMessage: 'Cancel',
-              id: '47FYwb',
             })}
           </Button>
         </Col>
@@ -111,7 +107,6 @@ const LinkDemCompany = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Import Evidence',
-              id: 'nzan7S',
             })}
           </Button>
         </Col>

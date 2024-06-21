@@ -10,7 +10,7 @@ import {
   Row,
   Typography,
 } from 'antd';
-import type { ListArticlesQuery } from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
@@ -20,6 +20,7 @@ import ArticleSkeletonCard from '../../../Articles/ArticleSkeletonCard';
 import ArticleCard from '../ArticleCard';
 import ArticleFilter from '../../../Articles/ArticleFilter';
 import Loading from '../../../shared-components/AntD/Loading';
+import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
 
 const { Title } = Typography;
 
@@ -76,7 +77,6 @@ const ArticlesSection = ({
           <Title className={classes.title} level={4}>
             {intl.formatMessage({
               defaultMessage: 'Recent Bulletins',
-              id: 'H40AZz',
             })}
           </Title>
         </Col>
@@ -85,7 +85,6 @@ const ArticlesSection = ({
             size="small"
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for Bulletins...',
-              id: '6PU5qG',
             })}
             // value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -163,11 +162,9 @@ const ArticlesSection = ({
                 search === ''
                   ? intl.formatMessage({
                       defaultMessage: 'No Bulletins',
-                      id: '7Pv3BL',
                     })
                   : intl.formatMessage({
                       defaultMessage: 'No bulletins match your search criteria',
-                      id: 'pZaTHe',
                     })
               }
             />
@@ -178,7 +175,6 @@ const ArticlesSection = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
-          id: 'o9w9ud',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}

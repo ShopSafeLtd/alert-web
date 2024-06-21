@@ -1,8 +1,8 @@
 import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { DeleteChatMutation } from 'graphql/generated';
 import View from './ViewMessage.view';
 import useViewMessages from './useViewMessage';
+import type { DeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
 
 interface Props {
   chatId: string;

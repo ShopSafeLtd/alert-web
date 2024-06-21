@@ -1,4 +1,5 @@
-import { UserStatus } from 'graphql/generated';
+import { UserStatus } from '#/graphql/types';
+
 // wait to check
 export const userStatusValues = [
   {

@@ -1,4 +1,6 @@
 import type { UploadFile } from 'antd';
+
+import type { Moment } from 'moment';
 import type {
   Age,
   AnswerType,
@@ -9,11 +11,10 @@ import type {
   Height,
   IdSource,
   ImagePosition,
-  ListIncidentsQuery,
   Race,
   UpdateType,
-} from 'graphql/generated';
-import type { Moment } from 'moment';
+} from 'graphql/types';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
 
 // BanData
 export interface BanData {

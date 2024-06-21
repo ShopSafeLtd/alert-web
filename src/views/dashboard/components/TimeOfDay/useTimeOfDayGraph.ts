@@ -1,6 +1,6 @@
-import { useIncidentsTimeOfDayQuery } from 'graphql/generated';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import { useEffect, useMemo, useState } from 'react';
+import { useIncidentsTimeOfDayQuery } from '#/views/dashboard/graphql/queries/time-of-day.generated';
 
 interface Return {
   data: { label: string; value: number }[];

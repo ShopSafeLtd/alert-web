@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
-import { SortOrder, ArticlePriority } from 'graphql/generated';
+
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
 import type { ArticleFilters } from 'state/data-model';
 import useStyles from './ArticleFilter.styles';
+import { ArticlePriority, SortOrder } from 'graphql/types';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -72,7 +73,6 @@ const ArticleFilter = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
-              id: 'MsGXc3',
             })}
           </Button>
         </Col>
@@ -81,7 +81,7 @@ const ArticleFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Sort Order', id: 'Hw6crD' })}
+            {intl.formatMessage({ defaultMessage: 'Sort Order' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -92,13 +92,11 @@ const ArticleFilter = ({
             <Select.Option value={SortOrder.Desc}>
               {intl.formatMessage({
                 defaultMessage: 'Newest First',
-                id: 'dZYazP',
               })}
             </Select.Option>
             <Select.Option value={SortOrder.Asc}>
               {intl.formatMessage({
                 defaultMessage: 'Oldest First',
-                id: 'FqI37D',
               })}
             </Select.Option>
           </Select>
@@ -109,7 +107,6 @@ const ArticleFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
               defaultMessage: 'Created Between',
-              id: 'hGJYON',
             })}
           </Typography.Paragraph>
           <Form.Item name="date">
@@ -130,13 +127,12 @@ const ArticleFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
+            {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             mode="multiple"
             size="small"
@@ -157,13 +153,12 @@ const ArticleFilter = ({
       <Row>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Priority', id: '8lCjAM' })}
+            {intl.formatMessage({ defaultMessage: 'Priority' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Priority',
-              id: '8lCjAM',
             })}
             mode="multiple"
             size="small"
@@ -173,13 +168,13 @@ const ArticleFilter = ({
             value={priorityFilter}
           >
             <Select.Option value={ArticlePriority.High}>
-              {intl.formatMessage({ defaultMessage: 'High', id: 'AxMhQr' })}
+              {intl.formatMessage({ defaultMessage: 'High' })}
             </Select.Option>
             <Select.Option value={ArticlePriority.Medium}>
-              {intl.formatMessage({ defaultMessage: 'Medium', id: 'ovJ26C' })}
+              {intl.formatMessage({ defaultMessage: 'Medium' })}
             </Select.Option>
             <Select.Option value={ArticlePriority.Normal}>
-              {intl.formatMessage({ defaultMessage: 'Normal', id: 'myq2ZL' })}
+              {intl.formatMessage({ defaultMessage: 'Normal' })}
             </Select.Option>
           </Select>
         </Col>

@@ -1,9 +1,8 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListIncidentsQuery } from 'graphql/generated';
+
 import { Row, Col, Input, Table, Button } from 'antd';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
 
 interface Props {
   onClose: () => void;
@@ -38,7 +37,6 @@ const LinkIncident = ({
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
-              id: 'gvqTQ8',
               defaultMessage: 'Search Incidents...',
             })}
             allowClear
@@ -52,7 +50,6 @@ const LinkIncident = ({
             key: 'reference',
             dataIndex: 'reference',
             title: intl.formatMessage({
-              id: 'k8ZNgH',
               defaultMessage: 'Alert ID',
             }),
           },
@@ -60,7 +57,6 @@ const LinkIncident = ({
             key: 'subject',
             dataIndex: 'subject',
             title: intl.formatMessage({
-              id: 'LLtKhp',
               defaultMessage: 'Subject',
             }),
           },
@@ -68,7 +64,6 @@ const LinkIncident = ({
             key: 'date',
             dataIndex: 'date',
             title: intl.formatMessage({
-              id: 'P7PLVj',
               defaultMessage: 'Date',
             }),
           },
@@ -76,7 +71,6 @@ const LinkIncident = ({
             key: 'location',
             dataIndex: 'location',
             title: intl.formatMessage({
-              id: 'rvirM2',
               defaultMessage: 'Location',
             }),
           },
@@ -84,7 +78,6 @@ const LinkIncident = ({
             key: 'offenders',
             dataIndex: 'offenders',
             title: intl.formatMessage({
-              id: 'xb54TN',
               defaultMessage: 'Offenders',
             }),
           },
@@ -122,7 +115,6 @@ const LinkIncident = ({
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
             {intl.formatMessage({
-              id: '47FYwb',
               defaultMessage: 'Cancel',
             })}
           </Button>
@@ -135,7 +127,6 @@ const LinkIncident = ({
             type="primary"
           >
             {intl.formatMessage({
-              id: '4sHDoC',
               defaultMessage: 'Link Incident',
             })}
           </Button>

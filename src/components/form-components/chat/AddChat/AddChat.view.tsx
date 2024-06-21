@@ -2,7 +2,7 @@ import React from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useIntl } from 'react-intl';
-import type { ListSchemeUsersQuery } from 'graphql/generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 
 export interface FormData {
   name: string;
@@ -35,13 +35,12 @@ const AddChat = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the new chat group.',
-                  id: 'DqoZy3',
                 }),
               },
             ]}
@@ -55,7 +54,6 @@ const AddChat = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea disabled={saving} />
@@ -69,7 +67,6 @@ const AddChat = ({
             name="users"
             label={intl.formatMessage({
               defaultMessage: 'Users',
-              id: 'YDMrKK',
             })}
             rules={[
               {
@@ -77,7 +74,6 @@ const AddChat = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please add at least one user for the new chat group.',
-                  id: 'c8IWbz',
                 }),
               },
             ]}
@@ -102,7 +98,7 @@ const AddChat = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -114,7 +110,6 @@ const AddChat = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Create Chat Group',
-                id: 'z0zYUX',
               })}
             </Button>
           </Col>

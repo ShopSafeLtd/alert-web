@@ -47,7 +47,6 @@ const FilterOptions = ({
       <GroupsSelect
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Groups',
-          id: 'q2cuIU',
         })}
         mode="multiple"
         maxTagCount="responsive"
@@ -62,7 +61,6 @@ const FilterOptions = ({
       <Select
         placeholder={intl.formatMessage({
           defaultMessage: 'Select Business',
-          id: 'Hdg31+',
         })}
         mode="multiple"
         maxTagCount="responsive"
@@ -203,7 +201,7 @@ const CrimeGroupReportView = ({
               type="primary"
               style={{ marginLeft: 10 }}
             >
-              {intl.formatMessage({ defaultMessage: 'Add Logo', id: 'pn9DSF' })}
+              {intl.formatMessage({ defaultMessage: 'Add Logo' })}
             </Button>
           </div>
           <Title level={2} className="print-title">
@@ -211,7 +209,6 @@ const CrimeGroupReportView = ({
               {
                 defaultMessage:
                   'Crime Group Report: {alias}-{startDate}-{endDate}',
-                id: 'IE/cxz',
               },
               {
                 alias:
@@ -302,7 +299,6 @@ const CrimeGroupReportView = ({
                   {
                     defaultMessage:
                       'Crime Group Report: {alias}-{startDate}-{endDate}',
-                    id: 'IE/cxz',
                   },
                   {
                     alias:
@@ -338,7 +334,6 @@ const CrimeGroupReportView = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Components available to add',
-          id: 'OJhI0K',
         })}
         placement="right"
         closable
@@ -381,7 +376,7 @@ const CrimeGroupReportView = ({
         />
       </Drawer>
       <Drawer
-        title={intl.formatMessage({ defaultMessage: 'Add Logo', id: 'pn9DSF' })}
+        title={intl.formatMessage({ defaultMessage: 'Add Logo' })}
         placement="right"
         closable
         open={editMode && addLogoDrawer}
@@ -396,7 +391,7 @@ const CrimeGroupReportView = ({
         />
       </Drawer>
       <Drawer
-        title={intl.formatMessage({ defaultMessage: 'Save as', id: 'nCsL6d' })}
+        title={intl.formatMessage({ defaultMessage: 'Save as' })}
         placement="right"
         closable
         open={saveAsDrawer}

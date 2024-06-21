@@ -3,10 +3,11 @@ import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
 import { Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { InvestigationStatus } from 'graphql/generated';
+
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import GetInvestigationStatusValues from '#/types/enums/investigation-status';
+import { InvestigationStatus } from 'graphql/types';
 
 export interface BusinessTableData {
   fullName: string;
@@ -22,12 +23,12 @@ export const BusinessColumns: ColumnsType<BusinessTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
-    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+    title: <FormattedMessage defaultMessage="Name" />,
   },
   {
     key: 'incidentsCreated',
     dataIndex: 'incidentsCreated',
-    title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+    title: <FormattedMessage defaultMessage="Incidents" />,
     defaultSortOrder: 'descend' as SortOrder,
     sorter: (a: BusinessTableData, b: BusinessTableData) =>
       a.incidentsCreated - b.incidentsCreated,
@@ -35,34 +36,34 @@ export const BusinessColumns: ColumnsType<BusinessTableData> = [
   {
     key: 'offendersCreated',
     dataIndex: 'offendersCreated',
-    title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
+    title: <FormattedMessage defaultMessage="Offenders" />,
     sorter: (a: BusinessTableData, b: BusinessTableData) =>
       a.offendersCreated - b.offendersCreated,
   },
   {
     key: 'updatesCreated',
     dataIndex: 'updatesCreated',
-    title: <FormattedMessage id="recCg9" defaultMessage="Updates" />,
+    title: <FormattedMessage defaultMessage="Updates" />,
     sorter: (a: BusinessTableData, b: BusinessTableData) =>
       a.updatesCreated - b.updatesCreated,
   },
   {
     key: 'messagesSent',
     dataIndex: 'messagesSent',
-    title: <FormattedMessage id="hMzcSq" defaultMessage="Messages" />,
+    title: <FormattedMessage defaultMessage="Messages" />,
     sorter: (a: BusinessTableData, b: BusinessTableData) =>
       a.messagesSent - b.messagesSent,
   },
   {
     key: 'logins',
     dataIndex: 'logins',
-    title: <FormattedMessage id="+vA//S" defaultMessage="Logins" />,
+    title: <FormattedMessage defaultMessage="Logins" />,
     sorter: (a: BusinessTableData, b: BusinessTableData) => a.logins - b.logins,
   },
   {
     key: 'users',
     dataIndex: 'users',
-    title: <FormattedMessage id="YDMrKK" defaultMessage="Users" />,
+    title: <FormattedMessage defaultMessage="Users" />,
     sorter: (a: BusinessTableData, b: BusinessTableData) => a.users - b.users,
   },
 ];
@@ -81,12 +82,12 @@ export const ContributionColumns: ColumnsType<ContributionTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
-    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+    title: <FormattedMessage defaultMessage="Name" />,
   },
   {
     key: 'incidentsCreated',
     dataIndex: 'incidentsCreated',
-    title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+    title: <FormattedMessage defaultMessage="Incidents" />,
     defaultSortOrder: 'descend' as SortOrder,
     sorter: (a: ContributionTableData, b: ContributionTableData) =>
       a.incidentsCreated - b.incidentsCreated,
@@ -94,28 +95,28 @@ export const ContributionColumns: ColumnsType<ContributionTableData> = [
   {
     key: 'offendersCreated',
     dataIndex: 'offendersCreated',
-    title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
+    title: <FormattedMessage defaultMessage="Offenders" />,
     sorter: (a: ContributionTableData, b: ContributionTableData) =>
       a.offendersCreated - b.offendersCreated,
   },
   {
     key: 'updatesCreated',
     dataIndex: 'updatesCreated',
-    title: <FormattedMessage id="recCg9" defaultMessage="Updates" />,
+    title: <FormattedMessage defaultMessage="Updates" />,
     sorter: (a: ContributionTableData, b: ContributionTableData) =>
       a.updatesCreated - b.updatesCreated,
   },
   {
     key: 'messagesSent',
     dataIndex: 'messagesSent',
-    title: <FormattedMessage id="hMzcSq" defaultMessage="Messages" />,
+    title: <FormattedMessage defaultMessage="Messages" />,
     sorter: (a: ContributionTableData, b: ContributionTableData) =>
       a.messagesSent - b.messagesSent,
   },
   {
     key: 'logins',
     dataIndex: 'logins',
-    title: <FormattedMessage id="+vA//S" defaultMessage="Logins" />,
+    title: <FormattedMessage defaultMessage="Logins" />,
     sorter: (a: ContributionTableData, b: ContributionTableData) =>
       a.logins - b.logins,
   },
@@ -137,7 +138,7 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
-    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+    title: <FormattedMessage defaultMessage="Name" />,
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       a.fullName.localeCompare(b.fullName),
     render: (name: string, item: OffenderTableData) => (
@@ -147,7 +148,7 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
   {
     key: 'totalIncidents',
     dataIndex: 'totalIncidents',
-    title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+    title: <FormattedMessage defaultMessage="Incidents" />,
     defaultSortOrder: 'descend' as SortOrder,
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       a.totalIncidents - b.totalIncidents,
@@ -170,7 +171,7 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
   {
     key: 'lostValue',
     dataIndex: 'lostValue',
-    title: <FormattedMessage id="LIuP87" defaultMessage="Lost value" />,
+    title: <FormattedMessage defaultMessage="Lost value" />,
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
@@ -183,7 +184,7 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
   {
     key: 'recoveredValue',
     dataIndex: 'recoveredValue',
-    title: <FormattedMessage id="oVyEbU" defaultMessage="Recovered value" />,
+    title: <FormattedMessage defaultMessage="Recovered value" />,
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
@@ -196,7 +197,7 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="mQPFSj" defaultMessage="Loss Rate" />,
+    title: <FormattedMessage defaultMessage="Loss Rate" />,
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -220,7 +221,7 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
     {
       key: 'fullName',
       dataIndex: 'fullName',
-      title: <FormattedMessage id="Ri9jA7" defaultMessage="Alias" />,
+      title: <FormattedMessage defaultMessage="Alias" />,
       sorter: (
         a: CrimeGroupPerformanceTableData,
         b: CrimeGroupPerformanceTableData
@@ -229,7 +230,7 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
     {
       key: 'totalIncidents',
       dataIndex: 'totalIncidents',
-      title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+      title: <FormattedMessage defaultMessage="Incidents" />,
       defaultSortOrder: 'descend' as SortOrder,
       sorter: (
         a: CrimeGroupPerformanceTableData,
@@ -239,7 +240,7 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
     {
       key: 'totalOffenders',
       dataIndex: 'totalOffenders',
-      title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
+      title: <FormattedMessage defaultMessage="Offenders" />,
       sorter: (
         a: CrimeGroupPerformanceTableData,
         b: CrimeGroupPerformanceTableData
@@ -258,7 +259,7 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
     {
       key: 'lostValue',
       dataIndex: 'lostValue',
-      title: <FormattedMessage id="LIuP87" defaultMessage="Lost value" />,
+      title: <FormattedMessage defaultMessage="Lost value" />,
       sorter: (
         a: CrimeGroupPerformanceTableData,
         b: CrimeGroupPerformanceTableData
@@ -274,7 +275,7 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
     {
       key: 'recoveredValue',
       dataIndex: 'recoveredValue',
-      title: <FormattedMessage id="oVyEbU" defaultMessage="Recovered value" />,
+      title: <FormattedMessage defaultMessage="Recovered value" />,
       sorter: (
         a: CrimeGroupPerformanceTableData,
         b: CrimeGroupPerformanceTableData
@@ -290,7 +291,7 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
     {
       key: 'successRate',
       dataIndex: 'successRate',
-      title: <FormattedMessage id="SbhgH8" defaultMessage="Sucesses Rate" />,
+      title: <FormattedMessage defaultMessage="Sucesses Rate" />,
       sorter: (
         a: CrimeGroupPerformanceTableData,
         b: CrimeGroupPerformanceTableData
@@ -317,12 +318,12 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
-    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+    title: <FormattedMessage defaultMessage="Name" />,
   },
   {
     key: 'incidentsCreated',
     dataIndex: 'incidentsCreated',
-    title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+    title: <FormattedMessage defaultMessage="Incidents" />,
     defaultSortOrder: 'descend' as SortOrder,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.incidentsCreated - b.incidentsCreated,
@@ -330,14 +331,14 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'offendersCreated',
     dataIndex: 'offendersCreated',
-    title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
+    title: <FormattedMessage defaultMessage="Offenders" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.offendersCreated - b.offendersCreated,
   },
   {
     key: 'lostValue',
     dataIndex: 'lostValue',
-    title: <FormattedMessage id="LIuP87" defaultMessage="Lost value" />,
+    title: <FormattedMessage defaultMessage="Lost value" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
@@ -350,7 +351,7 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'recoveredValue',
     dataIndex: 'recoveredValue',
-    title: <FormattedMessage id="oVyEbU" defaultMessage="Recovered value" />,
+    title: <FormattedMessage defaultMessage="Recovered value" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
@@ -363,7 +364,7 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="qKkLk4" defaultMessage="Recovery Rate" />,
+    title: <FormattedMessage defaultMessage="Recovery Rate" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -372,14 +373,14 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'commonLost',
     dataIndex: 'commonLost',
-    title: <FormattedMessage id="olEMVF" defaultMessage="Most Common Lost" />,
+    title: <FormattedMessage defaultMessage="Most Common Lost" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.commonLost.localeCompare(b.commonLost),
   },
   {
     key: 'highestValueLost',
     dataIndex: 'highestValueLost',
-    title: <FormattedMessage id="MLZWwC" defaultMessage="Highest Value Lost" />,
+    title: <FormattedMessage defaultMessage="Highest Value Lost" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.highestValueLost - b.highestValueLost,
     render: (text: number) => <Typography.Text>{`£${text}`}</Typography.Text>,
@@ -387,7 +388,7 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'avgLost',
     dataIndex: 'avgLost',
-    title: <FormattedMessage id="jz2M2Y" defaultMessage="Average Lost" />,
+    title: <FormattedMessage defaultMessage="Average Lost" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
       Number.parseInt(b.avgLost || '0', 10),
@@ -413,12 +414,12 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
-    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+    title: <FormattedMessage defaultMessage="Name" />,
   },
   {
     key: 'incidentsCreated',
     dataIndex: 'incidentsCreated',
-    title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+    title: <FormattedMessage defaultMessage="Incidents" />,
     defaultSortOrder: 'descend' as SortOrder,
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       a.incidentsCreated - b.incidentsCreated,
@@ -433,7 +434,7 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
   {
     key: 'lostValue',
     dataIndex: 'lostValue',
-    title: <FormattedMessage id="LIuP87" defaultMessage="Lost value" />,
+    title: <FormattedMessage defaultMessage="Lost value" />,
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
@@ -446,7 +447,7 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
   {
     key: 'recoveredValue',
     dataIndex: 'recoveredValue',
-    title: <FormattedMessage id="oVyEbU" defaultMessage="Recovered value" />,
+    title: <FormattedMessage defaultMessage="Recovered value" />,
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
@@ -459,7 +460,7 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="qKkLk4" defaultMessage="Recovery Rate" />,
+    title: <FormattedMessage defaultMessage="Recovery Rate" />,
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -468,7 +469,7 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
   {
     key: 'avgLost',
     dataIndex: 'avgLost',
-    title: <FormattedMessage id="jz2M2Y" defaultMessage="Average Lost" />,
+    title: <FormattedMessage defaultMessage="Average Lost" />,
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
       Number.parseInt(b.avgLost || '0', 10),
@@ -495,7 +496,7 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
   {
     key: 'alertId',
     dataIndex: 'alertId',
-    title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
+    title: <FormattedMessage defaultMessage="Alert ID" />,
     render: (text, item) => (
       <Link to={`/app/investigations/view/${item.key}`}>{text}</Link>
     ),
@@ -503,19 +504,19 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
   {
     key: 'name',
     dataIndex: 'name',
-    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+    title: <FormattedMessage defaultMessage="Name" />,
   },
   {
     key: 'status',
     dataIndex: 'status',
-    title: <FormattedMessage id="tzMNF3" defaultMessage="Status" />,
+    title: <FormattedMessage defaultMessage="Status" />,
     filters: [
       {
-        text: <FormattedMessage id="JfG49w" defaultMessage="Open" />,
+        text: <FormattedMessage defaultMessage="Open" />,
         value: InvestigationStatus.Open,
       },
       {
-        text: <FormattedMessage id="Fv1ZSz" defaultMessage="Closed" />,
+        text: <FormattedMessage defaultMessage="Closed" />,
         value: InvestigationStatus.Closed,
       },
     ],
@@ -529,20 +530,20 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
   {
     key: 'createdAt',
     dataIndex: 'createdAt',
-    title: <FormattedMessage id="zQ9i1N" defaultMessage="Date Opened" />,
+    title: <FormattedMessage defaultMessage="Date Opened" />,
     render: (date: string) => moment(date).format('DD/MM/YYYY'),
   },
   {
     key: 'closedAt',
     dataIndex: 'closedAt',
-    title: <FormattedMessage id="CkpoSI" defaultMessage="Date Closed" />,
+    title: <FormattedMessage defaultMessage="Date Closed" />,
     render: (value: string) =>
       value ? moment(value).format('DD/MM/YYYY') : undefined,
   },
   {
     key: 'totalIncidents',
     dataIndex: 'totalIncidents',
-    title: <FormattedMessage id="pUlxda" defaultMessage="Total Incidents" />,
+    title: <FormattedMessage defaultMessage="Total Incidents" />,
     sorter: (a: InvestigationsTableData, b: InvestigationsTableData) =>
       a.totalIncidents - b.totalIncidents,
     render: (text: number) => (
@@ -552,7 +553,7 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
   {
     key: 'totalOffenders',
     dataIndex: 'totalOffenders',
-    title: <FormattedMessage id="Pyo0l3" defaultMessage="Total Offenders" />,
+    title: <FormattedMessage defaultMessage="Total Offenders" />,
     sorter: (a: InvestigationsTableData, b: InvestigationsTableData) =>
       a.totalOffenders - b.totalOffenders,
     render: (text: number) => (
@@ -562,7 +563,7 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
   {
     key: 'totalValue',
     dataIndex: 'totalValue',
-    title: <FormattedMessage id="MoJx/h" defaultMessage="Total Value" />,
+    title: <FormattedMessage defaultMessage="Total Value" />,
     sorter: (a: InvestigationsTableData, b: InvestigationsTableData) =>
       a.totalValue - b.totalValue,
     render: (text: number) => (
@@ -589,12 +590,12 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
   {
     key: 'alertId',
     dataIndex: 'alertId',
-    title: <FormattedMessage defaultMessage="Alert ID" id="k8ZNgH" />,
+    title: <FormattedMessage defaultMessage="Alert ID" />,
   },
   {
     key: 'date',
     dataIndex: 'date',
-    title: <FormattedMessage defaultMessage="Date" id="P7PLVj" />,
+    title: <FormattedMessage defaultMessage="Date" />,
     // compare dates
     sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     defaultSortOrder: 'descend',
@@ -602,7 +603,7 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
   {
     key: 'value',
     dataIndex: 'value',
-    title: <FormattedMessage defaultMessage="Value Lost" id="uPmWKm" />,
+    title: <FormattedMessage defaultMessage="Value Lost" />,
     sorter: (a, b) => a.value.localeCompare(b.value),
     render: (text: string) => (
       <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
@@ -613,7 +614,7 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
   {
     key: 'valueRec',
     dataIndex: 'valueRec',
-    title: <FormattedMessage defaultMessage="Value Recovered" id="FqEGSY" />,
+    title: <FormattedMessage defaultMessage="Value Recovered" />,
     sorter: (a, b) => a.valueRec.localeCompare(b.valueRec),
     render: (text: string) => (
       <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
@@ -624,7 +625,7 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
   {
     key: 'location',
     dataIndex: 'location',
-    title: <FormattedMessage defaultMessage="Location" id="rvirM2" />,
+    title: <FormattedMessage defaultMessage="Location" />,
     sorter: (a, b) => a.location.localeCompare(b.location),
   },
   {
@@ -635,7 +636,6 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
         defaultMessage="
 Offenders
     "
-        id="TRAHH0"
       />
     ),
     sorter: (a, b) => a.totalOffenders - b.totalOffenders,
@@ -643,21 +643,21 @@ Offenders
   {
     key: 'crimeTypes',
     dataIndex: 'crimeTypes',
-    title: <FormattedMessage defaultMessage="Crime Types" id="Piba4q" />,
+    title: <FormattedMessage defaultMessage="Crime Types" />,
   },
   {
     key: 'policeReported',
     dataIndex: 'policeReported',
-    title: <FormattedMessage defaultMessage="Police Reported" id="KrBn25" />,
+    title: <FormattedMessage defaultMessage="Police Reported" />,
   },
   {
     key: 'policeAttended',
     dataIndex: 'policeAttended',
-    title: <FormattedMessage defaultMessage="Police Attended" id="ES0Nc8" />,
+    title: <FormattedMessage defaultMessage="Police Attended" />,
   },
   {
     key: 'crimeRef',
     dataIndex: 'crimeRef',
-    title: <FormattedMessage defaultMessage="Crime Ref" id="03pSDv" />,
+    title: <FormattedMessage defaultMessage="Crime Ref" />,
   },
 ];

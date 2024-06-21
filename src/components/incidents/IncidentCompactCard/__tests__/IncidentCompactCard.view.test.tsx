@@ -1,8 +1,8 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { ImagePosition, IncidentPriority } from 'graphql/generated';
 import IncidentCard from '../IncidentCompactCard.view';
+import { ImagePosition, IncidentPriority } from 'graphql/types';
 
 describe('Detail Officer View', () => {
   const data = {

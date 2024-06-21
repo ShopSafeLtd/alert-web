@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
-import { GoodsMode } from '../graphql/generated';
+import { GoodsMode } from 'graphql/types';
 
 export interface Translations {
   [key: string]: {

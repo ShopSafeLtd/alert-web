@@ -13,8 +13,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { SchemeGroupsQuery } from 'graphql/generated';
-import { Role, useListSchemeUsersQuery } from 'graphql/generated';
+
 import { createUseStyles } from 'react-jss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -25,6 +24,9 @@ import {
 import { useStoreState } from 'state';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { NewBusiness, NewUser } from '../DiscImport.types';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { Role } from 'graphql/types';
 
 const { Text } = Typography;
 
@@ -133,7 +135,7 @@ const NewUserRow = React.memo(
       setLink(false);
     };
 
-    const onBlur = async () => {
+    const onBlur = () => {
       const values = form.getFieldsValue();
       onUpdateUser({ ...user, ...values });
     };
@@ -220,7 +222,6 @@ const NewUserRow = React.memo(
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Link to an existing user',
-                  id: 'uryL7t',
                 })}
               >
                 <Button size="small" onClick={() => setLink(true)}>
@@ -249,7 +250,6 @@ const NewUserRow = React.memo(
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Clear Link',
-                      id: 'qWrq/B',
                     })}
                   >
                     <Button size="small" onClick={clearLink}>
@@ -265,7 +265,6 @@ const NewUserRow = React.memo(
               overlayInnerStyle={{ padding: 10 }}
               title={intl.formatMessage({
                 defaultMessage: 'Are you sure you want to remove this user?',
-                id: '2b7AJD',
               })}
               onConfirm={() => onDelete(user.id)}
             >
@@ -310,11 +309,10 @@ const NewUsersTable = ({
     <Card
       title={intl.formatMessage({
         defaultMessage: 'Users',
-        id: 'YDMrKK',
       })}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          <FormattedMessage defaultMessage="Add User" id="7c3ANV" />
+          <FormattedMessage defaultMessage="Add User" />
         </Button>
       }
     >
@@ -329,27 +327,27 @@ const NewUsersTable = ({
           style={{ borderTopLeftRadius: 10 }}
         >
           <Text style={{ paddingLeft: 5 }} strong>
-            <FormattedMessage defaultMessage="Name" id="HAlOn1" />
+            <FormattedMessage defaultMessage="Name" />
           </Text>
         </Col>
         <Col span={4} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            <FormattedMessage defaultMessage="Email" id="sy+pv5" />
+            <FormattedMessage defaultMessage="Email" />
           </Text>
         </Col>
         <Col style={{ width: 160 }} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            <FormattedMessage defaultMessage="Role" id="1ZgrhW" />
+            <FormattedMessage defaultMessage="Role" />
           </Text>
         </Col>
         <Col flex={1} className={classes.headerCell} style={{ maxWidth: 250 }}>
           <Text style={{ paddingLeft: 5 }} strong>
-            <FormattedMessage defaultMessage="Business" id="w1Fanr" />
+            <FormattedMessage defaultMessage="Business" />
           </Text>
         </Col>
         <Col flex={1} className={classes.headerCell} style={{ maxWidth: 250 }}>
           <Text style={{ paddingLeft: 5 }} strong>
-            <FormattedMessage defaultMessage="Groups" id="hzmswI" />
+            <FormattedMessage defaultMessage="Groups" />
           </Text>
         </Col>
       </Row>

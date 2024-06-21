@@ -1,17 +1,15 @@
-/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-restricted-syntax,@typescript-eslint/no-unsafe-enum-comparison */
 import { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import { useNavigate, useParams } from 'react-router';
-import type { ChecklistAnswerType } from 'graphql/generated';
-import {
-  useBrandsQuery,
-  useChecklistQuery,
-  useCreateUpdateChecklistMutation,
-  useListBusinessesChecklistQuery,
-  useUserListChecklistQuery,
-} from 'graphql/generated';
-import { useStoreState } from '../../../state';
+import { useStoreState } from '#/state';
+import type { ChecklistAnswerType } from 'graphql/types';
+import { useListBusinessesChecklistQuery } from '#/views/checklist/graphql/queries/list-businesses.generated';
+import { useUserListChecklistQuery } from '#/views/checklist/graphql/queries/list-users-checklist.generated';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+import { useCreateUpdateChecklistMutation } from '#/views/checklist/graphql/mutations/create-update-checklist.generated';
+import { useChecklistQuery } from '#/views/checklist/graphql/queries/view-checklist.generated';
 
 export interface SelectOption {
   label: string;
@@ -153,7 +151,6 @@ const getWeight = (
         failWeight: undefined,
       };
     }
-    // eslint-disable-next-line sonarjs/no-duplicated-branches
     default: {
       return {
         passWeight: weights.find((weight) => weight.answer === 'PASS')?.weight,
@@ -200,7 +197,6 @@ const createAnswerWeight = (
     case 'TEXT': {
       return [{ answer: 'TEXT', weight: passWeight }];
     }
-    // eslint-disable-next-line sonarjs/no-duplicated-branches
     default: {
       return [
         { answer: 'PASS', weight: passWeight },
@@ -211,7 +207,7 @@ const createAnswerWeight = (
 };
 
 export function useCreateChecklist(): Return {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormData>();
   const [sections, setSections] = useState<Section[]>([
     { order: 1, title: '', description: '', subsections: [] },
   ]);
@@ -265,10 +261,11 @@ export function useCreateChecklist(): Return {
 
       form.setFieldsValue({
         title: data.checklist.title,
-        description: data.checklist.description,
+        description: data.checklist.description ?? undefined,
         userIds: data.checklist.users.map((user) => user.id) || [],
         businessIds:
           data.checklist.business.map((business) => business.id) || [],
+        // @ts-expect-error types not liking generics
         sections: data.checklist.sections.map((section) => ({
           order: section.order,
           title: section.title,

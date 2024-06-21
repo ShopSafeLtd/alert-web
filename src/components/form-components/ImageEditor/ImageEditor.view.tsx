@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { UploadFile } from 'antd';
 import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { ImagePosition } from 'graphql/generated';
+import { ImagePosition } from 'graphql/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRotateBackward,
@@ -14,39 +14,39 @@ import useStyles from './ImageEditor.styles';
 const positionOptions = [
   {
     value: ImagePosition.CenterBottom,
-    label: <FormattedMessage id="sXTiFB" defaultMessage="Center Bottom" />,
+    label: <FormattedMessage defaultMessage="Center Bottom" />,
   },
   {
     value: ImagePosition.CenterCenter,
-    label: <FormattedMessage id="K+qua6" defaultMessage="Center Center" />,
+    label: <FormattedMessage defaultMessage="Center Center" />,
   },
   {
     value: ImagePosition.CenterTop,
-    label: <FormattedMessage id="9X8NHT" defaultMessage="Center Top" />,
+    label: <FormattedMessage defaultMessage="Center Top" />,
   },
   {
     value: ImagePosition.LeftBottom,
-    label: <FormattedMessage id="sfcQw6" defaultMessage="Left Bottom" />,
+    label: <FormattedMessage defaultMessage="Left Bottom" />,
   },
   {
     value: ImagePosition.LeftCenter,
-    label: <FormattedMessage id="Ei0973" defaultMessage="Left Center" />,
+    label: <FormattedMessage defaultMessage="Left Center" />,
   },
   {
     value: ImagePosition.LeftTop,
-    label: <FormattedMessage id="0B9/ob" defaultMessage="Left Top" />,
+    label: <FormattedMessage defaultMessage="Left Top" />,
   },
   {
     value: ImagePosition.RightBottom,
-    label: <FormattedMessage id="Mm1WF/" defaultMessage="Right Bottom" />,
+    label: <FormattedMessage defaultMessage="Right Bottom" />,
   },
   {
     value: ImagePosition.RightCenter,
-    label: <FormattedMessage id="iF7Gcw" defaultMessage="Right Center" />,
+    label: <FormattedMessage defaultMessage="Right Center" />,
   },
   {
     value: ImagePosition.RightTop,
-    label: <FormattedMessage id="b8244+" defaultMessage="Right Top" />,
+    label: <FormattedMessage defaultMessage="Right Top" />,
   },
 ];
 
@@ -125,12 +125,10 @@ const ImageEditor = ({
       width={600}
       open={open}
       title={intl.formatMessage({
-        id: '9UlLIw',
         defaultMessage: 'Edit Image',
       })}
       bodyStyle={{ padding: 0 }}
       okText={intl.formatMessage({
-        id: 'gR55Uz',
         defaultMessage: 'Save Image',
       })}
       onOk={handleSubmit}
@@ -153,7 +151,6 @@ const ImageEditor = ({
             >
               <Form.Item
                 label={intl.formatMessage({
-                  id: 't9T6TI',
                   defaultMessage: 'Image Position',
                 })}
               >
@@ -165,7 +162,6 @@ const ImageEditor = ({
               </Form.Item>
               <Form.Item
                 label={intl.formatMessage({
-                  id: 'dQJGtK',
                   defaultMessage: 'Rotation',
                 })}
               >
@@ -184,7 +180,6 @@ const ImageEditor = ({
               </Form.Item>
               <Form.Item
                 label={intl.formatMessage({
-                  id: '8U+Csh',
                   defaultMessage: 'Set as primary image',
                 })}
                 name="primaryImage"
@@ -203,7 +198,6 @@ const ImageEditor = ({
               </Form.Item>
               <Form.Item
                 label={intl.formatMessage({
-                  id: 'fOYafo',
                   defaultMessage: 'Received from the police',
                 })}
                 name="policeImage"

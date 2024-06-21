@@ -6,7 +6,8 @@ import type {
 } from 'types/DataType';
 import View from './ViewDetails.view';
 import useViewDetails from './useViewDetails';
-import type { ViewInvestigationQuery } from '../../../../../graphql/generated';
+
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
 
 interface Props {
   investigationId: string;

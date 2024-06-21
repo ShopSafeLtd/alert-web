@@ -92,7 +92,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             setIsEditing(true);
             drawer.open({
               defaultTitle: intl.formatMessage({
-                id: 'XmcDl5',
                 defaultMessage: 'Select Image',
               }),
               id: 'imageSelect',
@@ -100,7 +99,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           }}
         >
           {intl.formatMessage({
-            id: 'XmcDl5',
             defaultMessage: 'Select Image',
           })}
         </Button>
@@ -122,7 +120,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             <div className={classes.editing}>
               {intl.formatMessage(
                 {
-                  id: 'QmCmt6',
                   defaultMessage: '{user} is editing this component',
                 },
                 {

@@ -35,8 +35,7 @@ const OffenderTile = ({
       placement="bottom"
       title={intl.formatMessage(
         {
-          id: 'RZ0IMu',
-          defaultMessage: `Add {name} to incident`,
+          defaultMessage: 'Add {name} to incident',
         },
         { name: offender.name }
       )}
@@ -70,7 +69,6 @@ const OffenderTile = ({
         >
           {intl.formatMessage(
             {
-              id: '377fsC',
               defaultMessage: 'Alert ID: {reference}',
             },
             { reference: offender.reference }

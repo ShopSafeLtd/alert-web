@@ -3,8 +3,9 @@ import { ReactFlowProvider } from 'reactflow';
 import React from 'react';
 import useFlow from './hooks/useFlow';
 import ReactFlowView from './Flow.view';
-import type { ViewInvestigationQuery } from '../../../../../graphql/generated';
+
 import { WebRtcProviderContextProvider } from './hooks/useWebRtcProvidor';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
 
 interface Props {
   importData: ViewInvestigationQuery | undefined;

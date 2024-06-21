@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
+import type { Translations } from './scheme-model';
 import type {
   GoodsMode,
   PermissionMethod,
   PermissionModel,
-} from 'graphql/generated';
-import { Role } from 'graphql/generated';
-import type { Translations } from './scheme-model';
+} from 'graphql/types';
+import { Role } from 'graphql/types';
 
 export interface SetUserPayload {
   id: string;
@@ -17,6 +17,8 @@ export interface SetUserPayload {
   reference: string;
   onboarded: boolean;
   reportToAllBusinesses: boolean;
+  forcePasswordReset: boolean;
+  hasPassword: boolean;
   businesses: {
     name: string;
     fullName: string;
@@ -50,6 +52,7 @@ export interface SetUserPayload {
   isSet: boolean;
   userNotifications: number;
   userMessages: number;
+  termsExpired: boolean;
 }
 
 export interface SetDemPayload {
@@ -156,6 +159,8 @@ export interface UserModel {
   }[];
   onboarded: boolean;
   reportToAllBusinesses: boolean;
+  forcePasswordReset: boolean;
+  hasPassword: boolean;
   schemes: Scheme[];
   demId: string | null | undefined;
   userTodos?: number | null | undefined;
@@ -178,6 +183,7 @@ export interface UserModel {
   role: Role;
   isSet: boolean;
   investigationAllSchemes: boolean;
+  termsExpired: boolean;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
   setFilterDefaultGroup: Action<UserModel, SetFilterDefaultGroup>;
@@ -188,6 +194,8 @@ export interface UserModel {
   clearUser: Action<UserModel>;
   setDem: Action<UserModel, SetDemPayload>;
   setSession: Action<UserModel, string>;
+  setPasswordSet: Action<UserModel>;
+  userOnboarded: Action<UserModel>;
 }
 
 const userModel: UserModel = {
@@ -206,13 +214,19 @@ const userModel: UserModel = {
   defaultGroups: [],
   filterDefaultGroups: [],
   reportToAllBusinesses: false,
-
+  forcePasswordReset: false,
+  hasPassword: false,
   demId: '',
   userTodos: 0,
   userNotifications: 0,
   userMessages: 0,
   investigationAllSchemes: false,
   dem: [],
+  termsExpired: false,
+  setPasswordSet: action((state) => {
+    state.forcePasswordReset = false;
+    state.hasPassword = true;
+  }),
   setUser: action((state, payload) => {
     state.id = payload.id;
     state.email = payload.email;
@@ -229,6 +243,9 @@ const userModel: UserModel = {
     state.userNotifications = payload.userNotifications;
     state.userMessages = payload.userMessages;
     state.reportToAllBusinesses = payload.reportToAllBusinesses;
+    state.forcePasswordReset = payload.forcePasswordReset;
+    state.hasPassword = payload.hasPassword;
+    state.termsExpired = payload.termsExpired;
   }),
   setFilterDefaultGroup: action((state, payload) => {
     state.filterDefaultGroups = payload.filterDefaultGroups;
@@ -250,6 +267,10 @@ const userModel: UserModel = {
   }),
   setDem: action((state, payload) => {
     state.dem = payload.dem;
+  }),
+  userOnboarded: action((state) => {
+    state.onboarded = true;
+    state.termsExpired = false;
   }),
   clearUser: action((state) => {
     state.id = '';

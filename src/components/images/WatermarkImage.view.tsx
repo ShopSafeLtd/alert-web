@@ -1,8 +1,8 @@
-import { ImagePosition } from 'graphql/generated';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
 import type { Theme } from '#/configs/ThemeConfig';
+import { ImagePosition } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   container: {

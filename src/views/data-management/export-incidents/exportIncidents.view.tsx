@@ -43,7 +43,7 @@ const ExportIncidentsView = ({
     <div style={{ marginLeft: 15 }}>
       <Page>
         <Typography.Title level={3}>
-          <FormattedMessage id="Kge2AV" defaultMessage="Export Data" />
+          <FormattedMessage defaultMessage="Export Data" />
         </Typography.Title>
         <Row style={{ marginBottom: 10 }} gutter={[10, 10]}>
           <Col span={6}>
@@ -75,7 +75,6 @@ const ExportIncidentsView = ({
               style={{ width: '100%', marginLeft: 10 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select businesses',
-                id: '2zeT5M',
               })}
               mode="multiple"
               maxTagCount="responsive"
@@ -101,7 +100,6 @@ const ExportIncidentsView = ({
               style={{ width: '100%', marginLeft: 10 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select groups',
-                id: '2FLt1f',
               })}
               mode="multiple"
               showSearch
@@ -127,7 +125,6 @@ const ExportIncidentsView = ({
               style={{ width: '100%', marginLeft: 10 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select tags',
-                id: 'o4IKNv',
               })}
               mode="multiple"
               showSearch
@@ -158,7 +155,6 @@ const ExportIncidentsView = ({
               <Button onClick={getZip} type="primary">
                 {intl.formatMessage({
                   defaultMessage: 'Generate Zip',
-                  id: 'HJy9P1',
                 })}
               </Button>
             </Col>
@@ -178,7 +174,6 @@ const ExportIncidentsView = ({
                 <a href={state.zipFile} download>
                   {intl.formatMessage({
                     defaultMessage: 'Download Zip',
-                    id: '7T5HhD',
                   })}
                 </a>
               )}
@@ -191,7 +186,6 @@ const ExportIncidentsView = ({
               <Statistic
                 title={intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
                 loading={loading}
                 value={state.data.incidentCount}
@@ -203,7 +197,6 @@ const ExportIncidentsView = ({
               <Statistic
                 title={intl.formatMessage({
                   defaultMessage: 'Offenders',
-                  id: 'xb54TN',
                 })}
                 loading={loading}
                 value={state.data.offenderCount}
@@ -215,7 +208,6 @@ const ExportIncidentsView = ({
               <Statistic
                 title={intl.formatMessage({
                   defaultMessage: 'Vehicles',
-                  id: 'r6wuJ3',
                 })}
                 loading={loading}
                 value={state.data.vehicleCount}
@@ -227,7 +219,6 @@ const ExportIncidentsView = ({
               <Statistic
                 title={intl.formatMessage({
                   defaultMessage: 'Incident Items',
-                  id: 'NR0vUx',
                 })}
                 loading={loading}
                 value={state.data.incidentItemsCount}
@@ -239,7 +230,6 @@ const ExportIncidentsView = ({
               <Statistic
                 title={intl.formatMessage({
                   defaultMessage: 'Activities',
-                  id: 'UmEsZF',
                 })}
                 loading={loading}
                 value={state.data.activityCount}
@@ -252,7 +242,6 @@ const ExportIncidentsView = ({
             <Card
               title={intl.formatMessage({
                 defaultMessage: 'Incidents',
-                id: 'mtr3R4',
               })}
             >
               <Table
@@ -265,7 +254,6 @@ const ExportIncidentsView = ({
                   {
                     title: intl.formatMessage({
                       defaultMessage: 'Date',
-                      id: 'P7PLVj',
                     }),
                     dataIndex: 'date',
                     key: 'date',
@@ -274,7 +262,6 @@ const ExportIncidentsView = ({
                   {
                     title: intl.formatMessage({
                       defaultMessage: 'Description',
-                      id: 'Q8Qw5B',
                     }),
                     dataIndex: 'description',
                     key: 'description',

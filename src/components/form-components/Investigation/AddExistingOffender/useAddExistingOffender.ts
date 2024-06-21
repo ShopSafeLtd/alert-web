@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import type { ListOffendersQuery } from 'graphql/generated';
-import {
-  Role,
-  QueryMode,
-  SortOrder,
-  useListOffendersQuery,
-  useUpdateInvestigationMutation,
-} from 'graphql/generated';
+import { Role, QueryMode, SortOrder } from 'graphql/types';
 import { useStoreActions, useStoreState } from 'state';
 import { notification } from 'antd';
 import { useParams } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import { useListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
 
 interface Props {
   onClose: () => void;
@@ -132,11 +128,9 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been added to the investigation! ',
-          id: 'ioLnSH',
         }),
 
         placement: 'bottomRight',

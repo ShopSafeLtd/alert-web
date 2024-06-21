@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { ImagePosition, IncidentPriority } from 'graphql/generated';
+import { ImagePosition, IncidentPriority } from 'graphql/types';
 import LinkIncident from '../SelectIncidents.view';
 
 describe('Detail Officer View', () => {

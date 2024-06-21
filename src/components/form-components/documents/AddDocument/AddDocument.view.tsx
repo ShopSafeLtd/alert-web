@@ -52,14 +52,12 @@ const AddDocument = ({
             name="name"
             label={intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please input a name!',
-                  id: '705XBo',
                 }),
               },
             ]}
@@ -67,7 +65,6 @@ const AddDocument = ({
             <Input
               placeholder={intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               })}
             />
           </Form.Item>
@@ -79,13 +76,11 @@ const AddDocument = ({
             name="category"
             label={intl.formatMessage({
               defaultMessage: 'Category',
-              id: 'ccXLVi',
             })}
           >
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Category',
-                id: 'ccXLVi',
               })}
               mode="tags"
               size="small"
@@ -112,7 +107,6 @@ const AddDocument = ({
           <Button icon={<UploadOutlined />}>
             {intl.formatMessage({
               defaultMessage: 'Upload Document',
-              id: 'Kc9MAV',
             })}
           </Button>
         </Upload>
@@ -123,7 +117,6 @@ const AddDocument = ({
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -137,11 +130,9 @@ const AddDocument = ({
               {providedId
                 ? intl.formatMessage({
                     defaultMessage: 'Create Evidence',
-                    id: '5RJkQZ',
                   })
                 : intl.formatMessage({
                     defaultMessage: 'Create Document',
-                    id: 'JxpaMx',
                   })}
             </Button>
           </Col>

@@ -48,14 +48,12 @@ const AddGroup = ({
             name="name"
             label={intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the new group.',
-                  id: 'mRLlqQ',
                 }),
               },
             ]}
@@ -69,7 +67,6 @@ const AddGroup = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
             rules={[
               {
@@ -77,7 +74,6 @@ const AddGroup = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a description for the new group.',
-                  id: 'm36ZnV',
                 }),
               },
             ]}
@@ -93,7 +89,6 @@ const AddGroup = ({
             name="users"
             label={intl.formatMessage({
               defaultMessage: 'Users',
-              id: 'YDMrKK',
             })}
             rules={[
               {
@@ -101,7 +96,6 @@ const AddGroup = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select at least one user for the new group.',
-                  id: 'mduNlp',
                 }),
               },
             ]}
@@ -127,7 +121,6 @@ const AddGroup = ({
               name="approvers"
               label={intl.formatMessage({
                 defaultMessage: 'Approvers',
-                id: 'Nm9Hsa',
               })}
             >
               <Select
@@ -154,7 +147,6 @@ const AddGroup = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Show Control Offender Settings?',
-              id: 'NBYcPg',
             })}
           </Typography.Title>
         </Col>
@@ -195,7 +187,7 @@ const AddGroup = ({
                 <Switch
                   disabled={saving}
                   style={{ marginLeft: 5, marginTop: -22 }}
-                  // 
+                  //
                 />
               </Form.Item>
             </Col>
@@ -226,7 +218,7 @@ const AddGroup = ({
                 <Switch
                   disabled={saving}
                   style={{ marginLeft: 5, marginTop: -22 }}
-                  // 
+                  //
                 />
               </Form.Item>
             </Col>
@@ -236,7 +228,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Name',
-                  id: 'LxDnoc',
                 })}
                 name="showName"
                 valuePropName="checked"
@@ -256,7 +247,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Alias',
-                  id: 'jcV2wy',
                 })}
                 name="showAlias"
                 valuePropName="checked"
@@ -276,7 +266,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Ethnicity',
-                  id: 'd1HnEr',
                 })}
                 name="showEthnicity"
                 valuePropName="checked"
@@ -296,7 +285,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Gender',
-                  id: 'wmoFoM',
                 })}
                 name="showGender"
                 valuePropName="checked"
@@ -316,7 +304,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Build',
-                  id: 'NAbrWS',
                 })}
                 name="showBuild"
                 valuePropName="checked"
@@ -336,7 +323,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Height',
-                  id: '+MhMte',
                 })}
                 name="showHeight"
                 valuePropName="checked"
@@ -356,7 +342,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Hair',
-                  id: '05ZX/k',
                 })}
                 name="showHair"
                 valuePropName="checked"
@@ -376,7 +361,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Age',
-                  id: 'To9AO3',
                 })}
                 name="showAge"
                 valuePropName="checked"
@@ -396,7 +380,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Date Of Birth',
-                  id: 'RbB1mP',
                 })}
                 name="showDateOfBirth"
                 valuePropName="checked"
@@ -416,7 +399,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Date Of Birth Source',
-                  id: '5/YYbb',
                 })}
                 name="showDateOfBirthSource"
                 valuePropName="checked"
@@ -436,7 +418,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Id Verified',
-                  id: '1jFhhX',
                 })}
                 name="showIdVerified"
                 valuePropName="checked"
@@ -456,7 +437,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Peculiarities',
-                  id: 'e/MoKK',
                 })}
                 name="showPeculiarities"
                 valuePropName="checked"
@@ -476,7 +456,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Comment',
-                  id: 'lyxeeq',
                 })}
                 name="showComment"
                 valuePropName="checked"
@@ -496,7 +475,6 @@ const AddGroup = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Images',
-                  id: 'YaS9tR',
                 })}
                 name="showImages"
                 valuePropName="checked"
@@ -521,7 +499,6 @@ const AddGroup = ({
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -534,7 +511,6 @@ const AddGroup = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Create Group',
-                id: '8eDBzp',
               })}
             </Button>
           </Col>

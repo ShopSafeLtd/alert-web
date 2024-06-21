@@ -46,7 +46,6 @@ const AddCustomGallery = ({
             {intl.formatMessage({
               defaultMessage:
                 'Custom galleries are added to offenders or vehicles to sort.',
-              id: 'Ne01v6',
             })}
           </Text>
         </Col>
@@ -55,13 +54,12 @@ const AddCustomGallery = ({
         <Col span={24}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the custom gallery.',
-                  id: 'uOtpVl',
                 }),
               },
             ]}
@@ -74,7 +72,6 @@ const AddCustomGallery = ({
             name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             rules={[
               {
@@ -82,7 +79,6 @@ const AddCustomGallery = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please selected at least one group for the custom gallery.',
-                  id: 'aBB7Lm',
                 }),
               },
             ]}
@@ -103,7 +99,6 @@ const AddCustomGallery = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea rows={10} disabled={saving} />
@@ -115,7 +110,7 @@ const AddCustomGallery = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -128,11 +123,9 @@ const AddCustomGallery = ({
               {data
                 ? intl.formatMessage({
                     defaultMessage: 'Save',
-                    id: 'jvo0vs',
                   })
                 : intl.formatMessage({
                     defaultMessage: 'Create',
-                    id: 'VzzYJk',
                   })}
             </Button>
           </Col>

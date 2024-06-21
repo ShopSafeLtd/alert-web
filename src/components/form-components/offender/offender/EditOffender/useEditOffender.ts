@@ -1,22 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
+
 import type {
   Age,
   BanType,
   Build,
   Gender,
-  OffenderUpdateInput,
   Race,
-  ViewOffenderQuery,
-} from 'graphql/generated';
-import {
-  Model,
-  Role,
-  useRecycleOffenderMutation,
-  useTagsQuery,
-  useUpdateOffenderMutation,
-  useViewOffenderQuery,
-} from 'graphql/generated';
+  OffenderUpdateInput,
+} from 'graphql/types';
+import { Model, Role } from 'graphql/types';
 import type { FormInstance } from 'antd';
 import { Form, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
@@ -27,6 +20,11 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import { useGroupsContext } from '#/context/groups-context';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
+import { useViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
 
 export interface OffenderData {
   id: string;
@@ -223,11 +221,9 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated',
-          id: 'ryTk34',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been updated!',
-          id: 'aRw1jd',
         }),
         placement: 'bottomRight',
       });
@@ -366,12 +362,10 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Rejected!',
-          id: 'C0DMPx',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
-          id: 'nQ1eW+',
         }),
         placement: 'bottomRight',
       });
@@ -384,16 +378,13 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure you want to delete this article?',
-        id: 'AjSz/I',
       }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: '5YfZun',
       }),
       okText: intl.formatMessage({
         defaultMessage: 'Reject',
-        id: 'VzIOKf',
       }),
       onOk() {
         void recycleOffender({
@@ -451,11 +442,9 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Do you want to delete the exclusion?',
-        id: 'P70g0z',
       }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
       }),
       onOk() {
         openDelete(currentId);

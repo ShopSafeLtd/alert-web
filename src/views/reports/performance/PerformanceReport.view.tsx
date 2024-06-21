@@ -59,7 +59,6 @@ const FilterOptions = ({
           <GroupsSelect
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Groups',
-              id: 'q2cuIU',
             })}
             mode="multiple"
             maxTagCount="responsive"
@@ -83,7 +82,6 @@ const FilterOptions = ({
           <Badge count={filterCount} showZero={false} offset={[8, 0]}>
             {intl.formatMessage({
               defaultMessage: 'More Filters',
-              id: 'stWNQ/',
             })}
           </Badge>
         </Button>
@@ -243,7 +241,6 @@ const PerformanceReport = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Logo',
-                    id: 'pn9DSF',
                   })}
                 </Button>
               </div>
@@ -251,7 +248,6 @@ const PerformanceReport = ({
                 {intl.formatMessage(
                   {
                     defaultMessage: 'Summary Report: {startDate} - {endDate}',
-                    id: 'CT8UPX',
                   },
                   {
                     startDate: dateRange.startDate.toLocaleDateString(),
@@ -351,7 +347,6 @@ const PerformanceReport = ({
                       {
                         defaultMessage:
                           'Summary Report: {startDate} - {endDate}',
-                        id: 'CT8UPX',
                       },
                       {
                         startDate: dateRange.startDate.toLocaleDateString(),
@@ -396,7 +391,6 @@ const PerformanceReport = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Components available to add',
-              id: 'OJhI0K',
             })}
             placement="right"
             closable
@@ -441,7 +435,6 @@ const PerformanceReport = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Add Logo',
-              id: 'pn9DSF',
             })}
             placement="right"
             closable
@@ -459,7 +452,6 @@ const PerformanceReport = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Save As',
-              id: '/XPfp1',
             })}
             placement="right"
             closable
@@ -479,7 +471,6 @@ const PerformanceReport = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Report Filters',
-              id: 'QxpB9+',
             })}
             open={filtersOpen}
             onClose={toggleFiltersOpen}
@@ -488,13 +479,11 @@ const PerformanceReport = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Brands',
-                  id: 'jWfWEA',
                 })}
               >
                 <BrandsSelect
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select Brands',
-                    id: 'XfiiaU',
                   })}
                   mode="multiple"
                   maxTagCount="responsive"
@@ -508,7 +497,6 @@ const PerformanceReport = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Industries',
-                  id: 'lINmqu',
                 })}
               >
                 <IndustrySelect
@@ -524,7 +512,6 @@ const PerformanceReport = ({
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'User Role',
-                  id: 'lBxkBr',
                 })}
               >
                 <RolesSelect
@@ -537,7 +524,6 @@ const PerformanceReport = ({
                   style={{ width: '100%' }}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select User Roles',
-                    id: 'q0cO2B',
                   })}
                 />
               </Form.Item>

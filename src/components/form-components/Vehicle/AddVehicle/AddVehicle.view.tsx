@@ -14,7 +14,6 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
@@ -32,6 +31,7 @@ import UploadImage from 'components/images/UploadImage.view';
 import { useIntl } from 'react-intl';
 import useStyles from './AddVehicle.styles';
 import type { FormData } from './useAddVehicle';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 const { confirm } = Modal;
 
@@ -125,7 +125,6 @@ const AddVehicle = ({
               name="make"
               label={intl.formatMessage({
                 defaultMessage: 'Make',
-                id: '6AAM0P',
               })}
             >
               <Input disabled={saving} />
@@ -136,7 +135,6 @@ const AddVehicle = ({
               name="model"
               label={intl.formatMessage({
                 defaultMessage: 'Model',
-                id: 'rhSI1/',
               })}
             >
               <Input disabled={saving} />
@@ -149,7 +147,6 @@ const AddVehicle = ({
               name="colour"
               label={intl.formatMessage({
                 defaultMessage: 'Colour',
-                id: '+e8vAT',
               })}
             >
               <Input disabled={saving} />
@@ -160,7 +157,6 @@ const AddVehicle = ({
               name="registration"
               label={intl.formatMessage({
                 defaultMessage: 'Registration',
-                id: 'qv7ied',
               })}
             >
               <Input disabled={saving} />
@@ -175,12 +171,10 @@ const AddVehicle = ({
                 name="groups"
                 label={intl.formatMessage({
                   defaultMessage: 'Groups',
-                  id: 'hzmswI',
                 })}
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'Please select the relevant groups that you would like this vehicle to be visible to.',
-                  id: 'cz35+X',
                 })}
                 rules={[
                   {
@@ -188,7 +182,6 @@ const AddVehicle = ({
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select at least one group for the vehicle.',
-                      id: 'QVpuqK',
                     }),
                   },
                 ]}
@@ -200,7 +193,6 @@ const AddVehicle = ({
                   maxTagCount={3}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select groups...',
-                    id: 'aVKXev',
                   })}
                 >
                   {groups.map((group) => (
@@ -218,7 +210,6 @@ const AddVehicle = ({
                 name="crimeGroup"
                 label={intl.formatMessage({
                   defaultMessage: 'Crime Groups',
-                  id: 'a0aLil',
                 })}
               >
                 <Select
@@ -234,7 +225,6 @@ const AddVehicle = ({
                       label: intl.formatMessage(
                         {
                           defaultMessage: 'CG-{ref}',
-                          id: 'h/qDZq',
                         },
                         {
                           ref: crimeGroup.reference,
@@ -257,12 +247,10 @@ const AddVehicle = ({
                     name="customGalleries"
                     label={intl.formatMessage({
                       defaultMessage: 'Custom Galleries',
-                      id: 'bzpFEk',
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'select any custom galleries that are relevant to this offender or add your own.',
-                      id: 'Or8c6M',
                     })}
                   >
                     <Select
@@ -300,7 +288,6 @@ const AddVehicle = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Custom Gallery',
-                      id: 'rLyRNN',
                     })}
                   </Button>
                 </Col>
@@ -321,7 +308,6 @@ const AddVehicle = ({
           setPrimaryImage={setPrimaryImage}
           title={intl.formatMessage({
             defaultMessage: 'vehicle',
-            id: 'qcNaCj',
           })}
         />
 
@@ -342,7 +328,6 @@ const AddVehicle = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Link Incident',
-                    id: '4sHDoC',
                   })}
                 </Button>
               </Col>
@@ -364,7 +349,6 @@ const AddVehicle = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Link Offender',
-                      id: 'IWqg0R',
                     })}
                   </Button>
                 </div>
@@ -378,7 +362,6 @@ const AddVehicle = ({
             <Divider>
               {intl.formatMessage({
                 defaultMessage: 'Linked Incidents',
-                id: 'RDsV4v',
               })}
             </Divider>
             <Table
@@ -388,7 +371,6 @@ const AddVehicle = ({
                   dataIndex: 'reference',
                   title: intl.formatMessage({
                     defaultMessage: 'Alert ID',
-                    id: 'k8ZNgH',
                   }),
                 },
                 {
@@ -396,7 +378,6 @@ const AddVehicle = ({
                   dataIndex: 'subject',
                   title: intl.formatMessage({
                     defaultMessage: 'Subject',
-                    id: 'LLtKhp',
                   }),
                 },
                 {
@@ -404,14 +385,12 @@ const AddVehicle = ({
                   dataIndex: 'date',
                   title: intl.formatMessage({
                     defaultMessage: 'Date',
-                    id: 'P7PLVj',
                   }),
                 },
                 {
                   key: 'Options',
                   title: intl.formatMessage({
                     defaultMessage: 'Delete',
-                    id: 'K3r6DQ',
                   }),
                   dataIndex: 'Options',
                   width: 5,
@@ -421,7 +400,6 @@ const AddVehicle = ({
                         <Tooltip
                           title={intl.formatMessage({
                             defaultMessage: 'Remove Incident',
-                            id: 'NhpFO7',
                           })}
                         >
                           <Button
@@ -432,12 +410,10 @@ const AddVehicle = ({
                                 title: intl.formatMessage({
                                   defaultMessage:
                                     'Do you want to remove the incident?',
-                                  id: 'wN3wVs',
                                 }),
                                 content: intl.formatMessage({
                                   defaultMessage:
                                     'This action cannot be undone.',
-                                  id: 'JDJoIZ',
                                 }),
                                 onOk() {
                                   removeIncident(record.key);
@@ -471,7 +447,6 @@ const AddVehicle = ({
             <Divider>
               {intl.formatMessage({
                 defaultMessage: 'Linked Offenders',
-                id: 'hyrc8o',
               })}
             </Divider>
             <Table
@@ -481,7 +456,6 @@ const AddVehicle = ({
                   dataIndex: 'images',
                   title: intl.formatMessage({
                     defaultMessage: 'Image',
-                    id: '+0zv6g',
                   }),
                   // eslint-disable-next-line no-confusing-arrow
                   render: (images: { id: string; optimised: string }[]) =>
@@ -503,7 +477,6 @@ const AddVehicle = ({
                   dataIndex: 'name',
                   title: intl.formatMessage({
                     defaultMessage: 'Name',
-                    id: 'HAlOn1',
                   }),
                 },
 
@@ -511,7 +484,6 @@ const AddVehicle = ({
                   key: 'Options',
                   title: intl.formatMessage({
                     defaultMessage: 'Delete',
-                    id: 'K3r6DQ',
                   }),
                   dataIndex: 'Options',
                   width: 5,
@@ -521,7 +493,6 @@ const AddVehicle = ({
                         <Tooltip
                           title={intl.formatMessage({
                             defaultMessage: 'Remove Offender',
-                            id: 'cZH2Kj',
                           })}
                         >
                           <Button
@@ -532,12 +503,10 @@ const AddVehicle = ({
                                 title: intl.formatMessage({
                                   defaultMessage:
                                     'Do you want to remove the offender?',
-                                  id: 'B3Hfqo',
                                 }),
                                 content: intl.formatMessage({
                                   defaultMessage:
                                     'This action cannot be undone.',
-                                  id: 'JDJoIZ',
                                 }),
                                 onOk() {
                                   removeOffender(record.key);
@@ -567,7 +536,7 @@ const AddVehicle = ({
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>
             </Col>
             <Col>
@@ -579,7 +548,6 @@ const AddVehicle = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Vehicle',
-                  id: '4JVX6H',
                 })}
               </Button>
             </Col>
@@ -589,7 +557,6 @@ const AddVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
-          id: 'UhSUQG',
         })}
         open={linkOffender}
         width="800"
@@ -608,7 +575,6 @@ const AddVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Link Incidents',
-          id: '1Vs3Qr',
         })}
         open={linkIncident}
         width="800"
@@ -627,7 +593,6 @@ const AddVehicle = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',
-          id: 'rLyRNN',
         })}
         open={addCustomGallery}
         width="800"

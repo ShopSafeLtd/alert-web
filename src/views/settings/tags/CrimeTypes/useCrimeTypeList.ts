@@ -1,23 +1,19 @@
 import { useEffect, useState } from 'react';
-import type {
-  CreateTagMutation,
-  RecycleTagMutation,
-  TagsQuery,
-} from 'graphql/generated';
-import {
-  Model,
-  QueryMode,
-  TagsDocument,
-  TagType,
-  useRecycleTagMutation,
-  useTagsQuery,
-  useUpdateTagMutation,
-} from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import {
+  TagsDocument,
+  useTagsQuery,
+} from 'graphql/tags/queries/tags.generated';
+import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { Model, QueryMode, TagType } from 'graphql/types';
+import type { RecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
+import { useRecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
 
 const { confirm } = Modal;
 
@@ -375,13 +371,11 @@ const useCrimeTypeList = (): Return => {
       setSaving(false);
       notification.success({
         message: intl.formatMessage({
-          id: 'NzVm0o',
           defaultMessage: 'Successfully Removed',
         }),
         description: intl.formatMessage(
           {
             defaultMessage: 'The crime type has been removed from {schemeName}',
-            id: 'Og1LWe',
           },
           { schemeName }
         ),
@@ -409,11 +403,9 @@ const useCrimeTypeList = (): Return => {
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: intl.formatMessage({
-        id: '2oCaym',
         defaultMessage: 'Are you sure?',
       }),
       content: intl.formatMessage({
-        id: 'q21W2X',
         defaultMessage:
           'This will remove this crime type from this scheme, bu not any other schemes you may have added it to.',
       }),

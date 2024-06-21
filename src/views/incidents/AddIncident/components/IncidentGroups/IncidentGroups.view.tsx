@@ -23,7 +23,6 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Who is this incident relevant to?',
-                id: 'EeN7DX',
               })}
             </Title>
           </Col>
@@ -36,7 +35,6 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
               {intl.formatMessage({
                 defaultMessage:
                   '- Please select the groups that this incident is for.',
-                id: 'gVNXsT',
               })}
             </Paragraph>
           </Col>
@@ -48,7 +46,6 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
-                id: 'vi+XKb',
               })}
               rules={[
                 {
@@ -56,7 +53,6 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please add at least one group that you would like this incident to be visible to.',
-                    id: 'ukeLzq',
                   }),
                 },
               ]}
@@ -68,7 +64,6 @@ const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
                 maxTagCount={3}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select groups...',
-                  id: 'aVKXev',
                 })}
               >
                 {groups.map((group) => (

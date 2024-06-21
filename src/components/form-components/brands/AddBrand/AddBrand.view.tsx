@@ -28,19 +28,18 @@ const AddBrand = ({
   return (
     <Form form={form} layout="vertical" onFinish={onSubmit}>
       <Typography.Title level={4} style={{ marginBottom: 15 }}>
-        {intl.formatMessage({ defaultMessage: 'Brand Detail:', id: 'qOT02e' })}
+        {intl.formatMessage({ defaultMessage: 'Brand Detail:' })}
       </Typography.Title>
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the brand.',
-                  id: '64hC/9',
                 }),
               },
             ]}
@@ -53,7 +52,6 @@ const AddBrand = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea rows={10} disabled={saving} />
@@ -68,7 +66,6 @@ const AddBrand = ({
                 name="businesses"
                 label={intl.formatMessage({
                   defaultMessage: 'Businesses',
-                  id: 'D0tMhW',
                 })}
                 rules={[
                   {
@@ -76,7 +73,6 @@ const AddBrand = ({
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select at least one business for the new brand.',
-                      id: 'YJIC/p',
                     }),
                   },
                 ]}
@@ -89,7 +85,6 @@ const AddBrand = ({
                   disabled={saving}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Search for a business...',
-                    id: 'qaJxSS',
                   })}
                   fetchOptions={onSearchBusiness}
                   style={{ width: '100%' }}
@@ -104,7 +99,7 @@ const AddBrand = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -114,7 +109,7 @@ const AddBrand = ({
               type="primary"
               htmlType="submit"
             >
-              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+              {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
           </Col>
         </Row>

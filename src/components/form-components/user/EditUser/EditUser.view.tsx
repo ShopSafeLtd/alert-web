@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from 'react';
-import type { UserQuery } from 'graphql/generated';
-import { Role } from 'graphql/generated';
+import { Role } from 'graphql/types';
 import type { FormInstance } from 'antd';
 import {
   Button,
@@ -22,6 +21,7 @@ import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { useIntl } from 'react-intl';
 import type { FormData } from './useEditUser';
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import type { UserQuery } from 'graphql/user/queries/user.generated';
 
 const { Title } = Typography;
 
@@ -117,7 +117,6 @@ const EditUser = ({
       <Title level={4} style={{ marginBottom: 15 }}>
         {intl.formatMessage({
           defaultMessage: 'User Details:',
-          id: 'vewp8R',
         })}
       </Title>
       <Row gutter={16}>
@@ -126,14 +125,12 @@ const EditUser = ({
             name="fullName"
             label={intl.formatMessage({
               defaultMessage: 'Full Name',
-              id: 'TemVby',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the user',
-                  id: 'HPWnU/',
                 }),
               },
             ]}
@@ -146,7 +143,6 @@ const EditUser = ({
             name="email"
             label={intl.formatMessage({
               defaultMessage: 'Email Address',
-              id: 'xxQxLE',
             })}
             rules={[
               {
@@ -154,7 +150,6 @@ const EditUser = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     "'Please enter a email address for the user.'",
-                  id: 'uMU/SG',
                 }),
               },
             ]}
@@ -172,7 +167,6 @@ const EditUser = ({
                 name="businesses"
                 label={intl.formatMessage({
                   defaultMessage: 'Business',
-                  id: 'w1Fanr',
                 })}
                 rules={[
                   {
@@ -180,7 +174,6 @@ const EditUser = ({
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select a business for the new user.',
-                      id: 'N4J5/K',
                     }),
                   },
                 ]}
@@ -193,7 +186,6 @@ const EditUser = ({
                   disabled={saving}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Search for a business...',
-                    id: 'qaJxSS',
                   })}
                   style={{ width: '100%' }}
                 />
@@ -211,7 +203,6 @@ const EditUser = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'New Business',
-                  id: 'KepKya',
                 })}
               </Button>
             </Col>
@@ -222,13 +213,12 @@ const EditUser = ({
         <Col span={12}>
           <Form.Item
             name="role"
-            label={intl.formatMessage({ defaultMessage: 'Role', id: '1ZgrhW' })}
+            label={intl.formatMessage({ defaultMessage: 'Role' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please select a role for the user.',
-                  id: 'vJrE3G',
                 }),
               },
             ]}
@@ -243,7 +233,7 @@ const EditUser = ({
         </Col>
       </Row>
       <Title level={4} style={{ marginBottom: 15 }}>
-        {intl.formatMessage({ defaultMessage: 'User Groups:', id: 'OfXLJQ' })}
+        {intl.formatMessage({ defaultMessage: 'User Groups:' })}
       </Title>
       <Row gutter={16}>
         <Col span={12}>
@@ -251,7 +241,6 @@ const EditUser = ({
             name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             })}
             rules={[
               {
@@ -259,7 +248,6 @@ const EditUser = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please selected at least one group for the user.',
-                  id: 'XXcGL4',
                 }),
               },
             ]}
@@ -281,7 +269,6 @@ const EditUser = ({
             name="chats"
             label={intl.formatMessage({
               defaultMessage: 'Chats Group',
-              id: 'q5yM57',
             })}
           >
             <Select
@@ -305,7 +292,6 @@ const EditUser = ({
                 name="approverGroups"
                 label={intl.formatMessage({
                   defaultMessage: 'Approver Groups',
-                  id: 'D/FCTs',
                 })}
               >
                 <Select
@@ -327,7 +313,6 @@ const EditUser = ({
               name="defaultGroups"
               label={intl.formatMessage({
                 defaultMessage: 'Default Groups',
-                id: '2KZp/e',
               })}
             >
               <Select
@@ -350,7 +335,6 @@ const EditUser = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Show user name in the system',
-              id: 'YxFuTi',
             })}
             name="publicName"
             valuePropName="checked"
@@ -371,7 +355,6 @@ const EditUser = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Allow user to report to all businesses',
-              id: 'OILM5t',
             })}
             name="reportToAllBusinesses"
             valuePropName="checked"
@@ -392,20 +375,17 @@ const EditUser = ({
       <Title level={4} style={{ marginBottom: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Notification Settings:',
-          id: 'op0fQr',
         })}
       </Title>
       <Title style={{ marginBottom: 8, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Incidents:',
-          id: '+nRUf9',
         })}
       </Title>
       <Form.Item
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed incidents:',
-          id: 'q92TAS',
         })}
         name="subscribedIncidentOnly"
         valuePropName="checked"
@@ -424,7 +404,6 @@ const EditUser = ({
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for incidents:',
-          id: 'hwc1SW',
         })}
         name="incidentPush"
         valuePropName="checked"
@@ -443,7 +422,6 @@ const EditUser = ({
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send emails for incidents:',
-          id: 'P8o2fl',
         })}
         name="incidentEmail"
         valuePropName="checked"
@@ -462,7 +440,6 @@ const EditUser = ({
       <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Offenders:',
-          id: 'HEnuMU',
         })}
       </Title>
       <Form.Item
@@ -470,7 +447,6 @@ const EditUser = ({
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed offenders:',
-          id: 'PxTS+p',
         })}
         valuePropName="checked"
         style={{
@@ -489,7 +465,6 @@ const EditUser = ({
         name="offenderPush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for offenders:',
-          id: 'kOXe4z',
         })}
         valuePropName="checked"
         style={{
@@ -508,7 +483,6 @@ const EditUser = ({
         name="offenderEmail"
         label={intl.formatMessage({
           defaultMessage: 'Send emails for offenders:',
-          id: 'jhu5sz',
         })}
         valuePropName="checked"
         style={{
@@ -526,13 +500,11 @@ const EditUser = ({
       <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Bulletins:',
-          id: '3woXlC',
         })}
       </Title>
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for bulletins:',
-          id: 'sXEYqs',
         })}
         name="bulletinPush"
         valuePropName="checked"
@@ -551,7 +523,6 @@ const EditUser = ({
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Send emails for bulletins:',
-          id: '6iDV7o',
         })}
         name="bulletinEmails"
         valuePropName="checked"
@@ -570,14 +541,12 @@ const EditUser = ({
       <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
         {intl.formatMessage({
           defaultMessage: 'Chat Messages:',
-          id: 'UT42Ko',
         })}
       </Title>
       <Form.Item
         name="messagePush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for new chat messages:',
-          id: 'S4ojdm',
         })}
         valuePropName="checked"
         style={{
@@ -597,7 +566,7 @@ const EditUser = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -607,7 +576,7 @@ const EditUser = ({
               type="primary"
               htmlType="submit"
             >
-              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+              {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
           </Col>
         </Row>
@@ -617,7 +586,6 @@ const EditUser = ({
         onClose={toggleAddBusinessVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
-          id: 'p47asT',
         })}
         width={600}
       >

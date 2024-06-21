@@ -36,7 +36,6 @@ const ActiveOffendersTemplate = ({
       >
         {intl.formatMessage({
           defaultMessage: 'Recently Active Offenders',
-          id: '3CqKJ0',
         })}
       </Title>
 

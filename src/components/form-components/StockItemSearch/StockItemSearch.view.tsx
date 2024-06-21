@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO Make similar to the business search with the debounce and fetch more if they have more than 1000
 import type { SelectProps } from 'antd';
 import { Typography, Select, Spin, Row, Col } from 'antd';
 import React, { useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { useApolloClient } from '@apollo/client';
 import { FormattedMessage } from 'react-intl';
-import type {
-  ListStockItemsQuery,
-  ListStockItemsQueryVariables,
-} from 'graphql/generated';
-import { ListStockItemsDocument, QueryMode } from 'graphql/generated';
+
+import { QueryMode } from 'graphql/types';
 import { useStoreState } from 'state';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
+import type {
+  ListStockItemsQuery,
+  ListStockItemsQueryVariables,
+} from 'graphql/stock-item/stock-items-import.generated';
+import { ListStockItemsDocument } from 'graphql/stock-item/stock-items-import.generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   option: {
@@ -152,10 +155,7 @@ const StockItemSearch = ({
               <Row gutter={4}>
                 <Col>
                   <Typography.Text type="secondary" strong>
-                    <FormattedMessage
-                      id="uTnplY"
-                      defaultMessage="Description:"
-                    />
+                    <FormattedMessage defaultMessage="Description:" />
                   </Typography.Text>
                 </Col>
                 <Col>
@@ -168,7 +168,7 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage id="KFjD/N" defaultMessage="Cost:" />
+                      <FormattedMessage defaultMessage="Cost:" />
                     </Typography.Text>
                   </Col>
                   <Col>
@@ -185,10 +185,7 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage
-                        id="Dkp1fL"
-                        defaultMessage="Retail Price:"
-                      />
+                      <FormattedMessage defaultMessage="Retail Price:" />
                     </Typography.Text>
                   </Col>
                   <Col>
@@ -207,7 +204,7 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage id="204/FC" defaultMessage="Brand:" />
+                      <FormattedMessage defaultMessage="Brand:" />
                     </Typography.Text>
                   </Col>
                   <Col>
@@ -220,7 +217,7 @@ const StockItemSearch = ({
               <Row gutter={4}>
                 <Col>
                   <Typography.Text type="secondary" strong>
-                    <FormattedMessage id="x99+yI" defaultMessage="SKU:" />
+                    <FormattedMessage defaultMessage="SKU:" />
                   </Typography.Text>
                 </Col>
                 <Col>
@@ -233,7 +230,7 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage id="eRnT7x" defaultMessage="Barcode:" />
+                      <FormattedMessage defaultMessage="Barcode:" />
                     </Typography.Text>
                   </Col>
                   <Col>

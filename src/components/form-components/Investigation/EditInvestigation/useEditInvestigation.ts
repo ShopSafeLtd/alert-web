@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useUpdateInvestigationDetailsMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { InvestigationDetails } from 'types/DataType';
+import { useUpdateInvestigationDetailsMutation } from 'graphql/investigations/mutations/update/update-investigation-details.generated';
 
 interface Props {
   onClose: () => void;
@@ -32,12 +32,10 @@ const useAddInvestigation = ({ onClose, investigationData }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The details of this investigation has been updated! ',
-          id: 'u3Hlky',
         }),
         placement: 'bottomRight',
       });

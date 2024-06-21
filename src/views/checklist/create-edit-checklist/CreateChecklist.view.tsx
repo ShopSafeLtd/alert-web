@@ -111,11 +111,9 @@ const CreateChecklistView: React.FC<Props> = ({
           id
             ? intl.formatMessage({
                 defaultMessage: 'Edit Checklist',
-                id: '2yq6iI',
               })
             : intl.formatMessage({
                 defaultMessage: 'Create Checklist',
-                id: 'aDpBb2',
               })
         }
       />
@@ -132,7 +130,6 @@ const CreateChecklistView: React.FC<Props> = ({
             <Col span={8}>
               <Form.Item
                 label={intl.formatMessage({
-                  id: 'F+9MHk',
                   defaultMessage: 'Checklist Title',
                 })}
                 name="title"
@@ -140,7 +137,6 @@ const CreateChecklistView: React.FC<Props> = ({
                   {
                     required: true,
                     message: intl.formatMessage({
-                      id: 'K+LnZG',
                       defaultMessage: 'Missing title',
                     }),
                   },
@@ -148,7 +144,6 @@ const CreateChecklistView: React.FC<Props> = ({
               >
                 <Input
                   placeholder={intl.formatMessage({
-                    id: '9a9+ww',
                     defaultMessage: 'Title',
                   })}
                 />
@@ -157,14 +152,12 @@ const CreateChecklistView: React.FC<Props> = ({
             <Col flex={1}>
               <Form.Item
                 label={intl.formatMessage({
-                  id: '1OyEjZ',
                   defaultMessage: 'Checklist Description',
                 })}
                 name="description"
               >
                 <Input.TextArea
                   placeholder={intl.formatMessage({
-                    id: 'Q8Qw5B',
                     defaultMessage: 'Description',
                   })}
                 />
@@ -175,7 +168,6 @@ const CreateChecklistView: React.FC<Props> = ({
             <Col span={8}>
               <Form.Item
                 label={intl.formatMessage({
-                  id: 'YDMrKK',
                   defaultMessage: 'Users',
                 })}
                 name="userIds"
@@ -186,7 +178,6 @@ const CreateChecklistView: React.FC<Props> = ({
                   mode="multiple"
                   maxTagCount="responsive"
                   placeholder={intl.formatMessage({
-                    id: 'YDMrKK',
                     defaultMessage: 'Users',
                   })}
                   options={users}
@@ -196,7 +187,6 @@ const CreateChecklistView: React.FC<Props> = ({
             <Col span={8}>
               <Form.Item
                 label={intl.formatMessage({
-                  id: 'D0tMhW',
                   defaultMessage: 'Businesses',
                 })}
                 name="businessIds"
@@ -207,7 +197,6 @@ const CreateChecklistView: React.FC<Props> = ({
                   mode="multiple"
                   maxTagCount="responsive"
                   placeholder={intl.formatMessage({
-                    id: 'D0tMhW',
                     defaultMessage: 'Businesses',
                   })}
                   options={businesses}
@@ -225,7 +214,6 @@ const CreateChecklistView: React.FC<Props> = ({
                     <Space>
                       <Form.Item
                         label={intl.formatMessage({
-                          id: 'q1Cd7m',
                           defaultMessage: 'Section',
                         })}
                         name={[name, 'order']}
@@ -233,7 +221,6 @@ const CreateChecklistView: React.FC<Props> = ({
                           {
                             required: true,
                             message: intl.formatMessage({
-                              id: 'zx0+xA',
                               defaultMessage: 'Missing order',
                             }),
                           },
@@ -241,7 +228,6 @@ const CreateChecklistView: React.FC<Props> = ({
                       >
                         <InputNumber
                           placeholder={intl.formatMessage({
-                            id: 'XPruqs',
                             defaultMessage: 'Order',
                           })}
                           size="small"
@@ -251,7 +237,6 @@ const CreateChecklistView: React.FC<Props> = ({
                       </Form.Item>
                       <Form.Item
                         label={intl.formatMessage({
-                          id: 'uHmtQN',
                           defaultMessage: 'Section Title',
                         })}
                         name={[name, 'title']}
@@ -259,7 +244,6 @@ const CreateChecklistView: React.FC<Props> = ({
                       >
                         <Input
                           placeholder={intl.formatMessage({
-                            id: '9a9+ww',
                             defaultMessage: 'Title',
                           })}
                           style={{ width: 600 }}
@@ -273,7 +257,6 @@ const CreateChecklistView: React.FC<Props> = ({
                         onClick={() => handleRemoveSection(sectionIndex)}
                       >
                         {intl.formatMessage({
-                          id: '+3zeQW',
                           defaultMessage: 'Delete Section',
                         })}
                       </Button>
@@ -292,7 +275,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                   <Form.Item
                                     label={intl.formatMessage(
                                       {
-                                        id: '2ywqay',
                                         defaultMessage: 'Subsection: {value}',
                                       },
                                       {
@@ -309,7 +291,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                   >
                                     <InputNumber
                                       placeholder={intl.formatMessage({
-                                        id: 'uY1hPI',
                                         defaultMessage: 'Subsection Order',
                                       })}
                                       size="small"
@@ -319,7 +300,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                   </Form.Item>
                                   <Form.Item
                                     label={intl.formatMessage({
-                                      id: 'TSyRmY',
                                       defaultMessage: 'Subsection title',
                                     })}
                                     name={[subsectionField.name, 'title']}
@@ -332,7 +312,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                   >
                                     <Input
                                       placeholder={intl.formatMessage({
-                                        id: 'fB20Jz',
                                         defaultMessage: 'Subsection Title',
                                       })}
                                       style={{ width: 600 }}
@@ -351,7 +330,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                     }
                                   >
                                     {intl.formatMessage({
-                                      id: 'tF4nnC',
                                       defaultMessage: 'Delete Subsection',
                                     })}
                                   </Button>
@@ -375,7 +353,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                 <Form.Item
                                                   label={intl.formatMessage(
                                                     {
-                                                      id: 'G/p6Ga',
                                                       defaultMessage:
                                                         'Question: {value}',
                                                     },
@@ -400,7 +377,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   <InputNumber
                                                     placeholder={intl.formatMessage(
                                                       {
-                                                        id: 'g6pvMr',
                                                         defaultMessage:
                                                           'Question Order',
                                                       }
@@ -412,7 +388,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                 </Form.Item>
                                                 <Form.Item
                                                   label={intl.formatMessage({
-                                                    id: 'kgOBET',
                                                     defaultMessage: 'Question',
                                                   })}
                                                   name={[
@@ -431,7 +406,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                     style={{ width: 600 }}
                                                     placeholder={intl.formatMessage(
                                                       {
-                                                        id: 'kgOBET',
                                                         defaultMessage:
                                                           'Question',
                                                       }
@@ -454,7 +428,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   }
                                                 >
                                                   {intl.formatMessage({
-                                                    id: 'hdAZpB',
                                                     defaultMessage:
                                                       'Delete Question',
                                                   })}
@@ -466,7 +439,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                               <Space size="large">
                                                 <Form.Item
                                                   label={intl.formatMessage({
-                                                    id: '+U6ozc',
                                                     defaultMessage: 'Type',
                                                   })}
                                                   name={[
@@ -486,7 +458,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
-                                                            id: 'AUmBVv',
                                                             defaultMessage:
                                                               'Pass/Fail',
                                                           }),
@@ -495,7 +466,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
-                                                            id: 'KgcF6B',
                                                             defaultMessage:
                                                               'Yes/No',
                                                           }),
@@ -504,7 +474,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
-                                                            id: 'u2Ejz4',
                                                             defaultMessage:
                                                               'Good/Bad',
                                                           }),
@@ -513,7 +482,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
-                                                            id: '25m6b6',
                                                             defaultMessage:
                                                               'Pass/Fail (NA)',
                                                           }),
@@ -522,7 +490,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
-                                                            id: 'Ugy0Wc',
                                                             defaultMessage:
                                                               'Yes/No (NA)',
                                                           }),
@@ -531,7 +498,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
-                                                            id: '6AjeNu',
                                                             defaultMessage:
                                                               'Good/Bad (NA)',
                                                           }),
@@ -540,7 +506,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
-                                                            id: 'aA8bDw',
                                                             defaultMessage:
                                                               'Text',
                                                           }),
@@ -553,7 +518,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                 </Form.Item>
                                                 <Form.Item
                                                   label={intl.formatMessage({
-                                                    id: 'tHTw4s',
                                                     defaultMessage: 'Weighted',
                                                   })}
                                                   name={[
@@ -648,7 +612,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     label={intl.formatMessage(
                                                                       {
-                                                                        id: 'TK3Mb0',
                                                                         defaultMessage:
                                                                           'Pass Weight',
                                                                       }
@@ -669,7 +632,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     <InputNumber
                                                                       placeholder={intl.formatMessage(
                                                                         {
-                                                                          id: 'TK3Mb0',
                                                                           defaultMessage:
                                                                             'Pass Weight',
                                                                         }
@@ -690,7 +652,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     label={intl.formatMessage(
                                                                       {
-                                                                        id: 'n5Pq9/',
                                                                         defaultMessage:
                                                                           'Fail Weight',
                                                                       }
@@ -711,7 +672,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     <InputNumber
                                                                       placeholder={intl.formatMessage(
                                                                         {
-                                                                          id: 'n5Pq9/',
                                                                           defaultMessage:
                                                                             'Fail Weight',
                                                                         }
@@ -740,7 +700,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     label={intl.formatMessage(
                                                                       {
-                                                                        id: 'JI4CP3',
                                                                         defaultMessage:
                                                                           'Yes Weight',
                                                                       }
@@ -761,7 +720,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     <InputNumber
                                                                       placeholder={intl.formatMessage(
                                                                         {
-                                                                          id: 'JI4CP3',
                                                                           defaultMessage:
                                                                             'Yes Weight',
                                                                         }
@@ -782,7 +740,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     label={intl.formatMessage(
                                                                       {
-                                                                        id: 'PwFJqP',
                                                                         defaultMessage:
                                                                           'No Weight',
                                                                       }
@@ -803,7 +760,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     <InputNumber
                                                                       placeholder={intl.formatMessage(
                                                                         {
-                                                                          id: 'PwFJqP',
                                                                           defaultMessage:
                                                                             'No Weight',
                                                                         }
@@ -832,7 +788,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     ]}
                                                                     label={intl.formatMessage(
                                                                       {
-                                                                        id: 'yW3z+F',
                                                                         defaultMessage:
                                                                           'Good Weight',
                                                                       }
@@ -853,7 +808,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     <InputNumber
                                                                       placeholder={intl.formatMessage(
                                                                         {
-                                                                          id: 'yW3z+F',
                                                                           defaultMessage:
                                                                             'Good Weight',
                                                                         }
@@ -877,7 +831,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }
                                                                     label={intl.formatMessage(
                                                                       {
-                                                                        id: '/fJf+L',
                                                                         defaultMessage:
                                                                           'Bad Weight',
                                                                       }
@@ -895,7 +848,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     <InputNumber
                                                                       placeholder={intl.formatMessage(
                                                                         {
-                                                                          id: '/fJf+L',
                                                                           defaultMessage:
                                                                             'Bad Weight',
                                                                         }
@@ -926,7 +878,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }
                                                                     label={intl.formatMessage(
                                                                       {
-                                                                        id: 'nSHZnm',
                                                                         defaultMessage:
                                                                           'Text Weight',
                                                                       }
@@ -944,7 +895,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     <InputNumber
                                                                       placeholder={intl.formatMessage(
                                                                         {
-                                                                          id: 'nSHZnm',
                                                                           defaultMessage:
                                                                             'Text Weight',
                                                                         }
@@ -976,7 +926,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                             <Col span={22}>
                                               <Form.Item
                                                 label={intl.formatMessage({
-                                                  id: 'jWfWEA',
                                                   defaultMessage: 'Brands',
                                                 })}
                                                 name={[
@@ -1002,7 +951,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                             <Col span={20}>
                                               <Form.Item
                                                 label={intl.formatMessage({
-                                                  id: 'R1OkyM',
                                                   defaultMessage: 'Dependent',
                                                 })}
                                                 name={[
@@ -1191,7 +1139,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                           ]}
                                                           label={intl.formatMessage(
                                                             {
-                                                              id: 'GH/JnG',
                                                               defaultMessage:
                                                                 'Dependent Question',
                                                             }
@@ -1242,7 +1189,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                           ]}
                                                           label={intl.formatMessage(
                                                             {
-                                                              id: 'uVG0Go',
                                                               defaultMessage:
                                                                 'Dependent Answer',
                                                             }
@@ -1289,7 +1235,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                       icon={<PlusOutlined />}
                                     >
                                       {intl.formatMessage({
-                                        id: '7nSzTq',
                                         defaultMessage: 'Add Question',
                                       })}
                                     </Button>
@@ -1307,7 +1252,6 @@ const CreateChecklistView: React.FC<Props> = ({
                           icon={<PlusOutlined />}
                         >
                           {intl.formatMessage({
-                            id: 'yvByKt',
                             defaultMessage: 'Add Subsection',
                           })}
                         </Button>
@@ -1324,7 +1268,6 @@ const CreateChecklistView: React.FC<Props> = ({
                   icon={<PlusOutlined />}
                 >
                   {intl.formatMessage({
-                    id: 'ckO4/Z',
                     defaultMessage: 'Add Section',
                   })}
                 </Button>
@@ -1344,11 +1287,9 @@ const CreateChecklistView: React.FC<Props> = ({
                 >
                   {id
                     ? intl.formatMessage({
-                        id: '47FYwb',
                         defaultMessage: 'Cancel',
                       })
                     : intl.formatMessage({
-                        id: 'cyR7Kh',
                         defaultMessage: 'Back',
                       })}
                 </Button>
@@ -1359,11 +1300,9 @@ const CreateChecklistView: React.FC<Props> = ({
                 <Button loading={loading} type="primary" htmlType="submit">
                   {id
                     ? intl.formatMessage({
-                        id: 'jvo0vs',
                         defaultMessage: 'Save',
                       })
                     : intl.formatMessage({
-                        id: 'wSZR47',
                         defaultMessage: 'Submit',
                       })}
                 </Button>

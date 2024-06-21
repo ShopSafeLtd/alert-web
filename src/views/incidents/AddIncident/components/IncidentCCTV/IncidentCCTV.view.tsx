@@ -38,7 +38,6 @@ const IncidentCCTV = ({ saving, form }: Props) => {
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
             {intl.formatMessage({
               defaultMessage: 'CCTV Evidence',
-              id: 'sc0r3O',
             })}
           </Title>
         </Col>
@@ -50,11 +49,9 @@ const IncidentCCTV = ({ saving, form }: Props) => {
             tooltip={intl.formatMessage({
               defaultMessage:
                 'Is there any cctv footage of the incident available',
-              id: 'IKSGfQ',
             })}
             label={intl.formatMessage({
               defaultMessage: 'Is CCTV available?',
-              id: 'Z7Kumo',
             })}
             required
           >
@@ -63,14 +60,12 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'Yes',
-                    id: 'a5msuh',
                   }),
                   value: true,
                 },
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'No',
-                    id: 'oUWADl',
                   }),
                   value: false,
                 },
@@ -96,7 +91,6 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Camera Number',
-                          id: 'nxMNaZ',
                         })
                       }
                     >
@@ -111,14 +105,12 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                         intl.formatMessage({
                           defaultMessage:
                             'Does the footage show the incident occur?',
-                          id: '3QaL2u',
                         })
                       }
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Shows Incident',
-                          id: 'aZlFiU',
                         })
                       }
                     >
@@ -127,14 +119,12 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'Yes',
-                              id: 'a5msuh',
                             }),
                             value: true,
                           },
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'No',
-                              id: 'oUWADl',
                             }),
                             value: false,
                           },
@@ -152,14 +142,12 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                         intl.formatMessage({
                           defaultMessage:
                             'Does the footage show the suspects face?',
-                          id: 'GTTE7l',
                         })
                       }
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Shows suspects face',
-                          id: 'cnt50D',
                         })
                       }
                     >
@@ -168,14 +156,12 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'Yes',
-                              id: 'a5msuh',
                             }),
                             value: true,
                           },
                           {
                             label: intl.formatMessage({
                               defaultMessage: 'No',
-                              id: 'oUWADl',
                             }),
                             value: false,
                           },
@@ -194,7 +180,6 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Start Time',
-                          id: '5QYdPU',
                         })
                       }
                     >
@@ -210,7 +195,6 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'End Time',
-                          id: '0niASN',
                         })
                       }
                     >
@@ -233,10 +217,7 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                 <Row justify="center">
                   <Col>
                     <Button onClick={() => add()} block>
-                      <FormattedMessage
-                        id="scqoib"
-                        defaultMessage="Add CCTV Evidence"
-                      />
+                      <FormattedMessage defaultMessage="Add CCTV Evidence" />
                     </Button>
                   </Col>
                 </Row>

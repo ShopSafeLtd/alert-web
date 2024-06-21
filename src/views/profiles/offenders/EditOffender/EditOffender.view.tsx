@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ListVehiclesQuery, ViewOffenderQuery } from 'graphql/generated';
+
 import type { FormInstance } from 'antd';
 import {
   Button,
@@ -41,6 +41,8 @@ import OffenderExclusions from 'components/offenders/OffenderForm/OffenderExclus
 import OffenderImage from 'components/offenders/OffenderForm/OffenderImage';
 import { useIntl } from 'react-intl';
 import type { BanType, FormData } from './useEditOffender';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
 const { Title, Paragraph } = Typography;
 
@@ -203,11 +205,9 @@ const EditOffender = ({
           reviewed
             ? intl.formatMessage({
                 defaultMessage: 'Review Offender',
-                id: 'i7Qzld',
               })
             : intl.formatMessage({
                 defaultMessage: 'Edit Offender',
-                id: '+OfJ4/',
               })
         }
       />
@@ -303,7 +303,6 @@ const EditOffender = ({
                     <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                       {intl.formatMessage({
                         defaultMessage: 'Addresses',
-                        id: 'xBrtnx',
                       })}
                     </Title>
                   </Col>
@@ -318,7 +317,6 @@ const EditOffender = ({
                           {intl.formatMessage({
                             defaultMessage:
                               '                          - Add any of the known addresses for the offender.',
-                            id: '2Us/IK',
                           })}
                         </Paragraph>
                       </Col>
@@ -340,7 +338,6 @@ const EditOffender = ({
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Add Address',
-                            id: 'xg14pg',
                           })}
                         </Button>
                       </Col>
@@ -360,7 +357,6 @@ const EditOffender = ({
                         key: 'alias',
                         title: intl.formatMessage({
                           defaultMessage: 'Label',
-                          id: '753yX5',
                         }),
                         dataIndex: 'alias',
                       },
@@ -368,7 +364,6 @@ const EditOffender = ({
                         key: 'street',
                         title: intl.formatMessage({
                           defaultMessage: 'Street',
-                          id: 'BaIwdV',
                         }),
                         dataIndex: 'street',
                       },
@@ -376,7 +371,6 @@ const EditOffender = ({
                         key: 'townCity',
                         title: intl.formatMessage({
                           defaultMessage: 'City',
-                          id: 'TE4fIS',
                         }),
                         dataIndex: 'townCity',
                       },
@@ -384,7 +378,6 @@ const EditOffender = ({
                         key: 'county',
                         title: intl.formatMessage({
                           defaultMessage: 'County',
-                          id: 'B+KJhc',
                         }),
                         dataIndex: 'county',
                       },
@@ -392,7 +385,6 @@ const EditOffender = ({
                         key: 'postcode',
                         title: intl.formatMessage({
                           defaultMessage: 'Postcode',
-                          id: 'FJhjgz',
                         }),
                         dataIndex: 'postcode',
                       },
@@ -400,7 +392,6 @@ const EditOffender = ({
                         key: 'Edit',
                         title: intl.formatMessage({
                           defaultMessage: 'Edit',
-                          id: 'wEQDC6',
                         }),
                         width: 50,
                         dataIndex: 'Edit',
@@ -416,7 +407,6 @@ const EditOffender = ({
                         key: 'Delete',
                         title: intl.formatMessage({
                           defaultMessage: 'Delete',
-                          id: 'K3r6DQ',
                         }),
                         dataIndex: 'Delete',
                         width: 60,
@@ -424,11 +414,9 @@ const EditOffender = ({
                           <Popconfirm
                             title={intl.formatMessage({
                               defaultMessage: 'Are you sure?',
-                              id: '2oCaym',
                             })}
                             okText={intl.formatMessage({
                               defaultMessage: 'Delete',
-                              id: 'K3r6DQ',
                             })}
                             onConfirm={() => onDeleteAddress(record.key)}
                             overlayInnerStyle={{ padding: 10 }}
@@ -459,7 +447,6 @@ const EditOffender = ({
                       description={intl.formatMessage({
                         defaultMessage:
                           'There are no addresses for this offender.',
-                        id: 'k/Rta7',
                       })}
                       style={{ marginLeft: 150 }}
                     />
@@ -500,7 +487,6 @@ const EditOffender = ({
                 emptyDescription={intl.formatMessage({
                   defaultMessage:
                     "You haven't added any exclusion for this offender yet.",
-                  id: 'dE8QLQ',
                 })}
               />
             )}
@@ -532,7 +518,6 @@ const EditOffender = ({
                     <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                       {intl.formatMessage({
                         defaultMessage: 'Who is it visible to?',
-                        id: 'wvg3HJ',
                       })}
                     </Title>
                   </Col>
@@ -545,7 +530,6 @@ const EditOffender = ({
                       {intl.formatMessage({
                         defaultMessage:
                           '- Please select the content groups that this incident is for',
-                        id: 'dx+dmJ',
                       })}
                     </Paragraph>
                   </Col>
@@ -556,12 +540,10 @@ const EditOffender = ({
                       name="groups"
                       label={intl.formatMessage({
                         defaultMessage: 'Content Groups',
-                        id: '3lRewT',
                       })}
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           'Select the groups that you would like this offender to be visible to.',
-                        id: '/oJY/I',
                       })}
                       rules={[
                         {
@@ -569,7 +551,6 @@ const EditOffender = ({
                           message: intl.formatMessage({
                             defaultMessage:
                               'Please select at least one group for the offender.',
-                            id: 'hK3zLA',
                           }),
                         },
                       ]}
@@ -604,11 +585,9 @@ const EditOffender = ({
                     {reviewed
                       ? intl.formatMessage({
                           defaultMessage: 'Reject',
-                          id: 'VzIOKf',
                         })
                       : intl.formatMessage({
                           defaultMessage: 'Cancel',
-                          id: '47FYwb',
                         })}
                   </Button>
                 </Col>
@@ -622,11 +601,9 @@ const EditOffender = ({
                     {reviewed
                       ? intl.formatMessage({
                           defaultMessage: 'Approve',
-                          id: 'WCaf5C',
                         })
                       : intl.formatMessage({
                           defaultMessage: 'Save',
-                          id: 'jvo0vs',
                         })}
                   </Button>
                 </Col>
@@ -637,7 +614,6 @@ const EditOffender = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Add Address',
-              id: 'xg14pg',
             })}
             open={addAddress}
             width="600"
@@ -653,7 +629,6 @@ const EditOffender = ({
           <Drawer
             title={intl.formatMessage({
               defaultMessage: 'Edit Address',
-              id: 'uSpe21',
             })}
             open={editAddress !== null}
             width="600"

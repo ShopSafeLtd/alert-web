@@ -1,9 +1,5 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
-import type {
-  ImagePosition,
-  ListOffendersAllSchemesQuery,
-} from 'graphql/generated';
 
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,6 +13,8 @@ import {
 import AddJustification from 'components/form-components/offender/AddJustification';
 import OffenderFilter from 'components/offenders/OffenderFilter';
 import useStyles from './DataAudit.styles';
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
+import type { ImagePosition } from 'graphql/types';
 
 interface Props {
   loading: boolean;
@@ -59,7 +57,6 @@ const DataAudit = ({
             className={classes.searchInput}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Offenders...',
-              id: 'mCDjFM',
             })}
           />
         </Col>
@@ -76,7 +73,6 @@ const DataAudit = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Sort & Filter',
-              id: 'f2g3SM',
             })}
           </Button>
         </Col>
@@ -85,7 +81,6 @@ const DataAudit = ({
             <Button type="primary">
               {intl.formatMessage({
                 defaultMessage: 'Create Offender',
-                id: 'nkYLl6',
               })}
             </Button>
           </Link>
@@ -119,7 +114,6 @@ const DataAudit = ({
             key: 'reference',
             dataIndex: 'reference',
             title: intl.formatMessage({
-              id: 'k8ZNgH',
               defaultMessage: 'Alert ID',
             }),
             width: 80,
@@ -134,7 +128,7 @@ const DataAudit = ({
           },
 
           {
-            title: intl.formatMessage({ id: 'HAlOn1', defaultMessage: 'Name' }),
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
             dataIndex: 'name',
             key: 'name',
           },
@@ -178,7 +172,6 @@ const DataAudit = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'View Offender',
-                      id: 'GszQTo',
                     })}
                   >
                     <Link to={`/app/offenders/view/${record.key}`}>
@@ -195,7 +188,6 @@ const DataAudit = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Add Justification',
-                      id: 'nf5k+D',
                     })}
                   >
                     <Button
@@ -242,7 +234,6 @@ const DataAudit = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Offender Filters',
-          id: 'gxEHRQ',
         })}
         open={sortFilter}
         onClose={toggleSortFilter}
@@ -253,7 +244,6 @@ const DataAudit = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Justification for Offender',
-          id: 'l+lhch',
         })}
         open={!!offenderId}
         width="400"

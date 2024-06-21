@@ -13,9 +13,10 @@ import {
 } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { IFileInfo } from 'react-csv-reader';
-import { Role } from 'graphql/generated';
+
 import type { Action, CSVData, DataType, State } from './useImport';
 import CSVReader from '../../../../../components/CSVReader/CSVReader';
+import { Role } from 'graphql/types';
 
 interface Props {
   onItemsLoaded: (
@@ -44,7 +45,6 @@ const ImportStockItems = ({
         <Select
           placeholder={intl.formatMessage({
             defaultMessage: 'Goods Type',
-            id: 'sesFK5',
           })}
           style={{
             width: '80%',
@@ -70,21 +70,18 @@ const ImportStockItems = ({
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Role',
-                id: '1ZgrhW',
               })}
               defaultValue={state.additionalInfo.role}
               options={[
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'Admin',
-                    id: 'iHN12u',
                   }),
                   value: Role.GroupAdmin,
                 },
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'User',
-                    id: 'EwRIOm',
                   }),
                   value: Role.User,
                 },
@@ -105,7 +102,6 @@ const ImportStockItems = ({
               defaultValue={state.additionalInfo.password || undefined}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Default Password',
-                id: 'lrV/4+',
               })}
               onChange={(e) =>
                 dispatch({
@@ -123,7 +119,6 @@ const ImportStockItems = ({
               defaultValue={state.additionalInfo.password || undefined}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Organisation',
-                id: 'ZA6cIU',
               })}
               onChange={(e) =>
                 dispatch({
@@ -148,7 +143,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             key: 'name',
             dataIndex: 0,
@@ -156,7 +150,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Brand',
-              id: 'SOPEeg',
             }),
             key: 'brand',
             dataIndex: 1,
@@ -165,7 +158,6 @@ const ImportStockItems = ({
             key: 'sku',
             title: intl.formatMessage({
               defaultMessage: 'SKU',
-              id: 'k4brJy',
             }),
             dataIndex: 2,
           },
@@ -173,7 +165,6 @@ const ImportStockItems = ({
             key: 'barcode',
             title: intl.formatMessage({
               defaultMessage: 'Barcode',
-              id: 'fM4JjM',
             }),
             dataIndex: 3,
           },
@@ -181,7 +172,6 @@ const ImportStockItems = ({
             key: 'costPrice',
             title: intl.formatMessage({
               defaultMessage: 'Cost Price',
-              id: 'k6HOPg',
             }),
             dataIndex: 4,
           },
@@ -189,7 +179,6 @@ const ImportStockItems = ({
             key: 'salePrice',
             title: intl.formatMessage({
               defaultMessage: 'Sale Price',
-              id: '49sNcx',
             }),
             dataIndex: 5,
           },
@@ -197,7 +186,6 @@ const ImportStockItems = ({
             key: 'division',
             title: intl.formatMessage({
               defaultMessage: 'Division',
-              id: 'dETzL9',
             }),
             dataIndex: 6,
           },
@@ -208,7 +196,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             key: 'name',
             dataIndex: 0,
@@ -216,7 +203,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Email',
-              id: 'sy+pv5',
             }),
             key: 'email',
             dataIndex: 1,
@@ -224,7 +210,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Groups',
-              id: 'hzmswI',
             }),
             key: 'groups',
             dataIndex: 2,
@@ -232,7 +217,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Businesses',
-              id: 'D0tMhW',
             }),
             key: 'businesses',
             dataIndex: 3,
@@ -250,7 +234,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             key: 'name',
             dataIndex: 0,
@@ -258,7 +241,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             }),
             key: 'description',
             dataIndex: 1,
@@ -270,7 +252,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Name',
-              id: 'HAlOn1',
             }),
             key: 'name',
             dataIndex: 0,
@@ -278,7 +259,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Division',
-              id: 'dETzL9',
             }),
             key: 'division',
             dataIndex: 1,
@@ -286,7 +266,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Address',
-              id: 'e6Ph5+',
             }),
             key: 'address',
             dataIndex: 2,
@@ -294,7 +273,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Postcode',
-              id: 'FJhjgz',
             }),
             key: 'postcode',
             dataIndex: 3,
@@ -302,7 +280,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Country',
-              id: 'vONi+O',
             }),
             key: 'country',
             dataIndex: 4,
@@ -310,7 +287,6 @@ const ImportStockItems = ({
           {
             title: intl.formatMessage({
               defaultMessage: 'Coordinates',
-              id: 'LQ46NL',
             }),
             key: 'coordinates',
             dataIndex: 5,
@@ -326,44 +302,36 @@ const ImportStockItems = ({
   return (
     <div style={{ padding: 20 }}>
       <Typography.Title level={3}>
-        <FormattedMessage id="cTiCAi" defaultMessage="Import Data" />
+        <FormattedMessage defaultMessage="Import Data" />
       </Typography.Title>
       <Typography.Paragraph>
-        <FormattedMessage
-          defaultMessage="Import data from a CSV file. Please use a provided template to ensure the data is imported correctly. If importing multiple types of data, please import them in the following order: "
-          id="fHyU7x"
-        />
+        <FormattedMessage defaultMessage="Import data from a CSV file. Please use a provided template to ensure the data is imported correctly. If importing multiple types of data, please import them in the following order: " />
         <ul>
           <li>
-            <FormattedMessage defaultMessage="Stock Items" id="GaP7rI" />
+            <FormattedMessage defaultMessage="Stock Items" />
           </li>
 
           <li>
-            <FormattedMessage defaultMessage="Groups" id="hzmswI" />
+            <FormattedMessage defaultMessage="Groups" />
           </li>
           <li>
-            <FormattedMessage defaultMessage="Businesses" id="D0tMhW" />
+            <FormattedMessage defaultMessage="Businesses" />
           </li>
           <li>
-            <FormattedMessage defaultMessage="Users" id="YDMrKK" />
+            <FormattedMessage defaultMessage="Users" />
           </li>
         </ul>
 
-        <FormattedMessage
-          defaultMessage="An email will be sent to you once the data has finished processing."
-          id="FW/98A"
-        />
+        <FormattedMessage defaultMessage="An email will be sent to you once the data has finished processing." />
       </Typography.Paragraph>
 
       <Typography.Title level={4}>
         {intl.formatMessage({
           defaultMessage: 'Templates',
-          id: 'A3ptul',
         })}
       </Typography.Title>
       {intl.formatMessage({
         defaultMessage: 'Stock Items: ',
-        id: 'lskgs6',
       })}
       <a
         href="https://shopsafealert.blob.core.windows.net/csv/Stock_Item_Template.csv?sp=r&st=2023-09-29T17:48:01Z&se=2030-09-30T01:48:01Z&spr=https&sv=2022-11-02&sr=b&sig=kQqHQCpmrFAut53Wu%2Frme3%2B1VNRh%2BBaA68SDKAolYis%3D"
@@ -371,13 +339,11 @@ const ImportStockItems = ({
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
-          id: '5q3qC0',
         })}
       </a>
       <br />
       {intl.formatMessage({
         defaultMessage: 'Groups: ',
-        id: 'UC7B91',
       })}
       <a
         href="https://shopsafealert.blob.core.windows.net/csv/Group_Template.csv?sp=r&st=2023-09-29T17:52:22Z&se=2030-09-30T01:52:22Z&spr=https&sv=2022-11-02&sr=b&sig=i3%2BLGJm7EuwenYcdkcBp2SWc8lHxC47IpEQZgPL22QQ%3D"
@@ -385,13 +351,11 @@ const ImportStockItems = ({
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
-          id: '5q3qC0',
         })}
       </a>
       <br />
       {intl.formatMessage({
         defaultMessage: 'Businesses: ',
-        id: 'msBHeV',
       })}
       <a
         href="https://shopsafealert.blob.core.windows.net/csv/Business_Template.csv?sp=r&st=2023-09-29T17:52:46Z&se=2030-09-30T01:52:46Z&spr=https&sv=2022-11-02&sr=b&sig=AbqBLI0RWVmgjFpHyk1O44gsAmcvVvBLD6oiJBM0zBI%3D"
@@ -399,13 +363,11 @@ const ImportStockItems = ({
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
-          id: '5q3qC0',
         })}
       </a>
       <br />
       {intl.formatMessage({
         defaultMessage: 'Users: ',
-        id: 'HvjXdX',
       })}
       <a
         href="https://shopsafealert.blob.core.windows.net/csv/User_Template.csv?sp=r&st=2023-09-29T17:51:59Z&se=2030-09-30T01:51:59Z&spr=https&sv=2022-11-02&sr=b&sig=toX26Crlo1bol%2Fg7x1UxtKe8VkdLMRA0SMesivzxG8k%3D"
@@ -413,7 +375,6 @@ const ImportStockItems = ({
       >
         {intl.formatMessage({
           defaultMessage: 'Download',
-          id: '5q3qC0',
         })}
       </a>
 
@@ -421,7 +382,7 @@ const ImportStockItems = ({
         <Col span={5}>
           <Card style={{ height: 150 }}>
             <Typography.Title level={5}>
-              <FormattedMessage id="wCVGH+" defaultMessage="CSV to import" />
+              <FormattedMessage defaultMessage="CSV to import" />
             </Typography.Title>
             <CSVReader onFileLoaded={onItemsLoaded} />
           </Card>
@@ -429,7 +390,7 @@ const ImportStockItems = ({
         <Col span={8}>
           <Card style={{ height: 150 }}>
             <Typography.Title level={5}>
-              <FormattedMessage id="X6ruKu" defaultMessage="Data type" />
+              <FormattedMessage defaultMessage="Data type" />
             </Typography.Title>
             <Radio.Group
               onChange={(e) =>
@@ -440,16 +401,16 @@ const ImportStockItems = ({
               }
             >
               <Radio.Button value="stockItems">
-                <FormattedMessage id="GaP7rI" defaultMessage="Stock Items" />
+                <FormattedMessage defaultMessage="Stock Items" />
               </Radio.Button>
               <Radio.Button value="groups">
-                <FormattedMessage id="hzmswI" defaultMessage="Groups" />
+                <FormattedMessage defaultMessage="Groups" />
               </Radio.Button>
               <Radio.Button value="businesses">
-                <FormattedMessage id="D0tMhW" defaultMessage="Businesses" />
+                <FormattedMessage defaultMessage="Businesses" />
               </Radio.Button>
               <Radio.Button value="users">
-                <FormattedMessage id="YDMrKK" defaultMessage="Users" />
+                <FormattedMessage defaultMessage="Users" />
               </Radio.Button>
               {/* <Radio.Button value="offenders"> */}
               {/*   <FormattedMessage id="xb54TN" defaultMessage="Offenders" /> */}
@@ -465,7 +426,6 @@ const ImportStockItems = ({
             style={{ height: 150 }}
             title={intl.formatMessage({
               defaultMessage: 'Additional Info',
-              id: '3XOciw',
             })}
           >
             {!state.dataTypes ||
@@ -474,7 +434,6 @@ const ImportStockItems = ({
               <div>
                 {intl.formatMessage({
                   defaultMessage: 'No additional info required',
-                  id: 'GliOBt',
                 })}
               </div>
             ) : (
@@ -488,7 +447,6 @@ const ImportStockItems = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Preview',
-              id: 'TJo5E6',
             })}
           >
             <Table
@@ -505,10 +463,7 @@ const ImportStockItems = ({
                   !state.additionalInfo.organisation)) ||
               (state.dataTypes === 'stockItems' &&
                 !state.additionalInfo.goodsType) ? (
-                <FormattedMessage
-                  id="m0vlma"
-                  defaultMessage="Please complete the additional info"
-                />
+                <FormattedMessage defaultMessage="Please complete the additional info" />
               ) : (
                 <Button
                   loading={saving}
@@ -516,10 +471,7 @@ const ImportStockItems = ({
                   onClick={onSubmit}
                   type="primary"
                 >
-                  <FormattedMessage
-                    id="RCrrbc"
-                    defaultMessage="Import Stock Items"
-                  />
+                  <FormattedMessage defaultMessage="Import Stock Items" />
                 </Button>
               )}
             </Col>

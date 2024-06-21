@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
 import { useState } from 'react';
-import { useUpdateOffenderNameMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import { useIntl } from 'react-intl';
+import { useUpdateOffenderNameMutation } from '#/components/form-components/offender/KnowOffender/graphql/mutation/update-offender-name.generated';
 
 interface Props {
   onClose: () => void;
@@ -30,11 +30,9 @@ const useKnowOffender = ({ offenderId, onClose }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated',
-          id: 'ryTk34',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been updated!',
-          id: 'aRw1jd',
         }),
         placement: 'bottomRight',
       });

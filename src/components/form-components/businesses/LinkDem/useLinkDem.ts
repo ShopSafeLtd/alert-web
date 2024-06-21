@@ -1,10 +1,7 @@
 import { useState } from 'react';
-
-import type { ListDemCompaniesQuery } from 'graphql/generated';
-import {
-  useLinkOrgToDemMutation,
-  useListDemCompaniesQuery,
-} from 'graphql/generated';
+import type { ListDemCompaniesQuery } from 'graphql/dem/queries/list-companies.generated';
+import { useListDemCompaniesQuery } from 'graphql/dem/queries/list-companies.generated';
+import { useLinkOrgToDemMutation } from 'graphql/dem/mutations/link-org-to-dem.generated';
 
 interface Props {
   onClose: () => void;

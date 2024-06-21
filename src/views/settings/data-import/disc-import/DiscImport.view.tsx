@@ -21,8 +21,7 @@ import {
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/pro-light-svg-icons';
-import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
-import { TagType } from 'graphql/generated';
+
 import type {
   CSVData,
   GenerateData,
@@ -42,6 +41,9 @@ import NewOffenderTable from './components/NewOffenderTable';
 import NewBusinessTable from './components/NewBusinessTable';
 import NewIncidentTable from './components/NewIncidentTable';
 import CSVReader from '../../../../components/CSVReader/CSVReader';
+import { TagType } from 'graphql/types';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
 
 const { Title } = Typography;
 

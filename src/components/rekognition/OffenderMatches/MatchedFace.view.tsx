@@ -2,9 +2,9 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { ImagePosition } from 'graphql/generated';
 import { Row, Typography } from 'antd';
 import { useIntl } from 'react-intl';
+import type { ImagePosition } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   matchedFace: {
@@ -55,7 +55,6 @@ const MatchedFace = ({ face, similarity, onClick }: Props) => {
           {similarity?.toFixed(2) || 0}%
           {intl.formatMessage({
             defaultMessage: 'match',
-            id: 'zHoH3/',
           })}
         </Typography.Text>
       </div>

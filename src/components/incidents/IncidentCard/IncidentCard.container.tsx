@@ -1,11 +1,10 @@
 import React from 'react';
-import type {
-  IncidentCardFragment,
-  RecycleIncidentMutation,
-} from 'graphql/generated';
+
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './IncidentCard.view';
 import useIncidentCard from './useIncidentCard';
+import type { IncidentCardFragment } from 'graphql/fragments/incident-card.generated';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
 
 interface Props {
   incident: IncidentCardFragment;

@@ -5,8 +5,10 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
-import { CrimeType, TagDocument, UpdateTagDocument } from 'graphql/generated';
+import { CrimeType } from 'graphql/types';
 import useEditCrimeType from '../useEditCrimeType';
+import { TagDocument } from 'graphql/tag/queries/tag.generated';
+import { UpdateTagDocument } from 'graphql/tag/mutation/update_tag.generated';
 
 const mocks = [
   {

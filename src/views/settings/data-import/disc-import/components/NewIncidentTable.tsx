@@ -19,8 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { faImages } from '@fortawesome/pro-solid-svg-icons';
 import type { Theme } from 'configs/ThemeConfig';
-import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
-import { TagType } from 'graphql/generated';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import type {
   NewBusiness,
@@ -28,6 +27,9 @@ import type {
   NewOffender,
   NewUser,
 } from '../DiscImport.types';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import { TagType } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   cell: {},
@@ -124,7 +126,6 @@ const NewOffenderRow = React.memo(
                       name="date"
                       label={intl.formatMessage({
                         defaultMessage: 'Date',
-                        id: 'P7PLVj',
                       })}
                     >
                       <DatePicker onBlur={onBlur} format="DD/MM/YYYY" />
@@ -135,7 +136,6 @@ const NewOffenderRow = React.memo(
                       name="time"
                       label={intl.formatMessage({
                         defaultMessage: 'Time',
-                        id: 'ug01Mk',
                       })}
                     >
                       <DatePicker onBlur={onBlur} format="HH:mm" />
@@ -148,7 +148,6 @@ const NewOffenderRow = React.memo(
                   name="offenders"
                   label={intl.formatMessage({
                     defaultMessage: 'Offenders',
-                    id: 'xb54TN',
                   })}
                 >
                   <Select
@@ -168,7 +167,6 @@ const NewOffenderRow = React.memo(
                   name="createdBy"
                   label={intl.formatMessage({
                     defaultMessage: 'Created by',
-                    id: 'p4mBmL',
                   })}
                 >
                   <Select
@@ -185,7 +183,6 @@ const NewOffenderRow = React.memo(
                   name="business"
                   label={intl.formatMessage({
                     defaultMessage: 'Business',
-                    id: 'w1Fanr',
                   })}
                 >
                   <Select
@@ -203,14 +200,12 @@ const NewOffenderRow = React.memo(
                   name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Groups',
-                    id: 'hzmswI',
                   })}
                   rules={[
                     {
                       required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Choose at least one group',
-                        id: 'HRCIYo',
                       }),
                     },
                   ]}
@@ -231,7 +226,6 @@ const NewOffenderRow = React.memo(
                   title={intl.formatMessage({
                     defaultMessage:
                       'Are you sure you want to delete this incident?',
-                    id: '/OdzA8',
                   })}
                   onConfirm={() => onDelete(incident.id)}
                 >
@@ -247,14 +241,12 @@ const NewOffenderRow = React.memo(
                   name="crimeTypes"
                   label={intl.formatMessage({
                     defaultMessage: 'Crime Types',
-                    id: 'Piba4q',
                   })}
                   rules={[
                     {
                       required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Choose at least one crime type',
-                        id: '/MtIJ2',
                       }),
                     },
                   ]}
@@ -278,7 +270,6 @@ const NewOffenderRow = React.memo(
                   name="impactTypes"
                   label={intl.formatMessage({
                     defaultMessage: 'Impact Types',
-                    id: 'Y5fbZF',
                   })}
                 >
                   <Select
@@ -300,7 +291,6 @@ const NewOffenderRow = React.memo(
                   name="involvedTypes"
                   label={intl.formatMessage({
                     defaultMessage: 'Involved Types',
-                    id: 'FFqBXF',
                   })}
                 >
                   <Select
@@ -326,7 +316,6 @@ const NewOffenderRow = React.memo(
               name="lostValue"
               label={intl.formatMessage({
                 defaultMessage: 'Value',
-                id: 'GufXy5',
               })}
             >
               <InputNumber onBlur={onBlur} />
@@ -337,7 +326,6 @@ const NewOffenderRow = React.memo(
               name="recoveredValue"
               label={intl.formatMessage({
                 defaultMessage: 'Recovered Value',
-                id: 'bGwFFv',
               })}
             >
               <InputNumber onBlur={onBlur} />
@@ -348,7 +336,6 @@ const NewOffenderRow = React.memo(
               name="policeInvolved"
               label={intl.formatMessage({
                 defaultMessage: 'Police Involved',
-                id: '6m7Lvw',
               })}
             >
               <Radio.Group
@@ -372,7 +359,6 @@ const NewOffenderRow = React.memo(
               name="policeRef"
               label={intl.formatMessage({
                 defaultMessage: 'Police Ref',
-                id: '/KdeiX',
               })}
             >
               <Input onBlur={onBlur} />
@@ -383,7 +369,6 @@ const NewOffenderRow = React.memo(
               name="building"
               label={intl.formatMessage({
                 defaultMessage: 'Building',
-                id: 'oS/nae',
               })}
             >
               <Input onBlur={onBlur} />
@@ -394,7 +379,6 @@ const NewOffenderRow = React.memo(
               name="street"
               label={intl.formatMessage({
                 defaultMessage: 'Street',
-                id: 'BaIwdV',
               })}
               rules={[{ required: true }]}
             >
@@ -406,7 +390,6 @@ const NewOffenderRow = React.memo(
               name="townCity"
               label={intl.formatMessage({
                 defaultMessage: 'Town/City',
-                id: 'byaTQZ',
               })}
             >
               <Input onBlur={onBlur} />
@@ -417,7 +400,6 @@ const NewOffenderRow = React.memo(
               name="county"
               label={intl.formatMessage({
                 defaultMessage: 'County',
-                id: 'B+KJhc',
               })}
             >
               <Input onBlur={onBlur} />
@@ -428,7 +410,6 @@ const NewOffenderRow = React.memo(
               name="postcode"
               label={intl.formatMessage({
                 defaultMessage: 'Postcode',
-                id: 'FJhjgz',
               })}
             >
               <Input onBlur={onBlur} />
@@ -441,7 +422,6 @@ const NewOffenderRow = React.memo(
               name="description"
               label={intl.formatMessage({
                 defaultMessage: 'Description',
-                id: 'Q8Qw5B',
               })}
             >
               <Input.TextArea onBlur={onBlur} rows={5} />
@@ -489,8 +469,7 @@ const NewIncidentTable = ({
     <Card
       title={intl.formatMessage(
         {
-          defaultMessage: `Incidents: {total}`,
-          id: 'XdwXwO',
+          defaultMessage: 'Incidents: {total}',
         },
         {
           total: newIncidents.length,
@@ -498,7 +477,7 @@ const NewIncidentTable = ({
       )}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          <FormattedMessage defaultMessage="Add Incident" id="kG1p3q" />
+          <FormattedMessage defaultMessage="Add Incident" />
         </Button>
       }
     >
@@ -523,8 +502,7 @@ const NewIncidentTable = ({
         showTotal={(total) =>
           intl.formatMessage(
             {
-              defaultMessage: `Total Incidents: {total}`,
-              id: 'SHEopq',
+              defaultMessage: 'Total Incidents: {total}',
             },
             {
               total,

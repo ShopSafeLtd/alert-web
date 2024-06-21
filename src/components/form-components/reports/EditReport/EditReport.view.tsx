@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Row, Col } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
-import {
-  useUpdateReportTemplateMutation,
-  useEditReportTemplateQuery,
-} from 'graphql/generated';
 import { useForm } from 'antd/lib/form/Form';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { useEditReportTemplateQuery } from './edit-report-query.generated';
+import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/update-report-template.generated';
 
 interface FormData {
   name: string;
@@ -67,13 +65,12 @@ const EditReport = ({ onClose, reportId }: Props) => {
     <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
       <Form.Item
         name="name"
-        label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+        label={intl.formatMessage({ defaultMessage: 'Name' })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'Name is required',
-              id: 'Gvxoji',
             }),
           },
         ]}
@@ -84,14 +81,12 @@ const EditReport = ({ onClose, reportId }: Props) => {
         name="description"
         label={intl.formatMessage({
           defaultMessage: 'Description',
-          id: 'Q8Qw5B',
         })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'Description is required',
-              id: '+NKkKd',
             }),
           },
         ]}
@@ -102,14 +97,12 @@ const EditReport = ({ onClose, reportId }: Props) => {
         name="groups"
         label={intl.formatMessage({
           defaultMessage: 'Groups',
-          id: 'hzmswI',
         })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'Please select at least one group.',
-              id: 'dwqaFS',
             }),
           },
         ]}
@@ -120,7 +113,7 @@ const EditReport = ({ onClose, reportId }: Props) => {
         <Row gutter={16} justify="end">
           <Col>
             <Button onClick={onClose}>
-              <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
+              <FormattedMessage defaultMessage="Cancel" />
             </Button>
           </Col>
           <Col>
@@ -130,7 +123,7 @@ const EditReport = ({ onClose, reportId }: Props) => {
               type="primary"
               htmlType="submit"
             >
-              <FormattedMessage defaultMessage="Save Report" id="WfOm9L" />
+              <FormattedMessage defaultMessage="Save Report" />
             </Button>
           </Col>
         </Row>

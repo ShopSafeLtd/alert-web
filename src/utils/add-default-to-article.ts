@@ -14,9 +14,13 @@ function extracted(html: string | undefined): string {
     if (
       href &&
       (href.startsWith('../../offenders/') ||
-        href.startsWith('../../incidents/'))
+        href.startsWith('../../incidents/') ||
+        href.startsWith('../offenders/') ||
+        href.startsWith('../incidents/'))
     ) {
-      link_.setAttribute('href', href.replace('../..', currentUrlSplit[0]));
+      if (href.startsWith('../..'))
+        link_.setAttribute('href', href.replace('../..', currentUrlSplit[0]));
+      else link_.setAttribute('href', href.replace('..', currentUrlSplit[0]));
     }
   }
 

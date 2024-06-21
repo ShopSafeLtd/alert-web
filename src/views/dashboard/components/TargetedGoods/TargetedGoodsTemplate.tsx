@@ -25,7 +25,6 @@ const TargetedGoodsGraph = ({
       bodyStyle={{ height: '90%' }}
       title={intl.formatMessage({
         defaultMessage: 'Top 5 Targeted Goods',
-        id: '4Zd7Kq',
       })}
     >
       <Button
@@ -38,7 +37,6 @@ const TargetedGoodsGraph = ({
         data={data}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Targeted Goods',
-          id: 'ZWF2ZV',
         })}
         margin={{
           bottom: 30,

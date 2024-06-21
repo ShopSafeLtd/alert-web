@@ -8,13 +8,14 @@ import type {
   TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from '../../../../components/reports/tableColumns';
-import type { PerformanceReportQuery } from '../../../../graphql/generated';
+
 import type {
   ExtendedLayout,
   IReportTemplate,
   MetaData,
   SelectOptions,
 } from '../../types';
+import type { PerformanceReportQuery } from 'graphql/reports/queries/performance-report.generated';
 
 export interface Props {
   addLogo: (arg0: string) => void;

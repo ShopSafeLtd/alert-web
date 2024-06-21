@@ -4,7 +4,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import type { ArticleData } from 'types/DataType';
-import { ArticlePriority } from 'graphql/generated';
+import { ArticlePriority } from 'graphql/types';
 import {
   faClock,
   faExclamationCircle,
@@ -51,7 +51,6 @@ const ArticleTile = ({ article, onClick }: Props): JSX.Element => {
       title={intl.formatMessage(
         {
           defaultMessage: 'Add {title} to incident',
-          id: '0dj72C',
         },
         { title: article.title }
       )}

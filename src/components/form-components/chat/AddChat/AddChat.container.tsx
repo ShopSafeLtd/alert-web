@@ -1,8 +1,9 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateChatMutation } from 'graphql/generated';
+
 import React from 'react';
 import View from './AddChat.view';
 import useAddChat from './useAddChat';
+import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
 
 interface Props {
   onClose: () => void;

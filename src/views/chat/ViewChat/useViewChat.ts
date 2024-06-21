@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
-import type {
-  CreateChatMutation,
-  DeleteChatMutation,
-  UserChatsQuery,
-} from 'graphql/generated';
-import {
-  Role,
-  SortOrder,
-  TodoType,
-  useMarkAsReadMessagesMutation,
-  UserChatsDocument,
-  useUpdateTodoMentionMutation,
-  useUserChatsQuery,
-} from 'graphql/generated';
+
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
+import type { UserChatsQuery } from 'graphql/userChat/queries/user_chats.generated';
+import {
+  UserChatsDocument,
+  useUserChatsQuery,
+} from 'graphql/userChat/queries/user_chats.generated';
+import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
+import type { DeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
+import { Role, SortOrder, TodoType } from 'graphql/types';
+import { useMarkAsReadMessagesMutation } from 'graphql/userChat/mutations/mark_ad_read_messages.generated';
+import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/update_todo_mention.generated';
 
 interface Props {
   chatId: string;

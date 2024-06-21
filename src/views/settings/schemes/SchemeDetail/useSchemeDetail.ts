@@ -1,24 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
-import type {
-  GoodsMode,
-  ListSchemeTagsQuery,
-  SchemeQuery,
-} from 'graphql/generated';
-import {
-  Model,
-  TagType,
-  useListSchemeTagsQuery,
-  useSchemeQuery,
-  useUpdateSchemeMutation,
-  useUpdateTagMutation,
-} from 'graphql/generated';
 import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { SchemeQuery } from 'graphql/scheme/queries/scheme.generated';
+import { useSchemeQuery } from 'graphql/scheme/queries/scheme.generated';
+import type { GoodsMode } from 'graphql/types';
+import { Model, TagType } from 'graphql/types';
+import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
+import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
+import { useUpdateSchemeMutation } from 'graphql/scheme/mutation/update_scheme.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
 
 export interface FormData {
   name: string;
@@ -136,11 +131,9 @@ const useSchemeDetail = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated!',
-          id: 'w5Yfkf',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The scheme has been updated.',
-          id: 'uAmnXX',
         }),
         placement: 'bottomRight',
       });

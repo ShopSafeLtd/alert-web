@@ -9,12 +9,13 @@ import {
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import type { ViewIncidentQuery } from 'graphql/generated';
-import { UpdateType } from 'graphql/generated';
+
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroll-component';
 // import type { UpdateData } from 'types/DataType';
 import UpdateContent from './Update.view';
+import type { ViewIncidentQuery } from 'graphql/incidents/queries/view-incident.generated';
+import { UpdateType } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   container: {
@@ -111,7 +112,6 @@ const IntelSection = ({
           <div className="date">
             {intl.formatMessage({
               defaultMessage: 'Loading...',
-              id: 'gjBiyj',
             })}
           </div>
           <div className="date-line" />
@@ -155,7 +155,6 @@ const IntelSection = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Edit Update',
-                        id: 'pCzvx3',
                       })}
                     </Button>
                     <Button
@@ -175,7 +174,6 @@ const IntelSection = ({
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Delete Update',
-                        id: 'ef1dfd',
                       })}
                     </Button>
                   </div>
@@ -250,7 +248,6 @@ const IntelSection = ({
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Edit Update',
-                            id: 'pCzvx3',
                           })}
                         </Button>
                         <Button
@@ -270,7 +267,6 @@ const IntelSection = ({
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Delete Update',
-                            id: 'ef1dfd',
                           })}
                         </Button>
                       </div>
@@ -330,7 +326,6 @@ const IntelSection = ({
                           userId === update.createdBy.id
                             ? intl.formatMessage({
                                 defaultMessage: 'You',
-                                id: 'kJ5W29',
                               })
                             : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                         id: update.id,
@@ -340,7 +335,6 @@ const IntelSection = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Reply',
-                      id: '9HU8vw',
                     })}
                   </Button>
                 </Col>
@@ -382,7 +376,6 @@ const IntelSection = ({
                               key: 0,
                               label: intl.formatMessage({
                                 defaultMessage: 'Add Image to Incident',
-                                id: 'VN9g7W',
                               }),
                               onClick: () => {
                                 if (onAddToIncident)
@@ -399,7 +392,6 @@ const IntelSection = ({
                               key: 1,
                               label: intl.formatMessage({
                                 defaultMessage: 'Add Image to Offender',
-                                id: 'dy/65U',
                               }),
                               onClick: () => {
                                 if (onAddToOffender)
@@ -432,7 +424,6 @@ const IntelSection = ({
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Image',
-                          id: 'u1ETNe',
                         })}
                       </Button>
                     </Dropdown>

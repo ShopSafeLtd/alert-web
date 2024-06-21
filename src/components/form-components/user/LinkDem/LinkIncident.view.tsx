@@ -1,9 +1,8 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import type { ListDemUsersQuery } from 'graphql/generated';
+
 import { Button, Col, Row, Table } from 'antd';
 import { useIntl } from 'react-intl';
+import type { ListDemUsersQuery } from 'graphql/dem/queries/list-users.generated';
 
 interface Props {
   onClose: () => void;
@@ -28,14 +27,13 @@ const LinkDemUser = ({
       <Table
         columns={[
           {
-            title: intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' }),
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
             dataIndex: 'name',
             key: 'name',
           },
           {
             title: intl.formatMessage({
               defaultMessage: 'Email',
-              id: 'sy+pv5',
             }),
             dataIndex: 'email',
             key: 'email',
@@ -65,7 +63,7 @@ const LinkDemUser = ({
       <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -77,7 +75,6 @@ const LinkDemUser = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Link DEM User',
-              id: 'avzlc+',
             })}
           </Button>
         </Col>

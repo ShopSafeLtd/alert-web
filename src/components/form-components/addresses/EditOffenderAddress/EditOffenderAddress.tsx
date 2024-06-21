@@ -53,12 +53,10 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
             name="alias"
             label={intl.formatMessage({
               defaultMessage: 'Label',
-              id: '753yX5',
             })}
             tooltip={intl.formatMessage({
               defaultMessage:
                 'A friendly name for the address to identify it, such as home',
-              id: 'YI+p4u',
             })}
           >
             <Input />
@@ -69,7 +67,6 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
             name="building"
             label={intl.formatMessage({
               defaultMessage: 'Building',
-              id: 'oS/nae',
             })}
           >
             <Input />
@@ -82,14 +79,12 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
             name="street"
             label={intl.formatMessage({
               defaultMessage: 'Street',
-              id: 'BaIwdV',
             })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a street for the new address.',
-                  id: 'd3uFRh',
                 }),
               },
             ]}
@@ -102,7 +97,6 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
             name="townCity"
             label={intl.formatMessage({
               defaultMessage: 'Town/City',
-              id: 'byaTQZ',
             })}
             rules={[
               {
@@ -110,7 +104,6 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a town/city for the new address.',
-                  id: 'YxqXbK',
                 }),
               },
             ]}
@@ -125,7 +118,6 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
             name="county"
             label={intl.formatMessage({
               defaultMessage: 'County',
-              id: 'B+KJhc',
             })}
           >
             <Input />
@@ -136,7 +128,6 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
             name="postcode"
             label={intl.formatMessage({
               defaultMessage: 'Postcode',
-              id: 'FJhjgz',
             })}
             rules={[
               {
@@ -144,7 +135,6 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a postcode for the new address.',
-                  id: 'iBIFWL',
                 }),
               },
             ]}
@@ -158,14 +148,13 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
             <Button type="primary" htmlType="submit">
               {intl.formatMessage({
                 defaultMessage: 'Save Address',
-                id: 'xlfAGs',
               })}
             </Button>
           </Col>

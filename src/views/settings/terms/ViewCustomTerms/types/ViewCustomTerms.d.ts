@@ -1,4 +1,4 @@
-import type { CurrentSchemeTermsQuery } from '../../../../../graphql/generated';
+import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
 
 export interface ReturnProps {
   data: CurrentSchemeTermsQuery | undefined;

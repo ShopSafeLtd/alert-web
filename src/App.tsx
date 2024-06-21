@@ -20,6 +20,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { Store, ThemeConfig } from './state';
 import RouteWrapper from './navigation/utils/route-wrapper';
+import { TokenProvider } from '#/context/token-context';
 
 const themes = {
   dark: '/css/dark-theme.css',
@@ -79,13 +80,15 @@ const App = (): JSX.Element => (
         googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
         libraries={['visualization']}
       >
-        <Store>
-          <ApolloProvider>
-            <RouteWrapper title={undefined}>
-              <Views />
-            </RouteWrapper>
-          </ApolloProvider>
-        </Store>
+        <TokenProvider>
+          <Store>
+            <ApolloProvider>
+              <RouteWrapper title={undefined}>
+                <Views />
+              </RouteWrapper>
+            </ApolloProvider>
+          </Store>
+        </TokenProvider>
       </LoadScript>
     </ThemeSwitcherProvider>
   </div>

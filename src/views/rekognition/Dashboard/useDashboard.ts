@@ -1,6 +1,6 @@
-import type { SchemeRekognitionQuery } from 'graphql/generated';
-import { useSchemeRekognitionQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
+import type { SchemeRekognitionQuery } from 'graphql/rekognition/queries/scheme-rekognition.generated';
+import { useSchemeRekognitionQuery } from 'graphql/rekognition/queries/scheme-rekognition.generated';
 
 interface Return {
   loading: boolean;

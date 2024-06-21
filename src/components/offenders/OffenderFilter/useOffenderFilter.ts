@@ -1,20 +1,11 @@
-import type {
-  Age,
-  Build,
-  Gender,
-  Race,
-  SearchBusinessesQuery,
-} from 'graphql/generated';
-import {
-  Model,
-  Role,
-  SortOrder,
-  useSearchBusinessesQuery,
-  useTagsQuery,
-} from 'graphql/generated';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import type { OffenderFilters } from 'state/data-model';
+import type { SearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
+import { useSearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+import { Model, Role, SortOrder } from 'graphql/types';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
 
 interface Return {
   order: OffenderSort;

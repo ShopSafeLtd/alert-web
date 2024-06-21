@@ -17,11 +17,11 @@ import {
   faRotate,
   faSquareCheck,
 } from '@fortawesome/pro-light-svg-icons';
-import type { ListUserNotificationsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import useStyles from './NotificationDrawer.styles';
 import type { NotificationData } from './useNotificationDrawer';
+import type { ListUserNotificationsQuery } from 'graphql/userNotification/queries/list-user-notifications.generated';
 
 interface Props {
   data:
@@ -62,7 +62,6 @@ const NotificationsDrawer = ({
             <Button onClick={onClose} size="small">
               {intl.formatMessage({
                 defaultMessage: 'All Notifications',
-                id: '9GcvKL',
               })}
             </Button>
           </Link>
@@ -72,13 +71,11 @@ const NotificationsDrawer = ({
             <Radio.Button onClick={toggleTakeAllSchemes} value="ALL">
               {intl.formatMessage({
                 defaultMessage: 'All Schemes',
-                id: '4zN3gE',
               })}
             </Radio.Button>
             <Radio.Button onClick={toggleTakeAllSchemes} value="Current">
               {intl.formatMessage({
                 defaultMessage: 'Current Scheme',
-                id: 'qWFImB',
               })}
             </Radio.Button>
           </Radio.Group>
@@ -96,7 +93,7 @@ const NotificationsDrawer = ({
               />
             }
           >
-            {intl.formatMessage({ defaultMessage: 'Clear All', id: 'cqlObT' })}
+            {intl.formatMessage({ defaultMessage: 'Clear All' })}
           </Button>
         </Col>
         <Col>
@@ -192,7 +189,6 @@ const NotificationsDrawer = ({
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
               defaultMessage: "There's no new notification",
-              id: '7cQ0NO',
             })}
           />
         </div>
@@ -203,7 +199,6 @@ const NotificationsDrawer = ({
             <Button size="small">
               {intl.formatMessage({
                 defaultMessage: 'View All Notifications',
-                id: 'HTKZYW',
               })}
             </Button>
           </Col>

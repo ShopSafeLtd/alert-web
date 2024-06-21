@@ -6,8 +6,9 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import { Role, UserDocument } from 'graphql/generated';
 import useUserDetail from '../useUserDetail';
+import { UserDocument } from 'graphql/user/queries/user.generated';
+import { Role } from 'graphql/types';
 
 const mocks = [
   {

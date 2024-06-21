@@ -1,10 +1,11 @@
 import React from 'react';
-import type { SchemeGroupsSelectQueryVariables } from 'graphql/generated';
-import { SortOrder, useSchemeGroupsSelectQuery } from 'graphql/generated';
 import { Select } from 'antd';
 import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
+import type { SchemeGroupsSelectQueryVariables } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
+import { useSchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
+import { SortOrder } from 'graphql/types';
 
 interface Props {
   value?: string[];

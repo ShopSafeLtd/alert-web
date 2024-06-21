@@ -54,7 +54,7 @@ const ReportToolbar = ({
               style={{ marginRight: 5 }}
               icon={faEdit}
             />
-            <FormattedMessage defaultMessage="Edit" id="wEQDC6" />
+            <FormattedMessage defaultMessage="Edit" />
           </Button>
         </Col>
       )}
@@ -72,7 +72,7 @@ const ReportToolbar = ({
               style={{ marginRight: 5 }}
               icon={faPlus}
             />
-            <FormattedMessage defaultMessage="Add Components" id="PaIeKf" />
+            <FormattedMessage defaultMessage="Add Components" />
           </Button>
         </Col>
       )}
@@ -81,7 +81,6 @@ const ReportToolbar = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Finish editing & lock layout',
-              id: '29W0tO',
             })}
           >
             <Button
@@ -105,7 +104,6 @@ const ReportToolbar = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Save changes',
-              id: 'X0ha1a',
             })}
           >
             <Button
@@ -131,7 +129,6 @@ const ReportToolbar = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Save as new report',
-              id: 'bLHp7y',
             })}
           >
             <Button
@@ -156,7 +153,6 @@ const ReportToolbar = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Redact PPI on download',
-              id: 'nICoZB',
             })}
           >
             <Button
@@ -181,7 +177,6 @@ const ReportToolbar = ({
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Download report as PDF',
-              id: 'v4ZiJj',
             })}
           >
             <Button
@@ -198,7 +193,7 @@ const ReportToolbar = ({
                 size="lg"
                 icon={faFileDownload}
               />
-              <FormattedMessage defaultMessage="Download" id="5q3qC0" />
+              <FormattedMessage defaultMessage="Download" />
             </Button>
           </Tooltip>
         </Col>

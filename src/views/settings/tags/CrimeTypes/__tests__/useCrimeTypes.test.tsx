@@ -5,8 +5,10 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import { Model, QueryMode, TagsDocument } from 'graphql/generated';
+
 import useTagList from '../useCrimeTypeList';
+import { Model, QueryMode } from 'graphql/types';
+import { TagsDocument } from 'graphql/tags/queries/tags.generated';
 
 const mocks = [
   {

@@ -1,8 +1,5 @@
-/* eslint-disable sonarjs/no-nested-template-literals */
-
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
-import { Model, useTagsQuery } from 'graphql/generated';
 import { useState } from 'react';
 
 import { useStoreState } from 'state';
@@ -13,6 +10,8 @@ import type {
   TagData,
 } from 'types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { Model } from 'graphql/types';
 
 export interface FormData {
   name: string;

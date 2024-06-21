@@ -63,18 +63,15 @@ const AddNewOffender = ({
           name="images"
           label={intl.formatMessage({
             defaultMessage: 'Images',
-            id: 'Fip4H8',
           })}
           tooltip={intl.formatMessage({
             defaultMessage: 'Select the images that the offender is in.',
-            id: 'LQT0YO',
           })}
           rules={[
             {
               required: imagesRequired,
               message: intl.formatMessage({
                 defaultMessage: 'Images are required for offenders.',
-                id: 'UwlDA8',
               }),
             },
           ]}
@@ -92,7 +89,7 @@ const AddNewOffender = ({
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button disabled={saving || uploading} onClick={onClose}>
-              <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
+              <FormattedMessage defaultMessage="Cancel" />
             </Button>
           </Col>
           <Col>
@@ -102,7 +99,7 @@ const AddNewOffender = ({
               type="primary"
               htmlType="submit"
             >
-              <FormattedMessage defaultMessage="Add Offender" id="m3ChN4" />
+              <FormattedMessage defaultMessage="Add Offender" />
             </Button>
           </Col>
         </Row>

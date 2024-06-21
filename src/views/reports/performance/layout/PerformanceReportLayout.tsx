@@ -61,13 +61,14 @@ import BusinessCrimeTypeGraph from '#/components/reports/components/BusinessCrim
 import { useNavigate } from 'react-router';
 import BusinessLossRecoveredGraph from '#/components/reports/components/BusinessLossRecoveredGraph/BusinessCrimeTypeGraph';
 // import UserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
-import type { PerformanceReportQuery } from '../../../../graphql/generated';
-import { LanguageCode } from '../../../../graphql/generated';
+
 import useStyles from '../../styles/report.styles';
 import type { AllowedValue, MetaData, ReportItemTypes } from '../../types';
 import type { Props as HookProps } from '../hooks/types';
 import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
 import TargetedBusinessTable from '#/components/reports/components/TargetedBusinessTable/TargetedBusinessTable.view';
+import type { PerformanceReportQuery } from 'graphql/reports/queries/performance-report.generated';
+import { LanguageCode } from 'graphql/types';
 
 interface ContributorTable {
   key: string;
@@ -166,14 +167,7 @@ const PerformanceReportLayout = ({
     component: AllowedValue;
   }
 
-  console.log(
-    'crimeTypesDonut',
-    metadata,
-    metadata.find((item) => item.key === 'crimeTypesDonut')
-  );
-
   const getComponent = ({ key, component }: GetComponentArgs) => {
-    // eslint-disable-next-line sonarjs/max-switch-cases
     switch (component) {
       case 'createdSummary': {
         return (
@@ -198,7 +192,6 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Created Summary',
-                    id: 'gNrgvu',
                   })}
                 </Title>
               </Col>
@@ -207,7 +200,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Incidents Created',
-                    id: 'UOcKMI',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.incidents || 0
@@ -224,7 +216,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Offenders Created',
-                    id: 'kNP3in',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.offenders || 0
@@ -241,7 +232,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Updates Submitted',
-                    id: 'E/xqrh',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.updates || 0
@@ -258,7 +248,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Messages Sent',
-                    id: 'QGQoOa',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.messages || 0
@@ -275,7 +264,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Vehicles Created',
-                    id: 'PX1DHW',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.vehicles ||
@@ -293,7 +281,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Bulletins Created',
-                    id: 'd5dcOZ',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.bulletins || 0
@@ -309,7 +296,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Crime Groups Created',
-                    id: '4bsmSr',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.crimeGroups || 0
@@ -348,7 +334,6 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Incidents Summary',
-                    id: 'DGld1Y',
                   })}
                 </Title>
               </Col>
@@ -358,7 +343,6 @@ const PerformanceReportLayout = ({
                     className={classes.stats}
                     title={intl.formatMessage({
                       defaultMessage: 'Last Incident (in range)',
-                      id: 'lI3BDd',
                     })}
                     value={
                       data?.performanceReport?.incidentSummary?.lastIncidentDate
@@ -380,7 +364,6 @@ const PerformanceReportLayout = ({
                     className={classes.stats}
                     title={intl.formatMessage({
                       defaultMessage: 'Top Incident Type',
-                      id: '7uH5I4',
                     })}
                     valueRender={(node) => (
                       <Typography.Text
@@ -407,7 +390,6 @@ const PerformanceReportLayout = ({
                     className={classes.stats}
                     title={intl.formatMessage({
                       defaultMessage: 'Crime Groups',
-                      id: 'a0aLil',
                     })}
                     value={
                       data?.performanceReport?.createdDataCounts?.crimeGroups ||
@@ -448,7 +430,6 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Basic Police Engagement Summary',
-                    id: 'Qoktvg',
                   })}
                 </Title>
               </Col>
@@ -457,7 +438,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Reported to Police',
-                    id: 'LhTpVN',
                   })}
                   value={
                     data?.performanceReport?.policeSummary
@@ -475,7 +455,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Police Attended',
-                    id: 'ES0Nc8',
                   })}
                   value={
                     data?.performanceReport?.policeSummary
@@ -515,7 +494,6 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Police Engagement Summary',
-                    id: 'ue8y5S',
                   })}
                 </Title>
               </Col>
@@ -524,7 +502,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Reported to Police',
-                    id: 'LhTpVN',
                   })}
                   value={
                     data?.performanceReport?.policeSummary
@@ -542,7 +519,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Police Attended',
-                    id: 'ES0Nc8',
                   })}
                   value={
                     data?.performanceReport?.policeSummary
@@ -560,7 +536,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Custody Images',
-                    id: 'eSwB1J',
                   })}
                   value={
                     data?.performanceReport?.policeSummary?.totalPoliceImages ||
@@ -601,7 +576,6 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Investigation Summary',
-                    id: '6uUMrA',
                   })}
                 </Title>
               </Col>
@@ -610,7 +584,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Currently Open',
-                    id: 'KeeTbC',
                   })}
                   value={
                     data?.performanceReport?.investigationSummary.open || 0
@@ -627,7 +600,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Opened',
-                    id: 'ADKsID',
                   })}
                   value={
                     data?.performanceReport?.investigationSummary.opened || 0
@@ -644,7 +616,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Closed',
-                    id: 'Fv1ZSz',
                   })}
                   value={
                     data?.performanceReport?.investigationSummary.closed || 0
@@ -683,7 +654,6 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Outcomes Summary',
-                    id: 'hHUmrO',
                   })}
                 </Title>
               </Col>
@@ -692,7 +662,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Verified IDs',
-                    id: '+YBMvu',
                   })}
                   value={
                     data?.performanceReport?.policeSummary
@@ -709,7 +678,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Arrests',
-                    id: 'uyYgh0',
                   })}
                   value={
                     data?.performanceReport?.outcomeSummary?.totalArrests || 0
@@ -726,7 +694,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'CBO Count',
-                    id: 'cQmqi4',
                   })}
                   value={
                     data?.performanceReport?.outcomeSummary?.totalCBOCount || 0
@@ -743,12 +710,10 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'CBO Durations',
-                    id: 'E/Ctgr',
                   })}
                   value={intl.formatMessage(
                     {
                       defaultMessage: '{value} years',
-                      id: '0tCt48',
                     },
                     {
                       value:
@@ -768,12 +733,10 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Prison Sentences',
-                    id: 'JBWog3',
                   })}
                   value={intl.formatMessage(
                     {
                       defaultMessage: '{value} weeks',
-                      id: '4ouuyu',
                     },
                     {
                       value:
@@ -792,7 +755,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Rehabilitation Orders',
-                    id: '+KMkeb',
                   })}
                   value={
                     data?.performanceReport?.outcomeSummary?.totalRehabOrders ||
@@ -809,7 +771,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Fines Issued',
-                    id: '/mIqOm',
                   })}
                   value={
                     data?.performanceReport?.outcomeSummary?.totalFinesCount ||
@@ -826,7 +787,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Fines Value',
-                    id: 'JXR8hB',
                   })}
                   value={
                     data?.performanceReport?.outcomeSummary?.totalFinesValue ||
@@ -866,7 +826,6 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Loss Summary',
-                    id: 'O0DXtz',
                   })}
                 </Title>
               </Col>
@@ -875,7 +834,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Total lost value',
-                    id: 'xhO9Od',
                   })}
                   value={
                     data?.performanceReport?.lossTotals?.totalLostValue
@@ -886,7 +844,6 @@ const PerformanceReportLayout = ({
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
-                          id: 'thiOfy',
                         })
                   }
                   prefix={
@@ -901,7 +858,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Total recovered',
-                    id: '3A1IaB',
                   })}
                   value={
                     data?.performanceReport?.lossTotals?.totalRecoveredValue
@@ -912,7 +868,6 @@ const PerformanceReportLayout = ({
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
-                          id: 'thiOfy',
                         })
                   }
                   prefix={
@@ -927,7 +882,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Total Loss',
-                    id: 'LPr3Nh',
                   })}
                   value={
                     data?.performanceReport?.lossTotals?.totalRecoveredValue
@@ -940,7 +894,6 @@ const PerformanceReportLayout = ({
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
-                          id: 'thiOfy',
                         })
                   }
                   prefix={
@@ -955,8 +908,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Average Loss Rate',
-
-                    id: 'VSxLGp',
                   })}
                   value={`${(
                     (data?.performanceReport?.lossTotals?.averageSuccessRate ||
@@ -973,7 +924,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Average Incident Value',
-                    id: '8Q52ae',
                   })}
                   value={
                     `£${(
@@ -992,7 +942,6 @@ const PerformanceReportLayout = ({
                   className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Average Loss Value',
-                    id: 'QZKPMa',
                   })}
                   value={
                     `£${(
@@ -1017,7 +966,6 @@ const PerformanceReportLayout = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Incident Types',
-              id: 'DtIroT',
             })}
             className="no-break"
             loading={loading}
@@ -1079,7 +1027,6 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.crimeTypeDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Incident Types',
-                  id: '2+nubw',
                 })}
                 type={
                   metadata.find((item) => item.key === 'crimeTypesDonut')
@@ -1092,11 +1039,9 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.crimeTypeDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Incident Types',
-                  id: '2+nubw',
                 })}
                 labelFormat={intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               />
             )}
@@ -1108,7 +1053,6 @@ const PerformanceReportLayout = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Involved Tags',
-              id: 'hqB+1X',
             })}
             className="no-break"
             loading={loading}
@@ -1170,7 +1114,6 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.involvedTagCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Involved Tags',
-                  id: 'N26vgU',
                 })}
                 type={
                   metadata.find((item) => item.key === 'involvedTagsDonut')
@@ -1183,11 +1126,9 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.involvedTagCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Involved Tags',
-                  id: 'N26vgU',
                 })}
                 labelFormat={intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               />
             )}
@@ -1199,7 +1140,6 @@ const PerformanceReportLayout = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Goods Type Count',
-              id: 'z1wXYP',
             })}
             className="no-break"
             loading={loading}
@@ -1261,7 +1201,6 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.goodsTypeCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods count',
-                  id: '2t8hXG',
                 })}
                 type={
                   metadata.find((item) => item.key === 'goodsTypeDonut')
@@ -1274,11 +1213,9 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.goodsTypeCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods count',
-                  id: '2t8hXG',
                 })}
                 labelFormat={intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               />
             )}
@@ -1290,7 +1227,6 @@ const PerformanceReportLayout = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Goods type value',
-              id: 'YQkHXw',
             })}
             className="no-break"
             loading={loading}
@@ -1353,7 +1289,6 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.goodsTypeValueDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods values',
-                  id: 'pbIqi6',
                 })}
                 type={
                   metadata.find((item) => item.key === 'goodsValueDonut')
@@ -1366,7 +1301,6 @@ const PerformanceReportLayout = ({
                 data={data?.performanceReport?.goodsTypeValueDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods values',
-                  id: 'pbIqi6',
                 })}
                 labelFormat="£"
               />
@@ -1396,13 +1330,11 @@ const PerformanceReportLayout = ({
               isPrinting={isPrinting}
               label={intl.formatMessage({
                 defaultMessage: 'Incidents by day of week',
-                id: 'LPtzWr',
               })}
               data={data?.performanceReport?.incidentDayOfWeekLine}
               dataLabel="incidents"
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
               })}
             />
           </Card>
@@ -1430,7 +1362,6 @@ const PerformanceReportLayout = ({
               isPrinting={isPrinting}
               label={intl.formatMessage({
                 defaultMessage: 'Incidents heatmap',
-                id: 'UTvOxQ',
               })}
               height={calculateHeight('incidentsHeatMap', 80)}
               data={
@@ -1446,7 +1377,6 @@ const PerformanceReportLayout = ({
               }
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
               })}
             />
           </Card>
@@ -1473,7 +1403,6 @@ const PerformanceReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Business contribution',
-                id: '5ETgSz',
               })}
             </Title>
             <Table
@@ -1517,7 +1446,6 @@ const PerformanceReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Top Contributors',
-                id: 'r67UpQ',
               })}
             </Title>
             <Table<ContributorTable>
@@ -1561,7 +1489,6 @@ const PerformanceReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Offenders Table',
-                id: 'pSy8jU',
               })}
             </Title>
             <Table
@@ -1605,7 +1532,6 @@ const PerformanceReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Crime Group Table',
-                id: 'RBV3cF',
               })}
             </Title>
             <Table
@@ -1675,7 +1601,6 @@ const PerformanceReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Targeted Goods',
-                id: 'dLBbg0',
               })}
             </Title>
             <Table
@@ -1722,7 +1647,6 @@ const PerformanceReportLayout = ({
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Investigations',
-                id: 'juQ8mz',
               })}
             </Title>
             <Table
@@ -1760,7 +1684,6 @@ const PerformanceReportLayout = ({
             <Typography.Paragraph>
               {intl.formatMessage({
                 defaultMessage: 'Page 1',
-                id: 'hEAGzW',
               })}
             </Typography.Paragraph>
           </div>
@@ -1781,7 +1704,6 @@ const PerformanceReportLayout = ({
             <Typography.Paragraph>
               {intl.formatMessage({
                 defaultMessage: 'Page 2',
-                id: 'Q3p9d3',
               })}
             </Typography.Paragraph>
           </div>
@@ -1800,7 +1722,7 @@ const PerformanceReportLayout = ({
             }}
           >
             <Typography.Paragraph>
-              {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+              {intl.formatMessage({ defaultMessage: 'Page 3' })}
             </Typography.Paragraph>
           </div>
         );
@@ -1818,7 +1740,7 @@ const PerformanceReportLayout = ({
             }}
           >
             <Typography.Paragraph>
-              {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
+              {intl.formatMessage({ defaultMessage: 'Page 4' })}
             </Typography.Paragraph>
           </div>
         );
@@ -1833,7 +1755,6 @@ const PerformanceReportLayout = ({
             bodyStyle={{ height: '90%' }}
             title={intl.formatMessage({
               defaultMessage: 'Incidents by time',
-              id: '+YmxWP',
             })}
           >
             <Button
@@ -1851,7 +1772,6 @@ const PerformanceReportLayout = ({
               data={data?.performanceReport?.timeHeatMap}
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
               })}
               bottomLabel="time"
             />
@@ -1863,7 +1783,6 @@ const PerformanceReportLayout = ({
           <Card
             title={intl.formatMessage({
               defaultMessage: 'Priorty Graph',
-              id: '6qZYxN',
             })}
             className="no-break"
             loading={loading}
@@ -1884,12 +1803,10 @@ const PerformanceReportLayout = ({
               isPrinting={isPrinting}
               labelFormat={intl.formatMessage({
                 defaultMessage: 'Priority Graph',
-                id: 'vZ/a8V',
               })}
               data={data?.performanceReport?.priorityGraph}
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
               })}
             />
           </Card>

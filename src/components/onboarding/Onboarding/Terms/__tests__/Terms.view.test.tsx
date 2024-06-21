@@ -12,7 +12,6 @@ describe('List Officer View', () => {
           update={jest.fn()}
           saving={false}
           onBack={jest.fn()}
-          setCurrent={jest.fn()}
         />
       </MemoryRouter>
     );

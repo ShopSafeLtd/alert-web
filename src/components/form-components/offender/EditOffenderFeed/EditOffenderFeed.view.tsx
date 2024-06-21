@@ -1,11 +1,12 @@
 import React from 'react';
-import type { EditOffenderQuery } from 'graphql/generated';
+
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
 import type { OffenderSettingsType } from '#/types/DataType';
 import OffenderFormDetails from '#/components/form-components/offender/offender/OffenderForm/OffenderFormDetails.view';
 import type { FormData } from './useEditOffenderFeed';
+import type { EditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/edit-offender.generated';
 
 interface Props {
   onClose: () => void;
@@ -106,12 +107,10 @@ const EditOffender = ({
                   name="tags"
                   label={intl.formatMessage({
                     defaultMessage: 'Offender Warnings',
-                    id: '1jRWJS',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'select any warning labels that are relevant to this offender or add your own.',
-                    id: 'BwoE1F',
                   })}
                 >
                   <Select
@@ -134,12 +133,10 @@ const EditOffender = ({
                   name="customGalleries"
                   label={intl.formatMessage({
                     defaultMessage: 'Custom Galleries',
-                    id: 'bzpFEk',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'select any custom galleries that are relevant to this offender or add your own.',
-                    id: 'Or8c6M',
                   })}
                 >
                   <Select
@@ -166,12 +163,10 @@ const EditOffender = ({
                   name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Groups',
-                    id: 'hzmswI',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the groups that you would like this offender to be visible to.',
-                    id: '/oJY/I',
                   })}
                   rules={[
                     {
@@ -179,7 +174,6 @@ const EditOffender = ({
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please select at least one group for the offender.',
-                        id: 'hK3zLA',
                       }),
                     },
                   ]}
@@ -207,12 +201,10 @@ const EditOffender = ({
                   name="knownFor"
                   label={intl.formatMessage({
                     defaultMessage: 'Crime Types',
-                    id: 'Piba4q',
                   })}
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the relevant crime types for this offender, these help to categorize the offender.',
-                    id: 'ly6B/b',
                   })}
                 >
                   <Select disabled={saving} mode="multiple" maxTagCount={3}>
@@ -234,12 +226,10 @@ const EditOffender = ({
                     name="targetedGoods"
                     label={intl.formatMessage({
                       defaultMessage: 'Goods',
-                      id: 'u5dS1t',
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'Select the Goods that this offender stole.',
-                      id: 'cjsTZ/',
                     })}
                   >
                     <Select disabled={saving} mode="multiple" maxTagCount={3}>
@@ -260,11 +250,10 @@ const EditOffender = ({
                   name="infoSource"
                   label={intl.formatMessage({
                     defaultMessage: 'Information Source',
-                    id: 'LUqHSz',
                   })}
                   tooltip={intl.formatMessage({
-                    defaultMessage: `Enter the information source of the offender's name`,
-                    id: 'WYJoK2',
+                    defaultMessage:
+                      "Enter the information source of the offender's name",
                   })}
                 >
                   <Input.TextArea disabled={saving} />
@@ -278,11 +267,10 @@ const EditOffender = ({
                   name="justification"
                   label={intl.formatMessage({
                     defaultMessage: 'Justification',
-                    id: 'i0xkcf',
                   })}
                   tooltip={intl.formatMessage({
-                    defaultMessage: `Enter a justification to explain why this offender doesn't connect with an incident.`,
-                    id: 'P7rUrU',
+                    defaultMessage:
+                      "Enter a justification to explain why this offender doesn't connect with an incident.",
                   })}
                   rules={[
                     {
@@ -290,7 +278,6 @@ const EditOffender = ({
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a justification for the offender.',
-                        id: '11rxZC',
                       }),
                     },
                   ]}
@@ -307,7 +294,6 @@ const EditOffender = ({
                 <Button disabled={saving} onClick={onClose}>
                   {intl.formatMessage({
                     defaultMessage: 'Cancel',
-                    id: '47FYwb',
                   })}
                 </Button>
               </Col>
@@ -320,7 +306,6 @@ const EditOffender = ({
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Save',
-                    id: 'jvo0vs',
                   })}
                 </Button>
               </Col>

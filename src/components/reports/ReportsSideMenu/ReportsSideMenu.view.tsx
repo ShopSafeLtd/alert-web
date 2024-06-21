@@ -3,10 +3,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Tooltip, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useStoreState } from '#/state';
-import { useReportsCentreQuery } from '#/graphql/generated';
+
 import Sider from 'antd/lib/layout/Sider';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import useStyles from './ReportsSideMenu.style';
+import { useReportsCentreQuery } from '#/views/reports/reports-centre/reports-centre.generated';
 
 interface Props {
   collapsed: boolean;
@@ -52,12 +53,12 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
       ) : (
         <div className={classes.container}>
           <Typography.Paragraph className={classes.menuTitle}>
-            <FormattedMessage id="6MXa5r" defaultMessage="Reports Centre" />
+            <FormattedMessage defaultMessage="Reports Centre" />
           </Typography.Paragraph>
 
           <div className={classes.subMenu}>
             <Typography.Paragraph className={classes.menuSubTitle}>
-              <FormattedMessage id="Mk3lXF" defaultMessage="Summary Reports" />
+              <FormattedMessage defaultMessage="Summary Reports" />
             </Typography.Paragraph>
             {data?.reportsCentre.summaryReports.map((item) => (
               <Link key={item.id} to={`/app/reports/summary-report/${item.id}`}>
@@ -80,7 +81,7 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
 
           <div className={classes.subMenu}>
             <Typography.Paragraph className={classes.menuSubTitle}>
-              <FormattedMessage id="u9fC2r" defaultMessage="Offender Reports" />
+              <FormattedMessage defaultMessage="Offender Reports" />
             </Typography.Paragraph>
             {data?.reportsCentre.offenderReports.map((item) => (
               <Link
@@ -106,7 +107,7 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
 
           <div className={classes.subMenu}>
             <Typography.Paragraph className={classes.menuSubTitle}>
-              <FormattedMessage id="Mx+X4o" defaultMessage="Business Reports" />
+              <FormattedMessage defaultMessage="Business Reports" />
             </Typography.Paragraph>
             {data?.reportsCentre.businessReports.map((item) => (
               <Link key={item.id} to={`/app/reports/business/${item.id}`}>
@@ -129,10 +130,7 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
 
           <div className={classes.subMenu}>
             <Typography.Paragraph className={classes.menuSubTitle}>
-              <FormattedMessage
-                id="MSLXPl"
-                defaultMessage="Crime Group Reports"
-              />
+              <FormattedMessage defaultMessage="Crime Group Reports" />
             </Typography.Paragraph>
             {data?.reportsCentre.crimeGroupReports.map((item) => (
               <Link key={item.id} to={`/app/reports/crime-groups/${item.id}`}>
@@ -155,17 +153,13 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
 
           <div className={classes.subMenu}>
             <Typography.Paragraph className={classes.menuSubTitle}>
-              <FormattedMessage
-                id="7DwulR"
-                defaultMessage="Engagement Reports"
-              />
+              <FormattedMessage defaultMessage="Engagement Reports" />
             </Typography.Paragraph>
             <Link to="/app/reports/business-engagement">
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage:
                     'Table showing engagement of businesses with the alert platform.',
-                  id: 'VpEQsA',
                 })}
               >
                 <div
@@ -176,10 +170,7 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
                   }
                 >
                   <Typography.Text className={classes.text}>
-                    <FormattedMessage
-                      defaultMessage="Business Engagement"
-                      id="8reQAO"
-                    />
+                    <FormattedMessage defaultMessage="Business Engagement" />
                   </Typography.Text>
                 </div>
               </Tooltip>
@@ -189,7 +180,6 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
                 title={intl.formatMessage({
                   defaultMessage:
                     'Table showing engagement of users with the alert platform.',
-                  id: 'wqY0X0',
                 })}
               >
                 <div
@@ -200,10 +190,7 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
                   }
                 >
                   <Typography.Text className={classes.text}>
-                    <FormattedMessage
-                      defaultMessage="User Engagement"
-                      id="cRXL0+"
-                    />
+                    <FormattedMessage defaultMessage="User Engagement" />
                   </Typography.Text>
                 </div>
               </Tooltip>
@@ -212,13 +199,12 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
 
           <div className={classes.subMenu}>
             <Typography.Paragraph className={classes.menuSubTitle}>
-              <FormattedMessage id="1Uo6oc" defaultMessage="Mapping Reports" />
+              <FormattedMessage defaultMessage="Mapping Reports" />
             </Typography.Paragraph>
             <Link to={'/app/reports/incident-map'}>
               <Tooltip
                 title={intl.formatMessage({
                   defaultMessage: 'Plotting of incident data on a map.',
-                  id: 'N+vDG+',
                 })}
               >
                 <div
@@ -229,10 +215,7 @@ const ReportsSideMenu = ({ collapsed, setCollapsed, selectedId }: Props) => {
                   }
                 >
                   <Typography.Text className={classes.text}>
-                    <FormattedMessage
-                      defaultMessage="Incident Map"
-                      id="8vWvqg"
-                    />
+                    <FormattedMessage defaultMessage="Incident Map" />
                   </Typography.Text>
                 </div>
               </Tooltip>

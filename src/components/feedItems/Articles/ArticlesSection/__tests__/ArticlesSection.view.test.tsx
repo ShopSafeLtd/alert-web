@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { ArticlePriority, SortOrder } from 'graphql/generated';
+
 import TodoList from '../ArticlesSection.view';
+import { ArticlePriority } from 'graphql/types';
 
 describe('List Officer View', () => {
   const data = {

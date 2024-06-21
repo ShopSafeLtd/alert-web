@@ -1,14 +1,3 @@
-import type {
-  ArticlePriority,
-  DeleteArticleMutation,
-  ListArticlesFeedQuery,
-} from 'graphql/generated';
-import {
-  ListArticlesFeedDocument,
-  QueryMode,
-  SortOrder,
-  useListArticlesFeedQuery,
-} from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +5,14 @@ import type { DateType } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ArticleFilters } from 'state/data-model';
 import { useGroupsContext } from '#/context/groups-context';
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
+import {
+  ListArticlesFeedDocument,
+  useListArticlesFeedQuery,
+} from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
+import type { ArticlePriority } from 'graphql/types';
+import { QueryMode, SortOrder } from 'graphql/types';
+import type { DeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
 
 interface Return {
   data:
@@ -51,7 +48,7 @@ interface Return {
 
 const useArticleFeed = (): Return => {
   const navigate = useNavigate();
-  const onNavigate = () => navigate(`/app/article/add`);
+  const onNavigate = () => navigate('/app/article/add');
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);

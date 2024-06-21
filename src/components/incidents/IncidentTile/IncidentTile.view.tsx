@@ -21,7 +21,7 @@ const IncidentTile = ({ incident, onClick }: Props): JSX.Element => {
     <Tooltip
       placement="bottom"
       title={intl.formatMessage(
-        { defaultMessage: `Add {subject} to offender`, id: 'Z/t+tP' },
+        { defaultMessage: 'Add {subject} to offender' },
         {
           subject: incident.subject,
         }

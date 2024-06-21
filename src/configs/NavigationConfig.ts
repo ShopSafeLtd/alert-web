@@ -3,39 +3,26 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   faAddressCard,
-  faArrowProgress,
-  faBuilding,
   faCalendarCheck,
   faCar,
   faChalkboard,
-  faCircleExclamation,
   faCircleInfo,
   faClipboard,
-  faClipboardList,
   faClipboardListCheck,
   faCog,
-  faCommentLines,
   faComments,
   faExclamationCircle,
   faFile,
-  faFileExport,
-  faFileImport,
-  faFilterList,
   faHome,
   faLineChart,
-  faListCheck,
-  faMapLocationDot,
   faNewspaper,
   faPeopleGroup,
-  faPieChart,
   faPlayCircle,
-  faSirenOn,
-  faTrash,
-  faUser,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import { PermissionMethod, PermissionModel, Role } from 'graphql/generated';
+
 import { defineMessage } from 'react-intl';
+import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
 
 export enum BadgeTypes {
   todo = 'TODO',

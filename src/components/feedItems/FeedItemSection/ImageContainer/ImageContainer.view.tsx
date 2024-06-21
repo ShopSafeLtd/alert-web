@@ -1,7 +1,7 @@
 import React from 'react';
-import type { ImagePosition } from 'graphql/generated';
 
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import type { ImagePosition } from 'graphql/types';
 
 const ImageContainer = ({
   src,

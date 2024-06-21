@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,formatjs/no-literal-string-in-jsx */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import {
   Avatar,
@@ -13,11 +12,7 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
-import type {
-  CreateChatMutation,
-  DeleteChatMutation,
-  UserChatsQuery,
-} from 'graphql/generated';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
@@ -27,6 +22,9 @@ import AddChat from 'components/form-components/chat/AddChat';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { formatDate } from 'utils';
 import { useIntl } from 'react-intl';
+import type { UserChatsQuery } from 'graphql/userChat/queries/user_chats.generated';
+import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
+import type { DeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -43,7 +41,8 @@ interface Props {
   loading: boolean;
 }
 
-const getContent = (content: string) => content.replace(/@\[([^]+?)]/g, '@$1');
+const getContent = (content: string) =>
+  content.replaceAll(/@\[([^]+?)]/g, '@$1');
 // .split(/(@\[.*?]\(.*?\))/)
 // .map((item) => {
 //   if (item.includes('@[')) {
@@ -107,7 +106,6 @@ const ViewOffender = ({
           <Empty
             description={intl.formatMessage({
               defaultMessage: 'No Chats',
-              id: '5lq2mV',
             })}
           />
         </div>
@@ -206,7 +204,6 @@ const ViewOffender = ({
                           <Text type="danger" style={{ marginRight: 3 }}>
                             {intl.formatMessage({
                               defaultMessage: '[You were mentioned]',
-                              id: 'ES/52d',
                             })}
                           </Text>
                         )}
@@ -219,42 +216,35 @@ const ViewOffender = ({
                                 messages?.slice(-1)[0].images.length &&
                                 intl.formatMessage({
                                   defaultMessage: 'Sent an image',
-                                  id: '4SOYvd',
                                 })) ||
                               (messages?.slice(-1)[0].offenders &&
                                 messages?.slice(-1)[0].offenders.length &&
                                 intl.formatMessage({
                                   defaultMessage: 'Linked an offender',
-                                  id: 'GJeKJo',
                                 })) ||
                               (messages?.slice(-1)[0].incidents &&
                                 messages?.slice(-1)[0].incidents.length &&
                                 intl.formatMessage({
                                   defaultMessage: 'Linked an incident',
-                                  id: 'bozBqN',
                                 })) ||
                               (messages?.slice(-1)[0].vehicles &&
                                 messages?.slice(-1)[0].vehicles.length &&
                                 intl.formatMessage({
                                   defaultMessage: 'Linked a vehicle',
-                                  id: 'nIEa5z',
                                 })) ||
                               (messages?.slice(-1)[0].crimeGroups &&
                                 messages?.slice(-1)[0].crimeGroups.length &&
                                 intl.formatMessage({
                                   defaultMessage: 'Linked a crime group',
-                                  id: 'PQ3WJD',
                                 })) ||
                               (messages?.slice(-1)[0].articles &&
                                 messages?.slice(-1)[0].articles.length &&
                                 intl.formatMessage({
                                   defaultMessage: 'Linked an article',
-                                  id: 'YFR/Y5',
                                 }))
                             }`
                           : intl.formatMessage({
                               defaultMessage: 'No Messages',
-                              id: 'NYz9wc',
                             })}
                       </Paragraph>
                     </Col>
@@ -278,7 +268,6 @@ const ViewOffender = ({
                 <Title level={3} style={{ marginTop: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Chats',
-                    id: 'ABAQyo',
                   })}
                 </Title>
               </Col>
@@ -299,7 +288,6 @@ const ViewOffender = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'New Chat',
-                      id: 'UT7Nkj',
                     })}
                   </Button>
                 </Col>
@@ -324,7 +312,6 @@ const ViewOffender = ({
               }}
               description={intl.formatMessage({
                 defaultMessage: 'Select or create a chat to view messages',
-                id: 'pHlO2V',
               })}
             />
           )}
@@ -333,7 +320,6 @@ const ViewOffender = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Create A New Chat',
-          id: 'E5LFtn',
         })}
         open={addChat}
         width="400"

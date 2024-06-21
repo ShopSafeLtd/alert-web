@@ -1,28 +1,19 @@
 import { useState } from 'react';
-import type {
-  Age,
-  Build,
-  EditOffenderQuery,
-  Gender,
-  Height,
-  IdSource,
-  Race,
-} from 'graphql/generated';
-import {
-  Model,
-  Role,
-  useBusinessOffenderSettingsQuery,
-  useEditOffenderQuery,
-  useListCustomGalleriesQuery,
-  useTagsQuery,
-  useUpdateOffenderMutation,
-} from 'graphql/generated';
+
+import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
+import { Model, Role } from 'graphql/types';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { OffenderSettingsType } from '#/types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
+import type { EditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/edit-offender.generated';
+import { useEditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/edit-offender.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
+import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/business-offender-settings.generated';
 
 interface Props {
   onClose: () => void;
@@ -137,11 +128,9 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Updated',
-          id: 'ryTk34',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been updated!',
-          id: 'aRw1jd',
         }),
         placement: 'bottomRight',
       });
@@ -176,7 +165,6 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
               data.hair ||
               intl.formatMessage({
                 defaultMessage: 'Unknown',
-                id: '5jeq8P',
               }),
           },
           comment: { set: data.comment || '' },

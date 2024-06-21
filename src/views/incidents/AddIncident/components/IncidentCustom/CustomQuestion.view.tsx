@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment,@typescript-eslint/no-base-to-string */
+// todo check data.tostring types
 import {
   Col,
   DatePicker,
@@ -10,12 +11,13 @@ import {
   TimePicker,
 } from 'antd';
 import React from 'react';
-import { AnswerType } from 'graphql/generated';
+
 import type { CustomQuestion } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import CheckTags from '../../../../../components/form-components/check-tags/CheckTags.view';
+import { AnswerType } from 'graphql/types';
 
 interface StringInputProps {
   value?: string;
@@ -127,14 +129,12 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Yes',
-                  id: 'a5msuh',
                 }),
                 value: 'true',
               },
               {
                 label: intl.formatMessage({
                   defaultMessage: 'No',
-                  id: 'oUWADl',
                 }),
                 value: 'false',
               },
@@ -187,7 +187,6 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                         {
                           required: question.required,
                           message: intl.formatMessage({
-                            id: '6B5Jtu',
                             defaultMessage: 'This field is required.',
                           }),
                         },
@@ -211,7 +210,6 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                   {
                     required: question.required,
                     message: intl.formatMessage({
-                      id: '6B5Jtu',
                       defaultMessage: 'This field is required.',
                     }),
                   },
@@ -232,7 +230,6 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                   {
                     required: question.required,
                     message: intl.formatMessage({
-                      id: '6B5Jtu',
                       defaultMessage: 'This field is required.',
                     }),
                   },
@@ -249,7 +246,6 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                   {
                     required: question.required,
                     message: intl.formatMessage({
-                      id: '6B5Jtu',
                       defaultMessage: 'This field is required.',
                     }),
                   },
@@ -266,7 +262,6 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                   {
                     required: question.required,
                     message: intl.formatMessage({
-                      id: '6B5Jtu',
                       defaultMessage: 'This field is required.',
                     }),
                   },
@@ -277,14 +272,12 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                     {
                       label: intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       }),
                       value: 'true',
                     },
                     {
                       label: intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       }),
                       value: 'false',
                     },
@@ -302,7 +295,6 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                   {
                     required: question.required,
                     message: intl.formatMessage({
-                      id: '6B5Jtu',
                       defaultMessage: 'This field is required.',
                     }),
                   },
@@ -319,7 +311,6 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                   {
                     required: question.required,
                     message: intl.formatMessage({
-                      id: '6B5Jtu',
                       defaultMessage: 'This field is required.',
                     }),
                   },

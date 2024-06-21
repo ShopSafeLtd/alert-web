@@ -1,10 +1,12 @@
 import React from 'react';
-import type { BrandsQueryVariables } from 'graphql/generated';
-import { SortOrder, useBrandsQuery } from 'graphql/generated';
+
 import { Select } from 'antd';
 import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
+import type { BrandsQueryVariables } from '#/views/settings/brands/graphql/queries/brands.generated';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+import { SortOrder } from 'graphql/types';
 
 interface Props {
   value?: string[];

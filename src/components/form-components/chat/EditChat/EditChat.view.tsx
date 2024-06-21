@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import { useIntl } from 'react-intl';
-import type { ChatQuery, ListSchemeUsersQuery } from 'graphql/generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
 
 interface FormData {
   name: string;
@@ -49,13 +50,12 @@ const EditChat = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            label={intl.formatMessage({ defaultMessage: 'Name' })}
             rules={[
               {
                 required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the chat group.',
-                  id: 'Fpln7y',
                 }),
               },
             ]}
@@ -70,7 +70,6 @@ const EditChat = ({
             name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
-              id: 'Q8Qw5B',
             })}
           >
             <Input.TextArea disabled={saving} />
@@ -84,7 +83,6 @@ const EditChat = ({
             name="user"
             label={intl.formatMessage({
               defaultMessage: 'Users',
-              id: 'YDMrKK',
             })}
             rules={[
               {
@@ -92,7 +90,6 @@ const EditChat = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please add at least one user for the chat group.',
-                  id: 'Ov3luP',
                 }),
               },
             ]}
@@ -117,7 +114,7 @@ const EditChat = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -127,7 +124,7 @@ const EditChat = ({
               type="primary"
               htmlType="submit"
             >
-              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+              {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
           </Col>
         </Row>

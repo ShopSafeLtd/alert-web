@@ -2,8 +2,9 @@ import React from 'react';
 import type { FetchResult } from '@apollo/client';
 import { Button, Form, Input, Select } from 'antd';
 import { useIntl } from 'react-intl';
-import type { CreateActiveChecklistMutation } from '../../../../graphql/generated';
+
 import { useStoreState } from '../../../../state';
+import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/create-active-checklist.generated';
 
 interface Props {
   createActive: ({
@@ -50,13 +51,13 @@ const createActiveChecklistDrawer = ({
     >
       <Form.Item
         name="title"
-        label={intl.formatMessage({ id: '9a9+ww', defaultMessage: 'Title' })}
+        label={intl.formatMessage({ defaultMessage: 'Title' })}
       >
         <Input />
       </Form.Item>
       <Form.Item
         name="businessId"
-        label={intl.formatMessage({ id: 'w1Fanr', defaultMessage: 'Business' })}
+        label={intl.formatMessage({ defaultMessage: 'Business' })}
       >
         <Select>
           {userBusinesses.map((business) => (
@@ -68,10 +69,10 @@ const createActiveChecklistDrawer = ({
       </Form.Item>
       <Form.Item>
         <Button onClick={close} style={{ marginRight: 12 }}>
-          {intl.formatMessage({ id: '47FYwb', defaultMessage: 'Cancel' })}
+          {intl.formatMessage({ defaultMessage: 'Cancel' })}
         </Button>
         <Button type="primary" htmlType="submit">
-          {intl.formatMessage({ id: 'VzzYJk', defaultMessage: 'Create' })}
+          {intl.formatMessage({ defaultMessage: 'Create' })}
         </Button>
       </Form.Item>
     </Form>

@@ -72,7 +72,6 @@ const EditBusiness = ({
             name="name"
             label={intl.formatMessage({
               defaultMessage: 'Business Name',
-              id: 'pGwRxT',
             })}
             rules={[{ required: true }]}
           >
@@ -84,7 +83,6 @@ const EditBusiness = ({
             name="siteNumber"
             label={intl.formatMessage({
               defaultMessage: 'Site Number',
-              id: 'rAGVXn',
             })}
           >
             {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
@@ -95,7 +93,6 @@ const EditBusiness = ({
       <Form.Item
         label={intl.formatMessage({
           defaultMessage: 'Show business name in the system',
-          id: 'yuNoZz',
         })}
         name="publicName"
         valuePropName="checked"
@@ -117,7 +114,6 @@ const EditBusiness = ({
             name="parent"
             label={intl.formatMessage({
               defaultMessage: 'Parent Business',
-              id: 'Av/UtY',
             })}
           >
             {loading ? (
@@ -129,7 +125,6 @@ const EditBusiness = ({
                 disabled={saving}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Search for a business...',
-                  id: 'qaJxSS',
                 })}
                 fetchOptions={onSearchBusiness}
                 // style={{ width: 400 }}
@@ -144,12 +139,10 @@ const EditBusiness = ({
             name="brands"
             label={intl.formatMessage({
               defaultMessage: 'Brands',
-              id: 'jWfWEA',
             })}
             tooltip={intl.formatMessage({
               defaultMessage:
                 'select the brands that are relevant to this shop.',
-              id: 'rs0Bek',
             })}
           >
             <Select
@@ -174,12 +167,10 @@ const EditBusiness = ({
             name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Content Groups',
-              id: '3lRewT',
             })}
             tooltip={intl.formatMessage({
               defaultMessage:
                 'select the content groups that are relevant to this shop.',
-              id: 'iKCl0b',
             })}
           >
             <Select
@@ -206,12 +197,10 @@ const EditBusiness = ({
                 name="tags"
                 label={intl.formatMessage({
                   defaultMessage: 'Tags',
-                  id: '1EYCdR',
                 })}
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'select of any tags that are relevant to this shop or add your own.',
-                  id: 'EdSN+T',
                 })}
               >
                 <Select
@@ -242,7 +231,6 @@ const EditBusiness = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Tag',
-                  id: 'GUW//c',
                 })}
               </Button>
             </Col>
@@ -250,7 +238,7 @@ const EditBusiness = ({
         </Col>
       </Row>
       <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-        {intl.formatMessage({ defaultMessage: 'Location', id: 'rvirM2' })}
+        {intl.formatMessage({ defaultMessage: 'Location' })}
       </Typography.Text>
       <LocatingCard
         width="100%"
@@ -264,7 +252,6 @@ const EditBusiness = ({
             name="building"
             label={intl.formatMessage({
               defaultMessage: 'Building',
-              id: 'oS/nae',
             })}
           >
             {loading ? (
@@ -279,7 +266,6 @@ const EditBusiness = ({
             name="street"
             label={intl.formatMessage({
               defaultMessage: 'Street',
-              id: 'BaIwdV',
             })}
             // rules={[{ required: true }]}
           >
@@ -297,7 +283,6 @@ const EditBusiness = ({
             name="townCity"
             label={intl.formatMessage({
               defaultMessage: 'Town/City',
-              id: 'byaTQZ',
             })}
             // rules={[{ required: true }]}
           >
@@ -313,7 +298,6 @@ const EditBusiness = ({
             name="county"
             label={intl.formatMessage({
               defaultMessage: 'County',
-              id: 'B+KJhc',
             })}
           >
             {loading ? (
@@ -330,7 +314,6 @@ const EditBusiness = ({
             name="postcode"
             label={intl.formatMessage({
               defaultMessage: 'Postcode',
-              id: 'FJhjgz',
             })}
             // rules={[{ required: true }]}
           >
@@ -342,7 +325,7 @@ const EditBusiness = ({
         <Row gutter={16} justify="end">
           <Col>
             <Button onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -354,7 +337,6 @@ const EditBusiness = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Save Business',
-                id: 'Dk/kmv',
               })}
             </Button>
           </Col>
@@ -363,7 +345,6 @@ const EditBusiness = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Business Tag',
-          id: 'frQeQr',
         })}
         open={addTag}
         width="600"
@@ -374,7 +355,6 @@ const EditBusiness = ({
           onClose={toggleAddTag}
           description={intl.formatMessage({
             defaultMessage: 'Tags are added to sort shops.',
-            id: 'M1v6uH',
           })}
         />
       </Drawer>

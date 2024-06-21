@@ -3,7 +3,7 @@ import { Typography, Row, Col, Table, Card, Button, notification } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import CSVReader from 'react-csv-reader';
 import { useStoreState } from 'state';
-import { useStockItemImportMutation } from 'graphql/generated';
+import { useStockItemImportMutation } from 'graphql/imports/import-stock-items.generated';
 
 export type CSVData = string[][];
 
@@ -41,7 +41,6 @@ const ImportStockItems = () => {
     onCompleted: () => {
       notification.success({
         message: intl.formatMessage({
-          id: 'A8Mbfh',
           defaultMessage: 'Items imported successfully',
         }),
         placement: 'bottomRight',
@@ -51,7 +50,6 @@ const ImportStockItems = () => {
     onError: () => {
       notification.error({
         message: intl.formatMessage({
-          id: 'gVGsmW',
           defaultMessage: 'An errer occurred while importing',
         }),
         placement: 'bottomRight',
@@ -88,13 +86,13 @@ const ImportStockItems = () => {
   return (
     <div style={{ padding: 20 }}>
       <Typography.Title level={3}>
-        <FormattedMessage id="RCrrbc" defaultMessage="Import Stock Items" />
+        <FormattedMessage defaultMessage="Import Stock Items" />
       </Typography.Title>
       <Row>
         <Col>
           <Card>
             <Typography.Title level={5}>
-              <FormattedMessage id="0t0g9d" defaultMessage="Stock Items CSV" />
+              <FormattedMessage defaultMessage="Stock Items CSV" />
             </Typography.Title>
             <CSVReader onFileLoaded={onItemsLoaded} />
           </Card>
@@ -108,7 +106,6 @@ const ImportStockItems = () => {
             {
               title: intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               }),
               key: 'name',
               dataIndex: 'name',
@@ -116,7 +113,6 @@ const ImportStockItems = () => {
             {
               title: intl.formatMessage({
                 defaultMessage: 'Brand',
-                id: 'SOPEeg',
               }),
               key: 'brand',
               dataIndex: 'brand',
@@ -125,7 +121,6 @@ const ImportStockItems = () => {
               key: 'sku',
               title: intl.formatMessage({
                 defaultMessage: 'SKU',
-                id: 'k4brJy',
               }),
               dataIndex: 'sku',
             },
@@ -133,7 +128,6 @@ const ImportStockItems = () => {
               key: 'barcode',
               title: intl.formatMessage({
                 defaultMessage: 'Barcode',
-                id: 'fM4JjM',
               }),
               dataIndex: 'barcode',
             },
@@ -141,7 +135,6 @@ const ImportStockItems = () => {
               key: 'costPrice',
               title: intl.formatMessage({
                 defaultMessage: 'Cost Price',
-                id: 'k6HOPg',
               }),
               dataIndex: 'costPrice',
             },
@@ -149,7 +142,6 @@ const ImportStockItems = () => {
               key: 'salePrice',
               title: intl.formatMessage({
                 defaultMessage: 'Sale Price',
-                id: '49sNcx',
               }),
               dataIndex: 'salePrice',
             },
@@ -157,7 +149,6 @@ const ImportStockItems = () => {
               key: 'division',
               title: intl.formatMessage({
                 defaultMessage: 'Division',
-                id: 'dETzL9',
               }),
               dataIndex: 'division',
             },
@@ -172,7 +163,7 @@ const ImportStockItems = () => {
             onClick={onSubmit}
             type="primary"
           >
-            <FormattedMessage id="RCrrbc" defaultMessage="Import Stock Items" />
+            <FormattedMessage defaultMessage="Import Stock Items" />
           </Button>
         </Col>
       </Row>

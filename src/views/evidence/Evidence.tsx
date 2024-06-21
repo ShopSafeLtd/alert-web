@@ -32,9 +32,7 @@ const Evidence = () => {
         ? [
             {
               key: 'Body Cameras',
-              label: (
-                <FormattedMessage defaultMessage="Body Cameras" id="p9UGut" />
-              ),
+              label: <FormattedMessage defaultMessage="Body Cameras" />,
               children: <EvidenceList />,
             },
           ]
@@ -43,7 +41,7 @@ const Evidence = () => {
     const generalTabs = [
       {
         key: 'Evidence Files',
-        label: <FormattedMessage defaultMessage="Evidence Files" id="AHxroc" />,
+        label: <FormattedMessage defaultMessage="Evidence Files" />,
         children: <ListDocuments />,
       },
     ];

@@ -19,11 +19,12 @@ import type { FullScreenHandle } from 'react-full-screen';
 import { useFullScreenHandle } from 'react-full-screen';
 import useObservableListener from './useObservableListener';
 import styles from '../style.module.css';
-import type { ViewInvestigationQuery } from '../../../../../../graphql/generated';
-import { useUpdateFlowMutation } from '../../../../../../graphql/generated';
+
 import useDownloadImage from './useDownloadImage';
 import useGraphStateSynced from './useNodesEdgesStateSynced';
 import { useWebRtcContext } from './useWebRtcProvidor';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
+import { useUpdateFlowMutation } from 'graphql/investigations/mutations/update-flow.generated';
 
 interface Return {
   nodes: Node[];
@@ -189,7 +190,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
 
   useEffect(() => {
     let isMounted = true;
-    const fetchFallback = async () => {
+    const fetchFallback = () => {
       if (provider.wsconnected && clientCount === 0 && !usedFallbackRef) {
         // eslint-disable-next-line no-underscore-dangle
         if (nodesMap?._map.size === 0) {

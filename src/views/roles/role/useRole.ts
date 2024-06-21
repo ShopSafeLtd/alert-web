@@ -3,17 +3,13 @@ import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import { useState } from 'react';
 import { useStoreState } from '../../../state';
-import type {
-  PermissionModel,
-  Role,
-  RoleQuery,
-} from '../../../graphql/generated';
-import {
-  PermissionMethod,
-  useRoleQuery,
-  useUpsertPermissionMutation,
-} from '../../../graphql/generated';
+
 import type { FormData } from '../types';
+import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
+import { useRoleQuery } from '#/views/roles/graphql/queries/role.generated';
+import type { PermissionModel, Role } from 'graphql/types';
+import { PermissionMethod } from 'graphql/types';
+import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/upsertPermissions.generated';
 
 interface Props {
   form: FormInstance<FormValues>;

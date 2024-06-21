@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router';
 import ListInvestigations from '../../../views/investigations/ListInvestigations/ListInvestigations.container';
 import ViewInvestigation from '../../../views/investigations/ViewInvestigation/ViewInvestigation.container';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
 
@@ -14,7 +14,6 @@ const Investigations = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Investigations',
-        id: 'juQ8mz',
       })}
     >
       <Routes>

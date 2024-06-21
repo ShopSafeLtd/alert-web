@@ -17,7 +17,6 @@ const SideBar = () => {
       <div className="description">
         {intl.formatMessage({
           defaultMessage: 'You can drag these nodes to the pane on the right.',
-          id: 'TToxGs',
         })}
       </div>
       <div
@@ -27,7 +26,6 @@ const SideBar = () => {
       >
         {intl.formatMessage({
           defaultMessage: 'Input Node',
-          id: 'FUnyfx',
         })}
       </div>
       <div
@@ -37,7 +35,6 @@ const SideBar = () => {
       >
         {intl.formatMessage({
           defaultMessage: 'Default Node',
-          id: 'qV4R14',
         })}
       </div>
       <div
@@ -47,7 +44,6 @@ const SideBar = () => {
       >
         {intl.formatMessage({
           defaultMessage: 'Output Node',
-          id: '9MnnCm',
         })}
       </div>
     </aside>

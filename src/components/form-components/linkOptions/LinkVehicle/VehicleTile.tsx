@@ -38,7 +38,6 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
   const classes = useStyles();
   const unknown = intl.formatMessage({
     defaultMessage: 'Unknown',
-    id: '5jeq8P',
   });
 
   return (
@@ -47,7 +46,6 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
       title={intl.formatMessage(
         {
           defaultMessage: 'Add Alert ID: {ref} to incident',
-          id: 'bwgI7n',
         },
         { ref: vehicle.reference }
       )}
@@ -74,13 +72,13 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
         <div className={classes.details}>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+              { defaultMessage: 'Alert ID: {ref}' },
               { ref: vehicle.reference }
             )}
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Registration: {reg}', id: 'OkCUcT' },
+              { defaultMessage: 'Registration: {reg}' },
               {
                 reg: vehicle.registration || unknown,
               }
@@ -88,7 +86,7 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Make: {make}', id: 'cPuur1' },
+              { defaultMessage: 'Make: {make}' },
               {
                 make: vehicle.make || unknown,
               }
@@ -96,7 +94,7 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Model: {model}', id: '6gT5ZW' },
+              { defaultMessage: 'Model: {model}' },
               {
                 model: vehicle.model || unknown,
               }
@@ -104,7 +102,7 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
           </Paragraph>
           <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
-              { defaultMessage: 'Colour: {colour}', id: 'pukOve' },
+              { defaultMessage: 'Colour: {colour}' },
               {
                 colour: vehicle.colour || unknown,
               }

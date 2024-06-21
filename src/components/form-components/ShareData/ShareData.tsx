@@ -13,11 +13,9 @@ import {
 } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import {
-  SortOrder,
-  useSchemeGroupsQuery,
-  useShareDataMutation,
-} from 'graphql/generated';
+import { useShareDataMutation } from '#/components/form-components/ShareData/share-data-mutation.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { SortOrder } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   scheme: {
@@ -76,11 +74,9 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
     onCompleted: () =>
       notification.success({
         message: intl.formatMessage({
-          id: 'R2O2MA',
           defaultMessage: 'Item Shared',
         }),
         description: intl.formatMessage({
-          id: '1s8byF',
           defaultMessage:
             'Item has been successfully shared with the other scheme.',
         }),
@@ -127,7 +123,7 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
             </Col>
             <Col>
               <Button onClick={() => setSelectedScheme(scheme.id)}>
-                <FormattedMessage id="kQAf2d" defaultMessage="Select" />
+                <FormattedMessage defaultMessage="Select" />
               </Button>
             </Col>
           </Row>
@@ -138,14 +134,12 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Select the groups to share the incident with',
-                id: 'Xis7st',
               })}
               name="groups"
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: 'kylRsq',
                     defaultMessage: 'Select at least one group',
                   }),
                 },
@@ -164,12 +158,12 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
               <Row justify="end" gutter={16}>
                 <Col>
                   <Button onClick={onClose}>
-                    <FormattedMessage id="rbrahO" defaultMessage="Close" />
+                    <FormattedMessage defaultMessage="Close" />
                   </Button>
                 </Col>
                 <Col>
                   <Button type="primary" htmlType="submit">
-                    <FormattedMessage id="OKhRC6" defaultMessage="Share" />
+                    <FormattedMessage defaultMessage="Share" />
                   </Button>
                 </Col>
               </Row>

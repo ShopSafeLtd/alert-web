@@ -1,23 +1,15 @@
 import { useEffect, useState } from 'react';
-import type {
-  ListIncidentsAllSchemesQuery,
-  ListIncidentsQuery,
-} from 'graphql/generated';
-import {
-  Model,
-  QueryMode,
-  Role,
-  SortOrder,
-  TagType,
-  useListBusinessesQuery,
-  useListGoodsTypesQuery,
-  useListIncidentsAllSchemesQuery,
-  useTagsQuery,
-} from 'graphql/generated';
+import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
 import { useStoreActions, useStoreState } from 'state';
 import type { IncidentCardData } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
 import { useGroupsContext } from '#/context/groups-context';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useListBusinessesQuery } from 'graphql/businesses/queries/list-businesses.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
 
 export interface Incident {
   incident:

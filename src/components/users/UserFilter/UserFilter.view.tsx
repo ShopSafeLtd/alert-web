@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography } from 'antd';
-import { Role, UserStatus } from 'graphql/generated';
 
 import { UserSort } from 'types/enums/user_sort';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { userStatusValues } from 'types/enums/user_status';
 import useStyles from './UserFilter.styles';
+import { Role, UserStatus } from 'graphql/types';
 
 interface Props {
   order: UserSort;
@@ -42,14 +42,14 @@ const UserFilter = ({
       <Row justify="end">
         <Col>
           <Button type="text" danger onClick={clearFilters}>
-            <FormattedMessage id="MsGXc3" defaultMessage="Clear Filters" />
+            <FormattedMessage defaultMessage="Clear Filters" />
           </Button>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            <FormattedMessage id="Hw6crD" defaultMessage="Sort Order" />
+            <FormattedMessage defaultMessage="Sort Order" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -57,21 +57,20 @@ const UserFilter = ({
             onChange={setOrder}
             size="small"
             placeholder={intl.formatMessage({
-              id: 'Hw6crD',
               defaultMessage: 'Sort Order',
             })}
           >
             <Select.Option value={UserSort.nameAsc}>
-              <FormattedMessage id="9wooBl" defaultMessage="Name A-Z" />
+              <FormattedMessage defaultMessage="Name A-Z" />
             </Select.Option>
             <Select.Option value={UserSort.nameDesc}>
-              <FormattedMessage id="egH4sY" defaultMessage="Name Z-A" />
+              <FormattedMessage defaultMessage="Name Z-A" />
             </Select.Option>
             <Select.Option value={UserSort.createdAtDesc}>
-              <FormattedMessage id="dZYazP" defaultMessage="Newest First" />
+              <FormattedMessage defaultMessage="Newest First" />
             </Select.Option>
             <Select.Option value={UserSort.createdAtAsc}>
-              <FormattedMessage id="FqI37D" defaultMessage="Oldest First" />
+              <FormattedMessage defaultMessage="Oldest First" />
             </Select.Option>
           </Select>
         </Col>
@@ -80,11 +79,10 @@ const UserFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            <FormattedMessage id="tzMNF3" defaultMessage="Status" />
+            <FormattedMessage defaultMessage="Status" />
           </Typography.Paragraph>
           <Select
             placeholder={intl.formatMessage({
-              id: 'tzMNF3',
               defaultMessage: 'Status',
             })}
             mode="multiple"
@@ -98,19 +96,19 @@ const UserFilter = ({
             }))}
           >
             <Select.Option value={UserStatus.Active}>
-              <FormattedMessage id="3a5wL8" defaultMessage="Active" />
+              <FormattedMessage defaultMessage="Active" />
             </Select.Option>
             <Select.Option value={UserStatus.Inactive}>
-              <FormattedMessage id="6Tps09" defaultMessage="Inactive" />
+              <FormattedMessage defaultMessage="Inactive" />
             </Select.Option>
             <Select.Option value={UserStatus.Invited}>
-              <FormattedMessage id="qJje/s" defaultMessage="Invited" />
+              <FormattedMessage defaultMessage="Invited" />
             </Select.Option>
             <Select.Option value={UserStatus.NotInvited}>
-              <FormattedMessage id="kJwS9K" defaultMessage="NotInvited" />
+              <FormattedMessage defaultMessage="NotInvited" />
             </Select.Option>
             <Select.Option value={UserStatus.Disabled}>
-              <FormattedMessage id="tthToS" defaultMessage="Disabled" />
+              <FormattedMessage defaultMessage="Disabled" />
             </Select.Option>
           </Select>
         </Col>
@@ -118,12 +116,11 @@ const UserFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            <FormattedMessage id="1ZgrhW" defaultMessage="Role" />
+            <FormattedMessage defaultMessage="Role" />
           </Typography.Paragraph>
           <Select
             allowClear
             placeholder={intl.formatMessage({
-              id: '1ZgrhW',
               defaultMessage: 'Role',
             })}
             className={classes.select}
@@ -131,16 +128,16 @@ const UserFilter = ({
             onChange={setUserRole}
           >
             <Select.Option value={Role.User}>
-              <FormattedMessage id="EwRIOm" defaultMessage="User" />
+              <FormattedMessage defaultMessage="User" />
             </Select.Option>
             <Select.Option value={Role.ContentAdmin}>
-              <FormattedMessage id="juchkY" defaultMessage="Content Admin" />
+              <FormattedMessage defaultMessage="Content Admin" />
             </Select.Option>
             <Select.Option value={Role.GroupAdmin}>
-              <FormattedMessage id="UmJl0N" defaultMessage="Group Admin" />
+              <FormattedMessage defaultMessage="Group Admin" />
             </Select.Option>
             <Select.Option value={Role.SchemeAdmin}>
-              <FormattedMessage id="ZENz1B" defaultMessage="Scheme Admin" />
+              <FormattedMessage defaultMessage="Scheme Admin" />
             </Select.Option>
           </Select>
         </Col>
@@ -148,12 +145,11 @@ const UserFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            <FormattedMessage id="hzmswI" defaultMessage="Groups" />
+            <FormattedMessage defaultMessage="Groups" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({
-              id: 'hzmswI',
               defaultMessage: 'Groups',
             })}
             mode="multiple"

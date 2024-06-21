@@ -1,19 +1,19 @@
-import type {
-  AvailRolesQuery,
-  CreateDashboardMutationVariables,
-  DashboardTemplatesQuery,
-} from 'graphql/generated';
-import {
-  DashboardTemplatesDocument,
-  useAvailRolesQuery,
-  useCreateDashboardMutation,
-  useDashboardTemplatesQuery,
-  useDeleteDashboardMutation,
-  useUpdateDashboardTemplateMutation,
-} from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
+import type { CreateDashboardMutationVariables } from '#/views/dashboard-management/graphql/mutations/dashboard.generated';
+import {
+  useCreateDashboardMutation,
+  useDeleteDashboardMutation,
+  useUpdateDashboardTemplateMutation,
+} from '#/views/dashboard-management/graphql/mutations/dashboard.generated';
+import type { DashboardTemplatesQuery } from '#/views/dashboard-management/graphql/queries/dashboard-templates.generated';
+import {
+  DashboardTemplatesDocument,
+  useDashboardTemplatesQuery,
+} from '#/views/dashboard-management/graphql/queries/dashboard-templates.generated';
+import type { AvailRolesQuery } from '#/views/dashboard-management/graphql/queries/available-roles.generated';
+import { useAvailRolesQuery } from '#/views/dashboard-management/graphql/queries/available-roles.generated';
 
 interface Return {
   data: DashboardTemplatesQuery | undefined;

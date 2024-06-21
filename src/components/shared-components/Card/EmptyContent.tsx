@@ -25,7 +25,6 @@ const EmptyContent: React.FC<Props> = ({ text }: Props) => {
           <Typography.Title level={4}>
             {intl.formatMessage({
               defaultMessage: 'There is nothing here!',
-              id: 'cOPFph',
             })}
           </Typography.Title>
           <Typography.Text type="secondary">{text}</Typography.Text>

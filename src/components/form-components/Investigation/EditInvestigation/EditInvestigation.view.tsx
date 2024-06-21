@@ -32,7 +32,6 @@ const AddInvestigation = ({
             <Form.Item
               name="name"
               label={intl.formatMessage({
-                id: 'HAlOn1',
                 defaultMessage: 'Name',
               })}
             >
@@ -45,7 +44,6 @@ const AddInvestigation = ({
             <Form.Item
               name="description"
               label={intl.formatMessage({
-                id: 'Q8Qw5B',
                 defaultMessage: 'Description',
               })}
             >
@@ -58,7 +56,6 @@ const AddInvestigation = ({
             <Form.Item
               name="groupIds"
               label={intl.formatMessage({
-                id: 'hzmswI',
                 defaultMessage: 'Groups',
               })}
             >
@@ -71,7 +68,6 @@ const AddInvestigation = ({
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
-                  id: '47FYwb',
                   defaultMessage: 'Cancel',
                 })}
               </Button>
@@ -85,11 +81,9 @@ const AddInvestigation = ({
               >
                 {investigationData
                   ? intl.formatMessage({
-                      id: 'w5+hs4',
                       defaultMessage: 'Save Details',
                     })
                   : intl.formatMessage({
-                      id: 'cihgU6',
                       defaultMessage: 'Create Investigation',
                     })}
               </Button>

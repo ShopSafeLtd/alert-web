@@ -1,23 +1,22 @@
 /* eslint-disable */
-// TODO - Fix this
-
+// TODO add eslint
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Col, Drawer, Grid, Menu, Row, Typography } from 'antd';
+import { Badge, Col, Drawer, Grid, Menu, Row } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { NavItem } from 'configs/NavigationConfig';
 import navConfig, { BadgeTypes } from 'configs/NavigationConfig';
 import utils from 'utils';
-import { NavType, SideNavTheme, useStoreActions, useStoreState } from 'state';
+import type { NavType } from 'state';
+import { SideNavTheme, useStoreActions, useStoreState } from 'state';
 import { APP_NAME } from 'configs/AppConfig';
-import { useStore } from 'easy-peasy';
 import NavScheme from './NavScheme';
 import NavProfile from './NavProfile';
 import Logo from './Logo';
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
 import { faBell } from '@fortawesome/pro-light-svg-icons';
 import { createUseStyles } from 'react-jss';
-import { Theme } from 'configs/ThemeConfig';
+import type { Theme } from 'configs/ThemeConfig';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
 import ReportOnlyNavigationConfig from 'configs/ReportOnlyNavigationConfig';
 
@@ -123,7 +122,6 @@ const SideNavContent = (props: SideNavContentProps) => {
     role: userRole,
     id: userId,
     dem,
-    businesses,
     schemes,
   } = useStoreState((state) => state.user);
 
@@ -132,19 +130,14 @@ const SideNavContent = (props: SideNavContentProps) => {
       .find((scheme) => scheme.scheme.id === schemeId)
       ?.permissions.map(({ model }) => model) || [];
 
-  const { restrictIncidentAccess, reportOnly } = useStoreState(
-    (state) => state.scheme
-  );
+  const { reportOnly } = useStoreState((state) => state.scheme);
 
   const getNavigationConfig = () => {
     if (userRole === 'USER' && reportOnly) {
       return ReportOnlyNavigationConfig;
     }
-    const filteredConfig = navConfig;
-    if (userRole === 'USER' && restrictIncidentAccess) {
-      return filteredConfig.filter((el) => el.title !== 'Incidents');
-    }
-    return filteredConfig;
+
+    return navConfig;
   };
   const navigationConfig = getNavigationConfig();
 
@@ -175,18 +168,6 @@ const SideNavContent = (props: SideNavContentProps) => {
     [BadgeTypes.message]: messages,
   };
 
-  // console.log('config', navigationConfig);
-  // console.log(
-  //   'childPermissions',
-  //   navigationConfig.filter((el) => {
-  //     console.log(el.childPermissions);
-  //     return el.childPermissions
-  //       ? el.childPermissions.some((childPermission) =>
-  //           permissions.includes(childPermission)
-  //         )
-  //       : true;
-  //   })
-  // );
   return (
     <div
       style={{
@@ -297,7 +278,7 @@ const SideNavContent = (props: SideNavContentProps) => {
                   </Badge>
                 ) : (
                   <span>{setLocale(localization, menu?.intl.id)}</span>
-                )}{' '}
+                )}
                 {menu.path ? (
                   <Link onClick={() => closeMobileNav()} to={menu.path} />
                 ) : null}
@@ -351,102 +332,6 @@ const SideNavContent = (props: SideNavContentProps) => {
   );
 };
 
-interface TopNavContentProps {
-  topNavColor: string;
-  localization: boolean;
-}
-
-const TopNavContent = (props: TopNavContentProps) => {
-  const { topNavColor, localization } = props;
-
-  const userRole = useStoreState((state) => state.user.role);
-  const restrictIncidentAccess = useStoreState(
-    (state) => state.scheme.restrictIncidentAccess
-  );
-
-  const getNavigationConfig = () => {
-    if (userRole !== 'SCHEME_ADMIN') {
-      if (userRole === 'USER' && restrictIncidentAccess) {
-        return navConfig.filter(
-          (el) => el.title !== 'sidenav.scheme' && el.title !== 'Incidents'
-        );
-      }
-      return navConfig.filter((el) => el.title !== 'sidenav.scheme');
-    }
-    return navConfig;
-  };
-  const navigationConfig = getNavigationConfig();
-
-  return (
-    <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
-      {navigationConfig.map((menu) =>
-        menu.submenu.length > 0 ? (
-          <SubMenu
-            key={menu.key}
-            popupClassName="top-nav-menu"
-            title={
-              <span>
-                {menu.icon ? <Icon icon={menu?.icon} /> : null}
-                <span>{setLocale(localization, menu.title)}</span>
-              </span>
-            }
-          >
-            {menu.submenu.map((subMenuFirst) =>
-              subMenuFirst.submenu.length > 0 ? (
-                <SubMenu
-                  key={subMenuFirst.key}
-                  icon={
-                    subMenuFirst.icon ? (
-                      <Icon icon={subMenuFirst?.icon} />
-                    ) : null
-                  }
-                  title={setLocale(localization, subMenuFirst.title)}
-                >
-                  {subMenuFirst.submenu.map((subMenuSecond) => (
-                    <Menu.Item key={subMenuSecond.key}>
-                      <span>
-                        {setLocale(localization, subMenuSecond.title)}
-                      </span>
-                      <Link to={subMenuSecond.path} />
-                    </Menu.Item>
-                  ))}
-                </SubMenu>
-              ) : (
-                <Menu.Item key={subMenuFirst.key}>
-                  {subMenuFirst.icon ? (
-                    <Icon icon={subMenuFirst?.icon} />
-                  ) : null}
-                  <span>{setLocale(localization, subMenuFirst.title)}</span>
-                  <Link to={subMenuFirst.path} />
-                </Menu.Item>
-              )
-            )}
-          </SubMenu>
-        ) : (
-          <Menu.Item key={menu.key}>
-            {menu.icon ? <Icon icon={menu?.icon} /> : null}
-            {menu.badge ? (
-              <Badge
-                style={{ height: 20, padding: 3 }}
-                offset={[8, 0]}
-                size="small"
-                count={0}
-                showZero
-              >
-                <span>{setLocale(localization, menu?.title)}</span>
-              </Badge>
-            ) : (
-              <span>{setLocale(localization, menu?.title)}</span>
-            )}
-
-            {menu.path ? <Link to={menu.path} /> : null}
-          </Menu.Item>
-        )
-      )}
-    </Menu>
-  );
-};
-
 interface Props {
   localization: boolean;
   type: NavType;
@@ -456,7 +341,7 @@ interface Props {
 
 const MenuContent = (props: Props) => {
   const sideNavTheme = useStoreState((state) => state.theme.sideNavTheme);
-  const topNavColor = useStoreState((state) => state.theme.topNavColor);
+
   const onMobileNavToggle = useStoreActions(
     (actions) => actions.theme.toggleMobileNav
   );
@@ -468,8 +353,6 @@ const MenuContent = (props: Props) => {
   const [todoCount, setTodoCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
-
-  const store = useStore();
 
   useEffect(() => {
     setTodoCount(userTodos || 0);
@@ -483,7 +366,7 @@ const MenuContent = (props: Props) => {
     setMessageCount(userMessages || 0);
   }, [userMessages]);
 
-  return props.type === NavType.SIDE ? (
+  return (
     <SideNavContent
       {...props}
       todos={todoCount}
@@ -492,8 +375,6 @@ const MenuContent = (props: Props) => {
       onMobileNavToggle={onMobileNavToggle}
       sideNavTheme={sideNavTheme}
     />
-  ) : (
-    <TopNavContent topNavColor={topNavColor} {...props} />
   );
 };
 

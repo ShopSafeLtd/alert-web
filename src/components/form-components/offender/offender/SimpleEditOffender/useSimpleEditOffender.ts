@@ -1,18 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
-import type {
-  Age,
-  Build,
-  Gender,
-  Race,
-  Height,
-  IdSource,
-  UpdateSimpleOffenderMutation,
-} from 'graphql/generated';
-import {
-  useBusinessOffenderSettingsQuery,
-  useUpdateSimpleOffenderMutation,
-  ImagePosition,
-} from 'graphql/generated';
+import type { Age, Build, Gender, Race, Height, IdSource } from 'graphql/types';
+import { ImagePosition } from 'graphql/types';
+
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -23,6 +12,9 @@ import type { AddressData, OffenderSettingsType } from '#/types/DataType';
 import { useState } from 'react';
 import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import { useUpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/business-offender-settings.generated';
 
 interface OffenderImage {
   id: string;

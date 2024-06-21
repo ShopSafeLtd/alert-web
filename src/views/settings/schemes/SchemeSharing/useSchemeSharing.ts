@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
-import type {
-  SchemeSharingQuery,
-  SchemeSharingQueryVariables,
-} from 'graphql/generated';
-import {
-  SchemeSharingDocument,
-  useSchemeSharingQuery,
-  useSetSchemeSharingMutation,
-} from 'graphql/generated';
 import { useStoreState } from 'state';
 import { Modal } from 'antd';
 import { useIntl } from 'react-intl';
+import type {
+  SchemeSharingQuery,
+  SchemeSharingQueryVariables,
+} from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
+import {
+  SchemeSharingDocument,
+  useSchemeSharingQuery,
+} from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
+import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/conenct-scheme-mutation.generated';
 
 const { confirm } = Modal;
 
@@ -75,11 +75,9 @@ const useSchemeSharing = (): Return => {
   const onUnlink = (id: string) => {
     confirm({
       title: intl.formatMessage({
-        id: '2oCaym',
         defaultMessage: 'Are you sure?',
       }),
       content: intl.formatMessage({
-        id: 'xBqvXY',
         defaultMessage:
           'This will unlink the scheme and no more offender or incidents will be able to be shared. Any previously shared data will remained shared.',
       }),

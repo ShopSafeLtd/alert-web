@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { SelectProps, UploadProps } from 'antd';
-import type {
-  CreateDocumentMutation,
-  ListDocumentsOnSchemeQuery,
-  ListDocumentsOnSchemeQueryVariables,
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
-} from 'graphql/generated';
-import {
-  DocumentType,
-  ListDocumentsOnSchemeDocument,
-  Model,
-  useCreateDocumentMutation,
-  useCreateTagMutation,
-  useTagsQuery,
-  ViewInvestigationDocument,
-} from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
 import customRequest from '../../../../utils/custom-request';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import { useCreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { Model, DocumentType } from 'graphql/types';
+import type {
+  ListDocumentsOnSchemeQuery,
+  ListDocumentsOnSchemeQueryVariables,
+} from 'graphql/documents/queries/list-documents.generated';
+import { ListDocumentsOnSchemeDocument } from 'graphql/documents/queries/list-documents.generated';
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/investigations/queries/view-investigation.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
 
 interface OnSubmitValues {
   name: string;

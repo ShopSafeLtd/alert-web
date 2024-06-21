@@ -1,10 +1,6 @@
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
-import {
-  Mg11Status,
-  useFetchMg11Query,
-  useUpdateOneMg11Mutation,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -12,6 +8,9 @@ import { useIntl } from 'react-intl';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import type { Mg11Data } from './FinalSignMg11.view';
 import { useStoreState } from '../../../state';
+import { Mg11Status } from 'graphql/types';
+import { useUpdateOneMg11Mutation } from 'graphql/mg11/mutations/update-mg11.generated';
+import { useFetchMg11Query } from 'graphql/mg11/queries/get-mg11.generated';
 
 const { useForm } = Form;
 
@@ -93,12 +92,10 @@ const useFinalSignMg11 = (): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Signed!',
-          id: 'LnyNwP',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The statement has been successfully signed, thank you!',
-          id: '+/CdFi',
         }),
 
         placement: 'bottomRight',
@@ -165,7 +162,7 @@ const useFinalSignMg11 = (): Return => {
 
   const onSubmit = () => {
     setSaving(true);
-    updateMg11({
+    void updateMg11({
       variables: {
         where: {
           id: id || '',

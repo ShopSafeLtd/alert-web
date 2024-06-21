@@ -67,7 +67,7 @@ const OffenderExclusions = ({
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
       {intl.formatMessage(
-        { defaultMessage: 'Description: {description}', id: 'US7L2J' },
+        { defaultMessage: 'Description: {description}' },
         {
           description: record.description,
         }
@@ -91,7 +91,6 @@ const OffenderExclusions = ({
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Outcomes',
-                id: 'h5J5Su',
               })}
             </Title>
           </Col>
@@ -104,7 +103,6 @@ const OffenderExclusions = ({
               {intl.formatMessage({
                 defaultMessage:
                   '- Create outcomes for this offender to exclude them from areas or premises.',
-                id: 'AIeJUP',
               })}
             </Paragraph>
           </Col>
@@ -119,7 +117,6 @@ const OffenderExclusions = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Outcome',
-                id: 'HQnZ2l',
               })}
             </Button>
           </Col>
@@ -142,7 +139,6 @@ const OffenderExclusions = ({
                 key: 'type',
                 title: intl.formatMessage({
                   defaultMessage: 'Type',
-                  id: '+U6ozc',
                 }),
                 dataIndex: 'type',
               },
@@ -150,7 +146,6 @@ const OffenderExclusions = ({
                 key: 'months',
                 title: intl.formatMessage({
                   defaultMessage: 'Duration',
-                  id: 'IuFETn',
                 }),
                 dataIndex: 'months',
               },
@@ -158,7 +153,6 @@ const OffenderExclusions = ({
                 key: 'startDate',
                 title: intl.formatMessage({
                   defaultMessage: 'Start Date',
-                  id: 'QirE3M',
                 }),
                 dataIndex: 'startDate',
                 // eslint-disable-next-line
@@ -169,7 +163,6 @@ const OffenderExclusions = ({
                 key: 'endDate',
                 title: intl.formatMessage({
                   defaultMessage: 'End Date',
-                  id: 'T4GOiX',
                 }),
                 dataIndex: 'endDate',
                 // eslint-disable-next-line
@@ -180,7 +173,6 @@ const OffenderExclusions = ({
                 key: 'fineValue',
                 title: intl.formatMessage({
                   defaultMessage: 'Fine Value',
-                  id: 'l2lAwm',
                 }),
                 dataIndex: 'fineValue',
               },
@@ -188,7 +180,6 @@ const OffenderExclusions = ({
                 key: 'Edit',
                 title: intl.formatMessage({
                   defaultMessage: 'Edit',
-                  id: 'wEQDC6',
                 }),
                 width: 50,
                 dataIndex: 'Edit',
@@ -207,7 +198,6 @@ const OffenderExclusions = ({
                 key: 'Delete',
                 title: intl.formatMessage({
                   defaultMessage: 'Delete',
-                  id: 'K3r6DQ',
                 }),
                 dataIndex: 'Delete',
                 width: 60,
@@ -241,7 +231,6 @@ const OffenderExclusions = ({
                 emptyDescription ||
                 intl.formatMessage({
                   defaultMessage: 'No exclusions added yet.',
-                  id: '8SBPZ4',
                 })
               }
               // style={{ marginLeft: 50 }}
@@ -252,7 +241,6 @@ const OffenderExclusions = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Exclusion',
-          id: 'QPeZMN',
         })}
         open={addExclusion}
         width="400"
@@ -267,7 +255,6 @@ const OffenderExclusions = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Exclusion',
-          id: '22olP0',
         })}
         open={editExclusion}
         width="400"

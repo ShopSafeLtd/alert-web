@@ -1,7 +1,8 @@
 import React from 'react';
-import type { AddressesQuery } from 'graphql/generated';
+
 import { Button, Col, Form, Radio, Row, Skeleton, Typography } from 'antd';
 import { useIntl } from 'react-intl';
+import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
 
 const { Paragraph } = Typography;
 
@@ -34,7 +35,6 @@ const ViewOffender = ({
         name="selectedLocation"
         label={intl.formatMessage({
           defaultMessage: 'Previous Locations:',
-          id: 'tIUIJt',
         })}
         rules={[
           {
@@ -42,7 +42,6 @@ const ViewOffender = ({
             message: intl.formatMessage({
               defaultMessage:
                 'Please select at least one location for the incident.',
-              id: 'AG8qKq',
             }),
           },
         ]}
@@ -69,7 +68,7 @@ const ViewOffender = ({
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
@@ -81,7 +80,6 @@ const ViewOffender = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Select Location',
-                id: 'yNCChc',
               })}
             </Button>
           </Col>

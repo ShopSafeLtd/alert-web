@@ -94,7 +94,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             drawer.open({
               defaultTitle: intl.formatMessage({
                 defaultMessage: 'Select incident',
-                id: 'Vea8nA',
               }),
               id: 'incidentSelect',
             });
@@ -102,7 +101,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         >
           {intl.formatMessage({
             defaultMessage: 'Select incident',
-            id: 'Vea8nA',
           })}
         </Button>
       </NodeToolbar>
@@ -125,7 +123,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
               {intl.formatMessage({
                 defaultMessage: 'Select incident',
-                id: 'Vea8nA',
               })}
             </div>
           )}

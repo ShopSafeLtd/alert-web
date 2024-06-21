@@ -4,9 +4,15 @@ import CreateArticle from 'views/article/CreateEditArticle/CreateEditArticle.con
 import ArticleFeed from 'views/article/ArticleFeed';
 import ViewArticle from 'views/article/ViewArticle/ViewArticle.container';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { Navigate, useParams } from 'react-router-dom';
+
+const RedirectOffenders = () => {
+  const { id } = useParams();
+  return <Navigate to={`/app/offenders/view/${id}`} />;
+};
 
 const Article = (): JSX.Element => {
   const intl = useIntl();
@@ -14,7 +20,6 @@ const Article = (): JSX.Element => {
     <RouteWrapper
       title={intl.formatMessage({
         defaultMessage: 'Bulletins',
-        id: 'tgD5sa',
       })}
     >
       <Routes>
@@ -57,6 +62,7 @@ const Article = (): JSX.Element => {
             </PermissionCheckWrapper>
           }
         />
+        <Route path="offenders/view/:id" element={<RedirectOffenders />} />
         <Route
           path="edit/:id"
           element={

@@ -1,42 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import type {
-  AssociatedOffendersQuery,
-  CreateDocumentMutation,
-  CreateInvestigationMutation,
-  CreateSimpleVehicleMutation,
-  DeleteDocumentMutation,
-  LanguageCode,
-  UpdateOffenderBansMutation,
-  UpdateOffenderCrimeGroupsMutation,
-  UpdateOffenderVehiclesMutation,
-  ViewOffenderQuery,
-  ViewOffenderQueryVariables,
-} from 'graphql/generated';
-import {
-  PermissionMethod,
-  PermissionModel,
-  Role,
-  TagType,
-  useAddImagesToIncidentMutation,
-  useAddImagesToOffenderMutation,
-  useAssociatedOffendersQuery,
-  useCreateSimpleVehicleMutation,
-  useDeleteUpdateMutation,
-  useRecycleOffenderMutation,
-  useSubscribeToOffenderMutation,
-  useTranslateLazyQuery,
-  useUnsubscribeFromOffenderMutation,
-  useUpdateOffenderAddressesMutation,
-  useUpdateOffenderBansMutation,
-  useUpdateOffenderCrimeGroupsMutation,
-  useUpdateOffenderImagesMutation,
-  useUpdateOffenderMutation,
-  useUpdateOffenderVehiclesMutation,
-  useUpdateSimpleVehicleMutation,
-  useUpdateUpdateMutation,
-  useViewOffenderQuery,
-  ViewOffenderDocument,
-} from 'graphql/generated';
 
 import { Modal, notification } from 'antd';
 import { useStoreState } from 'state';
@@ -57,6 +19,46 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useGroupsContext } from '#/context/groups-context';
 import hasPermission from '#/utils/has-permission';
+import type { AssociatedOffendersQuery } from 'graphql/offenders/queries/associated-offenders.generated';
+import { useAssociatedOffendersQuery } from 'graphql/offenders/queries/associated-offenders.generated';
+import type {
+  ViewOffenderQuery,
+  ViewOffenderQueryVariables,
+} from 'graphql/offenders/queries/view-offender.generated';
+import {
+  useViewOffenderQuery,
+  ViewOffenderDocument,
+} from 'graphql/offenders/queries/view-offender.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { LanguageCode } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  Role,
+  TagType,
+} from 'graphql/types';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import { useUpdateOffenderImagesMutation } from 'graphql/offenders/mutations/update/update-offender-images.generated';
+import type { UpdateOffenderVehiclesMutation } from 'graphql/offenders/mutations/update/update-offender-vehicles.generated';
+import { useUpdateOffenderVehiclesMutation } from 'graphql/offenders/mutations/update/update-offender-vehicles.generated';
+import type { CreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
+import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
+import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
+import type { UpdateOffenderCrimeGroupsMutation } from 'graphql/offenders/mutations/update/update-offender-crime-group.generated';
+import { useUpdateOffenderCrimeGroupsMutation } from 'graphql/offenders/mutations/update/update-offender-crime-group.generated';
+import { useUpdateOffenderAddressesMutation } from 'graphql/offenders/mutations/update/update-offender-address.generated';
+import type { UpdateOffenderBansMutation } from 'graphql/offenders/mutations/update/update-offender-ban.generated';
+import { useUpdateOffenderBansMutation } from 'graphql/offenders/mutations/update/update-offender-ban.generated';
+import { useSubscribeToOffenderMutation } from 'graphql/offenders/mutations/subscribe-to-offender.generated';
+import { useUnsubscribeFromOffenderMutation } from 'graphql/offenders/mutations/unsubscribe-to-offender.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
+import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/add-images-to-offender.generated';
+import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/add-images-to-incident.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
+import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
 
 const { confirm } = Modal;
 
@@ -369,11 +371,9 @@ const useViewOffender = (offenderId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Linked!',
-          id: 'y2UHQ1',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The offenders have been Linked to this incidents!',
-          id: 'fFQgTY',
         }),
         placement: 'bottomRight',
       });
@@ -383,11 +383,9 @@ const useViewOffender = (offenderId: string): Return => {
       notification.error({
         message: intl.formatMessage({
           defaultMessage: 'Error',
-          id: 'KN7zKn',
         }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors. Please try again. ',
-          id: 'YNC1/h',
         }),
         placement: 'bottomRight',
       });
@@ -417,12 +415,10 @@ const useViewOffender = (offenderId: string): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
-          id: 'nQ1eW+',
         }),
         placement: 'bottomRight',
       });
@@ -431,11 +427,9 @@ const useViewOffender = (offenderId: string): Return => {
       notification.error({
         message: intl.formatMessage({
           defaultMessage: 'Error',
-          id: 'KN7zKn',
         }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors. Please try again. ',
-          id: 'YNC1/h',
         }),
         placement: 'bottomRight',
       });
@@ -446,16 +440,13 @@ const useViewOffender = (offenderId: string): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure you want to delete this offender?',
-        id: 'lOgZfN',
       }),
       content: intl.formatMessage({
         defaultMessage:
           'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: 'J35F/I',
       }),
       okText: intl.formatMessage({
         defaultMessage: 'Delete',
-        id: 'K3r6DQ',
       }),
       onOk() {
         void recycleOffender({
@@ -523,11 +514,9 @@ const useViewOffender = (offenderId: string): Return => {
         notification.success({
           message: intl.formatMessage({
             defaultMessage: 'Successfully updated!',
-            id: 'zJzbfm',
           }),
           description: intl.formatMessage({
             defaultMessage: 'The images have been updated',
-            id: 'yRfbZE',
           }),
           placement: 'bottomRight',
         });
@@ -582,11 +571,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully updated!',
-              id: 'zJzbfm',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The images have been updated',
-              id: 'yRfbZE',
             }),
             placement: 'bottomRight',
           });
@@ -611,11 +598,9 @@ const useViewOffender = (offenderId: string): Return => {
         notification.success({
           message: intl.formatMessage({
             defaultMessage: 'Successfully deleted!',
-            id: 'RFD+id',
           }),
           description: intl.formatMessage({
             defaultMessage: 'The image/s have been deleted',
-            id: '65D7dw',
           }),
           placement: 'bottomRight',
         });
@@ -789,11 +774,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully updated!',
-              id: 'zJzbfm',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The vehicle/s have been updated',
-              id: 'UD3TUz',
             }),
             placement: 'bottomRight',
           });
@@ -872,11 +855,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully added!',
-              id: 'bYuIEA',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The vehicle/s have been added',
-              id: 'jLIci0',
             }),
             placement: 'bottomRight',
           });
@@ -903,11 +884,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully added!',
-              id: 'bYuIEA',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The vehicle/s have been added',
-              id: 'jLIci0',
             }),
             placement: 'bottomRight',
           });
@@ -930,11 +909,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully deleted!',
-              id: 'RFD+id',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The vehicle/s have been deleted',
-              id: '2bEaE/',
             }),
             placement: 'bottomRight',
           });
@@ -1011,11 +988,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully added!',
-              id: 'bYuIEA',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The crime groups has been added',
-              id: 'gtAFT7',
             }),
             placement: 'bottomRight',
           });
@@ -1038,11 +1013,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully removed!',
-              id: 'nvymrt',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The crime group has been removed',
-              id: 'nOqQ3P',
             }),
             placement: 'bottomRight',
           });
@@ -1112,11 +1085,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully updated!',
-              id: 'zJzbfm',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The address has been updated',
-              id: '5+GceR',
             }),
             placement: 'bottomRight',
           });
@@ -1151,11 +1122,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully added!',
-              id: 'bYuIEA',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The address has been added',
-              id: 'ASXk8Y',
             }),
             placement: 'bottomRight',
           });
@@ -1179,11 +1148,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully deleted!',
-              id: 'RFD+id',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The address has been removed',
-              id: '8BX6EA',
             }),
             placement: 'bottomRight',
           });
@@ -1285,11 +1252,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully updated!',
-              id: 'zJzbfm',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The ban has been updated',
-              id: 'cUo6em',
             }),
             placement: 'bottomRight',
           });
@@ -1333,11 +1298,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully added!',
-              id: 'bYuIEA',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The ban has been added',
-              id: '5mHoFH',
             }),
             placement: 'bottomRight',
           });
@@ -1361,11 +1324,9 @@ const useViewOffender = (offenderId: string): Return => {
           notification.success({
             message: intl.formatMessage({
               defaultMessage: 'Successfully deleted!',
-              id: 'RFD+id',
             }),
             description: intl.formatMessage({
               defaultMessage: 'The ban has been removed',
-              id: '+Llm6i',
             }),
             placement: 'bottomRight',
           });
@@ -1614,18 +1575,15 @@ const useViewOffender = (offenderId: string): Return => {
     confirm({
       title: intl.formatMessage({
         defaultMessage: 'Are you sure?',
-        id: '2oCaym',
       }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
-        id: 'gwznO0',
       }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
       okText: intl.formatMessage({
         defaultMessage: 'Delete',
-        id: 'K3r6DQ',
       }),
     });
   };
@@ -1688,19 +1646,16 @@ const useViewOffender = (offenderId: string): Return => {
           confirm({
             title: intl.formatMessage({
               defaultMessage: 'Are you sure?',
-              id: '2oCaym',
             }),
             content: intl.formatMessage({
               defaultMessage:
                 'Adding this image will notify any other users following the incident.',
-              id: 'qfS4of',
             }),
             onOk() {
               onAddUpdateImagesToIncident(data?.offender.incidents[0].id);
             },
             okText: intl.formatMessage({
               defaultMessage: 'Add Images',
-              id: 'b4GGYZ',
             }),
           });
         }
@@ -1708,19 +1663,16 @@ const useViewOffender = (offenderId: string): Return => {
         confirm({
           title: intl.formatMessage({
             defaultMessage: 'Are you sure?',
-            id: '2oCaym',
           }),
           content: intl.formatMessage({
             defaultMessage:
               'Adding this image will notify any other users following the offender.',
-            id: '8Vqbat',
           }),
           onOk() {
             onAddUpdateImagesToOffender(images.map(({ id }) => ({ id })));
           },
           okText: intl.formatMessage({
             defaultMessage: 'Add Images',
-            id: 'b4GGYZ',
           }),
         });
       }
@@ -1779,7 +1731,6 @@ const useViewOffender = (offenderId: string): Return => {
         {
           label: intl.formatMessage({
             defaultMessage: 'Compare',
-            id: '493J7R',
           }),
           key: '0',
           icon: <FontAwesomeIcon size="3x" icon={faPeople} />,
@@ -1788,7 +1739,6 @@ const useViewOffender = (offenderId: string): Return => {
         {
           label: intl.formatMessage({
             defaultMessage: 'Edit',
-            id: 'wEQDC6',
           }),
           key: '1',
           icon: <FontAwesomeIcon size="3x" icon={faEdit} />,
@@ -1797,7 +1747,6 @@ const useViewOffender = (offenderId: string): Return => {
         {
           label: intl.formatMessage({
             defaultMessage: 'Delete',
-            id: 'K3r6DQ',
           }),
           key: '2',
           icon: <FontAwesomeIcon icon={faTrash} />,

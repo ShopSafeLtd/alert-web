@@ -1,30 +1,29 @@
 import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
-import type {
-  BusinessesSideListQuery,
-  BusinessesSideListQueryVariables,
-  BusinessUpdateInput,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-} from 'graphql/generated';
-import {
-  BusinessesSideListDocument,
-  SortOrder,
-  Model,
-  QueryMode,
-  SearchBusinessesDocument,
-  useBrandsQuery,
-  useEditBusinessQuery,
-  useTagsQuery,
-  useUpdateBusinessMutation,
-} from 'graphql/generated';
+
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import type { LocationData, TagData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useGroupsContext } from '#/context/groups-context';
+import { useEditBusinessQuery } from 'graphql/businesses/queries/edit-business.generated';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+import type { BusinessUpdateInput } from 'graphql/types';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useUpdateBusinessMutation } from 'graphql/businesses/mutations/update-business.generated';
+import type {
+  BusinessesSideListQuery,
+  BusinessesSideListQueryVariables,
+} from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/businesses/queries/search-businesses.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
 
 export interface OnSubmitValues {
   name: string;
@@ -177,7 +176,6 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Shop has been updated',
-          id: 'SxquWc',
         }),
 
         placement: 'bottomRight',
@@ -468,7 +466,6 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
               {
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
-                  id: 'hX5PAb',
                 }),
                 value: '',
                 disabled: true,

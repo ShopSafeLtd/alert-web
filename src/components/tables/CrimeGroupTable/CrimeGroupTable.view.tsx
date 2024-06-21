@@ -130,7 +130,7 @@ const CrimeGroupTable = ({
         {
           key: 'reference',
           dataIndex: 'reference',
-          title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
+          title: <FormattedMessage defaultMessage="Alert ID" />,
           width: 100,
           render: (
             _,
@@ -149,22 +149,22 @@ const CrimeGroupTable = ({
         {
           key: 'alias',
           dataIndex: 'alias',
-          title: <FormattedMessage id="Ri9jA7" defaultMessage="Alias" />,
+          title: <FormattedMessage defaultMessage="Alias" />,
         },
         {
           key: 'totalOffenders',
           dataIndex: 'totalOffenders',
-          title: <FormattedMessage id="+a+2ug" defaultMessage="Members" />,
+          title: <FormattedMessage defaultMessage="Members" />,
         },
         {
           key: 'totalIncidents',
           dataIndex: 'totalIncidents',
-          title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
+          title: <FormattedMessage defaultMessage="Incidents" />,
         },
         {
           key: 'totalValue',
           dataIndex: 'totalValue',
-          title: <FormattedMessage id="MoJx/h" defaultMessage="Total Value" />,
+          title: <FormattedMessage defaultMessage="Total Value" />,
           render: (value: number) => `£${value.toLocaleString() || 0}`,
         },
         {
@@ -185,7 +185,6 @@ const CrimeGroupTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'View Crime Group',
-                      id: 'NCLKFX',
                     })}
                   >
                     <Link to={`/app/crime-groups/view/${record.key}`}>
@@ -203,7 +202,6 @@ const CrimeGroupTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Edit Crime Group',
-                      id: 'uK1ewV',
                     })}
                   >
                     <Button
@@ -222,25 +220,21 @@ const CrimeGroupTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove Crime Group',
-                      id: '6HwEZt',
                     })}
                   >
                     <Popconfirm
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the crimeGroup?',
-                        id: 'oIBRWV',
                       })}
                       onConfirm={() => {
                         onDelete(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >

@@ -10,14 +10,16 @@ import {
   Tooltip,
 } from 'antd';
 import { createUseStyles } from 'react-jss';
-import type { DeleteDocumentMutation, FileType } from 'graphql/generated';
-import { useDeleteDocumentMutation } from 'graphql/generated';
+
 import { useIntl } from 'react-intl';
 import { faFileArrowDown, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { FileType } from 'graphql/types';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import { useDeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
 
 const useStyles = createUseStyles({
   row: {
@@ -64,12 +66,10 @@ const EvidenceTable = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage(
           {
             defaultMessage: 'The document has been deleted from the {title}!',
-            id: 'Qr7jBZ',
           },
           { title }
         ),
@@ -101,7 +101,6 @@ const EvidenceTable = ({
           key: 'name',
           dataIndex: 'name',
           title: intl.formatMessage({
-            id: 'HAlOn1',
             defaultMessage: 'Name',
           }),
           // width: '80%',
@@ -110,7 +109,6 @@ const EvidenceTable = ({
           key: 'tags',
           dataIndex: 'tags',
           title: intl.formatMessage({
-            id: '1EYCdR',
             defaultMessage: 'Tags',
           }),
 
@@ -126,7 +124,6 @@ const EvidenceTable = ({
                       {intl.formatMessage(
                         {
                           defaultMessage: '+ {num} more',
-                          id: 'fi2Xie',
                         },
                         {
                           num: value.length - 2,
@@ -164,7 +161,6 @@ const EvidenceTable = ({
                 <Tooltip
                   title={intl.formatMessage({
                     defaultMessage: 'Download',
-                    id: '5q3qC0',
                   })}
                 >
                   <Button
@@ -182,25 +178,21 @@ const EvidenceTable = ({
                   <Tooltip
                     title={intl.formatMessage({
                       defaultMessage: 'Remove Evidence',
-                      id: 'K9MTKE',
                     })}
                   >
                     <Popconfirm
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the evidence?',
-                        id: 'IW8b3z',
                       })}
                       onConfirm={() => {
                         onDelete(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
-                        id: 'a5msuh',
                       })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
-                        id: 'oUWADl',
                       })}
                       overlayInnerStyle={{ padding: 10 }}
                     >

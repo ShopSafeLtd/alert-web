@@ -5,16 +5,16 @@ import type { FormInstance } from 'antd';
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   Form,
+  Space,
+  Tabs,
+  Upload,
+  Checkbox,
   Radio,
   Row,
   Select,
-  Space,
-  Tabs,
   Typography,
-  Upload,
 } from 'antd';
 import ReactDOMServer from 'react-dom/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,8 +24,9 @@ import type { FormData } from './useSignMg11';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import SignatureInput from '../../../components/SignBox';
-import { Mg11Status } from '../../../graphql/generated';
+
 import Loading from '../../../components/loading';
+import { Mg11Status } from 'graphql/types';
 
 const { Title } = Typography;
 

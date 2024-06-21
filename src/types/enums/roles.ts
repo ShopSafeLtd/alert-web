@@ -1,4 +1,4 @@
-import { Role } from 'graphql/generated';
+import { Role } from 'graphql/types';
 
 export enum Roles {
   admin = 'ADMIN',

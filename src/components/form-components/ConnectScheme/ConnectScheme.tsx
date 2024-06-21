@@ -1,21 +1,19 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React from 'react';
-import type {
-  SchemeSharingQuery,
-  SchemeSharingQueryVariables,
-} from 'graphql/generated';
-import {
-  Role,
-  SchemeSharingDocument,
-  SortOrder,
-  useConnectSchemesQuery,
-  useSetSchemeSharingMutation,
-} from 'graphql/generated';
+
 import { useStoreState } from 'state';
 import { Button, Col, Row, Skeleton, Typography } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
+import { useConnectSchemesQuery } from '#/components/form-components/ConnectScheme/connect-schemes-query.generated';
+import { Role, SortOrder } from 'graphql/types';
+import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/conenct-scheme-mutation.generated';
+import type {
+  SchemeSharingQuery,
+  SchemeSharingQueryVariables,
+} from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
+import { SchemeSharingDocument } from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   scheme: {
@@ -129,7 +127,7 @@ const ConnectScheme = ({ connectedScheme, onClose }: Props) => {
             </Col>
             <Col>
               <Button onClick={() => connectScheme(scheme.id)}>
-                <FormattedMessage id="+vVZ/G" defaultMessage="Connect" />
+                <FormattedMessage defaultMessage="Connect" />
               </Button>
             </Col>
           </Row>

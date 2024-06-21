@@ -1,17 +1,15 @@
 import type { SelectProps } from 'antd';
+import { useState } from 'react';
+import { useStoreState } from 'state';
+import { useCopyEvidenceMutation } from 'graphql/dem/mutations/import-evidence.generated';
 import type {
   ViewInvestigationQuery,
   ViewInvestigationQueryVariables,
-} from 'graphql/generated';
-import {
-  Model,
-  useCopyEvidenceMutation,
-  useCreateTagMutation,
-  useTagsQuery,
-  ViewInvestigationDocument,
-} from 'graphql/generated';
-import { useState } from 'react';
-import { useStoreState } from 'state';
+} from 'graphql/investigations/queries/view-investigation.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
+import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { Model } from 'graphql/types';
 
 interface OnSubmitValues {
   name: string;

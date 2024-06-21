@@ -57,14 +57,12 @@ const AddBusiness = ({
               name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
-                id: 'HAlOn1',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please input a name!',
-                    id: '705XBo',
                   }),
                 },
               ]}
@@ -72,7 +70,6 @@ const AddBusiness = ({
               <Input
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Name',
-                  id: 'HAlOn1',
                 })}
               />
             </Form.Item>
@@ -84,13 +81,11 @@ const AddBusiness = ({
               name="category"
               label={intl.formatMessage({
                 defaultMessage: 'Category',
-                id: 'ccXLVi',
               })}
             >
               <Select
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Category',
-                  id: 'ccXLVi',
                 })}
                 mode="tags"
                 size="small"
@@ -119,7 +114,6 @@ const AddBusiness = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Search Evidence',
-                id: 'GeGjlC',
               })}
             </Button>
           </Col>
@@ -130,7 +124,6 @@ const AddBusiness = ({
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
                   defaultMessage: 'Cancel',
-                  id: '47FYwb',
                 })}
               </Button>
             </Col>
@@ -143,7 +136,6 @@ const AddBusiness = ({
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Evidence',
-                  id: '5RJkQZ',
                 })}
               </Button>
             </Col>
@@ -153,7 +145,6 @@ const AddBusiness = ({
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add DEM Evidence',
-          id: 'yyf+RN',
         })}
         open={searchEvidence}
         width="800"

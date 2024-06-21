@@ -27,7 +27,6 @@ const FeedItemCol = ({
       <Typography.Title>
         {intl.formatMessage({
           defaultMessage: 'Feed Items',
-          id: 'opjh8D',
         })}
       </Typography.Title>
 

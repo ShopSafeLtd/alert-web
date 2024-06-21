@@ -16,7 +16,7 @@ import {
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { FormData } from './useUpdateQuestion';
-import { AnswerType } from '../../../graphql/generated';
+import { AnswerType } from '../../../graphql/types';
 import type { TagQuestion } from './UpdateQuestion.container';
 
 interface AddQuestionViewProps {
@@ -60,10 +60,10 @@ const UpdateQuestionView = ({
         return (
           <Radio.Group size="small">
             <Radio.Button value="true">
-              <FormattedMessage defaultMessage="Yes" id="a5msuh" />
+              <FormattedMessage defaultMessage="Yes" />
             </Radio.Button>
             <Radio.Button value="false">
-              <FormattedMessage defaultMessage="No" id="oUWADl" />
+              <FormattedMessage defaultMessage="No" />
             </Radio.Button>
           </Radio.Group>
         );
@@ -103,7 +103,6 @@ const UpdateQuestionView = ({
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Question',
-            id: 'kgOBET',
           })}
           name="newQuestion"
           required
@@ -113,7 +112,6 @@ const UpdateQuestionView = ({
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Required',
-            id: 'Seanpx',
           })}
           name="required"
           valuePropName="checked"
@@ -130,7 +128,6 @@ const UpdateQuestionView = ({
           }}
           title={intl.formatMessage({
             defaultMessage: 'Options',
-            id: 'NDV5Mq',
           })}
         >
           <Form.List
@@ -145,7 +142,6 @@ const UpdateQuestionView = ({
                       new Error(
                         intl.formatMessage({
                           defaultMessage: 'Please add at least 2 options',
-                          id: 'VdoV2m',
                         })
                       )
                     );
@@ -155,7 +151,6 @@ const UpdateQuestionView = ({
                       new Error(
                         intl.formatMessage({
                           defaultMessage: 'Please fill all options',
-                          id: 'FyntBD',
                         })
                       )
                     );
@@ -181,7 +176,6 @@ const UpdateQuestionView = ({
                       <Button onClick={() => remove(field.name)}>
                         {intl.formatMessage({
                           defaultMessage: 'Remove',
-                          id: 'G/yZLu',
                         })}
                       </Button>
                     </Col>
@@ -202,7 +196,6 @@ const UpdateQuestionView = ({
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Option',
-                      id: 'MMOk0m',
                     })}
                   </Button>
                   <Form.ErrorList errors={errors} />
@@ -217,13 +210,11 @@ const UpdateQuestionView = ({
         loading={loading}
         title={intl.formatMessage({
           defaultMessage: 'Dependencies',
-          id: '37Z5zj',
         })}
       >
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Dependent Question',
-            id: 'GH/JnG',
           })}
           name="dependentOn"
         >
@@ -239,7 +230,6 @@ const UpdateQuestionView = ({
           <Form.Item
             label={intl.formatMessage({
               defaultMessage: 'Dependent Answer',
-              id: 'uVG0Go',
             })}
             rules={[
               {
@@ -247,7 +237,6 @@ const UpdateQuestionView = ({
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select an answer that this question will depend on to show in the form',
-                  id: 'DigMoX',
                 }),
               },
             ]}
@@ -262,7 +251,6 @@ const UpdateQuestionView = ({
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Dependent Brands',
-            id: 'Lw8lSX',
           })}
           name="dependentBrands"
           hidden={brands?.length === 0}
@@ -276,7 +264,6 @@ const UpdateQuestionView = ({
             <Button disabled={saving || loading} onClick={() => onClose()}>
               {intl.formatMessage({
                 defaultMessage: 'Cancel',
-                id: '47FYwb',
               })}
             </Button>
           </Col>
@@ -289,7 +276,6 @@ const UpdateQuestionView = ({
             >
               {intl.formatMessage({
                 defaultMessage: 'Submit',
-                id: 'wSZR47',
               })}
             </Button>
           </Col>

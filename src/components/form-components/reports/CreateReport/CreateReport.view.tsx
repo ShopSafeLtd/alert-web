@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useStoreState } from '#/state';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { ReportType } from 'graphql/types';
+import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/create-report-template.generated';
 import type {
   ReportsCentreQuery,
   ReportsCentreQueryVariables,
-} from 'graphql/generated';
-import {
-  ReportsCentreDocument,
-  ReportType,
-  useCreateReportTemplateMutation,
-} from 'graphql/generated';
-import { useStoreState } from '#/state';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+} from '#/views/reports/reports-centre/reports-centre.generated';
+import { ReportsCentreDocument } from '#/views/reports/reports-centre/reports-centre.generated';
 
 interface FormData {
   name: string;
@@ -34,45 +32,37 @@ const CreateReport = ({ onClose }: Props) => {
       value: ReportType.Performance,
       name: intl.formatMessage({
         defaultMessage: 'Summary Report',
-        id: 'fsgqKM',
       }),
       description: intl.formatMessage({
         defaultMessage:
           'Report that can show a summary of all data in alert together.',
-        id: 'Mkss8i',
       }),
     },
     {
       value: ReportType.Offender,
       name: intl.formatMessage({
         defaultMessage: 'Offender Report',
-        id: 'ynFfP5',
       }),
       description: intl.formatMessage({
         defaultMessage: 'Report that focuses on the data for one offender.',
-        id: 'Kvwge2',
       }),
     },
     {
       value: ReportType.Business,
       name: intl.formatMessage({
         defaultMessage: 'Business Report',
-        id: 'e0DE11',
       }),
       description: intl.formatMessage({
         defaultMessage: 'Report that focuses on the data for one business.',
-        id: '1DwtXz',
       }),
     },
     {
       value: ReportType.CrimeGroup,
       name: intl.formatMessage({
         defaultMessage: 'Crime Group Report',
-        id: 'I3QTNl',
       }),
       description: intl.formatMessage({
         defaultMessage: 'Report that focuses on the data for one crime group.',
-        id: 'iUW0OA',
       }),
     },
   ];
@@ -207,13 +197,12 @@ const CreateReport = ({ onClose }: Props) => {
     <Form<FormData> layout="vertical" onFinish={onSubmit}>
       <Form.Item
         name="name"
-        label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+        label={intl.formatMessage({ defaultMessage: 'Name' })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'Name is required',
-              id: 'Gvxoji',
             }),
           },
         ]}
@@ -224,14 +213,12 @@ const CreateReport = ({ onClose }: Props) => {
         name="description"
         label={intl.formatMessage({
           defaultMessage: 'Description',
-          id: 'Q8Qw5B',
         })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'Description is required',
-              id: '+NKkKd',
             }),
           },
         ]}
@@ -242,14 +229,12 @@ const CreateReport = ({ onClose }: Props) => {
         name="type"
         label={intl.formatMessage({
           defaultMessage: 'Report Type',
-          id: 'HDqA4C',
         })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'A type is required.',
-              id: '/TAVlX',
             }),
           },
         ]}
@@ -274,14 +259,12 @@ const CreateReport = ({ onClose }: Props) => {
         name="groups"
         label={intl.formatMessage({
           defaultMessage: 'Groups',
-          id: 'hzmswI',
         })}
         rules={[
           {
             required: true,
             message: intl.formatMessage({
               defaultMessage: 'Please select at least one group.',
-              id: 'dwqaFS',
             }),
           },
         ]}
@@ -292,7 +275,7 @@ const CreateReport = ({ onClose }: Props) => {
         <Row gutter={16} justify="end">
           <Col>
             <Button onClick={onClose}>
-              <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
+              <FormattedMessage defaultMessage="Cancel" />
             </Button>
           </Col>
           <Col>
@@ -302,7 +285,7 @@ const CreateReport = ({ onClose }: Props) => {
               type="primary"
               htmlType="submit"
             >
-              <FormattedMessage defaultMessage="Create Report" id="xUcQWH" />
+              <FormattedMessage defaultMessage="Create Report" />
             </Button>
           </Col>
         </Row>

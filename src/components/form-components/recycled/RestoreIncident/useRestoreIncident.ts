@@ -1,18 +1,14 @@
 import { useState } from 'react';
-import type {
-  RecycledItemQuery,
-  RestoreIncidentMutation,
-  DeleteIncidentMutation,
-} from 'graphql/generated';
-import {
-  useRecycledItemQuery,
-  useRestoreIncidentMutation,
-  useDeleteIncidentMutation,
-} from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
+import { useRestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
+import { useDeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
+import type { RecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
+import { useRecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
 
 interface Props {
   onClose: () => void;
@@ -54,11 +50,9 @@ const useRestoreIncident = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Restored!',
-          id: 'aJnSOt',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The incident has been restored! ',
-          id: '/PBSKb',
         }),
         placement: 'bottomRight',
       });
@@ -87,11 +81,9 @@ const useRestoreIncident = ({
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Deleted!',
-          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The incident has been deleted.',
-          id: 'kOsXhQ',
         }),
         placement: 'bottomRight',
       });

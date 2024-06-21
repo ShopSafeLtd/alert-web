@@ -1,8 +1,7 @@
 import type { SetUserPayload } from 'state';
 import { useStoreActions, useStoreState } from 'state';
 import LogRocket from 'logrocket';
-import { GoodsMode, useCurrentUserLazyQuery } from 'graphql/generated';
-import { useAuth0 } from '@auth0/auth0-react';
+
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
 import Mixpanel from 'utils/mixpanel';
@@ -12,32 +11,30 @@ import type {
   DashboardLayout,
 } from '#/state/dashboard-model';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
-import type { Translations } from '../state/scheme-model';
-
-// import OneSignal from 'react-onesignal';
+import type { Translations } from '#/state/scheme-model';
+import {
+  useAuth as useAuthClerk,
+  useSession,
+  useUser,
+} from '@clerk/clerk-react';
+import { useTokenContext } from '#/context/token-context';
+import { GoodsMode } from 'graphql/types';
+import { useCurrentUserLazyQuery } from '#/hooks/user/queries/current-user.generated';
 
 interface Return {
   rehydrateAuth: () => void;
   signOut: () => void;
-  onLoginSuccess: (data: OnLoginSuccessArgs) => void;
+
   getCurrentUser: () => void;
   loading: boolean;
   expired: () => void;
 }
 
-interface OnLoginSuccessArgs extends SetUserPayload {
-  accessToken: string;
-}
-
 const useAuth = (): Return => {
-  const {
-    getAccessTokenSilently,
-    isAuthenticated,
-    user,
-    isLoading,
-    loginWithRedirect,
-  } = useAuth0();
-
+  const { isSignedIn, user, isLoaded } = useUser();
+  const { getToken, signOut: signOutClerk } = useAuthClerk();
+  const { token } = useTokenContext();
+  const { session } = useSession();
   const navigate = useNavigate();
   // const client = useApolloClient();
   const authenticated = useStoreActions(
@@ -53,25 +50,17 @@ const useAuth = (): Return => {
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
   );
+  const currentUserId = useStoreState((state) => state.user.id);
   const currentScheme = useStoreState((state) => state.scheme.id);
 
   const setDashboard = useStoreActions(
     (actions) => actions.dashboard.setSchemeLayouts
   );
+
   interface HandleSuccessArgs extends SetUserPayload {
     accessToken: string;
     defaultScheme?: string;
   }
-
-  const loginRoute = () => {
-    if (localStorage.getItem('logo')?.endsWith('.webp')) {
-      void loginWithRedirect({
-        'ext-logo': localStorage.getItem('logo'),
-      });
-    } else {
-      void loginWithRedirect();
-    }
-  };
 
   const handleSuccess = async ({
     id,
@@ -83,17 +72,18 @@ const useAuth = (): Return => {
     onboarded,
     schemes,
     demId,
-
     reference,
     userNotifications,
     userMessages,
     defaultGroups,
     reportToAllBusinesses,
     defaultScheme,
+    forcePasswordReset,
+    hasPassword,
+    termsExpired,
   }: // eslint-disable-next-line @typescript-eslint/require-await
   HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
-
     const handleNoValidScheme = () => {
       const defScheme =
         schemes.find(({ scheme: { id: sId } }) => sId === defaultScheme) ||
@@ -223,6 +213,7 @@ const useAuth = (): Return => {
       (el) => el.scheme.id === scheme
     );
     Sentry.setUser({ email, username: fullName, id });
+    console.log('setting user?');
     setUser({
       id,
       email,
@@ -231,7 +222,8 @@ const useAuth = (): Return => {
       businesses,
       onboarded,
       schemes,
-
+      hasPassword,
+      forcePasswordReset,
       isSet: true,
       demId,
       reference,
@@ -240,6 +232,7 @@ const useAuth = (): Return => {
       defaultGroups,
       filterDefaultGroups,
       reportToAllBusinesses,
+      termsExpired,
     });
 
     const businessToDem = (businesses
@@ -255,110 +248,121 @@ const useAuth = (): Return => {
   const [getCurrentUserQuery, { loading, data: CurrentUserData }] =
     useCurrentUserLazyQuery({
       fetchPolicy: 'cache-first',
+      nextFetchPolicy: 'cache-only',
       canonizeResults: true,
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onCompleted: async ({ currentUser }) => {
         if (!currentUser) {
-          if (!isLoading && isAuthenticated) {
+          if (!isLoaded && isSignedIn) {
             expired();
-          } else if (!isLoading && !isAuthenticated) {
-            loginRoute();
+          } else if (!isLoaded && !isSignedIn) {
+            navigate('/sign-in');
           }
         }
-        const scheme =
-          currentScheme || window.localStorage.getItem('currentScheme');
 
-        if (scheme) {
-          const currentS =
-            currentUser &&
-            currentUser.schemes.find((s) => s.scheme.id === scheme);
-          if (currentS) {
-            window.localStorage.setItem(
-              'logo',
-              currentS?.scheme?.logo?.optimisedPersisted || ''
-            );
-            if (!currentS?.scheme?.logo?.optimisedPersisted) {
-              window.localStorage.setItem('logo', '');
+        if (currentUserId !== currentUser?.id) {
+          const scheme =
+            currentScheme || window.localStorage.getItem('currentScheme');
+
+          if (scheme) {
+            const currentS =
+              currentUser &&
+              currentUser.schemes.find((s) => s.scheme.id === scheme);
+            if (currentS) {
+              window.localStorage.setItem(
+                'logo',
+                currentS?.scheme?.logo?.optimisedPersisted || ''
+              );
+              if (!currentS?.scheme?.logo?.optimisedPersisted) {
+                window.localStorage.setItem('logo', '');
+              }
+              window.localStorage.setItem(
+                'logo-dark',
+                currentS?.scheme?.darkLogo?.optimisedPersisted || ''
+              );
             }
-            window.localStorage.setItem(
-              'logo-dark',
-              currentS?.scheme?.darkLogo?.optimisedPersisted || ''
-            );
-          }
-        }
-
-        const result: { [key: string]: DashboardLayout } = {};
-
-        if (currentUser?.schemes)
-          // eslint-disable-next-line no-unsafe-optional-chaining,no-restricted-syntax
-          for (const item of currentUser?.schemes) {
-            result[item.scheme.id] = {
-              marquee:
-                item.dashboard?.runningBanner ??
-                (item.isAdmin
-                  ? defaultAdminLayout.marquee
-                  : defaultUserLayout.marquee),
-              layout: item.dashboard?.layout
-                ? item.dashboard?.layout.map((lay) => ({
-                    ...lay,
-                    i: lay.i as AvailableDashboardElements,
-                    static: !!lay.static,
-                    isBounded: true,
-                    isDraggable: false,
-                    isResizable: false,
-                    maxH: lay.maxH ?? undefined,
-                    maxW: lay.maxW ?? undefined,
-                    minH: lay.minH ?? undefined,
-                    minW: lay.minW ?? undefined,
-                  }))
-                : item.isAdmin
-                ? defaultAdminLayout.layout
-                : defaultUserLayout.layout,
-            };
           }
 
-        setDashboard(result);
+          const result: { [key: string]: DashboardLayout } = {};
 
-        await handleSuccess({
-          id: currentUser?.id || '',
-          email: currentUser?.email || '',
-          fullName: currentUser?.fullName || '',
-          origName: currentUser?.origName || '',
-          accessToken: window.localStorage.getItem('access_token') || '',
-          businesses: currentUser?.businesses || [],
-          onboarded: !currentUser?.newUser,
-          schemes: currentUser?.schemes || [],
+          if (currentUser?.schemes)
+            // eslint-disable-next-line no-unsafe-optional-chaining,no-restricted-syntax
+            for (const item of currentUser?.schemes) {
+              result[item.scheme.id] = {
+                marquee:
+                  item.dashboard?.runningBanner ??
+                  (item.isAdmin
+                    ? defaultAdminLayout.marquee
+                    : defaultUserLayout.marquee),
+                layout: item.dashboard?.layout
+                  ? item.dashboard?.layout.map((lay) => ({
+                      ...lay,
+                      i: lay.i as AvailableDashboardElements,
+                      static: !!lay.static,
+                      isBounded: true,
+                      isDraggable: false,
+                      isResizable: false,
+                      maxH: lay.maxH ?? undefined,
+                      maxW: lay.maxW ?? undefined,
+                      minH: lay.minH ?? undefined,
+                      minW: lay.minW ?? undefined,
+                    }))
+                  : item.isAdmin
+                  ? defaultAdminLayout.layout
+                  : defaultUserLayout.layout,
+              };
+            }
 
-          demId: currentUser?.demId || '',
-          isSet: true,
-          reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
+          setDashboard(result);
 
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          reference: `${currentUser?.reference}` || '',
-          userNotifications: currentUser?.notificationCount || 0,
-          userMessages: currentUser?.messageCount || 0,
-          defaultGroups: currentUser?.defaultGroups || [],
-          defaultScheme: currentUser?.defaultScheme || undefined,
-          filterDefaultGroups:
-            currentUser?.defaultGroups.filter(
-              (el) => el.scheme.id === scheme
-            ) || [],
-        });
-        if (currentUser?.newUser) {
-          navigate('/app/onboarding');
+          await handleSuccess({
+            id: currentUser?.id || '',
+            email: currentUser?.email || '',
+            fullName: currentUser?.fullName || '',
+            origName: currentUser?.origName || '',
+            accessToken: window.localStorage.getItem('access_token') || '',
+            businesses: currentUser?.businesses || [],
+            onboarded: !currentUser?.newUser,
+            schemes: currentUser?.schemes || [],
+            demId: currentUser?.demId || '',
+            isSet: true,
+            reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
+            forcePasswordReset: currentUser?.forcePasswordReset ?? false,
+            hasPassword: currentUser?.hasPassword ?? false,
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            reference: `${currentUser?.reference}` || '',
+            userNotifications: currentUser?.notificationCount || 0,
+            userMessages: currentUser?.messageCount || 0,
+            defaultGroups: currentUser?.defaultGroups || [],
+            defaultScheme: currentUser?.defaultScheme || undefined,
+            termsExpired: currentUser?.termsExpired || false,
+            filterDefaultGroups:
+              currentUser?.defaultGroups.filter(
+                (el) => el.scheme.id === scheme
+              ) || [],
+          });
+          if (currentUser?.newUser) {
+            navigate('/app/onboarding');
+          }
         }
       },
       onError: () => expired(),
     });
   const getCurrentUser = () => {
-    if (!CurrentUserData) void getCurrentUserQuery();
+    if (!CurrentUserData && token) {
+      void getCurrentUserQuery({
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      });
+    }
   };
   const rehydrateAuth = () => {
-    if (user !== undefined) {
-      if (Date.now() < user.exp * 1000) {
-        if (user.iss === 'https://alert.eu.auth0.com/') {
-          void getCurrentUser();
-        } else if (isAuthenticated) {
+    if (user !== undefined && session?.expireAt instanceof Date) {
+      if (Date.now() < session.expireAt.getTime()) {
+        if (isSignedIn) {
           void getCurrentUser();
         } else {
           expired();
@@ -366,165 +370,47 @@ const useAuth = (): Return => {
       } else {
         expired();
       }
-    } else if (isAuthenticated) {
+    } else if (isSignedIn) {
       void getCurrentUser();
     } else {
       expired();
     }
-    // const accessToken = localStorage.getItem('accessToken');
-    // if (accessToken) {
-    //   const token: DecodedToken = jwtDecode(accessToken);
-    //   if (new Date().getTime() < token.exp * 1000) {
-    //     if (token.iss === 'https://alert.eu.auth0.com/') {
-    //       getCurrentUser({
-    //         context: {
-    //           headers: {
-    //             authorization: `Bearer ${accessToken}`,
-    //           },
-    //         },
-    //       });
-    //     } else {
-    //       expired();
-    //     }
-    //   } else {
-    //     expired();
-    //   }
-    // } else {
-    //   expired();
-    // }
   };
 
-  const onLoginSuccess = async (data: OnLoginSuccessArgs) => {
-    window.localStorage.setItem('access_token', data.accessToken);
-
-    const scheme = window.localStorage.getItem('currentScheme');
-    if (!scheme) {
-      window.localStorage.setItem('currentScheme', data.schemes[0].scheme.id);
-    }
-
-    LogRocket.identify(data.id, {
-      name: data.fullName,
-      email: data.email,
-    });
-
-    await handleSuccess({
-      id: data.id,
-      accessToken: data.accessToken,
-      email: data.email,
-      fullName: data.fullName,
-      origName: data.origName,
-      onboarded: data.onboarded,
-      businesses: data.businesses,
-      schemes: data.schemes,
-
-      isSet: true,
-      demId: data.demId,
-      reference: data.reference,
-      userNotifications: data.userNotifications,
-      userMessages: data.userMessages,
-      defaultGroups: data.defaultGroups,
-      reportToAllBusinesses: data.reportToAllBusinesses,
-      filterDefaultGroups: data.defaultGroups.filter(
-        (el) => el.scheme.id === scheme
-      ),
-    });
-  };
-
-  // useEffect(() => {
-  //   // authenticated from auth0
-  //   if (isAuthenticated) {
-  //     (async () => {
-  //       try {
-  //         const token = await getAccessTokenSilently();
-  //         authenticated(token);
-  //         window.localStorage.setItem('accessToken', token);
-  //         try {
-  //           const { data } = await client.query<CurrentUserQuery>({
-  //             query: CurrentUserDocument,
-  //             fetchPolicy: 'network-only',
-  //             context: {
-  //               headers: {
-  //                 authorization: `Bearer ${token}`,
-  //               },
-  //             },
-  //           });
-  //           console.log(data);
-  //           // Adding this in breaks the side and top navs. Not sure why atm
-  //           // onLoginSuccess({
-  //           //   accessToken: token || '',
-  //           //   email: data.currentUser?.email || '',
-  //           //   fullName: data.currentUser?.fullName || '',
-  //           //   id: data.currentUser?.id || '',
-  //           //   onboarded: data.currentUser?.newUser || false,
-  //           //   organisation: data.currentUser?.organisation || '',
-  //           //   schemes: data.currentUser?.schemes || [],
-  //           //   groups: data.currentUser?.groups || [],
-  //           // });
-  //           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //         } catch (err: any) {
-  //           setAuthMessage(err.message);
-  //           console.log(err);
-  //         }
-  //       } catch (e) {
-  //         // eslint-disable-next-line no-console
-  //         console.error(e);
-  //       }
-  //
-  //       // try {
-  //
-  //       //   onLoginSuccess({
-  //       //     accessToken: token || '',
-  //       //     email: data.currentUser?.email || '',
-  //       //     fullName: data.currentUser?.fullName || '',
-  //       //     id: data.currentUser?.id || '',
-  //       //     onboarded: data.currentUser?.newUser || false,
-  //       //     organisation: data.currentUser?.organisation || '',
-  //       //     schemes: data.currentUser?.schemes || [],
-  //       //     groups: data.currentUser?.groups || [],
-  //       //   });
-  //       //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //       // } catch (err: any) {
-  //       //   setAuthMessage(err.message);
-  //       //   console.log(err);
-  //       // }
-  //     })();
-  //   }
-  // }, [isAuthenticated]);
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isSignedIn) {
       void (async () => {
         try {
-          const newToken = await getAccessTokenSilently();
+          if (!token) console.log('getting token 4');
 
-          authenticated(newToken);
-          window.localStorage.setItem('access_token', newToken);
+          const newToken =
+            token ||
+            (await getToken({
+              leewayInSeconds: 1800,
+              template: 'test',
+            }));
+
+          if (newToken) {
+            authenticated(newToken);
+          }
         } catch (error) {
           if (error instanceof Error) setAuthMessage(error.message);
           // console.error(e);
         }
       })();
     }
-  }, [isAuthenticated]);
-  // const login = ({ email, password }: LoginArgs) => {
-  //   window.localStorage.removeItem('accessToken');
-  //   handleLogin({
-  //     variables: {
-  //       email,
-  //       password,
-  //     },
-  //   });
-  // };
+  }, [isSignedIn]);
 
   const signOut = () => {
     clearUser();
     handleSignOut();
     const logo = window.localStorage.getItem('logo');
     const dLogo = window.localStorage.getItem('logo-dark');
-
     window.localStorage.clear();
     window.localStorage.setItem('logo', logo || '');
     window.localStorage.setItem('logo-dark', dLogo || '');
     window.sessionStorage.clear();
+    void signOutClerk();
   };
 
   return {
@@ -532,8 +418,6 @@ const useAuth = (): Return => {
     loading,
     rehydrateAuth,
     signOut,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onLoginSuccess,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     getCurrentUser,
     expired,

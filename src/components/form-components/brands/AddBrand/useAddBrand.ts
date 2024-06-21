@@ -1,13 +1,3 @@
-import type {
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-  UpsertBrandMutation,
-} from '#/graphql/generated';
-import {
-  QueryMode,
-  SearchBusinessesDocument,
-  useUpsertBrandMutation,
-} from '#/graphql/generated';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useApolloClient } from '@apollo/client';
@@ -17,6 +7,14 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import type { SelectOptions } from 'types/DataType';
+import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
+import { useUpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
+import { QueryMode } from 'graphql/types';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/businesses/queries/search-businesses.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
 
 const { useForm } = Form;
 
@@ -89,11 +87,9 @@ const useAddBrand = ({ onClose, update }: Props): Return => {
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
-          id: '5Hvk21',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The brand has been added.',
-          id: 'jdfhCx',
         }),
         placement: 'bottomRight',
       });

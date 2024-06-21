@@ -1,8 +1,9 @@
 import { Empty } from 'antd';
 import React from 'react';
 import { useStoreState } from '#/state';
-import type { TimeHeatMap as TimeHeatMapT } from 'graphql/generated';
+
 import { ResponsiveHeatMap } from '@nivo/heatmap';
+import type { TimeHeatMap as TimeHeatMapT } from 'graphql/types';
 
 const TimeHeatmap = ({
   data,

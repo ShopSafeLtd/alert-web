@@ -9,7 +9,7 @@ import {
   Row,
   Typography,
 } from 'antd';
-import { Role } from 'graphql/generated';
+
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -36,6 +36,7 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { useIntl } from 'react-intl';
 import type { OffenderData } from 'types/DataType';
 import useStyles from './MultiSelectOffenders.style';
+import { Role } from 'graphql/types';
 
 const { Title, Text } = Typography;
 
@@ -138,7 +139,7 @@ const SuggestedOffenders = ({
             <Col style={{ marginTop: 3 }}>
               <Text>
                 {intl.formatMessage(
-                  { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+                  { defaultMessage: 'Alert ID: {ref}' },
                   { ref: offender.reference }
                 )}
               </Text>
@@ -150,7 +151,6 @@ const SuggestedOffenders = ({
               <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Alias: ',
-                  id: 'eZm/Sa',
                 })}
               >
                 {offender.alias.map((item) => (
@@ -168,7 +168,6 @@ const SuggestedOffenders = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Age',
-                      id: '9oNQSC',
                     })}
                   </span>
                 }
@@ -187,7 +186,6 @@ const SuggestedOffenders = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Sex',
-                    id: 'eWJHGp',
                   })}
                 </span>
               }
@@ -203,7 +201,6 @@ const SuggestedOffenders = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Build',
-                    id: 'RSctv1',
                   })}
                 </span>
               }
@@ -219,7 +216,6 @@ const SuggestedOffenders = ({
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Ethnicity',
-                    id: 'XtCAFo',
                   })}
                 </span>
               }
@@ -236,7 +232,6 @@ const SuggestedOffenders = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Hair',
-                      id: 'e4YBbX',
                     })}
                   </span>
                 }
@@ -256,7 +251,6 @@ const SuggestedOffenders = ({
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Additional Information',
-                      id: 'laUK3e',
                     })}
                   </span>
                 }
@@ -270,7 +264,6 @@ const SuggestedOffenders = ({
               <Button danger type="ghost" onClick={() => onSelect(offender.id)}>
                 {intl.formatMessage({
                   defaultMessage: 'Add To Investigation',
-                  id: 'zEXZIx',
                 })}
               </Button>
             </Col>
@@ -282,7 +275,7 @@ const SuggestedOffenders = ({
       <Row gutter={16} style={{ marginTop: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} type="text">
-            {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
@@ -294,7 +287,6 @@ const SuggestedOffenders = ({
           >
             {intl.formatMessage({
               defaultMessage: 'Add Offedners',
-              id: 'Eo51xP',
             })}
           </Button>
         </Col>

@@ -1,23 +1,11 @@
-import React, { lazy, Suspense, useEffect, useMemo } from 'react';
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Loading from 'components/shared-components/AntD/Loading';
-import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
-import { useAuth0 } from '@auth0/auth0-react';
 import useManageSession from 'hooks/useManageSession';
-import { GroupsProvider } from '#/context/groups-context';
-import type { Role } from '../../graphql/generated';
-import type { NavItem as ConfigNavItem } from '../../configs/NavigationConfig';
-import navigationConfig from '../../configs/NavigationConfig';
-import { APP_PREFIX_PATH } from '../../configs/AppConfig';
 
 const Onboarding = lazy(() => import('./onboarding/router'));
+const PasswordReset = lazy(() => import('./password/router'));
 const Incidents = lazy(() => import('./incidents/router'));
 const Offenders = lazy(() => import('./offenders/router'));
 const Chat = lazy(() => import('./chat/router'));
@@ -39,105 +27,34 @@ const Evidence = lazy(() => import('./evidence/router'));
 const Checklists = lazy(() => import('./checklist/router'));
 const DashboardManagement = lazy(() => import('./dashboard-management/router'));
 
-// Define the interface for your navigation items
-interface NavItem {
-  path: string;
-  roles?: Role[];
-  submenu: NavItem[];
-}
-
-// Flatten the navigation items to include submenus
-const flattenNavigationItems = (
-  items: ConfigNavItem[],
-  parentRoles: Role[] = []
-): NavItem[] =>
-  // eslint-disable-next-line unicorn/no-array-reduce
-  items.reduce((acc: NavItem[], item: ConfigNavItem) => {
-    const safeParentRoles = parentRoles || [];
-    const safeRoles = item.roles || [];
-    const combinedRoles = [...new Set([...safeRoles, ...safeParentRoles])];
-    acc.push({ path: item.path, roles: combinedRoles, submenu: [] });
-
-    if (item.submenu.length > 0) {
-      acc.push(
-        ...flattenNavigationItems(
-          item.submenu as ConfigNavItem[],
-          combinedRoles
-        )
-      );
-    }
-
-    return acc;
-  }, []);
-
-// Function to check if a role is allowed for a specific path
-const isRoleAllowedForPath = (
-  role: Role,
-  path: string,
-  flattenedNavItems: NavItem[]
-): boolean => {
-  const item = flattenedNavItems.find((i) => i.path === path);
-  if (!item) {
-    return true;
-  }
-  if (!item.roles || item.roles.length === 0) return true;
-  return item ? item.roles.includes(role) : false;
-};
-
 export const AppViews = (): JSX.Element => {
-  const { isLoading } = useAuth0();
-  const { getCurrentUser, loading } = useAuth();
-  const { role, onboarded, isSet } = useStoreState((state) => state.user);
   useManageSession();
-
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
-
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { pathname } = location;
-
-  const flattenedNavItems = useMemo(
-    () => flattenNavigationItems(navigationConfig),
-    []
+  const { onboarded, forcePasswordReset, termsExpired } = useStoreState(
+    (state) => state.user
   );
 
-  const isAllowed = useMemo(
-    () => isRoleAllowedForPath(role, pathname, flattenedNavItems),
-    [role, pathname]
-  );
+  const onboardingRoute = !onboarded || forcePasswordReset || termsExpired;
 
-  useEffect(() => {
-    if (!pathname || loading || isLoading || !isSet) return;
-    if (!isAllowed) {
-      navigate(`${APP_PREFIX_PATH}/dashboard`);
-    }
-  }, [pathname, role]);
-
-  if (loading || isLoading || !isSet) return <Loading cover="content" />;
   return (
-    <GroupsProvider>
-      <Suspense fallback={<Loading cover="content" />}>
+    <Suspense fallback={<Loading cover="content" />}>
+      {onboardingRoute ? (
         <Routes>
+          <Route path={'*'} index element={<Navigate to={'onboarding'} />} />
           <Route
+            key="onboarding"
+            path="onboarding/*"
+            element={forcePasswordReset ? <PasswordReset /> : <Onboarding />}
             index
-            element={<Navigate to={onboarded ? 'dashboard' : 'onboarding'} />}
           />
-          {!onboarded && (
-            <Route
-              key="onboarding"
-              path="onboarding/*"
-              element={<Onboarding />}
-            />
-          )}
-          {/* // TODO change */}
+        </Routes>
+      ) : (
+        <Routes>
+          <Route path={'*'} index element={<Navigate to={'dashboard'} />} />
           <Route
             key="manage-dashboard"
             path="manage-dashboard/*"
             element={<DashboardManagement />}
           />
-
           <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />
           <Route key="tasks" path="tasks/*" element={<Tasks />} />
           <Route key="incidents" path="incidents/*" element={<Incidents />} />
@@ -178,9 +95,9 @@ export const AppViews = (): JSX.Element => {
             element={<DataManagement />}
           />
         </Routes>
-      </Suspense>
-    </GroupsProvider>
+      )}
+    </Suspense>
   );
 };
 
-export default React.memo(AppViews);
+export default AppViews;

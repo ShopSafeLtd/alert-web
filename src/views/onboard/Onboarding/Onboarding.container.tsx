@@ -10,19 +10,19 @@ const Onboarding = (): JSX.Element => {
     onBack,
     updateAccountDetail,
     updateTermsSigned,
-    setCurrent,
     loading,
     schemeTerms,
     updateSchemeTermsSigned,
     name,
+    accountDetail,
   } = useOnboarding();
   return (
     <View
+      accountDetail={accountDetail}
       loading={loading}
       schemeTerms={schemeTerms}
       saving={saving}
       current={current}
-      setCurrent={setCurrent}
       onBack={onBack}
       onSubmit={onSubmit}
       updateTermsSigned={updateTermsSigned}
