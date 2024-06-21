@@ -159,9 +159,11 @@ export interface VehicleData {
   existing: boolean;
   edited: boolean;
 }
+
 interface Props {
   investigationId?: string;
 }
+
 interface Return {
   addressLoading: boolean;
   adminRights: boolean;
@@ -758,43 +760,44 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 : data.groups.map((id) => ({ id })),
             images: getImages(),
             investigationId: investigationId || null,
-            // items:
-            //   data.goods &&
-            //   data.goods
-            //     .filter(
-            //       (item) =>
-            //         item.goodsType !== undefined || item.sku !== undefined
-            //     )
-            //     .map((item) => ({
-            //       goodsType: item.goodsType
-            //         ? {
-            //             id: item.goodsType,
-            //           }
-            //         : undefined,
-            //       name:
-            //         (goodsTypesData &&
-            //           goodsTypesData.listGoodsTypes.goodsTypes.find(
-            //             ({ id }) => id === item.goodsType
-            //           )?.name) ||
-            //         '',
-            //       value:
-            //         goodsMode === GoodsMode.Specific
-            //           ? (item.value || 0) * (item.quantity || 0)
-            //           : item.value || 0,
-            //       recoveredValue:
-            //         goodsMode === GoodsMode.Specific
-            //           ? (item.recoveredValue || 0) *
-            //             (item.recoveredQuantity || 0)
-            //           : item.recoveredValue || 0,
-            //       sku: item.sku,
-            //       quantity: item.quantity,
-            //       recoveredQuantity: item.recoveredQuantity,
-            //       stockItem: item.stockItem
-            //         ? {
-            //             id: item.stockItem,
-            //           }
-            //         : undefined,
-            //     })),
+            items:
+              data.goods &&
+              data.goods
+                .filter(
+                  (item) =>
+                    item.goodsType !== undefined || item.sku !== undefined
+                )
+                .map((item) => ({
+                  goodsType: item.goodsType
+                    ? {
+                        id: item.goodsType,
+                      }
+                    : undefined,
+                  name:
+                    item.name ??
+                    (goodsTypesData &&
+                      goodsTypesData.listGoodsTypes.goodsTypes.find(
+                        ({ id }) => id === item.goodsType
+                      )?.name) ??
+                    '',
+                  value:
+                    goodsMode === GoodsMode.Specific
+                      ? (item.value || 0) * (item.quantity || 0)
+                      : item.value || 0,
+                  recoveredValue:
+                    goodsMode === GoodsMode.Specific
+                      ? (item.recoveredValue || 0) *
+                        (item.recoveredQuantity || 0)
+                      : item.recoveredValue || 0,
+                  sku: item.sku,
+                  quantity: item.quantity,
+                  recoveredQuantity: item.recoveredQuantity,
+                  stockItem: item.stockItem
+                    ? {
+                        id: item.stockItem,
+                      }
+                    : undefined,
+                })),
             location: getLocation(),
             offenders: getOffenders(),
             policeInvolved: data.policeInvolved,
