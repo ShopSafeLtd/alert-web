@@ -18,6 +18,14 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     subscribed
     totalValue
     totalRecoveredValue
+    cctvRecords {
+      cameraNumber
+      endTime
+      id
+      showFace
+      showIncident
+      startTime
+    }
     answers {
       id
       answer

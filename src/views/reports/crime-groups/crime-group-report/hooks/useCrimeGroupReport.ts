@@ -136,7 +136,10 @@ const useCrimeGroupReport = (): Return => {
         crimeGroupId: selectedCrimeGroup || '',
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
       },
     },
   });

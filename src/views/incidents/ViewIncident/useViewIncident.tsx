@@ -1386,14 +1386,26 @@ const useViewIncident = (incidentId: string): Return => {
           incidentItems: {
             create: [
               {
-                goodsType: {
-                  connect: {
-                    id: value.goodsTypeId || '',
-                  },
-                },
+                goodsType: value.goodsTypeId
+                  ? {
+                      connect: {
+                        id: value.goodsTypeId || '',
+                      },
+                    }
+                  : undefined,
                 name: value.name,
+                sku: value.sku,
                 value: value.value || 0,
                 recoveredValue: value.recoveredValue || 0,
+                quantity: value.quantity,
+                stockItem: value.stockItemId
+                  ? {
+                      connect: {
+                        id: value.stockItemId,
+                      },
+                    }
+                  : undefined,
+                recoveredQuantity: value.recoveredQuantity,
               },
             ],
           },

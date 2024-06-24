@@ -23,6 +23,7 @@ const RadialGraph = ({
 }) => {
   const theme = useStoreState((state) => state.theme.currentTheme);
   const darkMode = theme === 'dark' && !isPrinting;
+  console.log(darkMode);
   return (
     <div
       style={{ height: '100%', width: '100%%', marginLeft: 15 }}
@@ -31,7 +32,8 @@ const RadialGraph = ({
       {data && data.length > 0 ? (
         <ResponsiveRadialBar
           theme={{
-            text: { color: darkMode ? '#ffffff' : '#000' },
+            text: { color: darkMode ? '#fff' : '#000' },
+            axis: { ticks: { text: { fill: darkMode ? '#fff' : '#000' } } },
           }}
           valueFormat=">-.2f"
           padding={0.6}

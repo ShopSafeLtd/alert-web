@@ -126,7 +126,10 @@ const useOffenderReport = (): Return => {
         offenderId: selectedOffender || '',
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
       },
     },
   });

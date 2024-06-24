@@ -1,5 +1,5 @@
-query ListStockItems($where: StockItemsWhereInput) {
-  listStockItems(where: $where) {
+query ListStockItems($where: StockItemsWhereInput, $take: Int) {
+  listStockItems(where: $where, take: $take) {
     total
     stockItems {
       id
