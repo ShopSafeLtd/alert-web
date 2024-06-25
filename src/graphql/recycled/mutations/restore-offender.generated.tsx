@@ -8,41 +8,23 @@ export type RestoreOffenderMutationVariables = Types.Exact<{
   recycledId: Types.Scalars['String'];
 }>;
 
-export type RestoreOffenderMutation = {
-  __typename?: 'Mutation';
-  restoreOffender: { __typename?: 'Offender'; id: string; recycled: boolean };
-};
+
+export type RestoreOffenderMutation = { __typename?: 'Mutation', restoreOffender: { __typename?: 'Offender', id: string, recycled: boolean } };
+
 
 export const RestoreOffenderDocument = gql`
-  mutation restoreOffender($id: String!, $recycledId: String!) {
-    restoreOffender(where: { id: $id }, data: { id: $recycledId }) {
-      id
-      recycled
-    }
+    mutation restoreOffender($id: String!, $recycledId: String!) {
+  restoreOffender(where: {id: $id}, data: {id: $recycledId}) {
+    id
+    recycled
   }
-`;
-export type RestoreOffenderMutationFn = Apollo.MutationFunction<
-  RestoreOffenderMutation,
-  RestoreOffenderMutationVariables
->;
-export function useRestoreOffenderMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RestoreOffenderMutation,
-    RestoreOffenderMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    RestoreOffenderMutation,
-    RestoreOffenderMutationVariables
-  >(RestoreOffenderDocument, options);
 }
-export type RestoreOffenderMutationHookResult = ReturnType<
-  typeof useRestoreOffenderMutation
->;
-export type RestoreOffenderMutationResult =
-  Apollo.MutationResult<RestoreOffenderMutation>;
-export type RestoreOffenderMutationOptions = Apollo.BaseMutationOptions<
-  RestoreOffenderMutation,
-  RestoreOffenderMutationVariables
->;
+    `;
+export type RestoreOffenderMutationFn = Apollo.MutationFunction<RestoreOffenderMutation, RestoreOffenderMutationVariables>;
+export function useRestoreOffenderMutation(baseOptions?: Apollo.MutationHookOptions<RestoreOffenderMutation, RestoreOffenderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RestoreOffenderMutation, RestoreOffenderMutationVariables>(RestoreOffenderDocument, options);
+      }
+export type RestoreOffenderMutationHookResult = ReturnType<typeof useRestoreOffenderMutation>;
+export type RestoreOffenderMutationResult = Apollo.MutationResult<RestoreOffenderMutation>;
+export type RestoreOffenderMutationOptions = Apollo.BaseMutationOptions<RestoreOffenderMutation, RestoreOffenderMutationVariables>;

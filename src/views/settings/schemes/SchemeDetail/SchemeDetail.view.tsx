@@ -15,20 +15,20 @@ import {
   Typography,
   Upload,
 } from 'antd';
-
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadProps, UploadFile, FormInstance } from 'antd';
+import type { RcFile } from 'antd/es/upload/interface';
 import { FormattedMessage, useIntl } from 'react-intl';
 import BuildTree from '../../../../utils/tags/tree-helper';
 import type { FormData } from './useSchemeDetail';
 import customRequest from '../../../../utils/custom-request';
-import type { SchemeQuery } from 'graphql/scheme/queries/scheme.generated';
+import type { SchemeDetailsQuery } from './graphql/scheme.generated';
 import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
 import { GoodsMode } from 'graphql/types';
 
 const { Title, Text, Paragraph } = Typography;
 
 interface Props {
-  data: SchemeQuery | undefined;
+  data: SchemeDetailsQuery | undefined;
   tags: ListSchemeTagsQuery | undefined;
   loading: boolean;
   saving: boolean;
@@ -40,6 +40,7 @@ interface Props {
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
+  form: FormInstance<FormData>;
 }
 
 // wait to check
@@ -66,6 +67,7 @@ const SchemeDetail = ({
   darkImgChange,
   darkFileList,
   updateTagParent,
+  form,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -82,6 +84,7 @@ const SchemeDetail = ({
         <Skeleton />
       ) : (
         <Form
+          form={form}
           onFinish={onSubmit}
           initialValues={{
             name: data?.scheme?.name,

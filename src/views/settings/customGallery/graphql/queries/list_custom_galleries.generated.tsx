@@ -10,82 +10,35 @@ export type CustomGalleriesQueryVariables = Types.Exact<{
   order?: Types.InputMaybe<Types.CustomGalleryOrderByWithRelationInput>;
 }>;
 
-export type CustomGalleriesQuery = {
-  __typename?: 'Query';
-  customGalleriesRelay: {
-    __typename?: 'QueryCustomGalleriesRelayConnection';
-    totalCount: number;
-    edges: Array<{
-      __typename?: 'QueryCustomGalleriesRelayConnectionEdge';
-      node: {
-        __typename?: 'CustomGallery';
-        description?: string | null;
-        id: string;
-        name: string;
-        groups: Array<{ __typename?: 'Group'; id: string }>;
-      };
-    }>;
-  };
-};
+
+export type CustomGalleriesQuery = { __typename?: 'Query', customGalleriesRelay: { __typename?: 'QueryCustomGalleriesRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCustomGalleriesRelayConnectionEdge', node: { __typename?: 'CustomGallery', description?: string | null, id: string, name: string, groups: Array<{ __typename?: 'Group', id: string }> } }> } };
+
 
 export const CustomGalleriesDocument = gql`
-  query customGalleries(
-    $where: CustomGalleryWhereInput
-    $take: Int
-    $skip: Int
-    $order: CustomGalleryOrderByWithRelationInput
-  ) {
-    customGalleriesRelay(
-      where: $where
-      take: $take
-      skip: $skip
-      order: $order
-    ) {
-      edges {
-        node {
-          description
+    query customGalleries($where: CustomGalleryWhereInput, $take: Int, $skip: Int, $order: CustomGalleryOrderByWithRelationInput) {
+  customGalleriesRelay(where: $where, take: $take, skip: $skip, order: $order) {
+    edges {
+      node {
+        description
+        id
+        name
+        groups {
           id
-          name
-          groups {
-            id
-          }
         }
       }
-      totalCount
     }
+    totalCount
   }
-`;
-export function useCustomGalleriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    CustomGalleriesQuery,
-    CustomGalleriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CustomGalleriesQuery, CustomGalleriesQueryVariables>(
-    CustomGalleriesDocument,
-    options
-  );
 }
-export function useCustomGalleriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CustomGalleriesQuery,
-    CustomGalleriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    CustomGalleriesQuery,
-    CustomGalleriesQueryVariables
-  >(CustomGalleriesDocument, options);
-}
-export type CustomGalleriesQueryHookResult = ReturnType<
-  typeof useCustomGalleriesQuery
->;
-export type CustomGalleriesLazyQueryHookResult = ReturnType<
-  typeof useCustomGalleriesLazyQuery
->;
-export type CustomGalleriesQueryResult = Apollo.QueryResult<
-  CustomGalleriesQuery,
-  CustomGalleriesQueryVariables
->;
+    `;
+export function useCustomGalleriesQuery(baseOptions?: Apollo.QueryHookOptions<CustomGalleriesQuery, CustomGalleriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CustomGalleriesQuery, CustomGalleriesQueryVariables>(CustomGalleriesDocument, options);
+      }
+export function useCustomGalleriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomGalleriesQuery, CustomGalleriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CustomGalleriesQuery, CustomGalleriesQueryVariables>(CustomGalleriesDocument, options);
+        }
+export type CustomGalleriesQueryHookResult = ReturnType<typeof useCustomGalleriesQuery>;
+export type CustomGalleriesLazyQueryHookResult = ReturnType<typeof useCustomGalleriesLazyQuery>;
+export type CustomGalleriesQueryResult = Apollo.QueryResult<CustomGalleriesQuery, CustomGalleriesQueryVariables>;

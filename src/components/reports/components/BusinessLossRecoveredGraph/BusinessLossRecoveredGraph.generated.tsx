@@ -8,60 +8,29 @@ export type BusinessLossRecoveredGraphQueryVariables = Types.Exact<{
   take?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
-export type BusinessLossRecoveredGraphQuery = {
-  __typename?: 'Query';
-  businessLossRecoveredGraph: Array<{
-    __typename?: 'RadialGraph';
-    label: string;
-    data: Array<{ __typename?: 'Graph'; label: string; value: number }>;
-  }>;
-};
+
+export type BusinessLossRecoveredGraphQuery = { __typename?: 'Query', businessLossRecoveredGraph: Array<{ __typename?: 'RadialGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
+
 
 export const BusinessLossRecoveredGraphDocument = gql`
-  query BusinessLossRecoveredGraph(
-    $where: BusinessIncidentsCountGraphInput!
-    $take: Int
-  ) {
-    businessLossRecoveredGraph(where: $where, take: $take) {
+    query BusinessLossRecoveredGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessLossRecoveredGraph(where: $where, take: $take) {
+    label
+    data {
       label
-      data {
-        label
-        value
-      }
+      value
     }
   }
-`;
-export function useBusinessLossRecoveredGraphQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    BusinessLossRecoveredGraphQuery,
-    BusinessLossRecoveredGraphQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    BusinessLossRecoveredGraphQuery,
-    BusinessLossRecoveredGraphQueryVariables
-  >(BusinessLossRecoveredGraphDocument, options);
 }
-export function useBusinessLossRecoveredGraphLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    BusinessLossRecoveredGraphQuery,
-    BusinessLossRecoveredGraphQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    BusinessLossRecoveredGraphQuery,
-    BusinessLossRecoveredGraphQueryVariables
-  >(BusinessLossRecoveredGraphDocument, options);
-}
-export type BusinessLossRecoveredGraphQueryHookResult = ReturnType<
-  typeof useBusinessLossRecoveredGraphQuery
->;
-export type BusinessLossRecoveredGraphLazyQueryHookResult = ReturnType<
-  typeof useBusinessLossRecoveredGraphLazyQuery
->;
-export type BusinessLossRecoveredGraphQueryResult = Apollo.QueryResult<
-  BusinessLossRecoveredGraphQuery,
-  BusinessLossRecoveredGraphQueryVariables
->;
+    `;
+export function useBusinessLossRecoveredGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>(BusinessLossRecoveredGraphDocument, options);
+      }
+export function useBusinessLossRecoveredGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>(BusinessLossRecoveredGraphDocument, options);
+        }
+export type BusinessLossRecoveredGraphQueryHookResult = ReturnType<typeof useBusinessLossRecoveredGraphQuery>;
+export type BusinessLossRecoveredGraphLazyQueryHookResult = ReturnType<typeof useBusinessLossRecoveredGraphLazyQuery>;
+export type BusinessLossRecoveredGraphQueryResult = Apollo.QueryResult<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>;

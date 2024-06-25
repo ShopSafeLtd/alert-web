@@ -21,7 +21,6 @@ const LoginView = () => {
   const [searchParams] = useSearchParams();
 
   const route = searchParams.get('rd');
-
   const intl = useIntl();
   return (
     <RouteWrapper

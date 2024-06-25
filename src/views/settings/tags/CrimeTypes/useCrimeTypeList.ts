@@ -431,7 +431,6 @@ const useCrimeTypeList = (): Return => {
       // if the parentTagId is not the same as the tagId, check the children of the child
       if (!checkTag(child?.id, parentTagId)) return false;
     }
-    console.log('valid');
     return true;
   };
 

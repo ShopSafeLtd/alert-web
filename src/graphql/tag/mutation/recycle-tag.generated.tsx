@@ -7,40 +7,22 @@ export type RecycleTagMutationVariables = Types.Exact<{
   where: Types.UniqueId;
 }>;
 
-export type RecycleTagMutation = {
-  __typename?: 'Mutation';
-  recycleTag: { __typename?: 'Tag'; id: string };
-};
+
+export type RecycleTagMutation = { __typename?: 'Mutation', recycleTag: { __typename?: 'Tag', id: string } };
+
 
 export const RecycleTagDocument = gql`
-  mutation recycleTag($where: UniqueId!) {
-    recycleTag(where: $where) {
-      id
-    }
+    mutation recycleTag($where: UniqueId!) {
+  recycleTag(where: $where) {
+    id
   }
-`;
-export type RecycleTagMutationFn = Apollo.MutationFunction<
-  RecycleTagMutation,
-  RecycleTagMutationVariables
->;
-export function useRecycleTagMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RecycleTagMutation,
-    RecycleTagMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<RecycleTagMutation, RecycleTagMutationVariables>(
-    RecycleTagDocument,
-    options
-  );
 }
-export type RecycleTagMutationHookResult = ReturnType<
-  typeof useRecycleTagMutation
->;
-export type RecycleTagMutationResult =
-  Apollo.MutationResult<RecycleTagMutation>;
-export type RecycleTagMutationOptions = Apollo.BaseMutationOptions<
-  RecycleTagMutation,
-  RecycleTagMutationVariables
->;
+    `;
+export type RecycleTagMutationFn = Apollo.MutationFunction<RecycleTagMutation, RecycleTagMutationVariables>;
+export function useRecycleTagMutation(baseOptions?: Apollo.MutationHookOptions<RecycleTagMutation, RecycleTagMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RecycleTagMutation, RecycleTagMutationVariables>(RecycleTagDocument, options);
+      }
+export type RecycleTagMutationHookResult = ReturnType<typeof useRecycleTagMutation>;
+export type RecycleTagMutationResult = Apollo.MutationResult<RecycleTagMutation>;
+export type RecycleTagMutationOptions = Apollo.BaseMutationOptions<RecycleTagMutation, RecycleTagMutationVariables>;

@@ -35,4 +35,4 @@ src/graphql/generated/*
 
 postInstall.js
 en/lang.json
-
+src/**/!(*.generated).{ts,tsx}

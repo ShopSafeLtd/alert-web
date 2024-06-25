@@ -8,40 +8,22 @@ export type DeleteUserFromSchemeMutationVariables = Types.Exact<{
   scheme: Types.Scalars['String'];
 }>;
 
-export type DeleteUserFromSchemeMutation = {
-  __typename?: 'Mutation';
-  deleteUserFromScheme?: { __typename?: 'User'; id: string } | null;
-};
+
+export type DeleteUserFromSchemeMutation = { __typename?: 'Mutation', deleteUserFromScheme?: { __typename?: 'User', id: string } | null };
+
 
 export const DeleteUserFromSchemeDocument = gql`
-  mutation deleteUserFromScheme($id: String!, $scheme: String!) {
-    deleteUserFromScheme(id: $id, scheme: $scheme) {
-      id
-    }
+    mutation deleteUserFromScheme($id: String!, $scheme: String!) {
+  deleteUserFromScheme(id: $id, scheme: $scheme) {
+    id
   }
-`;
-export type DeleteUserFromSchemeMutationFn = Apollo.MutationFunction<
-  DeleteUserFromSchemeMutation,
-  DeleteUserFromSchemeMutationVariables
->;
-export function useDeleteUserFromSchemeMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteUserFromSchemeMutation,
-    DeleteUserFromSchemeMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteUserFromSchemeMutation,
-    DeleteUserFromSchemeMutationVariables
-  >(DeleteUserFromSchemeDocument, options);
 }
-export type DeleteUserFromSchemeMutationHookResult = ReturnType<
-  typeof useDeleteUserFromSchemeMutation
->;
-export type DeleteUserFromSchemeMutationResult =
-  Apollo.MutationResult<DeleteUserFromSchemeMutation>;
-export type DeleteUserFromSchemeMutationOptions = Apollo.BaseMutationOptions<
-  DeleteUserFromSchemeMutation,
-  DeleteUserFromSchemeMutationVariables
->;
+    `;
+export type DeleteUserFromSchemeMutationFn = Apollo.MutationFunction<DeleteUserFromSchemeMutation, DeleteUserFromSchemeMutationVariables>;
+export function useDeleteUserFromSchemeMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserFromSchemeMutation, DeleteUserFromSchemeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserFromSchemeMutation, DeleteUserFromSchemeMutationVariables>(DeleteUserFromSchemeDocument, options);
+      }
+export type DeleteUserFromSchemeMutationHookResult = ReturnType<typeof useDeleteUserFromSchemeMutation>;
+export type DeleteUserFromSchemeMutationResult = Apollo.MutationResult<DeleteUserFromSchemeMutation>;
+export type DeleteUserFromSchemeMutationOptions = Apollo.BaseMutationOptions<DeleteUserFromSchemeMutation, DeleteUserFromSchemeMutationVariables>;

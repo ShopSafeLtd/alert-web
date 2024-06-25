@@ -68,7 +68,7 @@ const SettingsSideMenu = ({
       title: intl.formatMessage({
         defaultMessage: 'General Settings',
       }),
-      to: '/app/scheme-settings/scheme-settings',
+      to: '/app/scheme-settings/scheme',
       permissions: [PermissionModel.Settings],
     },
     {

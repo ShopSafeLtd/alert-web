@@ -7,72 +7,36 @@ export type ListDocumentsOnSchemeQueryVariables = Types.Exact<{
   where: Types.SchemeWhereUniqueInput;
 }>;
 
-export type ListDocumentsOnSchemeQuery = {
-  __typename?: 'Query';
-  scheme: {
-    __typename?: 'Scheme';
-    mg11Available: boolean;
-    documents: Array<{
-      __typename?: 'Document';
-      id: string;
-      name: string;
-      url: string;
-      thumbnailUrl?: string | null;
-      createdAt: Date;
-      tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
-    }>;
-  };
-};
+
+export type ListDocumentsOnSchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', mg11Available: boolean, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, createdAt: Date, tags: Array<{ __typename?: 'Tag', name: string, id: string }> }> } };
+
 
 export const ListDocumentsOnSchemeDocument = gql`
-  query listDocumentsOnScheme($where: SchemeWhereUniqueInput!) {
-    scheme(where: $where) {
-      mg11Available
-      documents {
-        id
+    query listDocumentsOnScheme($where: SchemeWhereUniqueInput!) {
+  scheme(where: $where) {
+    mg11Available
+    documents {
+      id
+      name
+      tags {
         name
-        tags {
-          name
-          id
-        }
-        url
-        thumbnailUrl
-        createdAt
+        id
       }
+      url
+      thumbnailUrl
+      createdAt
     }
   }
-`;
-export function useListDocumentsOnSchemeQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ListDocumentsOnSchemeQuery,
-    ListDocumentsOnSchemeQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    ListDocumentsOnSchemeQuery,
-    ListDocumentsOnSchemeQueryVariables
-  >(ListDocumentsOnSchemeDocument, options);
 }
-export function useListDocumentsOnSchemeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListDocumentsOnSchemeQuery,
-    ListDocumentsOnSchemeQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ListDocumentsOnSchemeQuery,
-    ListDocumentsOnSchemeQueryVariables
-  >(ListDocumentsOnSchemeDocument, options);
-}
-export type ListDocumentsOnSchemeQueryHookResult = ReturnType<
-  typeof useListDocumentsOnSchemeQuery
->;
-export type ListDocumentsOnSchemeLazyQueryHookResult = ReturnType<
-  typeof useListDocumentsOnSchemeLazyQuery
->;
-export type ListDocumentsOnSchemeQueryResult = Apollo.QueryResult<
-  ListDocumentsOnSchemeQuery,
-  ListDocumentsOnSchemeQueryVariables
->;
+    `;
+export function useListDocumentsOnSchemeQuery(baseOptions: Apollo.QueryHookOptions<ListDocumentsOnSchemeQuery, ListDocumentsOnSchemeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListDocumentsOnSchemeQuery, ListDocumentsOnSchemeQueryVariables>(ListDocumentsOnSchemeDocument, options);
+      }
+export function useListDocumentsOnSchemeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListDocumentsOnSchemeQuery, ListDocumentsOnSchemeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListDocumentsOnSchemeQuery, ListDocumentsOnSchemeQueryVariables>(ListDocumentsOnSchemeDocument, options);
+        }
+export type ListDocumentsOnSchemeQueryHookResult = ReturnType<typeof useListDocumentsOnSchemeQuery>;
+export type ListDocumentsOnSchemeLazyQueryHookResult = ReturnType<typeof useListDocumentsOnSchemeLazyQuery>;
+export type ListDocumentsOnSchemeQueryResult = Apollo.QueryResult<ListDocumentsOnSchemeQuery, ListDocumentsOnSchemeQueryVariables>;

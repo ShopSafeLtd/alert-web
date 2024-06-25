@@ -27,20 +27,15 @@ interface Props {
 
 const Apollo = ({ children }: Props): JSX.Element => {
   const navigate = useNavigate();
-  const { getToken, isLoaded, isSignedIn } = useAuth();
+  const { isSignedIn } = useAuth();
 
-  const { token, setToken } = useTokenContext();
+  const { token, setToken, getToken } = useTokenContext();
 
   const location = useLocation();
   const currentRoute = location.pathname;
   useEffect(() => {
     async function getSetToken() {
-      console.log('getting token 2');
-
-      const t = await getToken({
-        leewayInSeconds: 1800,
-        template: 'test',
-      });
+      const t = await getToken(true);
       if (!t && !isSignedIn) {
         navigate(GenerateSignInRedirect());
       }
@@ -126,12 +121,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
             extensions?.code === '401'
           ) {
             const oldHeaders = operation.getContext().headers;
-            console.log('getting token 1');
-            void getToken({
-              leewayInSeconds: 1800,
-              skipCache: true,
-              template: 'test',
-            }).then((t) => {
+            void getToken(true).then((t) => {
               operation.setContext({
                 headers: {
                   ...oldHeaders,
@@ -186,7 +176,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
         };
       } catch (error) {
         if (error instanceof Error) {
-          // handle new token logic
+          console.error(error.message);
         }
       }
     }

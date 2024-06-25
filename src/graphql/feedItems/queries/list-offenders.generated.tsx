@@ -12,86 +12,39 @@ export type ListOffendersFeedQueryVariables = Types.Exact<{
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
-export type ListOffendersFeedQuery = {
-  __typename?: 'Query';
-  listOffenders: {
-    __typename?: 'ListOffenders';
-    total: number;
-    offenders: Array<{
-      __typename?: 'Offender';
-      id: string;
-      reference?: number | null;
-      name?: string | null;
-      feedImage?: {
-        __typename?: 'Image';
-        id: string;
-        low?: string | null;
-        position: Types.ImagePosition;
-        rotation: number;
-      } | null;
-    }>;
-  };
-};
+
+export type ListOffendersFeedQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, feedImage?: { __typename?: 'Image', id: string, low?: string | null, position: Types.ImagePosition, rotation: number } | null }> } };
+
 
 export const ListOffendersFeedDocument = gql`
-  query listOffendersFeed(
-    $scheme: SchemeWhereUniqueInput!
-    $where: OffenderWhereInput
-    $order: OffenderOrderByWithRelationInput
-    $take: Int
-    $skip: Int
+    query listOffendersFeed($scheme: SchemeWhereUniqueInput!, $where: OffenderWhereInput, $order: OffenderOrderByWithRelationInput, $take: Int, $skip: Int) {
+  listOffenders(
+    scheme: $scheme
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
   ) {
-    listOffenders(
-      scheme: $scheme
-      where: $where
-      order: $order
-      take: $take
-      skip: $skip
-    ) {
-      offenders {
-        id
-        reference
-        name
-        feedImage {
-          ...FeedImage
-        }
+    offenders {
+      id
+      reference
+      name
+      feedImage {
+        ...FeedImage
       }
-      total
     }
+    total
   }
-  ${FeedImageFragmentDoc}
-`;
-export function useListOffendersFeedQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ListOffendersFeedQuery,
-    ListOffendersFeedQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    ListOffendersFeedQuery,
-    ListOffendersFeedQueryVariables
-  >(ListOffendersFeedDocument, options);
 }
-export function useListOffendersFeedLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListOffendersFeedQuery,
-    ListOffendersFeedQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ListOffendersFeedQuery,
-    ListOffendersFeedQueryVariables
-  >(ListOffendersFeedDocument, options);
-}
-export type ListOffendersFeedQueryHookResult = ReturnType<
-  typeof useListOffendersFeedQuery
->;
-export type ListOffendersFeedLazyQueryHookResult = ReturnType<
-  typeof useListOffendersFeedLazyQuery
->;
-export type ListOffendersFeedQueryResult = Apollo.QueryResult<
-  ListOffendersFeedQuery,
-  ListOffendersFeedQueryVariables
->;
+    ${FeedImageFragmentDoc}`;
+export function useListOffendersFeedQuery(baseOptions: Apollo.QueryHookOptions<ListOffendersFeedQuery, ListOffendersFeedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListOffendersFeedQuery, ListOffendersFeedQueryVariables>(ListOffendersFeedDocument, options);
+      }
+export function useListOffendersFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListOffendersFeedQuery, ListOffendersFeedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListOffendersFeedQuery, ListOffendersFeedQueryVariables>(ListOffendersFeedDocument, options);
+        }
+export type ListOffendersFeedQueryHookResult = ReturnType<typeof useListOffendersFeedQuery>;
+export type ListOffendersFeedLazyQueryHookResult = ReturnType<typeof useListOffendersFeedLazyQuery>;
+export type ListOffendersFeedQueryResult = Apollo.QueryResult<ListOffendersFeedQuery, ListOffendersFeedQueryVariables>;

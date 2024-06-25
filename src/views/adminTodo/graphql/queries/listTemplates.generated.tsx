@@ -8,86 +8,39 @@ export type QuestionGroupOnSchemeQueryVariables = Types.Exact<{
   questionGroupsWhere?: Types.InputMaybe<Types.QuestionGroupWhereInput>;
 }>;
 
-export type QuestionGroupOnSchemeQuery = {
-  __typename?: 'Query';
-  scheme: {
-    __typename?: 'Scheme';
-    questionGroups: Array<{
-      __typename?: 'QuestionGroup';
-      id: string;
-      name: string;
-      description?: string | null;
-      defaultDueDate: number;
-      questions: Array<{
-        __typename?: 'Question';
-        questionFormatted: string;
-        id: string;
-        type: Types.AnswerType;
-        optionsFormFormatted?: Array<{
-          __typename?: 'AnswerOption';
-          label: string;
-          value: string;
-        }> | null;
-      }>;
-    }>;
-  };
-};
+
+export type QuestionGroupOnSchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', questionGroups: Array<{ __typename?: 'QuestionGroup', id: string, name: string, description?: string | null, defaultDueDate: number, questions: Array<{ __typename?: 'Question', questionFormatted: string, id: string, type: Types.AnswerType, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', label: string, value: string }> | null }> }> } };
+
 
 export const QuestionGroupOnSchemeDocument = gql`
-  query QuestionGroupOnScheme(
-    $where: SchemeWhereUniqueInput!
-    $questionGroupsWhere: QuestionGroupWhereInput
-  ) {
-    scheme(where: $where) {
-      questionGroups(where: $questionGroupsWhere) {
+    query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!, $questionGroupsWhere: QuestionGroupWhereInput) {
+  scheme(where: $where) {
+    questionGroups(where: $questionGroupsWhere) {
+      id
+      name
+      description
+      defaultDueDate
+      questions {
+        questionFormatted
         id
-        name
-        description
-        defaultDueDate
-        questions {
-          questionFormatted
-          id
-          optionsFormFormatted {
-            label
-            value
-          }
-          type
+        optionsFormFormatted {
+          label
+          value
         }
+        type
       }
     }
   }
-`;
-export function useQuestionGroupOnSchemeQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    QuestionGroupOnSchemeQuery,
-    QuestionGroupOnSchemeQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    QuestionGroupOnSchemeQuery,
-    QuestionGroupOnSchemeQueryVariables
-  >(QuestionGroupOnSchemeDocument, options);
 }
-export function useQuestionGroupOnSchemeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    QuestionGroupOnSchemeQuery,
-    QuestionGroupOnSchemeQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    QuestionGroupOnSchemeQuery,
-    QuestionGroupOnSchemeQueryVariables
-  >(QuestionGroupOnSchemeDocument, options);
-}
-export type QuestionGroupOnSchemeQueryHookResult = ReturnType<
-  typeof useQuestionGroupOnSchemeQuery
->;
-export type QuestionGroupOnSchemeLazyQueryHookResult = ReturnType<
-  typeof useQuestionGroupOnSchemeLazyQuery
->;
-export type QuestionGroupOnSchemeQueryResult = Apollo.QueryResult<
-  QuestionGroupOnSchemeQuery,
-  QuestionGroupOnSchemeQueryVariables
->;
+    `;
+export function useQuestionGroupOnSchemeQuery(baseOptions: Apollo.QueryHookOptions<QuestionGroupOnSchemeQuery, QuestionGroupOnSchemeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuestionGroupOnSchemeQuery, QuestionGroupOnSchemeQueryVariables>(QuestionGroupOnSchemeDocument, options);
+      }
+export function useQuestionGroupOnSchemeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuestionGroupOnSchemeQuery, QuestionGroupOnSchemeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuestionGroupOnSchemeQuery, QuestionGroupOnSchemeQueryVariables>(QuestionGroupOnSchemeDocument, options);
+        }
+export type QuestionGroupOnSchemeQueryHookResult = ReturnType<typeof useQuestionGroupOnSchemeQuery>;
+export type QuestionGroupOnSchemeLazyQueryHookResult = ReturnType<typeof useQuestionGroupOnSchemeLazyQuery>;
+export type QuestionGroupOnSchemeQueryResult = Apollo.QueryResult<QuestionGroupOnSchemeQuery, QuestionGroupOnSchemeQueryVariables>;

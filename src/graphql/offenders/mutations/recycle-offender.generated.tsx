@@ -7,40 +7,22 @@ export type RecycleOffenderMutationVariables = Types.Exact<{
   where: Types.UniqueId;
 }>;
 
-export type RecycleOffenderMutation = {
-  __typename?: 'Mutation';
-  recycleOffender: { __typename?: 'Offender'; id: string };
-};
+
+export type RecycleOffenderMutation = { __typename?: 'Mutation', recycleOffender: { __typename?: 'Offender', id: string } };
+
 
 export const RecycleOffenderDocument = gql`
-  mutation recycleOffender($where: UniqueId!) {
-    recycleOffender(where: $where) {
-      id
-    }
+    mutation recycleOffender($where: UniqueId!) {
+  recycleOffender(where: $where) {
+    id
   }
-`;
-export type RecycleOffenderMutationFn = Apollo.MutationFunction<
-  RecycleOffenderMutation,
-  RecycleOffenderMutationVariables
->;
-export function useRecycleOffenderMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RecycleOffenderMutation,
-    RecycleOffenderMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    RecycleOffenderMutation,
-    RecycleOffenderMutationVariables
-  >(RecycleOffenderDocument, options);
 }
-export type RecycleOffenderMutationHookResult = ReturnType<
-  typeof useRecycleOffenderMutation
->;
-export type RecycleOffenderMutationResult =
-  Apollo.MutationResult<RecycleOffenderMutation>;
-export type RecycleOffenderMutationOptions = Apollo.BaseMutationOptions<
-  RecycleOffenderMutation,
-  RecycleOffenderMutationVariables
->;
+    `;
+export type RecycleOffenderMutationFn = Apollo.MutationFunction<RecycleOffenderMutation, RecycleOffenderMutationVariables>;
+export function useRecycleOffenderMutation(baseOptions?: Apollo.MutationHookOptions<RecycleOffenderMutation, RecycleOffenderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RecycleOffenderMutation, RecycleOffenderMutationVariables>(RecycleOffenderDocument, options);
+      }
+export type RecycleOffenderMutationHookResult = ReturnType<typeof useRecycleOffenderMutation>;
+export type RecycleOffenderMutationResult = Apollo.MutationResult<RecycleOffenderMutation>;
+export type RecycleOffenderMutationOptions = Apollo.BaseMutationOptions<RecycleOffenderMutation, RecycleOffenderMutationVariables>;

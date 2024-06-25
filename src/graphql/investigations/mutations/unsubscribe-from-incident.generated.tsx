@@ -7,46 +7,23 @@ export type UnsubscribeToInvestigationMutationVariables = Types.Exact<{
   where: Types.UniqueId;
 }>;
 
-export type UnsubscribeToInvestigationMutation = {
-  __typename?: 'Mutation';
-  unsubscribeToInvestigation: {
-    __typename?: 'Investigation';
-    id: string;
-    subscribed: boolean;
-  };
-};
+
+export type UnsubscribeToInvestigationMutation = { __typename?: 'Mutation', unsubscribeToInvestigation: { __typename?: 'Investigation', id: string, subscribed: boolean } };
+
 
 export const UnsubscribeToInvestigationDocument = gql`
-  mutation UnsubscribeToInvestigation($where: UniqueId!) {
-    unsubscribeToInvestigation(where: $where) {
-      id
-      subscribed
-    }
+    mutation UnsubscribeToInvestigation($where: UniqueId!) {
+  unsubscribeToInvestigation(where: $where) {
+    id
+    subscribed
   }
-`;
-export type UnsubscribeToInvestigationMutationFn = Apollo.MutationFunction<
-  UnsubscribeToInvestigationMutation,
-  UnsubscribeToInvestigationMutationVariables
->;
-export function useUnsubscribeToInvestigationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UnsubscribeToInvestigationMutation,
-    UnsubscribeToInvestigationMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UnsubscribeToInvestigationMutation,
-    UnsubscribeToInvestigationMutationVariables
-  >(UnsubscribeToInvestigationDocument, options);
 }
-export type UnsubscribeToInvestigationMutationHookResult = ReturnType<
-  typeof useUnsubscribeToInvestigationMutation
->;
-export type UnsubscribeToInvestigationMutationResult =
-  Apollo.MutationResult<UnsubscribeToInvestigationMutation>;
-export type UnsubscribeToInvestigationMutationOptions =
-  Apollo.BaseMutationOptions<
-    UnsubscribeToInvestigationMutation,
-    UnsubscribeToInvestigationMutationVariables
-  >;
+    `;
+export type UnsubscribeToInvestigationMutationFn = Apollo.MutationFunction<UnsubscribeToInvestigationMutation, UnsubscribeToInvestigationMutationVariables>;
+export function useUnsubscribeToInvestigationMutation(baseOptions?: Apollo.MutationHookOptions<UnsubscribeToInvestigationMutation, UnsubscribeToInvestigationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnsubscribeToInvestigationMutation, UnsubscribeToInvestigationMutationVariables>(UnsubscribeToInvestigationDocument, options);
+      }
+export type UnsubscribeToInvestigationMutationHookResult = ReturnType<typeof useUnsubscribeToInvestigationMutation>;
+export type UnsubscribeToInvestigationMutationResult = Apollo.MutationResult<UnsubscribeToInvestigationMutation>;
+export type UnsubscribeToInvestigationMutationOptions = Apollo.BaseMutationOptions<UnsubscribeToInvestigationMutation, UnsubscribeToInvestigationMutationVariables>;

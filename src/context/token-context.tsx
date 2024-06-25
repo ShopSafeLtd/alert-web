@@ -6,6 +6,7 @@ import jwtDecode from 'jwt-decode';
 interface TokenContextT {
   token: string | null;
   setToken: (token: string | null) => void;
+  getToken: (force?: boolean) => Promise<string | null>;
 }
 
 interface JwtPayload {
@@ -26,11 +27,18 @@ export const useTokenContext = () => {
 export const TokenProvider: React.FC<{
   children?: ReactNode;
 }> = ({ children }) => {
-  const { getToken, isSignedIn, isLoaded } = useAuth();
+  const { getToken: getClerkToken, isSignedIn, isLoaded } = useAuth();
 
   const [token, setToken] = React.useState<string | null>(null);
   const [expiredToken, setExpiredToken] = React.useState<string | null>(null);
   const [expireAt, setExpireAt] = React.useState<number | null>(null);
+
+  const getToken = (force?: boolean) =>
+    getClerkToken({
+      leewayInSeconds: 1800,
+      template: 'test',
+      skipCache: force,
+    });
 
   useEffect(() => {
     if (token && (!expireAt || token !== expiredToken)) {
@@ -42,18 +50,12 @@ export const TokenProvider: React.FC<{
     }
   }, [token, isLoaded, isSignedIn, expireAt]);
 
-  console.log(expireAt);
-  const value = useMemo(() => ({ token, setToken }), [token]);
+  const value = useMemo(() => ({ token, setToken, getToken }), [token]);
 
   // handle token expiration
   useEffect(() => {
     async function getSetToken() {
-      console.log('getting token 3');
-
-      const t = await getToken({
-        leewayInSeconds: 1800,
-        template: 'test',
-      });
+      const t = await getToken();
       setToken(t);
     }
     if (expireAt) {

@@ -7,45 +7,23 @@ export type UnsubscribeFromIncidentMutationVariables = Types.Exact<{
   where: Types.IncidentWhereUniqueInput;
 }>;
 
-export type UnsubscribeFromIncidentMutation = {
-  __typename?: 'Mutation';
-  unsubscribeFromIncident: {
-    __typename?: 'Incident';
-    id: string;
-    subscribed: boolean;
-  };
-};
+
+export type UnsubscribeFromIncidentMutation = { __typename?: 'Mutation', unsubscribeFromIncident: { __typename?: 'Incident', id: string, subscribed: boolean } };
+
 
 export const UnsubscribeFromIncidentDocument = gql`
-  mutation UnsubscribeFromIncident($where: IncidentWhereUniqueInput!) {
-    unsubscribeFromIncident(where: $where) {
-      id
-      subscribed
-    }
+    mutation UnsubscribeFromIncident($where: IncidentWhereUniqueInput!) {
+  unsubscribeFromIncident(where: $where) {
+    id
+    subscribed
   }
-`;
-export type UnsubscribeFromIncidentMutationFn = Apollo.MutationFunction<
-  UnsubscribeFromIncidentMutation,
-  UnsubscribeFromIncidentMutationVariables
->;
-export function useUnsubscribeFromIncidentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UnsubscribeFromIncidentMutation,
-    UnsubscribeFromIncidentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UnsubscribeFromIncidentMutation,
-    UnsubscribeFromIncidentMutationVariables
-  >(UnsubscribeFromIncidentDocument, options);
 }
-export type UnsubscribeFromIncidentMutationHookResult = ReturnType<
-  typeof useUnsubscribeFromIncidentMutation
->;
-export type UnsubscribeFromIncidentMutationResult =
-  Apollo.MutationResult<UnsubscribeFromIncidentMutation>;
-export type UnsubscribeFromIncidentMutationOptions = Apollo.BaseMutationOptions<
-  UnsubscribeFromIncidentMutation,
-  UnsubscribeFromIncidentMutationVariables
->;
+    `;
+export type UnsubscribeFromIncidentMutationFn = Apollo.MutationFunction<UnsubscribeFromIncidentMutation, UnsubscribeFromIncidentMutationVariables>;
+export function useUnsubscribeFromIncidentMutation(baseOptions?: Apollo.MutationHookOptions<UnsubscribeFromIncidentMutation, UnsubscribeFromIncidentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnsubscribeFromIncidentMutation, UnsubscribeFromIncidentMutationVariables>(UnsubscribeFromIncidentDocument, options);
+      }
+export type UnsubscribeFromIncidentMutationHookResult = ReturnType<typeof useUnsubscribeFromIncidentMutation>;
+export type UnsubscribeFromIncidentMutationResult = Apollo.MutationResult<UnsubscribeFromIncidentMutation>;
+export type UnsubscribeFromIncidentMutationOptions = Apollo.BaseMutationOptions<UnsubscribeFromIncidentMutation, UnsubscribeFromIncidentMutationVariables>;

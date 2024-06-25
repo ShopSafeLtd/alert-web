@@ -8,56 +8,30 @@ export type UpdateIncidentBusinessMutationVariables = Types.Exact<{
   where: Types.UniqueId;
 }>;
 
-export type UpdateIncidentBusinessMutation = {
-  __typename?: 'Mutation';
-  updateIncidentBusiness: {
-    __typename?: 'Incident';
-    id: string;
-    business?: { __typename?: 'Business'; id: string; name: string } | null;
-    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-  };
-};
+
+export type UpdateIncidentBusinessMutation = { __typename?: 'Mutation', updateIncidentBusiness: { __typename?: 'Incident', id: string, business?: { __typename?: 'Business', id: string, name: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+
 
 export const UpdateIncidentBusinessDocument = gql`
-  mutation UpdateIncidentBusiness(
-    $data: UpdateIncidentBusinessInput!
-    $where: UniqueId!
-  ) {
-    updateIncidentBusiness(data: $data, where: $where) {
+    mutation UpdateIncidentBusiness($data: UpdateIncidentBusinessInput!, $where: UniqueId!) {
+  updateIncidentBusiness(data: $data, where: $where) {
+    id
+    business {
       id
-      business {
-        id
-        name
-      }
-      groups {
-        id
-        name
-      }
+      name
+    }
+    groups {
+      id
+      name
     }
   }
-`;
-export type UpdateIncidentBusinessMutationFn = Apollo.MutationFunction<
-  UpdateIncidentBusinessMutation,
-  UpdateIncidentBusinessMutationVariables
->;
-export function useUpdateIncidentBusinessMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateIncidentBusinessMutation,
-    UpdateIncidentBusinessMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateIncidentBusinessMutation,
-    UpdateIncidentBusinessMutationVariables
-  >(UpdateIncidentBusinessDocument, options);
 }
-export type UpdateIncidentBusinessMutationHookResult = ReturnType<
-  typeof useUpdateIncidentBusinessMutation
->;
-export type UpdateIncidentBusinessMutationResult =
-  Apollo.MutationResult<UpdateIncidentBusinessMutation>;
-export type UpdateIncidentBusinessMutationOptions = Apollo.BaseMutationOptions<
-  UpdateIncidentBusinessMutation,
-  UpdateIncidentBusinessMutationVariables
->;
+    `;
+export type UpdateIncidentBusinessMutationFn = Apollo.MutationFunction<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>;
+export function useUpdateIncidentBusinessMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>(UpdateIncidentBusinessDocument, options);
+      }
+export type UpdateIncidentBusinessMutationHookResult = ReturnType<typeof useUpdateIncidentBusinessMutation>;
+export type UpdateIncidentBusinessMutationResult = Apollo.MutationResult<UpdateIncidentBusinessMutation>;
+export type UpdateIncidentBusinessMutationOptions = Apollo.BaseMutationOptions<UpdateIncidentBusinessMutation, UpdateIncidentBusinessMutationVariables>;

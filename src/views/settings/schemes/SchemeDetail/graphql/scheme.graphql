@@ -1,0 +1,42 @@
+query schemeDetails($where: SchemeWhereUniqueInput!) {
+  scheme(where: $where) {
+    id
+    name
+    restrictIncidentAccess
+    reportOnly
+    autoApproveIncidents
+    autoApproveOffenders
+    defaultIncidentEmail
+    defaultIncidentPush
+    defaultBulletinEmails
+    defaultBulletinPush
+    defaultSubscribedIncidentOnly
+    defaultSubscribedOffenderOnly
+    defaultMessagePush
+    defaultOffenderEmail
+    defaultOffenderPush
+    defaultPublicOffenderDOB
+    incidentRetention
+    offenderRetention
+    autoPopulateDescription
+    needJustification
+    facialRecognition
+    facialDetection
+    activityAssignToUser
+    useBusinessGroupsOnIncident
+    imagesRequiredOnOffenders
+    requireSiteNumberForUsers
+    oneSelectedIncidentTypeOnly
+    goodsMode
+    darkLogo {
+      id
+      url
+      optimised
+    }
+    logo {
+      id
+      url
+      optimised
+    }
+  }
+}

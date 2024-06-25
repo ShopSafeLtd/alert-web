@@ -1,7 +1,6 @@
 import React from 'react';
 import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
-import { useAuth } from 'hooks';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
 import { Link } from 'react-router-dom';
@@ -18,6 +17,7 @@ import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import { useIntl } from 'react-intl';
 import type { AvailableLanguages } from 'lang';
+import { useSignOut } from '#/hooks/signOut';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -35,7 +35,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
 }));
 
-
 export const NavProfile = () => {
   const { switcher, themes } = useThemeSwitcher();
   const classes = useStyles();
@@ -46,8 +45,7 @@ export const NavProfile = () => {
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
   const switchLocale = useStoreActions((actions) => actions.theme.changeLocale);
   const locale = useStoreState((state) => state.theme.locale);
-  const { signOut } = useAuth();
-
+  const { signOut } = useSignOut();
   const handleChangeLang = (value: AvailableLanguages) => {
     switchLocale(value as string);
     typedLocalStorage.set(LocalStorageKeys.lang, value as string);

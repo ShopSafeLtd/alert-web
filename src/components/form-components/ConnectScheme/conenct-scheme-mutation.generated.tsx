@@ -7,54 +7,27 @@ export type SetSchemeSharingMutationVariables = Types.Exact<{
   data: Types.SetSchemeSharingInput;
 }>;
 
-export type SetSchemeSharingMutation = {
-  __typename?: 'Mutation';
-  setSchemeSharing: {
-    __typename?: 'Scheme';
-    id: string;
-    name: string;
-    connectedToSchemes: Array<{
-      __typename?: 'Scheme';
-      id: string;
-      name: string;
-    }>;
-  };
-};
+
+export type SetSchemeSharingMutation = { __typename?: 'Mutation', setSchemeSharing: { __typename?: 'Scheme', id: string, name: string, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> } };
+
 
 export const SetSchemeSharingDocument = gql`
-  mutation SetSchemeSharing($data: SetSchemeSharingInput!) {
-    setSchemeSharing(data: $data) {
+    mutation SetSchemeSharing($data: SetSchemeSharingInput!) {
+  setSchemeSharing(data: $data) {
+    id
+    name
+    connectedToSchemes {
       id
       name
-      connectedToSchemes {
-        id
-        name
-      }
     }
   }
-`;
-export type SetSchemeSharingMutationFn = Apollo.MutationFunction<
-  SetSchemeSharingMutation,
-  SetSchemeSharingMutationVariables
->;
-export function useSetSchemeSharingMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SetSchemeSharingMutation,
-    SetSchemeSharingMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    SetSchemeSharingMutation,
-    SetSchemeSharingMutationVariables
-  >(SetSchemeSharingDocument, options);
 }
-export type SetSchemeSharingMutationHookResult = ReturnType<
-  typeof useSetSchemeSharingMutation
->;
-export type SetSchemeSharingMutationResult =
-  Apollo.MutationResult<SetSchemeSharingMutation>;
-export type SetSchemeSharingMutationOptions = Apollo.BaseMutationOptions<
-  SetSchemeSharingMutation,
-  SetSchemeSharingMutationVariables
->;
+    `;
+export type SetSchemeSharingMutationFn = Apollo.MutationFunction<SetSchemeSharingMutation, SetSchemeSharingMutationVariables>;
+export function useSetSchemeSharingMutation(baseOptions?: Apollo.MutationHookOptions<SetSchemeSharingMutation, SetSchemeSharingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetSchemeSharingMutation, SetSchemeSharingMutationVariables>(SetSchemeSharingDocument, options);
+      }
+export type SetSchemeSharingMutationHookResult = ReturnType<typeof useSetSchemeSharingMutation>;
+export type SetSchemeSharingMutationResult = Apollo.MutationResult<SetSchemeSharingMutation>;
+export type SetSchemeSharingMutationOptions = Apollo.BaseMutationOptions<SetSchemeSharingMutation, SetSchemeSharingMutationVariables>;

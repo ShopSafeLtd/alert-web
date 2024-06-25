@@ -12,104 +12,54 @@ export type ActiveChecklistsQueryVariables = Types.Exact<{
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
-export type ActiveChecklistsQuery = {
-  __typename?: 'Query';
-  activeChecklists: {
-    __typename?: 'QueryActiveChecklistsConnection';
-    totalCount: number;
-    pageInfo: { __typename?: 'PageInfo'; endCursor?: string | null };
-    edges: Array<{
-      __typename?: 'QueryActiveChecklistsConnectionEdge';
-      node: {
-        __typename?: 'ActiveChecklist';
-        id: string;
-        name?: string | null;
-        percentageScore: string;
-        percentComplete: number;
-        status: Types.ChecklistStatus;
-        updatedAt: Date;
-        completedAt?: Date | null;
-        document?: { __typename?: 'Document'; id: string; url: string } | null;
-        business?: { __typename?: 'Business'; name: string; id: string } | null;
-      };
-    }>;
-  };
-};
+
+export type ActiveChecklistsQuery = { __typename?: 'Query', activeChecklists: { __typename?: 'QueryActiveChecklistsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null }, edges: Array<{ __typename?: 'QueryActiveChecklistsConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentageScore: string, percentComplete: number, status: Types.ChecklistStatus, updatedAt: Date, completedAt?: Date | null, document?: { __typename?: 'Document', id: string, url: string } | null, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
+
 
 export const ActiveChecklistsDocument = gql`
-  query ActiveChecklists(
-    $first: Int
-    $after: String
-    $order: ActiveChecklistOrderByWithRelationInput
-    $where: ActiveChecklistWhereInput
-    $take: Int
-    $skip: Int
+    query ActiveChecklists($first: Int, $after: String, $order: ActiveChecklistOrderByWithRelationInput, $where: ActiveChecklistWhereInput, $take: Int, $skip: Int) {
+  activeChecklists(
+    first: $first
+    after: $after
+    order: $order
+    where: $where
+    take: $take
+    skip: $skip
   ) {
-    activeChecklists(
-      first: $first
-      after: $after
-      order: $order
-      where: $where
-      take: $take
-      skip: $skip
-    ) {
-      totalCount
-      pageInfo {
-        endCursor
-      }
-      edges {
-        node {
+    totalCount
+    pageInfo {
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        percentageScore
+        percentComplete
+        status
+        document {
           id
-          name
-          percentageScore
-          percentComplete
-          status
-          document {
-            id
-            url
-          }
-          updatedAt
-          business {
-            name
-            id
-          }
-          completedAt
+          url
         }
+        updatedAt
+        business {
+          name
+          id
+        }
+        completedAt
       }
     }
   }
-`;
-export function useActiveChecklistsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ActiveChecklistsQuery,
-    ActiveChecklistsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>(
-    ActiveChecklistsDocument,
-    options
-  );
 }
-export function useActiveChecklistsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ActiveChecklistsQuery,
-    ActiveChecklistsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ActiveChecklistsQuery,
-    ActiveChecklistsQueryVariables
-  >(ActiveChecklistsDocument, options);
-}
-export type ActiveChecklistsQueryHookResult = ReturnType<
-  typeof useActiveChecklistsQuery
->;
-export type ActiveChecklistsLazyQueryHookResult = ReturnType<
-  typeof useActiveChecklistsLazyQuery
->;
-export type ActiveChecklistsQueryResult = Apollo.QueryResult<
-  ActiveChecklistsQuery,
-  ActiveChecklistsQueryVariables
->;
+    `;
+export function useActiveChecklistsQuery(baseOptions?: Apollo.QueryHookOptions<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>(ActiveChecklistsDocument, options);
+      }
+export function useActiveChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>(ActiveChecklistsDocument, options);
+        }
+export type ActiveChecklistsQueryHookResult = ReturnType<typeof useActiveChecklistsQuery>;
+export type ActiveChecklistsLazyQueryHookResult = ReturnType<typeof useActiveChecklistsLazyQuery>;
+export type ActiveChecklistsQueryResult = Apollo.QueryResult<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>;

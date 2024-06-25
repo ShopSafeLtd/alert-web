@@ -5,14 +5,17 @@ import { PermissionMethod, PermissionModel } from 'graphql/types';
 import SettingsHome from '#/views/settings/settings-home/SettingsHome.view';
 import SettingsSideMenu from '#/components/settings/SettingSideMenu/SettingsSideMenu.view';
 import Loading from '#/components/shared-components/AntD/Loading';
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 
+const SchemeDetail = lazy(
+  () => import('views/settings/schemes/SchemeDetail/SchemeDetail.container')
+);
 const UserList = lazy(() => import('views/settings/users/UserList'));
 const ViewUser = lazy(() => import('views/settings/users/UserDetail'));
 const GroupList = lazy(() => import('views/settings/groups/GroupList'));
 const ViewGroup = lazy(() => import('views/settings/groups/GroupDetail'));
 const ChatGroupsList = lazy(() => import('views/settings/chats/ChatList'));
 const ViewChatGroup = lazy(() => import('views/settings/chats/ChatDetail'));
-const SchemeDetails = lazy(() => import('views/settings/schemes/SchemeDetail'));
 const OffenderWarnings = lazy(
   () => import('views/settings/tags/OffenderWarning')
 );
@@ -67,9 +70,6 @@ const MySafety = lazy(
 const IntelOne = lazy(
   () => import('../../../views/settings/data-import/intel-one/IntelOne.view')
 );
-const PermissionCheckWrapper = lazy(
-  () => import('../../../components/PermissionCheck/PermissionCheckWrapper')
-);
 const DashboardManagement = lazy(
   () => import('../dashboard-management/router')
 );
@@ -99,7 +99,8 @@ const SchemeSettings = (): JSX.Element => {
               }
             />
             <Route
-              path="scheme-settings"
+              key="scheme-settings-route"
+              path="scheme"
               element={
                 <PermissionCheckWrapper
                   permission={{
@@ -107,7 +108,7 @@ const SchemeSettings = (): JSX.Element => {
                     method: PermissionMethod.Read,
                   }}
                 >
-                  <SchemeDetails />
+                  <SchemeDetail />
                 </PermissionCheckWrapper>
               }
             />
@@ -232,19 +233,7 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
             />
-            <Route
-              path="scheme-details"
-              element={
-                <PermissionCheckWrapper
-                  permission={{
-                    model: PermissionModel.Settings,
-                    method: PermissionMethod.Read,
-                  }}
-                >
-                  <SchemeDetails />
-                </PermissionCheckWrapper>
-              }
-            />
+
             <Route
               path="terms/*"
               element={

@@ -1,29 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import type { AvailableLanguages } from 'lang';
-import AppLocale, { AvailableLanguagesConst } from 'lang';
 import { ThemeProvider } from 'react-jss';
 import { IntlProvider } from 'react-intl';
 import { ConfigProvider } from 'antd';
-import { useStoreActions, useStoreState } from 'state';
 import theme from 'configs/ThemeConfig';
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import { GuestLayout } from '#/layouts/guest-layout';
-import { LocalStorageKeys, typedLocalStorage } from '#/utils';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import LoginView from '#/views/sign-in/Login.View';
-import type { Translations } from '#/state/scheme-model';
 import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
 import { useTokenContext } from '#/context/token-context';
 import Loading from '#/components/shared-components/AntD/Loading';
 import AppLayout from '#/layouts/app-layout';
 import Terms from '#/navigation/auth-views/components/Terms';
+import { useThemeLanguage } from '#/hooks/useThemeLanguage';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
-
-function checkLang(l: string): l is AvailableLanguages {
-  return (AvailableLanguagesConst as readonly string[]).includes(l);
-}
 
 const Views = () => {
   // check if current url is staging. If so, redirect to  https://app.shopsafealert.co.uk/ unless localstorage has been set with staging:true
@@ -40,78 +32,13 @@ const Views = () => {
   } else if (navigator?.userAgent?.toLowerCase().includes('iphone')) {
     window.location.href = 'https://apps.apple.com/gb/app/alert/id1497736226';
   }
-
-  const locale = useStoreState((state) => state.theme.locale);
-  const lang =
-    checkLang(
-      navigator.language === 'nl-BE' ? 'rbe' : navigator.language.split('-')[0]
-    ) &&
-    (navigator.language === 'nl-BE' ? 'rbe' : navigator.language.split('-')[0]);
-
-  const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
-
-  const initLang = localLang || lang || locale;
-  useEffect(() => {
-    if (initLang) {
-      typedLocalStorage.set(LocalStorageKeys.lang, initLang);
-    }
-  }, []);
-
-  const customTranslations = useStoreState(
-    (state) => state.scheme.translations
-  );
-  const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const t = localStorage.getItem('theme');
-  const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
-  if (t) {
-    document.documentElement.setAttribute('style', `color-scheme: ${t}`);
-  } else {
-    // get browser theme preference
-    const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
-    switchTheme(darkMode ? 'dark' : 'light');
-    // set color-scheme: dark or light on the html element
-    document.documentElement.setAttribute(
-      'style',
-      `color-scheme: ${darkMode ? 'dark' : 'light'}`
-    );
-  }
-  const currentAppLocale = AppLocale[initLang as AvailableLanguages];
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore. eslint-disable-next-line
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  function convertTranslationsToJSON(
-    translations: Translations[],
-    language: string
-  ): { [key: string]: string } {
-    const json = {};
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const translation of translations) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const id = Object.keys(translation)[0];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-      json[id] = translation[id][language];
-    }
-
-    return json;
-  }
-
-  const [messages, setMessages] = useState({
-    ...currentAppLocale.messages,
-    ...convertTranslationsToJSON(customTranslations || [], locale),
-  });
   const { token } = useTokenContext();
-  useEffect(() => {
-    setMessages({
-      ...currentAppLocale.messages,
-      ...convertTranslationsToJSON(customTranslations || [], locale),
-    });
-  }, [currentAppLocale.messages, customTranslations, locale]);
+
+  const {
+    theme: currentTheme,
+    messages,
+    currentAppLocale,
+  } = useThemeLanguage();
 
   return (
     <div style={{ colorScheme: currentTheme }}>

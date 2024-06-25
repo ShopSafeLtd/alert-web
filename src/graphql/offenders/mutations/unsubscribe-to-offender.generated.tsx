@@ -7,45 +7,23 @@ export type UnsubscribeFromOffenderMutationVariables = Types.Exact<{
   where: Types.OffenderWhereUniqueInput;
 }>;
 
-export type UnsubscribeFromOffenderMutation = {
-  __typename?: 'Mutation';
-  unsubscribeFromOffender: {
-    __typename?: 'Offender';
-    id: string;
-    subscribed: boolean;
-  };
-};
+
+export type UnsubscribeFromOffenderMutation = { __typename?: 'Mutation', unsubscribeFromOffender: { __typename?: 'Offender', id: string, subscribed: boolean } };
+
 
 export const UnsubscribeFromOffenderDocument = gql`
-  mutation UnsubscribeFromOffender($where: OffenderWhereUniqueInput!) {
-    unsubscribeFromOffender(where: $where) {
-      id
-      subscribed
-    }
+    mutation UnsubscribeFromOffender($where: OffenderWhereUniqueInput!) {
+  unsubscribeFromOffender(where: $where) {
+    id
+    subscribed
   }
-`;
-export type UnsubscribeFromOffenderMutationFn = Apollo.MutationFunction<
-  UnsubscribeFromOffenderMutation,
-  UnsubscribeFromOffenderMutationVariables
->;
-export function useUnsubscribeFromOffenderMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UnsubscribeFromOffenderMutation,
-    UnsubscribeFromOffenderMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UnsubscribeFromOffenderMutation,
-    UnsubscribeFromOffenderMutationVariables
-  >(UnsubscribeFromOffenderDocument, options);
 }
-export type UnsubscribeFromOffenderMutationHookResult = ReturnType<
-  typeof useUnsubscribeFromOffenderMutation
->;
-export type UnsubscribeFromOffenderMutationResult =
-  Apollo.MutationResult<UnsubscribeFromOffenderMutation>;
-export type UnsubscribeFromOffenderMutationOptions = Apollo.BaseMutationOptions<
-  UnsubscribeFromOffenderMutation,
-  UnsubscribeFromOffenderMutationVariables
->;
+    `;
+export type UnsubscribeFromOffenderMutationFn = Apollo.MutationFunction<UnsubscribeFromOffenderMutation, UnsubscribeFromOffenderMutationVariables>;
+export function useUnsubscribeFromOffenderMutation(baseOptions?: Apollo.MutationHookOptions<UnsubscribeFromOffenderMutation, UnsubscribeFromOffenderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnsubscribeFromOffenderMutation, UnsubscribeFromOffenderMutationVariables>(UnsubscribeFromOffenderDocument, options);
+      }
+export type UnsubscribeFromOffenderMutationHookResult = ReturnType<typeof useUnsubscribeFromOffenderMutation>;
+export type UnsubscribeFromOffenderMutationResult = Apollo.MutationResult<UnsubscribeFromOffenderMutation>;
+export type UnsubscribeFromOffenderMutationOptions = Apollo.BaseMutationOptions<UnsubscribeFromOffenderMutation, UnsubscribeFromOffenderMutationVariables>;

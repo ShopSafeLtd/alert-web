@@ -8,38 +8,23 @@ export type SignInMutationVariables = Types.Exact<{
   password: Types.Scalars['String'];
 }>;
 
-export type SignInMutation = {
-  __typename?: 'Mutation';
-  signIn: { __typename?: 'SignIn'; accessToken: string; refreshToken: string };
-};
+
+export type SignInMutation = { __typename?: 'Mutation', signIn: { __typename?: 'SignIn', accessToken: string, refreshToken: string } };
+
 
 export const SignInDocument = gql`
-  mutation signIn($email: String!, $password: String!) {
-    signIn(data: { email: $email, password: $password }) {
-      accessToken
-      refreshToken
-    }
+    mutation signIn($email: String!, $password: String!) {
+  signIn(data: {email: $email, password: $password}) {
+    accessToken
+    refreshToken
   }
-`;
-export type SignInMutationFn = Apollo.MutationFunction<
-  SignInMutation,
-  SignInMutationVariables
->;
-export function useSignInMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SignInMutation,
-    SignInMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<SignInMutation, SignInMutationVariables>(
-    SignInDocument,
-    options
-  );
 }
+    `;
+export type SignInMutationFn = Apollo.MutationFunction<SignInMutation, SignInMutationVariables>;
+export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignInMutation, SignInMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, options);
+      }
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
-export type SignInMutationOptions = Apollo.BaseMutationOptions<
-  SignInMutation,
-  SignInMutationVariables
->;
+export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;

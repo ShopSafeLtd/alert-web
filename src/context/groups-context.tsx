@@ -23,7 +23,7 @@ export const useGroupsContext = () => {
 
 const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { id: userId } = useStoreState((state) => state.user);
+  const userId = useStoreState((state) => state.user.id);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
@@ -46,7 +46,7 @@ const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
       },
     },
     fetchPolicy: 'cache-first',
-    skip: !schemeId,
+    skip: !schemeId || !userId,
   });
 
   const groups = useMemo(

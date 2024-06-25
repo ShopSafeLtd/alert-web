@@ -1,14 +1,8 @@
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -146,7 +140,7 @@ export enum ActionScalarFieldEnum {
   TagId = 'tagId',
   Type = 'type',
   UserId = 'userId',
-  VehicleId = 'vehicleId',
+  VehicleId = 'vehicleId'
 }
 
 export enum ActionType {
@@ -160,7 +154,7 @@ export enum ActionType {
   Reduce = 'REDUCE',
   Remove = 'REMOVE',
   ResetPassword = 'RESET_PASSWORD',
-  Update = 'UPDATE',
+  Update = 'UPDATE'
 }
 
 export type ActionWhereInput = {
@@ -258,7 +252,7 @@ export type ActionWhereUniqueInput = {
 export enum ActionableLevelEnum {
   High = 'HIGH',
   Low = 'LOW',
-  Medium = 'MEDIUM',
+  Medium = 'MEDIUM'
 }
 
 export type ActiveChecklist = {
@@ -285,6 +279,7 @@ export type ActiveChecklist = {
   totalWeight: Scalars['Int'];
   updatedAt: Scalars['Date'];
 };
+
 
 export type ActiveChecklistFieldsArgs = {
   cursor?: InputMaybe<ActiveChecklistFieldsWhereUniqueInput>;
@@ -361,7 +356,7 @@ export enum ActiveChecklistFieldsScalarFieldEnum {
   Subsection = 'subsection',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  Weight = 'weight',
+  Weight = 'weight'
 }
 
 export type ActiveChecklistFieldsScalarWhereWithAggregatesInput = {
@@ -456,7 +451,7 @@ export enum ActiveChecklistScalarFieldEnum {
   Signature = 'signature',
   Status = 'status',
   TotalWeight = 'totalWeight',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type ActiveChecklistSections = {
@@ -606,7 +601,7 @@ export enum AddressScalarFieldEnum {
   Street = 'street',
   TownCity = 'townCity',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type AddressWhereInput = {
@@ -672,7 +667,7 @@ export enum Age {
   SixtySeventy = 'SIXTY_SEVENTY',
   ThirtyForty = 'THIRTY_FORTY',
   UnderEighteen = 'UNDER_EIGHTEEN',
-  Unknown = 'UNKNOWN',
+  Unknown = 'UNKNOWN'
 }
 
 export type Answer = {
@@ -739,7 +734,7 @@ export enum AnswerScalarFieldEnum {
   TaskId = 'taskId',
   TodoId = 'todoId',
   Type = 'type',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type AnswerScalarWhereInput = {
@@ -778,7 +773,7 @@ export enum AnswerType {
   Number = 'NUMBER',
   Select = 'SELECT',
   String = 'STRING',
-  Time = 'TIME',
+  Time = 'TIME'
 }
 
 export type AnswerUpdateManyWithoutTaskQuestionNestedInputFields = {
@@ -824,7 +819,7 @@ export enum AnswerWeightScalarFieldEnum {
   Answer = 'answer',
   Id = 'id',
   QuestionId = 'questionId',
-  Weight = 'weight',
+  Weight = 'weight'
 }
 
 export type AnswerWeightScalarWhereInput = {
@@ -913,12 +908,12 @@ export type AnswersInput = {
 
 export enum AnyAll {
   All = 'all',
-  Any = 'any',
+  Any = 'any'
 }
 
 export enum AppType {
   Native = 'NATIVE',
-  Web = 'WEB',
+  Web = 'WEB'
 }
 
 export type ApproveGroupsData = {
@@ -964,6 +959,7 @@ export type Article = {
   when?: Maybe<When>;
 };
 
+
 export type ArticleActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -972,6 +968,7 @@ export type ArticleActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type ArticleDocumentsArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
@@ -982,6 +979,7 @@ export type ArticleDocumentsArgs = {
   where?: InputMaybe<DocumentWhereInput>;
 };
 
+
 export type ArticleFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
@@ -990,6 +988,7 @@ export type ArticleFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type ArticleGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -1000,6 +999,7 @@ export type ArticleGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type ArticleImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -1008,6 +1008,7 @@ export type ArticleImagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
 };
+
 
 export type ArticleImpressionsArgs = {
   cursor?: InputMaybe<ImpressionWhereUniqueInput>;
@@ -1018,6 +1019,7 @@ export type ArticleImpressionsArgs = {
   where?: InputMaybe<ImpressionWhereInput>;
 };
 
+
 export type ArticleNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
   distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
@@ -1026,6 +1028,7 @@ export type ArticleNotificationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<NotificationWhereInput>;
 };
+
 
 export type ArticleRowsArgs = {
   cursor?: InputMaybe<ArticleRowWhereUniqueInput>;
@@ -1036,6 +1039,7 @@ export type ArticleRowsArgs = {
   where?: InputMaybe<ArticleRowWhereInput>;
 };
 
+
 export type ArticleSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -1045,6 +1049,7 @@ export type ArticleSchemesArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
+
 export type ArticleTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
   distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
@@ -1053,6 +1058,7 @@ export type ArticleTagsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type ArticleUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -1080,6 +1086,7 @@ export type ArticleColumn = {
   width: Scalars['Int'];
 };
 
+
 export type ArticleColumnImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -1089,6 +1096,7 @@ export type ArticleColumnImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
+
 export type ArticleColumnIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
@@ -1097,6 +1105,7 @@ export type ArticleColumnIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type ArticleColumnOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -1142,7 +1151,7 @@ export enum ArticleColumnScalarFieldEnum {
   Text = 'text',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  Width = 'width',
+  Width = 'width'
 }
 
 export type ArticleColumnWhereInput = {
@@ -1229,7 +1238,7 @@ export type ArticleOrderByWithRelationInput = {
 export enum ArticlePriority {
   High = 'HIGH',
   Medium = 'MEDIUM',
-  Normal = 'NORMAL',
+  Normal = 'NORMAL'
 }
 
 export type ArticleRow = {
@@ -1242,6 +1251,7 @@ export type ArticleRow = {
   position: Scalars['Int'];
   updatedAt: Scalars['Date'];
 };
+
 
 export type ArticleRowColumnsArgs = {
   cursor?: InputMaybe<ArticleColumnWhereUniqueInput>;
@@ -1277,7 +1287,7 @@ export enum ArticleRowScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
   Position = 'position',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type ArticleRowWhereInput = {
@@ -1323,7 +1333,7 @@ export enum ArticleScalarFieldEnum {
   Title = 'title',
   UpdatedAt = 'updatedAt',
   WatermarkImage = 'watermarkImage',
-  When = 'when',
+  When = 'when'
 }
 
 export enum ArticleSectionType {
@@ -1334,7 +1344,7 @@ export enum ArticleSectionType {
   OffenderGallery = 'OFFENDER_GALLERY',
   RecentIncidents = 'RECENT_INCIDENTS',
   Text = 'TEXT',
-  TopOffenders = 'TOP_OFFENDERS',
+  TopOffenders = 'TOP_OFFENDERS'
 }
 
 export type ArticleWhereInput = {
@@ -1447,6 +1457,7 @@ export type Ban = {
   updatedAt: Scalars['Date'];
 };
 
+
 export type BanActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -1455,6 +1466,7 @@ export type BanActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type BanFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
@@ -1465,6 +1477,7 @@ export type BanFeedItemsArgs = {
   where?: InputMaybe<FeedItemWhereInput>;
 };
 
+
 export type BanGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
   distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
@@ -1473,6 +1486,7 @@ export type BanGroupsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GroupWhereInput>;
 };
+
 
 export type BanNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
@@ -1549,7 +1563,7 @@ export enum BanScalarFieldEnum {
   StartDate = 'startDate',
   Title = 'title',
   Type = 'type',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export enum BanType {
@@ -1565,7 +1579,7 @@ export enum BanType {
   Pspo = 'PSPO',
   RehabilitationOrder = 'REHABILITATION_ORDER',
   SuspendedSentence = 'SUSPENDED_SENTENCE',
-  Wip = 'WIP',
+  Wip = 'WIP'
 }
 
 export type BanUpdateInput = {
@@ -1732,7 +1746,7 @@ export enum Build {
   Large = 'LARGE',
   Medium = 'MEDIUM',
   Small = 'SMALL',
-  Unknown = 'UNKNOWN',
+  Unknown = 'UNKNOWN'
 }
 
 export type Business = {
@@ -1768,6 +1782,7 @@ export type Business = {
   valueStats?: Maybe<ValueTotals>;
 };
 
+
 export type BusinessActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -1776,6 +1791,7 @@ export type BusinessActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type BusinessChecklistsArgs = {
   cursor?: InputMaybe<ActiveChecklistWhereUniqueInput>;
@@ -1786,6 +1802,7 @@ export type BusinessChecklistsArgs = {
   where?: InputMaybe<ActiveChecklistWhereInput>;
 };
 
+
 export type BusinessChildrenArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
   distinct?: InputMaybe<Array<BusinessScalarFieldEnum>>;
@@ -1795,10 +1812,12 @@ export type BusinessChildrenArgs = {
   where?: InputMaybe<BusinessWhereInput>;
 };
 
+
 export type BusinessGoodsTypesTotalsArgs = {
   endDate: Scalars['DateTime'];
   startDate: Scalars['DateTime'];
 };
+
 
 export type BusinessGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -1809,6 +1828,7 @@ export type BusinessGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type BusinessIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
@@ -1817,6 +1837,7 @@ export type BusinessIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type BusinessLocationsArgs = {
   cursor?: InputMaybe<AddressWhereUniqueInput>;
@@ -1827,6 +1848,7 @@ export type BusinessLocationsArgs = {
   where?: InputMaybe<AddressWhereInput>;
 };
 
+
 export type BusinessSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -1835,6 +1857,7 @@ export type BusinessSchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
 };
+
 
 export type BusinessTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
@@ -1845,6 +1868,7 @@ export type BusinessTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+
 export type BusinessTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<Array<TodoScalarFieldEnum>>;
@@ -1854,6 +1878,7 @@ export type BusinessTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type BusinessUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserScalarFieldEnum>>;
@@ -1862,6 +1887,7 @@ export type BusinessUsersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserWhereInput>;
 };
+
 
 export type BusinessValueStatsArgs = {
   endDate: Scalars['DateTime'];
@@ -2043,7 +2069,7 @@ export enum BusinessScalarFieldEnum {
   PublicName = 'publicName',
   Recycled = 'recycled',
   Reference = 'reference',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type BusinessUpdateInput = {
@@ -2150,6 +2176,7 @@ export type Chat = {
   uploaded: Scalars['Boolean'];
 };
 
+
 export type ChatActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -2159,6 +2186,7 @@ export type ChatActionsArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
+
 export type ChatMembersArgs = {
   cursor?: InputMaybe<UserChatWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserChatScalarFieldEnum>>;
@@ -2167,6 +2195,7 @@ export type ChatMembersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserChatWhereInput>;
 };
+
 
 export type ChatMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -2178,6 +2207,7 @@ export type ChatMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type ChatNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
   distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
@@ -2186,6 +2216,7 @@ export type ChatNotificationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<NotificationWhereInput>;
 };
+
 
 export type ChatTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
@@ -2250,7 +2281,7 @@ export enum ChatScalarFieldEnum {
   Name = 'name',
   SchemeId = 'schemeId',
   UpdatedAt = 'updatedAt',
-  Uploaded = 'uploaded',
+  Uploaded = 'uploaded'
 }
 
 export type ChatUpdateInput = {
@@ -2314,6 +2345,7 @@ export type Checklist = {
   users: Array<User>;
 };
 
+
 export type ChecklistActiveChecklistsArgs = {
   cursor?: InputMaybe<ActiveChecklistWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActiveChecklistScalarFieldEnum>>;
@@ -2322,6 +2354,7 @@ export type ChecklistActiveChecklistsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActiveChecklistWhereInput>;
 };
+
 
 export type ChecklistSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
@@ -2353,7 +2386,7 @@ export enum ChecklistAnswerType {
   PassFailNa = 'PASS_FAIL_NA',
   Text = 'TEXT',
   YesNo = 'YES_NO',
-  YesNoNa = 'YES_NO_NA',
+  YesNoNa = 'YES_NO_NA'
 }
 
 export type ChecklistCreateUpdateInput = {
@@ -2392,6 +2425,7 @@ export type ChecklistQuestion = {
   weight: Array<AnswerWeight>;
 };
 
+
 export type ChecklistQuestionWeightArgs = {
   cursor?: InputMaybe<AnswerWeightWhereUniqueInput>;
   distinct?: InputMaybe<Array<AnswerWeightScalarFieldEnum>>;
@@ -2425,7 +2459,7 @@ export type ChecklistSection = {
 
 export enum ChecklistStatus {
   Completed = 'COMPLETED',
-  InProgress = 'IN_PROGRESS',
+  InProgress = 'IN_PROGRESS'
 }
 
 export type ChecklistSubsection = {
@@ -2514,6 +2548,7 @@ export type Contact = {
   user?: Maybe<User>;
 };
 
+
 export type ContactMg11Args = {
   cursor?: InputMaybe<Mg11WhereUniqueInput>;
   distinct?: InputMaybe<Array<Mg11ScalarFieldEnum>>;
@@ -2522,6 +2557,7 @@ export type ContactMg11Args = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Mg11WhereInput>;
 };
+
 
 export type ContactSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
@@ -2554,7 +2590,7 @@ export type ContactOrderByWithRelationInput = {
 export enum ContactScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type ContactScalarWhereInput = {
@@ -3134,6 +3170,7 @@ export type CrimeGroup = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type CrimeGroupActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -3142,6 +3179,7 @@ export type CrimeGroupActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type CrimeGroupEvidenceArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
@@ -3152,6 +3190,7 @@ export type CrimeGroupEvidenceArgs = {
   where?: InputMaybe<DocumentWhereInput>;
 };
 
+
 export type CrimeGroupFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
@@ -3160,6 +3199,7 @@ export type CrimeGroupFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type CrimeGroupGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -3170,6 +3210,7 @@ export type CrimeGroupGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type CrimeGroupIntelArgs = {
   cursor?: InputMaybe<IntelWhereUniqueInput>;
   distinct?: InputMaybe<Array<IntelScalarFieldEnum>>;
@@ -3178,6 +3219,7 @@ export type CrimeGroupIntelArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IntelWhereInput>;
 };
+
 
 export type CrimeGroupInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
@@ -3188,6 +3230,7 @@ export type CrimeGroupInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type CrimeGroupLinkedUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -3196,6 +3239,7 @@ export type CrimeGroupLinkedUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type CrimeGroupMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -3207,6 +3251,7 @@ export type CrimeGroupMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type CrimeGroupNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
   distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
@@ -3215,6 +3260,7 @@ export type CrimeGroupNotificationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<NotificationWhereInput>;
 };
+
 
 export type CrimeGroupOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -3225,6 +3271,7 @@ export type CrimeGroupOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type CrimeGroupSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -3233,6 +3280,7 @@ export type CrimeGroupSchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
 };
+
 
 export type CrimeGroupSubscribedUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -3243,6 +3291,7 @@ export type CrimeGroupSubscribedUsersArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type CrimeGroupTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<Array<TodoScalarFieldEnum>>;
@@ -3252,6 +3301,7 @@ export type CrimeGroupTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type CrimeGroupUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -3260,6 +3310,7 @@ export type CrimeGroupUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type CrimeGroupVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -3361,7 +3412,7 @@ export enum CrimeGroupScalarFieldEnum {
   Ref = 'ref',
   Reference = 'reference',
   ReferenceStr = 'referenceStr',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type CrimeGroupUpdateManyWithoutIncidents = {
@@ -3441,7 +3492,7 @@ export enum CrimeType {
   Robbery = 'ROBBERY',
   SexualOffences = 'SEXUAL_OFFENCES',
   TheftHandling = 'THEFT_HANDLING',
-  Violence = 'VIOLENCE',
+  Violence = 'VIOLENCE'
 }
 
 export type CsvImport = {
@@ -3517,7 +3568,7 @@ export enum CsvImportScalarFieldEnum {
   Total = 'total',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type CsvImportScalarWhereInput = {
@@ -3608,7 +3659,7 @@ export enum CsvStatus {
   Completed = 'COMPLETED',
   Failed = 'FAILED',
   Pending = 'PENDING',
-  Processing = 'PROCESSING',
+  Processing = 'PROCESSING'
 }
 
 export enum CsvType {
@@ -3618,7 +3669,7 @@ export enum CsvType {
   Offender = 'OFFENDER',
   Stock = 'STOCK',
   User = 'USER',
-  Vehicle = 'VEHICLE',
+  Vehicle = 'VEHICLE'
 }
 
 export type CustomGallery = {
@@ -3634,6 +3685,7 @@ export type CustomGallery = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type CustomGalleryGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
   distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
@@ -3642,6 +3694,7 @@ export type CustomGalleryGroupsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GroupWhereInput>;
 };
+
 
 export type CustomGalleryOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -3652,6 +3705,7 @@ export type CustomGalleryOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type CustomGallerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -3660,6 +3714,7 @@ export type CustomGallerySchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
 };
+
 
 export type CustomGalleryVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -3702,7 +3757,7 @@ export enum CustomGalleryScalarFieldEnum {
   Description = 'description',
   Id = 'id',
   Name = 'name',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type CustomGalleryUpdateInput = {
@@ -4189,6 +4244,7 @@ export type Document = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type DocumentArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
   distinct?: InputMaybe<ArticleScalarFieldEnum>;
@@ -4197,6 +4253,7 @@ export type DocumentArticlesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
 };
+
 
 export type DocumentCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
@@ -4207,6 +4264,7 @@ export type DocumentCrimeGroupsArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type DocumentIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<IncidentScalarFieldEnum>;
@@ -4215,6 +4273,7 @@ export type DocumentIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type DocumentInvestigationArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
@@ -4225,6 +4284,7 @@ export type DocumentInvestigationArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type DocumentOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<OffenderScalarFieldEnum>;
@@ -4233,6 +4293,7 @@ export type DocumentOffendersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
+
 
 export type DocumentTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
@@ -4243,6 +4304,7 @@ export type DocumentTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+
 export type DocumentTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<TodoScalarFieldEnum>;
@@ -4251,6 +4313,7 @@ export type DocumentTodosArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TodoWhereInput>;
 };
+
 
 export type DocumentVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -4311,12 +4374,12 @@ export enum DocumentScalarFieldEnum {
   SchemeId = 'schemeId',
   ThumbnailUrl = 'thumbnailUrl',
   UpdatedAt = 'updatedAt',
-  Url = 'url',
+  Url = 'url'
 }
 
 export enum DocumentType {
   Document = 'DOCUMENT',
-  Evidence = 'EVIDENCE',
+  Evidence = 'EVIDENCE'
 }
 
 export type DocumentWhereInput = {
@@ -5269,6 +5332,7 @@ export type FeedItem = {
   vehicleId?: Maybe<Scalars['String']>;
 };
 
+
 export type FeedItemGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
   distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
@@ -5278,6 +5342,7 @@ export type FeedItemGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type FeedItemImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -5286,6 +5351,7 @@ export type FeedItemImagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
 };
+
 
 export type FeedItemSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
@@ -5350,7 +5416,7 @@ export enum FeedItemScalarFieldEnum {
   OffenderId = 'offenderId',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  VehicleId = 'vehicleId',
+  VehicleId = 'vehicleId'
 }
 
 export type FeedItemScalarWhereInput = {
@@ -5415,7 +5481,7 @@ export enum FeedItemType {
   OffenderIntel = 'OFFENDER_INTEL',
   OffenderUpdate = 'OFFENDER_UPDATE',
   VehicleImage = 'VEHICLE_IMAGE',
-  VehicleIntel = 'VEHICLE_INTEL',
+  VehicleIntel = 'VEHICLE_INTEL'
 }
 
 export type FeedItemWhereInput = {
@@ -5487,7 +5553,7 @@ export enum FileType {
   Document = 'DOCUMENT',
   Image = 'IMAGE',
   Unknown = 'UNKNOWN',
-  Video = 'VIDEO',
+  Video = 'VIDEO'
 }
 
 export type FloatFilter = {
@@ -5722,7 +5788,7 @@ export type FormFieldWhereInput = {
 export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
-  Unknown = 'UNKNOWN',
+  Unknown = 'UNKNOWN'
 }
 
 export type GeoIp = {
@@ -5798,7 +5864,7 @@ export type GeoIpWhereInput = {
 
 export enum GoodsMode {
   Generic = 'GENERIC',
-  Specific = 'SPECIFIC',
+  Specific = 'SPECIFIC'
 }
 
 export type GoodsType = {
@@ -5825,7 +5891,7 @@ export enum GoodsTypeScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
   Name = 'name',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type GoodsTypeScalarWhereWithAggregatesInput = {
@@ -5896,6 +5962,7 @@ export type Group = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type GroupActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -5904,6 +5971,7 @@ export type GroupActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type GroupApproverArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -5914,6 +5982,7 @@ export type GroupApproverArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type GroupArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
   distinct?: InputMaybe<ArticleScalarFieldEnum>;
@@ -5922,6 +5991,7 @@ export type GroupArticlesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
 };
+
 
 export type GroupBansArgs = {
   cursor?: InputMaybe<BanWhereUniqueInput>;
@@ -5932,6 +6002,7 @@ export type GroupBansArgs = {
   where?: InputMaybe<BanWhereInput>;
 };
 
+
 export type GroupBusinessesArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
   distinct?: InputMaybe<BusinessScalarFieldEnum>;
@@ -5940,6 +6011,7 @@ export type GroupBusinessesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
 };
+
 
 export type GroupCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
@@ -5950,6 +6022,7 @@ export type GroupCrimeGroupsArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type GroupCustomGalleriesArgs = {
   cursor?: InputMaybe<CustomGalleryWhereUniqueInput>;
   distinct?: InputMaybe<CustomGalleryScalarFieldEnum>;
@@ -5958,6 +6031,7 @@ export type GroupCustomGalleriesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CustomGalleryWhereInput>;
 };
+
 
 export type GroupDefaultGroupSchemeArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
@@ -5968,6 +6042,7 @@ export type GroupDefaultGroupSchemeArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
+
 export type GroupDefaultGroupUserArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
   distinct?: InputMaybe<UserScalarFieldEnum>;
@@ -5976,6 +6051,7 @@ export type GroupDefaultGroupUserArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserWhereInput>;
 };
+
 
 export type GroupFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
@@ -5986,6 +6062,7 @@ export type GroupFeedItemsArgs = {
   where?: InputMaybe<FeedItemWhereInput>;
 };
 
+
 export type GroupIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<IncidentScalarFieldEnum>;
@@ -5994,6 +6071,7 @@ export type GroupIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type GroupOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -6004,6 +6082,7 @@ export type GroupOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type GroupUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
   distinct?: InputMaybe<UserScalarFieldEnum>;
@@ -6012,6 +6091,7 @@ export type GroupUsersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserWhereInput>;
 };
+
 
 export type GroupVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -6073,7 +6153,7 @@ export enum GroupScalarFieldEnum {
   Name = 'name',
   SchemeId = 'schemeId',
   UpdatedAt = 'updatedAt',
-  Uploaded = 'uploaded',
+  Uploaded = 'uploaded'
 }
 
 export type GroupUpdateInput = {
@@ -6178,7 +6258,7 @@ export enum Height {
   Average = 'AVERAGE',
   Short = 'SHORT',
   Tall = 'TALL',
-  Unknown = 'UNKNOWN',
+  Unknown = 'UNKNOWN'
 }
 
 export type HourCountXy = {
@@ -6194,7 +6274,7 @@ export enum IdSource {
   Known = 'KNOWN',
   Other = 'OTHER',
   Passport = 'PASSPORT',
-  Police = 'POLICE',
+  Police = 'POLICE'
 }
 
 export type Image = {
@@ -6247,6 +6327,7 @@ export type Image = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type ImageSchemeArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -6255,6 +6336,7 @@ export type ImageSchemeArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
 };
+
 
 export type ImageActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
@@ -6265,6 +6347,7 @@ export type ImageActionsArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
+
 export type ImageArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
   distinct?: InputMaybe<ArticleScalarFieldEnum>;
@@ -6273,6 +6356,7 @@ export type ImageArticlesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
 };
+
 
 export type ImageFacesArgs = {
   cursor?: InputMaybe<RekFaceWhereUniqueInput>;
@@ -6283,6 +6367,7 @@ export type ImageFacesArgs = {
   where?: InputMaybe<RekFaceWhereInput>;
 };
 
+
 export type ImageFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<FeedItemScalarFieldEnum>;
@@ -6291,6 +6376,7 @@ export type ImageFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type ImageOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -6301,6 +6387,7 @@ export type ImageOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type ImageReportIconsArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -6310,6 +6397,7 @@ export type ImageReportIconsArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
+
 export type ImageSchemeDarkArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -6318,6 +6406,7 @@ export type ImageSchemeDarkArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
 };
+
 
 export type ImageVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -6409,7 +6498,7 @@ export enum ImagePosition {
   LeftTop = 'LEFT_TOP',
   RightBottom = 'RIGHT_BOTTOM',
   RightCenter = 'RIGHT_CENTER',
-  RightTop = 'RIGHT_TOP',
+  RightTop = 'RIGHT_TOP'
 }
 
 export enum ImageScalarFieldEnum {
@@ -6437,7 +6526,7 @@ export enum ImageScalarFieldEnum {
   UpdatedAt = 'updatedAt',
   Uploaded = 'uploaded',
   UploadedById = 'uploadedById',
-  Url = 'url',
+  Url = 'url'
 }
 
 export type ImageUpdateDataWithoutIncidentInput = {
@@ -6599,7 +6688,7 @@ export enum ImportType {
   Csv = 'CSV',
   Disc = 'DISC',
   IntelOne = 'INTEL_ONE',
-  MySafety = 'MY_SAFETY',
+  MySafety = 'MY_SAFETY'
 }
 
 export type Impression = {
@@ -6644,7 +6733,7 @@ export enum ImpressionScalarFieldEnum {
   IncidentId = 'incidentId',
   OffenderId = 'offenderId',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type ImpressionScalarWhereInput = {
@@ -6716,6 +6805,7 @@ export type Incident = {
   articleColumns: Array<ArticleColumn>;
   business?: Maybe<Business>;
   businessId?: Maybe<Scalars['String']>;
+  cctvRecords: Array<CctvRecord>;
   completedTodos: Array<Todo>;
   createdAt: Scalars['Date'];
   createdBy: User;
@@ -6795,6 +6885,7 @@ export type Incident = {
   weekOfYear?: Maybe<Scalars['Int']>;
 };
 
+
 export type IncidentActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -6803,6 +6894,7 @@ export type IncidentActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type IncidentAnswersArgs = {
   cursor?: InputMaybe<AnswerWhereUniqueInput>;
@@ -6813,6 +6905,7 @@ export type IncidentAnswersArgs = {
   where?: InputMaybe<AnswerWhereInput>;
 };
 
+
 export type IncidentArticleColumnsArgs = {
   cursor?: InputMaybe<ArticleColumnWhereUniqueInput>;
   distinct?: InputMaybe<Array<ArticleColumnScalarFieldEnum>>;
@@ -6821,6 +6914,7 @@ export type IncidentArticleColumnsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleColumnWhereInput>;
 };
+
 
 export type IncidentCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
@@ -6831,10 +6925,12 @@ export type IncidentCrimeGroupsArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type IncidentCrimeTypesArgs = {
   orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type IncidentEvidenceArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
@@ -6845,6 +6941,7 @@ export type IncidentEvidenceArgs = {
   where?: InputMaybe<DocumentWhereInput>;
 };
 
+
 export type IncidentFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
@@ -6853,6 +6950,7 @@ export type IncidentFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type IncidentGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -6863,6 +6961,7 @@ export type IncidentGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type IncidentImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -6872,10 +6971,12 @@ export type IncidentImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
+
 export type IncidentImpactTagsArgs = {
   orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type IncidentImpressionsArgs = {
   cursor?: InputMaybe<ImpressionWhereUniqueInput>;
@@ -6886,6 +6987,7 @@ export type IncidentImpressionsArgs = {
   where?: InputMaybe<ImpressionWhereInput>;
 };
 
+
 export type IncidentIncidentItemsArgs = {
   cursor?: InputMaybe<IncidentItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentItemScalarFieldEnum>>;
@@ -6894,6 +6996,7 @@ export type IncidentIncidentItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentItemWhereInput>;
 };
+
 
 export type IncidentIntelArgs = {
   cursor?: InputMaybe<IntelWhereUniqueInput>;
@@ -6904,6 +7007,7 @@ export type IncidentIntelArgs = {
   where?: InputMaybe<IntelWhereInput>;
 };
 
+
 export type IncidentInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
   distinct?: InputMaybe<Array<InvestigationScalarFieldEnum>>;
@@ -6913,10 +7017,12 @@ export type IncidentInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type IncidentInvolvedTagsArgs = {
   orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type IncidentLinkedUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
@@ -6927,6 +7033,7 @@ export type IncidentLinkedUpdatesArgs = {
   where?: InputMaybe<UpdateWhereInput>;
 };
 
+
 export type IncidentMatchesArgs = {
   cursor?: InputMaybe<RekMatchWhereUniqueInput>;
   distinct?: InputMaybe<Array<RekMatchScalarFieldEnum>>;
@@ -6935,6 +7042,7 @@ export type IncidentMatchesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RekMatchWhereInput>;
 };
+
 
 export type IncidentMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -6945,6 +7053,7 @@ export type IncidentMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type IncidentMg11Args = {
   cursor?: InputMaybe<Mg11WhereUniqueInput>;
   distinct?: InputMaybe<Array<Mg11ScalarFieldEnum>>;
@@ -6954,10 +7063,12 @@ export type IncidentMg11Args = {
   where?: InputMaybe<Mg11WhereInput>;
 };
 
+
 export type IncidentMotiveTagsArgs = {
   orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type IncidentNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
@@ -6968,6 +7079,7 @@ export type IncidentNotificationsArgs = {
   where?: InputMaybe<NotificationWhereInput>;
 };
 
+
 export type IncidentOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
@@ -6976,6 +7088,7 @@ export type IncidentOffendersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
+
 
 export type IncidentSubscribedUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -6986,6 +7099,7 @@ export type IncidentSubscribedUsersArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type IncidentTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<Array<TodoScalarFieldEnum>>;
@@ -6995,6 +7109,7 @@ export type IncidentTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type IncidentUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -7003,6 +7118,7 @@ export type IncidentUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type IncidentVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -7059,7 +7175,7 @@ export enum IncidentFormField {
   Vehicles = 'VEHICLES',
   Victims = 'VICTIMS',
   Where = 'WHERE',
-  Witnesses = 'WITNESSES',
+  Witnesses = 'WITNESSES'
 }
 
 export type IncidentFormFieldsInput = {
@@ -7101,7 +7217,7 @@ export type IncidentFormOrderByWithRelationInput = {
 export enum IncidentFormScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type IncidentFormScalarWhereInput = {
@@ -7164,7 +7280,11 @@ export type IncidentItem = {
 export type IncidentItemCreateWithoutIncident = {
   goodsType?: InputMaybe<ConnectHelper>;
   name?: InputMaybe<Scalars['String']>;
+  quantity?: InputMaybe<Scalars['Float']>;
+  recoveredQuantity?: InputMaybe<Scalars['Float']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
+  sku?: InputMaybe<Scalars['String']>;
+  stockItem?: InputMaybe<ConnectHelper>;
   value?: InputMaybe<Scalars['Float']>;
 };
 
@@ -7212,7 +7332,7 @@ export enum IncidentItemScalarFieldEnum {
   Sku = 'sku',
   StockItemId = 'stockItemId',
   UpdatedAt = 'updatedAt',
-  Value = 'value',
+  Value = 'value'
 }
 
 export type IncidentItemScalarWhereInput = {
@@ -7409,7 +7529,7 @@ export enum IncidentPriority {
   High = 'HIGH',
   Low = 'LOW',
   Medium = 'MEDIUM',
-  Normal = 'NORMAL',
+  Normal = 'NORMAL'
 }
 
 export type IncidentQuestions = {
@@ -7461,7 +7581,7 @@ export enum IncidentScalarFieldEnum {
   Uploaded = 'uploaded',
   Value = 'value',
   WeekOfMonth = 'weekOfMonth',
-  WeekOfYear = 'weekOfYear',
+  WeekOfYear = 'weekOfYear'
 }
 
 export type IncidentSummary = {
@@ -7828,14 +7948,14 @@ export enum IntelScalarFieldEnum {
   SuggestedOffenderId = 'suggestedOffenderId',
   Text = 'text',
   Type = 'type',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export enum IntelType {
   AddImage = 'ADD_IMAGE',
   AddOffender = 'ADD_OFFENDER',
   Comment = 'COMMENT',
-  SuggestOffender = 'SUGGEST_OFFENDER',
+  SuggestOffender = 'SUGGEST_OFFENDER'
 }
 
 export type IntelWhereInput = {
@@ -7944,6 +8064,7 @@ export type Investigation = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type InvestigationCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
   distinct?: InputMaybe<CrimeGroupScalarFieldEnum>;
@@ -7952,6 +8073,7 @@ export type InvestigationCrimeGroupsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
+
 
 export type InvestigationDocumentsArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
@@ -7962,6 +8084,7 @@ export type InvestigationDocumentsArgs = {
   where?: InputMaybe<DocumentWhereInput>;
 };
 
+
 export type InvestigationFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
@@ -7970,6 +8093,7 @@ export type InvestigationFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type InvestigationGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -7980,6 +8104,7 @@ export type InvestigationGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type InvestigationIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
@@ -7988,6 +8113,7 @@ export type InvestigationIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type InvestigationIntelArgs = {
   cursor?: InputMaybe<IntelWhereUniqueInput>;
@@ -7998,6 +8124,7 @@ export type InvestigationIntelArgs = {
   where?: InputMaybe<IntelWhereInput>;
 };
 
+
 export type InvestigationLinkedUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -8006,6 +8133,7 @@ export type InvestigationLinkedUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type InvestigationMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -8017,6 +8145,7 @@ export type InvestigationMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type InvestigationNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
   distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
@@ -8025,6 +8154,7 @@ export type InvestigationNotificationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<NotificationWhereInput>;
 };
+
 
 export type InvestigationOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -8035,6 +8165,7 @@ export type InvestigationOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type InvestigationSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -8043,6 +8174,7 @@ export type InvestigationSchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
 };
+
 
 export type InvestigationSubscribedUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -8053,6 +8185,7 @@ export type InvestigationSubscribedUsersArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type InvestigationTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<Array<TodoScalarFieldEnum>>;
@@ -8062,6 +8195,7 @@ export type InvestigationTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type InvestigationUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -8070,6 +8204,7 @@ export type InvestigationUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type InvestigationVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -8145,7 +8280,7 @@ export enum InvestigationScalarFieldEnum {
   ReferenceStr = 'referenceStr',
   SchemeId = 'schemeId',
   Status = 'status',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type InvestigationScalarWhereInput = {
@@ -8185,7 +8320,7 @@ export type InvestigationScalarWhereWithAggregatesInput = {
 export enum InvestigationStatus {
   Closed = 'CLOSED',
   Open = 'OPEN',
-  Paused = 'PAUSED',
+  Paused = 'PAUSED'
 }
 
 export type InvestigationSummary = {
@@ -8351,6 +8486,7 @@ export type Language = {
   updatedAt: Scalars['Date'];
 };
 
+
 export type LanguageSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -8372,7 +8508,7 @@ export enum LanguageCode {
   Pl = 'pl',
   Pt = 'pt',
   Rbe = 'rbe',
-  Sv = 'sv',
+  Sv = 'sv'
 }
 
 export type LanguageListRelationFilter = {
@@ -8399,7 +8535,7 @@ export enum LanguageScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
   Name = 'name',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type LanguageScalarWhereInput = {
@@ -8708,7 +8844,7 @@ export enum LoginEventScalarFieldEnum {
   LoginTime = 'loginTime',
   SchemeId = 'schemeId',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type LoginEventScalarWhereInput = {
@@ -8978,7 +9114,7 @@ export enum Mg11ScalarFieldEnum {
   WitnessServiceDisclose = 'witnessServiceDisclose',
   WitnessSignature = 'witnessSignature',
   WitnessSignatureDate = 'witnessSignatureDate',
-  WorkTel = 'workTel',
+  WorkTel = 'workTel'
 }
 
 export type Mg11ScalarWhereInput = {
@@ -9081,7 +9217,7 @@ export enum Mg11Status {
   Completed = 'COMPLETED',
   Draft = 'DRAFT',
   Sent = 'SENT',
-  UserSigned = 'USER_SIGNED',
+  UserSigned = 'USER_SIGNED'
 }
 
 export type Mg11UpdateInput = {
@@ -9256,6 +9392,7 @@ export type Message = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type MessageActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -9264,6 +9401,7 @@ export type MessageActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type MessageArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
@@ -9274,6 +9412,7 @@ export type MessageArticlesArgs = {
   where?: InputMaybe<ArticleWhereInput>;
 };
 
+
 export type MessageCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
   distinct?: InputMaybe<CrimeGroupScalarFieldEnum>;
@@ -9282,6 +9421,7 @@ export type MessageCrimeGroupsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
+
 
 export type MessageImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
@@ -9292,6 +9432,7 @@ export type MessageImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
+
 export type MessageIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
@@ -9300,6 +9441,7 @@ export type MessageIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type MessageInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
@@ -9310,6 +9452,7 @@ export type MessageInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type MessageMentionsArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserScalarFieldEnum>>;
@@ -9319,6 +9462,7 @@ export type MessageMentionsArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type MessageOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
@@ -9327,6 +9471,7 @@ export type MessageOffendersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
+
 
 export type MessageVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -9379,7 +9524,7 @@ export type MessageItem = {
 
 export enum MessageItemType {
   Date = 'DATE',
-  Message = 'MESSAGE',
+  Message = 'MESSAGE'
 }
 
 export type MessageListRelationFilter = {
@@ -9423,7 +9568,7 @@ export enum MessageScalarFieldEnum {
   Id = 'id',
   SchemeId = 'schemeId',
   Sent = 'sent',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type MessageScalarWhereInput = {
@@ -9532,7 +9677,7 @@ export enum Model {
   Todo = 'TODO',
   Update = 'UPDATE',
   User = 'USER',
-  Vehicle = 'VEHICLE',
+  Vehicle = 'VEHICLE'
 }
 
 export type Mutation = {
@@ -9727,34 +9872,41 @@ export type Mutation = {
   upsertPermission: CustomRole;
 };
 
+
 export type MutationAddImageIntelArgs = {
   data: AddImageIntelData;
 };
+
 
 export type MutationAddImagesToIncidentArgs = {
   images: Array<ImageWhereUniqueInput>;
   incident: IncidentWhereUniqueInput;
 };
 
+
 export type MutationAddImagesToOffenderArgs = {
   images: Array<ImageWhereUniqueInput>;
   offender: OffenderWhereUniqueInput;
 };
+
 
 export type MutationAddImagesToUpdateArgs = {
   data: Array<UrlImage>;
   where: UniqueId;
 };
 
+
 export type MutationAddQuestionArgs = {
   data: CreateQuestionInput;
   where?: InputMaybe<UniqueId>;
 };
 
+
 export type MutationAddUploadedImageToIncidentArgs = {
   data: Array<UploadIncidentOptimisticImage>;
   where: IncidentWhereUniqueInput;
 };
+
 
 export type MutationAddUsersToBusinessArgs = {
   data: Array<UserWhereUniqueInput>;
@@ -9762,42 +9914,51 @@ export type MutationAddUsersToBusinessArgs = {
   where: BusinessWhereUniqueInput;
 };
 
+
 export type MutationApproveIncidentArgs = {
   data: ApproveIncidentData;
   where: UniqueId;
 };
+
 
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
   where: UniqueId;
 };
 
+
 export type MutationCloseInvestigationArgs = {
   where: UniqueId;
 };
+
 
 export type MutationCompleteChecklistArgs = {
   data: CompleteActiveChecklistInput;
   where: Scalars['String'];
 };
 
+
 export type MutationCopyEvidenceOnInvestigationArgs = {
   data: ImportDemEvidence;
   where: UniqueId;
 };
+
 
 export type MutationCopyOffenderArgs = {
   data: CreateOffenderData;
   where: UniqueId;
 };
 
+
 export type MutationCreateActiveChecklistArgs = {
   data: CreateActiveChecklistInput;
 };
 
+
 export type MutationCreateArticleArgs = {
   data: CreateArticleInput;
 };
+
 
 export type MutationCreateBlankImageArgs = {
   incident?: InputMaybe<IncidentWhereUniqueInput>;
@@ -9805,138 +9966,172 @@ export type MutationCreateBlankImageArgs = {
   scheme: Scalars['String'];
 };
 
+
 export type MutationCreateBusinessArgs = {
   data: CreateBusinessDataInput;
 };
+
 
 export type MutationCreateChatArgs = {
   data: ChatCreateInput;
 };
 
+
 export type MutationCreateCollectionArgs = {
   data: CreateCollectionInput;
 };
+
 
 export type MutationCreateCommentArgs = {
   data: CreateCommentData;
 };
 
+
 export type MutationCreateCrimeGroupArgs = {
   data: CreateCrimeGroupDataInput;
 };
+
 
 export type MutationCreateCsvZipArgs = {
   where: IncidentExportInput;
 };
 
+
 export type MutationCreateCustomGalleryArgs = {
   data: CreateCustomGalleryInput;
 };
+
 
 export type MutationCreateDashboardArgs = {
   data: DashboardCreateInput;
 };
 
+
 export type MutationCreateDocumentArgs = {
   data: CreateDocument;
 };
+
 
 export type MutationCreateFlowArgs = {
   data: CreateFlowInput;
 };
 
+
 export type MutationCreateGroupArgs = {
   data: GroupCreateInput;
 };
+
 
 export type MutationCreateIncidentArgs = {
   data: CreateIncidentData;
 };
 
+
 export type MutationCreateIncidentFormArgs = {
   data: IncidentFormInput;
 };
+
 
 export type MutationCreateInvestigationArgs = {
   data: CreateInvestigationInput;
 };
 
+
 export type MutationCreateInvestigationCsvZipArgs = {
   where: UniqueId;
 };
+
 
 export type MutationCreateLoginEventArgs = {
   data: CreateEventInput;
 };
 
+
 export type MutationCreateMessageArgs = {
   data: MessageCreateInput;
 };
+
 
 export type MutationCreateMg11Args = {
   data: Mg11CreateInput;
   schemeId: Scalars['String'];
 };
 
+
 export type MutationCreateMg11PdfArgs = {
   data: Scalars['String'];
 };
+
 
 export type MutationCreateOffenderArgs = {
   data: CreateOffenderData;
 };
 
+
 export type MutationCreateOneBusinessImpactArgs = {
   data: BusinessImpactInput;
 };
+
 
 export type MutationCreateOneCsvImportArgs = {
   data: CsvImportCreateInput;
 };
 
+
 export type MutationCreateOneQuestionGroupArgs = {
   data: QuestionGroupCreateInput;
 };
+
 
 export type MutationCreateOneStatementTemplateArgs = {
   data: StatementTemplateCreateInput;
 };
 
+
 export type MutationCreateOneWorkflowArgs = {
   data: WorkflowCreateInput;
 };
+
 
 export type MutationCreateReportTemplateArgs = {
   data: ReportTemplateCreateInput;
 };
 
+
 export type MutationCreateSchemeArgs = {
   data: SchemeCreateInput;
 };
+
 
 export type MutationCreateSessionArgs = {
   data: CreateSessionInput;
 };
 
+
 export type MutationCreateSharingConfigArgs = {
   data: SharingConfigCreateInput;
 };
+
 
 export type MutationCreateTagArgs = {
   data: TagCreateInput;
 };
 
+
 export type MutationCreateTermsAndConditionsArgs = {
   data: CreateTermsInput;
 };
+
 
 export type MutationCreateTimesArgs = {
   data: CreateArticleInput;
 };
 
+
 export type MutationCreateTodoArgs = {
   data: TodoCreateInput;
 };
+
 
 export type MutationCreateUnlinkedImageArgs = {
   file: Scalars['Upload'];
@@ -9944,260 +10139,321 @@ export type MutationCreateUnlinkedImageArgs = {
   scheme: Scalars['String'];
 };
 
+
 export type MutationCreateUpdateChecklistArgs = {
   data: ChecklistCreateUpdateInput;
   id?: InputMaybe<Scalars['String']>;
 };
+
 
 export type MutationCreateUpdateOnCrimeGroupArgs = {
   crimeGroup: UniqueId;
   data: CreateUpdateData;
 };
 
+
 export type MutationCreateUpdateOnIncidentArgs = {
   data: CreateUpdateData;
   incident: UniqueId;
 };
+
 
 export type MutationCreateUpdateOnInvestigationArgs = {
   data: CreateUpdateData;
   investigation: UniqueId;
 };
 
+
 export type MutationCreateUpdateOnOffenderArgs = {
   data: CreateUpdateData;
   offender: UniqueId;
 };
+
 
 export type MutationCreateUpdateOnVehicleArgs = {
   data: CreateUpdateData;
   vehicle: UniqueId;
 };
 
+
 export type MutationCreateUserInAuth0Args = {
   id: Scalars['String'];
   password: Scalars['String'];
 };
 
+
 export type MutationCreateUserInDatabaseArgs = {
   data: CreateUserData;
 };
+
 
 export type MutationCreateVehicleArgs = {
   data: CreateVehicleDataInput;
 };
 
+
 export type MutationDeleteArticleArgs = {
   where: UniqueId;
 };
+
 
 export type MutationDeleteBanArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteBrandArgs = {
   where: BrandWhereUniqueInput;
 };
+
 
 export type MutationDeleteBusinessArgs = {
   where: BusinessWhereUniqueInput;
 };
 
+
 export type MutationDeleteChatArgs = {
   where: UniqueId;
 };
+
 
 export type MutationDeleteCrimeGroupArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteCustomGalleryArgs = {
   where: UniqueId;
 };
+
 
 export type MutationDeleteDashboardTemplateArgs = {
   where: DashboardWhereUniqueInput;
 };
 
+
 export type MutationDeleteDocumentArgs = {
   where: UniqueId;
 };
+
 
 export type MutationDeleteFaceArgs = {
   where: RekFaceWhereUniqueInput;
 };
 
+
 export type MutationDeleteFeedItemArgs = {
   where: UniqueId;
 };
+
 
 export type MutationDeleteGroupArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteIncidentArgs = {
   where: UniqueId;
 };
+
 
 export type MutationDeleteInvestigationArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteMessageArgs = {
   where: MessageWhereUniqueInput;
 };
+
 
 export type MutationDeleteOffenderArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteOneQuestionGroupArgs = {
   where: QuestionGroupWhereUniqueInput;
 };
+
 
 export type MutationDeleteOneStatementTemplateArgs = {
   where: StatementTemplateWhereUniqueInput;
 };
 
+
 export type MutationDeleteOneWorkflowArgs = {
   where: WorkflowWhereUniqueInput;
 };
+
 
 export type MutationDeleteRecycleTagArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteReportTemplateArgs = {
   where: ReportTemplateWhereUniqueInput;
 };
+
 
 export type MutationDeleteSharingConfigArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteTagArgs = {
   where: UniqueId;
 };
 
+
 export type MutationDeleteUpdateArgs = {
   where: UpdateWhereUnique;
 };
+
 
 export type MutationDeleteUserArgs = {
   id: Scalars['String'];
   scheme: Scalars['String'];
 };
 
+
 export type MutationDeleteUserFromSchemeArgs = {
   id: Scalars['String'];
   scheme: Scalars['String'];
 };
 
+
 export type MutationDeleteVehicleArgs = {
   where: UniqueId;
 };
+
 
 export type MutationDiscImportDataArgs = {
   data: DiscImportDataInput;
 };
 
+
 export type MutationDismissMatchArgs = {
   where: RekMatchWhereUniqueInput;
 };
+
 
 export type MutationEditArticleArgs = {
   data: CreateArticleInput;
   where: UniqueId;
 };
 
+
 export type MutationEnableSchemeRekognitionArgs = {
   data: EnableSchemeRekognotionInput;
   where: SchemeWhereUniqueInput;
 };
 
+
 export type MutationExportInvestigationZipArgs = {
   where: UniqueId;
 };
+
 
 export type MutationGenerateFeedItemsArgs = {
   where: UniqueId;
 };
 
+
 export type MutationIndexFacesArgs = {
   data: CreateArticleInput;
 };
+
 
 export type MutationIndexImageArgs = {
   where: ImageWhereUniqueInput;
 };
 
+
 export type MutationIntelOneImportDataArgs = {
   data: IntelOneImportDataInput;
 };
+
 
 export type MutationInviteExistingUserArgs = {
   data: UserUpdateInput;
   where: UniqueId;
 };
 
+
 export type MutationLinkBusinessToSchemeArgs = {
   business: BusinessWhereUniqueInput;
   scheme: SchemeWhereUniqueInput;
 };
+
 
 export type MutationLinkOrgToDemArgs = {
   data: UniqueId;
   where: UniqueId;
 };
 
+
 export type MutationLinkUserToDemArgs = {
   data: UniqueId;
   where: UniqueId;
 };
 
+
 export type MutationMarkAsReadMessagesArgs = {
   userChatId: Scalars['String'];
 };
+
 
 export type MutationMergeBusinessesWithSameNameArgs = {
   data: BusinessWhereUniqueInput;
 };
 
+
 export type MutationMergeOffenderArgs = {
   data: MergeOffendersInput;
 };
+
 
 export type MutationMySafetyImportDataArgs = {
   data: MySafetyImportDataInput;
 };
 
+
 export type MutationRecycleChecklistArgs = {
   id: Scalars['String'];
 };
+
 
 export type MutationRecycleIncidentArgs = {
   where: UniqueId;
 };
 
+
 export type MutationRecycleOffenderArgs = {
   where: UniqueId;
 };
+
 
 export type MutationRecycleTagArgs = {
   where: UniqueId;
 };
 
+
 export type MutationRefreshAuthArgs = {
   data: RefreshAuthData;
 };
+
 
 export type MutationRegisterPushTokenArgs = {
   data: RegisterPushTokenData;
 };
 
+
 export type MutationRemoveQuestionFromTagArgs = {
   where?: InputMaybe<UniqueId>;
 };
+
 
 export type MutationRemoveUserFromBusinessArgs = {
   data: UserWhereUniqueInput;
@@ -10205,256 +10461,313 @@ export type MutationRemoveUserFromBusinessArgs = {
   where: BusinessWhereUniqueInput;
 };
 
+
 export type MutationReopenInvestigationArgs = {
   where: UniqueId;
 };
+
 
 export type MutationResetPasswordArgs = {
   data: ResetPasswordData;
 };
 
+
 export type MutationRestoreAllRecycledItemsArgs = {
   schemeId: UniqueId;
 };
+
 
 export type MutationRestoreIncidentArgs = {
   data: RecycledItemWhereUniqueInput;
   where: UniqueId;
 };
 
+
 export type MutationRestoreItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
+
 
 export type MutationRestoreOffenderArgs = {
   data: RecycledItemWhereUniqueInput;
   where: UniqueId;
 };
 
+
 export type MutationScanIncidentArgs = {
   where: ScanIncidentInput;
 };
+
 
 export type MutationSendInviteArgs = {
   user: Scalars['String'];
 };
 
+
 export type MutationSetDefaultTemplateArgs = {
   data: SetDefaultTemplateInput;
 };
+
 
 export type MutationSetPasswordArgs = {
   data: SetPasswordData;
 };
 
+
 export type MutationSetSchemeSharingArgs = {
   data: SetSchemeSharingInput;
 };
+
 
 export type MutationShareDataArgs = {
   data: ShareDataInput;
 };
 
+
 export type MutationSignInArgs = {
   data: SignInData;
 };
+
 
 export type MutationSignTermsArgs = {
   data: SignTermsInput;
 };
 
+
 export type MutationStockItemImportArgs = {
   data: Array<StockItemsCreateInput>;
 };
+
 
 export type MutationSubscribeToCrimeGroupArgs = {
   where: UniqueId;
 };
 
+
 export type MutationSubscribeToIncidentArgs = {
   where: IncidentWhereUniqueInput;
 };
+
 
 export type MutationSubscribeToInvestigationArgs = {
   where: UniqueId;
 };
 
+
 export type MutationSubscribeToOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
+
 
 export type MutationSubscribeToVehicleArgs = {
   where: UniqueId;
 };
 
+
 export type MutationToggleUserArgs = {
   id: Scalars['ID'];
 };
+
 
 export type MutationUnsubscribeFromIncidentArgs = {
   where: IncidentWhereUniqueInput;
 };
 
+
 export type MutationUnsubscribeFromOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
+
 
 export type MutationUnsubscribeToCrimeGroupArgs = {
   where: UniqueId;
 };
 
+
 export type MutationUnsubscribeToInvestigationArgs = {
   where: UniqueId;
 };
 
+
 export type MutationUnsubscribeToVehicleArgs = {
   where: UniqueId;
 };
+
 
 export type MutationUpdateBusinessArgs = {
   data: BusinessUpdateInput;
   where: BusinessWhereUniqueInput;
 };
 
+
 export type MutationUpdateChatArgs = {
   data: ChatUpdateInput;
   where: UniqueId;
 };
+
 
 export type MutationUpdateCrimeGroupArgs = {
   data: UpdateCrimeGroupDataInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateCrimeGroupOffenderArgs = {
   data: UpdateCrimeGroupDataInput;
   where: UniqueId;
 };
+
 
 export type MutationUpdateCustomGalleryArgs = {
   data: CustomGalleryUpdateInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateDashboardTemplateArgs = {
   data: DashboardTemplateUpdateInput;
   where: DashboardWhereUniqueInput;
 };
+
 
 export type MutationUpdateFlowArgs = {
   data: UpdateFlowData;
   where: UniqueId;
 };
 
+
 export type MutationUpdateGroupArgs = {
   data: GroupUpdateInput;
   where: UniqueId;
 };
+
 
 export type MutationUpdateIncidentArgs = {
   data: IncidentUpdateInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateIncidentBusinessArgs = {
   data: UpdateIncidentBusinessInput;
   where: UniqueId;
 };
+
 
 export type MutationUpdateInvestigationArgs = {
   data: UpdateInvestigationInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateMessageArgs = {
   data: MessageUpdateInput;
   where: MessageWhereUniqueInput;
 };
+
 
 export type MutationUpdateOffenderArgs = {
   data: OffenderUpdateInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateOneMg11Args = {
   data: Mg11UpdateInput;
   where: Mg11WhereUniqueInput;
 };
+
 
 export type MutationUpdateOneQuestionGroupArgs = {
   data: QuestionGroupUpdateInput;
   where: QuestionGroupWhereUniqueInput;
 };
 
+
 export type MutationUpdateOneStatementTemplateArgs = {
   data: StatementTemplateUpdateInput;
   where: StatementTemplateWhereUniqueInput;
 };
+
 
 export type MutationUpdateOneWorkflowArgs = {
   data: WorkflowUpdateInput;
   where: WorkflowWhereUniqueInput;
 };
 
+
 export type MutationUpdatePasswordArgs = {
   data: UpdatePasswordData;
 };
 
+
 export type MutationUpdateQuestionOnTagArgs = {
   data: UpdateQuestionOnTagInput;
 };
+
 
 export type MutationUpdateReportTemplateArgs = {
   data: ReportTemplateUpdateInput;
   where: ReportTemplateWhereUniqueInput;
 };
 
+
 export type MutationUpdateSchemeArgs = {
   data: SchemeUpdateInput;
   where: UniqueId;
 };
+
 
 export type MutationUpdateSharingConfigArgs = {
   data: SharingConfigUpdateInput;
   where: SharingConfigWhereUniqueInput;
 };
 
+
 export type MutationUpdateTagArgs = {
   data: TagUpdateInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateTagQsArgs = {
   data: ChangePositionAndReqInput;
 };
+
 
 export type MutationUpdateTodoArgs = {
   data: TodoUpdateInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateTodoMentionArgs = {
   where: UpdateTodoMention;
 };
+
 
 export type MutationUpdateUpdateArgs = {
   data: UpdateUpdateDataInput;
   where: UpdateWhereUniqueInput;
 };
 
+
 export type MutationUpdateUserArgs = {
   data: UserUpdateInput;
   where: UniqueId;
 };
 
+
 export type MutationUpdateUserNotificationsArgs = {
   where: UserNotificationWhereInput;
 };
+
 
 export type MutationUpdateVehicleArgs = {
   data: VehicleUpdateInput;
   where: UniqueId;
 };
+
 
 export type MutationUploadImageArgs = {
   file: Scalars['Upload'];
@@ -10463,18 +10776,22 @@ export type MutationUploadImageArgs = {
   scheme: Scalars['String'];
 };
 
+
 export type MutationUploadToImageArgs = {
   file: Scalars['Upload'];
   image: ImageWhereUniqueInput;
 };
 
+
 export type MutationUpsertBrandArgs = {
   data: UpsertBrand;
 };
 
+
 export type MutationUpsertIncidentFormArgs = {
   data: UpsertIncidentFormInput;
 };
+
 
 export type MutationUpsertPermissionArgs = {
   data: UpsertRole;
@@ -11144,7 +11461,7 @@ export enum NotificationScalarFieldEnum {
   Type = 'type',
   UpdatedAt = 'updatedAt',
   UserId = 'userId',
-  VehicleId = 'vehicleId',
+  VehicleId = 'vehicleId'
 }
 
 export type NotificationScalarWhereInput = {
@@ -11212,7 +11529,7 @@ export enum NotificationType {
   OffenderUpdate = 'OFFENDER_UPDATE',
   Vehicle = 'VEHICLE',
   VehicleImage = 'VEHICLE_IMAGE',
-  VehicleIntel = 'VEHICLE_INTEL',
+  VehicleIntel = 'VEHICLE_INTEL'
 }
 
 export type NotificationWhereInput = {
@@ -11481,6 +11798,7 @@ export type Offender = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type OffenderActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -11489,6 +11807,7 @@ export type OffenderActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type OffenderAddressesArgs = {
   cursor?: InputMaybe<AddressWhereUniqueInput>;
@@ -11499,6 +11818,7 @@ export type OffenderAddressesArgs = {
   where?: InputMaybe<AddressWhereInput>;
 };
 
+
 export type OffenderArticleColumnsArgs = {
   cursor?: InputMaybe<ArticleColumnWhereUniqueInput>;
   distinct?: InputMaybe<Array<ArticleColumnScalarFieldEnum>>;
@@ -11508,16 +11828,19 @@ export type OffenderArticleColumnsArgs = {
   where?: InputMaybe<ArticleColumnWhereInput>;
 };
 
+
 export type OffenderAssociatedCrimeGroupsArgs = {
   associatedInvestigation?: InputMaybe<UniqueId>;
   associatedOffender?: InputMaybe<UniqueId>;
 };
+
 
 export type OffenderAssociatedIncidentsArgs = {
   associatedCrimeGroup?: InputMaybe<UniqueId>;
   associatedInvestigation?: InputMaybe<UniqueId>;
   associatedOffender?: InputMaybe<UniqueId>;
 };
+
 
 export type OffenderBansArgs = {
   cursor?: InputMaybe<BanWhereUniqueInput>;
@@ -11528,6 +11851,7 @@ export type OffenderBansArgs = {
   where?: InputMaybe<BanWhereInput>;
 };
 
+
 export type OffenderCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
   distinct?: InputMaybe<CrimeGroupScalarFieldEnum>;
@@ -11536,6 +11860,7 @@ export type OffenderCrimeGroupsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
+
 
 export type OffenderCustomGalleriesArgs = {
   cursor?: InputMaybe<CustomGalleryWhereUniqueInput>;
@@ -11546,6 +11871,7 @@ export type OffenderCustomGalleriesArgs = {
   where?: InputMaybe<CustomGalleryWhereInput>;
 };
 
+
 export type OffenderEvidenceArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
   distinct?: InputMaybe<Array<DocumentScalarFieldEnum>>;
@@ -11554,6 +11880,7 @@ export type OffenderEvidenceArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<DocumentWhereInput>;
 };
+
 
 export type OffenderFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
@@ -11564,10 +11891,12 @@ export type OffenderFeedItemsArgs = {
   where?: InputMaybe<FeedItemWhereInput>;
 };
 
+
 export type OffenderGoodsTypesTotalsArgs = {
   endDate?: InputMaybe<Scalars['Date']>;
   startDate?: InputMaybe<Scalars['Date']>;
 };
+
 
 export type OffenderGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -11578,6 +11907,7 @@ export type OffenderGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type OffenderImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -11586,6 +11916,7 @@ export type OffenderImagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
 };
+
 
 export type OffenderImpressionsArgs = {
   cursor?: InputMaybe<ImpressionWhereUniqueInput>;
@@ -11596,6 +11927,7 @@ export type OffenderImpressionsArgs = {
   where?: InputMaybe<ImpressionWhereInput>;
 };
 
+
 export type OffenderIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<IncidentScalarFieldEnum>;
@@ -11604,6 +11936,7 @@ export type OffenderIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type OffenderIncidentsFullArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
@@ -11614,6 +11947,7 @@ export type OffenderIncidentsFullArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type OffenderIntelArgs = {
   cursor?: InputMaybe<IntelWhereUniqueInput>;
   distinct?: InputMaybe<Array<IntelScalarFieldEnum>>;
@@ -11622,6 +11956,7 @@ export type OffenderIntelArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IntelWhereInput>;
 };
+
 
 export type OffenderInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
@@ -11632,11 +11967,13 @@ export type OffenderInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type OffenderKnownAssociatesArgs = {
   groups?: InputMaybe<Array<UniqueId>>;
   linkedCrimeGroup?: InputMaybe<Scalars['Boolean']>;
   linkedIncidents?: InputMaybe<Scalars['Boolean']>;
 };
+
 
 export type OffenderLinkedUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
@@ -11647,6 +11984,7 @@ export type OffenderLinkedUpdatesArgs = {
   where?: InputMaybe<UpdateWhereInput>;
 };
 
+
 export type OffenderMatchedMatchesArgs = {
   cursor?: InputMaybe<RekMatchWhereUniqueInput>;
   distinct?: InputMaybe<Array<RekMatchScalarFieldEnum>>;
@@ -11655,6 +11993,7 @@ export type OffenderMatchedMatchesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RekMatchWhereInput>;
 };
+
 
 export type OffenderMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -11666,6 +12005,7 @@ export type OffenderMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type OffenderNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
   distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
@@ -11674,6 +12014,7 @@ export type OffenderNotificationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<NotificationWhereInput>;
 };
+
 
 export type OffenderRekFacesArgs = {
   cursor?: InputMaybe<RekFaceWhereUniqueInput>;
@@ -11684,6 +12025,7 @@ export type OffenderRekFacesArgs = {
   where?: InputMaybe<RekFaceWhereInput>;
 };
 
+
 export type OffenderSearchedMatchesArgs = {
   cursor?: InputMaybe<RekMatchWhereUniqueInput>;
   distinct?: InputMaybe<Array<RekMatchScalarFieldEnum>>;
@@ -11692,6 +12034,7 @@ export type OffenderSearchedMatchesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RekMatchWhereInput>;
 };
+
 
 export type OffenderSubscribedUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -11702,6 +12045,7 @@ export type OffenderSubscribedUsersArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type OffenderTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
   distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
@@ -11710,6 +12054,7 @@ export type OffenderTagsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type OffenderTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
@@ -11720,16 +12065,19 @@ export type OffenderTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type OffenderTotalAssociatedCrimeGroupsArgs = {
   associatedInvestigation?: InputMaybe<UniqueId>;
   associatedOffender?: InputMaybe<UniqueId>;
 };
+
 
 export type OffenderTotalAssociatedIncidentsArgs = {
   associatedCrimeGroup?: InputMaybe<UniqueId>;
   associatedInvestigation?: InputMaybe<UniqueId>;
   associatedOffender?: InputMaybe<UniqueId>;
 };
+
 
 export type OffenderUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
@@ -11739,6 +12087,7 @@ export type OffenderUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type OffenderVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -11979,7 +12328,7 @@ export enum OffenderScalarFieldEnum {
   TargetedGoods = 'targetedGoods',
   TempId = 'tempId',
   UpdatedAt = 'updatedAt',
-  Uploaded = 'uploaded',
+  Uploaded = 'uploaded'
 }
 
 export type OffenderScalarWhereInput = {
@@ -12322,7 +12671,7 @@ export enum OnboardSteps {
   Details = 'DETAILS',
   Password = 'PASSWORD',
   Terms = 'TERMS',
-  Welcome = 'WELCOME',
+  Welcome = 'WELCOME'
 }
 
 export type OneSignalId = {
@@ -12431,7 +12780,7 @@ export enum PermissionMethod {
   Delete = 'DELETE',
   Edit = 'EDIT',
   Read = 'READ',
-  Write = 'WRITE',
+  Write = 'WRITE'
 }
 
 export enum PermissionModel {
@@ -12451,7 +12800,7 @@ export enum PermissionModel {
   Settings = 'SETTINGS',
   Tasks = 'TASKS',
   Users = 'USERS',
-  Vehicles = 'VEHICLES',
+  Vehicles = 'VEHICLES'
 }
 
 export type Permissions = {
@@ -12466,7 +12815,7 @@ export enum PoliceResponseTime {
   Within_1Hour = 'WITHIN_1_HOUR',
   Within_3Hours = 'WITHIN_3_HOURS',
   Within_12Hours = 'WITHIN_12_HOURS',
-  Within_24Hours = 'WITHIN_24_HOURS',
+  Within_24Hours = 'WITHIN_24_HOURS'
 }
 
 export type PoliceSummary = {
@@ -12631,9 +12980,11 @@ export type Query = {
   workflows: Array<Workflow>;
 };
 
+
 export type QueryActionArgs = {
   where: ActionWhereUniqueInput;
 };
+
 
 export type QueryActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
@@ -12644,9 +12995,11 @@ export type QueryActionsArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
+
 export type QueryActiveChecklistArgs = {
   where: ActiveChecklistWhereUniqueInput;
 };
+
 
 export type QueryActiveChecklistsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12659,9 +13012,11 @@ export type QueryActiveChecklistsArgs = {
   where?: InputMaybe<ActiveChecklistWhereInput>;
 };
 
+
 export type QueryAddressArgs = {
   where: AddressWhereUniqueInput;
 };
+
 
 export type QueryAddressesArgs = {
   cursor?: InputMaybe<AddressWhereUniqueInput>;
@@ -12672,9 +13027,11 @@ export type QueryAddressesArgs = {
   where?: InputMaybe<AddressWhereInput>;
 };
 
+
 export type QueryArticleArgs = {
   where: ArticleWhereUniqueInput;
 };
+
 
 export type QueryArticlesArgs = {
   orderBy?: InputMaybe<Array<ArticleOrderByWithRelationInput>>;
@@ -12683,21 +13040,26 @@ export type QueryArticlesArgs = {
   where?: InputMaybe<ArticleWhereInput>;
 };
 
+
 export type QueryAuth0UserArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryAvailableQuestionsArgs = {
   where?: InputMaybe<UniqueId>;
 };
 
+
 export type QueryAvailableTaskQuestionsArgs = {
   where: Array<Scalars['String']>;
 };
 
+
 export type QueryBanArgs = {
   where: BanWhereUniqueInput;
 };
+
 
 export type QueryBansArgs = {
   cursor?: InputMaybe<BanWhereUniqueInput>;
@@ -12708,9 +13070,11 @@ export type QueryBansArgs = {
   where?: InputMaybe<BanWhereInput>;
 };
 
+
 export type QueryBrandArgs = {
   where: BrandWhereUniqueInput;
 };
+
 
 export type QueryBrandsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12724,32 +13088,39 @@ export type QueryBrandsArgs = {
   where?: InputMaybe<BrandWhereInput>;
 };
 
+
 export type QueryBusinessArgs = {
   where: BusinessWhereUniqueInput;
 };
 
+
 export type QueryBusinessContributionArgs = {
   where: UserContributionWhereInput;
 };
+
 
 export type QueryBusinessCrimeTypeGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: BusinessIncidentsCountGraphInput;
 };
 
+
 export type QueryBusinessImpactArgs = {
   where: UniqueId;
 };
+
 
 export type QueryBusinessIncidentCountGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: BusinessIncidentsCountGraphInput;
 };
 
+
 export type QueryBusinessLossRecoveredGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: BusinessIncidentsCountGraphInput;
 };
+
 
 export type QueryBusinessRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12763,19 +13134,23 @@ export type QueryBusinessRelayArgs = {
   where?: InputMaybe<BusinessWhereInput>;
 };
 
+
 export type QueryBusinessReportArgs = {
   where: BusinessReportInput;
 };
 
+
 export type QueryChatArgs = {
   where: ChatWhereUniqueInput;
 };
+
 
 export type QueryChatMessagesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: ChatMessagesWhereInput;
 };
+
 
 export type QueryChatsArgs = {
   after?: InputMaybe<ChatWhereUniqueInput>;
@@ -12787,13 +13162,16 @@ export type QueryChatsArgs = {
   where?: InputMaybe<ChatWhereInput>;
 };
 
+
 export type QueryChecklistArgs = {
   where: ChecklistWhereUniqueInput;
 };
 
+
 export type QueryChecklistQuestionCountsArgs = {
   where: ActiveChecklistWhereInput;
 };
+
 
 export type QueryChecklistsArgs = {
   order?: InputMaybe<ChecklistOrderByWithRelationInput>;
@@ -12802,17 +13180,21 @@ export type QueryChecklistsArgs = {
   where: ChecklistWhereInput;
 };
 
+
 export type QueryCrimeGroupArgs = {
   where: CrimeGroupWhereUniqueInput;
 };
+
 
 export type QueryCrimeGroupPerformanceArgs = {
   where: UserContributionWhereInput;
 };
 
+
 export type QueryCrimeGroupReportArgs = {
   where: CrimeGroupReportInput;
 };
+
 
 export type QueryCustomGalleriesRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12825,17 +13207,21 @@ export type QueryCustomGalleriesRelayArgs = {
   where?: InputMaybe<CustomGalleryWhereInput>;
 };
 
+
 export type QueryCustomGalleryArgs = {
   where: CustomGalleryWhereUniqueInput;
 };
+
 
 export type QueryCustomQuestionsCountGraphArgs = {
   where: CustomQuestionsCountGraphInput;
 };
 
+
 export type QueryDashboardArgs = {
   where: DashboardWhereUniqueInput;
 };
+
 
 export type QueryDashboardsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12847,6 +13233,7 @@ export type QueryDashboardsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
 };
+
 
 export type QueryDocumentsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12860,9 +13247,11 @@ export type QueryDocumentsArgs = {
   where?: InputMaybe<DocumentWhereInput>;
 };
 
+
 export type QueryFeedItemArgs = {
   where: FeedItemWhereUniqueInput;
 };
+
 
 export type QueryFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
@@ -12873,6 +13262,7 @@ export type QueryFeedItemsArgs = {
   where?: InputMaybe<FeedItemWhereInput>;
 };
 
+
 export type QueryGoodsTypesArgs = {
   cursor?: InputMaybe<GoodsTypeWhereUniqueInput>;
   distinct?: InputMaybe<Array<GoodsTypeScalarFieldEnum>>;
@@ -12882,9 +13272,11 @@ export type QueryGoodsTypesArgs = {
   where?: InputMaybe<GoodsTypeWhereInput>;
 };
 
+
 export type QueryGroupArgs = {
   where: GroupWhereUniqueInput;
 };
+
 
 export type QueryGroupsArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
@@ -12896,9 +13288,11 @@ export type QueryGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type QueryImageArgs = {
   where: ImageWhereUniqueInput;
 };
+
 
 export type QueryImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
@@ -12909,13 +13303,16 @@ export type QueryImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
+
 export type QueryIncidentArgs = {
   where: IncidentWhereUniqueInput;
 };
 
+
 export type QueryIncidentCountArgs = {
   where: DashboardInput;
 };
+
 
 export type QueryIncidentFeedArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12928,9 +13325,11 @@ export type QueryIncidentFeedArgs = {
   search?: InputMaybe<Scalars['String']>;
 };
 
+
 export type QueryIncidentHeatPerformanceArgs = {
   where: UserContributionWhereInput;
 };
+
 
 export type QueryIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
@@ -12941,9 +13340,11 @@ export type QueryIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type QueryIncidentsDayOfWeekArgs = {
   where: DashboardInput;
 };
+
 
 export type QueryIncidentsRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12959,17 +13360,21 @@ export type QueryIncidentsRelayArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type QueryIncidentsTimeOfDayArgs = {
   where: DashboardInput;
 };
+
 
 export type QueryInvestigationArgs = {
   where: InvestigationWhereUniqueInput;
 };
 
+
 export type QueryInvestigationPerformanceArgs = {
   where: UserContributionWhereInput;
 };
+
 
 export type QueryInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
@@ -12980,9 +13385,11 @@ export type QueryInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type QueryLatestIncidentArgs = {
   where: DashboardInput;
 };
+
 
 export type QueryLatestIncidentsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -12992,6 +13399,7 @@ export type QueryLatestIncidentsArgs = {
   where: DashboardInput;
 };
 
+
 export type QueryLatestVehiclesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -13000,12 +13408,14 @@ export type QueryLatestVehiclesArgs = {
   where: DashboardInput;
 };
 
+
 export type QueryListActionsArgs = {
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type QueryListArticlesArgs = {
   order?: InputMaybe<ArticleOrderByWithRelationInput>;
@@ -13014,6 +13424,7 @@ export type QueryListArticlesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
 };
+
 
 export type QueryListArticlesRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -13025,12 +13436,14 @@ export type QueryListArticlesRelayArgs = {
   where?: InputMaybe<ArticleWhereInput>;
 };
 
+
 export type QueryListBusinessesArgs = {
   orderBy?: InputMaybe<Array<BusinessOrderBy>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
 };
+
 
 export type QueryListCrimeGroupsArgs = {
   order?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
@@ -13039,6 +13452,7 @@ export type QueryListCrimeGroupsArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type QueryListCustomGalleriesArgs = {
   order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -13046,10 +13460,12 @@ export type QueryListCustomGalleriesArgs = {
   where?: InputMaybe<CustomGalleryWhereInput>;
 };
 
+
 export type QueryListDemCompaniesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
 };
+
 
 export type QueryListDemEvidenceArgs = {
   skip?: InputMaybe<Scalars['Int']>;
@@ -13057,17 +13473,20 @@ export type QueryListDemEvidenceArgs = {
   where: Scalars['String'];
 };
 
+
 export type QueryListDemEvidenceExtendedWithoutUserArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: Scalars['String'];
 };
 
+
 export type QueryListDemUsersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: Scalars['String'];
 };
+
 
 export type QueryListFeedItemsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -13080,13 +13499,16 @@ export type QueryListFeedItemsArgs = {
   where?: InputMaybe<FeedItemWhereInput>;
 };
 
+
 export type QueryListGoodsTypesArgs = {
   where?: InputMaybe<ListGoodsTypeWhere>;
 };
 
+
 export type QueryListIncidentTagsArgs = {
   where: IncidentTagsInput;
 };
+
 
 export type QueryListIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
@@ -13097,6 +13519,7 @@ export type QueryListIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type QueryListIncidentsAllSchemesArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
@@ -13104,6 +13527,7 @@ export type QueryListIncidentsAllSchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type QueryListInvestigationsArgs = {
   order?: InputMaybe<InvestigationOrderByWithRelationInput>;
@@ -13113,12 +13537,14 @@ export type QueryListInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type QueryListInvestigationsAllSchemesArgs = {
   order?: InputMaybe<InvestigationOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
 };
+
 
 export type QueryListLoginEventsArgs = {
   orderBy?: InputMaybe<Array<LoginEventOrderByWithRelationInput>>;
@@ -13127,12 +13553,14 @@ export type QueryListLoginEventsArgs = {
   where?: InputMaybe<LoginEventWhereInput>;
 };
 
+
 export type QueryListNotificationsArgs = {
   orderBy?: InputMaybe<Array<NotificationOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<NotificationWhereInput>;
 };
+
 
 export type QueryListOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
@@ -13143,6 +13571,7 @@ export type QueryListOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type QueryListOffendersAllSchemesArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
@@ -13150,6 +13579,7 @@ export type QueryListOffendersAllSchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
+
 
 export type QueryListOffendersRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -13162,17 +13592,20 @@ export type QueryListOffendersRelayArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type QueryListRekMatchesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RekMatchWhereInput>;
 };
 
+
 export type QueryListStockItemsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<StockItemsWhereInput>;
 };
+
 
 export type QueryListTagsArgs = {
   order?: InputMaybe<TagOrderByWithRelationInput>;
@@ -13181,6 +13614,7 @@ export type QueryListTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+
 export type QueryListTodosArgs = {
   orderBy?: InputMaybe<Array<TodoOrderBy>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -13188,9 +13622,11 @@ export type QueryListTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type QueryListUserContributionArgs = {
   where: UserContributionWhereInput;
 };
+
 
 export type QueryListUserNotificationsArgs = {
   cursor?: InputMaybe<UserNotificationWhereUniqueInput>;
@@ -13200,12 +13636,14 @@ export type QueryListUserNotificationsArgs = {
   where?: InputMaybe<UserNotificationWhereInput>;
 };
 
+
 export type QueryListUsersArgs = {
   orderBy?: InputMaybe<Array<UserOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserWhereInput>;
 };
+
 
 export type QueryListVehiclesArgs = {
   order?: InputMaybe<VehicleOrderByWithRelationInput>;
@@ -13214,9 +13652,11 @@ export type QueryListVehiclesArgs = {
   where?: InputMaybe<VehicleWhereInput>;
 };
 
+
 export type QueryLoginEventArgs = {
   where: LoginEventWhereUniqueInput;
 };
+
 
 export type QueryLoginEventsArgs = {
   cursor?: InputMaybe<LoginEventWhereUniqueInput>;
@@ -13227,9 +13667,11 @@ export type QueryLoginEventsArgs = {
   where?: InputMaybe<LoginEventWhereInput>;
 };
 
+
 export type QueryMessageArgs = {
   where: MessageWhereUniqueInput;
 };
+
 
 export type QueryMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -13240,17 +13682,21 @@ export type QueryMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type QueryMg11Args = {
   where: Mg11WhereUniqueInput;
 };
+
 
 export type QueryOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
 
+
 export type QueryOffenderByNameArgs = {
   name: Scalars['String'];
 };
+
 
 export type QueryOffenderFeedArgs = {
   active?: InputMaybe<Scalars['Boolean']>;
@@ -13268,13 +13714,16 @@ export type QueryOffenderFeedArgs = {
   userId: Scalars['String'];
 };
 
+
 export type QueryOffenderLinkMapArgs = {
   where: OffenderLinkMapWhere;
 };
 
+
 export type QueryOffenderReportArgs = {
   where: OffenderReportInput;
 };
+
 
 export type QueryOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -13285,13 +13734,16 @@ export type QueryOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type QueryOffendersPerformanceArgs = {
   where: UserContributionWhereInput;
 };
 
+
 export type QueryPerformanceReportArgs = {
   where: UserContributionWhereInput;
 };
+
 
 export type QueryPreviewIncidentExportArgs = {
   skip?: InputMaybe<Scalars['Int']>;
@@ -13299,13 +13751,16 @@ export type QueryPreviewIncidentExportArgs = {
   where: IncidentExportInput;
 };
 
+
 export type QueryQuestionArgs = {
   where: QuestionWhereUniqueInput;
 };
 
+
 export type QueryRecycledItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
+
 
 export type QueryRecycledItemsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -13317,9 +13772,11 @@ export type QueryRecycledItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
+
 export type QueryReportTemplateArgs = {
   where: ReportTemplateWhereUniqueInput;
 };
+
 
 export type QueryReportTemplatesArgs = {
   cursor?: InputMaybe<ReportTemplateWhereUniqueInput>;
@@ -13330,18 +13787,22 @@ export type QueryReportTemplatesArgs = {
   where?: InputMaybe<ReportTemplateWhereInput>;
 };
 
+
 export type QueryReportUserLoginArgs = {
   device: DeviceInfo;
   platform: Scalars['Int'];
 };
 
+
 export type QueryReportsCentreArgs = {
   where: ReportsCentreWhereInput;
 };
 
+
 export type QueryRoleArgs = {
   where: CustomRoleWhereUniqueInput;
 };
+
 
 export type QueryRolesArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -13353,9 +13814,11 @@ export type QueryRolesArgs = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
+
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
 };
+
 
 export type QuerySchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
@@ -13366,9 +13829,11 @@ export type QuerySchemesArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
+
 export type QuerySharingConfigArgs = {
   where: SharingConfigWhereUniqueInput;
 };
+
 
 export type QuerySharingConfigsArgs = {
   cursor?: InputMaybe<SharingConfigWhereUniqueInput>;
@@ -13377,9 +13842,11 @@ export type QuerySharingConfigsArgs = {
   where?: InputMaybe<SharingConfigWhereInput>;
 };
 
+
 export type QueryStatementTemplateArgs = {
   where: StatementTemplateWhereUniqueInput;
 };
+
 
 export type QueryStatementTemplatesArgs = {
   cursor?: InputMaybe<StatementTemplateWhereUniqueInput>;
@@ -13390,9 +13857,11 @@ export type QueryStatementTemplatesArgs = {
   where?: InputMaybe<StatementTemplateWhereInput>;
 };
 
+
 export type QueryTagArgs = {
   where: TagWhereUniqueInput;
 };
+
 
 export type QueryTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
@@ -13402,21 +13871,26 @@ export type QueryTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+
 export type QueryTargetedGoodsArgs = {
   where: UserContributionWhereInput;
 };
+
 
 export type QueryTargetedGoodsDashboardArgs = {
   where: DashboardInput;
 };
 
+
 export type QueryTermArgs = {
   where: UniqueId;
 };
 
+
 export type QueryTodoArgs = {
   where: TodoWhereUniqueInput;
 };
+
 
 export type QueryTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
@@ -13427,35 +13901,43 @@ export type QueryTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type QueryTotalLossArgs = {
   where: DashboardInput;
 };
+
 
 export type QueryTotalUserSessionsGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: UserIncidentsCountGraphInput;
 };
 
+
 export type QueryTranslateTextArgs = {
   data: TranslateTextInput;
 };
+
 
 export type QueryUpdatesArgs = {
   orderBy?: InputMaybe<Array<UpdateOrderByWithRelationInput>>;
   where?: InputMaybe<UpdateWhereInput>;
 };
 
+
 export type QueryUserArgs = {
   where: UserWhereUniqueInput;
 };
+
 
 export type QueryUserByEmailArgs = {
   email: Scalars['String'];
 };
 
+
 export type QueryUserChatArgs = {
   where: UserChatWhereUniqueInput;
 };
+
 
 export type QueryUserChatsArgs = {
   cursor?: InputMaybe<UserChatWhereUniqueInput>;
@@ -13466,22 +13948,27 @@ export type QueryUserChatsArgs = {
   where?: InputMaybe<UserChatWhereInput>;
 };
 
+
 export type QueryUserContributionsArgs = {
   where: UserContributionWhereInput;
 };
+
 
 export type QueryUserIncidentCountGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: UserIncidentsCountGraphInput;
 };
 
+
 export type QueryUserNewArgs = {
   id: Scalars['String'];
 };
 
+
 export type QueryUserNotificationArgs = {
   where: UserNotificationWhereUniqueInput;
 };
+
 
 export type QueryUserNotificationsArgs = {
   cursor?: InputMaybe<UserNotificationWhereUniqueInput>;
@@ -13492,9 +13979,11 @@ export type QueryUserNotificationsArgs = {
   where?: InputMaybe<UserNotificationWhereInput>;
 };
 
+
 export type QueryUserSchemeArgs = {
   where: UserSchemeWhereUniqueInput;
 };
+
 
 export type QueryUserSchemesArgs = {
   cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
@@ -13505,10 +13994,12 @@ export type QueryUserSchemesArgs = {
   where?: InputMaybe<UserSchemeWhereInput>;
 };
 
+
 export type QueryUserSessionsGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: UserIncidentsCountGraphInput;
 };
+
 
 export type QueryUsersArgs = {
   after?: InputMaybe<UserWhereUniqueInput>;
@@ -13520,13 +14011,16 @@ export type QueryUsersArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type QueryVehicleArgs = {
   where: VehicleWhereUniqueInput;
 };
 
+
 export type QueryWorkflowArgs = {
   where: WorkflowWhereUniqueInput;
 };
+
 
 export type QueryWorkflowsArgs = {
   cursor?: InputMaybe<WorkflowWhereUniqueInput>;
@@ -13677,7 +14171,7 @@ export type QueryListOffendersRelayConnectionEdge = {
 
 export enum QueryMode {
   Default = 'default',
-  Insensitive = 'insensitive',
+  Insensitive = 'insensitive'
 }
 
 export type QueryRolesConnection = {
@@ -13771,7 +14265,7 @@ export enum QuestionGroupScalarFieldEnum {
   Description = 'description',
   Id = 'id',
   Name = 'name',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type QuestionGroupUpdateInput = {
@@ -13828,7 +14322,7 @@ export type QuestionListRelationFilter = {
 
 export enum QuestionModel {
   Tag = 'TAG',
-  Task = 'TASK',
+  Task = 'TASK'
 }
 
 export type QuestionOrderByRelationAggregateInput = {
@@ -13861,7 +14355,7 @@ export enum QuestionScalarFieldEnum {
   Question = 'question',
   QuestionTranslations = 'questionTranslations',
   Type = 'type',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type QuestionWhereInput = {
@@ -13911,7 +14405,7 @@ export enum Race {
   Ic4 = 'IC4',
   Ic5 = 'IC5',
   Ic6 = 'IC6',
-  Unknown = 'UNKNOWN',
+  Unknown = 'UNKNOWN'
 }
 
 export type RadialGraph = {
@@ -13975,7 +14469,7 @@ export enum RecycledItemScalarFieldEnum {
   OffenderId = 'offenderId',
   SchemeId = 'schemeId',
   SystemTask = 'systemTask',
-  TagId = 'tagId',
+  TagId = 'tagId'
 }
 
 export type RecycledItemScalarWhereInput = {
@@ -14098,7 +14592,7 @@ export enum RekCollectionScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
   Name = 'name',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type RekCollectionScalarWhereInput = {
@@ -14217,7 +14711,7 @@ export enum RekFaceScalarFieldEnum {
   OffenderId = 'offenderId',
   QualityBrightness = 'qualityBrightness',
   QualitySharpness = 'qualitySharpness',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type RekFaceScalarWhereInput = {
@@ -14356,7 +14850,7 @@ export enum RekMatchScalarFieldEnum {
   MatchedId = 'matchedId',
   OffenderId = 'offenderId',
   RekFaceId = 'rekFaceId',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type RekMatchScalarWhereInput = {
@@ -14690,7 +15184,7 @@ export enum ReportTemplateScalarFieldEnum {
   MetaData = 'metaData',
   Name = 'name',
   Type = 'type',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type ReportTemplateScalarWhereInput = {
@@ -14760,7 +15254,7 @@ export enum ReportType {
   Business = 'BUSINESS',
   CrimeGroup = 'CRIME_GROUP',
   Offender = 'OFFENDER',
-  Performance = 'PERFORMANCE',
+  Performance = 'PERFORMANCE'
 }
 
 export type ReportsCentre = {
@@ -14791,7 +15285,7 @@ export enum Role {
   GroupAdmin = 'GROUP_ADMIN',
   SchemeAdmin = 'SCHEME_ADMIN',
   ShopsafeAdmin = 'SHOPSAFE_ADMIN',
-  User = 'USER',
+  User = 'USER'
 }
 
 export type ScanIncidentInput = {
@@ -14903,6 +15397,7 @@ export type Scheme = {
   workflows: Array<Workflow>;
 };
 
+
 export type SchemeActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -14911,6 +15406,7 @@ export type SchemeActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type SchemeActionsInSchemeArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
@@ -14921,6 +15417,7 @@ export type SchemeActionsInSchemeArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
+
 export type SchemeArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
   distinct?: InputMaybe<ArticleScalarFieldEnum>;
@@ -14929,6 +15426,7 @@ export type SchemeArticlesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
 };
+
 
 export type SchemeBansArgs = {
   cursor?: InputMaybe<BanWhereUniqueInput>;
@@ -14939,6 +15437,7 @@ export type SchemeBansArgs = {
   where?: InputMaybe<BanWhereInput>;
 };
 
+
 export type SchemeBusinessesArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
   distinct?: InputMaybe<BusinessScalarFieldEnum>;
@@ -14947,6 +15446,7 @@ export type SchemeBusinessesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
 };
+
 
 export type SchemeChatsArgs = {
   cursor?: InputMaybe<UserChatWhereUniqueInput>;
@@ -14957,6 +15457,7 @@ export type SchemeChatsArgs = {
   where?: InputMaybe<UserChatWhereInput>;
 };
 
+
 export type SchemeContactsArgs = {
   cursor?: InputMaybe<ContactWhereUniqueInput>;
   distinct?: InputMaybe<Array<ContactScalarFieldEnum>>;
@@ -14965,6 +15466,7 @@ export type SchemeContactsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ContactWhereInput>;
 };
+
 
 export type SchemeCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
@@ -14975,6 +15477,7 @@ export type SchemeCrimeGroupsArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type SchemeCsvImportsArgs = {
   cursor?: InputMaybe<CsvImportWhereUniqueInput>;
   distinct?: InputMaybe<Array<CsvImportScalarFieldEnum>>;
@@ -14983,6 +15486,7 @@ export type SchemeCsvImportsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CsvImportWhereInput>;
 };
+
 
 export type SchemeCustomGalleriesArgs = {
   cursor?: InputMaybe<CustomGalleryWhereUniqueInput>;
@@ -14993,6 +15497,7 @@ export type SchemeCustomGalleriesArgs = {
   where?: InputMaybe<CustomGalleryWhereInput>;
 };
 
+
 export type SchemeDefaultGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
   distinct?: InputMaybe<Array<GroupScalarFieldEnum>>;
@@ -15001,6 +15506,7 @@ export type SchemeDefaultGroupsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<GroupWhereInput>;
 };
+
 
 export type SchemeDocumentsArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
@@ -15011,6 +15517,7 @@ export type SchemeDocumentsArgs = {
   where?: InputMaybe<DocumentWhereInput>;
 };
 
+
 export type SchemeFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
@@ -15019,6 +15526,7 @@ export type SchemeFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type SchemeGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -15029,6 +15537,7 @@ export type SchemeGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type SchemeImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -15037,6 +15546,7 @@ export type SchemeImagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
 };
+
 
 export type SchemeIncidentFormArgs = {
   cursor?: InputMaybe<IncidentFormWhereUniqueInput>;
@@ -15047,6 +15557,7 @@ export type SchemeIncidentFormArgs = {
   where?: InputMaybe<IncidentFormWhereInput>;
 };
 
+
 export type SchemeIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<IncidentScalarFieldEnum>;
@@ -15056,10 +15567,12 @@ export type SchemeIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type SchemeIncidentsCreatedArgs = {
   endDate: Scalars['Date'];
   startDate: Scalars['Date'];
 };
+
 
 export type SchemeIntelArgs = {
   cursor?: InputMaybe<IntelWhereUniqueInput>;
@@ -15070,6 +15583,7 @@ export type SchemeIntelArgs = {
   where?: InputMaybe<IntelWhereInput>;
 };
 
+
 export type SchemeInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
   distinct?: InputMaybe<Array<InvestigationScalarFieldEnum>>;
@@ -15078,6 +15592,7 @@ export type SchemeInvestigationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
 };
+
 
 export type SchemeInvestigationsInSchemeArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
@@ -15088,6 +15603,7 @@ export type SchemeInvestigationsInSchemeArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type SchemeLanguagesArgs = {
   cursor?: InputMaybe<LanguageWhereUniqueInput>;
   distinct?: InputMaybe<Array<LanguageScalarFieldEnum>>;
@@ -15096,6 +15612,7 @@ export type SchemeLanguagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<LanguageWhereInput>;
 };
+
 
 export type SchemeLoginEventsArgs = {
   cursor?: InputMaybe<LoginEventWhereUniqueInput>;
@@ -15106,6 +15623,7 @@ export type SchemeLoginEventsArgs = {
   where?: InputMaybe<LoginEventWhereInput>;
 };
 
+
 export type SchemeMembersArgs = {
   cursor?: InputMaybe<UserChatWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserChatScalarFieldEnum>>;
@@ -15114,6 +15632,7 @@ export type SchemeMembersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserChatWhereInput>;
 };
+
 
 export type SchemeMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -15125,10 +15644,12 @@ export type SchemeMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type SchemeMessagesSentArgs = {
   endDate: Scalars['Date'];
   startDate: Scalars['Date'];
 };
+
 
 export type SchemeNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
@@ -15139,6 +15660,7 @@ export type SchemeNotificationsArgs = {
   where?: InputMaybe<NotificationWhereInput>;
 };
 
+
 export type SchemeOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
@@ -15148,10 +15670,12 @@ export type SchemeOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type SchemeOffendersCreatedArgs = {
   endDate: Scalars['Date'];
   startDate: Scalars['Date'];
 };
+
 
 export type SchemeQuestionGroupsArgs = {
   cursor?: InputMaybe<QuestionGroupWhereUniqueInput>;
@@ -15162,6 +15686,7 @@ export type SchemeQuestionGroupsArgs = {
   where?: InputMaybe<QuestionGroupWhereInput>;
 };
 
+
 export type SchemeQuestionsArgs = {
   cursor?: InputMaybe<QuestionWhereUniqueInput>;
   distinct?: InputMaybe<Array<QuestionScalarFieldEnum>>;
@@ -15170,6 +15695,7 @@ export type SchemeQuestionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<QuestionWhereInput>;
 };
+
 
 export type SchemeRecycledItemsArgs = {
   cursor?: InputMaybe<RecycledItemWhereUniqueInput>;
@@ -15180,6 +15706,7 @@ export type SchemeRecycledItemsArgs = {
   where?: InputMaybe<RecycledItemWhereInput>;
 };
 
+
 export type SchemeRekCollectionsArgs = {
   cursor?: InputMaybe<RekCollectionWhereUniqueInput>;
   distinct?: InputMaybe<Array<RekCollectionScalarFieldEnum>>;
@@ -15188,6 +15715,7 @@ export type SchemeRekCollectionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RekCollectionWhereInput>;
 };
+
 
 export type SchemeReportIconsArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
@@ -15198,6 +15726,7 @@ export type SchemeReportIconsArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
+
 export type SchemeReportTemplatesArgs = {
   cursor?: InputMaybe<ReportTemplateWhereUniqueInput>;
   distinct?: InputMaybe<Array<ReportTemplateScalarFieldEnum>>;
@@ -15206,6 +15735,7 @@ export type SchemeReportTemplatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ReportTemplateWhereInput>;
 };
+
 
 export type SchemeSchemeTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
@@ -15216,6 +15746,7 @@ export type SchemeSchemeTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+
 export type SchemeStatementTemplatesArgs = {
   cursor?: InputMaybe<StatementTemplateWhereUniqueInput>;
   distinct?: InputMaybe<Array<StatementTemplateScalarFieldEnum>>;
@@ -15224,6 +15755,7 @@ export type SchemeStatementTemplatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<StatementTemplateWhereInput>;
 };
+
 
 export type SchemeStockItemsArgs = {
   cursor?: InputMaybe<StockItemWhereUniqueInput>;
@@ -15234,6 +15766,7 @@ export type SchemeStockItemsArgs = {
   where?: InputMaybe<StockItemWhereInput>;
 };
 
+
 export type SchemeTagOrdersArgs = {
   cursor?: InputMaybe<TagOrderWhereUniqueInput>;
   distinct?: InputMaybe<Array<TagOrderScalarFieldEnum>>;
@@ -15242,6 +15775,7 @@ export type SchemeTagOrdersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TagOrderWhereInput>;
 };
+
 
 export type SchemeTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
@@ -15252,6 +15786,7 @@ export type SchemeTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+
 export type SchemeTermsArgs = {
   cursor?: InputMaybe<TermsAndConditionWhereUniqueInput>;
   distinct?: InputMaybe<Array<TermsAndConditionScalarFieldEnum>>;
@@ -15260,6 +15795,7 @@ export type SchemeTermsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TermsAndConditionWhereInput>;
 };
+
 
 export type SchemeTermsInSchemeArgs = {
   cursor?: InputMaybe<TermsAndConditionWhereUniqueInput>;
@@ -15270,6 +15806,7 @@ export type SchemeTermsInSchemeArgs = {
   where?: InputMaybe<TermsAndConditionWhereInput>;
 };
 
+
 export type SchemeTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<TodoScalarFieldEnum>;
@@ -15279,15 +15816,18 @@ export type SchemeTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type SchemeTopContributorsArgs = {
   endDate: Scalars['Date'];
   startDate: Scalars['Date'];
 };
 
+
 export type SchemeUpdatesCreatedArgs = {
   endDate: Scalars['Date'];
   startDate: Scalars['Date'];
 };
+
 
 export type SchemeVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -15297,6 +15837,7 @@ export type SchemeVehiclesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<VehicleWhereInput>;
 };
+
 
 export type SchemeWorkflowsArgs = {
   cursor?: InputMaybe<WorkflowWhereUniqueInput>;
@@ -15493,7 +16034,7 @@ export enum SchemeScalarFieldEnum {
   TaskTimeTracking = 'taskTimeTracking',
   UpdatedAt = 'updatedAt',
   UploadOffenderImagesOnMobile = 'uploadOffenderImagesOnMobile',
-  UseBusinessGroupsOnIncident = 'useBusinessGroupsOnIncident',
+  UseBusinessGroupsOnIncident = 'useBusinessGroupsOnIncident'
 }
 
 export type SchemeUpdateInput = {
@@ -15845,12 +16386,12 @@ export type SharingConfigWhereUniqueInput = {
 
 export enum SharingMode {
   Automatic = 'AUTOMATIC',
-  Manual = 'MANUAL',
+  Manual = 'MANUAL'
 }
 
 export enum SharingType {
   Connected = 'CONNECTED',
-  External = 'EXTERNAL',
+  External = 'EXTERNAL'
 }
 
 export type SignIn = {
@@ -15912,7 +16453,7 @@ export type SimpleTagCreate = {
 
 export enum SortOrder {
   Asc = 'asc',
-  Desc = 'desc',
+  Desc = 'desc'
 }
 
 export type StatementTemplate = {
@@ -15955,7 +16496,7 @@ export enum StatementTemplateScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
   Name = 'name',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type StatementTemplateScalarWhereInput = {
@@ -16072,7 +16613,7 @@ export enum StockItemScalarFieldEnum {
   SalesPriceStandard = 'salesPriceStandard',
   SchemeId = 'schemeId',
   Sku = 'sku',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type StockItemScalarWhereInput = {
@@ -16304,10 +16845,12 @@ export type Subscription = {
   newMessage: Message;
 };
 
+
 export type SubscriptionChatMessagesArgs = {
   chatId: Scalars['ID'];
   userId: Scalars['ID'];
 };
+
 
 export type SubscriptionNewMessageArgs = {
   chatId: Scalars['ID'];
@@ -16359,6 +16902,7 @@ export type Tag = {
   users: Array<User>;
 };
 
+
 export type TagActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -16367,6 +16911,7 @@ export type TagActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type TagArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
@@ -16377,6 +16922,7 @@ export type TagArticlesArgs = {
   where?: InputMaybe<ArticleWhereInput>;
 };
 
+
 export type TagBusinessesArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
   distinct?: InputMaybe<BusinessScalarFieldEnum>;
@@ -16385,6 +16931,7 @@ export type TagBusinessesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
 };
+
 
 export type TagChildTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
@@ -16395,6 +16942,7 @@ export type TagChildTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+
 export type TagDocumentsArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
   distinct?: InputMaybe<Array<DocumentScalarFieldEnum>>;
@@ -16403,6 +16951,7 @@ export type TagDocumentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<DocumentWhereInput>;
 };
+
 
 export type TagIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
@@ -16413,6 +16962,7 @@ export type TagIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type TagOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
@@ -16421,6 +16971,7 @@ export type TagOffendersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
+
 
 export type TagOrdersArgs = {
   cursor?: InputMaybe<TagOrderWhereUniqueInput>;
@@ -16431,6 +16982,7 @@ export type TagOrdersArgs = {
   where?: InputMaybe<TagOrderWhereInput>;
 };
 
+
 export type TagSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -16440,6 +16992,7 @@ export type TagSchemesArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
+
 export type TagTagQuestionsArgs = {
   cursor?: InputMaybe<TagQuestionWhereUniqueInput>;
   distinct?: InputMaybe<Array<TagQuestionScalarFieldEnum>>;
@@ -16448,6 +17001,7 @@ export type TagTagQuestionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TagQuestionWhereInput>;
 };
+
 
 export type TagUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -16558,7 +17112,7 @@ export enum TagOrderScalarFieldEnum {
   Id = 'id',
   Order = 'order',
   SchemeId = 'schemeId',
-  TagId = 'tagId',
+  TagId = 'tagId'
 }
 
 export type TagOrderScalarWhereInput = {
@@ -16658,7 +17212,7 @@ export enum TagQuestionScalarFieldEnum {
   QuestionId = 'questionId',
   Req = 'req',
   TagId = 'tagId',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type TagQuestionScalarWhereInput = {
@@ -16742,7 +17296,7 @@ export enum TagScalarFieldEnum {
   Translations = 'translations',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  Uploaded = 'uploaded',
+  Uploaded = 'uploaded'
 }
 
 export type TagScalarWhereInput = {
@@ -16797,7 +17351,7 @@ export enum TagType {
   IncidentCrimeType = 'INCIDENT_CRIME_TYPE',
   IncidentImpact = 'INCIDENT_IMPACT',
   IncidentInvolved = 'INCIDENT_INVOLVED',
-  IncidentMotive = 'INCIDENT_MOTIVE',
+  IncidentMotive = 'INCIDENT_MOTIVE'
 }
 
 export type TagUpdateInput = {
@@ -16992,9 +17546,7 @@ export type TaskQuestionScalarWhereWithAggregatesInput = {
 };
 
 export type TaskQuestionUpdateManyWithoutTaskNestedInput = {
-  update?: InputMaybe<
-    Array<TaskQuestionUpdateWithWhereUniqueWithoutTaskInputFields>
-  >;
+  update?: InputMaybe<Array<TaskQuestionUpdateWithWhereUniqueWithoutTaskInputFields>>;
 };
 
 export type TaskQuestionUpdateWithWhereUniqueWithoutTaskInputFields = {
@@ -17079,7 +17631,7 @@ export enum TermsAndConditionScalarFieldEnum {
   Id = 'id',
   SchemeId = 'schemeId',
   UpdatedAt = 'updatedAt',
-  Version = 'version',
+  Version = 'version'
 }
 
 export type TermsAndConditionScalarWhereInput = {
@@ -17208,7 +17760,7 @@ export enum TimeTakenScalarFieldEnum {
   TimeTaken = 'timeTaken',
   TodoId = 'todoId',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type TimeTakenScalarWhereInput = {
@@ -17299,6 +17851,7 @@ export type Todo = {
   vehicle?: Maybe<Vehicle>;
   vehicleId?: Maybe<Scalars['String']>;
 };
+
 
 export type TodoGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -17399,7 +17952,7 @@ export enum TodoScalarFieldEnum {
   SimilarOffenderIds = 'similarOffenderIds',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  VehicleId = 'vehicleId',
+  VehicleId = 'vehicleId'
 }
 
 export type TodoScalarWhereInput = {
@@ -17461,7 +18014,7 @@ export enum TodoType {
   OffenderApprove = 'OFFENDER_APPROVE',
   OffenderCompare = 'OFFENDER_COMPARE',
   OffenderUpdate = 'OFFENDER_UPDATE',
-  VehicleUpdate = 'VEHICLE_UPDATE',
+  VehicleUpdate = 'VEHICLE_UPDATE'
 }
 
 export type TodoUpdateInput = {
@@ -17639,6 +18192,7 @@ export type Update = {
   vehicleId?: Maybe<Scalars['String']>;
 };
 
+
 export type UpdateImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -17647,6 +18201,7 @@ export type UpdateImagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
 };
+
 
 export type UpdateLinkedArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
@@ -17657,6 +18212,7 @@ export type UpdateLinkedArticlesArgs = {
   where?: InputMaybe<ArticleWhereInput>;
 };
 
+
 export type UpdateLinkedCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
   distinct?: InputMaybe<CrimeGroupScalarFieldEnum>;
@@ -17665,6 +18221,7 @@ export type UpdateLinkedCrimeGroupsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
+
 
 export type UpdateLinkedIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
@@ -17675,6 +18232,7 @@ export type UpdateLinkedIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type UpdateLinkedInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
   distinct?: InputMaybe<InvestigationScalarFieldEnum>;
@@ -17683,6 +18241,7 @@ export type UpdateLinkedInvestigationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
 };
+
 
 export type UpdateLinkedOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -17693,6 +18252,7 @@ export type UpdateLinkedOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type UpdateLinkedVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
   distinct?: InputMaybe<VehicleScalarFieldEnum>;
@@ -17702,6 +18262,7 @@ export type UpdateLinkedVehiclesArgs = {
   where?: InputMaybe<VehicleWhereInput>;
 };
 
+
 export type UpdateMentionedUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserScalarFieldEnum>>;
@@ -17710,6 +18271,7 @@ export type UpdateMentionedUsersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserWhereInput>;
 };
+
 
 export type UpdateRepliesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
@@ -17781,7 +18343,7 @@ export enum UpdateIcon {
   Offender = 'OFFENDER',
   Recycled = 'RECYCLED',
   Restored = 'RESTORED',
-  Updated = 'UPDATED',
+  Updated = 'UPDATED'
 }
 
 export type UpdateIncidentBusinessInput = {
@@ -17879,7 +18441,7 @@ export enum UpdateScalarFieldEnum {
   Text = 'text',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  VehicleId = 'vehicleId',
+  VehicleId = 'vehicleId'
 }
 
 export type UpdateScalarWhereInput = {
@@ -17961,7 +18523,7 @@ export enum UpdateType {
   LinkedOffender = 'LINKED_OFFENDER',
   LinkedVehicle = 'LINKED_VEHICLE',
   System = 'SYSTEM',
-  Text = 'TEXT',
+  Text = 'TEXT'
 }
 
 export type UpdateUpdateDataInput = {
@@ -18223,6 +18785,7 @@ export type User = {
   vehicles: Array<Vehicle>;
 };
 
+
 export type UserActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -18231,6 +18794,7 @@ export type UserActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type UserActionsByUserArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
@@ -18241,6 +18805,7 @@ export type UserActionsByUserArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
+
 export type UserAddressesArgs = {
   cursor?: InputMaybe<AddressWhereUniqueInput>;
   distinct?: InputMaybe<Array<AddressScalarFieldEnum>>;
@@ -18249,6 +18814,7 @@ export type UserAddressesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<AddressWhereInput>;
 };
+
 
 export type UserApproverGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -18259,6 +18825,7 @@ export type UserApproverGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type UserArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
   distinct?: InputMaybe<ArticleScalarFieldEnum>;
@@ -18267,6 +18834,7 @@ export type UserArticlesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
 };
+
 
 export type UserAssignedTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
@@ -18277,6 +18845,7 @@ export type UserAssignedTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type UserBansArgs = {
   cursor?: InputMaybe<BanWhereUniqueInput>;
   distinct?: InputMaybe<BanScalarFieldEnum>;
@@ -18285,6 +18854,7 @@ export type UserBansArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BanWhereInput>;
 };
+
 
 export type UserBusinessesArgs = {
   cursor?: InputMaybe<BusinessWhereUniqueInput>;
@@ -18295,6 +18865,7 @@ export type UserBusinessesArgs = {
   where?: InputMaybe<BusinessWhereInput>;
 };
 
+
 export type UserChatsArgs = {
   cursor?: InputMaybe<UserChatWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserChatScalarFieldEnum>>;
@@ -18303,6 +18874,7 @@ export type UserChatsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserChatWhereInput>;
 };
+
 
 export type UserChecklistsArgs = {
   cursor?: InputMaybe<ActiveChecklistWhereUniqueInput>;
@@ -18313,6 +18885,7 @@ export type UserChecklistsArgs = {
   where?: InputMaybe<ActiveChecklistWhereInput>;
 };
 
+
 export type UserCompletedTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<TodoScalarFieldEnum>;
@@ -18321,6 +18894,7 @@ export type UserCompletedTodosArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TodoWhereInput>;
 };
+
 
 export type UserCreatedArticlesArgs = {
   cursor?: InputMaybe<ArticleWhereUniqueInput>;
@@ -18331,6 +18905,7 @@ export type UserCreatedArticlesArgs = {
   where?: InputMaybe<ArticleWhereInput>;
 };
 
+
 export type UserCreatedTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
   distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
@@ -18339,6 +18914,7 @@ export type UserCreatedTagsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type UserCreatedTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
@@ -18349,6 +18925,7 @@ export type UserCreatedTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+
 export type UserCreatedUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -18357,6 +18934,7 @@ export type UserCreatedUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type UserCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
@@ -18367,6 +18945,7 @@ export type UserCrimeGroupsArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type UserCsvImportsArgs = {
   cursor?: InputMaybe<CsvImportWhereUniqueInput>;
   distinct?: InputMaybe<Array<CsvImportScalarFieldEnum>>;
@@ -18375,6 +18954,7 @@ export type UserCsvImportsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CsvImportWhereInput>;
 };
+
 
 export type UserDefaultGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -18385,6 +18965,7 @@ export type UserDefaultGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type UserFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
@@ -18393,6 +18974,7 @@ export type UserFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type UserGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -18403,6 +18985,7 @@ export type UserGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type UserImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -18411,6 +18994,7 @@ export type UserImagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
 };
+
 
 export type UserImpressionsArgs = {
   cursor?: InputMaybe<ImpressionWhereUniqueInput>;
@@ -18421,6 +19005,7 @@ export type UserImpressionsArgs = {
   where?: InputMaybe<ImpressionWhereInput>;
 };
 
+
 export type UserIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
@@ -18429,6 +19014,7 @@ export type UserIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type UserIntelArgs = {
   cursor?: InputMaybe<IntelWhereUniqueInput>;
@@ -18439,6 +19025,7 @@ export type UserIntelArgs = {
   where?: InputMaybe<IntelWhereInput>;
 };
 
+
 export type UserInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
   distinct?: InputMaybe<Array<InvestigationScalarFieldEnum>>;
@@ -18447,6 +19034,7 @@ export type UserInvestigationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
 };
+
 
 export type UserLoginEventsArgs = {
   cursor?: InputMaybe<LoginEventWhereUniqueInput>;
@@ -18457,6 +19045,7 @@ export type UserLoginEventsArgs = {
   where?: InputMaybe<LoginEventWhereInput>;
 };
 
+
 export type UserMentionedUpdatedArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -18465,6 +19054,7 @@ export type UserMentionedUpdatedArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type UserMessageMentionsArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -18476,6 +19066,7 @@ export type UserMessageMentionsArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type UserMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
   distinct?: InputMaybe<Array<MessageScalarFieldEnum>>;
@@ -18486,6 +19077,7 @@ export type UserMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type UserMg11sArgs = {
   cursor?: InputMaybe<Mg11WhereUniqueInput>;
   distinct?: InputMaybe<Array<Mg11ScalarFieldEnum>>;
@@ -18494,6 +19086,7 @@ export type UserMg11sArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Mg11WhereInput>;
 };
+
 
 export type UserNewSchemeNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
@@ -18504,9 +19097,11 @@ export type UserNewSchemeNotificationsArgs = {
   where?: InputMaybe<NotificationWhereInput>;
 };
 
+
 export type UserNotificationCountArgs = {
   scheme?: InputMaybe<UniqueId>;
 };
+
 
 export type UserNotificationsArgs = {
   cursor?: InputMaybe<UserNotificationWhereUniqueInput>;
@@ -18517,6 +19112,7 @@ export type UserNotificationsArgs = {
   where?: InputMaybe<UserNotificationWhereInput>;
 };
 
+
 export type UserOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
@@ -18525,6 +19121,7 @@ export type UserOffendersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
+
 
 export type UserRecycledItemsArgs = {
   cursor?: InputMaybe<RecycledItemWhereUniqueInput>;
@@ -18535,6 +19132,7 @@ export type UserRecycledItemsArgs = {
   where?: InputMaybe<RecycledItemWhereInput>;
 };
 
+
 export type UserSchemesArgs = {
   cursor?: InputMaybe<UserSchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserSchemeScalarFieldEnum>>;
@@ -18543,6 +19141,7 @@ export type UserSchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserSchemeWhereInput>;
 };
+
 
 export type UserSubscribedCrimeGroupsArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
@@ -18553,6 +19152,7 @@ export type UserSubscribedCrimeGroupsArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type UserSubscribedIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
@@ -18561,6 +19161,7 @@ export type UserSubscribedIncidentsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
+
 
 export type UserSubscribedInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
@@ -18571,6 +19172,7 @@ export type UserSubscribedInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type UserSubscribedOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
   distinct?: InputMaybe<Array<OffenderScalarFieldEnum>>;
@@ -18579,6 +19181,7 @@ export type UserSubscribedOffendersArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
 };
+
 
 export type UserSubscribedVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -18589,6 +19192,7 @@ export type UserSubscribedVehiclesArgs = {
   where?: InputMaybe<VehicleWhereInput>;
 };
 
+
 export type UserTagsArgs = {
   cursor?: InputMaybe<TagWhereUniqueInput>;
   distinct?: InputMaybe<Array<TagScalarFieldEnum>>;
@@ -18597,6 +19201,7 @@ export type UserTagsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TagWhereInput>;
 };
+
 
 export type UserTaskTimeTakenArgs = {
   cursor?: InputMaybe<TimeTakenWhereUniqueInput>;
@@ -18607,6 +19212,7 @@ export type UserTaskTimeTakenArgs = {
   where?: InputMaybe<TimeTakenWhereInput>;
 };
 
+
 export type UserUserTermsArgs = {
   cursor?: InputMaybe<UserTermWhereUniqueInput>;
   distinct?: InputMaybe<Array<UserTermScalarFieldEnum>>;
@@ -18615,6 +19221,7 @@ export type UserUserTermsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserTermWhereInput>;
 };
+
 
 export type UserVehiclesArgs = {
   cursor?: InputMaybe<VehicleWhereUniqueInput>;
@@ -18671,7 +19278,7 @@ export enum UserChatScalarFieldEnum {
   Mentioned = 'mentioned',
   NewMessages = 'newMessages',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type UserChatScalarWhereInput = {
@@ -18840,7 +19447,7 @@ export enum UserNotificationScalarFieldEnum {
   Id = 'id',
   NotificationId = 'notificationId',
   Read = 'read',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type UserNotificationScalarWhereInput = {
@@ -19008,7 +19615,7 @@ export enum UserScalarFieldEnum {
   TimeSigned = 'timeSigned',
   Type = 'type',
   UpdatedAt = 'updatedAt',
-  Uploaded = 'uploaded',
+  Uploaded = 'uploaded'
 }
 
 export type UserScheme = {
@@ -19079,7 +19686,7 @@ export enum UserSchemeScalarFieldEnum {
   Role = 'role',
   SchemeId = 'schemeId',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type UserSchemeScalarWhereInput = {
@@ -19143,7 +19750,7 @@ export enum UserStatus {
   Disabled = 'DISABLED',
   Inactive = 'INACTIVE',
   Invited = 'INVITED',
-  NotInvited = 'NOT_INVITED',
+  NotInvited = 'NOT_INVITED'
 }
 
 export type UserTerm = {
@@ -19185,7 +19792,7 @@ export enum UserTermScalarFieldEnum {
   SignedAt = 'signedAt',
   TermsId = 'termsId',
   UpdatedAt = 'updatedAt',
-  UserId = 'userId',
+  UserId = 'userId'
 }
 
 export type UserTermScalarWhereInput = {
@@ -19250,7 +19857,7 @@ export type UserTermWhereUniqueInput = {
 
 export enum UserType {
   Guest = 'GUEST',
-  User = 'USER',
+  User = 'USER'
 }
 
 export type UserUpdateInput = {
@@ -19508,6 +20115,7 @@ export type Vehicle = {
   updates: Array<Update>;
 };
 
+
 export type VehicleActionsArgs = {
   cursor?: InputMaybe<ActionWhereUniqueInput>;
   distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
@@ -19516,6 +20124,7 @@ export type VehicleActionsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
 };
+
 
 export type VehicleCrimeGroupArgs = {
   cursor?: InputMaybe<CrimeGroupWhereUniqueInput>;
@@ -19526,6 +20135,7 @@ export type VehicleCrimeGroupArgs = {
   where?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+
 export type VehicleCustomGalleriesArgs = {
   cursor?: InputMaybe<CustomGalleryWhereUniqueInput>;
   distinct?: InputMaybe<CustomGalleryScalarFieldEnum>;
@@ -19534,6 +20144,7 @@ export type VehicleCustomGalleriesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CustomGalleryWhereInput>;
 };
+
 
 export type VehicleEvidenceArgs = {
   cursor?: InputMaybe<DocumentWhereUniqueInput>;
@@ -19544,6 +20155,7 @@ export type VehicleEvidenceArgs = {
   where?: InputMaybe<DocumentWhereInput>;
 };
 
+
 export type VehicleFeedItemsArgs = {
   cursor?: InputMaybe<FeedItemWhereUniqueInput>;
   distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
@@ -19552,6 +20164,7 @@ export type VehicleFeedItemsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<FeedItemWhereInput>;
 };
+
 
 export type VehicleGroupsArgs = {
   cursor?: InputMaybe<GroupWhereUniqueInput>;
@@ -19562,6 +20175,7 @@ export type VehicleGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
+
 export type VehicleImagesArgs = {
   cursor?: InputMaybe<ImageWhereUniqueInput>;
   distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
@@ -19570,6 +20184,7 @@ export type VehicleImagesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
 };
+
 
 export type VehicleIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
@@ -19580,6 +20195,7 @@ export type VehicleIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+
 export type VehicleInvestigationsArgs = {
   cursor?: InputMaybe<InvestigationWhereUniqueInput>;
   distinct?: InputMaybe<Array<InvestigationScalarFieldEnum>>;
@@ -19589,6 +20205,7 @@ export type VehicleInvestigationsArgs = {
   where?: InputMaybe<InvestigationWhereInput>;
 };
 
+
 export type VehicleLinkedUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
   distinct?: InputMaybe<Array<UpdateScalarFieldEnum>>;
@@ -19597,6 +20214,7 @@ export type VehicleLinkedUpdatesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UpdateWhereInput>;
 };
+
 
 export type VehicleMessagesArgs = {
   cursor?: InputMaybe<MessageWhereUniqueInput>;
@@ -19608,6 +20226,7 @@ export type VehicleMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+
 export type VehicleNotificationsArgs = {
   cursor?: InputMaybe<NotificationWhereUniqueInput>;
   distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
@@ -19616,6 +20235,7 @@ export type VehicleNotificationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<NotificationWhereInput>;
 };
+
 
 export type VehicleOffendersArgs = {
   cursor?: InputMaybe<OffenderWhereUniqueInput>;
@@ -19626,6 +20246,7 @@ export type VehicleOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+
 export type VehicleSchemesArgs = {
   cursor?: InputMaybe<SchemeWhereUniqueInput>;
   distinct?: InputMaybe<Array<SchemeScalarFieldEnum>>;
@@ -19634,6 +20255,7 @@ export type VehicleSchemesArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
 };
+
 
 export type VehicleSubscribedUsersArgs = {
   cursor?: InputMaybe<UserWhereUniqueInput>;
@@ -19644,6 +20266,7 @@ export type VehicleSubscribedUsersArgs = {
   where?: InputMaybe<UserWhereInput>;
 };
 
+
 export type VehicleTodosArgs = {
   cursor?: InputMaybe<TodoWhereUniqueInput>;
   distinct?: InputMaybe<TodoScalarFieldEnum>;
@@ -19652,6 +20275,7 @@ export type VehicleTodosArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TodoWhereInput>;
 };
+
 
 export type VehicleUpdatesArgs = {
   cursor?: InputMaybe<UpdateWhereUniqueInput>;
@@ -19753,7 +20377,7 @@ export enum VehicleScalarFieldEnum {
   Reference = 'reference',
   ReferenceStr = 'referenceStr',
   Registration = 'registration',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type VehicleScalarWhereInput = {
@@ -19950,7 +20574,7 @@ export type Victim = {
 export enum When {
   Month = 'MONTH',
   Week = 'WEEK',
-  Year = 'YEAR',
+  Year = 'YEAR'
 }
 
 export type Witness = {
@@ -20044,13 +20668,11 @@ export enum WorkflowActionType {
   Create = 'CREATE',
   SendEmail = 'SEND_EMAIL',
   SendNotification = 'SEND_NOTIFICATION',
-  SetPriority = 'SET_PRIORITY',
+  SetPriority = 'SET_PRIORITY'
 }
 
 export type WorkflowActionUpdateManyWithoutWorkflowNestedInput = {
-  update?: InputMaybe<
-    Array<WorkflowActionUpdateWithWhereUniqueWithoutWorkflowInput>
-  >;
+  update?: InputMaybe<Array<WorkflowActionUpdateWithWhereUniqueWithoutWorkflowInput>>;
 };
 
 export type WorkflowActionUpdateWithWhereUniqueWithoutWorkflowInput = {
@@ -20135,7 +20757,7 @@ export enum WorkflowScalarFieldEnum {
   Name = 'name',
   Trigger = 'trigger',
   TriggerModels = 'triggerModels',
-  UpdatedAt = 'updatedAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type WorkflowScalarWhereInput = {
@@ -20169,7 +20791,7 @@ export enum WorkflowTrigger {
   Assigned = 'ASSIGNED',
   Completed = 'COMPLETED',
   Created = 'CREATED',
-  Updated = 'UPDATED',
+  Updated = 'UPDATED'
 }
 
 export type WorkflowUpdateInput = {

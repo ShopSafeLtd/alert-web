@@ -4,4 +4,7 @@ coverage
 .eslintcache
 /en/lang.json
 src/graphql/generated.ts
+src/graphql/types.ts
+*.generated.ts*
 public/
+src/**/!(*.generated).{ts,tsx}

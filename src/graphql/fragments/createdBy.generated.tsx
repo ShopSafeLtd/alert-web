@@ -1,20 +1,15 @@
 import type * as Types from '../types.js';
 
 import { gql } from '@apollo/client';
-export type CreatedByFragment = {
-  __typename?: 'User';
-  id: string;
-  fullName: string;
-  businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
-};
+export type CreatedByFragment = { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> };
 
 export const CreatedByFragmentDoc = gql`
-  fragment CreatedBy on User {
+    fragment CreatedBy on User {
+  id
+  fullName
+  businesses {
     id
-    fullName
-    businesses {
-      id
-      name
-    }
+    name
   }
-`;
+}
+    `;

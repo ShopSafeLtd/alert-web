@@ -7,45 +7,23 @@ export type SubscribeToVehicleMutationVariables = Types.Exact<{
   where: Types.UniqueId;
 }>;
 
-export type SubscribeToVehicleMutation = {
-  __typename?: 'Mutation';
-  subscribeToVehicle: {
-    __typename?: 'Vehicle';
-    id: string;
-    subscribed: boolean;
-  };
-};
+
+export type SubscribeToVehicleMutation = { __typename?: 'Mutation', subscribeToVehicle: { __typename?: 'Vehicle', id: string, subscribed: boolean } };
+
 
 export const SubscribeToVehicleDocument = gql`
-  mutation SubscribeToVehicle($where: UniqueId!) {
-    subscribeToVehicle(where: $where) {
-      id
-      subscribed
-    }
+    mutation SubscribeToVehicle($where: UniqueId!) {
+  subscribeToVehicle(where: $where) {
+    id
+    subscribed
   }
-`;
-export type SubscribeToVehicleMutationFn = Apollo.MutationFunction<
-  SubscribeToVehicleMutation,
-  SubscribeToVehicleMutationVariables
->;
-export function useSubscribeToVehicleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SubscribeToVehicleMutation,
-    SubscribeToVehicleMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    SubscribeToVehicleMutation,
-    SubscribeToVehicleMutationVariables
-  >(SubscribeToVehicleDocument, options);
 }
-export type SubscribeToVehicleMutationHookResult = ReturnType<
-  typeof useSubscribeToVehicleMutation
->;
-export type SubscribeToVehicleMutationResult =
-  Apollo.MutationResult<SubscribeToVehicleMutation>;
-export type SubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<
-  SubscribeToVehicleMutation,
-  SubscribeToVehicleMutationVariables
->;
+    `;
+export type SubscribeToVehicleMutationFn = Apollo.MutationFunction<SubscribeToVehicleMutation, SubscribeToVehicleMutationVariables>;
+export function useSubscribeToVehicleMutation(baseOptions?: Apollo.MutationHookOptions<SubscribeToVehicleMutation, SubscribeToVehicleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubscribeToVehicleMutation, SubscribeToVehicleMutationVariables>(SubscribeToVehicleDocument, options);
+      }
+export type SubscribeToVehicleMutationHookResult = ReturnType<typeof useSubscribeToVehicleMutation>;
+export type SubscribeToVehicleMutationResult = Apollo.MutationResult<SubscribeToVehicleMutation>;
+export type SubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<SubscribeToVehicleMutation, SubscribeToVehicleMutationVariables>;

@@ -7,52 +7,28 @@ export type UpsertBrandMutationVariables = Types.Exact<{
   data: Types.UpsertBrand;
 }>;
 
-export type UpsertBrandMutation = {
-  __typename?: 'Mutation';
-  upsertBrand: {
-    __typename?: 'Brand';
-    id: string;
-    name: string;
-    description?: string | null;
-    businesses: Array<{ __typename?: 'Business'; name: string; id: string }>;
-  };
-};
+
+export type UpsertBrandMutation = { __typename?: 'Mutation', upsertBrand: { __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', name: string, id: string }> } };
+
 
 export const UpsertBrandDocument = gql`
-  mutation UpsertBrand($data: UpsertBrand!) {
-    upsertBrand(data: $data) {
-      id
+    mutation UpsertBrand($data: UpsertBrand!) {
+  upsertBrand(data: $data) {
+    id
+    name
+    businesses {
       name
-      businesses {
-        name
-        id
-      }
-      description
+      id
     }
+    description
   }
-`;
-export type UpsertBrandMutationFn = Apollo.MutationFunction<
-  UpsertBrandMutation,
-  UpsertBrandMutationVariables
->;
-export function useUpsertBrandMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpsertBrandMutation,
-    UpsertBrandMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpsertBrandMutation, UpsertBrandMutationVariables>(
-    UpsertBrandDocument,
-    options
-  );
 }
-export type UpsertBrandMutationHookResult = ReturnType<
-  typeof useUpsertBrandMutation
->;
-export type UpsertBrandMutationResult =
-  Apollo.MutationResult<UpsertBrandMutation>;
-export type UpsertBrandMutationOptions = Apollo.BaseMutationOptions<
-  UpsertBrandMutation,
-  UpsertBrandMutationVariables
->;
+    `;
+export type UpsertBrandMutationFn = Apollo.MutationFunction<UpsertBrandMutation, UpsertBrandMutationVariables>;
+export function useUpsertBrandMutation(baseOptions?: Apollo.MutationHookOptions<UpsertBrandMutation, UpsertBrandMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpsertBrandMutation, UpsertBrandMutationVariables>(UpsertBrandDocument, options);
+      }
+export type UpsertBrandMutationHookResult = ReturnType<typeof useUpsertBrandMutation>;
+export type UpsertBrandMutationResult = Apollo.MutationResult<UpsertBrandMutation>;
+export type UpsertBrandMutationOptions = Apollo.BaseMutationOptions<UpsertBrandMutation, UpsertBrandMutationVariables>;

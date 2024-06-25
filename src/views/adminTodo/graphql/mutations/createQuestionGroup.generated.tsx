@@ -7,58 +7,29 @@ export type CreateOneQuestionGroupMutationVariables = Types.Exact<{
   data: Types.QuestionGroupCreateInput;
 }>;
 
-export type CreateOneQuestionGroupMutation = {
-  __typename?: 'Mutation';
-  createOneQuestionGroup: {
-    __typename?: 'QuestionGroup';
-    id: string;
-    name: string;
-    description?: string | null;
-    defaultDueDate: number;
-    questions: Array<{
-      __typename?: 'Question';
-      questionFormatted: string;
-      id: string;
-    }>;
-  };
-};
+
+export type CreateOneQuestionGroupMutation = { __typename?: 'Mutation', createOneQuestionGroup: { __typename?: 'QuestionGroup', id: string, name: string, description?: string | null, defaultDueDate: number, questions: Array<{ __typename?: 'Question', questionFormatted: string, id: string }> } };
+
 
 export const CreateOneQuestionGroupDocument = gql`
-  mutation CreateOneQuestionGroup($data: QuestionGroupCreateInput!) {
-    createOneQuestionGroup(data: $data) {
+    mutation CreateOneQuestionGroup($data: QuestionGroupCreateInput!) {
+  createOneQuestionGroup(data: $data) {
+    id
+    name
+    description
+    defaultDueDate
+    questions {
+      questionFormatted
       id
-      name
-      description
-      defaultDueDate
-      questions {
-        questionFormatted
-        id
-      }
     }
   }
-`;
-export type CreateOneQuestionGroupMutationFn = Apollo.MutationFunction<
-  CreateOneQuestionGroupMutation,
-  CreateOneQuestionGroupMutationVariables
->;
-export function useCreateOneQuestionGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateOneQuestionGroupMutation,
-    CreateOneQuestionGroupMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateOneQuestionGroupMutation,
-    CreateOneQuestionGroupMutationVariables
-  >(CreateOneQuestionGroupDocument, options);
 }
-export type CreateOneQuestionGroupMutationHookResult = ReturnType<
-  typeof useCreateOneQuestionGroupMutation
->;
-export type CreateOneQuestionGroupMutationResult =
-  Apollo.MutationResult<CreateOneQuestionGroupMutation>;
-export type CreateOneQuestionGroupMutationOptions = Apollo.BaseMutationOptions<
-  CreateOneQuestionGroupMutation,
-  CreateOneQuestionGroupMutationVariables
->;
+    `;
+export type CreateOneQuestionGroupMutationFn = Apollo.MutationFunction<CreateOneQuestionGroupMutation, CreateOneQuestionGroupMutationVariables>;
+export function useCreateOneQuestionGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateOneQuestionGroupMutation, CreateOneQuestionGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOneQuestionGroupMutation, CreateOneQuestionGroupMutationVariables>(CreateOneQuestionGroupDocument, options);
+      }
+export type CreateOneQuestionGroupMutationHookResult = ReturnType<typeof useCreateOneQuestionGroupMutation>;
+export type CreateOneQuestionGroupMutationResult = Apollo.MutationResult<CreateOneQuestionGroupMutation>;
+export type CreateOneQuestionGroupMutationOptions = Apollo.BaseMutationOptions<CreateOneQuestionGroupMutation, CreateOneQuestionGroupMutationVariables>;

@@ -7,58 +7,31 @@ export type CreateDocumentMutationVariables = Types.Exact<{
   data: Types.CreateDocument;
 }>;
 
-export type CreateDocumentMutation = {
-  __typename?: 'Mutation';
-  createDocument: {
-    __typename?: 'Document';
-    id: string;
-    name: string;
-    thumbnailUrl?: string | null;
-    url: string;
-    createdAt: Date;
-    updatedAt: Date;
-    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-  };
-};
+
+export type CreateDocumentMutation = { __typename?: 'Mutation', createDocument: { __typename?: 'Document', id: string, name: string, thumbnailUrl?: string | null, url: string, createdAt: Date, updatedAt: Date, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+
 
 export const CreateDocumentDocument = gql`
-  mutation CreateDocument($data: CreateDocument!) {
-    createDocument(data: $data) {
+    mutation CreateDocument($data: CreateDocument!) {
+  createDocument(data: $data) {
+    id
+    name
+    tags {
       id
       name
-      tags {
-        id
-        name
-      }
-      thumbnailUrl
-      url
-      createdAt
-      updatedAt
     }
+    thumbnailUrl
+    url
+    createdAt
+    updatedAt
   }
-`;
-export type CreateDocumentMutationFn = Apollo.MutationFunction<
-  CreateDocumentMutation,
-  CreateDocumentMutationVariables
->;
-export function useCreateDocumentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateDocumentMutation,
-    CreateDocumentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateDocumentMutation,
-    CreateDocumentMutationVariables
-  >(CreateDocumentDocument, options);
 }
-export type CreateDocumentMutationHookResult = ReturnType<
-  typeof useCreateDocumentMutation
->;
-export type CreateDocumentMutationResult =
-  Apollo.MutationResult<CreateDocumentMutation>;
-export type CreateDocumentMutationOptions = Apollo.BaseMutationOptions<
-  CreateDocumentMutation,
-  CreateDocumentMutationVariables
->;
+    `;
+export type CreateDocumentMutationFn = Apollo.MutationFunction<CreateDocumentMutation, CreateDocumentMutationVariables>;
+export function useCreateDocumentMutation(baseOptions?: Apollo.MutationHookOptions<CreateDocumentMutation, CreateDocumentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDocumentMutation, CreateDocumentMutationVariables>(CreateDocumentDocument, options);
+      }
+export type CreateDocumentMutationHookResult = ReturnType<typeof useCreateDocumentMutation>;
+export type CreateDocumentMutationResult = Apollo.MutationResult<CreateDocumentMutation>;
+export type CreateDocumentMutationOptions = Apollo.BaseMutationOptions<CreateDocumentMutation, CreateDocumentMutationVariables>;

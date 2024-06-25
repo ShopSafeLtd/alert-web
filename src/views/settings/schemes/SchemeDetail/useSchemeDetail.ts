@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
-
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-import type { SchemeQuery } from 'graphql/scheme/queries/scheme.generated';
-import { useSchemeQuery } from 'graphql/scheme/queries/scheme.generated';
+import type { SchemeDetailsQuery } from './graphql/scheme.generated';
+import { useSchemeDetailsQuery } from './graphql/scheme.generated';
 import type { GoodsMode } from 'graphql/types';
 import { Model, TagType } from 'graphql/types';
 import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
 import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
 import { useUpdateSchemeMutation } from 'graphql/scheme/mutation/update_scheme.generated';
 import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
+import type { RcFile } from 'antd/lib/upload/interface';
+import { useForm } from 'antd/lib/form/Form';
 
 export interface FormData {
   name: string;
@@ -47,7 +47,7 @@ export interface FormData {
 }
 
 interface Return {
-  data: SchemeQuery | undefined;
+  data: SchemeDetailsQuery | undefined;
   loading: boolean;
   saving: boolean;
   onSubmit: (value: FormData) => void;
@@ -59,17 +59,31 @@ interface Return {
   darkImgChange: UploadProps['onChange'];
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
   tags: ListSchemeTagsQuery | undefined;
+  form: FormInstance<FormData>;
 }
 
 const useSchemeDetail = (): Return => {
   const intl = useIntl();
+
+  const errorNotification = () =>
+    notification.error({
+      message: intl.formatMessage({
+        defaultMessage: 'Error',
+      }),
+      description: intl.formatMessage({
+        defaultMessage:
+          'This error has been reported to our team, if it continues to happen reach out to our support team.',
+      }),
+      placement: 'bottomRight',
+    });
+
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [imageChange, setImageChange] = useState(false);
   const [darkImageChange, setDarkImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [darkFileList, setDarkFileList] = useState<UploadFile[]>([]);
-
+  const [form] = useForm<FormData>();
   const { data: tags } = useListSchemeTagsQuery({
     variables: {
       listWhere: {
@@ -90,8 +104,7 @@ const useSchemeDetail = (): Return => {
     },
   });
 
-  const { data: schemeData, loading } = useSchemeQuery({
-    fetchPolicy: 'cache-and-network',
+  const { data: schemeData, loading } = useSchemeDetailsQuery({
     variables: {
       where: {
         id: schemeId,
@@ -107,8 +120,6 @@ const useSchemeDetail = (): Return => {
             url: `${scheme?.logo?.optimised || scheme?.logo?.url}`,
           },
         ]);
-      } else {
-        setFileList([]);
       }
       if (scheme?.darkLogo?.url) {
         setDarkFileList([
@@ -119,8 +130,6 @@ const useSchemeDetail = (): Return => {
             url: `${scheme?.darkLogo?.optimised || scheme?.darkLogo?.url}`,
           },
         ]);
-      } else {
-        setDarkFileList([]);
       }
     },
   });
@@ -155,7 +164,7 @@ const useSchemeDetail = (): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
 
-    updateScheme({
+    void updateScheme({
       variables: {
         where: {
           id: schemeId,
@@ -353,6 +362,7 @@ const useSchemeDetail = (): Return => {
     darkFileList,
     darkImgChange,
     tags,
+    form,
   };
 };
 
