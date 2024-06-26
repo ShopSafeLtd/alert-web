@@ -67,7 +67,13 @@ module.exports = {
     'no-self-compare': 'error',
     'wrap-iife': 'error',
     yoda: 'error',
-    'no-confusing-arrow': 'warn',
+    'no-confusing-arrow': 'warn', // TODO replace with below
+    // 'no-confusing-arrow': [
+    //   'error',
+    //   {
+    //     allowParens: true,
+    //   },
+    // ],
     'no-shadow': 1,
     'no-undef-init': 'error',
     'no-label-var': 'error',
@@ -123,12 +129,7 @@ module.exports = {
         after: true,
       },
     ],
-    'no-confusing-arrow': [
-      'error',
-      {
-        allowParens: true,
-      },
-    ],
+
     'no-var': 'error',
     'object-shorthand': 'error',
     'prefer-arrow-callback': 'error',

@@ -58,25 +58,27 @@ export const NavProfile = () => {
           {
             key: '1',
             label: (
-              <Row>
-                <Col>
-                  <Avatar
-                    style={{
-                      backgroundColor: 'rgb(222, 68, 54)',
-                      minWidth: 35,
-                    }}
-                    size={35}
-                  >
-                    {name?.charAt(0)}
-                  </Avatar>
-                </Col>
-                <Col>
-                  <div className="pl-2">
-                    <h4 className="mb-0">{name}</h4>
-                    <span className="text-muted">{email}</span>
-                  </div>
-                </Col>
-              </Row>
+              <Link to={`${APP_PREFIX_PATH}/user-settings`}>
+                <Row>
+                  <Col>
+                    <Avatar
+                      style={{
+                        backgroundColor: 'rgb(222, 68, 54)',
+                        minWidth: 35,
+                      }}
+                      size={35}
+                    >
+                      {name?.charAt(0)}
+                    </Avatar>
+                  </Col>
+                  <Col>
+                    <div className="pl-2">
+                      <h4 className="mb-0">{name}</h4>
+                      <span className="text-muted">{email}</span>
+                    </div>
+                  </Col>
+                </Row>
+              </Link>
             ),
           },
           {
