@@ -33,11 +33,17 @@ const useAddGoods = ({ update }: Props): Return => {
       id: `${Math.random()}`,
       goodsTypeId: value.goodsTypeId,
       name:
+        value.name ??
         goodsTypesData?.listGoodsTypes.goodsTypes.find(
           ({ id }) => id === value.goodsTypeId
-        )?.name || '',
-      value: value.value || 0,
-      recoveredValue: value.recoveredValue || 0,
+        )?.name ??
+        '',
+      value: value.value ?? 0,
+      recoveredValue: value.recoveredValue ?? 0,
+      quantity: value.quantity,
+      recoveredQuantity: value.recoveredQuantity,
+      stockItemId: value.stockItemId,
+      sku: value.sku,
     });
   };
 

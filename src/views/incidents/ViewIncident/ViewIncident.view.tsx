@@ -96,6 +96,7 @@ import type { UpdateTaskMutation } from '#/components/form-components/Todos/View
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
 import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import CctvRecords from '#/views/incidents/ViewIncident/components/CctvRecords.view';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -1031,10 +1032,39 @@ const ViewIncident = ({
                                   : [
                                       {
                                         title: intl.formatMessage({
+                                          defaultMessage: 'Name',
+                                        }),
+                                        dataIndex: 'name',
+                                        key: 'name',
+                                        render: (value: string) => (
+                                          <Tooltip title={value}>
+                                            <Paragraph
+                                              style={{
+                                                width: 200,
+                                                marginBottom: 0,
+                                              }}
+                                              ellipsis={{ rows: 1 }}
+                                            >
+                                              {value}
+                                            </Paragraph>
+                                          </Tooltip>
+                                        ),
+                                      },
+                                      {
+                                        title: intl.formatMessage({
                                           defaultMessage: 'SKU',
                                         }),
                                         dataIndex: 'sku',
-                                        key: 'name',
+                                        key: 'sku',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Item Value',
+                                        }),
+                                        dataIndex: 'value',
+                                        key: 'value',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
                                       },
                                       {
                                         title: intl.formatMessage({
@@ -1045,51 +1075,71 @@ const ViewIncident = ({
                                       },
                                       {
                                         title: intl.formatMessage({
-                                          defaultMessage: 'Recovered Quantity',
+                                          defaultMessage: 'Recovered',
                                         }),
                                         dataIndex: 'recoveredQuantity',
                                         key: 'recoveredQuantity',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Item Total',
+                                        }),
+                                        dataIndex: 'itemTotal',
+                                        key: 'itemTotal',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
                                       },
                                     ]
                               }
                               dataSource={data?.incident?.incidentItems.map(
                                 (item) => ({
-                                  key: item.id,
-                                  name: item.name || '',
-                                  value: item.value || 0,
-                                  recoveredValue: item.recoveredValue || 0,
-                                  sku: item.sku || '',
-                                  quantity: item.quantity || 0,
+                                  key: item.id ?? '',
+                                  value: item.value ?? 0,
+                                  recoveredValue: item.recoveredValue ?? 0,
+                                  sku: item.sku ?? '',
+                                  name: item.name ?? '',
+                                  quantity: item.quantity ?? 0,
                                   recoveredQuantity:
-                                    item.recoveredQuantity || 0,
+                                    item.recoveredQuantity ?? 0,
                                   item,
+                                  itemTotal:
+                                    (item.value ?? 0) * (item.quantity ?? 0) -
+                                    (item.value ?? 0) *
+                                      (item.recoveredQuantity ?? 0),
                                 })
                               )}
                               size="small"
                               // TODO
                               // eslint-disable-next-line react/no-unstable-nested-components
                               summary={(tableData) => {
-                                const totalValue = tableData
-                                  .map((item) => item.value || 0)
+                                const totalQnty = tableData
+                                  .map((item) => item.quantity || 0)
                                   .reduce((a, b) => a + b, 0);
-                                const totalRecovered = tableData
-                                  .map((item) => item.recoveredValue || 0)
+                                const totalRecoveredQnty = tableData
+                                  .map((item) => item.recoveredQuantity || 0)
+                                  .reduce((a, b) => a + b, 0);
+                                const totalValue = tableData
+                                  .map((item) => item.itemTotal || 0)
                                   .reduce((a, b) => a + b, 0);
 
                                 return (
                                   <Table.Summary.Row>
-                                    <Table.Summary.Cell index={0}>
+                                    <Table.Summary.Cell index={0} />
+                                    <Table.Summary.Cell index={1} />
+                                    <Table.Summary.Cell index={2}>
                                       {intl.formatMessage({
                                         defaultMessage: 'Total: ',
                                       })}
                                     </Table.Summary.Cell>
-                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                    <Table.Summary.Cell index={1}>
-                                      £{totalValue.toFixed(2)}
+                                    <Table.Summary.Cell index={3}>
+                                      {totalQnty}
                                     </Table.Summary.Cell>
-                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                    <Table.Summary.Cell index={1}>
-                                      £{totalRecovered.toFixed(2)}
+                                    <Table.Summary.Cell index={4}>
+                                      {totalRecoveredQnty}
+                                    </Table.Summary.Cell>
+                                    <Table.Summary.Cell index={5}>
+                                      <FormattedMessage defaultMessage="£" />
+                                      {totalValue.toFixed(2)}
                                     </Table.Summary.Cell>
                                   </Table.Summary.Row>
                                 );
@@ -1305,6 +1355,23 @@ const ViewIncident = ({
                             />
                           )}
                         </Card>
+
+                        {data?.incident &&
+                        data.incident.cctvRecords.length > 0 ? (
+                          <CctvRecords
+                            data={data.incident.cctvRecords.map((item) => ({
+                              cameraNumber: item.cameraNumber,
+                              endTime: item.endTime,
+                              key: item.id,
+                              showIncident: item.showIncident,
+                              showFace: item.showFace,
+                              startTime: item.startTime,
+                            }))}
+                            loading={loading}
+                          />
+                        ) : (
+                          <div />
+                        )}
 
                         <Card loading={loading}>
                           <Row
@@ -1874,7 +1941,7 @@ const ViewIncident = ({
           defaultMessage: 'Add New Item',
         })}
         open={addGoods}
-        width="400"
+        width="1000"
         zIndex={999}
         onClose={toggleAddGoods}
       >

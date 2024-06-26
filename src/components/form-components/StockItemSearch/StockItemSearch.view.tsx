@@ -63,6 +63,7 @@ const StockItemSearch = ({
       .query<ListStockItemsQuery, ListStockItemsQueryVariables>({
         query: ListStockItemsDocument,
         variables: {
+          take: 100,
           where: {
             scheme: {
               id: {

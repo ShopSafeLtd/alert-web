@@ -27,6 +27,7 @@ export interface BanData {
   months?: number | null | undefined;
   fineValue?: number | null | undefined;
 }
+
 // Offender
 export interface OffenderData {
   id: string;
@@ -172,12 +173,14 @@ export interface CrimeGroupCardData {
   vehicles?: VehicleData[];
   offenders?: OffenderData[];
 }
+
 export interface InvestigationDetails {
   id: string;
   name?: string;
   description?: string | null;
   groupIds?: string[];
 }
+
 // image
 export interface ImageCardData {
   id: string;
@@ -199,6 +202,7 @@ export interface ImageCardData {
     images: { id: string; optimised?: string | undefined | null }[];
   }[];
 }
+
 export interface Image extends UploadFile {
   // id: string;
   optimised?: string | null;
@@ -212,6 +216,7 @@ export interface Image extends UploadFile {
   deleted?: boolean;
   isFace?: boolean;
 }
+
 export interface ImageFaceType {
   imageURL: string;
   Gender: 'Male' | 'Female';
@@ -228,6 +233,7 @@ export interface ImageFaceType {
     Width: string;
   };
 }
+
 export interface EditFeedImage {
   id: string;
   optimised?: string | null | undefined;
@@ -237,6 +243,7 @@ export interface EditFeedImage {
   policeImage?: boolean | null | undefined;
   rotation?: number;
 }
+
 // LocationData
 export interface LocationData {
   id?: string;
@@ -250,6 +257,7 @@ export interface LocationData {
   geoLng?: number | null;
   full?: string | null;
 }
+
 export interface NewLocationData {
   geoLat: number;
   geoLng: number;
@@ -258,6 +266,7 @@ export interface NewLocationData {
   townCity?: string;
   postcode?: string;
 }
+
 export interface ViewportData {
   latitude: number;
   longitude: number;
@@ -268,6 +277,7 @@ export interface ViewportData {
   // townCity?: string;
   // postcode?: string;
 }
+
 export interface AddressData {
   alias?: string | null;
   building?: string | null;
@@ -276,6 +286,7 @@ export interface AddressData {
   county?: string | null;
   postcode: string;
 }
+
 // SchemeUserData
 export interface SchemeUserData {
   id: string;
@@ -340,6 +351,7 @@ export interface BrandData {
   businesses: string[];
   // newBusinesses?: BusinessData[];
 }
+
 export interface CustomGalleryData {
   id: string;
   name: string;
@@ -349,12 +361,14 @@ export interface CustomGalleryData {
   isConnected?: boolean;
   isNew?: boolean;
 }
+
 export interface CustomGalleryQueryData {
   id: string;
   name: string;
   description?: string;
   groups?: { id: string; name?: string }[];
 }
+
 export interface TagData {
   id: string;
   name: string;
@@ -364,6 +378,7 @@ export interface TagData {
   isConnected?: boolean;
   isNew?: boolean;
 }
+
 export interface NewTagData {
   id: string;
   name: string;
@@ -373,6 +388,7 @@ export interface NewTagData {
   isConnected?: boolean;
   isNew?: boolean;
 }
+
 export interface CustomQuestion {
   answerType: AnswerType;
   label: string;
@@ -394,6 +410,8 @@ export interface GoodsData {
   name?: string | undefined | null;
   value?: number | undefined | null;
   recoveredValue?: number | undefined | null;
+  quantity?: number | null | undefined;
+  recoveredQuantity?: number | null | undefined;
   goodsType?:
     | {
         id: string;
@@ -401,7 +419,10 @@ export interface GoodsData {
     | undefined
     | null;
   goodsTypeId?: string;
+  stockItemId?: string;
+  sku?: string | null;
 }
+
 export enum UserSort {
   createdAtDesc = 'CREATED_AT_DESC',
   createdAtAsc = 'CREATED_AT_ASC',
@@ -443,9 +464,11 @@ export interface Update {
   createdAt: Moment;
   type: UpdateType;
 }
+
 export interface UpdateData extends Update {
   replies: Update[];
 }
+
 export interface OffenderSettingsType {
   name: boolean;
   alias: boolean;

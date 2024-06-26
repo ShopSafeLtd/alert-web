@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type ListStockItemsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.StockItemsWhereInput>;
+  take?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -12,8 +13,8 @@ export type ListStockItemsQuery = { __typename?: 'Query', listStockItems: { __ty
 
 
 export const ListStockItemsDocument = gql`
-    query ListStockItems($where: StockItemsWhereInput) {
-  listStockItems(where: $where) {
+    query ListStockItems($where: StockItemsWhereInput, $take: Int) {
+  listStockItems(where: $where, take: $take) {
     total
     stockItems {
       id

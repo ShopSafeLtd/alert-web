@@ -4,6 +4,10 @@ import { useIntl } from 'react-intl';
 import type { GoodsData } from 'types/DataType';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
 import { GoodsMode } from 'graphql/types';
+import Input from 'antd/es/input/Input';
+import StockItemSearch, {
+  type StockItemValue,
+} from '#/components/form-components/StockItemSearch/StockItemSearch.view';
 
 interface Props {
   onClose: () => void;
@@ -19,9 +23,24 @@ const AddGoods = ({
   goodsMode,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const [form] = Form.useForm();
 
+  const onAddItem = (data: StockItemValue) => {
+    console.log(data);
+    form.setFieldsValue({
+      sku: data.sku || '',
+      value: data.salesPriceLocal ?? data.costPriceLocal ?? 0,
+      quantity: undefined,
+      recoveredQuantity: 0,
+      name: data.name || '',
+      stockItem: data.id,
+    });
+  };
+
+  const stockItem = Form.useWatch<string | undefined>('stockItem', form);
+  console.log(stockItem);
   return (
-    <Form layout="vertical" onFinish={onSubmit}>
+    <Form form={form} layout="vertical" onFinish={onSubmit}>
       {goodsMode === GoodsMode.Generic && (
         <Row gutter={16}>
           <Col span={24}>
@@ -113,13 +132,128 @@ const AddGoods = ({
           </Col>
         </Row>
       )}
+      {!stockItem && goodsMode === GoodsMode.Specific && (
+        <StockItemSearch
+          showSearch
+          allowClear
+          placeholder={intl.formatMessage({
+            defaultMessage: 'Search for an item to add to the incident...',
+          })}
+          style={{ width: 500, marginBottom: 20 }}
+          onAddItem={onAddItem}
+          division=""
+        />
+      )}
       {goodsMode === GoodsMode.Specific && (
-        <Row gutter={16}>
-          <Col span={12}>
+        <Row gutter={8}>
+          <Col>
+            <Form.Item name="stockItem" />
+          </Col>
+          <Col>
+            <Form.Item
+              name="name"
+              label={intl.formatMessage({
+                defaultMessage: 'Item Name',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please enter the name',
+                  }),
+                },
+              ]}
+            >
+              <Input
+                disabled={stockItem === undefined}
+                readOnly
+                style={{ width: 250 }}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item
+              name="sku"
+              label={intl.formatMessage({
+                defaultMessage: 'SKU',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please enter the SKU',
+                  }),
+                },
+              ]}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'The SKU of the item.',
+              })}
+            >
+              <Input
+                disabled={stockItem === undefined}
+                readOnly
+                style={{ width: 150 }}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item
+              name="value"
+              label={intl.formatMessage({
+                defaultMessage: 'Value',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please enter the value',
+                  }),
+                },
+              ]}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'The value of the item.',
+              })}
+            >
+              <InputNumber
+                style={{ width: 150 }}
+                // prefix="£"
+                precision={2}
+                min={0}
+                disabled={stockItem === undefined}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item
+              name="quantity"
+              label={intl.formatMessage({
+                defaultMessage: 'Quantity',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please enter a quantity.',
+                  }),
+                },
+              ]}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'The quantity of the items involved.',
+              })}
+            >
+              <InputNumber
+                disabled={stockItem === undefined}
+                style={{ width: 150 }}
+                precision={0}
+                min={0}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
             <Form.Item
               name="recoveredQuantity"
               label={intl.formatMessage({
-                defaultMessage: 'Quantity Recovered',
+                defaultMessage: 'Recovered Quantity',
               })}
               rules={[
                 {
@@ -134,7 +268,12 @@ const AddGoods = ({
                   'The quantity of the goods that were recovered.',
               })}
             >
-              <InputNumber style={{ width: '100%' }} precision={0} min={0} />
+              <InputNumber
+                disabled={stockItem === undefined}
+                style={{ width: 150 }}
+                precision={0}
+                min={0}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -157,5 +296,4 @@ const AddGoods = ({
     </Form>
   );
 };
-
 export default AddGoods;
