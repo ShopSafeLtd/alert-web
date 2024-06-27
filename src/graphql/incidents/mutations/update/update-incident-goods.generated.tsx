@@ -1,6 +1,7 @@
 import type * as Types from '../../../types.js';
 
 import { gql } from '@apollo/client';
+import { IncidentItemsFragmentDoc } from '../../../fragments/incident-item.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type UpdateIncidentGoodsMutationVariables = Types.Exact<{
@@ -9,7 +10,7 @@ export type UpdateIncidentGoodsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateIncidentGoodsMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, incidentItems: Array<{ __typename?: 'IncidentItem', id: string, name?: string | null, value?: number | null, recoveredValue?: number | null, goodsType: { __typename?: 'GoodsType', id: string } }> } };
+export type UpdateIncidentGoodsMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, incidentItems: Array<{ __typename?: 'IncidentItem', id: string, name?: string | null, value?: number | null, recoveredValue?: number | null, sku?: string | null, quantity?: number | null, recoveredQuantity?: number | null, goodsType: { __typename?: 'GoodsType', id: string }, stockItem: { __typename?: 'StockItem', id: string } }> } };
 
 
 export const UpdateIncidentGoodsDocument = gql`
@@ -17,17 +18,11 @@ export const UpdateIncidentGoodsDocument = gql`
   updateIncident(where: {id: $id}, data: {incidentItems: $incidentItems}) {
     id
     incidentItems {
-      id
-      name
-      value
-      recoveredValue
-      goodsType {
-        id
-      }
+      ...IncidentItems
     }
   }
 }
-    `;
+    ${IncidentItemsFragmentDoc}`;
 export type UpdateIncidentGoodsMutationFn = Apollo.MutationFunction<UpdateIncidentGoodsMutation, UpdateIncidentGoodsMutationVariables>;
 export function useUpdateIncidentGoodsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIncidentGoodsMutation, UpdateIncidentGoodsMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}

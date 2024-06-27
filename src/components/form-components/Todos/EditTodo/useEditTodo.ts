@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
-import type { MutationUpdaterFn } from '@apollo/client';
 
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { FormInstance, UploadFile } from 'antd';
@@ -12,34 +11,33 @@ import { useIntl } from 'react-intl';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import customRequest from '../../../../utils/custom-request';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import { useCreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import { useAddTodoUsersQuery } from './graphql/AddTodoUsers.generated';
+import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/AddTodoUsers.generated';
+import type { EditTodoQuery } from './graphql/edit_todo.generated';
+import { useEditTodoQuery } from './graphql/edit_todo.generated';
+import { useUpdateTodoDetailsMutation } from './graphql/update-todo-details.generated';
 
 const { useForm } = Form;
 
 export interface FormData {
   name: string;
   description: string;
+  completed: boolean;
   dueDate: Moment;
   assignedUsers: string[];
   questionGroup?: string;
   groups: string[];
-  [answer: string]: string | string[] | undefined | Moment | number;
+  [answer: string]: string | string[] | undefined | Moment | number | boolean;
 }
 
 interface Props {
   onClose: () => void;
-  incidentId?: string;
-  investigationId?: string;
-  businessId?: string;
-  updateMutation?: MutationUpdaterFn<CreateTodoMutation>;
   initData?: {
     id: string;
   };
+  todoId: string;
 }
 
 interface Return {
@@ -68,16 +66,11 @@ interface Return {
   ) => void;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
+  todoLoading: boolean;
+  todoData: EditTodoQuery | undefined;
 }
 
-const useAddTodo = ({
-  updateMutation,
-  onClose,
-  incidentId,
-  investigationId,
-  businessId,
-  initData,
-}: Props): Return => {
+const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -99,7 +92,32 @@ const useAddTodo = ({
     { id: string; question: string; type: AnswerType }[]
   >([]);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
-
+  const { data: todoData, loading: todoLoading } = useEditTodoQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: { id: todoId },
+    },
+    onCompleted: ({ todo }) => {
+      form.setFieldsValue({
+        name: todo.name || '',
+        description: todo?.description || '',
+        dueDate: moment(todo.dueDate, 'YYYY-MM-DD'),
+        completed: todo.completed || false,
+        assignedUsers: todo.assignedUsers.map(({ id }) => id),
+        groups: todo.groups.map(({ id }) => id),
+        // questionGroup: todo.questions.map((el) => el.id),
+      });
+      if (todo?.evidence && todo?.evidence.length > 0)
+        setDocumentList(
+          todo.evidence.map((document) => ({
+            uid: document.id,
+            name: document.name,
+            status: 'done',
+            url: document.url,
+          }))
+        );
+    },
+  });
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
       variables: {
@@ -244,7 +262,20 @@ const useAddTodo = ({
     }
   }, [assignedUsers, usersData]);
 
-  const [createTodo] = useCreateTodoMutation({
+  const [updateTodo] = useUpdateTodoDetailsMutation({
+    onCompleted: () => {
+      setSaving(false);
+      onClose();
+      notification.success({
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The activity has been updated.',
+        }),
+        placement: 'bottomRight',
+      });
+    },
     onError: () => {
       setSaving(false);
       errorNotification();
@@ -264,36 +295,36 @@ const useAddTodo = ({
         userId: time.id,
       }))
       ?.filter((time) => time.timeTaken && time.timeTaken > 0);
-    void createTodo({
+    const existingDocumentIds = todoData?.todo?.evidence.map((el) => el.id);
+    const newDocuments = documentList.filter(
+      (el) => !existingDocumentIds?.includes(el.uid)
+    );
+    const deletedDocuments = existingDocumentIds?.filter((documentId) =>
+      documentList.map((el) => el.uid !== documentId)
+    );
+    // const answers = todoData?.todo.questions.map(({ question, id: qId }) => ({
+    //   questionId: qId,
+    //   // answer: value[question?.id || ''],
+    //   type: question?.type,
+    // }));
+
+    // const answerIds = todoData?.todo?.answers?.map(({ id: aId }) => aId);
+
+    void updateTodo({
       variables: {
+        where: {
+          id: todoId || '',
+        },
         data: {
           name: data.name,
           description: data.description,
-          assignedUsers:
-            data.assignedUsers && data.assignedUsers.length > 0
-              ? { connect: data.assignedUsers.map((id) => ({ id })) }
-              : undefined,
-          groups: data.groups.map((id) => ({ id })),
-          questions:
-            selectedQuestions && selectedQuestions.length > 0
-              ? {
-                  create: selectedQuestions.map((question) => ({
-                    question: {
-                      connect: {
-                        id: question.id,
-                      },
-                    },
-                    answers: {
-                      create: [
-                        {
-                          answer: (data[question.id] as string) || '',
-                          type: question.type,
-                        },
-                      ],
-                    },
-                  })),
-                }
-              : undefined,
+
+          // assignedUsers:
+          //   data.assignedUsers && data.assignedUsers.length > 0
+          //     ? { connect: data.assignedUsers.map((id) => ({ id })) }
+          //     : undefined,
+          assignedUsers: { set: data.assignedUsers.map((id) => ({ id })) },
+          groups: { set: data.groups.map((id) => ({ id })) },
           timeTaken:
             userTime && timeTaken
               ? {
@@ -302,44 +333,61 @@ const useAddTodo = ({
                   },
                 }
               : undefined,
-          dueDate: data.dueDate.toDate(),
-          completed: false,
-          incident: incidentId ? { connect: { id: incidentId } } : undefined,
-          investigation: investigationId
-            ? { connect: { id: investigationId } }
-            : undefined,
-          business: businessId ? { connect: { id: businessId } } : undefined,
-          createdBy: { connect: { id: userId } },
-          documents:
-            documentList.map((file) => ({
-              url: file.url || '',
-              name: file.name || '',
-              fileType: file.type || '',
-              origFileName: file.fileName || '',
-            })) || [],
-          schemes: {
-            connect: [
-              {
-                id: schemeId,
-              },
-            ],
+          dueDate: { set: data.dueDate.toDate() },
+          completed: {
+            set: data.completed,
           },
+          documents: {
+            // @ts-expect-error TODO fix this date issue Wait to check
+            deleted:
+              deletedDocuments && deletedDocuments.length > 0
+                ? deletedDocuments.map((el) => ({ id: el }))
+                : undefined,
+            upload:
+              newDocuments && newDocuments.length > 0
+                ? newDocuments.map((file) => ({
+                    url: file.url || '',
+                    name: file.name || '',
+                    fileType: file.type || '',
+                    origFileName: file.fileName || '',
+                  }))
+                : undefined,
+          },
+          // questions: {
+          //   update: answers?.map((answer) => ({
+          //     where: {
+          //       id: answer.questionId,
+          //     },
+          //     data: {
+          //       answers: {
+          //         create: [
+          //           {
+          //             type: answer.type,
+          //             answer: (answer.answer as string) || '',
+          //             todo: {
+          //               connect: {
+          //                 id: todoId || '',
+          //               },
+          //             },
+          //           },
+          //         ],
+          //       },
+          //     },
+          //   })),
+          // },
+          // answers: {
+          //   deleteMany: answerIds
+          //     ? [
+          //         {
+          //           id: {
+          //             in: answerIds || [],
+          //           },
+          //         },
+          //       ]
+          //     : undefined,
+          // },
         },
       },
-      onCompleted: () => {
-        setSaving(false);
-        onClose();
-        notification.success({
-          message: intl.formatMessage({
-            defaultMessage: 'Successfully Added!',
-          }),
-          description: intl.formatMessage({
-            defaultMessage: 'The activity has been added.',
-          }),
-          placement: 'bottomRight',
-        });
-      },
-      update: updateMutation,
     });
   };
   // evidence
@@ -389,6 +437,8 @@ const useAddTodo = ({
     availableUsers,
     documentList,
     documentUploadProps,
+    todoLoading,
+    todoData,
   };
 };
-export default useAddTodo;
+export default useEditTodo;

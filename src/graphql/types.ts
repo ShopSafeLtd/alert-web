@@ -7273,6 +7273,7 @@ export type IncidentItem = {
   recoveredQuantity?: Maybe<Scalars['Int']>;
   recoveredValue?: Maybe<Scalars['Float']>;
   sku?: Maybe<Scalars['String']>;
+  stockItem: StockItem;
   updatedAt: Scalars['Date'];
   value?: Maybe<Scalars['Float']>;
 };
@@ -7390,7 +7391,11 @@ export type IncidentItemUpdateWithoutIncident = {
   goodsType?: InputMaybe<ConnectHelper>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<NullableSetStringHelper>;
+  quantity?: InputMaybe<SetFloatHelper>;
+  recoveredQuantity?: InputMaybe<SetFloatHelper>;
   recoveredValue?: InputMaybe<SetFloatHelper>;
+  sku?: InputMaybe<NullableSetStringHelper>;
+  stockItem?: InputMaybe<ConnectHelper>;
   value?: InputMaybe<SetFloatHelper>;
 };
 
@@ -9766,6 +9771,7 @@ export type Mutation = {
   deleteReportTemplate?: Maybe<ReportTemplate>;
   deleteSharingConfig: SharingConfig;
   deleteTag: Tag;
+  deleteTodo: Todo;
   deleteUpdate: Update;
   deleteUser: User;
   deleteUserFromScheme?: Maybe<User>;
@@ -10304,6 +10310,11 @@ export type MutationDeleteSharingConfigArgs = {
 
 export type MutationDeleteTagArgs = {
   where: UniqueId;
+};
+
+
+export type MutationDeleteTodoArgs = {
+  where: TodoWhereUniqueInput;
 };
 
 
@@ -12955,7 +12966,6 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
-  test: Scalars['String'];
   todo: Todo;
   todos: Array<Todo>;
   totalLoss: Scalars['Float'];
@@ -14973,6 +14983,10 @@ export type RekMatchedFaceWhereInput = {
   rekMatchId?: InputMaybe<StringFilter>;
   similarity?: InputMaybe<FloatFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type RelationSet = {
+  set?: InputMaybe<Array<UniqueId>>;
 };
 
 export type ReportLayout = {
@@ -18019,10 +18033,13 @@ export enum TodoType {
 
 export type TodoUpdateInput = {
   answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
+  assignedUsers?: InputMaybe<RelationSet>;
   completed?: InputMaybe<NullableSetBooleanHelper>;
   completedBy?: InputMaybe<ConnectHelper>;
   completedDate?: InputMaybe<NullableSetDateHelper>;
   documents?: InputMaybe<Array<UpdateDocument>>;
+  dueDate?: InputMaybe<NullableSetDateHelper>;
+  groups?: InputMaybe<RelationSet>;
   questions?: InputMaybe<TaskQuestionUpdateManyWithoutTaskNestedInput>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
   similarOffenderIds?: InputMaybe<Array<Scalars['String']>>;

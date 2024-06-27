@@ -1,0 +1,23 @@
+mutation UpdateTodoDetails($data: TodoUpdateInput!, $where: UniqueId!) {
+  updateTodo(data: $data, where: $where) {
+    id
+    name
+    description
+    dueDate
+    completed
+    assignedUsers {
+      id
+      fullName
+    }
+    groups {
+      id
+      name
+    }
+    evidence {
+      id
+      name
+      url
+      fileType
+    }
+  }
+}

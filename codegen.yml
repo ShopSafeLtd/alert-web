@@ -1,20 +1,16 @@
 overwrite: true
-schema: "http://localhost:8080/graphql"
-documents: "src/**/*.graphql"
+schema: 'http://localhost:4000/graphql'
+documents: 'src/**/*.graphql'
 config:
-    addDocBlocks: false,
-    scalars: {
-      DateTime: 'Date',
-      Date: 'Date',
-      JSON: '{ [key: string]: any }',
-    }
+  addDocBlocks: false,
+  scalars: { DateTime: 'Date', Date: 'Date', JSON: '{ [key: string]: any }' }
 hooks:
   afterAllFileWrite:
     - prettier --write
 generates:
   src/graphql/types.ts:
     plugins:
-      - "typescript"
+      - 'typescript'
   src/:
     preset: near-operation-file
     presetConfig:
@@ -22,14 +18,13 @@ generates:
       baseTypesPath: graphql/types.ts
       baseTypes: types
     plugins:
-      - "typescript-operations"
-      - "typescript-react-apollo"
-    config: {
-      withHooks: true,
-      addDocBlocks: false,
-      useTypeImports: true,
-      scalars: {
-        DateTime: 'Date',
-        Date: 'Date',
-        JSON: '{ [key: string]: any }',      }
-    }
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      {
+        withHooks: true,
+        addDocBlocks: false,
+        useTypeImports: true,
+        scalars:
+          { DateTime: 'Date', Date: 'Date', JSON: '{ [key: string]: any }' },
+      }

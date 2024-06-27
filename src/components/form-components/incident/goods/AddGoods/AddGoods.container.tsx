@@ -5,10 +5,27 @@ import View from './AddGoods.view';
 
 interface Props {
   onClose: () => void;
-  update: (value: GoodsData) => void;
+  update: (value: GoodsData[]) => void;
+  businessId?: string;
+  data?: GoodsData[];
+  saving: boolean;
 }
-const AddGoods = ({ onClose, update }: Props): JSX.Element => {
-  const { onSubmit, goodsTypesData, goodsMode } = useAddGoods({ update });
+const AddGoods = ({
+  onClose,
+  update,
+  businessId,
+  data,
+  saving,
+}: Props): JSX.Element => {
+  const {
+    onSubmit,
+    goodsTypesData,
+    goodsMode,
+    goods,
+    form,
+    division,
+    onAddItem,
+  } = useAddGoods({ update, businessId, data });
   return (
     <div>
       <View
@@ -16,6 +33,11 @@ const AddGoods = ({ onClose, update }: Props): JSX.Element => {
         onClose={onClose}
         goodsTypesData={goodsTypesData}
         goodsMode={goodsMode}
+        form={form}
+        goods={goods}
+        division={division}
+        onAddItem={onAddItem}
+        saving={saving}
       />
     </div>
   );

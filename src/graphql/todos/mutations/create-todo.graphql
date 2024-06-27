@@ -3,6 +3,7 @@ mutation CreateTodo($data: TodoCreateInput!) {
     type
     description
     dueDate
+    createdAt
     completedDate
     completed
     id
@@ -15,6 +16,10 @@ mutation CreateTodo($data: TodoCreateInput!) {
     assignedUsers {
       id
       fullName
+    }
+    groups {
+      id
+      name
     }
   }
 }

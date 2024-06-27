@@ -1,0 +1,6 @@
+mutation deleteTodo($id: String!) {
+  deleteTodo(where: { id: $id }) {
+    id
+    completed
+  }
+}

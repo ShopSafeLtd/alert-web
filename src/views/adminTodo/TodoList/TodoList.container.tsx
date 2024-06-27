@@ -35,6 +35,11 @@ const AdminTodos = ({
     groupsFilter,
     setGroupsFilter,
     groupsData,
+    editRights,
+    deleteRights,
+    editTodo,
+    setEditTodo,
+    onDeleteTodo,
   } = useAdminTodos({ templateData });
 
   return (
@@ -62,6 +67,11 @@ const AdminTodos = ({
       groupsFilter={groupsFilter}
       setGroupsFilter={setGroupsFilter}
       groupsData={groupsData}
+      editRights={editRights}
+      deleteRights={deleteRights}
+      editTodo={editTodo}
+      setEditTodo={setEditTodo}
+      onDeleteTodo={onDeleteTodo}
     />
   );
 };

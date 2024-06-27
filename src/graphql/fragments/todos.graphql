@@ -1,8 +1,8 @@
 fragment Todos on Todo {
   id
   name
-  description
-  dueDate
+  completedDate
+  createdAt
   completed
   assignedUsers {
     id

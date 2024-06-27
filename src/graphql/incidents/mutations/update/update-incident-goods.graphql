@@ -5,13 +5,7 @@ mutation UpdateIncidentGoods(
   updateIncident(where: { id: $id }, data: { incidentItems: $incidentItems }) {
     id
     incidentItems {
-      id
-      name
-      value
-      recoveredValue
-      goodsType {
-        id
-      }
+      ...IncidentItems
     }
   }
 }

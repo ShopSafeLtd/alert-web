@@ -8,7 +8,7 @@ export type CreateTodoMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTodoMutation = { __typename?: 'Mutation', createTodo: { __typename?: 'Todo', type?: Types.TodoType | null, description?: string | null, dueDate?: Date | null, completedDate?: Date | null, completed?: boolean | null, id: string, name?: string | null, similarOffenderIds: Array<string>, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> } };
+export type CreateTodoMutation = { __typename?: 'Mutation', createTodo: { __typename?: 'Todo', type?: Types.TodoType | null, description?: string | null, dueDate?: Date | null, createdAt: Date, completedDate?: Date | null, completed?: boolean | null, id: string, name?: string | null, similarOffenderIds: Array<string>, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 
 export const CreateTodoDocument = gql`
@@ -17,6 +17,7 @@ export const CreateTodoDocument = gql`
     type
     description
     dueDate
+    createdAt
     completedDate
     completed
     id
@@ -29,6 +30,10 @@ export const CreateTodoDocument = gql`
     assignedUsers {
       id
       fullName
+    }
+    groups {
+      id
+      name
     }
   }
 }

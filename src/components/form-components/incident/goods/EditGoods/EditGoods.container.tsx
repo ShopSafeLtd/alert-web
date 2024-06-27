@@ -7,8 +7,9 @@ interface Props {
   data: GoodsData;
   onClose: () => void;
   update: (value: GoodsData) => void;
+  saving: boolean;
 }
-const EditGoods = ({ onClose, update, data }: Props): JSX.Element => {
+const EditGoods = ({ onClose, update, data, saving }: Props): JSX.Element => {
   const { onSubmit, goodsTypesData, goodsMode } = useEditGoods({
     update,
     data,
@@ -21,6 +22,7 @@ const EditGoods = ({ onClose, update, data }: Props): JSX.Element => {
         onClose={onClose}
         goodsTypesData={goodsTypesData}
         goodsMode={goodsMode}
+        saving={saving || false}
       />
     </div>
   );

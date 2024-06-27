@@ -1,0 +1,15 @@
+fragment IncidentItems on IncidentItem {
+  id
+  name
+  value
+  recoveredValue
+  sku
+  quantity
+  recoveredQuantity
+  goodsType {
+    id
+  }
+  stockItem {
+    id
+  }
+}

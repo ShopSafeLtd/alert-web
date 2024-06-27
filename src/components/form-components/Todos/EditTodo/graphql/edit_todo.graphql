@@ -1,0 +1,51 @@
+query EditTodo($where: TodoWhereUniqueInput!) {
+  todo(where: $where) {
+    description
+    id
+    name
+    dueDate
+    completed
+    type
+    completedDate
+    assignedUsers {
+      id
+      fullName
+    }
+    timeTaken {
+      user {
+        id
+      }
+      timeTaken
+    }
+    questions {
+      id
+      question {
+        id
+        optionsFormatted
+        optionsFormFormatted {
+          label
+          value
+        }
+        questionFormatted
+        type
+      }
+    }
+    answers {
+      id
+      taskQuestion {
+        id
+      }
+      answer
+    }
+    groups {
+      id
+      name
+    }
+    evidence {
+      id
+      name
+      url
+      fileType
+    }
+  }
+}

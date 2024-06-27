@@ -1,4 +1,4 @@
-.gitignore
+yarn.gitignore
 .npmrc
 .prettierignore
 .prettierrc

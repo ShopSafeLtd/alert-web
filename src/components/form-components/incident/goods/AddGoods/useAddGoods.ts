@@ -2,22 +2,58 @@ import { useStoreState } from 'state';
 import type { GoodsData } from 'types/DataType';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import type { GoodsMode } from 'graphql/types';
+import { GoodsMode } from 'graphql/types';
+import { useListBusinessesDivisionQuery } from '#/graphql/businesses/queries/list-businesses-division.generated';
+import { useEffect, useState } from 'react';
+import type { FormInstance } from 'antd';
+import { Form } from 'antd';
+import type { StockItemValue } from '#/components/form-components/StockItemSearch/StockItemSearch.view';
+
+const { useForm } = Form;
 
 interface Props {
-  update: (value: GoodsData) => void;
+  update: (value: GoodsData[]) => void;
+  businessId?: string;
+  data?: GoodsData[];
+}
+export interface FormData {
+  goods: GoodsData[];
 }
 
 interface Return {
-  onSubmit: (value: GoodsData) => void;
+  onSubmit: (value: FormData) => void;
   goodsTypesData: ListGoodsTypesQuery | undefined;
   goodsMode: GoodsMode;
+  form: FormInstance<FormData>;
+  goods?: GoodsData[];
+  division: string | undefined;
+  onAddItem: (data: StockItemValue) => void;
 }
 
-const useAddGoods = ({ update }: Props): Return => {
+const useAddGoods = ({ update, businessId, data }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-
   const goodsMode = useStoreState((state) => state.scheme.goodsMode);
+  const [division, setDivision] = useState<string | undefined>(undefined);
+  const [form] = useForm<FormData>();
+
+  const goods = Form.useWatch('goods', form) || [];
+
+  useEffect(() => {
+    form.setFieldsValue({
+      goods: data?.map((item) => ({
+        id: item.id,
+        goodsType: item.goodsType,
+        name: item.name,
+        value: item.value || 0,
+        recoveredValue: item.recoveredValue || 0,
+        sku: item.sku,
+        quantity: item.quantity,
+        recoveredQuantity: item.recoveredQuantity,
+        stockItem: item.stockItem,
+      })),
+    });
+  }, [data]);
+
   const { data: goodsTypesData } = useListGoodsTypesQuery({
     variables: {
       where: {
@@ -27,30 +63,79 @@ const useAddGoods = ({ update }: Props): Return => {
       },
     },
   });
+  const { data: businessesData } = useListBusinessesDivisionQuery({
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+  });
+  useEffect(() => {
+    if (businessesData && businessId) {
+      const fullBusiness = businessesData.listBusinesses.businesses.find(
+        ({ id }) => id === businessId
+      );
+      if (fullBusiness?.division) setDivision(fullBusiness.division);
+    }
+  }, [businessId]);
 
-  const onSubmit = (value: GoodsData) => {
-    update({
-      id: `${Math.random()}`,
-      goodsTypeId: value.goodsTypeId,
-      name:
-        value.name ??
-        goodsTypesData?.listGoodsTypes.goodsTypes.find(
-          ({ id }) => id === value.goodsTypeId
-        )?.name ??
-        '',
-      value: value.value ?? 0,
-      recoveredValue: value.recoveredValue ?? 0,
-      quantity: value.quantity,
-      recoveredQuantity: value.recoveredQuantity,
-      stockItemId: value.stockItemId,
-      sku: value.sku,
+  const onAddItem = (data: StockItemValue) => {
+    form.setFieldsValue({
+      goods: [
+        ...goods,
+        {
+          sku: data.sku || '',
+          value: data.salesPriceLocal ?? data.costPriceLocal ?? 0,
+          name: data.name || '',
+          stockItem: data.id,
+        },
+      ],
     });
+  };
+
+  const onSubmit = (value: FormData) => {
+    const filterGoods = value.goods
+      .filter((item) => item.goodsType !== undefined || item.sku !== undefined)
+      .map((item) => ({
+        id: item.id || `${Math.random()}`,
+        goodsType: item.goodsType,
+        name:
+          item.name ??
+          (goodsTypesData &&
+            goodsTypesData.listGoodsTypes.goodsTypes.find(
+              ({ id }) => id === item.goodsType
+            )?.name) ??
+          '',
+        value:
+          goodsMode === GoodsMode.Specific
+            ? (item.value || 0) * (item.quantity || 0)
+            : item.value || 0,
+        recoveredValue:
+          goodsMode === GoodsMode.Specific
+            ? (item.recoveredValue || 0) * (item.recoveredQuantity || 0)
+            : item.recoveredValue || 0,
+        sku: item.sku,
+        quantity: item.quantity,
+        recoveredQuantity: item.recoveredQuantity,
+        stockItem: item.stockItem,
+      }));
+    update(filterGoods);
   };
 
   return {
     onSubmit,
     goodsTypesData,
     goodsMode,
+    goods,
+    form,
+    division,
+    onAddItem,
   };
 };
 

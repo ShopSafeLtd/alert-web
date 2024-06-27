@@ -10,6 +10,7 @@ query listTodos(
       id
       name
       dueDate
+      createdAt
       completed
       type
       vehicleId

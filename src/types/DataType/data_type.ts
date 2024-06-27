@@ -407,20 +407,25 @@ export interface CustomQuestion {
 
 export interface GoodsData {
   id: string;
-  name?: string | undefined | null;
-  value?: number | undefined | null;
-  recoveredValue?: number | undefined | null;
-  quantity?: number | null | undefined;
-  recoveredQuantity?: number | null | undefined;
-  goodsType?:
-    | {
-        id: string;
-      }
-    | undefined
-    | null;
-  goodsTypeId?: string;
-  stockItemId?: string;
-  sku?: string | null;
+  goodsType?: string;
+  value?: number;
+  recoveredValue?: number;
+  quantity?: number;
+  recoveredQuantity?: number;
+  sku?: string;
+  name?: string;
+  stockItem?: string;
+  // id: string;
+  // name?: string | undefined | null;
+  // value?: number | undefined | null;
+  // recoveredValue?: number | undefined | null;
+  // goodsType?:
+  //   | {
+  //       id: string;
+  //     }
+  //   | undefined
+  //   | null;
+  // goodsTypeId?: string;
 }
 
 export enum UserSort {
@@ -484,4 +489,15 @@ export interface OffenderSettingsType {
   peculiarities: boolean;
   comment: boolean;
   images: boolean;
+}
+
+export interface ActivityData {
+  id: string;
+  name?: string | null | undefined;
+  description?: string | null | undefined;
+  createdAt?: Date | null | undefined;
+  completedDate?: Date | null | undefined;
+  assignedUsers: { id: string; fullName: string }[];
+  groups: { id: string; name: string }[];
+  completed?: boolean | null | undefined;
 }

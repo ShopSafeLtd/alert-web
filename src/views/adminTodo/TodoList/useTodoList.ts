@@ -1,9 +1,10 @@
 import { useStoreActions, useStoreState } from 'state';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListData } from '../useActivities';
 import type { TableProps } from 'antd';
+import { notification } from 'antd';
 import type { TableItem } from '#/views/adminTodo/TodoList/TodoList.view';
 import type { ListTodosQuery } from 'graphql/todos/queries/list_todos.generated';
 import {
@@ -13,8 +14,16 @@ import {
 import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 import type { SchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
 import { useSchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  SortOrder,
+} from 'graphql/types';
 import { useUpdateTodoMutation } from 'graphql/todos/mutations/update_todo.generated';
+import hasPermission from '#/utils/has-permission';
+import { useDeleteTodoMutation } from '../graphql/mutations/delete-todo.generated';
+import errorNotification from '#/types/mutation_notifications/error_notification';
 
 interface Return {
   data:
@@ -44,6 +53,11 @@ interface Return {
   groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
   groupsData: SchemeGroupsSelectQuery | undefined;
+  editRights: boolean;
+  deleteRights: boolean;
+  editTodo: string | null;
+  setEditTodo: (id: string | null) => void;
+  onDeleteTodo: (id: string) => void;
 }
 
 interface Props {
@@ -55,6 +69,11 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     (state) => state.user
   );
   const schemeId = useStoreState((state) => state.scheme.id);
+  const currentScheme = useMemo(
+    () => userSchemes.find((scheme) => scheme.scheme.id === schemeId),
+    [userSchemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
 
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
@@ -67,6 +86,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useStoreState((state) => state.user.userTodos);
   const [selectedTodo, setSelectedTodo] = useState<string | null>(null);
+  const [editTodo, setEditTodo] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<ListData | null>(
     null
   );
@@ -161,10 +181,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
       data: {
         listTodos: {
           // TODO: add groups to create response if you can add groups on creation
-          todos: [
-            ...(<[]>existingData.listTodos.todos),
-            { ...res.createTodo, groups: [] },
-          ],
+          todos: [...(<[]>existingData.listTodos.todos), res.createTodo],
           total: existingData.listTodos.total + 1,
           uncompletedTotal: res.createTodo.completed
             ? existingData.listTodos.uncompletedTotal
@@ -185,6 +202,50 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
+    },
+  });
+  const [deleteTodo] = useDeleteTodoMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: 'Successfully Removed',
+        description: `The activity has been removed!`,
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.deleteTodo === null || res?.deleteTodo === undefined) return;
+
+      const existingData = store.readQuery<ListTodosQuery>({
+        query: ListTodosDocument,
+        variables,
+      });
+
+      if (!existingData?.listTodos) return;
+
+      store.writeQuery<ListTodosQuery>({
+        query: ListTodosDocument,
+        data: {
+          listTodos: {
+            todos: existingData.listTodos.todos.filter(
+              ({ id }) => id !== res.deleteTodo.id
+            ),
+            total: existingData.listTodos.total - 1,
+            uncompletedTotal: res.deleteTodo.completed
+              ? existingData.listTodos.uncompletedTotal - 1
+              : existingData.listTodos.uncompletedTotal,
+            totalUserTodos: res.deleteTodo.completed
+              ? existingData.listTodos.totalUserTodos - 1
+              : existingData.listTodos.totalUserTodos,
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
     },
   });
   // function
@@ -251,6 +312,14 @@ const useAdminTodos = ({ templateData }: Props): Return => {
       userTodos: userTodos ? userTodos + 1 : 1,
     });
   };
+  const onDeleteTodo = (currentId: string) => {
+    setSaving(true);
+    void deleteTodo({
+      variables: {
+        id: currentId,
+      },
+    }).finally(() => setSaving(false));
+  };
   const toggleAddTodo = () => {
     setAddTodo(!addTodo);
     setSelectedTemplate(null);
@@ -293,6 +362,21 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     setGroupsFilter((filters.groups as string[]) ?? []);
   };
 
+  const deleteRights = hasPermission({
+    permissions,
+    permission: {
+      model: PermissionModel.Articles,
+      method: PermissionMethod.Delete,
+    },
+  });
+  const editRights = hasPermission({
+    permissions,
+    permission: {
+      model: PermissionModel.Articles,
+      method: PermissionMethod.Edit,
+    },
+  });
+
   return {
     data: data?.listTodos,
     loading: (data === null || data === undefined) && loading,
@@ -318,6 +402,11 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     setGroupsFilter,
     groupsFilter,
     groupsData,
+    editRights,
+    deleteRights,
+    editTodo,
+    setEditTodo,
+    onDeleteTodo,
   };
 };
 

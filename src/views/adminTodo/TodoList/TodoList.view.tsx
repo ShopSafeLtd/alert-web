@@ -21,7 +21,11 @@ import {
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { FormattedMessage, useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
@@ -33,19 +37,25 @@ import type { ListData } from '../useActivities';
 import type { ListTodosQuery } from 'graphql/todos/queries/list_todos.generated';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 import type { SchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
+import EditTodo from '#/components/form-components/Todos/EditTodo';
 // const { Panel } = Collapse;
 
 type TemplateData = ListData;
-
+type ActivityData = Exclude<
+  ListTodosQuery['listTodos'],
+  undefined | null
+>['todos'][0];
 export interface TableItem {
   key: string;
   name?: string | null;
   description?: string | null;
+  createdAt?: Date | null | undefined;
+  completedDate?: Date | null | undefined;
   dueDate?: Date | null;
-  completed?: boolean | null;
+  completed: boolean;
   assignedUsers: { id: string; fullName: string }[];
   groups: { id: string; name: string }[];
-  todo: Exclude<ListTodosQuery['listTodos'], undefined | null>['todos'][0];
+  todo: ActivityData;
   linkedItem?: JSX.Element;
 }
 
@@ -76,6 +86,11 @@ interface Props {
   setGroupsFilter: (groups: string[]) => void;
   onTableChange: TableProps<TableItem>['onChange'];
   groupsData: SchemeGroupsSelectQuery | undefined;
+  editRights: boolean;
+  deleteRights: boolean;
+  editTodo: string | null;
+  setEditTodo: (id: string | null) => void;
+  onDeleteTodo: (id: string) => void;
 }
 
 const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
@@ -152,48 +167,53 @@ const AdminTodos = ({
   setGroupsFilter,
   onTableChange,
   groupsData,
+  editRights,
+  deleteRights,
+  editTodo,
+  setEditTodo,
+  onDeleteTodo,
 }: Props): JSX.Element => {
   // const classes = useStyles();
   const intl = useIntl();
   const shouldOpen = useStoreState((state) => state.scheme.taskTimeTracking);
-  const typesFilter = [
-    {
-      text: intl.formatMessage({
-        defaultMessage: 'Incident',
-      }),
-      value: 'incident',
-    },
-    {
-      text: intl.formatMessage({
-        defaultMessage: 'Offender',
-      }),
-      value: 'offender',
-    },
-    {
-      text: intl.formatMessage({
-        defaultMessage: 'Investigation',
-      }),
-      value: 'investigation',
-    },
-    {
-      text: intl.formatMessage({
-        defaultMessage: 'Vehicle',
-      }),
-      value: 'vehicle',
-    },
-    {
-      text: intl.formatMessage({
-        defaultMessage: 'Crime Group',
-      }),
-      value: 'crime group',
-    },
-    {
-      text: intl.formatMessage({
-        defaultMessage: 'Chat',
-      }),
-      value: 'chat',
-    },
-  ];
+  // const typesFilter = [
+  //   {
+  //     text: intl.formatMessage({
+  //       defaultMessage: 'Incident',
+  //     }),
+  //     value: 'incident',
+  //   },
+  //   {
+  //     text: intl.formatMessage({
+  //       defaultMessage: 'Offender',
+  //     }),
+  //     value: 'offender',
+  //   },
+  //   {
+  //     text: intl.formatMessage({
+  //       defaultMessage: 'Investigation',
+  //     }),
+  //     value: 'investigation',
+  //   },
+  //   {
+  //     text: intl.formatMessage({
+  //       defaultMessage: 'Vehicle',
+  //     }),
+  //     value: 'vehicle',
+  //   },
+  //   {
+  //     text: intl.formatMessage({
+  //       defaultMessage: 'Crime Group',
+  //     }),
+  //     value: 'crime group',
+  //   },
+  //   {
+  //     text: intl.formatMessage({
+  //       defaultMessage: 'Chat',
+  //     }),
+  //     value: 'chat',
+  //   },
+  // ];
 
   const userIds = new Set(
     data?.todos.flatMap((todo) => todo.assignedUsers.map(({ id }) => id))
@@ -315,7 +335,9 @@ const AdminTodos = ({
               name: todo.name,
               description: todo?.description,
               dueDate: todo.dueDate,
-              completed: todo.completed,
+              createdAt: todo.createdAt,
+              completedDate: todo.completedDate,
+              completed: todo.completed || false,
               assignedUsers: todo.assignedUsers,
               groups: todo.groups || [],
               todo,
@@ -345,14 +367,9 @@ const AdminTodos = ({
                 title: intl.formatMessage({
                   defaultMessage: 'Name',
                 }),
-                render: (value, record) => (
+                render: (value, record: { todo: ActivityData }) => (
                   <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
                 ),
-                filters: typesFilter,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                onFilter: (value: string, record) =>
-                  record.name?.includes(value),
               },
               {
                 key: 'description',
@@ -362,7 +379,25 @@ const AdminTodos = ({
                 }),
                 ellipsis: true,
               },
-
+              {
+                key: 'createdAt',
+                dataIndex: 'createdAt',
+                title: intl.formatMessage({
+                  defaultMessage: 'Start Date',
+                }),
+                render: (value: Date) => FormatCalendar(new Date(value), true),
+              },
+              {
+                key: 'completedDate',
+                dataIndex: 'completedDate',
+                title: intl.formatMessage({
+                  defaultMessage: 'Completed Date',
+                }),
+                ellipsis: true,
+                // eslint-disable-next-line no-confusing-arrow
+                render: (value: Date) =>
+                  value ? FormatCalendar(new Date(value), true) : undefined,
+              },
               {
                 key: 'dueDate',
                 dataIndex: 'dueDate',
@@ -370,10 +405,10 @@ const AdminTodos = ({
                   defaultMessage: 'Due Date',
                 }),
                 render: (value: Date) => FormatCalendar(value),
-                sorter: (a, b) =>
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  new Date(a.dueDate).valueOf() - new Date(b.dueDate).valueOf(),
+                // sorter: (a, b) =>
+                //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //   // @ts-ignore
+                //   new Date(a.dueDate).valueOf() - new Date(b.dueDate).valueOf(),
               },
               {
                 key: 'assignedUsers',
@@ -383,10 +418,10 @@ const AdminTodos = ({
                 }),
                 ellipsis: true,
                 filters: userFilter,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                onFilter: (value: string, record) =>
-                  record.assignedUsers.some((el) => el.id === value),
+                onFilter: (
+                  value: string | number | boolean,
+                  record: { assignedUsers: { id: string }[] }
+                ) => record.assignedUsers.some((el) => el.id === value),
                 render: (value: { id: string; fullName: string }[]) => (
                   <Row gutter={4}>
                     {value.map((item) => (
@@ -437,10 +472,15 @@ const AdminTodos = ({
                 title: intl.formatMessage({
                   defaultMessage: 'Linked Item',
                 }),
-                render: (value, todo) => (
+                // filters: typesFilter,
+                // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // // @ts-ignore
+                // onFilter: (value: string, record) =>
+                //   record.linkedItem?.includes(value),
+                render: (value, record: { key: string }) => (
                   <Link
                     to={getLinkedItemTo(
-                      data?.todos.find(({ id }) => id === todo.key)
+                      data?.todos.find(({ id }) => id === record.key)
                     )}
                   >
                     {value}
@@ -470,10 +510,12 @@ const AdminTodos = ({
                 ],
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                onFilter: (value: boolean, record) =>
-                  record.completed === value,
+                onFilter: (
+                  value: string | number | boolean,
+                  record: { completed: boolean }
+                ) => record.completed === value,
                 // eslint-disable-next-line no-confusing-arrow
-                render: (_, record) =>
+                render: (_, record: { key: string; completed: boolean }) =>
                   record.completed ? (
                     <Popconfirm
                       title={intl.formatMessage({
@@ -503,9 +545,9 @@ const AdminTodos = ({
                       style={{ width: 110, padding: 2 }}
                       onClick={() => {
                         if (shouldOpen) {
-                          setSelectedTodo(record.todo.id);
+                          setSelectedTodo(record.key);
                         } else {
-                          onCompletedTodo(record.todo.id);
+                          onCompletedTodo(record.key);
                         }
                       }}
                     >
@@ -534,7 +576,70 @@ const AdminTodos = ({
                 //   <Checkbox checked={!!record.completed} />
                 // </Popconfirm>
               },
-            ]}
+              {
+                key: 'Options',
+                title: '',
+                dataIndex: 'Options',
+                width: 100,
+                render: (_, record: { key: string }) => (
+                  <Row gutter={8}>
+                    {editRights && (
+                      <Col>
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'Edit Activity',
+                          })}
+                        >
+                          <Button
+                            size="small"
+                            disabled={saving}
+                            onClick={() => {
+                              setEditTodo(record?.key);
+                            }}
+                            icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                          />
+                        </Tooltip>
+                      </Col>
+                    )}
+                    {deleteRights && (
+                      <Col>
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove Activity',
+                          })}
+                        >
+                          <Popconfirm
+                            placement="topLeft"
+                            title={intl.formatMessage({
+                              defaultMessage: 'Remove the Activity?',
+                            })}
+                            onConfirm={() => {
+                              onDeleteTodo(record.key);
+                            }}
+                            okText={intl.formatMessage({
+                              defaultMessage: 'Yes',
+                            })}
+                            cancelText={intl.formatMessage({
+                              defaultMessage: 'No',
+                            })}
+                            overlayInnerStyle={{ padding: 10 }}
+                          >
+                            <Button
+                              size="small"
+                              disabled={saving}
+                              icon={<FontAwesomeIcon icon={faTrash} />}
+                            />
+                          </Popconfirm>
+                        </Tooltip>
+                      </Col>
+                    )}
+                  </Row>
+                ),
+              },
+            ].filter(
+              (item) =>
+                item?.dataIndex !== 'Options' || deleteRights || editRights
+            )}
           />
         )}
       </Card>
@@ -678,6 +783,24 @@ const AdminTodos = ({
           <AddTodo
             update={updateTodoList}
             onClose={toggleAddTodo}
+            initData={selectedTemplate ?? undefined}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Activity',
+        })}
+        open={!!editTodo}
+        width={800}
+        onClose={() => setEditTodo(null)}
+      >
+        {editTodo ? (
+          <EditTodo
+            todoId={editTodo}
+            onClose={() => setEditTodo(null)}
             initData={selectedTemplate ?? undefined}
           />
         ) : (

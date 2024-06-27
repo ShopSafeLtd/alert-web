@@ -160,7 +160,7 @@ interface Return {
   onAddExistingVehicle: (id: string) => void;
   onAddExistingOffender: (id: string) => void;
   onEditGoods: (value: GoodsData) => void;
-  onAddGoods: (value: GoodsData) => void;
+  onAddGoods: (value: GoodsData[]) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
   addTodo: boolean;
   toggleAddTodo: () => void;
@@ -1333,9 +1333,9 @@ const useViewIncident = (incidentId: string): Return => {
       variables,
     });
   };
-  const onEditGoods = (value: GoodsData) => {
+  const onEditGoods = (item: GoodsData) => {
     setSaving(true);
-    if (value)
+    if (item)
       void updateIncidentGoods({
         variables: {
           id: incidentId,
@@ -1343,17 +1343,29 @@ const useViewIncident = (incidentId: string): Return => {
             update: [
               {
                 where: {
-                  id: value.id,
+                  id: item.id,
                 },
                 data: {
-                  goodsType: {
-                    connect: {
-                      id: value.goodsTypeId || '',
-                    },
-                  },
-                  name: { set: value.name },
-                  value: { set: value.value || 0 },
-                  recoveredValue: { set: value.recoveredValue || 0 },
+                  goodsType: item.goodsType
+                    ? {
+                        connect: {
+                          id: item.goodsType,
+                        },
+                      }
+                    : undefined,
+                  stockItem: item.stockItem
+                    ? {
+                        connect: {
+                          id: item.stockItem,
+                        },
+                      }
+                    : undefined,
+                  name: { set: item.name },
+                  value: { set: item.value || 0 },
+                  recoveredValue: { set: item.recoveredValue || 0 },
+                  sku: { set: item.sku },
+                  quantity: { set: item.quantity || 0 },
+                  recoveredQuantity: { set: item.recoveredQuantity || 0 },
                 },
               },
             ],
@@ -1372,37 +1384,35 @@ const useViewIncident = (incidentId: string): Return => {
         setSaving(false);
       });
   };
-  const onAddGoods = (value: GoodsData) => {
+  const onAddGoods = (values: GoodsData[]) => {
     setSaving(true);
-    if (value) {
+    if (values) {
       void updateIncidentGoods({
         variables: {
           id: incidentId,
           incidentItems: {
-            create: [
-              {
-                goodsType: value.goodsTypeId
-                  ? {
-                      connect: {
-                        id: value.goodsTypeId || '',
-                      },
-                    }
-                  : undefined,
-                name: value.name,
-                sku: value.sku,
-                value: value.value || 0,
-                recoveredValue: value.recoveredValue || 0,
-                quantity: value.quantity,
-                stockItem: value.stockItemId
-                  ? {
-                      connect: {
-                        id: value.stockItemId,
-                      },
-                    }
-                  : undefined,
-                recoveredQuantity: value.recoveredQuantity,
-              },
-            ],
+            create: values.map((item) => ({
+              name: item.name,
+              value: item.value,
+              recoveredValue: item.recoveredValue,
+              sku: item.sku,
+              quantity: item.quantity,
+              recoveredQuantity: item.recoveredQuantity,
+              goodsType: item.goodsType
+                ? {
+                    connect: {
+                      id: item.goodsType,
+                    },
+                  }
+                : undefined,
+              stockItem: item.stockItem
+                ? {
+                    connect: {
+                      id: item.stockItem,
+                    },
+                  }
+                : undefined,
+            })),
           },
         },
         onCompleted: () => {

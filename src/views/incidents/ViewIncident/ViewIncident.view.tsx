@@ -193,7 +193,7 @@ interface Props {
   // onAddOffender: (value: OffenderData) => void;
   onAddExistingOffender: (id: string) => void;
   onEditGoods: (value: GoodsData) => void;
-  onAddGoods: (value: GoodsData) => void;
+  onAddGoods: (value: GoodsData[]) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
   goodsMode: GoodsMode;
   addTodo: boolean;
@@ -1089,6 +1089,104 @@ const ViewIncident = ({
                                         render: (value: number) =>
                                           `£${value.toFixed(2)}`,
                                       },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Value',
+                                        }),
+                                        dataIndex: 'value',
+                                        key: 'value',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Recovered Value',
+                                        }),
+                                        dataIndex: 'recoveredValue',
+                                        key: 'recoveredValue',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
+                                      },
+                                      {
+                                        key: 'Options',
+                                        title: '',
+                                        dataIndex: 'Options',
+                                        width: 100,
+                                        render: (_, record) => (
+                                          <Row gutter={8}>
+                                            {editRights && (
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage: 'Edit Item',
+                                                  })}
+                                                >
+                                                  <Button
+                                                    size="small"
+                                                    disabled={saving}
+                                                    onClick={() => {
+                                                      setEditGoodsData(
+                                                        record.item
+                                                      );
+                                                    }}
+                                                    icon={
+                                                      <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                      />
+                                                    }
+                                                  />
+                                                </Tooltip>
+                                              </Col>
+                                            )}
+                                            {deleteRights && (
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage:
+                                                      'Remove Item',
+                                                  })}
+                                                >
+                                                  <Popconfirm
+                                                    placement="topLeft"
+                                                    trigger="hover"
+                                                    title={intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Remove the item?',
+                                                    })}
+                                                    onConfirm={() =>
+                                                      onDeleteGoods(record.key)
+                                                    }
+                                                    okText={intl.formatMessage({
+                                                      defaultMessage: 'Yes',
+                                                    })}
+                                                    cancelText={intl.formatMessage(
+                                                      {
+                                                        defaultMessage: 'No',
+                                                      }
+                                                    )}
+                                                    overlayInnerStyle={{
+                                                      padding: 10,
+                                                    }}
+                                                  >
+                                                    <Button
+                                                      size="small"
+                                                      disabled={saving}
+                                                      // onClick={() =>
+                                                      //   onDeleteGoods(record.key)
+                                                      // }
+                                                      icon={
+                                                        <FontAwesomeIcon
+                                                          icon={faTrash}
+                                                        />
+                                                      }
+                                                    />
+                                                  </Popconfirm>
+                                                </Tooltip>
+                                              </Col>
+                                            )}
+                                          </Row>
+                                        ),
+                                      },
                                     ]
                               }
                               dataSource={data?.incident?.incidentItems.map(
@@ -1101,11 +1199,23 @@ const ViewIncident = ({
                                   quantity: item.quantity ?? 0,
                                   recoveredQuantity:
                                     item.recoveredQuantity ?? 0,
-                                  item,
                                   itemTotal:
                                     (item.value ?? 0) * (item.quantity ?? 0) -
                                     (item.value ?? 0) *
                                       (item.recoveredQuantity ?? 0),
+                                  item: {
+                                    name: item.name || '',
+                                    value: item.value || 0,
+                                    recoveredValue: item.recoveredValue || 0,
+                                    sku: item.sku || '',
+                                    quantity: item.quantity || 0,
+                                    recoveredQuantity:
+                                      item.recoveredQuantity || 0,
+                                    id: item.id,
+                                    goodsType: item.goodsType.id,
+                                    // ????
+                                    // stockItem: item.stockItem.id || '',
+                                  },
                                 })
                               )}
                               size="small"
@@ -1946,7 +2056,12 @@ const ViewIncident = ({
         onClose={toggleAddGoods}
       >
         {addGoods ? (
-          <AddGoods update={onAddGoods} onClose={toggleAddGoods} />
+          <AddGoods
+            update={onAddGoods}
+            onClose={toggleAddGoods}
+            businessId={data?.incident.business?.id}
+            saving={saving}
+          />
         ) : (
           <div />
         )}
@@ -1965,6 +2080,7 @@ const ViewIncident = ({
             update={onEditGoods}
             onClose={() => setEditGoodsData(null)}
             data={editGoodsData}
+            saving={saving}
           />
         ) : (
           <div />
