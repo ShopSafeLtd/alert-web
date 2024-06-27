@@ -14,7 +14,6 @@ const { useForm } = Form;
 interface Props {
   update: (value: GoodsData[]) => void;
   businessId?: string;
-  data?: GoodsData[];
 }
 export interface FormData {
   goods: GoodsData[];
@@ -30,29 +29,13 @@ interface Return {
   onAddItem: (data: StockItemValue) => void;
 }
 
-const useAddGoods = ({ update, businessId, data }: Props): Return => {
+const useAddGoods = ({ update, businessId }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const goodsMode = useStoreState((state) => state.scheme.goodsMode);
   const [division, setDivision] = useState<string | undefined>(undefined);
   const [form] = useForm<FormData>();
 
   const goods = Form.useWatch('goods', form) || [];
-
-  useEffect(() => {
-    form.setFieldsValue({
-      goods: data?.map((item) => ({
-        id: item.id,
-        goodsType: item.goodsType,
-        name: item.name,
-        value: item.value || 0,
-        recoveredValue: item.recoveredValue || 0,
-        sku: item.sku,
-        quantity: item.quantity,
-        recoveredQuantity: item.recoveredQuantity,
-        stockItem: item.stockItem,
-      })),
-    });
-  }, [data]);
 
   const { data: goodsTypesData } = useListGoodsTypesQuery({
     variables: {

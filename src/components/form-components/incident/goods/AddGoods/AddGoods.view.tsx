@@ -44,22 +44,7 @@ const AddGoods = ({
   saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const [form] = Form.useForm();
 
-  const onAddItem = (data: StockItemValue) => {
-    console.log(data);
-    form.setFieldsValue({
-      sku: data.sku || '',
-      value: data.salesPriceLocal ?? data.costPriceLocal ?? 0,
-      quantity: undefined,
-      recoveredQuantity: 0,
-      name: data.name || '',
-      stockItem: data.id,
-    });
-  };
-
-  const stockItem = Form.useWatch<string | undefined>('stockItem', form);
-  console.log(stockItem);
   return (
     <Form<FormData>
       layout="vertical"
@@ -68,9 +53,7 @@ const AddGoods = ({
       initialValues={{
         goods: [
           {
-            sku: '',
-            name: '',
-            stockItem: '',
+            recoveredValue: 0,
           },
         ],
       }}
@@ -130,11 +113,12 @@ const AddGoods = ({
                   <Row justify="center">
                     <Col>
                       <Button
-                        onClick={() =>
+                        onClick={() => {
+                          console.log('add');
                           add({
                             recoveredValue: 0,
-                          })
-                        }
+                          });
+                        }}
                         block
                         icon={
                           <FontAwesomeIcon
@@ -452,11 +436,13 @@ const AddGoods = ({
                     <Button
                       loading={saving}
                       disabled={saving}
-                      onClick={() =>
+                      onClick={() => {
+                        console.log('add');
                         add({
+                          value: 0,
                           recoveredValue: 0,
-                        })
-                      }
+                        });
+                      }}
                       block
                       icon={
                         <FontAwesomeIcon

@@ -7,14 +7,12 @@ interface Props {
   onClose: () => void;
   update: (value: GoodsData[]) => void;
   businessId?: string;
-  data?: GoodsData[];
   saving: boolean;
 }
 const AddGoods = ({
   onClose,
   update,
   businessId,
-  data,
   saving,
 }: Props): JSX.Element => {
   const {
@@ -25,7 +23,7 @@ const AddGoods = ({
     form,
     division,
     onAddItem,
-  } = useAddGoods({ update, businessId, data });
+  } = useAddGoods({ update, businessId });
   return (
     <div>
       <View

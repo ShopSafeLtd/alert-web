@@ -55,7 +55,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
   };
   const httpLink = new BatchHttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
-    batchMax: 8, // No more than 8 operations per batch
+    batchMax: 1, // No more than 8 operations per batch
     batchInterval: 50, // Wait no more than 50ms after first batched operation
   });
 

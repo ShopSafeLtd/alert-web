@@ -11,12 +11,17 @@ describe('Detail Officer View', () => {
         <EditGoods
           onSubmit={jest.fn()}
           onClose={jest.fn()}
+          saving={false}
           data={{
             id: `id`,
-            goodsTypeId: ' value.goodsTypeId',
+            goodsType: ' value.goodsTypeId',
             name: 'name',
             value: 0,
             recoveredValue: 0,
+            quantity: 0,
+            stockItem: '',
+            recoveredQuantity: 0,
+            sku: '',
           }}
           goodsTypesData={{
             listGoodsTypes: {

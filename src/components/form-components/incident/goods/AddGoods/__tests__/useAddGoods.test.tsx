@@ -17,11 +17,19 @@ const UseAddGoodsTest = () => {
         type="button"
         onClick={() =>
           onSubmit({
-            id: `id`,
-            goodsTypeId: ' value.goodsTypeId',
-            name: 'name',
-            value: 0,
-            recoveredValue: 0,
+            goods: [
+              {
+                id: '',
+                goodsType: ' value.goodsTypeId',
+                name: 'name',
+                value: 0,
+                recoveredValue: 0,
+                quantity: 0,
+                stockItem: '',
+                recoveredQuantity: 0,
+                sku: '',
+              },
+            ],
           })
         }
       >

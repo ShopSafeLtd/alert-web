@@ -5,7 +5,6 @@ import update from 'immutability-helper';
 import { IncidentSort, useStoreState } from 'state';
 import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
-
 import type {
   EditFeedImage,
   GoodsData,
@@ -1525,7 +1524,6 @@ const useViewIncident = (incidentId: string): Return => {
     if (existingData === null) return;
     if (existingData?.incident?.todos === undefined) return;
 
-    // write the new data to the Apollo store
     store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
       query: ViewIncidentDocument,
       data: {
@@ -1540,6 +1538,21 @@ const useViewIncident = (incidentId: string): Return => {
         }),
         __typename: 'Query',
       },
+      // data: {
+      //   incident: {
+      //     ...existingData.incident,
+      //     todos: update(existingData.incident.todos, {
+      //       [todoIndex]: {
+      //         $set: {
+      //           ...existingData.incident.todos[todoIndex],
+      //           ...res.updateTodo,
+      //         },
+      //       },
+      //     }),
+      //   },
+
+      //   __typename: 'Query',
+      // },
       variables,
     });
   };

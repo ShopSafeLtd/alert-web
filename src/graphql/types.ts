@@ -12795,6 +12795,7 @@ export enum PermissionMethod {
 }
 
 export enum PermissionModel {
+  Activities = 'ACTIVITIES',
   Articles = 'ARTICLES',
   Businesses = 'BUSINESSES',
   Chat = 'CHAT',
