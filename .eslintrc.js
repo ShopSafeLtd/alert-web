@@ -18,6 +18,7 @@ module.exports = {
     'universe/node',
     'universe/web',
     'universe/shared/typescript-analysis',
+    'plugin:perfectionist/recommended-natural',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
@@ -56,6 +57,7 @@ module.exports = {
     'unicorn',
     'sonarjs',
     'formatjs',
+    'perfectionist',
     'import',
   ],
   ignorePatterns: ['.eslintrc.js', '.postInstall.js'],
@@ -128,6 +130,7 @@ module.exports = {
     'operator-assignment': ['error', 'always'],
     'padded-blocks': ['error', 'never'],
     'spaced-comment': ['error', 'always'],
+    'import/order': 'off',
     'arrow-spacing': [
       'error',
       {

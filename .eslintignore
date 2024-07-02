@@ -14,7 +14,6 @@ build
 coverage
 
 src/serviceWorker.js
-src/graphql/*
 src/graphql-src/*
 src/configs/*
 vite.config.mts
