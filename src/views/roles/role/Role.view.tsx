@@ -1,46 +1,48 @@
-import React from 'react';
+import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
 import type { FormInstance } from 'antd';
+import type { CheckboxValueType } from 'antd/lib/checkbox/Group';
+
+import { faUser } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
-  Col,
-  Form,
-  Statistic,
-  Table,
   Card,
   Checkbox,
+  Col,
   Collapse,
+  Form,
   Input,
   PageHeader,
   Row,
   Select,
   Space,
+  Statistic,
+  Table,
   Typography,
 } from 'antd';
-import type { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/pro-light-svg-icons';
 
 import type { DataType } from '../types';
-import { availableCheckBoxes, ViewRequired } from '../types';
+import type { FormValues } from './useRole';
+
+import { ViewRequired, availableCheckBoxes } from '../types';
 import ViewRoleSidelist from './ViewRole.Sidelist';
 import useStyles from './ViewRole.styles';
-import type { FormValues } from './useRole';
-import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
-import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
 
 interface Props {
-  id?: string;
-  create: boolean;
-  form: FormInstance<FormValues>;
   changed: boolean;
+  create: boolean;
+  data: RoleQuery | undefined;
+  form: FormInstance<FormValues>;
+  id?: string;
+  loading: boolean;
+  onFinish: (values: FormValues) => void;
+  roleName: string | undefined;
   setChanged: (changed: boolean) => void;
   submitting: boolean;
-  onFinish: (values: FormValues) => void;
-  data: RoleQuery | undefined;
-  roleName: string | undefined;
-  loading: boolean;
 }
 
 type Fields = {
@@ -56,16 +58,16 @@ type Methods = {
 };
 
 const RoleView = ({
-  id,
-  create,
-  form,
   changed,
+  create,
+  data,
+  form,
+  id,
+  loading,
+  onFinish,
+  roleName,
   setChanged,
   submitting,
-  onFinish,
-  data,
-  roleName,
-  loading,
 }: Props) => {
   const navigate = useNavigate();
 
@@ -74,6 +76,27 @@ const RoleView = ({
   const classes = useStyles();
   const users = data?.role.users || [];
   const CheckboxComponent: Methods = {
+    [PermissionMethod.Approve]: (
+      <Checkbox value={PermissionMethod.Approve}>
+        {formatMessage({
+          defaultMessage: 'Approve',
+        })}
+      </Checkbox>
+    ),
+    [PermissionMethod.Delete]: (
+      <Checkbox value={PermissionMethod.Delete}>
+        {formatMessage({
+          defaultMessage: 'Delete',
+        })}
+      </Checkbox>
+    ),
+    [PermissionMethod.Edit]: (
+      <Checkbox value={PermissionMethod.Edit}>
+        {formatMessage({
+          defaultMessage: 'Edit',
+        })}
+      </Checkbox>
+    ),
     [PermissionMethod.Read]: (
       <Checkbox value={PermissionMethod.Read}>
         {formatMessage({
@@ -88,38 +111,35 @@ const RoleView = ({
         })}
       </Checkbox>
     ),
-    [PermissionMethod.Edit]: (
-      <Checkbox value={PermissionMethod.Edit}>
-        {formatMessage({
-          defaultMessage: 'Edit',
-        })}
-      </Checkbox>
-    ),
-    [PermissionMethod.Delete]: (
-      <Checkbox value={PermissionMethod.Delete}>
-        {formatMessage({
-          defaultMessage: 'Delete',
-        })}
-      </Checkbox>
-    ),
-    [PermissionMethod.Approve]: (
-      <Checkbox value={PermissionMethod.Approve}>
-        {formatMessage({
-          defaultMessage: 'Approve',
-        })}
-      </Checkbox>
-    ),
   };
 
   const labels: Labels = {
+    ACTIVITIES: formatMessage({
+      defaultMessage: 'Activities',
+    }),
     ARTICLES: formatMessage({
       defaultMessage: 'Bulletins',
+    }),
+    BUSINESSES: formatMessage({
+      defaultMessage: 'Businesses',
+    }),
+    CHAT: formatMessage({
+      defaultMessage: 'Chat',
+    }),
+    CHECKLIST: formatMessage({
+      defaultMessage: 'Checklist',
     }),
     CRIME_GROUPS: formatMessage({
       defaultMessage: 'Crime Groups',
     }),
     DASHBOARD: formatMessage({
       defaultMessage: 'Dashboard',
+    }),
+    DOCUMENTS: formatMessage({
+      defaultMessage: 'Documents',
+    }),
+    EVIDENCE: formatMessage({
+      defaultMessage: 'Evidence',
     }),
     GROUPS: formatMessage({
       defaultMessage: 'Groups',
@@ -133,47 +153,34 @@ const RoleView = ({
     OFFENDERS: formatMessage({
       defaultMessage: 'Offenders',
     }),
-    VEHICLES: formatMessage({
-      defaultMessage: 'Vehicles',
+    REPORTS: formatMessage({
+      defaultMessage: 'Reports',
     }),
     SETTINGS: formatMessage({
       defaultMessage: 'Settings',
     }),
+    SINGLE_SHOE: formatMessage({
+      defaultMessage: 'Single Shoe',
+    }),
     TASKS: formatMessage({
       defaultMessage: 'Tasks',
-    }),
-    CHAT: formatMessage({
-      defaultMessage: 'Chat',
-    }),
-    CHECKLIST: formatMessage({
-      defaultMessage: 'Checklist',
-    }),
-    DOCUMENTS: formatMessage({
-      defaultMessage: 'Documents',
-    }),
-    REPORTS: formatMessage({
-      defaultMessage: 'Reports',
     }),
     USERS: formatMessage({
       defaultMessage: 'Users',
     }),
-    BUSINESSES: formatMessage({
-      defaultMessage: 'Businesses',
-    }),
-    EVIDENCE: formatMessage({
-      defaultMessage: 'Evidence',
+    VEHICLES: formatMessage({
+      defaultMessage: 'Vehicles',
     }),
   };
 
   const createFormItem = (dataType: DataType) => (
     <Form.Item
-      name={dataType}
       label={labels[dataType]}
       labelAlign="left"
       labelCol={{ span: 4 }}
+      name={dataType}
     >
       <Checkbox.Group
-        style={{ width: '100%' }}
         onChange={(value: CheckboxValueType[]) => {
           if (ViewRequired.some((item) => value.includes(item))) {
             form.setFieldsValue({
@@ -184,10 +191,11 @@ const RoleView = ({
             });
           }
         }}
+        style={{ width: '100%' }}
       >
         <Row>
           {availableCheckBoxes[dataType].map((item) => (
-            <Col span={6} key={item}>
+            <Col key={item} span={6}>
               {CheckboxComponent[item]}
             </Col>
           ))}
@@ -209,7 +217,7 @@ const RoleView = ({
         <Col>
           <ViewRoleSidelist current={id} />
         </Col>
-        <Col flex={1} className={classes.borderLeft}>
+        <Col className={classes.borderLeft} flex={1}>
           <PageHeader
             onBack={() => navigate('/app/scheme-settings/roles')}
             title={
@@ -232,53 +240,53 @@ const RoleView = ({
                         key="1"
                       >
                         <Form<FormValues>
-                          name="checklist_form"
-                          onFinish={onFinish}
                           autoComplete="off"
-                          layout="horizontal"
                           form={form}
                           initialValues={{
                             'Dashboard.Group': [PermissionMethod.Read],
                           }}
+                          layout="horizontal"
+                          name="checklist_form"
                           onChange={() => {
                             setChanged(true);
                           }}
+                          onFinish={onFinish}
                         >
                           <>
                             {create && (
                               <>
                                 <Form.Item
-                                  name="name"
                                   label={formatMessage({
                                     defaultMessage: 'Name',
                                   })}
                                   labelAlign="left"
                                   labelCol={{ span: 4 }}
+                                  name="name"
                                   rules={[
                                     {
-                                      required: true,
                                       message: formatMessage({
                                         defaultMessage: 'Name',
                                       }),
+                                      required: true,
                                     },
                                   ]}
                                 >
                                   <Input />
                                 </Form.Item>
                                 <Form.Item
-                                  name="type"
                                   label={formatMessage({
                                     defaultMessage: 'Type',
                                   })}
                                   labelAlign="left"
                                   labelCol={{ span: 4 }}
+                                  name="type"
                                   rules={[
                                     {
-                                      required: true,
                                       message: intl.formatMessage({
                                         defaultMessage:
                                           'Please select a role for the user.',
                                       }),
+                                      required: true,
                                     },
                                   ]}
                                 >
@@ -293,11 +301,11 @@ const RoleView = ({
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
-                                        type="secondary"
                                         style={{
                                           fontSize: 13,
                                           margin: 0,
                                         }}
+                                        type="secondary"
                                       >
                                         {intl.formatMessage({
                                           defaultMessage:
@@ -315,12 +323,12 @@ const RoleView = ({
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
-                                        type="secondary"
                                         style={{
                                           fontSize: 13,
-                                          margin: 0,
                                           fontWeight: 400,
+                                          margin: 0,
                                         }}
+                                        type="secondary"
                                       >
                                         {intl.formatMessage({
                                           defaultMessage:
@@ -338,12 +346,12 @@ const RoleView = ({
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
-                                        type="secondary"
                                         style={{
                                           fontSize: 13,
-                                          margin: 0,
                                           fontWeight: 400,
+                                          margin: 0,
                                         }}
+                                        type="secondary"
                                       >
                                         {intl.formatMessage({
                                           defaultMessage:
@@ -362,11 +370,11 @@ const RoleView = ({
                                         })}
                                       </Typography.Text>
                                       <Typography.Paragraph
-                                        type="secondary"
                                         style={{
                                           fontSize: 13,
                                           margin: 0,
                                         }}
+                                        type="secondary"
                                       >
                                         {intl.formatMessage({
                                           defaultMessage:
@@ -391,9 +399,9 @@ const RoleView = ({
                                 <Col>
                                   <Form.Item hidden={!changed}>
                                     <Button
+                                      htmlType="submit"
                                       loading={loading || submitting}
                                       type="primary"
-                                      htmlType="submit"
                                     >
                                       {formatMessage({
                                         defaultMessage: 'Save',
@@ -407,39 +415,39 @@ const RoleView = ({
                         </Form>
                       </Collapse.Panel>
                       <Collapse.Panel
+                        disabled={create}
                         header={formatMessage({
                           defaultMessage: 'Users',
                         })}
                         key="2"
-                        disabled={create}
                       >
                         <Table
-                          pagination={{
-                            hideOnSinglePage: true,
-                            total: data?.role.usersCount || 0,
-                            defaultPageSize: 10,
-                          }}
                           columns={[
                             {
+                              dataIndex: 'name',
+                              key: 'name',
                               title: formatMessage({
                                 defaultMessage: 'Name',
                               }),
-                              dataIndex: 'name',
-                              key: 'name',
                             },
                             {
+                              dataIndex: 'email',
+                              key: 'email',
                               title: formatMessage({
                                 defaultMessage: 'Email',
                               }),
-                              dataIndex: 'email',
-                              key: 'email',
                             },
                           ]}
                           dataSource={users.map(({ user }) => ({
+                            email: user?.email,
                             key: user?.id,
                             name: user?.fullName,
-                            email: user?.email,
                           }))}
+                          pagination={{
+                            defaultPageSize: 10,
+                            hideOnSinglePage: true,
+                            total: data?.role.usersCount || 0,
+                          }}
                         />
                       </Collapse.Panel>
                     </Collapse>
@@ -448,18 +456,18 @@ const RoleView = ({
                   <Col>
                     {!create && (
                       <Statistic
-                        loading={loading}
                         className={classes.stats}
-                        title={formatMessage({
-                          defaultMessage: 'Total Users',
-                        })}
-                        value={data?.role.usersCount || 0}
+                        loading={loading}
                         prefix={
                           <FontAwesomeIcon
                             className={classes.prefixIcon}
                             icon={faUser}
                           />
                         }
+                        title={formatMessage({
+                          defaultMessage: 'Total Users',
+                        })}
+                        value={data?.role.usersCount || 0}
                       />
                     )}
                   </Col>

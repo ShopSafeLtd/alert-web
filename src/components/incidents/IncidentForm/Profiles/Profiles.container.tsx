@@ -1,23 +1,25 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
 import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+
+import React from 'react';
+
 import View from './Profiles.view';
 import useProfiles from './useProfiles';
 
 interface Props {
-  saving: boolean;
   form: FormInstance<FormData>;
+  hasVictims?: boolean;
   // hasVehicles?: boolean;
   hasWitnesses?: boolean;
-  hasVictims?: boolean;
+  saving: boolean;
 }
 
 const Profiles = ({
-  saving,
   form,
+  hasVictims = false,
   // hasVehicles = true,
   hasWitnesses = false,
-  hasVictims = false,
+  saving,
 }: Props) => {
   const {
     addExistingOffenderOpen,
@@ -32,19 +34,19 @@ const Profiles = ({
 
   return (
     <View
-      saving={saving}
-      form={form}
       addExistingOffenderOpen={addExistingOffenderOpen}
       addExistingVehicleOpen={addExistingVehicleOpen}
       addNewOffenderOpen={addNewOffenderOpen}
       addNewVehicleOpen={addNewVehicleOpen}
+      form={form}
+      hasVictims={hasVictims}
+      // hasVehicles={hasVehicles}
+      hasWitnesses={hasWitnesses}
+      saving={saving}
       toggleAddExisingVehicleOpen={toggleAddExisingVehicleOpen}
       toggleAddExistingOffenderOpen={toggleAddExistingOffenderOpen}
       toggleAddNewOffenderOpen={toggleAddNewOffenderOpen}
       toggleAddNewVehicleOpen={toggleAddNewVehicleOpen}
-      // hasVehicles={hasVehicles}
-      hasWitnesses={hasWitnesses}
-      hasVictims={hasVictims}
     />
   );
 };

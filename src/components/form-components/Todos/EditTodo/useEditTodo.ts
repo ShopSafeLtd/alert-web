@@ -1,76 +1,79 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { FormInstance, UploadFile } from 'antd';
+import type { UploadProps } from 'antd/es/upload/interface';
+import type { Moment } from 'moment';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
-import errorNotification from 'types/mutation_notifications/error_notification';
-import type { FormInstance, UploadFile } from 'antd';
-import { Form, notification } from 'antd';
-import type { UploadProps } from 'antd/es/upload/interface';
-import { useStoreState } from 'state';
-import { useIntl } from 'react-intl';
-import type { Moment } from 'moment';
-import moment from 'moment';
-import customRequest from '../../../../utils/custom-request';
-import { AnswerType, Role, SortOrder } from 'graphql/types';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/AddTodoUsers.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { Form, notification } from 'antd';
+import { AnswerType, Role, SortOrder } from 'graphql/types';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
+
 import type { EditTodoQuery } from './graphql/edit_todo.generated';
+
+import customRequest from '../../../../utils/custom-request';
 import { useEditTodoQuery } from './graphql/edit_todo.generated';
 import { useUpdateTodoDetailsMutation } from './graphql/update-todo-details.generated';
 
 const { useForm } = Form;
 
 export interface FormData {
-  name: string;
-  description: string;
-  completed: boolean;
-  dueDate: Moment;
+  [answer: string]: Moment | boolean | number | string | string[] | undefined;
   assignedUsers: string[];
-  questionGroup?: string;
+  business: string;
+  completed: boolean;
+  description: string;
+  dueDate: Moment;
   groups: string[];
-  [answer: string]: string | string[] | undefined | Moment | number | boolean;
+  name: string;
+  questionGroup?: string;
 }
 
 interface Props {
-  onClose: () => void;
   initData?: {
     id: string;
   };
+  onClose: () => void;
   todoId: string;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  adminUsersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
-  saving: boolean;
   addQuestion: boolean;
-  setAddQuestion: (value: boolean) => void;
-  update: (id: string, question: string) => void;
+  adminUsersData: SelectOptions[] | undefined;
+  availableUsers: { id: string; name: string; timeTaken: number }[];
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
+  form: FormInstance<FormData>;
+  onSubmit: (value: FormData) => void;
+  questions: CustomQuestion[];
+  saving: boolean;
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string; type: AnswerType }[];
-  setSelectedQuestions: (
-    value: { id: string; question: string; type: AnswerType }[]
-  ) => void;
-  setSelectedIds: (value: string[]) => void;
-  form: FormInstance<FormData>;
-  templatesData: QuestionGroupOnSchemeQuery | undefined;
-  templatesLoading: boolean;
-  questions: CustomQuestion[];
-  users: { id: string; name: string; timeTaken: number }[];
-  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
-  availableUsers: { id: string; name: string; timeTaken: number }[];
+  setAddQuestion: (value: boolean) => void;
   setAvailableUsers: (
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
-  documentList: UploadFile[];
-  documentUploadProps?: UploadProps;
-  todoLoading: boolean;
+  setSelectedIds: (value: string[]) => void;
+  setSelectedQuestions: (
+    value: { id: string; question: string; type: AnswerType }[]
+  ) => void;
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
   todoData: EditTodoQuery | undefined;
+  todoLoading: boolean;
+  update: (id: string, question: string) => void;
+  users: { id: string; name: string; timeTaken: number }[];
+  usersLoading: boolean;
 }
 
-const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
+const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -94,28 +97,53 @@ const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
   const { data: todoData, loading: todoLoading } = useEditTodoQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: { id: todoId },
-    },
     onCompleted: ({ todo }) => {
       form.setFieldsValue({
-        name: todo.name || '',
+        assignedUsers: todo.assignedUsers.map(({ id }) => id),
+        business: todo.business?.id || '',
+        completed: todo.completed || false,
         description: todo?.description || '',
         dueDate: moment(todo.dueDate, 'YYYY-MM-DD'),
-        completed: todo.completed || false,
-        assignedUsers: todo.assignedUsers.map(({ id }) => id),
         groups: todo.groups.map(({ id }) => id),
-        // questionGroup: todo.questions.map((el) => el.id),
+        name: todo.name || '',
       });
+      const newQuestions = todo.questions.map(({ id, question }) => {
+        form.setFieldValue(
+          question.id,
+          todo?.answers?.find((answer) => answer?.taskQuestion?.id === id)
+            ?.answer
+        );
+
+        return (
+          {
+            answerType: question?.type,
+            label: question.questionFormatted,
+            options: question.optionsFormFormatted || [],
+            questionId: question.id,
+            required: false,
+            tagQuestionId: id,
+            value: todo?.answers?.find(
+              (answer) => answer?.taskQuestion?.id === id
+            )?.answer,
+          } || []
+        );
+      }) as CustomQuestion[];
+      setQuestions(newQuestions);
       if (todo?.evidence && todo?.evidence.length > 0)
         setDocumentList(
           todo.evidence.map((document) => ({
-            uid: document.id,
             name: document.name,
             status: 'done',
+            uid: document.id,
             url: document.url,
           }))
         );
+    },
+    variables: {
+      where: {
+        id: todoId,
+        // id: 'cll3jomfy00013rybbduufubj',
+      },
     },
   });
   const { data: templatesData, loading: templatesLoading } =
@@ -142,56 +170,26 @@ const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
     }
   }, [initData]);
 
-  const questionGroup = Form.useWatch('questionGroup', form);
-
-  useEffect(() => {
-    const template = templatesData?.scheme?.questionGroups.find(
-      ({ id }) => id === questionGroup
-    );
-    if (template) {
-      const {
-        defaultDueDate,
-        name,
-        description,
-        questions: templateQuestions,
-      } = template;
-      const dueDate = new Date();
-      dueDate.setDate(dueDate.getDate() + defaultDueDate);
-
-      const formattedDate = moment(dueDate);
-      setSelectedIds(templateQuestions.map((question) => question.id));
-      setSelectedQuestions(
-        templateQuestions.map((question) => ({
-          id: question.id,
-          question: question.questionFormatted,
-          type: question.type,
-        }))
-      );
-
-      form.setFieldsValue({
-        name,
-        description: description || '',
-        dueDate: formattedDate,
-      });
-
-      setQuestions(
-        templateQuestions.map((question) => ({
-          answerType: question.type,
-          label: question.questionFormatted,
-          questionId: question.id,
-          required: false,
-          tagQuestionId: '',
-          value: '',
-          options: question.optionsFormFormatted || [],
-        }))
-      );
-    }
-  }, [questionGroup, templatesData]);
+  // const questionGroup = Form.useWatch('questionGroup', form);
 
   const { data: usersData, loading: usersLoading } = useAddTodoUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      orderBy: {
+        fullName: SortOrder.Asc,
+      },
       where: {
+        groups: {
+          some: {
+            users: {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            },
+          },
+        },
         schemes: {
           some: {
             AND: [
@@ -216,20 +214,6 @@ const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
             ],
           },
         },
-        groups: {
-          some: {
-            users: {
-              some: {
-                id: {
-                  equals: userId,
-                },
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        fullName: SortOrder.Asc,
       },
     },
   });
@@ -267,11 +251,11 @@ const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The activity has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -302,41 +286,37 @@ const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
     const deletedDocuments = existingDocumentIds?.filter((documentId) =>
       documentList.map((el) => el.uid !== documentId)
     );
-    // const answers = todoData?.todo.questions.map(({ question, id: qId }) => ({
-    //   questionId: qId,
-    //   // answer: value[question?.id || ''],
-    //   type: question?.type,
-    // }));
+    const answers = todoData?.todo.questions.map(({ id: qId, question }) => ({
+      answer: data[question?.id || ''],
+      questionId: qId,
+      type: question?.type,
+    }));
 
-    // const answerIds = todoData?.todo?.answers?.map(({ id: aId }) => aId);
+    const answerIds = todoData?.todo?.answers?.map(({ id: aId }) => aId);
 
     void updateTodo({
       variables: {
-        where: {
-          id: todoId || '',
-        },
         data: {
-          name: data.name,
-          description: data.description,
-
-          // assignedUsers:
-          //   data.assignedUsers && data.assignedUsers.length > 0
-          //     ? { connect: data.assignedUsers.map((id) => ({ id })) }
-          //     : undefined,
-          assignedUsers: { set: data.assignedUsers.map((id) => ({ id })) },
-          groups: { set: data.groups.map((id) => ({ id })) },
-          timeTaken:
-            userTime && timeTaken
-              ? {
-                  createMany: {
-                    data: timeTaken,
+          answers: {
+            deleteMany: answerIds
+              ? [
+                  {
+                    id: {
+                      in: answerIds || [],
+                    },
                   },
-                }
+                ]
               : undefined,
-          dueDate: { set: data.dueDate.toDate() },
+          },
+          assignedUsers: { set: data.assignedUsers.map((id) => ({ id })) },
+          business:
+            data.business && data.business !== todoData?.todo.id
+              ? { set: [{ id: data.business }] }
+              : undefined,
           completed: {
             set: data.completed,
           },
+          description: data.description,
           documents: {
             // @ts-expect-error TODO fix this date issue Wait to check
             deleted:
@@ -346,46 +326,71 @@ const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
             upload:
               newDocuments && newDocuments.length > 0
                 ? newDocuments.map((file) => ({
-                    url: file.url || '',
-                    name: file.name || '',
                     fileType: file.type || '',
+                    name: file.name || '',
                     origFileName: file.fileName || '',
+                    url: file.url || '',
                   }))
                 : undefined,
           },
-          // questions: {
-          //   update: answers?.map((answer) => ({
-          //     where: {
-          //       id: answer.questionId,
-          //     },
-          //     data: {
-          //       answers: {
-          //         create: [
-          //           {
-          //             type: answer.type,
-          //             answer: (answer.answer as string) || '',
-          //             todo: {
-          //               connect: {
-          //                 id: todoId || '',
-          //               },
-          //             },
-          //           },
-          //         ],
-          //       },
-          //     },
-          //   })),
-          // },
-          // answers: {
-          //   deleteMany: answerIds
-          //     ? [
-          //         {
-          //           id: {
-          //             in: answerIds || [],
-          //           },
-          //         },
-          //       ]
-          //     : undefined,
-          // },
+          dueDate: { set: data.dueDate.toDate() },
+          groups: { set: data.groups.map((id) => ({ id })) },
+
+          name: data.name,
+          questions: {
+            create:
+              selectedQuestions && selectedQuestions.length > 0
+                ? selectedQuestions.map((question) => ({
+                    answers: {
+                      create: [
+                        {
+                          answer: (data[question.id] as string) || '',
+                          type: question.type,
+                        },
+                      ],
+                    },
+                    question: {
+                      connect: {
+                        id: question.id,
+                      },
+                    },
+                  }))
+                : undefined,
+            update:
+              answers && answers.length > 0
+                ? answers?.map((answer) => ({
+                    data: {
+                      answers: {
+                        create: [
+                          {
+                            answer: (answer.answer as string) || '',
+                            todo: {
+                              connect: {
+                                id: todoId || '',
+                              },
+                            },
+                            type: answer.type,
+                          },
+                        ],
+                      },
+                    },
+                    where: {
+                      id: answer.questionId,
+                    },
+                  }))
+                : undefined,
+          },
+          timeTaken:
+            userTime && timeTaken
+              ? {
+                  createMany: {
+                    data: timeTaken,
+                  },
+                }
+              : undefined,
+        },
+        where: {
+          id: todoId || '',
         },
       },
     });
@@ -409,36 +414,36 @@ const useEditTodo = ({ onClose, initData, todoId }: Props): Return => {
 
   const documentUploadProps: UploadProps = {
     customRequest,
-    onChange: handleChange,
     multiple: true,
+    onChange: handleChange,
   };
   return {
-    onSubmit,
-    saving,
-    adminUsersData: usersData?.users.map((user) => ({
-      value: user.id,
-      label: user.fullName,
-    })),
-    usersLoading,
     addQuestion,
-    setAddQuestion,
-    update,
-    selectedIds,
-    selectedQuestions,
-    setSelectedQuestions,
-    setSelectedIds,
-    form,
-    templatesData,
-    templatesLoading,
-    questions,
-    setAvailableUsers,
-    setUsers,
-    users,
+    adminUsersData: usersData?.users.map((user) => ({
+      label: user.fullName,
+      value: user.id,
+    })),
     availableUsers,
     documentList,
     documentUploadProps,
-    todoLoading,
+    form,
+    onSubmit,
+    questions,
+    saving,
+    selectedIds,
+    selectedQuestions,
+    setAddQuestion,
+    setAvailableUsers,
+    setSelectedIds,
+    setSelectedQuestions,
+    setUsers,
+    templatesData,
+    templatesLoading,
     todoData,
+    todoLoading,
+    update,
+    users,
+    usersLoading,
   };
 };
 export default useEditTodo;

@@ -4,6 +4,6 @@ export interface PaginationModel {
   sizeOptions: string[];
 }
 export interface SelectOptions {
-  value: string;
   label: string;
+  value: string;
 }

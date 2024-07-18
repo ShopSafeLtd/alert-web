@@ -1,25 +1,27 @@
-import { useNavigate } from 'react-router';
+import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
 import type { FormInstance } from 'antd';
+import type { PermissionModel, Role } from 'graphql/types';
+
+import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/upsertPermissions.generated';
+import { useRoleQuery } from '#/views/roles/graphql/queries/role.generated';
 import { Form } from 'antd';
+import { PermissionMethod } from 'graphql/types';
 import { useState } from 'react';
-import { useStoreState } from '../../../state';
+import { useNavigate } from 'react-router';
 
 import type { FormData } from '../types';
-import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
-import { useRoleQuery } from '#/views/roles/graphql/queries/role.generated';
-import type { PermissionModel, Role } from 'graphql/types';
-import { PermissionMethod } from 'graphql/types';
-import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/upsertPermissions.generated';
+
+import { useStoreState } from '../../../state';
 
 interface Props {
-  form: FormInstance<FormValues>;
   changed: boolean;
+  data: RoleQuery | undefined;
+  form: FormInstance<FormValues>;
+  loading: boolean;
+  onFinish: (values: FormValues) => void;
+  roleName: string | undefined;
   setChanged: (changed: boolean) => void;
   submitting: boolean;
-  onFinish: (values: FormValues) => void;
-  data: RoleQuery | undefined;
-  roleName: string | undefined;
-  loading: boolean;
 }
 
 export interface FormValues extends FormData {
@@ -45,55 +47,50 @@ export function useRole(id: string | undefined, create: boolean): Props {
   const onFinish = (values: FormValues) => {
     setSubmitting(true);
     void updatePermissions({
+      onCompleted: (res) => {
+        if (create)
+          navigate(`/app/scheme-settings/roles/${res.upsertPermission.id}`);
+      },
       variables: {
         data: {
-          schemeId,
-          roleId: id,
           name: values.name,
-          type: values.type,
           permissions: Object.keys(values)
             .filter((key) => key !== 'name' && key !== 'type')
             .map((key) => {
               if (key === 'SETTINGS') {
                 if (values[key]?.includes(PermissionMethod.Edit)) {
                   return {
-                    model: key as PermissionModel,
                     allowedMethods: [
                       PermissionMethod.Read,
                       PermissionMethod.Edit,
                     ],
+                    model: key as PermissionModel,
                   };
                 }
                 return {
-                  model: key as PermissionModel,
                   allowedMethods: [],
+                  model: key as PermissionModel,
                 };
               }
               return {
-                model: key as PermissionModel,
                 allowedMethods: (values[key] as PermissionMethod[]) || [],
+                model: key as PermissionModel,
               };
             }),
+          roleId: id,
+          schemeId,
+          type: values.type,
         },
-      },
-      onCompleted: (res) => {
-        if (create)
-          navigate(`/app/scheme-settings/roles/${res.upsertPermission.id}`);
       },
     });
   };
 
   const { data, loading } = useRoleQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id,
-      },
-    },
     onCompleted: (iData) => {
       const permissions = iData?.role?.permissions.map((item) => ({
-        model: item?.model,
         methods: item?.allowedMethods,
+        model: item?.model,
       }));
 
       form.setFieldsValue({
@@ -106,17 +103,22 @@ export function useRole(id: string | undefined, create: boolean): Props {
       });
     },
     skip: !id,
+    variables: {
+      where: {
+        id,
+      },
+    },
   });
   const roleName = data?.role.name;
 
   return {
-    form,
     changed,
+    data,
+    form,
+    loading,
+    onFinish,
+    roleName,
     setChanged,
     submitting,
-    onFinish,
-    data,
-    roleName,
-    loading,
   };
 }

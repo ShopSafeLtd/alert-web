@@ -1,98 +1,98 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
-import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
-import { Form, Modal, notification } from 'antd';
-import type { BusinessData, SelectOptions } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useGroupsContext } from '#/context/groups-context';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import { useCreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
-import { useInviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
-import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
-import { useSearchUserQuery } from 'graphql/users/queries/search-user.generated';
-import { useSchemeQuery } from 'graphql/scheme/queries/scheme.generated';
-import { useSchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
 import type { CreateUserData, UserUpdateInput } from 'graphql/types';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+
+import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
+import { useGroupsContext } from '#/context/groups-context';
+import { Form, Modal, notification } from 'antd';
+import { useSchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
+import { useSchemeQuery } from 'graphql/scheme/queries/scheme.generated';
 import { Model, SortOrder } from 'graphql/types';
+import { useCreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import { useInviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import { useSearchUserQuery } from 'graphql/users/queries/search-user.generated';
+import { useEffect, useState } from 'react';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 const { useForm } = Form;
 
 export interface FormData {
-  fullName: string;
-  email: string;
-  businesses: string[] | SelectOptions[];
-  role: string;
-  groups: string[];
-  chats: string[];
-  incidentEmail: boolean;
-  incidentPush: boolean;
+  approverGroups: string[];
   bulletinEmails: boolean;
   bulletinPush: boolean;
-  subscribedIncidentOnly: boolean;
-  subscribedOffenderOnly: boolean;
+  businesses: SelectOptions[] | string[];
+  chats: string[];
+  defaultGroups: string[];
+  email: string;
+  fullName: string;
+  groups: string[];
+  incidentEmail: boolean;
+  incidentPush: boolean;
   messagePush: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
   reportToAllBusinesses: boolean;
-  approverGroups: string[];
-  defaultGroups: string[];
+  role: string;
+  subscribedIncidentOnly: boolean;
+  subscribedOffenderOnly: boolean;
 }
 
 interface Props {
+  business?: {
+    label: string;
+    value: string;
+  };
   onClose: () => void;
   update: MutationUpdaterFn<CreateUserInDatabaseMutation>;
   updateSearch: MutationUpdaterFn<InviteExistingUserMutation>;
-  business?: {
-    value: string;
-    label: string;
-  };
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  groupsData: SelectOptions[] | undefined;
-  groupsLoading: boolean;
+  addBusinessVisible: boolean;
+  availableRoles: SelectOptions[];
   chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
-  schemeLoading: boolean;
-  saving: boolean;
+  existingUser: boolean;
+  form: FormInstance<FormData>;
+  groupsData: SelectOptions[] | undefined;
+  groupsLoading: boolean;
+  onSubmit: (value: FormData) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValuesChange: (changedValues: any, values: FormData) => void;
-  form: FormInstance<FormData>;
-  existingUser: boolean;
-  selectedRole: string | undefined;
-  setSelectedRole: (value: string) => void;
+  saving: boolean;
+  schemeLoading: boolean;
   selectedGroups: string[] | undefined;
+  selectedRole: string | undefined;
   setSelectedGroups: (value: string[]) => void;
-  addBusinessVisible: boolean;
+  setSelectedRole: (value: string) => void;
   toggleAddBusinessVisible: () => void;
   updateNewBusinessData: (values: BusinessData) => void;
-  availableRoles: SelectOptions[];
 }
 
-export const stringOrOption = (inputOb: string | SelectOptions) => {
+export const stringOrOption = (inputOb: SelectOptions | string) => {
   if (typeof inputOb === 'string') {
     return inputOb;
   }
   return inputOb.value;
 };
-
 const useAddUser = ({
+  business,
   onClose,
   update,
   updateSearch,
-  business,
 }: Props): Return => {
   const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [search, setSearch] = useState<string | null>(null);
+  const [search, setSearch] = useState<null | string>(null);
   const [selectedRole, setSelectedRole] = useState<string>();
   const [selectedGroups, setSelectedGroups] = useState<string[]>();
   const [addBusinessVisible, setAddBusinessVisible] = useState(false);
@@ -101,16 +101,16 @@ const useAddUser = ({
   const [availableRoles, setAvailableRoles] = useState<SelectOptions[]>([]);
 
   const { data: rolesData, loading: rolesLoading } = useUserRolesQuery({
-    variables: {
-      schemeId,
-    },
-    skip: !schemeId,
     onCompleted: ({ roles }) => {
       const rolesFormatted = roles.edges.map(({ node: role }) => ({
         label: role.name,
         value: role.id,
       }));
       setAvailableRoles(rolesFormatted);
+    },
+    skip: !schemeId,
+    variables: {
+      schemeId,
     },
   });
 
@@ -123,54 +123,53 @@ const useAddUser = ({
   }, [business]);
 
   const { data: userData } = useSearchUserQuery({
-    variables: {
-      where: {
-        email: search?.toLowerCase(),
-      },
-    },
-    skip: search === null,
     onCompleted: ({ user }) => {
       if (user) {
         confirm({
-          title: 'This user already exists',
           content: `A user with the email address ${user.email} already exists, do you want to invite ${user.fullName} to the scheme?`,
+          onCancel() {
+            form.setFieldsValue({
+              email: '',
+            });
+          },
           onOk() {
             setExistingUser(true);
             setBusinessesData(
               user.businesses.map((el) => ({ ...el, isConnected: true }))
             );
             form.setFieldsValue({
-              fullName: user.fullName,
-              email: user.email,
-              publicName: user.publicName,
-              reportToAllBusinesses: user.reportToAllBusinesses,
               businesses:
                 user.businesses && user.businesses.length > 0
                   ? user.businesses.map(({ id, name }) => ({
-                      value: id,
                       label: name,
+                      value: id,
                     }))
                   : [],
+              email: user.email,
+              fullName: user.fullName,
+              publicName: user.publicName,
+              reportToAllBusinesses: user.reportToAllBusinesses,
             });
           },
-          onCancel() {
-            form.setFieldsValue({
-              email: '',
-            });
-          },
+          title: 'This user already exists',
         });
       }
+    },
+    skip: search === null,
+    variables: {
+      where: {
+        email: search?.toLowerCase(),
+      },
     },
   });
 
   const { loading: schemeLoading } = useSchemeQuery({
-    variables: { where: { id: schemeId } },
     onCompleted: (data) => {
       form.setFieldsValue({
-        incidentEmail: data.scheme?.defaultIncidentEmail,
-        incidentPush: data.scheme?.defaultIncidentPush,
         bulletinEmails: data.scheme?.defaultBulletinEmails,
         bulletinPush: data.scheme?.defaultBulletinPush,
+        incidentEmail: data.scheme?.defaultIncidentEmail,
+        incidentPush: data.scheme?.defaultIncidentPush,
         messagePush: data.scheme?.defaultMessagePush,
         offenderEmail: data.scheme?.defaultOffenderEmail,
         offenderPush: data.scheme?.defaultOffenderPush,
@@ -178,6 +177,7 @@ const useAddUser = ({
         subscribedOffenderOnly: data.scheme?.defaultSubscribedOffenderOnly,
       });
     },
+    variables: { where: { id: schemeId } },
   });
 
   const { groups, groupsLoading } = useGroupsContext();
@@ -185,15 +185,15 @@ const useAddUser = ({
   const { data: chatsData, loading: chatsLoading } = useSchemeChatsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         scheme: {
           id: {
             equals: schemeId,
           },
         },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
       },
     },
   });
@@ -202,8 +202,8 @@ const useAddUser = ({
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Invited!',
         description: 'The invitation has been sent! ',
+        message: 'Successfully Invited!',
         placement: 'bottomRight',
       });
     },
@@ -218,8 +218,8 @@ const useAddUser = ({
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Invited!',
         description: 'The invitation has been sent! ',
+        message: 'Successfully Invited!',
         placement: 'bottomRight',
       });
     },
@@ -242,7 +242,8 @@ const useAddUser = ({
     const updatedBusinesses = businessesData
       ?.filter(({ isConnected }) => isConnected)
       .filter(({ id }) => [...businessIds].includes(id));
-    const connectedBusinesses = data.businesses.filter(
+    const businessesValues: (SelectOptions | string)[] = data.businesses;
+    const connectedBusinesses = businessesValues.filter(
       (value) =>
         !newBusinesses?.some(
           ({ id: newBusinessId }) => newBusinessId === stringOrOption(value)
@@ -252,6 +253,20 @@ const useAddUser = ({
             updatedBusinessId === stringOrOption(value)
         )
     );
+    // const connectedBusinesses = (
+    //   isStringArray(data.businesses)
+    //     ? data.businesses
+    //     : data.businesses.map((option) => option.value)
+    // ).filter(
+    //   (value) =>
+    //     !newBusinesses?.some(
+    //       ({ id: newBusinessId }) => newBusinessId === stringOrOption(value)
+    //     ) &&
+    //     !updatedBusinesses?.some(
+    //       ({ id: updatedBusinessId }) =>
+    //         updatedBusinessId === stringOrOption(value)
+    //     )
+    // );
     const getExistingUserBusiness = (): UserUpdateInput['businesses'] => ({
       connect:
         connectedBusinesses && connectedBusinesses.length > 0
@@ -278,41 +293,6 @@ const useAddUser = ({
       create:
         newBusinesses && newBusinesses.length > 0
           ? newBusinesses.map((el) => ({
-              name: el.name,
-              siteNumber: el.siteNumber,
-              publicName: el.publicName || false,
-              schemes: {
-                connect: [
-                  {
-                    id: schemeId,
-                  },
-                ],
-              },
-              parent: el.parent
-                ? {
-                    connect: {
-                      id: el.parent.id,
-                    },
-                  }
-                : undefined,
-              tags: {
-                connect:
-                  el.tags && el.tags.length > 0
-                    ? el.tags.map((id) => ({ id }))
-                    : undefined,
-                create:
-                  el.newTags && el.newTags.length > 0
-                    ? el.newTags.map((value) => ({
-                        name: value.name,
-                        description: value.description || '',
-                        schemes: {
-                          connect: value.schemes.map((id) => ({ id })),
-                        },
-                        createdBy: { connect: { id: value.createdById } },
-                        dataType: Model.Business,
-                      }))
-                    : undefined,
-              },
               groups: el?.groups
                 ? { connect: el?.groups?.map((id) => ({ id })) }
                 : undefined,
@@ -322,11 +302,46 @@ const useAddUser = ({
                     ? el?.locations.map((location) => ({
                         building: location.building,
                         county: location.county,
+                        geoLat: location.geoLat,
+                        geoLng: location.geoLng,
                         postcode: location.postcode || '',
                         street: location.street || '',
                         townCity: location.townCity || '',
-                        geoLat: location.geoLat,
-                        geoLng: location.geoLng,
+                      }))
+                    : undefined,
+              },
+              name: el.name,
+              parent: el.parent
+                ? {
+                    connect: {
+                      id: el.parent.id,
+                    },
+                  }
+                : undefined,
+              publicName: el.publicName || false,
+              schemes: {
+                connect: [
+                  {
+                    id: schemeId,
+                  },
+                ],
+              },
+              siteNumber: el.siteNumber,
+              tags: {
+                connect:
+                  el.tags && el.tags.length > 0
+                    ? el.tags.map((id) => ({ id }))
+                    : undefined,
+                create:
+                  el.newTags && el.newTags.length > 0
+                    ? el.newTags.map((value) => ({
+                        createdBy: { connect: { id: value.createdById } },
+                        dataType: Model.Business,
+                        description: value.description || '',
+                        name: value.name,
+                        schemes: {
+                          connect: value.schemes.map((id) => ({ id })),
+                        },
                       }))
                     : undefined,
               },
@@ -352,15 +367,21 @@ const useAddUser = ({
       create:
         newBusinesses && newBusinesses.length > 0
           ? newBusinesses.map((el) => ({
-              name: el.name,
-              publicName: el.publicName || false,
-              schemes: {
-                connect: [
-                  {
-                    id: schemeId,
-                  },
-                ],
+              locations: {
+                create:
+                  el?.locations && el?.locations.length > 0
+                    ? el?.locations.map((location) => ({
+                        building: location.building,
+                        county: location.county,
+                        geoLat: location.geoLat,
+                        geoLng: location.geoLng,
+                        postcode: location.postcode || '',
+                        street: location.street || '',
+                        townCity: location.townCity || '',
+                      }))
+                    : undefined,
               },
+              name: el.name,
               parent: el.parent
                 ? {
                     connect: {
@@ -368,19 +389,13 @@ const useAddUser = ({
                     },
                   }
                 : undefined,
-              locations: {
-                create:
-                  el?.locations && el?.locations.length > 0
-                    ? el?.locations.map((location) => ({
-                        building: location.building,
-                        county: location.county,
-                        postcode: location.postcode || '',
-                        street: location.street || '',
-                        townCity: location.townCity || '',
-                        geoLat: location.geoLat,
-                        geoLng: location.geoLng,
-                      }))
-                    : undefined,
+              publicName: el.publicName || false,
+              schemes: {
+                connect: [
+                  {
+                    id: schemeId,
+                  },
+                ],
               },
             }))
           : undefined,
@@ -396,46 +411,43 @@ const useAddUser = ({
     if (existingUser && userData?.user) {
       void inviteExistingUser({
         variables: {
-          where: {
-            id: userData.user.id,
-          },
           data: {
-            groups: { connect: data.groups.map((id) => ({ id })) },
             approverGroups:
               data.approverGroups && data.approverGroups.length > 0
                 ? { connect: data.approverGroups.map((id) => ({ id })) }
+                : undefined,
+            businesses: getExistingUserBusiness(),
+            chats:
+              data.chats.length > 0
+                ? {
+                    create: data.chats.map((id) => ({
+                      chat: {
+                        connect: { id },
+                      },
+                      newMessages: false,
+                    })),
+                  }
                 : undefined,
             defaultGroups:
               data.defaultGroups && data.defaultGroups.length > 0
                 ? { connect: data.defaultGroups.map((id) => ({ id })) }
                 : undefined,
-            chats:
-              data.chats.length > 0
-                ? {
-                    create: data.chats.map((id) => ({
-                      newMessages: false,
-                      chat: {
-                        connect: { id },
-                      },
-                    })),
-                  }
-                : undefined,
+            groups: { connect: data.groups.map((id) => ({ id })) },
             schemes: {
               create: [
                 {
-                  role: foundRole.type,
                   permissions: {
                     connect: {
                       id: foundRole.id,
                     },
                   },
+                  role: foundRole.type,
                   scheme: {
                     connect: { id: schemeId },
                   },
                 },
               ],
             },
-            businesses: getExistingUserBusiness(),
           },
           groupWhere: {
             scheme: {
@@ -444,39 +456,42 @@ const useAddUser = ({
               },
             },
           },
+          where: {
+            id: userData.user.id,
+          },
         },
       });
     } else {
       void createUserInDatabase({
         variables: {
           data: {
-            email: data.email,
-            fullName: data.fullName,
-            groups: data.groups.map((id) => ({ id })),
             approverGroups: data.approverGroups
               ? data.approverGroups.map((id) => ({ id }))
               : undefined,
+            bulletinEmails: data.bulletinEmails,
+            bulletinPush: data.bulletinPush,
+            businesses: getBusiness(),
+            chats: data.chats.map((id) => ({ id })),
             defaultGroups: data.defaultGroups
               ? data.defaultGroups.map((id) => ({ id }))
               : undefined,
-            role: foundRole.type,
-            roleId: data.role,
-            publicName: data.publicName,
-            reportToAllBusinesses: data.reportToAllBusinesses,
+            email: data.email,
+            fullName: data.fullName,
+            groups: data.groups.map((id) => ({ id })),
             incidentEmail: data.incidentEmail,
             incidentPush: data.incidentPush,
             messagePush: data.messagePush,
             offenderEmail: data.offenderEmail,
             offenderPush: data.offenderPush,
-            bulletinEmails: data.bulletinEmails,
-            bulletinPush: data.bulletinPush,
-            subscribedIncidentOnly: data.subscribedIncidentOnly,
-            subscribedOffenderOnly: data.subscribedOffenderOnly,
+            publicName: data.publicName,
+            reportToAllBusinesses: data.reportToAllBusinesses,
+            role: foundRole.type,
+            roleId: data.role,
             scheme: {
               id: schemeId,
             },
-            chats: data.chats.map((id) => ({ id })),
-            businesses: getBusiness(),
+            subscribedIncidentOnly: data.subscribedIncidentOnly,
+            subscribedOffenderOnly: data.subscribedOffenderOnly,
           },
           groupWhere: {
             scheme: {
@@ -506,33 +521,33 @@ const useAddUser = ({
     form.setFieldsValue({
       businesses: [
         ...selectedBusinesses,
-        { value: values.id, label: values.name },
+        { label: values.name, value: values.id },
       ],
     });
     setBusinessesData([...businessesData, { ...values, isNew: true }]);
   };
   return {
-    onSubmit,
-    groupsData: groups,
-    groupsLoading,
+    addBusinessVisible,
+    availableRoles,
     chatsData: chatsData?.chats.map((chat) => ({
-      value: chat.id,
       label: chat.name,
+      value: chat.id,
     })),
     chatsLoading,
-    saving,
-    onValuesChange,
-    form,
     existingUser,
+    form,
+    groupsData: groups,
+    groupsLoading,
+    onSubmit,
+    onValuesChange,
+    saving,
     schemeLoading: schemeLoading || rolesLoading,
-    selectedRole,
-    setSelectedRole,
     selectedGroups,
+    selectedRole,
     setSelectedGroups,
-    addBusinessVisible,
+    setSelectedRole,
     toggleAddBusinessVisible,
     updateNewBusinessData,
-    availableRoles,
   };
 };
 

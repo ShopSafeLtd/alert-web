@@ -1,76 +1,77 @@
 /* eslint-disable react/jsx-props-no-spreading,@typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx */
-import React from 'react';
-
+import type { FormInstance } from 'antd';
+import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
-import type { FormInstance } from 'antd';
+import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
 import { Button, Card, Col, Drawer, Form, PageHeader, Row } from 'antd';
-import moment from 'moment';
+import AddLocation from 'components/form-components/addresses/AddLocation';
+import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
-import ImageSection from 'components/incidents/IncidentForm/ImageSection';
-import AddLocation from 'components/form-components/addresses/AddLocation';
+import { IncidentFormField } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
-import useStyles from './AddIncident.styles';
+
 import type { FormData } from './useAddIncident';
+
+import useStyles from './AddIncident.styles';
+import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
+import IncidentGroups from './components/IncidentGroups/IncidentGroups.container';
+import IncidentPolice from './components/IncidentPolice/IncidentPolice.view';
 import IncidentTypes from './components/IncidentTypes/IncidentTypes.container';
 import IncidentWhere from './components/IncidentWhere/IncidentWhere.container';
 import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
-import IncidentPolice from './components/IncidentPolice/IncidentPolice.view';
-import IncidentGroups from './components/IncidentGroups/IncidentGroups.container';
-import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
-import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
-import { IncidentFormField } from 'graphql/types';
 
 interface Props {
+  addNewAddress: boolean;
+  brands: string[];
+  customQuestions: CustomQuestion[];
+  dontKnowGoods: () => void;
   form: FormInstance<FormData>;
+  goodsMode: string;
+  goodsVisible: boolean;
+  incidentForm: IncidentFormField[];
+  knowGoods: () => void;
+  newAddressData: LocationData | undefined;
   onSubmit: (value: FormData) => void;
   onValuesChange: (changedValues: FormData, values: FormData) => void;
   primaryAddress:
-    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
+    | Exclude<AddressesQuery['addresses'], null | undefined>[0]
     | undefined;
+  primaryImage: string;
+  reportOnly: boolean;
   saving: boolean;
-  addNewAddress: boolean;
+  setBrands: (value: string[]) => void;
+  setPrimaryImage: (value: string) => void;
+  showSiteNumber: boolean;
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
-  newAddressData: LocationData | undefined;
-  goodsVisible: boolean;
-  dontKnowGoods: () => void;
-  knowGoods: () => void;
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
-  incidentForm: IncidentFormField[];
-  customQuestions: CustomQuestion[];
-  goodsMode: string;
-  reportOnly: boolean;
-  brands: string[];
-  setBrands: (value: string[]) => void;
-  showSiteNumber: boolean;
 }
 
 const AddIncident = ({
-  form,
+  addNewAddress,
+  brands,
   customQuestions,
+  dontKnowGoods,
+  form,
+  goodsMode,
+  goodsVisible,
+  incidentForm,
+  knowGoods,
+  newAddressData,
   onSubmit,
   onValuesChange,
   primaryAddress,
+  primaryImage,
+  reportOnly,
   saving,
-  addNewAddress,
+  setBrands,
+  setPrimaryImage,
+  showSiteNumber,
   toggleAddNewAddress,
   updateNewAddressData,
-  newAddressData,
-  dontKnowGoods,
-  goodsVisible,
-  knowGoods,
-  primaryImage,
-  setPrimaryImage,
-  incidentForm,
-  goodsMode,
-  reportOnly,
-  showSiteNumber,
-  brands,
-  setBrands,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -85,15 +86,15 @@ const AddIncident = ({
       <Form<FormData>
         form={form}
         initialValues={{
-          fullAddress: primaryAddress?.full,
           date: moment(),
+          fullAddress: primaryAddress?.full,
+          images: [],
           involvedTags: [],
           offenders: null,
           vehicles: null,
-          images: [],
         }}
-        onFinish={onSubmit}
         layout="vertical"
+        onFinish={onSubmit}
         onValuesChange={onValuesChange}
       >
         {incidentForm.map((field) => {
@@ -105,12 +106,12 @@ const AddIncident = ({
               return (
                 <IncidentWhere
                   brands={brands}
-                  setBrands={setBrands}
-                  updateNewAddressData={updateNewAddressData}
                   newAddressData={newAddressData}
-                  toggleAddNewAddress={toggleAddNewAddress}
                   saving={saving}
+                  setBrands={setBrands}
                   showSiteNumber={showSiteNumber}
+                  toggleAddNewAddress={toggleAddNewAddress}
+                  updateNewAddressData={updateNewAddressData}
                 />
               );
             }
@@ -118,10 +119,10 @@ const AddIncident = ({
               return (
                 <IncidentGoods
                   dontKnowGoods={dontKnowGoods}
+                  form={form}
+                  goodsMode={goodsMode}
                   goodsVisible={goodsVisible}
                   knowGoods={knowGoods}
-                  goodsMode={goodsMode}
-                  form={form}
                 />
               );
             }
@@ -130,16 +131,16 @@ const AddIncident = ({
                 <Card className={classes.card}>
                   <Profiles
                     form={form}
-                    saving={saving}
+                    hasVictims={incidentForm.includes(
+                      IncidentFormField.Victims
+                    )}
                     // hasVehicles={incidentForm.includes(
                     //   IncidentFormField.Vehicles
                     // )}
                     hasWitnesses={incidentForm.includes(
                       IncidentFormField.Witnesses
                     )}
-                    hasVictims={incidentForm.includes(
-                      IncidentFormField.Victims
-                    )}
+                    saving={saving}
                   />
                 </Card>
               );
@@ -149,16 +150,16 @@ const AddIncident = ({
                 <Card className={classes.card}>
                   <ImageSection
                     disabled={saving}
-                    primaryImage={primaryImage}
-                    setPrimaryImage={setPrimaryImage}
                     form={form}
                     incidentForm={incidentForm}
+                    primaryImage={primaryImage}
+                    setPrimaryImage={setPrimaryImage}
                   />
                 </Card>
               );
             }
             case IncidentFormField.Police: {
-              return <IncidentPolice saving={saving} form={form} />;
+              return <IncidentPolice form={form} saving={saving} />;
             }
             case IncidentFormField.Details: {
               return (
@@ -176,7 +177,7 @@ const AddIncident = ({
               );
             }
             case IncidentFormField.Cctv: {
-              return <IncidentCCTV saving={saving} form={form} />;
+              return <IncidentCCTV form={form} saving={saving} />;
             }
             default: {
               return <div />;
@@ -186,7 +187,7 @@ const AddIncident = ({
 
         {/* Buttons */}
         <Form.Item>
-          <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
             {!reportOnly && (
               <Col>
                 <Button disabled={saving} onClick={() => window.history.back()}>
@@ -199,9 +200,9 @@ const AddIncident = ({
             <Col>
               <Button
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Incident',
@@ -213,12 +214,12 @@ const AddIncident = ({
       </Form>
 
       <Drawer
+        onClose={toggleAddNewAddress}
+        open={addNewAddress}
         title={intl.formatMessage({
           defaultMessage: 'Enter Address',
         })}
-        open={addNewAddress}
         width="600"
-        onClose={toggleAddNewAddress}
       >
         {addNewAddress && (
           <AddLocation

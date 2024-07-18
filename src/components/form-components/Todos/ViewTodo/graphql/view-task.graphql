@@ -39,6 +39,12 @@ query Todo($where: TodoWhereUniqueInput!) {
         type
       }
     }
+    business {
+      locations {
+        geoLat
+        geoLng
+      }
+    }
     description
     id
   }

@@ -8,7 +8,7 @@ export type EditTodoQueryVariables = Types.Exact<{
 }>;
 
 
-export type EditTodoQuery = { __typename?: 'Query', todo: { __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: Types.TodoType | null, completedDate?: Date | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, timeTaken: Array<{ __typename?: 'TimeTaken', timeTaken: number, user: { __typename?: 'User', id: string } }>, questions: Array<{ __typename?: 'TaskQuestion', id: string, question: { __typename?: 'Question', id: string, optionsFormatted?: Array<string> | null, questionFormatted: string, type: Types.AnswerType, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', label: string, value: string }> | null } }>, answers?: Array<{ __typename?: 'Answer', id: string, answer: string, taskQuestion?: { __typename?: 'TaskQuestion', id: string } | null }> | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null }> } };
+export type EditTodoQuery = { __typename?: 'Query', todo: { __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: Types.TodoType | null, completedDate?: Date | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, timeTaken: Array<{ __typename?: 'TimeTaken', timeTaken: number, user: { __typename?: 'User', id: string } }>, business?: { __typename?: 'Business', id: string } | null, questions: Array<{ __typename?: 'TaskQuestion', id: string, question: { __typename?: 'Question', id: string, optionsFormatted?: Array<string> | null, questionFormatted: string, type: Types.AnswerType, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', label: string, value: string }> | null } }>, answers?: Array<{ __typename?: 'Answer', id: string, answer: string, taskQuestion?: { __typename?: 'TaskQuestion', id: string } | null }> | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null }> } };
 
 
 export const EditTodoDocument = gql`
@@ -30,6 +30,9 @@ export const EditTodoDocument = gql`
         id
       }
       timeTaken
+    }
+    business {
+      id
     }
     questions {
       id

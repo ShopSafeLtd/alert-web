@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
-import React from 'react';
-
-import { Role } from 'graphql/types';
 import type { FormInstance } from 'antd';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -14,62 +16,60 @@ import {
   Switch,
   Typography,
 } from 'antd';
-
-import type { BusinessData, SelectOptions } from 'types/DataType';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
+import { Role } from 'graphql/types';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { FormData } from './useAddUser';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 
 const { Title } = Typography;
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  groupsData: SelectOptions[] | undefined;
-  groupsLoading: boolean;
+  addBusinessVisible: boolean;
+  availableRoles: SelectOptions[];
+  businessProvided: boolean;
   chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
-  saving: boolean;
+  existingUser: boolean;
+  form: FormInstance<FormData>;
+  groupsData: SelectOptions[] | undefined;
+  groupsLoading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValuesChange: (changedValues: any, values: FormData) => void;
-  form: FormInstance<FormData>;
-  existingUser: boolean;
-  businessProvided: boolean;
+  saving: boolean;
   schemeLoading: boolean;
-  selectedRole: string | undefined;
-  setSelectedRole: (value: string) => void;
-  availableRoles: SelectOptions[];
   selectedGroups: string[] | undefined;
+  selectedRole: string | undefined;
   setSelectedGroups: (value: string[]) => void;
-  addBusinessVisible: boolean;
+  setSelectedRole: (value: string) => void;
   toggleAddBusinessVisible: () => void;
   updateNewBusinessData: (values: BusinessData) => void;
 }
 
 const AddUser = ({
-  onSubmit,
-  form,
-  onClose,
-  groupsData,
-  groupsLoading,
+  addBusinessVisible,
+  availableRoles,
+  businessProvided,
   chatsData,
   chatsLoading,
-  saving,
-  onValuesChange,
   existingUser,
-  businessProvided,
+  form,
+  groupsData,
+  groupsLoading,
+  onClose,
+  onSubmit,
+  onValuesChange,
+  saving,
   schemeLoading,
-  selectedRole,
-  setSelectedRole,
   selectedGroups,
+  selectedRole,
   setSelectedGroups,
-  addBusinessVisible,
+  setSelectedRole,
   toggleAddBusinessVisible,
   updateNewBusinessData,
-  availableRoles,
 }: Props): JSX.Element => {
   const intl = useIntl();
   // const [selectedGroups, setSelectedGroups] = useState<string[]>();
@@ -78,19 +78,19 @@ const AddUser = ({
     <Form<FormData>
       form={form}
       initialValues={{
-        fullName: '',
-        email: '',
-        businesses: [],
-        role: '',
-        postcode: '',
-        street: '',
-        townCity: '',
         building: '',
-        county: '',
-        groups: [],
+        businesses: [],
         chats: [],
+        county: '',
+        email: '',
+        fullName: '',
+        groups: [],
+        postcode: '',
         publicName: true,
         reportToAllBusinesses: false,
+        role: '',
+        street: '',
+        townCity: '',
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -102,39 +102,39 @@ const AddUser = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="fullName"
             label={intl.formatMessage({
               defaultMessage: 'Full Name',
             })}
+            name="fullName"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the new user.',
                 }),
+                required: true,
               },
             ]}
           >
-            <Input readOnly={existingUser} disabled={saving} />
+            <Input disabled={saving} readOnly={existingUser} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="email"
             label={intl.formatMessage({
               defaultMessage: 'Email Address',
             })}
+            name="email"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter an email address for the new user.',
                 }),
+                required: true,
               },
             ]}
           >
-            <Input readOnly={existingUser} disabled={saving} type="email" />
+            <Input disabled={saving} readOnly={existingUser} type="email" />
           </Form.Item>
         </Col>
       </Row>
@@ -142,51 +142,51 @@ const AddUser = ({
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="businesses"
               label={intl.formatMessage({
                 defaultMessage: 'Businesses',
               })}
+              name="businesses"
               rules={[
                 {
-                  required: !existingUser,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select at least one business for the new user.',
                   }),
+                  required: !existingUser,
                 },
               ]}
             >
               <BusinessesSelect
-                showSearch
                 allowClear
-                mode="multiple"
-                maxTagCount={3}
                 disabled={saving || businessProvided}
+                maxTagCount={3}
+                mode="multiple"
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Search for a business...',
                 })}
+                showSearch
                 style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="role"
               label={intl.formatMessage({
                 defaultMessage: 'Role',
               })}
+              name="role"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please select a role for the user.',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Select
-                loading={schemeLoading}
                 disabled={saving}
+                loading={schemeLoading}
                 onChange={(value) => setSelectedRole(value)}
                 options={availableRoles}
               />
@@ -197,32 +197,32 @@ const AddUser = ({
         <>
           <Row gutter={16}>
             <Col flex={1}>
-              <Row gutter={20} align="middle">
+              <Row align="middle" gutter={20}>
                 <Col flex={1}>
                   <Form.Item
-                    name="businesses"
                     label={intl.formatMessage({
                       defaultMessage: 'Businesses',
                     })}
+                    name="businesses"
                     rules={[
                       {
-                        required: !existingUser,
                         message: intl.formatMessage({
                           defaultMessage:
                             'Please select at least one business for the new user.',
                         }),
+                        required: !existingUser,
                       },
                     ]}
                   >
                     <BusinessesSelect
-                      showSearch
                       allowClear
-                      mode="multiple"
-                      maxTagCount={3}
                       disabled={saving || businessProvided}
+                      maxTagCount={3}
+                      mode="multiple"
                       placeholder={intl.formatMessage({
                         defaultMessage: 'Search for a business...',
                       })}
+                      showSearch
                       style={{ width: '100%' }}
                     />
                   </Form.Item>
@@ -231,14 +231,14 @@ const AddUser = ({
                 <Col>
                   <Button
                     disabled={saving}
-                    style={{ color: 'red', padding: 8, marginTop: 3 }}
-                    onClick={toggleAddBusinessVisible}
                     icon={
                       <FontAwesomeIcon
                         icon={faPlus}
                         style={{ marginRight: 5 }}
                       />
                     }
+                    onClick={toggleAddBusinessVisible}
+                    style={{ color: 'red', marginTop: 3, padding: 8 }}
                   >
                     {intl.formatMessage({
                       defaultMessage: 'New Business',
@@ -251,22 +251,22 @@ const AddUser = ({
           <Row>
             <Col span={12}>
               <Form.Item
-                name="role"
                 label={intl.formatMessage({
                   defaultMessage: 'Role',
                 })}
+                name="role"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage: 'Please select a role for the user.',
                     }),
+                    required: true,
                   },
                 ]}
               >
                 <Select
-                  loading={schemeLoading}
                   disabled={saving}
+                  loading={schemeLoading}
                   onChange={(value) => setSelectedRole(value)}
                   options={availableRoles}
                 />
@@ -282,47 +282,47 @@ const AddUser = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
+            name="groups"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select at least one group for a user.',
                 }),
+                required: true,
               },
             ]}
           >
             <Select
-              loading={groupsLoading}
               disabled={saving}
-              onChange={(value) => setSelectedGroups(value)}
-              mode="multiple"
+              loading={groupsLoading}
               maxTagCount={3}
-              options={groupsData}
+              mode="multiple"
+              onChange={(value) => setSelectedGroups(value)}
               optionFilterProp="label"
               optionLabelProp="label"
+              options={groupsData}
             />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="chats"
             label={intl.formatMessage({
               defaultMessage: 'Chat Groups',
             })}
+            name="chats"
           >
             <Select
-              loading={chatsLoading}
               disabled={saving}
-              mode="multiple"
+              loading={chatsLoading}
               maxTagCount={3}
-              options={chatsData}
+              mode="multiple"
               optionFilterProp="label"
               optionLabelProp="label"
+              options={chatsData}
             />
           </Form.Item>
         </Col>
@@ -333,42 +333,42 @@ const AddUser = ({
           {selectedRole === Role.SchemeAdmin && (
             <Col span={12}>
               <Form.Item
-                name="approverGroups"
                 label={intl.formatMessage({
                   defaultMessage: 'Approver Groups',
                 })}
+                name="approverGroups"
               >
                 <Select
-                  loading={chatsLoading}
                   disabled={saving}
-                  mode="multiple"
+                  loading={chatsLoading}
                   maxTagCount={3}
+                  mode="multiple"
+                  optionFilterProp="label"
+                  optionLabelProp="label"
                   options={groupsData?.filter(({ value }) =>
                     form.getFieldValue('groups').includes(value)
                   )}
-                  optionFilterProp="label"
-                  optionLabelProp="label"
                 />
               </Form.Item>
             </Col>
           )}
           <Col span={12}>
             <Form.Item
-              name="defaultGroups"
               label={intl.formatMessage({
                 defaultMessage: 'Default Groups',
               })}
+              name="defaultGroups"
             >
               <Select
-                loading={chatsLoading}
                 disabled={saving}
-                mode="multiple"
+                loading={chatsLoading}
                 maxTagCount={3}
+                mode="multiple"
+                optionFilterProp="label"
+                optionLabelProp="label"
                 options={groupsData?.filter(({ value }) =>
                   form.getFieldValue('groups').includes(value)
                 )}
-                optionFilterProp="label"
-                optionLabelProp="label"
               />
             </Form.Item>
           </Col>
@@ -381,17 +381,17 @@ const AddUser = ({
               defaultMessage: 'Show user name in the system',
             })}
             name="publicName"
-            valuePropName="checked"
             style={{
-              marginBottom: 0,
               flexDirection: 'row',
               justifyItems: 'center',
+              marginBottom: 0,
             }}
+            valuePropName="checked"
           >
             <Switch
+              className="scheme-detail-switch"
               disabled={saving}
               style={{ marginLeft: 10, marginTop: -22 }}
-              className="scheme-detail-switch"
             />
           </Form.Item>
         </Col>
@@ -401,17 +401,17 @@ const AddUser = ({
               defaultMessage: 'Allow user to report to all businesses',
             })}
             name="reportToAllBusinesses"
-            valuePropName="checked"
             style={{
-              marginBottom: 0,
               flexDirection: 'row',
               justifyItems: 'center',
+              marginBottom: 0,
             }}
+            valuePropName="checked"
           >
             <Switch
+              className="scheme-detail-switch"
               disabled={saving}
               style={{ marginLeft: 10, marginTop: -22 }}
-              className="scheme-detail-switch"
             />
           </Form.Item>
         </Col>
@@ -422,7 +422,7 @@ const AddUser = ({
           defaultMessage: 'Notification Settings:',
         })}
       </Title>
-      <Title style={{ marginBottom: 8, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8 }}>
         {intl.formatMessage({
           defaultMessage: 'Incidents:',
         })}
@@ -433,18 +433,18 @@ const AddUser = ({
             'Only notify users for their own and subscribed incidents:',
         })}
         name="subscribedIncidentOnly"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
           className="scheme-detail-switch"
+          disabled={saving}
           loading={schemeLoading}
+          style={{ marginLeft: 10, marginTop: -22 }}
         />
       </Form.Item>
       <Form.Item
@@ -452,18 +452,18 @@ const AddUser = ({
           defaultMessage: 'Send app notifications for incidents:',
         })}
         name="incidentPush"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
           className="scheme-detail-switch"
+          disabled={saving}
           loading={schemeLoading}
+          style={{ marginLeft: 10, marginTop: -22 }}
         />
       </Form.Item>
       <Form.Item
@@ -471,84 +471,84 @@ const AddUser = ({
           defaultMessage: 'Send emails for incidents:',
         })}
         name="incidentEmail"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
           className="scheme-detail-switch"
+          disabled={saving}
           loading={schemeLoading}
+          style={{ marginLeft: 10, marginTop: -22 }}
         />
       </Form.Item>
-      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Offenders:',
         })}
       </Title>
       <Form.Item
-        name="subscribedOffenderOnly"
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed offenders:',
         })}
-        valuePropName="checked"
+        name="subscribedOffenderOnly"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
           className="scheme-detail-switch"
+          disabled={saving}
           loading={schemeLoading}
+          style={{ marginLeft: 10, marginTop: -22 }}
         />
       </Form.Item>
       <Form.Item
-        name="offenderPush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for offenders:',
         })}
-        valuePropName="checked"
+        name="offenderPush"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
           className="scheme-detail-switch"
+          disabled={saving}
           loading={schemeLoading}
+          style={{ marginLeft: 10, marginTop: -22 }}
         />
       </Form.Item>
       <Form.Item
-        name="offenderEmail"
         label={intl.formatMessage({
           defaultMessage: 'Send emails for offenders:',
         })}
-        valuePropName="checked"
+        name="offenderEmail"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
           className="scheme-detail-switch"
+          disabled={saving}
           loading={schemeLoading}
+          style={{ marginLeft: 10, marginTop: -22 }}
         />
       </Form.Item>
-      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Bulletins:',
         })}
@@ -558,17 +558,17 @@ const AddUser = ({
           defaultMessage: 'Send app notifications for bulletins:',
         })}
         name="bulletinPush"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
       <Form.Item
@@ -576,46 +576,46 @@ const AddUser = ({
           defaultMessage: 'Send emails for bulletins:',
         })}
         name="bulletinEmails "
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
-      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Chat Messages:',
         })}
       </Title>
       <Form.Item
-        name="messagePush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for new chat messages:',
         })}
-        valuePropName="checked"
+        name="messagePush"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
           className="scheme-detail-switch"
+          disabled={saving}
           loading={schemeLoading}
+          style={{ marginLeft: 10, marginTop: -22 }}
         />
       </Form.Item>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -624,9 +624,9 @@ const AddUser = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Invite User',
@@ -636,8 +636,8 @@ const AddUser = ({
         </Row>
       </Form.Item>
       <Drawer
-        open={addBusinessVisible}
         onClose={toggleAddBusinessVisible}
+        open={addBusinessVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
         })}

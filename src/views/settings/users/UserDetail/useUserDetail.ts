@@ -1,41 +1,44 @@
-import { type RefObject, useState } from 'react';
-
-import { useStoreState } from 'state';
-import { useNavigate } from 'react-router-dom';
-import { Modal, notification } from 'antd';
-import { useIntl } from 'react-intl';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import useReportPrint from '#/utils/reportPrint/usePrintReports';
-import type { UserQuery } from 'graphql/user/queries/user.generated';
-import { useUserQuery } from 'graphql/user/queries/user.generated';
+import type { ViewportData } from '#/types/DataType';
 import type { Role } from 'graphql/types';
+import type { UserQuery } from 'graphql/user/queries/user.generated';
+
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
+import { Modal, notification } from 'antd';
 import { UserStatus } from 'graphql/types';
+import { useDeleteUserFromSchemeMutation } from 'graphql/user/mutation/delete_user_from_scheme.generated';
 import { useSendInviteMutation } from 'graphql/user/mutation/send_invite.generated';
 import { useUpdateUserDisableMutation } from 'graphql/user/mutation/update_user_disable.generated';
-import { useDeleteUserFromSchemeMutation } from 'graphql/user/mutation/delete_user_from_scheme.generated';
+import { useUserQuery } from 'graphql/user/queries/user.generated';
+import { type RefObject, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
 interface Return {
+  componentRef: RefObject<HTMLDivElement>;
   data: UserQuery | undefined;
+  deleteConfirm: () => void;
+  demId: null | string | undefined;
+  demLink: boolean;
+  disableConfirm: () => void;
+  editPassword: boolean;
+  editUser: boolean;
+  enableConfirm: () => void;
+  handlePrint: () => void;
+  inviteConfirm: () => void;
+  isOwn: boolean;
+  isPrinting: boolean;
   loading: boolean;
   saving: boolean;
-  editUser: boolean;
-  isOwn: boolean;
-  demLink: boolean;
-  demId: string | undefined | null;
+  setViewport: (value: ViewportData | null) => void;
   toggleDemLink: () => void;
-  toggleEditUser: () => void;
-  inviteConfirm: () => void;
-  enableConfirm: () => void;
-  disableConfirm: () => void;
-  deleteConfirm: () => void;
-  userRole: Role | undefined;
-  editPassword: boolean;
   toggleEditPassword: () => void;
-  componentRef: RefObject<HTMLDivElement>;
-  handlePrint: () => void;
-  isPrinting: boolean;
+  toggleEditUser: () => void;
+  userRole: Role | undefined;
+  viewport: ViewportData | null;
 }
 
 const useUserDetail = (userId: string): Return => {
@@ -55,6 +58,8 @@ const useUserDetail = (userId: string): Return => {
   const demId = business.map((item) => item.demId)[0];
   const isOwn = currentUserId === userId;
   const [editPassword, setEditPassword] = useState(false);
+  const [viewport, setViewport] = useState<ViewportData | null>(null);
+
   const toggleEditPassword = () => {
     setEditPassword(!editPassword);
   };
@@ -62,16 +67,6 @@ const useUserDetail = (userId: string): Return => {
   const { data, loading } = useUserQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      where: {
-        id: userId,
-      },
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
       chatWhere: {
         chat: {
           scheme: {
@@ -81,6 +76,16 @@ const useUserDetail = (userId: string): Return => {
           },
         },
       },
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      where: {
+        id: userId,
+      },
     },
   });
 
@@ -89,8 +94,8 @@ const useUserDetail = (userId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully invited!',
         description: 'The invitation has been sent!',
+        message: 'Successfully invited!',
         placement: 'bottomRight',
       });
     },
@@ -113,9 +118,6 @@ const useUserDetail = (userId: string): Return => {
   };
   const inviteConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to send the invite?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Resending the invite will reset the users password and send them an new invite containing the new password.',
@@ -123,6 +125,9 @@ const useUserDetail = (userId: string): Return => {
       onOk() {
         openInvite();
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to send the invite?',
+      }),
     });
   };
 
@@ -131,11 +136,11 @@ const useUserDetail = (userId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The status of user has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -151,14 +156,14 @@ const useUserDetail = (userId: string): Return => {
     if (userId)
       void updateUser({
         variables: {
-          where: {
-            id: userId,
-          },
           data: {
             disabled: { set: disabled },
             status: {
               set: disabled ? UserStatus.Disabled : UserStatus.Active,
             },
+          },
+          where: {
+            id: userId,
           },
         },
       }).finally(() => {
@@ -167,9 +172,6 @@ const useUserDetail = (userId: string): Return => {
   };
   const enableConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to enable the user?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Enabling this user will allow them to log back into the system.',
@@ -177,14 +179,14 @@ const useUserDetail = (userId: string): Return => {
       onOk() {
         openDisableUser(false);
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to enable the user?',
+      }),
     });
   };
 
   const disableConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to disable the user?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Disabling this user will prevent them from logging into alert but will not delete them or any content they have added.',
@@ -192,6 +194,9 @@ const useUserDetail = (userId: string): Return => {
       onOk() {
         openDisableUser(true);
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to disable the user?',
+      }),
     });
   };
   const toggleEditUser = () => {
@@ -203,11 +208,11 @@ const useUserDetail = (userId: string): Return => {
       setSaving(false);
       navigate('users');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The user has been deleted.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -233,9 +238,6 @@ const useUserDetail = (userId: string): Return => {
 
   const deleteConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the user from the scheme?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Deleting this user will remove them from the scheme and any groups, it will not remove any content that they have submitted. This action can not be undone.',
@@ -243,29 +245,34 @@ const useUserDetail = (userId: string): Return => {
       onOk() {
         openDelete();
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the user from the scheme?',
+      }),
     });
   };
 
   return {
-    data,
-    loading,
-    editUser,
-    saving,
-    toggleEditUser,
-    inviteConfirm,
-    enableConfirm,
-    disableConfirm,
-    deleteConfirm,
-    demLink,
-    toggleDemLink,
-    demId,
-    userRole: data?.user?.schemes.find((el) => el.schemeId === schemeId)?.role,
-    editPassword,
-    toggleEditPassword,
-    isOwn,
     componentRef,
+    data,
+    deleteConfirm,
+    demId,
+    demLink,
+    disableConfirm,
+    editPassword,
+    editUser,
+    enableConfirm,
     handlePrint,
+    inviteConfirm,
+    isOwn,
     isPrinting,
+    loading,
+    saving,
+    setViewport,
+    toggleDemLink,
+    toggleEditPassword,
+    toggleEditUser,
+    userRole: data?.user?.schemes.find((el) => el.schemeId === schemeId)?.role,
+    viewport,
   };
 };
 

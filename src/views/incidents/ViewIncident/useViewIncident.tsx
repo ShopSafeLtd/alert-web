@@ -1,10 +1,24 @@
-import { useEffect, useMemo, useState } from 'react';
-
-import update from 'immutability-helper';
-
-import { IncidentSort, useStoreState } from 'state';
-import { Modal, notification } from 'antd';
-import { useIntl } from 'react-intl';
+import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/create_blur_faces.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import type {
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
+} from 'graphql/incidents/queries/view-incident.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type {
+  GoodsMode,
+  ImageUpdateWhereDataWithoutIncidentInput,
+  LanguageCode,
+} from 'graphql/types';
 import type {
   EditFeedImage,
   GoodsData,
@@ -13,29 +27,29 @@ import type {
   OffenderData,
   VehicleData,
 } from 'types/DataType';
-import {
-  ProfileUpdatedModel,
-  ProfileUpdatedType,
-} from 'types/enums/profile-update-type';
-import type { MutationUpdaterFn } from '@apollo/client';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import successNotification from 'types/mutation_notifications/success_notification';
+
 import hasPermission from '#/utils/has-permission';
-import type {
-  ViewIncidentQuery,
-  ViewIncidentQueryVariables,
-} from 'graphql/incidents/queries/view-incident.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { Modal, notification } from 'antd';
+import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/add-images-to-incident.generated';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/subscribe-to-incident.generated';
+import { useUnsubscribeFromIncidentMutation } from 'graphql/incidents/mutations/unsubscribe-from-incident.generated';
+import { useUpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
+import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/update-incident-images.generated';
+import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/update-incident-location.generated';
+import { useUpdateIncidentOffendersMutation } from 'graphql/incidents/mutations/update/update-incident-offenders.generated';
+import { useUpdateIncidentVehiclesMutation } from 'graphql/incidents/mutations/update/update-incident-vehicles.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
+import { ListIncidentsAllSchemesDocument } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
 import {
-  useViewIncidentQuery,
   ViewIncidentDocument,
+  useViewIncidentQuery,
 } from 'graphql/incidents/queries/view-incident.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import type {
-  GoodsMode,
-  ImageUpdateWhereDataWithoutIncidentInput,
-  LanguageCode,
-} from 'graphql/types';
+import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
+import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/add-images-to-offender.generated';
+import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
 import {
   PermissionMethod,
   PermissionModel,
@@ -43,178 +57,165 @@ import {
   Role,
   SortOrder,
 } from 'graphql/types';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
-import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
-import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
-import { ListIncidentsAllSchemesDocument } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
-import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/update-incident-images.generated';
-import { useUpdateIncidentVehiclesMutation } from 'graphql/incidents/mutations/update/update-incident-vehicles.generated';
-import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
-import { useUpdateIncidentOffendersMutation } from 'graphql/incidents/mutations/update/update-incident-offenders.generated';
-import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
-import { useUpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
-import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/update-incident-location.generated';
-import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/subscribe-to-incident.generated';
-import { useUnsubscribeFromIncidentMutation } from 'graphql/incidents/mutations/unsubscribe-from-incident.generated';
-import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/add-images-to-offender.generated';
-import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/add-images-to-incident.generated';
-import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
-import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
-import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
+import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
+import update from 'immutability-helper';
+import { useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { IncidentSort, useStoreState } from 'state';
+import {
+  ProfileUpdatedModel,
+  ProfileUpdatedType,
+} from 'types/enums/profile-update-type';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import successNotification from 'types/mutation_notifications/success_notification';
 
 const { confirm } = Modal;
 
 interface Return {
-  data: ViewIncidentQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  addOffenderRights: boolean;
-  editRights: boolean;
-  deleteRights: boolean;
-  onDelete: (id: string) => void;
-  linkOffender: boolean;
-  toggleLinkOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  loadMore: boolean;
-  scrolledToTop: () => void;
-  userId: string;
-  replyTo: {
-    id: string;
-    text: string;
-    createdAt: string;
-    createdBy: string;
-  } | null;
-  setReplyTo: (
-    value: {
-      id: string;
-      text: string;
-      createdAt: string;
-      createdBy: string;
-    } | null
-  ) => void;
-  toggleSubscribe: () => void;
+  addDocument: boolean;
+  addExistingOffender: boolean;
+  addExistingVehicle: boolean;
+  addGoods: boolean;
   addImages:
     | {
         id: string;
         url: string;
       }[]
     | null;
+  addInvestigation: boolean;
+  addOffender: boolean;
+  addOffenderRights: boolean;
+  addTodo: boolean;
+  addVehicle: boolean;
   closeAddImages: () => void;
-  toggleSelectImages: (id: string) => void;
-  selectedImages: string[];
+  completeTodoVisible: null | string;
   confirmDeleteUpdate: (updateId: string) => void;
+  data: ViewIncidentQuery | undefined;
+  deleteRights: boolean;
+  editAddress: boolean;
+  editGoodsData: GoodsData | null;
+  editImageData: EditFeedImage | null;
+  editImages: boolean;
+  editIncident: boolean;
+  editOffenderData: OffenderData | null;
+  editRights: boolean;
   editUpdate: { id: string; text: string } | null;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
-  handleEditUpdate: () => void;
   editUpdateInput: string;
-  setEditUpdateInput: (value: string) => void;
+  editVehicleData: VehicleData | null;
+  facialDetection: boolean;
+  goodsMode: GoodsMode;
+  handleEditUpdate: () => void;
+  hasConnectedSchemes: boolean;
+  hideIncident: boolean;
+  isTranslated: null | string;
+  languageCount: number;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  goodsMode: GoodsMode;
-  editIncident: boolean;
-  toggleEditIncident: () => void;
-  editImages: boolean;
-  toggleEditImages: () => void;
-  editImageData: EditFeedImage | null;
-  setEditImageData: (value: EditFeedImage | null) => void;
-  onDeleteImage: (id: string) => void;
-  onEditImage: (id: EditFeedImage) => void;
-  addOffender: boolean;
-  addExistingOffender: boolean;
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
-  editOffenderData: OffenderData | null;
-  setEditOffenderData: (value: OffenderData | null) => void;
-  onDeleteOffender: (id: string) => void;
-  addVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleData: VehicleData | null;
-  setEditVehicleData: (value: VehicleData | null) => void;
-  onDeleteVehicle: (id: string) => void;
-  addGoods: boolean;
-  toggleAddGoods: () => void;
-  editGoodsData: GoodsData | null;
-  setEditGoodsData: (value: GoodsData | null) => void;
-  onDeleteGoods: (id: string) => void;
-  onEditVehicle: (value: VehicleData) => void;
-  onAddVehicle: (value: VehicleData) => void;
-  onAddExistingVehicle: (id: string) => void;
+  linkOffender: boolean;
+  loadMore: boolean;
+  loading: boolean;
   onAddExistingOffender: (id: string) => void;
-  onEditGoods: (value: GoodsData) => void;
+  onAddExistingVehicle: (id: string) => void;
   onAddGoods: (value: GoodsData[]) => void;
-  onUpdateImages: (value: ImageCardData[]) => void;
-  addTodo: boolean;
-  toggleAddTodo: () => void;
-  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  toggleAddDocument: () => void;
-  addDocument: boolean;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
-  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  hideIncident: boolean;
-  userRole: Role;
-  translateText: () => Promise<void>;
-  isTranslated: string | null;
-  languageCount: number;
-  templatesData: QuestionGroupOnSchemeQuery | undefined;
-  templatesLoading: boolean;
-  viewTodoVisible: string | null;
-  setViewTodoVisible: (value: string | null) => void;
-  completeTodoVisible: string | null;
-  setCompleteTodoVisible: (value: string | null) => void;
-  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
-  toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
-  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  editAddress: boolean;
-  toggleEditAddress: () => void;
-  onEditAddress: (value: LocationData) => void;
   onAddUpdateImages: (
     images: { id: string; url: string }[],
     addToOffender?: boolean
   ) => void;
-  onSelectUpdateImages: () => void;
-  showOffenderOptions: boolean;
-  toggleShowOffenderOptions: () => void;
   onAddUpdateImagesToOffender: (id: string) => void;
-  selectedOffenderId: string;
-  setSelectedOffenderId: (id: string) => void;
-  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
-  onCompletedEditOffender: () => void;
-  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onAddVehicle: (value: VehicleData) => void;
   onCompletedAddOffender: () => void;
-  hasConnectedSchemes: boolean;
+  onCompletedEditOffender: () => void;
+  onDelete: (id: string) => void;
+  onDeleteGoods: (id: string) => void;
+  onDeleteImage: (id: string) => void;
+  onDeleteOffender: (id: string) => void;
+  onDeleteVehicle: (id: string) => void;
+  onEditAddress: (value: LocationData) => void;
+  onEditGoods: (value: GoodsData) => void;
+  onEditImage: (id: EditFeedImage) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onSelectUpdateImages: () => void;
+  onUpdateImages: (value: ImageCardData[]) => void;
+  openLightbox: (index: number) => void;
+  optionRowShow: boolean;
+  replyTo: {
+    createdAt: string;
+    createdBy: string;
+    id: string;
+    text: string;
+  } | null;
+  saving: boolean;
+  scrolledToTop: () => void;
+  selectedImages: string[];
+  selectedOffenderId: string;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setEditGoodsData: (value: GoodsData | null) => void;
+  setEditImageData: (value: EditFeedImage | null) => void;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  setOptionRowShow: (value: boolean) => void;
+  setReplyTo: (
+    value: {
+      createdAt: string;
+      createdBy: string;
+      id: string;
+      text: string;
+    } | null
+  ) => void;
+  setSelectedOffenderId: (id: string) => void;
+  setViewTodoVisible: (value: null | string) => void;
   shareOpen: boolean;
+  showOffenderOptions: boolean;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  toggleAddDocument: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
+  toggleAddGoods: () => void;
+  toggleAddInvestigation: () => void;
+  toggleAddOffender: () => void;
+  toggleAddTodo: () => void;
+  toggleAddVehicle: () => void;
+  toggleEditAddress: () => void;
+  toggleEditImages: () => void;
+  toggleEditIncident: () => void;
+  toggleLinkOffender: () => void;
+  toggleSelectImages: (id: string) => void;
   toggleShareOpen: () => void;
-  facialDetection: boolean;
+  toggleShowOffenderOptions: () => void;
+  toggleSubscribe: () => void;
+  translateText: () => Promise<void>;
+  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation>;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  updateOffendersList: (value: OffenderData) => void;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  userId: string;
+  userRole: Role;
+  viewTodoVisible: null | string;
 }
 
 const useViewIncident = (incidentId: string): Return => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
   const {
-    languageCount,
     facialDetection,
-    restrictIncidentAccess,
-    id: schemeId,
     goodsMode,
+    id: schemeId,
+    languageCount,
+    restrictIncidentAccess,
   } = useStoreState((state) => state.scheme);
   const { id: userId, schemes } = useStoreState((state) => state.user);
 
@@ -255,10 +256,10 @@ const useViewIncident = (incidentId: string): Return => {
     | null
   >(null);
   const [replyTo, setReplyTo] = useState<{
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null>(null);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
@@ -277,15 +278,15 @@ const useViewIncident = (incidentId: string): Return => {
     []
   );
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const [editImages, setEditImages] = useState(false);
   const [editImageData, setEditImageData] = useState<EditFeedImage | null>(
     null
   );
-  const [viewTodoVisible, setViewTodoVisible] = useState<string | null>(null);
-  const [completeTodoVisible, setCompleteTodoVisible] = useState<string | null>(
+  const [viewTodoVisible, setViewTodoVisible] = useState<null | string>(null);
+  const [completeTodoVisible, setCompleteTodoVisible] = useState<null | string>(
     null
   );
   const [showOffenderOptions, setShowOffenderOptions] = useState(false);
@@ -293,7 +294,7 @@ const useViewIncident = (incidentId: string): Return => {
   const [selectedOffenderId, setSelectedOffenderId] = useState<string>('');
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   useEffect(() => {
@@ -307,12 +308,6 @@ const useViewIncident = (incidentId: string): Return => {
 
   const { data, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: incidentId,
-      },
-    },
-
     onCompleted: (res) => {
       setLightboxElements(
         res.incident?.images.map((image) => ({
@@ -320,18 +315,24 @@ const useViewIncident = (incidentId: string): Return => {
         })) || []
       );
     },
+
+    variables: {
+      where: {
+        id: incidentId,
+      },
+    },
   });
 
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
       variables: {
-        where: {
-          id: schemeId,
-        },
         questionGroupsWhere: {
           defaultForIncidents: {
             equals: true,
           },
+        },
+        where: {
+          id: schemeId,
         },
       },
     });
@@ -340,11 +341,11 @@ const useViewIncident = (incidentId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Linked!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offenders have been Linked to this incidents!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Linked!',
         }),
         placement: 'bottomRight',
       });
@@ -359,13 +360,13 @@ const useViewIncident = (incidentId: string): Return => {
     if (incidentId && selectedOffender) {
       void updateIncident({
         variables: {
-          where: {
-            id: incidentId,
-          },
           data: {
             offenders: {
               connect: [{ id: selectedOffender.id }],
             },
+          },
+          where: {
+            id: incidentId,
           },
         },
       });
@@ -374,112 +375,24 @@ const useViewIncident = (incidentId: string): Return => {
   };
 
   const {
-    search,
-    crimeTypes,
-    groups,
     businesses,
-    goods,
     createdAt,
+    crimeTypes,
+    gallery,
+    goods,
+    groups,
     incidentDate,
     peculiarities,
-    gallery,
+    search,
   } = filterVariables;
   const sideListVars = {
-    take: 12,
+    order: {
+      date:
+        order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
+    },
     skip: 0,
+    take: 12,
     where: {
-      schemeId: {
-        equals: schemeId,
-      },
-      createdAt: createdAt
-        ? {
-            gte: createdAt.startDate,
-            lte: createdAt.endDate,
-          }
-        : undefined,
-      date: incidentDate
-        ? {
-            gte: incidentDate.startDate,
-            lte: incidentDate.endDate,
-          }
-        : undefined,
-      crimeTypes:
-        crimeTypes.length > 0
-          ? {
-              some: {
-                id: {
-                  in: crimeTypes,
-                },
-              },
-            }
-          : undefined,
-      groups:
-        groups.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groups,
-                },
-              },
-            }
-          : undefined,
-      business:
-        businesses.length > 0
-          ? {
-              id: {
-                in: businesses,
-              },
-            }
-          : undefined,
-      incidentItems:
-        goods.length > 0
-          ? {
-              some: {
-                goodsType: {
-                  id: {
-                    in: goods,
-                  },
-                },
-              },
-            }
-          : undefined,
-      description: peculiarities
-        ? {
-            mode: QueryMode.Insensitive,
-            contains: peculiarities,
-          }
-        : undefined,
-      approved:
-        role === Role.User
-          ? {
-              equals: true,
-            }
-          : gallery.includes('NOT APPROVED')
-          ? {
-              equals: false,
-            }
-          : undefined,
-
-      subscribedUsers: gallery.includes('FOLLOWING')
-        ? {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          }
-        : undefined,
-      policeInvolved: gallery.includes('POLICEINVOLVED')
-        ? {
-            equals: true,
-          }
-        : undefined,
-      policeReported: gallery.includes('POLICEREPORTED')
-        ? {
-            equals: true,
-          }
-        : undefined,
-
       AND: [
         {
           OR: [
@@ -529,10 +442,98 @@ const useViewIncident = (incidentId: string): Return => {
             : undefined,
         },
       ],
-    },
-    order: {
-      date:
-        order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
+      approved:
+        role === Role.User
+          ? {
+              equals: true,
+            }
+          : gallery.includes('NOT APPROVED')
+            ? {
+                equals: false,
+              }
+            : undefined,
+      business:
+        businesses.length > 0
+          ? {
+              id: {
+                in: businesses,
+              },
+            }
+          : undefined,
+      createdAt: createdAt
+        ? {
+            gte: createdAt.startDate,
+            lte: createdAt.endDate,
+          }
+        : undefined,
+      crimeTypes:
+        crimeTypes.length > 0
+          ? {
+              some: {
+                id: {
+                  in: crimeTypes,
+                },
+              },
+            }
+          : undefined,
+      date: incidentDate
+        ? {
+            gte: incidentDate.startDate,
+            lte: incidentDate.endDate,
+          }
+        : undefined,
+      description: peculiarities
+        ? {
+            contains: peculiarities,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      groups:
+        groups.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groups,
+                },
+              },
+            }
+          : undefined,
+      incidentItems:
+        goods.length > 0
+          ? {
+              some: {
+                goodsType: {
+                  id: {
+                    in: goods,
+                  },
+                },
+              },
+            }
+          : undefined,
+
+      policeInvolved: gallery.includes('POLICEINVOLVED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      policeReported: gallery.includes('POLICEREPORTED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      schemeId: {
+        equals: schemeId,
+      },
+
+      subscribedUsers: gallery.includes('FOLLOWING')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
     },
   };
 
@@ -540,12 +541,12 @@ const useViewIncident = (incidentId: string): Return => {
     onCompleted: () => {
       window.history.back();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been updated from the feed and moved to the recycle bin.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -564,25 +565,22 @@ const useViewIncident = (incidentId: string): Return => {
       if (!existingData?.listIncidentsAllSchemes?.incidents) return;
 
       store.writeQuery<ListIncidentsAllSchemesQuery>({
-        query: ListIncidentsAllSchemesDocument,
         data: {
+          __typename: 'Query',
           listIncidentsAllSchemes: {
             ...existingData.listIncidentsAllSchemes,
             incidents: existingData.listIncidentsAllSchemes.incidents.filter(
               ({ id }) => id !== incidentId
             ),
           },
-          __typename: 'Query',
         },
+        query: ListIncidentsAllSchemesDocument,
         variables: sideListVars,
       });
     },
   });
   const onDelete = (id: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -595,6 +593,9 @@ const useViewIncident = (incidentId: string): Return => {
           },
         });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
   // image
@@ -613,51 +614,51 @@ const useViewIncident = (incidentId: string): Return => {
     const editedImages = value.filter(({ edited }) => edited);
 
     void updateIncidentImages({
-      variables: {
-        id: incidentId,
-        images: {
-          disconnect:
-            disconnect && disconnect.length > 0 ? disconnect : undefined,
-          upload:
-            newImages && newImages.length > 0
-              ? newImages
-                  .map((item) => ({
-                    url: {
-                      filename: item.fileName || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                    position: item.position,
-                    primary: item.primary,
-                    policeImage: item.policeImage,
-                    rotation: item.rotation || 0,
-                    totalFaces: item.totalFaces || 0,
-                  }))
-                  .filter((obj) => obj.url !== undefined)
-              : undefined,
-          update:
-            editedImages && editedImages.length > 0
-              ? editedImages.map((item) => ({
-                  where: {
-                    id: item.id,
-                  },
-                  data: {
-                    position: { set: item.position },
-                    primary: { set: item.primary },
-                    policeImage: { set: item.policeImage },
-                    rotation: { set: item.rotation },
-                    totalFaces: { set: item.totalFaces },
-                  },
-                }))
-              : undefined,
-        },
-      },
       onCompleted: () => {
         successNotification(
           ProfileUpdatedModel.Images,
           ProfileUpdatedModel.Incident,
           ProfileUpdatedType.updated
         );
+      },
+      variables: {
+        id: incidentId,
+        images: {
+          disconnect:
+            disconnect && disconnect.length > 0 ? disconnect : undefined,
+          update:
+            editedImages && editedImages.length > 0
+              ? editedImages.map((item) => ({
+                  data: {
+                    policeImage: { set: item.policeImage },
+                    position: { set: item.position },
+                    primary: { set: item.primary },
+                    rotation: { set: item.rotation },
+                    totalFaces: { set: item.totalFaces },
+                  },
+                  where: {
+                    id: item.id,
+                  },
+                }))
+              : undefined,
+          upload:
+            newImages && newImages.length > 0
+              ? newImages
+                  .map((item) => ({
+                    policeImage: item.policeImage,
+                    position: item.position,
+                    primary: item.primary,
+                    rotation: item.rotation || 0,
+                    totalFaces: item.totalFaces || 0,
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                  }))
+                  .filter((obj) => obj.url !== undefined)
+              : undefined,
+        },
       },
     }).finally(() => {
       setEditImages(false);
@@ -674,42 +675,42 @@ const useViewIncident = (incidentId: string): Return => {
 
       const updateImages: ImageUpdateWhereDataWithoutIncidentInput[] = [
         {
-          where: {
-            id: value.id,
-          },
           data: {
+            policeImage: { set: value.policeImage || false },
             position: { set: value.position },
             primary: { set: value.primary || false },
-            policeImage: { set: value.policeImage || false },
             rotation: { set: value.rotation || 0 },
+          },
+          where: {
+            id: value.id,
           },
         },
       ];
 
       if (findPrimaryId && value.primary && findPrimaryId !== value.id) {
         updateImages.push({
-          where: {
-            id: findPrimaryId,
-          },
           data: {
             primary: { set: false },
+          },
+          where: {
+            id: findPrimaryId,
           },
         });
       }
 
       void updateIncidentImages({
-        variables: {
-          id: incidentId,
-          images: {
-            update: updateImages,
-          },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Image,
             ProfileUpdatedModel.Incident,
             ProfileUpdatedType.updated
           );
+        },
+        variables: {
+          id: incidentId,
+          images: {
+            update: updateImages,
+          },
         },
       }).finally(() => {
         setEditImageData(null);
@@ -720,12 +721,6 @@ const useViewIncident = (incidentId: string): Return => {
   const onDeleteImage = (value: string) => {
     setSaving(false);
     void updateIncidentImages({
-      variables: {
-        id: incidentId,
-        images: {
-          disconnect: [{ id: value }],
-        },
-      },
       onCompleted: () => {
         successNotification(
           ProfileUpdatedModel.Image,
@@ -743,19 +738,59 @@ const useViewIncident = (incidentId: string): Return => {
 
         if (!existingData?.incident) return;
         store.writeQuery<ViewIncidentQuery>({
-          query: ViewIncidentDocument,
           data: {
+            __typename: 'Query',
             incident: {
               ...existingData.incident,
               images: existingData.incident.images.filter(
                 ({ id }) => id !== value
               ),
             },
-            __typename: 'Query',
           },
+          query: ViewIncidentDocument,
           variables,
         });
       },
+      variables: {
+        id: incidentId,
+        images: {
+          disconnect: [{ id: value }],
+        },
+      },
+    });
+  };
+  const updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createBlurFaces === null || res?.createBlurFaces === undefined)
+      return;
+
+    const existingData = store.readQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      variables,
+    });
+
+    if (!existingData?.incident) return;
+    const findIndex = existingData.incident.images.findIndex(
+      ({ id }) => id === res.createBlurFaces.id
+    );
+    store.writeQuery<ViewIncidentQuery>({
+      data: {
+        __typename: 'Query',
+
+        incident: update<ViewIncidentQuery['incident']>(existingData.incident, {
+          images: {
+            [findIndex]: {
+              $set: {
+                ...res.createBlurFaces,
+              },
+            },
+          },
+        }),
+      },
+      query: ViewIncidentDocument,
+      variables,
     });
   };
   // vehicle
@@ -782,8 +817,8 @@ const useViewIncident = (incidentId: string): Return => {
         .map((item) => item.id)
         .indexOf(res.updateVehicle.id);
       store.writeQuery<ViewIncidentQuery>({
-        query: ViewIncidentDocument,
         data: {
+          __typename: 'Query',
           incident: {
             ...existingData.incident,
             vehicles: update(existingData.incident.vehicles, {
@@ -792,8 +827,8 @@ const useViewIncident = (incidentId: string): Return => {
               },
             }),
           },
-          __typename: 'Query',
         },
+        query: ViewIncidentDocument,
         variables,
       });
     },
@@ -806,39 +841,40 @@ const useViewIncident = (incidentId: string): Return => {
         (id) => !value.images?.map((el) => el.id).includes(id)
       );
       void updateVehicle({
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Incident,
+            ProfileUpdatedType.updated
+          );
+        },
         variables: {
-          where: {
-            id: value.id,
-          },
           data: {
-            make: { set: value.make || '' },
-            model: { set: value.model || '' },
             colour: { set: value.colour || '' },
-            registration: { set: value.registration || '' },
             images:
               value.images && value.images.length > 0
                 ? {
-                    delete:
-                      deleteIds && deleteIds.length > 0
-                        ? deleteIds.map((id) => ({ id }))
-                        : undefined,
                     connect: value.images
                       ?.filter((image) => !image.new)
                       .map((image) => ({
                         id: image.id,
                       })),
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
                     upload: value.images
                       ?.filter((image) => image.new)
                       .map((item) => ({
+                        policeImage: item.policeImage,
+                        position: item.position,
+                        primary: item.primary,
+                        rotation: item.rotation || 0,
                         url: {
                           filename: item.fileName || '',
                           mimetype: item.type || '',
                           url: item.url || '',
                         },
-                        position: item.position,
-                        primary: item.primary,
-                        policeImage: item.policeImage,
-                        rotation: item.rotation || 0,
                       }))
                       .filter((obj) => obj.url !== undefined),
                   }
@@ -848,14 +884,13 @@ const useViewIncident = (incidentId: string): Return => {
                         ? deleteIds.map((id) => ({ id }))
                         : undefined,
                   },
+            make: { set: value.make || '' },
+            model: { set: value.model || '' },
+            registration: { set: value.registration || '' },
           },
-        },
-        onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedModel.Incident,
-            ProfileUpdatedType.updated
-          );
+          where: {
+            id: value.id,
+          },
         },
       }).finally(() => {
         setEditVehicleData(null);
@@ -877,14 +912,14 @@ const useViewIncident = (incidentId: string): Return => {
 
       if (!existingData?.incident) return;
       store.writeQuery<ViewIncidentQuery>({
-        query: ViewIncidentDocument,
         data: {
+          __typename: 'Query',
           incident: {
             ...existingData.incident,
             vehicles: [...existingData.incident.vehicles, res.createVehicle],
           },
-          __typename: 'Query',
         },
+        query: ViewIncidentDocument,
         variables,
       });
     },
@@ -893,14 +928,16 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (value) {
       void createVehicle({
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Incident,
+            ProfileUpdatedType.added
+          );
+        },
         variables: {
           data: {
-            make: value.make || '',
-            model: value.model || '',
             colour: value.colour || '',
-            registration: value.registration || '',
-            incidents: [{ id: incidentId }],
-            schemes: schemeId,
             image:
               value.images && value.images.length > 0
                 ? {
@@ -912,27 +949,25 @@ const useViewIncident = (incidentId: string): Return => {
                     upload: value.images
                       ?.filter((image) => image.new)
                       .map((item) => ({
+                        policeImage: item.policeImage,
+                        position: item.position,
+                        primary: item.primary,
+                        rotation: item.rotation || 0,
                         url: {
                           filename: item.fileName || '',
                           mimetype: item.type || '',
                           url: item.url || '',
                         },
-                        position: item.position,
-                        primary: item.primary,
-                        policeImage: item.policeImage,
-                        rotation: item.rotation || 0,
                       }))
                       .filter((obj) => obj.url !== undefined),
                   }
                 : {},
+            incidents: [{ id: incidentId }],
+            make: value.make || '',
+            model: value.model || '',
+            registration: value.registration || '',
+            schemes: schemeId,
           },
-        },
-        onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedModel.Incident,
-            ProfileUpdatedType.added
-          );
         },
       }).finally(() => {
         setAddVehicle(false);
@@ -944,12 +979,6 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (value)
       void updateIncidentVehicles({
-        variables: {
-          id: incidentId,
-          vehicles: {
-            connect: [{ id: value }],
-          },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Vehicle,
@@ -968,16 +997,22 @@ const useViewIncident = (incidentId: string): Return => {
 
           if (!existingData?.incident) return;
           store.writeQuery<ViewIncidentQuery>({
-            query: ViewIncidentDocument,
             data: {
+              __typename: 'Query',
               incident: {
                 ...existingData.incident,
                 vehicles: res.updateIncident.vehicles,
               },
-              __typename: 'Query',
             },
+            query: ViewIncidentDocument,
             variables,
           });
+        },
+        variables: {
+          id: incidentId,
+          vehicles: {
+            connect: [{ id: value }],
+          },
         },
       }).finally(() => {
         setAddExistingVehicle(false);
@@ -988,10 +1023,6 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (value)
       void updateIncidentVehicles({
-        variables: {
-          id: incidentId,
-          vehicles: { disconnect: [{ id: value }] },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Vehicle,
@@ -1009,18 +1040,22 @@ const useViewIncident = (incidentId: string): Return => {
 
           if (!existingData?.incident) return;
           store.writeQuery<ViewIncidentQuery>({
-            query: ViewIncidentDocument,
             data: {
+              __typename: 'Query',
               incident: {
                 ...existingData.incident,
                 vehicles: existingData.incident.vehicles.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewIncidentDocument,
             variables,
           });
+        },
+        variables: {
+          id: incidentId,
+          vehicles: { disconnect: [{ id: value }] },
         },
       }).finally(() => {
         setSaving(false);
@@ -1048,8 +1083,8 @@ const useViewIncident = (incidentId: string): Return => {
       .indexOf(res.updateOffender.id);
 
     store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: {
           ...existingData.incident,
           offenders: update(existingData.incident.offenders, {
@@ -1058,19 +1093,19 @@ const useViewIncident = (incidentId: string): Return => {
             },
           }),
         },
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       variables,
     });
   };
 
   const onCompletedEditOffender = () =>
     notification.success({
-      message: intl.formatMessage({
-        defaultMessage: 'Successfully updated!',
-      }),
       description: intl.formatMessage({
         defaultMessage: 'The offender has been updated on the incident!',
+      }),
+      message: intl.formatMessage({
+        defaultMessage: 'Successfully updated!',
       }),
       placement: 'bottomRight',
     });
@@ -1200,24 +1235,24 @@ const useViewIncident = (incidentId: string): Return => {
 
     if (!existingData?.incident) return;
     store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: {
           ...existingData.incident,
           offenders: [...existingData.incident.offenders, res.createOffender],
         },
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       variables,
     });
   };
   const onCompletedAddOffender = () =>
     notification.success({
-      message: intl.formatMessage({
-        defaultMessage: 'Successfully added!',
-      }),
       description: intl.formatMessage({
         defaultMessage: 'The offender has been added to the incident!',
+      }),
+      message: intl.formatMessage({
+        defaultMessage: 'Successfully added!',
       }),
       placement: 'bottomRight',
     });
@@ -1226,12 +1261,6 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (value)
       void updateIncidentOffenders({
-        variables: {
-          id: incidentId,
-          offenders: {
-            connect: [{ id: value }],
-          },
-        },
         onCompleted: () => {
           onCompletedAddOffender();
         },
@@ -1246,16 +1275,22 @@ const useViewIncident = (incidentId: string): Return => {
 
           if (!existingData?.incident) return;
           store.writeQuery<ViewIncidentQuery>({
-            query: ViewIncidentDocument,
             data: {
+              __typename: 'Query',
               incident: {
                 ...existingData.incident,
                 offenders: res.updateIncident.offenders,
               },
-              __typename: 'Query',
             },
+            query: ViewIncidentDocument,
             variables,
           });
+        },
+        variables: {
+          id: incidentId,
+          offenders: {
+            connect: [{ id: value }],
+          },
         },
       }).finally(() => {
         setAddExistingOffender(false);
@@ -1266,10 +1301,6 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (value)
       void updateIncidentOffenders({
-        variables: {
-          id: incidentId,
-          offenders: { disconnect: [{ id: value }] },
-        },
         onCompleted: () => {
           onCompletedAddOffender();
         },
@@ -1283,18 +1314,22 @@ const useViewIncident = (incidentId: string): Return => {
 
           if (!existingData?.incident) return;
           store.writeQuery<ViewIncidentQuery>({
-            query: ViewIncidentDocument,
             data: {
+              __typename: 'Query',
               incident: {
                 ...existingData.incident,
                 offenders: existingData.incident.offenders.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewIncidentDocument,
             variables,
           });
+        },
+        variables: {
+          id: incidentId,
+          offenders: { disconnect: [{ id: value }] },
         },
       }).finally(() => {
         setSaving(false);
@@ -1321,14 +1356,14 @@ const useViewIncident = (incidentId: string): Return => {
 
     if (!existingData?.incident) return;
     store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: {
           ...existingData.incident,
           incidentItems: res.updateIncident.incidentItems,
         },
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       variables,
     });
   };
@@ -1336,14 +1371,18 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (item)
       void updateIncidentGoods({
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Incident_Item,
+            ProfileUpdatedModel.Incident,
+            ProfileUpdatedType.updated
+          );
+        },
         variables: {
           id: incidentId,
           incidentItems: {
             update: [
               {
-                where: {
-                  id: item.id,
-                },
                 data: {
                   goodsType: item.goodsType
                     ? {
@@ -1352,6 +1391,11 @@ const useViewIncident = (incidentId: string): Return => {
                         },
                       }
                     : undefined,
+                  name: { set: item.name },
+                  quantity: { set: item.quantity || 0 },
+                  recoveredQuantity: { set: item.recoveredQuantity || 0 },
+                  recoveredValue: { set: item.recoveredValue || 0 },
+                  sku: { set: item.sku },
                   stockItem: item.stockItem
                     ? {
                         connect: {
@@ -1359,23 +1403,14 @@ const useViewIncident = (incidentId: string): Return => {
                         },
                       }
                     : undefined,
-                  name: { set: item.name },
                   value: { set: item.value || 0 },
-                  recoveredValue: { set: item.recoveredValue || 0 },
-                  sku: { set: item.sku },
-                  quantity: { set: item.quantity || 0 },
-                  recoveredQuantity: { set: item.recoveredQuantity || 0 },
+                },
+                where: {
+                  id: item.id,
                 },
               },
             ],
           },
-        },
-        onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Incident_Item,
-            ProfileUpdatedModel.Incident,
-            ProfileUpdatedType.updated
-          );
         },
         // update: updateGoodsList,
       }).finally(() => {
@@ -1387,33 +1422,6 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (values) {
       void updateIncidentGoods({
-        variables: {
-          id: incidentId,
-          incidentItems: {
-            create: values.map((item) => ({
-              name: item.name,
-              value: item.value,
-              recoveredValue: item.recoveredValue,
-              sku: item.sku,
-              quantity: item.quantity,
-              recoveredQuantity: item.recoveredQuantity,
-              goodsType: item.goodsType
-                ? {
-                    connect: {
-                      id: item.goodsType,
-                    },
-                  }
-                : undefined,
-              stockItem: item.stockItem
-                ? {
-                    connect: {
-                      id: item.stockItem,
-                    },
-                  }
-                : undefined,
-            })),
-          },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Incident_Item,
@@ -1422,6 +1430,33 @@ const useViewIncident = (incidentId: string): Return => {
           );
         },
         update: updateGoodsList,
+        variables: {
+          id: incidentId,
+          incidentItems: {
+            create: values.map((item) => ({
+              goodsType: item.goodsType
+                ? {
+                    connect: {
+                      id: item.goodsType,
+                    },
+                  }
+                : undefined,
+              name: item.name,
+              quantity: item.quantity,
+              recoveredQuantity: item.recoveredQuantity,
+              recoveredValue: item.recoveredValue,
+              sku: item.sku,
+              stockItem: item.stockItem
+                ? {
+                    connect: {
+                      id: item.stockItem,
+                    },
+                  }
+                : undefined,
+              value: item.value,
+            })),
+          },
+        },
       }).finally(() => {
         setAddGoods(false);
         setSaving(false);
@@ -1432,27 +1467,15 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (value)
       void updateIncidentGoods({
-        variables: {
-          id: incidentId,
-          incidentItems: {
-            deleteMany: [
-              {
-                id: {
-                  equals: value,
-                },
-              },
-            ],
-          },
-        },
-        onError: () => {
-          setSaving(false);
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Incident_Item,
             ProfileUpdatedModel.Incident,
             ProfileUpdatedType.deleted
           );
+          setSaving(false);
+        },
+        onError: () => {
           setSaving(false);
         },
         update: (store, { data: res }) => {
@@ -1465,18 +1488,30 @@ const useViewIncident = (incidentId: string): Return => {
 
           if (!existingData?.incident) return;
           store.writeQuery<ViewIncidentQuery>({
-            query: ViewIncidentDocument,
             data: {
+              __typename: 'Query',
               incident: {
                 ...existingData.incident,
                 incidentItems: existingData.incident.incidentItems.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewIncidentDocument,
             variables,
           });
+        },
+        variables: {
+          id: incidentId,
+          incidentItems: {
+            deleteMany: [
+              {
+                id: {
+                  equals: value,
+                },
+              },
+            ],
+          },
         },
       });
   };
@@ -1494,14 +1529,14 @@ const useViewIncident = (incidentId: string): Return => {
 
     if (!existingData?.incident) return;
     store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: {
           ...existingData.incident,
           todos: [...existingData.incident.todos, res.createTodo],
         },
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       variables,
     });
   };
@@ -1525,8 +1560,8 @@ const useViewIncident = (incidentId: string): Return => {
     if (existingData?.incident?.todos === undefined) return;
 
     store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: update<ViewIncidentQuery['incident']>(existingData.incident, {
           todos: {
             [existingData.incident.todos.findIndex(
@@ -1536,8 +1571,8 @@ const useViewIncident = (incidentId: string): Return => {
             },
           },
         }),
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       // data: {
       //   incident: {
       //     ...existingData.incident,
@@ -1571,14 +1606,14 @@ const useViewIncident = (incidentId: string): Return => {
 
     if (!existingData?.incident) return;
     store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: {
           ...existingData.incident,
           evidence: [...existingData.incident.evidence, res.createDocument],
         },
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       variables,
     });
   };
@@ -1595,16 +1630,16 @@ const useViewIncident = (incidentId: string): Return => {
 
     if (!existingData?.incident) return;
     store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: {
           ...existingData.incident,
           evidence: existingData.incident.evidence.filter(
             ({ id }) => id !== res.deleteDocument?.id
           ),
         },
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       variables,
     });
   };
@@ -1625,8 +1660,8 @@ const useViewIncident = (incidentId: string): Return => {
 
     if (!existingData?.incident) return;
     store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
       data: {
+        __typename: 'Query',
         incident: {
           ...existingData.incident,
           investigations: [
@@ -1634,8 +1669,8 @@ const useViewIncident = (incidentId: string): Return => {
             res.createInvestigation,
           ],
         },
-        __typename: 'Query',
       },
+      query: ViewIncidentDocument,
       variables,
     });
   };
@@ -1651,27 +1686,27 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(true);
     if (value)
       void updateIncidentLocation({
-        variables: {
-          id: incidentId,
-          location: {
-            create: {
-              premises: '',
-              building: value.building,
-              street: value.street,
-              townCity: value.townCity,
-              county: value.county,
-              postcode: value.postcode,
-              geoLat: value.geoLat || undefined,
-              geoLng: value.geoLng || undefined,
-            },
-          },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Address,
             ProfileUpdatedModel.Incident,
             ProfileUpdatedType.updated
           );
+        },
+        variables: {
+          id: incidentId,
+          location: {
+            create: {
+              building: value.building,
+              county: value.county,
+              geoLat: value.geoLat || undefined,
+              geoLng: value.geoLng || undefined,
+              postcode: value.postcode,
+              premises: '',
+              street: value.street,
+              townCity: value.townCity,
+            },
+          },
         },
         // update: updateGoodsList,
       }).finally(() => {
@@ -1687,30 +1722,30 @@ const useViewIncident = (incidentId: string): Return => {
   const toggleSubscribe = () => {
     if (data?.incident?.subscribed) {
       void unsubscribeFromIncident({
-        variables: {
-          where: { id: incidentId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           unsubscribeFromIncident: {
-            id: incidentId,
             __typename: 'Incident',
+            id: incidentId,
             subscribed: false,
           },
+        },
+        variables: {
+          where: { id: incidentId },
         },
       });
     } else {
       void subscribeToIncident({
-        variables: {
-          where: { id: incidentId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           subscribeToIncident: {
-            id: incidentId,
             __typename: 'Incident',
+            id: incidentId,
             subscribed: true,
           },
+        },
+        variables: {
+          where: { id: incidentId },
         },
       });
     }
@@ -1773,35 +1808,35 @@ const useViewIncident = (incidentId: string): Return => {
           setShowOffenderOptions(true);
         } else {
           confirm({
-            title: intl.formatMessage({
-              defaultMessage: 'Are you sure?',
-            }),
             content: intl.formatMessage({
               defaultMessage:
                 'Adding this image will notify any other users following the incident.',
             }),
+            okText: intl.formatMessage({
+              defaultMessage: 'Add Images',
+            }),
             onOk() {
               onAddUpdateImagesToOffender(data?.incident.offenders[0].id);
             },
-            okText: intl.formatMessage({
-              defaultMessage: 'Add Images',
+            title: intl.formatMessage({
+              defaultMessage: 'Are you sure?',
             }),
           });
         }
       } else {
         confirm({
-          title: intl.formatMessage({
-            defaultMessage: 'Are you sure?',
-          }),
           content: intl.formatMessage({
             defaultMessage:
               'Adding this image will notify any other users following the offender.',
           }),
+          okText: intl.formatMessage({
+            defaultMessage: 'Add Images',
+          }),
           onOk() {
             onAddUpdateImagesToIncident(images.map(({ id }) => ({ id })));
           },
-          okText: intl.formatMessage({
-            defaultMessage: 'Add Images',
+          title: intl.formatMessage({
+            defaultMessage: 'Are you sure?',
           }),
         });
       }
@@ -1825,16 +1860,11 @@ const useViewIncident = (incidentId: string): Return => {
 
   const handleDeleteUpdate = (updateId: string) => {
     void deleteUpdate({
-      variables: {
-        where: {
-          id: updateId,
-        },
-      },
       optimisticResponse: {
         __typename: 'Mutation',
         deleteUpdate: {
-          id: updateId,
           __typename: 'Update',
+          id: updateId,
           replyToId: '',
         },
       },
@@ -1860,12 +1890,6 @@ const useViewIncident = (incidentId: string): Return => {
               if (updateItem) {
                 store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
                   {
-                    query: ViewIncidentDocument,
-                    variables: {
-                      where: {
-                        id: incidentId,
-                      },
-                    },
                     data: {
                       incident: {
                         ...oldData.incident,
@@ -1883,17 +1907,17 @@ const useViewIncident = (incidentId: string): Return => {
                         }),
                       },
                     },
+                    query: ViewIncidentDocument,
+                    variables: {
+                      where: {
+                        id: incidentId,
+                      },
+                    },
                   }
                 );
               }
             } else {
               store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
-                query: ViewIncidentDocument,
-                variables: {
-                  where: {
-                    id: incidentId,
-                  },
-                },
                 data: {
                   incident: {
                     ...oldData.incident,
@@ -1902,25 +1926,36 @@ const useViewIncident = (incidentId: string): Return => {
                     ),
                   },
                 },
+                query: ViewIncidentDocument,
+                variables: {
+                  where: {
+                    id: incidentId,
+                  },
+                },
               });
             }
         }
+      },
+      variables: {
+        where: {
+          id: updateId,
+        },
       },
     });
   };
 
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
       }),
+      okText: intl.formatMessage({ defaultMessage: 'Delete' }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: intl.formatMessage({ defaultMessage: 'Delete' }),
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
@@ -1929,20 +1964,20 @@ const useViewIncident = (incidentId: string): Return => {
   const handleEditUpdate = () => {
     if (editUpdate !== null)
       void updateUpdate({
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateUpdate: {
+            __typename: 'Update',
+            id: editUpdate.id || '',
+            text: editUpdateInput,
+          },
+        },
         variables: {
           data: {
             text: editUpdateInput,
           },
           where: {
             id: editUpdate.id,
-          },
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateUpdate: {
-            id: editUpdate.id || '',
-            __typename: 'Update',
-            text: editUpdateInput,
           },
         },
       });
@@ -1995,7 +2030,7 @@ const useViewIncident = (incidentId: string): Return => {
     setShowOffenderOptions(!showOffenderOptions);
   };
 
-  const [isTranslated, setIsTranslated] = useState<string | null>(null);
+  const [isTranslated, setIsTranslated] = useState<null | string>(null);
   const currentLanguage = useStoreState((state) => state.theme.locale);
 
   const [translate] = useTranslateLazyQuery({
@@ -2003,8 +2038,8 @@ const useViewIncident = (incidentId: string): Return => {
     fetchPolicy: 'cache-first',
     variables: {
       data: {
-        text: [data?.incident?.description || ''],
         targetLang: currentLanguage as LanguageCode,
+        text: [data?.incident?.description || ''],
       },
     },
   });
@@ -2026,120 +2061,121 @@ const useViewIncident = (incidentId: string): Return => {
     setShareOpen(!shareOpen);
   };
   const editRights = hasPermission({
-    permissions,
     permission: {
-      model: PermissionModel.Incidents,
       method: PermissionMethod.Edit,
+      model: PermissionModel.Incidents,
     },
+    permissions,
   });
 
   return {
+    addDocument,
+    addExistingOffender,
+    addExistingVehicle,
+    addGoods,
     addImages,
+    addInvestigation,
+    addOffender,
     addOffenderRights: editRights,
+    addTodo,
+    addVehicle,
     closeAddImages,
+    completeTodoVisible,
     confirmDeleteUpdate,
     data,
     deleteRights: editRights,
+    editAddress,
+    editGoodsData,
+    editImageData,
+    editImages,
+    editIncident,
+    editOffenderData,
     editRights,
     editUpdate,
     editUpdateInput,
+    editVehicleData,
+    facialDetection,
+    goodsMode,
     handleEditUpdate,
+    hasConnectedSchemes,
+    hideIncident: role === Role.User && restrictIncidentAccess,
+    isTranslated,
+    languageCount,
+    lightBoxOpen,
     lightboxElements,
     linkOffender,
     loadMore,
     loading: (data === null || data === undefined) && loading,
+    onAddExistingOffender,
+    onAddExistingVehicle,
+    onAddGoods,
+    onAddUpdateImages,
+    onAddUpdateImagesToOffender,
+    onAddVehicle,
+    onCompletedAddOffender,
+    onCompletedEditOffender,
     onDelete,
+    onDeleteGoods,
+    onDeleteImage,
+    onDeleteOffender,
+    onDeleteVehicle,
+    onEditAddress,
+    onEditGoods,
+    onEditImage,
+    onEditVehicle,
+    onSelectUpdateImages,
+    onUpdateImages,
+    openLightbox,
+    optionRowShow,
     replyTo,
     saving,
     scrolledToTop,
     selectedImages,
+    selectedOffenderId,
+    setCompleteTodoVisible,
+    setEditGoodsData,
+    setEditImageData,
+    setEditOffenderData,
     setEditUpdate,
     setEditUpdateInput,
-    setReplyTo,
-    toggleLinkOffender,
-    toggleSelectImages,
-    toggleSubscribe,
-    updateOffendersList,
-    userId,
-    openLightbox,
-    lightBoxOpen,
-    optionRowShow,
-    setOptionRowShow,
-    goodsMode,
-    editIncident,
-    toggleEditIncident,
-    addOffender,
-    addExistingOffender,
-    editOffenderData,
-    setEditOffenderData,
-    onDeleteOffender,
-    toggleAddOffender,
-    toggleAddExistingOffender,
-    addVehicle,
-    addExistingVehicle,
-    editVehicleData,
     setEditVehicleData,
-    onDeleteVehicle,
-    toggleAddVehicle,
-    toggleAddExistingVehicle,
-    addGoods,
-    editGoodsData,
-    setEditGoodsData,
-    onDeleteGoods,
-    toggleAddGoods,
-    editImages,
-    toggleEditImages,
-    editImageData,
-    setEditImageData,
-    onDeleteImage,
-    onEditImage,
-    onUpdateImages,
-    onEditVehicle,
-    onAddVehicle,
-    onAddExistingVehicle,
-    onEditGoods,
-    onAddGoods,
-    onAddExistingOffender,
-    addTodo,
-    toggleAddTodo,
-    updateTodoList,
-    addDocument,
-    toggleAddDocument,
-    updateDocumentList,
-    updateDeleteDocument,
-    hideIncident: role === Role.User && restrictIncidentAccess,
-    userRole: role,
-    translateText,
-    isTranslated,
-    languageCount,
+    setOptionRowShow,
+    setReplyTo,
+    setSelectedOffenderId,
+    setViewTodoVisible,
+    shareOpen,
+    showOffenderOptions,
     templatesData,
     templatesLoading,
-    setViewTodoVisible,
-    setCompleteTodoVisible,
-    completeTodoVisible,
-    viewTodoVisible,
-    updateTodo,
-    addInvestigation,
+    toggleAddDocument,
+    toggleAddExistingOffender,
+    toggleAddExistingVehicle,
+    toggleAddGoods,
     toggleAddInvestigation,
-    updateInvestigationList,
-    editAddress,
+    toggleAddOffender,
+    toggleAddTodo,
+    toggleAddVehicle,
     toggleEditAddress,
-    onEditAddress,
-    onSelectUpdateImages,
-    showOffenderOptions,
-    toggleShowOffenderOptions,
-    onAddUpdateImagesToOffender,
-    selectedOffenderId,
-    setSelectedOffenderId,
-    onAddUpdateImages,
-    updateEditOffenderList,
-    onCompletedEditOffender,
-    onCompletedAddOffender,
-    updateAddOffenderList,
-    hasConnectedSchemes,
-    shareOpen,
+    toggleEditImages,
+    toggleEditIncident,
+    toggleLinkOffender,
+    toggleSelectImages,
     toggleShareOpen,
-    facialDetection,
+    toggleShowOffenderOptions,
+    toggleSubscribe,
+    translateText,
+    updateAddOffenderList,
+    updateDeleteDocument,
+    updateDocumentList,
+    updateEditOffenderList,
+    updateImagesList,
+    updateInvestigationList,
+    updateOffendersList,
+    updateTodo,
+    updateTodoList,
+    userId,
+    userRole: role,
+    viewTodoVisible,
   };
 };
 

@@ -1,5 +1,4 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Card,
@@ -10,74 +9,77 @@ import {
   Space,
   Typography,
 } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
+
 import type { ActiveChecklistSection } from '../active-checklist/useActiveChecklist';
 
 interface QuestionWeight {
+  additionalInfo: string;
+  answer: string;
+  flagged: boolean;
+  id: string;
+  images: {
+    name: string;
+    url: string;
+  }[];
   maxWeight: number;
-  weight: number;
   na: boolean;
+  question: string;
   section: number;
   subsection: number;
-  additionalInfo: string;
-  flagged: boolean;
-  question: string;
-  answer: string;
-  id: string;
   type: string;
-  images: {
-    url: string;
-    name: string;
-  }[];
+  weight: number;
 }
 const flaggedArray = new Set(['FAIL', 'NO', 'FALSE']);
 const successArray = new Set(['PASS', 'YES', 'TRUE']);
 const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
 const CompletedChecklistView = ({
-  checklistSections,
-  title,
   additionalInfo,
-  signature,
-  completedByUser,
+  checklistSections,
   completedAt,
-  theme = 'dark',
-  onBack = () => {},
+  completedByUser,
   generating = false,
+  onBack = () => {},
+  signature,
+  theme = 'dark',
+  title,
 }: {
-  checklistSections: ActiveChecklistSection[];
-  title: string;
   additionalInfo: string;
-  signature: string;
-  completedByUser: string;
+  checklistSections: ActiveChecklistSection[];
   completedAt: string;
-  theme?: 'dark' | 'light';
-  onBack?: () => void;
+  completedByUser: string;
   generating?: boolean;
+  onBack?: () => void;
+  signature: string;
+  theme?: 'dark' | 'light';
+  title: string;
 }) => {
   const questions: QuestionWeight[] = [];
   const images: {
-    url: string;
     name: string;
     qId: string;
+    url: string;
   }[] = [];
+  console.log('signature', signature);
 
   let total = 0;
   let maxTotal = 0;
   const sectionTotals: {
-    section: number;
-    total: number;
-    maxTotal: number;
     flaggedNos: number;
+    maxTotal: number;
+    section: number;
     title: string;
+    total: number;
   }[] = [];
   const subsectionTotals: {
+    flaggedNos: number;
+    maxTotal: number;
     section: number;
     subsection: number;
-    total: number;
-    maxTotal: number;
-    flaggedNos: number;
     title: string;
+    total: number;
   }[] = [];
 
   // eslint-disable-next-line no-restricted-syntax
@@ -90,30 +92,30 @@ const CompletedChecklistView = ({
           question.images
             ?.map((image) => image.url)
             .map((image, index) => ({
-              url: image || '',
               name: `Photo ${index + 1}`,
               qId: question.id,
+              url: image || '',
             })) || [];
         images.push(...questionImages);
         const questionFormatted = {
-          question: `${indexToLetter(question.order - 1)}) ${
-            question.question.en
-          }`,
-          images: [...questionImages],
           additionalInfo: question.additionalComments || '',
-          section: section.section,
-          subsection: subsection.subsection || 0,
+          answer: question.answer || '',
+          flagged: question.answer === 'FAIL',
+          id: question.id,
+          images: [...questionImages],
           maxWeight:
             question.weights.sort((a, b) => b.weight - a.weight)[0]?.weight ||
             0,
+          na: question.answer === 'N/A',
+          question: `${indexToLetter(question.order - 1)}) ${
+            question.question.en
+          }`,
+          section: section.section,
+          subsection: subsection.subsection || 0,
+          type: question.type,
           weight:
             question.weights.find((weight) => weight.answer === question.answer)
               ?.weight || 0,
-          na: question.answer === 'N/A',
-          flagged: question.answer === 'FAIL',
-          answer: question.answer || '',
-          id: question.id,
-          type: question.type,
         };
         questions.push(questionFormatted);
 
@@ -125,11 +127,11 @@ const CompletedChecklistView = ({
           );
           if (sectionIndex === -1)
             sectionTotals.push({
-              section: section.section,
-              total: questionFormatted.weight,
-              maxTotal: questionFormatted.maxWeight,
               flaggedNos: question.answer === 'FAIL' ? 1 : 0,
+              maxTotal: questionFormatted.maxWeight,
+              section: section.section,
               title: section.titleLocaled || '',
+              total: questionFormatted.weight,
             });
           else {
             sectionTotals[sectionIndex].total += questionFormatted.weight;
@@ -144,12 +146,12 @@ const CompletedChecklistView = ({
           );
           if (subsectionIndex === -1)
             subsectionTotals.push({
+              flaggedNos: question.answer === 'FAIL' ? 1 : 0,
+              maxTotal: questionFormatted.maxWeight,
               section: section.section,
               subsection: subsection.subsection || 0,
-              total: questionFormatted.weight,
-              maxTotal: questionFormatted.maxWeight,
-              flaggedNos: question.answer === 'FAIL' ? 1 : 0,
               title: subsection.titleLocaled || '',
+              total: questionFormatted.weight,
             });
           else {
             subsectionTotals[subsectionIndex].total += questionFormatted.weight;
@@ -165,9 +167,9 @@ const CompletedChecklistView = ({
 
   const flagged = questions.filter((question) => question.flagged);
   const imagesFormatted = images.map((image, index) => ({
-    url: image.url,
     name: `Photo ${index + 1}`,
     qId: image.qId,
+    url: image.url,
   }));
 
   const [isPrinting, setIsPrinting] = useState(false);
@@ -182,8 +184,12 @@ const CompletedChecklistView = ({
   }, [isPrinting]);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    pageStyle:
-      '@page { size: A4; margin:10mm !important; } @media print { body { -webkit-print-color-adjust: exact; } }',
+    onAfterPrint: () => {
+      // Reset the Promise resolve so we can print again
+
+      promiseResolveRef.current = null;
+      setIsPrinting(false);
+    },
     onBeforeGetContent: () =>
       new Promise((resolve) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -191,28 +197,24 @@ const CompletedChecklistView = ({
         promiseResolveRef.current = resolve;
         setIsPrinting(true);
       }),
-    onAfterPrint: () => {
-      // Reset the Promise resolve so we can print again
-
-      promiseResolveRef.current = null;
-      setIsPrinting(false);
-    },
+    pageStyle:
+      '@page { size: A4; margin:10mm !important; } @media print { body { -webkit-print-color-adjust: exact; } }',
   });
 
   const percentage = Math.round((total / maxTotal) * 100);
 
   if (generating)
     return (
-      <div ref={componentRef} className="page">
+      <div className="page" ref={componentRef}>
         <Typography.Title level={2}>{title}</Typography.Title>
         <Row
           style={{
+            alignItems: 'center',
             backgroundColor:
               theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+            marginBottom: 10,
             padding: 10,
             paddingLeft: 5,
-            marginBottom: 10,
-            alignItems: 'center',
             textAlign: 'center',
           }}
         >
@@ -261,12 +263,12 @@ const CompletedChecklistView = ({
           <>
             <Row
               style={{
+                alignItems: 'center',
                 backgroundColor:
                   theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+                marginBottom: 10,
                 padding: 10,
                 paddingLeft: 5,
-                marginBottom: 10,
-                alignItems: 'center',
                 textAlign: 'center',
               }}
             >
@@ -320,10 +322,10 @@ const CompletedChecklistView = ({
                   <Col
                     span={6}
                     style={{
-                      color: 'white',
                       backgroundColor: 'red',
-                      textAlign: 'center',
+                      color: 'white',
                       padding: 5,
+                      textAlign: 'center',
                     }}
                   >
                     {question.answer}
@@ -337,11 +339,11 @@ const CompletedChecklistView = ({
                     <Col
                       span={24}
                       style={{
+                        alignItems: 'center',
                         display: 'flex',
                         flexDirection: 'row',
                         flexWrap: 'wrap',
                         justifyContent: 'center',
-                        alignItems: 'center',
                       }}
                     >
                       {imagesFormatted
@@ -355,13 +357,13 @@ const CompletedChecklistView = ({
                             }}
                           >
                             <img
+                              alt={image.name}
+                              height={150}
+                              src={image.url}
                               style={{
                                 objectFit: 'contain',
                               }}
-                              height={150}
                               width={150}
-                              src={image.url}
-                              alt={image.name}
                             />
                             <Typography.Text type="secondary">
                               {image.name}
@@ -380,12 +382,12 @@ const CompletedChecklistView = ({
           <div>
             <Row
               style={{
+                alignItems: 'center',
                 backgroundColor:
                   theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+                marginBottom: 10,
                 padding: 10,
                 paddingLeft: 5,
-                marginBottom: 10,
-                alignItems: 'center',
                 textAlign: 'center',
               }}
             >
@@ -487,23 +489,23 @@ const CompletedChecklistView = ({
                                 <Col
                                   span={6}
                                   style={{
+                                    backgroundColor: flaggedArray.has(
+                                      question.answer
+                                    )
+                                      ? 'red'
+                                      : successArray.has(question.answer)
+                                        ? 'green'
+                                        : question.answer === 'N/A'
+                                          ? 'lightBlue'
+                                          : undefined,
                                     color:
                                       flaggedArray.has(question.answer) ||
                                       successArray.has(question.answer) ||
                                       question.answer === 'N/A'
                                         ? 'white'
                                         : 'black',
-                                    backgroundColor: flaggedArray.has(
-                                      question.answer
-                                    )
-                                      ? 'red'
-                                      : successArray.has(question.answer)
-                                      ? 'green'
-                                      : question.answer === 'N/A'
-                                      ? 'lightBlue'
-                                      : undefined,
-                                    textAlign: 'center',
                                     padding: 5,
+                                    textAlign: 'center',
                                   }}
                                 >
                                   {question.type === 'TEXT' ? (
@@ -523,11 +525,11 @@ const CompletedChecklistView = ({
                                   <Col
                                     span={24}
                                     style={{
+                                      alignItems: 'center',
                                       display: 'flex',
                                       flexDirection: 'row',
                                       flexWrap: 'wrap',
                                       justifyContent: 'center',
-                                      alignItems: 'center',
                                     }}
                                   >
                                     {imagesFormatted
@@ -543,11 +545,11 @@ const CompletedChecklistView = ({
                                           }}
                                         >
                                           <img
-                                            style={{ objectFit: 'contain' }}
-                                            height={150}
-                                            width={150}
-                                            src={image.url}
                                             alt={image.name}
+                                            height={150}
+                                            src={image.url}
+                                            style={{ objectFit: 'contain' }}
+                                            width={150}
                                           />
                                           <Typography.Text type="secondary">
                                             {image.name}
@@ -571,12 +573,12 @@ const CompletedChecklistView = ({
         <div>
           <Row
             style={{
+              alignItems: 'center',
               backgroundColor:
                 theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+              marginBottom: 10,
               padding: 10,
               paddingLeft: 5,
-              marginBottom: 10,
-              alignItems: 'center',
               textAlign: 'center',
             }}
           >
@@ -621,20 +623,20 @@ const CompletedChecklistView = ({
       </div>
     );
   return (
-    <div style={{ marginTop: 30, marginLeft: 50, marginRight: 50 }}>
+    <div style={{ marginLeft: 50, marginRight: 50, marginTop: 30 }}>
       <Row gutter={[8, 8]} style={{ marginBottom: 10 }}>
         <PageHeader
-          onBack={onBack}
-          title="Checklists"
-          style={{ paddingLeft: 0, paddingRight: 0, width: '100%' }}
           extra={[
             <>
               <Col flex={1} />
-              <Button type="primary" onClick={() => handlePrint()}>
+              <Button onClick={() => handlePrint()} type="primary">
                 Print
               </Button>
             </>,
           ]}
+          onBack={onBack}
+          style={{ paddingLeft: 0, paddingRight: 0, width: '100%' }}
+          title="Checklists"
         />
       </Row>
 
@@ -643,12 +645,12 @@ const CompletedChecklistView = ({
           <Typography.Title level={2}>{title}</Typography.Title>
           <Row
             style={{
+              alignItems: 'center',
               backgroundColor:
                 theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+              marginBottom: 10,
               padding: 10,
               paddingLeft: 5,
-              marginBottom: 10,
-              alignItems: 'center',
               textAlign: 'center',
             }}
           >
@@ -697,12 +699,12 @@ const CompletedChecklistView = ({
             <>
               <Row
                 style={{
+                  alignItems: 'center',
                   backgroundColor:
                     theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+                  marginBottom: 10,
                   padding: 10,
                   paddingLeft: 5,
-                  marginBottom: 10,
-                  alignItems: 'center',
                   textAlign: 'center',
                 }}
               >
@@ -756,10 +758,10 @@ const CompletedChecklistView = ({
                     <Col
                       span={6}
                       style={{
-                        color: 'white',
                         backgroundColor: 'red',
-                        textAlign: 'center',
+                        color: 'white',
                         padding: 5,
+                        textAlign: 'center',
                       }}
                     >
                       {question.answer}
@@ -773,11 +775,11 @@ const CompletedChecklistView = ({
                       <Col
                         span={24}
                         style={{
+                          alignItems: 'center',
                           display: 'flex',
                           flexDirection: 'row',
                           flexWrap: 'wrap',
                           justifyContent: 'center',
-                          alignItems: 'center',
                         }}
                       >
                         {imagesFormatted
@@ -791,13 +793,13 @@ const CompletedChecklistView = ({
                               }}
                             >
                               <img
+                                alt={image.name}
+                                height={150}
+                                src={image.url}
                                 style={{
                                   objectFit: 'contain',
                                 }}
-                                height={150}
                                 width={150}
-                                src={image.url}
-                                alt={image.name}
                               />
                               <Typography.Text type="secondary">
                                 {image.name}
@@ -816,12 +818,12 @@ const CompletedChecklistView = ({
             <div>
               <Row
                 style={{
+                  alignItems: 'center',
                   backgroundColor:
                     theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+                  marginBottom: 10,
                   padding: 10,
                   paddingLeft: 5,
-                  marginBottom: 10,
-                  alignItems: 'center',
                   textAlign: 'center',
                 }}
               >
@@ -923,23 +925,23 @@ const CompletedChecklistView = ({
                                   <Col
                                     span={6}
                                     style={{
+                                      backgroundColor: flaggedArray.has(
+                                        question.answer
+                                      )
+                                        ? 'red'
+                                        : successArray.has(question.answer)
+                                          ? 'green'
+                                          : question.answer === 'N/A'
+                                            ? 'lightBlue'
+                                            : undefined,
                                       color:
                                         flaggedArray.has(question.answer) ||
                                         successArray.has(question.answer) ||
                                         question.answer === 'N/A'
                                           ? 'white'
                                           : 'black',
-                                      backgroundColor: flaggedArray.has(
-                                        question.answer
-                                      )
-                                        ? 'red'
-                                        : successArray.has(question.answer)
-                                        ? 'green'
-                                        : question.answer === 'N/A'
-                                        ? 'lightBlue'
-                                        : undefined,
-                                      textAlign: 'center',
                                       padding: 5,
+                                      textAlign: 'center',
                                     }}
                                   >
                                     {question.type === 'TEXT' ? (
@@ -959,11 +961,11 @@ const CompletedChecklistView = ({
                                     <Col
                                       span={24}
                                       style={{
+                                        alignItems: 'center',
                                         display: 'flex',
                                         flexDirection: 'row',
                                         flexWrap: 'wrap',
                                         justifyContent: 'center',
-                                        alignItems: 'center',
                                       }}
                                     >
                                       {imagesFormatted
@@ -979,11 +981,11 @@ const CompletedChecklistView = ({
                                             }}
                                           >
                                             <img
-                                              style={{ objectFit: 'contain' }}
-                                              height={150}
-                                              width={150}
-                                              src={image.url}
                                               alt={image.name}
+                                              height={150}
+                                              src={image.url}
+                                              style={{ objectFit: 'contain' }}
+                                              width={150}
                                             />
                                             <Typography.Text type="secondary">
                                               {image.name}
@@ -1007,12 +1009,12 @@ const CompletedChecklistView = ({
           <div>
             <Row
               style={{
+                alignItems: 'center',
                 backgroundColor:
                   theme === 'light' || isPrinting ? '#f0f0f0' : '#303030',
+                marginBottom: 10,
                 padding: 10,
                 paddingLeft: 5,
-                marginBottom: 10,
-                alignItems: 'center',
                 textAlign: 'center',
               }}
             >

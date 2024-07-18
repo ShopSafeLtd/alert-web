@@ -1,82 +1,87 @@
-import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
-
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
-import useAddNewOffender from './useAddNewOffender';
-import View from './AddNewOffender.view';
-import type { ImageData } from '../../../ImageSelect/ImageSelect.view';
-import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
 
+import React from 'react';
+
+import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
+import type { ImageData } from '../../../ImageSelect/ImageSelect.view';
+
+import View from './AddNewOffender.view';
+import useAddNewOffender from './useAddNewOffender';
+
 interface Props {
-  onClose: () => void;
-  onCompleted?: () => void;
-  update?: MutationUpdaterFn<CreateSimpleOffenderMutation>;
-  onAddOffender?: (value: AddOffenderData) => void;
-  images?: ImageData[] | undefined;
-  incidentId?: string;
-  investigationId?: string;
-  vehicleId?: string;
+  addOverride?: string;
   crimeGroupId?: string;
   groupsIds?: string[];
-  onImagesUploaded?: (values: StateImageData[]) => void;
+  images?: ImageData[] | undefined;
   incidentBusinessId?: string;
+  incidentId?: string;
+  investigationId?: string;
+  onAddOffender?: (value: AddOffenderData) => void;
+  onClose: () => void;
+  onCompleted?: () => void;
+  onImagesUploaded?: (values: StateImageData[]) => void;
+  update?: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  vehicleId?: string;
 }
 
 const AddNewOffender = ({
-  onClose,
-  update,
-  onAddOffender,
-  onCompleted,
-  images,
-  onImagesUploaded,
-  incidentId,
-  investigationId,
-  vehicleId,
+  addOverride,
   crimeGroupId,
   groupsIds,
+  images,
   incidentBusinessId,
+  incidentId,
+  investigationId,
+  onAddOffender,
+  onClose,
+  onCompleted,
+  onImagesUploaded,
+  update,
+  vehicleId,
 }: Props): JSX.Element => {
   const {
+    ageCheck,
+    form,
+    idVerified,
+    knowAddress,
+    loading,
+    offenderSettings,
     onSubmit,
     saving,
-    ageCheck,
-    idVerified,
-    form,
-    uploading,
     setUploading,
-    offenderSettings,
-    loading,
-    knowAddress,
+    uploading,
   } = useAddNewOffender({
-    onClose,
-    update,
-    onAddOffender,
-    onCompleted,
-    onImagesUploaded,
-    incidentId,
-    investigationId,
-    vehicleId,
     crimeGroupId,
     groupsIds,
     incidentBusinessId,
+    incidentId,
+    investigationId,
+    onAddOffender,
+    onClose,
+    onCompleted,
+    onImagesUploaded,
+    update,
+    vehicleId,
   });
 
   return (
     <div>
       <View
-        setUploading={setUploading}
-        uploading={uploading}
-        onSubmit={onSubmit}
-        onClose={onClose}
-        saving={saving}
-        images={images}
+        addOverride={addOverride}
+        ageCheck={ageCheck}
         form={form}
         idVerified={idVerified}
-        ageCheck={ageCheck}
-        offenderSettings={offenderSettings}
-        loading={loading}
+        images={images}
         knowAddress={knowAddress}
+        loading={loading}
+        offenderSettings={offenderSettings}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        saving={saving}
+        setUploading={setUploading}
+        uploading={uploading}
       />
     </div>
   );

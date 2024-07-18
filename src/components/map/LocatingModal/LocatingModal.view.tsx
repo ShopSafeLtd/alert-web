@@ -1,41 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react';
-
-import { createUseStyles } from 'react-jss';
-import { Col, Form, Modal, Row, Spin, Switch } from 'antd';
-import { useStoreState } from 'state';
 import type { MapRef } from 'react-map-gl';
-import Map, { Marker } from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
-import { useIntl } from 'react-intl';
 import type { ViewportData } from 'types/DataType';
+
+import { Col, Form, Modal, Row, Spin, Switch } from 'antd';
+import mapboxgl from 'mapbox-gl';
+import React, { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import Map, { Marker } from 'react-map-gl';
+import { useStoreState } from 'state';
 
 import MapPin from '../MapPin';
 import GeocoderControl from './geocoder-control';
 
 const useStyles = createUseStyles({
-  spin: { position: 'absolute', top: '50%', left: '50%' },
+  action: {
+    marginTop: -20,
+  },
 
   actions: {
     marginTop: 60,
     paddingLeft: 10,
   },
-  action: {
-    marginTop: -20,
-  },
+  spin: { left: '50%', position: 'absolute', top: '50%' },
 });
 
 interface Props {
-  viewportData: ViewportData;
+  handleSubmit: (value: ViewportData) => void;
   onClose: () => void;
   open: boolean;
-  handleSubmit: (value: ViewportData) => void;
+  uneditable?: boolean;
+  viewportData: ViewportData;
 }
 
 const LocatingModal = ({
-  viewportData,
+  handleSubmit,
   onClose,
   open,
-  handleSubmit,
+  uneditable,
+  viewportData,
 }: Props) => {
   const mapRef = useRef<MapRef>(null);
   // const geoControlRef = useRef<mapboxgl.GeolocateControl>();
@@ -87,70 +89,74 @@ const LocatingModal = ({
   const onSubmit = () => {
     if (viewport) handleSubmit(viewport);
   };
+  const onCancel = () => {
+    setViewport(viewportData);
+    onClose();
+  };
 
   return (
     <Modal
-      bodyStyle={{ padding: 0, borderRadius: 10, overflow: 'hidden' }}
+      bodyStyle={{ borderRadius: 10, overflow: 'hidden', padding: 0 }}
+      okText={
+        uneditable
+          ? undefined
+          : intl.formatMessage({
+              defaultMessage: 'Save Location',
+            })
+      }
+      onCancel={onCancel}
+      onOk={uneditable ? onCancel : onSubmit}
       open={open}
-      title={intl.formatMessage({
-        defaultMessage: 'Pin an Location -- click to pin a location on the map',
-      })}
-      okText={intl.formatMessage({
-        defaultMessage: 'Save Location',
-      })}
-      onOk={onSubmit}
-      onCancel={() => {
-        // ???
-        setViewport(viewportData);
-        onClose();
-        // handleOnResult(viewportData);
-      }}
+      title={
+        uneditable
+          ? undefined
+          : intl.formatMessage({
+              defaultMessage:
+                'Pin an Location -- click to pin a location on the map',
+            })
+      }
       width="95vw"
     >
       <Row wrap={false}>
         <Col>
           {viewport ? (
             <Map
-              onError={() => {}}
-              onClick={handleClick}
-              ref={mapRef}
-              mapLib={mapboxgl}
-              mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
               initialViewState={{
-                longitude: viewport?.longitude,
+                fitBoundsOptions: { duration: 100 },
                 latitude: viewport?.latitude,
+                longitude: viewport?.longitude,
                 pitch: 45,
                 zoom: 16,
-                fitBoundsOptions: { duration: 100 },
               }}
-              style={{ width: '85vw', height: '80vh' }}
+              mapLib={mapboxgl}
               mapStyle={
                 currentTheme === 'dark'
                   ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
                   : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
               }
+              mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+              onClick={handleClick}
+              onError={() => {}}
+              ref={mapRef}
+              style={{ height: '80vh', width: '85vw' }}
             >
               <GeocoderControl
                 mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-                position="top-right"
-                onResult={handleOnResult}
                 marker={false}
+                onResult={handleOnResult}
+                position="top-right"
               />
-              {/* <Row>
-                <Col>search</Col>
-                <Col>search</Col>
-              </Row> */}
 
               <Marker
-                longitude={viewport.longitude}
-                latitude={viewport.latitude}
                 anchor="bottom"
+                latitude={viewport.latitude}
+                longitude={viewport.longitude}
               >
                 <MapPin />
               </Marker>
             </Map>
           ) : (
-            <div style={{ width: '85vw', height: '80vh' }}>
+            <div style={{ height: '80vh', width: '85vw' }}>
               <div className={classes.spin}>
                 <Spin size="large" />
               </div>
@@ -160,27 +166,27 @@ const LocatingModal = ({
         <Col className={classes.actions}>
           <Form layout="vertical">
             <Form.Item
-              style={{ margin: 0 }}
               label={intl.formatMessage({
                 defaultMessage: 'Show Heat Map',
               })}
+              style={{ margin: 0 }}
             >
               <Switch
+                checked={showHeatmap}
                 className={classes.action}
                 onClick={toggleHeatmap}
-                checked={showHeatmap}
               />
             </Form.Item>
             <Form.Item
-              style={{ margin: 0 }}
               label={intl.formatMessage({
                 defaultMessage: 'Show Markers',
               })}
+              style={{ margin: 0 }}
             >
               <Switch
+                checked={showMarkers}
                 className={classes.action}
                 onClick={toggleMarkers}
-                checked={showMarkers}
               />
             </Form.Item>
           </Form>

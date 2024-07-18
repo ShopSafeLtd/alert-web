@@ -1,7 +1,11 @@
-import React from 'react';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
+import type { RangePickerProps } from 'antd/es/date-picker';
+import type { CustomQuestion, SelectOptions } from 'types/DataType';
+
+import { useGroupsContext } from '#/context/groups-context';
+import { UploadOutlined } from '@ant-design/icons';
 import {
-  Upload,
   Button,
   Col,
   DatePicker,
@@ -13,70 +17,72 @@ import {
   Select,
   Tooltip,
   Typography,
+  Upload,
 } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker';
-import type { SelectOptions, CustomQuestion } from 'types/DataType';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import { UploadOutlined } from '@ant-design/icons';
+
 import type { FormData } from './useAddTodo';
-import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
+
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
-import { useGroupsContext } from '#/context/groups-context';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import BusinessesSelect from '../../BusinessesSelect/BusinessesSelect.view';
+import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: (value: FormData) => void;
-  adminUsersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
-  saving: boolean;
   addQuestion: boolean;
-  setAddQuestion: (value: boolean) => void;
-  update: (id: string, question: string) => void;
-  selectedIds?: string[];
-  // setSelectedIds: (value: string[]) => void;
-  // selectedQuestions: { id: string; question: string }[];
+  adminUsersData: SelectOptions[] | undefined;
+  availableUsers: { id: string; name: string; timeTaken: number }[];
+  businessId?: string;
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
   // setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   form: FormInstance<FormData>;
-  templatesData: QuestionGroupOnSchemeQuery | undefined;
-  templatesLoading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  // setSelectedIds: (value: string[]) => void;
   questions: CustomQuestion[];
-  users: { id: string; name: string; timeTaken: number }[];
-  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
-  availableUsers: { id: string; name: string; timeTaken: number }[];
+  // selectedQuestions: { id: string; question: string }[];
+  saving: boolean;
+  selectedIds?: string[];
+  setAddQuestion: (value: boolean) => void;
   setAvailableUsers: (
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
-  documentList: UploadFile[];
-  documentUploadProps?: UploadProps;
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  update: (id: string, question: string) => void;
+  users: { id: string; name: string; timeTaken: number }[];
+  usersLoading: boolean;
 }
 
 const disabledDate: RangePickerProps['disabledDate'] = (current) =>
   current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
 
 const AddTodo = ({
-  onSubmit,
-  onClose,
-  saving,
-  adminUsersData,
-  usersLoading,
   addQuestion,
-  setAddQuestion,
-  update,
-  selectedIds,
-  // setSelectedIds,
-  // selectedQuestions,
-  // setSelectedQuestions,
-  form,
-  templatesLoading,
-  templatesData,
-  questions,
-  users,
-  setUsers,
-  setAvailableUsers,
+  adminUsersData,
   availableUsers,
+  businessId,
   documentList,
   documentUploadProps,
+  // setSelectedQuestions,
+  form,
+  onClose,
+  onSubmit,
+  // setSelectedIds,
+  questions,
+  // selectedQuestions,
+  saving,
+  selectedIds,
+  setAddQuestion,
+  setAvailableUsers,
+  setUsers,
+  templatesData,
+  templatesLoading,
+  update,
+  users,
+  usersLoading,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const { groups, groupsLoading } = useGroupsContext();
@@ -84,24 +90,24 @@ const AddTodo = ({
   return (
     <>
       <Form
+        form={form}
+        initialValues={{ assignedUsers: [], business: businessId }}
         layout="vertical"
         onFinish={onSubmit}
-        form={form}
-        initialValues={{ assignedUsers: [] }}
       >
         <Row gutter={16}>
           <Col span={9}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a name for the new to-do.',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -110,40 +116,40 @@ const AddTodo = ({
           </Col>
           <Col span={9}>
             <Form.Item
-              name="questionGroup"
               label={intl.formatMessage({
                 defaultMessage: 'Activity Template',
               })}
+              name="questionGroup"
             >
               <Select
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'No template selected',
-                })}
+                allowClear
                 disabled={saving}
+                loading={templatesLoading}
                 options={templatesData?.scheme?.questionGroups.map(
                   (template) => ({
                     label: template.name,
                     value: template.id,
                   })
                 )}
-                allowClear
-                loading={templatesLoading}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'No template selected',
+                })}
               />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item
-              name="dueDate"
               label={intl.formatMessage({
                 defaultMessage: 'Due Date',
               })}
+              name="dueDate"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select a due date for the new to-do.',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -158,73 +164,101 @@ const AddTodo = ({
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="assignedUsers"
               label={intl.formatMessage({
                 defaultMessage: 'Assigned Users',
               })}
+              name="assignedUsers"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please selected at least one admin for the new to-do.',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Select
-                loading={usersLoading}
                 disabled={saving}
-                mode="multiple"
+                loading={usersLoading}
                 maxTagCount={3}
-                options={adminUsersData}
+                mode="multiple"
                 optionFilterProp="label"
                 optionLabelProp="label"
+                options={adminUsersData}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="groups"
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
               })}
+              name="groups"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
-                      'Please select at least one group for a user.',
+                      'Please select at least one group for the activity.',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Select
-                loading={groupsLoading}
                 disabled={saving}
-                mode="multiple"
+                loading={groupsLoading}
                 maxTagCount={3}
-                options={groups}
+                mode="multiple"
                 optionFilterProp="label"
                 optionLabelProp="label"
+                options={groups}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Businesses',
+              })}
+              name="businesses"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Please select one business for the activity.',
+                  }),
+                  required: !businessId,
+                },
+              ]}
+            >
+              <BusinessesSelect
+                allowClear
+                disabled={saving || !!businessId}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Search for a business...',
+                })}
+                showSearch
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
         </Row>
+
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
-              name="description"
               label={intl.formatMessage({
                 defaultMessage: 'Description',
               })}
+              name="description"
             >
               <Input.TextArea disabled={saving} />
             </Form.Item>
           </Col>
         </Row>
         {questions && questions.length > 0 ? (
-          <CustomQuestions questions={questions} disabled={saving} />
+          <CustomQuestions disabled={saving} questions={questions} />
         ) : null}
         {/* <Row> */}
         {/*  <Col span={23}> */}
@@ -284,26 +318,26 @@ const AddTodo = ({
               <Col flex={1}>
                 {users.map((user) => (
                   <Form.Item
-                    label={user.name}
-                    name={user.id}
                     colon
                     key={user.id}
+                    label={user.name}
+                    name={user.id}
                     required={false}
                     rules={[
                       {
-                        required: true,
                         message: intl.formatMessage({
                           defaultMessage: 'Please add a time for this user.',
                         }),
+                        required: true,
                       },
                     ]}
                   >
                     <InputNumber
-                      min={0}
                       addonAfter={intl.formatMessage({
                         defaultMessage: 'mins',
                       })}
                       disabled={saving}
+                      min={0}
                     />
                   </Form.Item>
                 ))}
@@ -311,19 +345,13 @@ const AddTodo = ({
               {users.length > 0 && (
                 <Col>
                   <Typography.Paragraph
-                    style={{ marginBottom: 5, fontWeight: 600 }}
+                    style={{ fontWeight: 600, marginBottom: 5 }}
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Another User',
                     })}
                   </Typography.Paragraph>
                   <Select
-                    value={null}
-                    style={{ width: 200 }}
-                    options={availableUsers.map((user) => ({
-                      label: user.name,
-                      value: user.id,
-                    }))}
                     disabled={saving}
                     onSelect={(value) => {
                       const user = availableUsers.find((u) => u.id === value);
@@ -334,6 +362,12 @@ const AddTodo = ({
                         );
                       }
                     }}
+                    options={availableUsers.map((user) => ({
+                      label: user.name,
+                      value: user.id,
+                    }))}
+                    style={{ width: 200 }}
+                    value={null}
                   />
                 </Col>
               )}
@@ -341,17 +375,17 @@ const AddTodo = ({
           </Col>
         </Row>
         <Form.Item
-          name="documents"
           label={intl.formatMessage({
             defaultMessage: 'Evidence',
           })}
+          name="documents"
         >
           <Upload
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...documentUploadProps}
+            fileList={documentList}
             listType="picture"
             style={{ display: 'flex' }}
-            fileList={documentList}
           >
             <Button icon={<UploadOutlined />}>
               {intl.formatMessage({
@@ -361,7 +395,7 @@ const AddTodo = ({
           </Upload>
         </Form.Item>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
@@ -389,10 +423,10 @@ const AddTodo = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create & Complete',
@@ -403,18 +437,18 @@ const AddTodo = ({
         </Form.Item>
       </Form>
       <Drawer
+        onClose={() => setAddQuestion(false)}
+        open={addQuestion}
         title={intl.formatMessage({
           defaultMessage: 'Add/Create Question',
         })}
-        open={addQuestion}
         width="800"
-        onClose={() => setAddQuestion(false)}
       >
         {addQuestion ? (
           <CreateQuestionContainer
+            ids={selectedIds}
             onClose={() => setAddQuestion(false)}
             update={update}
-            ids={selectedIds}
           />
         ) : (
           <div />

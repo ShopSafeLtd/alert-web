@@ -1,53 +1,54 @@
 import React from 'react';
+
 import View from './OffenderFeed.view';
 import useOffenderFeed from './useOffenderFeed';
 
 const OffenderFeed = (): JSX.Element => {
   const {
-    data,
-    loading,
-    lightboxElements,
-    openLightbox,
-    setSearch,
-    updateOffenderList,
-    onNavigate,
-    lightBoxOpen,
-    sortFilter,
-    toggleSortFilter,
-    setGallery,
     customGalleriesData,
-    // onSelectGallery,
+    data,
+    fetchMoreScroll,
+    lightBoxOpen,
+    lightboxElements,
+    loading,
+    onNavigate,
     // adminRights,
     onSelectCustomGalleries,
-    variables,
-    fetchMoreScroll,
+    openLightbox,
     setCompactView,
+    setGallery,
+    setSearch,
+    // onSelectGallery,
     setTableView,
+    sortFilter,
     tableView,
+    toggleSortFilter,
+    updateOffenderList,
+    variables,
   } = useOffenderFeed();
 
   return (
     <View
+      customGalleriesData={customGalleriesData}
+      data={data}
       fetchMoreScroll={fetchMoreScroll}
       lightBoxOpen={lightBoxOpen}
-      data={data}
-      loading={loading}
       lightboxElements={lightboxElements}
-      openLightbox={openLightbox}
-      setSearch={setSearch}
-      updateOffenderList={updateOffenderList}
+      loading={loading}
       onNavigate={onNavigate}
-      sortFilter={sortFilter}
-      toggleSortFilter={toggleSortFilter}
-      setGallery={setGallery}
-      customGalleriesData={customGalleriesData}
-      // onSelectGallery={onSelectGallery}
       // adminRights={adminRights}
       onSelectCustomGalleries={onSelectCustomGalleries}
-      variables={variables}
+      openLightbox={openLightbox}
       setCompactView={setCompactView}
+      setGallery={setGallery}
+      setSearch={setSearch}
       setTableView={setTableView}
+      // onSelectGallery={onSelectGallery}
+      sortFilter={sortFilter}
       tableView={tableView}
+      toggleSortFilter={toggleSortFilter}
+      updateOffenderList={updateOffenderList}
+      variables={variables}
     />
   );
 };

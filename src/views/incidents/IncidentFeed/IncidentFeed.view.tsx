@@ -1,5 +1,18 @@
-import React from 'react';
+import type { IncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type { IncidentFilters } from 'state/data-model';
 
+import { PrioButtonFilter } from '#/components/incidents/IncidentFilter/PrioFilter';
+import {
+  faFilter,
+  faGrid,
+  faGrid2,
+  faPlus,
+  faTable,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -12,34 +25,22 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import IncidentCard from 'components/incidents/IncidentCard';
+import IncidentFilter from 'components/incidents/IncidentFilter';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faFilter,
-  faGrid,
-  faGrid2,
-  faPlus,
-  faTable,
-} from '@fortawesome/pro-light-svg-icons';
-import type { MutationUpdaterFn } from '@apollo/client';
+import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
+import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import IncidentFilter from 'components/incidents/IncidentFilter';
-import { useIntl } from 'react-intl';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import type { IncidentFilters } from 'state/data-model';
-import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
-import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import { useNavigate } from 'react-router';
-import { createUseStyles } from 'react-jss';
-import { PrioButtonFilter } from '#/components/incidents/IncidentFilter/PrioFilter';
+
 import Loading from '../../../components/shared-components/AntD/Loading';
 import DebouncedInput from '../../../utils/debounced-input';
-import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import type { IncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
 
 const useStyles = createUseStyles({
   row: {
@@ -48,68 +49,68 @@ const useStyles = createUseStyles({
 });
 
 interface Props {
+  clearFilters: () => void;
+  crimeTypes: { label: string; value: string }[];
   data: IncidentsFeedQuery | undefined;
-  loading: boolean;
+  fetchMoreScroll: () => void;
+  goods: { label: string; value: string }[];
+  goodsLoading: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  setSearch: (value: string) => void;
-  crimeTypes: { value: string; label: string }[];
-  tagsLoading: boolean;
-  updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
+  loading: boolean;
   onNavigate: () => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  setPeculiarities: (value: string) => void;
-  clearFilters: () => void;
-  setGallery: (values: string[]) => void;
-  goods: { value: string; label: string }[];
-
-  goodsLoading: boolean;
-
-  fetchMoreScroll: () => void;
-  variables: IncidentFilters;
+  openLightbox: (elements: { src: string }[], index: number) => void;
   setCompactView: () => void;
+  setGallery: (values: string[]) => void;
+  setPeculiarities: (value: string) => void;
+  setSearch: (value: string) => void;
   setTableView: () => void;
+
+  sortFilter: boolean;
+
   tableView: boolean;
+  tagsLoading: boolean;
+  toggleSortFilter: () => void;
+  updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
+  variables: IncidentFilters;
 }
 
 const IncidentFeed = ({
-  data,
-  loading,
-  lightboxElements,
-  openLightbox,
-  // onPaginationChange,
-  // pagination,
-  setSearch,
-  crimeTypes,
-  tagsLoading,
-  updateIncidentList,
-  lightBoxOpen,
-  onNavigate,
-  sortFilter,
-  toggleSortFilter,
   clearFilters,
-  setGallery,
-  setPeculiarities,
-
+  crimeTypes,
+  data,
+  fetchMoreScroll,
+  // onPaginationChange,
   goods,
   goodsLoading,
-
-  fetchMoreScroll,
-  variables,
+  lightBoxOpen,
+  lightboxElements,
+  loading,
+  onNavigate,
+  openLightbox,
   setCompactView,
+  setGallery,
+  setPeculiarities,
+  // pagination,
+  setSearch,
+
   setTableView,
+  sortFilter,
+
   tableView,
+  tagsLoading,
+  toggleSortFilter,
+  updateIncidentList,
+  variables,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const { search, gallery, compactView, priority } = variables;
+  const { compactView, gallery, priority, search } = variables;
   const classes = useStyles();
 
   return (
@@ -124,21 +125,20 @@ const IncidentFeed = ({
         <Row align="middle" gutter={[12, 12]}>
           <Col span={8} xxl={6}>
             <DebouncedInput
-              size="small"
+              allowClear
+              defaultValue={search || ''}
+              onChange={(e) => setSearch(e.target.value)}
               // style={{ width: 350 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search Incidents...',
               })}
-              allowClear
-              defaultValue={search || ''}
-              onChange={(e) => setSearch(e.target.value)}
+              size="small"
             />
           </Col>
           <Col>
             <CheckTags
               mode="check"
               noGutter
-              value={gallery}
               onChange={setGallery}
               options={[
                 {
@@ -158,16 +158,17 @@ const IncidentFeed = ({
                   label: intl.formatMessage({
                     defaultMessage: 'Not Approved',
                   }),
-                  value: 'NOT APPROVED',
                   needAdminRight: true,
+                  value: 'NOT APPROVED',
                 },
               ]}
+              value={gallery}
             />
           </Col>
           <Col flex={1}>
             <PrioButtonFilter intl={intl} selected={priority} />
           </Col>
-          <Col style={{ display: 'flex', alignItems: 'center' }}>
+          <Col style={{ alignItems: 'center', display: 'flex' }}>
             <Tooltip
               // placement="topLeft"
               title={
@@ -181,18 +182,18 @@ const IncidentFeed = ({
               }
             >
               <Button
-                onClick={setCompactView}
-                style={{
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0,
-                  borderRight: '0px solid #000',
-                }}
                 icon={
                   <FontAwesomeIcon
                     icon={compactView ? faGrid2 : faGrid}
                     size="lg"
                   />
                 }
+                onClick={setCompactView}
+                style={{
+                  borderBottomRightRadius: 0,
+                  borderRight: '0px solid #000',
+                  borderTopRightRadius: 0,
+                }}
               />
             </Tooltip>
             <Tooltip
@@ -201,12 +202,12 @@ const IncidentFeed = ({
               })}
             >
               <Button
+                icon={<FontAwesomeIcon icon={faTable} size="lg" />}
                 onClick={setTableView}
                 style={{
                   borderRadius: 0,
                   borderRightWidth: 0,
                 }}
-                icon={<FontAwesomeIcon icon={faTable} size="lg" />}
               />
             </Tooltip>
             <Tooltip
@@ -215,11 +216,11 @@ const IncidentFeed = ({
               })}
             >
               <Button
+                icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
                 onClick={toggleSortFilter}
                 style={{
                   borderRadius: 0,
                 }}
-                icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
               />
             </Tooltip>
             <Tooltip
@@ -228,13 +229,6 @@ const IncidentFeed = ({
               })}
             >
               <Button
-                type="primary"
-                onClick={onNavigate}
-                style={{
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  borderLeftWidth: 0,
-                }}
                 icon={
                   <FontAwesomeIcon
                     icon={faPlus}
@@ -242,6 +236,13 @@ const IncidentFeed = ({
                     style={{ marginRight: 5 }}
                   />
                 }
+                onClick={onNavigate}
+                style={{
+                  borderBottomLeftRadius: 0,
+                  borderLeftWidth: 0,
+                  borderTopLeftRadius: 0,
+                }}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Incident',
@@ -256,20 +257,20 @@ const IncidentFeed = ({
         <div>
           {loading ? (
             <Row
-              gutter={24}
               align="stretch"
+              gutter={24}
               style={{
                 alignItems: 'stretch',
-                padding: 10,
                 overflowX: 'hidden',
+                padding: 10,
               }}
             >
               {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
                 <Col
                   // eslint-disable-next-line react/no-array-index-key
                   key={index}
-                  style={{ marginBottom: compactView ? 0 : 20 }}
                   span={compactView ? 6 : 8}
+                  style={{ marginBottom: compactView ? 0 : 20 }}
                   xxl={compactView ? 4 : 6}
                 >
                   {compactView ? (
@@ -283,39 +284,39 @@ const IncidentFeed = ({
           ) : data?.incidentsRelay && data.incidentsRelay.edges.length > 0 ? (
             <InfiniteScroll
               dataLength={data?.incidentsRelay.edges.length}
-              next={() => fetchMoreScroll()}
-              hasMore={data?.incidentsRelay.pageInfo.hasNextPage}
-              loader={<Loading />}
-              height="calc(100vh - 78px)"
-              style={{ overflowX: 'hidden' }}
               endMessage={
                 <p style={{ textAlign: 'center' }}>
                   {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                   <b>-----------</b>
                 </p>
               }
+              hasMore={data?.incidentsRelay.pageInfo.hasNextPage}
+              height="calc(100vh - 78px)"
+              loader={<Loading />}
+              next={() => fetchMoreScroll()}
+              style={{ overflowX: 'hidden' }}
             >
               <Row
-                gutter={compactView ? [10, 10] : [8, 16]}
                 align="stretch"
+                gutter={compactView ? [10, 10] : [8, 16]}
                 style={{
                   alignItems: 'stretch',
-                  padding: 10,
                   overflowX: 'hidden',
+                  padding: 10,
                 }}
               >
                 {data.incidentsRelay.edges.map(({ node }) => (
                   <Col
+                    key={node?.id}
                     span={compactView ? 6 : 8}
                     xxl={compactView ? 4 : 6}
-                    key={node?.id}
                   >
                     <IncidentCard
-                      key={node?.id}
+                      compactView={compactView}
                       incident={node}
+                      key={node?.id}
                       openLightbox={openLightbox}
                       update={updateIncidentList}
-                      compactView={compactView}
                     />
                   </Col>
                 ))}
@@ -325,10 +326,10 @@ const IncidentFeed = ({
             <Row gutter={8}>
               <div
                 style={{
+                  alignItems: 'center',
                   display: 'flex',
                   flex: 1,
                   height: 'calc(100vh - 100px)',
-                  alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
@@ -353,24 +354,23 @@ const IncidentFeed = ({
         <div style={{ marginRight: 10 }}>
           <InfiniteScroll
             dataLength={data?.incidentsRelay.edges.length || 0}
-            next={() => fetchMoreScroll()}
-            hasMore={data?.incidentsRelay.pageInfo.hasNextPage || false}
-            loader={<Loading />}
-            height="calc(100vh - 78px)"
-            style={{ overflowX: 'hidden' }}
             endMessage={
               <p style={{ textAlign: 'center' }}>
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                 <b>-----------</b>
               </p>
             }
+            hasMore={data?.incidentsRelay.pageInfo.hasNextPage || false}
+            height="calc(100vh - 78px)"
+            loader={<Loading />}
+            next={() => fetchMoreScroll()}
+            style={{ overflowX: 'hidden' }}
           >
             <Table
-              style={{ marginBottom: 20 }}
               columns={[
                 {
-                  key: 'alertId',
                   dataIndex: 'alertId',
+                  key: 'alertId',
                   title: (
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
@@ -380,8 +380,8 @@ const IncidentFeed = ({
                   ),
                 },
                 {
-                  key: 'type',
                   dataIndex: 'type',
+                  key: 'type',
                   title: (
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
@@ -391,8 +391,8 @@ const IncidentFeed = ({
                   ),
                 },
                 {
-                  key: 'dayTime',
                   dataIndex: 'dayTime',
+                  key: 'dayTime',
                   title: (
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
@@ -402,8 +402,14 @@ const IncidentFeed = ({
                   ),
                 },
                 {
-                  key: 'offenders',
                   dataIndex: 'offenders',
+                  key: 'offenders',
+                  render: (value: { id: string; name: string }[]) =>
+                    value.map((offender) => (
+                      <Tag key={offender.id} style={{ marginBottom: 5 }}>
+                        {offender.name}
+                      </Tag>
+                    )),
                   title: (
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
@@ -411,80 +417,75 @@ const IncidentFeed = ({
                       })}
                     </Typography.Text>
                   ),
-                  render: (value: { id: string; name: string }[]) =>
-                    value.map((offender) => (
-                      <Tag style={{ marginBottom: 5 }} key={offender.id}>
-                        {offender.name}
-                      </Tag>
-                    )),
                 },
                 {
-                  key: 'description',
                   dataIndex: 'description',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Description',
-                  }),
+                  key: 'description',
                   render: (value: string) => (
                     <Tooltip title={value}>
                       <Typography.Paragraph
-                        style={{ marginBottom: 0 }}
                         ellipsis={{ rows: 3 }}
+                        style={{ marginBottom: 0 }}
                       >
                         {value}
                       </Typography.Paragraph>
                     </Tooltip>
                   ),
+                  title: intl.formatMessage({
+                    defaultMessage: 'Description',
+                  }),
                 },
               ]}
               dataSource={data?.incidentsRelay.edges.map((item) => ({
-                key: item.node.id,
                 alertId: item.node.reference,
-                type: item.node.crimeTypes.map((type) => type.name).toString(),
                 dayTime: item.node.dayTime,
                 description: item.node.description,
+                key: item.node.id,
                 offenders: item.node.offenders,
+                type: item.node.crimeTypes.map((type) => type.name).toString(),
               }))}
-              pagination={false}
-              rowClassName={classes.row}
               onRow={(record) => ({
                 onClick: () => navigate(`/app/incidents/view/${record.key}`),
               })}
+              pagination={false}
+              rowClassName={classes.row}
+              style={{ marginBottom: 20 }}
             />
           </InfiniteScroll>
         </div>
       )}
 
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Incident Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <IncidentFilter
-          crimeTypes={crimeTypes}
-          tagsLoading={tagsLoading}
           clearFilters={clearFilters}
-          setPeculiarities={setPeculiarities}
+          crimeTypes={crimeTypes}
           goods={goods}
           goodsLoading={goodsLoading}
+          setPeculiarities={setPeculiarities}
+          tagsLoading={tagsLoading}
         />
       </Drawer>
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox([], 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

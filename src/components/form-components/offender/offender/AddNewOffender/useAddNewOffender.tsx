@@ -1,40 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
-import React, { useState } from 'react';
-import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
-import { QueryMode, SortOrder } from 'graphql/types';
-
-import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { FormInstance } from 'antd';
-import { Form, message } from 'antd';
-import { useApolloClient } from '@apollo/client';
-import { useStoreState } from 'state';
-import update from 'immutability-helper';
-import type { Image, OffenderData } from 'types/DataType';
-import { useIntl } from 'react-intl';
-import { compressImage } from 'utils/compress-images';
-import OffenderItem from './OffenderItem';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   SearchOffendersQuery,
   SearchOffendersQueryVariables,
 } from 'graphql/offenders/queries/search-offenders.generated';
+import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
+import type { Image, OffenderData } from 'types/DataType';
+
+import { useApolloClient } from '@apollo/client';
+import { Form, message } from 'antd';
 import { SearchOffendersDocument } from 'graphql/offenders/queries/search-offenders.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import update from 'immutability-helper';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import { compressImage } from 'utils/compress-images';
+
+import OffenderItem from './OffenderItem';
 
 export interface FormData {
-  name: string;
-  alias?: string[];
   age: Age;
-  gender: Gender;
-  race: Race;
+  alias?: string[];
   build: Build;
-  height: Height;
-  hair: string;
-  peculiarities: string;
   comment: string;
-  dateSource: string;
   dateOfBirth: Date;
+  dateSource: string;
+  gender: Gender;
   groups: string[];
-  idVerified?: boolean;
+  hair: string;
+  height: Height;
   idSource?: IdSource;
+  idVerified?: boolean;
+  name: string;
+  peculiarities: string;
+  race: Race;
 }
 
 interface Props {
@@ -42,25 +43,25 @@ interface Props {
   update: (value: OffenderData) => void;
 }
 interface Return {
-  onSubmit: (value: FormData) => void;
-  saving: boolean;
   ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
   editImage: Image | null;
+  fileList: Image[];
+  form: FormInstance<FormData>;
+  idVerified: boolean;
+  imgChange: UploadProps['onChange'];
   onEditImage: (value: Image) => void;
   onRemoveImage: (imageId: string) => void;
-  toggleEditImage: (value?: Image) => void;
   onSearchOffender: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
-  idVerified: boolean;
+  onSubmit: (value: FormData) => void;
   onValuesChange: (changedValues: FormData, values: FormData) => void;
-  form: FormInstance<FormData>;
+  primaryImage: string;
+  saving: boolean;
+  setAgeCheck: (value: boolean) => void;
+  setPrimaryImage: (value: string) => void;
+  toggleEditImage: (value?: Image) => void;
 }
 
 const useAddNewOffender = ({
@@ -87,17 +88,17 @@ const useAddNewOffender = ({
       .query<SearchOffendersQuery, SearchOffendersQueryVariables>({
         query: SearchOffendersDocument,
         variables: {
+          order: {
+            updatedAt: SortOrder.Desc,
+          },
+          scheme: {
+            id: schemeId,
+          },
           where: {
             name: {
               contains: value,
               mode: QueryMode.Insensitive,
             },
-          },
-          scheme: {
-            id: schemeId,
-          },
-          order: {
-            updatedAt: SortOrder.Desc,
           },
         },
       })
@@ -109,11 +110,11 @@ const useAddNewOffender = ({
             }))
           : [
               {
+                disabled: true,
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
                 }),
                 value: '',
-                disabled: true,
               },
             ]
       );
@@ -122,35 +123,35 @@ const useAddNewOffender = ({
   const onSubmit = (data: FormData) => {
     setSaving(true);
     updateOffender({
-      id: Math.floor(Math.random() * 1000).toString(),
-      name: data.name || 'Unidentified Offender',
+      age: ageCheck ? null : data.age || null,
       alias:
         data.alias && data.alias.length > 0
           ? [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))]
           : [],
-      gender: data.gender || null,
-      race: data.race || null,
       build: data.build || null,
-      hair: data.hair || null,
-      peculiarities: data.peculiarities || null,
-      age: ageCheck ? null : data.age || null,
-      dateSource: ageCheck ? data.dateSource || null : null,
       dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
-      idVerified: data.idVerified,
+      dateSource: ageCheck ? data.dateSource || null : null,
+      gender: data.gender || null,
+      hair: data.hair || null,
+      id: Math.floor(Math.random() * 1000).toString(),
       idSource: data.idSource,
+      idVerified: data.idVerified,
       images: imageChange
         ? fileList.map((el) => ({
-            id: el.uid,
-            optimised: el.url,
-            url: el.url,
             fileName: el.fileName,
-            type: el.type,
+            id: el.uid,
             new: true,
+            optimised: el.url,
+            policeImage: el.policeImage,
             position: el.position,
             primary: el.uid === primaryImage,
-            policeImage: el.policeImage,
+            type: el.type,
+            url: el.url,
           }))
         : undefined,
+      name: data.name || 'Unidentified Offender',
+      peculiarities: data.peculiarities || null,
+      race: data.race || null,
     });
 
     onClose();
@@ -173,9 +174,9 @@ const useAddNewOffender = ({
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
@@ -210,24 +211,24 @@ const useAddNewOffender = ({
   };
 
   return {
-    onSubmit,
-    saving,
     ageCheck,
-    setAgeCheck,
-    imgChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
-    fileList,
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
     editImage,
-    primaryImage,
-    setPrimaryImage,
-    onSearchOffender,
-    onValuesChange,
-    idVerified,
+    fileList,
     form,
+    idVerified,
+    imgChange,
+    onEditImage,
+    onRemoveImage,
+    onSearchOffender,
+    onSubmit,
+    onValuesChange,
+    primaryImage,
+    saving,
+    setAgeCheck,
+    setPrimaryImage,
+    toggleEditImage,
   };
 };
 

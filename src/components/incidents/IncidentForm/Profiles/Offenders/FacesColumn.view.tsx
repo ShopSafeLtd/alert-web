@@ -1,42 +1,43 @@
-import React, { useState } from 'react';
-import { Button, Col, Row, Tooltip, Typography } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheckCircle as faCheckedCircle,
   faCircleXmark,
 } from '@fortawesome/pro-solid-svg-icons';
-import CropFaceImage from '../../../../images/CropFaceImage';
-import useStyles from '../Profiles.styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Row, Tooltip, Typography } from 'antd';
+import { Build, Height, Race } from 'graphql/types';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import type {
   FaceData,
   FacesOpenData,
   StateOffenderData,
 } from './useOffenders';
 
+import CropFaceImage from '../../../../images/CropFaceImage';
 import {
   getClosestAgeRange,
   getGenderFromFace,
   getPeculiaritiesFromFace,
 } from '../../ImageSection/useImageSection';
-import { Build, Height, Race } from 'graphql/types';
+import useStyles from '../Profiles.styles';
 
 const { Paragraph, Title } = Typography;
 
 export interface FacesOpenSubmitData {
-  selectedFace: FaceData;
+  imageId: string;
   includedOffenders: StateOffenderData[];
   offenderId: string;
-  imageId: string;
+  selectedFace: FaceData;
 }
 
 interface Props {
   facesOpen: FacesOpenData;
-  onSubmit: (data: FacesOpenSubmitData) => void;
   onClose: () => void;
+  onSubmit: (data: FacesOpenSubmitData) => void;
 }
 
-const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
+const FacesColumn = ({ facesOpen, onClose, onSubmit }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const [selected, setSelected] = useState<FaceData | null>(null);
@@ -55,39 +56,40 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
   const handleSubmit = () => {
     if (selected)
       onSubmit({
-        selectedFace: selected,
+        imageId: facesOpen.id,
         includedOffenders: addOffenders.map((face) => ({
-          id: Math.floor(Math.random() * 1000).toString(),
-          name: 'Unidentified Offender',
-          confirmedInIncident: true,
-          gender: getGenderFromFace(face.gender),
           age: getClosestAgeRange(face.age.high, face.age.low),
-          race: Race.Unknown,
-          height: Height.Unknown,
+          blank: true,
           build: Build.Unknown,
-          peculiarities: getPeculiaritiesFromFace(face.beard, face.mustache),
+          confirmedInIncident: true,
+          edited: false,
+          existing: false,
+          gender: getGenderFromFace(face.gender),
+          getConfirmed: true,
+          height: Height.Unknown,
+          id: Math.floor(Math.random() * 1000).toString(),
+          imageConfirmed: true,
           images: [
             {
-              id: facesOpen.id,
-              optimised: facesOpen.url,
-              url: facesOpen.url,
-              new: true,
               boundingBox: {
                 height: face.boundingBox.height,
                 left: face.boundingBox.left,
                 top: face.boundingBox.top,
                 width: face.boundingBox.width,
               },
+              id: facesOpen.id,
+              new: true,
+              optimised: facesOpen.url,
+              url: facesOpen.url,
             },
           ],
+          name: 'Unidentified Offender',
           new: true,
-          existing: false,
-          edited: false,
-          blank: true,
-          imageConfirmed: true,
+          peculiarities: getPeculiaritiesFromFace(face.beard, face.mustache),
+          race: Race.Unknown,
         })),
         offenderId: facesOpen.offenderId,
-        imageId: facesOpen.id,
+        selectedFace: selected,
       });
   };
 
@@ -95,7 +97,7 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
     <div className={classes.modalRow}>
       <div className={classes.faceColumn}>
         <div>
-          <Row wrap={false} gutter={16}>
+          <Row gutter={16} wrap={false}>
             <Col>
               <div className={classes.facesHeaderContainer}>
                 <Title level={4}>
@@ -118,15 +120,15 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
                 <div className={classes.selectedFaceCard}>
                   <div className={classes.overlay} />
                   <FontAwesomeIcon
-                    onClick={() => setSelected(null)}
-                    icon={faCircleXmark}
                     className={classes.clearIcon}
+                    icon={faCircleXmark}
+                    onClick={() => setSelected(null)}
                     size="2x"
                   />
                   <CropFaceImage
-                    url={facesOpen.url || ''}
                     boundingBox={selected.boundingBox}
                     height={150}
+                    url={facesOpen.url || ''}
                     width={150}
                   />
                 </div>
@@ -151,19 +153,19 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
                       <div className={classes.faceCard}>
                         <div className={classes.overlay} />
                         <FontAwesomeIcon
-                          icon={faCheckedCircle}
                           className={
                             selected?.id === face.id ||
                             addOffenders.some(({ id }) => id === face.id)
                               ? classes.selectedIcon
                               : classes.selectIcon
                           }
+                          icon={faCheckedCircle}
                           size="2x"
                         />
                         <CropFaceImage
-                          url={facesOpen.url || ''}
                           boundingBox={face.boundingBox}
                           height={150}
+                          url={facesOpen.url || ''}
                           width={150}
                         />
                       </div>
@@ -173,7 +175,7 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
             </div>
           </Col>
         </Row>
-        <Row className={classes.buttonRow} justify="end" gutter={8}>
+        <Row className={classes.buttonRow} gutter={8} justify="end">
           <Col>
             <Tooltip
               title={intl.formatMessage({
@@ -188,9 +190,9 @@ const FacesColumn = ({ facesOpen, onSubmit, onClose }: Props) => {
           </Col>
           <Col>
             <Button
-              type="primary"
-              onClick={handleSubmit}
               disabled={selected === null}
+              onClick={handleSubmit}
+              type="primary"
             >
               <FormattedMessage defaultMessage="Save Faces" />
             </Button>

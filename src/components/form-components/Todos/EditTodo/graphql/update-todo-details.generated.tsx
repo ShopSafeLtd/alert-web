@@ -9,7 +9,7 @@ export type UpdateTodoDetailsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateTodoDetailsMutation = { __typename?: 'Mutation', updateTodo: { __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null }> } };
+export type UpdateTodoDetailsMutation = { __typename?: 'Mutation', updateTodo: { __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, business?: { __typename?: 'Business', id: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: Types.FileType | null }> } };
 
 
 export const UpdateTodoDetailsDocument = gql`
@@ -23,6 +23,9 @@ export const UpdateTodoDetailsDocument = gql`
     assignedUsers {
       id
       fullName
+    }
+    business {
+      id
     }
     groups {
       id

@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
-
-import type { FormInstance, UploadFile } from 'antd';
-import { Form, message, Modal, notification } from 'antd';
-import { useStoreActions, useStoreState } from 'state';
-import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import type { FormInstance, UploadFile } from 'antd';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type { CreateOffenderMutation } from 'graphql/offenders/mutations/crreate-offender.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import type {
+  Age,
+  Build,
+  CreateOffenderData,
+  Gender,
+  Height,
+  IdSource,
+  Race,
+} from 'graphql/types';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 import type {
   BanData,
   CrimeGroupData,
@@ -18,71 +25,66 @@ import type {
   TagData,
   VehicleData,
 } from 'types/DataType';
-import update from 'immutability-helper';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import compressImage from 'utils/compress-images';
+
 import { useGroupsContext } from '#/context/groups-context';
-import customRequest from '../../../../utils/custom-request';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import type {
-  Age,
-  Build,
-  CreateOffenderData,
-  Gender,
-  Height,
-  IdSource,
-  Race,
-} from 'graphql/types';
-import { ImagePosition, Model, QueryMode, Role } from 'graphql/types';
+import { useSearchOffendersLazyQuery } from '#/graphql/offenders/queries/search-offenders.generated';
+import { Form, Modal, message, notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/business-offender-settings.generated';
-import { useSearchOffendersLazyQuery } from 'graphql/offenders/queries/search-offenders.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import type { CreateOffenderMutation } from 'graphql/offenders/mutations/crreate-offender.generated';
 import { useCreateOffenderMutation } from 'graphql/offenders/mutations/crreate-offender.generated';
-import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
 import { ListOffendersDocument } from 'graphql/offenders/queries/list-offenders.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { ImagePosition, Model, QueryMode, Role } from 'graphql/types';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import compressImage from 'utils/compress-images';
+
+import customRequest from '../../../../utils/custom-request';
 
 const { confirm } = Modal;
 
 export interface FormData {
-  name: string;
-  alias?: string[];
-  age: Age;
-  gender: Gender;
-  race: Race;
-  build: Build;
-  height: Height;
-  hair: string;
-  peculiarities: string;
-  comment: string;
-  dateSource?: string;
-  dateOfBirth?: Date;
-  groups: string[];
-  tags: Array<string | SelectOptions>;
-  images?: { id: string; url: string; optimised: string }[];
-  idVerified?: boolean;
-  idSource?: IdSource;
-  bans?: BanData[];
   addressAlias?: string;
+  age: Age;
+  alias?: string[];
+  bans?: BanData[];
+  build: Build;
   building?: string;
-  street?: string;
-  townCity?: string;
+  comment: string;
   county?: string;
-  postcode?: string;
-  customGalleries: Array<string | SelectOptions>;
+  customGalleries: (SelectOptions | string)[];
+  dateOfBirth?: Date;
+  dateSource?: string;
+  gender: Gender;
+  groups: string[];
+  hair: string;
+  height: Height;
+  idSource?: IdSource;
+  idVerified?: boolean;
+  images?: { id: string; optimised: string; url: string }[];
   justification?: string;
+  name: string;
+  peculiarities: string;
+  postcode?: string;
+  race: Race;
+  street?: string;
+  tags: (SelectOptions | string)[];
+  townCity?: string;
 }
 
 interface VehicleType extends VehicleData {
-  new: boolean;
-  existing: boolean;
   edited: boolean;
+  existing: boolean;
+  new: boolean;
 }
 
 interface Return {
+  addCustomGallery: boolean;
   addExclusion: boolean;
   addOffenderTag: boolean;
   adminRights: boolean;
@@ -91,18 +93,23 @@ interface Return {
   bansData: BanData[];
   beforeUpload: (value: RcFile) => void;
   crimeGroupsData: CrimeGroupData[];
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
   deleteConfirm: (value: string | undefined) => void;
+  documentList: UploadFile[];
+  documentUploadProps: UploadProps;
   editExclusion: boolean;
   editImage: Image | null;
   fileList: Image[];
-  documentList: UploadFile[];
-  documentUploadProps: UploadProps;
   form: FormInstance<FormData>;
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
   idVerified: boolean;
   imgChange: UploadProps['onChange'];
   listVehiclesData: ListVehiclesQuery | undefined;
+  loading: boolean;
+  needJustification: boolean;
+  offenderSettings: OffenderSettingsType;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
   onEditImage: (value: Image) => void;
@@ -111,35 +118,29 @@ interface Return {
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   onRemoveImage: (imageId: string) => void;
   onRemoveVehicle: (vehicleId: string) => void;
+  onSearchOffender: () => void;
   onSubmit: (value: FormData) => void;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  potentialOffenders: OffenderData[];
+  primaryImage: string;
+  reportOnly: boolean;
   saving: boolean;
   setAgeCheck: (value: boolean) => void;
   setBanData: (value: BanData | null) => void;
-  tags: { value: string; label: string }[];
+  setPrimaryImage: (value: string) => void;
+  tags: { label: string; value: string }[];
   tagsLoading: boolean;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
+  toggleAddCustomGallery: () => void;
   toggleAddExclusion: () => void;
   toggleAddOffenderTag: () => void;
   toggleEditExclusion: () => void;
   toggleEditImage: (value?: Image) => void;
+  toggleViewPotentialOffenders: () => void;
   updateExclusion: (value: BanData) => void;
-  vehiclesData: VehicleType[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
-  addCustomGallery: boolean;
-  toggleAddCustomGallery: () => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
-  reportOnly: boolean;
-  potentialOffenders: OffenderData[];
+  vehiclesData: VehicleType[];
   viewPotentialOffenders: boolean;
-  toggleViewPotentialOffenders: () => void;
-  onSearchOffender: () => void;
-  needJustification: boolean;
-  offenderSettings: OffenderSettingsType;
-  loading: boolean;
 }
 
 // const onPreview = async (file: UploadFile) => {
@@ -161,12 +162,12 @@ const useAddOffender = (): Return => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
   const {
-    role,
-    id: userId,
     businesses: userBusinesses,
+    id: userId,
+    role,
   } = useStoreState((state) => state.user);
 
-  const { needJustification, id: schemeId } = useStoreState(
+  const { id: schemeId, needJustification } = useStoreState(
     (state) => state.scheme
   );
   const reportOnly =
@@ -235,12 +236,19 @@ const useAddOffender = (): Return => {
     if (offenderName && offenderName !== 'Unidentified Offender') {
       void queryOffenders({
         fetchPolicy: 'cache-and-network',
+        // skip: !offenderName || offenderName === 'Unidentified Offender',
+        onCompleted: ({ listOffenders }) => {
+          if (listOffenders && listOffenders?.total > 0) {
+            setPotentialOffenders(listOffenders?.offenders);
+          } else {
+            setPotentialOffenders([]);
+          }
+        },
         variables: {
+          scheme: {
+            id: schemeId,
+          },
           where: {
-            name: {
-              equals: offenderName,
-              mode: QueryMode.Insensitive,
-            },
             groups:
               role === Role.ContentAdmin
                 ? undefined
@@ -255,18 +263,11 @@ const useAddOffender = (): Return => {
                       },
                     },
                   },
+            name: {
+              equals: offenderName,
+              mode: QueryMode.Insensitive,
+            },
           },
-          scheme: {
-            id: schemeId,
-          },
-        },
-        // skip: !offenderName || offenderName === 'Unidentified Offender',
-        onCompleted: ({ listOffenders }) => {
-          if (listOffenders && listOffenders?.total > 0) {
-            setPotentialOffenders(listOffenders?.offenders);
-          } else {
-            setPotentialOffenders([]);
-          }
         },
       });
     }
@@ -292,27 +293,27 @@ const useAddOffender = (): Return => {
   useEffect(() => {
     if (groups)
       setOffendersState({
+        order,
         pagination,
         variables: {
           ...variables,
           groups: groups.map((group) => group.value),
         },
-        order,
       });
   }, [groups]);
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
+        dataType: {
+          equals: Model.Offender,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Offender,
         },
       },
     },
@@ -354,8 +355,8 @@ const useAddOffender = (): Return => {
     if (existingData?.listOffenders?.offenders === undefined) return;
 
     store.writeQuery<ListOffendersQuery>({
-      query: ListOffendersDocument,
       data: {
+        __typename: 'Query',
         listOffenders: {
           ...existingData.listOffenders,
           // TODO fix graphql type
@@ -376,8 +377,8 @@ const useAddOffender = (): Return => {
                   },
                 ],
         },
-        __typename: 'Query',
       },
+      query: ListOffendersDocument,
       variables: {
         scheme: {
           id: schemeId,
@@ -390,11 +391,11 @@ const useAddOffender = (): Return => {
     onCompleted: async () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been added!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -414,9 +415,9 @@ const useAddOffender = (): Return => {
   const onSubmit = (data: FormData) => {
     if (imagesRequired && fileList.length === 0) {
       confirm({
-        title: 'Please add at least one image to the offender.',
         content:
           'An offender needs to have one image to be created in the database',
+        title: 'Please add at least one image to the offender.',
         type: 'error',
       });
       return;
@@ -434,23 +435,35 @@ const useAddOffender = (): Return => {
           existingVehicles.length > 0
             ? existingVehicles.map(({ id }) => ({ id }))
             : undefined,
+        create:
+          newVehicles.length > 0
+            ? newVehicles.map((vehicle) => ({
+                colour: vehicle.colour,
+                crimeGroup:
+                  vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                    ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                    : undefined,
+                groups: {
+                  connect:
+                    groups && groups.length === 1
+                      ? groups.map(({ value: id }) => ({ id }))
+                      : data.groups.map((id) => ({ id })),
+                },
+                incidents: vehicle.incidents
+                  ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                  : undefined,
+                make: vehicle.make,
+                model: vehicle.model,
+                registration: vehicle.registration,
+                schemes: { connect: [{ id: schemeId }] },
+              }))
+            : undefined,
         update: editedVehicles.map((vehicle) => ({
-          where: { id: vehicle.id },
           data: {
-            make: { set: vehicle.make },
-            model: { set: vehicle.model },
             colour: { set: vehicle.colour },
-            registration: { set: vehicle.registration },
             crimeGroup:
               vehicle.crimeGroup && vehicle.crimeGroup.length > 0
                 ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                : undefined,
-            incidents: vehicle.incidents
-              ? { connect: vehicle.incidents.map((id) => ({ id })) }
-              : undefined,
-            offenders:
-              vehicle.offenders && vehicle.offenders.length > 0
-                ? { connect: vehicle.offenders.map((id) => ({ id })) }
                 : undefined,
             groups: {
               connect:
@@ -458,31 +471,19 @@ const useAddOffender = (): Return => {
                   ? groups.map(({ value: id }) => ({ id }))
                   : data.groups.map((id) => ({ id })),
             },
+            incidents: vehicle.incidents
+              ? { connect: vehicle.incidents.map((id) => ({ id })) }
+              : undefined,
+            make: { set: vehicle.make },
+            model: { set: vehicle.model },
+            offenders:
+              vehicle.offenders && vehicle.offenders.length > 0
+                ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                : undefined,
+            registration: { set: vehicle.registration },
           },
+          where: { id: vehicle.id },
         })),
-        create:
-          newVehicles.length > 0
-            ? newVehicles.map((vehicle) => ({
-                make: vehicle.make,
-                model: vehicle.model,
-                colour: vehicle.colour,
-                registration: vehicle.registration,
-                crimeGroup:
-                  vehicle.crimeGroup && vehicle.crimeGroup.length > 0
-                    ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                    : undefined,
-                incidents: vehicle.incidents
-                  ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                  : undefined,
-                groups: {
-                  connect:
-                    groups && groups.length === 1
-                      ? groups.map(({ value: id }) => ({ id }))
-                      : data.groups.map((id) => ({ id })),
-                },
-                schemes: { connect: [{ id: schemeId }] },
-              }))
-            : undefined,
       };
     };
     const getCrimeGroups = (): CreateOffenderData['crimeGroups'] => ({
@@ -514,15 +515,15 @@ const useAddOffender = (): Return => {
           create:
             newCustomGalleries && newCustomGalleries.length > 0
               ? newCustomGalleries.map((value) => ({
-                  name: value.name,
                   description: value.description || '',
-                  schemes: { connect: [{ id: schemeId }] },
                   groups: {
                     connect:
                       groups && groups.length === 1
                         ? groups.map(({ value: id }) => ({ id }))
                         : data.groups.map((id) => ({ id })),
                   },
+                  name: value.name,
+                  schemes: { connect: [{ id: schemeId }] },
                 }))
               : undefined,
         };
@@ -556,8 +557,10 @@ const useAddOffender = (): Return => {
           create:
             newOffenderTags.length > 0
               ? newOffenderTags.map((value) => ({
-                  name: value.name,
+                  createdBy: { connect: { id: userId } },
+                  dataType: Model.Offender,
                   description: value.description || '',
+                  name: value.name,
                   schemes: value.schemes.includes(schemeId)
                     ? {
                         connect: value.schemes.map((id) => ({
@@ -572,8 +575,6 @@ const useAddOffender = (): Return => {
                           { id: schemeId },
                         ],
                       },
-                  createdBy: { connect: { id: userId } },
-                  dataType: Model.Offender,
                 }))
               : undefined,
         };
@@ -586,88 +587,88 @@ const useAddOffender = (): Return => {
     void createOffender({
       variables: {
         data: {
-          sessionId,
-          name: data.name,
+          address:
+            data.street && data.townCity && data.postcode
+              ? {
+                  alias: data.addressAlias,
+                  building: data.building,
+                  county: data.county,
+                  postcode: data.postcode,
+                  street: data.street,
+                  townCity: data.townCity,
+                }
+              : undefined,
+          age: ageCheck ? null : data.age || null,
           alias:
             data.alias && data.alias.length > 0
               ? [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))]
               : [],
-          justification: data.justification || null,
-          gender: data.gender || null,
-          race: data.race || null,
+          bans:
+            bansData && bansData.length > 0
+              ? bansData.map((ban) => ({
+                  createdBy: { connect: { id: userId } },
+                  description: ban?.description || null,
+                  endDate: ban?.endDate || new Date(),
+                  fineValue: ban?.fineValue,
+                  location: ban?.location || '',
+                  months: ban?.months,
+                  scheme: {
+                    connect: {
+                      id: schemeId,
+                    },
+                  },
+                  startDate: ban?.startDate || new Date(),
+                  type: ban.type || null,
+                }))
+              : undefined,
           build: data.build || null,
-          height: data.height || null,
-          hair: data.hair || null,
-          peculiarities: data.peculiarities || null,
           comment: data.comment || null,
-          age: ageCheck ? null : data.age || null,
-          dateSource: ageCheck ? data.dateSource || null : null,
+          crimeGroups: getCrimeGroups(),
+          customGalleries: getCustomGalleries(),
           dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
+          dateSource: ageCheck ? data.dateSource || null : null,
+          documents:
+            documentList.map((file) => ({
+              fileType: file.type || '',
+              name: file.name || '',
+              origFileName: file.fileName || '',
+              url: file.url || '',
+            })) || [],
+          gender: data.gender || null,
           groups: {
             connect:
               groups && groups.length === 1
                 ? groups.map(({ value: id }) => ({ id }))
                 : data.groups.map((id) => ({ id })),
           },
-          scheme: schemeId,
-          vehicles: getVehicles(),
-          crimeGroups: getCrimeGroups(),
-          tags: getOffenderTags(),
-          customGalleries: getCustomGalleries(),
+          hair: data.hair || null,
+          height: data.height || null,
+          idSource: data.idSource,
+          idVerified: data.idVerified,
           image: {
             upload:
               imageChange && fileList.length > 0
                 ? fileList.map((item) => ({
+                    policeImage: item.policeImage,
+                    position: item.position,
+                    primary: item.uid === primaryImage,
+                    rotation: item.rotation || 0,
                     url: {
                       filename: item.fileName || '',
                       mimetype: item.type || '',
                       url: item.url || '',
                     },
-                    position: item.position,
-                    primary: item.uid === primaryImage,
-                    policeImage: item.policeImage,
-                    rotation: item.rotation || 0,
                   }))
                 : undefined,
           },
-          documents:
-            documentList.map((file) => ({
-              url: file.url || '',
-              name: file.name || '',
-              fileType: file.type || '',
-              origFileName: file.fileName || '',
-            })) || [],
-          bans:
-            bansData && bansData.length > 0
-              ? bansData.map((ban) => ({
-                  startDate: ban?.startDate || new Date(),
-                  endDate: ban?.endDate || new Date(),
-                  location: ban?.location || '',
-                  description: ban?.description || null,
-                  type: ban.type || null,
-                  scheme: {
-                    connect: {
-                      id: schemeId,
-                    },
-                  },
-                  createdBy: { connect: { id: userId } },
-                  months: ban?.months,
-                  fineValue: ban?.fineValue,
-                }))
-              : undefined,
-          idVerified: data.idVerified,
-          idSource: data.idSource,
-          address:
-            data.street && data.townCity && data.postcode
-              ? {
-                  alias: data.addressAlias,
-                  building: data.building,
-                  street: data.street,
-                  townCity: data.townCity,
-                  county: data.county,
-                  postcode: data.postcode,
-                }
-              : undefined,
+          justification: data.justification || null,
+          name: data.name,
+          peculiarities: data.peculiarities || null,
+          race: data.race || null,
+          scheme: schemeId,
+          sessionId,
+          tags: getOffenderTags(),
+          vehicles: getVehicles(),
         },
       },
     });
@@ -690,10 +691,10 @@ const useAddOffender = (): Return => {
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
           position: ImagePosition.CenterCenter,
+          type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
@@ -721,8 +722,8 @@ const useAddOffender = (): Return => {
 
   const documentUploadProps: UploadProps = {
     customRequest,
-    onChange: handleChange,
     multiple: true,
+    onChange: handleChange,
   };
 
   const toggleAddOffenderTag = () => {
@@ -742,7 +743,7 @@ const useAddOffender = (): Return => {
     setAddOffenderTag(false);
     const selectedOffenderTag = form.getFieldValue('tags');
     form.setFieldsValue({
-      tags: [...selectedOffenderTag, { value: values.id, label: values.name }],
+      tags: [...selectedOffenderTag, { label: values.name, value: values.id }],
     });
     setOffenderTagsData([...offenderTagsData, { ...values, isNew: true }]);
   };
@@ -755,12 +756,12 @@ const useAddOffender = (): Return => {
       form.setFieldsValue({
         customGalleries: [
           ...selectedCustomGallery,
-          { value: values.id, label: values.name },
+          { label: values.name, value: values.id },
         ],
       });
     } else {
       form.setFieldsValue({
-        customGalleries: [{ value: values.id, label: values.name }],
+        customGalleries: [{ label: values.name, value: values.id }],
       });
     }
     setCustomGalleryData([...customGalleryData, { ...values, isNew: true }]);
@@ -832,15 +833,15 @@ const useAddOffender = (): Return => {
 
   const deleteConfirm = (currentId: string | undefined) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the exclusion?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
       onOk() {
         onRemoveBan(currentId);
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the exclusion?',
+      }),
     });
   };
 
@@ -868,93 +869,93 @@ const useAddOffender = (): Return => {
   };
 
   return {
-    onSubmit,
-    saving,
-    groups,
+    addCustomGallery,
+    addExclusion,
+    addOffenderTag,
     // role === Role.SchemeAdmin
     //   ? groupData?.groups.map((group) => ({
     //       value: group.id,
     //       label: group.name,
     //     })) || []
-    //   : groups.map((group) => ({ value: group.id, label: group.name })),
-    groupsLoading,
-    tags:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    tagsLoading,
+    adminRights: role !== Role.User,
+    ageCheck,
+    banData,
+    bansData,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    beforeUpload,
+    crimeGroupsData,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     customGalleries:
       customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: tag }) => ({
-          value: tag.id,
           label: tag.name,
+          value: tag.id,
         })
       ) || [],
     customGalleriesLoading,
-    imgChange,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    // onPreview,
-    onRemoveImage,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    beforeUpload,
-    fileList,
-    addOffenderTag,
-    toggleAddOffenderTag,
-    addExclusion,
-    toggleAddExclusion,
-    editExclusion,
-    toggleEditExclusion,
-    banData,
-    setBanData,
     deleteConfirm,
-    ageCheck,
-    setAgeCheck,
-    bansData,
-    updateExclusion,
-    adminRights: role !== Role.User,
-    form,
-    vehiclesData,
-    crimeGroupsData,
-    listVehiclesData,
-    onValuesChange,
-    idVerified,
-    onEditImage,
-    toggleEditImage,
-    editImage,
-    onAddVehicle,
-    onEditVehicle,
-    onRemoveVehicle,
-    onAddCrimeGroup,
-    onRemoveCrimeGroup,
-    primaryImage,
-    setPrimaryImage,
-    addCustomGallery,
-    toggleAddCustomGallery,
-    updateNewCustomGalleryData,
-    updateNewOffenderTagData,
     documentList,
     documentUploadProps,
-    reportOnly,
-    potentialOffenders,
-    toggleViewPotentialOffenders,
-    onSearchOffender,
-    viewPotentialOffenders,
+    editExclusion,
+    editImage,
+    fileList,
+    form,
+    groups,
+    //   : groups.map((group) => ({ value: group.id, label: group.name })),
+    groupsLoading,
+    idVerified,
+    imgChange,
+    listVehiclesData,
+    loading,
     needJustification,
     offenderSettings: businessData?.business.offenderSettings || {
-      name: true,
-      alias: true,
-      ethnicity: true,
-      gender: true,
-      build: true,
-      height: true,
-      hair: true,
       age: true,
+      alias: true,
+      build: true,
+      comment: true,
       dateOfBirth: true,
       dateOfBirthSource: true,
+      ethnicity: true,
+      gender: true,
+      hair: true,
+      height: true,
       idVerified: true,
-      peculiarities: true,
-      comment: true,
       images: true,
+      name: true,
+      peculiarities: true,
     },
-    loading,
+    onAddCrimeGroup,
+    onAddVehicle,
+    onEditImage,
+    onEditVehicle,
+    onRemoveCrimeGroup,
+    // onPreview,
+    onRemoveImage,
+    onRemoveVehicle,
+    onSearchOffender,
+    onSubmit,
+    onValuesChange,
+    potentialOffenders,
+    primaryImage,
+    reportOnly,
+    saving,
+    setAgeCheck,
+    setBanData,
+    setPrimaryImage,
+    tags:
+      tagsData?.tags.map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    tagsLoading,
+    toggleAddCustomGallery,
+    toggleAddExclusion,
+    toggleAddOffenderTag,
+    toggleEditExclusion,
+    toggleEditImage,
+    toggleViewPotentialOffenders,
+    updateExclusion,
+    updateNewCustomGalleryData,
+    updateNewOffenderTagData,
+    vehiclesData,
+    viewPotentialOffenders,
   };
 };
 

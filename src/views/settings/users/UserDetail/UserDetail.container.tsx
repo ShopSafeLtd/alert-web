@@ -1,55 +1,59 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import View from './UserDetail.view';
 
+import View from './UserDetail.view';
 import useUserDetail from './useUserDetail';
 
 const UserDetailContainer = (): JSX.Element => {
   const userId = useParams().id || '';
 
   const {
-    data,
-    loading,
-    editUser,
-    toggleEditUser,
-    saving,
-    inviteConfirm,
-    deleteConfirm,
-    enableConfirm,
-    disableConfirm,
-    demLink,
-    toggleDemLink,
-    demId,
-    userRole,
-    editPassword,
-    toggleEditPassword,
-    isOwn,
     componentRef,
+    data,
+    deleteConfirm,
+    demId,
+    demLink,
+    disableConfirm,
+    editPassword,
+    editUser,
+    enableConfirm,
     handlePrint,
+    inviteConfirm,
+    isOwn,
     isPrinting,
+    loading,
+    saving,
+    setViewport,
+    toggleDemLink,
+    toggleEditPassword,
+    toggleEditUser,
+    userRole,
+    viewport,
   } = useUserDetail(userId);
 
   return (
     <View
-      isPrinting={isPrinting}
       componentRef={componentRef}
-      handlePrint={handlePrint}
-      isOwn={isOwn}
+      data={data}
+      deleteConfirm={deleteConfirm}
       demId={demId}
       demLink={demLink}
-      toggleDemLink={toggleDemLink}
-      data={data}
-      loading={loading}
-      editUser={editUser}
-      toggleEditUser={toggleEditUser}
-      saving={saving}
-      inviteConfirm={inviteConfirm}
-      deleteConfirm={deleteConfirm}
-      enableConfirm={enableConfirm}
       disableConfirm={disableConfirm}
-      userRole={userRole}
       editPassword={editPassword}
+      editUser={editUser}
+      enableConfirm={enableConfirm}
+      handlePrint={handlePrint}
+      inviteConfirm={inviteConfirm}
+      isOwn={isOwn}
+      isPrinting={isPrinting}
+      loading={loading}
+      saving={saving}
+      setViewport={setViewport}
+      toggleDemLink={toggleDemLink}
       toggleEditPassword={toggleEditPassword}
+      toggleEditUser={toggleEditUser}
+      userRole={userRole}
+      viewport={viewport}
     />
   );
 };

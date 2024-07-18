@@ -9,6 +9,9 @@ mutation UpdateTodoDetails($data: TodoUpdateInput!, $where: UniqueId!) {
       id
       fullName
     }
+    business {
+      id
+    }
     groups {
       id
       name

@@ -1,45 +1,48 @@
-import React from 'react';
-
-import type { FormInstance } from 'antd';
-import { Skeleton, Button, Col, Form, Row } from 'antd';
-
-import { FormattedMessage, useIntl } from 'react-intl';
 import type { OffenderSettingsType } from '#/types/DataType';
-import type { FormData } from './useAddNewOffender';
+import type { FormInstance } from 'antd';
+
+import { Button, Col, Form, Row, Skeleton } from 'antd';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import type { ImageData } from '../../../ImageSelect/ImageSelectAnalyse.view';
-import ImageSelectAnalyse from '../../../ImageSelect/ImageSelectAnalyse.view';
+import type { FormData } from './useAddNewOffender';
+
 import { useStoreState } from '../../../../../state';
-import OffenderFormDetails from '../OffenderForm/OffenderFormDetails.view';
+import ImageSelectAnalyse from '../../../ImageSelect/ImageSelectAnalyse.view';
 import OffenderFormAddress from '../OffenderForm/OffenderFormAddress.view';
+import OffenderFormDetails from '../OffenderForm/OffenderFormDetails.view';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: (value: FormData) => void;
-  saving: boolean;
+  addOverride?: string;
   ageCheck: boolean | undefined;
   form: FormInstance<FormData>;
   idVerified: boolean | undefined;
   images?: ImageData[] | undefined;
-  uploading: boolean;
-  setUploading: (value: boolean) => void;
-  offenderSettings: OffenderSettingsType | undefined;
-  loading: boolean;
   knowAddress: boolean | undefined;
+  loading: boolean;
+  offenderSettings: OffenderSettingsType | undefined;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  setUploading: (value: boolean) => void;
+  uploading: boolean;
 }
 
 const AddNewOffender = ({
+  addOverride,
+  ageCheck,
+  form,
+  idVerified,
+  images,
+  knowAddress,
+  loading,
+  offenderSettings,
   onClose,
   onSubmit,
   saving,
-  ageCheck,
-  idVerified,
-  form,
-  images,
-  uploading,
   setUploading,
-  offenderSettings,
-  loading,
-  knowAddress,
+  uploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const imagesRequired = useStoreState(
@@ -60,33 +63,33 @@ const AddNewOffender = ({
 
       {offenderSettings?.images && (
         <Form.Item
-          name="images"
           label={intl.formatMessage({
             defaultMessage: 'Images',
           })}
-          tooltip={intl.formatMessage({
-            defaultMessage: 'Select the images that the offender is in.',
-          })}
+          name="images"
           rules={[
             {
-              required: imagesRequired,
               message: intl.formatMessage({
                 defaultMessage: 'Images are required for offenders.',
               }),
+              required: imagesRequired,
             },
           ]}
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Select the images that the offender is in.',
+          })}
         >
           <ImageSelectAnalyse
+            form={form}
+            images={images}
             setUploading={setUploading}
             uploading={uploading}
-            images={images}
-            form={form}
           />
         </Form.Item>
       )}
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving || uploading} onClick={onClose}>
               <FormattedMessage defaultMessage="Cancel" />
@@ -95,11 +98,12 @@ const AddNewOffender = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving || uploading}
               type="primary"
-              htmlType="submit"
             >
-              <FormattedMessage defaultMessage="Add Offender" />
+              {addOverride || intl.formatMessage({ defaultMessage: 'Add' })}
+              {intl.formatMessage({ defaultMessage: 'Offender' })}
             </Button>
           </Col>
         </Row>

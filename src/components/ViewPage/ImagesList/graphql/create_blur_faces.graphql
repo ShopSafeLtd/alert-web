@@ -1,0 +1,11 @@
+mutation CreateBlurFaces($faces: [FaceInput!]!, $image: BlurImageInput!) {
+  createBlurFaces(faces: $faces, image: $image) {
+    id
+    optimised
+    url
+    position
+    rotation
+    primary
+    policeImage
+  }
+}

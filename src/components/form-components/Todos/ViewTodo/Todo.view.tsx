@@ -1,61 +1,65 @@
+import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
+
+import MapCard from '#/components/map/LocatingCard/MapCard.view';
+import { UploadOutlined } from '@ant-design/icons';
 import {
-  Upload,
   Button,
   Col,
+  Descriptions,
+  Divider,
   Form,
   InputNumber,
   Row,
   Select,
-  Typography,
-  Divider,
-  Descriptions,
   Skeleton,
+  Typography,
+  Upload,
 } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import moment from 'moment';
-import { UploadOutlined } from '@ant-design/icons';
+
 import type { CustomQuestion } from '../../../../types/DataType';
-import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 import type { FormData } from './useTodo';
-import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
+
+import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 
 interface Props {
-  todo: TodoQuery | undefined;
-  form: FormInstance;
-  onSubmit: (value: FormData) => void;
-  saving: boolean;
-  users: { id: string; name: string; timeTaken: number }[];
   availableUsers: { id: string; name: string; timeTaken: number }[];
-  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
-  setAvailableUsers: (
-    users: { id: string; name: string; timeTaken: number }[]
-  ) => void;
-  loading: boolean;
-  onClose: () => void;
   confirmText?: string;
   documentList: UploadFile[];
   documentUploadProps?: UploadProps;
+  form: FormInstance;
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  setAvailableUsers: (
+    users: { id: string; name: string; timeTaken: number }[]
+  ) => void;
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  todo: TodoQuery | undefined;
+  users: { id: string; name: string; timeTaken: number }[];
 }
 
 const TodoView = ({
-  todo,
-  form,
-  onSubmit,
-  saving,
-  users,
   availableUsers,
-  setUsers,
-  setAvailableUsers,
-  loading,
-  onClose,
   confirmText,
   documentList,
   documentUploadProps,
+  form,
+  loading,
+  onClose,
+  onSubmit,
+  saving,
+  setAvailableUsers,
+  setUsers,
+  todo,
+  users,
 }: Props) => {
   const intl = useIntl();
-  const questions = todo?.todo?.questions.map(({ question, id }) => {
+  const questions = todo?.todo?.questions.map(({ id, question }) => {
     form.setFieldValue(
       question.id,
       todo?.todo?.answers?.find((answer) => answer?.taskQuestion?.id === id)
@@ -66,13 +70,13 @@ const TodoView = ({
       {
         answerType: question?.type,
         label: question.questionFormatted,
+        options: question.optionsFormFormatted || [],
         questionId: question.id,
         required: false,
         tagQuestionId: id,
         value: todo?.todo?.answers?.find(
           (answer) => answer?.taskQuestion?.id === id
         )?.answer,
-        options: question.optionsFormFormatted || [],
       } || []
     );
   }) as CustomQuestion[];
@@ -121,9 +125,9 @@ const TodoView = ({
       <Divider style={{ marginTop: 10 }} />
       <Form
         form={form}
-        onFinish={onSubmit}
-        layout="vertical"
         initialValues={{ questions: [] }}
+        layout="vertical"
+        onFinish={onSubmit}
       >
         {questions && questions.length > 0 ? (
           <Typography.Title level={4}>
@@ -133,11 +137,27 @@ const TodoView = ({
           </Typography.Title>
         ) : null}
         {questions && questions.length > 0 ? (
-          <CustomQuestions questions={questions} disabled={saving} />
+          <CustomQuestions disabled={saving} questions={questions} />
         ) : null}
         {questions && questions.length > 0 ? (
           <Divider style={{ marginTop: 10 }} />
         ) : null}
+        {todo?.todo.business?.locations[0].geoLat &&
+          todo?.todo.business?.locations[0].geoLng && (
+            <>
+              <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
+                {intl.formatMessage({ defaultMessage: 'Location' })}
+              </Typography.Text>
+              <MapCard
+                height={194}
+                viewport={{
+                  latitude: todo?.todo.business?.locations[0].geoLat,
+                  longitude: todo?.todo.business?.locations[0].geoLng,
+                }}
+                width="100%"
+              />
+            </>
+          )}
         <Row>
           <Col span={24}>
             <Typography.Title level={4}>
@@ -149,37 +169,31 @@ const TodoView = ({
               <Col flex={1}>
                 {users.map((user) => (
                   <Form.Item
+                    colon
                     label={user.name}
                     name={user.id}
-                    colon
                     rules={[
-                      { required: true, message: 'Add time for this user' },
+                      { message: 'Add time for this user', required: true },
                     ]}
                   >
                     <InputNumber
-                      min={0}
                       addonAfter={intl.formatMessage({
                         defaultMessage: 'mins',
                       })}
+                      min={0}
                     />
                   </Form.Item>
                 ))}
               </Col>
               <Col>
                 <Typography.Paragraph
-                  style={{ marginBottom: 5, fontWeight: 600 }}
+                  style={{ fontWeight: 600, marginBottom: 5 }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Another User',
                   })}
                 </Typography.Paragraph>
                 <Select
-                  value={null}
-                  style={{ width: 200 }}
-                  options={availableUsers.map((user) => ({
-                    label: user.name,
-                    value: user.id,
-                  }))}
                   onSelect={(value) => {
                     const user = availableUsers.find((u) => u.id === value);
                     if (user) {
@@ -189,23 +203,29 @@ const TodoView = ({
                       );
                     }
                   }}
+                  options={availableUsers.map((user) => ({
+                    label: user.name,
+                    value: user.id,
+                  }))}
+                  style={{ width: 200 }}
+                  value={null}
                 />
               </Col>
             </Row>
           </Col>
         </Row>
         <Form.Item
-          name="documents"
           label={intl.formatMessage({
             defaultMessage: 'Evidence',
           })}
+          name="documents"
         >
           <Upload
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...documentUploadProps}
+            fileList={documentList}
             listType="picture"
             style={{ display: 'flex' }}
-            fileList={documentList}
           >
             <Button icon={<UploadOutlined />}>
               {intl.formatMessage({
@@ -216,7 +236,7 @@ const TodoView = ({
         </Form.Item>
         <Divider />
         <Form.Item>
-          <Row style={{ marginTop: 10 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 10 }}>
             <Col>
               <Button
                 disabled={saving}
@@ -231,10 +251,10 @@ const TodoView = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {confirmText ||
                   intl.formatMessage({

@@ -1,54 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { Card, Spin, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowsMaximize } from '@fortawesome/pro-solid-svg-icons';
-import { useStoreState } from 'state';
-import Map, { Marker } from 'react-map-gl';
-import { useIntl } from 'react-intl';
 import type { LocationData, ViewportData } from 'types/DataType';
+
+import { faArrowsMaximize } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card, Spin, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import Map, { Marker } from 'react-map-gl';
+import { useStoreState } from 'state';
 import getAddressFromLatLng from 'utils/mapbox/get-address-from-lat-lng';
-import MapPin from '../MapPin';
+
 import LocatingModal from '../LocatingModal';
+import MapPin from '../MapPin';
 
 const { Text } = Typography;
 
 const useStyles = createUseStyles({
-  mapOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 3,
-    cursor: 'pointer',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    transition: 'all 0.2s ease-in-out',
-    opacity: 0,
-    '&:hover': {
-      backgroundColor: 'rgba(0,0,0,.3)',
-      opacity: 1,
-    },
-  },
-  spin: { position: 'absolute', top: '45%', left: '50%' },
-  mapText: {
-    color: '#FFF',
-    marginLeft: 10,
-    fontSize: 16,
-    marginBottom: 0,
+  action: {
+    marginTop: -20,
   },
   actions: {
     marginTop: 60,
     paddingLeft: 10,
   },
-  action: {
-    marginTop: -20,
-  },
   clickableOverlay: {
     cursor: 'pointer',
   },
+  mapOverlay: {
+    '&:hover': {
+      backgroundColor: 'rgba(0,0,0,.3)',
+      opacity: 1,
+    },
+    alignItems: 'center',
+    bottom: 0,
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    left: 0,
+    opacity: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    transition: 'all 0.2s ease-in-out',
+    zIndex: 3,
+  },
+  mapText: {
+    color: '#FFF',
+    fontSize: 16,
+    marginBottom: 0,
+    marginLeft: 10,
+  },
+  spin: { left: '50%', position: 'absolute', top: '45%' },
 });
 // enum Permissions {
 //   denied = 'denied',
@@ -57,12 +59,19 @@ const useStyles = createUseStyles({
 // }
 interface Props {
   height: number | string;
-  width: number | string;
-  location: LocationData | undefined | null;
+  location: LocationData | null | undefined;
   setLocation: (value: LocationData) => void;
+  uneditable?: boolean;
+  width: number | string;
 }
 
-const LocatingCard = ({ height, width, location, setLocation }: Props) => {
+const LocatingCard = ({
+  height,
+  location,
+  setLocation,
+  uneditable,
+  width,
+}: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
@@ -70,7 +79,7 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
   const [viewport, setViewport] = useState<ViewportData>();
   const [currentViewport, setCurrentViewport] = useState<ViewportData>();
   // const [getCurrentLocation, setGetCurrentLocation] = useState(true);
-  const [status, setStatus] = useState<'denied' | 'prompt' | 'granted'>();
+  const [status, setStatus] = useState<'denied' | 'granted' | 'prompt'>();
   const originalViewport = {
     latitude: 51.6,
     longitude: 0.12,
@@ -92,14 +101,6 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
       });
     });
   }, []);
-
-  // useEffect(() => {
-  //   if (status === 'denied')
-  //     setCurrentViewport({
-  //       latitude: 51.6,
-  //       longitude: 0.12,
-  //     });
-  // }, [status]);
 
   useEffect(() => {
     if (location?.geoLat && location?.geoLng) {
@@ -137,32 +138,34 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
   return (
     <Card
       bodyStyle={{
-        padding: 0,
         borderRadius: 10,
         overflow: 'hidden',
+        padding: 0,
         position: 'relative',
       }}
     >
       {viewport || status === 'denied' ? (
         <>
-          <div
-            onKeyPress={toggleLargeOpen}
-            role="button"
-            tabIndex={-100}
-            onClick={toggleLargeOpen}
-            className={classes.mapOverlay}
-          >
-            <FontAwesomeIcon size="lg" color="#FFF" icon={faArrowsMaximize} />
-            <Text className={classes.mapText}>
-              {intl.formatMessage({
-                defaultMessage: 'View Larger Map',
-              })}
-            </Text>
-          </div>
+          {uneditable && (
+            <div
+              className={classes.mapOverlay}
+              onClick={toggleLargeOpen}
+              onKeyPress={toggleLargeOpen}
+              role="button"
+              tabIndex={-100}
+            >
+              <FontAwesomeIcon color="#FFF" icon={faArrowsMaximize} size="lg" />
+              <Text className={classes.mapText}>
+                {intl.formatMessage({
+                  defaultMessage: 'View Larger Map',
+                })}
+              </Text>
+            </div>
+          )}
 
           <Map
-            onError={() => {}}
             mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+            onError={() => {}}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...(viewport || originalViewport)}
             // initialViewState={{
@@ -181,21 +184,21 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
             //   width: 100,
             // }}
             // longitude={viewport.longitude}
-            // latitude={viewport.latitude}
-            zoom={15}
-            pitch={45}
-            style={{ width, height }}
             mapStyle={
               currentTheme === 'dark'
                 ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
                 : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
             }
+            pitch={45}
+            style={{ height, width }}
+            // latitude={viewport.latitude}
+            zoom={15}
           >
             {viewport && (
               <Marker
-                longitude={viewport.longitude}
-                latitude={viewport.latitude}
                 anchor="bottom"
+                latitude={viewport.latitude}
+                longitude={viewport.longitude}
               >
                 <MapPin />
               </Marker>
@@ -206,17 +209,17 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             handleSubmit={onSubmit}
             onClose={toggleLargeOpen}
+            open={largeOpen}
             viewportData={
               viewport || {
                 latitude: 51.6,
                 longitude: 0.12,
               }
             }
-            open={largeOpen}
           />
         </>
       ) : (
-        <div style={{ width, height }}>
+        <div style={{ height, width }}>
           <div className={classes.spin}>
             <Spin size="large" />
           </div>

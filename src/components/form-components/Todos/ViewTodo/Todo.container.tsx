@@ -1,55 +1,60 @@
-import React from 'react';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
+
+import React from 'react';
+
 import View from './Todo.view';
 import useTodo from './useTodo';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
 
 const ViewTodo = ({
+  confirmText,
   id,
   onClose,
-  updateTodo,
-  confirmText,
   updateQuery,
+  updateTodo,
 }: {
-  id: string | null;
-  onClose: () => void;
-  updateTodo: (value: boolean, i?: string) => void;
   confirmText?: string;
+  id: null | string;
+  onClose: () => void;
   updateQuery?: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodo: (value: boolean, i?: string) => void;
 }) => {
   const {
-    todo,
-    form,
-    onSubmit,
-    saving,
     availableUsers,
-    users,
-    setUsers,
-    setAvailableUsers,
-    loading,
     documentList,
     documentUploadProps,
+    form,
+    loading,
+    onSubmit,
+    saving,
+    setAvailableUsers,
+    setUsers,
+    todo,
+    users,
   } = useTodo({
     id,
     onClose,
-    updateTodo,
     updateQuery,
+    updateTodo,
   });
+
+  console.log('todoQuestions', todo?.todo.questions);
+
   return (
     <View
-      todo={todo}
-      form={form}
-      onSubmit={onSubmit}
-      saving={saving}
       availableUsers={availableUsers}
-      users={users}
-      setUsers={setUsers}
-      setAvailableUsers={setAvailableUsers}
-      loading={loading}
-      onClose={onClose}
       confirmText={confirmText}
       documentList={documentList}
       documentUploadProps={documentUploadProps}
+      form={form}
+      loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
+      setAvailableUsers={setAvailableUsers}
+      setUsers={setUsers}
+      todo={todo}
+      users={users}
     />
   );
 };

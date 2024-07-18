@@ -1,25 +1,25 @@
-import React from 'react';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  Descriptions,
-  Drawer,
-  Dropdown,
-  Empty,
-  Input,
-  Menu,
-  Modal,
-  Popconfirm,
-  Row,
-  Skeleton,
-  Table,
-  Tag,
-  Tooltip,
-  Typography,
-} from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/create_blur_faces.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
+import type { ViewIncidentQuery } from 'graphql/incidents/queries/view-incident.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type {
+  EditFeedImage,
+  GoodsData,
+  ImageCardData,
+  LocationData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
+
+import ShareData from '#/components/form-components/ShareData/ShareData';
+import CctvRecords from '#/views/incidents/ViewIncident/components/CctvRecords.view';
 import {
   faBell,
   faBellSlash,
@@ -40,318 +40,323 @@ import {
   faTrash,
   faUpload,
   faUser,
-  faUsers,
   faUserTag,
+  faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import { Link, useNavigate } from 'react-router-dom';
-import IncidentSideList from 'components/incidents/IncidentSideList';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Descriptions,
+  Drawer,
+  Dropdown,
+  Empty,
+  Input,
+  Menu,
+  Modal,
+  Popconfirm,
+  Row,
+  Skeleton,
+  Table,
+  Tag,
+  Tooltip,
+  Typography,
+} from 'antd';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import OffenderTable from 'components/tables/OffenderTable';
-import VehicleTable from 'components/tables/VehicleTable';
-import { FormattedMessage, useIntl } from 'react-intl';
-import type {
-  EditFeedImage,
-  GoodsData,
-  ImageCardData,
-  LocationData,
-  OffenderData,
-  VehicleData,
-} from 'types/DataType';
-import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
-import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
-import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import AddGoods from 'components/form-components/incident/goods/AddGoods';
-import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
-import EditGoods from 'components/form-components/incident/goods/EditGoods';
-import EditImageList from 'components/images/EditImageList';
-import type { MutationUpdaterFn } from '@apollo/client';
-import AddTodo from 'components/form-components/Todos/AddTodo';
-import AddDocument from 'components/form-components/documents/AddDocument';
-import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
-import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
-import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
-import ActivityTable from 'components/tables/ActivityTable';
-import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
-import InvestigationTable from 'components/tables/InvestigationTable';
-import AddLocation from 'components/form-components/addresses/AddLocation';
-import LocatingCard from 'components/map/LocatingCard';
 import ImagesList from 'components/ViewPage/ImagesList';
 import IntelSection from 'components/ViewPage/IntelSection';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import AddTodo from 'components/form-components/Todos/AddTodo';
+import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
+import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
+import AddLocation from 'components/form-components/addresses/AddLocation';
+import AddDocument from 'components/form-components/documents/AddDocument';
+import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
+import AddGoods from 'components/form-components/incident/goods/AddGoods';
+import EditGoods from 'components/form-components/incident/goods/EditGoods';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import OffenderTile from 'components/form-components/linkOptions/SelectOffenders/OffenderTile';
-import ShareData from '#/components/form-components/ShareData/ShareData';
-import useStyles from './ViewIncident.styles';
-import EvidenceTable from '../../../components/tables/EvidenceTable';
-import formatAnswer from '../../../utils/format-answer';
+import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
+import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
+import EditImageList from 'components/images/EditImageList';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import IncidentSideList from 'components/incidents/IncidentSideList';
+import LocatingCard from 'components/map/LocatingCard';
+import ActivityTable from 'components/tables/ActivityTable';
+import InvestigationTable from 'components/tables/InvestigationTable';
+import OffenderTable from 'components/tables/OffenderTable';
+import VehicleTable from 'components/tables/VehicleTable';
+import { GoodsMode, IncidentPriority, Role } from 'graphql/types';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Link, useNavigate } from 'react-router-dom';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 import IncidentPriorityTag from '../../../components/incidents/IncidentPriority/IncidentPriorityTag.view';
-import type { ViewIncidentQuery } from 'graphql/incidents/queries/view-incident.generated';
-import { GoodsMode, IncidentPriority, Role } from 'graphql/types';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
-import CctvRecords from '#/views/incidents/ViewIncident/components/CctvRecords.view';
+import EvidenceTable from '../../../components/tables/EvidenceTable';
+import formatAnswer from '../../../utils/format-answer';
+import useStyles from './ViewIncident.styles';
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  incidentId: string;
-  userRole: Role;
-  data: ViewIncidentQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  openLightbox: (index: number) => void;
-
-  editRights: boolean;
-  deleteRights: boolean;
-  linkOffender: boolean;
-  toggleLinkOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  scrolledToTop: () => void;
-  loadMore: boolean;
-  userId: string;
-  replyTo: {
-    id: string;
-    text: string;
-    createdAt: string;
-    createdBy: string;
-  } | null;
-  setReplyTo: (
-    value: {
-      id: string;
-      text: string;
-      createdAt: string;
-      createdBy: string;
-    } | null
-  ) => void;
+  addDocument: boolean;
+  addExistingOffender: boolean;
+  addExistingVehicle: boolean;
+  addGoods: boolean;
   addImages:
     | {
         id: string;
         url: string;
       }[]
     | null;
+  addInvestigation: boolean;
+
+  addOffender: boolean;
+  addTodo: boolean;
+  addVehicle: boolean;
+  approving: boolean;
   closeAddImages: () => void;
-  toggleSubscribe: () => void;
-  toggleSelectImages: (id: string) => void;
-  selectedImages: string[];
+  completeTodoVisible: null | string;
   confirmDeleteUpdate: (updateId: string) => void;
+  data: ViewIncidentQuery | undefined;
+  deleteRights: boolean;
+  editAddress: boolean;
+  editGoodsData: GoodsData | null;
+  editImageData: EditFeedImage | null;
+  editImages: boolean;
+  editIncident: boolean;
+  editOffenderData: OffenderData | null;
+  editRights: boolean;
   editUpdate: { id: string; text: string } | null;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
   editUpdateInput: string;
+  editVehicleData: VehicleData | null;
+  facialDetection: boolean;
+  goodsMode: GoodsMode;
   handleEditUpdate: () => void;
-  setEditUpdateInput: (value: string) => void;
+  hasConnectedSchemes: boolean;
+  hideIncident: boolean;
+  incidentId: string;
+  isTranslated: null | string;
+  languageCount: number;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  onDelete: (incidentId: string) => void;
-  onReject: () => void;
-  onApprove: () => void;
-  approving: boolean;
-  editIncident: boolean;
-  toggleEditIncident: () => void;
-  editImages: boolean;
-  toggleEditImages: () => void;
-  editImageData: EditFeedImage | null;
-  setEditImageData: (value: EditFeedImage | null) => void;
-  onDeleteImage: (id: string) => void;
-  onEditImage: (id: EditFeedImage) => void;
-  addOffender: boolean;
-  addExistingOffender: boolean;
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
-  editOffenderData: OffenderData | null;
-  setEditOffenderData: (value: OffenderData | null) => void;
-  onDeleteOffender: (id: string) => void;
-  addVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleData: VehicleData | null;
-  setEditVehicleData: (value: VehicleData | null) => void;
-  onDeleteVehicle: (id: string) => void;
-  addGoods: boolean;
-  toggleAddGoods: () => void;
-  editGoodsData: GoodsData | null;
-  setEditGoodsData: (value: GoodsData | null) => void;
-  onDeleteGoods: (id: string) => void;
-  onEditVehicle: (value: VehicleData) => void;
-  onAddVehicle: (value: VehicleData) => void;
-  onAddExistingVehicle: (id: string) => void;
-  // onEditOffender: (value: OffenderData) => void;
+  linkOffender: boolean;
+  loadMore: boolean;
+  loading: boolean;
   // onAddOffender: (value: OffenderData) => void;
   onAddExistingOffender: (id: string) => void;
-  onEditGoods: (value: GoodsData) => void;
+  onAddExistingVehicle: (id: string) => void;
   onAddGoods: (value: GoodsData[]) => void;
-  onUpdateImages: (value: ImageCardData[]) => void;
-  goodsMode: GoodsMode;
-  addTodo: boolean;
-  toggleAddTodo: () => void;
-  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  toggleAddDocument: () => void;
-  addDocument: boolean;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
-  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  hideIncident: boolean;
-  translateText: () => Promise<void>;
-  isTranslated: string | null;
-  languageCount: number;
-  templatesData: QuestionGroupOnSchemeQuery | undefined;
-  templatesLoading: boolean;
-  viewTodoVisible: string | null;
-  setViewTodoVisible: (value: string | null) => void;
-  completeTodoVisible: string | null;
-  setCompleteTodoVisible: (value: string | null) => void;
-  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
-  toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
-  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  editAddress: boolean;
-  toggleEditAddress: () => void;
-  onEditAddress: (value: LocationData) => void;
   onAddUpdateImages: (
     images: { id: string; url: string }[],
     addToOffender?: boolean
   ) => void;
-  onSelectUpdateImages: () => void;
-  showOffenderOptions: boolean;
-  toggleShowOffenderOptions: () => void;
   onAddUpdateImagesToOffender: (id: string) => void;
-  selectedOffenderId: string;
-  setSelectedOffenderId: (id: string) => void;
-  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
-  onCompletedEditOffender: () => void;
-  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onAddVehicle: (value: VehicleData) => void;
+  onApprove: () => void;
   onCompletedAddOffender: () => void;
-  hasConnectedSchemes: boolean;
+  onCompletedEditOffender: () => void;
+  onDelete: (incidentId: string) => void;
+  onDeleteGoods: (id: string) => void;
+  onDeleteImage: (id: string) => void;
+  onDeleteOffender: (id: string) => void;
+  onDeleteVehicle: (id: string) => void;
+  onEditAddress: (value: LocationData) => void;
+  onEditGoods: (value: GoodsData) => void;
+  onEditImage: (id: EditFeedImage) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onReject: () => void;
+  onSelectUpdateImages: () => void;
+  onUpdateImages: (value: ImageCardData[]) => void;
+  openLightbox: (index: number) => void;
+  optionRowShow: boolean;
+  replyTo: {
+    createdAt: string;
+    createdBy: string;
+    id: string;
+    text: string;
+  } | null;
+  saving: boolean;
+  scrolledToTop: () => void;
+  selectedImages: string[];
+  // onEditOffender: (value: OffenderData) => void;
+  selectedOffenderId: string;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setEditGoodsData: (value: GoodsData | null) => void;
+  setEditImageData: (value: EditFeedImage | null) => void;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  setOptionRowShow: (value: boolean) => void;
+  setReplyTo: (
+    value: {
+      createdAt: string;
+      createdBy: string;
+      id: string;
+      text: string;
+    } | null
+  ) => void;
+  setSelectedOffenderId: (id: string) => void;
+  setViewTodoVisible: (value: null | string) => void;
   shareOpen: boolean;
+  showOffenderOptions: boolean;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  toggleAddDocument: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
+  toggleAddGoods: () => void;
+  toggleAddInvestigation: () => void;
+  toggleAddOffender: () => void;
+  toggleAddTodo: () => void;
+  toggleAddVehicle: () => void;
+  toggleEditAddress: () => void;
+  toggleEditImages: () => void;
+  toggleEditIncident: () => void;
+  toggleLinkOffender: () => void;
+  toggleSelectImages: (id: string) => void;
   toggleShareOpen: () => void;
-  facialDetection: boolean;
+  toggleShowOffenderOptions: () => void;
+  toggleSubscribe: () => void;
+  translateText: () => Promise<void>;
+  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation>;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  updateOffendersList: (value: OffenderData) => void;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  userId: string;
+  userRole: Role;
+  viewTodoVisible: null | string;
 }
 
 const ViewIncident = ({
-  data,
-  loading,
-  saving,
-  openLightbox,
-  incidentId,
-  deleteRights,
-  editRights,
-  linkOffender,
-  toggleLinkOffender,
-  updateOffendersList,
-  loadMore,
-  scrolledToTop,
-  userId,
-  replyTo,
-  setReplyTo,
+  addDocument,
+  addExistingOffender,
+  addExistingVehicle,
+  addGoods,
   addImages,
+  addInvestigation,
+  addOffender,
+  addTodo,
+  addVehicle,
+  approving,
   closeAddImages,
-  toggleSubscribe,
-  selectedImages,
-  toggleSelectImages,
+  completeTodoVisible,
   confirmDeleteUpdate,
+  data,
+  deleteRights,
+  editAddress,
+  editGoodsData,
+  editImageData,
+  editImages,
+  editIncident,
+  editOffenderData,
+  editRights,
   editUpdate,
   editUpdateInput,
-  handleEditUpdate,
-  setEditUpdate,
-  setEditUpdateInput,
-  lightboxElements,
-  lightBoxOpen,
-  optionRowShow,
-  setOptionRowShow,
-  onDelete,
-  onReject,
-  onApprove,
-  approving,
-  editIncident,
-  toggleEditIncident,
-  editImages,
-  toggleEditImages,
-  editImageData,
-  setEditImageData,
-  onDeleteImage,
-  onEditImage,
-  addOffender,
-  addExistingOffender,
-  editOffenderData,
-  setEditOffenderData,
-  onDeleteOffender,
-  toggleAddOffender,
-  toggleAddExistingOffender,
-  addVehicle,
-  addExistingVehicle,
   editVehicleData,
-  setEditVehicleData,
-  onDeleteVehicle,
-  toggleAddVehicle,
-  toggleAddExistingVehicle,
-  addGoods,
-  editGoodsData,
-  setEditGoodsData,
-  onDeleteGoods,
-  toggleAddGoods,
-  onEditGoods,
-  onAddGoods,
-  // onEditOffender,
-  // onAddOffender,
-  onAddExistingOffender,
-  onEditVehicle,
-  onAddVehicle,
-  onAddExistingVehicle,
-  onUpdateImages,
+  facialDetection,
   goodsMode,
-  addTodo,
-  toggleAddTodo,
-  updateTodoList,
-  toggleAddDocument,
-  addDocument,
-  updateDocumentList,
-  updateDeleteDocument,
+  handleEditUpdate,
+  hasConnectedSchemes,
   hideIncident,
-  userRole,
-  translateText,
+  incidentId,
   isTranslated,
   languageCount,
-  templatesLoading,
-  templatesData,
-  setViewTodoVisible,
-  viewTodoVisible,
-  setCompleteTodoVisible,
-  completeTodoVisible,
-  updateTodo,
-  addInvestigation,
-  toggleAddInvestigation,
-  updateInvestigationList,
-  editAddress,
-  toggleEditAddress,
-  onEditAddress,
-  onSelectUpdateImages,
-  showOffenderOptions,
-  toggleShowOffenderOptions,
-  onAddUpdateImagesToOffender,
-  selectedOffenderId,
-  setSelectedOffenderId,
+  lightBoxOpen,
+  lightboxElements,
+  linkOffender,
+  loadMore,
+  loading,
+  // onAddOffender,
+  onAddExistingOffender,
+  onAddExistingVehicle,
+  onAddGoods,
   onAddUpdateImages,
-  updateEditOffenderList,
-  onCompletedEditOffender,
-  updateAddOffenderList,
+  onAddUpdateImagesToOffender,
+  onAddVehicle,
+  onApprove,
   onCompletedAddOffender,
-  hasConnectedSchemes,
-  toggleShareOpen,
+  onCompletedEditOffender,
+  onDelete,
+  onDeleteGoods,
+  onDeleteImage,
+  onDeleteOffender,
+  onDeleteVehicle,
+  onEditAddress,
+  onEditGoods,
+  onEditImage,
+  onEditVehicle,
+  onReject,
+  onSelectUpdateImages,
+  onUpdateImages,
+  openLightbox,
+  optionRowShow,
+  replyTo,
+  saving,
+  // onEditOffender,
+  scrolledToTop,
+  selectedImages,
+  selectedOffenderId,
+  setCompleteTodoVisible,
+  setEditGoodsData,
+  setEditImageData,
+  setEditOffenderData,
+  setEditUpdate,
+  setEditUpdateInput,
+  setEditVehicleData,
+  setOptionRowShow,
+  setReplyTo,
+  setSelectedOffenderId,
+  setViewTodoVisible,
   shareOpen,
-  facialDetection,
+  showOffenderOptions,
+  templatesData,
+  templatesLoading,
+  toggleAddDocument,
+  toggleAddExistingOffender,
+  toggleAddExistingVehicle,
+  toggleAddGoods,
+  toggleAddInvestigation,
+  toggleAddOffender,
+  toggleAddTodo,
+  toggleAddVehicle,
+  toggleEditAddress,
+  toggleEditImages,
+  toggleEditIncident,
+  toggleLinkOffender,
+  toggleSelectImages,
+  toggleShareOpen,
+  toggleShowOffenderOptions,
+  toggleSubscribe,
+  translateText,
+  updateAddOffenderList,
+  updateDeleteDocument,
+  updateDocumentList,
+  updateEditOffenderList,
+  updateImagesList,
+  updateInvestigationList,
+  updateOffendersList,
+  updateTodo,
+  updateTodoList,
+  userId,
+  userRole,
+  viewTodoVisible,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -374,25 +379,25 @@ const ViewIncident = ({
         <Col flex={1}>
           <div className={classes.viewIncident}>
             <Row className={classes.content}>
-              <Col span={16} className={classes.detailsContainer}>
+              <Col className={classes.detailsContainer} span={16}>
                 {data?.incident?.approved === false &&
                   userRole !== Role.User && (
                     <div className={classes.approveBar}>
                       <Row gutter={8} justify="end">
                         <Col>
                           <Button
-                            type="ghost"
-                            onClick={onReject}
                             disabled={approving}
+                            onClick={onReject}
+                            type="ghost"
                           >
                             <FormattedMessage defaultMessage="Reject Incident" />
                           </Button>
                         </Col>
                         <Col>
                           <Button
-                            type="primary"
-                            onClick={onApprove}
                             disabled={approving}
+                            onClick={onApprove}
+                            type="primary"
                           >
                             <FormattedMessage defaultMessage="Approve Incident" />
                           </Button>
@@ -401,7 +406,7 @@ const ViewIncident = ({
                     </div>
                   )}
                 <div className={classes.detailsContent}>
-                  <Row gutter={8} className={classes.headerBar} justify="end">
+                  <Row className={classes.headerBar} gutter={8} justify="end">
                     <Col>
                       <Tooltip
                         title={
@@ -416,20 +421,20 @@ const ViewIncident = ({
                         }
                       >
                         <Button
-                          onClick={toggleSubscribe}
-                          disabled={saving}
-                          loading={saving}
-                          type="ghost"
                           color={
                             data?.incident?.subscribed ? undefined : 'danger'
                           }
+                          disabled={saving}
+                          loading={saving}
+                          onClick={toggleSubscribe}
+                          type="ghost"
                         >
                           <FontAwesomeIcon
-                            size="1x"
-                            style={{ marginRight: 8 }}
                             icon={
                               data?.incident?.subscribed ? faBellSlash : faBell
                             }
+                            size="1x"
+                            style={{ marginRight: 8 }}
                           />
                           {data?.incident?.subscribed
                             ? intl.formatMessage({
@@ -445,9 +450,9 @@ const ViewIncident = ({
                       <Col>
                         <Button onClick={toggleShareOpen}>
                           <FontAwesomeIcon
+                            icon={faShareNodes}
                             size="1x"
                             style={{ marginRight: 8 }}
-                            icon={faShareNodes}
                           />
                           <FormattedMessage defaultMessage="Share" />
                         </Button>
@@ -456,18 +461,20 @@ const ViewIncident = ({
                     {editRights && (
                       <Col>
                         <Dropdown
+                          arrow={{ pointAtCenter: true }}
                           overlay={
                             <Menu
                               items={[
                                 {
+                                  icon: <FontAwesomeIcon icon={faEdit} />,
                                   key: 0,
                                   label: intl.formatMessage({
                                     defaultMessage: 'Edit Details',
                                   }),
                                   onClick: () => toggleEditIncident(),
-                                  icon: <FontAwesomeIcon icon={faEdit} />,
                                 },
                                 {
+                                  icon: <FontAwesomeIcon icon={faImage} />,
                                   key: 1,
                                   label:
                                     data?.incident?.totalImages &&
@@ -479,29 +486,27 @@ const ViewIncident = ({
                                           defaultMessage: 'Add Images',
                                         }),
                                   onClick: () => toggleEditImages(),
-                                  icon: <FontAwesomeIcon icon={faImage} />,
                                 },
                                 {
+                                  icon: (
+                                    <FontAwesomeIcon icon={faLocationDot} />
+                                  ),
                                   key: 2,
                                   label: intl.formatMessage({
                                     defaultMessage: 'Edit Address',
                                   }),
                                   onClick: () => toggleEditAddress(),
-                                  icon: (
-                                    <FontAwesomeIcon icon={faLocationDot} />
-                                  ),
                                 },
                               ]}
                             />
                           }
                           placement="bottomRight"
-                          arrow={{ pointAtCenter: true }}
                         >
                           <Button type="ghost">
                             <FontAwesomeIcon
+                              icon={faEdit}
                               size="1x"
                               style={{ marginRight: 8 }}
-                              icon={faEdit}
                             />
                             {intl.formatMessage({
                               defaultMessage: 'Edit',
@@ -514,13 +519,13 @@ const ViewIncident = ({
                     {deleteRights && (
                       <Col>
                         <Button
-                          type="ghost"
                           onClick={() => onDelete(incidentId)}
+                          type="ghost"
                         >
                           <FontAwesomeIcon
+                            icon={faTrash}
                             size="1x"
                             style={{ marginRight: 8 }}
-                            icon={faTrash}
                           />
                           {intl.formatMessage({
                             defaultMessage: 'Delete',
@@ -530,23 +535,24 @@ const ViewIncident = ({
                     )}
                   </Row>
                   <ImagesList
-                    imagesData={data?.incident?.images}
-                    loading={loading}
-                    saving={saving}
-                    editRights={editRights}
-                    openLightbox={openLightbox}
-                    lightBoxOpen={lightBoxOpen}
-                    lightboxElements={lightboxElements}
                     editImageData={editImageData}
-                    setEditImageData={setEditImageData}
-                    onDeleteImage={onDeleteImage}
-                    onEditImage={onEditImage}
+                    editRights={editRights}
                     hasImages={
                       !!(
                         data?.incident?.images &&
                         data?.incident?.images.length > 0
                       )
                     }
+                    imagesData={data?.incident?.images}
+                    lightBoxOpen={lightBoxOpen}
+                    lightboxElements={lightboxElements}
+                    loading={loading}
+                    onDeleteImage={onDeleteImage}
+                    onEditImage={onEditImage}
+                    openLightbox={openLightbox}
+                    saving={saving}
+                    setEditImageData={setEditImageData}
+                    updateImagesList={updateImagesList}
                   />
                   <div className={classes.details}>
                     {loading ? (
@@ -567,7 +573,7 @@ const ViewIncident = ({
                               }
                             )}
                           </Text>
-                          <Paragraph type="secondary" style={{ marginTop: 10 }}>
+                          <Paragraph style={{ marginTop: 10 }} type="secondary">
                             {isTranslated ?? data?.incident?.description}
                             {languageCount > 1 && (
                               <Tooltip
@@ -576,20 +582,20 @@ const ViewIncident = ({
                                 })}
                               >
                                 <FontAwesomeIcon
-                                  icon={faLanguage}
                                   color="lightblue"
+                                  icon={faLanguage}
                                   // eslint-disable-next-line no-void
                                   onClick={() => void translateText()}
                                   style={{
-                                    marginLeft: '10px',
                                     cursor: 'pointer',
+                                    marginLeft: '10px',
                                   }}
                                 />
                               </Tooltip>
                             )}
                           </Paragraph>
 
-                          <Descriptions column={1} className={classes.desc}>
+                          <Descriptions className={classes.desc} column={1}>
                             {data?.incident.priority ===
                             IncidentPriority.Normal ? undefined : (
                               <Descriptions.Item
@@ -675,7 +681,7 @@ const ViewIncident = ({
                             </Descriptions.Item>
                           </Descriptions>
 
-                          <Descriptions column={1} className={classes.desc}>
+                          <Descriptions className={classes.desc} column={1}>
                             <Descriptions.Item
                               className={classes.detailTag}
                               label={
@@ -692,7 +698,7 @@ const ViewIncident = ({
                             >
                               <Row>
                                 {data?.incident?.groups.map((group) => (
-                                  <Tag key={group.id} className={classes.tag}>
+                                  <Tag className={classes.tag} key={group.id}>
                                     {group.name}
                                   </Tag>
                                 ))}
@@ -715,9 +721,9 @@ const ViewIncident = ({
                               <Row>
                                 {data?.incident?.crimeTypes.map((tag) => (
                                   <Tag
+                                    className={classes.tag}
                                     color="red"
                                     key={tag.id}
-                                    className={classes.tag}
                                   >
                                     {tag.name}
                                   </Tag>
@@ -746,9 +752,9 @@ const ViewIncident = ({
                                   <Row>
                                     {data?.incident?.involvedTags.map((tag) => (
                                       <Tag
+                                        className={classes.tag}
                                         color="red"
                                         key={tag.id}
-                                        className={classes.tag}
                                       >
                                         {tag.name}
                                       </Tag>
@@ -776,12 +782,12 @@ const ViewIncident = ({
                                     </span>
                                   }
                                 >
-                                  <Row justify="start" align="middle">
+                                  <Row align="middle" justify="start">
                                     {data?.incident?.impactTags.map((tag) => (
                                       <Tag
+                                        className={classes.tag}
                                         color="red"
                                         key={tag.id}
-                                        className={classes.tag}
                                       >
                                         {tag.name}
                                       </Tag>
@@ -795,15 +801,15 @@ const ViewIncident = ({
                           </Descriptions>
                         </Card>
                         <Row gutter={16}>
-                          <Col xs={24} xl={12}>
+                          <Col xl={12} xs={24}>
                             <LocatingCard
-                              width="100%"
                               height={194}
                               location={data?.incident?.location}
                               setLocation={onEditAddress}
+                              width="100%"
                             />
                           </Col>
-                          <Col xs={24} xl={12}>
+                          <Col xl={12} xs={24}>
                             <Card loading={loading}>
                               <Title level={4}>
                                 {intl.formatMessage({
@@ -811,9 +817,9 @@ const ViewIncident = ({
                                 })}
                               </Title>
                               <Descriptions
+                                className={classes.desc}
                                 column={1}
                                 style={{ marginTop: 10 }}
-                                className={classes.desc}
                               >
                                 <Descriptions.Item
                                   className={classes.detail}
@@ -884,8 +890,8 @@ const ViewIncident = ({
 
                         <Card loading={loading}>
                           <Row
-                            gutter={8}
                             align="middle"
+                            gutter={8}
                             style={{ marginBottom: 10 }}
                           >
                             <Col flex={1}>
@@ -898,14 +904,14 @@ const ViewIncident = ({
                             {editRights && (
                               <Col>
                                 <Button
-                                  size="small"
-                                  onClick={toggleAddGoods}
                                   icon={
                                     <FontAwesomeIcon
                                       icon={faPlus}
                                       style={{ marginRight: 5 }}
                                     />
                                   }
+                                  onClick={toggleAddGoods}
+                                  size="small"
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Item',
@@ -916,43 +922,37 @@ const ViewIncident = ({
                           </Row>
                           {data?.incident?.incidentItems.length && !loading ? (
                             <Table
-                              pagination={{
-                                hideOnSinglePage: true,
-                                pageSize: 5,
-                              }}
                               columns={
                                 goodsMode === GoodsMode.Generic
                                   ? [
                                       {
+                                        dataIndex: 'name',
+                                        key: 'name',
                                         title: intl.formatMessage({
                                           defaultMessage: 'Name',
                                         }),
-                                        dataIndex: 'name',
-                                        key: 'name',
                                       },
                                       {
-                                        title: intl.formatMessage({
-                                          defaultMessage: 'Value',
-                                        }),
                                         dataIndex: 'value',
                                         key: 'value',
                                         render: (value: number) =>
                                           `£${value.toFixed(2)}`,
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Value',
+                                        }),
                                       },
                                       {
-                                        title: intl.formatMessage({
-                                          defaultMessage: 'Recovered Value',
-                                        }),
                                         dataIndex: 'recoveredValue',
                                         key: 'recoveredValue',
                                         render: (value: number) =>
                                           `£${value.toFixed(2)}`,
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Recovered Value',
+                                        }),
                                       },
                                       {
-                                        key: 'Options',
-                                        title: '',
                                         dataIndex: 'Options',
-                                        width: 100,
+                                        key: 'Options',
                                         render: (_, record) => (
                                           <Row gutter={8}>
                                             {editRights && (
@@ -963,18 +963,18 @@ const ViewIncident = ({
                                                   })}
                                                 >
                                                   <Button
-                                                    size="small"
                                                     disabled={saving}
-                                                    onClick={() => {
-                                                      setEditGoodsData(
-                                                        record.item
-                                                      );
-                                                    }}
                                                     icon={
                                                       <FontAwesomeIcon
                                                         icon={faPenToSquare}
                                                       />
                                                     }
+                                                    onClick={() => {
+                                                      setEditGoodsData(
+                                                        record.item
+                                                      );
+                                                    }}
+                                                    size="small"
                                                   />
                                                 </Tooltip>
                                               </Col>
@@ -988,38 +988,38 @@ const ViewIncident = ({
                                                   })}
                                                 >
                                                   <Popconfirm
-                                                    placement="topLeft"
-                                                    trigger="hover"
-                                                    title={intl.formatMessage({
-                                                      defaultMessage:
-                                                        'Remove the item?',
-                                                    })}
-                                                    onConfirm={() =>
-                                                      onDeleteGoods(record.key)
-                                                    }
-                                                    okText={intl.formatMessage({
-                                                      defaultMessage: 'Yes',
-                                                    })}
                                                     cancelText={intl.formatMessage(
                                                       {
                                                         defaultMessage: 'No',
                                                       }
                                                     )}
+                                                    okText={intl.formatMessage({
+                                                      defaultMessage: 'Yes',
+                                                    })}
+                                                    onConfirm={() =>
+                                                      onDeleteGoods(record.key)
+                                                    }
                                                     overlayInnerStyle={{
                                                       padding: 10,
                                                     }}
+                                                    placement="topLeft"
+                                                    title={intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Remove the item?',
+                                                    })}
+                                                    trigger="hover"
                                                   >
                                                     <Button
-                                                      size="small"
                                                       disabled={saving}
-                                                      // onClick={() =>
-                                                      //   onDeleteGoods(record.key)
                                                       // }
                                                       icon={
                                                         <FontAwesomeIcon
                                                           icon={faTrash}
                                                         />
                                                       }
+                                                      // onClick={() =>
+                                                      //   onDeleteGoods(record.key)
+                                                      size="small"
                                                     />
                                                   </Popconfirm>
                                                 </Tooltip>
@@ -1027,91 +1027,91 @@ const ViewIncident = ({
                                             )}
                                           </Row>
                                         ),
+                                        title: '',
+                                        width: 100,
                                       },
                                     ]
                                   : [
                                       {
-                                        title: intl.formatMessage({
-                                          defaultMessage: 'Name',
-                                        }),
                                         dataIndex: 'name',
                                         key: 'name',
                                         render: (value: string) => (
                                           <Tooltip title={value}>
                                             <Paragraph
-                                              style={{
-                                                width: 200,
-                                                marginBottom: 0,
-                                              }}
                                               ellipsis={{ rows: 1 }}
+                                              style={{
+                                                marginBottom: 0,
+                                                width: 200,
+                                              }}
                                             >
                                               {value}
                                             </Paragraph>
                                           </Tooltip>
                                         ),
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Name',
+                                        }),
                                       },
                                       {
+                                        dataIndex: 'sku',
+                                        key: 'sku',
                                         title: intl.formatMessage({
                                           defaultMessage: 'SKU',
                                         }),
-                                        dataIndex: 'sku',
-                                        key: 'sku',
                                       },
                                       {
-                                        title: intl.formatMessage({
-                                          defaultMessage: 'Item Value',
-                                        }),
                                         dataIndex: 'value',
                                         key: 'value',
                                         render: (value: number) =>
                                           `£${value.toFixed(2)}`,
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Item Value',
+                                        }),
                                       },
                                       {
+                                        dataIndex: 'quantity',
+                                        key: 'quantity',
                                         title: intl.formatMessage({
                                           defaultMessage: 'Quantity',
                                         }),
-                                        dataIndex: 'quantity',
-                                        key: 'quantity',
                                       },
                                       {
+                                        dataIndex: 'recoveredQuantity',
+                                        key: 'recoveredQuantity',
                                         title: intl.formatMessage({
                                           defaultMessage: 'Recovered',
                                         }),
-                                        dataIndex: 'recoveredQuantity',
-                                        key: 'recoveredQuantity',
                                       },
                                       {
-                                        title: intl.formatMessage({
-                                          defaultMessage: 'Item Total',
-                                        }),
                                         dataIndex: 'itemTotal',
                                         key: 'itemTotal',
                                         render: (value: number) =>
                                           `£${value.toFixed(2)}`,
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Item Total',
+                                        }),
                                       },
                                       {
-                                        title: intl.formatMessage({
-                                          defaultMessage: 'Value',
-                                        }),
                                         dataIndex: 'value',
                                         key: 'value',
                                         render: (value: number) =>
                                           `£${value.toFixed(2)}`,
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Value',
+                                        }),
                                       },
                                       {
-                                        title: intl.formatMessage({
-                                          defaultMessage: 'Recovered Value',
-                                        }),
                                         dataIndex: 'recoveredValue',
                                         key: 'recoveredValue',
                                         render: (value: number) =>
                                           `£${value.toFixed(2)}`,
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Recovered Value',
+                                        }),
                                       },
                                       {
-                                        key: 'Options',
-                                        title: '',
                                         dataIndex: 'Options',
-                                        width: 100,
+                                        key: 'Options',
                                         render: (_, record) => (
                                           <Row gutter={8}>
                                             {editRights && (
@@ -1122,18 +1122,18 @@ const ViewIncident = ({
                                                   })}
                                                 >
                                                   <Button
-                                                    size="small"
                                                     disabled={saving}
-                                                    onClick={() => {
-                                                      setEditGoodsData(
-                                                        record.item
-                                                      );
-                                                    }}
                                                     icon={
                                                       <FontAwesomeIcon
                                                         icon={faPenToSquare}
                                                       />
                                                     }
+                                                    onClick={() => {
+                                                      setEditGoodsData(
+                                                        record.item
+                                                      );
+                                                    }}
+                                                    size="small"
                                                   />
                                                 </Tooltip>
                                               </Col>
@@ -1147,38 +1147,38 @@ const ViewIncident = ({
                                                   })}
                                                 >
                                                   <Popconfirm
-                                                    placement="topLeft"
-                                                    trigger="hover"
-                                                    title={intl.formatMessage({
-                                                      defaultMessage:
-                                                        'Remove the item?',
-                                                    })}
-                                                    onConfirm={() =>
-                                                      onDeleteGoods(record.key)
-                                                    }
-                                                    okText={intl.formatMessage({
-                                                      defaultMessage: 'Yes',
-                                                    })}
                                                     cancelText={intl.formatMessage(
                                                       {
                                                         defaultMessage: 'No',
                                                       }
                                                     )}
+                                                    okText={intl.formatMessage({
+                                                      defaultMessage: 'Yes',
+                                                    })}
+                                                    onConfirm={() =>
+                                                      onDeleteGoods(record.key)
+                                                    }
                                                     overlayInnerStyle={{
                                                       padding: 10,
                                                     }}
+                                                    placement="topLeft"
+                                                    title={intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Remove the item?',
+                                                    })}
+                                                    trigger="hover"
                                                   >
                                                     <Button
-                                                      size="small"
                                                       disabled={saving}
-                                                      // onClick={() =>
-                                                      //   onDeleteGoods(record.key)
                                                       // }
                                                       icon={
                                                         <FontAwesomeIcon
                                                           icon={faTrash}
                                                         />
                                                       }
+                                                      // onClick={() =>
+                                                      //   onDeleteGoods(record.key)
+                                                      size="small"
                                                     />
                                                   </Popconfirm>
                                                 </Tooltip>
@@ -1186,38 +1186,44 @@ const ViewIncident = ({
                                             )}
                                           </Row>
                                         ),
+                                        title: '',
+                                        width: 100,
                                       },
                                     ]
                               }
                               dataSource={data?.incident?.incidentItems.map(
                                 (item) => ({
-                                  key: item.id ?? '',
-                                  value: item.value ?? 0,
-                                  recoveredValue: item.recoveredValue ?? 0,
-                                  sku: item.sku ?? '',
-                                  name: item.name ?? '',
-                                  quantity: item.quantity ?? 0,
-                                  recoveredQuantity:
-                                    item.recoveredQuantity ?? 0,
+                                  item: {
+                                    goodsType: item.goodsType?.id,
+                                    id: item.id,
+                                    name: item.name || '',
+                                    quantity: item.quantity || 0,
+                                    recoveredQuantity:
+                                      item.recoveredQuantity || 0,
+                                    recoveredValue: item.recoveredValue || 0,
+                                    sku: item.sku || '',
+                                    value: item.value || 0,
+                                    // ????
+                                    // stockItem: item.stockItem.id || '',
+                                  },
                                   itemTotal:
                                     (item.value ?? 0) * (item.quantity ?? 0) -
                                     (item.value ?? 0) *
                                       (item.recoveredQuantity ?? 0),
-                                  item: {
-                                    name: item.name || '',
-                                    value: item.value || 0,
-                                    recoveredValue: item.recoveredValue || 0,
-                                    sku: item.sku || '',
-                                    quantity: item.quantity || 0,
-                                    recoveredQuantity:
-                                      item.recoveredQuantity || 0,
-                                    id: item.id,
-                                    goodsType: item.goodsType.id,
-                                    // ????
-                                    // stockItem: item.stockItem.id || '',
-                                  },
+                                  key: item.id ?? '',
+                                  name: item.name ?? '',
+                                  quantity: item.quantity ?? 0,
+                                  recoveredQuantity:
+                                    item.recoveredQuantity ?? 0,
+                                  recoveredValue: item.recoveredValue ?? 0,
+                                  sku: item.sku ?? '',
+                                  value: item.value ?? 0,
                                 })
                               )}
+                              pagination={{
+                                hideOnSinglePage: true,
+                                pageSize: 5,
+                              }}
                               size="small"
                               // TODO
                               // eslint-disable-next-line react/no-unstable-nested-components
@@ -1275,8 +1281,8 @@ const ViewIncident = ({
                             <Descriptions column={1}>
                               {data.incident.answers.map((answer) => (
                                 <Descriptions.Item
-                                  label={answer.tagQuestion?.question.question}
                                   key={answer.tagQuestion?.question.id}
+                                  label={answer.tagQuestion?.question.question}
                                 >
                                   {formatAnswer(answer.answer, answer.type)}
                                 </Descriptions.Item>
@@ -1287,8 +1293,8 @@ const ViewIncident = ({
 
                         <Card loading={loading}>
                           <Row
-                            gutter={8}
                             align="middle"
+                            gutter={8}
                             style={{ marginBottom: 10 }}
                           >
                             <Col flex={1}>
@@ -1305,32 +1311,32 @@ const ViewIncident = ({
                                     <Menu
                                       items={[
                                         {
-                                          label: intl.formatMessage({
-                                            defaultMessage:
-                                              'Add Existing Offender',
-                                          }),
-                                          key: '1',
                                           icon: (
                                             <FontAwesomeIcon
                                               icon={faMagnifyingGlass}
                                               style={{ marginRight: 5 }}
                                             />
                                           ),
+                                          key: '1',
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Add Existing Offender',
+                                          }),
                                           onClick: () =>
                                             toggleAddExistingOffender(),
                                         },
                                         {
-                                          label: intl.formatMessage({
-                                            defaultMessage:
-                                              'Create New Offender',
-                                          }),
-                                          key: '2',
                                           icon: (
                                             <FontAwesomeIcon
                                               icon={faPlus}
                                               style={{ marginRight: 5 }}
                                             />
                                           ),
+                                          key: '2',
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Create New Offender',
+                                          }),
                                           onClick: () => toggleAddOffender(),
                                         },
                                       ]}
@@ -1338,13 +1344,13 @@ const ViewIncident = ({
                                   }
                                 >
                                   <Button
-                                    size="small"
                                     icon={
                                       <FontAwesomeIcon
                                         icon={faPlus}
                                         style={{ marginRight: 5 }}
                                       />
                                     }
+                                    size="small"
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Offenders',
@@ -1357,13 +1363,13 @@ const ViewIncident = ({
 
                           {data?.incident?.offenders.length && !loading ? (
                             <OffenderTable
+                              deleteRights={deleteRights}
+                              editRights={editRights}
+                              hasNavigation
                               offenders={data?.incident?.offenders}
-                              setEditOffenderData={setEditOffenderData}
                               onDeleteOffender={onDeleteOffender}
                               saving={saving}
-                              editRights={editRights}
-                              deleteRights={deleteRights}
-                              hasNavigation
+                              setEditOffenderData={setEditOffenderData}
                             />
                           ) : (
                             <Empty
@@ -1378,8 +1384,8 @@ const ViewIncident = ({
 
                         <Card loading={loading}>
                           <Row
-                            gutter={8}
                             align="middle"
+                            gutter={8}
                             style={{ marginBottom: 10 }}
                           >
                             <Col flex={1}>
@@ -1396,32 +1402,32 @@ const ViewIncident = ({
                                     <Menu
                                       items={[
                                         {
-                                          label: intl.formatMessage({
-                                            defaultMessage:
-                                              'Add Existing Vehicles',
-                                          }),
-                                          key: '1',
                                           icon: (
                                             <FontAwesomeIcon
                                               icon={faMagnifyingGlass}
                                               style={{ marginRight: 5 }}
                                             />
                                           ),
+                                          key: '1',
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Add Existing Vehicles',
+                                          }),
                                           onClick: () =>
                                             toggleAddExistingVehicle(),
                                         },
                                         {
-                                          label: intl.formatMessage({
-                                            defaultMessage:
-                                              'Create New Vehicle',
-                                          }),
-                                          key: '2',
                                           icon: (
                                             <FontAwesomeIcon
                                               icon={faPlus}
                                               style={{ marginRight: 5 }}
                                             />
                                           ),
+                                          key: '2',
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Create New Vehicle',
+                                          }),
                                           onClick: () => toggleAddVehicle(),
                                         },
                                       ]}
@@ -1429,13 +1435,13 @@ const ViewIncident = ({
                                   }
                                 >
                                   <Button
-                                    size="small"
                                     icon={
                                       <FontAwesomeIcon
                                         icon={faPlus}
                                         style={{ marginRight: 5 }}
                                       />
                                     }
+                                    size="small"
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Vehicles',
@@ -1448,13 +1454,13 @@ const ViewIncident = ({
 
                           {data?.incident?.vehicles.length && !loading ? (
                             <VehicleTable
-                              vehicles={data?.incident?.vehicles}
-                              setEditVehicleData={setEditVehicleData}
+                              deleteRights={deleteRights}
+                              editRights={editRights}
+                              hasNavigation
                               onDeleteVehicle={onDeleteVehicle}
                               saving={saving}
-                              editRights={editRights}
-                              deleteRights={deleteRights}
-                              hasNavigation
+                              setEditVehicleData={setEditVehicleData}
+                              vehicles={data?.incident?.vehicles}
                             />
                           ) : (
                             <Empty
@@ -1473,8 +1479,8 @@ const ViewIncident = ({
                               cameraNumber: item.cameraNumber,
                               endTime: item.endTime,
                               key: item.id,
-                              showIncident: item.showIncident,
                               showFace: item.showFace,
+                              showIncident: item.showIncident,
                               startTime: item.startTime,
                             }))}
                             loading={loading}
@@ -1485,8 +1491,8 @@ const ViewIncident = ({
 
                         <Card loading={loading}>
                           <Row
-                            gutter={8}
                             align="middle"
+                            gutter={8}
                             style={{ marginBottom: 10 }}
                           >
                             <Col flex={1}>
@@ -1504,17 +1510,17 @@ const ViewIncident = ({
                                       <Menu
                                         items={[
                                           {
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                icon={faPage}
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                              />
+                                            ),
+                                            key: '1',
                                             label: intl.formatMessage({
                                               defaultMessage: 'Create MG11',
                                             }),
-                                            key: '1',
-                                            icon: (
-                                              <FontAwesomeIcon
-                                                size="1x"
-                                                style={{ marginRight: 8 }}
-                                                icon={faPage}
-                                              />
-                                            ),
                                             // disabled: !listVehiclesData?.listVehicles.total,
                                             onClick: () =>
                                               navigate(
@@ -1522,18 +1528,18 @@ const ViewIncident = ({
                                               ),
                                           },
                                           {
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                icon={faPage}
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                              />
+                                            ),
+                                            key: '2',
                                             label: intl.formatMessage({
                                               defaultMessage:
                                                 'Create Business Impact Statement',
                                             }),
-                                            key: '2',
-                                            icon: (
-                                              <FontAwesomeIcon
-                                                size="1x"
-                                                style={{ marginRight: 8 }}
-                                                icon={faPage}
-                                              />
-                                            ),
                                             // disabled: !listVehiclesData?.listVehicles.total,
                                             onClick: () =>
                                               navigate(
@@ -1543,17 +1549,17 @@ const ViewIncident = ({
                                               ),
                                           },
                                           {
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                icon={faUpload}
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                              />
+                                            ),
+                                            key: '3',
                                             label: intl.formatMessage({
                                               defaultMessage: 'Upload',
                                             }),
-                                            key: '3',
-                                            icon: (
-                                              <FontAwesomeIcon
-                                                size="1x"
-                                                style={{ marginRight: 8 }}
-                                                icon={faUpload}
-                                              />
-                                            ),
                                             // disabled: !listVehiclesData?.listVehicles.total,
                                             onClick: () => toggleAddDocument(),
                                           },
@@ -1577,14 +1583,14 @@ const ViewIncident = ({
                                   </Dropdown>
                                 ) : (
                                   <Button
-                                    size="small"
-                                    onClick={toggleAddDocument}
                                     icon={
                                       <FontAwesomeIcon
                                         icon={faPlus}
                                         style={{ marginRight: 5 }}
                                       />
                                     }
+                                    onClick={toggleAddDocument}
+                                    size="small"
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Add Evidence',
@@ -1616,10 +1622,10 @@ const ViewIncident = ({
 
                           {data?.incident?.evidence.length && !loading ? (
                             <EvidenceTable
+                              deleteRights={deleteRights}
                               evidence={data?.incident?.evidence}
                               title={ProfileUpdatedModel.Incident}
                               update={updateDeleteDocument}
-                              deleteRights={deleteRights}
                             />
                           ) : (
                             <Empty
@@ -1634,8 +1640,8 @@ const ViewIncident = ({
                         {editRights && (
                           <Card loading={loading}>
                             <Row
-                              gutter={8}
                               align="middle"
+                              gutter={8}
                               style={{ marginBottom: 10 }}
                             >
                               <Col flex={1}>
@@ -1648,9 +1654,6 @@ const ViewIncident = ({
 
                               <Col>
                                 <Button
-                                  size="small"
-                                  onClick={toggleAddTodo}
-                                  loading={templatesLoading}
                                   disabled={templatesLoading}
                                   icon={
                                     <FontAwesomeIcon
@@ -1658,6 +1661,9 @@ const ViewIncident = ({
                                       style={{ marginRight: 5 }}
                                     />
                                   }
+                                  loading={templatesLoading}
+                                  onClick={toggleAddTodo}
+                                  size="small"
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Activity',
@@ -1667,10 +1673,10 @@ const ViewIncident = ({
                             </Row>
                             {data?.incident?.todos.length && !loading ? (
                               <ActivityTable
-                                todos={data?.incident?.todos}
                                 saving={saving || loading}
-                                setViewTodoVisible={setViewTodoVisible}
                                 setCompleteTodoVisible={setCompleteTodoVisible}
+                                setViewTodoVisible={setViewTodoVisible}
+                                todos={data?.incident?.todos}
                               />
                             ) : (
                               <Empty
@@ -1687,8 +1693,8 @@ const ViewIncident = ({
                         {editRights && (
                           <Card loading={loading}>
                             <Row
-                              gutter={8}
                               align="middle"
+                              gutter={8}
                               style={{ marginBottom: 10 }}
                             >
                               <Col flex={1}>
@@ -1701,14 +1707,14 @@ const ViewIncident = ({
 
                               <Col>
                                 <Button
-                                  size="small"
-                                  onClick={toggleAddInvestigation}
                                   icon={
                                     <FontAwesomeIcon
                                       icon={faPlus}
                                       style={{ marginRight: 5 }}
                                     />
                                   }
+                                  onClick={toggleAddInvestigation}
+                                  size="small"
                                 >
                                   {intl.formatMessage({
                                     defaultMessage: 'Add Investigation',
@@ -1737,18 +1743,12 @@ const ViewIncident = ({
                   </div>
                 </div>
               </Col>
-              <Col span={8} className="no-print">
+              <Col className="no-print" span={8}>
                 <div className={classes.updatesContainer}>
                   <IntelSection
-                    updates={data?.incident?.updates}
-                    scrolledToTop={scrolledToTop}
-                    loadMore={loadMore}
-                    saving={saving}
-                    editRights={editRights}
-                    userId={userId}
                     confirmDeleteUpdate={confirmDeleteUpdate}
-                    setEditUpdate={setEditUpdate}
-                    setReplyTo={setReplyTo}
+                    editRights={editRights}
+                    loadMore={loadMore}
                     onAddToIncident={(value) => onAddUpdateImages(value)}
                     onAddToOffender={
                       data?.incident.offenders &&
@@ -1757,14 +1757,20 @@ const ViewIncident = ({
                         : undefined
                     }
                     optionRowShow={optionRowShow}
+                    saving={saving}
+                    scrolledToTop={scrolledToTop}
+                    setEditUpdate={setEditUpdate}
+                    setReplyTo={setReplyTo}
+                    updates={data?.incident?.updates}
+                    userId={userId}
                   />
 
                   <UpdateBar
-                    replyTo={replyTo}
                     incidentId={incidentId}
+                    replyTo={replyTo}
+                    setOptionRowShow={setOptionRowShow}
                     setReplyTo={setReplyTo}
                     subscribed={data?.incident?.subscribed || false}
-                    setOptionRowShow={setOptionRowShow}
                   />
                 </div>
               </Col>
@@ -1773,29 +1779,29 @@ const ViewIncident = ({
         </Col>
       </Row>
       <Modal
-        title={intl.formatMessage({
-          defaultMessage: 'Select Images To Add',
+        okText={intl.formatMessage({
+          defaultMessage: 'Add Images',
         })}
-        open={addImages !== null}
+        onCancel={closeAddImages}
         onOk={() => {
           if (selectedImages && selectedImages.length > 0)
             onSelectUpdateImages();
         }}
-        onCancel={closeAddImages}
-        width={addImages ? addImages.length * 250 : 400}
-        okText={intl.formatMessage({
-          defaultMessage: 'Add Images',
+        open={addImages !== null}
+        title={intl.formatMessage({
+          defaultMessage: 'Select Images To Add',
         })}
+        width={addImages ? addImages.length * 250 : 400}
       >
-        <Row justify="center" gutter={8}>
+        <Row gutter={8} justify="center">
           {addImages?.map((image) => (
-            <Col key={image.id} className={classes.selectCard}>
+            <Col className={classes.selectCard} key={image.id}>
               <Checkbox
-                onChange={() => toggleSelectImages(image.id)}
                 checked={selectedImages.includes(image.id)}
                 className={classes.checkBox}
+                onChange={() => toggleSelectImages(image.id)}
               />
-              <div style={{ width: 200, height: 200, marginBottom: 10 }}>
+              <div style={{ height: 200, marginBottom: 10, width: 200 }}>
                 <WatermarkImage url={image.url} />
               </div>
             </Col>
@@ -1803,23 +1809,23 @@ const ViewIncident = ({
         </Row>
       </Modal>
       <Modal
-        title={intl.formatMessage({
-          defaultMessage: 'Select an offender to add the update images',
+        okText={intl.formatMessage({
+          defaultMessage: 'Add Offender',
         })}
-        open={showOffenderOptions}
-        onOk={() => {
-          if (selectedOffenderId)
-            onAddUpdateImagesToOffender(selectedOffenderId);
-        }}
         onCancel={() => {
           toggleShowOffenderOptions();
           closeAddImages();
           setSelectedOffenderId('');
         }}
-        width={700}
-        okText={intl.formatMessage({
-          defaultMessage: 'Add Offender',
+        onOk={() => {
+          if (selectedOffenderId)
+            onAddUpdateImagesToOffender(selectedOffenderId);
+        }}
+        open={showOffenderOptions}
+        title={intl.formatMessage({
+          defaultMessage: 'Select an offender to add the update images',
         })}
+        width={700}
       >
         <Row gutter={8}>
           {data?.incident.offenders?.map((offender) => (
@@ -1829,10 +1835,10 @@ const ViewIncident = ({
               span={offender.images && offender.images.length > 0 ? 12 : 6}
             >
               <Checkbox
-                value={offender.id}
                 checked={offender.id === selectedOffenderId}
-                onChange={() => setSelectedOffenderId(offender.id)}
                 className={classes.checkBox}
+                onChange={() => setSelectedOffenderId(offender.id)}
+                value={offender.id}
               />
 
               <OffenderTile
@@ -1844,33 +1850,33 @@ const ViewIncident = ({
         </Row>
       </Modal>
       <Modal
+        okText={intl.formatMessage({ defaultMessage: 'Save' })}
+        onCancel={() => setEditUpdate(null)}
+        onOk={handleEditUpdate}
+        open={editUpdate !== null}
         title={intl.formatMessage({
           defaultMessage: 'Edit Update Content',
         })}
-        open={editUpdate !== null}
-        onOk={handleEditUpdate}
-        onCancel={() => setEditUpdate(null)}
-        okText={intl.formatMessage({ defaultMessage: 'Save' })}
       >
         <Input
-          value={editUpdateInput}
           onChange={(e) => setEditUpdateInput(e.target.value)}
+          value={editUpdateInput}
         />
       </Modal>
 
       <Drawer
+        onClose={toggleLinkOffender}
+        open={linkOffender}
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
         })}
-        open={linkOffender}
         width="1000"
-        onClose={toggleLinkOffender}
       >
         {linkOffender ? (
           <AddExistingOffender
-            update={updateOffendersList}
-            onClose={toggleLinkOffender}
             offenderIds={data?.incident?.offenders.map(({ id }) => id)}
+            onClose={toggleLinkOffender}
+            update={updateOffendersList}
           />
         ) : (
           <div />
@@ -1878,17 +1884,17 @@ const ViewIncident = ({
       </Drawer>
       {/* incident details */}
       <Drawer
+        onClose={toggleEditIncident}
+        open={editIncident}
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident Details',
         })}
-        open={editIncident}
         width="600"
-        onClose={toggleEditIncident}
       >
         {editIncident ? (
           <EditIncidentFeed
-            onClose={toggleEditIncident}
             incidentId={data?.incident?.id || ''}
+            onClose={toggleEditIncident}
           />
         ) : (
           <div />
@@ -1896,24 +1902,24 @@ const ViewIncident = ({
       </Drawer>
       {/* images */}
       <Drawer
+        onClose={toggleEditImages}
+        open={editImages}
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident Images',
         })}
-        open={editImages}
         width="800"
         zIndex={999}
-        onClose={toggleEditImages}
       >
         {editImages ? (
           <EditImageList
-            update={onUpdateImages}
-            onClose={toggleEditImages}
+            facialDet={facialDetection}
             images={data?.incident?.images}
+            onClose={toggleEditImages}
+            saving={saving}
             title={intl.formatMessage({
               defaultMessage: 'incidnet',
             })}
-            saving={saving}
-            facialDet={facialDetection}
+            update={onUpdateImages}
           />
         ) : (
           <div />
@@ -1922,63 +1928,63 @@ const ViewIncident = ({
 
       {/* offender */}
       <Drawer
+        onClose={() => setEditOffenderData(null)}
+        open={!!editOffenderData}
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
         })}
-        open={!!editOffenderData}
         width="700"
-        onClose={() => setEditOffenderData(null)}
       >
         {editOffenderData ? (
           <SimpleEditOffender
             data={editOffenderData}
-            onClose={() => setEditOffenderData(null)}
-            update={updateEditOffenderList}
             images={data?.incident?.images}
-            onCompleted={onCompletedEditOffender}
             incidentBusinessId={data?.incident.business?.id}
+            onClose={() => setEditOffenderData(null)}
+            onCompleted={onCompletedEditOffender}
+            update={updateEditOffenderList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddOffender}
+        open={addOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
         })}
-        open={addOffender}
         width="700"
         zIndex={999}
-        onClose={toggleAddOffender}
       >
         {addOffender ? (
           <AddNewOffenderSimple
-            onCompleted={onCompletedAddOffender}
-            update={updateAddOffenderList}
-            incidentId={data?.incident.id}
             groupsIds={data?.incident.groups.map(({ id }) => id)}
-            onClose={toggleAddOffender}
             images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
             incidentBusinessId={data?.incident.business?.id}
+            incidentId={data?.incident.id}
+            onClose={toggleAddOffender}
+            onCompleted={onCompletedAddOffender}
+            update={updateAddOffenderList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddExistingOffender}
+        open={addExistingOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Offenders',
         })}
-        open={addExistingOffender}
         width="1000"
-        onClose={toggleAddExistingOffender}
         zIndex={1001}
       >
         {addExistingOffender ? (
           <AddExistingOffender
-            update={(value) => onAddExistingOffender(value.id)}
             offenderIds={data?.incident?.offenders.map(({ id }) => id)}
             onClose={toggleAddExistingOffender}
+            update={(value) => onAddExistingOffender(value.id)}
           />
         ) : (
           <div />
@@ -1987,59 +1993,59 @@ const ViewIncident = ({
 
       {/* vehicle */}
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={toggleAddExistingVehicle}
+        open={addExistingVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
         })}
-        open={addExistingVehicle}
         width="800"
-        onClose={toggleAddExistingVehicle}
         zIndex={1001}
-        bodyStyle={{ overflow: 'hidden' }}
       >
         {addExistingVehicle ? (
           <LinkVehicle
+            onClose={toggleAddExistingVehicle}
             update={(value) => onAddExistingVehicle(value.id)}
             vehicleIds={data?.incident?.vehicles.map(({ id }) => id)}
-            onClose={toggleAddExistingVehicle}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddVehicle}
+        open={addVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
         })}
-        open={addVehicle}
         width="700"
         zIndex={999}
-        onClose={toggleAddVehicle}
       >
         {addVehicle ? (
           <AddVehicleSimple
-            update={onAddVehicle}
-            onClose={toggleAddVehicle}
             images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
+            onClose={toggleAddVehicle}
+            update={onAddVehicle}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setEditVehicleData(null)}
+        open={!!editVehicleData}
         title={intl.formatMessage({
           defaultMessage: 'Edit Vehicle',
         })}
-        open={!!editVehicleData}
         width="800"
-        onClose={() => setEditVehicleData(null)}
         zIndex={1001}
       >
         {editVehicleData ? (
           <EditVehicleSimple
             editData={editVehicleData}
-            update={onEditVehicle}
-            onClose={() => setEditVehicleData(null)}
             images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
+            onClose={() => setEditVehicleData(null)}
+            update={onEditVehicle}
           />
         ) : (
           <div />
@@ -2047,40 +2053,40 @@ const ViewIncident = ({
       </Drawer>
       {/* goods */}
       <Drawer
+        onClose={toggleAddGoods}
+        open={addGoods}
         title={intl.formatMessage({
           defaultMessage: 'Add New Item',
         })}
-        open={addGoods}
-        width="1000"
+        width="800"
         zIndex={999}
-        onClose={toggleAddGoods}
       >
         {addGoods ? (
           <AddGoods
-            update={onAddGoods}
-            onClose={toggleAddGoods}
             businessId={data?.incident.business?.id}
+            onClose={toggleAddGoods}
             saving={saving}
+            update={onAddGoods}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setEditGoodsData(null)}
+        open={!!editGoodsData}
         title={intl.formatMessage({
           defaultMessage: 'Edit Item',
         })}
-        open={!!editGoodsData}
         width="400"
         zIndex={999}
-        onClose={() => setEditGoodsData(null)}
       >
         {editGoodsData ? (
           <EditGoods
-            update={onEditGoods}
-            onClose={() => setEditGoodsData(null)}
             data={editGoodsData}
+            onClose={() => setEditGoodsData(null)}
             saving={saving}
+            update={onEditGoods}
           />
         ) : (
           <div />
@@ -2089,17 +2095,15 @@ const ViewIncident = ({
 
       {/* todo */}
       <Drawer
+        onClose={toggleAddTodo}
+        open={addTodo}
         title={intl.formatMessage({
           defaultMessage: 'Add Activity',
         })}
-        open={addTodo}
         width="600"
-        onClose={toggleAddTodo}
       >
         {addTodo ? (
           <AddTodo
-            update={updateTodoList}
-            onClose={toggleAddTodo}
             incidentId={data?.incident?.id}
             initData={
               templatesData?.scheme &&
@@ -2109,18 +2113,20 @@ const ViewIncident = ({
                   }
                 : undefined
             }
+            onClose={toggleAddTodo}
+            update={updateTodoList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setCompleteTodoVisible(null)}
+        open={completeTodoVisible !== null}
         title={intl.formatMessage({
           defaultMessage: 'Complete Activity',
         })}
-        open={completeTodoVisible !== null}
         width={800}
-        onClose={() => setCompleteTodoVisible(null)}
       >
         {completeTodoVisible ? (
           <ViewTodo
@@ -2134,20 +2140,20 @@ const ViewIncident = ({
         )}
       </Drawer>
       <Drawer
+        onClose={() => setViewTodoVisible(null)}
+        open={!!viewTodoVisible}
         title={intl.formatMessage({
           defaultMessage: 'View Activity',
         })}
-        open={!!viewTodoVisible}
         width={800}
-        onClose={() => setViewTodoVisible(null)}
       >
         {viewTodoVisible ? (
           <ViewTodo
-            id={viewTodoVisible}
-            onClose={() => setViewTodoVisible(null)}
             confirmText={intl.formatMessage({
               defaultMessage: 'Save Activity',
             })}
+            id={viewTodoVisible}
+            onClose={() => setViewTodoVisible(null)}
             updateQuery={updateTodo}
             updateTodo={() => {}}
           />
@@ -2158,12 +2164,12 @@ const ViewIncident = ({
 
       {/* evidence */}
       <Drawer
+        onClose={toggleAddDocument}
+        open={addDocument}
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
         })}
-        open={addDocument}
         width="600"
-        onClose={toggleAddDocument}
         zIndex={1001}
       >
         {addDocument ? (
@@ -2178,18 +2184,18 @@ const ViewIncident = ({
       </Drawer>
       {/* investigation */}
       <Drawer
+        onClose={toggleAddInvestigation}
+        open={addInvestigation}
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
         })}
-        open={addInvestigation}
         width="500"
-        onClose={toggleAddInvestigation}
       >
         {addInvestigation ? (
           <AddInvestigation
-            update={updateInvestigationList}
             incidentId={data?.incident?.id || ''}
             onClose={toggleAddInvestigation}
+            update={updateInvestigationList}
           />
         ) : (
           <div />
@@ -2197,13 +2203,13 @@ const ViewIncident = ({
       </Drawer>
       {/* address */}
       <Drawer
+        onClose={toggleEditAddress}
+        open={editAddress}
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident Address',
         })}
-        open={editAddress}
         width="600"
         zIndex={999}
-        onClose={toggleEditAddress}
       >
         {editAddress ? (
           <AddLocation
@@ -2217,13 +2223,13 @@ const ViewIncident = ({
       </Drawer>
 
       <Drawer
+        bodyStyle={{ padding: 0 }}
+        onClose={toggleShareOpen}
         title={intl.formatMessage({
           defaultMessage: 'Share Incident',
         })}
-        bodyStyle={{ padding: 0 }}
         visible={shareOpen}
         width={700}
-        onClose={toggleShareOpen}
       >
         {shareOpen && (
           <ShareData incidentId={incidentId} onClose={toggleShareOpen} />

@@ -1,20 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
-import { Form, Modal, notification } from 'antd';
-
-import moment from 'moment';
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useStoreActions, useStoreState } from 'state';
-import type { CustomQuestion, Image, LocationData } from 'types/DataType';
-import Mixpanel from 'utils/mixpanel';
-import { useIntl } from 'react-intl';
+import type { StateImageData } from 'components/incidents/IncidentForm/ImageSection/useImageSection';
 import type { StateOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import type { StateVehicleData } from 'components/incidents/IncidentForm/Profiles/Vehicles/useVehicles';
-import type { StateImageData } from 'components/incidents/IncidentForm/ImageSection/useImageSection';
-import { useGroupsContext } from '#/context/groups-context';
+import type { CreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
+import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
 import type {
   Age,
   Build,
@@ -25,140 +18,150 @@ import type {
   PoliceResponseTime,
   Race,
 } from 'graphql/types';
+import type React from 'react';
+import type { CustomQuestion, Image, LocationData } from 'types/DataType';
+
+import { useGroupsContext } from '#/context/groups-context';
+import hasPermission from '#/utils/has-permission';
+import { Form, Modal, notification } from 'antd';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useCreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
+import { useAddressesQuery } from 'graphql/incidents/queries/address.generated';
+import { ListIncidentsDocument } from 'graphql/incidents/queries/list-incidents.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
 import {
   AnswerType,
   GoodsMode,
   IncidentFormField,
   Model,
+  PermissionMethod,
+  PermissionModel,
   Role,
 } from 'graphql/types';
-import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
-import { useAddressesQuery } from 'graphql/incidents/queries/address.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
-import type { CreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
-import { useCreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
-import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
-import { ListIncidentsDocument } from 'graphql/incidents/queries/list-incidents.generated';
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
+import moment from 'moment';
+import { useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'state';
+import Mixpanel from 'utils/mixpanel';
 
 const { useForm } = Form;
 const { confirm } = Modal;
 
 export interface OffenderData {
-  id: string;
-  confirmedInIncident: boolean;
-  reference?: number | null;
-  name?: string | null;
-  alias?: string[] | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  height?: Height | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  comment?: string | null;
+  alias?: null | string[];
   approved?: boolean | null;
-  updatedAt?: Date;
+  build?: Build | null;
+  comment?: null | string;
+  confirmedInIncident: boolean;
+  dateOfBirth?: Date | null;
+  dateSource?: null | string;
+  edited: boolean;
+  existing: boolean;
+  gender?: Gender | null;
+  hair?: null | string;
+  height?: Height | null;
+  id: string;
+  idSource?: IdSource;
+  idVerified?: boolean;
+  imageUid?: string[] | undefined;
   images?: {
-    id: string;
-    url?: string | null | undefined;
-    new: boolean;
     boundingBox?: {
       height: string;
       left: string;
       top: string;
       width: string;
     };
+    id: string;
+    new: boolean;
+    url?: null | string | undefined;
   }[];
-  imageUid?: string[] | undefined;
-  idVerified?: boolean;
-  idSource?: IdSource;
+  name?: null | string;
   new: boolean;
-  existing: boolean;
-  edited: boolean;
+  peculiarities?: null | string;
+  race?: Race | null;
+  reference?: null | number;
+  updatedAt?: Date;
 }
 
 export interface FormData {
-  subject: string;
-  description: string;
-  date: Date;
-  value?: number;
-  recoveredValue?: number;
-  policeReported?: boolean;
-  policeInvolved?: boolean;
-  policeRef?: string;
-  policeNo?: string;
-  policeResponse: PoliceResponseTime;
   business?: {
     label: React.ReactNode;
     value: string;
   };
-  groups: string[];
-  tags: string[];
-  images?: StateImageData[];
-  documents?: { fileList: UploadFile[] };
-  goods?: {
-    goodsType?: string;
-    value?: number;
-    recoveredValue?: number;
-    quantity?: number;
-    recoveredQuantity?: number;
-    sku?: string;
-    name?: string;
-    stockItem?: string;
-  }[];
-  offenders: StateOffenderData[] | null;
-  vehicles: StateVehicleData[] | null;
-  witnessesInvolved: boolean;
-  witnessDetails?: {
-    name: string;
-    phone?: string;
-    email?: string;
-    description?: string;
-  }[];
-  hasVictims: boolean;
-  victimsDetails?: {
-    name: string;
-    phone?: string;
-    email?: string;
-    description?: string;
-  }[];
-  involvedTags?: [];
-  fellingTags?: [];
-  cctvAvailable?: boolean;
   cctv?: {
     cameraNumber: string;
-    showIncident: boolean;
-    showFace: boolean;
-    startTime: Date;
     endTime: Date;
+    showFace: boolean;
+    showIncident: boolean;
+    startTime: Date;
   }[];
+  cctvAvailable?: boolean;
+  date: Date;
+  description: string;
+  documents?: { fileList: UploadFile[] };
+  fellingTags?: [];
+  goods?: {
+    goodsType?: string;
+    name?: string;
+    quantity?: number;
+    recoveredQuantity?: number;
+    recoveredValue?: number;
+    sku?: string;
+    stockItem?: string;
+    value?: number;
+  }[];
+  groups: string[];
+  hasVictims: boolean;
+  images?: StateImageData[];
+  involvedTags?: [];
+  offenders: StateOffenderData[] | null;
+  policeInvolved?: boolean;
+  policeNo?: string;
+  policeRef?: string;
+  policeReported?: boolean;
+  policeResponse: PoliceResponseTime;
+  recoveredValue?: number;
+  subject: string;
+  tags: string[];
+  value?: number;
+  vehicles: StateVehicleData[] | null;
+  victimsDetails?: {
+    description?: string;
+    email?: string;
+    name: string;
+    phone?: string;
+  }[];
+  witnessDetails?: {
+    description?: string;
+    email?: string;
+    name: string;
+    phone?: string;
+  }[];
+  witnessesInvolved: boolean;
 }
 
 export interface NewImage extends Image {
   offenders?: {
     id: string;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
     new?: boolean;
   }[];
 }
 
 export interface VehicleData {
-  id: string;
-  make?: string | null | undefined;
-  model?: string | null | undefined;
-  colour?: string | null | undefined;
-  reference?: number | null;
-  registration?: string | null | undefined;
-  new: boolean;
-  existing: boolean;
+  colour?: null | string | undefined;
   edited: boolean;
+  existing: boolean;
+  id: string;
+  make?: null | string | undefined;
+  model?: null | string | undefined;
+  new: boolean;
+  reference?: null | number;
+  registration?: null | string | undefined;
 }
 
 interface Props {
@@ -166,41 +169,45 @@ interface Props {
 }
 
 interface Return {
+  addNewAddress: boolean;
   addressLoading: boolean;
   adminRights: boolean;
+  brands: string[];
+  customQuestions: CustomQuestion[];
+  dontKnowGoods: () => void;
   form: FormInstance<FormData>;
+  goodsMode: GoodsMode;
+  goodsVisible: boolean;
+  incidentForm: IncidentFormField[];
   isTheft: boolean;
+  knowGoods: () => void;
+  newAddressData: LocationData | undefined;
   onSubmit: (value: FormData) => void;
   onValuesChange: (changedValues: FormData, values: FormData) => void;
   primaryAddress:
-    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
+    | Exclude<AddressesQuery['addresses'], null | undefined>[0]
     | undefined;
+  primaryImage: string;
+  reportOnly: boolean;
   saving: boolean;
-  addNewAddress: boolean;
+  setBrands: (value: string[]) => void;
+  setPrimaryImage: (value: string) => void;
+  showSiteNumber: boolean;
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
-  newAddressData: LocationData | undefined;
-  goodsVisible: boolean;
-  dontKnowGoods: () => void;
-  knowGoods: () => void;
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
-  incidentForm: IncidentFormField[];
-  customQuestions: CustomQuestion[];
-  goodsMode: GoodsMode;
-  reportOnly: boolean;
-  brands: string[];
-  setBrands: (value: string[]) => void;
-  showSiteNumber: boolean;
 }
 
 const useAddIncident = ({ investigationId }: Props): Return => {
   const [form] = useForm<FormData>();
 
   const intl = useIntl();
-  const userId = useStoreState((state) => state.user.id);
-  const businesses = useStoreState((state) => state.user.businesses);
-  const role = useStoreState((state) => state.user.role);
+  const {
+    businesses,
+    id: userId,
+    role,
+    schemes,
+  } = useStoreState((state) => state.user);
+
   const reportOnly =
     useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
   const pagination = useStoreState((state) => state.data.incidents.pagination);
@@ -213,12 +220,25 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   );
   const {
     id: schemeId,
-    restrictIncidentAccess,
     requireSiteNumberForUsers,
+    restrictIncidentAccess,
   } = useStoreState((state) => state.scheme);
   const facialRecognition = useStoreState(
     (state) => state.scheme.facialRecognition
   );
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
+
+  const addOffenderRights = hasPermission({
+    permission: {
+      method: PermissionMethod.Write,
+      model: PermissionModel.Offenders,
+    },
+    permissions,
+  });
 
   const [goodsVisible, setGoodsVisible] = useState(false);
   const [addNewAddress, setAddNewAddress] = useState(false);
@@ -262,12 +282,12 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   useEffect(() => {
     if (groups) {
       setIncidentsState({
+        order,
         pagination,
         variables: {
           ...variables,
           groups: groups.map((group) => group.value),
         },
-        order,
       });
     }
   }, [groups]);
@@ -298,15 +318,15 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const { data: tagsData } = useTagsQuery({
     variables: {
       where: {
+        dataType: {
+          equals: Model.Incident,
+        },
         schemes: {
           some: {
             id: {
               equals: schemeId,
             },
           },
-        },
-        dataType: {
-          equals: Model.Incident,
         },
       },
     },
@@ -342,8 +362,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<ListIncidentsQuery>({
-      query: ListIncidentsDocument,
       data: {
+        __typename: 'Query',
         listIncidents: {
           ...existingData.listIncidents,
           incidents:
@@ -354,22 +374,22 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                   ...existingData?.listIncidents?.incidents,
                   {
                     ...res.createIncident,
+                    incidentItems: [],
                     // TODO fix this
                     totalImages: res?.createIncident.images.length || 0,
-                    incidentItems: [],
                   },
                 ]
               : [
                   {
                     ...res.createIncident,
+                    incidentItems: [],
                     // TODO fix this
                     totalImages: res?.createIncident.images.length || 0,
-                    incidentItems: [],
                   },
                 ],
         },
-        __typename: 'Query',
       },
+      query: ListIncidentsDocument,
       variables: {
         scheme: {
           id: schemeId,
@@ -395,8 +415,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
     if (!existingData?.investigation) return;
     store.writeQuery<ViewInvestigationQuery>({
-      query: ViewInvestigationDocument,
       data: {
+        __typename: 'Query',
         investigation: {
           ...existingData.investigation,
           incidents: [
@@ -404,8 +424,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             ...existingData.investigation.incidents,
             {
               ...res.createIncident,
-              totalValue: res.createIncident.value || 0,
               totalRecoveredValue: res.createIncident.recoveredValue || 0,
+              totalValue: res.createIncident.value || 0,
             },
           ],
           offenders: [
@@ -417,8 +437,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             ...res.createIncident.vehicles,
           ],
         },
-        __typename: 'Query',
       },
+      query: ViewInvestigationDocument,
       variables,
     });
   };
@@ -429,11 +449,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       setSaving(false);
       Mixpanel.track('Successfully create incident');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The Incident has been added!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -451,11 +471,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       setSaving(false);
       Mixpanel.track('Unsuccessfully create incident');
       notification.error({
-        message: intl.formatMessage({
-          defaultMessage: 'Error!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors. Please try again.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Error!',
         }),
         placement: 'bottomRight',
       });
@@ -479,16 +499,16 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       ?.map((offender) => offender.confirmedInIncident)
       .includes(false);
     if (allOffendersConfirmed) {
+      const confirmedOffender = data.offenders?.filter((el) => el.getConfirmed);
       const getOffenders = (): CreateIncidentData['offenders'] => {
-        if (data.offenders) {
-          const existingOffenders = data.offenders.filter(
+        if (confirmedOffender) {
+          const existingOffenders = confirmedOffender.filter(
             (item) => item.existing
           );
-          const newOffenders = data.offenders.filter((item) => item.new);
-          const editedOffenders = data.offenders.filter((item) => item.edited);
-
-          console.log(data.offenders);
-
+          const newOffenders = confirmedOffender.filter((item) => item.new);
+          const editedOffenders = confirmedOffender.filter(
+            (item) => item.edited
+          );
           return {
             connect:
               existingOffenders.length > 0
@@ -497,6 +517,19 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             create:
               newOffenders.length > 0
                 ? newOffenders.map((offender) => ({
+                    address:
+                      offender?.address?.street &&
+                      offender?.address?.townCity &&
+                      offender?.address?.postcode
+                        ? {
+                            alias: offender?.address?.alias,
+                            building: offender?.address?.building,
+                            county: offender?.address?.county,
+                            postcode: offender?.address?.postcode,
+                            street: offender?.address?.street,
+                            townCity: offender?.address?.townCity,
+                          }
+                        : undefined,
                     age: offender.age || null,
                     alias: offender.alias ? { set: offender.alias } : undefined,
                     build: offender.build || null,
@@ -518,40 +551,27 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       offender.idVerified === null
                         ? false
                         : offender.idVerified,
-                    localId: offender.id,
-                    name: offender.name,
-                    peculiarities: offender.peculiarities || null,
-                    race: offender.race || null,
-                    scheme: { connect: { id: schemeId } },
-
-                    address:
-                      offender?.address?.street &&
-                      offender?.address?.townCity &&
-                      offender?.address?.postcode
-                        ? {
-                            alias: offender?.address?.alias,
-                            building: offender?.address?.building,
-                            street: offender?.address?.street,
-                            townCity: offender?.address?.townCity,
-                            county: offender?.address?.county,
-                            postcode: offender?.address?.postcode,
-                          }
-                        : undefined,
                     // TODO don't know which one to use so keeping above, may need to change??
                     images:
                       offender?.images && offender?.images.length > 0
                         ? {
                             create: offender.images.map((image) => ({
+                              indexFaces: facialRecognition,
                               url: {
                                 filename: image.fileName || '',
+                                id: image.id || '',
                                 mimetype: image.type || '',
                                 url: image.url || image.optimised || '',
-                                id: image.id || '',
                               },
-                              indexFaces: facialRecognition,
                             })),
                           }
                         : undefined,
+                    localId: offender.id,
+                    name: offender.name,
+                    peculiarities: offender.peculiarities || null,
+
+                    race: offender.race || null,
+                    scheme: { connect: { id: schemeId } },
                   }))
                 : undefined,
 
@@ -574,26 +594,26 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 idVerified: offender.idVerified
                   ? { set: offender.idVerified }
                   : undefined,
-                name: { set: offender.name || '' },
-                peculiarities: { set: offender.peculiarities || '' },
-                race: { set: offender.race },
-                justification: { set: offender.justification || null },
-                infoSource: { set: offender.infoSource || '' },
-                knownFor: offender.knownFor,
-                targetedGoods: offender.targetedGoods,
                 images:
                   offender?.images && offender?.images.length > 0
                     ? {
                         create: offender.images.map((image) => ({
                           url: {
                             filename: image.fileName || '',
+                            id: image.id,
                             mimetype: image.type || '',
                             url: image.url || image.optimised || '',
-                            id: image.id,
                           },
                         })),
                       }
                     : undefined,
+                infoSource: { set: offender.infoSource || '' },
+                justification: { set: offender.justification || null },
+                knownFor: offender.knownFor,
+                name: { set: offender.name || '' },
+                peculiarities: { set: offender.peculiarities || '' },
+                race: { set: offender.race },
+                targetedGoods: offender.targetedGoods,
               },
               where: { id: offender.id },
             })),
@@ -615,24 +635,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             existingVehicles.length > 0
               ? existingVehicles.map(({ id }) => ({ id }))
               : undefined,
-          update:
-            editedVehicles.length > 0
-              ? editedVehicles.map((vehicle) => ({
-                  where: { id: vehicle.id },
-                  data: {
-                    colour: { set: vehicle.colour },
-                    groups: {
-                      connect:
-                        groups && groups.length === 1
-                          ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups.map((id) => ({ id })),
-                    },
-                    make: { set: vehicle.make },
-                    model: { set: vehicle.model },
-                    registration: { set: vehicle.registration },
-                  },
-                }))
-              : undefined,
           create:
             newVehicles.length > 0
               ? newVehicles.map((vehicle) => ({
@@ -649,6 +651,24 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                   registration: vehicle.registration,
                 }))
               : undefined,
+          update:
+            editedVehicles.length > 0
+              ? editedVehicles.map((vehicle) => ({
+                  data: {
+                    colour: { set: vehicle.colour },
+                    groups: {
+                      connect:
+                        groups && groups.length === 1
+                          ? groups.map(({ value: id }) => ({ id }))
+                          : data.groups.map((id) => ({ id })),
+                    },
+                    make: { set: vehicle.make },
+                    model: { set: vehicle.model },
+                    registration: { set: vehicle.registration },
+                  },
+                  where: { id: vehicle.id },
+                }))
+              : undefined,
         };
       };
       const getLocation = (): CreateIncidentData['location'] => {
@@ -657,11 +677,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             create: {
               building: newAddressData.building,
               county: newAddressData.county,
+              geoLat: newAddressData.geoLat,
+              geoLng: newAddressData.geoLng,
               postcode: newAddressData.postcode,
               street: newAddressData.street,
               townCity: newAddressData.townCity,
-              geoLat: newAddressData.geoLat,
-              geoLng: newAddressData.geoLng,
             },
           };
         }
@@ -675,7 +695,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
           data.images && data.images.length > 0
             ? data.images
                 .map((item) => {
-                  const offenders = data.offenders?.filter((offender) =>
+                  const offenders = confirmedOffender?.filter((offender) =>
                     offender.images?.some(({ id }) => id === item.uid)
                   );
                   const vehicles = data.vehicles?.filter((vehicle) =>
@@ -683,24 +703,24 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                   );
 
                   return {
+                    offenders: offenders?.map((offender) => ({
+                      id: offender.id,
+                      new: offender.new || false,
+                    })),
+                    policeImage: item.policeImage,
+                    position: item.position,
+                    primary: item.uid === primaryImage,
+                    rotation: item.rotation || 0,
+                    totalFaces: item.totalFaces || 0,
                     url: {
                       filename: item.fileName || '',
                       mimetype: item.type || '',
                       url: item.url || '',
                     },
-                    offenders: offenders?.map((offender) => ({
-                      id: offender.id,
-                      new: offender.new || false,
-                    })),
                     vehicles: vehicles?.map((offender) => ({
                       id: offender.id,
                       new: offender.new || false,
                     })),
-                    position: item.position,
-                    primary: item.uid === primaryImage,
-                    policeImage: item.policeImage,
-                    rotation: item.rotation || 0,
-                    totalFaces: item.totalFaces || 0,
                   };
                 })
                 .filter((object) => object.url !== undefined)
@@ -716,10 +736,10 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       const getDocuments = () => {
         if (data.documents?.fileList && data.documents?.fileList?.length > 0) {
           return data.documents?.fileList.map((file) => ({
-            url: file.url || '',
-            name: file.name || '',
             fileType: file.type || '',
+            name: file.name || '',
             origFileName: file.fileName || '',
+            url: file.url || '',
           }));
         }
         return undefined;
@@ -732,8 +752,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore TODO: fix noImplicitAny error here
               answer: data[question.questionId] || '',
-              type: question.answerType,
               tagQuestionId: question.tagQuestionId,
+              type: question.answerType,
             })),
             business: data.business?.value
               ? {
@@ -742,6 +762,15 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               : {
                   id: businesses[0]?.id,
                 },
+            cctvRecords: {
+              create: data.cctv?.map((item) => ({
+                cameraNumber: item.cameraNumber,
+                endTime: item.endTime,
+                showFace: item.showFace,
+                showIncident: item.showIncident,
+                startTime: item.startTime,
+              })),
+            },
             crimeGroups: {},
             crimeTypes: [
               ...data.tags.map((id) => ({ id })),
@@ -757,79 +786,70 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 : data.groups.map((id) => ({ id })),
             images: getImages(),
             investigationId: investigationId || null,
-            items:
-              data.goods &&
-              data.goods
-                .filter(
-                  (item) =>
-                    item.goodsType !== undefined || item.sku !== undefined
-                )
-                .map((item) => ({
-                  goodsType: item.goodsType
-                    ? {
-                        id: item.goodsType,
-                      }
-                    : undefined,
-                  name:
-                    item.name ??
-                    (goodsTypesData &&
-                      goodsTypesData.listGoodsTypes.goodsTypes.find(
-                        ({ id }) => id === item.goodsType
-                      )?.name) ??
-                    '',
-                  value:
-                    goodsMode === GoodsMode.Specific
-                      ? (item.value || 0) * (item.quantity || 0)
-                      : item.value || 0,
-                  recoveredValue:
-                    goodsMode === GoodsMode.Specific
-                      ? (item.recoveredValue || 0) *
-                        (item.recoveredQuantity || 0)
-                      : item.recoveredValue || 0,
-                  sku: item.sku,
-                  quantity: item.quantity,
-                  recoveredQuantity: item.recoveredQuantity,
-                  stockItem: item.stockItem
-                    ? {
-                        id: item.stockItem,
-                      }
-                    : undefined,
-                })),
+            items: data.goods
+              ?.filter(
+                (item) => item.goodsType !== undefined || item.sku !== undefined
+              )
+              .map((item) => ({
+                goodsType: item.goodsType
+                  ? {
+                      id: item.goodsType,
+                    }
+                  : undefined,
+                name:
+                  item.name ??
+                  goodsTypesData?.listGoodsTypes.goodsTypes.find(
+                    ({ id }) => id === item.goodsType
+                  )?.name ??
+                  '',
+                quantity: item.quantity,
+                recoveredQuantity: item.recoveredQuantity,
+                recoveredValue:
+                  goodsMode === GoodsMode.Specific
+                    ? (item.recoveredValue || 0) * (item.recoveredQuantity || 0)
+                    : item.recoveredValue || 0,
+                sku: item.sku,
+                stockItem: item.stockItem
+                  ? {
+                      id: item.stockItem,
+                    }
+                  : undefined,
+                value:
+                  goodsMode === GoodsMode.Specific
+                    ? (item.value || 0) * (item.quantity || 0)
+                    : item.value || 0,
+              })),
             location: getLocation(),
-            offenders: getOffenders(),
+            offenders: addOffenderRights
+              ? getOffenders()
+              : {
+                  connect: undefined,
+                  create: undefined,
+                },
             policeInvolved: data.policeInvolved,
             policeNo: data.policeNo,
             policeRef: data.policeRef,
             policeReported: data.policeReported,
             policeResponse: data.policeResponse,
             scheme: schemeId,
-            subject: data.subject,
             sessionId,
+            subject: data.subject,
             time: data.date,
             vehicles: getVehicles(),
-            cctvRecords: {
-              create: data.cctv?.map((item) => ({
-                cameraNumber: item.cameraNumber,
-                endTime: item.endTime,
-                showIncident: item.showIncident,
-                showFace: item.showFace,
-                startTime: item.startTime,
+            victims: {
+              create: data.victimsDetails?.map((item) => ({
+                description: item.description,
+                email: item.email,
+                name: item.name,
+                phone: item.phone,
               })),
             },
             witnesses: {
               create: data.witnessDetails?.map((item) => ({
-                name: item.name,
                 description: item.description,
                 email: item.email,
-                phone: item.phone,
-              })),
-            },
-            victims: {
-              create: data.victimsDetails?.map((item) => ({
                 name: item.name,
                 phone: item.phone,
-                description: item.description,
-                email: item.email,
               })),
             },
           },
@@ -837,10 +857,10 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       });
     } else {
       confirm({
-        type: 'error',
-        title: 'Please confirm offenders',
         content:
           'You need to confirm that all the offenders were involved in the incident.',
+        title: 'Please confirm offenders',
+        type: 'error',
       });
       setSaving(false);
     }
@@ -855,7 +875,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     if (descriptionPristine && autoPopulateDescription) {
       // build description as data is completed
       const tags = values.tags
-        .map((id) => tagsData && tagsData.tags.find((tag) => tag.id === id))
+        .map((id) => tagsData?.tags.find((tag) => tag.id === id))
         .map((tag) => tag?.name || '');
       const offenders = values.offenders || [];
       const unknownOffenders =
@@ -885,13 +905,13 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             'The incident involved {offenderCount, plural, one {offender} other {offenders}} {knownOffenders}{unknownCount, plural, =0 {.} other { and}} {unknownCount, plural, =0 {} 1 {unidentified offender} other {unidentified offenders.}}',
         },
         {
-          offenderCount: offenders.length,
-
-          unknownCount: unknownOffenders.length,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           knownOffenders: `${knownOffenders.map(
             (item, index) => `${index > 1 ? ' ' : ''}${item.name || ''}`
           )}`,
+
+          offenderCount: offenders.length,
+          unknownCount: unknownOffenders.length,
         }
       );
 
@@ -926,24 +946,24 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 'An incident of {tags} occurred at {time} on {date}. {goods, plural, =0 {} other {The goods lost in this incident total {totalLoss} of which a value of {recovered} was recovered.}}',
             },
             {
-              tags: tags
-                .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
-                .toString(),
-              time: moment(values.date).format('HH:mm'),
               date: moment(values.date).format('dddd Do MMMM YYYY'),
               goods: 0,
-              totalLoss:
-                goodsWithValue.length > 0
-                  ? `£${
-                      goodsWithValue
-                        .reduce((a, b) => (a || 0) + (b || 0))
-                        ?.toFixed(2) || 0
-                    }`
-                  : '',
               recovered:
                 goodsWithRecoveredValue.length > 0
                   ? `£${
                       goodsWithRecoveredValue
+                        .reduce((a, b) => (a || 0) + (b || 0))
+                        ?.toFixed(2) || 0
+                    }`
+                  : '',
+              tags: tags
+                .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
+                .toString(),
+              time: moment(values.date).format('HH:mm'),
+              totalLoss:
+                goodsWithValue.length > 0
+                  ? `£${
+                      goodsWithValue
                         .reduce((a, b) => (a || 0) + (b || 0))
                         ?.toFixed(2) || 0
                     }`
@@ -961,11 +981,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         goods: [
           {
             goodsType:
-              (goodsTypesData &&
-                goodsTypesData.listGoodsTypes.goodsTypes.find(
-                  (item) => item.name === 'Unknown'
-                )?.id) ||
-              undefined,
+              goodsTypesData?.listGoodsTypes.goodsTypes.find(
+                (item) => item.name === 'Unknown'
+              )?.id || undefined,
             recoveredValue: 0,
             value: 0,
           },
@@ -1014,12 +1032,10 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       const sections = [
         ...new Set(
           formTags
-            .map(
-              (value) =>
-                incidentTagsData &&
-                incidentTagsData.listIncidentTags.find(
-                  (item) => item.value === value
-                )
+            .map((value) =>
+              incidentTagsData?.listIncidentTags.find(
+                (item) => item.value === value
+              )
             )
             .flatMap((item) => item?.incidentForm)
             .map((item) => item?.type)
@@ -1041,23 +1057,21 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         ]);
       }
       if (formTags.length > 0) {
-        const tag =
-          incidentTagsData &&
-          incidentTagsData.listIncidentTags.find(
-            (item) => item.value === formTags[0]
-          );
+        const tag = incidentTagsData?.listIncidentTags.find(
+          (item) => item.value === formTags[0]
+        );
         if (tag?.questions) {
           const tagQuestions = tag.questions.map((question) => ({
             answerType: question?.answerType || AnswerType.String,
+            dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
+            dependentOnBrandIds: question?.dependentOnBrandIds || [],
+            dependentOnQuestionId: question?.dependentOnQuestionId || null,
             label: question?.label || '',
+            options: question?.options || [],
             questionId: question?.questionId || '',
             required: question?.required || false,
             tagQuestionId: question?.tagQuestionId || '',
             value: '',
-            options: question?.options || [],
-            dependentOnQuestionId: question?.dependentOnQuestionId || null,
-            dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
-            dependentOnBrandIds: question?.dependentOnBrandIds || [],
           }));
           if (brands.length > 0) {
             const filteredQuestions = tagQuestions.filter((question) => {
@@ -1081,32 +1095,32 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   }, [formTags, incidentTagsData, brands]);
 
   return {
+    addNewAddress,
+    addressLoading,
+    adminRights: role !== Role.User,
+    brands,
+    customQuestions,
+    dontKnowGoods,
+    form,
+    goodsMode,
+    goodsVisible,
+    incidentForm,
+    isTheft,
+    knowGoods,
+    newAddressData,
     onSubmit,
-    saving,
+    onValuesChange,
     primaryAddress: addressData
       ? addressData.addresses.find((item) => item.primary)
       : undefined,
-    addressLoading,
-    form,
-    adminRights: role !== Role.User,
-    onValuesChange,
-    isTheft,
-    addNewAddress,
+    primaryImage,
+    reportOnly,
+    saving,
+    setBrands,
+    setPrimaryImage,
+    showSiteNumber,
     toggleAddNewAddress,
     updateNewAddressData,
-    newAddressData,
-    dontKnowGoods,
-    goodsVisible,
-    knowGoods,
-    primaryImage,
-    setPrimaryImage,
-    incidentForm,
-    customQuestions,
-    goodsMode,
-    reportOnly,
-    brands,
-    setBrands,
-    showSiteNumber,
   };
 };
 

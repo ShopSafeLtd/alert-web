@@ -1,108 +1,175 @@
-import React from 'react';
-import { Button, Col, Popconfirm, Popover, Row, Skeleton } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { Theme } from 'configs/ThemeConfig';
+import type { EditFeedImage, ImageFaceType } from 'types/DataType';
+
+import MultiFacesSelect from '#/components/form-components/FacesSelect/MultiFacesSelect.view';
+import errorNotification from '#/types/mutation_notifications/error_notification';
+import getFacesFromUrl from '#/utils/get-faces-from-url';
 import {
   faEdit,
   faFolderArrowDown,
   faTrash,
+  faUserPen,
 } from '@fortawesome/pro-light-svg-icons';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { EditFeedImage } from 'types/DataType';
-import { useIntl } from 'react-intl';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Button,
+  Col,
+  Popconfirm,
+  Popover,
+  Row,
+  Skeleton,
+  notification,
+} from 'antd';
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
-import Lightbox from 'yet-another-react-lightbox';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
 import downloadImage from 'utils/images/download-image';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+
+import type { CreateBlurFacesMutation } from './graphql/create_blur_faces.generated';
+
+import { useCreateBlurFacesMutation } from './graphql/create_blur_faces.generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  images: {
-    width: '100%',
-    padding: '0px 10px',
-    margin: '10px 0 15px',
-    transition: 'all 0.3s ease-in-out',
-    overflowY: 'hidden',
-    overflowX: 'auto',
-  },
+  icon: { marginRight: 5 },
   image: {
-    height: 160,
-    width: 150,
-    backgroundColor: theme.imageBackgroundColor,
-    cursor: 'pointer',
-    borderRadius: 10,
-    border: `2px solid ${theme.borderColor}`,
-    overflow: 'hidden',
-    transition: 'all 0.3s ease-in-out',
     '@media only screen and (min-height: 800px)': {
       height: 230,
       width: 170,
     },
+    backgroundColor: theme.imageBackgroundColor,
+    border: `2px solid ${theme.borderColor}`,
+    borderRadius: 10,
+    cursor: 'pointer',
+    height: 160,
+    overflow: 'hidden',
+    transition: 'all 0.3s ease-in-out',
+    width: 150,
   },
-  icon: { marginRight: 5 },
+  images: {
+    margin: '10px 0 15px',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    padding: '0px 10px',
+    transition: 'all 0.3s ease-in-out',
+    width: '100%',
+  },
 }));
 
 interface Props {
+  editImageData: EditFeedImage | null;
+  editRights: boolean;
+  hasImages: boolean;
   imagesData: EditFeedImage[] | undefined;
-  loading: boolean;
+  lightBoxOpen?: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements?: {
     src: string;
   }[];
-  openLightbox: (index: number) => void;
-  lightBoxOpen?: {
-    open: boolean;
-    index: number;
-  };
-  editRights: boolean;
-  saving: boolean;
-  editImageData: EditFeedImage | null;
-  setEditImageData: (value: EditFeedImage | null) => void;
+  loading: boolean;
   onDeleteImage: (id: string) => void;
   onEditImage: (id: EditFeedImage) => void;
-  hasImages: boolean;
+  openLightbox: (index: number) => void;
+  saving: boolean;
+  setEditImageData: (value: EditFeedImage | null) => void;
+  updateImagesList?: MutationUpdaterFn<CreateBlurFacesMutation>;
 }
 
 const ImagesList = ({
-  imagesData,
-  loading,
-  saving,
+  editImageData,
   editRights,
-  openLightbox,
+  hasImages,
+  imagesData,
   lightBoxOpen,
   lightboxElements,
-  editImageData,
-  setEditImageData,
+  loading,
   onDeleteImage,
   onEditImage,
-  hasImages,
+  openLightbox,
+  saving,
+  setEditImageData,
+  updateImagesList,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const [uploadFaces, setUploadFaces] = useState<ImageFaceType[]>([]);
+  const [uploadImage, setUploadImage] = useState<EditFeedImage | null>(null);
+
+  const imageRedaction = (image: EditFeedImage) => {
+    void getFacesFromUrl(image.url || '').then((res) => {
+      setUploadFaces(res);
+      setUploadImage(image);
+    });
+  };
+
+  const [createBlurFaces] = useCreateBlurFacesMutation({
+    onCompleted: () => {
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The image has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+    update: updateImagesList,
+  });
+  const onSelectFaces = (faces: ImageFaceType[]) => {
+    console.log('faces', faces);
+
+    const facesUrl = new Set(faces.map((face) => face.imageURL));
+    const blurFaces = uploadFaces.filter((el) => !facesUrl.has(el.imageURL));
+    if (blurFaces && uploadImage) {
+      void createBlurFaces({
+        variables: {
+          faces: blurFaces.map((el) => ({
+            blur: true,
+            height: Number(el.BoundingBox.Height),
+            left: Number(el.BoundingBox.Left),
+            top: Number(el.BoundingBox.Top),
+            width: Number(el.BoundingBox.Width),
+          })),
+          image: { id: uploadImage?.id || '', url: uploadImage?.url || '' },
+        },
+      }).finally(() => {
+        setUploadFaces([]);
+        setUploadImage(null);
+      });
+    }
+  };
 
   return loading ? (
     <Skeleton />
   ) : (
     <div>
       <Row
+        align="middle"
+        className={classes.images}
         gutter={8}
         justify="start"
-        align="middle"
-        wrap={false}
-        className={classes.images}
         style={{
           height: hasImages ? undefined : 0,
         }}
+        wrap={false}
       >
         {imagesData?.map((image, i) => (
           <Col key={image.id}>
             {editRights ? (
               <Popover
                 // trigger="hover"
-                // placement="left"
-                trigger={['contextMenu']}
-                placement="right"
                 content={
                   <div
                     style={{
@@ -111,7 +178,6 @@ const ImagesList = ({
                     }}
                   >
                     <Button
-                      type="text"
                       disabled={saving}
                       icon={
                         <FontAwesomeIcon
@@ -122,28 +188,47 @@ const ImagesList = ({
                       }
                       onClick={() => setEditImageData(image)}
                       size="small"
+                      type="text"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Edit Image',
                       })}
                     </Button>
+                    {updateImagesList && (
+                      <Button
+                        disabled={saving}
+                        icon={
+                          <FontAwesomeIcon
+                            className={classes.icon}
+                            icon={faUserPen}
+                            size="lg"
+                          />
+                        }
+                        onClick={() => imageRedaction(image)}
+                        size="small"
+                        type="text"
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Redact Image',
+                        })}
+                      </Button>
+                    )}
 
                     <Popconfirm
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                      })}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                      })}
+                      onConfirm={() => onDeleteImage(image.id)}
+                      overlayInnerStyle={{ padding: 10 }}
                       placement="topLeft"
                       title={intl.formatMessage({
                         defaultMessage: 'Remove the image?',
                       })}
-                      onConfirm={() => onDeleteImage(image.id)}
-                      okText={intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
-                      cancelText={intl.formatMessage({
-                        defaultMessage: 'No',
-                      })}
-                      overlayInnerStyle={{ padding: 10 }}
                     >
                       <Button
-                        type="text"
                         disabled={saving}
                         icon={
                           <FontAwesomeIcon
@@ -153,6 +238,7 @@ const ImagesList = ({
                           />
                         }
                         size="small"
+                        type="text"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Delete Image',
@@ -160,7 +246,6 @@ const ImagesList = ({
                       </Button>
                     </Popconfirm>
                     <Button
-                      type="text"
                       disabled={saving}
                       icon={
                         <FontAwesomeIcon
@@ -177,36 +262,40 @@ const ImagesList = ({
                         )
                       }
                       size="small"
+                      type="text"
                     >
                       {intl.formatMessage({
-                        defaultMessage: 'DownLoad Image',
+                        defaultMessage: 'Download Image',
                       })}
                     </Button>
                   </div>
                 }
+                placement="right"
+                // placement="left"
+                trigger={['contextMenu']}
               >
                 <Button
-                  onClick={() => openLightbox(i)}
                   className={classes.image}
+                  onClick={() => openLightbox(i)}
                   style={{ padding: 0 }}
                 >
                   <WatermarkImage
-                    url={image.optimised}
-                    rotation={image.rotation}
                     position={image.position}
+                    rotation={image.rotation}
+                    url={image.optimised}
                   />
                 </Button>
               </Popover>
             ) : (
               <Button
-                onClick={() => openLightbox(i)}
                 className={classes.image}
+                onClick={() => openLightbox(i)}
                 style={{ padding: 0 }}
               >
                 <WatermarkImage
-                  url={image.optimised}
-                  rotation={image.rotation}
                   position={image.position}
+                  rotation={image.rotation}
+                  url={image.optimised}
                 />
               </Button>
             )}
@@ -214,29 +303,35 @@ const ImagesList = ({
         ))}
       </Row>
       <FeedImageEditor
-        submitImage={onEditImage}
+        image={editImageData}
         onClose={() => setEditImageData(null)}
         open={!!editImageData}
-        image={editImageData}
+        submitImage={onEditImage}
       />
 
       {lightboxElements && lightBoxOpen && (
         <Lightbox
-          open={lightBoxOpen.open}
           close={() => openLightbox(0)}
-          plugins={[Zoom]}
-          index={lightBoxOpen.index}
-          slides={lightboxElements}
           controller={{
             closeOnBackdropClick: true,
           }}
+          index={lightBoxOpen.index}
+          open={lightBoxOpen.open}
+          plugins={[Zoom]}
           render={{
             slide: (slide: WatermarkSlideType) => (
               <WatermarkSlide slide={slide} />
             ),
           }}
+          slides={lightboxElements}
         />
       )}
+      <MultiFacesSelect
+        faces={uploadFaces}
+        onClose={() => setUploadFaces([])}
+        open={!!(uploadFaces && uploadFaces.length > 0)}
+        submitFace={onSelectFaces}
+      />
     </div>
   );
 };

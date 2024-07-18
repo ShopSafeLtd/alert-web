@@ -1,27 +1,27 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  selectTitle: {
+  filtersTitle: {
+    fontWeight: 600,
     marginBottom: '5px !important',
+  },
+  row: {
+    cursor: 'pointer',
   },
   select: {
     marginBottom: 20,
     width: '100%',
   },
-  filtersTitle: {
-    fontWeight: 600,
-    marginBottom: '5px !important',
-  },
   selectBox: {
-    // border: `1px solid ${theme.borderColor}`,
-    padding: '5px 10px ',
     borderRadius: 100,
     cursor: 'pointer',
-    position: 'relative',
     height: 'auto',
+    // border: `1px solid ${theme.borderColor}`,
+    padding: '5px 10px ',
+    position: 'relative',
   },
-  row: {
-    cursor: 'pointer',
+  selectTitle: {
+    marginBottom: '5px !important',
   },
 });
 

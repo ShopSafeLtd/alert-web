@@ -1,53 +1,54 @@
-import { useEffect, useState } from 'react';
-import { OffenderSort, useStoreActions, useStoreState } from 'state';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
-import type { OffenderFilters } from 'state/data-model';
-import cacheOrLoading from 'utils/cache-or-loading';
-import { useGroupsContext } from '#/context/groups-context';
 import type {
   ListOffendersRelayQuery,
   ListOffendersRelayQueryVariables,
 } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
-import {
-  ListOffendersRelayDocument,
-  useListOffendersRelayQuery,
-} from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
-import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
 import type {
   InputMaybe,
   OffenderOrderByWithRelationInput,
 } from 'graphql/types';
+import type { OffenderFilters } from 'state/data-model';
+
+import { useGroupsContext } from '#/context/groups-context';
+import {
+  ListOffendersRelayDocument,
+  useListOffendersRelayQuery,
+} from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
 import { QueryMode, Role, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { OffenderSort, useStoreActions, useStoreState } from 'state';
+import cacheOrLoading from 'utils/cache-or-loading';
 
 interface Return {
+  adminRights: boolean;
+  customGalleriesData: ListCustomGalleriesQuery | undefined;
   data: ListOffendersRelayQuery | undefined;
-  loading: boolean;
+  fetchMoreScroll: () => void;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  setSearch: (value: string) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
+  loading: boolean;
   onNavigate: () => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  setGallery: (values: string[]) => void;
-  customGalleriesData: ListCustomGalleriesQuery | undefined;
-  adminRights: boolean;
   onSelectCustomGalleries: (values: string) => void;
   onSelectGallery: (value: string) => void;
-  variables: OffenderFilters;
-  fetchMoreScroll: () => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
   setCompactView: () => void;
+  setGallery: (values: string[]) => void;
+  setSearch: (value: string) => void;
   setTableView: () => void;
+  sortFilter: boolean;
   tableView: boolean;
+  toggleSortFilter: () => void;
+  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
+  variables: OffenderFilters;
 }
 
 const useOffenderFeed = (): Return => {
@@ -57,9 +58,9 @@ const useOffenderFeed = (): Return => {
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
   const {
-    role,
-    id: userId,
     filterDefaultGroups: defaultGroups,
+    id: userId,
+    role,
   } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const filterVariables = useStoreState(
@@ -76,27 +77,27 @@ const useOffenderFeed = (): Return => {
     []
   );
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const isUser = role === Role.User;
   const { groups: defaultGroupsOnScheme } = useGroupsContext();
   const {
-    search,
-    groups,
-    businesses,
-    createdAt,
-    gallery,
-    customGalleries,
-    peculiarities,
-    hair,
-    warnings,
-    ethnicity,
     age,
     build,
-    sex,
+    businesses,
     compactView,
+    createdAt,
+    customGalleries,
+    ethnicity,
+    gallery,
+    groups,
+    hair,
+    peculiarities,
+    search,
+    sex,
     tableView,
+    warnings,
   } = filterVariables;
 
   const generateSorted = (): {
@@ -149,21 +150,88 @@ const useOffenderFeed = (): Return => {
       id: schemeId,
     },
     ...generateSorted(),
+    first: compactView ? 48 : 12,
     where: {
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          alias: {
+            hasSome: [search],
+          },
+        },
+        {
+          referenceStr: {
+            contains: search,
+          },
+        },
+      ],
+      active: gallery.includes('ACTIVE')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      age:
+        age.length > 0
+          ? {
+              in: age,
+            }
+          : undefined,
+      approved: isUser
+        ? {
+            equals: true,
+          }
+        : gallery.includes('NOT APPROVED')
+          ? {
+              equals: false,
+            }
+          : undefined,
+      bans: gallery.includes('BANNED')
+        ? {
+            some: {
+              active: {
+                equals: true,
+              },
+            },
+          }
+        : undefined,
+      build:
+        build.length > 0
+          ? {
+              in: build,
+            }
+          : undefined,
       createdAt: createdAt
         ? {
             gte: createdAt.startDate,
             lte: createdAt.endDate,
           }
         : undefined,
-      tags:
-        warnings.length > 0
+      createdBy: gallery.includes('MYDATA')
+        ? {
+            id: {
+              equals: userId,
+            },
+          }
+        : undefined,
+      customGalleries:
+        customGalleries && customGalleries.length > 0
           ? {
               some: {
                 id: {
-                  in: warnings,
+                  in: customGalleries,
                 },
               },
+            }
+          : undefined,
+      gender:
+        sex.length > 0
+          ? {
+              in: sex,
             }
           : undefined,
       groups:
@@ -183,30 +251,6 @@ const useOffenderFeed = (): Return => {
                 },
               },
             },
-      gender:
-        sex.length > 0
-          ? {
-              in: sex,
-            }
-          : undefined,
-      age:
-        age.length > 0
-          ? {
-              in: age,
-            }
-          : undefined,
-      build:
-        build.length > 0
-          ? {
-              in: build,
-            }
-          : undefined,
-      race:
-        ethnicity.length > 0
-          ? {
-              in: ethnicity,
-            }
-          : undefined,
       hair: hair
         ? {
             contains: hair,
@@ -216,12 +260,6 @@ const useOffenderFeed = (): Return => {
       idVerified: gallery.includes('VERIFIED_ID')
         ? {
             equals: true,
-          }
-        : undefined,
-      peculiarities: peculiarities
-        ? {
-            mode: QueryMode.Insensitive,
-            contains: peculiarities,
           }
         : undefined,
       incidents:
@@ -236,50 +274,23 @@ const useOffenderFeed = (): Return => {
               },
             }
           : undefined,
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          alias: {
-            hasSome: [search],
-          },
-        },
-        {
-          referenceStr: {
-            contains: search,
-          },
-        },
-      ],
-      createdBy: gallery.includes('MYDATA')
-        ? {
-            id: {
-              equals: userId,
-            },
-          }
-        : undefined,
       name: gallery.includes('ID')
         ? {
             equals: 'Unidentified Offender',
           }
         : undefined,
-      active: gallery.includes('ACTIVE')
+      peculiarities: peculiarities
         ? {
-            equals: true,
+            contains: peculiarities,
+            mode: QueryMode.Insensitive,
           }
         : undefined,
-      approved: isUser
-        ? {
-            equals: true,
-          }
-        : gallery.includes('NOT APPROVED')
-        ? {
-            equals: false,
-          }
-        : undefined,
+      race:
+        ethnicity.length > 0
+          ? {
+              in: ethnicity,
+            }
+          : undefined,
       subscribedUsers: gallery.includes('FOLLOWING')
         ? {
             some: {
@@ -289,32 +300,23 @@ const useOffenderFeed = (): Return => {
             },
           }
         : undefined,
-      bans: gallery.includes('BANNED')
-        ? {
-            some: {
-              active: {
-                equals: true,
-              },
-            },
-          }
-        : undefined,
-      customGalleries:
-        customGalleries && customGalleries.length > 0
+      tags:
+        warnings.length > 0
           ? {
               some: {
                 id: {
-                  in: customGalleries,
+                  in: warnings,
                 },
               },
             }
           : undefined,
     },
-    first: compactView ? 48 : 12,
   };
   // On mount
   useEffect(() => {
     if (groups.length === 0)
       setOffendersState({
+        order,
         pagination,
         variables: {
           ...filterVariables,
@@ -323,15 +325,14 @@ const useOffenderFeed = (): Return => {
               ?.filter(({ scheme }) => scheme.id === schemeId)
               ?.map(({ id }) => id) || [],
         },
-        order,
       });
   }, []);
 
   // Queries
   // Fetch Offenders
-  const { data, loading, fetchMore } = useListOffendersRelayQuery({
-    variables,
+  const { data, fetchMore, loading } = useListOffendersRelayQuery({
     fetchPolicy: 'cache-and-network',
+    variables,
   });
 
   // custom galleries
@@ -370,16 +371,16 @@ const useOffenderFeed = (): Return => {
     if (existingData?.listOffendersRelay?.edges === undefined) return;
 
     store.writeQuery<ListOffendersRelayQuery>({
-      query: ListOffendersRelayDocument,
       data: {
+        __typename: 'Query',
         listOffendersRelay: {
           ...existingData.listOffendersRelay,
           edges: existingData.listOffendersRelay?.edges.filter(
             (edge) => edge?.node?.id !== res?.recycleOffender?.id
           ),
         },
-        __typename: 'Query',
       },
+      query: ListOffendersRelayDocument,
       variables,
     });
   };
@@ -390,15 +391,15 @@ const useOffenderFeed = (): Return => {
 
     if (lightBoxOpen.open) {
       setLightBoxOpen({
-        open: !lightBoxOpen.open,
         index,
+        open: !lightBoxOpen.open,
       });
     } else {
       setTimeout(
         () =>
           setLightBoxOpen({
-            open: !lightBoxOpen.open,
             index,
+            open: !lightBoxOpen.open,
           }),
         0.3
       );
@@ -407,33 +408,33 @@ const useOffenderFeed = (): Return => {
 
   const setGallery = (values: string[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         gallery: values,
       },
-      order,
     });
   };
   const setCustomGalleries = (values: string[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         customGalleries: values,
       },
-      order,
     });
   };
 
   const setSearch = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         search: value,
       },
-      order,
     });
   };
 
@@ -462,32 +463,28 @@ const useOffenderFeed = (): Return => {
 
   const setCompactView = () => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
-        tableView: false,
         compactView: tableView ? compactView : !compactView,
+        tableView: false,
       },
-      order,
     });
   };
   const setTableView = () => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         tableView: !tableView,
       },
-      order,
     });
   };
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...filterVariables,
-        after: data?.listOffendersRelay?.pageInfo?.endCursor,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -500,33 +497,37 @@ const useOffenderFeed = (): Return => {
           },
         };
       },
+      variables: {
+        ...filterVariables,
+        after: data?.listOffendersRelay?.pageInfo?.endCursor,
+      },
     });
   };
 
   return {
-    fetchMoreScroll,
-    data,
-    loading: cacheOrLoading({
-      loading,
-      data,
-    }),
-    lightBoxOpen,
-    openLightbox: triggerLightbox,
-    lightboxElements,
-    setSearch,
-    variables: filterVariables,
-    updateOffenderList,
-    onNavigate,
-    sortFilter,
-    toggleSortFilter,
-    setGallery,
-    customGalleriesData,
     adminRights: role !== Role.User,
+    customGalleriesData,
+    data,
+    fetchMoreScroll,
+    lightBoxOpen,
+    lightboxElements,
+    loading: cacheOrLoading({
+      data,
+      loading,
+    }),
+    onNavigate,
     onSelectCustomGalleries,
     onSelectGallery,
+    openLightbox: triggerLightbox,
     setCompactView,
-    tableView,
+    setGallery,
+    setSearch,
     setTableView,
+    sortFilter,
+    tableView,
+    toggleSortFilter,
+    updateOffenderList,
+    variables: filterVariables,
   };
 };
 

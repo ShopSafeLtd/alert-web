@@ -1,67 +1,69 @@
-import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
-import View from './AddUser.view';
-import useAddUser from './useAddUser';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
 
+import React from 'react';
+
+import View from './AddUser.view';
+import useAddUser from './useAddUser';
+
 interface Props {
+  business?: {
+    label: string;
+    value: string;
+  };
   onClose: () => void;
   update: MutationUpdaterFn<CreateUserInDatabaseMutation>;
   updateSearch: MutationUpdaterFn<InviteExistingUserMutation>;
-  business?: {
-    value: string;
-    label: string;
-  };
 }
 
 const AddUser = ({
+  business,
   onClose,
   update,
   updateSearch,
-  business,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    groupsData,
-    groupsLoading,
+    addBusinessVisible,
+    availableRoles,
     chatsData,
     chatsLoading,
-    saving,
-    onValuesChange,
-    form,
     existingUser,
+    form,
+    groupsData,
+    groupsLoading,
+    onSubmit,
+    onValuesChange,
+    saving,
     schemeLoading,
-    selectedRole,
-    setSelectedRole,
     selectedGroups,
+    selectedRole,
     setSelectedGroups,
-    addBusinessVisible,
+    setSelectedRole,
     toggleAddBusinessVisible,
     updateNewBusinessData,
-    availableRoles,
-  } = useAddUser({ onClose, update, updateSearch, business });
+  } = useAddUser({ business, onClose, update, updateSearch });
 
   return (
     <View
+      addBusinessVisible={addBusinessVisible}
       availableRoles={availableRoles}
-      schemeLoading={schemeLoading}
-      onSubmit={onSubmit}
-      onClose={onClose}
-      groupsData={groupsData}
-      groupsLoading={groupsLoading}
+      businessProvided={!!business}
       chatsData={chatsData}
       chatsLoading={chatsLoading}
-      saving={saving}
-      onValuesChange={onValuesChange}
-      form={form}
       existingUser={existingUser}
-      businessProvided={!!business}
-      selectedRole={selectedRole}
-      setSelectedRole={setSelectedRole}
+      form={form}
+      groupsData={groupsData}
+      groupsLoading={groupsLoading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      onValuesChange={onValuesChange}
+      saving={saving}
+      schemeLoading={schemeLoading}
       selectedGroups={selectedGroups}
+      selectedRole={selectedRole}
       setSelectedGroups={setSelectedGroups}
-      addBusinessVisible={addBusinessVisible}
+      setSelectedRole={setSelectedRole}
       toggleAddBusinessVisible={toggleAddBusinessVisible}
       updateNewBusinessData={updateNewBusinessData}
     />

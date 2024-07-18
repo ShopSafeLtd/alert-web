@@ -1,33 +1,34 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
+import type { SearchOffendersQuery } from '#/graphql/offenders/queries/search-offenders.generated';
+import type { Theme } from 'configs/ThemeConfig';
+
+import { Col, Row, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
-import { Col, Row, Typography } from 'antd';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { SearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
 
 interface Props {
   item: Exclude<
     SearchOffendersQuery['listOffenders'],
-    undefined | null
+    null | undefined
   >['offenders'][0];
 }
 
 const useStyles = createUseStyles((theme: Theme) => ({
+  descText: {
+    fontSize: 12,
+    marginBottom: 0,
+  },
   image: {
-    height: 50,
-    width: 50,
+    backgroundColor: theme.imageBackgroundColor,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    backgroundColor: theme.imageBackgroundColor,
+    height: 50,
+    width: 50,
   },
   nameText: {
-    marginBottom: 0,
-  },
-  descText: {
-    fontSize: 12,
     marginBottom: 0,
   },
 }));
@@ -40,8 +41,8 @@ const OffenderItem = ({ item }: Props) => {
       <Col>
         <div className={classes.image}>
           <WatermarkImage
-            url={item.images[0]?.optimised}
             position={item.images[0]?.position}
+            url={item.images[0]?.optimised}
           />
         </div>
       </Col>
@@ -52,28 +53,28 @@ const OffenderItem = ({ item }: Props) => {
         <Row gutter={8}>
           <Col>
             {item.race && (
-              <Typography.Text type="secondary" className={classes.descText}>
+              <Typography.Text className={classes.descText} type="secondary">
                 {getEthnicity(item.race)} /
               </Typography.Text>
             )}
           </Col>
           <Col>
             {item.age && (
-              <Typography.Text type="secondary" className={classes.descText}>
+              <Typography.Text className={classes.descText} type="secondary">
                 {getAge(item.age)} /
               </Typography.Text>
             )}
           </Col>
           <Col>
             {item.build && (
-              <Typography.Text type="secondary" className={classes.descText}>
+              <Typography.Text className={classes.descText} type="secondary">
                 {getBuild(item.build)} /
               </Typography.Text>
             )}
           </Col>
           <Col>
             {item.gender && (
-              <Typography.Text type="secondary" className={classes.descText}>
+              <Typography.Text className={classes.descText} type="secondary">
                 {getSex(item.gender)}
               </Typography.Text>
             )}

@@ -1,85 +1,86 @@
 /* eslint-disable no-restricted-syntax */
-import { Form, type FormInstance } from 'antd';
-import { useParams } from 'react-router';
-import { useState } from 'react';
-
-import { useStoreState } from '../../../state';
-import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
+import type { ActiveChecklist } from 'graphql/types';
+
+import { useCompleteChecklistMutation } from '#/views/checklist/graphql/mutations/complete-checklist.generated';
 import {
   ActiveChecklistDocument,
   useActiveChecklistQuery,
 } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
-import { useCompleteChecklistMutation } from '#/views/checklist/graphql/mutations/complete-checklist.generated';
-import type { ActiveChecklist } from 'graphql/types';
+import { Form, type FormInstance } from 'antd';
+import { useState } from 'react';
+import { useParams } from 'react-router';
+
+import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+import { useStoreState } from '../../../state';
 
 interface Return {
+  data: ActiveChecklistQuery | undefined;
+  file: { file: string; name: string } | null;
+  form: FormInstance<FormData>;
   id: string | undefined;
   loading: boolean;
-  form: FormInstance<FormData>;
-  onFinish: (data: FormData) => void;
-  data: ActiveChecklistQuery | undefined;
-  sections: ActiveChecklistSection[];
-  saveDraft: () => void;
   name: string;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
+  onFinish: (data: FormData) => void;
+  saveDraft: () => void;
+  sections: ActiveChecklistSection[];
   selectedFont: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
   sign: string;
   submitting: boolean;
+  tab: string;
+  update: (value: string) => void;
 }
 
 export interface FormData {
-  sections: ActiveChecklistSection[];
   additionalInfo?: string;
+  sections: ActiveChecklistSection[];
 }
 
 export interface ActiveChecklistSection {
-  sub: boolean;
   section: number;
-  subsection?: number | null;
-  titleLocaled: string;
+  sub: boolean;
+  subsection?: null | number;
   subsections: ActiveChecklistSubsection[];
+  titleLocaled: string;
 }
 
 interface ActiveChecklistSubsection {
-  sub: boolean;
-  section: number;
-  subsection?: number | null;
-  titleLocaled: string;
   questions: ActiveChecklistField[];
+  section: number;
+  sub: boolean;
+  subsection?: null | number;
+  titleLocaled: string;
 }
 
 interface ActiveChecklistField {
-  id: string;
-  question: LocalizedString;
-  type: string;
+  additionalComments?: null | string;
+  answer: null | string;
   availableAnswers: AvailableAnswer[];
-  answer: string | null;
-  section: number;
-  subsection: number;
-  order: number;
-  weights: Weight[];
-  additionalComments?: string | null;
   dependent?: {
-    question: string;
     answer: string;
+    question: string;
   } | null;
-  ogName: string;
+  id: string;
   images?:
     | {
-        uid: string;
         name: string;
-        status: string;
-        url?: string;
         response?: { url: string }[];
+        status: string;
+        uid: string;
+        url?: string;
       }[]
     | null;
+  ogName: string;
+  order: number;
+  question: LocalizedString;
+  section: number;
+  subsection: number;
+  type: string;
+  weights: Weight[];
 }
 
 interface LocalizedString {
@@ -87,10 +88,10 @@ interface LocalizedString {
 }
 
 interface AvailableAnswer {
-  id?: string;
   answer: string;
-  weight: number;
+  id?: string;
   questionId?: string;
+  weight: number;
 }
 
 interface Weight {
@@ -122,11 +123,6 @@ const useActiveChecklist = (): Return => {
   };
 
   const { data, loading } = useActiveChecklistQuery({
-    variables: {
-      where: {
-        id: id || '',
-      },
-    },
     onCompleted: (initData) => {
       try {
         const sectionsData =
@@ -184,6 +180,18 @@ const useActiveChecklist = (): Return => {
                   ...subsection,
                   questions: questionsForSection.map((question) => ({
                     ...question,
+                    additionalComments:
+                      question?.answer?.additionalComments || '',
+                    answer: question?.answer?.answer || '',
+                    availableAnswers: (question?.availableAnswers ||
+                      []) as AvailableAnswer[],
+                    images:
+                      question?.answer?.images?.map((image, index) => ({
+                        name: `image-${index + 1}`,
+                        status: 'done',
+                        uid: `-${index + 1}`,
+                        url: image,
+                      })) || [],
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     ogName: question.question.og || '',
                     weights:
@@ -191,18 +199,6 @@ const useActiveChecklist = (): Return => {
                         answer: (weight.answer as string) || '',
                         weight: (weight.weight as number) || 0,
                       })) || [],
-                    answer: question?.answer?.answer || '',
-                    images:
-                      question?.answer?.images?.map((image, index) => ({
-                        uid: `-${index + 1}`,
-                        name: `image-${index + 1}`,
-                        status: 'done',
-                        url: image,
-                      })) || [],
-                    additionalComments:
-                      question?.answer?.additionalComments || '',
-                    availableAnswers: (question?.availableAnswers ||
-                      []) as AvailableAnswer[],
                   })),
                 };
               }) || [],
@@ -210,9 +206,9 @@ const useActiveChecklist = (): Return => {
         });
 
         form.setFieldsValue({
+          additionalInfo: initData?.activeChecklist?.comments || '',
           // @ts-expect-error type error with generics
           sections: sectionsAndSubsections,
-          additionalInfo: initData?.activeChecklist?.comments || '',
         });
         setSections(sectionsAndSubsections as ActiveChecklistSection[]);
         if (initData?.activeChecklist?.signature) {
@@ -222,9 +218,20 @@ const useActiveChecklist = (): Return => {
         console.log(error);
       }
     },
+    variables: {
+      where: {
+        id: id || '',
+      },
+    },
   });
 
   const [completeChecklist] = useCompleteChecklistMutation({
+    onCompleted: () => {
+      setSubmitting(false);
+    },
+    onError: () => {
+      setSubmitting(false);
+    },
     update: (cache, { data: mutationData }) => {
       try {
         const { activeChecklist } = cache.readQuery<ActiveChecklistQuery>({
@@ -240,25 +247,19 @@ const useActiveChecklist = (): Return => {
           ...mutationData?.completeChecklist,
         } as ActiveChecklist;
         cache.writeQuery<ActiveChecklistQuery>({
+          data: {
+            activeChecklist: newActiveChecklist,
+          },
           query: ActiveChecklistDocument,
           variables: {
             where: {
               id: id || '',
             },
           },
-          data: {
-            activeChecklist: newActiveChecklist,
-          },
         });
       } catch (error) {
         console.log(error);
       }
-    },
-    onCompleted: () => {
-      setSubmitting(false);
-    },
-    onError: () => {
-      setSubmitting(false);
     },
   });
 
@@ -269,19 +270,19 @@ const useActiveChecklist = (): Return => {
     let total = 0;
     let maxTotal = 0;
     const sectionTotals: {
-      section: number;
-      total: number;
-      maxTotal: number;
       flaggedNos: number;
+      maxTotal: number;
+      section: number;
       title: string;
+      total: number;
     }[] = [];
     const subsectionTotals: {
+      flaggedNos: number;
+      maxTotal: number;
       section: number;
       subsection: number;
-      total: number;
-      maxTotal: number;
-      flaggedNos: number;
       title: string;
+      total: number;
     }[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
@@ -299,19 +300,19 @@ const useActiveChecklist = (): Return => {
             if (dependOn?.answer !== isDepend.answer) unusedDep = true;
           }
           const questionFormatted = {
-            section: section.section,
-            subsection: subsection.subsection || 0,
+            answer: question.answer || '',
+            flagged: unusedDep ? false : question.answer === 'FAIL',
+            id: question.id,
             maxWeight:
               question.weights.sort((a, b) => b.weight - a.weight)[0]?.weight ||
               0,
+            na: question.answer === 'N/A' || unusedDep,
+            section: section.section,
+            subsection: subsection.subsection || 0,
             weight:
               question.weights.find(
                 (weight) => weight.answer === question.answer
               )?.weight || 0,
-            na: question.answer === 'N/A' || unusedDep,
-            flagged: unusedDep ? false : question.answer === 'FAIL',
-            answer: question.answer || '',
-            id: question.id,
           };
 
           if (!questionFormatted.na) {
@@ -322,11 +323,11 @@ const useActiveChecklist = (): Return => {
             );
             if (sectionIndex === -1)
               sectionTotals.push({
-                section: section.section,
-                total: questionFormatted.weight,
-                maxTotal: questionFormatted.maxWeight,
                 flaggedNos: question.answer === 'FAIL' ? 1 : 0,
+                maxTotal: questionFormatted.maxWeight,
+                section: section.section,
                 title: section.titleLocaled || '',
+                total: questionFormatted.weight,
               });
             else {
               sectionTotals[sectionIndex].total += questionFormatted.weight;
@@ -342,12 +343,12 @@ const useActiveChecklist = (): Return => {
             );
             if (subsectionIndex === -1)
               subsectionTotals.push({
+                flaggedNos: question.answer === 'FAIL' ? 1 : 0,
+                maxTotal: questionFormatted.maxWeight,
                 section: section.section,
                 subsection: subsection.subsection || 0,
-                total: questionFormatted.weight,
-                maxTotal: questionFormatted.maxWeight,
-                flaggedNos: question.answer === 'FAIL' ? 1 : 0,
                 title: subsection.titleLocaled || '',
+                total: questionFormatted.weight,
               });
             else {
               subsectionTotals[subsectionIndex].total +=
@@ -366,19 +367,19 @@ const useActiveChecklist = (): Return => {
       .flatMap((section) =>
         section.subsections.map((subsection) =>
           subsection.questions.map((question) => ({
-            fieldId: question.id,
-            answer: question.answer,
             additionalComments: question.additionalComments,
+            answer: question.answer,
+            fieldId: question.id,
+            flagged: flaggedArray.has(question.answer || ''),
             images:
               question.images?.map(
                 (image) => image.response?.[0]?.url || image.url || ''
               ) || [],
+            na: question.answer === 'N/A',
             weight:
               question.weights.find(
                 (weight) => weight.answer === question.answer
               )?.weight || 0,
-            na: question.answer === 'N/A',
-            flagged: flaggedArray.has(question.answer || ''),
           }))
         )
       )
@@ -386,23 +387,23 @@ const useActiveChecklist = (): Return => {
 
     void completeChecklist({
       variables: {
-        where: id || '',
         data: {
-          draft,
-          signature: sign,
           additionalInfo: completedData.additionalInfo,
-          total,
-          max: maxTotal,
           answers: questions.map((question) => ({
+            additionalInfo: question.additionalComments,
             answer: question.answer,
             fieldId: question.fieldId,
-            additionalInfo: question.additionalComments,
-            images: question.images,
-            weight: question.weight,
-            na: question.na,
             flagged: question.flagged,
+            images: question.images,
+            na: question.na,
+            weight: question.weight,
           })),
+          draft,
+          max: maxTotal,
+          signature: sign,
+          total,
         },
+        where: id || '',
       },
     });
   };
@@ -415,24 +416,24 @@ const useActiveChecklist = (): Return => {
   };
 
   return {
+    data,
+    file,
+    form,
     id,
     loading,
-    form,
-    onFinish,
-    data,
-    sections,
-    saveDraft,
     name,
-    file,
-    setFile,
-    setSign,
-    update,
+    onFinish,
+    saveDraft,
+    sections,
     selectedFont,
+    setFile,
     setSelectedFont,
-    sign,
+    setSign,
     setTab,
-    tab,
+    sign,
     submitting,
+    tab,
+    update,
   };
 };
 

@@ -1,0 +1,35 @@
+query searchOffendersRelay(
+  $after: String
+  $first: Int
+  $order: OffenderOrderByWithRelationInput
+  $scheme: SchemeWhereUniqueInput
+  $where: OffenderWhereInput
+  $orderByValue: SortOrder
+) {
+  listOffendersRelay(
+    after: $after
+    first: $first
+    order: $order
+    scheme: $scheme
+    where: $where
+    orderByValue: $orderByValue
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        ...Offenders
+        images {
+          ...Images
+          isFace
+        }
+        tags {
+          id
+          name
+        }
+      }
+    }
+  }
+}

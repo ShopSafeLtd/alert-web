@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument,no-restricted-syntax */
-import React from 'react';
+import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
 import type { FormInstance } from 'antd';
+
+import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
+import { PlusOutlined } from '@ant-design/icons';
+import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -15,46 +20,42 @@ import {
   Tabs,
   Upload,
 } from 'antd';
+import FONT_FAMILIES from 'components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+import { ChecklistStatus } from 'graphql/types';
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { PlusOutlined } from '@ant-design/icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
-import ReactDOMServer from 'react-dom/server';
-import FONT_FAMILIES from 'components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+
+import SignatureInput from '../../../components/SignBox';
+import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
+import { useStoreState } from '../../../state';
+import CompletedChecklistView from '../completed-checklist/CompletedChecklist.view';
+import useStyles from './ActiveChecklist.styles';
 import {
   type ActiveChecklistSection,
   type FormData,
 } from './useActiveChecklist';
 
-import useStyles from './ActiveChecklist.styles';
-import SignatureInput from '../../../components/SignBox';
-import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
-import CompletedChecklistView from '../completed-checklist/CompletedChecklist.view';
-import { useStoreState } from '../../../state';
-import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';
-import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
-import { ChecklistStatus } from 'graphql/types';
-
 interface Props {
+  data: ActiveChecklistQuery | undefined;
+  file: { file: string; name: string } | null;
+  form: FormInstance<FormData>;
   id: string | undefined;
   loading: boolean;
-  form: FormInstance<FormData>;
-  onFinish: (data: FormData) => void;
-  data: ActiveChecklistQuery | undefined;
-  sections: ActiveChecklistSection[];
-  saveDraft: () => void;
   name: string;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
+  onFinish: (data: FormData) => void;
+  saveDraft: () => void;
+  sections: ActiveChecklistSection[];
   selectedFont: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
   sign: string;
   submitting: boolean;
+  tab: string;
+  update: (value: string) => void;
 }
 
 // const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
@@ -69,24 +70,24 @@ const normFile = (e: { fileList: never | never[] }) => {
 };
 
 const ActiveChecklistView = ({
+  data,
+  file,
+  form,
   id,
   loading,
-  form,
-  onFinish,
-  data,
-  sections,
-  saveDraft,
-  file,
-  setFile,
   name: userName,
-  setSign,
-  update,
-  sign,
-  tab,
-  setTab,
+  onFinish,
+  saveDraft,
+  sections,
   selectedFont,
+  setFile,
   setSelectedFont,
+  setSign,
+  setTab,
+  sign,
   submitting,
+  tab,
+  update,
 }: Props) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -94,30 +95,28 @@ const ActiveChecklistView = ({
   const theme = useStoreState((state) => state.theme.currentTheme);
 
   const watching = Form.useWatch('sections', form);
+  console.log('signature', data?.activeChecklist.signature);
 
   localStorage.setItem(
     'data',
     JSON.stringify({
-      checklistSections: sections,
-      title: data?.activeChecklist.name || '',
       additionalInfo: data?.activeChecklist.comments || '',
-      signature: data?.activeChecklist.signature || '',
-      completedByUser: data?.activeChecklist.completedBy?.origName || '',
+      checklistSections: sections,
       completedAt: data?.activeChecklist.completedAt
         ? new Date(data?.activeChecklist.completedAt).toLocaleDateString(
             'en-GB'
           )
         : '',
+      completedByUser: data?.activeChecklist.completedBy?.origName || '',
+      signature: data?.activeChecklist.signature || '',
+      title: data?.activeChecklist.name || '',
     })
   );
   if (data && data?.activeChecklist.status === ChecklistStatus.Completed) {
     return (
       <CompletedChecklistView
-        checklistSections={sections}
-        title={data?.activeChecklist.name || ''}
         additionalInfo={data?.activeChecklist.comments || ''}
-        signature={data?.activeChecklist.signature || ''}
-        completedByUser={data?.activeChecklist?.completedBy?.origName || ''}
+        checklistSections={sections}
         completedAt={
           data.activeChecklist?.completedAt
             ? new Date(
@@ -125,8 +124,11 @@ const ActiveChecklistView = ({
               ).toLocaleDateString('en-GB')
             : ''
         }
-        theme={theme}
+        completedByUser={data?.activeChecklist?.completedBy?.origName || ''}
         onBack={() => navigate('/app/checklists')}
+        signature={data?.activeChecklist.signature || ''}
+        theme={theme}
+        title={data?.activeChecklist.name || ''}
       />
     );
   }
@@ -143,13 +145,13 @@ const ActiveChecklistView = ({
         }
       />
       <Form<FormData>
-        name="checklist_form"
-        onFinish={onFinish}
         autoComplete="off"
-        layout="horizontal"
-        form={form}
         className={classes.form}
         colon={false}
+        form={form}
+        layout="horizontal"
+        name="checklist_form"
+        onFinish={onFinish}
         preserve
       >
         <Card
@@ -229,25 +231,27 @@ const ActiveChecklistView = ({
                                             {/* Question Fields */}
                                             <Col span={13}>
                                               <Form.Item
-                                                shouldUpdate
                                                 className={classes.sideMargin}
                                                 name={[questionName, 'answer']}
+                                                shouldUpdate
                                               >
                                                 {sections[sectionIndex]
                                                   ?.subsections[subsectionIndex]
                                                   ?.questions[questionIndex]
                                                   ?.type === 'TEXT' ? (
                                                   <Input.TextArea
+                                                    autoSize={{ minRows: 3 }}
                                                     placeholder={intl.formatMessage(
                                                       {
                                                         defaultMessage:
                                                           'Enter your answer here...',
                                                       }
                                                     )}
-                                                    autoSize={{ minRows: 3 }}
                                                   />
                                                 ) : (
                                                   <Radio.Group
+                                                    buttonStyle="solid"
+                                                    optionType="button"
                                                     options={sections[
                                                       sectionIndex
                                                     ]?.subsections[
@@ -258,17 +262,15 @@ const ActiveChecklistView = ({
                                                       (answer) => ({
                                                         label: (
                                                           <FormattedMessageFixed
-                                                            id={answer.answer}
                                                             defaultMessage={
                                                               answer.answer
                                                             }
+                                                            id={answer.answer}
                                                           />
                                                         ),
                                                         value: answer.answer,
                                                       })
                                                     )}
-                                                    optionType="button"
-                                                    buttonStyle="solid"
                                                   />
                                                 )}
                                               </Form.Item>
@@ -322,16 +324,16 @@ const ActiveChecklistView = ({
                                                       className={
                                                         classes.sideMargin
                                                       }
-                                                      name={[
-                                                        questionName,
-                                                        'additionalComments',
-                                                      ]}
                                                       label={intl.formatMessage(
                                                         {
                                                           defaultMessage:
                                                             'Additional Info',
                                                         }
                                                       )}
+                                                      name={[
+                                                        questionName,
+                                                        'additionalComments',
+                                                      ]}
                                                     >
                                                       <Input.TextArea
                                                         placeholder={intl.formatMessage(
@@ -390,18 +392,18 @@ const ActiveChecklistView = ({
                                                 }
                                                 return (
                                                   <Form.Item
+                                                    className={
+                                                      classes.sideMargin
+                                                    }
+                                                    getValueFromEvent={normFile}
+                                                    label={intl.formatMessage({
+                                                      defaultMessage: 'Images',
+                                                    })}
                                                     name={[
                                                       questionName,
                                                       'images',
                                                     ]}
-                                                    label={intl.formatMessage({
-                                                      defaultMessage: 'Images',
-                                                    })}
-                                                    className={
-                                                      classes.sideMargin
-                                                    }
                                                     valuePropName="fileList"
-                                                    getValueFromEvent={normFile}
                                                   >
                                                     <Upload
                                                       action={
@@ -444,11 +446,11 @@ const ActiveChecklistView = ({
           <Col span={24}>
             <Col span={13}>
               <Form.Item
-                shouldUpdate
-                name="additionalInfo"
                 label={intl.formatMessage({
                   defaultMessage: 'Additional Comments:',
                 })}
+                name="additionalInfo"
+                shouldUpdate
               >
                 <Input.TextArea
                   placeholder={intl.formatMessage({
@@ -495,9 +497,10 @@ const ActiveChecklistView = ({
                 }),
               ]}
             >
-              <div style={{ width: '100%', display: 'flex' }}>
+              <div style={{ display: 'flex', width: '100%' }}>
                 <Tabs
                   activeKey={tab}
+                  destroyInactiveTabPane
                   onChange={(tabKey) => {
                     setTab(tabKey);
                     if (tabKey === 'upload' && file?.file) {
@@ -506,10 +509,10 @@ const ActiveChecklistView = ({
                       update(
                         ReactDOMServer.renderToString(
                           <img
-                            src={`data:application/pdf;base64,${file?.file}`}
                             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                             alt="file"
                             height={100}
+                            src={`data:application/pdf;base64,${file?.file}`}
                             width={300}
                           />
                         )
@@ -520,10 +523,10 @@ const ActiveChecklistView = ({
                       update(
                         ReactDOMServer.renderToString(
                           <SigSeal
-                            key={selectedFont}
-                            name={userName}
                             font={selectedFont}
                             height={100}
+                            key={selectedFont}
+                            name={userName}
                             width={300}
                           />
                         )
@@ -533,56 +536,54 @@ const ActiveChecklistView = ({
                       update('');
                     }
                   }}
-                  type="card"
                   style={{ height: 250, width: 500 }}
-                  destroyInactiveTabPane
+                  type="card"
                 >
-                  <Tabs.TabPane tab="Generate" key="generate">
+                  <Tabs.TabPane key="generate" tab="Generate">
                     <Select
-                      style={{
-                        fontFamily: selectedFont,
-                        marginBottom: 20,
-                      }}
                       defaultValue={selectedFont}
                       onChange={(value) => {
                         setSelectedFont(value);
                         update(
                           ReactDOMServer.renderToString(
                             <SigSeal
-                              key={selectedFont}
-                              name={userName}
                               font={selectedFont}
                               height={100}
+                              key={selectedFont}
+                              name={userName}
                               width={300}
                             />
                           )
                         );
                       }}
+                      style={{
+                        fontFamily: selectedFont,
+                        marginBottom: 20,
+                      }}
                     >
                       {FONT_FAMILIES.map((font) => (
                         <Select.Option
                           key={font}
-                          value={font}
                           style={{
                             fontFamily: font,
                           }}
+                          value={font}
                         >
                           {userName}
                         </Select.Option>
                       ))}
                     </Select>
                     <SigSeal
-                      key={selectedFont}
-                      name={userName}
                       font={selectedFont}
                       height={100}
+                      key={selectedFont}
+                      name={userName}
                       width={300}
                     />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Upload" key="upload">
+                  <Tabs.TabPane key="upload" tab="Upload">
                     <>
                       <Upload
-                        showUploadList={false}
                         beforeUpload={(f) => {
                           const reader = new FileReader();
                           reader.addEventListener('load', (e) => {
@@ -598,10 +599,10 @@ const ActiveChecklistView = ({
                                 update(
                                   ReactDOMServer.renderToString(
                                     <img
-                                      src={base64File}
                                       // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                                       alt="file"
                                       height={100}
+                                      src={base64File}
                                       width={300}
                                     />
                                   )
@@ -613,6 +614,7 @@ const ActiveChecklistView = ({
                           // Prevent upload
                           return false;
                         }}
+                        showUploadList={false}
                       >
                         <Button key="uploadButton" type="primary">
                           <FontAwesomeIcon
@@ -625,19 +627,19 @@ const ActiveChecklistView = ({
                         </Button>
                       </Upload>
                       {file && (
-                        <div style={{ paddingTop: 10, paddingLeft: 10 }}>
+                        <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                           <img
-                            src={`data:application/pdf;base64,${file.file}`}
                             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                             alt="file"
                             height={100}
+                            src={`data:application/pdf;base64,${file.file}`}
                             width={300}
                           />
                         </div>
                       )}
                     </>
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Draw" key="draw">
+                  <Tabs.TabPane key="draw" tab="Draw">
                     <SignatureInput
                       hidden={false}
                       onChange={(val: string) => {
@@ -675,8 +677,8 @@ const ActiveChecklistView = ({
               <Form.Item>
                 <Button
                   loading={loading || submitting}
-                  type="primary"
                   onClick={() => saveDraft()}
+                  type="primary"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Save Draft',
@@ -687,9 +689,9 @@ const ActiveChecklistView = ({
             <Col>
               <Form.Item>
                 <Button
+                  htmlType="submit"
                   loading={loading || submitting}
                   type="primary"
-                  htmlType="submit"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Submit',

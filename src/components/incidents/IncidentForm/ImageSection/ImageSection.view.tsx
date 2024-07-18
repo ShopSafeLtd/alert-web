@@ -1,5 +1,14 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
+import type { IncidentFormField } from 'graphql/types';
+
+import hasPermission from '#/utils/has-permission';
+import {
+  faEdit,
+  faFileArrowUp,
+  faImages,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -12,73 +21,86 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEdit,
-  faFileArrowUp,
-  faImages,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
-
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import {
+  ImagePosition,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/types';
+import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
-import type { StateImageData } from './useImageSection';
-import useImageSection from './useImageSection';
-import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
-import { compressImage } from '../../../../utils/compress-images';
-import type { IncidentFormField } from 'graphql/types';
-import { ImagePosition } from 'graphql/types';
 
-const { Title, Paragraph } = Typography;
+import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
+import type { StateImageData } from './useImageSection';
+
+import { compressImage } from '../../../../utils/compress-images';
+import useImageSection from './useImageSection';
+
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  incidentForm: IncidentFormField[];
-  form: FormInstance<FormData>;
-  value?: StateImageData[];
-  onChange?: (data: StateImageData[]) => void;
   disabled: boolean;
+  form: FormInstance<FormData>;
+  incidentForm: IncidentFormField[];
+  onChange?: (data: StateImageData[]) => void;
   primaryImage: string;
   setPrimaryImage: (value: string) => void;
+  value?: StateImageData[];
   // fileList: UploadFile[];
   // documentUploadProps: UploadProps;
 }
 
 const ImageSection = ({
   disabled = false,
+  form,
+  incidentForm,
+  onChange,
   primaryImage,
   setPrimaryImage,
-  incidentForm,
-  form,
-  onChange,
   value,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const {
-    images,
-    onImageChange,
-    editImage,
-    setEditImage,
-    onEditImage,
-    onRemoveImage,
-    fileList,
     documentUploadProps,
+    editImage,
+    fileList,
+    images,
+    onEditImage,
+    onImageChange,
+    onRemoveImage,
+    setEditImage,
   } = useImageSection({
-    value,
-    incidentForm,
     form,
+    incidentForm,
     onChange,
+    value,
   });
-  const facialDetection = useStoreState(
-    (state) => state.scheme.facialDetection
+  const { facialDetection, id: schemeId } = useStoreState(
+    (state) => state.scheme
   );
+  const { schemes } = useStoreState((state) => state.user);
+
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
+
+  const addOffenderRights = hasPermission({
+    permission: {
+      method: PermissionMethod.Write,
+      model: PermissionModel.Offenders,
+    },
+    permissions,
+  });
 
   return (
     <div>
       <Row align="middle" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Images & Other Media',
             })}
@@ -86,9 +108,9 @@ const ImageSection = ({
         </Col>
         <Col>
           <Paragraph
+            italic
             style={{ marginBottom: 1, marginLeft: 5 }}
             type="secondary"
-            italic
           >
             {intl.formatMessage({
               defaultMessage:
@@ -98,25 +120,25 @@ const ImageSection = ({
         </Col>
         <Col style={{ marginLeft: 30 }}>
           <Upload
-            fileList={images}
-            onChange={onImageChange}
+            // listType="picture-card"
+            accept=".png,.jpeg"
             action={
-              facialDetection
+              facialDetection && addOffenderRights
                 ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
                 : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
             }
-            className="incident-form-images-no-offenders"
-            // listType="picture-card"
-            accept=".png,.jpeg"
-            disabled={disabled}
             beforeUpload={async (file) => compressImage(file)}
+            className="incident-form-images-no-offenders"
+            disabled={disabled}
+            fileList={images}
+            onChange={onImageChange}
             showUploadList={false}
           >
             <Tooltip
+              placement="bottom"
               title={intl.formatMessage({
                 defaultMessage: 'Upload any images you have for the offender.',
               })}
-              placement="bottom"
             >
               <Button
                 icon={
@@ -133,19 +155,19 @@ const ImageSection = ({
         </Col>
         <Col style={{ marginLeft: 30 }}>
           <Tooltip
+            placement="bottom"
             title={intl.formatMessage({
               defaultMessage:
                 'Add documents to the offender such as PDFs or videos.',
             })}
-            placement="bottom"
           >
             <Upload
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...documentUploadProps}
-              listType="picture"
-              style={{ display: 'flex' }}
               fileList={fileList}
+              listType="picture"
               showUploadList={false}
+              style={{ display: 'flex' }}
             >
               <Button
                 icon={
@@ -167,15 +189,14 @@ const ImageSection = ({
       {images && images.length === 0 && (
         <Row justify="center">
           <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
               defaultMessage: 'No images & media added yet.',
             })}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
         </Row>
       )}
       <Form.Item
-        name="images"
         label={
           images && images.length === 0
             ? undefined
@@ -183,6 +204,7 @@ const ImageSection = ({
                 defaultMessage: 'Images',
               })
         }
+        name="images"
         style={
           images && images.length === 0
             ? {
@@ -193,22 +215,19 @@ const ImageSection = ({
         }
       >
         <Upload
-          fileList={images}
-          onChange={onImageChange}
+          accept=".png,.jpeg"
           action={
-            facialDetection
+            facialDetection && addOffenderRights
               ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
               : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
           }
-          className="incident-form-images-no-offenders"
-          listType="picture-card"
-          accept=".png,.jpeg"
-          disabled={disabled}
           beforeUpload={async (file) => compressImage(file)}
-          // TODO
+          className="incident-form-images-no-offenders"
+          disabled={disabled}
+          fileList={images}
           // eslint-disable-next-line react/no-unstable-nested-components
           itemRender={(el, file: StateImageData) => (
-            <div className="image-card" style={{ width: 200 }} key={el.key}>
+            <div className="image-card" key={el.key} style={{ width: 200 }}>
               {file.url === undefined && (
                 <div className="image-card-loading">
                   <Spin />
@@ -224,32 +243,32 @@ const ImageSection = ({
                   <Row gutter={4}>
                     <Col>
                       <Button
-                        size="small"
                         disabled={disabled}
-                        onClick={() => setEditImage(file)}
                         icon={<FontAwesomeIcon icon={faEdit} />}
+                        onClick={() => setEditImage(file)}
+                        size="small"
                       />
                     </Col>
                     <Col>
                       <Popconfirm
-                        placement="topLeft"
-                        trigger="hover"
-                        title={intl.formatMessage({
-                          defaultMessage: 'Remove the image?',
-                        })}
-                        onConfirm={() => onRemoveImage(file.uid)}
-                        okText={intl.formatMessage({
-                          defaultMessage: 'Yes',
-                        })}
                         cancelText={intl.formatMessage({
                           defaultMessage: 'No',
                         })}
+                        okText={intl.formatMessage({
+                          defaultMessage: 'Yes',
+                        })}
+                        onConfirm={() => onRemoveImage(file.uid)}
                         overlayInnerStyle={{ padding: 10 }}
+                        placement="topLeft"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Remove the image?',
+                        })}
+                        trigger="hover"
                       >
                         <Button
-                          size="small"
                           disabled={disabled}
                           icon={<FontAwesomeIcon icon={faTrash} />}
+                          size="small"
                         />
                       </Popconfirm>
                     </Col>
@@ -258,22 +277,25 @@ const ImageSection = ({
               </div>
             </div>
           )}
+          listType="picture-card"
+          // TODO
+          onChange={onImageChange}
         />
       </Form.Item>
       {fileList && fileList.length > 0 && (
         <div style={{ width: '35%' }}>
           <Form.Item
-            name="documents"
             label={intl.formatMessage({
               defaultMessage: 'Other Media',
             })}
+            name="documents"
           >
             <Upload
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...documentUploadProps}
+              fileList={fileList}
               listType="picture"
               style={{ display: 'flex' }}
-              fileList={fileList}
             />
           </Form.Item>
         </div>
@@ -281,12 +303,12 @@ const ImageSection = ({
 
       {/* TODO! */}
       <ImageEditor
-        submitImage={onEditImage}
+        image={editImage}
         onClose={() => setEditImage(null)}
         open={!!editImage}
-        image={editImage}
         primaryImage={primaryImage}
         setPrimaryImage={setPrimaryImage}
+        submitImage={onEditImage}
       />
     </div>
   );

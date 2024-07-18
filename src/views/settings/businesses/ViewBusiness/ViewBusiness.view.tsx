@@ -1,4 +1,23 @@
-import React from 'react';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { ListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
+import type { BusinessQuery } from 'graphql/businesses/queries/business.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import type { ListBusinessUsersQuery } from 'graphql/users/queries/list-business-users.generated';
+import type { LocationData } from 'types/DataType';
+
+import {
+  faEdit,
+  faMagnifyingGlass,
+  faPaperPlane,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -17,115 +36,97 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEdit,
-  faMagnifyingGlass,
-  faPaperPlane,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
 import BusinessSideList from 'components/businesses/BusinessSideList';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
+import AddTodo from 'components/form-components/Todos/AddTodo';
+import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
 import EditBusiness from 'components/form-components/businesses/EditBusiness';
 import AddUser from 'components/form-components/user/AddUser';
 import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { FormattedMessage, useIntl } from 'react-intl';
-import AddTodo from 'components/form-components/Todos/AddTodo';
-import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
+import LocatingCard from 'components/map/LocatingCard';
 import ActivityTable from 'components/tables/ActivityTable';
 import IncidentTable from 'components/tables/IncidentTable';
-import LocatingCard from 'components/map/LocatingCard';
-import type { LocationData } from 'types/DataType';
-import useStyles from './ViewBusiness.styles';
+import moment from 'moment';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
-import type { BusinessQuery } from 'graphql/businesses/queries/business.generated';
-import type { ListBusinessUsersQuery } from 'graphql/users/queries/list-business-users.generated';
-import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
-import type { ListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import useStyles from './ViewBusiness.styles';
 
 interface UserTable {
+  groups: { id: string; name: string }[];
   key: string;
+  lastLogin: string;
   name: string;
   status: string;
-  lastLogin: string;
-  groups: { id: string; name: string }[];
 }
 
 interface Props {
-  data: BusinessQuery | undefined;
-  loading: boolean;
-  businessId: string | undefined;
-  editVisible: boolean;
-  toggleEdit: () => void;
-  inviteUserVisible: boolean;
-  toggleInviteUser: () => void;
-  addUserVisible: boolean;
-  toggleAddUser: () => void;
-  usersData: ListBusinessUsersQuery | undefined;
-  usersLoading: boolean;
-  updateUsersList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
-  updateUsersListExisting: MutationUpdaterFn<InviteExistingUserMutation>;
-  updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
   actionsData: ListActionsQuery | undefined;
-  onRemoveBusiness: (value: string) => void;
-  toggleLinkDem: () => void;
-  linkDemVisible: boolean;
-  saving: boolean;
-  deleteConfirm: (value: string) => void;
   addTodo: boolean;
-  toggleAddTodo: () => void;
+  addUserVisible: boolean;
+  businessId: string | undefined;
+  completeTodoVisible: null | string;
+  data: BusinessQuery | undefined;
+  deleteConfirm: (value: string) => void;
+  editVisible: boolean;
+  inviteUserVisible: boolean;
+  linkDemVisible: boolean;
+  loading: boolean;
+  onEditAddress: (value: LocationData) => void;
+  onRemoveBusiness: (value: string) => void;
+  saving: boolean;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setViewTodoVisible: (value: null | string) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
-  viewTodoVisible: string | null;
-  setViewTodoVisible: (value: string | null) => void;
-  completeTodoVisible: string | null;
-  setCompleteTodoVisible: (value: string | null) => void;
+  toggleAddTodo: () => void;
+  toggleAddUser: () => void;
+  toggleEdit: () => void;
+  toggleInviteUser: () => void;
+  toggleLinkDem: () => void;
+  updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  onEditAddress: (value: LocationData) => void;
+  updateUsersList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+  updateUsersListExisting: MutationUpdaterFn<InviteExistingUserMutation>;
+  usersData: ListBusinessUsersQuery | undefined;
+  usersLoading: boolean;
+  viewTodoVisible: null | string;
 }
 
 const ViewBusiness = ({
-  data,
-  loading,
-  businessId,
-  editVisible,
-  toggleEdit,
-  toggleLinkDem,
-  inviteUserVisible,
-  toggleInviteUser,
-  usersLoading,
-  usersData,
-  updateUsersList,
-  updateUsersListExisting,
-  addUserVisible,
-  toggleAddUser,
-  updateAddUsersToBusiness,
   actionsData,
-  onRemoveBusiness,
-  linkDemVisible,
-  saving,
-  deleteConfirm,
   addTodo,
-  toggleAddTodo,
+  addUserVisible,
+  businessId,
+  completeTodoVisible,
+  data,
+  deleteConfirm,
+  editVisible,
+  inviteUserVisible,
+  linkDemVisible,
+  loading,
+  onEditAddress,
+  onRemoveBusiness,
+  saving,
+  setCompleteTodoVisible,
+  setViewTodoVisible,
   templatesData,
   templatesLoading,
-  setViewTodoVisible,
-  setCompleteTodoVisible,
-  completeTodoVisible,
-  viewTodoVisible,
+  toggleAddTodo,
+  toggleAddUser,
+  toggleEdit,
+  toggleInviteUser,
+  toggleLinkDem,
+  updateAddUsersToBusiness,
   updateTodo,
   updateTodoList,
-  onEditAddress,
+  updateUsersList,
+  updateUsersListExisting,
+  usersData,
+  usersLoading,
+  viewTodoVisible,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -135,8 +136,8 @@ const ViewBusiness = ({
         <Col>
           <BusinessSideList current={businessId} />
         </Col>
-        <Col flex={1} className={classes.content}>
-          <Row gutter={8} className={classes.headerBar} justify="end">
+        <Col className={classes.content} flex={1}>
+          <Row className={classes.headerBar} gutter={8} justify="end">
             <Col>
               <Button
                 // disabled={!!data?.business?.demId}
@@ -150,11 +151,11 @@ const ViewBusiness = ({
               </Button>
             </Col>
             <Col>
-              <Button type="ghost" onClick={toggleEdit}>
+              <Button onClick={toggleEdit} type="ghost">
                 <FontAwesomeIcon
+                  icon={faEdit}
                   size="1x"
                   style={{ marginRight: 8 }}
-                  icon={faEdit}
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Edit Business',
@@ -163,13 +164,13 @@ const ViewBusiness = ({
             </Col>
             <Col>
               <Button
-                type="ghost"
                 onClick={() => deleteConfirm(data?.business?.id || '')}
+                type="ghost"
               >
                 <FontAwesomeIcon
+                  icon={faTrash}
                   size="1x"
                   style={{ marginRight: 8 }}
-                  icon={faTrash}
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Delete',
@@ -250,7 +251,7 @@ const ViewBusiness = ({
                     data?.business?.brands.length > 0 ? (
                       data?.business?.brands.map((el, i) => (
                         // eslint-disable-next-line react/no-array-index-key
-                        <Tag key={i} className={classes.tag}>
+                        <Tag className={classes.tag} key={i}>
                           {el}
                         </Tag>
                       ))
@@ -268,7 +269,7 @@ const ViewBusiness = ({
                   <Row gutter={[0, 8]}>
                     {data?.business?.groups &&
                     data?.business?.groups.length > 0 ? (
-                      data?.business?.groups.map(({ name, id }) => (
+                      data?.business?.groups.map(({ id, name }) => (
                         <Col key={id}>
                           <Tag color="blue">{name}</Tag>
                         </Col>
@@ -285,7 +286,7 @@ const ViewBusiness = ({
                 >
                   <Row gutter={[0, 8]}>
                     {data?.business?.tags && data?.business?.tags.length > 0 ? (
-                      data?.business?.tags.map(({ name, id }) => (
+                      data?.business?.tags.map(({ id, name }) => (
                         <Col key={id}>
                           <Tag>{name}</Tag>
                         </Col>
@@ -309,10 +310,10 @@ const ViewBusiness = ({
             </Card>
 
             <LocatingCard
-              width="100%"
               height={194}
               location={data?.business?.locations[0]}
               setLocation={onEditAddress}
+              width="100%"
             />
             <Card>
               <Row align="middle" className={classes.cardHeader}>
@@ -329,43 +330,43 @@ const ViewBusiness = ({
                       <Menu
                         items={[
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Add Existing',
-                            }),
-                            key: '1',
-                            onClick: toggleAddUser,
                             icon: (
                               <FontAwesomeIcon
                                 icon={faMagnifyingGlass}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '1',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing',
+                            }),
+                            onClick: toggleAddUser,
                           },
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Invite New User',
-                            }),
-                            key: '2',
-                            onClick: toggleInviteUser,
                             icon: (
                               <FontAwesomeIcon
                                 icon={faPaperPlane}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '2',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Invite New User',
+                            }),
+                            onClick: toggleInviteUser,
                           },
                         ]}
                       />
                     }
                   >
                     <Button
-                      size="small"
                       icon={
                         <FontAwesomeIcon
                           icon={faPlus}
                           style={{ marginRight: 5 }}
                         />
                       }
+                      size="small"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add User',
@@ -378,23 +379,20 @@ const ViewBusiness = ({
               <Table<UserTable>
                 columns={[
                   {
-                    key: 'name',
                     dataIndex: 'name',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Name',
-                    }),
+                    key: 'name',
                     render: (value, item) => (
                       <Link to={`/app/scheme-settings/users/view/${item.key}`}>
                         {value}
                       </Link>
                     ),
+                    title: intl.formatMessage({
+                      defaultMessage: 'Name',
+                    }),
                   },
                   {
-                    key: 'status',
                     dataIndex: 'status',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Status',
-                    }),
+                    key: 'status',
                     render: (value) => (
                       <Typography.Text
                         type={value === 'Enabled' ? 'success' : 'warning'}
@@ -402,35 +400,38 @@ const ViewBusiness = ({
                         {value}
                       </Typography.Text>
                     ),
+                    title: intl.formatMessage({
+                      defaultMessage: 'Status',
+                    }),
                   },
                   {
-                    key: 'lastLogin',
                     dataIndex: 'lastLogin',
+                    key: 'lastLogin',
                     title: intl.formatMessage({
                       defaultMessage: 'Last Login',
                     }),
                   },
                   {
-                    key: 'groups',
                     dataIndex: 'groups',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Groups',
-                    }),
+                    key: 'groups',
                     render: (values: { id: string; name: string }[]) =>
                       values.map((group) => (
                         <Tag key={group.id}>{group.name}</Tag>
                       )),
+                    title: intl.formatMessage({
+                      defaultMessage: 'Groups',
+                    }),
                   },
                   {
-                    key: 'actions',
                     dataIndex: 'actions',
+                    key: 'actions',
                     render: (_, item) => (
                       <Popconfirm
+                        onConfirm={() => onRemoveBusiness(item.key)}
+                        overlayInnerStyle={{ padding: 10 }}
                         title={intl.formatMessage({
                           defaultMessage: 'Are you sure?',
                         })}
-                        onConfirm={() => onRemoveBusiness(item.key)}
-                        overlayInnerStyle={{ padding: 10 }}
                       >
                         <Tooltip
                           title={intl.formatMessage({
@@ -438,9 +439,9 @@ const ViewBusiness = ({
                           })}
                         >
                           <Button
-                            type="text"
-                            style={{ padding: '0px 8px' }}
                             size="small"
+                            style={{ padding: '0px 8px' }}
+                            type="text"
                           >
                             <FontAwesomeIcon icon={faTrash} />
                           </Button>
@@ -449,7 +450,6 @@ const ViewBusiness = ({
                     ),
                   },
                 ]}
-                loading={usersLoading}
                 dataSource={
                   usersData?.users.map((user) => ({
                     groups: user.groups,
@@ -464,6 +464,7 @@ const ViewBusiness = ({
                     status: user.status || 'Unknown',
                   })) || []
                 }
+                loading={usersLoading}
                 pagination={{
                   hideOnSinglePage: true,
                   pageSize: 10,
@@ -478,8 +479,8 @@ const ViewBusiness = ({
                 })}
               </Typography.Title>
               <IncidentTable
-                incidents={data?.business?.incidents || []}
                 hasNavigation
+                incidents={data?.business?.incidents || []}
               />
             </Card>
 
@@ -494,9 +495,6 @@ const ViewBusiness = ({
                 </Col>
                 <Col>
                   <Button
-                    size="small"
-                    onClick={toggleAddTodo}
-                    loading={templatesLoading}
                     disabled={templatesLoading}
                     icon={
                       <FontAwesomeIcon
@@ -504,6 +502,9 @@ const ViewBusiness = ({
                         style={{ marginRight: 5 }}
                       />
                     }
+                    loading={templatesLoading}
+                    onClick={toggleAddTodo}
+                    size="small"
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Activity',
@@ -513,17 +514,17 @@ const ViewBusiness = ({
               </Row>
 
               <ActivityTable
-                todos={data?.business?.todos}
                 saving={saving || loading}
-                setViewTodoVisible={setViewTodoVisible}
                 setCompleteTodoVisible={setCompleteTodoVisible}
+                setViewTodoVisible={setViewTodoVisible}
+                todos={data?.business?.todos}
               />
             </Card>
           </div>
         </Col>
         {actionsData?.listActions.actions &&
         actionsData?.listActions.actions.length > 0 ? (
-          <Col span={6} className={classes.updatesContainer}>
+          <Col className={classes.updatesContainer} span={6}>
             <Card>
               <Typography.Title level={4} style={{ marginBottom: 30 }}>
                 {intl.formatMessage({
@@ -540,16 +541,16 @@ const ViewBusiness = ({
                       <Row gutter={32}>
                         <Col>
                           <Typography.Paragraph
-                            type="secondary"
                             style={{ fontSize: 12, marginBottom: 0 }}
+                            type="secondary"
                           >
                             {moment(action.createdAt).format('HH:mm DD/MM/YY')}
                           </Typography.Paragraph>
                         </Col>
                         <Col>
                           <Typography.Paragraph
-                            type="secondary"
                             style={{ fontSize: 12, marginBottom: 0 }}
+                            type="secondary"
                           >
                             {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                             {action.byUser.fullName} -{' '}
@@ -574,11 +575,11 @@ const ViewBusiness = ({
       </Row>
 
       <Drawer
+        onClose={toggleEdit}
+        open={editVisible}
         title={intl.formatMessage({
           defaultMessage: 'Edit Business',
         })}
-        open={editVisible}
-        onClose={toggleEdit}
         width={500}
       >
         {editVisible && (
@@ -587,11 +588,11 @@ const ViewBusiness = ({
       </Drawer>
 
       <Drawer
+        onClose={toggleLinkDem}
+        open={linkDemVisible}
         title={intl.formatMessage({
           defaultMessage: 'Link DEM',
         })}
-        open={linkDemVisible}
-        onClose={toggleLinkDem}
         width={500}
       >
         {linkDemVisible && (
@@ -599,12 +600,12 @@ const ViewBusiness = ({
         )}
       </Drawer>
       <Drawer
-        open={inviteUserVisible}
         onClose={toggleInviteUser}
-        width={700}
+        open={inviteUserVisible}
         title={intl.formatMessage({
           defaultMessage: 'Invite Existing User',
         })}
+        width={700}
       >
         {inviteUserVisible && (
           <AddUser
@@ -620,12 +621,12 @@ const ViewBusiness = ({
       </Drawer>
 
       <Drawer
-        open={addUserVisible}
         onClose={toggleAddUser}
-        width={700}
+        open={addUserVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing User',
         })}
+        width={700}
       >
         {addUserVisible && (
           <AddUserToBusiness
@@ -637,17 +638,15 @@ const ViewBusiness = ({
       </Drawer>
       {/* todo */}
       <Drawer
+        onClose={toggleAddTodo}
+        open={addTodo}
         title={intl.formatMessage({
           defaultMessage: 'Add Activity',
         })}
-        open={addTodo}
         width="600"
-        onClose={toggleAddTodo}
       >
         {addTodo ? (
           <AddTodo
-            update={updateTodoList}
-            onClose={toggleAddTodo}
             businessId={data?.business?.id}
             initData={
               templatesData?.scheme &&
@@ -657,18 +656,20 @@ const ViewBusiness = ({
                   }
                 : undefined
             }
+            onClose={toggleAddTodo}
+            update={updateTodoList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setCompleteTodoVisible(null)}
+        open={completeTodoVisible !== null}
         title={intl.formatMessage({
           defaultMessage: 'Complete Activity',
         })}
-        open={completeTodoVisible !== null}
         width={800}
-        onClose={() => setCompleteTodoVisible(null)}
       >
         {completeTodoVisible ? (
           <ViewTodo
@@ -682,20 +683,20 @@ const ViewBusiness = ({
         )}
       </Drawer>
       <Drawer
+        onClose={() => setViewTodoVisible(null)}
+        open={!!viewTodoVisible}
         title={intl.formatMessage({
           defaultMessage: 'View Activity',
         })}
-        open={!!viewTodoVisible}
         width={800}
-        onClose={() => setViewTodoVisible(null)}
       >
         {viewTodoVisible ? (
           <ViewTodo
-            id={viewTodoVisible}
-            onClose={() => setViewTodoVisible(null)}
             confirmText={intl.formatMessage({
               defaultMessage: 'Save Activity',
             })}
+            id={viewTodoVisible}
+            onClose={() => setViewTodoVisible(null)}
             updateQuery={updateTodo}
             updateTodo={() => {}}
           />

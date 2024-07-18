@@ -1,3 +1,7 @@
+import type { UploadChangeParam } from 'antd/lib/upload';
+
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -9,11 +13,10 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import { Role } from 'graphql/types';
 import React from 'react';
-import type { UploadChangeParam } from 'antd/lib/upload';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import {
   getOffenderAge,
@@ -22,52 +25,51 @@ import {
   getOffenderHeight,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import WatermarkImage from 'components/images/WatermarkImage.view';
+
+import type { StateImageData } from '../../ImageSection/useImageSection';
+import type { StateOffenderData } from './useOffenders';
 
 import useStyles from '../Profiles.styles';
-import type { StateOffenderData } from './useOffenders';
-import type { StateImageData } from '../../ImageSection/useImageSection';
-import { Role } from 'graphql/types';
 
-const { Title, Text, Paragraph } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  offender: StateOffenderData;
-  setUpdateOpen: (value: StateOffenderData | null) => void;
-  setMatchExistingOpen: (value: StateOffenderData | null) => void;
-  onRemoveOffender: (id: string) => void;
-  onConfirmOffender: (id: string) => void;
-  saving: boolean;
-  mergeActive: string | null;
-  toggleMerge: (value: string | null) => void;
-  toggleMergeSelected: (value: string) => void;
-  mergeSelected: string | null;
-  onMerge: () => void;
   index: number;
+  mergeActive: null | string;
+  mergeSelected: null | string;
+  offender: StateOffenderData;
   onChangeOffenderImage: (
     info: UploadChangeParam<StateImageData>,
     offenderId: string
   ) => void;
-  uploading: boolean;
+  onConfirmOffender: (id: string) => void;
+  onMerge: () => void;
   onNoImages: (id: string) => void;
+  onRemoveOffender: (id: string) => void;
+  saving: boolean;
+  setMatchExistingOpen: (value: StateOffenderData | null) => void;
+  setUpdateOpen: (value: StateOffenderData | null) => void;
+  toggleMerge: (value: null | string) => void;
+  toggleMergeSelected: (value: string) => void;
+  uploading: boolean;
 }
 
 const OffenderProfile = ({
-  offender,
-  setUpdateOpen,
-  onRemoveOffender,
-  setMatchExistingOpen,
-  saving,
-  onConfirmOffender,
-  mergeActive,
-  toggleMerge,
-  mergeSelected,
-  toggleMergeSelected,
-  onMerge,
   index,
+  mergeActive,
+  mergeSelected,
+  offender,
   onChangeOffenderImage,
-  uploading,
+  onConfirmOffender,
+  onMerge,
   onNoImages,
+  onRemoveOffender,
+  saving,
+  setMatchExistingOpen,
+  setUpdateOpen,
+  toggleMerge,
+  toggleMergeSelected,
+  uploading,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
@@ -94,14 +96,14 @@ const OffenderProfile = ({
           <div className={classes.profileImage}>
             {offender.images[0]?.boundingBox && (
               <img
-                src={offender.images[0].url || ''}
                 // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                 alt={offender.name || 'offender image'}
                 height={210}
-                width={210}
+                src={offender.images[0].url || ''}
                 style={{
                   objectFit: 'contain',
                 }}
+                width={210}
               />
             )}
             {/* {offender.images[0]?.boundingBox && ( */}
@@ -120,7 +122,7 @@ const OffenderProfile = ({
         {offender.confirmedInIncident && offender.imageConfirmed && (
           <div className={classes.profileContent}>
             <Title level={4}>{offender.name}</Title>
-            <Row gutter={[16, 8]} wrap className={classes.profileDetails}>
+            <Row className={classes.profileDetails} gutter={[16, 8]} wrap>
               <Col>
                 <Text>
                   <FormattedMessage
@@ -200,10 +202,10 @@ const OffenderProfile = ({
                 </Col> */}
                 <Col>
                   <Button
-                    type={mergeSelected === offender.id ? 'primary' : 'default'}
                     onClick={() => {
                       toggleMergeSelected(offender.id);
                     }}
+                    type={mergeSelected === offender.id ? 'primary' : 'default'}
                   >
                     {mergeSelected === offender.id ? (
                       <FormattedMessage defaultMessage="Selected" />
@@ -222,10 +224,10 @@ const OffenderProfile = ({
                     })}
                   >
                     <Button
-                      size="small"
                       className={offender.blank ? classes.redButton : ''}
-                      onClick={() => setUpdateOpen(offender)}
                       disabled={saving}
+                      onClick={() => setUpdateOpen(offender)}
+                      size="small"
                     >
                       <FormattedMessage defaultMessage="Add Details" />
                     </Button>
@@ -240,9 +242,9 @@ const OffenderProfile = ({
                       })}
                     >
                       <Button
-                        size="small"
-                        onClick={() => setMatchExistingOpen(offender)}
                         disabled={saving}
+                        onClick={() => setMatchExistingOpen(offender)}
+                        size="small"
                       >
                         <FormattedMessage defaultMessage="Match Offender" />
                       </Button>
@@ -251,25 +253,25 @@ const OffenderProfile = ({
                 )}
                 <Col>
                   <Popconfirm
-                    placement="topLeft"
-                    title={intl.formatMessage({
-                      defaultMessage: 'Remove the offender?',
+                    cancelText={intl.formatMessage({
+                      defaultMessage: 'No',
+                    })}
+                    okText={intl.formatMessage({
+                      defaultMessage: 'Yes',
                     })}
                     onConfirm={() => {
                       onRemoveOffender(offender.id);
                     }}
-                    okText={intl.formatMessage({
-                      defaultMessage: 'Yes',
-                    })}
-                    cancelText={intl.formatMessage({
-                      defaultMessage: 'No',
-                    })}
                     overlayInnerStyle={{ padding: 10 }}
+                    placement="topLeft"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove the offender?',
+                    })}
                   >
                     <Button
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faTrash} size="xs" />}
                       style={{ height: 36 }}
-                      icon={<FontAwesomeIcon size="xs" icon={faTrash} />}
                     />
                   </Popconfirm>
                 </Col>
@@ -283,16 +285,16 @@ const OffenderProfile = ({
               mergeActive === offender.id ? (
                 <>
                   <Button
-                    size="small"
-                    onClick={onMerge}
-                    type="ghost"
                     className={classes.mergeButton}
                     danger
                     disabled={!mergeSelected}
+                    onClick={onMerge}
+                    size="small"
+                    type="ghost"
                   >
                     <FormattedMessage defaultMessage="Merge People" />
                   </Button>
-                  <Button size="small" onClick={() => toggleMerge(null)}>
+                  <Button onClick={() => toggleMerge(null)} size="small">
                     <FormattedMessage defaultMessage="Cancel" />
                   </Button>
                 </>
@@ -302,12 +304,12 @@ const OffenderProfile = ({
                   <Row gutter={8} justify="end">
                     <Col>
                       <Button
-                        type={
-                          mergeSelected === offender.id ? 'primary' : 'default'
-                        }
                         onClick={() => {
                           toggleMergeSelected(offender.id);
                         }}
+                        type={
+                          mergeSelected === offender.id ? 'primary' : 'default'
+                        }
                       >
                         {mergeSelected === offender.id ? (
                           <FormattedMessage defaultMessage="Selected" />
@@ -326,35 +328,35 @@ const OffenderProfile = ({
                 </Paragraph>
                 <Radio.Group>
                   <Radio.Button
-                    value
                     onClick={() => {
                       onConfirmOffender(offender.id);
                     }}
+                    value
                   >
                     <FormattedMessage defaultMessage="Yes" />
                   </Radio.Button>
                   <Popconfirm
-                    placement="topLeft"
-                    title={intl.formatMessage({
-                      defaultMessage: 'Remove person from incident?',
+                    cancelText={intl.formatMessage({
+                      defaultMessage: 'No',
+                    })}
+                    okText={intl.formatMessage({
+                      defaultMessage: 'Yes',
                     })}
                     onConfirm={() => {
                       onRemoveOffender(offender.id);
                     }}
-                    okText={intl.formatMessage({
-                      defaultMessage: 'Yes',
-                    })}
-                    cancelText={intl.formatMessage({
-                      defaultMessage: 'No',
-                    })}
                     overlayInnerStyle={{ padding: 10 }}
+                    placement="topLeft"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove person from incident?',
+                    })}
                   >
-                    <Radio.Button value={false} disabled={saving}>
+                    <Radio.Button disabled={saving} value={false}>
                       <FormattedMessage defaultMessage="No" />
                     </Radio.Button>
                   </Popconfirm>
                 </Radio.Group>
-                <Divider style={{ marginTop: 10, marginBottom: 10 }}>
+                <Divider style={{ marginBottom: 10, marginTop: 10 }}>
                   <Text className={classes.dividerText}>
                     <FormattedMessage defaultMessage="OR" />
                   </Text>
@@ -365,7 +367,7 @@ const OffenderProfile = ({
                       'Merge this offender with another offender on this incident',
                   })}
                 >
-                  <Button size="small" onClick={() => toggleMerge(offender.id)}>
+                  <Button onClick={() => toggleMerge(offender.id)} size="small">
                     <FormattedMessage defaultMessage="Merge Person" />
                   </Button>
                 </Tooltip>
@@ -389,23 +391,23 @@ const OffenderProfile = ({
                 <Row>
                   <Col>
                     <Upload
-                      onChange={(info) =>
-                        onChangeOffenderImage(info, offender.id)
-                      }
+                      accept=".png,.jpeg"
                       action={
                         facialDetection
                           ? import.meta.env
                               .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
                           : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
                       }
+                      onChange={(info) =>
+                        onChangeOffenderImage(info, offender.id)
+                      }
                       showUploadList={false}
-                      accept=".png,.jpeg"
                     >
                       <Button
-                        loading={uploading}
-                        disabled={uploading}
-                        size="small"
                         className={classes.buttonLeft}
+                        disabled={uploading}
+                        loading={uploading}
+                        size="small"
                       >
                         <FormattedMessage defaultMessage="Yes" />
                       </Button>
@@ -414,32 +416,32 @@ const OffenderProfile = ({
                   <Col>
                     {imagesRequired && (
                       <Popconfirm
+                        cancelText={intl.formatMessage({
+                          defaultMessage: 'No',
+                        })}
+                        okText={intl.formatMessage({
+                          defaultMessage: 'Yes',
+                        })}
+                        onConfirm={() => {
+                          onRemoveOffender(offender.id);
+                        }}
+                        overlayInnerStyle={{ padding: 10 }}
                         placement="topLeft"
                         title={intl.formatMessage({
                           defaultMessage:
                             'If you have no image the offender will be removed',
                         })}
-                        onConfirm={() => {
-                          onRemoveOffender(offender.id);
-                        }}
-                        okText={intl.formatMessage({
-                          defaultMessage: 'Yes',
-                        })}
-                        cancelText={intl.formatMessage({
-                          defaultMessage: 'No',
-                        })}
-                        overlayInnerStyle={{ padding: 10 }}
                       >
-                        <Button size="small" className={classes.buttonRight}>
+                        <Button className={classes.buttonRight} size="small">
                           <FormattedMessage defaultMessage="No" />
                         </Button>
                       </Popconfirm>
                     )}
                     {!imagesRequired && (
                       <Button
-                        size="small"
                         className={classes.buttonRight}
                         onClick={() => onNoImages(offender.id)}
+                        size="small"
                       >
                         <FormattedMessage defaultMessage="No" />
                       </Button>
@@ -452,12 +454,12 @@ const OffenderProfile = ({
         )}
       </div>
       {!offender.confirmedInIncident && (
-        <Paragraph type="danger" style={{ marginTop: 5 }}>
+        <Paragraph style={{ marginTop: 5 }} type="danger">
           <FormattedMessage defaultMessage="Please confirm if this person was involved" />
         </Paragraph>
       )}
       {!offender.imageConfirmed && (
-        <Paragraph type="danger" style={{ marginTop: 5 }}>
+        <Paragraph style={{ marginTop: 5 }} type="danger">
           <FormattedMessage defaultMessage="Confirm there is an image." />
         </Paragraph>
       )}

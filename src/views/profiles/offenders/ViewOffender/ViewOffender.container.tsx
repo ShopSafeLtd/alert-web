@@ -1,215 +1,218 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import View from './ViewOffender.view';
-import useViewOffender from './useViewOffender';
 import useApproveOffender from './useApproveIncident';
+import useViewOffender from './useViewOffender';
 
 const ViewOffender = (): JSX.Element => {
   const offenderId = useParams().id || '';
 
   const {
-    data,
-    saving,
-    loading,
-    openLightbox,
-    deleteRights,
-    editRights,
-    linkIncident,
-    toggleLinkIncident,
-    updateIncidentList,
-    toggleSubscribe,
-    confirmDeleteUpdate,
-    onAddUpdateImages,
-    editUpdate,
-    loadMore,
-    replyTo,
-    scrolledToTop,
-    selectedImages,
-    setEditUpdate,
-    setReplyTo,
-    userId,
+    addAddress,
+    addBan,
+    addCrimeGroup,
+    addDocument,
+    addExistingVehicle,
     addImages,
-
-    closeAddImages,
-    editUpdateInput,
-    handleEditUpdate,
-    setEditUpdateInput,
-    toggleSelectImages,
-    lightBoxOpen,
-
-    optionRowShow,
-    setOptionRowShow,
-    publicOffenderDOB,
-    onDelete,
+    addInvestigation,
+    addVehicle,
+    associateFilters,
     associatesData,
     associatesLoading,
-    onAssociateFilterChange,
-    associateFilters,
-    toggleViewAssociate,
-    viewAssociate,
-    toggleViewMatches,
-    viewMatches,
+    closeAddImages,
+    confirmDeleteUpdate,
     copyOffender,
-    toggleCopyOffender,
-    editOffender,
-    toggleEditOffender,
-    editImages,
-    toggleEditImages,
-    editImageData,
-    setEditImageData,
-    onDeleteImage,
-    onEditImage,
-    onUpdateImages,
-    addVehicle,
-    addExistingVehicle,
-    editVehicleData,
-    setEditVehicleData,
-    onDeleteVehicle,
-    toggleAddVehicle,
-    toggleAddExistingVehicle,
-    onEditVehicle,
-    onAddVehicle,
-    onAddExistingVehicle,
-    addCrimeGroup,
-    onDeleteCrimeGroup,
-    toggleAddCrimeGroup,
-    onAddCrimeGroup,
-    addAddress,
+    data,
+    deleteRights,
     editAddressData,
-    setEditAddressData,
-    onDeleteAddress,
-    toggleAddAddress,
-    onEditAddress,
-    onAddAddress,
-    addBan,
     editBanData,
-    setEditBanData,
-    onDeleteBan,
-    toggleAddBan,
-    onEditBan,
-    onAddBan,
-    toggleAddDocument,
-    addDocument,
-    updateDocumentList,
-    updateDeleteDocument,
-    addInvestigation,
-    toggleAddInvestigation,
-    updateInvestigationList,
-    knowOffender,
-    toggleKnowOffender,
-    onSelectUpdateImages,
-    showIncidentOptions,
-    toggleShowIncidentOptions,
-    onAddUpdateImagesToIncident,
-    selectedIncidentId,
-    onSelect,
+    editImageData,
+    editImages,
+    editOffender,
+
+    editRights,
+    editUpdate,
+    editUpdateInput,
+    editVehicleData,
+    handleEditUpdate,
     hasConnectedSchemes,
+
+    knowOffender,
+    lightBoxOpen,
+    linkIncident,
+    loadMore,
+    loading,
+    onAddAddress,
+    onAddBan,
+    onAddCrimeGroup,
+    onAddExistingVehicle,
+    onAddUpdateImages,
+    onAddUpdateImagesToIncident,
+    onAddVehicle,
+    onAssociateFilterChange,
+    onDelete,
+    onDeleteAddress,
+    onDeleteBan,
+    onDeleteCrimeGroup,
+    onDeleteImage,
+    onDeleteVehicle,
+    onEditAddress,
+    onEditBan,
+    onEditImage,
+    onEditVehicle,
+    onSelect,
+    onSelectUpdateImages,
+    onUpdateImages,
+    openLightbox,
+    optionRowShow,
+    publicOffenderDOB,
+    replyTo,
+    saving,
+    scrolledToTop,
+    selectedImages,
+    selectedIncidentId,
+    setEditAddressData,
+    setEditBanData,
+    setEditImageData,
+    setEditUpdate,
+    setEditUpdateInput,
+    setEditVehicleData,
+    setOptionRowShow,
+    setReplyTo,
     shareOpen,
+    showIncidentOptions,
+    toggleAddAddress,
+    toggleAddBan,
+    toggleAddCrimeGroup,
+    toggleAddDocument,
+    toggleAddExistingVehicle,
+    toggleAddInvestigation,
+    toggleAddVehicle,
+    toggleCopyOffender,
+    toggleEditImages,
+    toggleEditOffender,
+    toggleKnowOffender,
+    toggleLinkIncident,
+    toggleSelectImages,
     toggleShareOpen,
+    toggleShowIncidentOptions,
+    toggleSubscribe,
+    toggleViewAssociate,
+    toggleViewMatches,
+    updateDeleteDocument,
+    updateDocumentList,
+    updateImagesList,
+    updateIncidentList,
+    updateInvestigationList,
+    userId,
+    viewAssociate,
+    viewMatches,
   } = useViewOffender(offenderId);
-  const { onApprove, onReject, approving } = useApproveOffender({ offenderId });
+  const { approving, onApprove, onReject } = useApproveOffender({ offenderId });
   return (
     <View
+      addAddress={addAddress}
+      addBan={addBan}
+      addCrimeGroup={addCrimeGroup}
+      addDocument={addDocument}
+      addExistingVehicle={addExistingVehicle}
+      addImages={addImages}
+      addInvestigation={addInvestigation}
+      addVehicle={addVehicle}
+      approving={approving}
+      associateFilters={associateFilters}
       associatesData={associatesData}
       associatesLoading={associatesLoading}
-      lightBoxOpen={lightBoxOpen}
-      data={data}
-      loading={loading}
-      saving={saving}
-      openLightbox={openLightbox}
-      offenderId={offenderId}
-      deleteRights={deleteRights}
-      editRights={editRights}
-      linkIncident={linkIncident}
-      toggleLinkIncident={toggleLinkIncident}
-      updateIncidentList={updateIncidentList}
-      toggleSubscribe={toggleSubscribe}
+      closeAddImages={closeAddImages}
       confirmDeleteUpdate={confirmDeleteUpdate}
-      onAddUpdateImages={onAddUpdateImages}
+      copyOffender={copyOffender}
+      data={data}
+      deleteRights={deleteRights}
+      editAddressData={editAddressData}
+      editBanData={editBanData}
+      editImageData={editImageData}
+      editImages={editImages}
+      editOffender={editOffender}
+      editRights={editRights}
       editUpdate={editUpdate}
+      editUpdateInput={editUpdateInput}
+      editVehicleData={editVehicleData}
+      handleEditUpdate={handleEditUpdate}
+      hasConnectedSchemes={hasConnectedSchemes}
+      knowOffender={knowOffender}
+      lightBoxOpen={lightBoxOpen}
+      linkIncident={linkIncident}
       loadMore={loadMore}
+      loading={loading}
+      offenderId={offenderId}
+      onAddAddress={onAddAddress}
+      onAddBan={onAddBan}
+      onAddCrimeGroup={onAddCrimeGroup}
+      onAddExistingVehicle={onAddExistingVehicle}
+      onAddUpdateImages={onAddUpdateImages}
+      onAddUpdateImagesToIncident={onAddUpdateImagesToIncident}
+      onAddVehicle={onAddVehicle}
+      onApprove={onApprove}
+      onAssociateFilterChange={onAssociateFilterChange}
+      onDelete={onDelete}
+      onDeleteAddress={onDeleteAddress}
+      onDeleteBan={onDeleteBan}
+      onDeleteCrimeGroup={onDeleteCrimeGroup}
+      onDeleteImage={onDeleteImage}
+      onDeleteVehicle={onDeleteVehicle}
+      onEditAddress={onEditAddress}
+      onEditBan={onEditBan}
+      onEditImage={onEditImage}
+      onEditVehicle={onEditVehicle}
+      onReject={onReject}
+      onSelect={onSelect}
+      onSelectUpdateImages={onSelectUpdateImages}
+      onUpdateImages={onUpdateImages}
+      openLightbox={openLightbox}
+      optionRowShow={optionRowShow}
+      publicOffenderDOB={publicOffenderDOB}
       replyTo={replyTo}
+      saving={saving}
       scrolledToTop={scrolledToTop}
       selectedImages={selectedImages}
-      setEditUpdate={setEditUpdate}
-      setReplyTo={setReplyTo}
-      userId={userId}
-      addImages={addImages}
-      closeAddImages={closeAddImages}
-      editUpdateInput={editUpdateInput}
-      handleEditUpdate={handleEditUpdate}
-      setEditUpdateInput={setEditUpdateInput}
-      toggleSelectImages={toggleSelectImages}
-      optionRowShow={optionRowShow}
-      setOptionRowShow={setOptionRowShow}
-      publicOffenderDOB={publicOffenderDOB}
-      onDelete={onDelete}
-      onAssociateFilterChange={onAssociateFilterChange}
-      associateFilters={associateFilters}
-      toggleViewAssociate={toggleViewAssociate}
-      viewAssociate={viewAssociate}
-      toggleViewMatches={toggleViewMatches}
-      viewMatches={viewMatches}
-      copyOffender={copyOffender}
-      toggleCopyOffender={toggleCopyOffender}
-      editOffender={editOffender}
-      toggleEditOffender={toggleEditOffender}
-      editImages={editImages}
-      toggleEditImages={toggleEditImages}
-      editImageData={editImageData}
-      setEditImageData={setEditImageData}
-      onDeleteImage={onDeleteImage}
-      onEditImage={onEditImage}
-      onUpdateImages={onUpdateImages}
-      addVehicle={addVehicle}
-      addExistingVehicle={addExistingVehicle}
-      editVehicleData={editVehicleData}
-      setEditVehicleData={setEditVehicleData}
-      onDeleteVehicle={onDeleteVehicle}
-      toggleAddVehicle={toggleAddVehicle}
-      toggleAddExistingVehicle={toggleAddExistingVehicle}
-      onEditVehicle={onEditVehicle}
-      onAddVehicle={onAddVehicle}
-      onAddExistingVehicle={onAddExistingVehicle}
-      addCrimeGroup={addCrimeGroup}
-      onDeleteCrimeGroup={onDeleteCrimeGroup}
-      toggleAddCrimeGroup={toggleAddCrimeGroup}
-      onAddCrimeGroup={onAddCrimeGroup}
-      addAddress={addAddress}
-      editAddressData={editAddressData}
-      setEditAddressData={setEditAddressData}
-      onDeleteAddress={onDeleteAddress}
-      toggleAddAddress={toggleAddAddress}
-      onEditAddress={onEditAddress}
-      onAddAddress={onAddAddress}
-      addBan={addBan}
-      editBanData={editBanData}
-      setEditBanData={setEditBanData}
-      onDeleteBan={onDeleteBan}
-      toggleAddBan={toggleAddBan}
-      onEditBan={onEditBan}
-      onAddBan={onAddBan}
-      toggleAddDocument={toggleAddDocument}
-      addDocument={addDocument}
-      updateDocumentList={updateDocumentList}
-      updateDeleteDocument={updateDeleteDocument}
-      onApprove={onApprove}
-      onReject={onReject}
-      approving={approving}
-      addInvestigation={addInvestigation}
-      toggleAddInvestigation={toggleAddInvestigation}
-      updateInvestigationList={updateInvestigationList}
-      knowOffender={knowOffender}
-      toggleKnowOffender={toggleKnowOffender}
-      onSelectUpdateImages={onSelectUpdateImages}
-      showIncidentOptions={showIncidentOptions}
-      toggleShowIncidentOptions={toggleShowIncidentOptions}
-      onAddUpdateImagesToIncident={onAddUpdateImagesToIncident}
       selectedIncidentId={selectedIncidentId}
-      onSelect={onSelect}
-      hasConnectedSchemes={hasConnectedSchemes}
+      setEditAddressData={setEditAddressData}
+      setEditBanData={setEditBanData}
+      setEditImageData={setEditImageData}
+      setEditUpdate={setEditUpdate}
+      setEditUpdateInput={setEditUpdateInput}
+      setEditVehicleData={setEditVehicleData}
+      setOptionRowShow={setOptionRowShow}
+      setReplyTo={setReplyTo}
       shareOpen={shareOpen}
+      showIncidentOptions={showIncidentOptions}
+      toggleAddAddress={toggleAddAddress}
+      toggleAddBan={toggleAddBan}
+      toggleAddCrimeGroup={toggleAddCrimeGroup}
+      toggleAddDocument={toggleAddDocument}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      toggleAddInvestigation={toggleAddInvestigation}
+      toggleAddVehicle={toggleAddVehicle}
+      toggleCopyOffender={toggleCopyOffender}
+      toggleEditImages={toggleEditImages}
+      toggleEditOffender={toggleEditOffender}
+      toggleKnowOffender={toggleKnowOffender}
+      toggleLinkIncident={toggleLinkIncident}
+      toggleSelectImages={toggleSelectImages}
       toggleShareOpen={toggleShareOpen}
+      toggleShowIncidentOptions={toggleShowIncidentOptions}
+      toggleSubscribe={toggleSubscribe}
+      toggleViewAssociate={toggleViewAssociate}
+      toggleViewMatches={toggleViewMatches}
+      updateDeleteDocument={updateDeleteDocument}
+      updateDocumentList={updateDocumentList}
+      updateImagesList={updateImagesList}
+      updateIncidentList={updateIncidentList}
+      updateInvestigationList={updateInvestigationList}
+      userId={userId}
+      viewAssociate={viewAssociate}
+      viewMatches={viewMatches}
     />
   );
 };

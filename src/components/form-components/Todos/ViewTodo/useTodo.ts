@@ -1,35 +1,36 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import { Form } from 'antd';
-import { useEffect, useState } from 'react';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
+
+import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
+import { Form } from 'antd';
+import { Role, SortOrder } from 'graphql/types';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useEffect, useState } from 'react';
 
 import { useStoreState } from '../../../../state';
 import customRequest from '../../../../utils/custom-request';
-import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
-import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import { Role, SortOrder } from 'graphql/types';
 
 export interface FormData {
-  [key: string]: string | number | boolean | undefined;
+  [key: string]: boolean | number | string | undefined;
 }
 interface Return {
-  todo: TodoQuery | undefined;
+  availableUsers: { id: string; name: string; timeTaken: number }[];
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
   form: FormInstance;
+  loading: boolean;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  users: { id: string; name: string; timeTaken: number }[];
-  availableUsers: { id: string; name: string; timeTaken: number }[];
-  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
   setAvailableUsers: (
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
-  loading: boolean;
-  documentList: UploadFile[];
-  documentUploadProps?: UploadProps;
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  todo: TodoQuery | undefined;
+  users: { id: string; name: string; timeTaken: number }[];
 }
 
 const { useForm } = Form;
@@ -37,13 +38,13 @@ const { useForm } = Form;
 const useTodo = ({
   id,
   onClose,
-  updateTodo,
   updateQuery,
+  updateTodo,
 }: {
-  id: string | null;
+  id: null | string;
   onClose: () => void;
-  updateTodo: (value: boolean, i?: string) => void;
   updateQuery?: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodo: (value: boolean, i?: string) => void;
 }): Return => {
   const [form] = useForm();
 
@@ -58,21 +59,22 @@ const useTodo = ({
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
 
   const { data: todo, loading } = useTodoQuery({
-    variables: {
-      where: {
-        id: id || '',
-      },
-    },
     onCompleted: () => {
       if (todo?.todo?.evidence && todo?.todo?.evidence.length > 0)
         setDocumentList(
           todo?.todo?.evidence?.map((document) => ({
-            uid: document.id,
             name: document.name,
             status: 'done',
+            uid: document.id,
             url: document.url,
           }))
         );
+    },
+    variables: {
+      where: {
+        // id: 'cll3jomfy00013rybbduufubj',
+        id: id || '',
+      },
     },
   });
 
@@ -95,6 +97,23 @@ const useTodo = ({
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      orderBy: {
+        fullName: SortOrder.Asc,
+      },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
       where: {
         schemes: {
           some: {
@@ -112,23 +131,6 @@ const useTodo = ({
                 },
               },
             ],
-          },
-        },
-      },
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      orderBy: {
-        fullName: SortOrder.Asc,
-      },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
           },
         },
       },
@@ -173,9 +175,9 @@ const useTodo = ({
       timeTaken: value[user.id],
     }));
 
-    const answers = todo?.todo?.questions.map(({ question, id: qId }) => ({
-      questionId: qId,
+    const answers = todo?.todo?.questions.map(({ id: qId, question }) => ({
       answer: value[question?.id || ''],
+      questionId: qId,
       type: question?.type,
     }));
 
@@ -197,51 +199,7 @@ const useTodo = ({
 
     void updateTodoMutation({
       variables: {
-        where: {
-          id: id || '',
-        },
         data: {
-          documents: {
-            // @ts-expect-error TODO fix this date issue Wait to check
-            deleted:
-              deletedDocuments && deletedDocuments.length > 0
-                ? deletedDocuments.map((el) => ({ id: el }))
-                : undefined,
-            upload:
-              newDocuments && newDocuments.length > 0
-                ? newDocuments.map((file) => ({
-                    url: file.url || '',
-                    name: file.name || '',
-                    fileType: file.type || '',
-                    origFileName: file.fileName || '',
-                  }))
-                : undefined,
-          },
-          completed: {
-            set: true,
-          },
-          questions: {
-            update: answers?.map((answer) => ({
-              where: {
-                id: answer.questionId,
-              },
-              data: {
-                answers: {
-                  create: [
-                    {
-                      type: answer.type,
-                      answer: (answer.answer as string) || '',
-                      todo: {
-                        connect: {
-                          id: id || '',
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            })),
-          },
           answers: {
             deleteMany: answerIds
               ? [
@@ -260,6 +218,47 @@ const useTodo = ({
             //   })),
             // },
           },
+          completed: {
+            set: true,
+          },
+          documents: {
+            // @ts-expect-error TODO fix this date issue Wait to check
+            deleted:
+              deletedDocuments && deletedDocuments.length > 0
+                ? deletedDocuments.map((el) => ({ id: el }))
+                : undefined,
+            upload:
+              newDocuments && newDocuments.length > 0
+                ? newDocuments.map((file) => ({
+                    fileType: file.type || '',
+                    name: file.name || '',
+                    origFileName: file.fileName || '',
+                    url: file.url || '',
+                  }))
+                : undefined,
+          },
+          questions: {
+            update: answers?.map((answer) => ({
+              data: {
+                answers: {
+                  create: [
+                    {
+                      answer: (answer.answer as string) || '',
+                      todo: {
+                        connect: {
+                          id: id || '',
+                        },
+                      },
+                      type: answer.type,
+                    },
+                  ],
+                },
+              },
+              where: {
+                id: answer.questionId,
+              },
+            })),
+          },
           timeTaken:
             userTime && timeTaken
               ? {
@@ -268,6 +267,9 @@ const useTodo = ({
                   },
                 }
               : undefined,
+        },
+        where: {
+          id: id || '',
         },
       },
     });
@@ -292,21 +294,21 @@ const useTodo = ({
 
   const documentUploadProps: UploadProps = {
     customRequest,
-    onChange: handleChange,
     multiple: true,
+    onChange: handleChange,
   };
   return {
-    todo,
-    form,
-    onSubmit,
-    saving,
     availableUsers,
-    users,
-    setUsers,
-    setAvailableUsers,
-    loading: loading || usersLoading,
     documentList,
     documentUploadProps,
+    form,
+    loading: loading || usersLoading,
+    onSubmit,
+    saving,
+    setAvailableUsers,
+    setUsers,
+    todo,
+    users,
   };
 };
 

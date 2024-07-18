@@ -1,6 +1,5 @@
 import type { UploadFile } from 'antd';
-
-import type { Moment } from 'moment';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
 import type {
   Age,
   AnswerType,
@@ -14,319 +13,338 @@ import type {
   Race,
   UpdateType,
 } from 'graphql/types';
-import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import type { Moment } from 'moment';
 
 // BanData
 export interface BanData {
-  id: string;
-  type?: BanType | null;
+  description?: null | string | undefined;
   endDate?: Date;
-  startDate?: Date;
+  fineValue?: null | number | undefined;
+  id: string;
   location?: string;
-  description?: string | null | undefined;
-  months?: number | null | undefined;
-  fineValue?: number | null | undefined;
+  months?: null | number | undefined;
+  startDate?: Date;
+  type?: BanType | null;
 }
 
 // Offender
 export interface OffenderData {
-  id: string;
-  reference?: number | null;
-  name?: string | null;
-  alias?: string[] | null;
-  knownFor?: string[] | null;
-  targetedGoods?: string[] | null;
-  infoSource?: string | null;
-  justification?: string | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  height?: Height | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  comment?: string | null;
+  alias?: null | string[];
   approved?: boolean | null;
-  updatedAt?: Date;
+  bans?: BanData[] | undefined;
+  build?: Build | null;
+  comment?: null | string;
+  dateOfBirth?: Date | null;
+  dateSource?: null | string;
+  edited?: boolean;
+  existing?: boolean;
+  gender?: Gender | null;
   groups?:
     | {
         id: string;
         name: string;
       }[]
     | undefined;
+  hair?: null | string;
+  height?: Height | null;
+  id: string;
+  idSource?: IdSource | null;
+  idVerified?: boolean;
+  imageUid?: string[] | undefined;
+  images?: ImageCardData[] | null | undefined;
+  infoSource?: null | string;
+  justification?: null | string;
+  knownFor?: null | string[];
+  lastActive?:
+    | { dayTime?: null | string | undefined; id: string }
+    | null
+    | undefined;
+  name?: null | string;
+  new?: boolean;
+  peculiarities?: null | string;
+  race?: Race | null;
+  reference?: null | number;
   tags?: {
     id: string;
     name: string;
   }[];
-  lastActive?:
-    | { id: string; dayTime?: string | null | undefined }
-    | null
-    | undefined;
-  images?: ImageCardData[] | null | undefined;
-  imageUid?: string[] | undefined;
-  bans?: BanData[] | undefined;
-  idVerified?: boolean;
-  idSource?: IdSource | null;
-  new?: boolean;
-  existing?: boolean;
-  edited?: boolean;
+  targetedGoods?: null | string[];
+  updatedAt?: Date;
 }
 
 export interface OffenderCardData {
   id: string;
-  reference?: number | null;
-  updatedAt?: Date | undefined;
-  name?: string | null;
   images?:
     | Array<{
         id: string;
-        url?: string | null;
-        optimised?: string | null;
+        optimised?: null | string;
+        url?: null | string;
       }>
     | null
     | undefined;
+  name?: null | string;
+  reference?: null | number;
+  updatedAt?: Date | undefined;
 }
 
 // Incident
 export type IncidentsData =
-  | Exclude<ListIncidentsQuery['listIncidents'], undefined | null>['incidents']
+  | Exclude<ListIncidentsQuery['listIncidents'], null | undefined>['incidents']
   | undefined;
 
 export interface IncidentCardData {
-  id: string;
-  reference?: number | null;
-  subject?: string | null;
-  description?: string;
-  dayTime?: string | undefined | null;
-  images?: ImageCardData[] | null | undefined;
+  createdBy?: {
+    businesses: Array<{ id: string; name: string }>;
+    fullName: string;
+    id: string;
+  };
   crimeTypes?: Array<{
     id: string;
     name: string;
   }>;
-  createdBy?: {
-    id: string;
-    fullName: string;
-    businesses: Array<{ id: string; name: string }>;
-  };
-  policeRef?: string | undefined | null;
-  totalValue?: number | undefined | null;
-  totalRecoveredValue?: number | null;
+  dayTime?: null | string | undefined;
+  description?: string;
+  id: string;
+  images?: ImageCardData[] | null | undefined;
+  policeRef?: null | string | undefined;
+  reference?: null | number;
+  subject?: null | string;
+  totalRecoveredValue?: null | number;
+  totalValue?: null | number | undefined;
 }
 
 // Vehicle
 export interface VehicleData {
-  id: string;
-  make?: string | null | undefined;
-  model?: string | null | undefined;
-  colour?: string | null | undefined;
-  reference?: number | null;
-  totalOffenders?: number | null;
-  registration?: string | null | undefined;
+  colour?: null | string | undefined;
   crimeGroup?: string[];
-  groups?: string[];
-  incidents?: string[];
-  offenders?: string[];
   customGalleries?: string[];
-  newCustomGalleriesData?: CustomGalleryData[];
+  groups?: string[];
+  id: string;
   images?: ImageCardData[] | null | undefined;
+  incidents?: string[];
+  make?: null | string | undefined;
+  model?: null | string | undefined;
+  newCustomGalleriesData?: CustomGalleryData[];
+  offenders?: string[];
+  reference?: null | number;
+  registration?: null | string | undefined;
+  totalOffenders?: null | number;
 }
 
 export interface VehicleCardData {
-  id: string;
-  make?: string | null;
-  model?: string | null;
-  colour?: string | null | undefined;
-  registration?: string | null;
-  reference?: number | null;
-  totalOffenders?: number | null;
-  groups?: string[];
+  colour?: null | string | undefined;
   crimeGroup?: string[];
   customGalleries?: string[];
+  groups?: string[];
+  id: string;
   images?: ImageCardData[] | null | undefined;
   incidents?: IncidentCardData[];
+  make?: null | string;
+  model?: null | string;
   offenders?: OffenderData[];
+  reference?: null | number;
+  registration?: null | string;
+  totalOffenders?: null | number;
 }
 
 // CrimeGroupData
 export interface CrimeGroupData {
+  alias?: null | string;
   id: string;
-  reference?: number | null;
-  alias?: string | null;
-  totalOffenders?: number | null;
-  totalIncidents?: number | null;
-  totalValue?: number | null;
-  totalRecoveredValue?: number | null;
-  totalTheftSuccess?: number | null;
-  vehicles?: string[];
   offenders?: string[];
+  reference?: null | number;
+  totalIncidents?: null | number;
+  totalOffenders?: null | number;
+  totalRecoveredValue?: null | number;
+  totalTheftSuccess?: null | number;
+  totalValue?: null | number;
+  vehicles?: string[];
 }
 
 export interface CrimeGroupCardData {
+  alias?: null | string;
   id: string;
-  alias?: string | null;
-  reference?: number | null;
-  totalOffenders?: number | null;
-  totalIncidents?: number | null;
-  totalValue?: number | null;
-  vehicles?: VehicleData[];
   offenders?: OffenderData[];
+  reference?: null | number;
+  totalIncidents?: null | number;
+  totalOffenders?: null | number;
+  totalValue?: null | number;
+  vehicles?: VehicleData[];
 }
 
 export interface InvestigationDetails {
+  description?: null | string;
+  groupIds?: string[];
   id: string;
   name?: string;
-  description?: string | null;
-  groupIds?: string[];
 }
 
 // image
 export interface ImageCardData {
-  id: string;
-  optimised?: string | null | undefined;
-  url?: string | null | undefined;
-  fileName?: string | null;
-  type?: string | null;
-  edited?: boolean;
-  new?: boolean;
   deleted?: boolean;
-  position?: ImagePosition;
-  primary?: boolean | null | undefined;
+  edited?: boolean;
+  fileName?: null | string;
+  id: string;
   isFace?: boolean | null | undefined;
-  policeImage?: boolean | null | undefined;
-  rotation?: number;
-  totalFaces?: number;
+  new?: boolean;
   offenders?: {
     id: string;
-    images: { id: string; optimised?: string | undefined | null }[];
+    images: { id: string; optimised?: null | string | undefined }[];
   }[];
+  optimised?: null | string | undefined;
+  policeImage?: boolean | null | undefined;
+  position?: ImagePosition;
+  primary?: boolean | null | undefined;
+  rotation?: number;
+  totalFaces?: number;
+  type?: null | string;
+  url?: null | string | undefined;
 }
 
 export interface Image extends UploadFile {
+  deleted?: boolean;
+  edited?: boolean;
+  isFace?: boolean;
+  new?: boolean;
   // id: string;
-  optimised?: string | null;
+  optimised?: null | string;
+  policeImage?: boolean;
   position?: ImagePosition;
   primary?: boolean;
-  policeImage?: boolean;
   rotation?: number;
   totalFaces?: number;
-  edited?: boolean;
-  new?: boolean;
-  deleted?: boolean;
-  isFace?: boolean;
 }
 
 export interface ImageFaceType {
-  imageURL: string;
-  Gender: 'Male' | 'Female';
   AgeRange: {
     High: number;
     Low: number;
   };
   Beard: boolean;
-  Mustache: boolean;
   BoundingBox: {
     Height: string;
     Left: string;
     Top: string;
     Width: string;
   };
+  Gender: 'Female' | 'Male';
+  Mustache: boolean;
+  imageURL: string;
 }
 
 export interface EditFeedImage {
   id: string;
-  optimised?: string | null | undefined;
-  url?: string | null | undefined;
+  optimised?: null | string | undefined;
+  policeImage?: boolean | null | undefined;
   position?: ImagePosition;
   primary?: boolean | null | undefined;
-  policeImage?: boolean | null | undefined;
   rotation?: number;
+  url?: null | string | undefined;
 }
-
+export interface FaceType {
+  AgeRange: {
+    High: number;
+    Low: number;
+  };
+  Beard: boolean;
+  BoundingBox: {
+    Height: string;
+    Left: string;
+    Top: string;
+    Width: string;
+  };
+  Gender: 'Female' | 'Male';
+  Mustache: boolean;
+  id: string;
+  imageURL?: string;
+}
 // LocationData
 export interface LocationData {
+  alias?: null | string;
+  building?: null | string;
+  county?: null | string;
+  full?: null | string;
+  geoLat?: null | number;
+  geoLng?: null | number;
   id?: string;
-  alias?: string | null;
-  building?: string | null;
-  street?: string | null;
-  townCity?: string | null;
-  county?: string | null;
-  postcode?: string | null;
-  geoLat?: number | null;
-  geoLng?: number | null;
-  full?: string | null;
+  postcode?: null | string;
+  street?: null | string;
+  townCity?: null | string;
 }
 
 export interface NewLocationData {
+  full?: string;
   geoLat: number;
   geoLng: number;
-  full?: string;
+  postcode?: string;
   street?: string;
   townCity?: string;
-  postcode?: string;
 }
 
 export interface ViewportData {
+  full?: string;
   latitude: number;
   longitude: number;
-  full?: string;
-  zoom?: number;
   transitionDuration?: number;
+  zoom?: number;
   // street?: string;
   // townCity?: string;
   // postcode?: string;
 }
 
 export interface AddressData {
-  alias?: string | null;
-  building?: string | null;
+  alias?: null | string;
+  building?: null | string;
+  county?: null | string;
+  postcode: string;
   street: string;
   townCity: string;
-  county?: string | null;
-  postcode: string;
 }
 
 // SchemeUserData
 export interface SchemeUserData {
-  id: string;
-  fullName: string;
-  businessesName?: string;
   businesses?: { id: string; name: string }[];
+  businessesName?: string;
+  firstLetter?: null | string;
+  fullName: string;
 
-  firstLetter?: string | null;
+  id: string;
   oldFullName: string;
 }
 
 // updateData
 export interface DatedMessages {
-  id?: string;
-  content?: string | undefined | null;
-  from?: {
-    id: string;
-    fullName: string;
-    businesses: { id: string; name: string }[];
-  };
-  images?: ImageCardData[];
-  offenders?: OffenderCardData[];
-  incidents?: IncidentCardData[];
-  vehicles?: VehicleData[];
-  crimeGroups?: CrimeGroupData[];
+  content?: null | string | undefined;
   createdAt?: Moment;
+  crimeGroups?: CrimeGroupData[];
+  from?: {
+    businesses: { id: string; name: string }[];
+    fullName: string;
+    id: string;
+  };
+  id?: string;
+  images?: ImageCardData[];
+  incidents?: IncidentCardData[];
+  offenders?: OffenderCardData[];
+  vehicles?: VehicleData[];
 }
 
 // date
 export interface DateType {
-  startDate: Date;
   endDate: Date;
+  startDate: Date;
 }
 
 // businessData
 export interface BusinessData {
+  groups?: string[];
   id: string;
+  isConnected?: boolean;
+  isNew?: boolean;
+  locations: LocationData[];
   name: string;
-  publicName?: boolean;
-  siteNumber?: string;
+  newTags?: TagData[];
   parent?:
     | {
         id: string;
@@ -335,86 +353,83 @@ export interface BusinessData {
       }
     | null
     | undefined;
-  locations: LocationData[];
+  publicName?: boolean;
+  siteNumber?: string;
   tags?: string[];
-  newTags?: TagData[];
-  groups?: string[];
-  isConnected?: boolean;
-  isNew?: boolean;
 }
 
 export interface BrandData {
+  businesses: string[];
+  description?: null | string;
   id: string;
   name: string;
-  description?: string | null;
   schemeId?: string;
-  businesses: string[];
   // newBusinesses?: BusinessData[];
 }
 
 export interface CustomGalleryData {
-  id: string;
-  name: string;
-  description?: string | null;
+  description?: null | string;
   groups?: string[];
-  schemes?: string[];
+  id: string;
   isConnected?: boolean;
   isNew?: boolean;
+  name: string;
+  schemes?: string[];
 }
 
 export interface CustomGalleryQueryData {
-  id: string;
-  name: string;
   description?: string;
   groups?: { id: string; name?: string }[];
+  id: string;
+  name: string;
 }
 
 export interface TagData {
-  id: string;
-  name: string;
-  description?: string;
-  schemes: string[];
   createdById: string;
+  description?: string;
+  id: string;
   isConnected?: boolean;
   isNew?: boolean;
+  name: string;
+  schemes: string[];
 }
 
 export interface NewTagData {
-  id: string;
-  name: string;
-  description?: string;
-  schemes: string[];
   createdById?: string;
+  description?: string;
+  id: string;
   isConnected?: boolean;
   isNew?: boolean;
+  name: string;
+  schemes: string[];
 }
 
 export interface CustomQuestion {
   answerType: AnswerType;
+  dependentOnAnswerValue?: null | string;
+  dependentOnBrandIds?: string[];
+  dependentOnQuestionId?: null | string;
   label: string;
-  questionId: string;
-  required: boolean;
-  tagQuestionId: string;
-  value: string;
   options: {
     label: string;
     value: string;
   }[];
-  dependentOnQuestionId?: string | null;
-  dependentOnAnswerValue?: string | null;
-  dependentOnBrandIds?: string[];
+  questionId: string;
+  required: boolean;
+  tagQuestionId: string;
+  value: string;
 }
 
 export interface GoodsData {
-  id: string;
   goodsType?: string;
-  value?: number;
-  recoveredValue?: number;
+  id: string;
+  name?: string;
   quantity?: number;
   recoveredQuantity?: number;
+  recoveredValue?: number;
   sku?: string;
-  name?: string;
   stockItem?: string;
+  value?: number;
   // id: string;
   // name?: string | undefined | null;
   // value?: number | undefined | null;
@@ -429,44 +444,44 @@ export interface GoodsData {
 }
 
 export enum UserSort {
-  createdAtDesc = 'CREATED_AT_DESC',
   createdAtAsc = 'CREATED_AT_ASC',
-  nameDesc = 'NAME_DESC',
+  createdAtDesc = 'CREATED_AT_DESC',
   nameAsc = 'NAME_ASC',
+  nameDesc = 'NAME_DESC',
 }
 
 export interface ArticleData {
-  id: string;
-  title: string;
-  previewText?: string | undefined | null;
-  priority: ArticlePriority;
   createdBy?: {
-    id: string;
-    fullName: string;
     businesses?: Array<{ id: string; name: string }>;
+    fullName: string;
+    id: string;
   };
-  watermarkImage?: boolean;
+  id: string;
   image?: ImageCardData | null;
   images?: ImageCardData[];
+  previewText?: null | string | undefined;
+  priority: ArticlePriority;
+  title: string;
   updatedAt?: Date;
+  watermarkImage?: boolean;
 }
 
 export interface Update {
-  id: string;
-  text?: string | undefined | null;
+  createdAt: Moment;
   createdBy: {
+    businesses: { fullName: string; id: string; name: string }[];
+    fullName: string;
     id: string;
     origName: string;
-    fullName: string;
-    businesses: { id: string; name: string; fullName: string }[];
   };
+  id: string;
   images?: ImageCardData[];
-  linkedOffenders?: OffenderCardData[];
-  linkedIncidents?: IncidentCardData[];
-  linkedVehicles?: VehicleData[];
-  linkedCrimeGroups?: CrimeGroupData[];
   linkedArticles?: ArticleData[];
-  createdAt: Moment;
+  linkedCrimeGroups?: CrimeGroupData[];
+  linkedIncidents?: IncidentCardData[];
+  linkedOffenders?: OffenderCardData[];
+  linkedVehicles?: VehicleData[];
+  text?: null | string | undefined;
   type: UpdateType;
 }
 
@@ -475,29 +490,29 @@ export interface UpdateData extends Update {
 }
 
 export interface OffenderSettingsType {
-  name: boolean;
-  alias: boolean;
-  ethnicity: boolean;
-  gender: boolean;
-  build: boolean;
-  height: boolean;
-  hair: boolean;
   age: boolean;
+  alias: boolean;
+  build: boolean;
+  comment: boolean;
   dateOfBirth: boolean;
   dateOfBirthSource: boolean;
+  ethnicity: boolean;
+  gender: boolean;
+  hair: boolean;
+  height: boolean;
   idVerified: boolean;
-  peculiarities: boolean;
-  comment: boolean;
   images: boolean;
+  name: boolean;
+  peculiarities: boolean;
 }
 
 export interface ActivityData {
-  id: string;
-  name?: string | null | undefined;
-  description?: string | null | undefined;
-  createdAt?: Date | null | undefined;
-  completedDate?: Date | null | undefined;
-  assignedUsers: { id: string; fullName: string }[];
-  groups: { id: string; name: string }[];
+  assignedUsers: { fullName: string; id: string }[];
   completed?: boolean | null | undefined;
+  completedDate?: Date | null | undefined;
+  createdAt?: Date | null | undefined;
+  description?: null | string | undefined;
+  groups: { id: string; name: string }[];
+  id: string;
+  name?: null | string | undefined;
 }

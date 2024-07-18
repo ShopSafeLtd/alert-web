@@ -1,93 +1,98 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createUseStyles } from 'react-jss';
+import type { CarouselRef } from 'antd/lib/carousel';
 import type { Theme } from 'configs/ThemeConfig';
-import { Button, Carousel, Col, Drawer, Row } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+// import AddNewOffender from '#/components/form-components/offender/offender/AddNewOffender';
+import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
 import {
   faAngleLeft,
   faAngleRight,
   faClose,
 } from '@fortawesome/pro-light-svg-icons';
-import type { CarouselRef } from 'antd/lib/carousel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Carousel, Col, Drawer, Row } from 'antd';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import AddNewOffender from 'components/form-components/offender/offender/AddNewOffender';
+// import AddNewOffender from 'components/form-components/offender/offender/AddNewOffender';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
+import React, { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import LightBoxFace from './LightBoxFace.view';
-import Slide from './LightBoxSlide.view';
+import { createUseStyles } from 'react-jss';
+
 import type { Image } from './LightBox.types';
 
+import LightBoxFace from './LightBoxFace.view';
+import Slide from './LightBoxSlide.view';
+
 const useStyles = createUseStyles((theme: Theme) => ({
-  page: {
+  close: {
     position: 'fixed',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    background: theme.bodyBackground,
-    zIndex: 1000,
-  },
-  leftButton: {
-    zIndex: 1001,
-    position: 'absolute',
-    left: 10,
-    top: '50%',
-  },
-  rightButton: {
-    zIndex: 1001,
-    position: 'absolute',
-    right: 10,
-    top: '50%',
+    right: 20,
+    top: 20,
   },
   imageContainer: {
-    height: '100vh',
     backgroundColor: theme.imageBackgroundColor,
+    height: '100vh',
     position: 'relative',
     transition: 'all 0.2s ease-in-out',
+  },
+  leftButton: {
+    left: 10,
+    position: 'absolute',
+    top: '50%',
+    zIndex: 1001,
   },
   offenders: {
     padding: 20,
     transition: 'all 0.2s ease-in-out',
   },
-  close: {
+  page: {
+    background: theme.bodyBackground,
+    bottom: 0,
+    left: 0,
     position: 'fixed',
-    top: 20,
-    right: 20,
+    right: 0,
+    top: 0,
+    zIndex: 1000,
+  },
+  rightButton: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    zIndex: 1001,
   },
 }));
 
 interface Props {
-  images?: Image[];
-  open: boolean;
   close: () => void;
+  images?: Image[];
   index: number;
-  onReIndex: (imageId?: string) => void;
-  reIndexing: boolean;
   isAdmin: boolean;
-  toggleBoxes: () => void;
-  showBoxes: boolean;
-  linkOffender: string | null;
-  toggleLinkOffender: (faceId: string | null) => void;
-  toggleLinkNewOffender: () => void;
   linkNewOffender: boolean;
-  viewMatches: string | null;
-  toggleViewMatches: (offenderId: string | null) => void;
+  linkOffender: null | string;
+  onReIndex: (imageId?: string) => void;
+  open: boolean;
+  reIndexing: boolean;
+  showBoxes: boolean;
+  toggleBoxes: () => void;
+  toggleLinkNewOffender: () => void;
+  toggleLinkOffender: (faceId: null | string) => void;
+  toggleViewMatches: (offenderId: null | string) => void;
+  viewMatches: null | string;
 }
 
 const LightBox = ({
-  images = [],
   close,
+  images = [],
   index,
-  open,
   isAdmin,
+  linkNewOffender,
+  linkOffender,
   onReIndex,
+  open,
   reIndexing,
   showBoxes,
   toggleBoxes,
-  linkOffender,
-  toggleLinkOffender,
-  linkNewOffender,
   toggleLinkNewOffender,
+  toggleLinkOffender,
   toggleViewMatches,
   viewMatches,
 }: Props) => {
@@ -129,31 +134,31 @@ const LightBox = ({
     <div className={classes.page}>
       <Row>
         <Col
-          span={currentImage?.faces && currentImage.faces.length > 0 ? 18 : 24}
           className={classes.imageContainer}
+          span={currentImage?.faces && currentImage.faces.length > 0 ? 18 : 24}
         >
           <Carousel afterChange={setSlide} ref={carouselRef}>
             {images.map((image) => (
               // <div className={classes.imageContainer}>
               //   <WatermarkImage key={image.id} url={image.optimised} />
               // </div>
-              <Slide key={image.id} image={image} showBoxes={showBoxes} />
+              <Slide image={image} key={image.id} showBoxes={showBoxes} />
             ))}
           </Carousel>
           {images.length > 1 && (
             <>
               <div className={classes.leftButton}>
                 <Button
-                  size="small"
                   onClick={() => carouselRef.current?.prev()}
+                  size="small"
                 >
                   <FontAwesomeIcon icon={faAngleLeft} size="lg" />
                 </Button>
               </div>
               <div className={classes.rightButton}>
                 <Button
-                  size="small"
                   onClick={() => carouselRef.current?.next()}
+                  size="small"
                 >
                   <FontAwesomeIcon icon={faAngleRight} size="lg" />
                 </Button>
@@ -162,8 +167,8 @@ const LightBox = ({
           )}
         </Col>
         <Col
-          span={currentImage?.faces && currentImage.faces.length > 0 ? 6 : 0}
           className={classes.offenders}
+          span={currentImage?.faces && currentImage.faces.length > 0 ? 6 : 0}
         >
           <Row gutter={8} justify="end" style={{ marginBottom: 20 }}>
             <Col>
@@ -182,8 +187,8 @@ const LightBox = ({
             {isAdmin && (
               <Col>
                 <Button
-                  loading={reIndexing}
                   disabled={reIndexing}
+                  loading={reIndexing}
                   onClick={() => onReIndex(currentImage?.id)}
                 >
                   {intl.formatMessage({
@@ -194,16 +199,16 @@ const LightBox = ({
             )}
             <Col>
               <Button onClick={close}>
-                <FontAwesomeIcon size="lg" icon={faClose} />
+                <FontAwesomeIcon icon={faClose} size="lg" />
               </Button>
             </Col>
           </Row>
           {currentImage?.faces.map((face, faceIndex) => (
             <LightBoxFace
-              key={face.id}
               face={face}
               faceIndex={faceIndex}
               imageUrl={currentImage.optimised}
+              key={face.id}
               toggleLinkOffender={toggleLinkOffender}
               toggleViewMatches={toggleViewMatches}
             />
@@ -213,17 +218,11 @@ const LightBox = ({
 
       {currentImage?.faces && currentImage.faces.length === 0 && (
         <Button className={classes.close} onClick={close}>
-          <FontAwesomeIcon size="lg" icon={faClose} />
+          <FontAwesomeIcon icon={faClose} size="lg" />
         </Button>
       )}
 
       <Drawer
-        width={linkNewOffender ? 600 : 1000}
-        title={intl.formatMessage({
-          defaultMessage: 'Link an offender to face',
-        })}
-        open={linkOffender !== null}
-        onClose={() => toggleLinkOffender(null)}
         extra={
           <Button onClick={toggleLinkNewOffender}>
             {linkNewOffender
@@ -235,27 +234,38 @@ const LightBox = ({
                 })}
           </Button>
         }
+        onClose={() => toggleLinkOffender(null)}
+        open={linkOffender !== null}
+        title={intl.formatMessage({
+          defaultMessage: 'Link an offender to face',
+        })}
+        width={linkNewOffender ? 600 : 1000}
       >
         {!linkNewOffender && linkOffender && (
           <AddExistingOffender
+            addOverride="Link"
             offenderIds={[]}
             onClose={() => toggleLinkOffender(null)}
             update={() => {}}
-            addOverride="Link"
           />
         )}
         {linkNewOffender && linkOffender && (
-          <AddNewOffender
-            onClose={() => toggleLinkOffender(null)}
-            update={() => {}}
+          // <AddNewOffender
+          //   addOverride="Link"
+          //   onClose={() => toggleLinkOffender(null)}
+          //   update={() => {}}
+          // />
+          <AddNewOffenderSimple
             addOverride="Link"
+            images={[]}
+            onClose={() => toggleLinkOffender(null)}
           />
         )}
       </Drawer>
 
       <Drawer
-        open={viewMatches !== null}
         onClose={() => toggleViewMatches(null)}
+        open={viewMatches !== null}
         title={intl.formatMessage({
           defaultMessage: 'View Face AI matches',
         })}

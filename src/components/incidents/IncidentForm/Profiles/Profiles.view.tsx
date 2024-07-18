@@ -1,63 +1,66 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
 import type { FormInstance } from 'antd';
-import {
-  Button,
-  Col,
-  Dropdown,
-  Menu,
-  Row,
-  Typography,
-  Form,
-  Radio,
-  Input,
-} from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+
 import {
   faMagnifyingGlass,
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Button,
+  Col,
+  Dropdown,
+  Form,
+  Input,
+  Menu,
+  Radio,
+  Row,
+  Typography,
+} from 'antd';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
-import useStyles from './Profiles.styles';
-import Offenders from './Offenders/Offenders.view';
-import Vehicles from './Vehicles/Vehicles.view';
+
 import type { StateOffenderData } from './Offenders/useOffenders';
 import type { StateVehicleData } from './Vehicles/useVehicles';
 
-const { Title, Paragraph } = Typography;
+import Offenders from './Offenders/Offenders.view';
+import useStyles from './Profiles.styles';
+import Vehicles from './Vehicles/Vehicles.view';
+
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  addNewOffenderOpen: boolean;
   addExistingOffenderOpen: boolean;
-  addNewVehicleOpen: boolean;
   addExistingVehicleOpen: boolean;
-  toggleAddNewOffenderOpen: () => void;
-  toggleAddExistingOffenderOpen: () => void;
-  toggleAddNewVehicleOpen: () => void;
-  toggleAddExisingVehicleOpen: () => void;
-  saving: boolean;
+  addNewOffenderOpen: boolean;
+  addNewVehicleOpen: boolean;
   form: FormInstance<FormData>;
+  hasVictims: boolean;
   // hasVehicles: boolean;
   hasWitnesses: boolean;
-  hasVictims: boolean;
+  saving: boolean;
+  toggleAddExisingVehicleOpen: () => void;
+  toggleAddExistingOffenderOpen: () => void;
+  toggleAddNewOffenderOpen: () => void;
+  toggleAddNewVehicleOpen: () => void;
 }
 
 const Profiles = ({
-  addExistingVehicleOpen,
-  saving,
-  toggleAddExisingVehicleOpen,
-  toggleAddNewVehicleOpen,
-  addNewVehicleOpen,
-  toggleAddExistingOffenderOpen,
-  toggleAddNewOffenderOpen,
-  addNewOffenderOpen,
   addExistingOffenderOpen,
+  addExistingVehicleOpen,
+  addNewOffenderOpen,
+  addNewVehicleOpen,
   form,
-  hasWitnesses,
   // hasVehicles,
   hasVictims,
+  hasWitnesses,
+  saving,
+  toggleAddExisingVehicleOpen,
+  toggleAddExistingOffenderOpen,
+  toggleAddNewOffenderOpen,
+  toggleAddNewVehicleOpen,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -68,9 +71,9 @@ const Profiles = ({
 
   return (
     <>
-      <Row gutter={10} align="middle">
+      <Row align="middle" gutter={10}>
         <Col>
-          <Title style={{ marginBottom: 0 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0 }}>
             {intl.formatMessage({
               defaultMessage: 'Profiles',
             })}
@@ -91,29 +94,29 @@ const Profiles = ({
                 <Menu
                   items={[
                     {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Add Existing Offender',
-                      }),
-                      key: '1',
                       icon: (
                         <FontAwesomeIcon
                           icon={faMagnifyingGlass}
                           style={{ marginRight: 5 }}
                         />
                       ),
+                      key: '1',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Add Existing Offender',
+                      }),
                       onClick: () => toggleAddExistingOffenderOpen(),
                     },
                     {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Create New Offender',
-                      }),
-                      key: '2',
                       icon: (
                         <FontAwesomeIcon
                           icon={faPlus}
                           style={{ marginRight: 5 }}
                         />
                       ),
+                      key: '2',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Create New Offender',
+                      }),
                       onClick: () => toggleAddNewOffenderOpen(),
                     },
                   ]}
@@ -141,29 +144,29 @@ const Profiles = ({
                 <Menu
                   items={[
                     {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Add Existing Vehicle',
-                      }),
-                      key: '1',
                       icon: (
                         <FontAwesomeIcon
                           icon={faMagnifyingGlass}
                           style={{ marginRight: 5 }}
                         />
                       ),
+                      key: '1',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Add Existing Vehicle',
+                      }),
                       onClick: () => toggleAddExisingVehicleOpen(),
                     },
                     {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Create New Vehicle',
-                      }),
-                      key: '2',
                       icon: (
                         <FontAwesomeIcon
                           icon={faPlus}
                           style={{ marginRight: 5 }}
                         />
                       ),
+                      key: '2',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Create New Vehicle',
+                      }),
                       onClick: () => toggleAddNewVehicleOpen(),
                     },
                   ]}
@@ -206,10 +209,10 @@ const Profiles = ({
         <Offenders
           addExistingOpen={addExistingOffenderOpen}
           addNewOpen={addNewOffenderOpen}
-          toggleAddNewOpen={toggleAddNewOffenderOpen}
-          toggleAddExistingOpen={toggleAddExistingOffenderOpen}
-          saving={saving}
           form={form}
+          saving={saving}
+          toggleAddExistingOpen={toggleAddExistingOffenderOpen}
+          toggleAddNewOpen={toggleAddNewOffenderOpen}
         />
       </Form.Item>
       <Form.Item
@@ -233,18 +236,14 @@ const Profiles = ({
         <Vehicles
           addExistingOpen={addExistingVehicleOpen}
           addNewOpen={addNewVehicleOpen}
-          toggleAddNewOpen={toggleAddNewVehicleOpen}
-          toggleAddExistingOpen={toggleAddExisingVehicleOpen}
-          saving={saving}
           form={form}
+          saving={saving}
+          toggleAddExistingOpen={toggleAddExisingVehicleOpen}
+          toggleAddNewOpen={toggleAddNewVehicleOpen}
         />
       </Form.Item>
       {hasWitnesses && (
         <Form.Item
-          name="witnessesInvolved"
-          tooltip={intl.formatMessage({
-            defaultMessage: 'Were there any witnesses of the incident?',
-          })}
           label={
             <Typography.Text>
               {intl.formatMessage({
@@ -252,9 +251,15 @@ const Profiles = ({
               })}
             </Typography.Text>
           }
+          name="witnessesInvolved"
           required
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Were there any witnesses of the incident?',
+          })}
         >
           <Radio.Group
+            disabled={saving}
+            optionType="button"
             options={[
               {
                 label: intl.formatMessage({
@@ -269,8 +274,6 @@ const Profiles = ({
                 value: false,
               },
             ]}
-            optionType="button"
-            disabled={saving}
           />
         </Form.Item>
       )}
@@ -283,63 +286,63 @@ const Profiles = ({
                   <Col key={key}>
                     <Form.Item
                       {...restField}
-                      name={[name, 'name']}
-                      rules={[{ required: true, message: 'Enter a name.' }]}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Full Name',
                         })
                       }
+                      name={[name, 'name']}
+                      rules={[{ message: 'Enter a name.', required: true }]}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col span={3}>
                     <Form.Item
-                      name={[name, 'phone']}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Phone Number',
                         })
                       }
+                      name={[name, 'phone']}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col span={4}>
                     <Form.Item
-                      name={[name, 'email']}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Email Address',
                         })
                       }
+                      name={[name, 'email']}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col flex={1}>
                     <Form.Item
-                      name={[name, 'description']}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Additional Information',
                         })
                       }
+                      name={[name, 'description']}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col>
                     <Button
+                      onClick={() => remove(name)}
                       style={{
                         marginTop: i === 0 ? 30 : 0,
                       }}
-                      onClick={() => remove(name)}
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </Button>
@@ -349,7 +352,7 @@ const Profiles = ({
               <Form.Item>
                 <Row justify="center">
                   <Col>
-                    <Button onClick={() => add()} block>
+                    <Button block onClick={() => add()}>
                       <FormattedMessage defaultMessage="Add Witness" />
                     </Button>
                   </Col>
@@ -361,10 +364,6 @@ const Profiles = ({
       )}
       {hasVictims && (
         <Form.Item
-          name="victimInvolved"
-          tooltip={intl.formatMessage({
-            defaultMessage: 'Were the any victims involved in the incident',
-          })}
           label={
             <Typography.Text>
               {intl.formatMessage({
@@ -372,9 +371,15 @@ const Profiles = ({
               })}
             </Typography.Text>
           }
+          name="victimInvolved"
           required
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Were the any victims involved in the incident',
+          })}
         >
           <Radio.Group
+            disabled={saving}
+            optionType="button"
             options={[
               {
                 label: intl.formatMessage({
@@ -389,8 +394,6 @@ const Profiles = ({
                 value: false,
               },
             ]}
-            optionType="button"
-            disabled={saving}
           />
         </Form.Item>
       )}
@@ -403,63 +406,63 @@ const Profiles = ({
                   <Col key={key}>
                     <Form.Item
                       {...restField}
-                      name={[name, 'name']}
-                      rules={[{ required: true, message: 'Enter a name.' }]}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Full Name',
                         })
                       }
+                      name={[name, 'name']}
+                      rules={[{ message: 'Enter a name.', required: true }]}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col span={3}>
                     <Form.Item
-                      name={[name, 'phone']}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Phone Number',
                         })
                       }
+                      name={[name, 'phone']}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col span={4}>
                     <Form.Item
-                      name={[name, 'email']}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Email Address',
                         })
                       }
+                      name={[name, 'email']}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col flex={1}>
                     <Form.Item
-                      name={[name, 'description']}
                       label={
                         i === 0 &&
                         intl.formatMessage({
                           defaultMessage: 'Additional Information',
                         })
                       }
+                      name={[name, 'description']}
                     >
                       <Input style={{ width: '100%' }} />
                     </Form.Item>
                   </Col>
                   <Col>
                     <Button
+                      onClick={() => remove(name)}
                       style={{
                         marginTop: i === 0 ? 30 : 0,
                       }}
-                      onClick={() => remove(name)}
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </Button>
@@ -469,7 +472,7 @@ const Profiles = ({
               <Form.Item>
                 <Row justify="center">
                   <Col>
-                    <Button onClick={() => add()} block>
+                    <Button block onClick={() => add()}>
                       <FormattedMessage defaultMessage="Add Victim" />
                     </Button>
                   </Col>

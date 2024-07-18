@@ -159,7 +159,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
 
   return (
     <Row>
-      {questions.map((question) => {
+      {questions.map((question, index) => {
         if (
           question.dependentOnQuestionId !== null &&
           question.dependentOnQuestionId
@@ -182,20 +182,45 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                   ) as string | undefined;
                   return currentValue?.toLowerCase() ===
                     question.dependentOnAnswerValue ? (
-                    <Form.Item
-                      label={question.label}
-                      name={question.questionId}
-                      rules={[
-                        {
-                          message: intl.formatMessage({
-                            defaultMessage: 'This field is required.',
-                          }),
-                          required: question.required,
-                        },
-                      ]}
-                    >
-                      {getFieldType(question, question.answerType)}
-                    </Form.Item>
+                    <Row>
+                      <Col>
+                        <Form.Item
+                          label={intl.formatMessage(
+                            {
+                              defaultMessage: 'Question {order}',
+                            },
+                            { order: index + 1 }
+                          )}
+                          name={question.questionId}
+                          rules={[
+                            {
+                              message: intl.formatMessage({
+                                defaultMessage: 'This field is required.',
+                              }),
+                              required: question.required,
+                            },
+                          ]}
+                        >
+                          {getFieldType(question, question.answerType)}
+                        </Form.Item>
+                      </Col>
+                      <Col>
+                        <Form.Item
+                          label={question.label}
+                          name={question.questionId}
+                          rules={[
+                            {
+                              message: intl.formatMessage({
+                                defaultMessage: 'This field is required.',
+                              }),
+                              required: question.required,
+                            },
+                          ]}
+                        >
+                          {getFieldType(question, question.answerType)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
                   ) : null;
                 }}
               </Form.Item>

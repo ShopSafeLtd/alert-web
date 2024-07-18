@@ -1,4 +1,7 @@
-import React from 'react';
+import CompactSkeletonCard from '#/components/offenders/OffenderCard/OffenderSkeletonCard.view';
+import Loading from '#/components/shared-components/AntD/Loading';
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -6,13 +9,19 @@ import {
   Col,
   Divider,
   Drawer,
+  Empty,
   Popconfirm,
   Row,
-  Spin,
   Typography,
 } from 'antd';
-
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import {
   getAge,
   getBuild,
@@ -20,43 +29,40 @@ import {
   getEthnicityShort,
   getSex,
 } from 'utils';
-import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl'; // Import the useIntl hook
-import { useStoreState } from 'state';
-import useStyles from './CreateCrimeGroup.styles';
-import type { SearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
-import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
 
-const { Title, Text } = Typography;
+import type { ListOffendersCardQuery } from './graphql/list-offender-card.generated';
+import type { SearchOffendersRelayQuery } from './graphql/search-offenders-relay.generated';
+
+import useStyles from './CreateCrimeGroup.styles';
+
+const { Text, Title } = Typography;
 
 interface Props {
-  searchData: SearchOffendersQuery | undefined;
-  loading: boolean;
-  selectOffender: (id: string) => void;
-  offendersData: ListOffendersQuery | undefined;
-  offendersSelected: boolean;
   addOffender: boolean;
-  toggleAddOffender: () => void;
+  fetchMoreScroll: () => void;
+  loading: boolean;
+  offendersData: ListOffendersCardQuery | undefined;
+  offendersSelected: boolean;
   onSubmit: () => void;
-  submitting: boolean;
   removeOffender: (id: string) => void;
+  searchData: SearchOffendersRelayQuery | undefined;
+  selectOffender: (id: string) => void;
+  submitting: boolean;
+  toggleAddOffender: () => void;
 }
 
 const CreateCrimeGroup = ({
+  addOffender,
+  fetchMoreScroll,
   loading,
   offendersData,
-  searchData,
-  selectOffender,
   offendersSelected,
-  addOffender,
-  toggleAddOffender,
   onSubmit,
   removeOffender,
+  searchData,
+  selectOffender,
   submitting,
+  toggleAddOffender,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl(); // Initialize the useIntl hook
@@ -68,7 +74,7 @@ const CreateCrimeGroup = ({
     <div className={classes.page}>
       <Row align="middle" className={classes.headerRow}>
         <Col flex={1}>
-          <Title style={{ margin: 0 }} level={3}>
+          <Title level={3} style={{ margin: 0 }}>
             {intl.formatMessage({
               defaultMessage:
                 'Select the offenders to be in the new crime group',
@@ -88,28 +94,47 @@ const CreateCrimeGroup = ({
           </Button>
         </Col>
       </Row>
+
       {loading ? (
-        <div>
-          <Spin />
-        </div>
+        <Row
+          align="stretch"
+          gutter={24}
+          style={{
+            alignItems: 'stretch',
+            overflowX: 'hidden',
+            padding: 10,
+          }}
+        >
+          {Array.from({ length: 18 }).map((_, index) => (
+            <Col
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              span={8}
+              style={{ marginBottom: 20 }}
+              xxl={6}
+            >
+              <CompactSkeletonCard />
+            </Col>
+          ))}
+        </Row>
       ) : (
         <div>
           {offendersSelected ? (
             <Row gutter={16}>
-              {offendersData?.listOffenders?.offenders.map((offender) => (
-                <Col key={offender.id}>
+              {offendersData?.listOffendersRelay.edges.map((t) => (
+                <Col key={t?.node?.id}>
                   <Card
-                    className={classes.offenderCol}
                     bodyStyle={{ padding: 0 }}
+                    className={classes.offenderCol}
                   >
                     <Carousel>
-                      {offender.images.map((image) => (
-                        <div key={image.id} className={classes.imageContainer}>
+                      {t?.node?.images.map((image) => (
+                        <div className={classes.imageContainer} key={image.id}>
                           <div className={classes.image}>
                             <WatermarkImage
-                              url={image.optimised}
-                              rotation={image.rotation}
                               position={image.position}
+                              rotation={image.rotation}
+                              url={image.optimised}
                             />
                           </div>
                         </div>
@@ -119,22 +144,22 @@ const CreateCrimeGroup = ({
                       <Row align="middle">
                         <Col flex={1}>
                           <Title className={classes.title} level={4}>
-                            {offender.name}
+                            {t?.node?.name}
                           </Title>
                         </Col>
                         <Col>
                           <Popconfirm
+                            disabled={submitting}
+                            onConfirm={() => removeOffender(t?.node?.id)}
+                            overlayInnerStyle={{ padding: 10 }}
                             title={intl.formatMessage({
                               defaultMessage: 'Are you sure?',
                             })}
-                            disabled={submitting}
-                            overlayInnerStyle={{ padding: 10 }}
-                            onConfirm={() => removeOffender(offender.id)}
                           >
                             <Button
                               className={classes.deleteButton}
-                              size="small"
                               disabled={submitting}
+                              size="small"
                             >
                               <FontAwesomeIcon icon={faTrash} />
                             </Button>
@@ -150,7 +175,7 @@ const CreateCrimeGroup = ({
                             })}
                           </Text>
                           <Text type="secondary">
-                            {getAge(offender.age || Age.Unknown)}
+                            {getAge(t?.node?.age || Age.Unknown)}
                           </Text>
                         </div>
                       )}
@@ -162,7 +187,7 @@ const CreateCrimeGroup = ({
                           })}
                         </Text>
                         <Text type="secondary">
-                          {moment(offender.dateOfBirth).format('DD/MM/YYYY') ||
+                          {moment(t?.node?.dateOfBirth).format('DD/MM/YYYY') ||
                             intl.formatMessage({
                               defaultMessage: 'Unknown',
                             })}
@@ -176,7 +201,7 @@ const CreateCrimeGroup = ({
                           })}
                         </Text>
                         <Text type="secondary">
-                          {offender.dateSource ||
+                          {t?.node?.dateSource ||
                             intl.formatMessage({
                               defaultMessage: 'None',
                             })}
@@ -190,7 +215,7 @@ const CreateCrimeGroup = ({
                           })}
                         </Text>
                         <Text type="secondary">
-                          {getBuild(offender.build || Build.Unknown)}
+                          {getBuild(t?.node?.build || Build.Unknown)}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
@@ -201,7 +226,7 @@ const CreateCrimeGroup = ({
                           })}
                         </Text>
                         <Text type="secondary">
-                          {getEthnicity(offender.race || Race.Unknown)}
+                          {getEthnicity(t?.node?.race || Race.Unknown)}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
@@ -212,7 +237,7 @@ const CreateCrimeGroup = ({
                           })}
                         </Text>
                         <Text type="secondary">
-                          {getSex(offender.gender || Gender.Unknown)}
+                          {getSex(t?.node?.gender || Gender.Unknown)}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
@@ -223,7 +248,7 @@ const CreateCrimeGroup = ({
                           })}
                         </Text>
                         <Text type="secondary">
-                          {offender.lastActive?.dayTime ||
+                          {t?.node?.lastActive?.dayTime ||
                             intl.formatMessage({
                               defaultMessage: 'Never',
                             })}
@@ -247,119 +272,157 @@ const CreateCrimeGroup = ({
               </Col>
             </Row>
           ) : (
-            <Row gutter={16}>
-              {searchData?.listOffenders?.offenders.map((offender) => (
-                <Col>
-                  <Card
-                    onClick={() => selectOffender(offender.id)}
-                    className={classes.offenderCard}
-                    bodyStyle={{ padding: 0, display: 'flex' }}
-                    key={offender.id}
+            <div>
+              {searchData?.listOffendersRelay?.edges &&
+              searchData?.listOffendersRelay?.edges.length > 0 ? (
+                <InfiniteScroll
+                  dataLength={searchData?.listOffendersRelay?.edges.length}
+                  endMessage={
+                    <p style={{ textAlign: 'center' }}>
+                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                      <b>-----------</b>
+                    </p>
+                  }
+                  hasMore={searchData?.listOffendersRelay.pageInfo.hasNextPage}
+                  height="calc(100vh - 78px)"
+                  loader={<Loading />}
+                  next={() => fetchMoreScroll()}
+                  style={{ overflowX: 'hidden' }}
+                >
+                  <Row
+                    align="stretch"
+                    gutter={[10, 10]}
+                    style={{
+                      alignItems: 'stretch',
+                      overflowX: 'hidden',
+                      padding: 10,
+                    }}
                   >
-                    <div className={classes.offenderImage}>
-                      <WatermarkImage
-                        url={offender.images[0]?.optimised}
-                        position={offender.images[0]?.position}
-                      />
-                    </div>
-                    <div className={classes.offenderContent}>
-                      <Text className={classes.offenderName}>
-                        {offender.name}
-                      </Text>
-                      <Row gutter={8}>
-                        <Col>
-                          <Text className={classes.offenderDetail}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Age: ',
-                            })}
-                          </Text>
-                          <Text
-                            className={classes.offenderDetail}
-                            type="secondary"
-                          >
-                            {getAge(offender.age || Age.Unknown)}
-                          </Text>
-                        </Col>
-                        <Col>
-                          <Text className={classes.offenderDetail}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Build: ',
-                            })}
-                          </Text>
-                          <Text
-                            className={classes.offenderDetail}
-                            type="secondary"
-                          >
-                            {getBuild(offender.build || Build.Unknown)}
-                          </Text>
-                        </Col>
-                      </Row>
-                      <Row gutter={8}>
-                        <Col>
-                          <Text className={classes.offenderDetail}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Sex: ',
-                            })}
-                          </Text>
-                          <Text
-                            className={classes.offenderDetail}
-                            type="secondary"
-                          >
-                            {getSex(offender.gender || Gender.Unknown)}
-                          </Text>
-                        </Col>
-                        <Col>
-                          <Text className={classes.offenderDetail}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Ethnicity: ',
-                            })}
-                          </Text>
-                          <Text type="secondary">
-                            {getEthnicityShort(offender.race || Race.Unknown)}
-                          </Text>
-                        </Col>
-                      </Row>
-                      {/* <Row gutter={8}>
-                        <Col>
-                          <Text className={classes.offenderDetail}>
-                            {intl.formatMessage({
-                              id: 'kS9obh',
-                              defaultMessage: 'Last Active: ',
-                            })}
-                          </Text>
-                          <Text
-                            className={classes.offenderDetail}
-                            type="secondary"
-                          >
-                            {offender.}
-                          </Text>
-                        </Col>
-                      </Row> */}
-                    </div>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+                    {searchData.listOffendersRelay.edges.map((t) => (
+                      <Col key={t?.node?.id}>
+                        <Card
+                          bodyStyle={{ display: 'flex', padding: 0 }}
+                          className={classes.offenderCard}
+                          onClick={() => selectOffender(t?.node?.id)}
+                        >
+                          <div className={classes.offenderImage}>
+                            <WatermarkImage
+                              position={t?.node?.images[0]?.position}
+                              url={t?.node?.images[0]?.optimised}
+                            />
+                          </div>
+                          <div className={classes.offenderContent}>
+                            <Text className={classes.offenderName}>
+                              {t?.node?.name}
+                            </Text>
+                            <Row gutter={8}>
+                              <Col>
+                                <Text className={classes.offenderDetail}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Age: ',
+                                  })}
+                                </Text>
+                                <Text
+                                  className={classes.offenderDetail}
+                                  type="secondary"
+                                >
+                                  {getAge(t?.node?.age || Age.Unknown)}
+                                </Text>
+                              </Col>
+                              <Col>
+                                <Text className={classes.offenderDetail}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Build: ',
+                                  })}
+                                </Text>
+                                <Text
+                                  className={classes.offenderDetail}
+                                  type="secondary"
+                                >
+                                  {getBuild(t?.node?.build || Build.Unknown)}
+                                </Text>
+                              </Col>
+                            </Row>
+                            <Row gutter={8}>
+                              <Col>
+                                <Text className={classes.offenderDetail}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Sex: ',
+                                  })}
+                                </Text>
+                                <Text
+                                  className={classes.offenderDetail}
+                                  type="secondary"
+                                >
+                                  {getSex(t?.node?.gender || Gender.Unknown)}
+                                </Text>
+                              </Col>
+                              <Col>
+                                <Text className={classes.offenderDetail}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Ethnicity: ',
+                                  })}
+                                </Text>
+                                <Text type="secondary">
+                                  {getEthnicityShort(
+                                    t?.node?.race || Race.Unknown
+                                  )}
+                                </Text>
+                              </Col>
+                            </Row>
+                          </div>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                </InfiniteScroll>
+              ) : (
+                <div
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    flex: 1,
+                    height: 'calc(100vh - 100px)',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Empty
+                    description={
+                      intl.formatMessage({
+                        defaultMessage: 'No Offenders',
+                      })
+                      // search === ''
+                      //   ? intl.formatMessage({
+                      //       defaultMessage: 'No Offenders',
+                      //     })
+                      //   : intl.formatMessage({
+                      //       defaultMessage:
+                      //         'No offenders match your search criteria',
+                      //     })
+                    }
+                  />
+                </div>
+              )}
+            </div>
           )}
         </div>
       )}
-
       <Drawer
+        onClose={toggleAddOffender}
+        open={addOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add Offenders',
         })}
-        open={addOffender}
         width="800"
-        onClose={toggleAddOffender}
         zIndex={1001}
       >
         {addOffender ? (
           <AddExisitingOffender
-            update={(offender) => selectOffender(offender.id)}
-            offenderIds={offendersData?.listOffenders?.offenders.map(
-              ({ id }) => id
+            offenderIds={offendersData?.listOffendersRelay.edges?.map(
+              (t) => t.node.id
             )}
             onClose={toggleAddOffender}
+            update={(offender) => selectOffender(offender.id)}
           />
         ) : (
           <div />

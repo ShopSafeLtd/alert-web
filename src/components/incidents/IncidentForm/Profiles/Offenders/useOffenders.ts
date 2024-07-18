@@ -1,140 +1,143 @@
-import { useState, useEffect } from 'react';
-
-import update from 'immutability-helper';
-import type { UploadChangeParam } from 'antd/lib/upload';
 import type { FormInstance } from 'antd';
-import { Form } from 'antd';
-import { useStoreState } from 'state';
-import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { IdSource } from 'graphql/types';
 import type { AddressData } from 'types/DataType';
+import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+
+import { Form } from 'antd';
+import { Age, Build, Gender, Height, ImagePosition, Race } from 'graphql/types';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useStoreState } from 'state';
+
 import type { StateImageData } from '../../ImageSection/useImageSection';
 import type { FacesOpenSubmitData } from './FacesColumn.view';
+
 import {
   getClosestAgeRange,
   getGenderFromFace,
   getPeculiaritiesFromFace,
 } from '../../ImageSection/useImageSection';
-import type { IdSource } from 'graphql/types';
-import { Age, Build, Gender, Height, ImagePosition, Race } from 'graphql/types';
 
 export interface FaceData {
-  id: string;
-  gender: 'Male' | 'Female';
   age: {
     high: number;
     low: number;
   };
   beard: boolean;
-  mustache: boolean;
   boundingBox: {
     height: string;
     left: string;
     top: string;
     width: string;
   };
+  gender: 'Female' | 'Male';
+  id: string;
+  mustache: boolean;
 }
 
 export interface FacesOpenData {
-  offenderId: string;
-  id: string;
-  url?: string | null | undefined;
-  optimised?: string | null | undefined;
   faces: FaceData[];
+  id: string;
+  offenderId: string;
+  optimised?: null | string | undefined;
+  url?: null | string | undefined;
 }
 
 interface ImageType {
-  id: string;
-  url?: string | null | undefined;
-  optimised?: string | null | undefined;
-  fileName?: string | null;
-  type?: string | null;
-  new?: boolean;
   boundingBox?: {
     height: string;
     left: string;
     top: string;
     width: string;
   };
+  fileName?: null | string;
+  id: string;
+  new?: boolean;
+  optimised?: null | string | undefined;
+  type?: null | string;
+  url?: null | string | undefined;
 }
 
 export interface AddOffenderData {
-  id: string;
-  reference?: number | null;
-  alias?: string[] | null;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  height?: Height | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  comment?: string | null;
-  idVerified?: boolean;
-  idSource?: IdSource;
-  images?: ImageType[] | null;
-  knownFor?: string[] | null;
-  targetedGoods?: string[] | null;
-  infoSource?: string | null;
-  justification?: string | null;
-  knowAddress?: boolean;
   address?: AddressData;
+  age?: Age | null;
+  alias?: null | string[];
+  build?: Build | null;
+  comment?: null | string;
+  dateOfBirth?: Date | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
+  hair?: null | string;
+  height?: Height | null;
+  id: string;
+  idSource?: IdSource;
+  idVerified?: boolean;
+  images?: ImageType[] | null;
+  infoSource?: null | string;
+  justification?: null | string;
+  knowAddress?: boolean;
+  knownFor?: null | string[];
+  name?: null | string;
+  peculiarities?: null | string;
+  race?: Race | null;
+  reference?: null | number;
+  targetedGoods?: null | string[];
   // groupIds?: string[];
 }
 
 export interface StateOffenderData extends AddOffenderData {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
   blank: boolean;
   confirmedInIncident: boolean;
+  edited: boolean;
+  existing: boolean;
+  getConfirmed?: boolean;
   imageConfirmed: boolean;
+  new: boolean;
 }
 
 interface Props {
-  value?: StateOffenderData[];
-  onChange?: (value: StateOffenderData[]) => void;
   form: FormInstance<FormData>;
+  onChange?: (value: StateOffenderData[]) => void;
+  value?: StateOffenderData[];
 }
 
 interface Return {
+  facesOpen: FacesOpenData | null;
+  matchExistingOpen: StateOffenderData | null;
+  mergeActive: null | string;
+  mergeSelected: null | string;
+  noOffenders: boolean;
   offenders: StateOffenderData[];
+  onAddBlankOffenders: (count: number) => void;
   onAddOffenders: (
     values: AddOffenderData[],
     existing: boolean,
     blank: boolean
   ) => void;
-  onUpdateOffender: (value: AddOffenderData) => void;
-  onRemoveOffender: (id: string) => void;
-  onConfirmOffender: (id: string) => void;
-  toggleNoOffenders: () => void;
-  setMatchExistingOpen: (value: StateOffenderData | null) => void;
-  setUpdateOpen: (value: StateOffenderData | null) => void;
-  onAddBlankOffenders: (count: number) => void;
-  onMatchOffender: (value: AddOffenderData) => void;
-  noOffenders: boolean;
-  matchExistingOpen: StateOffenderData | null;
-  updateOpen: StateOffenderData | null;
-  mergeActive: string | null;
-  toggleMerge: (value: string | null) => void;
-  toggleMergeSelected: (value: string) => void;
-  mergeSelected: string | null;
-  onMerge: () => void;
   onChangeOffenderImage: (
     info: UploadChangeParam<StateImageData>,
     offenderId: string
   ) => void;
-  uploading: boolean;
-  onNoImages: (id: string) => void;
+  onConfirmOffender: (id: string) => void;
   onImagesUploadedInForm: (values: StateImageData[]) => void;
-  facesOpen: FacesOpenData | null;
-  setFacesOpen: (data: FacesOpenData | null) => void;
+  onMatchOffender: (value: AddOffenderData) => void;
+  onMerge: () => void;
+  onNoImages: (id: string) => void;
+  onRemoveOffender: (id: string) => void;
   onSubmitImageFaces: (data: FacesOpenSubmitData) => void;
+  onUpdateOffender: (value: AddOffenderData) => void;
+  setFacesOpen: (data: FacesOpenData | null) => void;
+  setMatchExistingOpen: (value: StateOffenderData | null) => void;
+  setUpdateOpen: (value: StateOffenderData | null) => void;
+  toggleMerge: (value: null | string) => void;
+  toggleMergeSelected: (value: string) => void;
+  toggleNoOffenders: () => void;
+  updateOpen: StateOffenderData | null;
+  uploading: boolean;
 }
 
-const useOffenders = ({ value, onChange, form }: Props): Return => {
+const useOffenders = ({ form, onChange, value }: Props): Return => {
   const images = Form.useWatch('images', form);
   const facialDetection = useStoreState(
     (state) => state.scheme.facialDetection
@@ -149,8 +152,8 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
     useState<StateOffenderData | null>(null);
   const [updateOpen, setUpdateOpen] = useState<StateOffenderData | null>(null);
   const [noOffenders, setNoOffenders] = useState(false);
-  const [mergeActive, toggleMerge] = useState<string | null>(null);
-  const [mergeSelected, setMergeSelected] = useState<string | null>(null);
+  const [mergeActive, toggleMerge] = useState<null | string>(null);
+  const [mergeSelected, setMergeSelected] = useState<null | string>(null);
   const [uploading, setUploading] = useState(false);
   const [facesOpen, setFacesOpen] = useState<FacesOpenData | null>(null);
 
@@ -173,16 +176,16 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
     const formattedOffenders: StateOffenderData[] = values.map(
       (offender): StateOffenderData => ({
         ...offender,
-        images: offender.images || [],
-        edited: false,
-        confirmedInIncident: true,
-        new: !existing,
-        existing,
         blank,
+        confirmedInIncident: true,
+        edited: false,
+        existing,
+        getConfirmed: true,
         imageConfirmed: imagesRequiredOnOffenders ? !blank : true,
+        images: offender.images || [],
+        new: !existing,
       })
     );
-    console.log('onAddOffenders', formattedOffenders);
 
     setOffenders([...offenders, ...formattedOffenders]);
     setPristine(false);
@@ -198,27 +201,27 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
           [offenders.findIndex((offender) => offender.id === newData.id)]: {
             $set: {
               ...currentData,
-              height: newData.height,
-              alias: newData.alias,
-              comment: newData.comment,
               age: newData.age,
+              alias: newData.alias,
+              blank: false,
               build: newData.build,
-              hair: newData.hair,
+              comment: newData.comment,
               dateOfBirth: newData.dateOfBirth,
-              gender: newData.gender,
-              race: newData.race,
-              peculiarities: newData.peculiarities,
               dateSource: newData.dateSource,
-              name: newData.name,
-              images: newData.images,
+              edited: !currentData.new,
+              gender: newData.gender,
+              hair: newData.hair,
+              height: newData.height,
               idSource: newData.idSource,
               idVerified: newData.idVerified,
-              justification: newData.justification,
+              images: newData.images,
               infoSource: newData.infoSource,
+              justification: newData.justification,
               knownFor: newData.knownFor,
+              name: newData.name,
+              peculiarities: newData.peculiarities,
+              race: newData.race,
               targetedGoods: newData.targetedGoods,
-              edited: !currentData.new,
-              blank: false,
             },
           },
         })
@@ -229,10 +232,13 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
     setOffenders(
       update<StateOffenderData[]>(offenders, {
         [offenders.findIndex((offender) => offender.id === id)]: {
+          blank: {
+            $set: true,
+          },
           confirmedInIncident: {
             $set: true,
           },
-          blank: {
+          getConfirmed: {
             $set: true,
           },
         },
@@ -250,15 +256,16 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
   };
   const onAddBlankOffenders = (count: number) => {
     const data: AddOffenderData[] = Array.from({ length: count }, () => ({
-      id: Math.floor(Math.random() * 1000).toString(),
-      name: 'Unidentified Offender',
+      age: Age.Unknown,
+      build: Build.Unknown,
       confirmedInIncident: true,
       gender: Gender.Unknown,
-      age: Age.Unknown,
-      race: Race.Unknown,
+      getConfirmed: false,
       height: Height.Unknown,
-      build: Build.Unknown,
+      id: Math.floor(Math.random() * 1000).toString(),
       images: [],
+      name: 'Unidentified Offender',
+      race: Race.Unknown,
     }));
     setNoOffenders(false);
     onAddOffenders(data, false, true);
@@ -302,26 +309,15 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
           )]: {
             $set: {
               ...matchExistingOpen,
-              id: data.id,
               age: ageUpdated ? matchExistingOpen.age : data.age,
+              blank: false,
               build: buildUpdated ? matchExistingOpen.build : data.build,
-              hair: hairUpdated ? matchExistingOpen.build : data.hair,
               dateOfBirth: dateOfBirthUpdated
                 ? matchExistingOpen.dateOfBirth
                 : data.dateOfBirth,
-              gender: genderUpdated ? matchExistingOpen.gender : data.gender,
-              race: raceUpdated ? matchExistingOpen.race : data.race,
-              peculiarities: peculiaritiesUpdated
-                ? matchExistingOpen.peculiarities
-                : data.peculiarities,
               dateSource: dateSourceUpdated
                 ? matchExistingOpen.dateSource
                 : data.dateSource,
-              name: nameUpdated ? matchExistingOpen.name : data.name,
-              images: [...newImages, ...existingImages],
-              new: false,
-              existing: true,
-              blank: false,
               edited:
                 ageUpdated ||
                 buildUpdated ||
@@ -331,6 +327,17 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
                 peculiaritiesUpdated ||
                 dateSourceUpdated ||
                 nameUpdated,
+              existing: true,
+              gender: genderUpdated ? matchExistingOpen.gender : data.gender,
+              hair: hairUpdated ? matchExistingOpen.build : data.hair,
+              id: data.id,
+              images: [...newImages, ...existingImages],
+              name: nameUpdated ? matchExistingOpen.name : data.name,
+              new: false,
+              peculiarities: peculiaritiesUpdated
+                ? matchExistingOpen.peculiarities
+                : data.peculiarities,
+              race: raceUpdated ? matchExistingOpen.race : data.race,
             },
           },
         })
@@ -359,36 +366,37 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
         update<StateOffenderData[]>(offenders, {
           [offenders.findIndex(({ id }) => id === mergeSelected)]: {
             $set: {
-              id: offenderOne.id,
               age:
                 offenderOne.age && offenderOne.age !== Age.Unknown
                   ? offenderOne.age
                   : offenderTwo.age,
-              build: offenderOne.build,
-              images: [...offenderOneImages, ...offenderTwoImages],
-              existing: offenderOne.existing,
+              alias: offenderOne.alias,
               blank: offenderOne.blank,
+              build: offenderOne.build,
+              comment: offenderOne.comment,
               confirmedInIncident: offenderOne.confirmedInIncident,
-              name: offenderOne.name,
-              idVerified: offenderOne.idVerified,
-              idSource: offenderOne.idSource,
+              dateOfBirth: offenderOne.dateOfBirth,
               dateSource: offenderOne.dateSource,
-              race: offenderOne.race,
-              peculiarities:
-                offenderOne.peculiarities || offenderTwo.peculiarities,
+              edited: offenderOne.edited,
+              existing: offenderOne.existing,
               gender:
                 offenderOne.gender && offenderOne.gender !== Gender.Unknown
                   ? offenderOne.gender
                   : offenderTwo.gender,
-              dateOfBirth: offenderOne.dateOfBirth,
+              getConfirmed: true,
               hair: offenderOne.hair,
-              comment: offenderOne.comment,
-              alias: offenderOne.alias,
               height: offenderOne.height,
-              new: offenderOne.new,
-              edited: offenderOne.edited,
-              reference: offenderOne.reference,
+              id: offenderOne.id,
+              idSource: offenderOne.idSource,
+              idVerified: offenderOne.idVerified,
               imageConfirmed: offenderOne.imageConfirmed,
+              images: [...offenderOneImages, ...offenderTwoImages],
+              name: offenderOne.name,
+              new: offenderOne.new,
+              peculiarities:
+                offenderOne.peculiarities || offenderTwo.peculiarities,
+              race: offenderOne.race,
+              reference: offenderOne.reference,
             },
           },
         }).filter(({ id }) => id !== offenderTwo.id)
@@ -402,7 +410,7 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
   ) => {
     if (info.file) {
       if (images?.some(({ uid }) => uid === info.file.uid)) {
-        if (info.file.response && info.file.response[0]) {
+        if (info.file.response?.[0]) {
           // add the image to the offender in state
           setOffenders(
             update<StateOffenderData[]>(offenders, {
@@ -414,8 +422,8 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
                   $push: [
                     {
                       id: info.file.uid,
-                      url: info.file.response[0].url,
                       optimised: info.file.response[0].url,
+                      url: info.file.response[0].url,
                     },
                   ],
                 },
@@ -432,25 +440,25 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
           ) {
             setFacesOpen({
               faces: info.file.response[0].faces.map((face) => ({
-                id: Math.floor(Math.random() * 1000).toString(),
+                age: {
+                  high: face.AgeRange.High,
+                  low: face.AgeRange.Low,
+                },
+                beard: face.Beard,
                 boundingBox: {
                   height: face.BoundingBox.Height,
                   left: face.BoundingBox.Left,
                   top: face.BoundingBox.Top,
                   width: face.BoundingBox.Width,
                 },
-                age: {
-                  high: face.AgeRange.High,
-                  low: face.AgeRange.Low,
-                },
                 gender: face.Gender,
-                beard: face.Beard,
+                id: Math.floor(Math.random() * 1000).toString(),
                 mustache: face.Beard,
               })),
-              url: info.file.response[0].url,
               id: info.file.uid,
               offenderId,
               optimised: info.file.response[0].url,
+              url: info.file.response[0].url,
             });
           }
         }
@@ -459,19 +467,18 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
         form.setFieldsValue({
           images: update<StateImageData[]>(images, {
             [images.findIndex(({ uid }) => uid === info.file.uid)]: {
-              $set:
-                info.file.response && info.file.response[0]
-                  ? {
-                      ...info.file,
-                      url: info.file.response[0].url,
-                      fileName: info.file.response[0].blobName,
-                      type: info.file.response[0].mimetype,
-                      policeImage: false,
-                      primary: false,
-                      rotation: 0,
-                      position: ImagePosition.CenterCenter,
-                    }
-                  : info.file,
+              $set: info.file.response?.[0]
+                ? {
+                    ...info.file,
+                    fileName: info.file.response[0].blobName,
+                    policeImage: false,
+                    position: ImagePosition.CenterCenter,
+                    primary: false,
+                    rotation: 0,
+                    type: info.file.response[0].mimetype,
+                    url: info.file.response[0].url,
+                  }
+                : info.file,
             },
           }),
         });
@@ -535,10 +542,8 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
             ({ id }) => !offendersToReplace.some((item) => item.id === id)
           ),
           {
+            $push: data.includedOffenders,
             [offenders.findIndex(({ id }) => id === data.offenderId)]: {
-              images: {
-                $set: offenderImages,
-              },
               age: {
                 $set: getClosestAgeRange(
                   data.selectedFace.age.high,
@@ -548,6 +553,9 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
               gender: {
                 $set: getGenderFromFace(data.selectedFace.gender),
               },
+              images: {
+                $set: offenderImages,
+              },
               peculiarities: {
                 $set: getPeculiaritiesFromFace(
                   data.selectedFace.beard,
@@ -555,7 +563,6 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
                 ),
               },
             },
-            $push: data.includedOffenders,
           }
         )
       );
@@ -563,31 +570,31 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
   };
 
   return {
+    facesOpen,
+    matchExistingOpen,
+    mergeActive,
+    mergeSelected,
+    noOffenders,
     offenders,
+    onAddBlankOffenders,
     onAddOffenders,
-    onUpdateOffender,
+    onChangeOffenderImage,
+    onConfirmOffender,
+    onImagesUploadedInForm,
+    onMatchOffender,
+    onMerge,
+    onNoImages,
     onRemoveOffender,
+    onSubmitImageFaces,
+    onUpdateOffender,
+    setFacesOpen,
     setMatchExistingOpen,
     setUpdateOpen,
-    onAddBlankOffenders,
-    toggleNoOffenders,
-    noOffenders,
-    onMatchOffender,
-    matchExistingOpen,
-    updateOpen,
-    onConfirmOffender,
-    mergeActive,
     toggleMerge,
     toggleMergeSelected,
-    mergeSelected,
-    onMerge,
-    onChangeOffenderImage,
+    toggleNoOffenders,
+    updateOpen,
     uploading,
-    onNoImages,
-    onImagesUploadedInForm,
-    facesOpen,
-    setFacesOpen,
-    onSubmitImageFaces,
   };
 };
 

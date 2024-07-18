@@ -1,79 +1,80 @@
-import { useEffect, useState } from 'react';
-import { IncidentSort, useStoreActions, useStoreState } from 'state';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
-import type { DateType } from 'types/DataType';
-import type { IncidentFilters } from 'state/data-model';
-import { useGroupsContext } from '#/context/groups-context';
 import type {
   IncidentsFeedQuery,
   IncidentsFeedQueryVariables,
 } from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type { IncidentFilters } from 'state/data-model';
+import type { DateType } from 'types/DataType';
+
+import { useGroupsContext } from '#/context/groups-context';
 import {
   IncidentsFeedDocument,
   useIncidentsFeedQuery,
 } from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
-import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { IncidentSort, useStoreActions, useStoreState } from 'state';
 
 interface Return {
+  clearFilters: () => void;
+  crimeTypes: { label: string; value: string }[];
   data: IncidentsFeedQuery | undefined;
-  loading: boolean;
+  fetchMoreScroll: () => void;
+  goods: { label: string; value: string }[];
+
+  goodsLoading: boolean;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  isUser: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  openLightbox: (elements: { src: string }[], index: number) => void;
-
-  order: IncidentSort;
-  setOrder: (value: IncidentSort) => void;
-  setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  crimeTypes: { value: string; label: string }[];
-  tagsLoading: boolean;
-  updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
+  loading: boolean;
   onNavigate: () => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  setPeculiarities: (value: string) => void;
-  clearFilters: () => void;
-  setGallery: (values: string[]) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setCrimeTypesFilter: (value: string[]) => void;
-  goods: { value: string; label: string }[];
-  setGoodsFilter: (value: string[]) => void;
-
+  openLightbox: (elements: { src: string }[], index: number) => void;
+  order: IncidentSort;
   setBusinessesFilter: (value: string[]) => void;
-
-  goodsLoading: boolean;
-  setIncidentDateFilter: (
-    value:
-      | {
-          startDate: Date;
-          endDate: Date;
-        }
-      | undefined
-  ) => void;
+  setCompactView: () => void;
   setCreatedAtFilter: (
     value:
       | {
-          startDate: Date;
           endDate: Date;
+          startDate: Date;
         }
       | undefined
   ) => void;
-  fetchMoreScroll: () => void;
-  variables: IncidentFilters;
-  setCompactView: () => void;
-  isUser: boolean;
+  setCrimeTypesFilter: (value: string[]) => void;
+  setGallery: (values: string[]) => void;
+  setGoodsFilter: (value: string[]) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setIncidentDateFilter: (
+    value:
+      | {
+          endDate: Date;
+          startDate: Date;
+        }
+      | undefined
+  ) => void;
+
+  setOrder: (value: IncidentSort) => void;
+
+  setPeculiarities: (value: string) => void;
+  setSearch: (value: string) => void;
   setTableView: () => void;
+  sortFilter: boolean;
   tableView: boolean;
+  tagsLoading: boolean;
+  toggleSortFilter: () => void;
+  updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
+  variables: IncidentFilters;
 }
 
 const useIncidentFeed = (): Return => {
@@ -83,9 +84,9 @@ const useIncidentFeed = (): Return => {
   // Global State
   const { id: schemeId } = useStoreState((state) => state.scheme);
   const {
-    role,
-    id: userId,
     filterDefaultGroups: defaultGroups,
+    id: userId,
+    role,
   } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -95,19 +96,19 @@ const useIncidentFeed = (): Return => {
   );
 
   const {
-    search,
-    crimeTypes,
-    groups,
     businesses,
-    goods,
-    createdAt,
-    incidentDate,
-    gallery,
-    peculiarities,
     compactView,
-    priority,
-    tableView,
+    createdAt,
     createdBy,
+    crimeTypes,
+    gallery,
+    goods,
+    groups,
+    incidentDate,
+    peculiarities,
+    priority,
+    search,
+    tableView,
   } = variables;
 
   // filter initial state
@@ -119,114 +120,23 @@ const useIncidentFeed = (): Return => {
     []
   );
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
 
   const queryVariables: IncidentsFeedQueryVariables = {
-    schemeId,
+    approved: isUser
+      ? true
+      : gallery.includes('NOT APPROVED')
+        ? false
+        : undefined,
+    first: compactView ? 48 : 12,
     order: {
       date:
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
-    approved: isUser
-      ? true
-      : gallery.includes('NOT APPROVED')
-      ? false
-      : undefined,
+    schemeId,
     where: {
-      createdAt: createdAt
-        ? {
-            gte: createdAt.startDate,
-            lte: createdAt.endDate,
-          }
-        : undefined,
-      date: incidentDate
-        ? {
-            gte: incidentDate.startDate,
-            lte: incidentDate.endDate,
-          }
-        : undefined,
-      priority:
-        priority.length > 0
-          ? {
-              in: priority,
-            }
-          : undefined,
-      crimeTypes:
-        crimeTypes.length > 0
-          ? {
-              some: {
-                id: {
-                  in: crimeTypes,
-                },
-              },
-            }
-          : undefined,
-      groups:
-        groups.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groups,
-                },
-              },
-            }
-          : undefined,
-      business:
-        businesses.length > 0
-          ? {
-              id: {
-                in: businesses,
-              },
-            }
-          : undefined,
-      incidentItems:
-        goods.length > 0
-          ? {
-              some: {
-                goodsType: {
-                  id: {
-                    in: goods,
-                  },
-                },
-              },
-            }
-          : undefined,
-      description: peculiarities
-        ? {
-            mode: QueryMode.Insensitive,
-            contains: peculiarities,
-          }
-        : undefined,
-      approved: isUser
-        ? {
-            equals: true,
-          }
-        : gallery.includes('NOT APPROVED')
-        ? {
-            equals: false,
-          }
-        : undefined,
-      subscribedUsers: gallery.includes('FOLLOWING')
-        ? {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          }
-        : undefined,
-      policeInvolved: gallery.includes('POLICEINVOLVED')
-        ? {
-            equals: true,
-          }
-        : undefined,
-      policeReported: gallery.includes('POLICEREPORTED')
-        ? {
-            equals: true,
-          }
-        : undefined,
       AND: search
         ? [
             {
@@ -283,6 +193,29 @@ const useIncidentFeed = (): Return => {
             },
           ]
         : undefined,
+      approved: isUser
+        ? {
+            equals: true,
+          }
+        : gallery.includes('NOT APPROVED')
+          ? {
+              equals: false,
+            }
+          : undefined,
+      business:
+        businesses.length > 0
+          ? {
+              id: {
+                in: businesses,
+              },
+            }
+          : undefined,
+      createdAt: createdAt
+        ? {
+            gte: createdAt.startDate,
+            lte: createdAt.endDate,
+          }
+        : undefined,
       createdBy:
         gallery.includes('MYDATA') || createdBy.length > 0
           ? {
@@ -291,14 +224,82 @@ const useIncidentFeed = (): Return => {
               },
             }
           : undefined,
+      crimeTypes:
+        crimeTypes.length > 0
+          ? {
+              some: {
+                id: {
+                  in: crimeTypes,
+                },
+              },
+            }
+          : undefined,
+      date: incidentDate
+        ? {
+            gte: incidentDate.startDate,
+            lte: incidentDate.endDate,
+          }
+        : undefined,
+      description: peculiarities
+        ? {
+            contains: peculiarities,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      groups:
+        groups.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groups,
+                },
+              },
+            }
+          : undefined,
+      incidentItems:
+        goods.length > 0
+          ? {
+              some: {
+                goodsType: {
+                  id: {
+                    in: goods,
+                  },
+                },
+              },
+            }
+          : undefined,
+      policeInvolved: gallery.includes('POLICEINVOLVED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      policeReported: gallery.includes('POLICEREPORTED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      priority:
+        priority.length > 0
+          ? {
+              in: priority,
+            }
+          : undefined,
+      subscribedUsers: gallery.includes('FOLLOWING')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
     },
-    first: compactView ? 48 : 12,
   };
   // Queries
   // Fetch incidents
-  const { data, loading, fetchMore } = useIncidentsFeedQuery({
-    variables: queryVariables,
+  const { data, fetchMore, loading } = useIncidentsFeedQuery({
     fetchPolicy: 'cache-and-network',
+    variables: queryVariables,
     // skip: role === Role.User && restrictIncidentAccess,
   });
 
@@ -309,15 +310,15 @@ const useIncidentFeed = (): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
+        dataType: {
+          equals: Model.Incident,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Incident,
         },
         type: {
           equals: TagType.IncidentCrimeType,
@@ -340,6 +341,7 @@ const useIncidentFeed = (): Return => {
   useEffect(() => {
     if (groups.length === 0)
       setIncidentsState({
+        order,
         pagination,
         variables: {
           ...variables,
@@ -348,7 +350,6 @@ const useIncidentFeed = (): Return => {
               ?.filter(({ scheme }) => scheme.id === schemeId)
               ?.map(({ id }) => id) || [],
         },
-        order,
       });
   }, []);
   // update Incident list after deleting an item
@@ -367,16 +368,16 @@ const useIncidentFeed = (): Return => {
     if (existingData?.incidentsRelay?.edges === undefined) return;
 
     store.writeQuery<IncidentsFeedQuery>({
-      query: IncidentsFeedDocument,
       data: {
+        __typename: 'Query',
         incidentsRelay: {
           ...existingData.incidentsRelay,
           edges: existingData.incidentsRelay?.edges.filter(
             (n) => n.node.id !== res?.recycleIncident?.id
           ),
         },
-        __typename: 'Query',
       },
+      query: IncidentsFeedDocument,
       variables: queryVariables,
     });
   };
@@ -386,15 +387,15 @@ const useIncidentFeed = (): Return => {
     setLightboxElements(elements);
     if (lightBoxOpen.open) {
       setLightBoxOpen({
-        open: !lightBoxOpen.open,
         index,
+        open: !lightBoxOpen.open,
       });
     } else {
       setTimeout(
         () =>
           setLightBoxOpen({
-            open: !lightBoxOpen.open,
             index,
+            open: !lightBoxOpen.open,
           }),
         0.3
       );
@@ -403,123 +404,123 @@ const useIncidentFeed = (): Return => {
 
   const setOrder = (value: IncidentSort) => {
     setIncidentsState({
+      order: value,
       pagination,
       variables,
-      order: value,
     });
   };
 
   const setGroupsFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         groups: values,
       },
-      order,
     });
   };
   const setBusinessesFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         businesses: values,
       },
-      order,
     });
   };
   const setGoodsFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         goods: values,
       },
-      order,
     });
   };
 
   const setCrimeTypesFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         crimeTypes: values,
       },
-      order,
     });
   };
   const setIncidentDateFilter = (values: DateType | undefined) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         incidentDate: values,
       },
-      order,
     });
   };
   const setCreatedAtFilter = (values: DateType | undefined) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         createdAt: values,
       },
-      order,
     });
   };
   const setGallery = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         gallery: values,
       },
-      order,
     });
   };
 
   const setCompactView = () => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
-        tableView: false,
         compactView: tableView ? compactView : !compactView,
+        tableView: false,
       },
-      order,
     });
   };
   const setTableView = () => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         tableView: !tableView,
       },
-      order,
     });
   };
   const setPeculiarities = (value: string) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         peculiarities: value,
       },
-      order,
     });
   };
   const setSearch = (value: string) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         search: value,
       },
-      order,
     });
   };
   const toggleSortFilter = () => {
@@ -528,10 +529,6 @@ const useIncidentFeed = (): Return => {
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...queryVariables,
-        after: data?.incidentsRelay?.pageInfo?.endCursor,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -544,73 +541,77 @@ const useIncidentFeed = (): Return => {
           },
         };
       },
+      variables: {
+        ...queryVariables,
+        after: data?.incidentsRelay?.pageInfo?.endCursor,
+      },
     });
   };
 
   const clearFilters = () => {
     setIncidentsState({
+      order: IncidentSort.createdAtDesc,
       pagination,
       variables: {
         ...variables,
-        gallery: [],
-        search: '',
-        crimeTypes: [],
-        groups: [],
         businesses: [],
         createdAt: undefined,
-        incidentDate: undefined,
+        crimeTypes: [],
+        gallery: [],
         goods: [],
+        groups: [],
+        incidentDate: undefined,
         peculiarities: '',
+        search: '',
       },
-      order: IncidentSort.createdAtDesc,
     });
   };
 
   return {
-    data,
-    loading,
-    order,
-    setOrder,
-    setSearch,
-    groups: groupsData,
-    groupsLoading,
-    // onGroupsChange,
-    variables,
+    clearFilters,
     // onCrimeTypesChange,
     crimeTypes:
       tagsData?.tags?.map((tag) => ({
-        value: tag?.id || '',
         label: tag?.name || '',
+        value: tag?.id || '',
       })) || [],
-    tagsLoading,
-    updateIncidentList,
-    onNavigate,
-    lightboxElements,
-    lightBoxOpen,
-    openLightbox: triggerLightbox,
-    sortFilter,
-    toggleSortFilter,
-    clearFilters,
-    setGallery,
-    setPeculiarities,
-    setGroupsFilter,
-
+    data,
+    fetchMoreScroll,
     goods:
       goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
-        value: item.id,
         label: item.name,
+        value: item.id,
       })) || [],
-    setGoodsFilter,
-    setBusinessesFilter,
-    setCrimeTypesFilter,
     goodsLoading,
-    setCreatedAtFilter,
-    setIncidentDateFilter,
-    fetchMoreScroll,
-    setCompactView,
+    groups: groupsData,
+    groupsLoading,
     isUser,
+    lightBoxOpen,
+    lightboxElements,
+    loading,
+    onNavigate,
+    openLightbox: triggerLightbox,
+    order,
+    setBusinessesFilter,
+    setCompactView,
+    setCreatedAtFilter,
+    setCrimeTypesFilter,
+    setGallery,
+    setGoodsFilter,
+
+    setGroupsFilter,
+    setIncidentDateFilter,
+    setOrder,
+    setPeculiarities,
+    setSearch,
     setTableView,
+    sortFilter,
     tableView,
+    tagsLoading,
+    toggleSortFilter,
+    updateIncidentList,
+    // onGroupsChange,
+    variables,
   };
 };
 

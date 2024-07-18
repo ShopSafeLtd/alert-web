@@ -335,6 +335,23 @@ const navigationConfig: NavItem[] = [
     ],
     submenu: [],
   },
+  // {
+  //   key: 'singleShoeSystem',
+  //   path: `${APP_PREFIX_PATH}/singleShoeSystem`,
+  //   title: 'SingleShoeSystem',
+  //   icon: faLineChart,
+  //   breadcrumb: true,
+  //   intl: defineMessage({
+  //     id: 'reports',
+  //     defaultMessage: 'Single Shoe',
+  //   }),
+  //   permission: [
+  //     {
+  //       model: PermissionModel.SingleShoe,
+  //     },
+  //   ],
+  //   submenu: [],
+  // },
   {
     key: 'settings',
     path: `${APP_PREFIX_PATH}/scheme-settings`,

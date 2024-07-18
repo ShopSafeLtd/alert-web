@@ -1,82 +1,84 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
-import type { CustomQuestion, SelectOptions } from 'types/DataType';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-
-import errorNotification from 'types/mutation_notifications/error_notification';
 import type { FormInstance, UploadFile } from 'antd';
-import { Form, notification } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
-import { useStoreState } from 'state';
-import { useIntl } from 'react-intl';
-import type { Moment } from 'moment';
-import moment from 'moment';
-import customRequest from '../../../../utils/custom-request';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { Moment } from 'moment';
+import type { CustomQuestion, SelectOptions } from 'types/DataType';
+
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { Form, notification } from 'antd';
 import { useCreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
+
+import customRequest from '../../../../utils/custom-request';
 import { useAddTodoUsersQuery } from './graphql/AddTodoUsers.generated';
 
 const { useForm } = Form;
 
 export interface FormData {
-  name: string;
+  [answer: string]: Moment | number | string | string[] | undefined;
+  assignedUsers: string[];
+  business: string;
   description: string;
   dueDate: Moment;
-  assignedUsers: string[];
-  questionGroup?: string;
   groups: string[];
-  [answer: string]: string | string[] | undefined | Moment | number;
+  name: string;
+  questionGroup?: string;
 }
 
 interface Props {
-  onClose: () => void;
-  incidentId?: string;
-  investigationId?: string;
   businessId?: string;
-  updateMutation?: MutationUpdaterFn<CreateTodoMutation>;
+  incidentId?: string;
   initData?: {
     id: string;
   };
+  investigationId?: string;
+  onClose: () => void;
+  updateMutation?: MutationUpdaterFn<CreateTodoMutation>;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  adminUsersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
-  saving: boolean;
   addQuestion: boolean;
-  setAddQuestion: (value: boolean) => void;
-  update: (id: string, question: string) => void;
+  adminUsersData: SelectOptions[] | undefined;
+  availableUsers: { id: string; name: string; timeTaken: number }[];
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
+  form: FormInstance<FormData>;
+  onSubmit: (value: FormData) => void;
+  questions: CustomQuestion[];
+  saving: boolean;
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string; type: AnswerType }[];
-  setSelectedQuestions: (
-    value: { id: string; question: string; type: AnswerType }[]
-  ) => void;
-  setSelectedIds: (value: string[]) => void;
-  form: FormInstance<FormData>;
-  templatesData: QuestionGroupOnSchemeQuery | undefined;
-  templatesLoading: boolean;
-  questions: CustomQuestion[];
-  users: { id: string; name: string; timeTaken: number }[];
-  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
-  availableUsers: { id: string; name: string; timeTaken: number }[];
+  setAddQuestion: (value: boolean) => void;
   setAvailableUsers: (
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
-  documentList: UploadFile[];
-  documentUploadProps?: UploadProps;
+  setSelectedIds: (value: string[]) => void;
+  setSelectedQuestions: (
+    value: { id: string; question: string; type: AnswerType }[]
+  ) => void;
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  update: (id: string, question: string) => void;
+  users: { id: string; name: string; timeTaken: number }[];
+  usersLoading: boolean;
 }
 
 const useAddTodo = ({
-  updateMutation,
-  onClose,
-  incidentId,
-  investigationId,
   businessId,
+  incidentId,
   initData,
+  investigationId,
+  onClose,
+  updateMutation,
 }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
@@ -99,7 +101,13 @@ const useAddTodo = ({
     { id: string; question: string; type: AnswerType }[]
   >([]);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
-
+  useEffect(() => {
+    if (businessId) {
+      form.setFieldsValue({
+        businesses: businessId,
+      });
+    }
+  }, [businessId]);
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
       variables: {
@@ -133,8 +141,8 @@ const useAddTodo = ({
     if (template) {
       const {
         defaultDueDate,
-        name,
         description,
+        name,
         questions: templateQuestions,
       } = template;
       const dueDate = new Date();
@@ -151,20 +159,20 @@ const useAddTodo = ({
       );
 
       form.setFieldsValue({
-        name,
         description: description || '',
         dueDate: formattedDate,
+        name,
       });
 
       setQuestions(
         templateQuestions.map((question) => ({
           answerType: question.type,
           label: question.questionFormatted,
+          options: question.optionsFormFormatted || [],
           questionId: question.id,
           required: false,
           tagQuestionId: '',
           value: '',
-          options: question.optionsFormFormatted || [],
         }))
       );
     }
@@ -173,7 +181,21 @@ const useAddTodo = ({
   const { data: usersData, loading: usersLoading } = useAddTodoUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      orderBy: {
+        fullName: SortOrder.Asc,
+      },
       where: {
+        groups: {
+          some: {
+            users: {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            },
+          },
+        },
         schemes: {
           some: {
             AND: [
@@ -198,20 +220,6 @@ const useAddTodo = ({
             ],
           },
         },
-        groups: {
-          some: {
-            users: {
-              some: {
-                id: {
-                  equals: userId,
-                },
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        fullName: SortOrder.Asc,
       },
     },
   });
@@ -265,24 +273,52 @@ const useAddTodo = ({
       }))
       ?.filter((time) => time.timeTaken && time.timeTaken > 0);
     void createTodo({
+      onCompleted: () => {
+        setSaving(false);
+        onClose();
+        notification.success({
+          description: intl.formatMessage({
+            defaultMessage: 'The activity has been added.',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully Added!',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+      update: updateMutation,
       variables: {
         data: {
-          name: data.name,
-          description: data.description,
           assignedUsers:
             data.assignedUsers && data.assignedUsers.length > 0
               ? { connect: data.assignedUsers.map((id) => ({ id })) }
               : undefined,
+          business: businessId
+            ? { connect: { id: businessId } }
+            : data.business
+              ? { connect: { id: data.business } }
+              : undefined,
+          completed: false,
+          createdBy: { connect: { id: userId } },
+          description: data.description,
+          documents:
+            documentList.map((file) => ({
+              fileType: file.type || '',
+              name: file.name || '',
+              origFileName: file.fileName || '',
+              url: file.url || '',
+            })) || [],
+          dueDate: data.dueDate.toDate(),
           groups: data.groups.map((id) => ({ id })),
+          incident: incidentId ? { connect: { id: incidentId } } : undefined,
+          investigation: investigationId
+            ? { connect: { id: investigationId } }
+            : undefined,
+          name: data.name,
           questions:
             selectedQuestions && selectedQuestions.length > 0
               ? {
                   create: selectedQuestions.map((question) => ({
-                    question: {
-                      connect: {
-                        id: question.id,
-                      },
-                    },
                     answers: {
                       create: [
                         {
@@ -291,9 +327,21 @@ const useAddTodo = ({
                         },
                       ],
                     },
+                    question: {
+                      connect: {
+                        id: question.id,
+                      },
+                    },
                   })),
                 }
               : undefined,
+          schemes: {
+            connect: [
+              {
+                id: schemeId,
+              },
+            ],
+          },
           timeTaken:
             userTime && timeTaken
               ? {
@@ -302,44 +350,8 @@ const useAddTodo = ({
                   },
                 }
               : undefined,
-          dueDate: data.dueDate.toDate(),
-          completed: false,
-          incident: incidentId ? { connect: { id: incidentId } } : undefined,
-          investigation: investigationId
-            ? { connect: { id: investigationId } }
-            : undefined,
-          business: businessId ? { connect: { id: businessId } } : undefined,
-          createdBy: { connect: { id: userId } },
-          documents:
-            documentList.map((file) => ({
-              url: file.url || '',
-              name: file.name || '',
-              fileType: file.type || '',
-              origFileName: file.fileName || '',
-            })) || [],
-          schemes: {
-            connect: [
-              {
-                id: schemeId,
-              },
-            ],
-          },
         },
       },
-      onCompleted: () => {
-        setSaving(false);
-        onClose();
-        notification.success({
-          message: intl.formatMessage({
-            defaultMessage: 'Successfully Added!',
-          }),
-          description: intl.formatMessage({
-            defaultMessage: 'The activity has been added.',
-          }),
-          placement: 'bottomRight',
-        });
-      },
-      update: updateMutation,
     });
   };
   // evidence
@@ -361,34 +373,34 @@ const useAddTodo = ({
 
   const documentUploadProps: UploadProps = {
     customRequest,
-    onChange: handleChange,
     multiple: true,
+    onChange: handleChange,
   };
   return {
-    onSubmit,
-    saving,
-    adminUsersData: usersData?.users.map((user) => ({
-      value: user.id,
-      label: user.fullName,
-    })),
-    usersLoading,
     addQuestion,
-    setAddQuestion,
-    update,
-    selectedIds,
-    selectedQuestions,
-    setSelectedQuestions,
-    setSelectedIds,
-    form,
-    templatesData,
-    templatesLoading,
-    questions,
-    setAvailableUsers,
-    setUsers,
-    users,
+    adminUsersData: usersData?.users.map((user) => ({
+      label: user.fullName,
+      value: user.id,
+    })),
     availableUsers,
     documentList,
     documentUploadProps,
+    form,
+    onSubmit,
+    questions,
+    saving,
+    selectedIds,
+    selectedQuestions,
+    setAddQuestion,
+    setAvailableUsers,
+    setSelectedIds,
+    setSelectedQuestions,
+    setUsers,
+    templatesData,
+    templatesLoading,
+    update,
+    users,
+    usersLoading,
   };
 };
 export default useAddTodo;

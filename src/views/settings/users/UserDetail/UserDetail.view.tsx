@@ -1,9 +1,27 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
+import type { ViewportData } from '#/types/DataType';
+import type { Role } from 'graphql/types';
+import type { UserQuery } from 'graphql/user/queries/user.generated';
 import type { RefObject } from 'react';
-import React, { useState } from 'react';
-import { RoleValues } from 'types';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Link, useNavigate } from 'react-router-dom';
+
+import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
+import LocatingModal from '#/components/map/LocatingModal';
+import { CustomTermsView } from '#/components/onboarding/Onboarding/SchemeTerms/Terms.view';
+import FormatCalendar from '#/utils/format-calendar-24h';
+import { useTermQuery } from '#/views/settings/users/UserDetail/graphql/queries/view-users-signed-terms.generated';
+import {
+  faCalendarClock,
+  faCalendarDays,
+  faCalendarWeek,
+  faLocationDot,
+  faLockKeyhole,
+  faPaperPlaneTop,
+  faPenToSquare,
+  faPrint,
+  faTrash,
+  faUnlockKeyhole,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -15,55 +33,47 @@ import {
   PageHeader,
   Row,
   Statistic,
+  Table,
   Tag,
   Timeline,
+  Tooltip,
   Typography,
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCalendarClock,
-  faCalendarDays,
-  faCalendarWeek,
-  faLockKeyhole,
-  faPaperPlaneTop,
-  faPenToSquare,
-  faPrint,
-  faTrash,
-  faUnlockKeyhole,
-} from '@fortawesome/pro-light-svg-icons';
+import { AppType, UserStatus } from 'graphql/types';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Link, useNavigate } from 'react-router-dom';
+import { RoleValues } from 'types';
 import { GetUserStatusValues } from 'types/enums/user_status';
 import formatLoginTime from 'utils/format-login-time';
+
+import SetPassword from '../../../../components/form-components/SetPassword';
 import LinkDem from '../../../../components/form-components/user/LinkDem';
 import useStyles from './UserDetail.styles';
-import SetPassword from '../../../../components/form-components/SetPassword';
-import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
-import { CustomTermsView } from '#/components/onboarding/Onboarding/SchemeTerms/Terms.view';
-import type { Role } from 'graphql/types';
-import { UserStatus } from 'graphql/types';
-import type { UserQuery } from 'graphql/user/queries/user.generated';
-import { useTermQuery } from '#/views/settings/users/UserDetail/graphql/queries/view-users-signed-terms.generated';
 
 interface Props {
-  data: UserQuery | undefined;
-  loading: boolean;
-  editUser: boolean;
-  saving: boolean;
-  demLink: boolean;
-  demId: string | null | undefined;
-  toggleEditUser: () => void;
-  inviteConfirm: () => void;
-  enableConfirm: () => void;
-  disableConfirm: () => void;
-  deleteConfirm: () => void;
-  toggleDemLink: () => void;
-  userRole: Role | undefined;
-  toggleEditPassword: () => void;
-  editPassword: boolean;
-  isOwn: boolean;
   componentRef: RefObject<HTMLDivElement>;
+  data: UserQuery | undefined;
+  deleteConfirm: () => void;
+  demId: null | string | undefined;
+  demLink: boolean;
+  disableConfirm: () => void;
+  editPassword: boolean;
+  editUser: boolean;
+  enableConfirm: () => void;
   handlePrint: () => void;
+  inviteConfirm: () => void;
+  isOwn: boolean;
   isPrinting: boolean;
+  loading: boolean;
+  saving: boolean;
+  setViewport: (value: ViewportData | null) => void;
+  toggleDemLink: () => void;
+  toggleEditPassword: () => void;
+  toggleEditUser: () => void;
+  userRole: Role | undefined;
+  viewport: ViewportData | null;
 }
 const getTextStatus = (value: UserStatus) => {
   if (value === UserStatus.Active) return 'green';
@@ -73,19 +83,19 @@ const getTextStatus = (value: UserStatus) => {
 };
 
 const UserTermsModal = ({
-  isPrinting,
   componentRef,
-  termsId,
-  signature,
-  name,
   date,
+  isPrinting,
+  name,
+  signature,
+  termsId,
 }: {
-  isPrinting: boolean;
   componentRef: RefObject<HTMLDivElement>;
-  termsId: string;
-  signature: string;
-  name: string;
   date: string;
+  isPrinting: boolean;
+  name: string;
+  signature: string;
+  termsId: string;
 }) => {
   const { data: termsData, loading } = useTermQuery({
     skip: !termsId,
@@ -106,9 +116,9 @@ const UserTermsModal = ({
           isPrinting
             ? undefined
             : {
-                width: '100%',
                 height: '100%',
                 marginTop: 20,
+                width: '100%',
               }
         }
       >
@@ -121,13 +131,13 @@ const UserTermsModal = ({
         Signed By: {name}
         <br />
         <div
+          dangerouslySetInnerHTML={{ __html: signature }}
           style={{
-            outline: '1px solid black',
-            width: '300px',
             height: '100px',
             marginLeft: 5,
+            outline: '1px solid black',
+            width: '300px',
           }}
-          dangerouslySetInnerHTML={{ __html: signature }}
         />
       </div>
     </Card>
@@ -135,31 +145,46 @@ const UserTermsModal = ({
 };
 
 const userDetail = ({
-  data,
-  loading,
-  editUser,
-  toggleEditUser,
-  saving,
-  inviteConfirm,
-  deleteConfirm,
-  enableConfirm,
-  disableConfirm,
-  demLink,
-  toggleDemLink,
-  demId,
-  userRole,
-  toggleEditPassword,
-  editPassword,
-  isOwn,
   componentRef,
+  data,
+  deleteConfirm,
+  demId,
+  demLink,
+  disableConfirm,
+  editPassword,
+  editUser,
+  enableConfirm,
   handlePrint,
+  inviteConfirm,
+  isOwn,
   isPrinting,
+  loading,
+  saving,
+  setViewport,
+  toggleDemLink,
+  toggleEditPassword,
+  toggleEditUser,
+  userRole,
+  viewport,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const AppTypeFilter = [
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Web',
+      }),
+      value: AppType.Web,
+    },
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'App',
+      }),
+      value: AppType.Native,
+    },
+  ];
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -172,7 +197,7 @@ const userDetail = ({
       return <EditPasswordButton key="5" saving={saving} />;
     }
     return (
-      <Button key="5" disabled={saving} onClick={toggleEditPassword}>
+      <Button disabled={saving} key="5" onClick={toggleEditPassword}>
         <FormattedMessage defaultMessage="Edit Password" />
       </Button>
     );
@@ -181,23 +206,12 @@ const userDetail = ({
   return (
     <div className="list-view">
       <PageHeader
-        onBack={() => window.history.back()}
-        title={data?.user?.fullName}
-        // new things to translate
-        subTitle={
-          <Tag
-            color={getTextStatus(data?.user?.status || UserStatus.Active)}
-            style={{ marginTop: 0 }}
-          >
-            {GetUserStatusValues[data?.user?.status || UserStatus.Active]}
-          </Tag>
-        }
         extra={[
           <EditPassword key="5" />,
           <Button
-            key="3"
             // disabled={saving || !!data?.user?.demId || !demId}
             disabled
+            key="3"
             onClick={toggleDemLink}
           >
             <FormattedMessage defaultMessage="Link Dem User" />
@@ -210,16 +224,16 @@ const userDetail = ({
             </Button>
           ) : null,
           <Button
-            key="4"
             disabled={saving}
-            onClick={inviteConfirm}
             icon={
               <FontAwesomeIcon
-                style={{ marginRight: 5 }}
-                size="lg"
                 icon={faPaperPlaneTop}
+                size="lg"
+                style={{ marginRight: 5 }}
               />
             }
+            key="4"
+            onClick={inviteConfirm}
           >
             {data?.user?.status === UserStatus.NotInvited ? (
               <FormattedMessage defaultMessage="Send Invite" />
@@ -229,58 +243,69 @@ const userDetail = ({
           </Button>,
           data?.user?.disabled ? (
             <Button
-              key="3"
               disabled={saving}
-              onClick={enableConfirm}
               icon={
                 <FontAwesomeIcon
-                  style={{ marginRight: 5 }}
-                  size="lg"
                   icon={faUnlockKeyhole}
+                  size="lg"
+                  style={{ marginRight: 5 }}
                 />
               }
+              key="3"
+              onClick={enableConfirm}
             >
               <FormattedMessage defaultMessage="Enable User" />
             </Button>
           ) : (
             <Button
-              key="2"
               disabled={saving}
-              onClick={disableConfirm}
               icon={
                 <FontAwesomeIcon
-                  style={{ marginRight: 5 }}
-                  size="lg"
                   icon={faLockKeyhole}
+                  size="lg"
+                  style={{ marginRight: 5 }}
                 />
               }
+              key="2"
+              onClick={disableConfirm}
             >
               <FormattedMessage defaultMessage="Disable User" />
             </Button>
           ),
           <Button
-            key="1"
             disabled={saving}
-            onClick={deleteConfirm}
             icon={
               <FontAwesomeIcon
+                icon={faTrash}
                 size="lg"
                 style={{ marginRight: 5 }}
-                icon={faTrash}
               />
             }
+            key="1"
+            onClick={deleteConfirm}
           >
             <FormattedMessage defaultMessage="Delete User" />
           </Button>,
         ]}
+        onBack={() => window.history.back()}
+        // new things to translate
+        subTitle={
+          <Tag
+            color={getTextStatus(data?.user?.status || UserStatus.Active)}
+            style={{ marginTop: 0 }}
+          >
+            {GetUserStatusValues[data?.user?.status || UserStatus.Active]}
+          </Tag>
+        }
+        title={data?.user?.fullName}
       />
 
       <Row gutter={16}>
         <Col span={16} xxl={12}>
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
             loading={loading}
+            style={{ width: '100%' }}
           >
             <Row align="top" style={{ marginBottom: 10 }}>
               <Col flex={1}>
@@ -310,6 +335,12 @@ const userDetail = ({
             <Row justify="space-between">
               <Statistic
                 className={classes.stats}
+                prefix={
+                  <FontAwesomeIcon
+                    className={classes.prefixIcon}
+                    icon={faCalendarClock}
+                  />
+                }
                 title={intl.formatMessage({
                   defaultMessage: 'Last Login',
                 })}
@@ -320,64 +351,58 @@ const userDetail = ({
                         defaultMessage: 'Unknown',
                       })
                 }
-                prefix={
-                  <FontAwesomeIcon
-                    className={classes.prefixIcon}
-                    icon={faCalendarClock}
-                  />
-                }
               />
 
               <Statistic
                 className={classes.stats}
-                title={intl.formatMessage({
-                  defaultMessage: 'Total logins in the last 30 Days',
-                })}
-                value={data?.user?.totalThirtyDaysLogin || 0}
                 prefix={
                   <FontAwesomeIcon
                     className={classes.prefixIcon}
                     icon={faCalendarDays}
                   />
                 }
+                title={intl.formatMessage({
+                  defaultMessage: 'Total logins in the last 30 Days',
+                })}
+                value={data?.user?.totalThirtyDaysLogin || 0}
               />
 
               <Statistic
                 className={classes.stats}
-                title={intl.formatMessage({
-                  defaultMessage: 'Total logins in the last year',
-                })}
-                value={data?.user?.totalLastYearLogin || 0}
                 prefix={
                   <FontAwesomeIcon
                     className={classes.prefixIcon}
                     icon={faCalendarWeek}
                   />
                 }
+                title={intl.formatMessage({
+                  defaultMessage: 'Total logins in the last year',
+                })}
+                value={data?.user?.totalLastYearLogin || 0}
               />
             </Row>
           </Card>
           <Card loading={loading}>
             <Descriptions
-              title={
-                <Typography.Title level={4}>
-                  <FormattedMessage defaultMessage="User Details" />
-                </Typography.Title>
-              }
               column={1}
               extra={
                 <Button
                   icon={
                     <FontAwesomeIcon
-                      style={{ marginRight: 5 }}
-                      size="lg"
                       icon={faPenToSquare}
+                      size="lg"
+                      style={{ marginRight: 5 }}
                     />
                   }
                   onClick={toggleEditUser}
                 >
                   <FormattedMessage defaultMessage="Edit Details" />
                 </Button>
+              }
+              title={
+                <Typography.Title level={4}>
+                  <FormattedMessage defaultMessage="User Details" />
+                </Typography.Title>
               }
             >
               <Descriptions.Item
@@ -444,7 +469,7 @@ const userDetail = ({
                 label={<FormattedMessage defaultMessage="Groups" />}
               >
                 <Row gutter={[0, 8]}>
-                  {data?.user?.groups.map(({ name, id }) => (
+                  {data?.user?.groups.map(({ id, name }) => (
                     <Col key={id}>
                       <Tag color="blue">{name}</Tag>
                     </Col>
@@ -459,7 +484,7 @@ const userDetail = ({
                     }
                   >
                     <Row gutter={[0, 8]}>
-                      {data?.user?.approverGroups.map(({ name, id }) => (
+                      {data?.user?.approverGroups.map(({ id, name }) => (
                         <Col key={id}>
                           <Tag color="blue">{name}</Tag>
                         </Col>
@@ -473,7 +498,7 @@ const userDetail = ({
                     label={<FormattedMessage defaultMessage="Default Groups" />}
                   >
                     <Row gutter={[0, 8]}>
-                      {data?.user?.defaultGroups.map(({ name, id }) => (
+                      {data?.user?.defaultGroups.map(({ id, name }) => (
                         <Col key={id}>
                           <Tag color="blue">{name}</Tag>
                         </Col>
@@ -488,7 +513,7 @@ const userDetail = ({
                   <Row gutter={[0, 8]}>
                     {data?.user?.chats
                       .map(({ chat }) => chat)
-                      .map(({ name, id }) => (
+                      .map(({ id, name }) => (
                         <Col key={id}>
                           <Tag color="blue">{name}</Tag>
                         </Col>
@@ -564,38 +589,130 @@ const userDetail = ({
               }))}
             /> */}
           </Card>
+          <Card loading={loading}>
+            <Typography.Title level={4} style={{ marginBottom: 10 }}>
+              {intl.formatMessage({
+                defaultMessage: 'User Sessions',
+              })}
+            </Typography.Title>
+            <Table
+              // rowClassName={classes.row}
+              columns={[
+                {
+                  dataIndex: 'type',
+                  filters: AppTypeFilter,
+                  key: 'type',
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  onFilter: (value: AppType, record: { type: AppType }) =>
+                    record.type.includes(value),
+                  // eslint-disable-next-line no-confusing-arrow
+                  render: (_, record: { type: AppType }) =>
+                    record.type === AppType.Web ? (
+                      <Tag color="green">
+                        {intl.formatMessage({
+                          defaultMessage: 'Web',
+                        })}
+                      </Tag>
+                    ) : (
+                      <Tag color="red">
+                        {intl.formatMessage({
+                          defaultMessage: 'App',
+                        })}
+                      </Tag>
+                    ),
+                  title: intl.formatMessage({ defaultMessage: 'Type' }),
+                  width: 100,
+                },
+                {
+                  dataIndex: 'updatedAt',
+                  ellipsis: true,
+                  key: 'updatedAt',
+                  // eslint-disable-next-line no-confusing-arrow
+                  render: (value: Date) =>
+                    FormatCalendar(new Date(value), true),
+                  title: intl.formatMessage({ defaultMessage: 'UpdatedAt' }),
+                },
+                {
+                  dataIndex: 'completed',
+                  key: 'actions',
+                  // eslint-disable-next-line no-confusing-arrow
+                  render: (
+                    _,
+                    record: { viewport: ViewportData | undefined }
+                  ) =>
+                    record.viewport ? (
+                      <Tooltip
+                        title={intl.formatMessage({
+                          defaultMessage: 'View Session Location',
+                        })}
+                      >
+                        <Button
+                          disabled={saving}
+                          icon={<FontAwesomeIcon icon={faLocationDot} />}
+                          onClick={() => {
+                            if (record.viewport) setViewport(record.viewport);
+                          }}
+                          size="small"
+                        />
+                      </Tooltip>
+                    ) : undefined,
+                  width: 50,
+                },
+              ]}
+              dataSource={
+                data?.user.sessions.map((session) => ({
+                  key: session.id,
+                  type: session.app,
+                  updatedAt: session.updatedAt,
+                  viewport:
+                    session.locationLat && session.locationLng
+                      ? {
+                          latitude: session.locationLat,
+                          longitude: session.locationLng,
+                        }
+                      : undefined,
+                })) || []
+              }
+              pagination={{
+                hideOnSinglePage: true,
+                pageSize: 8,
+              }}
+              size="small"
+            />
+          </Card>
         </Col>
       </Row>
 
       <Drawer
-        title={<FormattedMessage defaultMessage="Edit User Details" />}
-        open={editUser}
-        width="600"
         onClose={toggleEditUser}
+        open={editUser}
+        title={<FormattedMessage defaultMessage="Edit User Details" />}
+        width="600"
       >
         {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}
       </Drawer>
       <Drawer
-        title={<FormattedMessage defaultMessage="Edit Password" />}
-        open={editPassword}
-        width="600"
         onClose={toggleEditPassword}
+        open={editPassword}
+        title={<FormattedMessage defaultMessage="Edit Password" />}
+        width="600"
       >
         <SetPassword
-          userId={data?.user?.id || ''}
           onClose={toggleEditPassword}
+          userId={data?.user?.id || ''}
         />
       </Drawer>
       <Drawer
-        title={<FormattedMessage defaultMessage="Link to dem user" />}
-        open={demLink && !!demId}
-        width="800"
         onClose={toggleDemLink}
+        open={demLink && !!demId}
+        title={<FormattedMessage defaultMessage="Link to dem user" />}
+        width="800"
       >
         {demLink ? (
           <LinkDem
-            onClose={toggleDemLink}
             businessId={demId || ''}
+            onClose={toggleDemLink}
             userId={data?.user?.id || ''}
           />
         ) : (
@@ -603,37 +720,46 @@ const userDetail = ({
         )}
       </Drawer>
       <Modal
-        title={intl.formatMessage({
-          defaultMessage: 'User Terms',
-        })}
-        style={{ top: 20 }}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        maskClosable
-        width={900}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Close
           </Button>,
-          <Button onClick={handlePrint} type="primary" key="printButton">
-            <FontAwesomeIcon style={{ marginRight: 10 }} icon={faPrint} />
+          <Button key="printButton" onClick={handlePrint} type="primary">
+            <FontAwesomeIcon icon={faPrint} style={{ marginRight: 10 }} />
             {intl.formatMessage({
               defaultMessage: 'Print',
             })}
           </Button>,
         ]}
+        maskClosable
+        onCancel={handleCancel}
+        open={isModalOpen}
+        style={{ top: 20 }}
+        title={intl.formatMessage({
+          defaultMessage: 'User Terms',
+        })}
+        width={900}
       >
         <UserTermsModal
-          termsId={data?.user.signedTerms?.terms.id || ''}
-          signature={data?.user.signedTerms?.signature || ''}
-          name={data?.user.fullName || ''}
+          componentRef={componentRef}
           date={new Date(
             data?.user.signedTerms?.signedAt || ''
           ).toLocaleDateString()}
           isPrinting={isPrinting}
-          componentRef={componentRef}
+          name={data?.user.fullName || ''}
+          signature={data?.user.signedTerms?.signature || ''}
+          termsId={data?.user.signedTerms?.terms.id || ''}
         />
       </Modal>
+      {viewport && (
+        <LocatingModal
+          handleSubmit={() => {}}
+          onClose={() => setViewport(null)}
+          open={!!viewport}
+          uneditable
+          viewportData={viewport}
+        />
+      )}
     </div>
   );
 };

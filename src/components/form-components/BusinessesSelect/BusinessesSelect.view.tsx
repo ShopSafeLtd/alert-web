@@ -1,39 +1,40 @@
-import React, { useCallback } from 'react';
-import type { BusinessesSelectQueryVariables } from './BusinessSelectQuery.generated';
-
-import { Select, Typography } from 'antd';
-import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
-import { useIntl } from 'react-intl';
-import debounce from 'lodash/debounce';
+
 import { useBusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+import { Select, Typography } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
+import debounce from 'lodash/debounce';
+import React, { useCallback } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+
+import type { BusinessesSelectQueryVariables } from './BusinessSelectQuery.generated';
 
 interface Props {
-  value?: string[];
-  onChange?: (value: string[]) => void;
-  mode?: 'multiple' | 'tags';
-  style?: React.CSSProperties;
   allowClear?: boolean;
-  placeholder?: string;
   className?: string;
-  size?: SizeType;
-  maxTagCount?: number | 'responsive';
+  maxTagCount?: 'responsive' | number;
+  mode?: 'multiple' | 'tags';
+  onChange?: (value: string[]) => void;
+  placeholder?: string;
   queryVars?: BusinessesSelectQueryVariables;
+  size?: SizeType;
+  style?: React.CSSProperties;
+  value?: string[];
 }
 
-const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
-  onChange,
-  value,
-  mode,
-  style,
-  size,
-  className,
-  placeholder,
+const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   allowClear = true,
+  className,
   maxTagCount,
+  mode,
+  onChange,
+  placeholder,
   queryVars,
+  size,
+  style,
+  value,
   ...props
 }) => {
   const intl = useIntl();
@@ -58,12 +59,12 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   //   },
   // });
 
-  const { data, loading, fetchMore } = useBusinessesSideListQuery({
+  const { data, fetchMore, loading } = useBusinessesSideListQuery({
     variables: {
+      first: take,
       orderBy: {
         name: SortOrder.Asc,
       },
-      first: take,
       where: {
         schemes: {
           some: {
@@ -79,20 +80,6 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
 
   const next = () => {
     void fetchMore({
-      variables: {
-        where: {
-          schemes: {
-            some: {
-              id: {
-                equals: currentSchemeId,
-              },
-            },
-          },
-        },
-        orderBy: { name: SortOrder.Asc },
-        first: 30,
-        after: data?.businessRelay.pageInfo.endCursor,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -104,6 +91,20 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
             ],
           },
         };
+      },
+      variables: {
+        after: data?.businessRelay.pageInfo.endCursor,
+        first: 30,
+        orderBy: { name: SortOrder.Asc },
+        where: {
+          schemes: {
+            some: {
+              id: {
+                equals: currentSchemeId,
+              },
+            },
+          },
+        },
       },
     });
   };
@@ -159,26 +160,6 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   const handleChange = (searchValueInput: string) => {
     const searchedIds = data?.businessRelay?.edges?.map(({ node }) => node.id);
     void fetchMore({
-      variables: {
-        where: {
-          id: {
-            notIn: searchedIds,
-          },
-          schemes: {
-            some: {
-              id: {
-                equals: currentSchemeId,
-              },
-            },
-          },
-          name: {
-            contains: searchValueInput,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        orderBy: { name: SortOrder.Asc },
-        first: 100,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -190,6 +171,26 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
             ],
           },
         };
+      },
+      variables: {
+        first: 100,
+        orderBy: { name: SortOrder.Asc },
+        where: {
+          id: {
+            notIn: searchedIds,
+          },
+          name: {
+            contains: searchValueInput,
+            mode: QueryMode.Insensitive,
+          },
+          schemes: {
+            some: {
+              id: {
+                equals: currentSchemeId,
+              },
+            },
+          },
+        },
       },
     });
   };
@@ -212,20 +213,21 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   });
   return (
     <Select
-      value={value || undefined}
+      allowClear={allowClear}
+      className={className}
+      loading={loading}
+      maxTagCount={maxTagCount}
+      mode={mode}
+      notFoundContent={
+        loading ? intl.formatMessage({ defaultMessage: 'loading' }) : null
+      }
       onChange={(selected: string[]) => {
         if (onChange) onChange(selected);
       }}
-      mode={mode}
+      onClear={() => {
+        if (onChange) onChange([]);
+      }}
       onPopupScroll={onScroll}
-      loading={loading}
-      style={style}
-      size={size}
-      className={className}
-      placeholder={placeholder}
-      allowClear={allowClear}
-      maxTagCount={maxTagCount}
-      optionFilterProp="label"
       onSearch={(v: string) => {
         if (data?.businessRelay?.pageInfo?.hasNextPage) {
           if (!v) {
@@ -236,17 +238,16 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
           changeHandler(v);
         }
       }}
-      notFoundContent={
-        loading ? intl.formatMessage({ defaultMessage: 'loading' }) : null
-      }
-      onClear={() => {
-        if (onChange) onChange([]);
-      }}
+      optionFilterProp="label"
+      placeholder={placeholder}
+      size={size}
+      style={style}
+      value={value || undefined}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
       {sortedData.map(({ node: option }) => (
-        <Select.Option key={option.id} value={option.id} label={option.name}>
+        <Select.Option key={option.id} label={option.name} value={option.id}>
           {option.name}
           {option.siteNumber &&
             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
@@ -254,8 +255,8 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
 
           {option.locations && option.locations.length > 0 ? (
             <Typography.Paragraph
-              type="secondary"
               style={{ fontSize: 13, margin: 0 }}
+              type="secondary"
             >
               {option.locations[0].full}
             </Typography.Paragraph>

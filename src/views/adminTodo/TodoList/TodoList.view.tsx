@@ -1,6 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React from 'react';
+import type { SchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
 import type { TableProps } from 'antd';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { ListTodosQuery } from 'graphql/todos/queries/list_todos.generated';
+
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import EditTodo from '#/components/form-components/Todos/EditTodo';
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
   Button,
@@ -17,80 +29,70 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-
-import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import FormatCalendar from 'utils/format-calendar-24h';
-import { useStoreState } from 'state';
 import { Link } from 'react-router-dom';
+import { useStoreState } from 'state';
+import FormatCalendar from 'utils/format-calendar-24h';
 import getTodoUrl from 'utils/get-to-do-url';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
+
 import type { ListData } from '../useActivities';
-import type { ListTodosQuery } from 'graphql/todos/queries/list_todos.generated';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import type { SchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
-import EditTodo from '#/components/form-components/Todos/EditTodo';
+
+import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 // const { Panel } = Collapse;
 
 type TemplateData = ListData;
 type ActivityData = Exclude<
   ListTodosQuery['listTodos'],
-  undefined | null
+  null | undefined
 >['todos'][0];
 export interface TableItem {
-  key: string;
-  name?: string | null;
-  description?: string | null;
-  createdAt?: Date | null | undefined;
-  completedDate?: Date | null | undefined;
-  dueDate?: Date | null;
+  assignedUsers: { fullName: string; id: string }[];
   completed: boolean;
-  assignedUsers: { id: string; fullName: string }[];
+  completedDate?: Date | null | undefined;
+  createdAt?: Date | null | undefined;
+  description?: null | string;
+  dueDate?: Date | null;
   groups: { id: string; name: string }[];
-  todo: ActivityData;
+  key: string;
   linkedItem?: JSX.Element;
+  name?: null | string;
+  todo: ActivityData;
 }
 
 interface Props {
-  data:
-    | Exclude<ListTodosQuery['listTodos'], undefined | null>
-    | null
-    | undefined;
-  loading: boolean;
-  saving: boolean;
-  onCompletedTodo: (id: string) => void;
-  onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
-  toggleAddTodo: () => void;
-  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
   currentPage: number;
   currentPageSize: number;
-  toggleAllUsers: () => void;
-  toggleAllSchemes: () => void;
-  selectedTodo: string | null;
-  setSelectedTodo: (id: string | null) => void;
-  templateData: ListData[];
-  selectedTemplate: TemplateData | null;
-  selectTemplate: (id: string | null) => void;
-  groupsFilter: string[];
-  setGroupsFilter: (groups: string[]) => void;
-  onTableChange: TableProps<TableItem>['onChange'];
-  groupsData: SchemeGroupsSelectQuery | undefined;
-  editRights: boolean;
+  data:
+    | Exclude<ListTodosQuery['listTodos'], null | undefined>
+    | null
+    | undefined;
   deleteRights: boolean;
-  editTodo: string | null;
-  setEditTodo: (id: string | null) => void;
+  editRights: boolean;
+  editTodo: null | string;
+  groupsData: SchemeGroupsSelectQuery | undefined;
+  groupsFilter: string[];
+  loading: boolean;
+  onCompletedTodo: (id: string) => void;
   onDeleteTodo: (id: string) => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  onTableChange: TableProps<TableItem>['onChange'];
+  onUncompletedTodo: (id: string) => void;
+  saving: boolean;
+  selectTemplate: (id: null | string) => void;
+  selectedTemplate: TemplateData | null;
+  selectedTodo: null | string;
+  setEditTodo: (id: null | string) => void;
+  setGroupsFilter: (groups: string[]) => void;
+  setSearch: (value: string) => void;
+  setSelectedTodo: (id: null | string) => void;
+  templateData: ListData[];
+  toggleAddTodo: () => void;
+  toggleAllSchemes: () => void;
+  toggleAllUsers: () => void;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
 }
 
 const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
@@ -144,34 +146,34 @@ const getLinkedItemTo = (todo?: ListTodosQuery['listTodos']['todos'][0]) => {
 };
 
 const AdminTodos = ({
-  data,
-  loading,
-  saving,
-  onCompletedTodo,
-  onUncompletedTodo,
   addTodo,
-  toggleAddTodo,
-  updateTodoList,
-  setSearch,
-  onPaginationChange,
   currentPage,
   currentPageSize,
-  toggleAllUsers,
-  toggleAllSchemes,
-  selectedTodo,
-  setSelectedTodo,
-  templateData,
+  data,
+  deleteRights,
+  editRights,
+  editTodo,
+  groupsData,
+  groupsFilter,
+  loading,
+  onCompletedTodo,
+  onDeleteTodo,
+  onPaginationChange,
+  onTableChange,
+  onUncompletedTodo,
+  saving,
   selectTemplate,
   selectedTemplate,
-  groupsFilter,
-  setGroupsFilter,
-  onTableChange,
-  groupsData,
-  editRights,
-  deleteRights,
-  editTodo,
+  selectedTodo,
   setEditTodo,
-  onDeleteTodo,
+  setGroupsFilter,
+  setSearch,
+  setSelectedTodo,
+  templateData,
+  toggleAddTodo,
+  toggleAllSchemes,
+  toggleAllUsers,
+  updateTodoList,
 }: Props): JSX.Element => {
   // const classes = useStyles();
   const intl = useIntl();
@@ -214,7 +216,20 @@ const AdminTodos = ({
   //     value: 'chat',
   //   },
   // ];
-
+  const statusFilter = [
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Uncompleted',
+      }),
+      value: false,
+    },
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Completed',
+      }),
+      value: true,
+    },
+  ];
   const userIds = new Set(
     data?.todos.flatMap((todo) => todo.assignedUsers.map(({ id }) => id))
   );
@@ -234,25 +249,25 @@ const AdminTodos = ({
       <Row gutter={8} style={{ marginBottom: 15 }}>
         <Col span={6}>
           <Input
+            allowClear
             // value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a task...',
             })}
-            allowClear
           />
         </Col>
         <Col span={5}>
           <GroupsSelect
             allowClear
+            maxTagCount="responsive"
+            mode="multiple"
             onChange={setGroupsFilter}
-            value={groupsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
             style={{ width: '100%' }}
-            mode="multiple"
-            maxTagCount="responsive"
+            value={groupsFilter}
           />
         </Col>
         <Col flex={1} />
@@ -260,23 +275,21 @@ const AdminTodos = ({
         {templateData.length > 0 && (
           <Col span={5}>
             <Select
-              style={{ width: '100%' }}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Create Activity from Template',
-              })}
               onSelect={(value) => selectTemplate(value)}
-              value={null}
               options={templateData.map((item) => ({
                 label: item.name,
                 value: item.id,
               }))}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Create Activity from Template',
+              })}
+              style={{ width: '100%' }}
+              value={null}
             />
           </Col>
         )}
         <Col>
           <Button
-            type="primary"
-            onClick={toggleAddTodo}
             disabled={saving}
             icon={
               <FontAwesomeIcon
@@ -285,6 +298,8 @@ const AdminTodos = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleAddTodo}
+            type="primary"
           >
             {intl.formatMessage({
               defaultMessage: 'New Activity',
@@ -322,7 +337,7 @@ const AdminTodos = ({
           </Radio.Group>
         </Col>
       </Row>
-      <Card loading={loading} bodyStyle={{ padding: loading ? 20 : 0 }}>
+      <Card bodyStyle={{ padding: loading ? 20 : 0 }} loading={loading}>
         {loading ? (
           Array.from({ length: 5 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -330,106 +345,73 @@ const AdminTodos = ({
           ))
         ) : (
           <Table<TableItem>
-            dataSource={data?.todos?.map((todo) => ({
-              key: todo.id,
-              name: todo.name,
-              description: todo?.description,
-              dueDate: todo.dueDate,
-              createdAt: todo.createdAt,
-              completedDate: todo.completedDate,
-              completed: todo.completed || false,
-              assignedUsers: todo.assignedUsers,
-              groups: todo.groups || [],
-              todo,
-              linkedItem: getLinkedItemId(todo),
-            }))}
-            // onRow={(record) =>
-            //   record.type !== undefined && record.type !== null
-            //     ? { onClick: () => getTodoUrl(record.type, record.key) }
-            //     : {}
-            // }
-            loading={loading}
-            size="small"
-            onChange={onTableChange}
-            pagination={{
-              hideOnSinglePage: true,
-              total: data?.uncompletedTotal,
-              onChange: onPaginationChange,
-              pageSize: currentPageSize,
-              current: currentPage,
-              showSizeChanger: false,
-              position: ['bottomCenter'],
-            }}
             columns={[
               {
-                key: 'name',
                 dataIndex: 'name',
-                title: intl.formatMessage({
-                  defaultMessage: 'Name',
-                }),
+                key: 'name',
                 render: (value, record: { todo: ActivityData }) => (
                   <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
                 ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Name',
+                }),
               },
               {
-                key: 'description',
                 dataIndex: 'description',
+                ellipsis: true,
+                key: 'description',
                 title: intl.formatMessage({
                   defaultMessage: 'Description',
                 }),
-                ellipsis: true,
               },
               {
-                key: 'createdAt',
                 dataIndex: 'createdAt',
+                key: 'createdAt',
+                render: (value: Date) => FormatCalendar(new Date(value), true),
                 title: intl.formatMessage({
                   defaultMessage: 'Start Date',
                 }),
-                render: (value: Date) => FormatCalendar(new Date(value), true),
               },
               {
-                key: 'completedDate',
                 dataIndex: 'completedDate',
-                title: intl.formatMessage({
-                  defaultMessage: 'Completed Date',
-                }),
                 ellipsis: true,
+                key: 'completedDate',
                 // eslint-disable-next-line no-confusing-arrow
                 render: (value: Date) =>
                   value ? FormatCalendar(new Date(value), true) : undefined,
+                title: intl.formatMessage({
+                  defaultMessage: 'Completed Date',
+                }),
               },
               {
-                key: 'dueDate',
                 dataIndex: 'dueDate',
+                key: 'dueDate',
+                render: (value: Date) => FormatCalendar(value),
                 title: intl.formatMessage({
                   defaultMessage: 'Due Date',
                 }),
-                render: (value: Date) => FormatCalendar(value),
                 // sorter: (a, b) =>
                 //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 //   // @ts-ignore
                 //   new Date(a.dueDate).valueOf() - new Date(b.dueDate).valueOf(),
               },
               {
-                key: 'assignedUsers',
                 dataIndex: 'assignedUsers',
-                title: intl.formatMessage({
-                  defaultMessage: 'Assigned Users',
-                }),
                 ellipsis: true,
                 filters: userFilter,
+                key: 'assignedUsers',
                 onFilter: (
-                  value: string | number | boolean,
+                  value: boolean | number | string,
                   record: { assignedUsers: { id: string }[] }
                 ) => record.assignedUsers.some((el) => el.id === value),
-                render: (value: { id: string; fullName: string }[]) => (
+                render: (value: { fullName: string; id: string }[]) => (
                   <Row gutter={4}>
                     {value.map((item) => (
                       <Col key={item.id}>
                         <Tooltip title={item.fullName}>
                           <Avatar
-                            style={{ cursor: 'pointer', fontSize: 14 }}
                             size={30}
+                            style={{ cursor: 'pointer', fontSize: 14 }}
                           >
                             {item.fullName
                               .split(' ')
@@ -442,19 +424,19 @@ const AdminTodos = ({
                     ))}
                   </Row>
                 ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Assigned Users',
+                }),
               },
               {
-                key: 'groups',
-                title: intl.formatMessage({
-                  defaultMessage: 'Groups',
-                }),
                 dataIndex: 'groups',
+                filteredValue: groupsFilter,
                 filters:
                   groupsData?.groups.map(({ id, name }) => ({
                     text: name,
                     value: id,
                   })) ?? [],
-                filteredValue: groupsFilter,
+                key: 'groups',
                 render: (value: { id: string; name: string }[]) => (
                   <Typography.Text>
                     {value
@@ -465,17 +447,13 @@ const AdminTodos = ({
                       .toString()}
                   </Typography.Text>
                 ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Groups',
+                }),
               },
               {
-                key: 'linkedItem',
                 dataIndex: 'linkedItem',
-                title: intl.formatMessage({
-                  defaultMessage: 'Linked Item',
-                }),
-                // filters: typesFilter,
-                // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // // @ts-ignore
-                // onFilter: (value: string, record) =>
+                key: 'linkedItem',
                 //   record.linkedItem?.includes(value),
                 render: (value, record: { key: string }) => (
                   <Link
@@ -486,52 +464,40 @@ const AdminTodos = ({
                     {value}
                   </Link>
                 ),
+                // filters: typesFilter,
+                // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // // @ts-ignore
+                // onFilter: (value: string, record) =>
+                title: intl.formatMessage({
+                  defaultMessage: 'Linked Item',
+                }),
               },
               {
-                title: intl.formatMessage({
-                  defaultMessage: 'Status',
-                }),
                 dataIndex: 'actions',
+                filters: statusFilter,
                 key: 'actions',
-                width: 130,
-                filters: [
-                  {
-                    text: intl.formatMessage({
-                      defaultMessage: 'Uncompleted',
-                    }),
-                    value: false,
-                  },
-                  {
-                    text: intl.formatMessage({
-                      defaultMessage: 'Completed',
-                    }),
-                    value: true,
-                  },
-                ],
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
                 onFilter: (
-                  value: string | number | boolean,
+                  value: boolean | number | string,
                   record: { completed: boolean }
                 ) => record.completed === value,
                 // eslint-disable-next-line no-confusing-arrow
-                render: (_, record: { key: string; completed: boolean }) =>
+                render: (_, record: { completed: boolean; key: string }) =>
                   record.completed ? (
                     <Popconfirm
-                      title={intl.formatMessage({
-                        defaultMessage: 'Uncompleted this activity?',
-                      })}
-                      // description="Do you complete this activity?"
-                      onConfirm={() => onUncompletedTodo(record.key)}
-                      okText={intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
                       })}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                      })}
+                      // description="Do you complete this activity?"
+                      onConfirm={() => onUncompletedTodo(record.key)}
                       overlayInnerStyle={{ padding: 10 }}
+                      title={intl.formatMessage({
+                        defaultMessage: 'Uncompleted this activity?',
+                      })}
                     >
-                      <Button size="small" style={{ width: 110, padding: 2 }}>
+                      <Button size="small" style={{ padding: 2, width: 110 }}>
                         {intl.formatMessage({
                           defaultMessage: 'Completed',
                         })}
@@ -539,10 +505,7 @@ const AdminTodos = ({
                     </Popconfirm>
                   ) : (
                     <Button
-                      size="small"
-                      type="ghost"
                       danger
-                      style={{ width: 110, padding: 2 }}
                       onClick={() => {
                         if (shouldOpen) {
                           setSelectedTodo(record.key);
@@ -550,12 +513,20 @@ const AdminTodos = ({
                           onCompletedTodo(record.key);
                         }
                       }}
+                      size="small"
+                      style={{ padding: 2, width: 110 }}
+                      type="ghost"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Uncompleted',
                       })}
                     </Button>
                   ),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                title: intl.formatMessage({
+                  defaultMessage: 'Status',
+                }),
+                width: 130,
                 // <Popconfirm
                 //   title={intl.formatMessage({
                 //     defaultMessage: 'Complete this activity?',
@@ -577,10 +548,8 @@ const AdminTodos = ({
                 // </Popconfirm>
               },
               {
-                key: 'Options',
-                title: '',
                 dataIndex: 'Options',
-                width: 100,
+                key: 'Options',
                 render: (_, record: { key: string }) => (
                   <Row gutter={8}>
                     {editRights && (
@@ -591,12 +560,12 @@ const AdminTodos = ({
                           })}
                         >
                           <Button
-                            size="small"
                             disabled={saving}
+                            icon={<FontAwesomeIcon icon={faPenToSquare} />}
                             onClick={() => {
                               setEditTodo(record?.key);
                             }}
-                            icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                            size="small"
                           />
                         </Tooltip>
                       </Col>
@@ -609,25 +578,25 @@ const AdminTodos = ({
                           })}
                         >
                           <Popconfirm
-                            placement="topLeft"
-                            title={intl.formatMessage({
-                              defaultMessage: 'Remove the Activity?',
+                            cancelText={intl.formatMessage({
+                              defaultMessage: 'No',
+                            })}
+                            okText={intl.formatMessage({
+                              defaultMessage: 'Yes',
                             })}
                             onConfirm={() => {
                               onDeleteTodo(record.key);
                             }}
-                            okText={intl.formatMessage({
-                              defaultMessage: 'Yes',
-                            })}
-                            cancelText={intl.formatMessage({
-                              defaultMessage: 'No',
-                            })}
                             overlayInnerStyle={{ padding: 10 }}
+                            placement="topLeft"
+                            title={intl.formatMessage({
+                              defaultMessage: 'Remove the Activity?',
+                            })}
                           >
                             <Button
-                              size="small"
                               disabled={saving}
                               icon={<FontAwesomeIcon icon={faTrash} />}
+                              size="small"
                             />
                           </Popconfirm>
                         </Tooltip>
@@ -635,11 +604,43 @@ const AdminTodos = ({
                     )}
                   </Row>
                 ),
+                title: '',
+                width: 100,
               },
             ].filter(
               (item) =>
                 item?.dataIndex !== 'Options' || deleteRights || editRights
             )}
+            // onRow={(record) =>
+            //   record.type !== undefined && record.type !== null
+            //     ? { onClick: () => getTodoUrl(record.type, record.key) }
+            //     : {}
+            dataSource={data?.todos?.map((todo) => ({
+              assignedUsers: todo.assignedUsers,
+              completed: todo.completed || false,
+              completedDate: todo.completedDate,
+              createdAt: todo.createdAt,
+              description: todo?.description,
+              dueDate: todo.dueDate,
+              groups: todo.groups || [],
+              key: todo.id,
+              linkedItem: getLinkedItemId(todo),
+              name: todo.name,
+              todo,
+            }))}
+            // }
+            loading={loading}
+            onChange={onTableChange}
+            pagination={{
+              current: currentPage,
+              hideOnSinglePage: true,
+              onChange: onPaginationChange,
+              pageSize: currentPageSize,
+              position: ['bottomCenter'],
+              showSizeChanger: false,
+              total: data?.uncompletedTotal,
+            }}
+            size="small"
           />
         )}
       </Card>
@@ -772,48 +773,48 @@ const AdminTodos = ({
       </Collapse> */}
 
       <Drawer
+        onClose={toggleAddTodo}
+        open={addTodo}
         title={intl.formatMessage({
           defaultMessage: 'Create Activity',
         })}
-        open={addTodo}
         width={800}
-        onClose={toggleAddTodo}
       >
         {addTodo ? (
           <AddTodo
-            update={updateTodoList}
-            onClose={toggleAddTodo}
             initData={selectedTemplate ?? undefined}
+            onClose={toggleAddTodo}
+            update={updateTodoList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setEditTodo(null)}
+        open={!!editTodo}
         title={intl.formatMessage({
           defaultMessage: 'Edit Activity',
         })}
-        open={!!editTodo}
         width={800}
-        onClose={() => setEditTodo(null)}
       >
         {editTodo ? (
           <EditTodo
-            todoId={editTodo}
-            onClose={() => setEditTodo(null)}
             initData={selectedTemplate ?? undefined}
+            onClose={() => setEditTodo(null)}
+            todoId={editTodo}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setSelectedTodo(null)}
+        open={!!selectedTodo}
         title={intl.formatMessage({
           defaultMessage: 'Complete Activity',
         })}
-        open={!!selectedTodo}
         width={800}
-        onClose={() => setSelectedTodo(null)}
       >
         {selectedTodo ? (
           <ViewTodo

@@ -1,54 +1,54 @@
-import React from 'react';
+import type { StockItemValue } from '#/components/form-components/StockItemSearch/StockItemSearch.view';
 import type { FormInstance } from 'antd';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import type { GoodsData } from 'types/DataType';
+
+import StockItemSearch from '#/components/form-components/StockItemSearch/StockItemSearch.view';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Input,
   Button,
   Col,
   Empty,
   Form,
+  Input,
   InputNumber,
   Row,
   Select,
 } from 'antd';
-import { useIntl } from 'react-intl';
-import type { GoodsData } from 'types/DataType';
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
 import { GoodsMode } from 'graphql/types';
-import type { StockItemValue } from '#/components/form-components/StockItemSearch/StockItemSearch.view';
-import StockItemSearch from '#/components/form-components/StockItemSearch/StockItemSearch.view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { FormData } from './useAddGoods';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: (value: FormData) => void;
-  goodsTypesData: ListGoodsTypesQuery | undefined;
-  goodsMode: GoodsMode;
-  onAddItem: (data: StockItemValue) => void;
+  division: string | undefined;
   form: FormInstance<FormData>;
   goods?: GoodsData[];
-  division: string | undefined;
+  goodsMode: GoodsMode;
+  goodsTypesData: ListGoodsTypesQuery | undefined;
+  onAddItem: (data: StockItemValue) => void;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
 }
 
 const AddGoods = ({
+  division,
+  form,
+  goods,
+  goodsMode,
+  goodsTypesData,
+  onAddItem,
   onClose,
   onSubmit,
-  goodsTypesData,
-  goodsMode,
-  goods,
-  form,
-  division,
-  onAddItem,
   saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <Form<FormData>
-      layout="vertical"
-      onFinish={onSubmit}
       form={form}
       initialValues={{
         goods: [
@@ -57,6 +57,8 @@ const AddGoods = ({
           },
         ],
       }}
+      layout="vertical"
+      onFinish={onSubmit}
     >
       <Form.List
         name="goods"
@@ -80,52 +82,52 @@ const AddGoods = ({
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
             {goodsMode === GoodsMode.Specific && (
               <StockItemSearch
-                showSearch
                 allowClear
+                disabled={saving}
+                division={division}
+                onAddItem={onAddItem}
                 placeholder={intl.formatMessage({
                   defaultMessage:
                     'Search for an item to add to the incident...',
                 })}
-                style={{ width: 500, marginBottom: 20 }}
-                onAddItem={onAddItem}
-                division={division}
-                disabled={saving}
+                showSearch
+                style={{ marginBottom: 20, width: 500 }}
               />
             )}
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
             {goodsMode === GoodsMode.Specific && fields.length === 0 && (
               <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={intl.formatMessage({
                   defaultMessage: 'Search for an item to add to this incident.',
                 })}
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
               />
             )}
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
             {goodsMode === GoodsMode.Generic && fields.length === 0 && (
               <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={intl.formatMessage({
                   defaultMessage: 'No goods added to incident',
                 })}
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
               >
                 <Form.Item>
                   <Row justify="center">
                     <Col>
                       <Button
+                        block
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 8 }}
+                          />
+                        }
                         onClick={() => {
                           console.log('add');
                           add({
                             recoveredValue: 0,
                           });
                         }}
-                        block
-                        icon={
-                          <FontAwesomeIcon
-                            style={{ marginRight: 8 }}
-                            icon={faPlus}
-                          />
-                        }
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Item',
@@ -137,7 +139,7 @@ const AddGoods = ({
               </Empty>
             )}
             {fields.map(({ key, name, ...restField }, index) => (
-              <Row key={key} gutter={8}>
+              <Row gutter={8} key={key}>
                 {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
                 {goodsMode === GoodsMode.Generic && (
                   <>
@@ -154,37 +156,34 @@ const AddGoods = ({
                         name={[name, 'goodsType']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage: 'Please enter a type',
                             }),
+                            required: index === 0,
                           },
                         ]}
                       >
                         <Select
+                          allowClear
+                          disabled={saving}
+                          options={
+                            goodsTypesData?.listGoodsTypes.goodsTypes.map(
+                              (goodsType) => ({
+                                label: goodsType.name,
+                                value: goodsType.id,
+                              })
+                            ) || []
+                          }
                           placeholder={intl.formatMessage({
                             defaultMessage: 'Select goods...',
                           })}
                           style={{ width: 300 }}
-                          allowClear
-                          options={
-                            (goodsTypesData &&
-                              goodsTypesData.listGoodsTypes.goodsTypes.map(
-                                (goodsType) => ({
-                                  value: goodsType.id,
-                                  label: goodsType.name,
-                                })
-                              )) ||
-                            []
-                          }
-                          disabled={saving}
                         />
                       </Form.Item>
                     </Col>
                     <Col>
                       <Form.Item
                         {...restField}
-                        name={[name, 'value']}
                         label={
                           index
                             ? ''
@@ -192,12 +191,13 @@ const AddGoods = ({
                                 defaultMessage: 'Value',
                               })
                         }
+                        name={[name, 'value']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage: 'Please enter a value',
                             }),
+                            required: index === 0,
                           },
                         ]}
                         tooltip={intl.formatMessage({
@@ -207,17 +207,16 @@ const AddGoods = ({
                       >
                         <InputNumber
                           disabled={saving}
-                          style={{ width: 150 }}
-                          prefix="£"
-                          precision={2}
                           min={0}
+                          precision={2}
+                          prefix="£"
+                          style={{ width: 150 }}
                         />
                       </Form.Item>
                     </Col>
                     <Col>
                       <Form.Item
                         {...restField}
-                        name={[name, 'recoveredValue']}
                         label={
                           index
                             ? ''
@@ -225,12 +224,13 @@ const AddGoods = ({
                                 defaultMessage: 'Value Recovered',
                               })
                         }
+                        name={[name, 'recoveredValue']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage: 'Please enter a value',
                             }),
+                            required: index === 0,
                           },
                         ]}
                         tooltip={intl.formatMessage({
@@ -240,15 +240,11 @@ const AddGoods = ({
                       >
                         <InputNumber
                           disabled={saving}
-                          style={{ width: 150 }}
-                          prefix="£"
-                          precision={2}
+                          max={goods?.[index]?.value ?? undefined}
                           min={0}
-                          max={
-                            goods && goods[index]?.value
-                              ? goods[index]?.value
-                              : undefined
-                          }
+                          precision={2}
+                          prefix="£"
+                          style={{ width: 150 }}
                         />
                       </Form.Item>
                     </Col>
@@ -260,7 +256,6 @@ const AddGoods = ({
                     <Col>
                       <Form.Item
                         {...restField}
-                        name={[name, 'name']}
                         label={
                           index
                             ? ''
@@ -268,12 +263,13 @@ const AddGoods = ({
                                 defaultMessage: 'Item Name',
                               })
                         }
+                        name={[name, 'name']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage: 'Please enter the name',
                             }),
+                            required: index === 0,
                           },
                         ]}
                         tooltip={intl.formatMessage({
@@ -286,7 +282,6 @@ const AddGoods = ({
                     <Col>
                       <Form.Item
                         {...restField}
-                        name={[name, 'sku']}
                         label={
                           index
                             ? ''
@@ -294,12 +289,13 @@ const AddGoods = ({
                                 defaultMessage: 'SKU',
                               })
                         }
+                        name={[name, 'sku']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage: 'Please enter the SKU',
                             }),
+                            required: index === 0,
                           },
                         ]}
                         tooltip={intl.formatMessage({
@@ -312,7 +308,6 @@ const AddGoods = ({
                     <Col>
                       <Form.Item
                         {...restField}
-                        name={[name, 'value']}
                         label={
                           index
                             ? ''
@@ -320,12 +315,13 @@ const AddGoods = ({
                                 defaultMessage: 'Value',
                               })
                         }
+                        name={[name, 'value']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage: 'Please enter the value',
                             }),
+                            required: index === 0,
                           },
                         ]}
                         tooltip={intl.formatMessage({
@@ -334,17 +330,16 @@ const AddGoods = ({
                       >
                         <InputNumber
                           disabled={saving}
-                          style={{ width: 150 }}
+                          min={0}
                           // prefix="£"
                           precision={2}
-                          min={0}
+                          style={{ width: 150 }}
                         />
                       </Form.Item>
                     </Col>
                     <Col>
                       <Form.Item
                         {...restField}
-                        name={[name, 'quantity']}
                         label={
                           index
                             ? ''
@@ -352,12 +347,13 @@ const AddGoods = ({
                                 defaultMessage: 'Quantity',
                               })
                         }
+                        name={[name, 'quantity']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage: 'Please enter a quantity.',
                             }),
+                            required: index === 0,
                           },
                         ]}
                         tooltip={intl.formatMessage({
@@ -366,16 +362,15 @@ const AddGoods = ({
                       >
                         <InputNumber
                           disabled={saving}
-                          style={{ width: 150 }}
-                          precision={0}
                           min={0}
+                          precision={0}
+                          style={{ width: 150 }}
                         />
                       </Form.Item>
                     </Col>
                     <Col>
                       <Form.Item
                         {...restField}
-                        name={[name, 'recoveredQuantity']}
                         label={
                           index
                             ? ''
@@ -383,13 +378,14 @@ const AddGoods = ({
                                 defaultMessage: 'Quantity Recovered',
                               })
                         }
+                        name={[name, 'recoveredQuantity']}
                         rules={[
                           {
-                            required: index === 0,
                             message: intl.formatMessage({
                               defaultMessage:
                                 'Please enter a recovered quantity.',
                             }),
+                            required: index === 0,
                           },
                         ]}
                         tooltip={intl.formatMessage({
@@ -399,14 +395,10 @@ const AddGoods = ({
                       >
                         <InputNumber
                           disabled={saving}
-                          style={{ width: 150 }}
-                          precision={0}
+                          max={goods?.[index].quantity ?? undefined}
                           min={0}
-                          max={
-                            goods && goods[index].quantity
-                              ? goods[index].quantity
-                              : undefined
-                          }
+                          precision={0}
+                          style={{ width: 150 }}
                         />
                       </Form.Item>
                     </Col>
@@ -416,13 +408,13 @@ const AddGoods = ({
                 {fields.length > 1 && (
                   <Col>
                     <Button
-                      loading={saving}
                       disabled={saving}
-                      style={{ marginTop: index === 0 ? 30 : 0 }}
-                      size="small"
+                      loading={saving}
                       onClick={() => remove(name)}
+                      size="small"
+                      style={{ marginTop: index === 0 ? 30 : 0 }}
                     >
-                      <FontAwesomeIcon size="lg" icon={faTrash} />
+                      <FontAwesomeIcon icon={faTrash} size="lg" />
                     </Button>
                   </Col>
                 )}
@@ -434,22 +426,22 @@ const AddGoods = ({
                 <Row justify="center">
                   <Col>
                     <Button
-                      loading={saving}
+                      block
                       disabled={saving}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 8 }}
+                        />
+                      }
+                      loading={saving}
                       onClick={() => {
                         console.log('add');
                         add({
-                          value: 0,
                           recoveredValue: 0,
+                          value: 0,
                         });
                       }}
-                      block
-                      icon={
-                        <FontAwesomeIcon
-                          style={{ marginRight: 8 }}
-                          icon={faPlus}
-                        />
-                      }
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Item',
@@ -464,18 +456,18 @@ const AddGoods = ({
       </Form.List>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
-            <Button onClick={onClose} loading={saving} disabled={saving}>
+            <Button disabled={saving} loading={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
             <Button
-              type="primary"
+              disabled={saving}
               htmlType="submit"
               loading={saving}
-              disabled={saving}
+              type="primary"
             >
               {intl.formatMessage({ defaultMessage: 'Create' })}
             </Button>

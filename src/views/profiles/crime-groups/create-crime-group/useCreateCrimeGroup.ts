@@ -1,30 +1,33 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-
-import { useNavigate } from 'react-router';
-import type { SearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
-import { useSearchOffendersQuery } from 'graphql/offenders/queries/search-offenders.generated';
-import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import { useListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import { SortOrder } from 'graphql/types';
-import { useCreateCrimeGroupMutation } from 'graphql/crime-groups/mutations/create-crime-group.generated';
 import type {
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables,
 } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+
+import { useCreateCrimeGroupMutation } from 'graphql/crime-groups/mutations/create-crime-group.generated';
 import { ListCrimeGroupsDocument } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { SortOrder } from 'graphql/types';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useStoreState } from 'state';
+
+import type { ListOffendersCardQuery } from './graphql/list-offender-card.generated';
+import type { SearchOffendersRelayQuery } from './graphql/search-offenders-relay.generated';
+
+import { useListOffendersCardQuery } from './graphql/list-offender-card.generated';
+import { useSearchOffendersRelayQuery } from './graphql/search-offenders-relay.generated';
 
 interface Return {
-  searchData: SearchOffendersQuery | undefined;
-  loading: boolean;
-  selectOffender: (id: string) => void;
-  offendersData: ListOffendersQuery | undefined;
-  offendersSelected: boolean;
   addOffender: boolean;
-  toggleAddOffender: () => void;
+  fetchMoreScroll: () => void;
+  loading: boolean;
+  offendersData: ListOffendersCardQuery | undefined;
+  offendersSelected: boolean;
   onSubmit: () => void;
-  submitting: boolean;
   removeOffender: (id: string) => void;
+  searchData: SearchOffendersRelayQuery | undefined;
+  selectOffender: (id: string) => void;
+  submitting: boolean;
+  toggleAddOffender: () => void;
 }
 
 const useCreateCrimeGroup = (): Return => {
@@ -33,34 +36,53 @@ const useCreateCrimeGroup = (): Return => {
   const [selectedOffenders, setSelectedOffenders] = useState<string[]>([]);
   const [addOffender, setAddOffender] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const variables = {
+    first: 18,
+    order: {
+      updatedAt: SortOrder.Desc,
+    },
+    scheme: {
+      id: currentScheme,
+    },
+  };
+  const { data: searchData, fetchMore } = useSearchOffendersRelayQuery({
+    fetchPolicy: 'cache-and-network',
+    variables,
+  });
 
-  const { data: searchData } = useSearchOffendersQuery({
+  const { data: offendersData } = useListOffendersCardQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
         id: currentScheme,
       },
-      take: 10,
-      order: {
-        updatedAt: SortOrder.Desc,
-      },
-    },
-  });
-
-  const { data: offendersData } = useListOffendersQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
       where: {
         id: {
           in: selectedOffenders,
         },
       },
-      scheme: {
-        id: currentScheme,
-      },
     },
   });
-
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listOffendersRelay: {
+            ...fetchMoreResult.listOffendersRelay,
+            edges: [
+              ...(prev.listOffendersRelay?.edges || []),
+              ...(fetchMoreResult.listOffendersRelay?.edges || []),
+            ],
+          },
+        };
+      },
+      variables: {
+        ...variables,
+        after: searchData?.listOffendersRelay?.pageInfo?.endCursor,
+      },
+    });
+  };
   const selectOffender = (id: string) => {
     setSelectedOffenders([...selectedOffenders, id]);
   };
@@ -97,6 +119,15 @@ const useCreateCrimeGroup = (): Return => {
         if (oldData?.listCrimeGroups?.crimeGroups)
           store.writeQuery<ListCrimeGroupsQuery, ListCrimeGroupsQueryVariables>(
             {
+              data: {
+                listCrimeGroups: {
+                  ...oldData.listCrimeGroups,
+                  crimeGroups: [
+                    ...oldData.listCrimeGroups.crimeGroups,
+                    result.data.createCrimeGroup,
+                  ],
+                },
+              },
               query: ListCrimeGroupsDocument,
               variables: {
                 where: {
@@ -109,15 +140,6 @@ const useCreateCrimeGroup = (): Return => {
                   },
                 },
               },
-              data: {
-                listCrimeGroups: {
-                  ...oldData.listCrimeGroups,
-                  crimeGroups: [
-                    ...oldData.listCrimeGroups.crimeGroups,
-                    result.data.createCrimeGroup,
-                  ],
-                },
-              },
             }
           );
       }
@@ -128,24 +150,9 @@ const useCreateCrimeGroup = (): Return => {
     if (selectedOffenders.length > 0) {
       setSubmitting(true);
       await createCrimeGroup({
-        variables: {
-          data: {
-            schemes: {
-              connect: [
-                {
-                  id: currentScheme,
-                },
-              ],
-            },
-            offenders: {
-              connect: selectedOffenders.map((id) => ({
-                id,
-              })),
-            },
-          },
-        },
         optimisticResponse: {
           createCrimeGroup: {
+            alias: '',
             id: Math.random().toString(),
             reference: 1000,
             totalIncidents: 0,
@@ -154,7 +161,22 @@ const useCreateCrimeGroup = (): Return => {
             totalTheftSuccess: 0,
             totalValue: 0,
             updatedAt: new Date(),
-            alias: '',
+          },
+        },
+        variables: {
+          data: {
+            offenders: {
+              connect: selectedOffenders.map((id) => ({
+                id,
+              })),
+            },
+            schemes: {
+              connect: [
+                {
+                  id: currentScheme,
+                },
+              ],
+            },
           },
         },
       });
@@ -168,17 +190,18 @@ const useCreateCrimeGroup = (): Return => {
   };
 
   return {
-    searchData,
+    addOffender,
+    fetchMoreScroll,
     loading: !searchData,
-    selectOffender,
     offendersData,
     offendersSelected: selectedOffenders.length > 0,
-    toggleAddOffender,
-    addOffender,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     removeOffender,
+    searchData,
+    selectOffender,
     submitting,
+    toggleAddOffender,
   };
 };
 

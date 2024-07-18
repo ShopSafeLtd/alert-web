@@ -1,5 +1,19 @@
-import React from 'react';
+import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import type { OffenderFilters } from 'state/data-model';
 
+import {
+  faChevronDown,
+  faFilter,
+  faGrid,
+  faGrid2,
+  faPlus,
+  faTable,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -10,89 +24,76 @@ import {
   Empty,
   Menu,
   Row,
-  Tooltip,
   Table,
+  Tooltip,
   Typography,
 } from 'antd';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderCard from 'components/offenders/OffenderCard';
+import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
+import OffenderFilter from 'components/offenders/OffenderFilter';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChevronDown,
-  faFilter,
-  faGrid,
-  faGrid2,
-  faPlus,
-  faTable,
-} from '@fortawesome/pro-light-svg-icons';
-import type { MutationUpdaterFn } from '@apollo/client';
+import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import DebouncedInput from 'utils/debounced-input';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import OffenderFilter from 'components/offenders/OffenderFilter';
-import { useIntl } from 'react-intl';
-import type { OffenderFilters } from 'state/data-model';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
-import DebouncedInput from 'utils/debounced-input';
-import { useNavigate } from 'react-router';
-import useStyles from './OffenderFeed.styles';
+
 import Loading from '../../../../components/shared-components/AntD/Loading';
-import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
-import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
-import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import useStyles from './OffenderFeed.styles';
 
 interface Props {
+  customGalleriesData: ListCustomGalleriesQuery | undefined;
   data: ListOffendersRelayQuery | undefined;
-  loading: boolean;
+  fetchMoreScroll: () => void;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  setSearch: (value: string) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
+  loading: boolean;
   onNavigate: () => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  setGallery: (values: string[]) => void;
-  customGalleriesData: ListCustomGalleriesQuery | undefined;
   onSelectCustomGalleries: (values: string) => void;
-  variables: OffenderFilters;
-  fetchMoreScroll: () => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
   setCompactView: () => void;
+  setGallery: (values: string[]) => void;
+  setSearch: (value: string) => void;
   setTableView: () => void;
+  sortFilter: boolean;
   tableView: boolean;
+  toggleSortFilter: () => void;
+  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
+  variables: OffenderFilters;
 }
 
 const OffenderFeed = ({
-  data,
-  loading,
-  lightboxElements,
-  openLightbox,
-  setSearch,
-  updateOffenderList,
-  onNavigate,
-  lightBoxOpen,
-  sortFilter,
-  toggleSortFilter,
-  setGallery,
   customGalleriesData,
-  onSelectCustomGalleries,
-  variables,
+  data,
   fetchMoreScroll,
+  lightBoxOpen,
+  lightboxElements,
+  loading,
+  onNavigate,
+  onSelectCustomGalleries,
+  openLightbox,
   setCompactView,
+  setGallery,
+  setSearch,
   setTableView,
+  sortFilter,
   tableView,
+  toggleSortFilter,
+  updateOffenderList,
+  variables,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
-  const { search, gallery, customGalleries, compactView } = variables;
+  const { compactView, customGalleries, gallery, search } = variables;
   const navigate = useNavigate();
 
   const galleryOptions = [
@@ -100,8 +101,8 @@ const OffenderFeed = ({
       label: intl.formatMessage({
         defaultMessage: 'Not Approved',
       }),
-      value: 'NOT APPROVED',
       needAdminRight: true,
+      value: 'NOT APPROVED',
     },
     {
       label: intl.formatMessage({ defaultMessage: 'Following' }),
@@ -132,8 +133,8 @@ const OffenderFeed = ({
         ({ node: { id, name } }) => (
           <Menu.Item key={id}>
             <Checkbox
-              key={id}
               checked={customGalleries.includes(id)}
+              key={id}
               onChange={() => {
                 onSelectCustomGalleries(id);
               }}
@@ -171,7 +172,7 @@ const OffenderFeed = ({
       style={
         loading
           ? { padding: 10, paddingRight: 12 }
-          : { padding: 10, paddingRight: 0, paddingBottom: 0 }
+          : { padding: 10, paddingBottom: 0, paddingRight: 0 }
       }
     >
       <Card
@@ -181,13 +182,13 @@ const OffenderFeed = ({
         <Row align="middle" gutter={8}>
           <Col span={4} xxl={4}>
             <DebouncedInput
-              size="small"
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Search Offenders...',
-              })}
               allowClear
               defaultValue={search || ''}
               onChange={(e) => setSearch(e.target.value)}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Search Offenders...',
+              })}
+              size="small"
             />
           </Col>
 
@@ -213,9 +214,9 @@ const OffenderFeed = ({
             <CheckTags
               mode="check"
               noGutter
-              value={gallery}
               onChange={setGallery}
               options={galleryOptions}
+              value={gallery}
             />
             {/* )} */}
           </Col>
@@ -224,10 +225,10 @@ const OffenderFeed = ({
             {customGalleriesData?.customGalleriesRelay?.totalCount &&
             customGalleriesData?.customGalleriesRelay?.totalCount > 0 ? (
               <Dropdown
+                arrow={{ pointAtCenter: true }}
                 // trigger={['click']}
                 overlay={menu}
                 placement="bottom"
-                arrow={{ pointAtCenter: true }}
               >
                 <Button className={classes.selectBox}>
                   {/* <FontAwesomeIcon
@@ -246,7 +247,7 @@ const OffenderFeed = ({
               </Dropdown>
             ) : null}
           </Col>
-          <Col style={{ display: 'flex', alignItems: 'center' }}>
+          <Col style={{ alignItems: 'center', display: 'flex' }}>
             <Tooltip
               // placement="topLeft"
               title={
@@ -260,17 +261,17 @@ const OffenderFeed = ({
               }
             >
               <Button
-                onClick={setCompactView}
                 icon={
                   <FontAwesomeIcon
                     icon={compactView ? faGrid2 : faGrid}
                     size="lg"
                   />
                 }
+                onClick={setCompactView}
                 style={{
-                  borderTopRightRadius: 0,
                   borderBottomRightRadius: 0,
                   borderRight: '0px solid #000',
+                  borderTopRightRadius: 0,
                 }}
               />
             </Tooltip>
@@ -280,8 +281,8 @@ const OffenderFeed = ({
               })}
             >
               <Button
-                onClick={setTableView}
                 icon={<FontAwesomeIcon icon={faTable} size="lg" />}
+                onClick={setTableView}
                 style={{
                   borderRadius: 0,
                   borderRightWidth: 0,
@@ -294,8 +295,8 @@ const OffenderFeed = ({
               })}
             >
               <Button
-                onClick={toggleSortFilter}
                 icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
+                onClick={toggleSortFilter}
                 style={{
                   borderRadius: 0,
                 }}
@@ -307,13 +308,6 @@ const OffenderFeed = ({
               })}
             >
               <Button
-                type="primary"
-                onClick={onNavigate}
-                style={{
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  borderLeftWidth: 0,
-                }}
                 icon={
                   <FontAwesomeIcon
                     icon={faPlus}
@@ -321,6 +315,13 @@ const OffenderFeed = ({
                     style={{ marginRight: 5 }}
                   />
                 }
+                onClick={onNavigate}
+                style={{
+                  borderBottomLeftRadius: 0,
+                  borderLeftWidth: 0,
+                  borderTopLeftRadius: 0,
+                }}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Offender',
@@ -335,20 +336,20 @@ const OffenderFeed = ({
         <div>
           {loading ? (
             <Row
-              gutter={24}
               align="stretch"
+              gutter={24}
               style={{
                 alignItems: 'stretch',
-                padding: 10,
                 overflowX: 'hidden',
+                padding: 10,
               }}
             >
               {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
                 <Col
-                  style={{ marginBottom: compactView ? 0 : 20 }}
                   // eslint-disable-next-line react/no-array-index-key
                   key={index}
                   span={compactView ? 6 : 8}
+                  style={{ marginBottom: compactView ? 0 : 20 }}
                   xxl={compactView ? 4 : 6}
                 >
                   {compactView ? (
@@ -363,40 +364,40 @@ const OffenderFeed = ({
             data?.listOffendersRelay?.edges.length > 0 ? (
             <InfiniteScroll
               dataLength={data?.listOffendersRelay?.edges.length}
-              next={() => fetchMoreScroll()}
-              hasMore={data.listOffendersRelay.pageInfo.hasNextPage}
-              loader={<Loading />}
-              height="calc(100vh - 78px)"
-              style={{ overflowX: 'hidden' }}
               endMessage={
                 <p style={{ textAlign: 'center' }}>
                   {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                   <b>-----------</b>
                 </p>
               }
+              hasMore={data.listOffendersRelay.pageInfo.hasNextPage}
+              height="calc(100vh - 78px)"
+              loader={<Loading />}
+              next={() => fetchMoreScroll()}
+              style={{ overflowX: 'hidden' }}
             >
               <Row
-                gutter={[8, 8]}
                 align="stretch"
+                gutter={[8, 8]}
                 style={{
                   alignItems: 'stretch',
-                  padding: 10,
                   overflowX: 'hidden',
+                  padding: 10,
                 }}
               >
                 {data?.listOffendersRelay?.edges?.map((t) => {
                   if (!t?.node?.id) return null;
                   return (
                     <Col
+                      key={t?.node?.id}
                       span={compactView ? 6 : 8}
                       xxl={compactView ? 4 : 6}
-                      key={t?.node?.id}
                     >
                       <OffenderCard
+                        compactView={compactView}
                         offender={t?.node}
                         openLightbox={openLightbox}
                         update={updateOffenderList}
-                        compactView={compactView}
                       />
                     </Col>
                   );
@@ -406,10 +407,10 @@ const OffenderFeed = ({
           ) : (
             <div
               style={{
+                alignItems: 'center',
                 display: 'flex',
                 flex: 1,
                 height: 'calc(100vh - 100px)',
-                alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
@@ -434,29 +435,23 @@ const OffenderFeed = ({
         <div>
           <InfiniteScroll
             dataLength={data?.listOffendersRelay?.edges.length || 0}
-            next={() => fetchMoreScroll()}
-            hasMore={data?.listOffendersRelay.pageInfo.hasNextPage || false}
-            loader={<Loading />}
-            height="calc(100vh - 78px)"
-            style={{ overflowX: 'hidden' }}
             endMessage={
               <p style={{ textAlign: 'center' }}>
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                 <b>-----------</b>
               </p>
             }
+            hasMore={data?.listOffendersRelay.pageInfo.hasNextPage || false}
+            height="calc(100vh - 78px)"
+            loader={<Loading />}
+            next={() => fetchMoreScroll()}
+            style={{ overflowX: 'hidden' }}
           >
             <Table
-              pagination={false}
-              rowClassName={classes.row}
-              onRow={(record) => ({
-                onClick: () => navigate(`/app/offenders/view/${record.key}`),
-              })}
-              style={{ marginBottom: 20 }}
               columns={[
                 {
-                  key: 'alertId',
                   dataIndex: 'alertId',
+                  key: 'alertId',
                   title: (
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
@@ -466,8 +461,8 @@ const OffenderFeed = ({
                   ),
                 },
                 {
-                  key: 'name',
                   dataIndex: 'name',
+                  key: 'name',
                   title: (
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
@@ -477,8 +472,8 @@ const OffenderFeed = ({
                   ),
                 },
                 {
-                  key: 'totalIncidents',
                   dataIndex: 'totalIncidents',
+                  key: 'totalIncidents',
                   title: (
                     <Typography.Text ellipsis>
                       {intl.formatMessage({
@@ -488,15 +483,8 @@ const OffenderFeed = ({
                   ),
                 },
                 {
-                  key: 'totalValue',
                   dataIndex: 'totalValue',
-                  title: (
-                    <Typography.Text ellipsis>
-                      {intl.formatMessage({
-                        defaultMessage: 'Total Loss',
-                      })}
-                    </Typography.Text>
-                  ),
+                  key: 'totalValue',
                   render: (value: number) => (
                     <Typography.Text ellipsis>
                       {intl.formatMessage(
@@ -509,53 +497,66 @@ const OffenderFeed = ({
                       )}
                     </Typography.Text>
                   ),
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Total Loss',
+                      })}
+                    </Typography.Text>
+                  ),
                 },
                 {
-                  key: 'lastIncident',
                   dataIndex: 'lastIncident',
+                  key: 'lastIncident',
                   title: intl.formatMessage({
                     defaultMessage: 'Last Incident',
                   }),
                 },
               ]}
               dataSource={data?.listOffendersRelay.edges.map(({ node }) => ({
-                key: node.id,
                 alertId: node.reference,
+                key: node.id,
+                lastIncident: node.latestIncident?.dayTime,
                 name: node.name,
                 totalIncidents: node.totalIncidents,
                 totalValue: node.totalValue,
-                lastIncident: node.latestIncident?.dayTime,
               }))}
+              onRow={(record) => ({
+                onClick: () => navigate(`/app/offenders/view/${record.key}`),
+              })}
+              pagination={false}
+              rowClassName={classes.row}
+              style={{ marginBottom: 20 }}
             />
           </InfiniteScroll>
         </div>
       )}
 
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Offender Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <OffenderFilter />
       </Drawer>
 
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox([], 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

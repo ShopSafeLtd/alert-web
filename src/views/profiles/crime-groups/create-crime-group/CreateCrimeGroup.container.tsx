@@ -1,32 +1,36 @@
 import React from 'react';
+
 import View from './CreateCrimeGroup.view';
 import useCreateCrimeGroup from './useCreateCrimeGroup';
 
 const CreateCrimeGroup = () => {
   const {
+    addOffender,
+    fetchMoreScroll,
     loading,
     offendersData,
     offendersSelected,
-    searchData,
-    selectOffender,
-    addOffender,
-    toggleAddOffender,
     onSubmit,
     removeOffender,
+    searchData,
+    selectOffender,
     submitting,
+    toggleAddOffender,
   } = useCreateCrimeGroup();
+
   return (
     <View
-      selectOffender={selectOffender}
+      addOffender={addOffender}
+      fetchMoreScroll={fetchMoreScroll}
+      loading={loading}
       offendersData={offendersData}
       offendersSelected={offendersSelected}
-      loading={loading}
-      searchData={searchData}
-      addOffender={addOffender}
-      toggleAddOffender={toggleAddOffender}
       onSubmit={onSubmit}
       removeOffender={removeOffender}
+      searchData={searchData}
+      selectOffender={selectOffender}
       submitting={submitting}
+      toggleAddOffender={toggleAddOffender}
     />
   );
 };

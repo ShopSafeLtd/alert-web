@@ -1,84 +1,86 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+
 import React from 'react';
 
 import View from './AddTodo.view';
 import useAddTodo from './useAddTodo';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 
 interface Props {
-  onClose: () => void;
-  update?: MutationUpdaterFn<CreateTodoMutation>;
-  incidentId?: string;
-  investigationId?: string;
   businessId?: string;
+  incidentId?: string;
   initData?: {
     id: string;
   };
+  investigationId?: string;
+  onClose: () => void;
+  update?: MutationUpdaterFn<CreateTodoMutation>;
 }
 
 const AddTodo = ({
-  update: updateMutation,
-  onClose,
-  incidentId,
-  investigationId,
   businessId,
+  incidentId,
   initData,
+  investigationId,
+  onClose,
+  update: updateMutation,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
-    adminUsersData,
-    usersLoading,
     addQuestion,
-    setAddQuestion,
-    update,
-    selectedIds,
-    // selectedQuestions,
-    // setSelectedQuestions,
-    // setSelectedIds,
-    form,
-    templatesLoading,
-    templatesData,
-    questions,
-    setUsers,
-    setAvailableUsers,
-    users,
+    adminUsersData,
     availableUsers,
     documentList,
     documentUploadProps,
+    // setSelectedIds,
+    form,
+    onSubmit,
+    questions,
+    // selectedQuestions,
+    // setSelectedQuestions,
+    saving,
+    selectedIds,
+    setAddQuestion,
+    setAvailableUsers,
+    setUsers,
+    templatesData,
+    templatesLoading,
+    update,
+    users,
+    usersLoading,
   } = useAddTodo({
+    businessId,
+    incidentId,
+    initData,
+    investigationId,
     onClose,
     updateMutation,
-    incidentId,
-    investigationId,
-    businessId,
-    initData,
   });
 
   return (
     <View
-      form={form}
       // setSelectedIds={setSelectedIds}
       addQuestion={addQuestion}
-      setAddQuestion={setAddQuestion}
-      update={update}
-      selectedIds={selectedIds}
-      // selectedQuestions={selectedQuestions}
-      // setSelectedQuestions={setSelectedQuestions}
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
       adminUsersData={adminUsersData}
-      usersLoading={usersLoading}
-      templatesLoading={templatesLoading}
-      templatesData={templatesData}
-      questions={questions}
       availableUsers={availableUsers}
-      setAvailableUsers={setAvailableUsers}
-      setUsers={setUsers}
-      users={users}
+      businessId={businessId}
       documentList={documentList}
       documentUploadProps={documentUploadProps}
+      // selectedQuestions={selectedQuestions}
+      form={form}
+      onClose={onClose}
+      // setSelectedQuestions={setSelectedQuestions}
+      onSubmit={onSubmit}
+      questions={questions}
+      saving={saving}
+      selectedIds={selectedIds}
+      setAddQuestion={setAddQuestion}
+      setAvailableUsers={setAvailableUsers}
+      setUsers={setUsers}
+      templatesData={templatesData}
+      templatesLoading={templatesLoading}
+      update={update}
+      users={users}
+      usersLoading={usersLoading}
     />
   );
 };
