@@ -1,8 +1,9 @@
 import React from 'react';
+
 import useStyles from './Loading.styles';
 
 export interface Props {
-  size?: 'default' | 'small' | 'large' | undefined;
+  size?: 'default' | 'large' | 'small' | undefined;
 }
 
 const Loading = (): JSX.Element => {

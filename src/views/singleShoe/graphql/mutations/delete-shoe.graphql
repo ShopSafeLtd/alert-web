@@ -1,0 +1,6 @@
+mutation deleteShoe($id: String!) {
+  deleteShoe(where: { id: $id }) {
+    id
+    status
+  }
+}

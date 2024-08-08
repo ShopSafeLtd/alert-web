@@ -1,0 +1,9 @@
+mutation UpsertShoe($data: UpsertShoe!) {
+  upsertShoe(data: $data) {
+    ...SingleShoe
+    matchedInfo
+    secondaryShoe {
+      id
+    }
+  }
+}

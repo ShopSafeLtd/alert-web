@@ -1,39 +1,38 @@
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
-
-import { Modal, notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import type { CustomGalleryData } from 'types/DataType';
-import { useIntl } from 'react-intl';
 import type {
   CustomGalleriesQuery,
   CustomGalleriesQueryVariables,
 } from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
+import type { CustomGalleryData } from 'types/DataType';
+
 import {
   CustomGalleriesDocument,
   useCustomGalleriesQuery,
 } from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
+import { Modal, notification } from 'antd';
 import { useCreateCustomGalleryMutation } from 'graphql/customGallery/mutations/create-custom-gallery.generated';
 import { useDeleteCustomGalleryMutation } from 'graphql/customGallery/mutations/delete_custom-gallery.generated';
 import { useUpdateCustomGalleryMutation } from 'graphql/customGallery/mutations/update_custom-gallery.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
 interface Return {
-  data: CustomGalleriesQuery | undefined;
-  loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
   addCustomGallery: boolean;
-  toggleAddCustomGallery: () => void;
-  editCustomGallery: CustomGalleryData | undefined;
-  setEditCustomGallery: (value: CustomGalleryData | undefined) => void;
-  saving: boolean;
+  data: CustomGalleriesQuery | undefined;
   deleteConfirm: (value: string) => void;
+  editCustomGallery: CustomGalleryData | undefined;
+  loading: boolean;
   onAddCustomGallery: (value: CustomGalleryData) => void;
   onEditCustomGallery: (value: CustomGalleryData) => void;
+  saving: boolean;
+  search: string;
+  setEditCustomGallery: (value: CustomGalleryData | undefined) => void;
+  setSearch: (value: string) => void;
+  toggleAddCustomGallery: () => void;
 }
 
 const useCustomGalleries = (): Return => {
@@ -53,14 +52,6 @@ const useCustomGalleries = (): Return => {
       name: SortOrder.Asc,
     },
     where: {
-      schemes: {
-        some: {
-          id: {
-            in: [schemeId],
-          },
-        },
-      },
-
       OR: [
         {
           name: {
@@ -75,6 +66,14 @@ const useCustomGalleries = (): Return => {
           },
         },
       ],
+
+      schemes: {
+        some: {
+          id: {
+            in: [schemeId],
+          },
+        },
+      },
     },
   };
   const { data, loading } = useCustomGalleriesQuery({
@@ -87,11 +86,11 @@ const useCustomGalleries = (): Return => {
     onCompleted: () => {
       setAddCustomGallery(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The custom gallery has been added.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -109,17 +108,17 @@ const useCustomGalleries = (): Return => {
       if (existingData === null) return;
 
       store.writeQuery<CustomGalleriesQuery>({
-        query: CustomGalleriesDocument,
         data: {
+          __typename: 'Query',
           customGalleriesRelay: {
-            totalCount: existingData.customGalleriesRelay.totalCount + 1,
             edges: [
               ...existingData.customGalleriesRelay.edges,
               { node: res.createCustomGallery },
             ],
+            totalCount: existingData.customGalleriesRelay.totalCount + 1,
           },
-          __typename: 'Query',
         },
+        query: CustomGalleriesDocument,
         variables,
       });
     },
@@ -129,16 +128,16 @@ const useCustomGalleries = (): Return => {
     void createCustomGallery({
       variables: {
         data: {
-          name: value.name,
           description: value.description || '',
-          schemes: {
-            connect: { id: schemeId },
-          },
           groups: {
             connect:
               value.groups && value.groups.length > 0
                 ? value.groups?.map((id) => ({ id }))
                 : [],
+          },
+          name: value.name,
+          schemes: {
+            connect: { id: schemeId },
           },
         },
       },
@@ -152,8 +151,8 @@ const useCustomGalleries = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Removed',
         description: `The custom gallery has been removed from ${schemeName}!`,
+        message: 'Successfully Removed',
         placement: 'bottomRight',
       });
     },
@@ -171,17 +170,17 @@ const useCustomGalleries = (): Return => {
       if (existingData === null) return;
 
       store.writeQuery<CustomGalleriesQuery>({
-        query: CustomGalleriesDocument,
         data: {
+          __typename: 'Query',
           customGalleriesRelay: {
-            totalCount: existingData.customGalleriesRelay.totalCount - 1,
             edges: existingData.customGalleriesRelay.edges.filter(
               ({ node: customGallery }) =>
                 customGallery?.id !== res?.deleteCustomGallery?.id
             ),
+            totalCount: existingData.customGalleriesRelay.totalCount - 1,
           },
-          __typename: 'Query',
         },
+        query: CustomGalleriesDocument,
         variables,
       });
     },
@@ -190,11 +189,11 @@ const useCustomGalleries = (): Return => {
     onCompleted: () => {
       setEditCustomGallery(undefined);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender warning has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -208,11 +207,7 @@ const useCustomGalleries = (): Return => {
     setSaving(true);
     void updateCustomGallery({
       variables: {
-        where: {
-          id: value.id,
-        },
         data: {
-          name: { set: value.name },
           description: { set: value.description || '' },
           groups: {
             set:
@@ -220,6 +215,10 @@ const useCustomGalleries = (): Return => {
                 ? value.groups?.map((id) => ({ id }))
                 : [],
           },
+          name: { set: value.name },
+        },
+        where: {
+          id: value.id,
         },
       },
     }).finally(() => {
@@ -228,9 +227,6 @@ const useCustomGalleries = (): Return => {
   };
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the custom gallery?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
@@ -242,6 +238,9 @@ const useCustomGalleries = (): Return => {
           },
         }).finally(() => setSaving(false));
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the custom gallery?',
+      }),
     });
   };
   const toggleAddCustomGallery = () => {
@@ -249,18 +248,18 @@ const useCustomGalleries = (): Return => {
   };
 
   return {
-    data,
-    loading,
-    search,
-    setSearch,
     addCustomGallery,
-    toggleAddCustomGallery,
-    editCustomGallery,
-    saving,
+    data,
     deleteConfirm,
+    editCustomGallery,
+    loading,
     onAddCustomGallery,
     onEditCustomGallery,
+    saving,
+    search,
     setEditCustomGallery,
+    setSearch,
+    toggleAddCustomGallery,
   };
 };
 

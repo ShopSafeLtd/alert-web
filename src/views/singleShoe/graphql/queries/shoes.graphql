@@ -1,0 +1,15 @@
+query Shoes(
+  $skip: Int
+  $take: Int
+  $orderBy: [ShoeOrderByWithRelationInput!]
+  $where: ShoeWhereInput
+) {
+  shoes(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        ...SingleShoe
+      }
+    }
+  }
+}

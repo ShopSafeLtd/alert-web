@@ -1,12 +1,13 @@
+import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Route, Routes } from 'react-router';
+import ActiveChecklistContainer from 'views/checklist/active-checklist/ActiveChecklist.container';
 import CreateChecklist from 'views/checklist/create-edit-checklist/CreateChecklist.container';
 import ChecklistFeed from 'views/checklist/list-checklists/ListChecklists.container';
-import ActiveChecklistContainer from 'views/checklist/active-checklist/ActiveChecklist.container';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
+
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { useIntl } from 'react-intl';
-import RouteWrapper from '#/navigation/utils/route-wrapper';
 
 const Checklist = (): JSX.Element => {
   const intl = useIntl();
@@ -18,56 +19,56 @@ const Checklist = (): JSX.Element => {
     >
       <Routes>
         <Route
-          index
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Checklist,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Checklist,
               }}
             >
               <ChecklistFeed />
             </PermissionCheckWrapper>
           }
+          index
         />
         <Route
-          path="add"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Checklist,
                 method: PermissionMethod.Write,
+                model: PermissionModel.Checklist,
               }}
             >
               <CreateChecklist />
             </PermissionCheckWrapper>
           }
+          path="add"
         />
         <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Edit,
+                model: PermissionModel.Checklist,
+              }}
+            >
+              <CreateChecklist />
+            </PermissionCheckWrapper>
+          }
           path="edit/:id"
-          element={
-            <PermissionCheckWrapper
-              permission={{
-                model: PermissionModel.Checklist,
-                method: PermissionMethod.Edit,
-              }}
-            >
-              <CreateChecklist />
-            </PermissionCheckWrapper>
-          }
         />
         <Route
-          path="active/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Checklist,
                 method: PermissionMethod.Edit,
+                model: PermissionModel.Checklist,
               }}
             >
               <ActiveChecklistContainer />
             </PermissionCheckWrapper>
           }
+          path="active/:id"
         />
       </Routes>
     </RouteWrapper>

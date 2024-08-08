@@ -1,11 +1,12 @@
-import { useStoreState } from 'state';
 import type { BusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+
 import { useBusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
 import { SortOrder } from 'graphql/types';
+import { useStoreState } from 'state';
 
 interface Return {
   data:
-    | Exclude<BusinessesSideListQuery['businessRelay'], undefined | null>
+    | Exclude<BusinessesSideListQuery['businessRelay'], null | undefined>
     | null
     | undefined;
   loading: boolean;
@@ -15,8 +16,10 @@ interface Return {
 const useBusinessSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
 
-  const { data, loading, fetchMore } = useBusinessesSideListQuery({
+  const { data, fetchMore, loading } = useBusinessesSideListQuery({
     variables: {
+      first: 24,
+      orderBy: { name: SortOrder.Asc },
       where: {
         schemes: {
           some: {
@@ -26,27 +29,11 @@ const useBusinessSideList = (): Return => {
           },
         },
       },
-      orderBy: { name: SortOrder.Asc },
-      first: 24,
     },
   });
 
   const next = () => {
     void fetchMore({
-      variables: {
-        where: {
-          schemes: {
-            some: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-        orderBy: { name: SortOrder.Asc },
-        first: 24,
-        after: data?.businessRelay.pageInfo.endCursor,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -58,6 +45,20 @@ const useBusinessSideList = (): Return => {
             ],
           },
         };
+      },
+      variables: {
+        after: data?.businessRelay.pageInfo.endCursor,
+        first: 24,
+        orderBy: { name: SortOrder.Asc },
+        where: {
+          schemes: {
+            some: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
       },
     });
   };

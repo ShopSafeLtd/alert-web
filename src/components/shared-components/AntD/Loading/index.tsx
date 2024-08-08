@@ -1,12 +1,12 @@
 /* eslint-disable react/no-unused-prop-types */
 /* eslint-disable react/default-props-match-prop-types */
-/* eslint-disable react/require-default-props */
-import React from 'react';
+import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import PropTypes from 'prop-types';
-import { LoadingOutlined } from '@ant-design/icons';
+/* eslint-disable react/require-default-props */
+import React from 'react';
 
-const Icon = <LoadingOutlined style={{ fontSize: 35 }} spin />;
+const Icon = <LoadingOutlined spin style={{ fontSize: 35 }} />;
 
 export interface Props {
   align: 'center' | 'left' | 'right';
@@ -23,8 +23,8 @@ const Loading = (props: Props) => {
 };
 
 Loading.propTypes = {
-  size: PropTypes.string,
   cover: PropTypes.string,
+  size: PropTypes.string,
 };
 
 Loading.defaultProps = {

@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SelectProps } from 'antd';
-import { Typography, Select, Spin } from 'antd';
-import React, { useMemo, useRef, useState } from 'react';
+
+import { Select, Spin, Typography } from 'antd';
 import debounce from 'lodash/debounce';
+import React, { useMemo, useRef, useState } from 'react';
 
 export interface DebounceSelectProps<ValueType = any>
-  extends Omit<SelectProps<ValueType>, 'options' | 'children'> {
-  fetchOptions: (search: string) => Promise<ValueType[]>;
+  extends Omit<SelectProps<ValueType>, 'children' | 'options'> {
   debounceTimeout?: number;
+  fetchOptions: (search: string) => Promise<ValueType[]>;
   setValue?(args0: ValueType[]): void;
 }
 
@@ -26,11 +27,11 @@ const DebounceSelect = <
     label: string;
     location?: string;
     siteNumber?: string;
-    value: string | number;
-  } = any
+    value: number | string;
+  } = any,
 >({
-  fetchOptions,
   debounceTimeout = 200,
+  fetchOptions,
   setValue,
   ...props
 }: DebounceSelectProps) => {
@@ -56,10 +57,10 @@ const DebounceSelect = <
 
   return (
     <Select<ValueType>
-      labelInValue
       filterOption={false}
-      onSearch={debounceFetcher}
+      labelInValue
       notFoundContent={fetching ? <Spin size="small" /> : null}
+      onSearch={debounceFetcher}
       optionFilterProp="label"
       optionLabelProp="label"
       // options={options}
@@ -68,9 +69,9 @@ const DebounceSelect = <
     >
       {options.map((option) => (
         <Select.Option
-          key={option.value}
-          value={option.value}
+          key={option.location}
           label={option.label}
+          value={option.value}
         >
           <Typography.Text>{option.label}</Typography.Text>
           {option.siteNumber && (
@@ -80,8 +81,8 @@ const DebounceSelect = <
 
           {option.location && (
             <Typography.Paragraph
-              type="secondary"
               style={{ fontSize: 13, margin: 0 }}
+              type="secondary"
             >
               {option.location}
             </Typography.Paragraph>

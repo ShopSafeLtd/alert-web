@@ -1,0 +1,35 @@
+fragment Shoes on Shoe {
+  type
+  style
+  size
+  status
+  side
+  retailPrice
+  recycled
+  id
+  description
+  colour
+  stockItem {
+    id
+    sku
+  }
+  business {
+    id
+    name
+    locations {
+      full
+    }
+  }
+  box
+  updatedAt
+  primaryShoe {
+    id
+    business {
+      id
+      name
+      locations {
+        full
+      }
+    }
+  }
+}

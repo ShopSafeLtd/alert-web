@@ -1,0 +1,6 @@
+mutation UpdateShoe($where: UniqueId!, $data: UpdateShoe!) {
+  updateShoe(where: $where, data: $data) {
+    ...SingleShoe
+    matchedInfo
+  }
+}

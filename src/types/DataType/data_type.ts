@@ -11,6 +11,9 @@ import type {
   IdSource,
   ImagePosition,
   Race,
+  ShoeSide,
+  ShoeStatus,
+  ShoeType,
   UpdateType,
 } from 'graphql/types';
 import type { Moment } from 'moment';
@@ -76,11 +79,11 @@ export interface OffenderData {
 export interface OffenderCardData {
   id: string;
   images?:
-    | Array<{
+    | {
         id: string;
         optimised?: null | string;
         url?: null | string;
-      }>
+      }[]
     | null
     | undefined;
   name?: null | string;
@@ -95,14 +98,14 @@ export type IncidentsData =
 
 export interface IncidentCardData {
   createdBy?: {
-    businesses: Array<{ id: string; name: string }>;
+    businesses: { id: string; name: string }[];
     fullName: string;
     id: string;
   };
-  crimeTypes?: Array<{
+  crimeTypes?: {
     id: string;
     name: string;
-  }>;
+  }[];
   dayTime?: null | string | undefined;
   description?: string;
   id: string;
@@ -452,7 +455,7 @@ export enum UserSort {
 
 export interface ArticleData {
   createdBy?: {
-    businesses?: Array<{ id: string; name: string }>;
+    businesses?: { id: string; name: string }[];
     fullName: string;
     id: string;
   };
@@ -515,4 +518,29 @@ export interface ActivityData {
   groups: { id: string; name: string }[];
   id: string;
   name?: null | string | undefined;
+}
+export interface ShoeData {
+  box: boolean;
+  business: { id: string; locations?: { full?: string }[]; name: string };
+  colour: string;
+  description: string;
+  id: string;
+  primaryShoe?: {
+    __typename?: 'Shoe';
+    business: { id: string; locations?: { full?: string }[]; name: string };
+    id: string;
+  } | null;
+  // recycled: boolean;
+  retailPrice: number;
+  side: ShoeSide;
+  size: number;
+  status: ShoeStatus;
+  stockItem: {
+    id: string;
+    name?: null | string;
+    sku?: null | string | undefined;
+  };
+  style: string;
+  type: ShoeType;
+  updatedAt: Date;
 }

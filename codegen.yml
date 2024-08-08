@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'http://localhost:4000/graphql'
+schema: 'http://localhost:3001/graphql'
 documents: 'src/**/*.graphql'
 config:
   addDocBlocks: false,
@@ -17,11 +17,14 @@ generates:
       extension: .generated.tsx
       baseTypesPath: graphql/types.ts
       baseTypes: types
+      folder: '__generated__'
+
     plugins:
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
       {
+        immutableTypes: true,
         withHooks: true,
         addDocBlocks: false,
         useTypeImports: true,

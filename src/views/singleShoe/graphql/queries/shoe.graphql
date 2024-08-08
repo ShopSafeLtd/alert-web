@@ -1,0 +1,5 @@
+query Shoe($where: ShoeWhereUniqueInput!) {
+  shoe(where: $where) {
+    ...SingleShoe
+  }
+}

@@ -1,4 +1,4 @@
-import type * as Types from '../../../graphql/types.js';
+import type * as Types from '../../../../graphql/types.js';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
@@ -7,11 +7,11 @@ export type BusinessesSelectQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.BusinessWhereInput>;
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
   take?: Types.InputMaybe<Types.Scalars['Int']>;
-  orderBy?: Types.InputMaybe<Array<Types.BusinessOrderBy> | Types.BusinessOrderBy>;
+  orderBy?: Types.InputMaybe<ReadonlyArray<Types.BusinessOrderBy> | Types.BusinessOrderBy>;
 }>;
 
 
-export type BusinessesSelectQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null }> } };
+export type BusinessesSelectQuery = { readonly __typename?: 'Query', readonly listBusinesses: { readonly __typename?: 'ListBusinesses', readonly total: number, readonly businesses: ReadonlyArray<{ readonly __typename?: 'Business', readonly id: string, readonly name: string, readonly siteNumber?: string | null }> } };
 
 
 export const BusinessesSelectDocument = gql`

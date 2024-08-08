@@ -1,12 +1,13 @@
+import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Route, Routes } from 'react-router';
 import AddVehicle from 'views/profiles/Vehicles/AddVehicle';
 import ListVehicles from 'views/profiles/Vehicles/ListVehicles';
 import ViewVehicle from 'views/profiles/Vehicles/ViewVehicle';
+
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useIntl } from 'react-intl';
-import RouteWrapper from '#/navigation/utils/route-wrapper';
 
 const Vehicles = (): JSX.Element => {
   const intl = useIntl();
@@ -18,43 +19,43 @@ const Vehicles = (): JSX.Element => {
     >
       <Routes>
         <Route
-          index
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Vehicles,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Vehicles,
               }}
             >
               <ListVehicles />
             </PermissionCheckWrapper>
           }
+          index
         />
         <Route
-          path="view/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Vehicles,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Vehicles,
               }}
             >
               <ViewVehicle />
             </PermissionCheckWrapper>
           }
+          path="view/:id"
         />
         <Route
-          path="add"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Vehicles,
                 method: PermissionMethod.Write,
+                model: PermissionModel.Vehicles,
               }}
             >
               <AddVehicle />
             </PermissionCheckWrapper>
           }
+          path="add"
         />
       </Routes>
     </RouteWrapper>
