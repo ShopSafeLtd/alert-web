@@ -1,27 +1,29 @@
-import type { StockItemValue } from 'components/form-components/StockItemSearch/StockItemSearch.view';
 import type { FormInstance } from 'antd';
+import type { StockItemValue } from 'components/form-components/StockItemSearch/StockItemSearch.view';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+
 import { Form } from 'antd';
-import { useStoreState } from 'state';
+import { useListBusinessesDivisionQuery } from 'graphql/businesses/queries/__generated__/list-businesses-division.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useEffect, useState } from 'react';
+import { useStoreState } from 'state';
+
 import type { FormData } from '../../useAddIncident';
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { useListBusinessesDivisionQuery } from 'graphql/businesses/queries/list-businesses-division.generated';
 
 interface Return {
-  goodsTypesData: ListGoodsTypesQuery | undefined;
-  onAddItem: (data: StockItemValue) => void;
   division: string | undefined;
   goods: {
     goodsType?: string;
-    value?: number;
-    recoveredValue?: number;
+    name?: string;
     quantity?: number;
     recoveredQuantity?: number;
+    recoveredValue?: number;
     sku?: string;
-    name?: string;
     stockItem?: string;
+    value?: number;
   }[];
+  goodsTypesData: ListGoodsTypesQuery | undefined;
+  onAddItem: (data: StockItemValue) => void;
 }
 
 const useIncidentGoods = ({
@@ -70,22 +72,22 @@ const useIncidentGoods = ({
       goods: [
         ...goods,
         {
-          sku: data.sku || '',
-          value: data.salesPriceLocal ?? data.costPriceLocal ?? 0,
+          name: data.name || '',
           quantity: undefined,
           recoveredQuantity: 0,
-          name: data.name || '',
+          sku: data.sku || '',
           stockItem: data.id,
+          value: data.salesPriceLocal ?? data.costPriceLocal ?? 0,
         },
       ],
     });
   };
 
   return {
-    goodsTypesData,
-    onAddItem,
     division,
     goods,
+    goodsTypesData,
+    onAddItem,
   };
 };
 

@@ -1,5 +1,15 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import type {
+  CustomGalleryData,
+  Image,
+  IncidentCardData,
+} from 'types/DataType';
+
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -14,128 +24,121 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
-import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type {
-  CustomGalleryData,
-  Image,
-  IncidentCardData,
-} from 'types/DataType';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
+import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import UploadImage from 'components/images/UploadImage.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import useStyles from './AddVehicle.styles';
+
 import type { FormData } from './useAddVehicle';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+
+import useStyles from './AddVehicle.styles';
 
 const { confirm } = Modal;
 
 interface Props {
-  onClose: () => void;
-  onSubmit: (value: FormData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
-  saving?: boolean;
-  offendersData: OffenderData[];
+  addCustomGallery: boolean;
+  adminRights: boolean;
+  beforeUpload: (value: RcFile) => void;
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
+  editImage: Image | null;
+  fileList: Image[];
+  form: FormInstance<FormData>;
+  fromIncident?: boolean;
+  fromOffender?: boolean;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  imgChange: UploadProps['onChange'];
   incidentsData: IncidentCardData[];
   linkIncident: boolean;
   linkOffender: boolean;
-  toggleLinkIncident: () => void;
-  toggleLinkOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: IncidentCardData) => void;
-  removeOffender: (value: string | undefined) => void;
-  removeIncident: (value: string | undefined) => void;
-  adminRights: boolean;
-  imgChange: UploadProps['onChange'];
-  beforeUpload: (value: RcFile) => void;
 
-  fileList: Image[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
-  editImage: Image | null;
+  offendersData: OffenderData[];
+  onClose: () => void;
   onEditImage: (value: Image) => void;
   onRemoveImage: (imageId: string) => void;
-  toggleEditImage: (value?: Image) => void;
-  fromIncident?: boolean;
-  fromOffender?: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
+  onSubmit: (value: FormData) => void;
+  primaryImage: string;
+  removeIncident: (value: string | undefined) => void;
+  removeOffender: (value: string | undefined) => void;
+  saving?: boolean;
+  setPrimaryImage: (value: string) => void;
   showGroups?: boolean;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
-  addCustomGallery: boolean;
   toggleAddCustomGallery: () => void;
+  toggleEditImage: (value?: Image) => void;
+  toggleLinkIncident: () => void;
+  toggleLinkOffender: () => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
-  form: FormInstance<FormData>;
+  updateOffendersList: (value: OffenderData) => void;
 }
 
 const AddVehicle = ({
-  onClose,
-  onSubmit,
   CrimeGroupsData,
   CrimeGroupsLoading,
-  saving,
-  offendersData,
-  incidentsData,
-  linkIncident,
-  linkOffender,
-  toggleLinkIncident,
-  toggleLinkOffender,
-  updateIncidentList,
-  updateOffendersList,
-  removeOffender,
-  removeIncident,
+  addCustomGallery,
   adminRights,
-  imgChange,
   beforeUpload,
-
-  fileList,
-  onRemoveImage,
-  onEditImage,
-  toggleEditImage,
+  customGalleries,
+  customGalleriesLoading,
   editImage,
-  primaryImage,
-  setPrimaryImage,
+  fileList,
+  form,
   fromIncident,
   fromOffender,
   groups,
   groupsLoading,
+  imgChange,
+  incidentsData,
+  linkIncident,
+  linkOffender,
+
+  offendersData,
+  onClose,
+  onEditImage,
+  onRemoveImage,
+  onSubmit,
+  primaryImage,
+  removeIncident,
+  removeOffender,
+  saving,
+  setPrimaryImage,
   showGroups,
-  customGalleries,
-  customGalleriesLoading,
-  addCustomGallery,
   toggleAddCustomGallery,
+  toggleEditImage,
+  toggleLinkIncident,
+  toggleLinkOffender,
+  updateIncidentList,
   updateNewCustomGalleryData,
-  form,
+  updateOffendersList,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   return (
     <div>
-      <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
+      <Form<FormData> form={form} layout="vertical" onFinish={onSubmit}>
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="make"
               label={intl.formatMessage({
                 defaultMessage: 'Make',
               })}
+              name="make"
             >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="model"
               label={intl.formatMessage({
                 defaultMessage: 'Model',
               })}
+              name="model"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -144,20 +147,20 @@ const AddVehicle = ({
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="colour"
               label={intl.formatMessage({
                 defaultMessage: 'Colour',
               })}
+              name="colour"
             >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="registration"
               label={intl.formatMessage({
                 defaultMessage: 'Registration',
               })}
+              name="registration"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -168,29 +171,29 @@ const AddVehicle = ({
           {showGroups && (
             <Col span={12}>
               <Form.Item
-                name="groups"
                 label={intl.formatMessage({
                   defaultMessage: 'Groups',
                 })}
-                tooltip={intl.formatMessage({
-                  defaultMessage:
-                    'Please select the relevant groups that you would like this vehicle to be visible to.',
-                })}
+                name="groups"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select at least one group for the vehicle.',
                     }),
+                    required: true,
                   },
                 ]}
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'Please select the relevant groups that you would like this vehicle to be visible to.',
+                })}
               >
                 <Select
-                  loading={groupsLoading}
                   disabled={saving}
-                  mode="multiple"
+                  loading={groupsLoading}
                   maxTagCount={3}
+                  mode="multiple"
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select groups...',
                   })}
@@ -207,21 +210,20 @@ const AddVehicle = ({
           {adminRights && (
             <Col span={12}>
               <Form.Item
-                name="crimeGroup"
                 label={intl.formatMessage({
                   defaultMessage: 'Crime Groups',
                 })}
+                name="crimeGroup"
               >
                 <Select
-                  loading={CrimeGroupsLoading}
                   disabled={saving}
-                  mode="multiple"
-                  maxTagCount={3}
                   filterOption
+                  loading={CrimeGroupsLoading}
+                  maxTagCount={3}
+                  mode="multiple"
                   optionFilterProp="label"
                   options={CrimeGroupsData?.listCrimeGroups.crimeGroups.map(
                     (crimeGroup) => ({
-                      value: crimeGroup.id,
                       label: intl.formatMessage(
                         {
                           defaultMessage: 'CG-{ref}',
@@ -230,6 +232,7 @@ const AddVehicle = ({
                           ref: crimeGroup.reference,
                         }
                       ),
+                      value: crimeGroup.id,
                     })
                   )}
                 />
@@ -241,23 +244,23 @@ const AddVehicle = ({
         {showGroups && (
           <Row gutter={16}>
             <Col span={24}>
-              <Row gutter={16} align="middle">
+              <Row align="middle" gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    name="customGalleries"
                     label={intl.formatMessage({
                       defaultMessage: 'Custom Galleries',
                     })}
+                    name="customGalleries"
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'select any custom galleries that are relevant to this offender or add your own.',
                     })}
                   >
                     <Select
-                      loading={customGalleriesLoading}
                       disabled={saving}
-                      mode="multiple"
+                      loading={customGalleriesLoading}
                       maxTagCount={3}
+                      mode="multiple"
                       optionFilterProp="label"
                       // value={selectedItems}
                       // onChange={onSelectCustomGallery}
@@ -265,8 +268,8 @@ const AddVehicle = ({
                       {customGalleries.map((el) => (
                         <Select.Option
                           key={el.value}
-                          value={el.value}
                           label={el.label}
+                          value={el.value}
                         >
                           {el.label}
                         </Select.Option>
@@ -277,14 +280,14 @@ const AddVehicle = ({
                 <Col>
                   <Button
                     disabled={saving}
-                    style={{ color: 'red', padding: 8 }}
-                    onClick={toggleAddCustomGallery}
                     icon={
                       <FontAwesomeIcon
                         icon={faPlus}
                         style={{ marginRight: 5 }}
                       />
                     }
+                    onClick={toggleAddCustomGallery}
+                    style={{ color: 'red', padding: 8 }}
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Custom Gallery',
@@ -297,18 +300,18 @@ const AddVehicle = ({
         )}
 
         <UploadImage
-          imgChange={imgChange}
           beforeUpload={beforeUpload}
-          fileList={fileList}
           editImage={editImage}
+          fileList={fileList}
+          imgChange={imgChange}
           onEditImage={onEditImage}
-          toggleEditImage={toggleEditImage}
           onRemoveImage={onRemoveImage}
           primaryImage={primaryImage}
           setPrimaryImage={setPrimaryImage}
           title={intl.formatMessage({
             defaultMessage: 'vehicle',
           })}
+          toggleEditImage={toggleEditImage}
         />
 
         {adminRights && (
@@ -316,7 +319,6 @@ const AddVehicle = ({
             {!fromIncident && (
               <Col>
                 <Button
-                  onClick={toggleLinkIncident}
                   disabled={saving || linkOffender}
                   icon={
                     <FontAwesomeIcon
@@ -325,6 +327,7 @@ const AddVehicle = ({
                       size="lg"
                     />
                   }
+                  onClick={toggleLinkIncident}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Link Incident',
@@ -337,7 +340,6 @@ const AddVehicle = ({
               <Col>
                 <div>
                   <Button
-                    onClick={toggleLinkOffender}
                     disabled={saving || linkIncident}
                     icon={
                       <FontAwesomeIcon
@@ -346,6 +348,7 @@ const AddVehicle = ({
                         size="lg"
                       />
                     }
+                    onClick={toggleLinkOffender}
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Link Offender',
@@ -367,33 +370,29 @@ const AddVehicle = ({
             <Table
               columns={[
                 {
-                  key: 'reference',
                   dataIndex: 'reference',
+                  key: 'reference',
                   title: intl.formatMessage({
                     defaultMessage: 'Alert ID',
                   }),
                 },
                 {
-                  key: 'subject',
                   dataIndex: 'subject',
+                  key: 'subject',
                   title: intl.formatMessage({
                     defaultMessage: 'Subject',
                   }),
                 },
                 {
-                  key: 'date',
                   dataIndex: 'date',
+                  key: 'date',
                   title: intl.formatMessage({
                     defaultMessage: 'Date',
                   }),
                 },
                 {
-                  key: 'Options',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Delete',
-                  }),
                   dataIndex: 'Options',
-                  width: 5,
+                  key: 'Options',
                   render: (_, record) => (
                     <Row>
                       <Col>
@@ -403,14 +402,10 @@ const AddVehicle = ({
                           })}
                         >
                           <Button
-                            size="small"
                             disabled={saving}
+                            icon={<FontAwesomeIcon icon={faTrash} />}
                             onClick={() => {
                               confirm({
-                                title: intl.formatMessage({
-                                  defaultMessage:
-                                    'Do you want to remove the incident?',
-                                }),
                                 content: intl.formatMessage({
                                   defaultMessage:
                                     'This action cannot be undone.',
@@ -418,23 +413,31 @@ const AddVehicle = ({
                                 onOk() {
                                   removeIncident(record.key);
                                 },
+                                title: intl.formatMessage({
+                                  defaultMessage:
+                                    'Do you want to remove the incident?',
+                                }),
                               });
                             }}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
+                            size="small"
                           />
                         </Tooltip>
                       </Col>
                     </Row>
                   ),
+                  title: intl.formatMessage({
+                    defaultMessage: 'Delete',
+                  }),
+                  width: 5,
                 },
               ]}
               dataSource={incidentsData.map((incident) => ({
-                subject: incident.subject,
+                date: incident.dayTime,
+                key: incident.id,
+
                 reference: incident.reference,
 
-                date: incident.dayTime,
-
-                key: incident.id,
+                subject: incident.subject,
               }))}
               pagination={false}
               size="small"
@@ -452,10 +455,10 @@ const AddVehicle = ({
             <Table
               columns={[
                 {
-                  key: 'images',
                   dataIndex: 'images',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Image',
+                  key: 'images',
+                  onCell: () => ({
+                    className: classes.imageCell,
                   }),
                   // eslint-disable-next-line no-confusing-arrow
                   render: (images: { id: string; optimised: string }[]) =>
@@ -468,25 +471,21 @@ const AddVehicle = ({
                     ) : (
                       <Skeleton.Image className={classes.imageSkeleton} />
                     ),
-                  onCell: () => ({
-                    className: classes.imageCell,
+                  title: intl.formatMessage({
+                    defaultMessage: 'Image',
                   }),
                 },
                 {
-                  key: 'name',
                   dataIndex: 'name',
+                  key: 'name',
                   title: intl.formatMessage({
                     defaultMessage: 'Name',
                   }),
                 },
 
                 {
-                  key: 'Options',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Delete',
-                  }),
                   dataIndex: 'Options',
-                  width: 5,
+                  key: 'Options',
                   render: (_, record) => (
                     <Row>
                       <Col>
@@ -496,14 +495,10 @@ const AddVehicle = ({
                           })}
                         >
                           <Button
-                            size="small"
                             disabled={saving}
+                            icon={<FontAwesomeIcon icon={faTrash} />}
                             onClick={() => {
                               confirm({
-                                title: intl.formatMessage({
-                                  defaultMessage:
-                                    'Do you want to remove the offender?',
-                                }),
                                 content: intl.formatMessage({
                                   defaultMessage:
                                     'This action cannot be undone.',
@@ -511,20 +506,28 @@ const AddVehicle = ({
                                 onOk() {
                                   removeOffender(record.key);
                                 },
+                                title: intl.formatMessage({
+                                  defaultMessage:
+                                    'Do you want to remove the offender?',
+                                }),
                               });
                             }}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
+                            size="small"
                           />
                         </Tooltip>
                       </Col>
                     </Row>
                   ),
+                  title: intl.formatMessage({
+                    defaultMessage: 'Delete',
+                  }),
+                  width: 5,
                 },
               ]}
               dataSource={offendersData.map((offender) => ({
+                images: offender.images,
                 key: offender.id,
                 name: offender.name,
-                images: offender.images,
               }))}
               pagination={false}
               size="small"
@@ -533,7 +536,7 @@ const AddVehicle = ({
         ) : null}
 
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -541,10 +544,10 @@ const AddVehicle = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Vehicle',
@@ -555,52 +558,52 @@ const AddVehicle = ({
         </Form.Item>
       </Form>
       <Drawer
+        onClose={toggleLinkOffender}
+        open={linkOffender}
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
         })}
-        open={linkOffender}
         width="800"
-        onClose={toggleLinkOffender}
       >
         {linkOffender ? (
           <LinkOffender
-            update={updateOffendersList}
-            onClose={toggleLinkOffender}
             offenderIds={offendersData.map(({ id }) => id)}
+            onClose={toggleLinkOffender}
+            update={updateOffendersList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleLinkIncident}
+        open={linkIncident}
         title={intl.formatMessage({
           defaultMessage: 'Link Incidents',
         })}
-        open={linkIncident}
         width="800"
-        onClose={toggleLinkIncident}
       >
         {linkIncident ? (
           <LinkIncident
-            update={updateIncidentList}
-            onClose={toggleLinkIncident}
             incidentIds={incidentsData?.map(({ id }) => id)}
+            onClose={toggleLinkIncident}
+            update={updateIncidentList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddCustomGallery}
+        open={addCustomGallery}
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',
         })}
-        open={addCustomGallery}
         width="800"
-        onClose={toggleAddCustomGallery}
       >
         <AddCustomGallery
-          update={updateNewCustomGalleryData}
           onClose={toggleAddCustomGallery}
+          update={updateNewCustomGalleryData}
         />
       </Drawer>
     </div>

@@ -1,4 +1,7 @@
-import React from 'react';
+import type { CurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
+import type { SelectOptions } from 'types/DataType';
+
+import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import {
   Button,
   Card,
@@ -12,30 +15,29 @@ import {
   Switch,
   Typography,
 } from 'antd';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { SelectOptions } from 'types/DataType';
-import type { FormData } from './useEditProfile';
-import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
-import type { CurrentUserQuery } from '#/hooks/user/queries/current-user.generated';
 
-const { Title, Paragraph } = Typography;
+import type { FormData } from './useEditProfile';
+
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
   data: CurrentUserQuery | undefined;
-  loading: boolean;
-  saving: boolean;
   groups: SelectOptions[] | undefined;
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
   userDefaultGroups: string[] | undefined;
 }
 const EditProfile = ({
-  onSubmit,
-  onClose,
   data,
-  loading,
-  saving,
   groups,
+  loading,
+  onClose,
+  onSubmit,
+  saving,
   userDefaultGroups,
 }: Props): JSX.Element => {
   const intl = useIntl();
@@ -49,15 +51,15 @@ const EditProfile = ({
     <div className="list-view">
       <>
         <PageHeader
+          extra={[<EditPasswordButton key="editPassword" saving={saving} />]}
           onBack={() => window.history.back()}
-          title={intl.formatMessage({
-            defaultMessage: 'Edit Account',
-          })}
           subTitle={intl.formatMessage({
             defaultMessage:
               'Amend your account details and then press the save button to update them.',
           })}
-          extra={[<EditPasswordButton key="editPassword" saving={saving} />]}
+          title={intl.formatMessage({
+            defaultMessage: 'Edit Account',
+          })}
         />
 
         {loading ? (
@@ -65,17 +67,17 @@ const EditProfile = ({
         ) : (
           <Form
             initialValues={{
-              fullName: data?.currentUser?.fullName,
-              email: data?.currentUser?.email,
-              incidentEmail: data?.currentUser?.incidentEmail,
-              incidentPush: data?.currentUser?.incidentPush,
-              offenderEmail: data?.currentUser?.offenderEmail,
-              offenderPush: data?.currentUser?.offenderPush,
               bulletinEmails: data?.currentUser?.bulletinEmails,
               bulletinPush: data?.currentUser?.bulletinPush,
-              messagePush: data?.currentUser?.messagePush,
               defaultGroups: userDefaultGroups,
               defaultScheme: data?.currentUser?.defaultScheme,
+              email: data?.currentUser?.email,
+              fullName: data?.currentUser?.fullName,
+              incidentEmail: data?.currentUser?.incidentEmail,
+              incidentPush: data?.currentUser?.incidentPush,
+              messagePush: data?.currentUser?.messagePush,
+              offenderEmail: data?.currentUser?.offenderEmail,
+              offenderPush: data?.currentUser?.offenderPush,
             }}
             onFinish={onSubmit}
           >
@@ -86,14 +88,14 @@ const EditProfile = ({
               <Row gutter={50}>
                 <Col span={12}>
                   <Form.Item
-                    name="fullName"
                     label={<FormattedMessage defaultMessage="Full Name" />}
+                    name="fullName"
                     rules={[
                       {
-                        required: true,
                         message: intl.formatMessage({
                           defaultMessage: 'Please enter a name for the user.',
                         }),
+                        required: true,
                       },
                     ]}
                   >
@@ -102,15 +104,15 @@ const EditProfile = ({
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name="email"
                     label={<FormattedMessage defaultMessage="Email Address" />}
+                    name="email"
                     rules={[
                       {
-                        required: true,
                         message: intl.formatMessage({
                           defaultMessage:
                             'Please enter a email address for the user.',
                         }),
+                        required: true,
                       },
                     ]}
                   >
@@ -124,11 +126,11 @@ const EditProfile = ({
                   >
                     <Select
                       disabled={saving}
-                      mode="multiple"
                       maxTagCount={3}
-                      options={groups}
+                      mode="multiple"
                       optionFilterProp="label"
                       optionLabelProp="label"
+                      options={groups}
                     />
                   </Form.Item>
                 </Col>
@@ -139,9 +141,9 @@ const EditProfile = ({
                   >
                     <Select
                       disabled={saving}
-                      options={schemes}
                       optionFilterProp="label"
                       optionLabelProp="label"
+                      options={schemes}
                     />
                   </Form.Item>
                 </Col>
@@ -149,7 +151,7 @@ const EditProfile = ({
             </Card>
             <Row align="bottom" style={{ marginBottom: 20 }}>
               <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Notification Options',
                   })}
@@ -157,9 +159,9 @@ const EditProfile = ({
               </Col>
               <Col>
                 <Paragraph
+                  italic
                   style={{ marginBottom: 1, marginLeft: 5 }}
                   type="secondary"
-                  italic
                 >
                   {intl.formatMessage({
                     defaultMessage:
@@ -171,7 +173,7 @@ const EditProfile = ({
             <Card>
               <Row align="bottom" style={{ marginBottom: 10 }}>
                 <Col>
-                  <Title style={{ marginBottom: 0, fontSize: 16 }} level={4}>
+                  <Title level={4} style={{ fontSize: 16, marginBottom: 0 }}>
                     {intl.formatMessage({
                       defaultMessage: 'Incidents',
                     })}
@@ -179,9 +181,9 @@ const EditProfile = ({
                 </Col>
                 <Col>
                   <Paragraph
+                    italic
                     style={{ marginBottom: 1, marginLeft: 5 }}
                     type="secondary"
-                    italic
                   >
                     {intl.formatMessage({
                       defaultMessage:
@@ -198,8 +200,8 @@ const EditProfile = ({
                       <FormattedMessage defaultMessage="Email Notifications" />
                     }
                     name="incidentEmail"
-                    valuePropName="checked"
                     style={{ marginBottom: 0 }}
+                    valuePropName="checked"
                   >
                     <Switch disabled={saving} style={{ marginLeft: 5 }} />
                   </Form.Item>
@@ -208,8 +210,8 @@ const EditProfile = ({
                       <FormattedMessage defaultMessage="Push Notifications (Mobile App)" />
                     }
                     name="incidentPush"
-                    valuePropName="checked"
                     style={{ marginBottom: 0 }}
+                    valuePropName="checked"
                   >
                     <Switch disabled={saving} style={{ marginLeft: 5 }} />
                   </Form.Item>
@@ -219,7 +221,7 @@ const EditProfile = ({
             <Card>
               <Row align="bottom" style={{ marginBottom: 10 }}>
                 <Col>
-                  <Title style={{ marginBottom: 0, fontSize: 16 }} level={4}>
+                  <Title level={4} style={{ fontSize: 16, marginBottom: 0 }}>
                     {intl.formatMessage({
                       defaultMessage: 'Offenders',
                     })}
@@ -227,9 +229,9 @@ const EditProfile = ({
                 </Col>
                 <Col>
                   <Paragraph
+                    italic
                     style={{ marginBottom: 1, marginLeft: 5 }}
                     type="secondary"
-                    italic
                   >
                     {intl.formatMessage({
                       defaultMessage:
@@ -246,8 +248,8 @@ const EditProfile = ({
                       <FormattedMessage defaultMessage="Email Notifications" />
                     }
                     name="offenderEmail"
-                    valuePropName="checked"
                     style={{ marginBottom: 0 }}
+                    valuePropName="checked"
                   >
                     <Switch disabled={saving} style={{ marginLeft: 5 }} />
                   </Form.Item>
@@ -256,8 +258,8 @@ const EditProfile = ({
                       <FormattedMessage defaultMessage="Push Notifications (Mobile App)" />
                     }
                     name="offenderPush"
-                    valuePropName="checked"
                     style={{ marginBottom: 0 }}
+                    valuePropName="checked"
                   >
                     <Switch disabled={saving} style={{ marginLeft: 5 }} />
                   </Form.Item>
@@ -267,7 +269,7 @@ const EditProfile = ({
             <Card>
               <Row align="bottom" style={{ marginBottom: 10 }}>
                 <Col>
-                  <Title style={{ marginBottom: 0, fontSize: 16 }} level={4}>
+                  <Title level={4} style={{ fontSize: 16, marginBottom: 0 }}>
                     {intl.formatMessage({
                       defaultMessage: 'Bulletins',
                     })}
@@ -275,9 +277,9 @@ const EditProfile = ({
                 </Col>
                 <Col>
                   <Paragraph
+                    italic
                     style={{ marginBottom: 1, marginLeft: 5 }}
                     type="secondary"
-                    italic
                   >
                     {intl.formatMessage({
                       defaultMessage:
@@ -294,8 +296,8 @@ const EditProfile = ({
                       <FormattedMessage defaultMessage="Email Notifications" />
                     }
                     name="bulletinEmails"
-                    valuePropName="checked"
                     style={{ marginBottom: 0 }}
+                    valuePropName="checked"
                   >
                     <Switch disabled={saving} style={{ marginLeft: 5 }} />
                   </Form.Item>
@@ -304,8 +306,8 @@ const EditProfile = ({
                       <FormattedMessage defaultMessage="Push Notifications (Mobile App)" />
                     }
                     name="bulletinPush"
-                    valuePropName="checked"
                     style={{ marginBottom: 0 }}
+                    valuePropName="checked"
                   >
                     <Switch disabled={saving} style={{ marginLeft: 5 }} />
                   </Form.Item>
@@ -322,15 +324,15 @@ const EditProfile = ({
                   <FormattedMessage defaultMessage="Receive notifications for new messages" />
                 }
                 name="messagePush"
-                valuePropName="checked"
                 style={{ marginBottom: 0 }}
+                valuePropName="checked"
               >
                 <Switch disabled={saving} style={{ marginLeft: 5 }} />
               </Form.Item>
             </Card>
 
             <Form.Item>
-              <Row style={{ marginTop: 30 }} gutter={20} justify="end">
+              <Row gutter={20} justify="end" style={{ marginTop: 30 }}>
                 <Col>
                   <Button disabled={saving} onClick={onClose}>
                     <FormattedMessage defaultMessage="Cancel" />
@@ -339,9 +341,9 @@ const EditProfile = ({
                 <Col>
                   <Button
                     disabled={saving}
+                    htmlType="submit"
                     loading={saving}
                     type="primary"
-                    htmlType="submit"
                   >
                     <FormattedMessage defaultMessage="Save" />
                   </Button>

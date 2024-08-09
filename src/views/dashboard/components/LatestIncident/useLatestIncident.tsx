@@ -1,6 +1,6 @@
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
+import { useLatestIncidentQuery } from '#/views/dashboard/graphql/queries/__generated__/latest-incident.generated';
 import { useEffect, useMemo, useState } from 'react';
-import { useLatestIncidentQuery } from '#/views/dashboard/graphql/queries/latest-incident.generated';
 
 const useLatestIncident = (): {
   data: {
@@ -10,7 +10,7 @@ const useLatestIncident = (): {
   loading: boolean;
 } => {
   const {
-    variables: { groups: groupsFilter, gallery, createdAt: createdAtFilter },
+    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
   } = useDashboardContext();
   const thirtyDaysAgo = useMemo(() => {
     const date = new Date();
@@ -42,17 +42,20 @@ const useLatestIncident = (): {
       where: {
         dateRange,
         following: gallery.includes('FOLLOWING'),
-        myData: gallery.includes('MYDATA'),
         groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
+        myData: gallery.includes('MYDATA'),
       },
     },
   });
   useEffect(() => {
     startPolling(60 * 1000);
 
-    const timeoutId = setTimeout(() => {
-      stopPolling();
-    }, 10 * 60 * 1000);
+    const timeoutId = setTimeout(
+      () => {
+        stopPolling();
+      },
+      10 * 60 * 1000
+    );
 
     // Clean up function to stop polling when the component unmounts or after 10 minutes
     return () => {
@@ -60,13 +63,12 @@ const useLatestIncident = (): {
       stopPolling();
     };
   }, [startPolling, stopPolling]);
-  const data =
-    LatestData && LatestData.latestIncident
-      ? {
-          id: LatestData.latestIncident?.id,
-          date: LatestData.latestIncident?.date,
-        }
-      : null;
+  const data = LatestData?.latestIncident
+    ? {
+        date: LatestData.latestIncident?.date,
+        id: LatestData.latestIncident?.id,
+      }
+    : null;
 
   return {
     data,

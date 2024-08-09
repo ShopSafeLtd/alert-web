@@ -1,108 +1,67 @@
-import { useEffect, useState } from 'react';
-
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
 import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
-import { QueryMode, SortOrder } from 'graphql/types';
-import { OffenderSort, useStoreActions, useStoreState } from 'state';
-import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
-import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
 
-export interface OffenderData {
-  id: string;
-  reference?: number | null;
-  updatedAt?: Date;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-    position: ImagePosition;
-    rotation: number;
-  }[];
-  imageUid?: string[] | undefined;
-  tags: {
-    id: string;
-    name: string;
-  }[];
-  lastActive:
-    | { id: string; dayTime?: string | null | undefined }
-    | null
-    | undefined;
-}
+import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
 interface Props {
-  onClose: () => void;
-  update: (value: string[]) => void;
   offenderIds: string[] | undefined;
+  onClose: () => void;
   takeAllSchemes?: boolean;
+  update: (value: string[]) => void;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
+  age: Age[];
+  build: Build[];
+  clearFilters: () => void;
   data:
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >
     | null
     | undefined;
+  ethnicity: Race[];
+  fetchMoreScroll: () => void;
+  hair: string;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   loading: boolean;
+  onSelect: (id: string) => void;
+  onSubmit: () => void;
+  openLightbox: (index: number) => void;
+  peculiarities: string;
+  saving: boolean;
   search: string;
-  setSearch: (value: string) => void;
-  setCurrentId: (value: string | undefined) => void;
+  selected: string[];
   selectedOffender:
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  ethnicity: Race[];
-  setEthnicity: (value: Race[]) => void;
-  age: Age[];
   setAge: (value: Age[]) => void;
-  build: Build[];
   setBuild: (value: Build[]) => void;
-  sex: Gender[];
-  setSex: (value: Gender[]) => void;
+  setCurrentId: (value: string | undefined) => void;
+  setEthnicity: (value: Race[]) => void;
   setHair: (value: string) => void;
   setPeculiarities: (value: string) => void;
-  hair: string;
-  peculiarities: string;
-  clearFilters: () => void;
-  onSelect: (id: string) => void;
-  selected: string[];
-  fetchMoreScroll: () => void;
+  setSearch: (value: string) => void;
+  setSex: (value: Gender[]) => void;
+  sex: Gender[];
 }
 
 const useSelectedOffenders = ({
-  onClose,
-  update,
   offenderIds,
+  onClose,
   takeAllSchemes,
+  update,
 }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemeIds = useStoreState((state) => state.user.schemes).map(
@@ -123,20 +82,20 @@ const useSelectedOffenders = ({
     (actions) => actions.data.setOffenders
   );
 
-  const { search, groups, peculiarities, hair, ethnicity, age, build, sex } =
+  const { age, build, ethnicity, groups, hair, peculiarities, search, sex } =
     filterVariables;
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined
   >(undefined);
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const variables = {
     order: {
@@ -145,61 +104,6 @@ const useSelectedOffenders = ({
     },
     take: 64,
     where: {
-      schemeId: {
-        in: takeAllSchemes ? userSchemeIds : [schemeId],
-      },
-      id:
-        offenderIds && offenderIds?.length > 0
-          ? {
-              notIn: offenderIds,
-            }
-          : undefined,
-      groups:
-        groups.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groups,
-                },
-              },
-            }
-          : undefined,
-      gender:
-        sex.length > 0
-          ? {
-              in: sex,
-            }
-          : undefined,
-      age:
-        age.length > 0
-          ? {
-              in: age,
-            }
-          : undefined,
-      build:
-        build.length > 0
-          ? {
-              in: build,
-            }
-          : undefined,
-      race:
-        ethnicity.length > 0
-          ? {
-              in: ethnicity,
-            }
-          : undefined,
-      hair: hair
-        ? {
-            contains: hair,
-            mode: QueryMode.Insensitive,
-          }
-        : undefined,
-      peculiarities: peculiarities
-        ? {
-            mode: QueryMode.Insensitive,
-            contains: peculiarities,
-          }
-        : undefined,
       OR: [
         {
           name: {
@@ -218,34 +122,89 @@ const useSelectedOffenders = ({
           },
         },
       ],
+      age:
+        age.length > 0
+          ? {
+              in: age,
+            }
+          : undefined,
+      build:
+        build.length > 0
+          ? {
+              in: build,
+            }
+          : undefined,
+      gender:
+        sex.length > 0
+          ? {
+              in: sex,
+            }
+          : undefined,
+      groups:
+        groups.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groups,
+                },
+              },
+            }
+          : undefined,
+      hair: hair
+        ? {
+            contains: hair,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      id:
+        offenderIds && offenderIds?.length > 0
+          ? {
+              notIn: offenderIds,
+            }
+          : undefined,
+      peculiarities: peculiarities
+        ? {
+            contains: peculiarities,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      race:
+        ethnicity.length > 0
+          ? {
+              in: ethnicity,
+            }
+          : undefined,
+      schemeId: {
+        in: takeAllSchemes ? userSchemeIds : [schemeId],
+      },
     },
   };
-  const { data, loading, fetchMore } = useListOffendersAllSchemesQuery({
-    variables,
+  const { data, fetchMore, loading } = useListOffendersAllSchemesQuery({
     fetchPolicy: 'cache-and-network',
+    variables,
   });
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        skip: data?.listOffendersAllSchemes?.offenders?.length || 0,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           listOffendersAllSchemes: {
             ...fetchMoreResult.listOffendersAllSchemes,
-            total:
-              fetchMoreResult.listOffendersAllSchemes?.total ||
-              prev.listOffendersAllSchemes?.total ||
-              0,
             offenders: [
               ...(prev.listOffendersAllSchemes?.offenders || []),
               ...(fetchMoreResult.listOffendersAllSchemes?.offenders || []),
             ],
+            total:
+              fetchMoreResult.listOffendersAllSchemes?.total ||
+              prev.listOffendersAllSchemes?.total ||
+              0,
           },
         };
+      },
+      variables: {
+        ...variables,
+        skip: data?.listOffendersAllSchemes?.offenders?.length || 0,
       },
     });
   };
@@ -253,6 +212,7 @@ const useSelectedOffenders = ({
   useEffect(() => {
     if (groups.length === 0) {
       setOffendersState({
+        order,
         pagination,
         variables: {
           ...filterVariables,
@@ -261,104 +221,103 @@ const useSelectedOffenders = ({
               ?.filter(({ scheme }) => scheme.id === schemeId)
               ?.map(({ id }) => id) || [],
         },
-        order,
       });
     }
   }, []);
   const setSearch = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         search: value,
       },
-      order,
     });
   };
   const setPeculiarities = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         peculiarities: value,
       },
-      order,
     });
   };
   const setHair = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         hair: value,
       },
-      order,
     });
   };
 
   const setEthnicity = (values: Race[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         ethnicity: values,
       },
-      order,
     });
   };
 
   const setBuild = (values: Build[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         build: values,
       },
-      order,
     });
   };
   const setAge = (values: Age[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         age: values,
       },
-      order,
     });
   };
   const setSex = (values: Gender[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         sex: values,
       },
-      order,
     });
   };
   const clearFilters = () => {
     setOffendersState({
+      order: OffenderSort.updatedAtDesc,
       pagination,
       variables: {
-        createdBy: [],
-        search: '',
-        warnings: [],
-        groups: [],
-        businesses: [],
-        createdAt: undefined,
-        gallery: [],
-        customGalleries: [],
-        peculiarities: '',
-        hair: '',
-        ethnicity: [],
-        build: [],
         age: [],
-        sex: [],
+        build: [],
+        businesses: [],
         compactView: false,
+        createdAt: undefined,
+        createdBy: [],
+        customGalleries: [],
+        ethnicity: [],
+        gallery: [],
+        groups: [],
+        hair: '',
+        peculiarities: '',
+        search: '',
+        sex: [],
         tableView: false,
+        warnings: [],
       },
-      order: OffenderSort.updatedAtDesc,
     });
   };
   const onSelect = (value: string) => {
@@ -382,7 +341,7 @@ const useSelectedOffenders = ({
   };
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   useEffect(() => {
@@ -397,32 +356,32 @@ const useSelectedOffenders = ({
     }
   }, [currentId]);
   return {
-    onSubmit,
-    saving,
-    data: data?.listOffendersAllSchemes,
-    loading: data?.listOffendersAllSchemes ? false : loading,
-    search,
-    setSearch,
-    setCurrentId,
-    openLightbox,
-    lightBoxOpen,
-    selectedOffender,
     age,
     build,
+    clearFilters,
+    data: data?.listOffendersAllSchemes,
     ethnicity,
+    fetchMoreScroll,
+    hair,
+    lightBoxOpen,
+    loading: data?.listOffendersAllSchemes ? false : loading,
+    onSelect,
+    onSubmit,
+    openLightbox,
+    peculiarities,
+    saving,
+    search,
+    selected,
+    selectedOffender,
     setAge,
     setBuild,
+    setCurrentId,
     setEthnicity,
-    setSex,
-    sex,
-    hair,
-    peculiarities,
     setHair,
     setPeculiarities,
-    clearFilters,
-    onSelect,
-    selected,
-    fetchMoreScroll,
+    setSearch,
+    setSex,
+    sex,
   };
 };
 

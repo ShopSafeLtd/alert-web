@@ -1,36 +1,37 @@
-import { useCallback, useState } from 'react';
-
-import { useStoreActions, useStoreState } from 'state';
 import type { Incident } from 'components/react-flow/nodes/list-incidents-node';
-import type { IncidentTable } from './LinkIncident.view';
-import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
-import { useListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
+
+import { useListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
+import { useListIncidentsFlowLazyQuery } from 'graphql/incidents/queries/__generated__/list-incidents-flow.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
-import { useListIncidentsFlowLazyQuery } from 'graphql/incidents/queries/list-incidents-flow.generated';
+import { useCallback, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
+
+import type { IncidentTable } from './LinkIncident.view';
 
 interface Props {
+  ids?: string[];
   onClose: () => void;
   onSelect: (incidents: Incident[]) => void;
-  ids?: string[];
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListIncidentsQuery | undefined;
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  selectedRowKeys: React.Key[];
-
   onChange: (
     selectedRowKeys: React.Key[],
     selectedRows: IncidentTable[]
   ) => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  onSubmit: () => void;
+  saving: boolean;
+  search: string;
+  selectedRowKeys: React.Key[];
+
+  setSearch: (value: string) => void;
 }
 
-const useLinkIncident = ({ onClose, onSelect, ids }: Props): Return => {
+const useLinkIncident = ({ ids, onClose, onSelect }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.incidents.order);
@@ -43,15 +44,22 @@ const useLinkIncident = ({ onClose, onSelect, ids }: Props): Return => {
   const [selectedRowsData, setSelectedRowsData] = useState<IncidentTable[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const { data, loading } = useListIncidentsQuery({
+    fetchPolicy: 'cache-and-network',
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    onCompleted: (data) => {
+      if (ids && data?.listIncidents?.incidents) {
+        setSelectedRowKeys(ids);
+      }
+    },
     variables: {
-      scheme: {
-        id: schemeId,
-      },
       order: {
         createdAt: SortOrder.Desc,
       },
-      take: pagination.pageSize,
+      scheme: {
+        id: schemeId,
+      },
       skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
       where: {
         OR: [
           {
@@ -85,13 +93,6 @@ const useLinkIncident = ({ onClose, onSelect, ids }: Props): Return => {
         ],
       },
     },
-    fetchPolicy: 'cache-and-network',
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    onCompleted: (data) => {
-      if (ids && data && data.listIncidents && data.listIncidents.incidents) {
-        setSelectedRowKeys(ids);
-      }
-    },
   });
 
   // const setInitialSelected = useCallback(() => {
@@ -102,22 +103,22 @@ const useLinkIncident = ({ onClose, onSelect, ids }: Props): Return => {
 
   const onPaginationChange = (page: number) => {
     setIncidentsState({
+      order,
       pagination: {
         ...pagination,
         page,
       },
       variables,
-      order,
     });
   };
   const setSearch = (value: string) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         search: value,
       },
-      order,
     });
   };
 
@@ -161,15 +162,15 @@ const useLinkIncident = ({ onClose, onSelect, ids }: Props): Return => {
     setSelectedRowsData(selectedRows);
   };
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listIncidents ? false : loading,
-    search: variables.search,
-    setSearch,
-    onPaginationChange,
     onChange,
+    onPaginationChange,
+    onSubmit,
+    saving,
+    search: variables.search,
     selectedRowKeys,
+    setSearch,
   };
 };
 

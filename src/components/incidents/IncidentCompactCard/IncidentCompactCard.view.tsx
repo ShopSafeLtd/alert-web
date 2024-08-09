@@ -1,4 +1,22 @@
-import React, { useRef } from 'react';
+import type { CarouselRef } from 'antd/lib/carousel';
+import type { IncidentCardFragment } from 'graphql/fragments/__generated__/incident-card.generated';
+import type { EditFeedImage } from 'types/DataType';
+
+import {
+  faClock,
+  faEdit,
+  faEllipsisV,
+  faImage,
+  faLocationDot,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import {
+  faAngleLeft,
+  faAngleRight,
+  faArrowsMaximize,
+} from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -14,87 +32,70 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faClock,
-  faEdit,
-  faEllipsisV,
-  faImage,
-  faLocationDot,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import {
-  faAngleLeft,
-  faAngleRight,
-  faArrowsMaximize,
-} from '@fortawesome/pro-solid-svg-icons';
-import type { CarouselRef } from 'antd/lib/carousel';
-import { Link } from 'react-router-dom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import SkeletonImage from 'components/images/SkeletonImage.view';
-import { useIntl } from 'react-intl';
-import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
-import type { EditFeedImage } from 'types/DataType';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
-import type { IncidentCardFragment } from 'graphql/fragments/incident-card.generated';
+import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
+import SkeletonImage from 'components/images/SkeletonImage.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import React, { useRef } from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 
-const { Title, Text, Paragraph } = Typography;
+const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  incident: IncidentCardFragment;
+  addInvestigation: boolean;
   approvalRights: boolean;
   deleteRights: boolean;
-  menuRights: boolean;
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  onDelete: (id: string) => void;
-  editIncidentFeed: boolean;
-  toggleEditIncidentFeed: () => void;
   editImage: boolean;
-  toggleEditImage: () => void;
   editImageId: string;
-  setEditImageId: (id: string) => void;
+  editIncidentFeed: boolean;
+  incident: IncidentCardFragment;
+  menuRights: boolean;
+  onDelete: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
+  setEditImageId: (id: string) => void;
   toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
+  toggleEditImage: () => void;
+  toggleEditIncidentFeed: () => void;
 }
 
 const IncidentCard = ({
-  incident,
+  addInvestigation,
   approvalRights,
   deleteRights,
-  menuRights,
-  openLightbox,
-  onDelete,
-  editIncidentFeed,
-  toggleEditIncidentFeed,
   editImage,
-  toggleEditImage,
   editImageId,
-  setEditImageId,
+  editIncidentFeed,
+  incident,
+  menuRights,
+  onDelete,
   onEditImage,
-  addInvestigation,
+  openLightbox,
+  setEditImageId,
   toggleAddInvestigation,
+  toggleEditImage,
+  toggleEditIncidentFeed,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
   return (
     <Card
-      className="incident-card"
-      key={incident.id || ''}
       bodyStyle={{
-        overflow: 'hidden',
         borderRadius: 10,
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,
+        overflow: 'hidden',
       }}
+      className="incident-card"
+      key={incident.id || ''}
     >
       {!incident?.approved && (
         <div className="incident-card-overlay">
-          <Title level={4} className="incident-card-approval-title">
+          <Title className="incident-card-approval-title" level={4}>
             {intl.formatMessage({
               defaultMessage: 'This incident is awaiting approval',
             })}
@@ -112,39 +113,37 @@ const IncidentCard = ({
       )}
       {menuRights && (
         <Dropdown
-          trigger={['click']}
+          arrow={{ pointAtCenter: true }}
           overlay={
             <Menu
               items={[
                 {
+                  icon: <FontAwesomeIcon icon={faEdit} />,
                   key: 0,
                   label: intl.formatMessage({
                     defaultMessage: 'Edit Incident',
                   }),
                   onClick: () => toggleEditIncidentFeed(),
-                  icon: <FontAwesomeIcon icon={faEdit} />,
                 },
                 incident.totalImages && incident.totalImages > 0
                   ? {
+                      icon: <FontAwesomeIcon icon={faImage} />,
                       key: 1,
                       label: intl.formatMessage({
                         defaultMessage: 'Edit Image',
                       }),
                       onClick: () => toggleEditImage(),
-                      icon: <FontAwesomeIcon icon={faImage} />,
                     }
                   : null,
 
                 {
+                  icon: <FontAwesomeIcon icon={faTrash} />,
                   key: 2,
                   label: intl.formatMessage({
                     defaultMessage: 'Delete Incident',
                   }),
                   onClick: () =>
                     confirm({
-                      title: intl.formatMessage({
-                        defaultMessage: 'Are you sure?',
-                      }),
                       content: intl.formatMessage({
                         defaultMessage:
                           'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -153,29 +152,31 @@ const IncidentCard = ({
                         defaultMessage: 'Delete',
                       }),
                       onOk: () => onDelete(incident?.id || ''),
+                      title: intl.formatMessage({
+                        defaultMessage: 'Are you sure?',
+                      }),
                     }),
-                  icon: <FontAwesomeIcon icon={faTrash} />,
                 },
                 {
+                  icon: <FontAwesomeIcon icon={faPlus} />,
                   key: 3,
                   label: intl.formatMessage({
                     defaultMessage: 'Add Investigation',
                   }),
                   onClick: () => toggleAddInvestigation(),
-                  icon: <FontAwesomeIcon icon={faPlus} />,
                 },
                 // ???
               ].filter((item) => item?.key !== 2 || deleteRights)}
             />
           }
           placement="bottomRight"
-          arrow={{ pointAtCenter: true }}
+          trigger={['click']}
         >
           <Button className="incident-card-menu">
             <FontAwesomeIcon
+              icon={faEllipsisV}
               // size="5x"
               style={{ height: '100%' }}
-              icon={faEllipsisV}
             />
           </Button>
         </Dropdown>
@@ -214,18 +215,18 @@ const IncidentCard = ({
       <div>
         {incident.totalImages && incident.totalImages > 0 ? (
           <Carousel
-            ref={imagesRef}
             afterChange={(currentSlide: number) => {
               setEditImageId(incident.images[currentSlide].id);
             }}
+            ref={imagesRef}
           >
             {incident?.images.map((image) => (
               <div key={image.id}>
                 <div className="incident-card-image">
                   <WatermarkImage
-                    url={image.low}
-                    rotation={image.rotation}
                     position={image.position}
+                    rotation={image.rotation}
+                    url={image.low}
                   />
                 </div>
               </div>
@@ -270,7 +271,7 @@ const IncidentCard = ({
       ) : null}
       <div className="incident-card-content">
         <Space direction="vertical">
-          <Title level={4} ellipsis>
+          <Title ellipsis level={4}>
             {incident?.subject}
           </Title>
           <div>
@@ -282,8 +283,8 @@ const IncidentCard = ({
                 },
                 {
                   incidentReference: incident?.reference,
-                  policeRefS: incident.policeRef,
                   policeRef: incident.policeRef ? 1 : 0,
+                  policeRefS: incident.policeRef,
                 }
               )}
             </Text>
@@ -328,17 +329,17 @@ const IncidentCard = ({
           )}
           <Link to={`/app/incidents/view/${incident?.id}`}>
             <Row
-              wrap={false}
               gutter={8}
               style={{ marginBottom: 5, maxWidth: '100%' }}
+              wrap={false}
             >
               <Col span={12}>
                 <Row wrap={false}>
                   <Col>
                     <FontAwesomeIcon
-                      size="sm"
                       className="incident-card-icon"
                       icon={faClock}
+                      size="sm"
                     />
                   </Col>
                   <Col>
@@ -350,13 +351,13 @@ const IncidentCard = ({
                 <Row wrap={false}>
                   <Col>
                     <FontAwesomeIcon
-                      size="sm"
                       className="incident-card-icon"
                       icon={faLocationDot}
+                      size="sm"
                     />
                   </Col>
                   <Col>
-                    <Text style={{ flex: 1 }} ellipsis type="secondary">
+                    <Text ellipsis style={{ flex: 1 }} type="secondary">
                       {incident?.business?.name || incident?.location?.full}
                     </Text>
                   </Col>
@@ -366,23 +367,23 @@ const IncidentCard = ({
 
             <Paragraph
               // style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
+              ellipsis={{ rows: 2 }}
               // className="incident-card-desc"
               style={{
                 height: incident.offenders.length > 0 ? 60 : 95,
                 marginBottom: 10,
               }}
               type="secondary"
-              ellipsis={{ rows: 2 }}
             >
               {incident?.description}
             </Paragraph>
             <Row
-              wrap={false}
               align="middle"
               style={{
                 overflowX: 'auto',
                 // marginBottom: incident.offenders.length > 2 ? 3 : 15,
               }}
+              wrap={false}
             >
               <Col style={{ minWidth: 60 }}>
                 <Text strong type="secondary">
@@ -396,7 +397,7 @@ const IncidentCard = ({
         </Space>
         <Row
           justify="center"
-          style={{ marginTop: 10, flexGrow: 1, alignContent: 'flex-end' }}
+          style={{ alignContent: 'flex-end', flexGrow: 1, marginTop: 10 }}
         >
           <Col>
             <Link to={`/app/incidents/view/${incident?.id}`}>
@@ -410,17 +411,17 @@ const IncidentCard = ({
         </Row>
       </div>
       <Drawer
+        onClose={toggleEditIncidentFeed}
+        open={editIncidentFeed}
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident',
         })}
-        open={editIncidentFeed}
         width="600"
-        onClose={toggleEditIncidentFeed}
       >
         {editIncidentFeed ? (
           <EditIncidentFeed
-            onClose={toggleEditIncidentFeed}
             incidentId={incident.id}
+            onClose={toggleEditIncidentFeed}
           />
         ) : (
           <div />
@@ -428,12 +429,12 @@ const IncidentCard = ({
       </Drawer>
       {/* investigation */}
       <Drawer
+        onClose={toggleAddInvestigation}
+        open={addInvestigation}
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
         })}
-        open={addInvestigation}
         width="500"
-        onClose={toggleAddInvestigation}
       >
         {addInvestigation ? (
           <AddInvestigation
@@ -445,10 +446,10 @@ const IncidentCard = ({
         )}
       </Drawer>
       <FeedImageEditor
-        submitImage={onEditImage}
+        image={incident.images.find((image) => editImageId === image.id)}
         onClose={toggleEditImage}
         open={editImage}
-        image={incident.images.find((image) => editImageId === image.id)}
+        submitImage={onEditImage}
       />
     </Card>
   );

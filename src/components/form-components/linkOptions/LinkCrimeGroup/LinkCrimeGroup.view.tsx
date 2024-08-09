@@ -1,46 +1,46 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import React from 'react';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
-import { Row, Col, Input, Table, Button } from 'antd';
+import { Button, Col, Input, Row, Table } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: () => void;
-  saving: boolean;
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
+  onClose: () => void;
   onPaginationChange: (page: number, pageSize: number) => void;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
 const LinkCrimeGroup = ({
-  onClose,
-  onSubmit,
-  saving,
   data,
   loading,
-  search,
-  setSearch,
+  onClose,
   onPaginationChange,
   onSelect,
+  onSubmit,
+  saving,
+  search,
+  setSearch,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <div className="add-existing-offender">
-      <Row gutter={8} className="search-offender">
+      <Row className="search-offender" gutter={8}>
         <Col span={18}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Crime Groups...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
       </Row>
@@ -48,76 +48,76 @@ const LinkCrimeGroup = ({
       <Table
         columns={[
           {
-            key: 'reference',
             dataIndex: 'reference',
+            key: 'reference',
             title: intl.formatMessage({
               defaultMessage: 'Alert ID',
             }),
           },
           {
-            key: 'totalOffenders',
             dataIndex: 'totalOffenders',
+            key: 'totalOffenders',
             title: intl.formatMessage({
               defaultMessage: 'Members',
             }),
           },
           {
-            key: 'totalIncidents',
             dataIndex: 'totalIncidents',
+            key: 'totalIncidents',
             title: intl.formatMessage({
               defaultMessage: 'Incidents',
             }),
           },
           {
-            key: 'totalValue',
             dataIndex: 'totalValue',
+            key: 'totalValue',
+            render: (value) => `£${value || 0}`,
             title: intl.formatMessage({
               defaultMessage: 'Lost Value',
             }),
-            render: (value) => `£${value || 0}`,
           },
           {
-            key: 'totalRecoveredValue',
             dataIndex: 'totalRecoveredValue',
+            key: 'totalRecoveredValue',
+            render: (value) => `£${value || 0}`,
             title: intl.formatMessage({
               defaultMessage: 'Recovered Value',
             }),
-            render: (value) => `£${value || 0}`,
           },
         ]}
         dataSource={data?.listCrimeGroups?.crimeGroups.map((crimeGroup) => ({
-          reference: crimeGroup.reference,
-          totalOffenders: crimeGroup.totalOffenders,
-          totalIncidents: crimeGroup.totalIncidents,
-          totalValue: crimeGroup.totalValue,
-          totalRecoveredValue: crimeGroup.totalRecoveredValue,
           key: crimeGroup.id,
+          reference: crimeGroup.reference,
+          totalIncidents: crimeGroup.totalIncidents,
+          totalOffenders: crimeGroup.totalOffenders,
+          totalRecoveredValue: crimeGroup.totalRecoveredValue,
+          totalValue: crimeGroup.totalValue,
         }))}
-        rowSelection={{
-          type: 'radio',
-          onSelect,
-        }}
+        loading={loading}
         pagination={{
           hideOnSinglePage: true,
-          total: data?.listCrimeGroups?.total,
           onChange: onPaginationChange,
           pageSize: 24,
-          showSizeChanger: false,
           position: ['bottomCenter'],
+          showSizeChanger: false,
+          total: data?.listCrimeGroups?.total,
         }}
-        loading={loading}
+        rowSelection={{
+          onSelect,
+          type: 'radio',
+        }}
         size="small"
       />
-      <Row gutter={16} style={{ marginTop: 30 }} justify="end">
+      <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
         <Col>
-          <Button onClick={onClose} disabled={saving} type="text">
+          <Button disabled={saving} onClick={onClose} type="text">
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
+            loading={saving}
             onClick={onSubmit}
             type="primary"
           >

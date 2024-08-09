@@ -1,4 +1,12 @@
-import React from 'react';
+import type { ListUserNotificationsQuery } from 'graphql/userNotification/queries/__generated__/list-user-notifications.generated';
+
+import {
+  faBellOn,
+  faBellSlash,
+  faRotate,
+  faSquareCheck,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -10,53 +18,48 @@ import {
   Typography,
 } from 'antd';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBellOn,
-  faBellSlash,
-  faRotate,
-  faSquareCheck,
-} from '@fortawesome/pro-light-svg-icons';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import useStyles from './NotificationDrawer.styles';
+import { Link } from 'react-router-dom';
+
 import type { NotificationData } from './useNotificationDrawer';
-import type { ListUserNotificationsQuery } from 'graphql/userNotification/queries/list-user-notifications.generated';
+
+import useStyles from './NotificationDrawer.styles';
 
 interface Props {
   data:
     | Exclude<
         ListUserNotificationsQuery['listUserNotifications'],
-        undefined | null
+        null | undefined
       >
     | null
     | undefined;
-  loading: boolean;
-  saving: boolean;
-  handleMarkAsRead: (value: NotificationData) => void;
   handleMarkAllRead: () => void;
-  toggleTakeAllSchemes: () => void;
-  refreshing: boolean;
-  onRefresh: () => void;
+  handleMarkAsRead: (value: NotificationData) => void;
+  loading: boolean;
   onClose: () => void;
+  onRefresh: () => void;
+  refreshing: boolean;
+  saving: boolean;
+  toggleTakeAllSchemes: () => void;
 }
 
 const NotificationsDrawer = ({
   data,
-  loading,
-  saving,
-  toggleTakeAllSchemes,
-  handleMarkAsRead,
   handleMarkAllRead,
+  handleMarkAsRead,
+  loading,
+  onClose,
   onRefresh,
   refreshing,
-  onClose,
+  saving,
+  toggleTakeAllSchemes,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   return (
     <div>
-      <Row justify="end" gutter={8} className={classes.head}>
+      <Row className={classes.head} gutter={8} justify="end">
         <Col>
           <Link to="/app/notifications">
             <Button onClick={onClose} size="small">
@@ -67,7 +70,7 @@ const NotificationsDrawer = ({
           </Link>
         </Col>
         <Col>
-          <Radio.Group size="small" defaultValue="ALL">
+          <Radio.Group defaultValue="ALL" size="small">
             <Radio.Button onClick={toggleTakeAllSchemes} value="ALL">
               {intl.formatMessage({
                 defaultMessage: 'All Schemes',
@@ -82,9 +85,7 @@ const NotificationsDrawer = ({
         </Col>
         <Col>
           <Button
-            onClick={handleMarkAllRead}
             disabled={saving}
-            size="small"
             icon={
               <FontAwesomeIcon
                 icon={faSquareCheck}
@@ -92,16 +93,15 @@ const NotificationsDrawer = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={handleMarkAllRead}
+            size="small"
           >
             {intl.formatMessage({ defaultMessage: 'Clear All' })}
           </Button>
         </Col>
         <Col>
           <Button
-            size="small"
-            onClick={onRefresh}
             disabled={saving}
-            loading={refreshing}
             icon={
               <FontAwesomeIcon
                 icon={faRotate}
@@ -109,6 +109,9 @@ const NotificationsDrawer = ({
                 // style={{ marginTop: 5 }}
               />
             }
+            loading={refreshing}
+            onClick={onRefresh}
+            size="small"
           />
         </Col>
       </Row>
@@ -121,20 +124,20 @@ const NotificationsDrawer = ({
         ))
       ) : data?.total && data?.total > 0 ? (
         <List
-          itemLayout="horizontal"
           className={classes.list}
           dataSource={data?.notifications?.map((el) => ({
-            key: el.id,
-            title: el.notification.title,
             body: el.notification.body,
             createdAt: el.createdAt,
-            read: el.read,
+            key: el.id,
             notification: el.notification,
+            read: el.read,
+            title: el.notification.title,
             // expireDay: calcDuration(
             //   new Date(el.createdAt),
             //   new Date(new Date().setDate(el.createdAt.getDate() - 30))
             // ),
           }))}
+          itemLayout="horizontal"
           renderItem={(item) => (
             <List.Item
               className={item.read ? classes.item : classes.unreadItem}
@@ -149,11 +152,12 @@ const NotificationsDrawer = ({
               <List.Item.Meta
                 avatar={
                   <FontAwesomeIcon
+                    className={item.read ? classes.read : classes.unread}
                     icon={item.read ? faBellSlash : faBellOn}
                     size="lg"
-                    className={item.read ? classes.read : classes.unread}
                   />
                 }
+                description={item.body}
                 title={
                   <Row>
                     <Col flex={1}>
@@ -171,7 +175,6 @@ const NotificationsDrawer = ({
                     </Col>
                   </Row>
                 }
-                description={item.body}
               />
             </List.Item>
           )}
@@ -179,17 +182,17 @@ const NotificationsDrawer = ({
       ) : (
         <div
           style={{
+            alignItems: 'center',
             display: 'flex',
             flex: 1,
-            alignItems: 'center',
             justifyContent: 'center',
           }}
         >
           <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
               defaultMessage: "There's no new notification",
             })}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
         </div>
       )}

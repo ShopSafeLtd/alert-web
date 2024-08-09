@@ -99,6 +99,10 @@ query InvestigationSuggestions(
         id
         full
       }
+      business {
+        id
+        name
+      }
       offenders {
         id
         name

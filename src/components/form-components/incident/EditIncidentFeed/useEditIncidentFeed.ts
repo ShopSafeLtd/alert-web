@@ -1,77 +1,75 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import { useApolloClient } from '@apollo/client';
-
-import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { useGroupsContext } from '#/context/groups-context';
-import type { IncidentPriority } from 'graphql/types';
-import { Model, QueryMode, TagType } from 'graphql/types';
-import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/edit-incident-feed.generated';
-import { useEditIncidentFeedQuery } from 'graphql/incidents/queries/edit-incident-feed.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import type { LabeledValue } from 'antd/lib/select';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
-} from 'graphql/businesses/queries/search-businesses.generated';
-import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
-import { useUpdateIncidentBusinessMutation } from 'graphql/incidents/mutations/update/update-incident-business.generated';
-import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
+} from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
+import type { IncidentPriority } from 'graphql/types';
+
+import { useGroupsContext } from '#/context/groups-context';
+import { useApolloClient } from '@apollo/client';
+import { notification } from 'antd';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
+import { useUpdateIncidentBusinessMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-business.generated';
+import { useEditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, QueryMode, TagType } from 'graphql/types';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
-  subject: string;
-  description: string;
+  business?: LabeledValue | string | string[];
   customerRef: string;
   date: Date;
-  value?: number;
-  recoveredValue?: number;
-  policeReported?: boolean;
-  policeInvolved?: boolean;
-  policeRef?: string;
-  policeNo?: string;
-  priority: IncidentPriority;
+  description: string;
   goods: {
-    id: string;
     goodsType?: string;
-    value?: number;
+    id: string;
     recoveredValue: number;
+    value?: number;
   }[];
-  business?: {
-    label: React.ReactNode;
-    value: string;
-  };
   groups: string[];
+  policeInvolved?: boolean;
+  policeNo?: string;
+  policeRef?: string;
+  policeReported?: boolean;
+  priority: IncidentPriority;
+  recoveredValue?: number;
+  subject: string;
   tagsCrimeTypes: string[];
-  tagsInvolved: string[];
   tagsImpact: string[];
+  tagsInvolved: string[];
+  value?: number;
 }
 
 interface Props {
-  onClose: () => void;
   incidentId: string;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
+  crimeTypes: { label: string; value: string }[];
   data:
-    | Exclude<EditIncidentFeedQuery['incident'], undefined | null>
+    | Exclude<EditIncidentFeedQuery['incident'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  saving: boolean;
-  crimeTypes: { value: string; label: string }[];
-  involvedTags: { value: string; label: string }[];
-  impactTags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
+  impactTags: { label: string; value: string }[];
+  involvedTags: { label: string; value: string }[];
+  loading: boolean;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  tagsLoading: boolean;
 }
 
-const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
+const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
   const intl = useIntl();
   const client = useApolloClient();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -90,15 +88,15 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
+        dataType: {
+          equals: Model.Incident,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Incident,
         },
       },
     },
@@ -131,16 +129,16 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
         response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
-              value: item?.id || '',
               location: item?.locations[0].full || '',
+              value: item?.id || '',
             }))
           : [
               {
+                disabled: true,
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
                 }),
                 value: '',
-                disabled: true,
               },
             ]
       );
@@ -150,11 +148,11 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The Incident has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -170,22 +168,8 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
     if (incidentId) {
       void updateIncident({
         variables: {
-          where: {
-            id: incidentId,
-          },
           data: {
             approved: { set: true },
-            subject: { set: data.subject },
-            description: { set: data.description },
-            date: { set: data.date },
-            time: { set: data.date },
-            customerRef: data.customerRef
-              ? { set: data.customerRef }
-              : undefined,
-            priority: { set: data.priority },
-            groups: {
-              set: data.groups.map((id) => ({ id })),
-            },
             crimeTypes: {
               set: [
                 ...data.tagsCrimeTypes.map((id) => ({ id })),
@@ -193,37 +177,50 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                 ...data.tagsInvolved.map((id) => ({ id })),
               ],
             },
+            customerRef: data.customerRef
+              ? { set: data.customerRef }
+              : undefined,
+            date: { set: data.date },
+            description: { set: data.description },
+            groups: {
+              set: data.groups.map((id) => ({ id })),
+            },
             policeInvolved: { set: data.policeInvolved || false },
-            policeRef: { set: data.policeRef || '' },
             policeNo: { set: data.policeNo || '' },
+            policeRef: { set: data.policeRef || '' },
             policeReported: { set: data.policeReported || false },
+            priority: { set: data.priority },
+            subject: { set: data.subject },
+            time: { set: data.date },
+          },
+          where: {
+            id: incidentId,
           },
         },
       });
     }
+
+    const businessId = (
+      typeof data.business === 'string'
+        ? data.business
+        : Array.isArray(data.business)
+          ? data.business[0]
+          : data.business?.value
+    ) as string | undefined;
+
     if (
       incidentData?.incident.business &&
-      incidentData?.incident.business.id !== data.business?.value
+      businessId &&
+      incidentData?.incident.business.id !== businessId
     ) {
       void updateIncidentBusiness({
         variables: {
           data: {
             business: {
-              connect: data.business?.value
-                ? {
-                    id: data.business.value,
-                  }
-                : undefined,
-              // ???
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              disconnect:
-                incidentData?.incident?.business?.id &&
-                data.business?.value === undefined
-                  ? {
-                      id: data.business?.value,
-                    }
-                  : undefined,
+              connect: {
+                id: businessId,
+              },
+              disconnect: true,
             },
           },
           where: {
@@ -235,26 +232,26 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
   };
 
   return {
-    onSubmit,
-    data: incidentData?.incident,
-    loading,
     crimeTypes:
       tagsData?.tags
         .filter((item) => item.type === TagType.IncidentCrimeType)
-        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
+        .map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    data: incidentData?.incident,
+    groups,
+    groupsLoading,
     impactTags:
       tagsData?.tags
         .filter((item) => item.type === TagType.IncidentImpact)
-        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
+        .map((tag) => ({ label: tag.name, value: tag.id })) || [],
     involvedTags:
       tagsData?.tags
         .filter((item) => item.type === TagType.IncidentInvolved)
-        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    tagsLoading,
-    groups,
-    groupsLoading,
-    saving,
+        .map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    loading,
     onSearchBusiness,
+    onSubmit,
+    saving,
+    tagsLoading,
   };
 };
 

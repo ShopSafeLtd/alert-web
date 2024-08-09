@@ -6,10 +6,11 @@ import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 
 import useEditChat from '../useEditChat';
-import { UpdateChatDocument } from 'graphql/chat/mutation/update_chat.generated';
-import { ChatDocument } from 'graphql/chat/queries/chat.generated';
-import { ListSchemeUsersDocument } from 'graphql/users/queries/list-scheme-users.generated';
+
 import { SortOrder } from 'graphql/types';
+import { UpdateChatDocument } from 'graphql/chat/mutation/__generated__/update_chat.generated';
+import { ChatDocument } from 'graphql/chat/queries/__generated__/chat.generated';
+import { ListSchemeUsersDocument } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
 const mocks = [
   {

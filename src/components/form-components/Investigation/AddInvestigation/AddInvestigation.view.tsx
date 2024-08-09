@@ -1,7 +1,8 @@
-import React from 'react';
-import { Button, Col, Form, Input, Row } from 'antd';
-import { useIntl } from 'react-intl';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { Button, Col, Form, Input, Row } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { InvestigationData } from './useAddInvestigation';
 
 interface Props {
@@ -23,10 +24,18 @@ const AddInvestigation = ({
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'A name is required for an investigation',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -35,10 +44,10 @@ const AddInvestigation = ({
         <Row>
           <Col span={24}>
             <Form.Item
-              name="description"
               label={intl.formatMessage({
                 defaultMessage: 'Description',
               })}
+              name="description"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -47,17 +56,25 @@ const AddInvestigation = ({
         <Row>
           <Col span={24}>
             <Form.Item
-              name="groupIds"
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
               })}
+              name="groupIds"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'A name is required for an investigation',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <GroupsSelect disabled={saving} mode="multiple" />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
@@ -67,10 +84,10 @@ const AddInvestigation = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Investigation',

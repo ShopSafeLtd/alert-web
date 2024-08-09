@@ -1,48 +1,49 @@
-import React from 'react';
-import { Button, Col, Drawer, Input, Row, Table, Tag, Typography } from 'antd';
-import { Link } from 'react-router-dom';
-import AddUser from 'components/form-components/user/AddUser';
+import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
-import EditUser from 'components/form-components/user/EditUser';
-import type { UserSort } from 'types/enums/user_sort';
-import UserFilter from 'components/users/UserFilter';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { GetUserStatusValues, userStatusValues } from 'types/enums/user_status';
 import type { Role } from 'graphql/types';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
+import type { UserSort } from 'types/enums/user_sort';
+
+import { faEdit, faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Input, Row, Table, Tag, Typography } from 'antd';
+import AddUser from 'components/form-components/user/AddUser';
+import EditUser from 'components/form-components/user/EditUser';
+import UserFilter from 'components/users/UserFilter';
 import { UserStatus } from 'graphql/types';
-import type { UserListQuery } from '#/views/settings/users/UserList/UserList.generated';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import { GetUserStatusValues, userStatusValues } from 'types/enums/user_status';
 
 interface Props {
-  data: UserListQuery | undefined;
-  loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  selectedGroups: string[];
-  setSelectedGroups: (value: string[]) => void;
   addUser: boolean;
-  toggleAddUser: () => void;
-  updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
-  updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
-  onPaginationChange: (page: number, pageSize: number) => void;
+  clearFilters: () => void;
   currentPage: number;
   currentPageSize: number;
-  toggleEditUser: (value?: string | undefined) => void;
+  data: UserListQuery | undefined;
   editUser: string | undefined;
-  userStatus: UserStatus[] | undefined;
-  setUserStatus: (value: UserStatus[]) => void;
-  userRole: Role | undefined;
-  setUserRole: (value: Role) => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
+  onPaginationChange: (page: number, pageSize: number) => void;
   order: UserSort;
+  search: string;
+  selectedGroups: string[];
   setOrder: (value: UserSort) => void;
-  clearFilters: () => void;
+  setSearch: (value: string) => void;
+  setSelectedGroups: (value: string[]) => void;
+  setUserRole: (value: Role) => void;
+  setUserStatus: (value: UserStatus[]) => void;
+  sortFilter: boolean;
+  toggleAddUser: () => void;
+  toggleEditUser: (value?: string | undefined) => void;
+  toggleSortFilter: () => void;
+  updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
+  updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+  userRole: Role | undefined;
+  userStatus: UserStatus[] | undefined;
 }
 const getTextStatus = (value: UserStatus) => {
   if (value === UserStatus.Active) return 'success';
@@ -51,32 +52,32 @@ const getTextStatus = (value: UserStatus) => {
   return 'secondary';
 };
 const UserList = ({
-  data,
-  loading,
-  search,
-  setSearch,
-  groups,
-  groupsLoading,
-  selectedGroups,
-  setSelectedGroups,
   addUser,
-  toggleAddUser,
-  updateUserList,
-  updateExitingUserList,
-  onPaginationChange,
+  clearFilters,
   currentPage,
   currentPageSize,
+  data,
   editUser,
-  toggleEditUser,
-  userStatus,
-  setUserStatus,
-  userRole,
-  setUserRole,
+  groups,
+  groupsLoading,
+  loading,
+  onPaginationChange,
   order,
+  search,
+  selectedGroups,
   setOrder,
+  setSearch,
+  setSelectedGroups,
+  setUserRole,
+  setUserStatus,
   sortFilter,
+  toggleAddUser,
+  toggleEditUser,
   toggleSortFilter,
-  clearFilters,
+  updateExitingUserList,
+  updateUserList,
+  userRole,
+  userStatus,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const groupIds = new Set(
@@ -98,18 +99,17 @@ const UserList = ({
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={8}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a user...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
         <Col flex={1} />
         <Col>
           <Button
-            onClick={toggleSortFilter}
             icon={
               <FontAwesomeIcon
                 icon={faFilter}
@@ -117,6 +117,7 @@ const UserList = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleSortFilter}
           >
             <FormattedMessage defaultMessage="Sort & filter" />
           </Button>
@@ -124,8 +125,6 @@ const UserList = ({
 
         <Col>
           <Button
-            type="primary"
-            onClick={toggleAddUser}
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -133,100 +132,87 @@ const UserList = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleAddUser}
+            type="primary"
           >
             <FormattedMessage defaultMessage="Invite New User" />
           </Button>
         </Col>
       </Row>
       <Table
-        size="small"
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 50,
-          pageSize: currentPageSize,
-          showSizeChanger: true,
-          current: currentPage,
-          onChange: onPaginationChange,
-          total: data?.listUsers.total,
-          showTotal: (total) => `Total Users: ${total}`,
-        }}
         columns={[
           {
-            key: 'name',
-            title: intl.formatMessage({
-              defaultMessage: 'Name',
-            }),
             dataIndex: 'name',
+            key: 'name',
             render: (value, record) => (
               <Link to={`/app/scheme-settings/users/view/${record.key}`}>
                 {value}
               </Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+            }),
           },
           {
-            key: 'status',
-            title: intl.formatMessage({
-              defaultMessage: 'Status',
-            }),
             dataIndex: 'status',
             filters: userStatusValues.map((el) => ({
               text: el.label,
               value: el.value,
             })),
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            key: 'status',
             // @ts-ignore
             onFilter: (value: UserStatus, record: { status: UserStatus }) =>
               record.status.includes(value),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (value: UserStatus) => (
               <Typography.Text type={getTextStatus(value)}>
                 {GetUserStatusValues[value]}
               </Typography.Text>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Status',
+            }),
           },
           {
+            dataIndex: 'emailAddress',
             key: 'emailAddress',
             title: intl.formatMessage({
               defaultMessage: 'Email Address',
             }),
-            dataIndex: 'emailAddress',
           },
           {
-            key: 'business',
-            title: intl.formatMessage({
-              defaultMessage: 'Business',
-            }),
             dataIndex: 'business',
             filters: businessFilter,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            key: 'business',
             // @ts-ignore
             onFilter: (
-              value: string | number | boolean,
+              value: boolean | number | string,
               record: { businesses: { id: string; name: string }[] }
             ) => record.businesses.some(({ id }) => id === value),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (_, record) =>
               record.businesses.map(({ id, name }) => (
                 <Link
-                  to={`/app/scheme-settings/businesses/view/${id}`}
                   key={id}
+                  to={`/app/scheme-settings/businesses/view/${id}`}
                 >
                   <Tag color="red">{name}</Tag>
                 </Link>
               )),
+            title: intl.formatMessage({
+              defaultMessage: 'Business',
+            }),
           },
           {
-            key: 'groups',
-            title: intl.formatMessage({
-              defaultMessage: 'Groups',
-            }),
             dataIndex: 'groups',
             filters: groupFilter,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            key: 'groups',
             // @ts-ignore
             onFilter: (
-              value: string | number | boolean,
+              value: boolean | number | string,
               record: { groups: { id: string; name: string }[] }
             ) => record.groups.some(({ id }) => id === value),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (value: { id: string; name: string }[]) => (
               <Typography.Text>
                 {value
@@ -234,85 +220,100 @@ const UserList = ({
                   .toString()}
               </Typography.Text>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Groups',
+            }),
           },
           {
-            key: 'actions',
-            title: '',
             dataIndex: 'actions',
-            width: 50,
+            key: 'actions',
             render: (_, record) => (
               <Button
+                onClick={() => toggleEditUser(record.key)}
                 size="small"
                 type="text"
-                onClick={() => toggleEditUser(record.key)}
               >
-                <FontAwesomeIcon size="lg" icon={faEdit} />
+                <FontAwesomeIcon icon={faEdit} size="lg" />
               </Button>
             ),
+            title: '',
+            width: 50,
           },
         ]}
         dataSource={data?.listUsers.users.map((user) => ({
+          businesses: user.businesses.map((el) => ({
+            id: el.id,
+            name: el.name,
+          })),
+          emailAddress: user.email,
+          groups: user.groups,
           key: user.id,
           name: user.fullName,
-          emailAddress: user.email,
-          businesses: user.businesses.map((el) => ({
-            name: el.name,
-            id: el.id,
-          })),
-          groups: user.groups,
           status: user.status || UserStatus.Inactive,
         }))}
+        loading={loading}
+        pagination={{
+          current: currentPage,
+          defaultPageSize: 50,
+          hideOnSinglePage: true,
+          onChange: onPaginationChange,
+          pageSize: currentPageSize,
+          showSizeChanger: true,
+          showTotal: (total) => `Total Users: ${total}`,
+          total: data?.listUsers.total,
+        }}
+        size="small"
       />
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'User Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={400}
       >
         <UserFilter
           clearFilters={clearFilters}
-          order={order}
-          setOrder={setOrder}
           groups={groups}
-          groupsLoading={groupsLoading}
           groupsFilter={selectedGroups}
+          groupsLoading={groupsLoading}
+          order={order}
           setGroupsFilter={setSelectedGroups}
-          userStatus={userStatus}
+          setOrder={setOrder}
+          setUserRole={setUserRole}
           setUserStatus={setUserStatus}
           userRole={userRole}
-          setUserRole={setUserRole}
+          userStatus={userStatus}
         />
       </Drawer>
       <Drawer
+        onClose={toggleAddUser}
+        open={addUser}
         title={intl.formatMessage({
           defaultMessage: 'Invite New User',
         })}
-        open={addUser}
         width="600"
-        onClose={toggleAddUser}
       >
         {addUser ? (
           <AddUser
+            onClose={toggleAddUser}
             update={updateUserList}
             updateSearch={updateExitingUserList}
-            onClose={toggleAddUser}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => toggleEditUser()}
+        open={editUser !== undefined}
         title={intl.formatMessage({
           defaultMessage: 'Edit User',
         })}
-        open={editUser !== undefined}
         width="600"
-        onClose={() => toggleEditUser()}
       >
         {editUser ? (
-          <EditUser onClose={() => toggleEditUser()} id={editUser} />
+          <EditUser id={editUser} onClose={() => toggleEditUser()} />
         ) : (
           <div />
         )}

@@ -1,33 +1,32 @@
-import { useState } from 'react';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 
-import { QueryMode, SortOrder } from 'graphql/types';
-
-import { useStoreActions, useStoreState } from 'state';
 import { notification } from 'antd';
-import { useParams } from 'react-router';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
-import { useListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
-import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
+import { useParams } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
-  onClose: () => void;
   incidentIds: string[] | undefined;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListIncidentsQuery | undefined;
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
-const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
+const useLinkIncident = ({ incidentIds, onClose }: Props): Return => {
   const params = useParams();
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
@@ -41,19 +40,17 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
   );
 
   const { data, loading } = useListIncidentsQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
-      scheme: {
-        id: schemeId,
-      },
       order: {
         createdAt: SortOrder.Desc,
       },
-      take: pagination.pageSize,
+      scheme: {
+        id: schemeId,
+      },
       skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
       where: {
-        id: {
-          notIn: incidentIds,
-        },
         OR: [
           {
             subject: {
@@ -80,29 +77,31 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
             },
           },
         ],
+        id: {
+          notIn: incidentIds,
+        },
       },
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   const onPaginationChange = (page: number) => {
     setIncidentsState({
+      order,
       pagination: {
         ...pagination,
         page,
       },
       variables,
-      order,
     });
   };
   const setSearch = (value: string) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         search: value,
       },
-      order,
     });
   };
   const [updateInvestigation] = useUpdateInvestigationMutation({
@@ -110,11 +109,11 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added to the crime group! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -129,13 +128,13 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
     if (selected) {
       void updateInvestigation({
         variables: {
-          where: {
-            id: params.id || '',
-          },
           data: {
             incidentIds: [selected],
 
             // schemes: schemeId,
+          },
+          where: {
+            id: params.id || '',
           },
         },
       });
@@ -149,14 +148,14 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
   };
 
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listIncidents ? false : loading,
-    search: variables.search,
-    setSearch,
     onPaginationChange,
     onSelect,
+    onSubmit,
+    saving,
+    search: variables.search,
+    setSearch,
   };
 };
 

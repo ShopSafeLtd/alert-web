@@ -1,78 +1,78 @@
-import React from 'react';
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { DeleteArticleMutation } from 'graphql/article/mutations/__generated__/delete_article.generated';
+import type { ArticleFilters } from 'state/data-model';
 
-import { Button, Card, Col, Drawer, Empty, Input, Row, Tooltip } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Drawer, Empty, Input, Row, Tooltip } from 'antd';
+import ArticleCard from 'components/Articles/ArticleCard';
+import ArticleFilter from 'components/Articles/ArticleFilter';
+import ArticleSkeletonCard from 'components/Articles/ArticleSkeletonCard';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useIntl } from 'react-intl';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import ArticleFilter from 'components/Articles/ArticleFilter';
-import ArticleCard from 'components/Articles/ArticleCard';
-import ArticleSkeletonCard from 'components/Articles/ArticleSkeletonCard';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { useIntl } from 'react-intl';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import type { ArticleFilters } from 'state/data-model';
+
 import Loading from '../../../components/shared-components/AntD/Loading';
-import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
-import type { DeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
 
 interface Props {
   data:
-    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], undefined | null>
+    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  lightboxElements: {
-    src: string;
-  }[];
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  // groups: { value: string; label: string }[];
-  // groupsLoading: boolean;
-  onNavigate: () => void;
-  setGallery: (values: string[]) => void;
-  updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
   fetchMoreScroll: () => void;
   filterVariables: ArticleFilters;
   hasCreateRights: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
+  lightboxElements: {
+    src: string;
+  }[];
+  loading: boolean;
+  // groupsLoading: boolean;
+  onNavigate: () => void;
+  // groups: { value: string; label: string }[];
+  openLightbox: (elements: { src: string }[], index: number) => void;
+  setGallery: (values: string[]) => void;
+  setSearch: (value: string) => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
 }
 
 const Article = ({
   data,
-  loading,
-  setSearch,
-  sortFilter,
-  toggleSortFilter,
-  lightboxElements,
-  lightBoxOpen,
-  openLightbox,
-  // groups,
-  // groupsLoading,
-  onNavigate,
-  setGallery,
-  updateArticleList,
   fetchMoreScroll,
   filterVariables,
   hasCreateRights,
+  lightBoxOpen,
+  lightboxElements,
+  loading,
+  // groupsLoading,
+  onNavigate,
+  // groups,
+  openLightbox,
+  setGallery,
+  setSearch,
+  sortFilter,
+  toggleSortFilter,
+  updateArticleList,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const {
     // groups: groupsFilter,
     // // createdAt: createdAtFilter,
     // order,
+    gallery,
     // priorities: priorityFilter,
     search,
-    gallery,
   } = filterVariables;
   return (
     <div
@@ -86,20 +86,19 @@ const Article = ({
         <Row align="middle" gutter={16}>
           <Col span={4} xxl={6}>
             <Input
-              size="small"
+              onChange={(e) => setSearch(e.target.value)}
               // style={{ width: 350 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search Bulletins...',
               })}
+              size="small"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
             />
           </Col>
           <Col flex={1}>
             <CheckTags
               mode="check"
               noGutter
-              value={gallery}
               onChange={setGallery}
               options={[
                 {
@@ -109,6 +108,7 @@ const Article = ({
                   value: 'MYDATA',
                 },
               ]}
+              value={gallery}
             />
           </Col>
           <Col>
@@ -118,7 +118,6 @@ const Article = ({
               })}
             >
               <Button
-                onClick={toggleSortFilter}
                 icon={
                   <FontAwesomeIcon
                     icon={faFilter}
@@ -126,14 +125,13 @@ const Article = ({
                     style={{ marginRight: 5 }}
                   />
                 }
+                onClick={toggleSortFilter}
               />
             </Tooltip>
           </Col>
           {hasCreateRights && (
             <Col>
               <Button
-                type="primary"
-                onClick={onNavigate}
                 icon={
                   <FontAwesomeIcon
                     icon={faPlus}
@@ -141,6 +139,8 @@ const Article = ({
                     style={{ marginRight: 5 }}
                   />
                 }
+                onClick={onNavigate}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Bulletin',
@@ -154,17 +154,17 @@ const Article = ({
       <div style={{ paddingBottom: 10 }}>
         {loading ? (
           <Row
-            gutter={[8, 16]}
             align="stretch"
+            gutter={[8, 16]}
             style={{
               alignItems: 'stretch',
-              padding: 10,
               overflowX: 'hidden',
+              padding: 10,
             }}
           >
             {Array.from({ length: 24 }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
-              <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
+              <Col key={index} lg={8} md={12} sm={24} xl={8} xxl={6}>
                 <ArticleSkeletonCard inFeedList />
               </Col>
             ))}
@@ -172,29 +172,29 @@ const Article = ({
         ) : data?.edges && data?.edges.length > 0 ? (
           <InfiniteScroll
             dataLength={data?.edges.length}
-            next={() => fetchMoreScroll()}
-            hasMore={data?.pageInfo.hasNextPage}
-            loader={<Loading />}
-            height="calc(100vh - 87px)"
-            style={{ overflowX: 'hidden' }}
             endMessage={
               <p style={{ textAlign: 'center' }}>
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                 <b>-----------</b>
               </p>
             }
+            hasMore={data?.pageInfo.hasNextPage}
+            height="calc(100vh - 87px)"
+            loader={<Loading />}
+            next={() => fetchMoreScroll()}
+            style={{ overflowX: 'hidden' }}
           >
             <Row
-              gutter={[8, 16]}
               align="stretch"
+              gutter={[8, 16]}
               style={{
                 alignItems: 'stretch',
-                padding: 10,
                 overflowX: 'hidden',
+                padding: 10,
               }}
             >
               {data?.edges.map((t) => (
-                <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={t?.node?.id}>
+                <Col key={t?.node?.id} lg={8} md={12} sm={24} xl={8} xxl={6}>
                   <ArticleCard
                     article={t?.node}
                     openLightbox={openLightbox}
@@ -207,10 +207,10 @@ const Article = ({
         ) : (
           <div
             style={{
+              alignItems: 'center',
               display: 'flex',
               flex: 1,
               height: 'calc(100vh - 100px)',
-              alignItems: 'center',
               justifyContent: 'center',
             }}
           >
@@ -248,29 +248,29 @@ const Article = ({
         {/* </Row> */}
       </div>
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <ArticleFilter />
       </Drawer>
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox([], 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

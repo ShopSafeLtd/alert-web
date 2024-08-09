@@ -1,26 +1,28 @@
-import React, { useState } from 'react';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/__generated__/investigation-suggestions.generated';
+
 import { Button, Table } from 'antd';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { FormattedMessage } from 'react-intl';
+
 import useStyles from './SuggestedVehicles.style';
-import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
 
 interface Props {
-  suggestedData: InvestigationSuggestionsQuery | undefined;
   handleAddSuggestion: (id: string) => void;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
 }
 
-const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
+const SuggestedVehicles = ({ handleAddSuggestion, suggestedData }: Props) => {
   const classes = useStyles();
   const [lightBoxOpen, setLightBoxOpen] = useState<{
-    open: boolean;
     index: number;
+    open: boolean;
   }>({
-    open: false,
     index: 0,
+    open: false,
   });
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
@@ -28,7 +30,7 @@ const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
 
   const openLightbox = (
     offender: {
-      images: { id: string; optimised?: string | undefined | null }[];
+      images: { id: string; optimised?: null | string | undefined }[];
     },
     index: number
   ) => {
@@ -37,7 +39,7 @@ const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
         src: image.optimised || '',
       })) || []
     );
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   return (
@@ -45,71 +47,71 @@ const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
       <Table
         columns={[
           {
-            key: 'reference',
             dataIndex: 'reference',
+            key: 'reference',
             title: <FormattedMessage defaultMessage="Alert ID" />,
           },
           {
-            key: 'registration',
             dataIndex: 'registration',
+            key: 'registration',
             title: <FormattedMessage defaultMessage="Registration" />,
           },
           {
-            key: 'make',
             dataIndex: 'make',
+            key: 'make',
             title: <FormattedMessage defaultMessage="Make" />,
           },
           {
-            key: 'model',
             dataIndex: 'model',
+            key: 'model',
             title: <FormattedMessage defaultMessage="Model" />,
           },
           {
-            key: 'colour',
             dataIndex: 'colour',
+            key: 'colour',
             title: <FormattedMessage defaultMessage="Colour" />,
           },
           {
-            key: 'actions',
             dataIndex: 'actions',
-            title: '',
+            key: 'actions',
             render: (_, row) => (
               <Button
                 danger
-                type="ghost"
                 onClick={() => handleAddSuggestion(row.key)}
+                type="ghost"
               >
                 <FormattedMessage defaultMessage="Add To Investigation" />
               </Button>
             ),
+            title: '',
           },
         ]}
         dataSource={
           suggestedData?.investigation?.suggestedVehicles?.map((item) => ({
-            reference: item.reference,
-            registration: item.registration,
-            make: item.make,
-            model: item.model,
             colour: item.colour,
             key: item.id,
+            make: item.make,
+            model: item.model,
+            reference: item.reference,
+            registration: item.registration,
           })) || []
         }
       />
 
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox({ images: [] }, 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

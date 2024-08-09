@@ -1,16 +1,17 @@
 import type { Dispatch } from 'react';
+
+import { useCreateCsvZipMutation } from '#/views/data-management/export-incidents/graphql/mutations/__generated__/create-zip.generated';
+import { usePreviewIncidentExportQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/export-incidents-preview.generated';
+import { useExportFiltersQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/scheme-details.generated';
 import { useEffect, useReducer, useRef } from 'react';
 
 import { useStoreState } from '../../../state';
-import { usePreviewIncidentExportQuery } from '#/views/data-management/export-incidents/graphql/queries/export-incidents-preview.generated';
-import { useExportFiltersQuery } from '#/views/data-management/export-incidents/graphql/queries/scheme-details.generated';
-import { useCreateCsvZipMutation } from '#/views/data-management/export-incidents/graphql/mutations/create-zip.generated';
 
 interface Return {
-  loading: boolean;
-  state: ExportIncidentsState;
   dispatch: Dispatch<Action>;
   getZip: () => void;
+  loading: boolean;
+  state: ExportIncidentsState;
 }
 
 export interface SelectOption {
@@ -19,75 +20,67 @@ export interface SelectOption {
 }
 
 export type ActionType =
-  | 'UPDATE_TAKE'
-  | 'UPDATE_SKIP'
-  | 'UPDATE_GROUP_IDS'
+  | 'SET_DATA'
+  | 'SET_OPTIONS'
+  | 'SET_PROGRESS'
+  | 'SET_ZIP_FILE'
   | 'UPDATE_BUSINESS_IDS'
   | 'UPDATE_CRIME_GROUP_IDS'
-  | 'UPDATE_START_DATE'
   | 'UPDATE_END_DATE'
-  | 'SET_OPTIONS'
-  | 'SET_DATA'
-  | 'SET_ZIP_FILE'
-  | 'SET_PROGRESS';
+  | 'UPDATE_GROUP_IDS'
+  | 'UPDATE_SKIP'
+  | 'UPDATE_START_DATE'
+  | 'UPDATE_TAKE';
 
 export type Action = {
-  type: ActionType;
   payload:
+    | { [key in Options]: SelectOption[] }
+    | { data: ExportIncidentsState['data'] }
+    | Date
+    | null
     | number
     | string
-    | Date
-    | string[]
-    | null
-    | { [key in Options]: SelectOption[] }
-    | { data: ExportIncidentsState['data'] };
+    | string[];
+  type: ActionType;
 };
 
-type Options = 'groupOptions' | 'businessOptions' | 'crimeGroupOptions';
+type Options = 'businessOptions' | 'crimeGroupOptions' | 'groupOptions';
 
 export interface ExportIncidentsState {
-  take: number;
-  endDate: Date;
-  skip: number;
-  startDate: Date;
-  groupIds: string[];
-  crimeGroupIds: string[];
   businessIds: string[];
-  groupOptions: SelectOption[];
   businessOptions: SelectOption[];
+  crimeGroupIds: string[];
   crimeGroupOptions: SelectOption[];
-  progress: number;
-  zipFile: string | null;
   data: {
     activityCount: number;
     incidentCount: number;
     incidentItemsCount: number;
     incidents: {
-      id: string;
       date: Date;
       description: string;
+      id: string;
     }[];
     offenderCount: number;
     vehicleCount: number;
   };
+  endDate: Date;
+  groupIds: string[];
+  groupOptions: SelectOption[];
+  progress: number;
+  skip: number;
+  startDate: Date;
+  take: number;
+  zipFile: null | string;
 }
 
 const useExportIncidents = (): Return => {
   const { id: schemeId } = useStoreState((state) => state.scheme);
 
   const initialState: ExportIncidentsState = {
-    take: 10,
-    skip: 0,
-    groupIds: [],
     businessIds: [],
-    crimeGroupIds: [],
-    startDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
-    endDate: new Date(),
-    groupOptions: [],
     businessOptions: [],
+    crimeGroupIds: [],
     crimeGroupOptions: [],
-    progress: 0,
-    zipFile: null,
     data: {
       activityCount: 0,
       incidentCount: 0,
@@ -96,6 +89,14 @@ const useExportIncidents = (): Return => {
       offenderCount: 0,
       vehicleCount: 0,
     },
+    endDate: new Date(),
+    groupIds: [],
+    groupOptions: [],
+    progress: 0,
+    skip: 0,
+    startDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
+    take: 10,
+    zipFile: null,
   };
 
   const reducer = (
@@ -161,7 +162,7 @@ const useExportIncidents = (): Return => {
       }
 
       case 'SET_ZIP_FILE': {
-        const zipFile = action.payload as string | null;
+        const zipFile = action.payload as null | string;
         return { ...state, zipFile };
       }
 
@@ -178,48 +179,43 @@ const useExportIncidents = (): Return => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { loading } = usePreviewIncidentExportQuery({
-    variables: {
-      take: state.take,
-      skip: state.skip,
-      where: {
-        businessIds: state.businessIds,
-        crimeGroupIds: state.crimeGroupIds,
-        groupIds: state.groupIds,
-        dateRange: {
-          startDate: state.startDate,
-          endDate: state.endDate,
-        },
-      },
-    },
     onCompleted: (data) => {
       if (data) {
         dispatch({
-          type: 'SET_DATA',
           payload: {
             data: data.previewIncidentExport,
           },
+          type: 'SET_DATA',
         });
       } else {
         dispatch({
-          type: 'SET_DATA',
           payload: {
             data: initialState.data,
           },
+          type: 'SET_DATA',
         });
       }
+    },
+    variables: {
+      skip: state.skip,
+      take: state.take,
+      where: {
+        businessIds: state.businessIds,
+        crimeGroupIds: state.crimeGroupIds,
+        dateRange: {
+          endDate: state.endDate,
+          startDate: state.startDate,
+        },
+        groupIds: state.groupIds,
+      },
     },
   });
 
   const { loading: filtersLoading } = useExportFiltersQuery({
-    variables: {
-      where: {
-        id: schemeId,
-      },
-    },
     onCompleted: (filterOptions) => {
       if (filterOptions && filterOptions?.scheme) {
         // eslint-disable-next-line no-unsafe-optional-chaining
-        const { groups, businesses, schemeTags } = filterOptions?.scheme;
+        const { businesses, groups, schemeTags } = filterOptions?.scheme;
 
         const groupOptions = groups.map((group) => ({
           label: group.name,
@@ -237,29 +233,34 @@ const useExportIncidents = (): Return => {
         }));
 
         dispatch({
-          type: 'SET_OPTIONS',
           payload: {
-            groupOptions,
             businessOptions,
             crimeGroupOptions: [...schemeTagsOptions],
+            groupOptions,
           },
+          type: 'SET_OPTIONS',
         });
       }
     },
+    variables: {
+      where: {
+        id: schemeId,
+      },
+    },
   });
 
-  const animationFrameRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<null | number>(null);
 
   const [createZip] = useCreateCsvZipMutation({
     onCompleted: (d) => {
       if (d && d.createCsvZip) {
         dispatch({
-          type: 'SET_ZIP_FILE',
           payload: d.createCsvZip,
+          type: 'SET_ZIP_FILE',
         });
         dispatch({
-          type: 'SET_PROGRESS',
           payload: 100,
+          type: 'SET_PROGRESS',
         });
       }
     },
@@ -267,12 +268,12 @@ const useExportIncidents = (): Return => {
 
   const getZip = () => {
     dispatch({
-      type: 'SET_ZIP_FILE',
       payload: null,
+      type: 'SET_ZIP_FILE',
     });
     dispatch({
-      type: 'SET_PROGRESS',
       payload: 0,
+      type: 'SET_PROGRESS',
     });
 
     void createZip({
@@ -280,11 +281,11 @@ const useExportIncidents = (): Return => {
         where: {
           businessIds: state.businessIds,
           crimeGroupIds: state.crimeGroupIds,
-          groupIds: state.groupIds,
           dateRange: {
-            startDate: state.startDate,
             endDate: state.endDate,
+            startDate: state.startDate,
           },
+          groupIds: state.groupIds,
         },
       },
     });
@@ -300,19 +301,19 @@ const useExportIncidents = (): Return => {
 
       if (elapsedTime >= duration) {
         dispatch({
-          type: 'SET_ZIP_FILE',
           payload: null,
+          type: 'SET_ZIP_FILE',
         });
         dispatch({
-          type: 'SET_PROGRESS',
           payload: targetProgress,
+          type: 'SET_PROGRESS',
         });
       } else {
         const newProgress = (elapsedTime / duration) * targetProgress;
 
         dispatch({
-          type: 'SET_PROGRESS',
           payload: Math.floor(newProgress),
+          type: 'SET_PROGRESS',
         });
         animationFrameRef.current = requestAnimationFrame(updateProgress);
       }
@@ -332,10 +333,10 @@ const useExportIncidents = (): Return => {
   );
 
   return {
-    loading: loading || filtersLoading,
-    state,
     dispatch,
     getZip,
+    loading: loading || filtersLoading,
+    state,
   };
 };
 

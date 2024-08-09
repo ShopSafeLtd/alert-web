@@ -1,23 +1,26 @@
-import { useStoreState } from 'state';
+import type { BusinessEngagementQuery } from 'graphql/reports/queries/__generated__/business-engagement.generated';
+import type { DateRangeInput } from 'graphql/types';
 import type { RefObject } from 'react';
+
+import { useGroupsContext } from '#/context/groups-context';
+import { useBusinessEngagementQuery } from 'graphql/reports/queries/__generated__/business-engagement.generated';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { useGroupsContext } from '#/context/groups-context';
-import type { BusinessEngagementQuery } from 'graphql/reports/queries/business-engagement.generated';
-import { useBusinessEngagementQuery } from 'graphql/reports/queries/business-engagement.generated';
+import { useStoreState } from 'state';
 
 interface Return {
-  loading: boolean;
-  data: BusinessEngagementQuery | undefined;
-  groups: SelectOptions[];
-
-  dateRange: { startDate: Date; endDate: Date };
-  setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-  setSelectedGroups: (groups: string[]) => void;
-  groupsLoading: boolean;
-  selectedGroups: string[];
   componentRef: RefObject<HTMLDivElement>;
+  data: BusinessEngagementQuery | undefined;
+  dateRange: { endDate: Date; startDate: Date };
+  groups: SelectOptions[];
+  groupsLoading: boolean;
   handlePrint: () => void;
+  loading: boolean;
+  selectedGroups: string[];
+  setDateRange: (
+    dateRange: { endDate: Date; startDate: Date } | undefined
+  ) => void;
+  setSelectedGroups: (groups: string[]) => void;
 }
 
 export interface SelectOptions {
@@ -30,9 +33,11 @@ const useBusinessEngagement = (): Return => {
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
-    startDate: Date;
     endDate: Date;
+    startDate: Date;
   }>({
+    // today at 23:59:59
+    endDate: new Date(new Date().setHours(23, 59, 59)),
     // new date 1 month ago at 00:00:00
     startDate: new Date(
       new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
@@ -41,8 +46,6 @@ const useBusinessEngagement = (): Return => {
         59
       )
     ),
-    // today at 23:59:59
-    endDate: new Date(new Date().setHours(23, 59, 59)),
   });
   const { groups: groupsData, groupsLoading } = useGroupsContext();
 
@@ -59,24 +62,24 @@ const useBusinessEngagement = (): Return => {
     variables: {
       where: {
         dateRange,
-        schemeIds: [currentScheme],
         groupIds:
           selectedGroups.length > 0
             ? selectedGroups
             : groups.map(({ value }) => value),
+        schemeIds: [currentScheme],
       },
     },
   });
 
   const setDateRange = (dateRangeInput: {
-    startDate: Date;
     endDate: Date;
+    startDate: Date;
   }): void => {
     setDateRangeState({
+      endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
       startDate: new Date(
         new Date(dateRangeInput.startDate).setHours(0, 0, 59)
       ),
-      endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
     });
   };
 
@@ -95,8 +98,11 @@ const useBusinessEngagement = (): Return => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    pageStyle:
-      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
+    onAfterPrint: () => {
+      // Reset the Promise resolve so we can print again
+      promiseResolveRef.current = null;
+      setIsPrinting(false);
+    },
     onBeforeGetContent: () =>
       new Promise((resolve) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -104,24 +110,34 @@ const useBusinessEngagement = (): Return => {
         promiseResolveRef.current = resolve;
         setIsPrinting(true);
       }),
-    onAfterPrint: () => {
-      // Reset the Promise resolve so we can print again
-      promiseResolveRef.current = null;
-      setIsPrinting(false);
-    },
+    pageStyle:
+      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
   });
+  const onSetDateRange = (rangeValue: DateRangeInput | undefined) =>
+    setDateRange(
+      rangeValue ?? {
+        endDate: new Date(new Date().setHours(23, 59, 59)),
+        startDate: new Date(
+          new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+            0,
+            0,
+            59
+          )
+        ),
+      }
+    );
 
   return {
+    componentRef,
     data,
-    loading,
-    setDateRange,
     dateRange,
     groups,
-    setSelectedGroups,
     groupsLoading,
-    selectedGroups,
     handlePrint,
-    componentRef,
+    loading,
+    selectedGroups,
+    setDateRange: onSetDateRange,
+    setSelectedGroups,
   };
 };
 

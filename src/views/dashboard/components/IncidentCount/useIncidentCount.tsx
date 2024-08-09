@@ -1,14 +1,13 @@
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-
+import { useIncidentCountQuery } from '#/views/dashboard/graphql/queries/__generated__/incident-counts.generated';
 import { useEffect, useMemo, useState } from 'react';
-import { useIncidentCountQuery } from '#/views/dashboard/graphql/queries/incident-counts.generated';
 
 const useIncidentCount = (): {
   data: number;
   loading: boolean;
 } => {
   const {
-    variables: { groups: groupsFilter, gallery, createdAt: createdAtFilter },
+    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
   } = useDashboardContext();
 
   const thirtyDaysAgoMemo = useMemo(() => {
@@ -42,8 +41,8 @@ const useIncidentCount = (): {
       where: {
         dateRange,
         following: gallery.includes('FOLLOWING'),
-        myData: gallery.includes('MYDATA'),
         groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
+        myData: gallery.includes('MYDATA'),
       },
     },
   });

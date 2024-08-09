@@ -1,31 +1,33 @@
-import React from 'react';
 import { Col, Row, Skeleton, Typography } from 'antd';
-import { Link } from 'react-router-dom';
-import { useIntl } from 'react-intl'; // Import the useIntl hook
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom'; // Import the useIntl hook
+import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
+
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SideListItem from 'components/side-list/SideListItem.view';
-import useStyles from './OffenderSideList.styles';
+
 import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
-import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import useStyles from './OffenderSideList.styles';
 
 const { Text } = Typography;
 
 interface Props {
+  current?: string;
   data:
-    | Exclude<ListOffendersRelayQuery['listOffendersRelay'], undefined | null>
+    | Exclude<ListOffendersRelayQuery['listOffendersRelay'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  current?: string;
-  to?: string;
   fetchMoreScroll: () => void;
+  loading: boolean;
+  to?: string;
 }
 
 const OffenderSideList = ({
-  data,
-  loading,
   current,
+  data,
   fetchMoreScroll,
+  loading,
   to,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -34,8 +36,8 @@ const OffenderSideList = ({
 
   const offenderItems = data?.edges?.map(({ node: offender }) => (
     <Link
-      to={`${to || '/app/offenders/view/'}${offender.id}`}
       key={offender.id}
+      to={`${to || '/app/offenders/view/'}${offender.id}`}
     >
       <SideListItem current={current === offender.id}>
         <Row wrap={false}>
@@ -43,8 +45,8 @@ const OffenderSideList = ({
             {offender.images.length > 0 ? (
               <div className={classes.image}>
                 <WatermarkImage
-                  url={offender.images[0].optimised}
                   position={offender.images[0].position}
+                  url={offender.images[0].optimised}
                 />
               </div>
             ) : (
@@ -54,8 +56,8 @@ const OffenderSideList = ({
           <Col className={classes.content} flex={1}>
             <Text
               className={classes.name}
-              strong={current === offender.id}
               ellipsis
+              strong={current === offender.id}
             >
               {offender.name}
             </Text>
@@ -73,13 +75,13 @@ const OffenderSideList = ({
               </Col>
             </Row>
             {offender.approved ? (
-              <Text style={{ fontSize: 12 }} type="success" ellipsis>
+              <Text ellipsis style={{ fontSize: 12 }} type="success">
                 {intl.formatMessage({
                   defaultMessage: 'Approved',
                 })}
               </Text>
             ) : (
-              <Text style={{ fontSize: 12 }} type="warning" ellipsis>
+              <Text ellipsis style={{ fontSize: 12 }} type="warning">
                 {intl.formatMessage({
                   defaultMessage: 'Unapproved',
                 })}
@@ -106,10 +108,10 @@ const OffenderSideList = ({
   return (
     <InfiniteSideScrollList
       dataLength={data?.edges?.length}
-      next={fetchMoreScroll}
       hasMore={data?.pageInfo.hasNextPage}
       isLoading={isLoading}
       items={offenderItems}
+      next={fetchMoreScroll}
     />
   );
 };

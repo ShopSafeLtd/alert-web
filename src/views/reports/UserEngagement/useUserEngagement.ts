@@ -1,31 +1,35 @@
-import { useStoreState } from 'state';
+import type { UserEngagementQuery } from 'graphql/reports/queries/__generated__/list-user-engagement.generated';
+import type { DateRangeInput } from 'graphql/types';
 import type { RefObject } from 'react';
+
+import { useGroupsContext } from '#/context/groups-context';
+import { useUserEngagementQuery } from 'graphql/reports/queries/__generated__/list-user-engagement.generated';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { useGroupsContext } from '#/context/groups-context';
-import type { UserEngagementQuery } from 'graphql/reports/queries/list-user-engagement.generated';
-import { useUserEngagementQuery } from 'graphql/reports/queries/list-user-engagement.generated';
+import { useStoreState } from 'state';
 
 interface Return {
-  loading: boolean;
+  componentRef: RefObject<HTMLDivElement>;
   data:
-    | Exclude<UserEngagementQuery['listUserContribution'], undefined | null>
+    | Exclude<UserEngagementQuery['listUserContribution'], null | undefined>
     | null
     | undefined;
-  dateRange: { startDate: Date; endDate: Date };
-  setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-  setSelectedGroups: (groups: string[]) => void;
-  selectedGroups: string[];
-  componentRef: RefObject<HTMLDivElement>;
-  handlePrint: () => void;
+  dateRange: { endDate: Date; startDate: Date };
   filtersOpen: boolean;
-  toggleFiltersOpen: () => void;
-  selectedRoles: string[];
-  setSelectedRoles: (value: string[]) => void;
-  selectedBusinesses: string[];
-  setSelectedBusinesses: (value: string[]) => void;
+  handlePrint: () => void;
+  loading: boolean;
   search: string;
+  selectedBusinesses: string[];
+  selectedGroups: string[];
+  selectedRoles: string[];
+  setDateRange: (
+    dateRange: { endDate: Date; startDate: Date } | undefined
+  ) => void;
   setSearch: (value: string) => void;
+  setSelectedBusinesses: (value: string[]) => void;
+  setSelectedGroups: (groups: string[]) => void;
+  setSelectedRoles: (value: string[]) => void;
+  toggleFiltersOpen: () => void;
 }
 
 export interface SelectOptions {
@@ -41,9 +45,11 @@ const useUserEngagement = (): Return => {
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedBusinesses, setSelectedBusinesses] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
-    startDate: Date;
     endDate: Date;
+    startDate: Date;
   }>({
+    // today at 23:59:59
+    endDate: new Date(new Date().setHours(23, 59, 59)),
     // new date 1 month ago at 00:00:00
     startDate: new Date(
       new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
@@ -52,8 +58,6 @@ const useUserEngagement = (): Return => {
         59
       )
     ),
-    // today at 23:59:59
-    endDate: new Date(new Date().setHours(23, 59, 59)),
   });
   const { groups, groupsLoading } = useGroupsContext();
 
@@ -62,27 +66,27 @@ const useUserEngagement = (): Return => {
     skip: !currentScheme || groupsLoading || !selectedGroups,
     variables: {
       where: {
+        businessesIds: selectedBusinesses ?? [],
         dateRange,
-        schemeIds: [currentScheme],
         groupIds:
           selectedGroups.length > 0
             ? selectedGroups
             : groups.map(({ value: id }) => id),
-        businessesIds: selectedBusinesses ?? [],
         rolesIds: selectedRoles ?? [],
+        schemeIds: [currentScheme],
       },
     },
   });
 
   const setDateRange = (dateRangeInput: {
-    startDate: Date;
     endDate: Date;
+    startDate: Date;
   }): void => {
     setDateRangeState({
+      endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
       startDate: new Date(
         new Date(dateRangeInput.startDate).setHours(0, 0, 59)
       ),
-      endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
     });
   };
 
@@ -101,8 +105,11 @@ const useUserEngagement = (): Return => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    pageStyle:
-      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
+    onAfterPrint: () => {
+      // Reset the Promise resolve so we can print again
+      promiseResolveRef.current = null;
+      setIsPrinting(false);
+    },
     onBeforeGetContent: () =>
       new Promise((resolve) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -110,34 +117,44 @@ const useUserEngagement = (): Return => {
         promiseResolveRef.current = resolve;
         setIsPrinting(true);
       }),
-    onAfterPrint: () => {
-      // Reset the Promise resolve so we can print again
-      promiseResolveRef.current = null;
-      setIsPrinting(false);
-    },
+    pageStyle:
+      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
   });
 
   const toggleFiltersOpen = () => {
     setFiltersOpen(!filtersOpen);
   };
+  const onSetDateRange = (rangeValue: DateRangeInput | undefined) =>
+    setDateRange(
+      rangeValue ?? {
+        endDate: new Date(new Date().setHours(23, 59, 59)),
+        startDate: new Date(
+          new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+            0,
+            0,
+            59
+          )
+        ),
+      }
+    );
 
   return {
-    data: data?.listUserContribution,
-    loading,
-    setDateRange,
-    dateRange,
-    setSelectedGroups,
-    selectedGroups,
-    handlePrint,
     componentRef,
+    data: data?.listUserContribution,
+    dateRange,
     filtersOpen,
-    toggleFiltersOpen,
-    selectedRoles,
-    setSelectedBusinesses,
-    setSelectedRoles,
-    selectedBusinesses,
+    handlePrint,
+    loading,
     search,
+    selectedBusinesses,
+    selectedGroups,
+    selectedRoles,
+    setDateRange: onSetDateRange,
     setSearch,
+    setSelectedBusinesses,
+    setSelectedGroups,
+    setSelectedRoles,
+    toggleFiltersOpen,
   };
 };
 

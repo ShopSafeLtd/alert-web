@@ -1,8 +1,9 @@
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
 
 interface Return {
   data: ListCrimeGroupsQuery | undefined;
@@ -23,24 +24,6 @@ const useListCrimeGroups = (): Return => {
         updatedAt: SortOrder.Desc,
       },
       where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-        groups: {
-          some: {
-            users: {
-              some: {
-                id: {
-                  equals: userId,
-                },
-              },
-            },
-          },
-        },
         OR: [
           {
             alias: {
@@ -63,6 +46,24 @@ const useListCrimeGroups = (): Return => {
             },
           },
         ],
+        groups: {
+          some: {
+            users: {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            },
+          },
+        },
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
       },
     },
   });

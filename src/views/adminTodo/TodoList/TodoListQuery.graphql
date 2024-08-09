@@ -1,0 +1,60 @@
+query TodoList(
+    $where: TodoRelayWhereInput!
+    $take: Int
+    $skip: Int
+    $orderBy: [TodoOrderByWithRelationInput!]
+    $after: String
+) {
+    todoRelay(where: $where, take: $take, skip: $skip, orderBy: $orderBy, after: $after) {
+        edges {
+            node {
+                id
+                name
+                description
+                dueDate
+                completedDate
+                completed
+                createdAt
+                type
+                vehicleId
+                vehicle {
+                    id
+                    reference
+                }
+                offenderId
+                offender {
+                    id
+                    reference
+                }
+                crimeGroupId
+                crimeGroup {
+                    id
+                    reference
+                }
+                incidentId
+                incident {
+                    id
+                    reference
+                }
+                investigationId
+                investigation {
+                    id
+                    reference
+                }
+                chatId
+                assignedUsers {
+                    id
+                    fullName
+                }
+                groups {
+                    id
+                    name
+                }
+            }
+        }
+        totalCount
+        pageInfo {
+            endCursor
+        }
+    }
+}

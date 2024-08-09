@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
 import type { Moment } from 'moment';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
-import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/AddTodoUsers.generated';
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import { Form, notification } from 'antd';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import moment from 'moment';
@@ -15,11 +12,23 @@ import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-import type { EditTodoQuery } from './graphql/edit_todo.generated';
 
 import customRequest from '../../../../utils/custom-request';
-import { useEditTodoQuery } from './graphql/edit_todo.generated';
-import { useUpdateTodoDetailsMutation } from './graphql/update-todo-details.generated';
+import {
+  QuestionGroupOnSchemeQuery,
+  useQuestionGroupOnSchemeQuery,
+} from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
+import {
+  EditTodoQuery,
+  useEditTodoQuery,
+} from '#/components/form-components/Todos/EditTodo/graphql/__generated__/edit_todo.generated';
+import {
+  useAddTodoUsersQuery
+} from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
+import {
+  useUpdateTodoDetailsMutation
+} from '#/components/form-components/Todos/EditTodo/graphql/__generated__/update-todo-details.generated';
+
 
 const { useForm } = Form;
 

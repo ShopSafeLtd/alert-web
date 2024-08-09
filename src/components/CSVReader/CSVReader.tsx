@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
+import React from 'react';
+
 import Papa from 'papaparse';
 
 export interface IFileInfo {
@@ -29,12 +29,13 @@ export interface CSVReaderProps {
   parserOptions?: Papa.ParseConfig;
   disabled?: boolean;
   strict?: boolean;
+  setLoading?: (loading: boolean) => void;
 }
 
 const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
   (
     {
-      accept = '.csv, text/csv',
+      accept = '.csv, text/csv, text/plain',
       cssClass = 'csv-reader-input',
       cssInputClass = 'csv-input',
       cssLabelClass = 'csv-label',
@@ -49,6 +50,7 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
       parserOptions = {} as Papa.ParseConfig,
       disabled = false,
       strict = false,
+      setLoading,
     },
     inputRef
   ) => {
@@ -58,6 +60,7 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
       const files: FileList = e.target.files!;
 
       if (files.length > 0) {
+        setLoading(true);
         const fileInfo: IFileInfo = {
           name: files[0].name,
           size: files[0].size,
@@ -65,11 +68,12 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
         };
 
         if (strict && accept.indexOf(fileInfo.type) <= 0) {
-          onError(
-            new Error(
-              `[strict mode] Accept type not respected: got '${fileInfo.type}' but not in '${accept}'`
-            )
-          );
+          setLoading(false),
+            onError(
+              new Error(
+                `[strict mode] Accept type not respected: got '${fileInfo.type}' but not in '${accept}'`
+              )
+            );
           return;
         }
 
@@ -82,6 +86,7 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
               encoding: fileEncoding,
             })
           );
+          setLoading(false);
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
           onFileLoaded(csvData?.data ?? [], fileInfo, files[0]);
         };
@@ -112,24 +117,5 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
     );
   }
 );
-
-CSVReader.propTypes = {
-  accept: PropTypes.string,
-  cssClass: PropTypes.string,
-  cssInputClass: PropTypes.string,
-  cssLabelClass: PropTypes.string,
-  fileEncoding: PropTypes.string,
-  inputId: PropTypes.string,
-  inputName: PropTypes.string,
-  // eslint-disable-next-line react/forbid-prop-types
-  inputStyle: PropTypes.object,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  onError: PropTypes.func,
-  onFileLoaded: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  parserOptions: PropTypes.object,
-  disabled: PropTypes.bool,
-  strict: PropTypes.bool,
-};
 
 export default CSVReader;

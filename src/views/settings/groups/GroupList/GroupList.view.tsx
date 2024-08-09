@@ -1,31 +1,31 @@
-import React from 'react';
-import { Button, Col, Drawer, Input, Row, Table } from 'antd';
-
-import { Link } from 'react-router-dom';
-import AddGroup from 'components/form-components/group/AddGroup';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Input, Row, Table } from 'antd';
+import AddGroup from 'components/form-components/group/AddGroup';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { Link } from 'react-router-dom';
 
 interface Props {
+  addGroup: boolean;
   data: SchemeGroupsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addGroup: boolean;
   toggleAddGroup: () => void;
   updateGroupList: MutationUpdaterFn<CreateGroupMutation>;
 }
 
 const GroupList = ({
+  addGroup,
   data,
   loading,
   search,
   setSearch,
-  addGroup,
   toggleAddGroup,
   updateGroupList,
 }: Props): JSX.Element => {
@@ -35,19 +35,17 @@ const GroupList = ({
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={8}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a group...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
         <Col flex={1} />
         <Col>
           <Button
-            type="primary"
-            onClick={toggleAddGroup}
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -55,13 +53,42 @@ const GroupList = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleAddGroup}
+            type="primary"
           >
             <FormattedMessage defaultMessage="New Content Group" />
           </Button>
         </Col>
       </Row>
       <Table
-        size="small"
+        columns={[
+          {
+            dataIndex: 'name',
+            key: 'name',
+            render: (value, record) => (
+              <Link to={`/app/scheme-settings/groups/view/${record.key}`}>
+                {value}
+              </Link>
+            ),
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+            }),
+            width: 300,
+          },
+          {
+            dataIndex: 'description',
+            ellipsis: true,
+            key: 'description',
+            title: intl.formatMessage({
+              defaultMessage: 'Description',
+            }),
+          },
+        ]}
+        dataSource={data?.groups.map((group) => ({
+          description: group.description,
+          key: group.id,
+          name: group.name,
+        }))}
         loading={loading}
         pagination={
           data?.groups && data.groups.length > 50
@@ -71,46 +98,19 @@ const GroupList = ({
               }
             : false
         }
-        columns={[
-          {
-            key: 'name',
-            title: intl.formatMessage({
-              defaultMessage: 'Name',
-            }),
-            dataIndex: 'name',
-            width: 300,
-            render: (value, record) => (
-              <Link to={`/app/scheme-settings/groups/view/${record.key}`}>
-                {value}
-              </Link>
-            ),
-          },
-          {
-            key: 'description',
-            title: intl.formatMessage({
-              defaultMessage: 'Description',
-            }),
-            dataIndex: 'description',
-            ellipsis: true,
-          },
-        ]}
-        dataSource={data?.groups.map((group) => ({
-          key: group.id,
-          name: group.name,
-          description: group.description,
-        }))}
+        size="small"
       />
 
       <Drawer
+        onClose={toggleAddGroup}
+        open={addGroup}
         title={intl.formatMessage({
           defaultMessage: 'Create New Content Group',
         })}
-        open={addGroup}
         width="400"
-        onClose={toggleAddGroup}
       >
         {addGroup ? (
-          <AddGroup update={updateGroupList} onClose={toggleAddGroup} />
+          <AddGroup onClose={toggleAddGroup} update={updateGroupList} />
         ) : (
           <div />
         )}

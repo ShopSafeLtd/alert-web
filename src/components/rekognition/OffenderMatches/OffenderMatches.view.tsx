@@ -1,74 +1,76 @@
-import React from 'react';
-import { createUseStyles } from 'react-jss';
+import type { Image } from 'components/images/LightBox/LightBox.types';
+import type { ViewOffenderMatchesQuery } from 'graphql/offenders/queries/__generated__/offender-macthes.generated';
+
 import { Button, Card, Col, Popconfirm, Row, Skeleton, Typography } from 'antd';
+import LightBox from 'components/images/LightBox/LightBox.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { Role } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import { Link } from 'react-router-dom';
+import { useStoreState } from 'state';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import LightBox from 'components/images/LightBox/LightBox.container';
-import type { Image } from 'components/images/LightBox/LightBox.types';
-import { Link } from 'react-router-dom';
-import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
+
 import MatchedFace from './MatchedFace.view';
-import type { ViewOffenderMatchesQuery } from 'graphql/offenders/queries/offender-macthes.generated';
-import { Role } from 'graphql/types';
 
 const useStyles = createUseStyles({
   container: {},
-  skeletonMatch: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  ref: {
-    fontSize: 14,
-  },
-  imageContainer: {
-    height: 200,
-    width: '100%',
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
   currentOffender: {
     marginBottom: 20,
   },
-  matchImage: {
-    height: 300,
-    width: 200,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+  imageContainer: {
+    borderRadius: 10,
+    height: 200,
     overflow: 'hidden',
+    width: '100%',
   },
   matchContainer: {
     padding: '10px 15px',
   },
+  matchImage: {
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    height: 300,
+    overflow: 'hidden',
+    width: 200,
+  },
   matchRef: {
     marginBottom: 10,
+  },
+  ref: {
+    fontSize: 14,
+  },
+  skeletonMatch: {
+    marginBottom: 20,
+    width: '100%',
   },
 });
 
 interface LightBoxState {
-  index: number;
   images: Image[];
+  index: number;
 }
 
 interface Props {
   data: ViewOffenderMatchesQuery | undefined;
-  loading: boolean;
   lightBox: LightBoxState | null;
-  toggleLightBox: (data: LightBoxState | null) => void;
+  loading: boolean;
   onDismissMatch: (id: string) => void;
+  toggleLightBox: (data: LightBoxState | null) => void;
 }
 
 const OffenderMatches = ({
   data,
-  loading,
   lightBox,
-  toggleLightBox,
+  loading,
   onDismissMatch,
+  toggleLightBox,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -78,14 +80,14 @@ const OffenderMatches = ({
     role !== Role.User;
   return (
     <div className={classes.container}>
-      <Row gutter={16} className={classes.currentOffender}>
+      <Row className={classes.currentOffender} gutter={16}>
         <Col span={6}>
           {loading && <Skeleton.Image style={{ height: 200, width: 200 }} />}
           {!loading && (
             <div className={classes.imageContainer}>
               <WatermarkImage
-                url={data?.offender?.images[0]?.optimised}
                 position={data?.offender?.images[0]?.position}
+                url={data?.offender?.images[0]?.optimised}
               />
             </div>
           )}
@@ -107,7 +109,7 @@ const OffenderMatches = ({
                   }
                 )}
               </Typography.Text>
-              <Row style={{ marginTop: 5, marginBottom: 10 }} gutter={16}>
+              <Row gutter={16} style={{ marginBottom: 10, marginTop: 5 }}>
                 {publicOffenderDOB && (
                   <Col>
                     <Typography.Text>
@@ -151,19 +153,19 @@ const OffenderMatches = ({
       {loading && (
         <>
           <Skeleton.Avatar
-            style={{ width: '100%', borderRadius: 10, height: 100 }}
-            className={classes.skeletonMatch}
             active
+            className={classes.skeletonMatch}
+            style={{ borderRadius: 10, height: 100, width: '100%' }}
           />
           <Skeleton.Avatar
-            style={{ width: '100%', borderRadius: 10, height: 100 }}
-            className={classes.skeletonMatch}
             active
+            className={classes.skeletonMatch}
+            style={{ borderRadius: 10, height: 100, width: '100%' }}
           />
           <Skeleton.Avatar
-            style={{ width: '100%', borderRadius: 10, height: 100 }}
-            className={classes.skeletonMatch}
             active
+            className={classes.skeletonMatch}
+            style={{ borderRadius: 10, height: 100, width: '100%' }}
           />
         </>
       )}
@@ -178,20 +180,20 @@ const OffenderMatches = ({
       {data?.offender?.searchedMatches.map((match) => (
         <>
           <Card
-            key={match.id}
             bodyStyle={{ padding: 0 }}
+            key={match.id}
             style={{ marginBottom: 10 }}
           >
             <Row wrap={false}>
               <Col>
                 <div className={classes.matchImage}>
                   <WatermarkImage
-                    url={match.matchedOffender?.images[0]?.optimised}
                     position={match.matchedOffender?.images[0]?.position}
+                    url={match.matchedOffender?.images[0]?.optimised}
                   />
                 </div>
               </Col>
-              <Col flex={1} className={classes.matchContainer}>
+              <Col className={classes.matchContainer} flex={1}>
                 <Typography.Title level={4} style={{ marginBottom: -3 }}>
                   {match.matchedOffender?.name}
                 </Typography.Title>
@@ -205,7 +207,7 @@ const OffenderMatches = ({
                     }
                   )}
                 </Typography.Text>
-                <Row style={{ marginTop: 5, marginBottom: 10 }} gutter={16}>
+                <Row gutter={16} style={{ marginBottom: 10, marginTop: 5 }}>
                   <Col>
                     <Typography.Text>
                       {intl.formatMessage({
@@ -245,19 +247,18 @@ const OffenderMatches = ({
                   })}
                 </Typography.Text>
                 <Row
-                  wrap={false}
                   gutter={8}
                   style={{
+                    colorScheme: 'dark',
                     marginTop: 5,
                     overflowX: 'auto',
-                    colorScheme: 'dark',
                   }}
+                  wrap={false}
                 >
                   {match.matchedFaces.map((matchedFace, index) => (
                     <Col key={matchedFace.id}>
                       <MatchedFace
                         face={matchedFace.rekFace}
-                        similarity={matchedFace.similarity}
                         onClick={() =>
                           toggleLightBox({
                             images: match.matchedFaces.map(
@@ -266,6 +267,7 @@ const OffenderMatches = ({
                             index,
                           })
                         }
+                        similarity={matchedFace.similarity}
                       />
                     </Col>
                   ))}
@@ -273,14 +275,14 @@ const OffenderMatches = ({
               </Col>
             </Row>
           </Card>
-          <Row justify="end" gutter={8} style={{ marginBottom: 20 }}>
+          <Row gutter={8} justify="end" style={{ marginBottom: 20 }}>
             <Col>
               <Popconfirm
+                onConfirm={() => onDismissMatch(match.id)}
                 overlayInnerStyle={{ padding: 10 }}
                 title={intl.formatMessage({
                   defaultMessage: 'Are you sure?',
                 })}
-                onConfirm={() => onDismissMatch(match.id)}
               >
                 <Button size="small">
                   {intl.formatMessage({
@@ -294,7 +296,7 @@ const OffenderMatches = ({
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 to={`/app/offenders/compare/${match.matchedOffender?.id}?offenders=${data.offender?.id}`}
               >
-                <Button size="small" danger>
+                <Button danger size="small">
                   {intl.formatMessage({
                     defaultMessage: 'Compare & Merge',
                   })}
@@ -308,9 +310,9 @@ const OffenderMatches = ({
       {lightBox !== null && (
         <LightBox
           close={() => toggleLightBox(null)}
+          images={lightBox?.images || []}
           index={lightBox.index}
           open={lightBox !== null}
-          images={lightBox?.images || []}
         />
       )}
     </div>

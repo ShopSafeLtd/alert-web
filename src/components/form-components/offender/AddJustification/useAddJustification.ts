@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
-import { useState } from 'react';
-
+import { useUpdateOffenderJustificationMutation } from '#/components/form-components/offender/AddJustification/graphql/mutation/__generated__/update-offender-name.generated';
 import { notification } from 'antd';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-import { useIntl } from 'react-intl';
-import { useUpdateOffenderJustificationMutation } from '#/components/form-components/offender/AddJustification/graphql/mutation/update-offender-name.generated';
-
 interface Props {
-  onClose: () => void;
   offenderId: string;
+  onClose: () => void;
 }
 export interface FormData {
   // name: string;
@@ -29,11 +27,11 @@ const useAddJustification = ({ offenderId, onClose }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The justification of offender has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated',
         }),
         placement: 'bottomRight',
       });
@@ -49,10 +47,10 @@ const useAddJustification = ({ offenderId, onClose }: Props): Return => {
     setSaving(true);
     void updateOffender({
       variables: {
-        id: offenderId,
         data: {
           justification: { set: data.justification },
         },
+        id: offenderId,
       },
     });
   };

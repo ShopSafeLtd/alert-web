@@ -37,7 +37,6 @@ const ViewIncident = (): JSX.Element => {
     handleEditUpdate,
     hasConnectedSchemes,
     hideIncident,
-    isTranslated,
     languageCount,
     lightBoxOpen,
     lightboxElements,
@@ -71,8 +70,8 @@ const ViewIncident = (): JSX.Element => {
     scrolledToTop,
     selectedImages,
     selectedOffenderId,
-    // onEditOffender,
     setCompleteTodoVisible,
+    // onEditOffender,
     setEditGoodsData,
     setEditImageData,
     setEditOffenderData,
@@ -85,6 +84,7 @@ const ViewIncident = (): JSX.Element => {
     setViewTodoVisible,
     shareOpen,
     showOffenderOptions,
+    showOriginal,
     templatesData,
     templatesLoading,
     toggleAddDocument,
@@ -102,13 +102,12 @@ const ViewIncident = (): JSX.Element => {
     toggleSelectImages,
     toggleShareOpen,
     toggleShowOffenderOptions,
+    toggleShowOriginalDescription,
     toggleSubscribe,
-    translateText,
     updateAddOffenderList,
     updateDeleteDocument,
     updateDocumentList,
     updateEditOffenderList,
-    updateImagesList,
     updateInvestigationList,
     updateOffendersList,
     updateTodo,
@@ -152,7 +151,6 @@ const ViewIncident = (): JSX.Element => {
       hasConnectedSchemes={hasConnectedSchemes}
       hideIncident={hideIncident}
       incidentId={incidentId}
-      isTranslated={isTranslated}
       languageCount={languageCount}
       lightBoxOpen={lightBoxOpen}
       lightboxElements={lightboxElements}
@@ -193,8 +191,8 @@ const ViewIncident = (): JSX.Element => {
       setEditImageData={setEditImageData}
       setEditOffenderData={setEditOffenderData}
       setEditUpdate={setEditUpdate}
-      // onEditOffender={onEditOffender}
       setEditUpdateInput={setEditUpdateInput}
+      // onEditOffender={onEditOffender}
       setEditVehicleData={setEditVehicleData}
       setOptionRowShow={setOptionRowShow}
       setReplyTo={setReplyTo}
@@ -202,6 +200,7 @@ const ViewIncident = (): JSX.Element => {
       setViewTodoVisible={setViewTodoVisible}
       shareOpen={shareOpen}
       showOffenderOptions={showOffenderOptions}
+      showOriginal={showOriginal}
       templatesData={templatesData}
       templatesLoading={templatesLoading}
       toggleAddDocument={toggleAddDocument}
@@ -219,13 +218,12 @@ const ViewIncident = (): JSX.Element => {
       toggleSelectImages={toggleSelectImages}
       toggleShareOpen={toggleShareOpen}
       toggleShowOffenderOptions={toggleShowOffenderOptions}
+      toggleShowOriginalDescription={toggleShowOriginalDescription}
       toggleSubscribe={toggleSubscribe}
-      translateText={translateText}
       updateAddOffenderList={updateAddOffenderList}
       updateDeleteDocument={updateDeleteDocument}
       updateDocumentList={updateDocumentList}
       updateEditOffenderList={updateEditOffenderList}
-      updateImagesList={updateImagesList}
       updateInvestigationList={updateInvestigationList}
       updateOffendersList={updateOffendersList}
       updateTodo={updateTodo}

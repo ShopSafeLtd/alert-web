@@ -1,4 +1,12 @@
-import React from 'react';
+import type { CustomGalleriesQuery } from '#/views/settings/customGallery/graphql/queries/__generated__/list_custom_galleries.generated';
+import type { CustomGalleryData } from 'types/DataType';
+
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -9,46 +17,38 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import type { CustomGalleryData } from 'types/DataType';
+import AddNewCustomGallery from 'components/form-components/customGalleries/AddNewCustomGallery';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import AddNewCustomGallery from 'components/form-components/customGalleries/AddNewCustomGallery';
-import type { CustomGalleriesQuery } from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
-
 interface Props {
-  data: CustomGalleriesQuery | undefined;
-  loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
   addCustomGallery: boolean;
-  toggleAddCustomGallery: () => void;
-  editCustomGallery: CustomGalleryData | undefined;
-  setEditCustomGallery: (value: CustomGalleryData | undefined) => void;
-  saving: boolean;
+  data: CustomGalleriesQuery | undefined;
   deleteConfirm: (value: string) => void;
+  editCustomGallery: CustomGalleryData | undefined;
+  loading: boolean;
   onAddCustomGallery: (value: CustomGalleryData) => void;
   onEditCustomGallery: (value: CustomGalleryData) => void;
+  saving: boolean;
+  search: string;
+  setEditCustomGallery: (value: CustomGalleryData | undefined) => void;
+  setSearch: (value: string) => void;
+  toggleAddCustomGallery: () => void;
 }
 
 const CustomGalleries = ({
-  data,
-  loading,
-  search,
-  setSearch,
   addCustomGallery,
-  toggleAddCustomGallery,
-  editCustomGallery,
-  saving,
+  data,
   deleteConfirm,
+  editCustomGallery,
+  loading,
   onAddCustomGallery,
   onEditCustomGallery,
+  saving,
+  search,
   setEditCustomGallery,
+  setSearch,
+  toggleAddCustomGallery,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -56,19 +56,17 @@ const CustomGalleries = ({
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={8}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search custom gallery...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
         <Col flex={1} />
         <Col>
           <Button
-            type="primary"
-            onClick={toggleAddCustomGallery}
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -76,28 +74,18 @@ const CustomGalleries = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleAddCustomGallery}
+            type="primary"
           >
             <FormattedMessage defaultMessage="Add Custom Gallery" />
           </Button>
         </Col>
       </Row>
       <Table
-        size="small"
-        style={{ marginRight: 10 }}
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
         columns={[
           {
-            key: 'name',
-            title: intl.formatMessage({
-              defaultMessage: 'Name',
-            }),
             dataIndex: 'name',
-            width: 300,
+            key: 'name',
             render: (value, record) => (
               <Typography.Link
                 disabled={saving}
@@ -111,21 +99,23 @@ const CustomGalleries = ({
                 {value}
               </Typography.Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+            }),
+            width: 300,
           },
           {
+            dataIndex: 'description',
+            ellipsis: true,
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
             }),
-            dataIndex: 'description',
-            ellipsis: true,
           },
 
           {
-            key: 'Options',
-            title: '',
             dataIndex: 'Options',
-            width: 100,
+            key: 'Options',
             render: (_, record) => (
               <Row gutter={8}>
                 <Col>
@@ -135,8 +125,8 @@ const CustomGalleries = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       onClick={() => {
                         setEditCustomGallery({
                           ...record.customGallery,
@@ -145,7 +135,7 @@ const CustomGalleries = ({
                           ),
                         });
                       }}
-                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
@@ -156,60 +146,70 @@ const CustomGalleries = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faTrash} />}
                       onClick={() => {
                         deleteConfirm(record.key);
                       }}
-                      icon={<FontAwesomeIcon icon={faTrash} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
               </Row>
             ),
+            title: '',
+            width: 100,
           },
         ]}
         dataSource={data?.customGalleriesRelay?.edges?.map(
           ({ node: customGallery }) => ({
+            customGallery,
+            description: customGallery.description,
             key: customGallery.id,
             name: customGallery.name,
-            description: customGallery.description,
-            customGallery,
           })
         )}
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          pageSize: 20,
+        }}
+        size="small"
+        style={{ marginRight: 10 }}
       />
 
       <Drawer
+        onClose={toggleAddCustomGallery}
+        open={addCustomGallery}
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',
         })}
-        open={addCustomGallery}
         width="400"
-        onClose={toggleAddCustomGallery}
       >
         {addCustomGallery ? (
           <AddNewCustomGallery
-            update={onAddCustomGallery}
             onClose={toggleAddCustomGallery}
             saving={saving}
+            update={onAddCustomGallery}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setEditCustomGallery(undefined)}
+        open={!!editCustomGallery}
         title={intl.formatMessage({
           defaultMessage: 'Edit Custom Gallery',
         })}
-        open={!!editCustomGallery}
         width="400"
-        onClose={() => setEditCustomGallery(undefined)}
       >
         <AddNewCustomGallery
           data={editCustomGallery}
           onClose={() => setEditCustomGallery(undefined)}
-          update={onEditCustomGallery}
           saving={saving}
+          update={onEditCustomGallery}
         />
       </Drawer>
     </div>

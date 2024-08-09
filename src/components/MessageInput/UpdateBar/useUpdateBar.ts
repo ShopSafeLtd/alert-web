@@ -1,13 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { FormInstance } from 'antd';
-import { Form, message } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
-import Upload from 'antd/lib/upload';
 import type { UploadFile, UploadProps } from 'antd/lib/upload/interface';
-
-import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
-import update from 'immutability-helper';
+import type {
+  CrimeGroupQuery,
+  CrimeGroupQueryVariables,
+} from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
+import type {
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
+} from 'graphql/incidents/queries/__generated__/view-incident.generated';
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type {
+  ViewOffenderQuery,
+  ViewOffenderQueryVariables,
+} from 'graphql/offenders/queries/__generated__/view-offender.generated';
+import type {
+  VehicleQuery,
+  VehicleQueryVariables,
+} from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
 import type {
   ArticleData,
   CrimeGroupData,
@@ -16,133 +30,119 @@ import type {
   SchemeUserData,
   VehicleData,
 } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { getText } from 'utils/getMentions/get-mention-text';
+
+import { useMentionableUsersQuery } from '#/components/MessageInput/UpdateBar/graphql/queries/__generated__/users-to-mention.generated';
 import { useGroupsContext } from '#/context/groups-context';
-import { useMentionableUsersQuery } from '#/components/MessageInput/UpdateBar/graphql/queries/users-to-mention.generated';
-import { useSubscribeToOffenderMutation } from 'graphql/offenders/mutations/subscribe-to-offender.generated';
-import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/subscribe-to-incident.generated';
-import { useSubscribeToInvestigationMutation } from 'graphql/investigations/mutations/subscribe-to-investigation.generated';
-import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/subscribe-to-vehicle.generated';
-import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/subscribe-to-crime-group.generated';
-import { useCreateUpdateOnIncidentMutation } from 'graphql/mutations/create-update-on-incident.generated';
-import { useCreateUpdateOnOffenderMutation } from 'graphql/mutations/create-update-on-offender.generated';
-import { useCreateUpdateOnVehicleMutation } from 'graphql/mutations/create-update-on-vehicle.generated';
-import { useCreateUpdateOnCrimeGroupMutation } from 'graphql/mutations/create-update-on-crime-group.generated';
-import { useCreateUpdateOnInvestigationMutation } from 'graphql/mutations/create-update-on-investigation.generated';
+import { Form, message } from 'antd';
+import Upload from 'antd/lib/upload';
+import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/subscribe-to-crime-group.generated';
+import { CrimeGroupDocument } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
+import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/__generated__/subscribe-to-incident.generated';
+import { ViewIncidentDocument } from 'graphql/incidents/queries/__generated__/view-incident.generated';
+import { useSubscribeToInvestigationMutation } from 'graphql/investigations/mutations/__generated__/subscribe-to-investigation.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import { useCreateUpdateOnCrimeGroupMutation } from 'graphql/mutations/__generated__/create-update-on-crime-group.generated';
+import { useCreateUpdateOnIncidentMutation } from 'graphql/mutations/__generated__/create-update-on-incident.generated';
+import { useCreateUpdateOnInvestigationMutation } from 'graphql/mutations/__generated__/create-update-on-investigation.generated';
+import { useCreateUpdateOnOffenderMutation } from 'graphql/mutations/__generated__/create-update-on-offender.generated';
+import { useCreateUpdateOnVehicleMutation } from 'graphql/mutations/__generated__/create-update-on-vehicle.generated';
+import { useSubscribeToOffenderMutation } from 'graphql/offenders/mutations/__generated__/subscribe-to-offender.generated';
+import { ViewOffenderDocument } from 'graphql/offenders/queries/__generated__/view-offender.generated';
+import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/__generated__/update_todo_mention.generated';
 import { Role, TodoType, UpdateIcon, UpdateType } from 'graphql/types';
-import type {
-  ViewIncidentQuery,
-  ViewIncidentQueryVariables,
-} from 'graphql/incidents/queries/view-incident.generated';
-import { ViewIncidentDocument } from 'graphql/incidents/queries/view-incident.generated';
-import type {
-  ViewOffenderQuery,
-  ViewOffenderQueryVariables,
-} from 'graphql/offenders/queries/view-offender.generated';
-import { ViewOffenderDocument } from 'graphql/offenders/queries/view-offender.generated';
-import type {
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
-} from 'graphql/investigations/queries/view-investigation.generated';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
-import type {
-  CrimeGroupQuery,
-  CrimeGroupQueryVariables,
-} from 'graphql/crime-groups/queries/view-crime-group.generated';
-import { CrimeGroupDocument } from 'graphql/crime-groups/queries/view-crime-group.generated';
-import type {
-  VehicleQuery,
-  VehicleQueryVariables,
-} from 'graphql/vehicles/queries/view-vehicle.generated';
-import { VehicleDocument } from 'graphql/vehicles/queries/view-vehicle.generated';
-import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/update_todo_mention.generated';
+import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/__generated__/subscribe-to-vehicle.generated';
+import { VehicleDocument } from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import { getText } from 'utils/getMentions/get-mention-text';
 
 interface Return {
+  adminRights: boolean;
+  articlesData: ArticleData[];
   beforeUpdateImageUpload: (value: RcFile) => void;
+  crimeGroupsData: CrimeGroupData[];
+  handleMarkAsRead: () => void;
+  hideIncident: boolean;
+  linkArticle: boolean;
+  linkCrimeGroup: boolean;
+  linkIncident: boolean;
+  linkOffender: boolean;
+  linkVehicle: boolean;
   onSubmitUpdate: () => void;
   onUpdateImageChange: UploadProps['onChange'];
   onUpdateImagePreview: (value: UploadFile) => void;
+  removeArticle: (value: string | undefined) => void;
+  removeCrimeGroup: (value: string | undefined) => void;
   removeUpdateImage: (uid: string) => void;
   removeUpdateIncident: (value: string | undefined) => void;
   removeUpdateOffender: (value: string | undefined) => void;
-  removeCrimeGroup: (value: string | undefined) => void;
   removeVehicle: (value: string | undefined) => void;
-  removeArticle: (value: string | undefined) => void;
+  saving: boolean;
   schemeUsers: Map<string, SchemeUserData> | undefined;
   setMentionedUser: (value: { id: string; value: string }[]) => void;
   setUpdateInput: (value: string) => void;
   showUpdatePicker: boolean;
+  toggleLinkArticle: () => void;
+  toggleLinkCrimeGroup: () => void;
   toggleLinkUpdateIncident: () => void;
   toggleLinkUpdateOffender: () => void;
-  toggleShowUpdatePicker: () => void;
   toggleLinkVehicle: () => void;
-  toggleLinkCrimeGroup: () => void;
-  toggleLinkArticle: () => void;
+  toggleShowUpdatePicker: () => void;
+  updateArticleList: (value: ArticleData) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
   updateFileList: UploadFile[];
   updateForm: FormInstance<FormData>;
+  updateIncidentList: (value: IncidentCardData) => void;
   updateIncidents: IncidentCardData[];
   updateInput: string;
-  updateIncidentList: (value: IncidentCardData) => void;
+  updateOffenders: OffenderData[];
   updateOffendersList: (value: OffenderData) => void;
   updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: CrimeGroupData) => void;
-  updateArticleList: (value: ArticleData) => void;
-  linkIncident: boolean;
-  linkOffender: boolean;
-  linkVehicle: boolean;
-  linkCrimeGroup: boolean;
-  linkArticle: boolean;
-  updateOffenders: OffenderData[];
-  crimeGroupsData: CrimeGroupData[];
   vehiclesData: VehicleData[];
-  articlesData: ArticleData[];
-  saving: boolean;
-  adminRights: boolean;
-  handleMarkAsRead: () => void;
-  hideIncident: boolean;
 }
 
 interface Props {
+  crimeGroupId?: string;
+  incidentId?: string;
+  investigationId?: string;
+  offenderId?: string;
   replyTo: {
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null;
-  incidentId?: string;
-  offenderId?: string;
-  investigationId?: string;
-  vehicleId?: string;
-  crimeGroupId?: string;
+  setOptionRowShow?: (value: boolean) => void;
   setReplyTo: (
     value: {
-      id: string;
-      text: string;
       createdAt: string;
       createdBy: string;
+      id: string;
+      text: string;
     } | null
   ) => void;
   subscribed: boolean;
-  setOptionRowShow?: (value: boolean) => void;
+  vehicleId?: string;
 }
 
 const useUpdateBar = ({
-  replyTo,
+  crimeGroupId,
   incidentId,
+  investigationId,
+  offenderId,
+  replyTo,
+  setOptionRowShow,
   setReplyTo,
   subscribed,
-  investigationId,
   vehicleId,
-  crimeGroupId,
-  offenderId,
-  setOptionRowShow,
 }: Props): Return => {
   const [updateForm] = Form.useForm<FormData>();
   const [formTouched, setFormTouched] = useState(false);
   const { restrictIncidentAccess } = useStoreState((state) => state.scheme);
-  const { role: userRole, id: userId } = useStoreState((state) => state.user);
+  const { id: userId, role: userRole } = useStoreState((state) => state.user);
   const { groups } = useGroupsContext();
   const groupsId = groups.map((group) => group.value);
   const [saving, setSaving] = useState(false);
@@ -206,11 +206,11 @@ const useUpdateBar = ({
       // eslint-disable-next-line no-restricted-syntax
       for (const user of mentionableUsersData.mentionableUsers) {
         updatedSchemeUsers.set(user.fullName, {
-          // Here, I suggest using user.id as the key instead of user.fullName for uniqueness.
-          id: user.id,
-          fullName: user.fullName,
           businessesName: user.businessesName,
           firstLetter: user.firstLetter, // You might want to include this as well.
+          fullName: user.fullName,
+          // Here, I suggest using user.id as the key instead of user.fullName for uniqueness.
+          id: user.id,
           oldFullName: user.oldFullName,
         });
       }
@@ -305,85 +305,85 @@ const useUpdateBar = ({
       if (!subscribed) {
         if (crimeGroupId) {
           void subscribeToCrimeGroup({
-            variables: {
-              where: {
-                id: crimeGroupId,
-              },
-            },
             optimisticResponse: {
               __typename: 'Mutation',
               subscribeToCrimeGroup: {
-                id: crimeGroupId,
                 __typename: 'CrimeGroup',
+                id: crimeGroupId,
                 subscribed: true,
+              },
+            },
+            variables: {
+              where: {
+                id: crimeGroupId,
               },
             },
           });
         }
         if (vehicleId) {
           void subscribeToVehicle({
-            variables: {
-              where: {
-                id: vehicleId,
-              },
-            },
             optimisticResponse: {
               __typename: 'Mutation',
               subscribeToVehicle: {
-                id: vehicleId,
                 __typename: 'Vehicle',
+                id: vehicleId,
                 subscribed: true,
+              },
+            },
+            variables: {
+              where: {
+                id: vehicleId,
               },
             },
           });
         }
         if (investigationId) {
           void subscribeToInvestigation({
-            variables: {
-              where: {
-                id: investigationId,
-              },
-            },
             optimisticResponse: {
               __typename: 'Mutation',
               subscribeToInvestigation: {
-                id: investigationId,
                 __typename: 'Investigation',
+                id: investigationId,
                 subscribed: true,
+              },
+            },
+            variables: {
+              where: {
+                id: investigationId,
               },
             },
           });
         }
         if (incidentId) {
           void subscribeToIncident({
-            variables: {
-              where: {
-                id: incidentId,
-              },
-            },
             optimisticResponse: {
               __typename: 'Mutation',
               subscribeToIncident: {
-                id: incidentId,
                 __typename: 'Incident',
+                id: incidentId,
                 subscribed: true,
+              },
+            },
+            variables: {
+              where: {
+                id: incidentId,
               },
             },
           });
         }
         if (offenderId) {
           void subscribeToOffender({
-            variables: {
-              where: {
-                id: offenderId,
-              },
-            },
             optimisticResponse: {
               __typename: 'Mutation',
               subscribeToOffender: {
-                id: offenderId,
                 __typename: 'Offender',
+                id: offenderId,
                 subscribed: true,
+              },
+            },
+            variables: {
+              where: {
+                id: offenderId,
               },
             },
           });
@@ -518,13 +518,6 @@ const useUpdateBar = ({
 
       const data = {
         icon: UpdateIcon.Comment,
-        type: getUpdateType(),
-        text: getText(updateInput, schemeUsers),
-        replyTo: replyTo
-          ? {
-              id: replyTo.id,
-            }
-          : undefined,
         images:
           updateFileList.length > 0
             ? updateFileList.map((image) => ({
@@ -533,41 +526,41 @@ const useUpdateBar = ({
                 url: image.url || '',
               }))
             : undefined,
-        linkedOffenders:
-          updateOffenders.length > 0
-            ? updateOffenders.map(({ id }) => ({ id }))
-            : undefined,
-        linkedIncidents:
-          updateIncidents && updateIncidents.length > 0
-            ? updateIncidents.map(({ id }) => ({ id }))
-            : undefined,
-        linkedVehicles:
-          vehiclesData && vehiclesData.length > 0
-            ? vehiclesData.map(({ id }) => ({ id }))
+        linkedArticles:
+          articlesData && articlesData.length > 0
+            ? articlesData.map(({ id }) => ({ id }))
             : undefined,
         linkedCrimeGroups:
           crimeGroupsData && crimeGroupsData.length > 0
             ? crimeGroupsData.map(({ id }) => ({ id }))
             : undefined,
-        linkedArticles:
-          articlesData && articlesData.length > 0
-            ? articlesData.map(({ id }) => ({ id }))
+        linkedIncidents:
+          updateIncidents && updateIncidents.length > 0
+            ? updateIncidents.map(({ id }) => ({ id }))
+            : undefined,
+        linkedOffenders:
+          updateOffenders.length > 0
+            ? updateOffenders.map(({ id }) => ({ id }))
+            : undefined,
+        linkedVehicles:
+          vehiclesData && vehiclesData.length > 0
+            ? vehiclesData.map(({ id }) => ({ id }))
             : undefined,
         mentionedUsers:
           mentionedUser.length > 0
             ? mentionedUser.map(({ id }) => ({ id }))
             : undefined,
+        replyTo: replyTo
+          ? {
+              id: replyTo.id,
+            }
+          : undefined,
+        text: getText(updateInput, schemeUsers),
+        type: getUpdateType(),
       };
 
       if (incidentId) {
         void createIncidentUpdate({
-          variables: {
-            data,
-            incident: {
-              id: incidentId,
-            },
-          },
-
           update: (store, result) => {
             if (result.data?.createUpdateOnIncident) {
               const oldData = store.readQuery<
@@ -585,12 +578,6 @@ const useUpdateBar = ({
               if (oldData?.incident)
                 store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
                   {
-                    query: ViewIncidentDocument,
-                    variables: {
-                      where: {
-                        id: incidentId,
-                      },
-                    },
                     data: {
                       incident: {
                         ...oldData.incident,
@@ -607,8 +594,8 @@ const useUpdateBar = ({
                                         result.data.createUpdateOnIncident.linkedIncidents?.map(
                                           (inc) => ({
                                             ...inc,
-                                            totalValue: 0,
                                             totalRecoveredValue: 0,
+                                            totalValue: 0,
                                           })
                                         ),
                                     },
@@ -622,23 +609,27 @@ const useUpdateBar = ({
                             ],
                       },
                     },
+                    query: ViewIncidentDocument,
+                    variables: {
+                      where: {
+                        id: incidentId,
+                      },
+                    },
                   }
                 );
             }
+          },
+
+          variables: {
+            data,
+            incident: {
+              id: incidentId,
+            },
           },
         });
       }
       if (offenderId) {
         void createOffenderUpdate({
-          variables: {
-            data,
-            offender: {
-              id: offenderId,
-            },
-          },
-          // optimisticResponse: {
-          //   __typename: 'Mutation',
-          //   createUpdateOnOffender: newResponse,
           // },
           update: (store, result) => {
             if (result.data?.createUpdateOnOffender) {
@@ -648,9 +639,6 @@ const useUpdateBar = ({
               >({
                 query: ViewOffenderDocument,
                 variables: {
-                  where: {
-                    id: offenderId,
-                  },
                   banWhere: {
                     groups:
                       userRole === Role.User ||
@@ -659,26 +647,15 @@ const useUpdateBar = ({
                         ? { some: { id: { in: groupsId } } }
                         : undefined,
                   },
+                  where: {
+                    id: offenderId,
+                  },
                 },
               });
 
               if (oldData?.offender)
                 store.writeQuery<ViewOffenderQuery, ViewOffenderQueryVariables>(
                   {
-                    query: ViewOffenderDocument,
-                    variables: {
-                      where: {
-                        id: offenderId,
-                      },
-                      banWhere: {
-                        groups:
-                          userRole === Role.User ||
-                          userRole === Role.ContentAdmin ||
-                          userRole === Role.GroupAdmin
-                            ? { some: { id: { in: groupsId } } }
-                            : undefined,
-                      },
-                    },
                     data: {
                       offender: {
                         ...oldData.offender,
@@ -698,8 +675,8 @@ const useUpdateBar = ({
                                         result.data.createUpdateOnOffender.linkedIncidents?.map(
                                           (inc) => ({
                                             ...inc,
-                                            totalValue: 0,
                                             totalRecoveredValue: 0,
+                                            totalValue: 0,
                                           })
                                         ),
                                     },
@@ -713,21 +690,37 @@ const useUpdateBar = ({
                             ],
                       },
                     },
+                    query: ViewOffenderDocument,
+                    variables: {
+                      banWhere: {
+                        groups:
+                          userRole === Role.User ||
+                          userRole === Role.ContentAdmin ||
+                          userRole === Role.GroupAdmin
+                            ? { some: { id: { in: groupsId } } }
+                            : undefined,
+                      },
+                      where: {
+                        id: offenderId,
+                      },
+                    },
                   }
                 );
             }
+          },
+          // optimisticResponse: {
+          //   __typename: 'Mutation',
+          //   createUpdateOnOffender: newResponse,
+          variables: {
+            data,
+            offender: {
+              id: offenderId,
+            },
           },
         });
       }
       if (investigationId) {
         void createInvestigationUpdate({
-          variables: {
-            data,
-            investigation: {
-              id: investigationId,
-            },
-          },
-
           update: (store, result) => {
             if (result.data?.createUpdateOnInvestigation) {
               const oldData = store.readQuery<
@@ -747,12 +740,6 @@ const useUpdateBar = ({
                   ViewInvestigationQuery,
                   ViewInvestigationQueryVariables
                 >({
-                  query: ViewInvestigationDocument,
-                  variables: {
-                    where: {
-                      id: investigationId,
-                    },
-                  },
                   data: {
                     investigation: {
                       ...oldData.investigation,
@@ -772,8 +759,8 @@ const useUpdateBar = ({
                                       result.data.createUpdateOnInvestigation.linkedIncidents?.map(
                                         (inc) => ({
                                           ...inc,
-                                          totalValue: 0,
                                           totalRecoveredValue: 0,
+                                          totalValue: 0,
                                         })
                                       ),
                                   },
@@ -787,20 +774,26 @@ const useUpdateBar = ({
                           ],
                     },
                   },
+                  query: ViewInvestigationDocument,
+                  variables: {
+                    where: {
+                      id: investigationId,
+                    },
+                  },
                 });
             }
+          },
+
+          variables: {
+            data,
+            investigation: {
+              id: investigationId,
+            },
           },
         });
       }
       if (crimeGroupId) {
         void createCrimeGroupUpdate({
-          variables: {
-            data,
-            crimeGroup: {
-              id: crimeGroupId,
-            },
-          },
-
           update: (store, result) => {
             if (result.data?.createUpdateOnCrimeGroup) {
               const oldData = store.readQuery<
@@ -817,12 +810,6 @@ const useUpdateBar = ({
 
               if (oldData?.crimeGroup)
                 store.writeQuery<CrimeGroupQuery, CrimeGroupQueryVariables>({
-                  query: CrimeGroupDocument,
-                  variables: {
-                    where: {
-                      id: crimeGroupId,
-                    },
-                  },
                   data: {
                     crimeGroup: {
                       ...oldData.crimeGroup,
@@ -839,8 +826,8 @@ const useUpdateBar = ({
                                       result.data.createUpdateOnCrimeGroup.linkedIncidents?.map(
                                         (inc) => ({
                                           ...inc,
-                                          totalValue: 0,
                                           totalRecoveredValue: 0,
+                                          totalValue: 0,
                                         })
                                       ),
                                   },
@@ -854,20 +841,26 @@ const useUpdateBar = ({
                           ],
                     },
                   },
+                  query: CrimeGroupDocument,
+                  variables: {
+                    where: {
+                      id: crimeGroupId,
+                    },
+                  },
                 });
             }
+          },
+
+          variables: {
+            crimeGroup: {
+              id: crimeGroupId,
+            },
+            data,
           },
         });
       }
       if (vehicleId) {
         void createVehicleUpdate({
-          variables: {
-            data,
-            vehicle: {
-              id: vehicleId,
-            },
-          },
-
           update: (store, result) => {
             if (result.data?.createUpdateOnVehicle) {
               const oldData = store.readQuery<
@@ -884,12 +877,6 @@ const useUpdateBar = ({
 
               if (oldData?.vehicle) {
                 store.writeQuery<VehicleQuery, VehicleQueryVariables>({
-                  query: VehicleDocument,
-                  variables: {
-                    where: {
-                      id: vehicleId,
-                    },
-                  },
                   data: {
                     vehicle: {
                       ...oldData.vehicle,
@@ -906,8 +893,8 @@ const useUpdateBar = ({
                                       result.data.createUpdateOnVehicle.linkedIncidents?.map(
                                         (inc) => ({
                                           ...inc,
-                                          totalValue: 0,
                                           totalRecoveredValue: 0,
+                                          totalValue: 0,
                                         })
                                       ),
                                   },
@@ -921,9 +908,22 @@ const useUpdateBar = ({
                           ],
                     },
                   },
+                  query: VehicleDocument,
+                  variables: {
+                    where: {
+                      id: vehicleId,
+                    },
+                  },
                 });
               }
             }
+          },
+
+          variables: {
+            data,
+            vehicle: {
+              id: vehicleId,
+            },
           },
         });
       }
@@ -936,9 +936,9 @@ const useUpdateBar = ({
         ...updateFileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
     } else {
@@ -1066,7 +1066,7 @@ const useUpdateBar = ({
   const getWhereArgs = () => {
     if (incidentId) return { incidentId, type: TodoType.IncidentUpdate };
     if (offenderId) return { offenderId, type: TodoType.OffenderUpdate };
-    if (vehicleId) return { vehicleId, type: TodoType.VehicleUpdate };
+    if (vehicleId) return { type: TodoType.VehicleUpdate, vehicleId };
     if (crimeGroupId) return { crimeGroupId, type: TodoType.CrimegroupUpdate };
     if (investigationId)
       return { investigationId, type: TodoType.InvestigationUpdate };
@@ -1091,49 +1091,49 @@ const useUpdateBar = ({
   };
 
   return {
+    adminRights: userRole !== Role.User,
+    articlesData,
     beforeUpdateImageUpload,
+    crimeGroupsData,
+    handleMarkAsRead,
+    hideIncident: userRole === Role.User && restrictIncidentAccess,
+    linkArticle,
+    linkCrimeGroup,
+    linkIncident,
+    linkOffender,
+    linkVehicle,
     onSubmitUpdate,
     onUpdateImageChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onUpdateImagePreview,
+    removeArticle,
+    removeCrimeGroup,
     removeUpdateImage,
     removeUpdateIncident,
     removeUpdateOffender,
-    removeCrimeGroup,
     removeVehicle,
-    removeArticle,
+    saving,
     schemeUsers,
     setMentionedUser,
     setUpdateInput,
     showUpdatePicker,
+    toggleLinkArticle,
+    toggleLinkCrimeGroup,
     toggleLinkUpdateIncident,
     toggleLinkUpdateOffender,
-    toggleShowUpdatePicker,
     toggleLinkVehicle,
-    toggleLinkCrimeGroup,
-    toggleLinkArticle,
+    toggleShowUpdatePicker,
+    updateArticleList,
+    updateCrimeGroupList,
     updateFileList,
     updateForm,
+    updateIncidentList,
     updateIncidents,
     updateInput,
-    updateIncidentList,
+    updateOffenders,
     updateOffendersList,
     updateVehicleList,
-    updateCrimeGroupList,
-    updateArticleList,
-    linkIncident,
-    linkOffender,
-    linkVehicle,
-    linkCrimeGroup,
-    linkArticle,
-    updateOffenders,
-    crimeGroupsData,
     vehiclesData,
-    articlesData,
-    saving,
-    adminRights: userRole !== Role.User,
-    handleMarkAsRead,
-    hideIncident: userRole === Role.User && restrictIncidentAccess,
   };
 };
 

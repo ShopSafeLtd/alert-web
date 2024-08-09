@@ -1,21 +1,21 @@
-import { useStoreActions, useStoreState } from 'state';
-
-import { useEffect, useState } from 'react';
 import type {
   ListArticlesQuery,
   ListArticlesQueryVariables,
-} from 'graphql/article/queries/list_articles.generated';
-import { useListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
+} from 'graphql/article/queries/__generated__/list_articles.generated';
+
+import { useListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
   data:
-    | Exclude<ListArticlesQuery['listArticles'], undefined | null>
+    | Exclude<ListArticlesQuery['listArticles'], null | undefined>
     | null
     | undefined;
+  fetchMoreScroll: () => void;
   loading: boolean;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  fetchMoreScroll: () => void;
 }
 
 const useArticlesSideList = (): Return => {
@@ -29,8 +29,8 @@ const useArticlesSideList = (): Return => {
 
   const setFilterState = useStoreActions((actions) => actions.data.setArticles);
   const {
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    groups: groupsFilter,
     order,
     priorities: priorityFilter,
   } = filterVariables;
@@ -39,10 +39,10 @@ const useArticlesSideList = (): Return => {
     order: {
       updatedAt: order,
     },
-    take: 12,
     scheme: {
       id: schemeId,
     },
+    take: 12,
     where: {
       createdAt: createdAtFilter
         ? {
@@ -82,7 +82,7 @@ const useArticlesSideList = (): Return => {
       });
   }, []);
 
-  const { data, loading, fetchMore } = useListArticlesQuery({
+  const { data, fetchMore, loading } = useListArticlesQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
@@ -95,36 +95,36 @@ const useArticlesSideList = (): Return => {
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        take: 6,
-        skip: data?.listArticles?.articles?.length || 0,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           listArticles: {
             ...fetchMoreResult.listArticles,
-            total:
-              prev.listArticles?.total ||
-              fetchMoreResult?.listArticles?.total ||
-              0,
             articles: [
               ...(prev.listArticles?.articles || []),
               ...(fetchMoreResult.listArticles?.articles || []),
             ],
+            total:
+              prev.listArticles?.total ||
+              fetchMoreResult?.listArticles?.total ||
+              0,
           },
         };
+      },
+      variables: {
+        ...variables,
+        skip: data?.listArticles?.articles?.length || 0,
+        take: 6,
       },
     });
   };
 
   return {
     data: data?.listArticles,
+    fetchMoreScroll,
     loading: (data === null || data === undefined) && loading,
     sortFilter,
     toggleSortFilter,
-    fetchMoreScroll,
   };
 };
 

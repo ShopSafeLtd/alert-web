@@ -1,17 +1,17 @@
 import type { Image } from 'components/images/LightBox/LightBox.types';
+import type { ViewOffenderMatchesQuery } from 'graphql/offenders/queries/__generated__/offender-macthes.generated';
 
-import { useState } from 'react';
-import type { ViewOffenderMatchesQuery } from 'graphql/offenders/queries/offender-macthes.generated';
 import {
-  useViewOffenderMatchesQuery,
   ViewOffenderMatchesDocument,
-} from 'graphql/offenders/queries/offender-macthes.generated';
+  useViewOffenderMatchesQuery,
+} from 'graphql/offenders/queries/__generated__/offender-macthes.generated';
+import { useDismissMatchMutation } from 'graphql/rekognition/mutations/__generated__/dismiss-match.generated';
 import { SortOrder } from 'graphql/types';
-import { useDismissMatchMutation } from 'graphql/rekognition/mutations/dismiss-match.generated';
+import { useState } from 'react';
 
 interface LightBoxState {
-  index: number;
   images: Image[];
+  index: number;
 }
 
 interface Props {
@@ -20,10 +20,10 @@ interface Props {
 
 interface Return {
   data: ViewOffenderMatchesQuery | undefined;
-  loading: boolean;
   lightBox: LightBoxState | null;
-  toggleLightBox: (data: LightBoxState | null) => void;
+  loading: boolean;
   onDismissMatch: (id: string) => void;
+  toggleLightBox: (data: LightBoxState | null) => void;
 }
 
 const useOffenderMatches = ({ offenderId }: Props): Return => {
@@ -31,11 +31,11 @@ const useOffenderMatches = ({ offenderId }: Props): Return => {
 
   const { data, loading } = useViewOffenderMatchesQuery({
     variables: {
-      where: {
-        id: offenderId,
-      },
       orderBy: {
         createdAt: SortOrder.Desc,
+      },
+      where: {
+        id: offenderId,
       },
     },
   });
@@ -44,11 +44,6 @@ const useOffenderMatches = ({ offenderId }: Props): Return => {
 
   const onDismissMatch = async (id: string) => {
     await dismissMatch({
-      variables: {
-        where: {
-          id,
-        },
-      },
       optimisticResponse: {
         dismissMatch: {
           id,
@@ -62,11 +57,11 @@ const useOffenderMatches = ({ offenderId }: Props): Return => {
         const existingData = store.readQuery<ViewOffenderMatchesQuery>({
           query: ViewOffenderMatchesDocument,
           variables: {
-            where: {
-              id: offenderId,
-            },
             orderBy: {
               createdAt: SortOrder.Desc,
+            },
+            where: {
+              id: offenderId,
             },
           },
         });
@@ -74,37 +69,42 @@ const useOffenderMatches = ({ offenderId }: Props): Return => {
         if (!existingData?.offender) return;
         if (res.dismissMatch) {
           store.writeQuery<ViewOffenderMatchesQuery>({
-            query: ViewOffenderMatchesDocument,
             data: {
+              __typename: 'Query',
               offender: {
                 ...existingData.offender,
                 searchedMatches: existingData.offender.searchedMatches.filter(
                   (match) => match.id !== res.dismissMatch?.id
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewOffenderMatchesDocument,
             variables: {
-              where: {
-                id: offenderId,
-              },
               orderBy: {
                 createdAt: SortOrder.Desc,
+              },
+              where: {
+                id: offenderId,
               },
             },
           });
         }
+      },
+      variables: {
+        where: {
+          id,
+        },
       },
     });
   };
 
   return {
     data,
-    loading,
     lightBox,
-    toggleLightBox,
+    loading,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onDismissMatch,
+    toggleLightBox,
   };
 };
 

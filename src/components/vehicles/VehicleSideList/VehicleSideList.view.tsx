@@ -1,31 +1,33 @@
-import React from 'react';
 import { Col, Row, Skeleton, Typography } from 'antd';
-import { Link } from 'react-router-dom';
-import { useIntl } from 'react-intl'; // Import the useIntl hook
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import SideListItem from 'components/side-list/SideListItem.view';
-import InfiniteSideScrollList from 'components/side-list/InfiniteSideList';
-import useStyles from './VehicleSideListList.styles';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom'; // Import the useIntl hook
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 
-const { Text, Paragraph } = Typography;
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import InfiniteSideScrollList from 'components/side-list/InfiniteSideList';
+import SideListItem from 'components/side-list/SideListItem.view';
+
+import useStyles from './VehicleSideListList.styles';
+
+const { Paragraph, Text } = Typography;
 
 interface Props {
+  // eslint-disable-next-line react/require-default-props
+  current?: string;
   data:
-    | Exclude<ListVehiclesQuery['listVehicles'], undefined | null>
+    | Exclude<ListVehiclesQuery['listVehicles'], null | undefined>
     | null
     | undefined;
   loading: boolean;
   next: () => void;
-  // eslint-disable-next-line react/require-default-props
-  current?: string;
   to?: string;
 }
 
 const VehicleSideList = ({
+  current,
   data,
   loading,
-  current,
   next,
   to,
 }: Props): JSX.Element => {
@@ -33,15 +35,15 @@ const VehicleSideList = ({
   const intl = useIntl(); // Use the useIntl hook to access the intl object
   const isLoading = loading && !data?.total;
   const items = data?.vehicles.map((vehicle) => (
-    <Link to={`${to || '/app/vehicles/view/'}${vehicle.id}`} key={vehicle.id}>
+    <Link key={vehicle.id} to={`${to || '/app/vehicles/view/'}${vehicle.id}`}>
       <SideListItem current={current === vehicle.id}>
         <Row wrap={false}>
           <Col>
             {vehicle.images.length > 0 ? (
               <div className={classes.image}>
                 <WatermarkImage
-                  url={vehicle.images[0].optimised}
                   position={vehicle.images[0].position}
+                  url={vehicle.images[0].optimised}
                 />
               </div>
             ) : (
@@ -51,15 +53,15 @@ const VehicleSideList = ({
           <Col className={classes.content} flex={1}>
             <Text
               className={classes.name}
-              strong={current === vehicle.id}
               ellipsis
+              strong={current === vehicle.id}
             >
               {vehicle.registration}
             </Text>
             <Paragraph
               className={classes.reference}
-              strong={current === vehicle.id}
               ellipsis
+              strong={current === vehicle.id}
             >
               {intl.formatMessage(
                 {
@@ -92,10 +94,10 @@ const VehicleSideList = ({
   return (
     <InfiniteSideScrollList
       dataLength={data?.vehicles?.length}
-      next={next}
       hasMore={(data?.vehicles?.length || 0) < (data?.total || 0)}
       isLoading={isLoading}
       items={items}
+      next={next}
     />
   );
 };

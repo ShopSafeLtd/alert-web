@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import type { ChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
 
 import { Modal, notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useDeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
+import { useChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
-import { useChatQuery } from 'graphql/chat/queries/chat.generated';
-import { useDeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 interface Return {
   data: ChatQuery | undefined;
-  loading: boolean;
-  editChat: boolean;
-  toggleEditChat: () => void;
-  saving: boolean;
   deleteConfirm: () => void;
+  editChat: boolean;
+  loading: boolean;
+  saving: boolean;
+  toggleEditChat: () => void;
 }
 
 const useChatDetail = (chatId: string): Return => {
@@ -40,11 +40,11 @@ const useChatDetail = (chatId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The chat group has been deleted.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -57,16 +57,12 @@ const useChatDetail = (chatId: string): Return => {
 
   const deleteConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the chat group?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
       okText: intl.formatMessage({
         defaultMessage: 'Delete',
       }),
-
       onOk() {
         setSaving(true);
         if (chatId)
@@ -76,16 +72,20 @@ const useChatDetail = (chatId: string): Return => {
             },
           });
       },
+
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the chat group?',
+      }),
     });
   };
 
   return {
     data,
-    loading,
-    editChat,
-    toggleEditChat,
-    saving,
     deleteConfirm,
+    editChat,
+    loading,
+    saving,
+    toggleEditChat,
   };
 };
 

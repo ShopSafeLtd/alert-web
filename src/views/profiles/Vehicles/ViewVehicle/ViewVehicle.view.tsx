@@ -1,4 +1,26 @@
-import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
+import type { VehicleQuery } from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
+import type {
+  EditFeedImage,
+  ImageCardData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
+
+import {
+  faBell,
+  faBellSlash,
+  faEdit,
+  faMagnifyingGlass,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -16,183 +38,161 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBell,
-  faBellSlash,
-  faEdit,
-  faMagnifyingGlass,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
-
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import OffenderTable from 'components/tables/OffenderTable';
-import CrimeGroupTable from 'components/tables/CrimeGroupTable';
-import IncidentTable from 'components/tables/IncidentTable';
-import type {
-  EditFeedImage,
-  ImageCardData,
-  OffenderData,
-  VehicleData,
-} from 'types/DataType';
-import { FormattedMessage, useIntl } from 'react-intl';
-import type { MutationUpdaterFn } from '@apollo/client';
-import EvidenceTable from 'components/tables/EvidenceTable';
-import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
-import AddDocument from 'components/form-components/documents/AddDocument';
-import InvestigationTable from 'components/tables/InvestigationTable';
-import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
-import VehicleSideList from 'components/vehicles/VehicleSideList';
-import FormatCalendar from 'utils/format-calendar-24h';
-import EditImageList from 'components/images/EditImageList';
-import MapCard from 'components/map/MapCard';
-import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
-import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
-import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import ImagesList from 'components/ViewPage/ImagesList';
 import IntelSection from 'components/ViewPage/IntelSection';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
+import AddDocument from 'components/form-components/documents/AddDocument';
+import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
+import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
+import EditImageList from 'components/images/EditImageList';
+import MapCard from 'components/map/MapCard';
+import CrimeGroupTable from 'components/tables/CrimeGroupTable';
+import EvidenceTable from 'components/tables/EvidenceTable';
+import IncidentTable from 'components/tables/IncidentTable';
+import InvestigationTable from 'components/tables/InvestigationTable';
+import OffenderTable from 'components/tables/OffenderTable';
+import VehicleSideList from 'components/vehicles/VehicleSideList';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+import FormatCalendar from 'utils/format-calendar-24h';
+
 import useStyles from './ViewVehicle.styles';
-import type { VehicleQuery } from 'graphql/vehicles/queries/view-vehicle.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
 
 const { Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  data: VehicleQuery | undefined;
-  loading: boolean;
-  editVehicle: boolean;
-  toggleEditVehicle: () => void;
-  saving: boolean;
-  onDeleteVehicle: () => void;
-  loadMore: boolean;
-  scrolledToTop: () => void;
-  userId: string;
-  replyTo: {
-    id: string;
-    text: string;
-    createdAt: string;
-    createdBy: string;
-  } | null;
-  setReplyTo: (
-    value: {
-      id: string;
-      text: string;
-      createdAt: string;
-      createdBy: string;
-    } | null
-  ) => void;
-
+  addDocument: boolean;
+  addExistingOffender: boolean;
+  addInvestigation: boolean;
+  addOffender: boolean;
   confirmDeleteUpdate: (updateId: string) => void;
+  data: VehicleQuery | undefined;
+  editImageData: EditFeedImage | null;
+  editImages: boolean;
+  editOffenderData: OffenderData | null;
+  // optionMenuItems: ItemType[];
+  editRights: boolean;
   editUpdate: { id: string; text: string } | null;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
-  handleEditUpdate: () => void;
+
   editUpdateInput: string;
-  setEditUpdateInput: (value: string) => void;
+  editVehicle: boolean;
+  handleEditUpdate: () => void;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  // optionMenuItems: ItemType[];
-  editRights: boolean;
-  vehicleId: string;
-  toggleSubscribe: () => void;
-  submitEditVehicle: (value: VehicleData) => void;
-  toggleAddDocument: () => void;
-  addDocument: boolean;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
-  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
-  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  editImages: boolean;
-  toggleEditImages: () => void;
-  editImageData: EditFeedImage | null;
-  setEditImageData: (value: EditFeedImage | null) => void;
+  loadMore: boolean;
+  loading: boolean;
+  onAddExistingOffender: (id: string) => void;
+  onCompletedAddOffender: () => void;
+  onCompletedEditOffender: () => void;
   onDeleteImage: (id: string) => void;
+  onDeleteOffender: (id: string) => void;
+  onDeleteVehicle: () => void;
   onEditImage: (id: EditFeedImage) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
-
-  onAddExistingOffender: (id: string) => void;
-  addOffender: boolean;
-  addExistingOffender: boolean;
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
-  editOffenderData: OffenderData | null;
+  openLightbox: (index: number) => void;
+  optionRowShow: boolean;
+  replyTo: {
+    createdAt: string;
+    createdBy: string;
+    id: string;
+    text: string;
+  } | null;
+  saving: boolean;
+  scrolledToTop: () => void;
+  setEditImageData: (value: EditFeedImage | null) => void;
   setEditOffenderData: (value: OffenderData | null) => void;
-  onDeleteOffender: (id: string) => void;
-  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
-  onCompletedEditOffender: () => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setOptionRowShow: (value: boolean) => void;
+  setReplyTo: (
+    value: {
+      createdAt: string;
+      createdBy: string;
+      id: string;
+      text: string;
+    } | null
+  ) => void;
+  submitEditVehicle: (value: VehicleData) => void;
+  toggleAddDocument: () => void;
+  toggleAddExistingOffender: () => void;
+
+  toggleAddInvestigation: () => void;
+  toggleAddOffender: () => void;
+  toggleEditImages: () => void;
+  toggleEditVehicle: () => void;
+  toggleSubscribe: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
-  onCompletedAddOffender: () => void;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  userId: string;
+  vehicleId: string;
 }
 
 const ViewVehicle = ({
+  addDocument,
+  addExistingOffender,
+  addInvestigation,
+  addOffender,
+  confirmDeleteUpdate,
   data,
-  loading,
-  saving,
-  editVehicle,
-  toggleEditVehicle,
-  onDeleteVehicle,
+  editImageData,
+  editImages,
+  editOffenderData,
   editRights,
-  optionRowShow,
-  setOptionRowShow,
-  userId,
-  openLightbox,
-  lightBoxOpen,
   editUpdate,
   editUpdateInput,
+  editVehicle,
   handleEditUpdate,
+  lightBoxOpen,
   lightboxElements,
-  replyTo,
-  scrolledToTop,
-  setEditUpdate,
-  setEditUpdateInput,
-  setReplyTo,
   loadMore,
-  confirmDeleteUpdate,
-  vehicleId,
-  toggleSubscribe,
-  submitEditVehicle,
-  toggleAddDocument,
-  addDocument,
-  updateDocumentList,
-  updateDeleteDocument,
-  addInvestigation,
-  toggleAddInvestigation,
-  updateInvestigationList,
-  editImages,
-  toggleEditImages,
-  editImageData,
-  setEditImageData,
+  loading,
+  onAddExistingOffender,
+  onCompletedAddOffender,
+  onCompletedEditOffender,
   onDeleteImage,
+  onDeleteOffender,
+  onDeleteVehicle,
   onEditImage,
   onUpdateImages,
-  addOffender,
-  addExistingOffender,
-  editOffenderData,
+  openLightbox,
+  optionRowShow,
+  replyTo,
+  saving,
+  scrolledToTop,
+  setEditImageData,
   setEditOffenderData,
-  onDeleteOffender,
-  toggleAddOffender,
+  setEditUpdate,
+  setEditUpdateInput,
+  setOptionRowShow,
+  setReplyTo,
+  submitEditVehicle,
+  toggleAddDocument,
   toggleAddExistingOffender,
-  onAddExistingOffender,
-  updateEditOffenderList,
-  onCompletedEditOffender,
+  toggleAddInvestigation,
+  toggleAddOffender,
+  toggleEditImages,
+  toggleEditVehicle,
+  toggleSubscribe,
   updateAddOffenderList,
-  onCompletedAddOffender,
+  updateDeleteDocument,
+  updateDocumentList,
+  updateEditOffenderList,
+  updateInvestigationList,
+  userId,
+  vehicleId,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -207,8 +207,8 @@ const ViewVehicle = ({
         <Col>
           <VehicleSideList current={vehicleId} />
         </Col>
-        <Col flex={1} className={classes.content}>
-          <Row gutter={8} className={classes.headerBar} justify="end">
+        <Col className={classes.content} flex={1}>
+          <Row className={classes.headerBar} gutter={8} justify="end">
             <Col>
               <Tooltip
                 title={
@@ -222,16 +222,16 @@ const ViewVehicle = ({
                 }
               >
                 <Button
-                  onClick={toggleSubscribe}
+                  color={data?.vehicle?.subscribed ? undefined : 'danger'}
                   disabled={saving}
                   loading={saving}
+                  onClick={toggleSubscribe}
                   type="ghost"
-                  color={data?.vehicle?.subscribed ? undefined : 'danger'}
                 >
                   <FontAwesomeIcon
+                    icon={data?.vehicle?.subscribed ? faBellSlash : faBell}
                     size="1x"
                     style={{ marginRight: 8 }}
-                    icon={data?.vehicle?.subscribed ? faBellSlash : faBell}
                   />
                   {data?.vehicle?.subscribed
                     ? intl.formatMessage({
@@ -247,10 +247,10 @@ const ViewVehicle = ({
               <Col>
                 <Button type="ghost">
                   <FontAwesomeIcon
+                    icon={faEdit}
+                    onClick={toggleEditVehicle}
                     size="1x"
                     style={{ marginRight: 8 }}
-                    onClick={toggleEditVehicle}
-                    icon={faEdit}
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Edit',
@@ -309,25 +309,25 @@ const ViewVehicle = ({
             {editRights && (
               <Col>
                 <Button
-                  type="ghost"
                   onClick={() => {
                     confirm({
-                      title: intl.formatMessage({
-                        defaultMessage: 'Do you want to delete the vehicle?',
-                      }),
                       content: intl.formatMessage({
                         defaultMessage: 'This action cannot be undone.',
                       }),
                       onOk() {
                         onDeleteVehicle();
                       },
+                      title: intl.formatMessage({
+                        defaultMessage: 'Do you want to delete the vehicle?',
+                      }),
                     });
                   }}
+                  type="ghost"
                 >
                   <FontAwesomeIcon
+                    icon={faTrash}
                     size="1x"
                     style={{ marginRight: 8 }}
-                    icon={faTrash}
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Delete',
@@ -337,20 +337,20 @@ const ViewVehicle = ({
             )}
           </Row>
           <ImagesList
-            imagesData={data?.vehicle?.images}
-            loading={loading}
-            saving={saving}
-            editRights={editRights}
-            openLightbox={openLightbox}
-            lightBoxOpen={lightBoxOpen}
-            lightboxElements={lightboxElements}
             editImageData={editImageData}
-            setEditImageData={setEditImageData}
-            onDeleteImage={onDeleteImage}
-            onEditImage={onEditImage}
+            editRights={editRights}
             hasImages={
               !!(data?.vehicle?.images && data?.vehicle?.images.length > 0)
             }
+            imagesData={data?.vehicle?.images}
+            lightBoxOpen={lightBoxOpen}
+            lightboxElements={lightboxElements}
+            loading={loading}
+            onDeleteImage={onDeleteImage}
+            onEditImage={onEditImage}
+            openLightbox={openLightbox}
+            saving={saving}
+            setEditImageData={setEditImageData}
           />
           <div className={classes.details}>
             {loading ? (
@@ -414,7 +414,6 @@ const ViewVehicle = ({
                         {data?.vehicle?.incidents &&
                         data?.vehicle?.incidents.length > 0 ? (
                           <MapCard
-                            width="100%"
                             height={301}
                             markers={
                               data?.vehicle?.incidents.map((incident) => ({
@@ -422,22 +421,23 @@ const ViewVehicle = ({
                                 geoLng: incident.location?.geoLng,
                               })) || []
                             }
+                            width="100%"
                           />
                         ) : (
                           <Card
                             loading={loading}
                             style={{
-                              height: 'calc(100% - 20px)',
-                              display: 'flex',
                               alignItems: 'center',
+                              display: 'flex',
+                              height: 'calc(100% - 20px)',
                               justifyContent: 'center',
                             }}
                           >
                             <Empty
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
                               description={intl.formatMessage({
                                 defaultMessage: 'No incidents found',
                               })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
                           </Card>
                         )}
@@ -484,7 +484,7 @@ const ViewVehicle = ({
               </Row>
             )}
             <Card loading={loading}>
-              <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+              <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
                 <Col flex={1}>
                   <Title level={4}>
                     {intl.formatMessage({
@@ -499,29 +499,29 @@ const ViewVehicle = ({
                         <Menu
                           items={[
                             {
+                              icon: (
+                                <FontAwesomeIcon
+                                  className={classes.icon}
+                                  icon={faMagnifyingGlass}
+                                />
+                              ),
+                              key: '1',
                               label: intl.formatMessage({
                                 defaultMessage: 'Add Existing Offender',
                               }),
-                              key: '1',
-                              icon: (
-                                <FontAwesomeIcon
-                                  icon={faMagnifyingGlass}
-                                  className={classes.icon}
-                                />
-                              ),
                               onClick: () => toggleAddExistingOffender(),
                             },
                             {
+                              icon: (
+                                <FontAwesomeIcon
+                                  className={classes.icon}
+                                  icon={faPlus}
+                                />
+                              ),
+                              key: '2',
                               label: intl.formatMessage({
                                 defaultMessage: 'Create New Offender',
                               }),
-                              key: '2',
-                              icon: (
-                                <FontAwesomeIcon
-                                  icon={faPlus}
-                                  className={classes.icon}
-                                />
-                              ),
                               onClick: () => toggleAddOffender(),
                             },
                           ]}
@@ -529,13 +529,13 @@ const ViewVehicle = ({
                       }
                     >
                       <Button
-                        size="small"
                         icon={
                           <FontAwesomeIcon
-                            icon={faPlus}
                             className={classes.icon}
+                            icon={faPlus}
                           />
                         }
+                        size="small"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Offenders',
@@ -547,13 +547,13 @@ const ViewVehicle = ({
               </Row>
               {data?.vehicle?.offenders.length && !loading ? (
                 <OffenderTable
+                  deleteRights={editRights}
+                  editRights={editRights}
+                  hasNavigation
                   offenders={data?.vehicle?.offenders}
-                  setEditOffenderData={setEditOffenderData}
                   onDeleteOffender={onDeleteOffender}
                   saving={saving}
-                  editRights={editRights}
-                  deleteRights={editRights}
-                  hasNavigation
+                  setEditOffenderData={setEditOffenderData}
                 />
               ) : (
                 <Empty
@@ -570,8 +570,8 @@ const ViewVehicle = ({
               </Title>
               {data?.vehicle?.incidents.length && !loading ? (
                 <IncidentTable
-                  incidents={data?.vehicle?.incidents}
                   hasNavigation
+                  incidents={data?.vehicle?.incidents}
                 />
               ) : (
                 <Empty
@@ -602,7 +602,7 @@ const ViewVehicle = ({
             </Card>
 
             <Card loading={loading}>
-              <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+              <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
                 <Col flex={1}>
                   <Title level={4}>
                     {intl.formatMessage({
@@ -613,14 +613,14 @@ const ViewVehicle = ({
                 {editRights && (
                   <Col>
                     <Button
-                      size="small"
-                      onClick={toggleAddDocument}
                       icon={
                         <FontAwesomeIcon
-                          icon={faPlus}
                           className={classes.icon}
+                          icon={faPlus}
                         />
                       }
+                      onClick={toggleAddDocument}
+                      size="small"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Evidence',
@@ -632,10 +632,10 @@ const ViewVehicle = ({
 
               {data?.vehicle?.evidence.length && !loading ? (
                 <EvidenceTable
+                  deleteRights={editRights}
                   evidence={data?.vehicle?.evidence}
                   title={ProfileUpdatedModel.Vehicle}
                   update={updateDeleteDocument}
-                  deleteRights={editRights}
                 />
               ) : (
                 <Empty
@@ -648,7 +648,7 @@ const ViewVehicle = ({
             </Card>
             {editRights && (
               <Card loading={loading}>
-                <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
                   <Col flex={1}>
                     <Title level={4}>
                       {intl.formatMessage({
@@ -659,14 +659,14 @@ const ViewVehicle = ({
 
                   <Col>
                     <Button
-                      size="small"
-                      onClick={toggleAddInvestigation}
                       icon={
                         <FontAwesomeIcon
-                          icon={faPlus}
                           className={classes.icon}
+                          icon={faPlus}
                         />
                       }
+                      onClick={toggleAddInvestigation}
+                      size="small"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Investigation',
@@ -693,88 +693,88 @@ const ViewVehicle = ({
         <Col span={6}>
           <div className={classes.updatesContainer}>
             <IntelSection
-              updates={data?.vehicle?.updates}
-              scrolledToTop={scrolledToTop}
-              loadMore={loadMore}
-              saving={saving}
-              editRights={editRights}
-              userId={userId}
               confirmDeleteUpdate={confirmDeleteUpdate}
+              editRights={editRights}
+              loadMore={loadMore}
+              optionRowShow={optionRowShow}
+              saving={saving}
+              scrolledToTop={scrolledToTop}
               setEditUpdate={setEditUpdate}
               setReplyTo={setReplyTo}
-              optionRowShow={optionRowShow}
+              updates={data?.vehicle?.updates}
+              userId={userId}
             />
             <UpdateBar
               replyTo={replyTo}
-              vehicleId={vehicleId}
+              setOptionRowShow={setOptionRowShow}
               setReplyTo={setReplyTo}
               subscribed={data?.vehicle?.subscribed || false}
-              setOptionRowShow={setOptionRowShow}
+              vehicleId={vehicleId}
             />
           </div>
         </Col>
 
         <Drawer
-          title={<FormattedMessage defaultMessage="Edit Vehicle Details" />}
+          onClose={toggleEditVehicle}
           open={editVehicle}
+          title={<FormattedMessage defaultMessage="Edit Vehicle Details" />}
           width={700}
           zIndex={999}
-          onClose={toggleEditVehicle}
         >
           {editVehicle ? (
             <EditVehicle
-              onClose={toggleEditVehicle}
-              update={submitEditVehicle}
               editData={{
                 ...data?.vehicle,
-                id: data?.vehicle?.id || '',
                 crimeGroup: data?.vehicle?.crimeGroup.map(({ id }) => id || ''),
-                incidents: data?.vehicle?.incidents,
-                offenders: data?.vehicle?.offenders,
                 customGalleries: data?.vehicle?.customGalleries.map(
                   ({ id }) => id || ''
                 ),
                 groups: data?.vehicle?.groups.map(({ id }) => id || ''),
+                id: data?.vehicle?.id || '',
                 images: data?.vehicle?.images.map((el) => ({
                   ...el,
                   policeImage: el.policeImage || false,
                   primary: el.primary || false,
                 })),
+                incidents: data?.vehicle?.incidents,
+                offenders: data?.vehicle?.offenders,
               }}
+              onClose={toggleEditVehicle}
               showGroups
+              update={submitEditVehicle}
             />
           ) : (
             <div />
           )}
         </Drawer>
         <Modal
-          title={<FormattedMessage defaultMessage="Edit Update Content" />}
-          open={editUpdate !== null}
-          onOk={handleEditUpdate}
-          onCancel={() => setEditUpdate(null)}
           okText={<FormattedMessage defaultMessage="Save" />}
+          onCancel={() => setEditUpdate(null)}
+          onOk={handleEditUpdate}
+          open={editUpdate !== null}
+          title={<FormattedMessage defaultMessage="Edit Update Content" />}
         >
           <Input
-            value={editUpdateInput}
             onChange={(e) => setEditUpdateInput(e.target.value)}
+            value={editUpdateInput}
           />
         </Modal>
       </Row>
       {/* evidence */}
       <Drawer
+        onClose={toggleAddDocument}
+        open={addDocument}
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
         })}
-        open={addDocument}
         width="600"
-        onClose={toggleAddDocument}
         zIndex={1001}
       >
         {addDocument ? (
           <AddDocument
-            vehicleId={data?.vehicle?.id || ''}
             onClose={toggleAddDocument}
             update={updateDocumentList}
+            vehicleId={data?.vehicle?.id || ''}
           />
         ) : (
           <div />
@@ -782,18 +782,18 @@ const ViewVehicle = ({
       </Drawer>
       {/* investigation */}
       <Drawer
+        onClose={toggleAddInvestigation}
+        open={addInvestigation}
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
         })}
-        open={addInvestigation}
         width="500"
-        onClose={toggleAddInvestigation}
       >
         {addInvestigation ? (
           <AddInvestigation
-            update={updateInvestigationList}
             incidentId={data?.vehicle?.id || ''}
             onClose={toggleAddInvestigation}
+            update={updateInvestigationList}
           />
         ) : (
           <div />
@@ -801,23 +801,23 @@ const ViewVehicle = ({
       </Drawer>
       {/* images */}
       <Drawer
+        onClose={toggleEditImages}
+        open={editImages}
         title={intl.formatMessage({
           defaultMessage: 'Edit Vehicle Images',
         })}
-        open={editImages}
         width="800"
         zIndex={999}
-        onClose={toggleEditImages}
       >
         {editImages ? (
           <EditImageList
-            update={onUpdateImages}
-            onClose={toggleEditImages}
             images={data?.vehicle?.images}
+            onClose={toggleEditImages}
+            saving={saving}
             title={intl.formatMessage({
               defaultMessage: 'vehicle',
             })}
-            saving={saving}
+            update={onUpdateImages}
           />
         ) : (
           <div />
@@ -826,61 +826,61 @@ const ViewVehicle = ({
 
       {/* offender */}
       <Drawer
+        onClose={() => setEditOffenderData(null)}
+        open={!!editOffenderData}
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
         })}
-        open={!!editOffenderData}
         width="700"
-        onClose={() => setEditOffenderData(null)}
       >
         {editOffenderData ? (
           <SimpleEditOffender
             data={editOffenderData}
-            onClose={() => setEditOffenderData(null)}
-            update={updateEditOffenderList}
             images={data?.vehicle?.images}
+            onClose={() => setEditOffenderData(null)}
             onCompleted={onCompletedEditOffender}
+            update={updateEditOffenderList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddOffender}
+        open={addOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
         })}
-        open={addOffender}
         width="700"
         zIndex={999}
-        onClose={toggleAddOffender}
       >
         {addOffender ? (
           <AddNewOffenderSimple
+            groupsIds={data?.vehicle.groups.map(({ id }) => id)}
+            images={data?.vehicle?.images.map((el) => ({ ...el, uid: el.id }))}
+            onClose={toggleAddOffender}
             onCompleted={onCompletedAddOffender}
             update={updateAddOffenderList}
             vehicleId={data?.vehicle.id}
-            groupsIds={data?.vehicle.groups.map(({ id }) => id)}
-            onClose={toggleAddOffender}
-            images={data?.vehicle?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddExistingOffender}
+        open={addExistingOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Offenders',
         })}
-        open={addExistingOffender}
         width="1000"
-        onClose={toggleAddExistingOffender}
         zIndex={1001}
       >
         {addExistingOffender ? (
           <AddExistingOffender
-            update={(value) => onAddExistingOffender(value.id)}
             offenderIds={data?.vehicle?.offenders.map(({ id }) => id)}
             onClose={toggleAddExistingOffender}
+            update={(value) => onAddExistingOffender(value.id)}
           />
         ) : (
           <div />

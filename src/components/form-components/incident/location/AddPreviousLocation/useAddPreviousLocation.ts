@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 
+import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
+import { useState } from 'react';
 import { useStoreState } from 'state';
-import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
-import { useAddressesQuery } from 'graphql/incidents/queries/address.generated';
 
 interface FormData {
   selectedLocation: string;
@@ -14,11 +14,11 @@ interface Props {
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  saving: boolean;
   data: AddressesQuery | undefined;
   // data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
   loading: boolean;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
 }
 
 const useAddPreviousLocation = ({ onClose, update }: Props): Return => {
@@ -44,11 +44,11 @@ const useAddPreviousLocation = ({ onClose, update }: Props): Return => {
     onClose();
   };
   return {
-    onSubmit,
-    saving,
     // data: addressData?.addresses.filter(({ primary }) => !primary),
     data: addressData,
     loading,
+    onSubmit,
+    saving,
   };
 };
 

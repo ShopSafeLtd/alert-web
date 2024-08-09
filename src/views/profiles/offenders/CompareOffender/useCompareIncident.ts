@@ -1,11 +1,12 @@
+import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
+import type { ViewOffendersCompareQuery } from 'graphql/offenders/queries/__generated__/compare-offenders.generated';
+
+import { useMergeOffendersMutation } from 'graphql/offenders/mutations/__generated__/merge-offenders.generated';
+import { useViewOffendersCompareLazyQuery } from 'graphql/offenders/queries/__generated__/compare-offenders.generated';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import { useStoreState } from 'state';
-import type { ViewOffendersCompareQuery } from 'graphql/offenders/queries/compare-offenders.generated';
-import { useViewOffendersCompareLazyQuery } from 'graphql/offenders/queries/compare-offenders.generated';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
-import { useMergeOffendersMutation } from 'graphql/offenders/mutations/merge-offenders.generated';
 
 function useQuery() {
   const { search } = useLocation();
@@ -15,80 +16,80 @@ function useQuery() {
 
 type Offenders = Exclude<
   ViewOffendersCompareQuery['offenders'],
-  undefined | null
+  null | undefined
 >;
 
 type Offender = Offenders[number];
 
 export type OffenderField =
-  | 'name'
   | 'age'
   | 'build'
-  | 'gender'
-  | 'race'
-  | 'hair'
-  | 'peculiarities'
   | 'dateOfBirth'
-  | 'dateSource';
+  | 'dateSource'
+  | 'gender'
+  | 'hair'
+  | 'name'
+  | 'peculiarities'
+  | 'race';
 
 export interface Selected {
   age: null | string;
   build: null | string;
-  gender: null | string;
-  name: null | string;
-  race: null | string;
-  hair: null | string;
   dateOfBirth: null | string;
   dateSource: null | string;
+  gender: null | string;
+  hair: null | string;
+  name: null | string;
+  race: null | string;
 }
 
 interface Return {
-  offenders: Offender[];
-  preview: Offender;
   addOffender: boolean;
-  toggleAddOffender: () => void;
   addOffenders: (value: OffenderData) => void;
-  toggleSelected: (offender: Offender, field: OffenderField) => void;
-  selected: Selected;
-  removeOffender: (offender: Offender) => void;
-  onMerge: () => void;
   mode: 'column' | 'grid';
-  setMode: (value: 'column' | 'grid') => void;
-  toggleSelectedImages: (value: string) => void;
-  selectedImages: string[];
+  offenders: Offender[];
+  onMerge: () => void;
   onSubmitImages: () => void;
+  preview: Offender;
+  removeOffender: (offender: Offender) => void;
+  selected: Selected;
+  selectedImages: string[];
+  setMode: (value: 'column' | 'grid') => void;
+  toggleAddOffender: () => void;
+  toggleSelected: (offender: Offender, field: OffenderField) => void;
+  toggleSelectedImages: (value: string) => void;
 }
 
 const compareIncident = (): Return => {
   const { id: offenderId } = useParams();
   const query = useQuery();
   const navigate = useNavigate();
-  const { role, id: userId } = useStoreState((state) => state.user);
-  const [mode, setMode] = useState<'grid' | 'column'>('column');
+  const { id: userId, role } = useStoreState((state) => state.user);
+  const [mode, setMode] = useState<'column' | 'grid'>('column');
   const [addOffender, setAddOffender] = useState(false);
   const [offenders, setOffenders] = useState<Offender[]>([]);
   const [preview, setPreview] = useState<Offender>({
-    id: '',
-    images: [],
     age: Age.Unknown,
-    tags: [],
-    updatedAt: new Date(),
     build: Build.Unknown,
     gender: Gender.Unknown,
-    name: '',
-    race: Race.Unknown,
     hair: 'None',
+    id: '',
+    images: [],
+    name: '',
     peculiarities: 'None',
+    race: Race.Unknown,
+    tags: [],
+    updatedAt: new Date(),
   });
   const [selected, setSelected] = useState<Selected>({
     age: null,
     build: null,
-    gender: null,
-    name: null,
-    race: null,
-    hair: null,
     dateOfBirth: null,
     dateSource: null,
+    gender: null,
+    hair: null,
+    name: null,
+    race: null,
   });
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   // const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -108,9 +109,6 @@ const compareIncident = (): Return => {
       fetchPolicy: 'cache-and-network',
       variables: {
         where: {
-          id: {
-            in: ids,
-          },
           groups:
             role === Role.ContentAdmin
               ? undefined
@@ -125,6 +123,9 @@ const compareIncident = (): Return => {
                     },
                   },
                 },
+          id: {
+            in: ids,
+          },
         },
       },
     });
@@ -140,12 +141,12 @@ const compareIncident = (): Return => {
         setSelected({
           age: primaryOffender.id || null,
           build: primaryOffender.id || null,
+          dateOfBirth: primaryOffender.id || null,
+          dateSource: primaryOffender.id || null,
           gender: primaryOffender.id || null,
           hair: primaryOffender.id || null,
           name: primaryOffender.id || null,
           race: primaryOffender.id || null,
-          dateOfBirth: primaryOffender.id || null,
-          dateSource: primaryOffender.id || null,
         });
       }
     }
@@ -173,24 +174,24 @@ const compareIncident = (): Return => {
       // @ts-expect-error Date or null
       ...offenders,
       {
-        id: value.id,
-        images: value.images || [],
-        tags: value.tags,
-        // @ts-expect-error Date or null
-        updatedAt: value.updatedAt,
         age: value.age,
         build: value.build,
         dateOfBirth: value.dateOfBirth,
         dateSource: value.dateSource,
         gender: value.gender,
         hair: value.hair,
+        id: value.id,
+        images: value.images || [],
         lastActive: {
-          id: value.lastActive?.id || '',
           dayTime: value.lastActive?.dayTime || '',
+          id: value.lastActive?.id || '',
         },
         name: value.name,
         peculiarities: value.peculiarities,
         race: value.race,
+        tags: value.tags,
+        // @ts-expect-error Date or null
+        updatedAt: value.updatedAt,
       },
     ]);
 
@@ -208,10 +209,10 @@ const compareIncident = (): Return => {
       images: value.images
         ? [...preview.images, ...value.images]
         : preview.images,
-      tags: value.tags ? [...preview.tags, ...value.tags] : preview.tags,
       peculiarities: value.peculiarities
         ? getPeculiarities()
         : preview.peculiarities,
+      tags: value.tags ? [...preview.tags, ...value.tags] : preview.tags,
     });
   };
 
@@ -249,10 +250,10 @@ const compareIncident = (): Return => {
     setSelected({
       age: ageSelected ? first?.id || '' : selected.age,
       build: buildSelected ? first?.id || '' : selected.build,
-      gender: genderSelected ? first?.id || '' : selected.gender,
-      hair: hairSelected ? first?.id || '' : selected.hair,
       dateOfBirth: dateSelected ? first?.id || '' : selected.dateOfBirth,
       dateSource: dateSourceSelected ? first?.id || '' : selected.dateSource,
+      gender: genderSelected ? first?.id || '' : selected.gender,
+      hair: hairSelected ? first?.id || '' : selected.hair,
       name: nameSelected ? first?.id || '' : selected.name,
       race: raceSelected ? first?.id || '' : selected.race,
     });
@@ -311,40 +312,40 @@ const compareIncident = (): Return => {
     void mergeOffenders({
       variables: {
         data: {
-          name: preview.name,
-          peculiarities: preview.peculiarities,
-          race: preview.race,
-          tags: preview.tags.map(({ id }) => id),
           age: preview.age,
           build: preview.build,
           dateOfBirth: preview.dateOfBirth,
           gender: preview.gender,
           hair: preview.hair,
+          imageIds: preview.images.map(({ id }) => id),
           mainOffenderId: offenderId || '',
+          name: preview.name,
           offenderIds: offenders
             .map(({ id }) => id)
             .filter((id) => id !== preview.id),
-          imageIds: preview.images.map(({ id }) => id),
+          peculiarities: preview.peculiarities,
+          race: preview.race,
+          tags: preview.tags.map(({ id }) => id),
         },
       },
     });
   };
 
   return {
-    offenders,
-    preview,
     addOffender,
-    toggleAddOffender,
     addOffenders,
-    toggleSelected,
-    selected,
-    removeOffender,
-    onMerge,
     mode,
-    setMode,
-    toggleSelectedImages,
-    selectedImages,
+    offenders,
+    onMerge,
     onSubmitImages,
+    preview,
+    removeOffender,
+    selected,
+    selectedImages,
+    setMode,
+    toggleAddOffender,
+    toggleSelected,
+    toggleSelectedImages,
   };
 };
 

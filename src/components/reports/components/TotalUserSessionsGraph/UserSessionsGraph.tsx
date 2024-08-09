@@ -1,26 +1,28 @@
-import React from 'react';
-import { Button, Typography } from 'antd';
-import type { UserSessionsGraphQueryVariables } from './UserSessionsGraph.generated';
-import { useUserSessionsGraphQuery } from './UserSessionsGraph.generated';
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { UserSessionsGraphQueryVariables } from '#/components/reports/components/TotalUserSessionsGraph/__generated__/UserSessionsGraph.generated';
+
+import { useUserSessionsGraphQuery } from '#/components/reports/components/TotalUserSessionsGraph/__generated__/UserSessionsGraph.generated';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import RadialGraph from '../../graphs/radialGraph';
 
 interface Props {
   editMode: boolean;
-  variables: UserSessionsGraphQueryVariables;
-  removeItem: () => void;
-  onNavigate: () => void;
   isPrinting: boolean;
+  onNavigate: () => void;
+  removeItem: () => void;
+  variables: UserSessionsGraphQueryVariables;
 }
 
 const UserSessionsGraph = ({
-  variables,
   editMode,
-  removeItem,
-  onNavigate,
   isPrinting,
+  onNavigate,
+  removeItem,
+  variables,
 }: Props) => {
   const intl = useIntl();
 
@@ -38,22 +40,22 @@ const UserSessionsGraph = ({
 
       {editMode ? (
         <Button
-          type="text"
-          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
           onClick={removeItem}
+          shape="circle"
+          size="small"
+          type="text"
         />
       ) : (
         <Button
-          type="text"
           className="change-graph1-view-more"
+          danger
+          onClick={onNavigate}
           // style={{ position: 'absolute', right: 5, top: 15, zIndex: 1 }}
           size="small"
-          onClick={onNavigate}
-          danger
+          type="text"
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
@@ -62,11 +64,11 @@ const UserSessionsGraph = ({
       )}
 
       <RadialGraph
-        isPrinting={isPrinting}
         data={data?.userSessionsGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Users',
         })}
+        isPrinting={isPrinting}
       />
     </>
   );

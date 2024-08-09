@@ -1,22 +1,25 @@
+import RouteWrapper from '#/navigation/utils/route-wrapper';
+import IncidentItemReport from '#/views/reports/incident-items/IncidentItemsReport.view';
+import OffenderTable from '#/views/reports/offender-table/OffenderTable.container';
+import ReportCentre from '#/views/reports/reports-centre/ReportsCentre.container';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Route, Routes } from 'react-router';
-import PerformanceReport from 'views/reports/performance';
-import OffenderProfileSearch from 'views/reports/offender-profile/Search';
-import IncidentMap from 'views/reports/incident-map';
+import DataAudit from 'views/reports/DataAudit';
+import UserEngagement from 'views/reports/UserEngagement';
+import BusinessReport from 'views/reports/business/BusinessReport';
 import BusinessSearch from 'views/reports/business/Search';
 // import BusinessView from 'views/reports/business/View';
 import BusinessEngagement from 'views/reports/business-engagement';
-import OffenderEngagement from 'views/reports/offender-report';
-import CrimeGroupList from 'views/reports/crime-groups/list-crime-groups';
 import CrimeGroupReport from 'views/reports/crime-groups/crime-group-report';
-import BusinessReport from 'views/reports/business/BusinessReport';
-import UserEngagement from 'views/reports/UserEngagement';
-import DataAudit from 'views/reports/DataAudit';
+import CrimeGroupList from 'views/reports/crime-groups/list-crime-groups';
+import IncidentMap from 'views/reports/incident-map';
+import OffenderProfileSearch from 'views/reports/offender-profile/Search';
+import OffenderEngagement from 'views/reports/offender-report';
+import PerformanceReport from 'views/reports/performance';
+
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useIntl } from 'react-intl';
-import RouteWrapper from '#/navigation/utils/route-wrapper';
-import ReportCentre from '#/views/reports/reports-centre/ReportsCentre.container';
 
 const Reports = (): JSX.Element => {
   const intl = useIntl();
@@ -28,160 +31,186 @@ const Reports = (): JSX.Element => {
     >
       <Routes>
         <Route
-          index
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <ReportCentre />
             </PermissionCheckWrapper>
           }
+          index
         />
         <Route
-          path="summary-report/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <PerformanceReport />
             </PermissionCheckWrapper>
           }
+          path="summary-report/:reportId"
         />
         <Route
-          path="offender-profile/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <OffenderProfileSearch />
             </PermissionCheckWrapper>
           }
+          path="offender-profile/:reportId"
         />
         <Route
-          path="offender-profile/:reportId/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <OffenderEngagement />
             </PermissionCheckWrapper>
           }
+          path="offender-profile/:reportId/:id"
         />
         <Route
-          path="incident-map"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <IncidentMap />
             </PermissionCheckWrapper>
           }
+          path="incident-map/:reportId"
         />
         <Route
-          path="business/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <BusinessSearch />
             </PermissionCheckWrapper>
           }
+          path="business/:reportId"
         />
         <Route
-          path="business-engagement"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <BusinessEngagement />
             </PermissionCheckWrapper>
           }
+          path="business-engagement/:reportId"
         />
         <Route
-          path="user-engagement"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <UserEngagement />
             </PermissionCheckWrapper>
           }
+          path="user-engagement/:reportId"
         />
         <Route
-          path="data-audit"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <DataAudit />
             </PermissionCheckWrapper>
           }
+          path="data-audit"
         />
         <Route
-          path="crime-groups/:reportId"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <CrimeGroupList />
             </PermissionCheckWrapper>
           }
+          path="crime-groups/:reportId"
         />
         <Route
-          path="crime-groups/:reportId/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <CrimeGroupReport />
             </PermissionCheckWrapper>
           }
+          path="crime-groups/:reportId/:id"
         />
         <Route
-          path="business/:reportId/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Reports,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
               }}
             >
               <BusinessReport />
             </PermissionCheckWrapper>
           }
+          path="business/:reportId/:id"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <IncidentItemReport />
+            </PermissionCheckWrapper>
+          }
+          path="incident-items/:reportId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <OffenderTable />
+            </PermissionCheckWrapper>
+          }
+          path="offender-table/:reportId"
         />
       </Routes>
     </RouteWrapper>

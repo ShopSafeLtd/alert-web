@@ -1,11 +1,11 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import Dashboard from '#/views/dashboard/FeedItems.container';
-import { DashboardProvider } from '#/views/dashboard/Dashboard.context';
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { DashboardProvider } from '#/views/dashboard/Dashboard.context';
+import Dashboard from '#/views/dashboard/FeedItems.container';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import React from 'react';
 import { useIntl } from 'react-intl';
+import { Route, Routes } from 'react-router';
 
 // import ReviewIncident from 'views/incidents/ReviewIncident ';
 
@@ -19,12 +19,11 @@ const DashboardRouter = (): JSX.Element => {
     >
       <Routes>
         <Route
-          index
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Incidents,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Dashboard,
               }}
               unauthorizedElement={<div />}
             >
@@ -33,6 +32,7 @@ const DashboardRouter = (): JSX.Element => {
               </DashboardProvider>
             </PermissionCheckWrapper>
           }
+          index
         />
       </Routes>
     </RouteWrapper>

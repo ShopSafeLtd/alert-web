@@ -1,32 +1,33 @@
-import { OffenderSort, useStoreActions, useStoreState } from 'state';
-import type { DateType } from 'types/DataType';
-import type { OffenderFilters } from 'state/data-model';
-import type { SearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
-import { useSearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
+import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type { Age, Build, Gender, Race } from 'graphql/types';
+import type { OffenderFilters } from 'state/data-model';
+import type { DateType } from 'types/DataType';
+
+import { useSearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, Role, SortOrder } from 'graphql/types';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
 interface Return {
-  order: OffenderSort;
-  setOrder: (value: OffenderSort) => void;
-  setEthnicity: (value: Race[]) => void;
-  setAge: (value: Age[]) => void;
-  setBuild: (value: Build[]) => void;
-  setSex: (value: Gender[]) => void;
-  setHair: (value: string) => void;
-  setPeculiarities: (value: string) => void;
-  clearFilters: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setWarnings: (value: string[]) => void;
-  setBusinesses: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  variables: OffenderFilters;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
+  clearFilters: () => void;
+  order: OffenderSort;
   publicOffenderDOB: boolean;
+  setAge: (value: Age[]) => void;
+  setBuild: (value: Build[]) => void;
+  setBusinesses: (value: string[]) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setEthnicity: (value: Race[]) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setHair: (value: string) => void;
+  setOrder: (value: OffenderSort) => void;
+  setPeculiarities: (value: string) => void;
+  setSex: (value: Gender[]) => void;
+  setWarnings: (value: string[]) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
+  variables: OffenderFilters;
 }
 
 const useOffenderFilter = (): Return => {
@@ -48,15 +49,15 @@ const useOffenderFilter = (): Return => {
     variables: {
       orderBy: { name: SortOrder.Asc },
       where: {
+        dataType: {
+          equals: Model.Offender,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Offender,
         },
       },
     },
@@ -65,6 +66,10 @@ const useOffenderFilter = (): Return => {
   const { data: businessData, loading: businessesLoading } =
     useSearchBusinessesQuery({
       variables: {
+        orderBy: {
+          name: SortOrder.Asc,
+        },
+        take: 100,
         where: {
           schemes: {
             some: {
@@ -74,167 +79,164 @@ const useOffenderFilter = (): Return => {
             },
           },
         },
-        orderBy: {
-          name: SortOrder.Asc,
-        },
       },
     });
 
   const setGroupsFilter = (values: string[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         groups: values,
       },
-      order,
     });
   };
 
   const setWarnings = (values: string[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         warnings: values,
       },
-      order,
     });
   };
   const setBusinesses = (values: string[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         businesses: values,
       },
-      order,
     });
   };
   const setEthnicity = (values: Race[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         ethnicity: values,
       },
-      order,
     });
   };
   const setBuild = (values: Build[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         build: values,
       },
-      order,
     });
   };
   const setAge = (values: Age[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         age: values,
       },
-      order,
     });
   };
   const setSex = (values: Gender[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         sex: values,
       },
-      order,
     });
   };
 
   const setCreatedAtFilter = (values: DateType | undefined) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         createdAt: values,
       },
-      order,
     });
   };
   const setOrder = (value: OffenderSort) => {
     setOffendersState({
+      order: value,
       pagination,
       variables,
-      order: value,
     });
   };
 
   const setPeculiarities = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         peculiarities: value,
       },
-      order,
     });
   };
   const setHair = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         hair: value,
       },
-      order,
     });
   };
 
   const clearFilters = () => {
     setOffendersState({
+      order: OffenderSort.updatedAtDesc,
       pagination,
       variables: {
         ...variables,
-        search: '',
-        warnings: [],
-        groups: [],
+        age: [],
+        build: [],
         businesses: [],
         createdAt: undefined,
-        gallery: [],
         customGalleries: [],
-        peculiarities: '',
-        hair: '',
         ethnicity: [],
-        build: [],
-        age: [],
+        gallery: [],
+        groups: [],
+        hair: '',
+        peculiarities: '',
+        search: '',
         sex: [],
+        warnings: [],
       },
-      order: OffenderSort.updatedAtDesc,
     });
   };
 
   return {
-    order,
-    setOrder,
-    variables,
-    tags:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    tagsLoading,
+    businessData,
+    businessesLoading,
     clearFilters,
+    order,
+    publicOffenderDOB,
     setAge,
     setBuild,
+    setBusinesses,
+    setCreatedAtFilter,
     setEthnicity,
+    setGroupsFilter,
     setHair,
+    setOrder,
     setPeculiarities,
     setSex,
-    setGroupsFilter,
-    setCreatedAtFilter,
     setWarnings,
-    businessData,
-    setBusinesses,
-    businessesLoading,
-    publicOffenderDOB,
+    tags:
+      tagsData?.tags.map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    tagsLoading,
+    variables,
   };
 };
 

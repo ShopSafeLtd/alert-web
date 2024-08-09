@@ -22,7 +22,7 @@ import type {
   NewOffender,
   NewUser,
 } from './DiscImport.types';
-import { useListUsersQuery } from 'graphql/users/queries/list-users.generated';
+
 import {
   Age,
   Build,
@@ -34,11 +34,11 @@ import {
   SortOrder,
   TagType,
 } from 'graphql/types';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useDiscImportDataMutation } from 'graphql/imports/disc-import.generated';
+import { TagsQuery, useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { SchemeGroupsQuery, useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
+import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
+
 
 const calcAge = (value: string) => {
   if (value === '45 - 64') return Age.FortyFifty;
@@ -1583,7 +1583,7 @@ const useDiscImport = (): Return => {
                   townCity: business.townCity,
                 },
           })),
-          historicIncidents: newHistoricIncidents.map((incident) => ({
+          historicIncidents: newHistoricIn cidents.map((incident) => ({
             importId: incident.id,
             building: '',
             county: '',

@@ -1,40 +1,40 @@
-import React from 'react';
-import { Button, Col, Drawer, Tooltip } from 'antd';
+import type { ListArticlesQuery } from '#/graphql/article/queries/__generated__/list_articles.generated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
-import ArticleCard from '#/components/feedItems/Articles/ArticleCard';
 import ArticleFilter from '#/components/Articles/ArticleFilter';
+import ArticleCard from '#/components/feedItems/Articles/ArticleCard';
 import InfiniteSideScrollList from '#/components/side-list/InfiniteSideList';
+import { faFilter } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Tooltip } from 'antd';
 import SideListItem from 'components/side-list/SideListItem.view';
-import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
 interface Props {
+  current: string | undefined;
   data:
-    | Exclude<ListArticlesQuery['listArticles'], undefined | null>
+    | Exclude<ListArticlesQuery['listArticles'], null | undefined>
     | null
     | undefined;
+  fetchMoreScroll: () => void;
   loading: boolean;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  fetchMoreScroll: () => void;
-  current: string | undefined;
 }
 
 const ArticlesSection = ({
+  current,
   data,
+  fetchMoreScroll,
   loading,
   sortFilter,
   toggleSortFilter,
-  fetchMoreScroll,
-  current,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const articleItems = data?.articles.map((article) => (
     <Col span={24} style={{ marginBottom: 10 }}>
-      <SideListItem current={current === article.id} noCard loading={loading}>
-        <ArticleCard key={article.id} article={article} />
+      <SideListItem current={current === article.id} loading={loading} noCard>
+        <ArticleCard article={article} key={article.id} />
       </SideListItem>
     </Col>
   ));
@@ -46,36 +46,36 @@ const ArticlesSection = ({
       })}
     >
       <Button
-        type="default"
         disabled={loading}
         icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
         onClick={toggleSortFilter}
         shape="circle"
         style={{
           position: 'absolute',
-          top: 10,
           right: 15,
+          top: 10,
           zIndex: 100,
         }}
+        type="default"
       />
     </Tooltip>
   );
   return (
     <>
       <InfiniteSideScrollList
-        filters={filters}
         dataLength={data?.articles.length}
-        next={fetchMoreScroll}
+        filters={filters}
         hasMore={(data?.articles.length || 0) < (data?.total || 0)}
         isLoading={loading}
         items={articleItems}
+        next={fetchMoreScroll}
       />
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <ArticleFilter />

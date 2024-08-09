@@ -1,36 +1,37 @@
-import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/__generated__/delete-offender.generated';
+import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/__generated__/restore-offender.generated';
+import type { RecycledItemQuery } from 'graphql/recycled/queries/__generated__/recycled-item.generated';
+
 import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useDeleteOffenderMutation } from 'graphql/recycled/mutations/__generated__/delete-offender.generated';
+import { useRestoreOffenderMutation } from 'graphql/recycled/mutations/__generated__/restore-offender.generated';
+import { useRecycledItemQuery } from 'graphql/recycled/queries/__generated__/recycled-item.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
-import { useRestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
-import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
-import { useDeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
-import type { RecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
-import { useRecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
-  onClose: () => void;
   offenderId: string | undefined;
+  onClose: () => void;
   recycledId: string | undefined;
-  updateRestore: MutationUpdaterFn<RestoreOffenderMutation>;
   updateDelete: MutationUpdaterFn<DeleteOffenderMutation>;
+  updateRestore: MutationUpdaterFn<RestoreOffenderMutation>;
 }
 interface Return {
-  onSubmit: () => void;
-  onDelete: () => void;
   data: RecycledItemQuery | undefined;
   loading: boolean;
+  onDelete: () => void;
+  onSubmit: () => void;
   saving: boolean;
 }
 
 const useRestoreOffender = ({
-  onClose,
   offenderId,
+  onClose,
   recycledId,
-  updateRestore,
   updateDelete,
+  updateRestore,
 }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
@@ -49,11 +50,11 @@ const useRestoreOffender = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Restored!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been restored! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Restored!',
         }),
         placement: 'bottomRight',
       });
@@ -80,11 +81,11 @@ const useRestoreOffender = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been deleted.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -104,10 +105,10 @@ const useRestoreOffender = ({
       });
   };
   return {
-    onSubmit,
-    onDelete,
     data,
     loading,
+    onDelete,
+    onSubmit,
     saving,
   };
 };

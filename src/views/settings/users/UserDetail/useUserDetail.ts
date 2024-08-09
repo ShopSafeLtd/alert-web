@@ -1,14 +1,14 @@
 import type { ViewportData } from '#/types/DataType';
 import type { Role } from 'graphql/types';
-import type { UserQuery } from 'graphql/user/queries/user.generated';
+import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
 
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import { Modal, notification } from 'antd';
 import { UserStatus } from 'graphql/types';
-import { useDeleteUserFromSchemeMutation } from 'graphql/user/mutation/delete_user_from_scheme.generated';
-import { useSendInviteMutation } from 'graphql/user/mutation/send_invite.generated';
-import { useUpdateUserDisableMutation } from 'graphql/user/mutation/update_user_disable.generated';
-import { useUserQuery } from 'graphql/user/queries/user.generated';
+import { useDeleteUserFromSchemeMutation } from 'graphql/user/mutation/__generated__/delete_user_from_scheme.generated';
+import { useSendInviteMutation } from 'graphql/user/mutation/__generated__/send_invite.generated';
+import { useUpdateUserDisableMutation } from 'graphql/user/mutation/__generated__/update_user_disable.generated';
+import { useUserQuery } from 'graphql/user/queries/__generated__/user.generated';
 import { type RefObject, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';

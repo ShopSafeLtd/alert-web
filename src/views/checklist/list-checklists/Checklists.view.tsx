@@ -1,6 +1,6 @@
-import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/create-active-checklist.generated';
-import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/list-active-checklists.generated';
-import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/list-checklists.generated';
+import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
+import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
+import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import type { FetchResult } from '@apollo/client';
 
 import {

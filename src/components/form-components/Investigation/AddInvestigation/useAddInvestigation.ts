@@ -1,26 +1,27 @@
-import { useState } from 'react';
-import { notification } from 'antd';
-import { useStoreState } from 'state';
+import type { CreateInvestigationMutation } from '#/graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import errorNotification from 'types/mutation_notifications/error_notification';
+
+import { useCreateInvestigationMutation } from '#/graphql/investigations/mutations/__generated__/create-investigations.generated';
+import { notification } from 'antd';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import { useCreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface InvestigationData {
-  id?: string;
-  name?: string;
   description?: string;
   groupIds?: string[];
+  id?: string;
+  name?: string;
 }
 
 interface Props {
+  crimeGroupId?: null | string;
+  incidentId?: null | string;
+  offenderId?: null | string;
   onClose: () => void;
-  incidentId?: string | null;
-  offenderId?: string | null;
-  vehicleId?: string | null;
-  crimeGroupId?: string | null;
   update?: MutationUpdaterFn<CreateInvestigationMutation>;
+  vehicleId?: null | string;
 }
 
 interface Return {
@@ -29,12 +30,12 @@ interface Return {
 }
 
 const useAddInvestigation = ({
+  crimeGroupId,
+  incidentId,
+  offenderId,
   onClose,
   update,
-  offenderId,
-  incidentId,
   vehicleId,
-  crimeGroupId,
 }: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -44,11 +45,11 @@ const useAddInvestigation = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The investigation has been added! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -65,14 +66,14 @@ const useAddInvestigation = ({
     void createInvestigation({
       variables: {
         data: {
-          name: data.name || '',
-          description: data.description,
-          schemeId,
-          incidentId: incidentId || null,
-          offenderId: offenderId || null,
-          vehicleId: vehicleId || null,
           crimeGroupId: crimeGroupId || null,
+          description: data.description,
           groupIds: data.groupIds || [],
+          incidentId: incidentId || null,
+          name: data.name || '',
+          offenderId: offenderId || null,
+          schemeId,
+          vehicleId: vehicleId || null,
         },
       },
     });

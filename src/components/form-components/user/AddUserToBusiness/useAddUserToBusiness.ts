@@ -1,24 +1,24 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import { notification } from 'antd';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/__generated__/add-users-to-business.generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
+import { notification } from 'antd';
+import { useAddUsersToBusinessMutation } from 'graphql/businesses/mutations/__generated__/add-users-to-business.generated';
+import { SortOrder } from 'graphql/types';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
-import { useAddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import { SortOrder } from 'graphql/types';
 
 interface Row {
-  key: string;
-  fullName: string;
-  status: string | null | undefined;
   business: {
     id: string;
     name: string;
   } | null;
+  fullName: string;
+  key: string;
+  status: null | string | undefined;
 }
 
 interface Return {
@@ -49,17 +49,14 @@ const useAddUserToBusiness = ({
     fetchPolicy: 'cache-and-network',
     variables: {
       orderBy: [{ fullName: SortOrder.Asc }],
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
-            },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: currentScheme,
           },
         },
-        recycled: { equals: false },
+      },
+      where: {
         OR: [
           {
             businesses: {
@@ -82,11 +79,14 @@ const useAddUserToBusiness = ({
             },
           },
         ],
-      },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: currentScheme,
+        recycled: { equals: false },
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: currentScheme,
+              },
+            },
           },
         },
       },
@@ -102,12 +102,12 @@ const useAddUserToBusiness = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Users Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The users have been successfully added to the business',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Users Added!',
         }),
         placement: 'bottomRight',
       });
@@ -125,18 +125,18 @@ const useAddUserToBusiness = ({
         data: selected.map((item) => ({
           id: item.key,
         })),
-        schemeWhere: {
-          id: currentScheme,
-        },
-        where: {
-          id: businessId,
-        },
         groupWhere: {
           scheme: {
             id: {
               equals: currentScheme,
             },
           },
+        },
+        schemeWhere: {
+          id: currentScheme,
+        },
+        where: {
+          id: businessId,
         },
       },
     });

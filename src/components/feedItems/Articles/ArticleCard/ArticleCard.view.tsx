@@ -1,31 +1,31 @@
-import React from 'react';
-import { Col, Row, Typography } from 'antd';
-
-import { Link } from 'react-router-dom';
-import SkeletonImage from 'components/images/SkeletonImage.view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
+import type { ListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
 
 import {
   faArrowsMaximize,
   faClock,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
+import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Row, Typography } from 'antd';
+import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import FormatCalendar from 'utils/format-calendar-24h';
-import moment from 'moment';
-import useStyles from './ArticleCard.styles';
-import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
 import { ArticlePriority } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import FormatCalendar from 'utils/format-calendar-24h';
 
-const { Title, Paragraph, Text } = Typography;
+import useStyles from './ArticleCard.styles';
+
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
   article:
     | Exclude<
         ListArticlesQuery['listArticles'],
-        undefined | null
-      >['articles'][0]
+        null | undefined
+      >['articles'][number]
     | null
     | undefined;
   openLightbox?: (elements: { src: string }[], index: number) => void;
@@ -33,7 +33,7 @@ interface Props {
 
 const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-  const { id, title, images, previewText, updatedAt, priority, createdBy } =
+  const { createdBy, id, images, previewText, priority, title, updatedAt } =
     article || {};
   const classes = useStyles();
   return (
@@ -42,11 +42,11 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
       <div className={classes.card}>
         {images && images.length > 0 ? (
           <div
-            style={{
-              width: '100%',
-              height: 250,
-            }}
             key={id}
+            style={{
+              height: 250,
+              width: '100%',
+            }}
           >
             <WatermarkImage
               position={images[0]?.position}
@@ -58,7 +58,6 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
         )}
         {openLightbox && images && images.length > 0 && (
           <FontAwesomeIcon
-            size="lg"
             className={classes.imageExpand}
             icon={faArrowsMaximize}
             onClick={() =>
@@ -69,22 +68,23 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
                 0
               )
             }
+            size="lg"
           />
         )}
         <div className={classes.content}>
           <div className={classes.details}>
             <Title
-              level={4}
               ellipsis={{
                 rows: 2,
                 tooltip: title?.replace(/^\S/, (s) => s.toUpperCase()),
               }}
+              level={4}
             >
               {priority === ArticlePriority.High && (
                 <FontAwesomeIcon
-                  size="sm"
                   className="feedItem-card-icon"
                   icon={faExclamationCircle}
+                  size="sm"
                   style={{ marginRight: 8 }}
                 />
               )}
@@ -96,18 +96,18 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
           <Row style={{ marginBottom: 5 }}>
             <Col flex={1}>
               <FontAwesomeIcon
-                size="sm"
                 className="feedItem-card-icon"
                 icon={faUser}
+                size="sm"
                 style={{ marginRight: 5 }}
               />
               <Text>{createdBy?.fullName}</Text>
             </Col>
             <Col>
               <FontAwesomeIcon
-                size="sm"
                 className="feedItem-card-icon"
                 icon={faClock}
+                size="sm"
                 style={{ marginRight: 5 }}
               />
               <Text>{FormatCalendar(updatedAt || moment())}</Text>

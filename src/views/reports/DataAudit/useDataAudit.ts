@@ -1,22 +1,23 @@
-import { OffenderSort, useStoreActions, useStoreState } from 'state';
-import { useEffect, useState } from 'react';
-import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
-import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
+
+import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
 interface Return {
-  loading: boolean;
   data:
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >
     | null
     | undefined;
+  loading: boolean;
 
   offenderId: string;
-  setOffenderId: (id: string) => void;
   search: string;
+  setOffenderId: (id: string) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
@@ -39,102 +40,28 @@ const useDataAudit = (): Return => {
   const [sortFilter, setSortFilter] = useState(false);
 
   const {
-    search,
-    groups,
-    businesses,
-    createdAt,
-    peculiarities,
-    hair,
-    warnings,
-    ethnicity,
     age,
     build,
+    businesses,
+    createdAt,
+    ethnicity,
+    groups,
+    hair,
+    peculiarities,
+    search,
     sex,
+    warnings,
   } = filterVariables;
   const variables = {
-    scheme: {
-      in: [schemeId],
-    },
-
     order: {
       updatedAt:
         order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
+
+    scheme: {
+      in: [schemeId],
+    },
     where: {
-      createdAt: createdAt
-        ? {
-            gte: createdAt.startDate,
-            lte: createdAt.endDate,
-          }
-        : undefined,
-      tags:
-        warnings.length > 0
-          ? {
-              some: {
-                id: {
-                  in: warnings,
-                },
-              },
-            }
-          : undefined,
-      groups:
-        groups.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groups,
-                },
-              },
-            }
-          : undefined,
-      gender:
-        sex.length > 0
-          ? {
-              in: sex,
-            }
-          : undefined,
-      age:
-        age.length > 0
-          ? {
-              in: age,
-            }
-          : undefined,
-      build:
-        build.length > 0
-          ? {
-              in: build,
-            }
-          : undefined,
-      race:
-        ethnicity.length > 0
-          ? {
-              in: ethnicity,
-            }
-          : undefined,
-      hair: hair
-        ? {
-            contains: hair,
-            mode: QueryMode.Insensitive,
-          }
-        : undefined,
-      peculiarities: peculiarities
-        ? {
-            mode: QueryMode.Insensitive,
-            contains: peculiarities,
-          }
-        : undefined,
-      incidents:
-        businesses.length > 0
-          ? {
-              some: {
-                business: {
-                  id: {
-                    in: businesses,
-                  },
-                },
-              },
-            }
-          : undefined,
       OR: [
         {
           name: {
@@ -153,12 +80,87 @@ const useDataAudit = (): Return => {
           },
         },
       ],
+      age:
+        age.length > 0
+          ? {
+              in: age,
+            }
+          : undefined,
+      build:
+        build.length > 0
+          ? {
+              in: build,
+            }
+          : undefined,
+      createdAt: createdAt
+        ? {
+            gte: createdAt.startDate,
+            lte: createdAt.endDate,
+          }
+        : undefined,
+      gender:
+        sex.length > 0
+          ? {
+              in: sex,
+            }
+          : undefined,
+      groups:
+        groups.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groups,
+                },
+              },
+            }
+          : undefined,
+      hair: hair
+        ? {
+            contains: hair,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      incidents:
+        businesses.length > 0
+          ? {
+              some: {
+                business: {
+                  id: {
+                    in: businesses,
+                  },
+                },
+              },
+            }
+          : undefined,
+      peculiarities: peculiarities
+        ? {
+            contains: peculiarities,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      race:
+        ethnicity.length > 0
+          ? {
+              in: ethnicity,
+            }
+          : undefined,
+      tags:
+        warnings.length > 0
+          ? {
+              some: {
+                id: {
+                  in: warnings,
+                },
+              },
+            }
+          : undefined,
     },
   };
   // On mount
   useEffect(() => {
     if (groups.length === 0)
       setOffendersState({
+        order,
         pagination,
         variables: {
           ...filterVariables,
@@ -167,23 +169,22 @@ const useDataAudit = (): Return => {
               ?.filter(({ scheme }) => scheme.id === schemeId)
               ?.map(({ id }) => id) || [],
         },
-        order,
       });
   }, []);
   const { data, loading } = useListOffendersAllSchemesQuery({
-    variables,
     fetchPolicy: 'cache-and-network',
+    variables,
   });
 
   // function
   const setSearch = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...filterVariables,
         search: value,
       },
-      order,
     });
   };
 
@@ -195,11 +196,11 @@ const useDataAudit = (): Return => {
     data: data?.listOffendersAllSchemes,
     loading,
     offenderId,
-    setOffenderId,
     search,
+    setOffenderId,
     setSearch,
-    toggleSortFilter,
     sortFilter,
+    toggleSortFilter,
   };
 };
 

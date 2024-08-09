@@ -1,18 +1,19 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import { useNavigate } from 'react-router-dom';
-import type { SearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
-import { useSearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
+import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+
+import { useSearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { QueryMode } from 'graphql/types';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useStoreState } from 'state';
 
 interface Return {
+  currentSearchPage: number;
+  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearchPageChange: (page: number, pageSize: number) => void;
   searchBusinessData: SearchBusinessesQuery | undefined;
   searchBusinessLoading: boolean;
   searchValue: string;
-  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setSelectedBusiness: (value: string) => void;
-  currentSearchPage: number;
-  onSearchPageChange: (page: number, pageSize: number) => void;
 }
 
 const useOffenderProfile = (): Return => {
@@ -29,18 +30,9 @@ const useOffenderProfile = (): Return => {
     useSearchBusinessesQuery({
       fetchPolicy: 'cache-and-network',
       variables: {
+        skip: searchPageSize * (searchPage - 1),
+        take: searchPageSize,
         where: {
-          schemes: {
-            some: {
-              id: {
-                equals: currentScheme,
-              },
-            },
-          },
-          name: {
-            contains: searchValue,
-            mode: QueryMode.Insensitive,
-          },
           groups: {
             some: {
               users: {
@@ -52,9 +44,18 @@ const useOffenderProfile = (): Return => {
               },
             },
           },
+          name: {
+            contains: searchValue,
+            mode: QueryMode.Insensitive,
+          },
+          schemes: {
+            some: {
+              id: {
+                equals: currentScheme,
+              },
+            },
+          },
         },
-        skip: searchPageSize * (searchPage - 1),
-        take: searchPageSize,
       },
     });
 
@@ -72,13 +73,13 @@ const useOffenderProfile = (): Return => {
   };
 
   return {
+    currentSearchPage: searchPage,
+    handleSearchChange,
+    onSearchPageChange,
     searchBusinessData,
     searchBusinessLoading,
     searchValue,
-    handleSearchChange,
     setSelectedBusiness,
-    currentSearchPage: searchPage,
-    onSearchPageChange,
   };
 };
 

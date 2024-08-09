@@ -1,4 +1,8 @@
-import React from 'react';
+import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import type { OffenderFilters } from 'state/data-model';
+import type { DateType } from 'types/DataType';
+
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import {
   Button,
   Col,
@@ -9,15 +13,13 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { OffenderSort } from 'state';
-import type { DateType } from 'types/DataType';
-import { useIntl } from 'react-intl';
-import type { OffenderFilters } from 'state/data-model';
-import moment from 'moment';
-import useStyles from './OffenderFilter.styles';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import type { SearchBusinessesQuery } from 'graphql/businesses/queries/search-businesses.generated';
 import { Age, Build, Gender, Race } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { OffenderSort } from 'state';
+
+import useStyles from './OffenderFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -27,63 +29,64 @@ interface FormData {
 }
 
 interface Props {
-  order: OffenderSort;
-  setOrder: (value: OffenderSort) => void;
-  setEthnicity: (value: Race[]) => void;
-  setAge: (value: Age[]) => void;
-  setBuild: (value: Build[]) => void;
-  setSex: (value: Gender[]) => void;
-  setHair: (value: string) => void;
-  setPeculiarities: (value: string) => void;
-  clearFilters: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setWarnings: (value: string[]) => void;
-  setBusinesses: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  variables: OffenderFilters;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
+  clearFilters: () => void;
+  order: OffenderSort;
   publicOffenderDOB: boolean;
+  setAge: (value: Age[]) => void;
+  setBuild: (value: Build[]) => void;
+  setBusinesses: (value: string[]) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setEthnicity: (value: Race[]) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setHair: (value: string) => void;
+  setOrder: (value: OffenderSort) => void;
+  setPeculiarities: (value: string) => void;
+  setSex: (value: Gender[]) => void;
+  setWarnings: (value: string[]) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
+  variables: OffenderFilters;
 }
 
+// TODO change to businesses select component instead of doing a search
 const OffenderFilter = ({
-  order,
-  setOrder,
-  tags,
-  tagsLoading,
+  businessData,
+  businessesLoading,
   clearFilters,
+  order,
+  publicOffenderDOB,
   setAge,
   setBuild,
+  setBusinesses,
+  setCreatedAtFilter,
   setEthnicity,
   setGroupsFilter,
   setHair,
+  setOrder,
   setPeculiarities,
   setSex,
   setWarnings,
-  businessData,
-  setBusinesses,
-  businessesLoading,
-  setCreatedAtFilter,
+  tags,
+  tagsLoading,
   variables,
-  publicOffenderDOB,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
 
   const {
-    groups: groupsFilter,
-    businesses,
-    createdAt: createdAtFilter,
-    peculiarities,
-    hair,
-    warnings,
-    ethnicity,
     age,
     build,
+    businesses,
+    createdAt: createdAtFilter,
+    ethnicity,
+    groups: groupsFilter,
+    hair,
+    peculiarities,
     sex,
+    warnings,
   } = variables;
   return (
     <Form<FormData>
@@ -100,7 +103,6 @@ const OffenderFilter = ({
       <Row justify="end">
         <Col>
           <Button
-            type="text"
             danger
             onClick={() => {
               clearFilters();
@@ -108,6 +110,7 @@ const OffenderFilter = ({
                 createdAt: [],
               });
             }}
+            type="text"
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
@@ -122,9 +125,9 @@ const OffenderFilter = ({
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            value={order}
             onChange={setOrder}
             size="small"
+            value={order}
           >
             <Select.Option value={OffenderSort.updatedAtDesc}>
               {intl.formatMessage({
@@ -175,8 +178,8 @@ const OffenderFilter = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
               }}
             />
@@ -189,15 +192,15 @@ const OffenderFilter = ({
             {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
           <GroupsSelect
+            allowClear
             className={classes.select}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setGroupsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
-            mode="multiple"
             size="small"
-            maxTagCount={2}
-            allowClear
-            onChange={setGroupsFilter}
             value={groupsFilter}
           />
         </Col>
@@ -208,20 +211,20 @@ const OffenderFilter = ({
             })}
           </Typography.Paragraph>
           <Select
+            allowClear
             className={classes.select}
+            loading={tagsLoading}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setWarnings}
             placeholder={intl.formatMessage({
               defaultMessage: 'Offender Warnings',
             })}
-            mode="multiple"
             size="small"
-            allowClear
-            maxTagCount={2}
-            onChange={setWarnings}
             value={warnings}
-            loading={tagsLoading}
           >
             {tags.map((tag) => (
-              <Select.Option value={tag.value} key={tag.value}>
+              <Select.Option key={tag.value} value={tag.value}>
                 {tag.label}
               </Select.Option>
             ))}
@@ -237,14 +240,14 @@ const OffenderFilter = ({
             {intl.formatMessage({ defaultMessage: 'Ethnicity' })}
           </Typography.Paragraph>
           <Select
+            allowClear
+            className={classes.select}
+            mode="multiple"
+            onChange={setEthnicity}
             placeholder={intl.formatMessage({
               defaultMessage: 'Ethnicity',
             })}
-            className={classes.select}
-            mode="multiple"
-            allowClear
             value={ethnicity}
-            onChange={setEthnicity}
           >
             <Select.Option value={Race.Ic1}>
               {intl.formatMessage({
@@ -286,14 +289,14 @@ const OffenderFilter = ({
             {intl.formatMessage({ defaultMessage: 'Build' })}
           </Typography.Paragraph>
           <Select
-            mode="multiple"
             allowClear
+            className={classes.select}
+            mode="multiple"
+            onChange={setBuild}
             placeholder={intl.formatMessage({
               defaultMessage: 'Build',
             })}
-            className={classes.select}
             value={build}
-            onChange={setBuild}
           >
             <Select.Option value={Build.Small}>
               {intl.formatMessage({ defaultMessage: 'Small' })}
@@ -317,14 +320,14 @@ const OffenderFilter = ({
               {intl.formatMessage({ defaultMessage: 'Age' })}
             </Typography.Paragraph>
             <Select
-              mode="multiple"
               allowClear
+              className={classes.select}
+              mode="multiple"
+              onChange={setAge}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Age',
               })}
-              className={classes.select}
               value={age}
-              onChange={setAge}
             >
               <Select.Option value={Age.UnderEighteen}>
                 {intl.formatMessage({
@@ -379,14 +382,14 @@ const OffenderFilter = ({
             {intl.formatMessage({ defaultMessage: 'Sex' })}
           </Typography.Paragraph>
           <Select
-            mode="multiple"
             allowClear
+            className={classes.select}
+            mode="multiple"
+            onChange={setSex}
             placeholder={intl.formatMessage({
               defaultMessage: 'Sex',
             })}
-            className={classes.select}
             value={sex}
-            onChange={setSex}
           >
             <Select.Option value={Gender.Female}>
               {intl.formatMessage({ defaultMessage: 'Female' })}
@@ -406,9 +409,9 @@ const OffenderFilter = ({
             {intl.formatMessage({ defaultMessage: 'Hair' })}
           </Typography.Paragraph>
           <Input.TextArea
-            value={hair}
-            onChange={(e) => setHair(e.target.value)}
             className={classes.select}
+            onChange={(e) => setHair(e.target.value)}
+            value={hair}
           />
         </Col>
         <Col span={12}>
@@ -418,9 +421,9 @@ const OffenderFilter = ({
             })}
           </Typography.Paragraph>
           <Input.TextArea
-            value={peculiarities}
-            onChange={(e) => setPeculiarities(e.target.value)}
             className={classes.select}
+            onChange={(e) => setPeculiarities(e.target.value)}
+            value={peculiarities}
           />
         </Col>
       </Row>
@@ -435,28 +438,28 @@ const OffenderFilter = ({
             })}
           </Typography.Paragraph>
           <Select
-            mode="multiple"
             allowClear
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Businesses',
-            })}
             className={classes.select}
-            value={businesses}
-            onChange={setBusinesses}
             loading={businessesLoading}
+            mode="multiple"
+            onChange={setBusinesses}
             optionLabelProp="textLabel"
             options={businessData?.listBusinesses.businesses.map((item) => ({
-              textLabel: item.name,
               label: (
-                <div style={{ display: 'inline-block' }} key={item.id}>
+                <div key={item.id} style={{ display: 'inline-block' }}>
                   <Typography.Text>{item.name}</Typography.Text>
                   <div>
                     <Typography.Text>{item.locations[0]?.full}</Typography.Text>
                   </div>
                 </div>
               ),
+              textLabel: item.name,
               value: item.id,
             }))}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Businesses',
+            })}
+            value={businesses}
           />
         </Col>
       </Row>

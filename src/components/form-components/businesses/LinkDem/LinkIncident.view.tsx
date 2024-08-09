@@ -1,25 +1,25 @@
-import React from 'react';
+import type { ListDemCompaniesQuery } from 'graphql/dem/queries/__generated__/list-companies.generated';
 
 import { Button, Col, Row, Table } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListDemCompaniesQuery } from 'graphql/dem/queries/list-companies.generated';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: () => void;
-  saving: boolean;
   data: ListDemCompaniesQuery | undefined;
   loading: boolean;
+  onClose: () => void;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
 }
 
 const LinkDemCompany = ({
-  onClose,
-  onSubmit,
-  saving,
   data,
   loading,
+  onClose,
   onSelect,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -28,40 +28,40 @@ const LinkDemCompany = ({
       <Table
         columns={[
           {
-            title: intl.formatMessage({ defaultMessage: 'Name' }),
             dataIndex: 'name',
             key: 'name',
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
           },
         ]}
         dataSource={data?.listDemCompanies?.demCompanies?.map((company) => ({
-          name: company.name || '',
           id: company.id || '',
           key: company.id || '',
+          name: company.name || '',
         }))}
-        rowSelection={{
-          type: 'radio',
-          onSelect,
-        }}
+        loading={loading}
         pagination={{
           hideOnSinglePage: true,
-          total: data?.listDemCompanies?.total,
           pageSize: 24,
-          showSizeChanger: false,
           position: ['bottomCenter'],
+          showSizeChanger: false,
+          total: data?.listDemCompanies?.total,
         }}
-        loading={loading}
+        rowSelection={{
+          onSelect,
+          type: 'radio',
+        }}
         size="small"
       />
-      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+      <Row gutter={16} justify="end" style={{ paddingBottom: 30 }}>
         <Col>
-          <Button onClick={onClose} disabled={saving} type="text">
+          <Button disabled={saving} onClick={onClose} type="text">
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
+            loading={saving}
             onClick={onSubmit}
             type="primary"
           >

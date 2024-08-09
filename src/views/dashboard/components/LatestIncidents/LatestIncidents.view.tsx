@@ -1,34 +1,35 @@
-import React from 'react';
-import { Card, Col, Divider, Row, Skeleton, Typography } from 'antd';
+import type { LatestIncidentsQuery } from '#/views/dashboard/graphql/queries/__generated__/latest-incidents.generated';
 
-import { Link } from 'react-router-dom';
-import { useIntl } from 'react-intl';
 import FormatCalendar from '#/utils/format-calendar-24h';
 import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
-import useStyles from './LatestIncidents.styles';
-import type { LatestIncidentsQuery } from '#/views/dashboard/graphql/queries/latest-incidents.generated';
+import { Card, Col, Divider, Row, Skeleton, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 
-const { Title, Text } = Typography;
+import useStyles from './LatestIncidents.styles';
+
+const { Text, Title } = Typography;
 
 interface Props {
   data: LatestIncidentsQuery | undefined;
-  loading: boolean;
   fetchMoreScroll: () => void;
+  loading: boolean;
 }
 
 const LatestIncidents = ({
   data,
-  loading,
   fetchMoreScroll,
+  loading,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   return (
     <Col
       style={{
-        height: 'inherit',
         display: 'flex',
         flexDirection: 'column',
+        height: 'inherit',
         overflow: 'hidden',
       }}
     >
@@ -41,8 +42,8 @@ const LatestIncidents = ({
         <Row
           align="middle"
           gutter={8}
-          wrap={false}
           style={{ margin: '10px 0 10px 5px' }}
+          wrap={false}
         >
           <Col style={{ minWidth: 'min-content' }}>
             <Title className={classes.title} style={{ fontSize: 16 }}>
@@ -56,9 +57,9 @@ const LatestIncidents = ({
       </Card>
       {loading ? (
         <Row
-          gutter={[8, 8]}
           align="stretch"
-          style={{ padding: 10, alignItems: 'stretch' }}
+          gutter={[8, 8]}
+          style={{ alignItems: 'stretch', padding: 10 }}
         >
           {Array.from({ length: 5 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -68,11 +69,11 @@ const LatestIncidents = ({
       ) : (
         <DashboardInfiniteScroll
           dataLength={data?.latestIncidents?.edges?.length ?? 0}
-          next={() => fetchMoreScroll()}
           hasMore={!!data?.latestIncidents.pageInfo.hasNextPage}
           id="scroll-incidents"
+          next={() => fetchMoreScroll()}
         >
-          <Row wrap={false} className={classes.header}>
+          <Row className={classes.header} wrap={false}>
             <Col flex={1}>
               {intl.formatMessage({
                 defaultMessage: 'Description',
@@ -88,12 +89,12 @@ const LatestIncidents = ({
           <div>
             {data?.latestIncidents?.edges?.map(({ node: incident }) => (
               <>
-                <Row wrap={false} className={classes.contentRow}>
+                <Row className={classes.contentRow} wrap={false}>
                   <Col flex={1}>
                     <Text style={{ fontSize: 14 }}>
                       <Link
-                        to={`/app/incidents/view/${incident.id}`}
                         key={incident.id}
+                        to={`/app/incidents/view/${incident.id}`}
                       >
                         {incident.description.slice(0, 63)}
                         {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}

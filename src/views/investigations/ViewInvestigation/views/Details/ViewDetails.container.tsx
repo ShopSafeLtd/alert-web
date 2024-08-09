@@ -1,147 +1,148 @@
-import React from 'react';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import type {
   CrimeGroupCardData,
   OffenderData,
   VehicleData,
 } from 'types/DataType';
+
+import React from 'react';
+
 import View from './ViewDetails.view';
 import useViewDetails from './useViewDetails';
 
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
-
 interface Props {
+  data: ViewInvestigationQuery | undefined;
   investigationId: string;
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
-  setEditOffenderData: (value: OffenderData | null) => void;
+  loading: boolean;
+  onDeleteCrimeGroup: (id: string) => void;
+  onDeleteIncident: (id: string) => void;
   onDeleteOffender: (id: string) => void;
-  toggleAddVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  setEditVehicleData: (value: VehicleData | null) => void;
   onDeleteVehicle: (id: string) => void;
+  saving: boolean;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  setViewTodoVisible: (value: null | string) => void;
+  templatesLoading: boolean;
   toggleAddCrimeGroup: () => void;
   toggleAddExistingCrimeGroup: () => void;
-  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
-  onDeleteCrimeGroup: (id: string) => void;
   toggleAddExistingIncident: () => void;
-  onDeleteIncident: (id: string) => void;
-  templatesLoading: boolean;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
+  toggleAddOffender: () => void;
   toggleAddTodo: () => void;
-  setViewTodoVisible: (value: string | null) => void;
-  setCompleteTodoVisible: (value: string | null) => void;
-  saving: boolean;
-  data: ViewInvestigationQuery | undefined;
-  loading: boolean;
+  toggleAddVehicle: () => void;
   toggleEditInvestigation: () => void;
 }
 
 const ViewDetails = ({
+  data,
   investigationId,
-  toggleAddOffender,
-  toggleAddExistingOffender,
-  setEditOffenderData,
+  loading,
+  onDeleteCrimeGroup,
+  onDeleteIncident,
   onDeleteOffender,
-  toggleAddVehicle,
-  toggleAddExistingVehicle,
-  setEditVehicleData,
   onDeleteVehicle,
+  saving,
+  setCompleteTodoVisible,
+  setEditCrimeGroupData,
+  setEditOffenderData,
+  setEditVehicleData,
+  setViewTodoVisible,
+  templatesLoading,
   toggleAddCrimeGroup,
   toggleAddExistingCrimeGroup,
-  setEditCrimeGroupData,
-  onDeleteCrimeGroup,
   toggleAddExistingIncident,
-  onDeleteIncident,
-  saving,
-  templatesLoading,
-  setViewTodoVisible,
-  setCompleteTodoVisible,
+  toggleAddExistingOffender,
+  toggleAddExistingVehicle,
+  toggleAddOffender,
   toggleAddTodo,
-  data,
-  loading,
+  toggleAddVehicle,
   toggleEditInvestigation,
 }: Props) => {
   const {
-    scrolledToTop,
-    loadMore,
-    userId,
-    editRights,
-    setEditUpdate,
     confirmDeleteUpdate,
-    replyTo,
-    setReplyTo,
-    handleEditUpdate,
-    setEditUpdateInput,
-    editUpdateInput,
+    editIncidentId,
+    editRights,
     editUpdate,
-    optionRowShow,
-    setOptionRowShow,
-    suggestedData,
-    toggleViewSuggestedOffenders,
-    viewSuggestedOffenders,
+    editUpdateInput,
     handleConnectIncident,
     handleConnectOffender,
     handleConnectVehicle,
-    toggleViewSuggestedIncidents,
-    toggleViewSuggestedVehicles,
-    viewSuggestedIncidents,
-    viewSuggestedVehicles,
-    editIncidentId,
+    handleEditUpdate,
+    loadMore,
+    optionRowShow,
+    replyTo,
+    scrolledToTop,
     setEditIncidentId,
+    setEditUpdate,
+    setEditUpdateInput,
+    setOptionRowShow,
+    setReplyTo,
+    suggestedData,
+    toggleViewSuggestedIncidents,
+    toggleViewSuggestedOffenders,
+    toggleViewSuggestedVehicles,
+    userId,
+    viewSuggestedIncidents,
+    viewSuggestedOffenders,
+    viewSuggestedVehicles,
   } = useViewDetails({
     investigationId,
   });
 
   return (
     <View
-      handleEditUpdate={handleEditUpdate}
       confirmDeleteUpdate={confirmDeleteUpdate}
-      setEditUpdate={setEditUpdate}
-      editRights={editRights}
-      saving={saving}
-      userId={userId}
-      replyTo={replyTo}
-      setReplyTo={setReplyTo}
-      loadMore={loadMore}
-      scrolledToTop={scrolledToTop}
       data={data}
-      loading={loading}
-      investigationId={investigationId}
-      editUpdateInput={editUpdateInput}
-      setEditUpdateInput={setEditUpdateInput}
+      editIncidentId={editIncidentId}
+      editRights={editRights}
       editUpdate={editUpdate}
-      toggleAddOffender={toggleAddOffender}
-      toggleAddExistingOffender={toggleAddExistingOffender}
-      setEditOffenderData={setEditOffenderData}
-      onDeleteOffender={onDeleteOffender}
-      toggleAddVehicle={toggleAddVehicle}
-      toggleAddExistingVehicle={toggleAddExistingVehicle}
-      setEditVehicleData={setEditVehicleData}
-      onDeleteVehicle={onDeleteVehicle}
-      toggleAddCrimeGroup={toggleAddCrimeGroup}
-      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-      setEditCrimeGroupData={setEditCrimeGroupData}
-      onDeleteCrimeGroup={onDeleteCrimeGroup}
-      toggleAddExistingIncident={toggleAddExistingIncident}
-      onDeleteIncident={onDeleteIncident}
-      optionRowShow={optionRowShow}
-      setOptionRowShow={setOptionRowShow}
-      suggestedData={suggestedData}
-      toggleViewSuggestedOffenders={toggleViewSuggestedOffenders}
-      viewSuggestedOffenders={viewSuggestedOffenders}
+      editUpdateInput={editUpdateInput}
       handleConnectIncident={handleConnectIncident}
       handleConnectOffender={handleConnectOffender}
       handleConnectVehicle={handleConnectVehicle}
-      toggleViewSuggestedIncidents={toggleViewSuggestedIncidents}
-      toggleViewSuggestedVehicles={toggleViewSuggestedVehicles}
-      viewSuggestedIncidents={viewSuggestedIncidents}
-      viewSuggestedVehicles={viewSuggestedVehicles}
-      templatesLoading={templatesLoading}
-      setViewTodoVisible={setViewTodoVisible}
+      handleEditUpdate={handleEditUpdate}
+      investigationId={investigationId}
+      loadMore={loadMore}
+      loading={loading}
+      onDeleteCrimeGroup={onDeleteCrimeGroup}
+      onDeleteIncident={onDeleteIncident}
+      onDeleteOffender={onDeleteOffender}
+      onDeleteVehicle={onDeleteVehicle}
+      optionRowShow={optionRowShow}
+      replyTo={replyTo}
+      saving={saving}
+      scrolledToTop={scrolledToTop}
       setCompleteTodoVisible={setCompleteTodoVisible}
-      toggleAddTodo={toggleAddTodo}
-      editIncidentId={editIncidentId}
+      setEditCrimeGroupData={setEditCrimeGroupData}
       setEditIncidentId={setEditIncidentId}
+      setEditOffenderData={setEditOffenderData}
+      setEditUpdate={setEditUpdate}
+      setEditUpdateInput={setEditUpdateInput}
+      setEditVehicleData={setEditVehicleData}
+      setOptionRowShow={setOptionRowShow}
+      setReplyTo={setReplyTo}
+      setViewTodoVisible={setViewTodoVisible}
+      suggestedData={suggestedData}
+      templatesLoading={templatesLoading}
+      toggleAddCrimeGroup={toggleAddCrimeGroup}
+      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+      toggleAddExistingIncident={toggleAddExistingIncident}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      toggleAddOffender={toggleAddOffender}
+      toggleAddTodo={toggleAddTodo}
+      toggleAddVehicle={toggleAddVehicle}
       toggleEditInvestigation={toggleEditInvestigation}
+      toggleViewSuggestedIncidents={toggleViewSuggestedIncidents}
+      toggleViewSuggestedOffenders={toggleViewSuggestedOffenders}
+      toggleViewSuggestedVehicles={toggleViewSuggestedVehicles}
+      userId={userId}
+      viewSuggestedIncidents={viewSuggestedIncidents}
+      viewSuggestedOffenders={viewSuggestedOffenders}
+      viewSuggestedVehicles={viewSuggestedVehicles}
     />
   );
 };

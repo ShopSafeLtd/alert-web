@@ -1,5 +1,8 @@
-import React from 'react';
-import { SortOrder } from 'graphql/types';
+import type { ListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/__generated__/list-vehicles-card.generated';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { VehicleFilters } from 'state/data-model';
+import type { DateType, VehicleData } from 'types/DataType';
+
 import {
   Button,
   Col,
@@ -11,21 +14,19 @@ import {
   Select,
   Typography,
 } from 'antd';
+import CardSkeleton from 'components/Skeleton/CardSkeleton.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { SortOrder } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-import Lightbox from 'yet-another-react-lightbox';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { useIntl } from 'react-intl';
-import type { DateType, VehicleData } from 'types/DataType';
-import type { VehicleFilters } from 'state/data-model';
-import moment from 'moment';
-import CardSkeleton from 'components/Skeleton/CardSkeleton.view';
+import InfiniteSelectScrollList from '../select-list/InfiniteSelectList';
 import useStyles from './LinkVehicle.styles';
 import VehicleTile from './VehicleTile';
-import InfiniteSelectScrollList from '../select-list/InfiniteSelectList';
-import type { ListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/list-vehicles-card.generated';
 
 const { Paragraph, Text } = Typography;
 // interface ItemProps {
@@ -48,55 +49,55 @@ const { Paragraph, Text } = Typography;
 //     </Col>
 //   ));
 interface Props {
-  onSubmit: () => void;
+  clearFilters: () => void;
   data:
-    | Exclude<ListVehiclesCardQuery['listVehicles'], undefined | null>
+    | Exclude<ListVehiclesCardQuery['listVehicles'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  selectedVehicle: VehicleData | undefined;
-  setSelectedVehicle: (value: VehicleData | undefined) => void;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  filterVariables: VehicleFilters;
-  setOrder: (value: SortOrder) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  clearFilters: () => void;
   fetchMoreScroll: () => void;
+  filterVariables: VehicleFilters;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
+  loading: boolean;
+  onSubmit: () => void;
+  openLightbox: (index: number) => void;
+  selectedVehicle: VehicleData | undefined;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setSearch: (value: string) => void;
+  setSelectedVehicle: (value: VehicleData | undefined) => void;
 }
 
 const LinkVehicle = ({
-  onSubmit,
+  clearFilters,
   data,
-  loading,
-  setSearch,
-  selectedVehicle,
-  setSelectedVehicle,
-  openLightbox,
-  lightBoxOpen,
+  fetchMoreScroll,
   filterVariables,
-  setOrder,
-  setGroupsFilter,
-  setCreatedAtFilter,
   groups,
   groupsLoading,
-  clearFilters,
-  fetchMoreScroll,
+  lightBoxOpen,
+  loading,
+  onSubmit,
+  openLightbox,
+  selectedVehicle,
+  setCreatedAtFilter,
+  setGroupsFilter,
+  setOrder,
+  setSearch,
+  setSelectedVehicle,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   const {
-    search,
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    groups: groupsFilter,
     order,
+    search,
   } = filterVariables;
   const isLoading = loading && !data?.total;
   const vehicleItems = data?.vehicles?.map((vehicle) => (
@@ -105,8 +106,8 @@ const LinkVehicle = ({
       span={vehicle.images && vehicle.images.length > 0 ? 16 : 8}
     >
       <VehicleTile
-        vehicle={vehicle}
         onClick={() => setSelectedVehicle(vehicle)}
+        vehicle={vehicle}
       />
     </Col>
   ));
@@ -156,30 +157,30 @@ const LinkVehicle = ({
   return (
     <div style={{ overflow: 'hidden' }}>
       <Row wrap={false}>
-        <Col span={18} className={classes.list}>
+        <Col className={classes.list} span={18}>
           <Input
-            value={search}
+            allowClear
             className={classes.searchBar}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Vehicles...',
             })}
-            allowClear
+            value={search}
           />
           <InfiniteSelectScrollList
             dataLength={data?.vehicles?.length}
-            next={fetchMoreScroll}
             hasMore={(data?.vehicles?.length || 0) < (data?.total || 0)}
             isLoading={isLoading}
             items={vehicleItems}
+            // )}
+            loadingItems={<CardSkeleton />}
             // ???
             // items={() => (
             //   <VehiclesItems
             //     data={data || []}
             //     setSelectedVehicle={setSelectedVehicle}
             //   />
-            // )}
-            loadingItems={<CardSkeleton />}
+            next={fetchMoreScroll}
           />
           {/* <div className="add-existing-offender-row">{existingVehicles()}</div> */}
         </Col>
@@ -194,11 +195,11 @@ const LinkVehicle = ({
               })}
             </Text>
             <Select
-              className={classes.filterSelect}
-              size="small"
               allowClear
-              value={order}
+              className={classes.filterSelect}
               onChange={setOrder}
+              size="small"
+              value={order}
             >
               <Select.Option value={SortOrder.Desc}>
                 {intl.formatMessage({
@@ -219,16 +220,16 @@ const LinkVehicle = ({
               })}
             </Text>
             <Select
+              allowClear
+              className={classes.filterSelect}
+              loading={groupsLoading}
+              maxTagCount={2}
+              mode="multiple"
+              onChange={setGroupsFilter}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Groups',
               })}
-              mode="multiple"
-              className={classes.filterSelect}
               size="small"
-              maxTagCount={2}
-              allowClear
-              loading={groupsLoading}
-              onChange={setGroupsFilter}
               value={groupsFilter}
             >
               {groups.map((group) => (
@@ -255,14 +256,14 @@ const LinkVehicle = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
               }}
             />
           </div>
 
-          <Row justify="end" className={classes.clearRow}>
+          <Row className={classes.clearRow} justify="end">
             <Col>
               <Button onClick={clearFilters}>
                 {intl.formatMessage({
@@ -275,31 +276,31 @@ const LinkVehicle = ({
       </Row>
 
       <Modal
-        open={!!selectedVehicle}
-        zIndex={1010}
+        bodyStyle={{ padding: 0 }}
         okText={intl.formatMessage({
           defaultMessage: 'Add Vehicle',
         })}
-        onOk={onSubmit}
         onCancel={() => setSelectedVehicle(undefined)}
-        bodyStyle={{ padding: 0 }}
+        onOk={onSubmit}
+        open={!!selectedVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Add this vehicle?',
         })}
+        zIndex={1010}
       >
         <Row wrap={false}>
           {selectedVehicle?.images && selectedVehicle.images.length > 0 && (
             <Col>
               <div
                 style={{
-                  width: 250,
                   height: 250,
+                  width: 250,
                 }}
               >
                 <WatermarkImage
-                  url={selectedVehicle?.images[0]?.optimised}
                   position={selectedVehicle?.images[0]?.position}
                   rotation={selectedVehicle?.images[0]?.rotation}
+                  url={selectedVehicle?.images[0]?.optimised}
                 />
               </div>
             </Col>
@@ -352,22 +353,22 @@ const LinkVehicle = ({
       </Modal>
 
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox(0)}
-        plugins={[Zoom]}
         controller={{
           closeOnBackdropClick: true,
+        }}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
         }}
         slides={
           selectedVehicle?.images?.map((image) => ({
             src: image.optimised || '',
           })) || []
         }
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
       />
     </div>
   );

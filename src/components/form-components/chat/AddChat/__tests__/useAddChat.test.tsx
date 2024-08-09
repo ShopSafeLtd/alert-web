@@ -7,9 +7,9 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { storeModel } from 'state';
 import useAddChat from '../useAddChat';
-import { CreateChatDocument } from 'graphql/chats/mutations/create-chat.generated';
+import { ListSchemeUsersDocument } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 import { SortOrder } from 'graphql/types';
-import { ListSchemeUsersDocument } from 'graphql/users/queries/list-scheme-users.generated';
+import { CreateChatDocument } from 'graphql/chats/mutations/__generated__/create-chat.generated';
 
 const mocks = [
   {

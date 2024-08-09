@@ -1,6 +1,14 @@
-import React from 'react';
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { ArticleFilters } from 'state/data-model';
+import type { ArticleData, DateType } from 'types/DataType';
 
-import { SortOrder, ArticlePriority } from 'graphql/types';
+import {
+  faClock,
+  faExclamationCircle,
+  faUser,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -12,84 +20,77 @@ import {
   Select,
   Typography,
 } from 'antd';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import Lightbox from 'yet-another-react-lightbox';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { useIntl } from 'react-intl';
-import type { DateType, ArticleData } from 'types/DataType';
-import type { ArticleFilters } from 'state/data-model';
-import moment from 'moment';
 import CardSkeleton from 'components/Skeleton/CardSkeleton.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { ArticlePriority, SortOrder } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faClock,
-  faExclamationCircle,
-  faUser,
-} from '@fortawesome/pro-light-svg-icons';
 import FormatCalendar from 'utils/format-calendar-24h';
-import useStyles from './LinkArticle.styles';
-import ArticleTile from './ArticleTile';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+
 import InfiniteSelectScrollList from '../select-list/InfiniteSelectList';
-import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
+import ArticleTile from './ArticleTile';
+import useStyles from './LinkArticle.styles';
 
 const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  onSubmit: () => void;
+  clearFilters: () => void;
   data:
-    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], undefined | null>
+    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  selectedArticle: ArticleData | undefined;
-  setSelectedArticle: (value: ArticleData | undefined) => void;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  filterVariables: ArticleFilters;
-  setOrder: (value: SortOrder) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  clearFilters: () => void;
   fetchMoreScroll: () => void;
+  filterVariables: ArticleFilters;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
+  loading: boolean;
+  onSubmit: () => void;
+  openLightbox: (index: number) => void;
+  selectedArticle: ArticleData | undefined;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setPriorityFilter: (value: ArticlePriority[]) => void;
+  setSearch: (value: string) => void;
+  setSelectedArticle: (value: ArticleData | undefined) => void;
 }
 
 const LinkArticle = ({
-  onSubmit,
+  clearFilters,
   data,
-  loading,
-  setSearch,
-  selectedArticle,
-  setSelectedArticle,
-  openLightbox,
-  lightBoxOpen,
+  fetchMoreScroll,
   filterVariables,
-  setOrder,
-  setGroupsFilter,
-  setCreatedAtFilter,
-  setPriorityFilter,
   groups,
   groupsLoading,
-  clearFilters,
-  fetchMoreScroll,
+  lightBoxOpen,
+  loading,
+  onSubmit,
+  openLightbox,
+  selectedArticle,
+  setCreatedAtFilter,
+  setGroupsFilter,
+  setOrder,
+  setPriorityFilter,
+  setSearch,
+  setSelectedArticle,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   const {
-    search,
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    groups: groupsFilter,
     order,
     priorities: priorityFilter,
+    search,
   } = filterVariables;
   // const isLoading = loading && !data?.total;
   const articleItems = data?.edges.map((t) => (
@@ -107,23 +108,23 @@ const LinkArticle = ({
   return (
     <div style={{ overflow: 'hidden' }}>
       <Row wrap={false}>
-        <Col span={18} className={classes.list}>
+        <Col className={classes.list} span={18}>
           <Input
-            value={search}
+            allowClear
             className={classes.searchBar}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Articles...',
             })}
-            allowClear
+            value={search}
           />
           <InfiniteSelectScrollList
             dataLength={data?.edges?.length}
-            next={fetchMoreScroll}
             hasMore={data?.pageInfo.hasNextPage}
             isLoading={loading}
             items={articleItems}
             loadingItems={<CardSkeleton />}
+            next={fetchMoreScroll}
           />
         </Col>
         <Col className={classes.filters} span={6}>
@@ -137,11 +138,11 @@ const LinkArticle = ({
               })}
             </Text>
             <Select
-              className={classes.filterSelect}
-              size="small"
               allowClear
-              value={order}
+              className={classes.filterSelect}
               onChange={setOrder}
+              size="small"
+              value={order}
             >
               <Select.Option value={SortOrder.Desc}>
                 {intl.formatMessage({
@@ -162,16 +163,16 @@ const LinkArticle = ({
               })}
             </Text>
             <Select
+              allowClear
+              className={classes.filterSelect}
+              loading={groupsLoading}
+              maxTagCount={2}
+              mode="multiple"
+              onChange={setGroupsFilter}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Groups',
               })}
-              mode="multiple"
-              className={classes.filterSelect}
               size="small"
-              maxTagCount={2}
-              allowClear
-              loading={groupsLoading}
-              onChange={setGroupsFilter}
               value={groupsFilter}
             >
               {groups.map((group) => (
@@ -188,16 +189,16 @@ const LinkArticle = ({
               })}
             </Text>
             <Select
+              allowClear
+              className={classes.filterSelect}
+              loading={groupsLoading}
+              maxTagCount={2}
+              mode="multiple"
+              onChange={setPriorityFilter}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select Priority',
               })}
-              mode="multiple"
-              className={classes.filterSelect}
               size="small"
-              maxTagCount={2}
-              allowClear
-              loading={groupsLoading}
-              onChange={setPriorityFilter}
               value={priorityFilter}
             >
               <Select.Option value={ArticlePriority.High}>
@@ -230,14 +231,14 @@ const LinkArticle = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
               }}
             />
           </div>
 
-          <Row justify="end" className={classes.clearRow}>
+          <Row className={classes.clearRow} justify="end">
             <Col>
               <Button onClick={clearFilters}>
                 {intl.formatMessage({
@@ -250,50 +251,50 @@ const LinkArticle = ({
       </Row>
 
       <Modal
-        open={!!selectedArticle}
-        zIndex={1010}
+        bodyStyle={{ padding: 0 }}
         okText={intl.formatMessage({
           defaultMessage: 'Add Article',
         })}
-        onOk={onSubmit}
         onCancel={() => setSelectedArticle(undefined)}
-        bodyStyle={{ padding: 0 }}
+        onOk={onSubmit}
+        open={!!selectedArticle}
         title={intl.formatMessage({
           defaultMessage: 'Add this article?',
         })}
+        zIndex={1010}
       >
         <Row gutter={16} wrap={false}>
           {selectedArticle?.images && selectedArticle?.images.length > 0 && (
             <Col>
               <div
                 style={{
-                  width: 250,
                   height: 250,
+                  width: 250,
                 }}
               >
                 <WatermarkImage
-                  url={selectedArticle?.images[0]?.optimised}
                   position={selectedArticle?.images[0]?.position}
                   rotation={selectedArticle?.images[0]?.rotation}
+                  url={selectedArticle?.images[0]?.optimised}
                 />
               </div>
             </Col>
           )}
           <Col style={{ padding: '10px 10px 15px' }}>
             <Title
-              level={4}
               ellipsis={{
                 rows: 2,
                 tooltip: selectedArticle?.title?.replace(/^\S/, (s) =>
                   s.toUpperCase()
                 ),
               }}
+              level={4}
             >
               {selectedArticle?.priority === ArticlePriority.High && (
                 <FontAwesomeIcon
-                  size="sm"
-                  icon={faExclamationCircle}
                   className={classes.descIcon}
+                  icon={faExclamationCircle}
+                  size="sm"
                 />
               )}
               {selectedArticle?.title?.replace(/^\S/, (s) => s.toUpperCase())}
@@ -338,10 +339,10 @@ const LinkArticle = ({
 
             <Link to={`/app/article/view/${selectedArticle?.id || ''}`}>
               <Button
-                type="ghost"
                 danger
                 size="small"
                 style={{ marginTop: 10 }}
+                type="ghost"
               >
                 {intl.formatMessage({
                   defaultMessage: 'View Article',
@@ -353,22 +354,22 @@ const LinkArticle = ({
       </Modal>
 
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox(0)}
-        plugins={[Zoom]}
         controller={{
           closeOnBackdropClick: true,
+        }}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
         }}
         slides={
           selectedArticle?.images?.map((image) => ({
             src: image.optimised || '',
           })) || []
         }
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
       />
     </div>
   );

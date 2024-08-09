@@ -1,14 +1,22 @@
-import { useEffect, useState } from 'react';
-
-import { useStoreState } from 'state';
-import type { FormInstance } from 'antd';
-import { Form, message, Modal, notification, Upload } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { useApolloClient } from '@apollo/client';
-import { useNavigate } from 'react-router';
+import type { FormInstance } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import moment from 'moment';
-import update from 'immutability-helper';
+import type { DeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
+import type {
+  ChatQuery,
+  ChatQueryVariables,
+} from 'graphql/chat/queries/__generated__/chat.generated';
+import type { CreateMessageMutation } from 'graphql/messages/mutations/__generated__/create_message.generated';
+import type { DeleteMessageMutation } from 'graphql/messages/mutations/__generated__/delete_message.generated';
+import type {
+  ChatMessagesQuery,
+  ChatMessagesQueryVariables,
+} from 'graphql/messages/queries/__generated__/chat-messages.generated';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+import type {
+  UserChatsQuery,
+  UserChatsQueryVariables,
+} from 'graphql/userChat/queries/__generated__/user_chats.generated';
 import type {
   ArticleData,
   CrimeGroupData,
@@ -16,39 +24,31 @@ import type {
   SchemeUserData,
   VehicleData,
 } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
-import type { DeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
-import { useDeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
-import type { Age, Build, Gender, Race } from 'graphql/types';
-import { ImagePosition, MessageItemType, Role, SortOrder } from 'graphql/types';
-import type {
-  ChatMessagesQuery,
-  ChatMessagesQueryVariables,
-} from 'graphql/messages/queries/chat-messages.generated';
-import {
-  ChatMessagesDocument,
-  useChatMessagesQuery,
-} from 'graphql/messages/queries/chat-messages.generated';
-import type {
-  ChatQuery,
-  ChatQueryVariables,
-} from 'graphql/chat/queries/chat.generated';
+
+import { useApolloClient } from '@apollo/client';
+import { Form, Modal, Upload, message, notification } from 'antd';
+import { useDeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
 import {
   ChatDocument,
   useChatQuery,
-} from 'graphql/chat/queries/chat.generated';
-import { MessagesSubscriptionDocument } from 'graphql/messages/subscriptions/new_message.generated';
-import type {
-  UserChatsQuery,
-  UserChatsQueryVariables,
-} from 'graphql/userChat/queries/user_chats.generated';
-import { UserChatsDocument } from 'graphql/userChat/queries/user_chats.generated';
-import type { CreateMessageMutation } from 'graphql/messages/mutations/create_message.generated';
-import { useCreateMessageMutation } from 'graphql/messages/mutations/create_message.generated';
-import type { DeleteMessageMutation } from 'graphql/messages/mutations/delete_message.generated';
-import { useDeleteMessageMutation } from 'graphql/messages/mutations/delete_message.generated';
+} from 'graphql/chat/queries/__generated__/chat.generated';
+import { useCreateMessageMutation } from 'graphql/messages/mutations/__generated__/create_message.generated';
+import { useDeleteMessageMutation } from 'graphql/messages/mutations/__generated__/delete_message.generated';
+import {
+  ChatMessagesDocument,
+  useChatMessagesQuery,
+} from 'graphql/messages/queries/__generated__/chat-messages.generated';
+import { MessagesSubscriptionDocument } from 'graphql/messages/subscriptions/__generated__/new_message.generated';
+import { ImagePosition, MessageItemType, Role, SortOrder } from 'graphql/types';
+import { UserChatsDocument } from 'graphql/userChat/queries/__generated__/user_chats.generated';
+import update from 'immutability-helper';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -59,103 +59,103 @@ interface Props {
 }
 
 export interface OffenderData {
-  id: string;
-  updatedAt?: Date;
-  name?: string | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
+  approved?: boolean | null;
   build?: Build | null;
   dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
   groups?:
     | {
         id: string;
         name: string;
       }[]
     | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-  }[];
+  hair?: null | string;
+  id: string;
   imageUid?: string[] | undefined;
+  images?: {
+    fileName?: null | string;
+    id: string;
+    new?: boolean;
+    optimised?: null | string;
+    type?: null | string;
+    url?: null | string;
+  }[];
+  name?: null | string;
+  peculiarities?: null | string;
+  race?: Race | null;
+  updatedAt?: Date;
 }
 
 interface Return {
-  onSubmit: () => void;
-  data: ChatMessagesQuery | undefined;
-  loading: boolean;
-  chatData: ChatQuery | undefined;
-  form: FormInstance<FormData>;
-  saving: boolean;
-  scrolledToTop: () => void;
-  userId: string | undefined;
-  messageSent: boolean;
-  deleteMessageConfirm: (value: string) => void;
   adminRights: boolean;
-  deleteChatConfirm: () => void;
-  manageChat: boolean;
-  toggleManageChat: () => void;
-  membersData: SchemeUserData[] | undefined;
-  inputStr: string;
-  setInputStr: (value: string) => void;
-  showPicker: boolean;
-  toggleShowPicker: () => void;
-  imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
-  beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
-  offendersData: OffenderData[];
-  incidentsData: IncidentCardData[];
-  crimeGroupsData: CrimeGroupData[];
-  vehiclesData: VehicleData[];
   articlesData: ArticleData[];
+  beforeUpload: (value: RcFile) => void;
+  chatData: ChatQuery | undefined;
+  crimeGroupsData: CrimeGroupData[];
+  data: ChatMessagesQuery | undefined;
+  deleteChatConfirm: () => void;
+  deleteImageConfirm: (messageId: string, imageId: string) => void;
+  deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
+  deleteMessageConfirm: (value: string) => void;
+  deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
+  fileList: UploadFile[];
+  form: FormInstance<FormData>;
+  imgChange: UploadProps['onChange'];
+  incidentsData: IncidentCardData[];
+  inputStr: string;
+  linkArticle: boolean;
+  linkCrimeGroup: boolean;
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
-  linkCrimeGroup: boolean;
-  linkArticle: boolean;
+  loading: boolean;
+  manageChat: boolean;
+  membersData: SchemeUserData[] | undefined;
+  mentionedUser: { id: string; value: string }[];
+  messageSent: boolean;
+  offendersData: OffenderData[];
+  onPreview: (value: UploadFile) => void;
+  onSubmit: () => void;
+  removeArticle: (value: string | undefined) => void;
+  removeCrimeGroup: (value: string | undefined) => void;
+  removeImage: (uid: string) => void;
+  removeIncident: (value: string | undefined) => void;
+  removeOffender: (value: string | undefined) => void;
+  removeVehicle: (value: string | undefined) => void;
+  restrictIncidentAccess: boolean;
+  saving: boolean;
+  scrolledToTop: () => void;
+  setInputStr: (value: string) => void;
+  setMentionedUser: (value: { id: string; value: string }[]) => void;
+  setMessageSent: (value: boolean) => void;
+  showPicker: boolean;
+  toggleLinkArticle: () => void;
+  toggleLinkCrimeGroup: () => void;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
   toggleLinkVehicle: () => void;
-  toggleLinkCrimeGroup: () => void;
-  toggleLinkArticle: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: IncidentCardData) => void;
-  updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: CrimeGroupData) => void;
-  updateArticleList: (value: ArticleData) => void;
-  removeOffender: (value: string | undefined) => void;
-  removeIncident: (value: string | undefined) => void;
-  removeCrimeGroup: (value: string | undefined) => void;
-  removeVehicle: (value: string | undefined) => void;
-  removeArticle: (value: string | undefined) => void;
-  removeImage: (uid: string) => void;
-  mentionedUser: { id: string; value: string }[];
-  setMentionedUser: (value: { id: string; value: string }[]) => void;
-  deleteImageConfirm: (messageId: string, imageId: string) => void;
-  deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
-  deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
-  setMessageSent: (value: boolean) => void;
+  toggleManageChat: () => void;
+  toggleShowPicker: () => void;
   totalChats: number;
-  restrictIncidentAccess: boolean;
+  updateArticleList: (value: ArticleData) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
+  updateOffendersList: (value: OffenderData) => void;
+  updateVehicleList: (value: VehicleData) => void;
+  userId: string | undefined;
+  vehiclesData: VehicleData[];
 }
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
   const intl = useIntl();
   const {
-    role,
+    businesses: userBusinesses,
     id: userId,
     origName: userOrigName,
-    businesses: userBusinesses,
+    role,
   } = useStoreState((state) => state.user);
   const restrictIncidentAccess =
     useStoreState((state) => state.scheme.restrictIncidentAccess) &&
@@ -197,33 +197,28 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     setLoading(true);
   }, [chatId]);
 
-  const { subscribeToMore, data, fetchMore } = useChatMessagesQuery({
+  const { data, fetchMore, subscribeToMore } = useChatMessagesQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        chat: {
-          id: chatId,
-        },
-      },
-      skip: 0,
-      take: 20,
-    },
-    skip: !chatId,
     onCompleted: () => {
       setLoadMore(false);
       setLoading(false);
       setFetching(false);
       setAfter(after + 20);
     },
+    skip: !chatId,
+    variables: {
+      skip: 0,
+      take: 20,
+      where: {
+        chat: {
+          id: chatId,
+        },
+      },
+    },
   });
 
   const { data: chatData } = useChatQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: chatId,
-      },
-    },
     onCompleted: ({ chat }) => {
       if (chat?.members && chat.members.length > 0) {
         setMembersData(
@@ -231,11 +226,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             chat.members
               .map((userChat) => userChat.user)
               .map((user) => ({
-                fullName: user.origName,
-                oldFullName: user.origName,
-                id: user.id,
                 businesses: user.businesses,
                 firstLetter: user.firstLetter,
+                fullName: user.origName,
+                id: user.id,
+                oldFullName: user.origName,
               }))
           )
           // chat.members
@@ -261,16 +256,17 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         );
       }
     },
+    variables: {
+      where: {
+        id: chatId,
+      },
+    },
   });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const subscribeToNewMessage = () => {
     subscribeToMore({
       document: MessagesSubscriptionDocument,
-      variables: {
-        chat: chatId,
-        user: userId,
-      },
       updateQuery: (prev, { subscriptionData, variables }) => {
         const existingChatListData = apolloStore.readQuery<
           UserChatsQuery,
@@ -278,14 +274,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         >({
           query: UserChatsDocument,
           variables: {
-            where: {
-              id: userId,
-            },
-            scheme: schemeId,
             orderBy: {
               chat: {
                 updatedAt: SortOrder.Desc,
               },
+            },
+            scheme: schemeId,
+            where: {
+              id: userId,
             },
           },
         });
@@ -306,6 +302,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         });
         if (existingChat && existingChat.chat)
           apolloStore.writeQuery<ChatQuery, ChatQueryVariables>({
+            data: {
+              chat: {
+                ...existingChat?.chat,
+                totalMessages: (existingChat?.chat?.totalMessages || 0) + 1,
+              },
+            },
             query: ChatDocument,
             variables: {
               where: {
@@ -313,12 +315,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                 // @ts-ignore
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 id: variables?.where?.chat?.id as string,
-              },
-            },
-            data: {
-              chat: {
-                ...existingChat?.chat,
-                totalMessages: (existingChat?.chat?.totalMessages || 0) + 1,
               },
             },
           });
@@ -333,48 +329,48 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             .indexOf((variables?.where?.chat?.id as string) || chatId);
 
           apolloStore.writeQuery<UserChatsQuery, UserChatsQueryVariables>({
-            query: UserChatsDocument,
             data: {
+              __typename: 'Query',
               user: {
-                id: existingChatListData.user.id,
-                totalChats: existingChatListData.user.totalChats,
                 chats: update(existingChatListData.user.chats, {
                   [chatIndex]: {
                     chat: {
                       messages: {
                         $set: [
                           {
+                            articles: newMessage.articles,
                             content: newMessage.content,
                             createdAt: newMessage?.createdAt,
+                            crimeGroups: newMessage.crimeGroups,
                             from: {
-                              origName: newMessage.from?.fullName || '',
                               id: newMessage.id || '',
+                              origName: newMessage.from?.fullName || '',
                             },
                             id: newMessage.id,
                             images: newMessage.images,
                             incidents: newMessage.incidents,
                             offenders: newMessage.offenders,
                             vehicles: newMessage.vehicles,
-                            crimeGroups: newMessage.crimeGroups,
-                            articles: newMessage.articles,
                           },
                         ],
                       },
                     },
                   },
                 }),
+                id: existingChatListData.user.id,
+                totalChats: existingChatListData.user.totalChats,
               },
-              __typename: 'Query',
             },
+            query: UserChatsDocument,
             variables: {
-              where: {
-                id: userId,
-              },
-              scheme: schemeId,
               orderBy: {
                 chat: {
                   name: SortOrder.Asc,
                 },
+              },
+              scheme: schemeId,
+              where: {
+                id: userId,
               },
             },
           });
@@ -397,17 +393,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
               chatMessages: [
                 {
                   ...subscriptionData.data.chatMessages[0],
+                  articles:
+                    subscriptionData.data.chatMessages[0]?.articles || [],
                   content: subscriptionData.data.chatMessages[0]?.content || '',
+
                   createdAt:
                     subscriptionData.data.chatMessages[0]?.createdAt || '',
-
-                  id: subscriptionData.data.chatMessages[0]?.id || '',
-                  sent: subscriptionData.data.chatMessages[0]?.sent || false,
-                  incidents:
-                    subscriptionData.data.chatMessages[0]?.incidents || [],
-                  offenders:
-                    subscriptionData.data.chatMessages[0]?.offenders || [],
-                  images: subscriptionData.data.chatMessages[0]?.images || [],
                   crimeGroups:
                     subscriptionData.data.chatMessages[0]?.crimeGroups || [],
                   currentUser:
@@ -415,20 +406,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   formattedDateTime:
                     subscriptionData.data.chatMessages[0]?.formattedDateTime ||
                     '',
-                  paddingTop:
-                    subscriptionData.data.chatMessages[0]?.paddingTop || false,
-                  type:
-                    subscriptionData.data.chatMessages[0]?.type || 'MESSAGE',
-                  showUser:
-                    subscriptionData.data.chatMessages[0]?.showUser || false,
-                  vehicles:
-                    subscriptionData.data.chatMessages[0]?.vehicles || [],
-                  articles:
-                    subscriptionData.data.chatMessages[0]?.articles || [],
                   from: {
-                    fullName:
-                      subscriptionData.data.chatMessages[0]?.from?.fullName ||
-                      '',
                     businesses:
                       subscriptionData.data.chatMessages[0]?.from?.businesses ||
                       [],
@@ -436,15 +414,33 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
                         0
                       ) || '',
-                    origName:
+                    fullName:
                       subscriptionData.data.chatMessages[0]?.from?.fullName ||
                       '',
+                    id: subscriptionData.data.chatMessages[0]?.from?.id || '',
                     origFirstLetter:
                       subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
                         0
                       ) || '',
-                    id: subscriptionData.data.chatMessages[0]?.from?.id || '',
+                    origName:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName ||
+                      '',
                   },
+                  id: subscriptionData.data.chatMessages[0]?.id || '',
+                  images: subscriptionData.data.chatMessages[0]?.images || [],
+                  incidents:
+                    subscriptionData.data.chatMessages[0]?.incidents || [],
+                  offenders:
+                    subscriptionData.data.chatMessages[0]?.offenders || [],
+                  paddingTop:
+                    subscriptionData.data.chatMessages[0]?.paddingTop || false,
+                  sent: subscriptionData.data.chatMessages[0]?.sent || false,
+                  showUser:
+                    subscriptionData.data.chatMessages[0]?.showUser || false,
+                  type:
+                    subscriptionData.data.chatMessages[0]?.type || 'MESSAGE',
+                  vehicles:
+                    subscriptionData.data.chatMessages[0]?.vehicles || [],
                 },
                 ...prev.chatMessages,
               ],
@@ -454,6 +450,10 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         return {
           ...prev,
         };
+      },
+      variables: {
+        chat: chatId,
+        user: userId,
       },
     });
   };
@@ -467,8 +467,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       await fetchMore({
         variables: {
           skip:
-            data?.chatMessages?.filter((chat) => chat?.type !== 'DATE')
-              .length || 0,
+            data?.chatMessages?.filter(
+              (chat) => chat?.type !== MessageItemType.Date
+            ).length || 0,
         },
       });
       setLoadMore(false);
@@ -489,24 +490,24 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     >({
       query: ChatMessagesDocument,
       variables: {
+        skip: 0,
+        take: 20,
         where: {
           chat: {
             id: chatId,
           },
         },
-        skip: 0,
-        take: 20,
       },
     });
 
     if (existingData === null || existingData === undefined) return;
 
     store.writeQuery<ChatMessagesQuery, ChatMessagesQueryVariables>({
-      query: ChatMessagesDocument,
       data: {
-        chatMessages: [res.createMessage, ...existingData.chatMessages],
         __typename: 'Query',
+        chatMessages: [res.createMessage, ...existingData.chatMessages],
       },
+      query: ChatMessagesDocument,
       variables: {
         where: {
           chat: {
@@ -523,14 +524,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     >({
       query: UserChatsDocument,
       variables: {
-        where: {
-          id: userId,
-        },
-        scheme: schemeId,
         orderBy: {
           chat: {
             name: SortOrder.Asc,
           },
+        },
+        scheme: schemeId,
+        where: {
+          id: userId,
         },
       },
     });
@@ -545,48 +546,48 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       .indexOf(chatId);
 
     store.writeQuery<UserChatsQuery, UserChatsQueryVariables>({
-      query: UserChatsDocument,
       data: {
+        __typename: 'Query',
         user: {
-          id: existingChatListData.user.id,
-          totalChats: existingChatListData.user.totalChats,
           chats: update(existingChatListData.user.chats, {
             [chatIndex]: {
               chat: {
                 messages: {
                   $set: [
                     {
+                      articles: res.createMessage.articles,
                       content: res.createMessage.content,
                       createdAt: res.createMessage.createdAt,
+                      crimeGroups: res.createMessage.crimeGroups,
                       from: {
-                        origName: res.createMessage.from?.fullName || '',
                         id: res.createMessage.id || '',
+                        origName: res.createMessage.from?.fullName || '',
                       },
                       id: res.createMessage.id,
                       images: res.createMessage.images,
                       incidents: res.createMessage.incidents,
                       offenders: res.createMessage.offenders,
-                      crimeGroups: res.createMessage.crimeGroups,
                       vehicles: res.createMessage.vehicles,
-                      articles: res.createMessage.articles,
                     },
                   ],
                 },
               },
             },
           }),
+          id: existingChatListData.user.id,
+          totalChats: existingChatListData.user.totalChats,
         },
-        __typename: 'Query',
       },
+      query: UserChatsDocument,
       variables: {
-        where: {
-          id: userId,
-        },
-        scheme: schemeId,
         orderBy: {
           chat: {
             name: SortOrder.Asc,
           },
+        },
+        scheme: schemeId,
+        where: {
+          id: userId,
         },
       },
     });
@@ -617,13 +618,13 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     if (existingData === null) return;
 
     store.writeQuery<ChatMessagesQuery, ChatMessagesQueryVariables>({
-      query: ChatMessagesDocument,
       data: {
+        __typename: 'Query',
         chatMessages: existingData.chatMessages.filter(
           (el) => el.id !== res?.deleteMessage?.id
         ),
-        __typename: 'Query',
       },
+      query: ChatMessagesDocument,
       variables: {
         where: {
           chat: {
@@ -638,11 +639,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The task has been deleted!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -666,15 +667,15 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
   const deleteMessageConfirm = (currentId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the task?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
       onOk() {
         openDelete(currentId);
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the task?',
+      }),
     });
   };
 
@@ -683,11 +684,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setSaving(false);
       navigate('/app/chat');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The task has been deleted!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -700,9 +701,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   });
   const deleteChatConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the chat?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
@@ -718,6 +716,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             },
           });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the chat?',
+      }),
     });
   };
   const toggleManageChat = () => {
@@ -825,11 +826,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         {
           ...info.file,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          url: info.file.response[0].url,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           fileName: info.file.response[0].blobName,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           type: info.file.response[0].mimetype,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
@@ -894,30 +895,162 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     } else {
       setSaving(true);
       void sendMessage({
+        optimisticResponse: {
+          __typename: 'Mutation',
+          createMessage: {
+            articles:
+              articlesData && articlesData.length > 0
+                ? articlesData.map((article) => ({
+                    createdBy: {
+                      fullName: article.createdBy?.fullName || '',
+                      id: article.createdBy?.id || '',
+                    },
+                    id: article.id,
+                    images:
+                      article.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                        rotation: 0,
+                      })) || [],
+                    previewText: article.previewText,
+                    priority: article.priority,
+                    title: article.title,
+                    updatedAt: article.updatedAt || new Date(),
+                    watermarkImage: article.watermarkImage || false,
+                  }))
+                : [],
+            content: getText(inputStr, membersData),
+            createdAt: new Date(),
+            crimeGroups:
+              crimeGroupsData && crimeGroupsData.length > 0
+                ? crimeGroupsData.map((crimeGroup) => ({
+                    alias: crimeGroup.alias,
+                    id: crimeGroup.id,
+                    reference: crimeGroup.reference,
+                    totalIncidents: crimeGroup.totalIncidents || 0,
+                    totalOffenders: crimeGroup.totalOffenders || 0,
+                    totalRecoveredValue: crimeGroup.totalRecoveredValue || 0,
+                    totalTheftSuccess: crimeGroup.totalTheftSuccess || 0,
+                    totalValue: crimeGroup.totalValue || 0,
+                  }))
+                : [],
+            currentUser: true,
+            formattedDateTime: moment().format('HH:mm'),
+            from: {
+              businesses: [
+                {
+                  fullName: userBusinesses[0].fullName,
+                  id: userBusinesses[0].id,
+                },
+              ],
+              firstLetter: userOrigName.slice(1)[0],
+              fullName: userOrigName,
+              id: userId,
+              origFirstLetter: userOrigName.slice(1)[0],
+              origName: userOrigName,
+            },
+            id: `${Math.random()}`,
+            images:
+              imageChange && fileList.length > 0
+                ? fileList
+                    .map((item) => ({
+                      id: item.fileName || '',
+                      optimised: item.url || '',
+                      position: ImagePosition.CenterCenter,
+                      rotation: 0,
+                      url: item.url || '',
+                    }))
+                    .filter((obj) => obj.url !== undefined)
+                : [],
+            incidents:
+              incidentsData && incidentsData.length > 0
+                ? incidentsData.map((incident) => ({
+                    dayTime: incident.dayTime || '',
+                    description: incident.description || '',
+                    id: incident.id,
+                    images:
+                      incident.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                        rotation: 0,
+                      })) || [],
+                    reference: incident.reference,
+                    subject: incident.subject ?? '',
+                    totalRecoveredValue: incident.totalRecoveredValue || 0,
+                    totalValue: incident.totalValue || 0,
+                  }))
+                : [],
+            offenders:
+              offendersData && offendersData.length > 0
+                ? offendersData.map((offender) => ({
+                    age: offender.age,
+                    alias: [],
+                    build: offender.build,
+                    dateOfBirth: offender.dateOfBirth,
+                    gender: offender.gender,
+                    id: offender.id,
+                    idVerified: false,
+                    images:
+                      offender.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                        rotation: 0,
+                      })) || [],
+                    knownFor: [],
+                    name: offender.name,
+                    race: offender.race,
+                    targetedGoods: [],
+                    updatedAt: offender.updatedAt || new Date(),
+                  }))
+                : [],
+            paddingTop: true,
+            sent: false,
+            showUser: false,
+            type: MessageItemType.Message,
+            vehicles:
+              vehiclesData && vehiclesData.length > 0
+                ? vehiclesData.map((vehicle) => ({
+                    colour: vehicle.colour,
+                    id: vehicle.id,
+                    images:
+                      vehicle.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                        rotation: 0,
+                      })) || [],
+                    make: vehicle.make,
+                    model: vehicle.model,
+                    reference: vehicle.reference,
+                    registration: vehicle.registration,
+                  }))
+                : [],
+          },
+        },
         variables: {
           data: {
+            articles: {
+              connect:
+                articlesData && articlesData.length > 0
+                  ? articlesData.map(({ id }) => ({ id }))
+                  : undefined,
+            },
             chat: {
               connect: {
                 id: chatId,
               },
             },
-            scheme: {
-              connect: {
-                id: schemeId,
-              },
+            content: getText(inputStr, membersData),
+            crimeGroups: {
+              connect:
+                crimeGroupsData && crimeGroupsData.length > 0
+                  ? crimeGroupsData.map(({ id }) => ({ id }))
+                  : undefined,
             },
             from: {
               connect: {
                 id: userId,
               },
             },
-            mentions: {
-              connect:
-                mentionedUser && mentionedUser.length > 0
-                  ? mentionedUser.map(({ id }) => ({ id }))
-                  : undefined,
-            },
-            content: getText(inputStr, membersData),
             images:
               imageChange && fileList.length > 0
                 ? fileList
@@ -934,11 +1067,22 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   ? incidentsData.map(({ id }) => ({ id }))
                   : undefined,
             },
+            mentions: {
+              connect:
+                mentionedUser && mentionedUser.length > 0
+                  ? mentionedUser.map(({ id }) => ({ id }))
+                  : undefined,
+            },
             offenders: {
               connect:
                 offendersData && offendersData.length > 0
                   ? offendersData.map(({ id }) => ({ id }))
                   : undefined,
+            },
+            scheme: {
+              connect: {
+                id: schemeId,
+              },
             },
             vehicles: {
               connect:
@@ -946,149 +1090,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   ? vehiclesData.map(({ id }) => ({ id }))
                   : undefined,
             },
-            crimeGroups: {
-              connect:
-                crimeGroupsData && crimeGroupsData.length > 0
-                  ? crimeGroupsData.map(({ id }) => ({ id }))
-                  : undefined,
-            },
-            articles: {
-              connect:
-                articlesData && articlesData.length > 0
-                  ? articlesData.map(({ id }) => ({ id }))
-                  : undefined,
-            },
-          },
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createMessage: {
-            content: getText(inputStr, membersData),
-            createdAt: new Date(),
-            id: `${Math.random()}`,
-            images:
-              imageChange && fileList.length > 0
-                ? fileList
-                    .map((item) => ({
-                      id: item.fileName || '',
-                      optimised: item.url || '',
-                      url: item.url || '',
-                      position: ImagePosition.CenterCenter,
-                      rotation: 0,
-                    }))
-                    .filter((obj) => obj.url !== undefined)
-                : [],
-            incidents:
-              incidentsData && incidentsData.length > 0
-                ? incidentsData.map((incident) => ({
-                    id: incident.id,
-                    images:
-                      incident.images?.map((image) => ({
-                        ...image,
-                        position: ImagePosition.CenterCenter,
-                        rotation: 0,
-                      })) || [],
-                    reference: incident.reference,
-                    subject: incident.subject,
-                    description: incident.description || '',
-                    dayTime: incident.dayTime || '',
-                    totalValue: incident.totalValue || 0,
-                    totalRecoveredValue: incident.totalRecoveredValue || 0,
-                  }))
-                : [],
-            offenders:
-              offendersData && offendersData.length > 0
-                ? offendersData.map((offender) => ({
-                    id: offender.id,
-                    images:
-                      offender.images?.map((image) => ({
-                        ...image,
-                        position: ImagePosition.CenterCenter,
-                        rotation: 0,
-                      })) || [],
-                    updatedAt: offender.updatedAt || new Date(),
-                    age: offender.age,
-                    build: offender.build,
-                    dateOfBirth: offender.dateOfBirth,
-                    gender: offender.gender,
-                    name: offender.name,
-                    race: offender.race,
-                    alias: [],
-                    idVerified: false,
-                    knownFor: [],
-                    targetedGoods: [],
-                  }))
-                : [],
-            vehicles:
-              vehiclesData && vehiclesData.length > 0
-                ? vehiclesData.map((vehicle) => ({
-                    id: vehicle.id,
-                    images:
-                      vehicle.images?.map((image) => ({
-                        ...image,
-                        position: ImagePosition.CenterCenter,
-                        rotation: 0,
-                      })) || [],
-                    reference: vehicle.reference,
-                    registration: vehicle.registration,
-                    colour: vehicle.colour,
-                    make: vehicle.make,
-                    model: vehicle.model,
-                  }))
-                : [],
-            crimeGroups:
-              crimeGroupsData && crimeGroupsData.length > 0
-                ? crimeGroupsData.map((crimeGroup) => ({
-                    id: crimeGroup.id,
-                    reference: crimeGroup.reference,
-                    alias: crimeGroup.alias,
-                    totalOffenders: crimeGroup.totalOffenders || 0,
-                    totalIncidents: crimeGroup.totalIncidents || 0,
-                    totalRecoveredValue: crimeGroup.totalRecoveredValue || 0,
-                    totalTheftSuccess: crimeGroup.totalTheftSuccess || 0,
-                    totalValue: crimeGroup.totalValue || 0,
-                  }))
-                : [],
-            articles:
-              articlesData && articlesData.length > 0
-                ? articlesData.map((article) => ({
-                    id: article.id,
-                    images:
-                      article.images?.map((image) => ({
-                        ...image,
-                        position: ImagePosition.CenterCenter,
-                        rotation: 0,
-                      })) || [],
-                    title: article.title,
-                    updatedAt: article.updatedAt || new Date(),
-                    watermarkImage: article.watermarkImage || false,
-                    previewText: article.previewText,
-                    priority: article.priority,
-                    createdBy: {
-                      id: article.createdBy?.id || '',
-                      fullName: article.createdBy?.fullName || '',
-                    },
-                  }))
-                : [],
-            sent: false,
-            type: MessageItemType.Message,
-            currentUser: true,
-            formattedDateTime: moment().format('HH:mm'),
-            from: {
-              origFirstLetter: userOrigName.slice(1)[0],
-              fullName: userOrigName,
-              id: userId,
-              firstLetter: userOrigName.slice(1)[0],
-              origName: userOrigName,
-              businesses: [
-                {
-                  id: userBusinesses[0].id,
-                  fullName: userBusinesses[0].fullName,
-                },
-              ],
-            },
-            paddingTop: true,
-            showUser: false,
           },
         },
       });
@@ -1107,68 +1108,68 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onSubmit,
-    data,
-    loading,
-    chatData,
-    form,
-    saving,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    scrolledToTop,
-    userId,
-    deleteMessageConfirm,
     adminRights: role !== Role.User,
-    deleteChatConfirm,
-    manageChat,
-    toggleManageChat,
-    membersData,
-    inputStr,
-    setInputStr,
-    showPicker,
-    toggleShowPicker,
-    imgChange,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onPreview,
+    articlesData,
     beforeUpload,
-    fileList,
-    offendersData,
-    incidentsData,
+    chatData,
     crimeGroupsData,
-    vehiclesData,
+    data,
+    deleteChatConfirm,
+    deleteImageConfirm: () => {},
+    deleteIncidentConfirm: () => {},
+    deleteMessageConfirm,
+    deleteOffenderConfirm: () => {},
+    fileList,
+    form,
+    imgChange,
+    incidentsData,
+    inputStr,
+    linkArticle,
+    linkCrimeGroup,
     linkIncident,
     linkOffender,
     linkVehicle,
-    linkArticle,
+    loading,
+    manageChat,
+    membersData,
+    mentionedUser,
+    messageSent,
+    offendersData,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onPreview,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onSubmit,
+    removeArticle,
 
-    linkCrimeGroup,
+    removeCrimeGroup,
+    removeImage,
+    removeIncident,
+    removeOffender,
+    removeVehicle,
+
+    restrictIncidentAccess,
+    saving,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    scrolledToTop,
+    setInputStr,
+    setMentionedUser,
+    setMessageSent,
+    showPicker,
+    toggleLinkArticle,
+    toggleLinkCrimeGroup,
     toggleLinkIncident,
     toggleLinkOffender,
     toggleLinkVehicle,
-    toggleLinkArticle,
-
-    toggleLinkCrimeGroup,
+    toggleManageChat,
+    toggleShowPicker,
+    totalChats: chatData?.chat?.totalMessages || 0,
+    updateArticleList,
+    updateCrimeGroupList,
     updateIncidentList,
     updateOffendersList,
     updateVehicleList,
-    updateArticleList,
-    updateCrimeGroupList,
-    removeOffender,
-    removeIncident,
-    removeImage,
-    removeCrimeGroup,
-    removeVehicle,
-    removeArticle,
-    mentionedUser,
-    setMentionedUser,
-    deleteImageConfirm: () => {},
-    deleteIncidentConfirm: () => {},
-    deleteOffenderConfirm: () => {},
-    messageSent,
-    setMessageSent,
-    totalChats: chatData?.chat?.totalMessages || 0,
-    restrictIncidentAccess,
-    articlesData,
+    userId,
+    vehiclesData,
   };
 };
 

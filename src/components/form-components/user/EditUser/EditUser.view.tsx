@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React from 'react';
-import { Role } from 'graphql/types';
 import type { FormInstance } from 'antd';
+import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -14,59 +18,57 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import type { BusinessData, SelectOptions } from 'types/DataType';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
+import { Role } from 'graphql/types';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { FormData } from './useEditUser';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import type { UserQuery } from 'graphql/user/queries/user.generated';
 
 const { Title } = Typography;
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  data: UserQuery | undefined;
-  loading: boolean;
-  groupsData: SelectOptions[] | undefined;
-  groupsLoading: boolean;
+  addBusinessVisible: boolean;
+  availableRoles: SelectOptions[];
   chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
-  saving: boolean;
+  data: UserQuery | undefined;
+  form: FormInstance<FormData>;
+  groupsData: SelectOptions[] | undefined;
+  groupsLoading: boolean;
+  loading: boolean;
 
-  selectedRole: string | undefined;
-  setSelectedRole: (value: string) => void;
-  availableRoles: SelectOptions[];
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
   selectedGroups: string[] | undefined;
+  selectedRole: string | undefined;
   setSelectedGroups: (value: string[]) => void;
-  addBusinessVisible: boolean;
+  setSelectedRole: (value: string) => void;
   toggleAddBusinessVisible: () => void;
   updateNewBusinessData: (values: BusinessData) => void;
-  form: FormInstance<FormData>;
 }
 
 const EditUser = ({
-  onSubmit,
-  form,
-  onClose,
-  data,
-  loading,
-  groupsData,
-  groupsLoading,
+  addBusinessVisible,
+  availableRoles,
   chatsData,
   chatsLoading,
-  saving,
+  data,
+  form,
+  groupsData,
+  groupsLoading,
+  loading,
+  onClose,
 
-  selectedRole,
-  setSelectedRole,
+  onSubmit,
+  saving,
   selectedGroups,
+  selectedRole,
   setSelectedGroups,
-  addBusinessVisible,
+  setSelectedRole,
   toggleAddBusinessVisible,
   updateNewBusinessData,
-  availableRoles,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return !data && loading ? (
@@ -75,41 +77,41 @@ const EditUser = ({
     <Form<FormData>
       form={form}
       initialValues={{
-        fullName: data?.user?.fullName,
-        email: data?.user?.email,
+        approverGroups:
+          data?.user?.approverGroups && data.user.approverGroups.length > 0
+            ? data.user.approverGroups.map(({ id }) => id)
+            : [],
+        bulletinEmails: data?.user?.bulletinEmails,
+        bulletinPush: data?.user?.bulletinPush,
         businesses: data?.user?.businesses.map(({ id, name }) => ({
           label: name,
           value: id,
         })),
-        role: data?.user?.schemePermission?.id || '',
-        groups:
-          data?.user?.groups && data.user.groups.length > 0
-            ? data.user.groups.map(({ id }) => id)
-            : [],
-        approverGroups:
-          data?.user?.approverGroups && data.user.approverGroups.length > 0
-            ? data.user.approverGroups.map(({ id }) => id)
+        chats:
+          data?.user?.chats && data.user.chats.length > 0
+            ? data.user.chats.map(({ chat }) => chat.id)
             : [],
         defaultGroups:
           data?.user?.defaultGroups && data.user.defaultGroups.length > 0
             ? data.user.defaultGroups.map(({ id }) => id)
             : [],
-        chats:
-          data?.user?.chats && data.user.chats.length > 0
-            ? data.user.chats.map(({ chat }) => chat.id)
+        email: data?.user?.email,
+        fullName: data?.user?.fullName,
+        groups:
+          data?.user?.groups && data.user.groups.length > 0
+            ? data.user.groups.map(({ id }) => id)
             : [],
-        publicName: data?.user?.publicName,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        reportToAllBusinesses: data?.user?.reportToAllBusinesses || false,
         incidentEmail: data?.user?.incidentEmail,
         incidentPush: data?.user?.incidentPush,
-        bulletinEmails: data?.user?.bulletinEmails,
-        bulletinPush: data?.user?.bulletinPush,
-        subscribedIncidentOnly: data?.user?.subscribedIncidentOnly,
-        subscribedOffenderOnly: data?.user?.subscribedOffenderOnly,
         messagePush: data?.user?.messagePush,
         offenderEmail: data?.user?.offenderEmail,
         offenderPush: data?.user?.offenderPush,
+        publicName: data?.user?.publicName,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        reportToAllBusinesses: data?.user?.reportToAllBusinesses || false,
+        role: data?.user?.schemePermission?.id || '',
+        subscribedIncidentOnly: data?.user?.subscribedIncidentOnly,
+        subscribedOffenderOnly: data?.user?.subscribedOffenderOnly,
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -122,16 +124,16 @@ const EditUser = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="fullName"
             label={intl.formatMessage({
               defaultMessage: 'Full Name',
             })}
+            name="fullName"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the user',
                 }),
+                required: true,
               },
             ]}
           >
@@ -140,17 +142,17 @@ const EditUser = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="email"
             label={intl.formatMessage({
               defaultMessage: 'Email Address',
             })}
+            name="email"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     "'Please enter a email address for the user.'",
                 }),
+                required: true,
               },
             ]}
           >
@@ -161,32 +163,32 @@ const EditUser = ({
 
       <Row gutter={16}>
         <Col flex={1}>
-          <Row gutter={20} align="middle">
+          <Row align="middle" gutter={20}>
             <Col flex={1}>
               <Form.Item
-                name="businesses"
                 label={intl.formatMessage({
                   defaultMessage: 'Business',
                 })}
+                name="businesses"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select a business for the new user.',
                     }),
+                    required: true,
                   },
                 ]}
               >
                 <BusinessesSelect
-                  showSearch
                   allowClear
-                  mode="multiple"
-                  maxTagCount={3}
                   disabled={saving}
+                  maxTagCount={3}
+                  mode="multiple"
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Search for a business...',
                   })}
+                  showSearch
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -195,11 +197,11 @@ const EditUser = ({
             <Col>
               <Button
                 disabled={saving}
-                style={{ color: 'red', padding: 8, marginTop: 3 }}
-                onClick={toggleAddBusinessVisible}
                 icon={
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                 }
+                onClick={toggleAddBusinessVisible}
+                style={{ color: 'red', marginTop: 3, padding: 8 }}
               >
                 {intl.formatMessage({
                   defaultMessage: 'New Business',
@@ -212,20 +214,20 @@ const EditUser = ({
       <Row>
         <Col span={12}>
           <Form.Item
-            name="role"
             label={intl.formatMessage({ defaultMessage: 'Role' })}
+            name="role"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please select a role for the user.',
                 }),
+                required: true,
               },
             ]}
           >
             <Select
-              loading={loading}
               disabled={saving}
+              loading={loading}
               onChange={(value) => setSelectedRole(value)}
               options={availableRoles}
             />
@@ -238,47 +240,47 @@ const EditUser = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
+            name="groups"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please selected at least one group for the user.',
                 }),
+                required: true,
               },
             ]}
           >
             <Select
-              loading={groupsLoading}
               disabled={saving}
-              onChange={(value) => setSelectedGroups(value)}
-              mode="multiple"
+              loading={groupsLoading}
               maxTagCount={2}
-              options={groupsData}
+              mode="multiple"
+              onChange={(value) => setSelectedGroups(value)}
               optionFilterProp="label"
               optionLabelProp="label"
+              options={groupsData}
             />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="chats"
             label={intl.formatMessage({
               defaultMessage: 'Chats Group',
             })}
+            name="chats"
           >
             <Select
-              loading={chatsLoading}
               disabled={saving}
-              mode="multiple"
+              loading={chatsLoading}
               maxTagCount={2}
-              options={chatsData}
+              mode="multiple"
               optionFilterProp="label"
               optionLabelProp="label"
+              options={chatsData}
             />
           </Form.Item>
         </Col>
@@ -289,42 +291,42 @@ const EditUser = ({
           {selectedRole === Role.SchemeAdmin && (
             <Col span={12}>
               <Form.Item
-                name="approverGroups"
                 label={intl.formatMessage({
                   defaultMessage: 'Approver Groups',
                 })}
+                name="approverGroups"
               >
                 <Select
-                  loading={chatsLoading}
                   disabled={saving}
-                  mode="multiple"
+                  loading={chatsLoading}
                   maxTagCount={3}
+                  mode="multiple"
+                  optionFilterProp="label"
+                  optionLabelProp="label"
                   options={groupsData?.filter(({ value }) =>
                     selectedGroups.includes(value)
                   )}
-                  optionFilterProp="label"
-                  optionLabelProp="label"
                 />
               </Form.Item>
             </Col>
           )}
           <Col span={12}>
             <Form.Item
-              name="defaultGroups"
               label={intl.formatMessage({
                 defaultMessage: 'Default Groups',
               })}
+              name="defaultGroups"
             >
               <Select
-                loading={chatsLoading}
                 disabled={saving}
-                mode="multiple"
+                loading={chatsLoading}
                 maxTagCount={3}
+                mode="multiple"
+                optionFilterProp="label"
+                optionLabelProp="label"
                 options={groupsData?.filter(({ value }) =>
                   selectedGroups.includes(value)
                 )}
-                optionFilterProp="label"
-                optionLabelProp="label"
               />
             </Form.Item>
           </Col>
@@ -337,17 +339,17 @@ const EditUser = ({
               defaultMessage: 'Show user name in the system',
             })}
             name="publicName"
-            valuePropName="checked"
             style={{
-              marginBottom: 0,
               flexDirection: 'row',
               justifyItems: 'center',
+              marginBottom: 0,
             }}
+            valuePropName="checked"
           >
             <Switch
+              className="scheme-detail-switch"
               disabled={saving}
               style={{ marginLeft: 10, marginTop: -22 }}
-              className="scheme-detail-switch"
             />
           </Form.Item>
         </Col>
@@ -357,17 +359,17 @@ const EditUser = ({
               defaultMessage: 'Allow user to report to all businesses',
             })}
             name="reportToAllBusinesses"
-            valuePropName="checked"
             style={{
-              marginBottom: 0,
               flexDirection: 'row',
               justifyItems: 'center',
+              marginBottom: 0,
             }}
+            valuePropName="checked"
           >
             <Switch
+              className="scheme-detail-switch"
               disabled={saving}
               style={{ marginLeft: 10, marginTop: -22 }}
-              className="scheme-detail-switch"
             />
           </Form.Item>
         </Col>
@@ -377,7 +379,7 @@ const EditUser = ({
           defaultMessage: 'Notification Settings:',
         })}
       </Title>
-      <Title style={{ marginBottom: 8, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8 }}>
         {intl.formatMessage({
           defaultMessage: 'Incidents:',
         })}
@@ -388,17 +390,17 @@ const EditUser = ({
             'Only notify users for their own and subscribed incidents:',
         })}
         name="subscribedIncidentOnly"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
       <Form.Item
@@ -406,17 +408,17 @@ const EditUser = ({
           defaultMessage: 'Send app notifications for incidents:',
         })}
         name="incidentPush"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
       <Form.Item
@@ -424,80 +426,80 @@ const EditUser = ({
           defaultMessage: 'Send emails for incidents:',
         })}
         name="incidentEmail"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
-      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Offenders:',
         })}
       </Title>
       <Form.Item
-        name="subscribedOffenderOnly"
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed offenders:',
         })}
-        valuePropName="checked"
+        name="subscribedOffenderOnly"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
       <Form.Item
-        name="offenderPush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for offenders:',
         })}
-        valuePropName="checked"
+        name="offenderPush"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
       <Form.Item
-        name="offenderEmail"
         label={intl.formatMessage({
           defaultMessage: 'Send emails for offenders:',
         })}
-        valuePropName="checked"
+        name="offenderEmail"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
-      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Bulletins:',
         })}
@@ -507,17 +509,17 @@ const EditUser = ({
           defaultMessage: 'Send app notifications for bulletins:',
         })}
         name="bulletinPush"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
       <Form.Item
@@ -525,45 +527,45 @@ const EditUser = ({
           defaultMessage: 'Send emails for bulletins:',
         })}
         name="bulletinEmails"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
-      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Chat Messages:',
         })}
       </Title>
       <Form.Item
-        name="messagePush"
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for new chat messages:',
         })}
-        valuePropName="checked"
+        name="messagePush"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -572,9 +574,9 @@ const EditUser = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
@@ -582,8 +584,8 @@ const EditUser = ({
         </Row>
       </Form.Item>
       <Drawer
-        open={addBusinessVisible}
         onClose={toggleAddBusinessVisible}
+        open={addBusinessVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
         })}

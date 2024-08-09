@@ -1,21 +1,21 @@
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
+import type { CreateChatMutation } from '#/graphql/chats/mutations/__generated__/create-chat.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
-import type { SchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
+import type { SchemeChatsQuery } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
+
 import {
   SchemeChatsDocument,
   useSchemeChatsQuery,
-} from 'graphql/chats/queries/scheme-chats.generated';
+} from 'graphql/chats/queries/__generated__/scheme-chats.generated';
 import { QueryMode } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface Return {
+  addChat: boolean;
   data: SchemeChatsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addChat: boolean;
   toggleAddChat: () => void;
   updateChatList: MutationUpdaterFn<CreateChatMutation>;
 }
@@ -29,7 +29,6 @@ const useChatList = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
-        scheme: { id: { equals: schemeId } },
         OR: [
           {
             name: {
@@ -44,6 +43,7 @@ const useChatList = (): Return => {
             },
           },
         ],
+        scheme: { id: { equals: schemeId } },
       },
     },
   });
@@ -63,7 +63,6 @@ const useChatList = (): Return => {
       query: SchemeChatsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
           OR: [
             {
               name: {
@@ -78,6 +77,7 @@ const useChatList = (): Return => {
               },
             },
           ],
+          scheme: { id: { equals: schemeId } },
         },
       },
     });
@@ -86,14 +86,13 @@ const useChatList = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<SchemeChatsQuery>({
-      query: SchemeChatsDocument,
       data: {
-        chats: [...existingData.chats, res.createChat],
         __typename: 'Query',
+        chats: [...existingData.chats, res.createChat],
       },
+      query: SchemeChatsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
           OR: [
             {
               name: {
@@ -108,17 +107,18 @@ const useChatList = (): Return => {
               },
             },
           ],
+          scheme: { id: { equals: schemeId } },
         },
       },
     });
   };
 
   return {
+    addChat,
     data,
     loading,
     search,
     setSearch,
-    addChat,
     toggleAddChat,
     updateChatList,
   };

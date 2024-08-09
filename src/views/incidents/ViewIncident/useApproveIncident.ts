@@ -1,11 +1,10 @@
-import { useState } from 'react';
-
 import { Modal, notification } from 'antd';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
-import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
 
 const { confirm } = Modal;
 
@@ -14,9 +13,9 @@ interface Props {
 }
 
 interface Return {
-  onReject: () => void;
-  onApprove: () => void;
   approving: boolean;
+  onApprove: () => void;
+  onReject: () => void;
 }
 
 const useApproveIncident = ({ incidentId }: Props): Return => {
@@ -28,11 +27,11 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
     onCompleted: () => {
       setApproving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Approved',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The Incident has been approved!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Approved',
         }),
         placement: 'bottomRight',
       });
@@ -49,12 +48,12 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
       setApproving(false);
       navigate('/app/incidents');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Rejected!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been deleted from the feed and moved to the recycle bin.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Rejected!',
         }),
         placement: 'bottomRight',
       });
@@ -66,9 +65,6 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
   });
   const onReject = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -82,6 +78,9 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
           },
         });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
@@ -89,20 +88,20 @@ const useApproveIncident = ({ incidentId }: Props): Return => {
     setApproving(true);
     void updateIncident({
       variables: {
-        where: {
-          id: incidentId,
-        },
         data: {
           approved: { set: true },
+        },
+        where: {
+          id: incidentId,
         },
       },
     });
   };
 
   return {
-    onReject,
-    onApprove,
     approving,
+    onApprove,
+    onReject,
   };
 };
 

@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import type { Theme } from 'configs/ThemeConfig';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { faImages } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -14,61 +20,57 @@ import {
   Select,
   Skeleton,
 } from 'antd';
-import { createUseStyles } from 'react-jss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import { faImages } from '@fortawesome/pro-solid-svg-icons';
-import type { Theme } from 'configs/ThemeConfig';
-
+import { TagType } from 'graphql/types';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+
 import type {
   NewBusiness,
   NewIncident,
   NewOffender,
   NewUser,
 } from '../DiscImport.types';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
-import { TagType } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  cell: {},
-  row: {
-    paddingLeft: 7,
-  },
   bottomRow: {
-    paddingLeft: 7,
-    marginBottom: 10,
     borderBottom: `1px solid ${theme.borderColor}`,
+    marginBottom: 10,
+    paddingLeft: 7,
   },
+  cell: {},
   headerRow: {
+    borderTopLeftRadius: 10,
     marginLeft: '0px !important',
     marginRight: '0px !important',
-    borderTopLeftRadius: 10,
+  },
+  row: {
+    paddingLeft: 7,
   },
 }));
 
 interface NewIncidentRowProps {
-  incident: NewIncident;
   groupsData: SchemeGroupsQuery | undefined;
-  onDelete: (id: string) => void;
-  tagsData: TagsQuery | undefined;
+  incident: NewIncident;
+  newBusinesses: NewBusiness[];
   newOffenders: NewOffender[];
   newUsers: NewUser[];
-  newBusinesses: NewBusiness[];
+  onDelete: (id: string) => void;
   onUpdateIncident: (data: NewIncident) => void;
+  tagsData: TagsQuery | undefined;
 }
 
+// eslint-disable-next-line react/display-name
 const NewOffenderRow = React.memo(
   ({
-    incident,
-    onDelete,
     groupsData,
-    tagsData,
-    newOffenders,
+    incident,
     newBusinesses,
+    newOffenders,
     newUsers,
+    onDelete,
     onUpdateIncident,
+    tagsData,
   }: NewIncidentRowProps) => {
     const [form] = Form.useForm<NewIncident>();
 
@@ -87,28 +89,28 @@ const NewOffenderRow = React.memo(
     };
     const intl = useIntl();
     return (
-      <Form layout="vertical" form={form}>
-        <Row gutter={8} className={classes.row}>
-          <Col className={classes.cell} style={{ width: 160, marginTop: 10 }}>
+      <Form form={form} layout="vertical">
+        <Row className={classes.row} gutter={8}>
+          <Col className={classes.cell} style={{ marginTop: 10, width: 160 }}>
             {incident.images.length > 0 && (
               <div
                 style={{
-                  height: 150,
-                  width: 150,
                   backgroundImage: `url(${incident.images[0]?.url})`,
                   backgroundPosition: 'center',
                   backgroundSize: 'cover',
                   borderRadius: 5,
-                  position: 'relative',
                   cursor: 'pointer',
+                  height: 150,
+                  position: 'relative',
+                  width: 150,
                 }}
               >
                 {incident.images.length > 1 && (
                   <FontAwesomeIcon
-                    icon={faImages}
-                    style={{ position: 'absolute', right: 10, bottom: 10 }}
                     color="#FFF"
+                    icon={faImages}
                     size="lg"
+                    style={{ bottom: 10, position: 'absolute', right: 10 }}
                   />
                 )}
               </div>
@@ -121,113 +123,113 @@ const NewOffenderRow = React.memo(
             <Row gutter={8}>
               <Col>
                 <Row gutter={8}>
-                  <Col span={12} className={classes.cell}>
+                  <Col className={classes.cell} span={12}>
                     <Form.Item
-                      name="date"
                       label={intl.formatMessage({
                         defaultMessage: 'Date',
                       })}
+                      name="date"
                     >
-                      <DatePicker onBlur={onBlur} format="DD/MM/YYYY" />
+                      <DatePicker format="DD/MM/YYYY" onBlur={onBlur} />
                     </Form.Item>
                   </Col>
-                  <Col span={12} className={classes.cell}>
+                  <Col className={classes.cell} span={12}>
                     <Form.Item
-                      name="time"
                       label={intl.formatMessage({
                         defaultMessage: 'Time',
                       })}
+                      name="time"
                     >
-                      <DatePicker onBlur={onBlur} format="HH:mm" />
+                      <DatePicker format="HH:mm" onBlur={onBlur} />
                     </Form.Item>
                   </Col>
                 </Row>
               </Col>
-              <Col span={3} className={classes.cell} style={{ maxWidth: 260 }}>
+              <Col className={classes.cell} span={3} style={{ maxWidth: 260 }}>
                 <Form.Item
-                  name="offenders"
                   label={intl.formatMessage({
                     defaultMessage: 'Offenders',
                   })}
+                  name="offenders"
                 >
                   <Select
-                    options={newOffenders.map((item) => ({
-                      value: item.id,
-                      label: item.name,
-                    }))}
                     disabled
-                    style={{ width: 250 }}
                     mode="multiple"
                     onBlur={onBlur}
+                    options={newOffenders.map((item) => ({
+                      label: item.name,
+                      value: item.id,
+                    }))}
+                    style={{ width: 250 }}
                   />
                 </Form.Item>
               </Col>
-              <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
+              <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
                 <Form.Item
-                  name="createdBy"
                   label={intl.formatMessage({
                     defaultMessage: 'Created by',
                   })}
+                  name="createdBy"
                 >
                   <Select
-                    options={newUsers.map((item) => ({
-                      value: item.id,
-                      label: item.fullName,
-                    }))}
                     onBlur={onBlur}
+                    options={newUsers.map((item) => ({
+                      label: item.fullName,
+                      value: item.id,
+                    }))}
                   />
                 </Form.Item>
               </Col>
-              <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
+              <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
                 <Form.Item
-                  name="business"
                   label={intl.formatMessage({
                     defaultMessage: 'Business',
                   })}
+                  name="business"
                 >
                   <Select
                     allowClear
-                    options={newBusinesses.map((item) => ({
-                      value: item.id,
-                      label: item.name,
-                    }))}
                     onBlur={onBlur}
+                    options={newBusinesses.map((item) => ({
+                      label: item.name,
+                      value: item.id,
+                    }))}
                   />
                 </Form.Item>
               </Col>
-              <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
+              <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
                 <Form.Item
-                  name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Groups',
                   })}
+                  name="groups"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Choose at least one group',
                       }),
+                      required: true,
                     },
                   ]}
                 >
                   <Select
-                    options={groupsData?.groups?.map((item) => ({
-                      value: item.id,
-                      label: item.name,
-                    }))}
                     mode="multiple"
                     onBlur={onBlur}
+                    options={groupsData?.groups?.map((item) => ({
+                      label: item.name,
+                      value: item.id,
+                    }))}
                   />
                 </Form.Item>
               </Col>
               <Col style={{ marginTop: 30 }}>
                 <Popconfirm
+                  onConfirm={() => onDelete(incident.id)}
                   overlayInnerStyle={{ padding: 10 }}
                   title={intl.formatMessage({
                     defaultMessage:
                       'Are you sure you want to delete this incident?',
                   })}
-                  onConfirm={() => onDelete(incident.id)}
                 >
                   <Button size="small">
                     <FontAwesomeIcon icon={faTrash} />
@@ -238,72 +240,72 @@ const NewOffenderRow = React.memo(
             <Row gutter={8}>
               <Col span={8}>
                 <Form.Item
-                  name="crimeTypes"
                   label={intl.formatMessage({
-                    defaultMessage: 'Crime Types',
+                    defaultMessage: 'Incident Types',
                   })}
+                  name="crimeTypes"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
-                        defaultMessage: 'Choose at least one crime type',
+                        defaultMessage: 'Choose at least one incident type',
                       }),
+                      required: true,
                     },
                   ]}
                 >
                   <Select
-                    mode="multiple"
-                    style={{ width: '100%' }}
                     maxTagCount={2}
+                    mode="multiple"
+                    onBlur={onBlur}
                     options={tagsData?.tags
                       .filter((tag) => tag.type === TagType.IncidentCrimeType)
                       .map((tag) => ({
-                        value: tag.id,
                         label: tag.name,
+                        value: tag.id,
                       }))}
-                    onBlur={onBlur}
+                    style={{ width: '100%' }}
                   />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
-                  name="impactTypes"
                   label={intl.formatMessage({
                     defaultMessage: 'Impact Types',
                   })}
+                  name="impactTypes"
                 >
                   <Select
-                    mode="multiple"
                     maxTagCount={2}
-                    style={{ width: '100%' }}
+                    mode="multiple"
+                    onBlur={onBlur}
                     options={tagsData?.tags
                       .filter((tag) => tag.type === TagType.IncidentImpact)
                       .map((tag) => ({
-                        value: tag.id,
                         label: tag.name,
+                        value: tag.id,
                       }))}
-                    onBlur={onBlur}
+                    style={{ width: '100%' }}
                   />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
-                  name="involvedTypes"
                   label={intl.formatMessage({
                     defaultMessage: 'Involved Types',
                   })}
+                  name="involvedTypes"
                 >
                   <Select
-                    mode="multiple"
-                    style={{ width: '100%' }}
                     maxTagCount={2}
+                    mode="multiple"
+                    onBlur={onBlur}
                     options={tagsData?.tags
                       .filter((tag) => tag.type === TagType.IncidentInvolved)
                       .map((tag) => ({
-                        value: tag.id,
                         label: tag.name,
+                        value: tag.id,
                       }))}
-                    onBlur={onBlur}
+                    style={{ width: '100%' }}
                   />
                 </Form.Item>
               </Col>
@@ -313,32 +315,34 @@ const NewOffenderRow = React.memo(
         <Row gutter={8}>
           <Col>
             <Form.Item
-              name="lostValue"
               label={intl.formatMessage({
                 defaultMessage: 'Value',
               })}
+              name="lostValue"
             >
               <InputNumber onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
-              name="recoveredValue"
               label={intl.formatMessage({
                 defaultMessage: 'Recovered Value',
               })}
+              name="recoveredValue"
             >
               <InputNumber onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
-              name="policeInvolved"
               label={intl.formatMessage({
                 defaultMessage: 'Police Involved',
               })}
+              name="policeInvolved"
             >
               <Radio.Group
+                onBlur={onBlur}
+                optionType="button"
                 options={[
                   {
                     label: 'Yes',
@@ -349,37 +353,35 @@ const NewOffenderRow = React.memo(
                     value: false,
                   },
                 ]}
-                optionType="button"
-                onBlur={onBlur}
               />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
-              name="policeRef"
               label={intl.formatMessage({
                 defaultMessage: 'Police Ref',
               })}
+              name="policeRef"
             >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
-              name="building"
               label={intl.formatMessage({
                 defaultMessage: 'Building',
               })}
+              name="building"
             >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
-              name="street"
               label={intl.formatMessage({
                 defaultMessage: 'Street',
               })}
+              name="street"
               rules={[{ required: true }]}
             >
               <Input onBlur={onBlur} />
@@ -387,42 +389,42 @@ const NewOffenderRow = React.memo(
           </Col>
           <Col>
             <Form.Item
-              name="townCity"
               label={intl.formatMessage({
                 defaultMessage: 'Town/City',
               })}
+              name="townCity"
             >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
-              name="county"
               label={intl.formatMessage({
                 defaultMessage: 'County',
               })}
+              name="county"
             >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
-              name="postcode"
               label={intl.formatMessage({
                 defaultMessage: 'Postcode',
               })}
+              name="postcode"
             >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={8} className={classes.bottomRow}>
-          <Col span={12} className={classes.cell}>
+        <Row className={classes.bottomRow} gutter={8}>
+          <Col className={classes.cell} span={12}>
             <Form.Item
-              name="description"
               label={intl.formatMessage({
                 defaultMessage: 'Description',
               })}
+              name="description"
             >
               <Input.TextArea onBlur={onBlur} rows={5} />
             </Form.Item>
@@ -434,25 +436,25 @@ const NewOffenderRow = React.memo(
 );
 
 interface Props {
-  onAdd: () => void;
-  newIncidents: NewIncident[];
   groupsData: SchemeGroupsQuery | undefined;
-  tagsData: TagsQuery | undefined;
+  newBusinesses: NewBusiness[];
+  newIncidents: NewIncident[];
   newOffenders: NewOffender[];
   newUsers: NewUser[];
-  newBusinesses: NewBusiness[];
+  onAdd: () => void;
   onUpdateIncident: (data: NewIncident) => void;
+  tagsData: TagsQuery | undefined;
 }
 
 const NewIncidentTable = ({
-  onAdd,
-  newIncidents,
   groupsData,
-  tagsData,
-  newOffenders = [],
   newBusinesses = [],
+  newIncidents,
+  newOffenders = [],
   newUsers = [],
+  onAdd,
   onUpdateIncident,
+  tagsData,
 }: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeIncidents, setActiveIncidents] = useState<NewIncident[]>(
@@ -467,6 +469,11 @@ const NewIncidentTable = ({
   const intl = useIntl();
   return (
     <Card
+      extra={
+        <Button onClick={onAdd} style={{ marginBottom: 16 }} type="primary">
+          <FormattedMessage defaultMessage="Add Incident" />
+        </Button>
+      }
       title={intl.formatMessage(
         {
           defaultMessage: 'Incidents: {total}',
@@ -475,30 +482,26 @@ const NewIncidentTable = ({
           total: newIncidents.length,
         }
       )}
-      extra={
-        <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          <FormattedMessage defaultMessage="Add Incident" />
-        </Button>
-      }
     >
       {activeIncidents.map((incident) => (
         <NewOffenderRow
-          key={incident.id}
-          incident={incident}
-          onDelete={() => {}}
           groupsData={groupsData}
-          tagsData={tagsData}
-          newOffenders={newOffenders}
+          incident={incident}
+          key={incident.id}
           newBusinesses={newBusinesses}
+          newOffenders={newOffenders}
           newUsers={newUsers}
+          onDelete={() => {}}
           onUpdateIncident={onUpdateIncident}
+          tagsData={tagsData}
         />
       ))}
 
       <Pagination
         current={currentPage}
+        hideOnSinglePage
         onChange={setCurrentPage}
-        total={newOffenders.length}
+        pageSizeOptions={[10]}
         showTotal={(total) =>
           intl.formatMessage(
             {
@@ -509,8 +512,7 @@ const NewIncidentTable = ({
             }
           )
         }
-        pageSizeOptions={[10]}
-        hideOnSinglePage
+        total={newOffenders.length}
       />
     </Card>
   );

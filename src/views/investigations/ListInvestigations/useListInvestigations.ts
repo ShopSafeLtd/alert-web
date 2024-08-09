@@ -1,30 +1,31 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type {
+  InvestigationRelayQuery,
+  InvestigationRelayQueryVariables,
+} from 'graphql/investigations/queries/__generated__/list-investigations-all-schemes.generated';
 
+import {
+  InvestigationRelayDocument,
+  useInvestigationRelayQuery,
+} from 'graphql/investigations/queries/__generated__/list-investigations-all-schemes.generated';
+import { SortOrder } from 'graphql/types';
 import { useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
-import type {
-  ListInvestigationsAllSchemesQuery,
-  ListInvestigationsAllSchemesQueryVariables,
-} from 'graphql/investigations/queries/list-investigations-all-schemes.generated';
-import {
-  ListInvestigationsAllSchemesDocument,
-  useListInvestigationsAllSchemesQuery,
-} from 'graphql/investigations/queries/list-investigations-all-schemes.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
 
 interface Return {
-  data: ListInvestigationsAllSchemesQuery | undefined;
-  loading: boolean;
   addInvestigation: boolean;
+  data: InvestigationRelayQuery | undefined;
+  loading: boolean;
+  onPaginationChange: (pageValue: number, sizeValue: number) => void;
+  setTakeAllSchemes: (value: boolean) => void;
+  takeAllSchemes: boolean;
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  takeAllSchemes: boolean;
-  setTakeAllSchemes: (value: boolean) => void;
 }
 
 const useListInvestigations = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userSchemes = useStoreState((state) => state.user.schemes);
   const setTakeAllSchemes = useStoreActions(
     (actions) => actions.data.setInvestigationTakeAllSchemes
   );
@@ -40,75 +41,25 @@ const useListInvestigations = (): Return => {
   const takeAllSchemes = useStoreState(
     (state) => state.data.investigations.takeAllSchemes
   );
-  const userSchemeIds = userSchemes.map((el) => el.scheme.id);
   const [addInvestigation, setAddInvestigation] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
 
   // const [takeAllSchemes, setTakeAllSchemes] = useState(investigationAllSchemes);
-  const variables: ListInvestigationsAllSchemesQueryVariables = {
+  const variables: InvestigationRelayQueryVariables = {
+    orderBy: {
+      createdAt: SortOrder.Desc,
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
     where: {
-      schemes: {
-        some: {
-          id: {
-            in: takeAllSchemes ? userSchemeIds : [schemeId],
-          },
-        },
-      },
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : undefined,
-      status:
-        statusFilter.length > 0
-          ? {
-              in: statusFilter,
-            }
-          : undefined,
-      OR: search
-        ? [
-            {
-              name: {
-                contains: search,
-              },
-            },
-            {
-              referenceStr: {
-                contains: search,
-              },
-            },
-            {
-              description: {
-                contains: search,
-              },
-            },
-            {
-              offenders: {
-                some: {
-                  OR: [
-                    {
-                      name: {
-                        contains: search,
-                      },
-                    },
-                    {
-                      referenceStr: {
-                        contains: search,
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          ]
-        : undefined,
+      groupIds: groupsFilter,
+      schemeIds: [schemeId],
+      search,
+      status: statusFilter,
     },
   };
-  const { data, loading } = useListInvestigationsAllSchemesQuery({
+  const { data, loading } = useInvestigationRelayQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
@@ -122,48 +73,54 @@ const useListInvestigations = (): Return => {
   > = (store, { data: res }) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<ListInvestigationsAllSchemesQuery>({
-      query: ListInvestigationsAllSchemesDocument,
+    const existingData = store.readQuery<
+      InvestigationRelayQuery,
+      InvestigationRelayQueryVariables
+    >({
+      query: InvestigationRelayDocument,
       variables,
     });
 
     if (existingData === null) return;
 
-    store.writeQuery<ListInvestigationsAllSchemesQuery>({
-      query: ListInvestigationsAllSchemesDocument,
-      data: {
-        listInvestigationsAllSchemes: {
-          ...existingData.listInvestigationsAllSchemes,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          investigations:
-            existingData?.listInvestigationsAllSchemes?.investigations &&
-            existingData.listInvestigationsAllSchemes.investigations.length > 0
-              ? [
-                  // eslint-disable-next-line no-unsafe-optional-chaining
-                  ...existingData?.listInvestigationsAllSchemes?.investigations,
-                  res?.createInvestigation || [],
-                ]
-              : [res.createInvestigation],
+    store.writeQuery<InvestigationRelayQuery, InvestigationRelayQueryVariables>(
+      {
+        data: {
+          __typename: 'Query',
+          investigationRelay: {
+            ...existingData.investigationRelay,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            edges:
+              existingData?.investigationRelay.edges &&
+              existingData.investigationRelay.edges.length > 0
+                ? [
+                    // eslint-disable-next-line no-unsafe-optional-chaining
+                    ...existingData.investigationRelay?.edges,
+                    res?.createInvestigation || [],
+                  ]
+                : [res.createInvestigation],
+          },
         },
-        __typename: 'Query',
-      },
-      variables,
-    });
+        query: InvestigationRelayDocument,
+        variables,
+      }
+    );
+  };
+  const onPaginationChange = (pageValue: number, sizeValue: number) => {
+    setPage(pageValue);
+    setPageSize(sizeValue);
   };
 
-  // const toggleTakeAllSchemes = () => {
-  //   setInvestigationAllSchemes({ takeAllSchemes: !takeAllSchemes });
-  // };
-
   return {
+    addInvestigation,
     data,
     loading,
-    addInvestigation,
+    onPaginationChange,
+    setTakeAllSchemes,
+    takeAllSchemes,
     toggleAddInvestigation,
     updateInvestigationList,
-    takeAllSchemes,
-    setTakeAllSchemes,
   };
 };
 

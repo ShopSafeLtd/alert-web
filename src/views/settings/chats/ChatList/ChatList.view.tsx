@@ -1,31 +1,31 @@
-import React from 'react';
-import { Button, Col, Drawer, Input, Row, Table } from 'antd';
-
-import { Link } from 'react-router-dom';
-import AddChat from 'components/form-components/chat/AddChat';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
+import type { SchemeChatsQuery } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
+
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Input, Row, Table } from 'antd';
+import AddChat from 'components/form-components/chat/AddChat';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { SchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
-import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
+import { Link } from 'react-router-dom';
 
 interface Props {
+  addChat: boolean;
   data: SchemeChatsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addChat: boolean;
   toggleAddChat: () => void;
   updateChatList: MutationUpdaterFn<CreateChatMutation>;
 }
 
 const ChatList = ({
+  addChat,
   data,
   loading,
   search,
   setSearch,
-  addChat,
   toggleAddChat,
   updateChatList,
 }: Props): JSX.Element => {
@@ -35,19 +35,17 @@ const ChatList = ({
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={8}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a chat group...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
         <Col flex={1} />
         <Col>
           <Button
-            onClick={toggleAddChat}
-            type="primary"
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -55,6 +53,8 @@ const ChatList = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleAddChat}
+            type="primary"
           >
             {intl.formatMessage({
               defaultMessage: 'New Chat Group',
@@ -63,53 +63,53 @@ const ChatList = ({
         </Col>
       </Row>
       <Table
-        size="small"
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
         columns={[
           {
-            key: 'name',
-            title: intl.formatMessage({
-              defaultMessage: 'Name',
-            }),
             dataIndex: 'name',
-            width: 300,
+            key: 'name',
             render: (value, record) => (
               <Link to={`/app/scheme-settings/chat-groups/view/${record.key}`}>
                 {value}
               </Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+            }),
+            width: 300,
           },
           {
+            dataIndex: 'description',
+            ellipsis: true,
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
             }),
-            dataIndex: 'description',
-            ellipsis: true,
           },
         ]}
         dataSource={data?.chats.map((chat) => ({
+          description: chat.description,
           key: chat.id,
           name: chat.name,
-          description: chat.description,
         }))}
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          pageSize: 20,
+        }}
+        size="small"
       />
 
       <Drawer
+        onClose={toggleAddChat}
+        open={addChat}
         title={intl.formatMessage({
           defaultMessage: 'New Chat Group',
         })}
-        open={addChat}
         width="400"
-        onClose={toggleAddChat}
       >
         {addChat ? (
-          <AddChat update={updateChatList} onClose={toggleAddChat} />
+          <AddChat onClose={toggleAddChat} update={updateChatList} />
         ) : (
           <div />
         )}

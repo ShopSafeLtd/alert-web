@@ -1,30 +1,27 @@
+import type { RolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
+
+import { useRolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
+
 import { useStoreState } from '../../../state';
-import type { RolesQuery } from '#/views/roles/graphql/queries/roles.generated';
-import { useRolesQuery } from '#/views/roles/graphql/queries/roles.generated';
 
 interface Return {
   data: RolesQuery | undefined;
-  loading: boolean;
   fetchPage: (page: number) => void;
+  loading: boolean;
 }
 
 const useRoles = (): Return => {
   const { id: currentScheme } = useStoreState((state) => state.scheme);
 
-  const { data, loading, fetchMore } = useRolesQuery({
+  const { data, fetchMore, loading } = useRolesQuery({
     variables: {
-      take: 20,
       schemeId: currentScheme || '',
+      take: 20,
     },
   });
 
   const fetchPage = (page: number) => {
     void fetchMore({
-      variables: {
-        take: 20,
-        schemeId: currentScheme || '',
-        skip: page * 20,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -37,9 +34,14 @@ const useRoles = (): Return => {
           },
         };
       },
+      variables: {
+        schemeId: currentScheme || '',
+        skip: page * 20,
+        take: 20,
+      },
     });
   };
 
-  return { data, loading, fetchPage };
+  return { data, fetchPage, loading };
 };
 export default useRoles;

@@ -1,21 +1,22 @@
-import { useStoreState } from 'state';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { GoodsData } from 'types/DataType';
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { GoodsMode } from 'graphql/types';
+import { useStoreState } from 'state';
 
 interface Props {
-  update: (value: GoodsData) => void;
   data: GoodsData;
+  update: (value: GoodsData) => void;
 }
 
 interface Return {
-  onSubmit: (value: GoodsData) => void;
-  goodsTypesData: ListGoodsTypesQuery | undefined;
   goodsMode: GoodsMode;
+  goodsTypesData: ListGoodsTypesQuery | undefined;
+  onSubmit: (value: GoodsData) => void;
 }
 
-const useEditGoods = ({ update, data }: Props): Return => {
+const useEditGoods = ({ data, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const goodsMode = useStoreState((state) => state.scheme.goodsMode);
   const { data: goodsTypesData } = useListGoodsTypesQuery({
@@ -34,30 +35,30 @@ const useEditGoods = ({ update, data }: Props): Return => {
       goodsType: item.goodsType,
       name:
         item.name ??
-        (goodsTypesData &&
-          goodsTypesData.listGoodsTypes.goodsTypes.find(
-            ({ id }) => id === item.goodsType
-          )?.name) ??
+        goodsTypesData?.listGoodsTypes.goodsTypes.find(
+          ({ id }) => id === item.goodsType
+        )?.name ??
         '',
-      value:
-        goodsMode === GoodsMode.Specific
-          ? (item.value || 0) * (item.quantity || 0)
-          : item.value || 0,
+      quantity: item.quantity,
+      recoveredQuantity: item.recoveredQuantity,
       recoveredValue:
         goodsMode === GoodsMode.Specific
           ? (item.recoveredValue || 0) * (item.recoveredQuantity || 0)
           : item.recoveredValue || 0,
       sku: item.sku,
-      quantity: item.quantity,
-      recoveredQuantity: item.recoveredQuantity,
+      // TODO fix
       stockItem: item.stockItem,
+      value:
+        goodsMode === GoodsMode.Specific
+          ? (item.value || 0) * (item.quantity || 0)
+          : item.value || 0,
     });
   };
 
   return {
-    onSubmit,
-    goodsTypesData,
     goodsMode,
+    goodsTypesData,
+    onSubmit,
   };
 };
 

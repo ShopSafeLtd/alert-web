@@ -1,0 +1,23 @@
+query StockItemSelect($where: stockItemRelayWhereInput!, $first: Int, $after: String) {
+    stockItemsRelay(where: $where, first: $first, after: $after) {
+        totalCount
+        pageInfo {
+            endCursor
+            hasNextPage
+        }
+        edges {
+            node {
+                id
+                barcode
+                brand
+                costPriceLocal
+                costPriceStandard
+                division
+                name
+                salesPriceLocal
+                salesPriceStandard
+                sku
+            }
+        }
+    }
+}

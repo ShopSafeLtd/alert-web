@@ -1,0 +1,15 @@
+query ReportGroupsSelect($where: ReportGroupWhere!, $first: Int, $after: String) {
+    reportGroups(where: $where, first: $first, after: $after) {
+        totalCount
+        edges {
+            node {
+                id
+                name
+            }
+        }
+        pageInfo {
+            endCursor
+            hasNextPage
+        }
+    }
+}

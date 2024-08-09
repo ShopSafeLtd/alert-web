@@ -1,50 +1,50 @@
-import { useEffect, useState } from 'react';
-
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useStoreActions, useStoreState } from 'state';
-import type { DateType, VehicleData } from 'types/DataType';
+import type { ListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/__generated__/list-vehicles-card.generated';
 import type { VehicleFilters } from 'state/data-model';
+import type { DateType, VehicleData } from 'types/DataType';
+
+import { useListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/__generated__/list-vehicles-card.generated';
 import { useGroupsContext } from '#/context/groups-context';
-import type { ListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/list-vehicles-card.generated';
-import { useListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/list-vehicles-card.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Props {
   onClose: () => void;
+  takeAllSchemes?: boolean;
   update: (value: VehicleData) => void;
   vehicleIds: string[] | undefined;
-  takeAllSchemes?: boolean;
 }
 
 interface Return {
-  onSubmit: () => void;
+  clearFilters: () => void;
   data:
-    | Exclude<ListVehiclesCardQuery['listVehicles'], undefined | null>
+    | Exclude<ListVehiclesCardQuery['listVehicles'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  selectedVehicle: VehicleData | undefined;
-  setSelectedVehicle: (value: VehicleData | undefined) => void;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  filterVariables: VehicleFilters;
-  setOrder: (value: SortOrder) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  clearFilters: () => void;
   fetchMoreScroll: () => void;
+  filterVariables: VehicleFilters;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
+  loading: boolean;
+  onSubmit: () => void;
+  openLightbox: (index: number) => void;
+  selectedVehicle: VehicleData | undefined;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setSearch: (value: string) => void;
+  setSelectedVehicle: (value: VehicleData | undefined) => void;
 }
 
 const useLinkVehicle = ({
   onClose,
+  takeAllSchemes,
   update,
   vehicleIds,
-  takeAllSchemes,
 }: Props): Return => {
   const { filterDefaultGroups: defaultGroups } = useStoreState(
     (state) => state.user
@@ -64,45 +64,21 @@ const useLinkVehicle = ({
   >(undefined);
 
   const {
-    search,
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    groups: groupsFilter,
     order,
+    search,
   } = filterVariables;
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const variables = {
-    take: 18,
     order: {
       updatedAt: order,
     },
+    take: 18,
     where: {
-      id: { notIn: vehicleIds },
-      schemes: {
-        some: {
-          id: {
-            in: takeAllSchemes ? userSchemeIds : [schemeId],
-          },
-        },
-      },
-      createdAt: createdAtFilter
-        ? {
-            gte: createdAtFilter.startDate,
-            lte: createdAtFilter.endDate,
-          }
-        : undefined,
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : undefined,
       OR: [
         {
           make: {
@@ -128,6 +104,30 @@ const useLinkVehicle = ({
           },
         },
       ],
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
+      id: { notIn: vehicleIds },
+      schemes: {
+        some: {
+          id: {
+            in: takeAllSchemes ? userSchemeIds : [schemeId],
+          },
+        },
+      },
     },
   };
 
@@ -146,17 +146,13 @@ const useLinkVehicle = ({
       });
     }
   }, []);
-  const { data, loading, fetchMore } = useListVehiclesCardQuery({
+  const { data, fetchMore, loading } = useListVehiclesCardQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        skip: data?.listVehicles.vehicles?.length || 0,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -173,6 +169,10 @@ const useLinkVehicle = ({
           },
         };
       },
+      variables: {
+        ...variables,
+        skip: data?.listVehicles.vehicles?.length || 0,
+      },
     });
   };
   const { groups, groupsLoading } = useGroupsContext();
@@ -186,7 +186,7 @@ const useLinkVehicle = ({
   };
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   // filter function
@@ -232,32 +232,32 @@ const useLinkVehicle = ({
     setFilterState({
       pagination,
       variables: {
+        createdAt: undefined,
+        customGalleries: [],
+        gallery: [],
+        groups: [],
         order: SortOrder.Desc,
         search: '',
-        createdAt: undefined,
-        gallery: [],
-        customGalleries: [],
-        groups: [],
       },
     });
   };
   return {
-    onSubmit,
+    clearFilters,
     data: data?.listVehicles,
-    loading: data?.listVehicles ? false : loading,
+    fetchMoreScroll,
+    filterVariables,
     groups,
     groupsLoading,
-    setSearch,
-    openLightbox,
     lightBoxOpen,
+    loading: data?.listVehicles ? false : loading,
+    onSubmit,
+    openLightbox,
     selectedVehicle,
-    setSelectedVehicle,
-    filterVariables,
-    setOrder,
-    setGroupsFilter,
     setCreatedAtFilter,
-    clearFilters,
-    fetchMoreScroll,
+    setGroupsFilter,
+    setOrder,
+    setSearch,
+    setSelectedVehicle,
   };
 };
 

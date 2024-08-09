@@ -1,5 +1,10 @@
-import React from 'react';
+import type { BusinessesListQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
+import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/useListBusinesses';
+import type { BusinessData } from 'types/DataType';
 
+import DebouncedInput from '#/utils/debounced-input';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -11,75 +16,71 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { Link } from 'react-router-dom';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
-import type { BusinessData } from 'types/DataType';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/useListBusinesses';
-import DebouncedInput from '#/utils/debounced-input';
+import { Link } from 'react-router-dom';
+
 import useStyles from './ListBusinesses.styles';
-import type { BusinessesListQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-businesses.generated';
 
 interface TableData {
   key: string;
+  location: string;
   name: string;
-  totalUsers: number;
   parent?: string;
   parentId?: string;
-  location: string;
+  totalUsers: number;
 }
 
 interface Props {
-  data: BusinessesListQuery | undefined;
-  loading: boolean;
-  searchValue: string;
-  onSearchChange: (value: string) => void;
   addVisible: boolean;
-  toggleAddVisible: () => void;
-  linkVisible: boolean;
-  toggleLinkVisible: () => void;
-  onSubmit: (value: BusinessData) => void;
-  saving: boolean;
+  data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
-  pagination: { page: number; pageSize: number };
-  setPagination: (value: { page: number; pageSize: number }) => void;
-  parentFilter: string[];
-  parentData: FilterLabels[];
-  setParentFilter: (value: string[]) => void;
-  groupFilter: string[];
   groupData: FilterLabels[];
+  groupFilter: string[];
+  linkVisible: boolean;
+  loading: boolean;
+  onSearchChange: (value: string) => void;
+  onSubmit: (value: BusinessData) => void;
+  pagination: { page: number; pageSize: number };
+  parentData: FilterLabels[];
+  parentFilter: string[];
+  saving: boolean;
+  searchValue: string;
   setGroupFilter: (value: string[]) => void;
+  setPagination: (value: { page: number; pageSize: number }) => void;
+  setParentFilter: (value: string[]) => void;
+  setTagFilter: (value: string[]) => void;
   tagFilter: string[];
   tags: FilterLabels[];
-  setTagFilter: (value: string[]) => void;
+  toggleAddVisible: () => void;
+  toggleLinkVisible: () => void;
 }
 
 const ListBusinesses = ({
-  data,
-  loading,
-  onSearchChange,
-  searchValue,
   addVisible,
-  toggleAddVisible,
-  linkVisible,
-  toggleLinkVisible,
-  onSubmit,
-  saving,
+  data,
   deleteConfirm,
   groupData,
+  groupFilter,
+  linkVisible,
+  loading,
+  onSearchChange,
+  onSubmit,
+  pagination,
   parentData,
   parentFilter,
-  setParentFilter,
+  saving,
+  searchValue,
   setGroupFilter,
-  groupFilter,
-  tagFilter,
-  setTagFilter,
-  tags,
-  pagination,
   setPagination,
+  setParentFilter,
+  setTagFilter,
+  tagFilter,
+  tags,
+  toggleAddVisible,
+  toggleLinkVisible,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
@@ -91,13 +92,13 @@ const ListBusinesses = ({
 
   return (
     <div className={classNames.page}>
-      <Row gutter={8} className={classNames.actions}>
+      <Row className={classNames.actions} gutter={8}>
         <Col span={19} />
         <Col
           span={4}
           style={{
-            display: 'flex',
             alignItems: 'center',
+            display: 'flex',
             marginBottom: 5,
           }}
         >
@@ -107,6 +108,7 @@ const ListBusinesses = ({
             })}
           >
             <Button
+              danger
               icon={
                 <FontAwesomeIcon
                   icon={faPlus}
@@ -114,12 +116,11 @@ const ListBusinesses = ({
                   style={{ marginRight: 5 }}
                 />
               }
-              style={{
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-              }}
-              danger
               onClick={toggleLinkVisible}
+              style={{
+                borderBottomRightRadius: 0,
+                borderTopRightRadius: 0,
+              }}
             >
               {intl.formatMessage({
                 defaultMessage: 'Existing',
@@ -133,11 +134,7 @@ const ListBusinesses = ({
             })}
           >
             <Button
-              style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                borderLeftWidth: 0,
-              }}
+              danger
               icon={
                 <FontAwesomeIcon
                   icon={faPlus}
@@ -145,8 +142,12 @@ const ListBusinesses = ({
                   style={{ marginRight: 5 }}
                 />
               }
-              danger
               onClick={toggleAddVisible}
+              style={{
+                borderBottomLeftRadius: 0,
+                borderLeftWidth: 0,
+                borderTopLeftRadius: 0,
+              }}
             >
               {intl.formatMessage({
                 defaultMessage: 'New',
@@ -162,16 +163,16 @@ const ListBusinesses = ({
             })}
           </Tag>
           <DebouncedInput
-            size="small"
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a business...',
-            })}
             allowClear
             defaultValue={searchValue || ''}
             onChange={(e) => {
               resetPage();
               onSearchChange(e.target.value);
             }}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a business...',
+            })}
+            size="small"
           />
         </Col>
         <Col span={6}>
@@ -181,21 +182,21 @@ const ListBusinesses = ({
             })}
           </Tag>
           <Select
+            allowClear
+            maxTagCount={4}
             mode="multiple"
-            style={{ width: '100%' }}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Parent',
-            })}
-            value={parentFilter}
             onChange={(value: string[]) => {
               resetPage();
 
               setParentFilter(value);
             }}
-            maxTagCount={4}
-            options={parentData}
             optionFilterProp="label"
-            allowClear
+            options={parentData}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Parent',
+            })}
+            style={{ width: '100%' }}
+            value={parentFilter}
           />
         </Col>
         <Col span={6}>
@@ -205,21 +206,21 @@ const ListBusinesses = ({
             })}
           </Tag>
           <Select
-            mode="multiple"
-            style={{ width: '100%' }}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Group',
-            })}
-            value={groupFilter}
+            allowClear
             maxTagCount={4}
+            mode="multiple"
             onChange={(value: string[]) => {
               resetPage();
 
               setGroupFilter(value);
             }}
-            options={groupData}
             optionFilterProp="label"
-            allowClear
+            options={groupData}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Group',
+            })}
+            style={{ width: '100%' }}
+            value={groupFilter}
           />
         </Col>
         <Col span={6}>
@@ -229,65 +230,62 @@ const ListBusinesses = ({
             })}
           </Tag>
           <Select
-            mode="multiple"
-            style={{ width: '100%' }}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Tag',
-            })}
+            allowClear
             maxTagCount={4}
-            value={tagFilter}
+            mode="multiple"
             onChange={(value: string[]) => {
               resetPage();
 
               setTagFilter(value);
             }}
-            options={tags}
             optionFilterProp="label"
-            allowClear
+            options={tags}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Tag',
+            })}
+            style={{ width: '100%' }}
+            value={tagFilter}
           />
         </Col>
       </Row>
       <Table<TableData>
         columns={[
           {
-            key: 'name',
             dataIndex: 'name',
-            title: intl.formatMessage({
-              defaultMessage: 'Name',
-            }),
+            key: 'name',
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+            }),
           },
           {
-            key: 'totalUsers',
             dataIndex: 'totalUsers',
+            key: 'totalUsers',
             title: intl.formatMessage({
               defaultMessage: 'Total Users',
             }),
           },
           {
-            key: 'parent',
             dataIndex: 'parent',
+            key: 'parent',
+            render: (value, item) =>
+              value ? <Link to={`/${item.parentId || ''}`}>{value}</Link> : '',
             title: intl.formatMessage({
               defaultMessage: 'Parent',
             }),
-            render: (value, item) =>
-              value ? <Link to={`/${item.parentId || ''}`}>{value}</Link> : '',
           },
           {
-            key: 'location',
             dataIndex: 'location',
+            key: 'location',
             title: intl.formatMessage({
               defaultMessage: 'Location',
             }),
           },
           {
-            key: 'tags',
-            title: intl.formatMessage({
-              defaultMessage: 'Tags',
-            }),
             dataIndex: 'tags',
+            key: 'tags',
             // filters: tagFilter,
             render: (value: string[]) => (
               <Tag color="red">
@@ -296,13 +294,13 @@ const ListBusinesses = ({
                   .toString()}
               </Tag>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Tags',
+            }),
           },
           {
-            key: 'groups',
-            title: intl.formatMessage({
-              defaultMessage: 'Content Groups',
-            }),
             dataIndex: 'groups',
+            key: 'groups',
             render: (value: { id: string; name: string }[]) => (
               <Typography.Text>
                 {value
@@ -310,11 +308,13 @@ const ListBusinesses = ({
                   .toString()}
               </Typography.Text>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Content Groups',
+            }),
           },
           {
-            key: 'Options',
             dataIndex: 'Options',
-            width: 60,
+            key: 'Options',
             render: (_, record) => (
               <Tooltip
                 title={intl.formatMessage({
@@ -322,42 +322,43 @@ const ListBusinesses = ({
                 })}
               >
                 <Button
-                  size="small"
                   disabled={saving}
+                  icon={<FontAwesomeIcon icon={faTrash} />}
                   onClick={() => {
                     deleteConfirm(record.key);
                   }}
-                  icon={<FontAwesomeIcon icon={faTrash} />}
+                  size="small"
                 />
               </Tooltip>
             ),
+            width: 60,
           },
         ]}
         dataSource={data?.businessRelay.edges.map(({ node: item }) => ({
+          groups: item.groups,
           key: item.id,
+          location: item.locations[0]?.full || '',
           name: item.name,
-          totalUsers: item.totalUsers,
           parent: item.parent?.name,
           parentId: item.parent?.id,
-          location: item.locations[0]?.full || '',
-          groups: item.groups,
           tags: item.tags.map(({ name }) => name),
+          totalUsers: item.totalUsers,
         }))}
         loading={loading}
-        size="small"
         pagination={{
-          pageSize: pagination.pageSize,
           current: pagination.page,
           onChange: (page, pageSize) => {
             setPagination({ page, pageSize });
           },
+          pageSize: pagination.pageSize,
           total: data?.businessRelay.totalCount,
         }}
+        size="small"
       />
 
       <Drawer
-        open={addVisible}
         onClose={toggleAddVisible}
+        open={addVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
         })}
@@ -372,8 +373,8 @@ const ListBusinesses = ({
         )}
       </Drawer>
       <Drawer
-        open={linkVisible}
         onClose={toggleLinkVisible}
+        open={linkVisible}
         title={intl.formatMessage({
           defaultMessage: 'Add New Business',
         })}

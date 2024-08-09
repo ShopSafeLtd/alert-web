@@ -1,0 +1,17 @@
+query OffenderTableReport($where: OffenderTableWhereInput!) {
+  offenderTableReport(where: $where) {
+    total
+    offenderPerformance {
+      alertId
+      id
+      lastIncidentDate
+      name
+      totalBulletins
+      totalIncidents
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      primaryPhoto
+    }
+  }
+}

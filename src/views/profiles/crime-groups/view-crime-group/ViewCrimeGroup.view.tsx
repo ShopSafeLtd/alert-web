@@ -1,4 +1,23 @@
-import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/__generated__/suggested-memebrs.generated';
+import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
+import type { VehicleData } from 'types/DataType';
+
+import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
+import {
+  faBell,
+  faBellSlash,
+  faEdit,
+  faMagnifyingGlass,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { faMessages } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -14,165 +33,147 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBell,
-  faBellSlash,
-  faEdit,
-  faMagnifyingGlass,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import { faMessages } from '@fortawesome/pro-solid-svg-icons';
-import AddAlias from 'components/form-components/crimeGroup/Alias';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import type { VehicleData } from 'types/DataType';
-import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
-import VehicleTable from 'components/tables/VehicleTable';
-import IncidentTable from 'components/tables/IncidentTable';
-import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import CrimeGroupSideList from 'components/crimeGroups/sidelist';
-import SuggestedMembers from 'components/crimeGroups/SuggestedMembers/SuggestedMembers.view';
-import MapCard from 'components/map/MapCard/MapCard.view';
-import { useIntl } from 'react-intl';
-import EvidenceTable from 'components/tables/EvidenceTable';
-import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
-import AddDocument from 'components/form-components/documents/AddDocument';
-import type { MutationUpdaterFn } from '@apollo/client';
-import InvestigationTable from 'components/tables/InvestigationTable';
-import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
-import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
 import IntelSection from 'components/ViewPage/IntelSection';
-import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
+import SuggestedMembers from 'components/crimeGroups/SuggestedMembers/SuggestedMembers.view';
+import CrimeGroupSideList from 'components/crimeGroups/sidelist';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
+import AddAlias from 'components/form-components/crimeGroup/Alias';
+import AddDocument from 'components/form-components/documents/AddDocument';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
+import MapCard from 'components/map/MapCard/MapCard.view';
+import EvidenceTable from 'components/tables/EvidenceTable';
+import IncidentTable from 'components/tables/IncidentTable';
+import InvestigationTable from 'components/tables/InvestigationTable';
+import VehicleTable from 'components/tables/VehicleTable';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+
 import OffenderGrid from '../../../../components/offenders/OffenderGrid';
 import useStyles from './ViewCrimeGroup.styles';
-import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/view-crime-group.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/suggested-memebrs.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
 
 const { Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  data: CrimeGroupQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  offenderIds: string[];
-  vehicleIds: string[];
-  addOffender: boolean;
-  toggleAddOffender: () => void;
-  addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  onDeleteCrimeGroup: () => void;
   addAlias: boolean;
-  toggleAddAlias: () => void;
+  addDocument: boolean;
+  addExistingOffender: boolean;
+  addExistingVehicle: boolean;
+  addInvestigation: boolean;
+  addNewVehicle: boolean;
+  addOffender: boolean;
+  confirmDeleteUpdate: (updateId: string) => void;
+  crimeGroupId: string;
+  data: CrimeGroupQuery | undefined;
+  editRights: boolean;
+  editUpdate: { id: string; text: string } | null;
+  editUpdateInput: string;
+  handleAddSuggestion: (id: string) => void;
+  handleEditUpdate: () => void;
   loadMore: boolean;
-  scrolledToTop: () => void;
-  userId: string;
+  loading: boolean;
+  offenderIds: string[];
+  onCompletedAddOffender: () => void;
+  onDeleteCrimeGroup: () => void;
+  optionRowShow: boolean;
   replyTo: {
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null;
+  saving: boolean;
+  scrolledToTop: () => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setOptionRowShow: (value: boolean) => void;
   setReplyTo: (
     value: {
-      id: string;
-      text: string;
       createdAt: string;
       createdBy: string;
+      id: string;
+      text: string;
     } | null
   ) => void;
-  confirmDeleteUpdate: (updateId: string) => void;
-  editUpdate: { id: string; text: string } | null;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
-  handleEditUpdate: () => void;
-  editUpdateInput: string;
-  setEditUpdateInput: (value: string) => void;
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  editRights: boolean;
-  toggleSubscribe: () => void;
-  crimeGroupId: string;
+  showIntel: boolean;
   submitNewVehicle: (value: VehicleData) => void;
   submitOffender: (value: string[]) => void;
   submitVehicle: (value: string) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
-  viewSuggestedOpen: boolean;
-  toggleViewSuggested: () => void;
-  handleAddSuggestion: (id: string) => void;
+  toggleAddAlias: () => void;
   toggleAddDocument: () => void;
-  addDocument: boolean;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
-  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
   toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
-  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  showIntel: boolean;
+  toggleAddNewVehicle: () => void;
+  toggleAddOffender: () => void;
   toggleShowIntel: () => void;
+  toggleSubscribe: () => void;
+  toggleViewSuggested: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
-  onCompletedAddOffender: () => void;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  userId: string;
+  vehicleIds: string[];
+  viewSuggestedOpen: boolean;
 }
 
 const ViewCrimeGroup = ({
-  data,
-  loading,
-  saving,
-  offenderIds,
-  vehicleIds,
-  addOffender,
-  toggleAddOffender,
-  addExistingOffender,
-  toggleAddExistingOffender,
-  addNewVehicle,
-  addExistingVehicle,
-  toggleAddNewVehicle,
-  toggleAddExistingVehicle,
-  onDeleteCrimeGroup,
   addAlias,
-  toggleAddAlias,
+  addDocument,
+  addExistingOffender,
+  addExistingVehicle,
+  addInvestigation,
+  addNewVehicle,
+  addOffender,
+  confirmDeleteUpdate,
+  crimeGroupId,
+  data,
   editRights,
-  optionRowShow,
-  setOptionRowShow,
-  userId,
   editUpdate,
   editUpdateInput,
+  handleAddSuggestion,
   handleEditUpdate,
+  loadMore,
+  loading,
+  offenderIds,
+  onCompletedAddOffender,
+  onDeleteCrimeGroup,
+  optionRowShow,
   replyTo,
+  saving,
   scrolledToTop,
   setEditUpdate,
   setEditUpdateInput,
+  setOptionRowShow,
   setReplyTo,
-  loadMore,
-  confirmDeleteUpdate,
-  toggleSubscribe,
-  crimeGroupId,
+  showIntel,
   submitNewVehicle,
   submitOffender,
   submitVehicle,
   suggestedData,
-  toggleViewSuggested,
-  viewSuggestedOpen,
-  handleAddSuggestion,
+  toggleAddAlias,
   toggleAddDocument,
-  addDocument,
-  updateDocumentList,
-  updateDeleteDocument,
-  addInvestigation,
+  toggleAddExistingOffender,
+  toggleAddExistingVehicle,
   toggleAddInvestigation,
-  updateInvestigationList,
-  showIntel,
+  toggleAddNewVehicle,
+  toggleAddOffender,
   toggleShowIntel,
+  toggleSubscribe,
+  toggleViewSuggested,
   updateAddOffenderList,
-  onCompletedAddOffender,
+  updateDeleteDocument,
+  updateDocumentList,
+  updateInvestigationList,
+  userId,
+  vehicleIds,
+  viewSuggestedOpen,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -211,8 +212,8 @@ const ViewCrimeGroup = ({
         <Col>
           <CrimeGroupSideList current={crimeGroupId} />
         </Col>
-        <Col flex={1} className={classes.detailsContent}>
-          <Row gutter={8} className={classes.headerBar} justify="end">
+        <Col className={classes.detailsContent} flex={1}>
+          <Row className={classes.headerBar} gutter={8} justify="end">
             <Col>
               <Tooltip
                 title={
@@ -226,16 +227,16 @@ const ViewCrimeGroup = ({
                 }
               >
                 <Button
-                  onClick={toggleSubscribe}
+                  color={data?.crimeGroup?.subscribed ? undefined : 'danger'}
                   disabled={saving}
                   loading={saving}
+                  onClick={toggleSubscribe}
                   type="ghost"
-                  color={data?.crimeGroup?.subscribed ? undefined : 'danger'}
                 >
                   <FontAwesomeIcon
+                    icon={data?.crimeGroup?.subscribed ? faBellSlash : faBell}
                     size="1x"
                     style={{ marginRight: 8 }}
-                    icon={data?.crimeGroup?.subscribed ? faBellSlash : faBell}
                   />
                   {data?.crimeGroup?.subscribed
                     ? intl.formatMessage({
@@ -264,11 +265,11 @@ const ViewCrimeGroup = ({
             )} */}
             {editRights && (
               <Col>
-                <Button type="ghost" onClick={toggleAddAlias}>
+                <Button onClick={toggleAddAlias} type="ghost">
                   <FontAwesomeIcon
+                    icon={faEdit}
                     size="1x"
                     style={{ marginRight: 8 }}
-                    icon={faEdit}
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Edit',
@@ -279,26 +280,26 @@ const ViewCrimeGroup = ({
             {editRights && (
               <Col>
                 <Button
-                  type="ghost"
                   onClick={() => {
                     confirm({
-                      title: intl.formatMessage({
-                        defaultMessage:
-                          'Do you want to delete the crime group?',
-                      }),
                       content: intl.formatMessage({
                         defaultMessage: 'This action cannot be undone.',
                       }),
                       onOk() {
                         onDeleteCrimeGroup();
                       },
+                      title: intl.formatMessage({
+                        defaultMessage:
+                          'Do you want to delete the crime group?',
+                      }),
                     });
                   }}
+                  type="ghost"
                 >
                   <FontAwesomeIcon
+                    icon={faTrash}
                     size="1x"
                     style={{ marginRight: 8 }}
-                    icon={faTrash}
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Delete',
@@ -316,10 +317,10 @@ const ViewCrimeGroup = ({
                       defaultMessage: 'Alert ID: {ref} {alias}',
                     },
                     {
-                      ref: data?.crimeGroup?.reference || '',
                       alias: data?.crimeGroup?.alias
                         ? `(${data?.crimeGroup?.alias})`
                         : '',
+                      ref: data?.crimeGroup?.reference || '',
                     }
                   )}
                 </Title>
@@ -374,7 +375,7 @@ const ViewCrimeGroup = ({
                 </Row>
               </Card>
               <Card loading={loading}>
-                <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
                   <Col flex={1}>
                     <Title level={4}>
                       {intl.formatMessage(
@@ -391,8 +392,8 @@ const ViewCrimeGroup = ({
                     suggestedData.crimeGroup.suggestedMembers.length > 0 && (
                       <Col>
                         <Button
-                          onClick={toggleViewSuggested}
                           danger
+                          onClick={toggleViewSuggested}
                           size="small"
                           type="ghost"
                         >
@@ -409,29 +410,29 @@ const ViewCrimeGroup = ({
                         <Menu
                           items={[
                             {
-                              label: intl.formatMessage({
-                                defaultMessage: 'Add Existing Offenders',
-                              }),
-                              key: '1',
                               icon: (
                                 <FontAwesomeIcon
                                   icon={faMagnifyingGlass}
                                   style={{ marginRight: 5 }}
                                 />
                               ),
+                              key: '1',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Add Existing Offenders',
+                              }),
                               onClick: () => toggleAddExistingOffender(),
                             },
                             {
-                              label: intl.formatMessage({
-                                defaultMessage: 'Create New Offender',
-                              }),
-                              key: '2',
                               icon: (
                                 <FontAwesomeIcon
                                   icon={faPlus}
                                   style={{ marginRight: 5 }}
                                 />
                               ),
+                              key: '2',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Create New Offender',
+                              }),
                               onClick: () => toggleAddOffender(),
                             },
                           ]}
@@ -439,13 +440,13 @@ const ViewCrimeGroup = ({
                       }
                     >
                       <Button
-                        size="small"
                         icon={
                           <FontAwesomeIcon
                             icon={faPlus}
                             style={{ marginRight: 5 }}
                           />
                         }
+                        size="small"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Offenders',
@@ -469,7 +470,6 @@ const ViewCrimeGroup = ({
               {data?.crimeGroup?.incidents &&
                 data?.crimeGroup?.incidents.length > 0 && (
                   <MapCard
-                    width="100%"
                     height={500}
                     markers={
                       data?.crimeGroup?.incidents.map((incident) => ({
@@ -477,6 +477,7 @@ const ViewCrimeGroup = ({
                         geoLng: incident?.location?.geoLng,
                       })) || []
                     }
+                    width="100%"
                   />
                 )}
               <Card loading={loading}>
@@ -494,29 +495,29 @@ const ViewCrimeGroup = ({
                         <Menu
                           items={[
                             {
-                              label: intl.formatMessage({
-                                defaultMessage: 'Add Existing Vehicles',
-                              }),
-                              key: '1',
                               icon: (
                                 <FontAwesomeIcon
                                   icon={faMagnifyingGlass}
                                   style={{ marginRight: 5 }}
                                 />
                               ),
+                              key: '1',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Add Existing Vehicles',
+                              }),
                               onClick: () => toggleAddExistingVehicle(),
                             },
                             {
-                              label: intl.formatMessage({
-                                defaultMessage: 'Create New Vehicle',
-                              }),
-                              key: '2',
                               icon: (
                                 <FontAwesomeIcon
                                   icon={faPlus}
                                   style={{ marginRight: 5 }}
                                 />
                               ),
+                              key: '2',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Create New Vehicle',
+                              }),
                               onClick: () => toggleAddNewVehicle(),
                             },
                           ]}
@@ -524,13 +525,13 @@ const ViewCrimeGroup = ({
                       }
                     >
                       <Button
-                        size="small"
                         icon={
                           <FontAwesomeIcon
                             icon={faPlus}
                             style={{ marginRight: 5 }}
                           />
                         }
+                        size="small"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Vehicles',
@@ -542,8 +543,8 @@ const ViewCrimeGroup = ({
 
                 {data?.crimeGroup?.vehicles.length && !loading ? (
                   <VehicleTable
-                    vehicles={data?.crimeGroup?.vehicles}
                     hasNavigation
+                    vehicles={data?.crimeGroup?.vehicles}
                   />
                 ) : (
                   <Empty
@@ -564,10 +565,10 @@ const ViewCrimeGroup = ({
                 data?.crimeGroup?.incidents.length > 0 &&
                 !loading ? (
                   <IncidentTable // TODO
+                    hasNavigation
                     incidents={data?.crimeGroup?.incidents.filter(
                       (incident) => incident !== null
                     )}
-                    hasNavigation
                     pageSize={20}
                   />
                 ) : (
@@ -580,7 +581,7 @@ const ViewCrimeGroup = ({
                 )}
               </Card>
               <Card loading={loading}>
-                <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
                   <Col flex={1}>
                     <Title level={4}>
                       {intl.formatMessage({
@@ -591,14 +592,14 @@ const ViewCrimeGroup = ({
                   {editRights && (
                     <Col>
                       <Button
-                        size="small"
-                        onClick={toggleAddDocument}
                         icon={
                           <FontAwesomeIcon
                             icon={faPlus}
                             style={{ marginRight: 5 }}
                           />
                         }
+                        onClick={toggleAddDocument}
+                        size="small"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Evidence',
@@ -610,10 +611,10 @@ const ViewCrimeGroup = ({
 
                 {data?.crimeGroup?.evidence.length && !loading ? (
                   <EvidenceTable
+                    deleteRights={editRights}
                     evidence={data?.crimeGroup?.evidence}
                     title={ProfileUpdatedModel.Crime_Group}
                     update={updateDeleteDocument}
-                    deleteRights={editRights}
                   />
                 ) : (
                   <Empty
@@ -627,7 +628,7 @@ const ViewCrimeGroup = ({
 
               {editRights && (
                 <Card loading={loading}>
-                  <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                  <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
                     <Col flex={1}>
                       <Title level={4}>
                         {intl.formatMessage({
@@ -638,14 +639,14 @@ const ViewCrimeGroup = ({
 
                     <Col>
                       <Button
-                        size="small"
-                        onClick={toggleAddInvestigation}
                         icon={
                           <FontAwesomeIcon
                             icon={faPlus}
                             style={{ marginRight: 5 }}
                           />
                         }
+                        onClick={toggleAddInvestigation}
+                        size="small"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Investigation',
@@ -671,19 +672,19 @@ const ViewCrimeGroup = ({
             </div>
 
             <Modal
-              title={intl.formatMessage({
-                defaultMessage: 'Edit Update Content',
-              })}
-              open={editUpdate !== null}
-              onOk={handleEditUpdate}
-              onCancel={() => setEditUpdate(null)}
               okText={intl.formatMessage({
                 defaultMessage: 'Save',
               })}
+              onCancel={() => setEditUpdate(null)}
+              onOk={handleEditUpdate}
+              open={editUpdate !== null}
+              title={intl.formatMessage({
+                defaultMessage: 'Edit Update Content',
+              })}
             >
               <Input
-                value={editUpdateInput}
                 onChange={(e) => setEditUpdateInput(e.target.value)}
+                value={editUpdateInput}
               />
             </Modal>
           </div>
@@ -706,57 +707,57 @@ const ViewCrimeGroup = ({
         <Col span={showIntel ? 6 : 0}>
           <div className={classes.updatesContainer}>
             <IntelSection
-              updates={data?.crimeGroup?.updates}
-              scrolledToTop={scrolledToTop}
-              loadMore={loadMore}
-              saving={saving}
-              editRights={editRights}
-              userId={userId}
               confirmDeleteUpdate={confirmDeleteUpdate}
+              editRights={editRights}
+              loadMore={loadMore}
+              optionRowShow={optionRowShow}
+              saving={saving}
+              scrolledToTop={scrolledToTop}
               setEditUpdate={setEditUpdate}
               setReplyTo={setReplyTo}
-              optionRowShow={optionRowShow}
+              updates={data?.crimeGroup?.updates}
+              userId={userId}
             />
             <UpdateBar
-              replyTo={replyTo}
               crimeGroupId={crimeGroupId}
+              replyTo={replyTo}
+              setOptionRowShow={setOptionRowShow}
               setReplyTo={setReplyTo}
               subscribed={data?.crimeGroup?.subscribed || false}
-              setOptionRowShow={setOptionRowShow}
             />
           </div>
         </Col>
       </Row>
 
       <Drawer
+        onClose={toggleAddOffender}
+        open={addOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
         })}
-        open={addOffender}
         width={700}
-        onClose={toggleAddOffender}
         zIndex={999}
       >
         {addOffender ? (
           <AddNewOffenderSimple
-            onCompleted={onCompletedAddOffender}
-            update={updateAddOffenderList}
             crimeGroupId={data?.crimeGroup.id}
             groupsIds={data?.crimeGroup.groups.map(({ id }) => id)}
-            onClose={toggleAddOffender}
             images={[]}
+            onClose={toggleAddOffender}
+            onCompleted={onCompletedAddOffender}
+            update={updateAddOffenderList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddExistingOffender}
+        open={addExistingOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Offenders',
         })}
-        open={addExistingOffender}
         width="1000"
-        onClose={toggleAddExistingOffender}
         zIndex={1001}
       >
         {addExistingOffender ? (
@@ -772,38 +773,38 @@ const ViewCrimeGroup = ({
 
       {/* vehicle */}
       <Drawer
+        onClose={toggleAddNewVehicle}
+        open={addNewVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Add New Vehicle',
         })}
-        open={addNewVehicle}
         width={700}
         zIndex={999}
-        onClose={toggleAddNewVehicle}
       >
         {addNewVehicle ? (
           <AddVehicle
             onClose={toggleAddNewVehicle}
-            update={submitNewVehicle}
             saving={saving}
+            update={submitNewVehicle}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={toggleAddExistingVehicle}
+        open={addExistingVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Add Existing Vehicles',
         })}
-        open={addExistingVehicle}
         width={800}
-        onClose={toggleAddExistingVehicle}
         zIndex={1001}
-        bodyStyle={{ overflow: 'hidden' }}
       >
         {addExistingVehicle ? (
           <LinkVehicle
-            update={(submitData) => submitVehicle(submitData.id)}
             onClose={toggleAddExistingVehicle}
+            update={(submitData) => submitVehicle(submitData.id)}
             vehicleIds={vehicleIds}
           />
         ) : (
@@ -811,40 +812,40 @@ const ViewCrimeGroup = ({
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddAlias}
+        open={addAlias}
         title={intl.formatMessage({
           defaultMessage: 'Add New Alias',
         })}
-        open={addAlias}
         width={400}
-        onClose={toggleAddAlias}
       >
         {addAlias ? <AddAlias onClose={toggleAddAlias} /> : <div />}
       </Drawer>
       <Drawer
+        bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
+        onClose={toggleViewSuggested}
+        open={viewSuggestedOpen}
         title={intl.formatMessage({
           defaultMessage: 'Suggested Group Members',
         })}
-        open={viewSuggestedOpen}
         width={900}
-        onClose={toggleViewSuggested}
-        bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
       >
         {viewSuggestedOpen && editRights && (
           <SuggestedMembers
-            suggestedData={suggestedData}
-            onClose={toggleViewSuggested}
             handleAddSuggestion={handleAddSuggestion}
+            onClose={toggleViewSuggested}
+            suggestedData={suggestedData}
           />
         )}
       </Drawer>
       {/* evidence */}
       <Drawer
+        onClose={toggleAddDocument}
+        open={addDocument}
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
         })}
-        open={addDocument}
         width="600"
-        onClose={toggleAddDocument}
         zIndex={1001}
       >
         {addDocument ? (
@@ -859,18 +860,18 @@ const ViewCrimeGroup = ({
       </Drawer>
       {/* investigation */}
       <Drawer
+        onClose={toggleAddInvestigation}
+        open={addInvestigation}
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
         })}
-        open={addInvestigation}
         width="500"
-        onClose={toggleAddInvestigation}
       >
         {addInvestigation ? (
           <AddInvestigation
-            update={updateInvestigationList}
             incidentId={data?.crimeGroup?.id || ''}
             onClose={toggleAddInvestigation}
+            update={updateInvestigationList}
           />
         ) : (
           <div />

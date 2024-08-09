@@ -1,30 +1,41 @@
 import React from 'react';
+
 import View from './ReportsCentre.view';
 import useReportsCentres from './useReportsCentre';
 
 const ReportsCentre = () => {
   const {
-    loading,
+    createGroupOpen,
+    createOpen,
     data,
+    editGroupOpen,
+    editOpen,
+    loading,
+    onDeleteReportGroup,
+    onDeleteReportTemplate,
     search,
     setSearch,
-    onDeleteReportTemplate,
-    toggleEditOpen,
+    toggleCreateGroupOpen,
     toggleCreateOpen,
-    editOpen,
-    createOpen,
+    toggleEditGroupOpen,
+    toggleEditOpen,
   } = useReportsCentres();
   return (
     <View
-      loading={loading}
+      createGroupOpen={createGroupOpen}
+      createOpen={createOpen}
       data={data}
+      editGroupOpen={editGroupOpen}
+      editOpen={editOpen}
+      loading={loading}
+      onDeleteReportGroup={onDeleteReportGroup}
+      onDeleteReportTemplate={onDeleteReportTemplate}
       search={search}
       setSearch={setSearch}
-      onDeleteReportTemplate={onDeleteReportTemplate}
-      toggleEditOpen={toggleEditOpen}
+      toggleCreateGroupOpen={toggleCreateGroupOpen}
       toggleCreateOpen={toggleCreateOpen}
-      editOpen={editOpen}
-      createOpen={createOpen}
+      toggleEditGroupOpen={toggleEditGroupOpen}
+      toggleEditOpen={toggleEditOpen}
     />
   );
 };

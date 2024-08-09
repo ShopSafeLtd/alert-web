@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useIntl } from 'react-intl';
 import useStyles from './ListBusinesses.styles';
 import CreateEditStatementContainer from '../../../../components/form-components/statements/createEditStatement.container';
-import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
+import { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
 
 interface TableData {
   key: string;

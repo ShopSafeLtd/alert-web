@@ -1,26 +1,26 @@
+import { useUserSettingsQuery } from '#/components/onboarding/Onboarding/AccountDetail/graphql/qureries/__generated__/user-settings.generated';
 import { useStoreState } from '#/state';
-import { useUserSettingsQuery } from '#/components/onboarding/Onboarding/AccountDetail/graphql/qureries/user-settings.generated';
 
 export interface AccountData {
   fullName: string;
-  subscribedIncidentOnly: boolean;
   incidentEmail: boolean;
   incidentPush: boolean;
-  subscribedOffenderOnly: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
+  subscribedIncidentOnly: boolean;
+  subscribedOffenderOnly: boolean;
 }
 interface Props {
-  update: (value: AccountData | undefined) => void;
   accountDetail: AccountData | undefined;
+  update: (value: AccountData | undefined) => void;
 }
 interface Return {
-  onSubmit: (value: AccountData) => void;
   data: AccountData;
   loading: boolean;
+  onSubmit: (value: AccountData) => void;
 }
 
-const useEditUser = ({ update, accountDetail }: Props): Return => {
+const useEditUser = ({ accountDetail, update }: Props): Return => {
   const { fullName } = useStoreState((state) => state.user);
   const onSubmit = (data: AccountData) => {
     update(data);
@@ -29,37 +29,37 @@ const useEditUser = ({ update, accountDetail }: Props): Return => {
   const { data: userData, loading } = useUserSettingsQuery();
 
   const {
-    subscribedIncidentOnly,
     incidentEmail,
     incidentPush,
-    subscribedOffenderOnly,
     offenderEmail,
     offenderPush,
+    subscribedIncidentOnly,
+    subscribedOffenderOnly,
   } = accountDetail ||
     userData?.currentUser || {
-      subscribedIncidentOnly: true,
       incidentEmail: false,
       incidentPush: true,
-      subscribedOffenderOnly: true,
+      messagePush: true,
       offenderEmail: false,
       offenderPush: true,
-      messagePush: true,
+      subscribedIncidentOnly: true,
+      subscribedOffenderOnly: true,
     };
   const data = {
     fullName,
-    subscribedIncidentOnly,
     incidentEmail,
     incidentPush,
-    subscribedOffenderOnly,
     offenderEmail,
     offenderPush,
+    subscribedIncidentOnly,
+    subscribedOffenderOnly,
   };
 
   //   messagePush: true,
   return {
     data,
-    onSubmit,
     loading,
+    onSubmit,
   };
 };
 

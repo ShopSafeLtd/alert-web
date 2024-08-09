@@ -1,24 +1,9 @@
 query ReportsCentre($where: ReportsCentreWhereInput!) {
     reportsCentre(where: $where) {
-        businessReports {
-            id
-            name
-            description
-            type
-        }
-        crimeGroupReports {
-            id
-            name
-            description
-            type
-        }
-        offenderReports {
-            id
-            name
-            description
-            type
-        }
-        summaryReports {
+        id
+        name
+        order
+        reports {
             id
             name
             description

@@ -1,36 +1,36 @@
-import { useStoreState } from 'state';
-import { useState } from 'react';
 import { QueryMode, SortOrder } from 'graphql/types';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface FormData {
   user: string[];
 }
 interface MemberData {
-  id: string;
+  businesses: { id: string; name: string }[];
+  firstLetter?: null | string;
   fullName: string;
-  businesses: { name: string; id: string }[];
-  firstLetter?: string | null;
+  id: string;
 }
 interface Props {
-  onClose: () => void;
   addMemberUpdate: (value: FormData) => void;
   membersData: MemberData[] | undefined;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  usersData: MemberData[] | undefined;
   loading: boolean;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  saving: boolean;
+  usersData: MemberData[] | undefined;
 }
 
 const useAddUserToChat = ({
-  onClose,
-  membersData,
   addMemberUpdate,
+  membersData,
+  onClose,
 }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -39,16 +39,24 @@ const useAddUserToChat = ({
   const { data: usersData, loading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
           },
         },
+      },
+      orderBy: {
+        fullName: SortOrder.Asc,
+      },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      where: {
         OR: [
           {
             fullName: {
@@ -67,21 +75,13 @@ const useAddUserToChat = ({
             },
           },
         ],
-      },
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      orderBy: {
-        fullName: SortOrder.Asc,
-      },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
           },
         },
       },
@@ -95,14 +95,14 @@ const useAddUserToChat = ({
   };
 
   return {
+    loading,
     onSubmit,
+    saving,
+    search,
+    setSearch,
     usersData: usersData?.users
       .filter((user) => !membersData?.map((el) => el.id).includes(user.id))
       .map((user) => user),
-    loading,
-    search,
-    setSearch,
-    saving,
   };
 };
 

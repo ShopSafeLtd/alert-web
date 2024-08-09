@@ -1,9 +1,9 @@
-import type { ListDocumentsOnSchemeQuery } from 'graphql/documents/queries/list-documents.generated';
+import type { ListDocumentsOnSchemeQuery } from 'graphql/documents/queries/__generated__/list-documents.generated';
 
 export interface Props {
-  data: ListDocumentsOnSchemeQuery | undefined;
-  toggleAddDocument: () => void;
   addDocument: boolean;
-  loading: boolean;
+  data: ListDocumentsOnSchemeQuery | undefined;
   isAdmin: boolean;
+  loading: boolean;
+  toggleAddDocument: () => void;
 }

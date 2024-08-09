@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { Button, Form, Input, Row, Col } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { useForm } from 'antd/lib/form/Form';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import { useEditReportTemplateQuery } from './edit-report-query.generated';
-import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/update-report-template.generated';
+import ReportGroupSelect from '#/components/form-components/ReportGroupSelect/ReportGroupSelect.view';
+import { useEditReportTemplateQuery } from '#/components/form-components/reports/EditReport/__generated__/edit-report-query.generated';
+import { Button, Col, Form, Input, Row } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/update-report-template.generated';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface FormData {
-  name: string;
   description: string;
   groups: string[];
+  name: string;
+  reportGroupId: string;
 }
 
 interface Props {
@@ -24,17 +26,18 @@ const EditReport = ({ onClose, reportId }: Props) => {
   const [saving, setSaving] = useState(false);
 
   useEditReportTemplateQuery({
+    onCompleted: (data) => {
+      form.setFieldsValue({
+        description: data.reportTemplate.description ?? '',
+        groups: data.reportTemplate.groups.map(({ id }) => id),
+        name: data.reportTemplate.name ?? '',
+        reportGroupId: data.reportTemplate.reportGroup.id,
+      });
+    },
     variables: {
       where: {
         id: reportId,
       },
-    },
-    onCompleted: (data) => {
-      form.setFieldsValue({
-        name: data.reportTemplate.name ?? '',
-        description: data.reportTemplate.description ?? '',
-        groups: data.reportTemplate.groups.map(({ id }) => id),
-      });
     },
   });
 
@@ -49,65 +52,74 @@ const EditReport = ({ onClose, reportId }: Props) => {
     setSaving(true);
     void editReport({
       variables: {
-        where: {
-          id: reportId,
-        },
         data: {
-          name: { set: values.name },
           description: { set: values.description },
           groups: { set: values.groups.map((id) => ({ id })) },
+          name: { set: values.name },
+          reportGroup: values.reportGroupId,
+        },
+        where: {
+          id: reportId,
         },
       },
     });
   };
 
   return (
-    <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
+    <Form<FormData> form={form} layout="vertical" onFinish={onSubmit}>
       <Form.Item
-        name="name"
         label={intl.formatMessage({ defaultMessage: 'Name' })}
+        name="name"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage: 'Name is required',
             }),
+            required: true,
           },
         ]}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        name="description"
         label={intl.formatMessage({
           defaultMessage: 'Description',
         })}
+        name="description"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage: 'Description is required',
             }),
+            required: true,
           },
         ]}
       >
         <Input.TextArea />
       </Form.Item>
       <Form.Item
-        name="groups"
         label={intl.formatMessage({
           defaultMessage: 'Groups',
         })}
+        name="groups"
+      >
+        <GroupsSelect mode="multiple" />
+      </Form.Item>
+      <Form.Item
+        label={intl.formatMessage({
+          defaultMessage: 'Report Group',
+        })}
+        name="reportGroupId"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
-              defaultMessage: 'Please select at least one group.',
+              defaultMessage: 'Please select a report group.',
             }),
+            required: true,
           },
         ]}
       >
-        <GroupsSelect mode="multiple" />
+        <ReportGroupSelect />
       </Form.Item>
       <Form.Item>
         <Row gutter={16} justify="end">
@@ -119,9 +131,9 @@ const EditReport = ({ onClose, reportId }: Props) => {
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               <FormattedMessage defaultMessage="Save Report" />
             </Button>

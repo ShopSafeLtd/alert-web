@@ -1,18 +1,19 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import { useNavigate } from 'react-router-dom';
-import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/search-offender-report.generated';
-import { useSearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/search-offender-report.generated';
+import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
+
+import { useSearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useStoreState } from 'state';
 
 interface Return {
-  searchOffendersData: SearchOffenderReportsQuery | undefined;
-  searchOffenderLoading: boolean;
-  searchValue: string;
-  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setSelectedOffender: (value: string) => void;
   currentSearchPage: number;
+  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSearchPageChange: (page: number, pageSize: number) => void;
+  searchOffenderLoading: boolean;
+  searchOffendersData: SearchOffenderReportsQuery | undefined;
+  searchValue: string;
+  setSelectedOffender: (value: string) => void;
 }
 
 const useOffenderProfile = (): Return => {
@@ -29,17 +30,15 @@ const useOffenderProfile = (): Return => {
     useSearchOffenderReportsQuery({
       fetchPolicy: 'cache-and-network',
       variables: {
-        scheme: {
-          id: currentScheme,
-        },
         order: {
           updatedAt: SortOrder.Desc,
         },
+        scheme: {
+          id: currentScheme,
+        },
+        skip: searchPageSize * (searchPage - 1),
+        take: searchPageSize,
         where: {
-          name: {
-            contains: searchValue,
-            mode: QueryMode.Insensitive,
-          },
           groups: {
             some: {
               users: {
@@ -51,9 +50,11 @@ const useOffenderProfile = (): Return => {
               },
             },
           },
+          name: {
+            contains: searchValue,
+            mode: QueryMode.Insensitive,
+          },
         },
-        skip: searchPageSize * (searchPage - 1),
-        take: searchPageSize,
       },
     });
 
@@ -71,13 +72,13 @@ const useOffenderProfile = (): Return => {
   };
 
   return {
-    searchOffendersData,
-    searchOffenderLoading,
-    searchValue,
-    handleSearchChange,
-    setSelectedOffender,
     currentSearchPage: searchPage,
+    handleSearchChange,
     onSearchPageChange,
+    searchOffenderLoading,
+    searchOffendersData,
+    searchValue,
+    setSelectedOffender,
   };
 };
 

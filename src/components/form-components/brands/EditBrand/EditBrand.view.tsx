@@ -1,31 +1,29 @@
-import React from 'react';
+import type { BrandQuery } from '#/views/settings/brands/graphql/queries/__generated__/brand.generated';
 import type { FormInstance } from 'antd';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import { Button, Col, Form, Input, Row, Skeleton, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import DebounceSelect from '../../DebounceSelect';
+
 import type { FormData } from './useEditBrand';
-import type { BrandQuery } from '#/views/settings/brands/graphql/queries/brand.generated';
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  data: Exclude<BrandQuery['brand'], undefined | null> | null | undefined;
-  loading: boolean;
-  saving: boolean;
+  data: Exclude<BrandQuery['brand'], null | undefined> | null | undefined;
   form: FormInstance<FormData>;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string; location?: string }[]>;
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
 }
 
 const EditOffenderWarning = ({
-  onSubmit,
-  onClose,
   data,
-  loading,
-  saving,
   form,
-  onSearchBusiness,
+  loading,
+  onClose,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return loading ? (
@@ -34,12 +32,12 @@ const EditOffenderWarning = ({
     <Form
       form={form}
       initialValues={{
-        name: data?.name,
-        description: data?.description,
         businesses: data?.businesses.map(({ id, name }) => ({
           label: name,
           value: id,
         })),
+        description: data?.description,
+        name: data?.name,
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -50,14 +48,14 @@ const EditOffenderWarning = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the brand.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -66,44 +64,41 @@ const EditOffenderWarning = ({
         </Col>
         <Col span={23}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
-            <Input.TextArea rows={10} disabled={saving} />
+            <Input.TextArea disabled={saving} rows={10} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col flex={1}>
-          <Row gutter={20} align="middle">
+          <Row align="middle" gutter={20}>
             <Col flex={1}>
               <Form.Item
-                name="businesses"
                 label={intl.formatMessage({
                   defaultMessage: 'Businesses',
                 })}
+                name="businesses"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select at least one business for the new brand.',
                     }),
+                    required: true,
                   },
                 ]}
               >
-                <DebounceSelect
-                  showSearch
-                  allowClear
-                  mode="multiple"
-                  maxTagCount={3}
+                <BusinessesSelect
                   disabled={saving}
+                  maxTagCount={3}
+                  mode="multiple"
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Search for a business...',
                   })}
-                  fetchOptions={onSearchBusiness}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -113,7 +108,7 @@ const EditOffenderWarning = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -122,9 +117,9 @@ const EditOffenderWarning = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>

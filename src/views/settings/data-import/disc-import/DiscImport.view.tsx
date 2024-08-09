@@ -1,6 +1,10 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+
+import { faUpload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Badge,
   Button,
@@ -18,9 +22,9 @@ import {
   Typography,
   Upload,
 } from 'antd';
+import { TagType } from 'graphql/types';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload } from '@fortawesome/pro-light-svg-icons';
+import React from 'react';
 
 import type {
   CSVData,
@@ -36,114 +40,110 @@ import type {
   NewOffender,
   NewUser,
 } from './DiscImport.types';
-import NewUsersTable from './components/NewUsersTable';
-import NewOffenderTable from './components/NewOffenderTable';
+
+import CSVReader from '../../../../components/CSVReader/CSVReader';
 import NewBusinessTable from './components/NewBusinessTable';
 import NewIncidentTable from './components/NewIncidentTable';
-import CSVReader from '../../../../components/CSVReader/CSVReader';
-import { TagType } from 'graphql/types';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import NewOffenderTable from './components/NewOffenderTable';
+import NewUsersTable from './components/NewUsersTable';
 
 const { Title } = Typography;
 
 const getTagText = (value: TagType) => {
-  if (value === TagType.IncidentCrimeType) return 'Crime Type';
+  if (value === TagType.IncidentCrimeType) return 'Incident Type';
   if (value === TagType.IncidentImpact) return 'Impact';
   return 'Involved';
 };
 
 interface Props {
-  knownSubjects: KnownSubject[];
-  members: Member[];
+  activeTags: IncidentTags;
+  areas: string[];
+  currentStep: number;
+  fileList: UploadFile[];
+  galleries: string[];
+  generating: boolean;
+  groupsData: SchemeGroupsQuery | undefined;
+  handleFileListChange: UploadProps['onChange'];
   idSought: IDSought[];
-  incidents: Incident[];
+  idSoughtModalOpen: boolean;
+  imageModalOpen: boolean;
   images: Image[];
+  incidentModalOpen: boolean;
+  incidents: Incident[];
+  knownSubjectModalOpen: boolean;
+  knownSubjects: KnownSubject[];
+  mappingForm: FormInstance<GenerateData>;
+  memberModalOpen: boolean;
+  members: Member[];
   newBusinesses: NewBusiness[];
+  newIncidents: NewIncident[];
   newOffenders: NewOffender[];
   newUsers: NewUser[];
-  onKnownSubjectFileLoaded: (data: CSVData) => void;
-  onMembersFileLoaded: (data: CSVData) => void;
+  onDeleteNewBusiness: (id: string) => void;
+  onGenerateData: (data: GenerateData) => void;
   onIDSoughtFileLoaded: (data: CSVData) => void;
   onIncidentFileLoaded: (data: CSVData) => void;
-  onGenerateData: (data: GenerateData) => void;
-  onDeleteNewBusiness: (id: string) => void;
-  fileList: UploadFile[];
-  handleFileListChange: UploadProps['onChange'];
-  groupsData: SchemeGroupsQuery | undefined;
-  memberModalOpen: boolean;
-  knownSubjectModalOpen: boolean;
-  idSoughtModalOpen: boolean;
-  incidentModalOpen: boolean;
-  imageModalOpen: boolean;
-  toggleMemberModal: () => void;
-  toggleKnownSubjectModal: () => void;
-  toggleIdSoughtModal: () => void;
-  toggleIncidentModal: () => void;
-  toggleImageModal: () => void;
-  generating: boolean;
-  tagData: TagsQuery | undefined;
-  newIncidents: NewIncident[];
-  activeTags: IncidentTags;
-  onSubmit: () => void;
-  onUpdateOffender: (data: NewOffender) => void;
-  onUpdateIncident: (data: NewIncident) => void;
-  onUpdateBusiness: (data: NewBusiness) => void;
-  onUpdateUser: (data: NewUser) => void;
-  mappingForm: FormInstance<GenerateData>;
-  areas: string[];
-  galleries: string[];
-  currentStep: number;
+  onKnownSubjectFileLoaded: (data: CSVData) => void;
+  onMembersFileLoaded: (data: CSVData) => void;
   onStepChange: (value: number) => void;
+  onSubmit: () => void;
+  onUpdateBusiness: (data: NewBusiness) => void;
+  onUpdateIncident: (data: NewIncident) => void;
+  onUpdateOffender: (data: NewOffender) => void;
+  onUpdateUser: (data: NewUser) => void;
+  tagData: TagsQuery | undefined;
+  toggleIdSoughtModal: () => void;
+  toggleImageModal: () => void;
+  toggleIncidentModal: () => void;
+  toggleKnownSubjectModal: () => void;
+  toggleMemberModal: () => void;
 }
 
 const DiscImport = ({
-  knownSubjects,
-  members,
+  activeTags,
+  areas,
+  currentStep,
+  fileList,
+  galleries,
+  groupsData,
+  handleFileListChange,
   idSought,
-  incidents,
+  idSoughtModalOpen,
+  imageModalOpen,
   images,
+  incidentModalOpen,
+  incidents,
+  knownSubjectModalOpen,
+  knownSubjects,
+  mappingForm,
+  memberModalOpen,
+  members,
   newBusinesses,
+  newIncidents,
   newOffenders,
   newUsers,
-  onKnownSubjectFileLoaded,
-  onMembersFileLoaded,
+  onDeleteNewBusiness,
+  onGenerateData,
   onIDSoughtFileLoaded,
   onIncidentFileLoaded,
-  onGenerateData,
-  fileList,
-  handleFileListChange,
-  groupsData,
-  memberModalOpen,
-  knownSubjectModalOpen,
-  idSoughtModalOpen,
-  incidentModalOpen,
-  imageModalOpen,
-  toggleMemberModal,
-  toggleKnownSubjectModal,
-  toggleIdSoughtModal,
-  toggleIncidentModal,
-  toggleImageModal,
-  onDeleteNewBusiness,
-  tagData,
-  newIncidents,
-  activeTags,
-  onSubmit,
-  onUpdateOffender,
-  onUpdateIncident,
-  onUpdateBusiness,
-  onUpdateUser,
-  mappingForm,
-  areas,
-  galleries,
-  currentStep,
+  onKnownSubjectFileLoaded,
+  onMembersFileLoaded,
   onStepChange,
+  onSubmit,
+  onUpdateBusiness,
+  onUpdateIncident,
+  onUpdateOffender,
+  onUpdateUser,
+  tagData,
+  toggleIdSoughtModal,
+  toggleImageModal,
+  toggleIncidentModal,
+  toggleKnownSubjectModal,
+  toggleMemberModal,
 }: Props) => (
   <div style={{ padding: 20 }}>
     <Steps
       current={currentStep}
-      style={{ marginBottom: 20 }}
-      onChange={onStepChange}
       items={[
         {
           title: 'DISC Data',
@@ -164,6 +164,8 @@ const DiscImport = ({
           title: 'Incidents',
         },
       ]}
+      onChange={onStepChange}
+      style={{ marginBottom: 20 }}
     />
 
     {currentStep === 0 && (
@@ -188,16 +190,16 @@ const DiscImport = ({
           <Col>
             <Title level={5}>Images ZIP</Title>
             <Upload
+              accept=".zip"
               action="http://localhost:4000/import-zip"
               fileList={fileList}
               onChange={handleFileListChange}
-              accept=".zip"
             >
               <Button
                 icon={
                   <FontAwesomeIcon
-                    style={{ marginRight: 10 }}
                     icon={faUpload}
+                    style={{ marginRight: 10 }}
                   />
                 }
               >
@@ -213,97 +215,97 @@ const DiscImport = ({
       <Row gutter={[16, 16]}>
         <Col>
           <Card
-            title="DISC Members"
-            onClick={toggleMemberModal}
-            style={{ cursor: 'pointer', margin: 0 }}
             bodyStyle={{ padding: 10 }}
             extra={
               <Badge
-                style={{ marginLeft: 10 }}
-                showZero
                 count={members.length}
+                showZero
+                style={{ marginLeft: 10 }}
               />
             }
+            onClick={toggleMemberModal}
+            style={{ cursor: 'pointer', margin: 0 }}
+            title="DISC Members"
           />
         </Col>
         <Col>
           <Card
-            title="DISC Known Subjects"
-            style={{ cursor: 'pointer', margin: 0 }}
             bodyStyle={{ padding: 10 }}
             extra={
               <Badge
-                style={{ marginLeft: 10 }}
-                showZero
                 count={knownSubjects.length}
+                showZero
+                style={{ marginLeft: 10 }}
               />
             }
             onClick={toggleKnownSubjectModal}
+            style={{ cursor: 'pointer', margin: 0 }}
+            title="DISC Known Subjects"
           />
         </Col>
         <Col>
           <Card
-            title="DISC ID Sought"
-            style={{ cursor: 'pointer', margin: 0 }}
             bodyStyle={{ padding: 10 }}
             extra={
               <Badge
-                style={{ marginLeft: 10 }}
-                showZero
                 count={idSought.length}
+                showZero
+                style={{ marginLeft: 10 }}
               />
             }
             onClick={toggleIdSoughtModal}
+            style={{ cursor: 'pointer', margin: 0 }}
+            title="DISC ID Sought"
           />
         </Col>
         <Col>
           <Card
-            title="DISC Incidents"
-            style={{ cursor: 'pointer', margin: 0 }}
             bodyStyle={{ padding: 10 }}
             extra={
               <Badge
-                style={{ marginLeft: 10 }}
-                showZero
                 count={incidents.length}
+                showZero
+                style={{ marginLeft: 10 }}
               />
             }
             onClick={toggleIncidentModal}
+            style={{ cursor: 'pointer', margin: 0 }}
+            title="DISC Incidents"
           />
         </Col>
         <Col>
           <Card
-            title="DISC Images"
-            style={{ cursor: 'pointer', margin: 0 }}
             bodyStyle={{ padding: 10 }}
             extra={
               <Badge
-                style={{ marginLeft: 10 }}
-                showZero
                 count={images.length}
+                showZero
+                style={{ marginLeft: 10 }}
               />
             }
             onClick={toggleImageModal}
+            style={{ cursor: 'pointer', margin: 0 }}
+            title="DISC Images"
           />
         </Col>
       </Row>
     )}
 
     {currentStep === 1 && (
-      <Card title="Import Settings" style={{ marginTop: 20 }}>
+      <Card style={{ marginTop: 20 }} title="Import Settings">
         <Form
           form={mappingForm}
-          onFinish={onGenerateData}
           initialValues={{
             excludeIncidentDate: moment().add(-1, 'year'),
             excludeUserDate: moment().add(-3, 'month'),
           }}
+          onFinish={onGenerateData}
         >
           <Row gutter={8}>
             <Col>
               <Form.Item
-                name="excludeIncidentDate"
                 label="Exclude data older than"
+                name="excludeIncidentDate"
                 required
               >
                 <DatePicker format="DD/MM/YYYY" />
@@ -311,27 +313,27 @@ const DiscImport = ({
             </Col>
             <Col>
               <Form.Item
-                name="excludeUserDate"
                 label="Exclude users that haven't logged in since"
+                name="excludeUserDate"
                 required
               >
                 <DatePicker format="DD/MM/YYYY" />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="townCity" label="Town City Override" required>
+              <Form.Item label="Town City Override" name="townCity" required>
                 <Input />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="fallbackGroup" label="Fallback Group" required>
+              <Form.Item label="Fallback Group" name="fallbackGroup" required>
                 <Select
                   mode="multiple"
-                  style={{ width: 200 }}
                   options={groupsData?.groups.map((group) => ({
-                    value: group.id,
                     label: group.name,
+                    value: group.id,
                   }))}
+                  style={{ width: 200 }}
                 />
               </Form.Item>
             </Col>
@@ -342,16 +344,16 @@ const DiscImport = ({
             {activeTags.assaultViolenceAffray && (
               <Col span={12}>
                 <Form.Item
-                  name="assaultViolenceAffray"
                   label="Assault/Violence/Affray"
+                  name="assaultViolenceAffray"
                   rules={[{ required: true }]}
                 >
                   <Select
-                    mode="multiple"
                     maxTagCount={2}
+                    mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -360,16 +362,16 @@ const DiscImport = ({
             {activeTags.beggingPersistent && (
               <Col span={12}>
                 <Form.Item
-                  name="beggingPersistent"
                   label="Begging, persistent"
+                  name="beggingPersistent"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -378,16 +380,16 @@ const DiscImport = ({
             {activeTags.begging && (
               <Col span={12}>
                 <Form.Item
-                  name="begging"
                   label="Begging"
+                  name="begging"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -396,16 +398,16 @@ const DiscImport = ({
             {activeTags.criminalDamageGraffitiVandalism && (
               <Col span={12}>
                 <Form.Item
-                  name="criminalDamageGraffitiVandalism"
                   label="Criminal Damage/Graffiti/Vandalism"
+                  name="criminalDamageGraffitiVandalism"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -414,16 +416,16 @@ const DiscImport = ({
             {activeTags.possessionWithIntentToSupplyDrugs && (
               <Col span={12}>
                 <Form.Item
-                  name="possessionWithIntentToSupplyDrugs"
                   label="Possession with intent to supply drugs"
+                  name="possessionWithIntentToSupplyDrugs"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -432,16 +434,16 @@ const DiscImport = ({
             {activeTags.harassmentThreateningBehaviour && (
               <Col span={12}>
                 <Form.Item
-                  name="harassmentThreateningBehaviour"
                   label="Harassment/Threatening Behaviour"
+                  name="harassmentThreateningBehaviour"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -450,16 +452,16 @@ const DiscImport = ({
             {activeTags.joyRiding && (
               <Col span={12}>
                 <Form.Item
-                  name="joyRiding"
                   label="Joyriding"
+                  name="joyRiding"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -468,16 +470,16 @@ const DiscImport = ({
             {activeTags.kerbCrawling && (
               <Col span={12}>
                 <Form.Item
-                  name="kerbCrawling"
                   label="Kerbcrawling"
+                  name="kerbCrawling"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -486,16 +488,16 @@ const DiscImport = ({
             {activeTags.noiseNuisance && (
               <Col span={12}>
                 <Form.Item
-                  name="noiseNuisance"
                   label="Noise Nuisance"
+                  name="noiseNuisance"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -504,16 +506,16 @@ const DiscImport = ({
             {activeTags.inappropriateSexualContact && (
               <Col span={12}>
                 <Form.Item
-                  name="inappropriateSexualContact"
                   label="Inappropriate sexual contact"
+                  name="inappropriateSexualContact"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -522,16 +524,16 @@ const DiscImport = ({
             {activeTags.racialAbuse && (
               <Col span={12}>
                 <Form.Item
-                  name="racialAbuse"
                   label="Racial Abuse"
+                  name="racialAbuse"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -540,16 +542,16 @@ const DiscImport = ({
             {activeTags.smokingUnderageOrInProhibitedArea && (
               <Col span={12}>
                 <Form.Item
-                  name="smokingUnderageOrInProhibitedArea"
                   label="Smoking, underage or in prohibited area"
+                  name="smokingUnderageOrInProhibitedArea"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -558,16 +560,16 @@ const DiscImport = ({
             {activeTags.streetDrinking && (
               <Col span={12}>
                 <Form.Item
-                  name="streetDrinking"
                   label="Street drinking"
+                  name="streetDrinking"
                   rules={[{ required: true }]}
                 >
                   <Select
-                    mode="multiple"
                     maxTagCount={2}
+                    mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -576,16 +578,16 @@ const DiscImport = ({
             {activeTags.possessionOfDrugs && (
               <Col span={12}>
                 <Form.Item
-                  name="possessionOfDrugs"
                   label="Possession of Drugs"
+                  name="possessionOfDrugs"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -594,16 +596,16 @@ const DiscImport = ({
             {activeTags.theft && (
               <Col span={12}>
                 <Form.Item
-                  name="theft"
                   label="Theft"
+                  name="theft"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -612,16 +614,16 @@ const DiscImport = ({
             {activeTags.verbalAbuse && (
               <Col span={12}>
                 <Form.Item
-                  name="verbalAbuse"
                   label="Verbal Abuse"
+                  name="verbalAbuse"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -630,16 +632,16 @@ const DiscImport = ({
             {activeTags.beingOnPremisesWhilstBanned && (
               <Col span={12}>
                 <Form.Item
-                  name="beingOnPremisesWhilstBanned"
                   label="Being On Premises Whilst Banned"
+                  name="beingOnPremisesWhilstBanned"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -648,16 +650,16 @@ const DiscImport = ({
             {activeTags.breachOfSection35Order && (
               <Col span={12}>
                 <Form.Item
-                  name="breachOfSection35Order"
                   label="Breach of Section 35 (was 27) Order"
+                  name="breachOfSection35Order"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -666,16 +668,16 @@ const DiscImport = ({
             {activeTags.other && (
               <Col span={12}>
                 <Form.Item
-                  name="other"
                   label="Other"
+                  name="other"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -684,16 +686,16 @@ const DiscImport = ({
             {activeTags.unlicensedTaxiCab && (
               <Col span={12}>
                 <Form.Item
-                  name="unlicensedTaxiCab"
                   label="Unlicensed Taxi Cab"
+                  name="unlicensedTaxiCab"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -702,16 +704,16 @@ const DiscImport = ({
             {activeTags.unlicensedStreetTrading && (
               <Col span={12}>
                 <Form.Item
-                  name="unlicensedStreetTrading"
                   label="Unlicensed Street Trading"
+                  name="unlicensedStreetTrading"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -720,16 +722,16 @@ const DiscImport = ({
             {activeTags.misuseOfID && (
               <Col span={12}>
                 <Form.Item
-                  name="misuseOfID"
                   label="Misuse of ID"
+                  name="misuseOfID"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -738,16 +740,16 @@ const DiscImport = ({
             {activeTags.underageIntoxication && (
               <Col span={12}>
                 <Form.Item
-                  name="underageIntoxication"
                   label="Underage Intoxication"
+                  name="underageIntoxication"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -756,15 +758,15 @@ const DiscImport = ({
             {activeTags.goingEquippedToSteal && (
               <Col span={12}>
                 <Form.Item
-                  name="goingEquippedToSteal"
                   label="Going equipped to steal"
+                  name="goingEquippedToSteal"
                   rules={[{ required: true }]}
                 >
                   <Select
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -773,16 +775,16 @@ const DiscImport = ({
             {activeTags.hateCrime && (
               <Col span={12}>
                 <Form.Item
-                  name="hateCrime"
                   label="Hate Crime"
+                  name="hateCrime"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -791,16 +793,16 @@ const DiscImport = ({
             {activeTags.roughSleeping && (
               <Col span={12}>
                 <Form.Item
-                  name="roughSleeping"
                   label="Rough Sleeping"
+                  name="roughSleeping"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -809,16 +811,16 @@ const DiscImport = ({
             {activeTags.breachOfBan && (
               <Col span={12}>
                 <Form.Item
-                  name="breachOfBan"
                   label="Breach of an order/ban etc"
+                  name="breachOfBan"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -827,16 +829,16 @@ const DiscImport = ({
             {activeTags.drunkenDisorderlyBehaviour && (
               <Col span={12}>
                 <Form.Item
-                  name="drunkenDisorderlyBehaviour"
                   label="Drunken and disorderly behaviour"
+                  name="drunkenDisorderlyBehaviour"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -845,16 +847,16 @@ const DiscImport = ({
             {activeTags.possessionOfAnOffensiveWeapon && (
               <Col span={12}>
                 <Form.Item
-                  name="possessionOfAnOffensiveWeapon"
                   label="Possession of an offensive weapon"
+                  name="possessionOfAnOffensiveWeapon"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -863,16 +865,16 @@ const DiscImport = ({
             {activeTags.attemptedTheft && (
               <Col span={12}>
                 <Form.Item
-                  name="attemptedTheft"
                   label="Attempted theft"
+                  name="attemptedTheft"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -881,16 +883,16 @@ const DiscImport = ({
             {activeTags.illegalGambling && (
               <Col span={12}>
                 <Form.Item
-                  name="illegalGambling"
                   label="Illegal gambling"
+                  name="illegalGambling"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -899,16 +901,16 @@ const DiscImport = ({
             {activeTags.robbery && (
               <Col span={12}>
                 <Form.Item
-                  name="robbery"
                   label="Robbery"
+                  name="robbery"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -917,16 +919,16 @@ const DiscImport = ({
             {activeTags.section35Issued && (
               <Col span={12}>
                 <Form.Item
-                  name="section35Issued"
                   label="Section 35 issued"
+                  name="section35Issued"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -935,16 +937,16 @@ const DiscImport = ({
             {activeTags.breachPoliceBail && (
               <Col span={12}>
                 <Form.Item
-                  name="breachPoliceBail"
                   label="Breach of Police bail"
+                  name="breachPoliceBail"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -953,16 +955,16 @@ const DiscImport = ({
             {activeTags.otherAlcoholDrugRelated && (
               <Col span={12}>
                 <Form.Item
-                  name="otherAlcoholDrugRelated"
                   label="Other Alcohol/Drug-related"
+                  name="otherAlcoholDrugRelated"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -971,16 +973,16 @@ const DiscImport = ({
             {activeTags.otherAntiSocialBehaviour && (
               <Col span={12}>
                 <Form.Item
-                  name="otherAntiSocialBehaviour"
                   label="Other Anti-Social Behaviour"
+                  name="otherAntiSocialBehaviour"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -989,16 +991,16 @@ const DiscImport = ({
             {activeTags.otherTheftFraud && (
               <Col span={12}>
                 <Form.Item
-                  name="otherTheftFraud"
                   label="Other Theft/Fraud"
+                  name="otherTheftFraud"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -1007,16 +1009,16 @@ const DiscImport = ({
             {activeTags.otherViolentOffensiveBehaviour && (
               <Col span={12}>
                 <Form.Item
-                  name="otherViolentOffensiveBehaviour"
                   label="Other Violent or offensive behaviour"
+                  name="otherViolentOffensiveBehaviour"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -1025,16 +1027,16 @@ const DiscImport = ({
             {activeTags.otherBreachBan && (
               <Col span={12}>
                 <Form.Item
-                  name="otherBreachBan"
                   label="Other Breach of an order/ban etc"
+                  name="otherBreachBan"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -1043,16 +1045,16 @@ const DiscImport = ({
             {activeTags.fareEvasion && (
               <Col span={12}>
                 <Form.Item
-                  name="fareEvasion"
                   label="Fare evasion"
+                  name="fareEvasion"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -1061,16 +1063,16 @@ const DiscImport = ({
             {activeTags.covidRelated && (
               <Col span={12}>
                 <Form.Item
-                  name="covidRelated"
                   label="Covid-related"
+                  name="covidRelated"
                   rules={[{ required: true }]}
                 >
                   <Select
                     maxTagCount={2}
                     mode="multiple"
                     options={tagData?.tags.map((tag) => ({
-                      value: tag.id,
                       label: `${tag.name} (${getTagText(tag.type)})`,
+                      value: tag.id,
                     }))}
                   />
                 </Form.Item>
@@ -1079,14 +1081,14 @@ const DiscImport = ({
           </Row>
 
           {areas.length === 0 && (
-            <Form.Item name="defaultUserGroup" label="Default User Group">
+            <Form.Item label="Default User Group" name="defaultUserGroup">
               <Select
                 mode="multiple"
-                style={{ width: 200 }}
                 options={groupsData?.groups.map((group) => ({
-                  value: group.id,
                   label: group.name,
+                  value: group.id,
                 }))}
+                style={{ width: 200 }}
               />
             </Form.Item>
           )}
@@ -1098,17 +1100,17 @@ const DiscImport = ({
                   <>
                     {fields.map(({ key, name, ...restField }) => (
                       <Space
+                        align="baseline"
                         key={key}
                         style={{ display: 'flex', marginBottom: 8 }}
-                        align="baseline"
                       >
                         <Form.Item
                           // eslint-disable-next-line react/jsx-props-no-spreading
                           {...restField}
                           name={[name, 'area']}
-                          rules={[{ required: true, message: 'Missing Area' }]}
+                          rules={[{ message: 'Missing Area', required: true }]}
                         >
-                          <Input readOnly placeholder="" />
+                          <Input placeholder="" readOnly />
                         </Form.Item>
                         <Form.Item
                           // eslint-disable-next-line react/jsx-props-no-spreading
@@ -1117,11 +1119,11 @@ const DiscImport = ({
                         >
                           <Select
                             mode="multiple"
-                            style={{ width: 200 }}
                             options={groupsData?.groups.map((group) => ({
-                              value: group.id,
                               label: group.name,
+                              value: group.id,
                             }))}
+                            style={{ width: 200 }}
                           />
                         </Form.Item>
                       </Space>
@@ -1134,16 +1136,16 @@ const DiscImport = ({
 
           {galleries.length === 0 && (
             <Form.Item
-              name="defaultOffenderGroup"
               label="Default Offender Group"
+              name="defaultOffenderGroup"
             >
               <Select
                 mode="multiple"
-                style={{ width: 200 }}
                 options={groupsData?.groups.map((group) => ({
-                  value: group.id,
                   label: group.name,
+                  value: group.id,
                 }))}
+                style={{ width: 200 }}
               />
             </Form.Item>
           )}
@@ -1155,19 +1157,19 @@ const DiscImport = ({
                   <>
                     {fields.map(({ key, name, ...restField }) => (
                       <Space
+                        align="baseline"
                         key={key}
                         style={{ display: 'flex', marginBottom: 8 }}
-                        align="baseline"
                       >
                         <Form.Item
                           // eslint-disable-next-line react/jsx-props-no-spreading
                           {...restField}
                           name={[name, 'gallery']}
                           rules={[
-                            { required: true, message: 'Missing Gallery' },
+                            { message: 'Missing Gallery', required: true },
                           ]}
                         >
-                          <Input readOnly placeholder="" />
+                          <Input placeholder="" readOnly />
                         </Form.Item>
                         <Form.Item
                           // eslint-disable-next-line react/jsx-props-no-spreading
@@ -1176,11 +1178,11 @@ const DiscImport = ({
                         >
                           <Select
                             mode="multiple"
-                            style={{ width: 200 }}
                             options={groupsData?.groups.map((group) => ({
-                              value: group.id,
                               label: group.name,
+                              value: group.id,
                             }))}
+                            style={{ width: 200 }}
                           />
                         </Form.Item>
                       </Space>
@@ -1192,7 +1194,7 @@ const DiscImport = ({
           )}
 
           <Form.Item>
-            <Row gutter={8} style={{ width: '100%' }} justify="end">
+            <Row gutter={8} justify="end" style={{ width: '100%' }}>
               <Col>
                 <Button onClick={() => onStepChange(currentStep - 1)}>
                   Back
@@ -1230,27 +1232,27 @@ const DiscImport = ({
 
     {currentStep === 4 && (
       <NewOffenderTable
+        groupsData={groupsData}
         newOffenders={newOffenders}
         onAdd={() => {}}
-        groupsData={groupsData}
         onUpdateOffender={onUpdateOffender}
       />
     )}
 
     {currentStep === 5 && (
       <NewIncidentTable
-        newIncidents={newIncidents}
-        onAdd={() => {}}
         groupsData={groupsData}
-        tagsData={tagData}
-        newOffenders={newOffenders}
         newBusinesses={newBusinesses}
+        newIncidents={newIncidents}
+        newOffenders={newOffenders}
         newUsers={newUsers}
+        onAdd={() => {}}
         onUpdateIncident={onUpdateIncident}
+        tagsData={tagData}
       />
     )}
 
-    <Row gutter={8} style={{ marginTop: 20 }} justify="end">
+    <Row gutter={8} justify="end" style={{ marginTop: 20 }}>
       {[2, 3, 4, 5].includes(currentStep) && (
         <Col>
           <Button onClick={() => onStepChange(currentStep - 1)}>Back</Button>
@@ -1271,8 +1273,8 @@ const DiscImport = ({
     </Row>
 
     <Drawer
-      open={memberModalOpen}
       onClose={toggleMemberModal}
+      open={memberModalOpen}
       title="DISC Members"
       width="95vw"
     >
@@ -1281,48 +1283,48 @@ const DiscImport = ({
           <Table<Member>
             columns={[
               {
-                key: 'id',
                 dataIndex: 'id',
+                key: 'id',
                 title: 'ID',
               },
               {
-                key: 'firstName',
                 dataIndex: 'firstName',
+                key: 'firstName',
                 title: 'firstName',
               },
               {
-                key: 'lastName',
                 dataIndex: 'lastName',
+                key: 'lastName',
                 title: 'lastName',
               },
               {
-                key: 'email',
                 dataIndex: 'email',
+                key: 'email',
                 title: 'email',
               },
               {
-                key: 'organisation',
                 dataIndex: 'organisation',
+                key: 'organisation',
                 title: 'organisation',
               },
               {
-                key: 'placeOfWork',
                 dataIndex: 'placeOfWork',
+                key: 'placeOfWork',
                 title: 'placeOfWork',
               },
               {
-                key: 'premises',
                 dataIndex: 'premises',
+                key: 'premises',
                 title: 'premises',
               },
               {
-                key: 'categories',
                 dataIndex: 'categories',
+                key: 'categories',
                 title: 'categories',
               },
               {
-                key: 'lastSignedIn',
                 dataIndex: 'lastSignedIn',
+                key: 'lastSignedIn',
                 title: 'lastSignedIn',
               },
             ]}
@@ -1334,8 +1336,8 @@ const DiscImport = ({
       )}
     </Drawer>
     <Drawer
-      open={knownSubjectModalOpen}
       onClose={toggleKnownSubjectModal}
+      open={knownSubjectModalOpen}
       title="DISC Known Subject"
       width="95vw"
     >
@@ -1344,113 +1346,113 @@ const DiscImport = ({
           <Table<KnownSubject>
             columns={[
               {
-                key: 'workspaceId',
                 dataIndex: 'workspaceId',
+                key: 'workspaceId',
                 title: 'Workspace ID',
               },
               {
-                key: 'workspaceName',
                 dataIndex: 'workspaceName',
+                key: 'workspaceName',
                 title: 'Workspace Name',
               },
               {
-                key: 'memberEmail',
                 dataIndex: 'memberEmail',
+                key: 'memberEmail',
                 title: 'Email',
               },
               {
-                key: 'id',
                 dataIndex: 'id',
+                key: 'id',
                 title: 'ID',
               },
               {
-                key: 'firstName',
                 dataIndex: 'firstName',
+                key: 'firstName',
                 title: 'First Name',
               },
               {
-                key: 'lastName',
                 dataIndex: 'lastName',
+                key: 'lastName',
                 title: 'Last Name',
               },
               {
-                key: 'nicknames',
                 dataIndex: 'nicknames',
+                key: 'nicknames',
                 title: 'Nicknames',
               },
               {
-                key: 'gender',
                 dataIndex: 'gender',
+                key: 'gender',
                 title: 'Gender',
               },
               {
-                key: 'dateOfBirth',
                 dataIndex: 'dateOfBirth',
+                key: 'dateOfBirth',
                 title: 'DOB',
               },
               {
-                key: 'prohibitions',
                 dataIndex: 'prohibitions',
+                key: 'prohibitions',
                 title: 'Prohibitions',
               },
               {
-                key: 'icCodes',
                 dataIndex: 'icCodes',
+                key: 'icCodes',
                 title: 'IC Codes',
               },
               {
-                key: 'ageRange',
                 dataIndex: 'ageRange',
+                key: 'ageRange',
                 title: 'Age Range',
               },
               {
-                key: 'height',
                 dataIndex: 'height',
+                key: 'height',
                 title: 'Height',
               },
               {
-                key: 'build',
                 dataIndex: 'build',
+                key: 'build',
                 title: 'Build',
               },
               {
-                key: 'distinguishingFeatures',
                 dataIndex: 'distinguishingFeatures',
+                key: 'distinguishingFeatures',
                 title: 'Distinguishing Features',
               },
               {
-                key: 'comments',
                 dataIndex: 'comments',
+                key: 'comments',
                 title: 'Comments',
               },
               {
-                key: 'address',
                 dataIndex: 'address',
+                key: 'address',
                 title: 'Address',
               },
               {
-                key: 'postcode',
                 dataIndex: 'postcode',
+                key: 'postcode',
                 title: 'Postcode',
               },
               {
-                key: 'incidentCount',
                 dataIndex: 'incidentCount',
+                key: 'incidentCount',
                 title: 'Incident Count',
               },
               {
-                key: 'dateAdded',
                 dataIndex: 'dateAdded',
+                key: 'dateAdded',
                 title: 'Date Added',
               },
               {
-                key: 'databaseDeletionDate',
                 dataIndex: 'databaseDeletionDate',
+                key: 'databaseDeletionDate',
                 title: 'Database Deletion Date',
               },
               {
-                key: 'galleryStatus',
                 dataIndex: 'galleryStatus',
+                key: 'galleryStatus',
                 title: 'Gallery',
               },
             ]}
@@ -1462,8 +1464,8 @@ const DiscImport = ({
       )}
     </Drawer>
     <Drawer
-      open={idSoughtModalOpen}
       onClose={toggleIdSoughtModal}
+      open={idSoughtModalOpen}
       title="DISC ID Sought"
       width="95vw"
     >
@@ -1472,113 +1474,113 @@ const DiscImport = ({
           <Table<IDSought>
             columns={[
               {
-                key: 'workspaceId',
                 dataIndex: 'workspaceId',
+                key: 'workspaceId',
                 title: 'Workspace ID',
               },
               {
-                key: 'workspaceName',
                 dataIndex: 'workspaceName',
+                key: 'workspaceName',
                 title: 'Workspace Name',
               },
               {
-                key: 'memberEmail',
                 dataIndex: 'memberEmail',
+                key: 'memberEmail',
                 title: 'Email',
               },
               {
-                key: 'id',
                 dataIndex: 'id',
+                key: 'id',
                 title: 'ID',
               },
               {
-                key: 'firstName',
                 dataIndex: 'firstName',
+                key: 'firstName',
                 title: 'First Name',
               },
               {
-                key: 'lastName',
                 dataIndex: 'lastName',
+                key: 'lastName',
                 title: 'Last Name',
               },
               {
-                key: 'nicknames',
                 dataIndex: 'nicknames',
+                key: 'nicknames',
                 title: 'Nicknames',
               },
               {
-                key: 'gender',
                 dataIndex: 'gender',
+                key: 'gender',
                 title: 'Gender',
               },
               {
-                key: 'dateOfBirth',
                 dataIndex: 'dateOfBirth',
+                key: 'dateOfBirth',
                 title: 'DOB',
               },
               {
-                key: 'prohibitions',
                 dataIndex: 'prohibitions',
+                key: 'prohibitions',
                 title: 'Prohibitions',
               },
               {
-                key: 'icCodes',
                 dataIndex: 'icCodes',
+                key: 'icCodes',
                 title: 'IC Codes',
               },
               {
-                key: 'ageRange',
                 dataIndex: 'ageRange',
+                key: 'ageRange',
                 title: 'Age Range',
               },
               {
-                key: 'height',
                 dataIndex: 'height',
+                key: 'height',
                 title: 'Height',
               },
               {
-                key: 'build',
                 dataIndex: 'build',
+                key: 'build',
                 title: 'Build',
               },
               {
-                key: 'distinguishingFeatures',
                 dataIndex: 'distinguishingFeatures',
+                key: 'distinguishingFeatures',
                 title: 'Distinguishing Features',
               },
               {
-                key: 'comments',
                 dataIndex: 'comments',
+                key: 'comments',
                 title: 'Comments',
               },
               {
-                key: 'address',
                 dataIndex: 'address',
+                key: 'address',
                 title: 'Address',
               },
               {
-                key: 'postcode',
                 dataIndex: 'postcode',
+                key: 'postcode',
                 title: 'Postcode',
               },
               {
-                key: 'incidentCount',
                 dataIndex: 'incidentCount',
+                key: 'incidentCount',
                 title: 'Incident Count',
               },
               {
-                key: 'dateAdded',
                 dataIndex: 'dateAdded',
+                key: 'dateAdded',
                 title: 'Date Added',
               },
               {
-                key: 'databaseDeletionDate',
                 dataIndex: 'databaseDeletionDate',
+                key: 'databaseDeletionDate',
                 title: 'Database Deletion Date',
               },
               {
-                key: 'galleryStatus',
                 dataIndex: 'galleryStatus',
+                key: 'galleryStatus',
                 title: 'Gallery',
               },
             ]}
@@ -1590,8 +1592,8 @@ const DiscImport = ({
       )}
     </Drawer>
     <Drawer
-      open={incidentModalOpen}
       onClose={toggleIncidentModal}
+      open={incidentModalOpen}
       title="DISC Incidents"
       width="95vw"
     >
@@ -1600,618 +1602,618 @@ const DiscImport = ({
           <Table<Incident>
             columns={[
               {
-                key: 'workspaceName',
                 dataIndex: 'workspaceName',
+                key: 'workspaceName',
                 title: 'Workspace Name',
               },
               {
-                key: 'id',
                 dataIndex: 'id',
+                key: 'id',
                 title: 'ID',
               },
               {
-                key: 'date',
                 dataIndex: 'date',
+                key: 'date',
                 title: 'Date',
               },
               {
-                key: 'dateTime',
                 dataIndex: 'dateTime',
+                key: 'dateTime',
                 title: 'Date Time',
               },
               {
-                key: 'summary',
                 dataIndex: 'summary',
+                key: 'summary',
                 title: 'Summary',
               },
               {
-                key: 'description',
                 dataIndex: 'description',
+                key: 'description',
                 title: 'Description',
               },
               {
-                key: 'policeContacted',
                 dataIndex: 'policeContacted',
+                key: 'policeContacted',
                 title: 'Police Contacted',
               },
               {
-                key: 'sentToEmails',
                 dataIndex: 'sentToEmails',
+                key: 'sentToEmails',
                 title: 'Sent To Emails',
               },
               {
-                key: 'crimeReportStatus',
                 dataIndex: 'crimeReportStatus',
+                key: 'crimeReportStatus',
                 title: 'Crime Report Status',
               },
               {
-                key: 'internalReference',
                 dataIndex: 'internalReference',
+                key: 'internalReference',
                 title: 'Internal Reference',
               },
               {
-                key: 'vehicleDescriptions',
                 dataIndex: 'vehicleDescriptions',
+                key: 'vehicleDescriptions',
                 title: 'Vehicle Descriptions',
               },
               {
-                key: 'vehicleRegistrations',
                 dataIndex: 'vehicleRegistrations',
+                key: 'vehicleRegistrations',
                 title: 'Vehicle Registrations',
               },
               {
-                key: 'fraudInvolved',
                 dataIndex: 'fraudInvolved',
+                key: 'fraudInvolved',
                 title: 'Fraud Involved',
               },
               {
-                key: 'outcome',
                 dataIndex: 'outcome',
+                key: 'outcome',
                 title: 'Outcome',
               },
               {
-                key: 'otherOutcome',
                 dataIndex: 'otherOutcome',
+                key: 'otherOutcome',
                 title: 'Other Outcome',
               },
               {
-                key: 'drinkInvolved',
                 dataIndex: 'drinkInvolved',
+                key: 'drinkInvolved',
                 title: 'Drink Involved',
               },
               {
-                key: 'drugsInvolved',
                 dataIndex: 'drugsInvolved',
+                key: 'drugsInvolved',
                 title: 'Drugs Involved',
               },
               {
-                key: 'dealingInvolved',
                 dataIndex: 'dealingInvolved',
+                key: 'dealingInvolved',
                 title: 'Dealing Involved',
               },
               {
-                key: 'weaponInvolved',
                 dataIndex: 'weaponInvolved',
+                key: 'weaponInvolved',
                 title: 'Weapon Involved',
               },
               {
-                key: 'groupInvolved',
                 dataIndex: 'groupInvolved',
+                key: 'groupInvolved',
                 title: 'Group Involved',
               },
               {
-                key: 'violenceInvolved',
                 dataIndex: 'violenceInvolved',
+                key: 'violenceInvolved',
                 title: 'Violence Involved',
               },
               {
-                key: 'verbalAbuseInvolved',
                 dataIndex: 'verbalAbuseInvolved',
+                key: 'verbalAbuseInvolved',
                 title: 'Verbal Abuse Involved',
               },
               {
-                key: 'lossValue',
                 dataIndex: 'lossValue',
+                key: 'lossValue',
                 title: 'Loss Value',
               },
               {
-                key: 'lossRecovered',
                 dataIndex: 'lossRecovered',
+                key: 'lossRecovered',
                 title: 'Description',
               },
               {
-                key: 'policeReference',
                 dataIndex: 'policeReference',
+                key: 'policeReference',
                 title: 'Police Reference',
               },
               {
-                key: 'address',
                 dataIndex: 'address',
+                key: 'address',
                 title: 'Address',
               },
               {
-                key: 'postcode',
                 dataIndex: 'postcode',
+                key: 'postcode',
                 title: 'Postcode',
               },
               {
-                key: 'memberId',
                 dataIndex: 'memberId',
+                key: 'memberId',
                 title: 'Member ID',
               },
               {
-                key: 'memberName',
                 dataIndex: 'memberName',
+                key: 'memberName',
                 title: 'Member Name',
               },
               {
-                key: 'memberEmail',
                 dataIndex: 'memberEmail',
+                key: 'memberEmail',
                 title: 'Member Email',
               },
               {
-                key: 'locationName',
                 dataIndex: 'locationName',
+                key: 'locationName',
                 title: 'Location Name',
               },
               {
-                key: 'premises',
                 dataIndex: 'premises',
+                key: 'premises',
                 title: 'Premises',
               },
               {
-                key: 'typeOfOffence',
                 dataIndex: 'typeOfOffence',
+                key: 'typeOfOffence',
                 title: 'Type Of Offence',
               },
               {
-                key: 'assaultViolenceAffray',
                 dataIndex: 'assaultViolenceAffray',
+                key: 'assaultViolenceAffray',
                 title: 'Assault Violence Affray',
               },
               {
-                key: 'beggingPersistent',
                 dataIndex: 'beggingPersistent',
+                key: 'beggingPersistent',
                 title: 'Begging Persistent',
               },
               {
-                key: 'begging',
                 dataIndex: 'begging',
+                key: 'begging',
                 title: 'Begging',
               },
               {
-                key: 'criminalDamageGraffitiVandalism',
                 dataIndex: 'criminalDamageGraffitiVandalism',
+                key: 'criminalDamageGraffitiVandalism',
                 title: 'Description',
               },
               {
-                key: 'possessionWithIntentToSupplyDrugs',
                 dataIndex: 'possessionWithIntentToSupplyDrugs',
+                key: 'possessionWithIntentToSupplyDrugs',
                 title: 'Possession With Intent To Supply Drugs',
               },
               {
-                key: 'harassmentThreateningBehaviour',
                 dataIndex: 'harassmentThreateningBehaviour',
+                key: 'harassmentThreateningBehaviour',
                 title: 'Harassment Threatening Behaviour',
               },
               {
-                key: 'joyRiding',
                 dataIndex: 'joyRiding',
+                key: 'joyRiding',
                 title: 'Joy Riding',
               },
               {
-                key: 'kerbCrawling',
                 dataIndex: 'kerbCrawling',
+                key: 'kerbCrawling',
                 title: 'Kerb Crawling',
               },
               {
-                key: 'noiseNuisance',
                 dataIndex: 'noiseNuisance',
+                key: 'noiseNuisance',
                 title: 'Noise Nuisance',
               },
               {
-                key: 'inappropriateSexualContact',
                 dataIndex: 'inappropriateSexualContact',
+                key: 'inappropriateSexualContact',
                 title: 'Inappropriate Sexual Contact',
               },
               {
-                key: 'racialAbuse',
                 dataIndex: 'racialAbuse',
+                key: 'racialAbuse',
                 title: 'Racial Abuse',
               },
               {
-                key: 'smokingUnderageOrInProhibitedArea',
                 dataIndex: 'smokingUnderageOrInProhibitedArea',
+                key: 'smokingUnderageOrInProhibitedArea',
                 title: 'Smoking Underage Or In Prohibited Area',
               },
               {
-                key: 'streetDrinking',
                 dataIndex: 'streetDrinking',
+                key: 'streetDrinking',
                 title: 'Street Drinking',
               },
               {
-                key: 'possessionOfDrugs',
                 dataIndex: 'possessionOfDrugs',
+                key: 'possessionOfDrugs',
                 title: 'Possession Of Drugs',
               },
               {
-                key: 'theft',
                 dataIndex: 'theft',
+                key: 'theft',
                 title: 'Theft',
               },
               {
-                key: 'verbalAbuse',
                 dataIndex: 'verbalAbuse',
+                key: 'verbalAbuse',
                 title: 'Verbal Abuse',
               },
               {
-                key: 'beingOnPremisesWhilstBanned',
                 dataIndex: 'beingOnPremisesWhilstBanned',
+                key: 'beingOnPremisesWhilstBanned',
                 title: 'Being On Premises Whilst Banned',
               },
               {
-                key: 'breachOfSection35Order',
                 dataIndex: 'breachOfSection35Order',
+                key: 'breachOfSection35Order',
                 title: 'Breach Of Section 35 Order',
               },
               {
-                key: 'other',
                 dataIndex: 'other',
+                key: 'other',
                 title: 'Other',
               },
               {
-                key: 'unlicensedTaxiCab',
                 dataIndex: 'unlicensedTaxiCab',
+                key: 'unlicensedTaxiCab',
                 title: 'Unlicensed Taxi Cab',
               },
               {
-                key: 'unlicensedStreetTrading',
                 dataIndex: 'unlicensedStreetTrading',
+                key: 'unlicensedStreetTrading',
                 title: 'Unlicensed Street Trading',
               },
               {
-                key: 'misuseOfID',
                 dataIndex: 'misuseOfID',
+                key: 'misuseOfID',
                 title: 'Misuse Of ID',
               },
               {
-                key: 'underageIntoxication',
                 dataIndex: 'underageIntoxication',
+                key: 'underageIntoxication',
                 title: 'Underage Intoxication',
               },
               {
-                key: 'goingEquippedToSteal',
                 dataIndex: 'goingEquippedToSteal',
+                key: 'goingEquippedToSteal',
                 title: 'Going Equipped To Steal',
               },
               {
-                key: 'hateCrime',
                 dataIndex: 'hateCrime',
+                key: 'hateCrime',
                 title: 'Hate Crime',
               },
               {
-                key: 'roughSleeping',
                 dataIndex: 'roughSleeping',
+                key: 'roughSleeping',
                 title: 'Rough Sleeping',
               },
               {
-                key: 'breachOfBan',
                 dataIndex: 'breachOfBan',
+                key: 'breachOfBan',
                 title: 'Breach Of Ban',
               },
               {
-                key: 'drunkenDisorderlyBehaviour',
                 dataIndex: 'drunkenDisorderlyBehaviour',
+                key: 'drunkenDisorderlyBehaviour',
                 title: 'Drunken Disorderly Behaviour',
               },
               {
-                key: 'possessionOfAnOffensiveWeapon',
                 dataIndex: 'possessionOfAnOffensiveWeapon',
+                key: 'possessionOfAnOffensiveWeapon',
                 title: 'Possession Of An Offensive Weapon',
               },
               {
-                key: 'attemptedTheft',
                 dataIndex: 'attemptedTheft',
+                key: 'attemptedTheft',
                 title: 'Attempted Theft',
               },
               {
-                key: 'illegalGambling',
                 dataIndex: 'illegalGambling',
+                key: 'illegalGambling',
                 title: 'Illegal Gambling',
               },
               {
-                key: 'robbery',
                 dataIndex: 'robbery',
+                key: 'robbery',
                 title: 'Robbery',
               },
               {
-                key: 'section35Issued',
                 dataIndex: 'section35Issued',
+                key: 'section35Issued',
                 title: 'Section 35 Issued',
               },
               {
-                key: 'breachPoliceBail',
                 dataIndex: 'breachPoliceBail',
+                key: 'breachPoliceBail',
                 title: 'Breach PoliceBail',
               },
               {
-                key: 'otherAlcoholDrugRelated',
                 dataIndex: 'otherAlcoholDrugRelated',
+                key: 'otherAlcoholDrugRelated',
                 title: 'Other Alcohol Drug Related',
               },
               {
-                key: 'otherAntiSocialBehaviour',
                 dataIndex: 'otherAntiSocialBehaviour',
+                key: 'otherAntiSocialBehaviour',
                 title: 'Other Anti Social Behaviour',
               },
               {
-                key: 'otherTheftFraud',
                 dataIndex: 'otherTheftFraud',
+                key: 'otherTheftFraud',
                 title: 'Other Theft Fraud',
               },
               {
-                key: 'otherViolentOffensiveBehaviour',
                 dataIndex: 'otherViolentOffensiveBehaviour',
+                key: 'otherViolentOffensiveBehaviour',
                 title: 'Other Violent Offensive Behaviour',
               },
               {
-                key: 'otherBreachBan',
                 dataIndex: 'otherBreachBan',
+                key: 'otherBreachBan',
                 title: 'Other Breach Ban',
               },
               {
-                key: 'fareEvasion',
                 dataIndex: 'fareEvasion',
+                key: 'fareEvasion',
                 title: 'Fare Evasion',
               },
               {
-                key: 'covidRelated',
                 dataIndex: 'covidRelated',
+                key: 'covidRelated',
                 title: 'COVID Related',
               },
               {
-                key: 'subjectID',
                 dataIndex: 'subjectID',
+                key: 'subjectID',
                 title: 'Subject ID',
               },
               {
-                key: 'subjectFirstName',
                 dataIndex: 'subjectFirstName',
+                key: 'subjectFirstName',
                 title: 'Subject First Name',
               },
               {
-                key: 'subjectLastName',
                 dataIndex: 'subjectLastName',
+                key: 'subjectLastName',
                 title: 'Subject Last Name',
               },
               {
-                key: 'subjectDOB',
                 dataIndex: 'subjectDOB',
+                key: 'subjectDOB',
                 title: 'Subject DOB',
               },
               {
-                key: 'subjectGender',
                 dataIndex: 'subjectGender',
+                key: 'subjectGender',
                 title: 'Subject Gender',
               },
               {
-                key: 'subjectProhibitions',
                 dataIndex: 'subjectProhibitions',
+                key: 'subjectProhibitions',
                 title: 'Subject Prohibitions',
               },
               {
-                key: 'subjectDeletionDate',
                 dataIndex: 'subjectDeletionDate',
+                key: 'subjectDeletionDate',
                 title: 'Subject Deletion Date',
               },
               {
-                key: 'subjectID1',
                 dataIndex: 'subjectID1',
+                key: 'subjectID1',
                 title: 'Subject 1 ID',
               },
               {
-                key: 'subjectFirstName1',
                 dataIndex: 'subjectFirstName1',
+                key: 'subjectFirstName1',
                 title: 'Subject 1 FirstName',
               },
               {
-                key: 'subjectLastName1',
                 dataIndex: 'subjectLastName1',
+                key: 'subjectLastName1',
                 title: 'Subject 1 Last Name',
               },
               {
-                key: 'subjectDOB1',
                 dataIndex: 'subjectDOB1',
+                key: 'subjectDOB1',
                 title: 'Subject 1 DOB',
               },
               {
-                key: 'subjectGender1',
                 dataIndex: 'subjectGender1',
+                key: 'subjectGender1',
                 title: 'Subject 1 Gender',
               },
               {
-                key: 'subjectProhibitions1',
                 dataIndex: 'subjectProhibitions1',
+                key: 'subjectProhibitions1',
                 title: 'Subject 1 Prohibitions',
               },
               {
-                key: 'subjectDeletionDate1',
                 dataIndex: 'subjectDeletionDate1',
+                key: 'subjectDeletionDate1',
                 title: 'Subject 1 Deletion Date',
               },
               {
-                key: 'subjectID2',
                 dataIndex: 'subjectID2',
+                key: 'subjectID2',
                 title: 'Subject 2 ID',
               },
               {
-                key: 'subjectFirstName2',
                 dataIndex: 'subjectFirstName2',
+                key: 'subjectFirstName2',
                 title: 'Subject 2 First Name',
               },
               {
-                key: 'subjectLastName2',
                 dataIndex: 'subjectLastName2',
+                key: 'subjectLastName2',
                 title: 'Subject 2 Last Name',
               },
               {
-                key: 'subjectDOB2',
                 dataIndex: 'subjectDOB2',
+                key: 'subjectDOB2',
                 title: 'Subject 2 DOB',
               },
               {
-                key: 'subjectGender2',
                 dataIndex: 'subjectGender2',
+                key: 'subjectGender2',
                 title: 'Subject 2 Gender',
               },
               {
-                key: 'subjectProhibitions2',
                 dataIndex: 'subjectProhibitions2',
+                key: 'subjectProhibitions2',
                 title: 'Subject 2 Prohibitions',
               },
               {
-                key: 'subjectDeletionDate2',
                 dataIndex: 'subjectDeletionDate2',
+                key: 'subjectDeletionDate2',
                 title: 'Subject 2 Deletion Date',
               },
               {
-                key: 'subjectID3',
                 dataIndex: 'subjectID3',
+                key: 'subjectID3',
                 title: 'Subject 3 ID',
               },
               {
-                key: 'subjectFirstName3',
                 dataIndex: 'subjectFirstName3',
+                key: 'subjectFirstName3',
                 title: 'Subject 3 First Name',
               },
               {
-                key: 'subjectLastName3',
                 dataIndex: 'subjectLastName3',
+                key: 'subjectLastName3',
                 title: 'Subject 3 Last Name',
               },
               {
-                key: 'subjectGender3',
                 dataIndex: 'subjectGender3',
+                key: 'subjectGender3',
                 title: 'Subject 3 Gender',
               },
               {
-                key: 'subjectProhibitions3',
                 dataIndex: 'subjectProhibitions3',
+                key: 'subjectProhibitions3',
                 title: 'Subject 3 Prohibitions',
               },
               {
-                key: 'subjectDeletionDate3',
                 dataIndex: 'subjectDeletionDate3',
+                key: 'subjectDeletionDate3',
                 title: 'Subject 3 Deletion Date',
               },
               {
-                key: 'subjectID4',
                 dataIndex: 'subjectID4',
+                key: 'subjectID4',
                 title: 'Subject 4 ID',
               },
               {
-                key: 'subjectFirstName4',
                 dataIndex: 'subjectFirstName4',
+                key: 'subjectFirstName4',
                 title: 'Subject 4 First Name',
               },
               {
-                key: 'subjectLastName4',
                 dataIndex: 'subjectLastName4',
+                key: 'subjectLastName4',
                 title: 'Subject 4 Last Name',
               },
               {
-                key: 'subjectDOB4',
                 dataIndex: 'subjectDOB4',
+                key: 'subjectDOB4',
                 title: 'Subject 4 DOB',
               },
               {
-                key: 'subjectGender4',
                 dataIndex: 'subjectGender4',
+                key: 'subjectGender4',
                 title: 'Subject 4 Gender',
               },
               {
-                key: 'subjectProhibitions4',
                 dataIndex: 'subjectProhibitions4',
+                key: 'subjectProhibitions4',
                 title: 'Subject 4 Prohibitions',
               },
               {
-                key: 'subjectDeletionDate4',
                 dataIndex: 'subjectDeletionDate4',
+                key: 'subjectDeletionDate4',
                 title: 'Subject 4 Deletion Date',
               },
               {
-                key: 'subjectID5',
                 dataIndex: 'subjectID5',
+                key: 'subjectID5',
                 title: 'Subject 5 ID',
               },
               {
-                key: 'subjectFirstName5',
                 dataIndex: 'subjectFirstName5',
+                key: 'subjectFirstName5',
                 title: 'Subject 5 First Name',
               },
               {
-                key: 'subjectLastName5',
                 dataIndex: 'subjectLastName5',
+                key: 'subjectLastName5',
                 title: 'Subject 5 Last Name',
               },
               {
-                key: 'subjectDOB5',
                 dataIndex: 'subjectDOB5',
+                key: 'subjectDOB5',
                 title: 'Subject 5 DOB',
               },
               {
-                key: 'subjectGender5',
                 dataIndex: 'subjectGender5',
+                key: 'subjectGender5',
                 title: 'Subject 5 Gender',
               },
               {
-                key: 'subjectProhibitions5',
                 dataIndex: 'subjectProhibitions5',
+                key: 'subjectProhibitions5',
                 title: 'Subject 5 Prohibitions',
               },
               {
-                key: 'subjectDeletionDate5',
                 dataIndex: 'subjectDeletionDate5',
+                key: 'subjectDeletionDate5',
                 title: 'Subject 5 Deletion Date',
               },
               {
-                key: 'subjectID6',
                 dataIndex: 'subjectID6',
+                key: 'subjectID6',
                 title: 'Subject 6 ID',
               },
               {
-                key: 'subjectFirstName6',
                 dataIndex: 'subjectFirstName6',
+                key: 'subjectFirstName6',
                 title: 'Subject 6 First Name',
               },
               {
-                key: 'subjectLastName6',
                 dataIndex: 'subjectLastName6',
+                key: 'subjectLastName6',
                 title: 'Subject 6 Last Name',
               },
               {
-                key: 'subjectDOB6',
                 dataIndex: 'subjectDOB6',
+                key: 'subjectDOB6',
                 title: 'Subject 6 DOB',
               },
               {
-                key: 'subjectGender6',
                 dataIndex: 'subjectGender6',
+                key: 'subjectGender6',
                 title: 'Subject 6 Gender',
               },
               {
-                key: 'subjectProhibitions6',
                 dataIndex: 'subjectProhibitions6',
+                key: 'subjectProhibitions6',
                 title: 'Subject 6 Prohibitions',
               },
               {
-                key: 'subjectDeletionDate6',
                 dataIndex: 'subjectDeletionDate6',
+                key: 'subjectDeletionDate6',
                 title: 'Subject 6 Deletion Date',
               },
               {
-                key: 'incidentNotes',
                 dataIndex: 'incidentNotes',
+                key: 'incidentNotes',
                 title: 'Notes',
               },
             ]}
@@ -2225,8 +2227,8 @@ const DiscImport = ({
       )}
     </Drawer>
     <Drawer
-      open={imageModalOpen}
       onClose={toggleImageModal}
+      open={imageModalOpen}
       title="DISC Images"
       width="95vw"
     >
@@ -2237,24 +2239,24 @@ const DiscImport = ({
               <Col key={image.fileName}>
                 <div
                   style={{
-                    height: 200,
-                    width: 170,
                     backgroundImage: `url(${image.url})`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
-                    overflow: 'hidden',
                     borderRadius: 10,
+                    height: 200,
+                    overflow: 'hidden',
                     position: 'relative',
+                    width: 170,
                   }}
                 >
                   <div
                     style={{
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
                       backgroundColor: 'rgba(0,0,0,0.6)',
+                      bottom: 0,
                       display: 'flex',
                       justifyContent: 'center',
+                      left: 0,
+                      right: 0,
                     }}
                   >
                     {image.originalName}

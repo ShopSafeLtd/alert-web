@@ -1,21 +1,29 @@
-query listInvestigationsAllSchemes(
+query InvestigationRelay(
+  $where: investigationRelayWhereInput!
   $take: Int
   $skip: Int
-  $where: InvestigationWhereInput
+  $orderBy: investigationRelayOrderInput
 ) {
-  listInvestigationsAllSchemes(where: $where, take: $take, skip: $skip) {
-    total
-    investigations {
-      id
-      name
-      description
-      status
-      createdAt
-      closedAt
-      reference
-      groups {
+  investigationRelay(
+    where: $where
+    take: $take
+    skip: $skip
+    orderBy: $orderBy
+  ) {
+    totalCount
+    edges {
+      node {
         id
         name
+        description
+        status
+        createdAt
+        closedAt
+        reference
+        groups {
+          id
+          name
+        }
       }
     }
   }

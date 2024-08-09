@@ -1,74 +1,73 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
-
 import type { FormInstance } from 'antd';
-import { Form, message } from 'antd';
-import { useStoreState } from 'state';
-
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import type {
   CustomGalleryData,
   Image,
   VehicleCardData,
   VehicleData,
 } from 'types/DataType';
-import update from 'immutability-helper';
+
 import { useGroupsContext } from '#/context/groups-context';
 import { compressImage } from '#/utils/compress-images';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
+import { Form, message } from 'antd';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import { ImagePosition, Role } from 'graphql/types';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useStoreState } from 'state';
 
 interface Props {
+  editData: VehicleCardData | null | undefined;
   onClose: () => void;
   update: (value: VehicleData) => void;
-  editData: VehicleCardData | undefined | null;
 }
 
 export interface FormData {
-  name: string;
+  colour?: string;
+  crimeGroup?: string[];
+  customGalleries?: ({ label: string; value: string } | string)[];
+  groups?: string[];
   make?: string;
   model?: string;
-  colour?: string;
-  reference?: number | null;
-  totalOffenders?: number | null;
+  name: string;
+  reference?: null | number;
   registration?: string;
-  crimeGroup?: string[];
-  groups?: string[];
-  customGalleries?: Array<string | { value: string; label: string }>;
+  totalOffenders?: null | number;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
-  saving: boolean;
-
+  addCustomGallery: boolean;
   adminRights: boolean;
-  imgChange: UploadProps['onChange'];
+
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
   editImage: Image | null;
+  fileList: Image[];
+  form: FormInstance<FormData>;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  imgChange: UploadProps['onChange'];
   onEditImage: (value: Image) => void;
   onRemoveImage: (imageId: string) => void;
-  toggleEditImage: (value?: Image) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
-  addCustomGallery: boolean;
+  onSubmit: (value: FormData) => void;
+  primaryImage: string;
+  saving: boolean;
+  setPrimaryImage: (value: string) => void;
   toggleAddCustomGallery: () => void;
+  toggleEditImage: (value?: Image) => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
-  form: FormInstance<FormData>;
 }
 
 const useEditVehicle = ({
+  editData,
   onClose,
   update: updateVehicle,
-  editData,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
   const { role } = useStoreState((state) => state.user);
@@ -87,19 +86,19 @@ const useEditVehicle = ({
     if (editData?.images && editData.images.length > 0) {
       setFileList(
         editData?.images.map((image) => ({
-          uid: `${image.id}`,
+          edited: false,
           name: `${image.id}.png`,
-          status: 'done',
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          url: `${image.optimised || image.url}`,
+          new: false,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           optimised: `${image.optimised || image.url}`,
+          policeImage: image.policeImage || false,
           position: image.position,
           primary: image.primary || false,
-          policeImage: image.policeImage || false,
           rotation: image.rotation || 0,
-          edited: false,
-          new: false,
+          status: 'done',
+          uid: `${image.id}`,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          url: `${image.optimised || image.url}`,
         }))
       );
       const findPrimaryImage = editData?.images.find(
@@ -155,15 +154,7 @@ const useEditVehicle = ({
     );
 
     updateVehicle({
-      id: editData?.id || '',
-      make: data.make || '',
-      model: data.model || '',
       colour: data.colour || '',
-      registration: data.registration || '',
-      groups:
-        data?.groups && data.groups.length > 0
-          ? data?.groups?.map((id) => id)
-          : [],
       crimeGroup:
         data?.crimeGroup && data.crimeGroup.length > 0
           ? data?.crimeGroup?.map((id) => id)
@@ -172,30 +163,38 @@ const useEditVehicle = ({
         customGalleriesIds && customGalleriesIds.length > 0
           ? customGalleriesIds
           : [],
-      newCustomGalleriesData:
-        newCustomGalleries && newCustomGalleries.length > 0
-          ? newCustomGalleries
+      groups:
+        data?.groups && data.groups.length > 0
+          ? data?.groups?.map((id) => id)
           : [],
-
+      id: editData?.id || '',
       images:
         imageChange && fileList.length > 0
           ? fileList
               // .filter((item) => !item.optimised)
               // .filter((item) => item.new || item.edited || item.deleted)
               .map((item) => ({
-                id: item.uid,
+                deleted: item.deleted,
+                edited: item.edited && !item.new,
                 filename: item.fileName || '',
+                id: item.uid,
                 mimetype: item.type || '',
-                url: item.url || '',
+                new: item.new,
+                policeImage: item.policeImage,
                 position: item.position,
                 primary: item.uid === primaryImage,
-                policeImage: item.policeImage,
                 rotation: item.rotation || 0,
-                edited: item.edited && !item.new,
-                new: item.new,
-                deleted: item.deleted,
+                url: item.url || '',
               }))
           : undefined,
+      make: data.make || '',
+      model: data.model || '',
+      newCustomGalleriesData:
+        newCustomGalleries && newCustomGalleries.length > 0
+          ? newCustomGalleries
+          : [],
+
+      registration: data.registration || '',
     });
     onClose();
   };
@@ -211,12 +210,12 @@ const useEditVehicle = ({
       form.setFieldsValue({
         customGalleries: [
           ...selectedCustomGallery,
-          { value: values.id, label: values.name },
+          { label: values.name, value: values.id },
         ],
       });
     } else {
       form.setFieldsValue({
-        customGalleries: [{ value: values.id, label: values.name }],
+        customGalleries: [{ label: values.name, value: values.id }],
       });
     }
     setCustomGalleryData([...customGalleryData, { ...values, isNew: true }]);
@@ -238,12 +237,12 @@ const useEditVehicle = ({
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
+          new: true,
           position: ImagePosition.CenterCenter,
           rotation: 0,
-          new: true,
+          type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
@@ -291,36 +290,36 @@ const useEditVehicle = ({
   };
 
   return {
-    onSubmit,
     CrimeGroupsData,
     CrimeGroupsLoading,
-    saving,
-
+    addCustomGallery,
     adminRights: role !== Role.User,
-    imgChange,
+
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
-    fileList: fileList.filter(({ deleted }) => !deleted),
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
-    editImage,
-    primaryImage,
-    setPrimaryImage,
-    groups,
-    groupsLoading,
     customGalleries:
       customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: tag }) => ({
-          value: tag.id,
           label: tag.name,
+          value: tag.id,
         })
       ) || [],
     customGalleriesLoading,
-    addCustomGallery,
-    toggleAddCustomGallery,
-    updateNewCustomGalleryData,
+    editImage,
+    fileList: fileList.filter(({ deleted }) => !deleted),
     form,
+    groups,
+    groupsLoading,
+    imgChange,
+    onEditImage,
+    onRemoveImage,
+    onSubmit,
+    primaryImage,
+    saving,
+    setPrimaryImage,
+    toggleAddCustomGallery,
+    toggleEditImage,
+    updateNewCustomGalleryData,
   };
 };
 export default useEditVehicle;

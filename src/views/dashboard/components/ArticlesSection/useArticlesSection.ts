@@ -1,38 +1,38 @@
+import type { ListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
+import type { DateType } from 'types/DataType';
+
+import { useListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
+import { QueryMode } from 'graphql/types';
+import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
-import { useEffect, useState } from 'react';
-import type { DateType } from 'types/DataType';
-import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
-import { useListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
-import { QueryMode } from 'graphql/types';
-
 interface Props {
-  fullSearch: string;
   fullCreatedAtFilter: DateType | undefined;
-  fullGroupFilter: string[];
   fullGallery: string[];
+  fullGroupFilter: string[];
+  fullSearch: string;
 }
 
 interface Return {
   data:
-    | Exclude<ListArticlesQuery['listArticles'], undefined | null>
+    | Exclude<ListArticlesQuery['listArticles'], null | undefined>
     | null
     | undefined;
+  fetchMoreScroll: () => void;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  fetchMoreScroll: () => void;
 }
 
 const useArticlesSection = ({
-  fullSearch,
   fullCreatedAtFilter,
-  fullGroupFilter,
   fullGallery,
+  fullGroupFilter,
+  fullSearch,
 }: Props): Return => {
-  const { id: userId, defaultGroups } = useStoreState((state) => state.user);
+  const { defaultGroups, id: userId } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [sortFilter, setSortFilter] = useState(false);
   const filterVariables = useStoreState(
@@ -40,31 +40,43 @@ const useArticlesSection = ({
   );
   const setFilterState = useStoreActions((actions) => actions.data.setArticles);
   const {
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    gallery,
+    groups: groupsFilter,
     order,
     priorities: priorityFilter,
     search,
-    gallery,
   } = filterVariables;
 
   useEffect(() => {
     setFilterState({
       variables: {
         ...filterVariables,
-        search: fullSearch,
+        createdAt: fullCreatedAtFilter,
         gallery: fullGallery,
         groups: fullGroupFilter || defaultGroups?.map(({ id }) => id),
-        createdAt: fullCreatedAtFilter,
+        search: fullSearch,
       },
     });
   }, []);
 
   const variables = {
+    order: {
+      updatedAt: order,
+    },
     scheme: {
       id: schemeId,
     },
+    take: 6,
     where: {
+      OR: [
+        {
+          title: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
       createdAt: createdAtFilter
         ? {
             gte: createdAtFilter.startDate,
@@ -94,22 +106,10 @@ const useArticlesSection = ({
               in: priorityFilter,
             }
           : undefined,
-      OR: [
-        {
-          title: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
     },
-    order: {
-      updatedAt: order,
-    },
-    take: 6,
   };
 
-  const { data, loading, fetchMore } = useListArticlesQuery({
+  const { data, fetchMore, loading } = useListArticlesQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
@@ -130,38 +130,38 @@ const useArticlesSection = ({
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        take: 6,
-        skip: data?.listArticles?.articles?.length || 0,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           listArticles: {
             ...fetchMoreResult.listArticles,
-            total:
-              prev.listArticles?.total ||
-              fetchMoreResult?.listArticles?.total ||
-              0,
             articles: [
               ...(prev.listArticles?.articles || []),
               ...(fetchMoreResult.listArticles?.articles || []),
             ],
+            total:
+              prev.listArticles?.total ||
+              fetchMoreResult?.listArticles?.total ||
+              0,
           },
         };
+      },
+      variables: {
+        ...variables,
+        skip: data?.listArticles?.articles?.length || 0,
+        take: 6,
       },
     });
   };
 
   return {
     data: data?.listArticles,
+    fetchMoreScroll,
     loading: (data === null || data === undefined) && loading,
-    sortFilter,
-    toggleSortFilter,
     search,
     setSearch,
-    fetchMoreScroll,
+    sortFilter,
+    toggleSortFilter,
   };
 };
 

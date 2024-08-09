@@ -1,0 +1,10 @@
+query TableReport($where: UniqueId!, $schemeWhere: SchemeWhereUniqueInput!) {
+    tableReport(where: $where) {
+        ...ReportTemplates
+    }
+    scheme(where: $schemeWhere) {
+        reportIcons {
+            optimisedPersisted
+        }
+    }
+}

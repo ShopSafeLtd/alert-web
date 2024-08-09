@@ -1,0 +1,16 @@
+mutation CreateReportGroup($data: ReportGroupCreateInput!) {
+    createReportGroup(data: $data) {
+        id
+        name
+        order
+        reports {
+            id
+            name
+            description
+            type
+        }
+    }
+}
+
+
+

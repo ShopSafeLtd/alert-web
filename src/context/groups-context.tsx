@@ -1,14 +1,15 @@
 /* eslint-disable react/no-unused-prop-types */
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, useMemo } from 'react';
+
 import { useStoreState } from '#/state';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { SortOrder } from 'graphql/types';
+import React, { createContext, useContext, useMemo } from 'react';
 
 interface GroupsContextT {
-  schemeId: string;
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
+  schemeId: string;
 }
 
 const GroupsContext = createContext<GroupsContextT | undefined>(undefined);
@@ -26,7 +27,12 @@ const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const userId = useStoreState((state) => state.user.id);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+    fetchPolicy: 'cache-first',
+    skip: !schemeId || !userId,
     variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         scheme: {
           id: {
@@ -41,28 +47,23 @@ const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
           },
         },
       },
-      orderBy: {
-        name: SortOrder.Asc,
-      },
     },
-    fetchPolicy: 'cache-first',
-    skip: !schemeId || !userId,
   });
 
   const groups = useMemo(
     () =>
       groupsData?.groups.map((group) => ({
-        value: group.id,
         label: group.name,
+        value: group.id,
       })) || [],
     [groupsData]
   );
 
   const value = useMemo(
     () => ({
-      schemeId,
       groups,
       groupsLoading,
+      schemeId,
     }),
     [schemeId, groups, groupsLoading]
   );

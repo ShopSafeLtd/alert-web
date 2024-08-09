@@ -1,31 +1,22 @@
-import React from 'react';
-import { SortOrder } from 'graphql/types';
-import { Select } from 'antd';
-import { useStoreState } from 'state';
+import { useUsersSelectQuery } from '#/components/form-components/UsersSelect/__generated__/users-select-query.generated';
 import { useGroupsContext } from '#/context/groups-context';
-import { useUsersSelectQuery } from '#/components/form-components/UsersSelect/users-select-query.generated';
+import { Select } from 'antd';
+import { SortOrder } from 'graphql/types';
+import React from 'react';
+import { useStoreState } from 'state';
 
 interface Props {
-  value?: string[];
-  onChange?: (value: string[]) => void;
-  mode?: 'multiple' | 'tags';
-  style?: React.CSSProperties;
   allowClear?: boolean;
-  placeholder?: string;
   className?: string;
+  mode?: 'multiple' | 'tags';
+  onChange?: (value: string[]) => void;
+  placeholder?: string;
+  style?: React.CSSProperties;
+  value?: string[];
 }
 
-const UsersSelect = ({
-  onChange,
-  value,
-  mode,
-  style,
-  allowClear,
-  placeholder,
-  className,
-}: Props) => {
+export const useUserData = () => {
   const currentSchemeId = useStoreState((state) => state.scheme.id);
-
   const { groups } = useGroupsContext();
   const { data, loading } = useUsersSelectQuery({
     variables: {
@@ -59,24 +50,41 @@ const UsersSelect = ({
     },
   });
 
+  return {
+    data,
+    loading,
+    userData:
+      data?.listUsers.users.map((user) => ({
+        label: user.fullName,
+        value: user.id,
+      })) || [],
+  };
+};
+
+const UsersSelect = ({
+  allowClear,
+  className,
+  mode,
+  onChange,
+  placeholder,
+  style,
+  value,
+}: Props) => {
+  const { loading, userData } = useUserData();
+
   return (
     <Select
-      value={value}
-      onChange={onChange}
-      mode={mode}
-      options={
-        data?.listUsers.users.map((user) => ({
-          value: user.id,
-          label: user.fullName,
-        })) || []
-      }
-      loading={loading}
-      disabled={loading}
-      style={style}
-      optionFilterProp="label"
       allowClear={allowClear}
-      placeholder={placeholder}
       className={className}
+      disabled={loading}
+      loading={loading}
+      mode={mode}
+      onChange={onChange}
+      optionFilterProp="label"
+      options={userData}
+      placeholder={placeholder}
+      style={style}
+      value={value}
     />
   );
 };

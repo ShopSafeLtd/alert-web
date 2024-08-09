@@ -1,35 +1,37 @@
 import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
 
+import { Form, notification } from 'antd';
+import { useUpdateOneMg11Mutation } from 'graphql/mg11/mutations/__generated__/update-mg11.generated';
+import { useFetchMg11Query } from 'graphql/mg11/queries/__generated__/get-mg11.generated';
+import { Mg11Status } from 'graphql/types';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
+
 import type { Mg11Data } from './FinalSignMg11.view';
+
+import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import { useStoreState } from '../../../state';
-import { Mg11Status } from 'graphql/types';
-import { useUpdateOneMg11Mutation } from 'graphql/mg11/mutations/update-mg11.generated';
-import { useFetchMg11Query } from 'graphql/mg11/queries/get-mg11.generated';
 
 const { useForm } = Form;
 
 interface Return {
+  data: Mg11Data;
+  file: { file: string; name: string } | null;
+  form: FormInstance;
+  name: string;
   onSubmit: () => void;
   saving: boolean;
-  form: FormInstance;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
   selectedFont: string;
-  name: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
-  data: Mg11Data;
-  status: Mg11Status;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
   sign: string;
+  status: Mg11Status;
+  tab: string;
+  update: (value: string) => void;
 }
 
 const useFinalSignMg11 = (): Return => {
@@ -37,43 +39,43 @@ const useFinalSignMg11 = (): Return => {
   const [form] = useForm();
   const { fullName: userName } = useStoreState((state) => state.user);
   const [data, setdata] = useState<Mg11Data>({
-    name: '',
-    urn: '',
-    age: '',
-    witnessSignature: '',
-    witnessSignatureDate: '',
-    visualRecording: false,
-    statement: '',
     address: '',
-    postcode: '',
-    homeTel: '',
-    workTel: '',
-    mobileTel: '',
-    email: '',
-    occupation: '',
-    prefContact: '',
-    gender: '',
-    dobPlace: '',
-    formerName: '',
-    height: '',
-    ethnicity: '',
+    age: '',
     availability: '',
-    likelyToAttend: false,
-    likelyToAttendReason: '',
-    specialMeasures: false,
     careNeeds: false,
     careNeedsDetails: '',
-    station: '',
-    statementWhereWhen: '',
-    detailsExplained: false,
-    leafletReceived: false,
-    medicalReleasedPolice: '',
-    medicalReleasedDefence: '',
     civilProceedingsRelease: '',
-    witnessServiceDisclose: false,
-    statementTakerName: '',
-    interviewerSignature: '',
+    detailsExplained: false,
+    dobPlace: '',
+    email: '',
+    ethnicity: '',
+    formerName: '',
+    gender: '',
+    height: '',
+    homeTel: '',
     incidentId: '',
+    interviewerSignature: '',
+    leafletReceived: false,
+    likelyToAttend: false,
+    likelyToAttendReason: '',
+    medicalReleasedDefence: '',
+    medicalReleasedPolice: '',
+    mobileTel: '',
+    name: '',
+    occupation: '',
+    postcode: '',
+    prefContact: '',
+    specialMeasures: false,
+    statement: '',
+    statementTakerName: '',
+    statementWhereWhen: '',
+    station: '',
+    urn: '',
+    visualRecording: false,
+    witnessServiceDisclose: false,
+    witnessSignature: '',
+    witnessSignatureDate: '',
+    workTel: '',
   });
   const { id } = useParams();
   const [saving, setSaving] = useState(false);
@@ -90,12 +92,12 @@ const useFinalSignMg11 = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Signed!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The statement has been successfully signed, thank you!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Signed!',
         }),
 
         placement: 'bottomRight',
@@ -109,54 +111,54 @@ const useFinalSignMg11 = (): Return => {
   });
 
   const { data: InitData, loading } = useFetchMg11Query({
-    variables: {
-      where: {
-        id: id || '',
-      },
-    },
     onCompleted: (Initdata) => {
       const { mg11 } = Initdata;
       setdata({
-        name: mg11?.name || '',
-        urn: mg11?.urn || '',
+        address: mg11?.address || '',
         age: mg11?.age || '',
+        availability: mg11?.availability || '',
+        careNeeds: mg11?.careNeeds || false,
+        careNeedsDetails: mg11?.careNeedsDetails || '',
+        civilProceedingsRelease: mg11?.civilProceedingsRelease || '',
+        detailsExplained: mg11?.detailsExplained || false,
+        dobPlace: mg11?.dobPlace || '',
+        email: mg11?.email || '',
+        ethnicity: mg11?.ethnicity || '',
+        formerName: mg11?.formerName || '',
+        gender: mg11?.gender || '',
+        height: mg11?.height || '',
+        homeTel: mg11?.homeTel || '',
+        incidentId: mg11?.incidentId || '',
+        interviewerSignature: mg11?.interviewerSignature || '',
+        leafletReceived: mg11?.leafletReceived || false,
+        likelyToAttend: mg11?.likelyToAttend || false,
+        likelyToAttendReason: mg11?.likelyToAttendReason || '',
+        medicalReleasedDefence: mg11?.medicalReleasedDefence || '',
+        medicalReleasedPolice: mg11?.medicalReleasedPolice || '',
+        mobileTel: mg11?.mobileTel || '',
+        name: mg11?.name || '',
+        occupation: mg11?.occupation || '',
+        postcode: mg11?.postcode || '',
+        prefContact: mg11?.prefContact || '',
+        specialMeasures: mg11?.specialMeasures || false,
+        statement: mg11?.statement || '',
+        statementTakerName: userName || '',
+        statementWhereWhen: mg11?.statementWhereWhen || '',
+        station: mg11?.station || '',
+        urn: mg11?.urn || '',
+        visualRecording: mg11?.visualRecording || false,
+        witnessServiceDisclose: mg11?.witnessServiceDisclose || false,
         witnessSignature: mg11?.witnessSignature || '',
         witnessSignatureDate: data.witnessSignatureDate
           ? new Date(data.witnessSignatureDate).toLocaleDateString('en-GB')
           : new Date().toLocaleDateString('en-GB'),
-        visualRecording: mg11?.visualRecording || false,
-        statement: mg11?.statement || '',
-        address: mg11?.address || '',
-        postcode: mg11?.postcode || '',
-        homeTel: mg11?.homeTel || '',
         workTel: mg11?.workTel || '',
-        mobileTel: mg11?.mobileTel || '',
-        email: mg11?.email || '',
-        occupation: mg11?.occupation || '',
-        prefContact: mg11?.prefContact || '',
-        gender: mg11?.gender || '',
-        dobPlace: mg11?.dobPlace || '',
-        formerName: mg11?.formerName || '',
-        height: mg11?.height || '',
-        ethnicity: mg11?.ethnicity || '',
-        availability: mg11?.availability || '',
-        likelyToAttend: mg11?.likelyToAttend || false,
-        likelyToAttendReason: mg11?.likelyToAttendReason || '',
-        specialMeasures: mg11?.specialMeasures || false,
-        careNeeds: mg11?.careNeeds || false,
-        careNeedsDetails: mg11?.careNeedsDetails || '',
-        station: mg11?.station || '',
-        statementWhereWhen: mg11?.statementWhereWhen || '',
-        detailsExplained: mg11?.detailsExplained || false,
-        leafletReceived: mg11?.leafletReceived || false,
-        medicalReleasedPolice: mg11?.medicalReleasedPolice || '',
-        medicalReleasedDefence: mg11?.medicalReleasedDefence || '',
-        civilProceedingsRelease: mg11?.civilProceedingsRelease || '',
-        witnessServiceDisclose: mg11?.witnessServiceDisclose || false,
-        statementTakerName: userName || '',
-        interviewerSignature: mg11?.interviewerSignature || '',
-        incidentId: mg11?.incidentId || '',
       });
+    },
+    variables: {
+      where: {
+        id: id || '',
+      },
     },
   });
 
@@ -164,12 +166,12 @@ const useFinalSignMg11 = (): Return => {
     setSaving(true);
     void updateMg11({
       variables: {
-        where: {
-          id: id || '',
-        },
         data: {
           interviewerSignature: { set: sign },
           status: { set: Mg11Status.Completed },
+        },
+        where: {
+          id: id || '',
         },
       },
     }).finally(() => {
@@ -182,21 +184,21 @@ const useFinalSignMg11 = (): Return => {
   };
 
   return {
+    data,
+    file,
+    form,
+    name: data.name || '',
     onSubmit,
     saving: saving || loading,
-    form,
-    setSign,
-    update,
     selectedFont,
-    name: data.name || '',
-    file,
-    setTab,
-    tab,
-    setSelectedFont,
     setFile,
-    data,
-    status: InitData?.mg11?.status || Mg11Status.Draft,
+    setSelectedFont,
+    setSign,
+    setTab,
     sign,
+    status: InitData?.mg11?.status || Mg11Status.Draft,
+    tab,
+    update,
   };
 };
 

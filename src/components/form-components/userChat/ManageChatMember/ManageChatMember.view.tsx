@@ -1,4 +1,7 @@
-import React from 'react';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+
+import { faTrash, faUser } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
   Button,
@@ -14,13 +17,11 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import { faTrash, faUser } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddUserToChat from 'components/form-components/userChat/AddUserToChat';
-
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { MemberData } from './useManageChatMember';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 
 const { Title } = Typography;
 
@@ -29,32 +30,32 @@ interface FormData {
 }
 
 interface Props {
+  addMember: boolean;
+  addMemberUpdate: (value: FormData) => void;
+  deleteConfirm: (value: string) => void;
+  loading: boolean;
+  membersData: MemberData[] | undefined;
   onClose: () => void;
   onSubmit: () => void;
-  addMemberUpdate: (value: FormData) => void;
-  loading: boolean;
+  saving: boolean;
+  toggleAddMember: () => void;
   usersData:
-    | Exclude<ListSchemeUsersQuery['users'], undefined | null>
+    | Exclude<ListSchemeUsersQuery['users'], null | undefined>
     | null
     | undefined;
-  saving: boolean;
-  addMember: boolean;
-  toggleAddMember: () => void;
-  membersData: MemberData[] | undefined;
-  deleteConfirm: (value: string) => void;
 }
 
 const EditChat = ({
-  onSubmit,
-  onClose,
-  addMemberUpdate,
-  loading,
-  usersData,
-  saving,
   addMember,
-  toggleAddMember,
-  membersData,
+  addMemberUpdate,
   deleteConfirm,
+  loading,
+  membersData,
+  onClose,
+  onSubmit,
+  saving,
+  toggleAddMember,
+  usersData,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return !usersData && loading ? (
@@ -64,14 +65,13 @@ const EditChat = ({
       <Form layout="vertical" onFinish={onSubmit}>
         {membersData && membersData.length > 0 ? (
           <List
+            dataSource={membersData}
             itemLayout="horizontal"
             loading={loading}
-            split={false}
-            dataSource={membersData}
             renderItem={({
-              id,
               // fullName,
               businesses,
+              id,
               // firstLetter,
               origFirstLetter,
               origName,
@@ -85,8 +85,8 @@ const EditChat = ({
                   avatar={
                     <Avatar
                       style={{
-                        color: '#f56a00',
                         backgroundColor: '#fde3cf',
+                        color: '#f56a00',
                         // marginLeft: 15,
                       }}
                     >
@@ -106,24 +106,24 @@ const EditChat = ({
                       </Col>
                       <Col>
                         <Popconfirm
-                          placement="left"
-                          trigger="click"
-                          title={intl.formatMessage({
-                            defaultMessage: 'Remove this member from the chat?',
-                          })}
-                          onConfirm={() => deleteConfirm(id)}
-                          okText={intl.formatMessage({
-                            defaultMessage: 'Yes',
-                          })}
                           cancelText={intl.formatMessage({
                             defaultMessage: 'No',
                           })}
+                          okText={intl.formatMessage({
+                            defaultMessage: 'Yes',
+                          })}
+                          onConfirm={() => deleteConfirm(id)}
                           overlayInnerStyle={{ padding: 10 }}
+                          placement="left"
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove this member from the chat?',
+                          })}
+                          trigger="click"
                         >
                           <Button
                             disabled={saving}
-                            style={{ color: 'red' }}
                             icon={<FontAwesomeIcon icon={faTrash} size="lg" />}
+                            style={{ color: 'red' }}
                           />
                         </Popconfirm>
                       </Col>
@@ -132,21 +132,22 @@ const EditChat = ({
                 />
               </List.Item>
             )}
+            split={false}
           />
         ) : (
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
         <Divider style={{ marginBottom: 15 }} />
         {usersData && usersData.length > 0 && (
-          <Row style={{ marginTop: 0 }} gutter={16} justify="center">
+          <Row gutter={16} justify="center" style={{ marginTop: 0 }}>
             <Col>
               <Button
                 disabled={saving}
-                onClick={toggleAddMember}
-                style={{ color: 'red' }}
                 icon={
                   <FontAwesomeIcon icon={faUser} style={{ marginRight: 5 }} />
                 }
+                onClick={toggleAddMember}
+                style={{ color: 'red' }}
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Chat Members',
@@ -156,7 +157,7 @@ const EditChat = ({
           </Row>
         )}
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -165,9 +166,9 @@ const EditChat = ({
             <Col>
               <Button
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 {intl.formatMessage({ defaultMessage: 'Save' })}
               </Button>
@@ -177,18 +178,18 @@ const EditChat = ({
       </Form>
 
       <Drawer
+        onClose={toggleAddMember}
+        open={addMember}
         title={intl.formatMessage({
           defaultMessage: 'Add Chat Members',
         })}
-        open={addMember}
         width="400"
-        onClose={toggleAddMember}
       >
         {addMember ? (
           <AddUserToChat
-            onClose={toggleAddMember}
             addMemberUpdate={addMemberUpdate}
             membersData={membersData}
+            onClose={toggleAddMember}
           />
         ) : (
           <div />

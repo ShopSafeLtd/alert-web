@@ -1,116 +1,117 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
-import type { Age, Build, Gender, Race, Height, IdSource } from 'graphql/types';
-import { ImagePosition } from 'graphql/types';
-
-import type { FormInstance } from 'antd';
-import { Form } from 'antd';
-import type { MutationUpdaterFn } from '@apollo/client';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
-import { useStoreState } from '#/state';
 import type { AddressData, OffenderSettingsType } from '#/types/DataType';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { FormInstance } from 'antd';
+import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
+import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
+
+import { useStoreState } from '#/state';
+import { Form } from 'antd';
+import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
+import { useUpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
+import { ImagePosition } from 'graphql/types';
 import { useState } from 'react';
-import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
+import errorNotification from 'types/mutation_notifications/error_notification';
+
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import { useUpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/business-offender-settings.generated';
+import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 
 interface OffenderImage {
   id: string;
-  url?: string | null | undefined;
-  optimised?: string | null | undefined;
+  optimised?: null | string | undefined;
+  url?: null | string | undefined;
 }
 
 export interface OffenderData {
-  id: string;
-  name?: string | null;
-  alias?: string[] | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  height?: Height | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  comment?: string | null;
-  idVerified?: boolean;
-  idSource?: IdSource | null;
-  images?: OffenderImage[] | null;
-  knownFor?: string[] | null;
-  targetedGoods?: string[] | null;
-  infoSource?: string | null;
-  justification?: string | null;
-  knowAddress?: boolean;
   address?: AddressData;
+  age?: Age | null;
+  alias?: null | string[];
+  build?: Build | null;
+  comment?: null | string;
+  dateOfBirth?: Date | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
+  hair?: null | string;
+  height?: Height | null;
+  id: string;
+  idSource?: IdSource | null;
+  idVerified?: boolean;
+  images?: OffenderImage[] | null;
+  infoSource?: null | string;
+  justification?: null | string;
+  knowAddress?: boolean;
+  knownFor?: null | string[];
+  name?: null | string;
+  peculiarities?: null | string;
+  race?: Race | null;
+  targetedGoods?: null | string[];
 }
 
 interface Props {
-  onClose: () => void;
   data: OffenderData;
+  facialDet?: boolean;
+  incidentBusinessId?: string;
+  onClose: () => void;
   onCompleted?: () => void;
-  update?: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
   onEditOffender?: (value: AddOffenderData) => void;
   onImagesUploaded?: (value: StateImageData[]) => void;
-  incidentBusinessId?: string;
-  facialDet?: boolean;
+  update?: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
 }
 
 export interface FormData {
-  name: string;
-  alias?: string[];
-  age: Age;
-  gender: Gender;
-  race: Race;
-  build: Build;
-  height: Height;
-  hair: string;
-  ageCheck: boolean;
-  peculiarities: string;
-  comment: string;
-  dateSource: string;
-  dateOfBirth: Date;
-  groups: string[];
-  idVerified?: boolean;
-  idSource?: IdSource;
-  images: ImageValue[];
-  knownFor: string[];
-  targetedGoods: string[];
-  justification: string;
-  infoSource: string;
-  knowAddress?: boolean;
   addressAlias?: string;
+  age: Age;
+  ageCheck: boolean;
+  alias?: string[];
+  build: Build;
   building?: string;
-  street?: string;
-  townCity?: string;
+  comment: string;
   county?: string;
+  dateOfBirth: Date;
+  dateSource: string;
+  gender: Gender;
+  groups: string[];
+  hair: string;
+  height: Height;
+  idSource?: IdSource;
+  idVerified?: boolean;
+  images: ImageValue[];
+  infoSource: string;
+  justification: string;
+  knowAddress?: boolean;
+  knownFor: string[];
+  name: string;
+  peculiarities: string;
   postcode?: string;
+  race: Race;
+  street?: string;
+  targetedGoods: string[];
+  townCity?: string;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  form: FormInstance<FormData>;
   ageCheck: boolean | undefined;
+  form: FormInstance<FormData>;
   idVerified: boolean | undefined;
-  offenderSettings: OffenderSettingsType | undefined;
-  loading: boolean;
-  saving: boolean;
-  needJustification: boolean;
-  uploading: boolean;
-  setUploading: (value: boolean) => void;
   knowAddress: boolean | undefined;
+  loading: boolean;
+  needJustification: boolean;
+  offenderSettings: OffenderSettingsType | undefined;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  setUploading: (value: boolean) => void;
+  uploading: boolean;
 }
 
 const useEditOffender = ({
   data,
-  onClose,
-  onEditOffender,
-  update,
-  onImagesUploaded,
-  onCompleted,
   incidentBusinessId,
+  onClose,
+  onCompleted,
+  onEditOffender,
+  onImagesUploaded,
+  update,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
   const ageCheck = Form.useWatch('ageCheck', form);
@@ -144,18 +145,18 @@ const useEditOffender = ({
     setSaving(true);
 
     const imageData = value.images.map((item) => ({
-      id: item.id || '',
-      url: item.url,
-      optimised: item.optimised,
       fileName: item.fileName,
-      type: item.type,
+      id: item.id || '',
+      isFace: item.isFace || false,
+      new: !!item.file || item.new,
+      optimised: item.optimised,
+      policeImage: item.policeImage || false,
       position: item.position,
       primary: item.primary || false,
-      policeImage: item.policeImage || false,
       rotation: item.rotation,
       totalFaces: item.totalFaces,
-      new: !!item.file || item.new,
-      isFace: item.isFace || false,
+      type: item.type,
+      url: item.url,
     }));
 
     const existingImageIds = data?.images?.map(({ id }) => id);
@@ -169,59 +170,91 @@ const useEditOffender = ({
     if (onEditOffender) {
       onEditOffender({
         ...data,
-        name: value.name || 'Unidentified Offender',
-        alias,
-        gender: value.gender || null,
-        race: value.race || null,
-        build: value.build || null,
-        hair: value.hair || null,
-        height: value.height || null,
-        peculiarities: value.peculiarities || null,
-        comment: value.comment || null,
-        age: ageCheck ? null : value.age || null,
-        dateSource: ageCheck ? value.dateSource || null : null,
-        dateOfBirth: ageCheck ? value.dateOfBirth || null : null,
-        idVerified: value.idVerified,
-        idSource: value.idSource || undefined,
-        images: imageData,
-        justification: value.justification || null,
-        infoSource: value.infoSource || null,
-        knownFor: value.knownFor,
-        targetedGoods: value.targetedGoods,
-        knowAddress: value.knowAddress,
         address: value.knowAddress
           ? {
               alias: value.addressAlias,
               building: value.building,
-              street: value.street || '',
-              townCity: value.townCity || '',
               county: value.county,
               postcode: value.postcode || '',
+              street: value.street || '',
+              townCity: value.townCity || '',
             }
           : undefined,
+        age: ageCheck ? null : value.age || null,
+        alias,
+        build: value.build || null,
+        comment: value.comment || null,
+        dateOfBirth: ageCheck ? value.dateOfBirth || null : null,
+        dateSource: ageCheck ? value.dateSource || null : null,
+        gender: value.gender || null,
+        hair: value.hair || null,
+        height: value.height || null,
+        idSource: value.idSource || undefined,
+        idVerified: value.idVerified,
+        images: imageData,
+        infoSource: value.infoSource || null,
+        justification: value.justification || null,
+        knowAddress: value.knowAddress,
+        knownFor: value.knownFor,
+        name: value.name || 'Unidentified Offender',
+        peculiarities: value.peculiarities || null,
+        race: value.race || null,
+        targetedGoods: value.targetedGoods,
       });
     } else {
       void updateOffender({
         variables: {
-          where: {
-            id: data.id,
-          },
           data: {
-            name: { set: value.name },
-            gender: { set: value.gender || null },
-            race: { set: value.race || null },
-            build: { set: value.build || null },
-            height: { set: value.height || null },
-            hair: { set: value.hair || 'Unknown' },
-            peculiarities: { set: value.peculiarities || '' },
             age: { set: value.age || null },
-            dateSource: { set: value.dateSource || null },
-            dateOfBirth: { set: value.dateOfBirth || null },
-            justification: { set: value.justification || null },
-            infoSource: { set: value.infoSource || null },
-            knownFor: { set: value.knownFor },
-            targetedGoods: { set: value.targetedGoods },
             alias: { set: alias },
+            build: { set: value.build || null },
+            dateOfBirth: { set: value.dateOfBirth || null },
+            dateSource: { set: value.dateSource || null },
+            gender: { set: value.gender || null },
+            hair: { set: value.hair || 'Unknown' },
+            height: { set: value.height || null },
+            //   : undefined,
+            images:
+              value.images && value.images.length > 0
+                ? {
+                    connect: imageData
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                    upload: imageData
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        isFace: item.isFace,
+                        policeImage: item.policeImage,
+                        position: item.position,
+                        primary: item.primary,
+                        rotation: item.rotation || 0,
+                        totalFaces: item.totalFaces || 0,
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                  },
+            infoSource: { set: value.infoSource || null },
+            justification: { set: value.justification || null },
+            knownFor: { set: value.knownFor },
+            name: { set: value.name },
+            peculiarities: { set: value.peculiarities || '' },
+            race: { set: value.race || null },
             // addresses: value.knowAddress
             //   ? {
             //       upsert: [
@@ -247,42 +280,10 @@ const useEditOffender = ({
             //         },
             //       ],
             //     }
-            //   : undefined,
-            images:
-              value.images && value.images.length > 0
-                ? {
-                    delete:
-                      deleteIds && deleteIds.length > 0
-                        ? deleteIds.map((id) => ({ id }))
-                        : undefined,
-                    connect: imageData
-                      ?.filter((image) => !image.new)
-                      .map((image) => ({
-                        id: image.id,
-                      })),
-                    upload: imageData
-                      ?.filter((image) => image.new)
-                      .map((item) => ({
-                        url: {
-                          filename: item.fileName || '',
-                          mimetype: item.type || '',
-                          url: item.url || '',
-                        },
-                        position: item.position,
-                        primary: item.primary,
-                        policeImage: item.policeImage,
-                        rotation: item.rotation || 0,
-                        totalFaces: item.totalFaces || 0,
-                        isFace: item.isFace,
-                      }))
-                      .filter((obj) => obj.url !== undefined),
-                  }
-                : {
-                    delete:
-                      deleteIds && deleteIds.length > 0
-                        ? deleteIds.map((id) => ({ id }))
-                        : undefined,
-                  },
+            targetedGoods: { set: value.targetedGoods },
+          },
+          where: {
+            id: data.id,
           },
         },
       });
@@ -297,32 +298,32 @@ const useEditOffender = ({
           (image) =>
             ({
               ...image.file,
-              url: image.file?.response && image.file.response[0].url,
-              fileName: image.file?.response && image.file.response[0].blobName,
-              type: image.file?.response && image.file.response[0].mimetype,
-              policeImage: false,
-              primary: false,
+              fileName: image.file?.response?.[0].blobName,
               isFace: image.isFace || false,
-              rotation: 0,
+              policeImage: false,
               position: ImagePosition.CenterCenter,
-            } as StateImageData)
+              primary: false,
+              rotation: 0,
+              type: image.file?.response?.[0].mimetype,
+              url: image.file?.response?.[0].url,
+            }) as StateImageData
         )
       );
     }
   };
 
   return {
-    onSubmit,
-    form,
     ageCheck,
+    form,
     idVerified,
-    offenderSettings: businessData?.business.offenderSettings,
-    loading,
-    saving,
-    needJustification,
-    uploading,
-    setUploading,
     knowAddress,
+    loading,
+    needJustification,
+    offenderSettings: businessData?.business.offenderSettings,
+    onSubmit,
+    saving,
+    setUploading,
+    uploading,
   };
 };
 

@@ -1,47 +1,48 @@
 import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
 
+import { Form, notification } from 'antd';
+import { useUpdateOneMg11Mutation } from 'graphql/mg11/mutations/__generated__/update-mg11.generated';
+import { useFetchMg11Query } from 'graphql/mg11/queries/__generated__/get-mg11.generated';
+import { Mg11Status } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
+
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import { useStoreState } from '../../../state';
-import { Mg11Status } from 'graphql/types';
-import { useUpdateOneMg11Mutation } from 'graphql/mg11/mutations/update-mg11.generated';
-import { useFetchMg11Query } from 'graphql/mg11/queries/get-mg11.generated';
 
 const { useForm } = Form;
 
 export interface FormData {
-  statement?: string;
+  civilProceedingsRelease?: string;
   detailsExplained?: string;
   leafletReceived?: string;
-  medicalReleasedPolice?: string;
   medicalReleasedDefence?: string;
-  civilProceedingsRelease?: string;
-  witnessServiceDisclose?: string;
-  signature?: string;
-  witnessSignatureDate?: string;
+  medicalReleasedPolice?: string;
   name?: string;
+  signature?: string;
+  statement?: string;
+  witnessServiceDisclose?: string;
+  witnessSignatureDate?: string;
 }
 
 interface Return {
+  data: FormData;
+  file: { file: string; name: string } | null;
+  form: FormInstance<FormData>;
+  name: string;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  form: FormInstance<FormData>;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
   selectedFont: string;
-  name: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
-  data: FormData;
-  status: Mg11Status;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
   sign: string;
+  status: Mg11Status;
+  tab: string;
+  update: (value: string) => void;
 }
 
 const useSignMg11 = (): Return => {
@@ -49,16 +50,16 @@ const useSignMg11 = (): Return => {
   const scheme = useStoreState((state) => state.scheme.id);
   const [form] = useForm<FormData>();
   const [data, setdata] = useState<FormData>({
-    statement: '',
+    civilProceedingsRelease: '',
     detailsExplained: '',
     leafletReceived: '',
-    medicalReleasedPolice: '',
     medicalReleasedDefence: '',
-    civilProceedingsRelease: '',
-    witnessServiceDisclose: '',
-    signature: '',
-    witnessSignatureDate: new Date().toLocaleDateString('en-GB'),
+    medicalReleasedPolice: '',
     name: '',
+    signature: '',
+    statement: '',
+    witnessServiceDisclose: '',
+    witnessSignatureDate: new Date().toLocaleDateString('en-GB'),
   });
   const { id } = useParams();
   const [saving, setSaving] = useState(false);
@@ -76,12 +77,12 @@ const useSignMg11 = (): Return => {
       setSaving(false);
 
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Signed!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The statement has been successfully signed, thank you!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Signed!',
         }),
         placement: 'bottomRight',
       });
@@ -94,11 +95,6 @@ const useSignMg11 = (): Return => {
   });
 
   const { data: InitData, loading } = useFetchMg11Query({
-    variables: {
-      where: {
-        id: id || '',
-      },
-    },
     onCompleted: (Initdata) => {
       setdata({
         ...data,
@@ -111,27 +107,32 @@ const useSignMg11 = (): Return => {
 </text></svg>`
       );
     },
+    variables: {
+      where: {
+        id: id || '',
+      },
+    },
   });
 
   const onSubmit = (formData: FormData) => {
     setSaving(true);
     void updateMg11({
       variables: {
-        where: {
-          id: id || '',
-        },
         data: {
-          status: { set: Mg11Status.Completed },
+          civilProceedingsRelease: { set: formData.civilProceedingsRelease },
           detailsExplained: { set: formData.detailsExplained === 'true' },
           leafletReceived: { set: formData.leafletReceived === 'true' },
-          medicalReleasedPolice: { set: formData.medicalReleasedPolice },
           medicalReleasedDefence: { set: formData.medicalReleasedDefence },
-          civilProceedingsRelease: { set: formData.civilProceedingsRelease },
+          medicalReleasedPolice: { set: formData.medicalReleasedPolice },
+          status: { set: Mg11Status.Completed },
           witnessServiceDisclose: {
             set: formData.witnessServiceDisclose === 'true',
           },
-          witnessSignatureDate: { set: new Date() },
           witnessSignature: { set: sign },
+          witnessSignatureDate: { set: new Date() },
+        },
+        where: {
+          id: id || '',
         },
       },
     }).finally(() => {
@@ -144,21 +145,21 @@ const useSignMg11 = (): Return => {
   };
 
   return {
+    data,
+    file,
+    form,
+    name: data.name || '',
     onSubmit,
     saving: saving || loading,
-    form,
-    setSign,
-    update,
     selectedFont,
-    name: data.name || '',
-    file,
-    setTab,
-    tab,
-    setSelectedFont,
     setFile,
-    data,
-    status: InitData?.mg11?.status || Mg11Status.Draft,
+    setSelectedFont,
+    setSign,
+    setTab,
     sign,
+    status: InitData?.mg11?.status || Mg11Status.Draft,
+    tab,
+    update,
   };
 };
 

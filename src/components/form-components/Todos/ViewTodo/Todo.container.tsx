@@ -1,10 +1,13 @@
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
+
 import type { MutationUpdaterFn } from '@apollo/client';
 
 import React from 'react';
 
 import View from './Todo.view';
 import useTodo from './useTodo';
+import {
+  UpdateTaskMutation
+} from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
 
 const ViewTodo = ({
   confirmText,

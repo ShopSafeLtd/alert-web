@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TODO Make similar to the business search with the debounce and fetch more if they have more than 1000
 import type { SelectProps } from 'antd';
 import { Typography, Select, Spin, Row, Col } from 'antd';
 import React, { useMemo, useRef, useState } from 'react';
@@ -7,15 +6,15 @@ import debounce from 'lodash/debounce';
 import { useApolloClient } from '@apollo/client';
 import { FormattedMessage } from 'react-intl';
 
-import { QueryMode } from 'graphql/types';
 import { useStoreState } from 'state';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import type {
+import {
+  ListStockItemsDocument,
   ListStockItemsQuery,
   ListStockItemsQueryVariables,
-} from 'graphql/stock-item/stock-items-import.generated';
-import { ListStockItemsDocument } from 'graphql/stock-item/stock-items-import.generated';
+} from 'graphql/stock-item/__generated__/stock-items-import.generated';
+import { QueryMode } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   option: {
@@ -43,11 +42,11 @@ export interface StockItemValue {
 }
 
 const StockItemSearch = ({
-  debounceTimeout = 200,
-  onAddItem,
-  division,
-  ...props
-}: DebounceSelectProps) => {
+                           debounceTimeout = 200,
+                           onAddItem,
+                           division,
+                           ...props
+                         }: DebounceSelectProps) => {
   const styles = useStyles();
   const client = useApolloClient();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -70,9 +69,11 @@ const StockItemSearch = ({
                 equals: schemeId,
               },
             },
-            division: {
-              equals: division,
-            },
+            division: division
+              ? {
+                equals: division,
+              }
+              : undefined,
             OR: [
               {
                 name: {
@@ -156,7 +157,10 @@ const StockItemSearch = ({
               <Row gutter={4}>
                 <Col>
                   <Typography.Text type="secondary" strong>
-                    <FormattedMessage defaultMessage="Description:" />
+                    <FormattedMessage
+                      id="uTnplY"
+                      defaultMessage="Description:"
+                    />
                   </Typography.Text>
                 </Col>
                 <Col>
@@ -169,7 +173,7 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage defaultMessage="Cost:" />
+                      <FormattedMessage id="KFjD/N" defaultMessage="Cost:" />
                     </Typography.Text>
                   </Col>
                   <Col>
@@ -186,7 +190,10 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage defaultMessage="Retail Price:" />
+                      <FormattedMessage
+                        id="Dkp1fL"
+                        defaultMessage="Retail Price:"
+                      />
                     </Typography.Text>
                   </Col>
                   <Col>
@@ -205,7 +212,7 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage defaultMessage="Brand:" />
+                      <FormattedMessage id="204/FC" defaultMessage="Brand:" />
                     </Typography.Text>
                   </Col>
                   <Col>
@@ -218,7 +225,7 @@ const StockItemSearch = ({
               <Row gutter={4}>
                 <Col>
                   <Typography.Text type="secondary" strong>
-                    <FormattedMessage defaultMessage="SKU:" />
+                    <FormattedMessage id="x99+yI" defaultMessage="SKU:" />
                   </Typography.Text>
                 </Col>
                 <Col>
@@ -231,7 +238,7 @@ const StockItemSearch = ({
                 <Row gutter={4}>
                   <Col>
                     <Typography.Text type="secondary" strong>
-                      <FormattedMessage defaultMessage="Barcode:" />
+                      <FormattedMessage id="eRnT7x" defaultMessage="Barcode:" />
                     </Typography.Text>
                   </Col>
                   <Col>

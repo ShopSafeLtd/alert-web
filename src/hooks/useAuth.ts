@@ -1,29 +1,29 @@
-import { useStoreActions, useStoreState } from 'state';
-
-import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
 import type {
   AvailableDashboardElements,
   DashboardLayout,
 } from '#/state/dashboard-model';
+
+import { useTokenContext } from '#/context/token-context';
+import { handleSuccess } from '#/hooks/handleSuccess';
+import { useCurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { useSession, useUser } from '@clerk/clerk-react';
-import { useTokenContext } from '#/context/token-context';
-import { useCurrentUserQuery } from '#/hooks/user/queries/current-user.generated';
-import { handleSuccess } from '#/hooks/handleSuccess';
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
-  rehydrateAuth: () => void;
+  expired: () => void;
   getCurrentUser: () => void;
   loading: boolean;
-  expired: () => void;
+  rehydrateAuth: () => void;
 }
 const getCurrentUser = () => {};
 
 const useAuth = (): Return => {
   const hasFetched = useRef(false);
-  const { isSignedIn, user, isLoaded } = useUser();
-  const { token, getToken } = useTokenContext();
+  const { isLoaded, isSignedIn, user } = useUser();
+  const { getToken, token } = useTokenContext();
   const { session } = useSession();
   const navigate = useNavigate();
   // const client = useApolloClient();
@@ -33,7 +33,7 @@ const useAuth = (): Return => {
   const expired = useStoreActions((actions) => actions.auth.expired);
   const currentUserId = useStoreState((state) => state.user.id);
   const currentScheme = useStoreState((state) => state.scheme.id);
-  const { setRole, setTodos, setNotifications, setFilterDefaultGroup, setDem } =
+  const { setDem, setFilterDefaultGroup, setNotifications, setRole, setTodos } =
     useStoreActions((actions) => actions.user);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setUser = useStoreActions((actions) => actions.user.setUser);
@@ -43,8 +43,6 @@ const useAuth = (): Return => {
 
   const { loading } = useCurrentUserQuery({
     fetchPolicy: 'cache-first',
-    onError: () => expired(),
-    skip: !isSignedIn || hasFetched.current || !isLoaded || !token,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onCompleted: async ({ currentUser }) => {
       if (!currentUser) {
@@ -62,9 +60,9 @@ const useAuth = (): Return => {
           currentScheme || window.localStorage.getItem('currentScheme');
 
         if (scheme) {
-          const currentS =
-            currentUser &&
-            currentUser.schemes.find((s) => s.scheme.id === scheme);
+          const currentS = currentUser?.schemes.find(
+            (s) => s.scheme.id === scheme
+          );
           if (currentS) {
             window.localStorage.setItem(
               'logo',
@@ -86,16 +84,10 @@ const useAuth = (): Return => {
           // eslint-disable-next-line no-unsafe-optional-chaining,no-restricted-syntax
           for (const item of currentUser?.schemes) {
             result[item.scheme.id] = {
-              marquee:
-                item.dashboard?.runningBanner ??
-                (item.isAdmin
-                  ? defaultAdminLayout.marquee
-                  : defaultUserLayout.marquee),
               layout: item.dashboard?.layout
                 ? item.dashboard?.layout.map((lay) => ({
                     ...lay,
                     i: lay.i as AvailableDashboardElements,
-                    static: !!lay.static,
                     isBounded: true,
                     isDraggable: false,
                     isResizable: false,
@@ -103,55 +95,63 @@ const useAuth = (): Return => {
                     maxW: lay.maxW ?? undefined,
                     minH: lay.minH ?? undefined,
                     minW: lay.minW ?? undefined,
+                    static: !!lay.static,
                   }))
                 : item.isAdmin
-                ? defaultAdminLayout.layout
-                : defaultUserLayout.layout,
+                  ? defaultAdminLayout.layout
+                  : defaultUserLayout.layout,
+              marquee:
+                item.dashboard?.runningBanner ??
+                (item.isAdmin
+                  ? defaultAdminLayout.marquee
+                  : defaultUserLayout.marquee),
             };
           }
 
         setDashboard(result);
 
         await handleSuccess({
-          id: currentUser?.id || '',
-          email: currentUser?.email || '',
-          fullName: currentUser?.fullName || '',
-          origName: currentUser?.origName || '',
           accessToken: window.localStorage.getItem('access_token') || '',
+          authenticated,
           businesses: currentUser?.businesses || [],
-          onboarded: !currentUser?.newUser,
-          schemes: currentUser?.schemes || [],
-          demId: currentUser?.demId || '',
-          isSet: true,
-          reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
-          forcePasswordReset: currentUser?.forcePasswordReset ?? false,
-          hasPassword: currentUser?.hasPassword ?? false,
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          reference: `${currentUser?.reference}` || '',
-          userNotifications: currentUser?.notificationCount || 0,
-          userMessages: currentUser?.messageCount || 0,
+          currentScheme,
           defaultGroups: currentUser?.defaultGroups || [],
           defaultScheme: currentUser?.defaultScheme || undefined,
-          termsExpired: currentUser?.termsExpired || false,
+          demId: currentUser?.demId || '',
+          email: currentUser?.email || '',
           filterDefaultGroups:
             currentUser?.defaultGroups.filter(
               (el) => el.scheme.id === scheme
             ) || [],
-          currentScheme,
+          forcePasswordReset: currentUser?.forcePasswordReset ?? false,
+          fullName: currentUser?.fullName || '',
+          hasPassword: currentUser?.hasPassword ?? false,
+          id: currentUser?.id || '',
+          isSet: true,
+          onboarded: !currentUser?.newUser,
+          origName: currentUser?.origName || '',
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          reference: `${currentUser?.reference}` || '',
+          reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
+          schemes: currentUser?.schemes || [],
+          setDem,
+          setFilterDefaultGroup,
+          setNotifications,
           setRole,
           setScheme,
-          setFilterDefaultGroup,
           setTodos,
-          setNotifications,
           setUser,
-          setDem,
-          authenticated,
+          termsExpired: currentUser?.termsExpired || false,
+          userMessages: currentUser?.messageCount || 0,
+          userNotifications: currentUser?.notificationCount || 0,
         });
         if (currentUser?.newUser) {
           navigate('/app/onboarding');
         }
       }
     },
+    onError: () => expired(),
+    skip: !isSignedIn || hasFetched.current || !isLoaded || !token,
   });
 
   const rehydrateAuth = () => {
@@ -201,12 +201,12 @@ const useAuth = (): Return => {
   }, [token]);
 
   return {
+    expired,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    getCurrentUser,
     // login,
     loading,
     rehydrateAuth,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    getCurrentUser,
-    expired,
   };
 };
 

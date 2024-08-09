@@ -1,17 +1,17 @@
-import { useStoreState } from 'state';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { IncidentCardFragment } from 'graphql/fragments/__generated__/incident-card.generated';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
+import type { ImagePosition } from 'graphql/types';
+import type { EditFeedImage } from 'types/DataType';
 
 import { notification } from 'antd';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { useIntl } from 'react-intl';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useState } from 'react';
-import type { EditFeedImage } from 'types/DataType';
-import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import type { ImagePosition } from 'graphql/types';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
+import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-images.generated';
 import { Role } from 'graphql/types';
-import type { IncidentCardFragment } from 'graphql/fragments/incident-card.generated';
-import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/update-incident-images.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
   incident: IncidentCardFragment;
@@ -19,24 +19,25 @@ interface Props {
 }
 
 interface Return {
+  addInvestigation: boolean;
   approvalRights: boolean;
   deleteRights: boolean;
+  editImage: boolean;
+  editImageId: string;
+  editIncidentFeed: boolean;
   menuRights: boolean;
   // onNavigate: (id: string) => void;
   onDelete: (id: string) => void;
-  editIncidentFeed: boolean;
-  toggleEditIncidentFeed: () => void;
-  editImage: boolean;
-  toggleEditImage: () => void;
-  editImageId: string;
-  setEditImageId: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
+  setEditImageId: (id: string) => void;
   toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
+  toggleEditImage: () => void;
+  toggleEditIncidentFeed: () => void;
 }
 const useIncidentCard = ({ incident, update }: Props): Return => {
   // const navigate = useNavigate();
   const intl = useIntl();
+  // TODO change to perms
   const role = useStoreState((state) => state.user.role);
   const [editIncidentFeed, setEditIncidentFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
@@ -55,12 +56,12 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   const [recycleIncident] = useRecycleIncidentMutation({
     onCompleted: () => {
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been deleted from the feed and moved to the recycle bin.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted',
         }),
         placement: 'bottomRight',
       });
@@ -74,11 +75,11 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   const [updateIncident] = useUpdateIncidentImagesMutation({
     onCompleted: () => {
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The image of the incident has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated',
         }),
         placement: 'bottomRight',
       });
@@ -93,32 +94,32 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
       const u: {
         data: {
           policeImage?: { set: boolean };
-          rotation?: { set: number };
           position?: { set: ImagePosition | undefined };
           primary: { set: boolean };
+          rotation?: { set: number };
         };
         where: { id: string };
       }[] = [
         {
-          where: {
-            id: value.id,
-          },
           data: {
+            policeImage: { set: value.policeImage || false },
             position: { set: value.position },
             primary: { set: value.primary || false },
-            policeImage: { set: value.policeImage || false },
             rotation: { set: value.rotation || 0 },
+          },
+          where: {
+            id: value.id,
           },
         },
       ];
 
       if (findPrimaryId && value.primary && findPrimaryId !== value.id) {
         u.push({
-          where: {
-            id: findPrimaryId,
-          },
           data: {
             primary: { set: false },
+          },
+          where: {
+            id: findPrimaryId,
           },
         });
       }
@@ -153,20 +154,20 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
     setAddInvestigation(() => !addInvestigation);
   };
   return {
+    addInvestigation,
     approvalRights,
-    menuRights,
     deleteRights,
+    editImage,
+    editImageId,
+    editIncidentFeed,
+    menuRights,
     // onNavigate,
     onDelete,
-    editIncidentFeed,
-    toggleEditIncidentFeed,
-    editImage,
-    toggleEditImage,
-    editImageId,
-    setEditImageId,
     onEditImage,
-    addInvestigation,
+    setEditImageId,
     toggleAddInvestigation,
+    toggleEditImage,
+    toggleEditIncidentFeed,
   };
 };
 

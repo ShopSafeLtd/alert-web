@@ -1,5 +1,6 @@
-import React from 'react';
 import type RGL from 'react-grid-layout';
+
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 export interface ExtendedLayout extends RGL.Layout {
@@ -7,814 +8,823 @@ export interface ExtendedLayout extends RGL.Layout {
 }
 
 export type AllowedValue =
-  | 'createdSummary'
-  | 'incidentsSummary'
-  | 'policeSummary'
   | 'basicPoliceSummary'
-  | 'investigationSummary'
-  | 'outcomeSummary'
-  | 'lossSummary'
+  | 'businessContributionTable'
+  | 'businessCrimeTypeGraph'
+  | 'businessIncidentCountGraph'
+  | 'businessLossRecoveredGraph'
+  | 'createdSummary'
+  | 'crimeGroupTable'
+  | 'crimeTypesByBusinessRadial'
+  | 'crimeTypesByOffender'
   | 'crimeTypesDonut'
-  | 'involvedTagsDonut'
+  | 'customQuestionsCountGraph'
   | 'goodsTypeDonut'
+  | 'goodsTypeLossRecoveredRadial'
   | 'goodsValueDonut'
+  | 'incidentMonthDonut'
+  | 'incidentTimeOfDayDonut'
   | 'incidentsDayOfWeekGraph'
   | 'incidentsHeatMap'
-  | 'businessContributionTable'
-  | 'topContributors'
-  | 'offendersTable'
-  | 'crimeGroupTable'
-  | 'targetedBusinessTable'
-  | 'targetedGoodsTable'
-  | 'investigationsTable'
-  | 'offenderSummary'
-  | 'crimeTypesByBusinessRadial'
-  | 'goodsTypeLossRecoveredRadial'
-  | 'crimeTypesByOffender'
-  | 'offenderGoodsTypeValue'
-  | 'incidentTimeOfDayDonut'
-  | 'incidentMonthDonut'
+  | 'incidentsSummary'
   | 'incidentsTable'
+  | 'investigationSummary'
+  | 'investigationsTable'
+  | 'involvedTagsDonut'
+  | 'logo'
+  | 'lossSummary'
+  | 'offenderGoodsTypeValue'
+  | 'offenderSummary'
+  | 'offendersTable'
+  | 'outcomeSummary'
   | 'pageBreak'
   | 'pageBreak2'
   | 'pageBreak3'
   | 'pageBreak4'
-  | 'logo'
-  | 'timeHeatMap'
+  | 'policeSummary'
   | 'priorityGraph'
-  | 'customQuestionsCountGraph'
-  | 'userSessionsDonut'
+  | 'targetedBusinessTable'
+  | 'targetedGoodsTable'
+  | 'timeHeatMap'
+  | 'topContributors'
   | 'userIncidentCountGraph'
-  | 'businessIncidentCountGraph'
-  | 'businessLossRecoveredGraph'
-  | 'businessCrimeTypeGraph';
+  | 'userSessionsDonut';
 
 export type ReportItemTypes =
-  | 'summary'
-  | 'pageBreak'
+  | 'bar'
   | 'donut'
   | 'graph'
   | 'heatmap'
-  | 'map'
-  | 'table'
-  | 'bar'
   | 'logo'
+  | 'map'
+  | 'pageBreak'
+  | 'pie'
   | 'radial'
-  | 'pie';
+  | 'summary'
+  | 'table';
 
-export type ReportViews = 'summary' | 'offender' | 'business' | 'crime_group';
+export type MetaDataAllowedValue = 'globalFilter' | AllowedValue;
+
+export type MetaDataItemTypes = 'globalFilter' | ReportItemTypes;
+
+export type ReportViews =
+  | 'business'
+  | 'crime_group'
+  | 'offender'
+  | 'offender_table'
+  | 'summary';
 
 export const LayoutToReadable: {
-  i: AllowedValue;
-  readable: string;
-  description: React.ReactNode;
   allowDuplicates: boolean;
+  description: React.ReactNode;
+  i: AllowedValue;
   item: ExtendedLayout;
-  reportViews: ReportViews[];
+  readable: string;
   reportItemTypes: ReportItemTypes[];
+  reportViews: ReportViews[];
 }[] = [
   {
-    i: 'createdSummary',
-    readable: 'Created Summary',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing incidents, offenders, updates, messages, vehicles, bulletins and crime groups created in Alert." />
     ),
-    allowDuplicates: false,
+    i: 'createdSummary',
     item: {
-      w: 2,
       h: 4,
-      x: 0,
-      y: 0,
       i: 'createdSummary',
       minH: 4,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 0,
     },
+    readable: 'Created Summary',
     reportItemTypes: ['summary'],
     reportViews: ['summary'],
   },
   {
-    i: 'basicPoliceSummary',
-    readable: 'Police Summary',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing the number of incidents reported to the police and the number of times the police attended incidents." />
     ),
-    allowDuplicates: false,
+    i: 'basicPoliceSummary',
     item: {
-      w: 1,
+      allowDuplicates: false,
       h: 4,
-      x: 1,
-      y: 4,
       i: 'basicPoliceSummary',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 1,
+      x: 1,
+      y: 4,
     },
+    readable: 'Police Summary',
     reportItemTypes: ['summary'],
     reportViews: ['summary'],
   },
   {
-    i: 'policeSummary',
-    readable: 'Police Summary (Extended)',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing the number of incidents reported to the police, number of times the police attended incidents as well as custody images shared." />
     ),
-    allowDuplicates: false,
+    i: 'policeSummary',
     item: {
-      w: 1,
+      allowDuplicates: false,
       h: 4,
-      x: 1,
-      y: 4,
       i: 'policeSummary',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 1,
+      x: 1,
+      y: 4,
     },
+    readable: 'Police Summary (Extended)',
     reportItemTypes: ['summary'],
     reportViews: ['summary'],
   },
   {
-    i: 'investigationSummary',
-    readable: 'Investigation Summary',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing a breakdown of investigation data in alert including currently open, closed and opened investigations." />
     ),
-    allowDuplicates: false,
+    i: 'investigationSummary',
     item: {
-      w: 1,
+      allowDuplicates: false,
       h: 4,
-      x: 0,
-      y: 4,
       i: 'investigationSummary',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 1,
+      x: 0,
+      y: 4,
     },
+    readable: 'Investigation Summary',
     reportItemTypes: ['summary'],
     reportViews: ['summary'],
   },
   {
-    i: 'outcomeSummary',
-    readable: 'Outcome Summary',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing an overview of outcomes for offenders in alert including verified ids, arrests, CBOs, prison sentences, rehbilitation orders and fines." />
     ),
-    allowDuplicates: false,
+    i: 'outcomeSummary',
     item: {
-      w: 2,
       h: 4,
-      x: 0,
-      y: 8,
       i: 'outcomeSummary',
       minH: 4,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 8,
     },
+    readable: 'Outcome Summary',
     reportItemTypes: ['summary'],
     reportViews: ['summary'],
   },
   {
-    i: 'crimeTypesDonut',
-    readable: 'Crime Types Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Graph component showing the breakdown of different incident types reported, avaliable as a bar and a a donut graph." />
     ),
-    allowDuplicates: false,
+    i: 'crimeTypesDonut',
     item: {
-      w: 1,
       h: 9,
-      x: 1,
-      y: 36,
       i: 'crimeTypesDonut',
       maxH: 11,
       moved: false,
       static: false,
+      w: 1,
+      x: 1,
+      y: 36,
     },
+    readable: 'Incident Types Graph',
     reportItemTypes: ['bar', 'donut'],
     reportViews: ['summary', 'business', 'crime_group', 'offender'],
   },
   {
-    i: 'involvedTagsDonut',
-    readable: 'Involved Tags Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Graph component showing the breakdown of different invoved tags reported on incidents, avaliable as a bar and a a donut graph." />
     ),
-    allowDuplicates: false,
+    i: 'involvedTagsDonut',
     item: {
-      w: 1,
       h: 10,
-      x: 1,
-      y: 16,
       i: 'involvedTagsDonut',
       maxH: 11,
       moved: false,
       static: false,
+      w: 1,
+      x: 1,
+      y: 16,
     },
+    readable: 'Involved Tags Graph',
     reportItemTypes: ['donut', 'bar'],
     reportViews: ['summary', 'business'],
   },
   {
-    i: 'goodsTypeDonut',
-    readable: 'Goods Type Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Graph component showing a breakdown of groods types by number of incidents, avaliable as a bar and a a donut graph." />
     ),
-    allowDuplicates: false,
+    i: 'goodsTypeDonut',
     item: {
-      w: 1,
       h: 10,
-      x: 0,
-      y: 16,
       i: 'goodsTypeDonut',
       maxH: 11,
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 16,
     },
+    readable: 'Goods Type Graph',
     reportItemTypes: ['donut', 'bar'],
     reportViews: ['summary'],
   },
   {
-    i: 'goodsValueDonut',
-    readable: 'Goods Value Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Graph component showing a breakdown of goods types by loss values, avaliable as a bar and a a donut graph." />
     ),
-    allowDuplicates: false,
+    i: 'goodsValueDonut',
     item: {
-      w: 1,
       h: 9,
-      x: 0,
-      y: 36,
       i: 'goodsValueDonut',
       maxH: 11,
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 36,
     },
+    readable: 'Goods Value Graph',
     reportItemTypes: ['donut', 'bar'],
     reportViews: ['summary', 'business'],
   },
   {
-    i: 'incidentsDayOfWeekGraph',
-    readable: 'Incidents Day of Week Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Line graph plotting the number of incidents by day of the week." />
     ),
-    allowDuplicates: false,
+    i: 'incidentsDayOfWeekGraph',
     item: {
-      w: 2,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'incidentsDayOfWeekGraph',
       minH: 4,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Incidents Day of Week Graph',
     reportItemTypes: ['graph'],
     reportViews: ['summary', 'business', 'offender', 'crime_group'],
   },
   {
-    i: 'businessContributionTable',
-    readable: 'Business Contribution Table',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing the created Alert data for each business giving an idea of engagement with the system." />
     ),
-    allowDuplicates: false,
+    i: 'businessContributionTable',
     item: {
-      w: 2,
       h: 15,
-      x: 0,
-      y: 75,
       i: 'businessContributionTable',
-      minW: 2,
       minH: 5,
+      minW: 2,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 75,
     },
+    readable: 'Business Contribution Table',
     reportItemTypes: ['table'],
     reportViews: ['summary'],
   },
   {
-    i: 'topContributors',
-    readable: 'Top Contributors Table',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing the top contributing users in Alert and a summary of their created data." />
     ),
-    allowDuplicates: false,
+    i: 'topContributors',
     item: {
-      w: 2,
       h: 15,
-      x: 0,
-      y: 90,
       i: 'topContributors',
       minW: 2,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 90,
     },
+    readable: 'Top Contributors Table',
     reportItemTypes: ['table'],
     reportViews: ['summary'],
   },
   {
-    i: 'offendersTable',
-    readable: 'Offenders Table',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing data for offenders in Alert including incident count, last incident date, total lost and recovered values. By default ordered by incident count to show prolific offenders." />
     ),
-    allowDuplicates: false,
+    i: 'offendersTable',
     item: {
-      w: 2,
       h: 15,
-      x: 0,
-      y: 105,
       i: 'offendersTable',
-      minW: 2,
       minH: 5,
+      minW: 2,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 105,
     },
+    readable: 'Offenders Table',
     reportItemTypes: ['table'],
-    reportViews: ['summary', 'crime_group'],
+    reportViews: ['summary', 'crime_group', 'offender_table'],
   },
   {
-    i: 'crimeGroupTable',
-    readable: 'Crime Group Table',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing data for crime groups in Alert including incident count, last incident date, total lost and recovered values. By default ordered by incident count to show the most harmfull groups." />
     ),
-    allowDuplicates: false,
+    i: 'crimeGroupTable',
     item: {
-      w: 2,
       h: 15,
-      x: 0,
-      y: 120,
       i: 'crimeGroupTable',
-      minW: 2,
       minH: 5,
+      minW: 2,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 120,
     },
+    readable: 'Crime Group Table',
     reportItemTypes: ['table'],
     reportViews: ['summary'],
   },
   {
-    i: 'targetedBusinessTable',
-    readable: 'Targeted Business Table',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing incident data for business inclunding incident coount, loss values statistics and last incident date. By defaut ordered by incident count by can be ordered by all columns to highlight most impacted businesses." />
     ),
-    allowDuplicates: false,
+    i: 'targetedBusinessTable',
     item: {
-      w: 2,
       h: 15,
-      x: 0,
-      y: 135,
       i: 'targetedBusinessTable',
-      minW: 2,
       minH: 5,
+      minW: 2,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 135,
     },
+    readable: 'Targeted Business Table',
     reportItemTypes: ['table'],
     reportViews: ['summary', 'offender', 'crime_group'],
   },
   {
-    i: 'targetedGoodsTable',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing highest targeted goods, includes a incident count and loss values statistics. By defaut ordered by incident count by can be ordered by all columns to highlight most targeted goods." />
     ),
-    readable: 'Targeted Goods Table',
-    allowDuplicates: false,
+    i: 'targetedGoodsTable',
     item: {
-      w: 2,
       h: 15,
-      x: 0,
-      y: 150,
       i: 'targetedGoodsTable',
-      minW: 2,
       minH: 5,
+      minW: 2,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 150,
     },
+    readable: 'Targeted Goods Table',
     reportItemTypes: ['table'],
     reportViews: ['crime_group', 'offender', 'summary', 'business'],
   },
   {
-    i: 'offenderSummary',
-    readable: 'Offender Summary',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing basic identity information for an offender, including name, Alert ID, image and description." />
     ),
-    allowDuplicates: false,
+    i: 'offenderSummary',
     item: {
-      w: 1,
+      allowDuplicates: false,
       h: 4,
-      x: 0,
-      y: 4,
       i: 'offenderSummary',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 1,
+      x: 0,
+      y: 4,
     },
+    readable: 'Offender Summary',
     reportItemTypes: ['summary'],
     reportViews: ['offender'],
   },
   {
-    i: 'incidentsSummary',
-    readable: 'Incidents Summary',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing an overview of incident data in Alert." />
     ),
-    allowDuplicates: false,
+    i: 'incidentsSummary',
     item: {
-      w: 1,
+      allowDuplicates: false,
       h: 4,
-      x: 0,
-      y: 4,
       i: 'incidentsSummary',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 1,
+      x: 0,
+      y: 4,
     },
+    readable: 'Incidents Summary',
     reportItemTypes: ['summary'],
     reportViews: ['offender', 'summary', 'business', 'crime_group'],
   },
   {
-    i: 'lossSummary',
-    readable: 'Loss Summary',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Summary component showing an overview of incident loss statistics in Alert." />
     ),
-    allowDuplicates: false,
+    i: 'lossSummary',
     item: {
-      w: 2,
       h: 4,
-      x: 0,
-      y: 12,
       i: 'lossSummary',
       minH: 4,
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 12,
     },
+    readable: 'Loss Summary',
     reportItemTypes: ['summary'],
     reportViews: ['crime_group', 'business', 'summary', 'offender'],
   },
   {
-    i: 'crimeTypesByBusinessRadial',
-    readable: 'Crime Types By Business Radial',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Radial graph showing a breakdown of the incident types by number of incidents for the business with the highest incident counts." />
     ),
-    allowDuplicates: false,
+    i: 'crimeTypesByBusinessRadial',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'crimeTypesByBusinessRadial',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Incident Types By Business Radial',
     reportItemTypes: ['donut'],
     reportViews: ['offender'],
   },
   {
-    i: 'goodsTypeLossRecoveredRadial',
-    readable: 'Goods Type Loss Recovered Radial',
     allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Radial graph showing a breakdown of loss vs recovered values for each of the higest targeted goods items." />
     ),
+    i: 'goodsTypeLossRecoveredRadial',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'goodsTypeLossRecoveredRadial',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Goods Type Loss Recovered Radial',
     reportItemTypes: ['donut'],
     reportViews: ['offender', 'business', 'crime_group'],
   },
   {
-    i: 'crimeTypesByOffender',
-    readable: 'Incident Types By Offender',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Bar graph showing the count for each incident type by offender." />
     ),
-    allowDuplicates: false,
+    i: 'crimeTypesByOffender',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'crimeTypesByOffender',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Incident Types By Offender',
     reportItemTypes: ['bar'],
     reportViews: ['crime_group'],
   },
   {
-    i: 'offenderGoodsTypeValue',
-    readable: 'Offender Goods Type Value',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Bar graph showing the loss value for goods types by offender." />
     ),
-    allowDuplicates: false,
+    i: 'offenderGoodsTypeValue',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'offenderGoodsTypeValue',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Offender Goods Type Value',
     reportItemTypes: ['bar'],
     reportViews: ['crime_group'],
   },
   {
-    i: 'incidentTimeOfDayDonut',
-    readable: 'Incident Time Of Day Donut',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Bar graph showing the loss value for goods types by offender." />
     ),
-    allowDuplicates: false,
+    i: 'incidentTimeOfDayDonut',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'incidentTimeOfDayDonut',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Incident Time Of Day Donut',
     reportItemTypes: ['bar'],
     reportViews: ['crime_group', 'offender', 'summary'],
   },
   {
-    i: 'incidentMonthDonut',
-    readable: 'Incident Month Donut',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Bar graph showing the loss value for goods types by offender." />
     ),
-    allowDuplicates: false,
+    i: 'incidentMonthDonut',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'incidentMonthDonut',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Incident Month Donut',
     reportItemTypes: ['bar'],
     reportViews: ['offender', 'crime_group', 'business'],
   },
   {
-    i: 'incidentsHeatMap',
-    readable: 'Incidents Heat Map',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Map showing a heatmap of incident data based on the count of incidents reported at businesses." />
     ),
-    allowDuplicates: false,
+    i: 'incidentsHeatMap',
     item: {
-      w: 2,
       h: 17,
-      x: 0,
-      y: 57,
       i: 'incidentsHeatMap',
       moved: false,
       static: false,
+      w: 2,
+      x: 0,
+      y: 57,
     },
+    readable: 'Incidents Heat Map',
     reportItemTypes: ['map'],
     reportViews: ['crime_group', 'summary', 'offender'],
   },
   {
-    i: 'incidentsTable',
-    readable: 'Incidents Table',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing a summary of recorded incident data." />
     ),
-    allowDuplicates: false,
+    i: 'incidentsTable',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 15,
-      x: 0,
-      y: 8,
       i: 'incidentsTable',
       minH: 5,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 8,
     },
+    readable: 'Incidents Table',
     reportItemTypes: ['table'],
     reportViews: ['offender', 'crime_group', 'business'],
   },
   {
-    i: 'investigationsTable',
-    readable: 'Investigations Table',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Table component showing a summary of open investigations." />
     ),
-    allowDuplicates: false,
+    i: 'investigationsTable',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 15,
-      x: 0,
-      y: 8,
       i: 'investigationsTable',
       minH: 5,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 8,
     },
+    readable: 'Investigations Table',
     reportItemTypes: ['table'],
     reportViews: ['summary'],
   },
   {
-    i: 'priorityGraph',
-    readable: 'Priority Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Bar graph component showming a breakdown of reported incidents by assigned priotity." />
     ),
-    allowDuplicates: false,
+    i: 'priorityGraph',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'priorityGraph',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Priority Graph',
     reportItemTypes: ['bar'],
     reportViews: ['summary'],
   },
   {
-    i: 'timeHeatMap',
-    readable: 'Time Heat Map',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Heat map component showing incident count broken down by day and hour." />
     ),
-    allowDuplicates: false,
+    i: 'timeHeatMap',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'timeHeatMap',
       minH: 4,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Time Heat Map',
     reportItemTypes: ['heatmap'],
     reportViews: ['summary'],
   },
   {
-    i: 'customQuestionsCountGraph',
-    readable: 'Incident Answer Count',
+    allowDuplicates: true,
     description: (
       <FormattedMessage defaultMessage="Graph component that shows the results from custom incident questions. Once added to the report you can select the question to base the data on." />
     ),
-    allowDuplicates: true,
+    i: 'customQuestionsCountGraph',
     item: {
-      w: 1,
+      allowDuplicates: true,
       h: 9,
-      x: 0,
-      y: 36,
       i: 'customQuestionsCountGraph',
       maxH: 11,
       moved: false,
       static: false,
-      allowDuplicates: true,
+      w: 1,
+      x: 0,
+      y: 36,
     },
+    readable: 'Incident Answer Count',
     reportItemTypes: ['donut'],
     reportViews: ['summary'],
   },
   {
-    i: 'userSessionsDonut',
-    readable: 'User Session Radial Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Radial graph showing the breakdown of sessions across the web and mobile apps for the most active users." />
     ),
-    allowDuplicates: false,
+    i: 'userSessionsDonut',
     item: {
-      w: 1,
+      allowDuplicates: false,
       h: 9,
-      x: 0,
-      y: 36,
       i: 'userSessionsDonut',
       maxH: 11,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 1,
+      x: 0,
+      y: 36,
     },
+    readable: 'User Session Radial Graph',
     reportItemTypes: ['donut'],
     reportViews: ['summary'],
   },
   {
-    i: 'userIncidentCountGraph',
-    readable: 'User Incidents Count',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Graph component showing the reported incident count for the top 10 users. Avaliable as a donut and bar graph." />
     ),
-    allowDuplicates: false,
+    i: 'userIncidentCountGraph',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'userIncidentCountGraph',
       maxH: 11,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'User Incidents Count',
     reportItemTypes: ['donut', 'bar'],
     reportViews: ['summary'],
   },
   {
-    i: 'businessIncidentCountGraph',
-    readable: 'Business Incidents Count',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Graph component showing the incident count for the top 10 impacted business. Avaliable as a donut and bar graph." />
     ),
-    allowDuplicates: false,
+    i: 'businessIncidentCountGraph',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'businessIncidentCountGraph',
       maxH: 11,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Business Incidents Count',
     reportItemTypes: ['donut', 'bar'],
     reportViews: ['summary'],
   },
   {
-    i: 'businessLossRecoveredGraph',
-    readable: 'Businesses Loss Recovered Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Bar graph component showing the incident loss values for the top 10 impacted business." />
     ),
-    allowDuplicates: false,
+    i: 'businessLossRecoveredGraph',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'businessLossRecoveredGraph',
       maxH: 11,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Businesses Loss Recovered Graph',
     reportItemTypes: ['bar'],
     reportViews: ['summary'],
   },
   {
-    i: 'businessCrimeTypeGraph',
-    readable: 'Business Crime Type Graph',
+    allowDuplicates: false,
     description: (
       <FormattedMessage defaultMessage="Stacked bar graph component showing breackdown of incident types for the top 10 impacted business." />
     ),
-    allowDuplicates: false,
+    i: 'businessCrimeTypeGraph',
     item: {
-      w: 2,
+      allowDuplicates: false,
       h: 12,
-      x: 0,
-      y: 45,
       i: 'businessCrimeTypeGraph',
       maxH: 11,
       moved: false,
       static: false,
-      allowDuplicates: false,
+      w: 2,
+      x: 0,
+      y: 45,
     },
+    readable: 'Business Incident Type Graph',
     reportItemTypes: ['bar'],
     reportViews: ['summary'],
   },
@@ -830,11 +840,12 @@ export type Elements = {
 };
 
 export interface MetaData {
-  key: AllowedValue;
-  type: ReportItemTypes;
-  urls?: string[];
-  propId?: string;
   columns?: string[];
+  data?: { [i: string]: unknown };
+  key: MetaDataAllowedValue;
+  propId?: string;
+  type: MetaDataItemTypes;
+  urls?: string[];
 }
 
 export interface SelectOptions {
@@ -843,11 +854,11 @@ export interface SelectOptions {
 }
 
 export interface IReportTemplate {
-  id: string;
-  name: string;
   default: boolean;
-  metaData: MetaData[];
+  id: string;
   layout: RGL.Layout[];
+  metaData: MetaData[];
+  name: string;
 }
 
 export const redactedText = '██████████';

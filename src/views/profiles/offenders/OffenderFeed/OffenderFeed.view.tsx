@@ -1,8 +1,8 @@
-import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/offender-feed.generated';
+import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
 import type { OffenderFilters } from 'state/data-model';
 
 import {

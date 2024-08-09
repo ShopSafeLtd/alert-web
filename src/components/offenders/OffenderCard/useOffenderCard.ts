@@ -1,39 +1,39 @@
-import { useStoreState } from 'state';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { OffenderCardFragment } from 'graphql/fragments/__generated__/offender-card.generated';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
+import type { ImagePosition } from 'graphql/types';
+import type { EditFeedImage } from 'types/DataType';
 
 import { notification } from 'antd';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { useIntl } from 'react-intl';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useNavigate } from 'react-router';
-import { useState } from 'react';
-import type { EditFeedImage } from 'types/DataType';
-import type { OffenderCardFragment } from 'graphql/fragments/offender-card.generated';
-import { useUpdateOffenderImagesMutation } from 'graphql/offenders/mutations/update/update-offender-images.generated';
-import type { ImagePosition } from 'graphql/types';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
+import { useUpdateOffenderImagesMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-images.generated';
 import { Role } from 'graphql/types';
-import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
-import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
   offender: OffenderCardFragment;
   update?: MutationUpdaterFn<RecycleOffenderMutation>;
 }
 interface Return {
+  addInvestigation: boolean;
   approvalRights: boolean;
   deleteRights: boolean;
-  menuRights: boolean;
-  onNavigate: (id?: string | undefined, url?: string | undefined) => void;
-  onDelete: (id: string) => void;
-  editOffenderFeed: boolean;
-  toggleEditOffenderFeed: () => void;
   editImage: boolean;
-  toggleEditImage: () => void;
   editImageId: string;
-  setEditImageId: (id: string) => void;
-  onEditImage: (value: EditFeedImage) => void;
-  toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
+  editOffenderFeed: boolean;
   knowOffender: boolean;
+  menuRights: boolean;
+  onDelete: (id: string) => void;
+  onEditImage: (value: EditFeedImage) => void;
+  onNavigate: (id?: string | undefined, url?: string | undefined) => void;
+  setEditImageId: (id: string) => void;
+  toggleAddInvestigation: () => void;
+  toggleEditImage: () => void;
+  toggleEditOffenderFeed: () => void;
   toggleKnowOffender: () => void;
 }
 const useOffenderCard = ({ offender, update }: Props): Return => {
@@ -64,12 +64,12 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const [recycleOffender] = useRecycleOffenderMutation({
     onCompleted: () => {
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted',
         }),
         placement: 'bottomRight',
       });
@@ -82,11 +82,11 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const [updateOffender] = useUpdateOffenderImagesMutation({
     onCompleted: () => {
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The image of the offender has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated',
         }),
         placement: 'bottomRight',
       });
@@ -101,32 +101,32 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
       const u: {
         data: {
           policeImage?: { set: boolean };
-          rotation?: { set: number };
           position?: { set: ImagePosition | undefined };
           primary: { set: boolean };
+          rotation?: { set: number };
         };
         where: { id: string };
       }[] = [
         {
-          where: {
-            id: value.id,
-          },
           data: {
+            policeImage: { set: value.policeImage || false },
             position: { set: value.position },
             primary: { set: value.primary || false },
-            policeImage: { set: value.policeImage || false },
             rotation: { set: value.rotation || 0 },
+          },
+          where: {
+            id: value.id,
           },
         },
       ];
 
       if (findPrimaryId && value.primary && findPrimaryId !== value.id) {
         u.push({
-          where: {
-            id: findPrimaryId,
-          },
           data: {
             primary: { set: false },
+          },
+          where: {
+            id: findPrimaryId,
           },
         });
       }
@@ -164,21 +164,21 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
     setKnowOffender(!knowOffender);
   };
   return {
+    addInvestigation,
     approvalRights,
-    menuRights,
     deleteRights,
-    onDelete,
-    editOffenderFeed,
-    toggleEditOffenderFeed,
     editImage,
-    toggleEditImage,
     editImageId,
-    setEditImageId,
+    editOffenderFeed,
+    knowOffender,
+    menuRights,
+    onDelete,
     onEditImage,
     onNavigate,
-    addInvestigation,
+    setEditImageId,
     toggleAddInvestigation,
-    knowOffender,
+    toggleEditImage,
+    toggleEditOffenderFeed,
     toggleKnowOffender,
   };
 };

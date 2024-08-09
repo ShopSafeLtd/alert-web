@@ -1,30 +1,31 @@
-import { useState } from 'react';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import { useState } from 'react';
+
 import type { Vehicle } from '../../../react-flow/nodes/vehicle-node';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
 interface Props {
+  investigationId: string;
   onClose: () => void;
   onSubmit: (value: Vehicle) => void;
-  investigationId: string;
 }
 
 interface Return {
-  onSubmitButton: () => void;
-  saving: boolean;
   data: ListVehiclesQuery | undefined;
   loading: boolean;
+  onSelect: (item: { key: string }) => void;
+  onSubmitButton: () => void;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onSelect: (item: { key: string }) => void;
 }
 
 const useAddExistingVehicle = ({
+  investigationId,
   onClose,
   onSubmit,
-  investigationId,
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
@@ -37,19 +38,6 @@ const useAddExistingVehicle = ({
         updatedAt: SortOrder.Desc,
       },
       where: {
-        investigations: {
-          some: {
-            id: {
-              equals: investigationId,
-            },
-          },
-        },
-        // schemes: {
-        //   some: {
-        //     id: {
-        //       equals: schemeId,
-        //     },
-        //   },
         // },
         OR: [
           {
@@ -65,6 +53,19 @@ const useAddExistingVehicle = ({
             },
           },
         ],
+        // schemes: {
+        //   some: {
+        //     id: {
+        //       equals: schemeId,
+        //     },
+        //   },
+        investigations: {
+          some: {
+            id: {
+              equals: investigationId,
+            },
+          },
+        },
       },
     },
   });
@@ -91,13 +92,13 @@ const useAddExistingVehicle = ({
   // };
 
   return {
-    onSubmitButton,
-    saving,
     data,
     loading: data?.listVehicles ? false : loading,
+    onSelect,
+    onSubmitButton,
+    saving,
     search,
     setSearch,
-    onSelect,
     // openLightbox,
     // lightBoxOpen,
   };

@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import type { OffenderProfileQuery } from 'graphql/reports/queries/__generated__/offender-profile.generated';
+
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { faDownload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ResponsiveBar } from '@nivo/bar';
+import { ResponsivePie } from '@nivo/pie';
 import {
   Button,
   Card,
@@ -12,36 +18,31 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import OffenderSideList from 'components/offenders/OffenderSideList';
-
-import { getAge, getBuild, getEthnicity, getSex } from 'utils';
-import { ResponsiveBar } from '@nivo/bar';
-import { ResponsivePie } from '@nivo/pie';
-import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/pro-light-svg-icons';
-import { useStoreState } from 'state';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl';
-import useStyles from './offender-profile.styles';
-import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import type { OffenderProfileQuery } from 'graphql/reports/queries/offender-profile.generated';
+import OffenderSideList from 'components/offenders/OffenderSideList';
 import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import moment from 'moment';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 
-const { Title, Text } = Typography;
+import useStyles from './offender-profile.styles';
+
+const { Text, Title } = Typography;
 
 interface Props {
   offenderProfileData: OffenderProfileQuery | undefined;
   offenderProfileLoading: boolean;
-  selectedOffender: string | undefined;
   reportId: string | undefined;
+  selectedOffender: string | undefined;
 }
 
 const OffenderProfile = ({
   offenderProfileData,
   offenderProfileLoading,
-  selectedOffender,
   reportId,
+  selectedOffender,
 }: Props) => {
   const classes = useStyles();
   const theme = useStoreState((state) => state.theme.currentTheme);
@@ -57,14 +58,14 @@ const OffenderProfile = ({
       <Col>
         <ReportsSideMenu
           collapsed={collapsed}
-          setCollapsed={setCollapsed}
           selectedId={reportId ?? ''}
+          setCollapsed={setCollapsed}
         />
       </Col>
       <Col>
         <OffenderSideList
-          to="/app/reports/offender-profile/"
           current={selectedOffender || ''}
+          to="/app/reports/offender-profile/"
         />
       </Col>
       <Col flex={1}>
@@ -74,12 +75,12 @@ const OffenderProfile = ({
           </div>
         ) : (
           <div className={classes.page}>
-            <Row justify="end" className={classes.actionBar}>
+            <Row className={classes.actionBar} justify="end">
               <Col>
                 <Button type="primary">
                   <FontAwesomeIcon
-                    icon={faDownload}
                     className={classes.buttonIcon}
+                    icon={faDownload}
                   />
                   {intl.formatMessage({
                     defaultMessage: 'Download Report',
@@ -88,7 +89,7 @@ const OffenderProfile = ({
               </Col>
             </Row>
             <div>
-              <Card bodyStyle={{ padding: 0, overflow: 'hidden' }}>
+              <Card bodyStyle={{ overflow: 'hidden', padding: 0 }}>
                 <Row wrap={false}>
                   <Col className={classes.imageCol} span={6}>
                     {offenderProfileData?.offender?.images &&
@@ -123,7 +124,7 @@ const OffenderProfile = ({
                         defaultMessage: 'Offender Details',
                       })}
                     </Title>
-                    <Descriptions column={2} className={classes.descriptions}>
+                    <Descriptions className={classes.descriptions} column={2}>
                       <Descriptions.Item
                         className={classes.descItem}
                         label={intl.formatMessage({
@@ -229,18 +230,21 @@ const OffenderProfile = ({
                   <Col>
                     <Card>
                       <Statistic
-                        value={
-                          offenderProfileData?.offender?.totalIncidents || 0
-                        }
                         title={intl.formatMessage({
                           defaultMessage: 'Total Incidents',
                         })}
+                        value={
+                          offenderProfileData?.offender?.totalIncidents || 0
+                        }
                       />
                     </Card>
                   </Col>
                   <Col>
                     <Card>
                       <Statistic
+                        title={intl.formatMessage({
+                          defaultMessage: 'Last Active',
+                        })}
                         value={
                           offenderProfileData?.offender?.lastActive?.date
                             ? moment(
@@ -250,46 +254,43 @@ const OffenderProfile = ({
                                 defaultMessage: 'None',
                               })
                         }
-                        title={intl.formatMessage({
-                          defaultMessage: 'Last Active',
-                        })}
                       />
                     </Card>
                   </Col>
                   <Col>
                     <Card>
                       <Statistic
-                        value={`£${
-                          offenderProfileData?.offender?.totalValue || 0
-                        }`}
                         title={intl.formatMessage({
                           defaultMessage: 'Total Value Lost',
                         })}
+                        value={`£${
+                          offenderProfileData?.offender?.totalValue || 0
+                        }`}
                       />
                     </Card>
                   </Col>
                   <Col>
                     <Card>
                       <Statistic
+                        title={intl.formatMessage({
+                          defaultMessage: 'Total Value Recovered',
+                        })}
                         value={`£${
                           offenderProfileData?.offender?.totalRecoveredValue ||
                           0
                         }`}
-                        title={intl.formatMessage({
-                          defaultMessage: 'Total Value Recovered',
-                        })}
                       />
                     </Card>
                   </Col>
                   <Col>
                     <Card>
                       <Statistic
-                        value={`${
-                          offenderProfileData?.offender?.totalTheftSuccess || 0
-                        }%`}
                         title={intl.formatMessage({
                           defaultMessage: 'Loss Rate',
                         })}
+                        value={`${
+                          offenderProfileData?.offender?.totalTheftSuccess || 0
+                        }%`}
                       />
                     </Card>
                   </Col>
@@ -305,6 +306,32 @@ const OffenderProfile = ({
                     style={{ height: 300, width: 950 }}
                   >
                     <ResponsiveBar
+                      ariaLabel="bar chart"
+                      axisBottom={{
+                        legend: 'Month',
+                        legendOffset: 32,
+                        legendPosition: 'middle',
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        tickSize: 5,
+                      }}
+                      axisLeft={{
+                        legend: intl.formatMessage({
+                          defaultMessage: 'Incidents',
+                        }),
+                        legendOffset: -40,
+                        legendPosition: 'middle',
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        tickSize: 5,
+                      }}
+                      axisRight={null}
+                      axisTop={null}
+                      borderColor={{
+                        from: 'color',
+                        modifiers: [['darker', 1.6]],
+                      }}
+                      colors={{ scheme: 'pastel1' }}
                       data={
                         offenderProfileData?.offender?.incidentTotals?.map(
                           (item) => {
@@ -331,6 +358,28 @@ const OffenderProfile = ({
                           }
                         ) || []
                       }
+                      defs={[
+                        {
+                          background: 'inherit',
+                          color: '#38bcb2',
+                          id: 'dots',
+                          padding: 1,
+                          size: 4,
+                          stagger: true,
+                          type: 'patternDots',
+                        },
+                        {
+                          background: 'inherit',
+                          color: '#eed312',
+                          id: 'lines',
+                          lineWidth: 6,
+                          rotation: -45,
+                          spacing: 10,
+                          type: 'patternLines',
+                        },
+                      ]}
+                      indexBy="month"
+                      indexScale={{ round: true, type: 'band' }}
                       keys={
                         [
                           ...new Set(
@@ -345,95 +394,17 @@ const OffenderProfile = ({
                           ),
                         ] || []
                       }
-                      indexBy="month"
-                      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-                      padding={0.3}
-                      valueScale={{ type: 'linear' }}
-                      indexScale={{ type: 'band', round: true }}
-                      colors={{ scheme: 'pastel1' }}
-                      defs={[
-                        {
-                          id: 'dots',
-                          type: 'patternDots',
-                          background: 'inherit',
-                          color: '#38bcb2',
-                          size: 4,
-                          padding: 1,
-                          stagger: true,
-                        },
-                        {
-                          id: 'lines',
-                          type: 'patternLines',
-                          background: 'inherit',
-                          color: '#eed312',
-                          rotation: -45,
-                          lineWidth: 6,
-                          spacing: 10,
-                        },
-                      ]}
-                      borderColor={{
-                        from: 'color',
-                        modifiers: [['darker', 1.6]],
-                      }}
-                      axisTop={null}
-                      axisRight={null}
-                      axisBottom={{
-                        tickSize: 5,
-                        tickPadding: 5,
-                        tickRotation: 0,
-                        legend: 'Month',
-                        legendPosition: 'middle',
-                        legendOffset: 32,
-                      }}
-                      axisLeft={{
-                        tickSize: 5,
-                        tickPadding: 5,
-                        tickRotation: 0,
-                        legend: intl.formatMessage({
-                          defaultMessage: 'Incidents',
-                        }),
-                        legendPosition: 'middle',
-                        legendOffset: -40,
-                      }}
-                      labelSkipWidth={12}
                       labelSkipHeight={12}
+                      labelSkipWidth={12}
                       labelTextColor={{
                         from: 'color',
                         modifiers: [['darker', 1.6]],
                       }}
-                      theme={{
-                        axis: {
-                          domain: {},
-                          ticks: {
-                            line: {
-                              fill: theme === 'light' ? '#333' : '#FFF',
-                            },
-                            text: {
-                              fill: theme === 'light' ? '#333' : '#FFF',
-                            },
-                          },
-                          legend: {
-                            text: {
-                              fill: theme === 'light' ? '#333' : '#FFF',
-                            },
-                          },
-                        },
-                      }}
                       legends={[
                         {
-                          dataFrom: 'keys',
                           anchor: 'bottom-right',
+                          dataFrom: 'keys',
                           direction: 'column',
-                          justify: false,
-                          translateX: 120,
-                          translateY: 0,
-                          itemsSpacing: 2,
-                          itemWidth: 100,
-                          itemHeight: 20,
-                          itemDirection: 'left-to-right',
-                          itemOpacity: 0.85,
-                          symbolSize: 20,
-                          itemTextColor: theme === 'light' ? '#333' : '#FFF',
                           effects: [
                             {
                               on: 'hover',
@@ -442,10 +413,40 @@ const OffenderProfile = ({
                               },
                             },
                           ],
+                          itemDirection: 'left-to-right',
+                          itemHeight: 20,
+                          itemOpacity: 0.85,
+                          itemTextColor: theme === 'light' ? '#333' : '#FFF',
+                          itemWidth: 100,
+                          itemsSpacing: 2,
+                          justify: false,
+                          symbolSize: 20,
+                          translateX: 120,
+                          translateY: 0,
                         },
                       ]}
+                      margin={{ bottom: 50, left: 60, right: 130, top: 50 }}
+                      padding={0.3}
                       role="application"
-                      ariaLabel="bar chart"
+                      theme={{
+                        axis: {
+                          domain: {},
+                          legend: {
+                            text: {
+                              fill: theme === 'light' ? '#333' : '#FFF',
+                            },
+                          },
+                          ticks: {
+                            line: {
+                              fill: theme === 'light' ? '#333' : '#FFF',
+                            },
+                            text: {
+                              fill: theme === 'light' ? '#333' : '#FFF',
+                            },
+                          },
+                        },
+                      }}
+                      valueScale={{ type: 'linear' }}
                     />
                   </div>
                 </Card>
@@ -456,54 +457,49 @@ const OffenderProfile = ({
                     })}
                   </Title>
                   <Table
-                    size="small"
-                    pagination={false}
                     columns={[
                       {
-                        key: 'reference',
                         dataIndex: 'reference',
+                        key: 'reference',
                         title: intl.formatMessage({
                           defaultMessage: 'Alert ID',
                         }),
                       },
                       {
-                        key: 'date',
                         dataIndex: 'date',
+                        key: 'date',
+                        render: (value: Date) =>
+                          moment(value).format('DD/MM/YY'),
                         title: intl.formatMessage({
                           defaultMessage: 'Date',
                         }),
-                        render: (value: Date) =>
-                          moment(value).format('DD/MM/YY'),
                       },
                       {
-                        key: 'value',
                         dataIndex: 'value',
+                        key: 'value',
+                        render: (value: string) => `£${value}`,
                         title: intl.formatMessage({
                           defaultMessage: 'Value',
                         }),
-                        render: (value: string) => `£${value}`,
                       },
                       {
-                        key: 'recoveredValue',
                         dataIndex: 'recoveredValue',
+                        key: 'recoveredValue',
+                        render: (value: string) => `£${value}`,
                         title: intl.formatMessage({
                           defaultMessage: 'Recovered Value',
                         }),
-                        render: (value: string) => `£${value}`,
                       },
                       {
-                        key: 'createdBy',
                         dataIndex: 'createdBy',
+                        key: 'createdBy',
                         title: intl.formatMessage({
                           defaultMessage: 'Created By',
                         }),
                       },
                       {
-                        key: 'crimeTypes',
                         dataIndex: 'crimeTypes',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Types',
-                        }),
+                        key: 'crimeTypes',
                         render: (value: { id: string; name: string }[]) =>
                           value.map(
                             // eslint-disable-next-line
@@ -511,22 +507,27 @@ const OffenderProfile = ({
                               <Tag key={id}>{name}</Tag>
                             )
                           ),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Types',
+                        }),
                       },
                     ]}
                     dataSource={offenderProfileData?.offender?.incidents.map(
                       (incident) => ({
-                        key: incident.id,
-                        reference: incident.reference,
-                        date: incident.date,
-                        crimeTypes: incident.crimeTypes,
-                        value: incident.value || 0,
-                        recoveredValue: incident.recoveredValue || 0,
                         createdBy: incident.createdBy.businesses[0]?.name,
+                        crimeTypes: incident.crimeTypes,
+                        date: incident.date,
+                        key: incident.id,
+                        recoveredValue: incident.recoveredValue || 0,
+                        reference: incident.reference,
+                        value: incident.value || 0,
                       })
                     )}
+                    pagination={false}
+                    size="small"
                   />
                 </Card>
-                <Row gutter={8} className={classes.dateRow}>
+                <Row className={classes.dateRow} gutter={8}>
                   <Col>
                     <Card>
                       <Title level={4}>
@@ -539,6 +540,23 @@ const OffenderProfile = ({
                         style={{ height: 300, width: 298 }}
                       >
                         <ResponsivePie
+                          arcLabelsSkipAngle={10}
+                          arcLabelsTextColor={{
+                            from: 'color',
+                            modifiers: [['darker', 2]],
+                          }}
+                          arcLinkLabelsColor={{ from: 'color' }}
+                          arcLinkLabelsSkipAngle={10}
+                          arcLinkLabelsTextColor={
+                            theme === 'light' ? '#333' : '#FFF'
+                          }
+                          arcLinkLabelsThickness={2}
+                          borderColor={{
+                            from: 'color',
+                            modifiers: [['darker', 0.2]],
+                          }}
+                          borderWidth={1}
+                          colors={{ scheme: 'pastel2' }}
                           data={
                             offenderProfileData?.offender?.incidentsByHour.map(
                               (item) => ({
@@ -548,45 +566,28 @@ const OffenderProfile = ({
                               })
                             ) || []
                           }
-                          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                          innerRadius={0.5}
-                          borderWidth={1}
-                          borderColor={{
-                            from: 'color',
-                            modifiers: [['darker', 0.2]],
-                          }}
-                          arcLinkLabelsSkipAngle={10}
-                          arcLinkLabelsTextColor={
-                            theme === 'light' ? '#333' : '#FFF'
-                          }
-                          arcLinkLabelsThickness={2}
-                          arcLinkLabelsColor={{ from: 'color' }}
-                          arcLabelsSkipAngle={10}
-                          arcLabelsTextColor={{
-                            from: 'color',
-                            modifiers: [['darker', 2]],
-                          }}
-                          colors={{ scheme: 'pastel2' }}
                           defs={[
                             {
-                              id: 'dots',
-                              type: 'patternDots',
                               background: 'inherit',
                               color: 'rgba(255, 255, 255, 0.3)',
-                              size: 4,
+                              id: 'dots',
                               padding: 1,
+                              size: 4,
                               stagger: true,
+                              type: 'patternDots',
                             },
                             {
-                              id: 'lines',
-                              type: 'patternLines',
                               background: 'inherit',
                               color: 'rgba(255, 255, 255, 0.3)',
-                              rotation: -45,
+                              id: 'lines',
                               lineWidth: 6,
+                              rotation: -45,
                               spacing: 10,
+                              type: 'patternLines',
                             },
                           ]}
+                          innerRadius={0.5}
+                          margin={{ bottom: 80, left: 80, right: 80, top: 40 }}
                         />
                       </div>
                     </Card>
@@ -603,6 +604,23 @@ const OffenderProfile = ({
                         style={{ height: 300, width: 298 }}
                       >
                         <ResponsivePie
+                          arcLabelsSkipAngle={10}
+                          arcLabelsTextColor={{
+                            from: 'color',
+                            modifiers: [['darker', 2]],
+                          }}
+                          arcLinkLabelsColor={{ from: 'color' }}
+                          arcLinkLabelsSkipAngle={10}
+                          arcLinkLabelsTextColor={
+                            theme === 'light' ? '#333' : '#FFF'
+                          }
+                          arcLinkLabelsThickness={2}
+                          borderColor={{
+                            from: 'color',
+                            modifiers: [['darker', 0.2]],
+                          }}
+                          borderWidth={1}
+                          colors={{ scheme: 'pastel2' }}
                           data={
                             offenderProfileData?.offender?.incidentsByDayOfWeek.map(
                               (item) => ({
@@ -612,45 +630,28 @@ const OffenderProfile = ({
                               })
                             ) || []
                           }
-                          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                          innerRadius={0.5}
-                          borderWidth={1}
-                          borderColor={{
-                            from: 'color',
-                            modifiers: [['darker', 0.2]],
-                          }}
-                          arcLinkLabelsSkipAngle={10}
-                          arcLinkLabelsTextColor={
-                            theme === 'light' ? '#333' : '#FFF'
-                          }
-                          arcLinkLabelsThickness={2}
-                          arcLinkLabelsColor={{ from: 'color' }}
-                          arcLabelsSkipAngle={10}
-                          arcLabelsTextColor={{
-                            from: 'color',
-                            modifiers: [['darker', 2]],
-                          }}
-                          colors={{ scheme: 'pastel2' }}
                           defs={[
                             {
-                              id: 'dots',
-                              type: 'patternDots',
                               background: 'inherit',
                               color: 'rgba(255, 255, 255, 0.3)',
-                              size: 4,
+                              id: 'dots',
                               padding: 1,
+                              size: 4,
                               stagger: true,
+                              type: 'patternDots',
                             },
                             {
-                              id: 'lines',
-                              type: 'patternLines',
                               background: 'inherit',
                               color: 'rgba(255, 255, 255, 0.3)',
-                              rotation: -45,
+                              id: 'lines',
                               lineWidth: 6,
+                              rotation: -45,
                               spacing: 10,
+                              type: 'patternLines',
                             },
                           ]}
+                          innerRadius={0.5}
+                          margin={{ bottom: 80, left: 80, right: 80, top: 40 }}
                         />
                       </div>
                     </Card>
@@ -667,6 +668,23 @@ const OffenderProfile = ({
                         style={{ height: 300, width: 298 }}
                       >
                         <ResponsivePie
+                          arcLabelsSkipAngle={10}
+                          arcLabelsTextColor={{
+                            from: 'color',
+                            modifiers: [['darker', 2]],
+                          }}
+                          arcLinkLabelsColor={{ from: 'color' }}
+                          arcLinkLabelsSkipAngle={10}
+                          arcLinkLabelsTextColor={
+                            theme === 'light' ? '#333' : '#FFF'
+                          }
+                          arcLinkLabelsThickness={2}
+                          borderColor={{
+                            from: 'color',
+                            modifiers: [['darker', 0.2]],
+                          }}
+                          borderWidth={1}
+                          colors={{ scheme: 'pastel2' }}
                           data={
                             offenderProfileData?.offender?.incidentsByMonth.map(
                               (item) => ({
@@ -676,45 +694,28 @@ const OffenderProfile = ({
                               })
                             ) || []
                           }
-                          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                          innerRadius={0.5}
-                          borderWidth={1}
-                          borderColor={{
-                            from: 'color',
-                            modifiers: [['darker', 0.2]],
-                          }}
-                          arcLinkLabelsSkipAngle={10}
-                          arcLinkLabelsTextColor={
-                            theme === 'light' ? '#333' : '#FFF'
-                          }
-                          arcLinkLabelsThickness={2}
-                          arcLinkLabelsColor={{ from: 'color' }}
-                          arcLabelsSkipAngle={10}
-                          arcLabelsTextColor={{
-                            from: 'color',
-                            modifiers: [['darker', 2]],
-                          }}
-                          colors={{ scheme: 'pastel2' }}
                           defs={[
                             {
-                              id: 'dots',
-                              type: 'patternDots',
                               background: 'inherit',
                               color: 'rgba(255, 255, 255, 0.3)',
-                              size: 4,
+                              id: 'dots',
                               padding: 1,
+                              size: 4,
                               stagger: true,
+                              type: 'patternDots',
                             },
                             {
-                              id: 'lines',
-                              type: 'patternLines',
                               background: 'inherit',
                               color: 'rgba(255, 255, 255, 0.3)',
-                              rotation: -45,
+                              id: 'lines',
                               lineWidth: 6,
+                              rotation: -45,
                               spacing: 10,
+                              type: 'patternLines',
                             },
                           ]}
+                          innerRadius={0.5}
+                          margin={{ bottom: 80, left: 80, right: 80, top: 40 }}
                         />
                       </div>
                     </Card>
@@ -729,43 +730,43 @@ const OffenderProfile = ({
                   <Table
                     columns={[
                       {
-                        key: 'name',
                         dataIndex: 'name',
+                        key: 'name',
                         title: intl.formatMessage({
                           defaultMessage: 'Name',
                         }),
                       },
                       {
-                        key: 'lost',
                         dataIndex: 'lost',
+                        key: 'lost',
+                        render: (value: number) => `£${value.toFixed(2)}`,
                         title: intl.formatMessage({
                           defaultMessage: 'Total Lost',
                         }),
-                        render: (value: number) => `£${value.toFixed(2)}`,
                       },
                       {
-                        key: 'recovered',
                         dataIndex: 'recovered',
+                        key: 'recovered',
+                        render: (value: number) => `£${value.toFixed(2)}`,
                         title: intl.formatMessage({
                           defaultMessage: 'Total Recovered',
                         }),
-                        render: (value: number) => `£${value.toFixed(2)}`,
                       },
                       {
-                        key: 'successRate',
                         dataIndex: 'successRate',
+                        key: 'successRate',
+                        render: (value: number) => `${value.toFixed(0)}%`,
                         title: intl.formatMessage({
                           defaultMessage: 'Loss Rate',
                         }),
-                        render: (value: number) => `${value.toFixed(0)}%`,
                       },
                       {
-                        key: 'avgLost',
                         dataIndex: 'avgLost',
+                        key: 'avgLost',
+                        render: (value: number) => `£${value.toFixed(2)}`,
                         title: intl.formatMessage({
                           defaultMessage: 'Avg Lost',
                         }),
-                        render: (value: number) => `£${value.toFixed(2)}`,
                       },
                     ]}
                     dataSource={offenderProfileData?.offender?.goodsTypesTotals
@@ -778,17 +779,17 @@ const OffenderProfile = ({
                           type.totalRecoveredValue
                       )
                       .map((type) => ({
-                        key: type.goodsType?.id,
-                        name: type.goodsType?.name,
-                        lost: type.totalLostValue || 0,
-                        recovered: type.totalRecoveredValue || 0,
-                        successRate: type.successRate || 0,
-                        incidents: type.count || 0,
                         avgLost: type.avgLostValue || 0,
                         avgRecovered: type.avgRecoveredValue || 0,
+                        incidents: type.count || 0,
+                        key: type.goodsType?.id,
+                        lost: type.totalLostValue || 0,
+                        name: type.goodsType?.name,
+                        recovered: type.totalRecoveredValue || 0,
+                        successRate: type.successRate || 0,
                       }))}
-                    size="small"
                     pagination={false}
+                    size="small"
                   />
                 </Card>
                 <Card>
@@ -798,51 +799,51 @@ const OffenderProfile = ({
                     })}
                   </Title>
                   <Table
-                    size="small"
                     columns={[
                       {
-                        key: 'reference',
                         dataIndex: 'reference',
+                        key: 'reference',
                         title: intl.formatMessage({
                           defaultMessage: 'Alert ID',
                         }),
                       },
                       {
-                        key: 'alias',
                         dataIndex: 'alias',
+                        key: 'alias',
                         title: intl.formatMessage({
                           defaultMessage: 'Alias',
                         }),
                       },
                       {
-                        key: 'members',
                         dataIndex: 'members',
+                        key: 'members',
                         title: intl.formatMessage({
                           defaultMessage: 'Members',
                         }),
                       },
                       {
-                        key: 'value',
                         dataIndex: 'value',
+                        key: 'value',
                         title: intl.formatMessage({
                           defaultMessage: 'Value',
                         }),
                       },
                       {
-                        key: 'recoveredValue',
                         dataIndex: 'recoveredValue',
+                        key: 'recoveredValue',
                         title: intl.formatMessage({
                           defaultMessage: 'Recovered Value',
                         }),
                       },
                       {
-                        key: 'lastActivity',
                         dataIndex: 'lastActivity',
+                        key: 'lastActivity',
                         title: intl.formatMessage({
                           defaultMessage: 'Last Incident',
                         }),
                       },
                     ]}
+                    size="small"
                   />
                 </Card>
                 <Card>
@@ -852,37 +853,37 @@ const OffenderProfile = ({
                     })}
                   </Title>
                   <Table
-                    size="small"
                     columns={[
                       {
-                        key: 'make',
                         dataIndex: 'make',
+                        key: 'make',
                         title: intl.formatMessage({
                           defaultMessage: 'Make',
                         }),
                       },
                       {
-                        key: 'model',
                         dataIndex: 'model',
+                        key: 'model',
                         title: intl.formatMessage({
                           defaultMessage: 'Model',
                         }),
                       },
                       {
-                        key: 'registration',
                         dataIndex: 'registration',
+                        key: 'registration',
                         title: intl.formatMessage({
                           defaultMessage: 'Registration',
                         }),
                       },
                       {
-                        key: 'colour',
                         dataIndex: 'colour',
+                        key: 'colour',
                         title: intl.formatMessage({
                           defaultMessage: 'Colour',
                         }),
                       },
                     ]}
+                    size="small"
                   />
                 </Card>
               </div>

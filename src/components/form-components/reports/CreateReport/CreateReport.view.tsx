@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
-import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { useStoreState } from '#/state';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import { ReportType } from 'graphql/types';
-import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/create-report-template.generated';
 import type {
   ReportsCentreQuery,
   ReportsCentreQueryVariables,
-} from '#/views/reports/reports-centre/reports-centre.generated';
-import { ReportsCentreDocument } from '#/views/reports/reports-centre/reports-centre.generated';
+} from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
+
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import ReportGroupSelect from '#/components/form-components/ReportGroupSelect/ReportGroupSelect.view';
+import { useStoreState } from '#/state';
+import { ReportsCentreDocument } from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
+import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/create-report-template.generated';
+import { ReportType } from 'graphql/types';
+import update from 'immutability-helper';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface FormData {
-  name: string;
   description: string;
-  type: ReportType;
   groups: string[];
+  name: string;
+  reportGroupId: string;
+  type: ReportType;
 }
 
 interface Props {
@@ -29,45 +33,58 @@ const CreateReport = ({ onClose }: Props) => {
   const [saving, setSaving] = useState(false);
   const options = [
     {
-      value: ReportType.Performance,
-      name: intl.formatMessage({
-        defaultMessage: 'Summary Report',
-      }),
       description: intl.formatMessage({
         defaultMessage:
           'Report that can show a summary of all data in alert together.',
       }),
+      name: intl.formatMessage({
+        defaultMessage: 'Summary Report',
+      }),
+      value: ReportType.Performance,
     },
     {
-      value: ReportType.Offender,
-      name: intl.formatMessage({
-        defaultMessage: 'Offender Report',
-      }),
       description: intl.formatMessage({
         defaultMessage: 'Report that focuses on the data for one offender.',
       }),
+      name: intl.formatMessage({
+        defaultMessage: 'Offender Summary',
+      }),
+      value: ReportType.Offender,
     },
     {
-      value: ReportType.Business,
-      name: intl.formatMessage({
-        defaultMessage: 'Business Report',
-      }),
       description: intl.formatMessage({
         defaultMessage: 'Report that focuses on the data for one business.',
       }),
+      name: intl.formatMessage({
+        defaultMessage: 'Business Summary',
+      }),
+      value: ReportType.Business,
     },
     {
-      value: ReportType.CrimeGroup,
-      name: intl.formatMessage({
-        defaultMessage: 'Crime Group Report',
-      }),
       description: intl.formatMessage({
         defaultMessage: 'Report that focuses on the data for one crime group.',
       }),
+      name: intl.formatMessage({
+        defaultMessage: 'Crime Group Summary',
+      }),
+      value: ReportType.CrimeGroup,
+    },
+    {
+      description: intl.formatMessage({
+        defaultMessage: 'Query and analyse offenders added in Alert.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'Offender Table',
+      }),
+      value: ReportType.OffenderTable,
     },
   ];
 
   const [createReport] = useCreateReportTemplateMutation({
+    onCompleted: () => {
+      setSaving(false);
+      onClose();
+    },
     update: (cache, { data: d }) => {
       const existingTemplates = cache.readQuery<
         ReportsCentreQuery,
@@ -76,95 +93,41 @@ const CreateReport = ({ onClose }: Props) => {
         query: ReportsCentreDocument,
         variables: {
           where: {
-            scheme: {
-              id: schemeId,
-            },
+            schemeId,
             search: '',
           },
         },
       });
 
       if (existingTemplates && d?.createReportTemplate) {
-        const perfReports =
-          d.createReportTemplate.type === ReportType.Performance
-            ? [
-                {
-                  name: d.createReportTemplate.name,
-                  description: d.createReportTemplate.description,
-                  id: d.createReportTemplate.id,
-                  type: ReportType.Performance,
-                },
-              ]
-            : [];
-        const offenderReports =
-          d.createReportTemplate.type === ReportType.Offender
-            ? [
-                {
-                  name: d.createReportTemplate.name,
-                  description: d.createReportTemplate.description,
-                  id: d.createReportTemplate.id,
-                  type: ReportType.Offender,
-                },
-              ]
-            : [];
-        const businessReports =
-          d.createReportTemplate.type === ReportType.Business
-            ? [
-                {
-                  name: d.createReportTemplate.name,
-                  description: d.createReportTemplate.description,
-                  id: d.createReportTemplate.id,
-                  type: ReportType.Business,
-                },
-              ]
-            : [];
-        const crimeGroupReports =
-          d.createReportTemplate.type === ReportType.CrimeGroup
-            ? [
-                {
-                  name: d.createReportTemplate.name,
-                  description: d.createReportTemplate.description,
-                  id: d.createReportTemplate.id,
-                  type: ReportType.CrimeGroup,
-                },
-              ]
-            : [];
         cache.writeQuery<ReportsCentreQuery, ReportsCentreQueryVariables>({
-          query: ReportsCentreDocument,
           data: {
-            reportsCentre: {
-              businessReports: [
-                ...existingTemplates.reportsCentre.businessReports,
-                ...businessReports,
-              ],
-              summaryReports: [
-                ...existingTemplates.reportsCentre.summaryReports,
-                ...perfReports,
-              ],
-              offenderReports: [
-                ...existingTemplates.reportsCentre.offenderReports,
-                ...offenderReports,
-              ],
-              crimeGroupReports: [
-                ...existingTemplates.reportsCentre.crimeGroupReports,
-                ...crimeGroupReports,
-              ],
-            },
+            reportsCentre: update(existingTemplates.reportsCentre, {
+              [existingTemplates.reportsCentre.findIndex(
+                (item) => item.id === d.createReportTemplate.reportGroup.id
+              )]: {
+                reports: {
+                  $push: [
+                    {
+                      description: d.createReportTemplate.description,
+                      id: d.createReportTemplate.id,
+                      name: d.createReportTemplate.name,
+                      type: d.createReportTemplate.type,
+                    },
+                  ],
+                },
+              },
+            }),
           },
+          query: ReportsCentreDocument,
           variables: {
             where: {
-              scheme: {
-                id: schemeId,
-              },
+              schemeId,
               search: '',
             },
           },
         });
       }
-    },
-    onCompleted: () => {
-      setSaving(false);
-      onClose();
     },
   });
 
@@ -173,13 +136,17 @@ const CreateReport = ({ onClose }: Props) => {
     void createReport({
       variables: {
         data: {
-          type: values.type,
-          name: values.name,
           description: values.description,
           groups: {
             connect: values.groups.map((id) => ({
               id,
             })),
+          },
+          name: values.name,
+          reportGroup: {
+            connect: {
+              id: values.reportGroupId,
+            },
           },
           schemes: {
             connect: [
@@ -188,6 +155,7 @@ const CreateReport = ({ onClose }: Props) => {
               },
             ],
           },
+          type: values.type,
         },
       },
     });
@@ -196,46 +164,46 @@ const CreateReport = ({ onClose }: Props) => {
   return (
     <Form<FormData> layout="vertical" onFinish={onSubmit}>
       <Form.Item
-        name="name"
         label={intl.formatMessage({ defaultMessage: 'Name' })}
+        name="name"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage: 'Name is required',
             }),
+            required: true,
           },
         ]}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        name="description"
         label={intl.formatMessage({
           defaultMessage: 'Description',
         })}
+        name="description"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage: 'Description is required',
             }),
+            required: true,
           },
         ]}
       >
         <Input.TextArea />
       </Form.Item>
       <Form.Item
-        name="type"
         label={intl.formatMessage({
           defaultMessage: 'Report Type',
         })}
+        name="type"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage: 'A type is required.',
             }),
+            required: true,
           },
         ]}
       >
@@ -247,7 +215,7 @@ const CreateReport = ({ onClose }: Props) => {
               </Typography.Paragraph>
               <Typography.Paragraph
                 style={{ marginBottom: 0 }}
-                type={'secondary'}
+                type="secondary"
               >
                 {item.description}
               </Typography.Paragraph>
@@ -256,20 +224,36 @@ const CreateReport = ({ onClose }: Props) => {
         </Select>
       </Form.Item>
       <Form.Item
-        name="groups"
         label={intl.formatMessage({
           defaultMessage: 'Groups',
         })}
+        name="groups"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage: 'Please select at least one group.',
             }),
+            required: true,
           },
         ]}
       >
         <GroupsSelect mode="multiple" />
+      </Form.Item>
+      <Form.Item
+        label={intl.formatMessage({
+          defaultMessage: 'Report Group',
+        })}
+        name="reportGroupId"
+        rules={[
+          {
+            message: intl.formatMessage({
+              defaultMessage: 'Please select a report group.',
+            }),
+            required: true,
+          },
+        ]}
+      >
+        <ReportGroupSelect />
       </Form.Item>
       <Form.Item>
         <Row gutter={16} justify="end">
@@ -281,9 +265,9 @@ const CreateReport = ({ onClose }: Props) => {
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               <FormattedMessage defaultMessage="Create Report" />
             </Button>

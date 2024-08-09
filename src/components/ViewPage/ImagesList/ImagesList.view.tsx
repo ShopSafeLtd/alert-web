@@ -1,8 +1,10 @@
+import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import type { Theme } from 'configs/ThemeConfig';
 import type { EditFeedImage, ImageFaceType } from 'types/DataType';
 
+import { useCreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import MultiFacesSelect from '#/components/form-components/FacesSelect/MultiFacesSelect.view';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import getFacesFromUrl from '#/utils/get-faces-from-url';
@@ -31,10 +33,6 @@ import { createUseStyles } from 'react-jss';
 import downloadImage from 'utils/images/download-image';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-
-import type { CreateBlurFacesMutation } from './graphql/create_blur_faces.generated';
-
-import { useCreateBlurFacesMutation } from './graphql/create_blur_faces.generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   icon: { marginRight: 5 },

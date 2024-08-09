@@ -1,9 +1,19 @@
-query schemeGroupsSelect(
-  $where: GroupWhereInput
-  $orderBy: [GroupOrderByWithRelationInput!]
-) {
-  groups(where: $where, orderBy: $orderBy) {
-    id
-    name
+query schemeGroupsSelect($where: UserGroupsReplayWhere) {
+  userGroupRelay(where: $where) {
+    edges {
+      node {
+        id
+        name
+        scheme {
+          id
+          name
+        }
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
   }
 }

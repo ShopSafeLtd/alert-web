@@ -10,10 +10,10 @@ const TabContent = ({ children }: Props): JSX.Element => (
   <ViewContent
     className="tab-content"
     style={{
-      width: '100%',
-      height: 'calc(100vh - 65px)',
-      overflowY: 'auto',
+      height: 'calc(100vh - 52px)',
       overflowX: 'hidden',
+      overflowY: 'auto',
+      width: '100%',
     }}
   >
     {children}

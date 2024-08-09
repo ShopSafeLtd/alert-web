@@ -1,22 +1,22 @@
-import React from 'react';
-import { Button, Col, Input, Row, Table } from 'antd';
+import type { ListBusinessesQuery } from 'graphql/businesses/queries/__generated__/list-businesses.generated';
 
+import { Button, Col, Input, Row, Table } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListBusinessesQuery } from 'graphql/businesses/queries/list-businesses.generated';
 
 interface Props {
-  data: ListBusinessesQuery | undefined;
-  onSubmit: () => void;
-  saving: boolean;
-  searchValue: string;
-  onSearchBusiness: (value: string) => void;
-  loading: boolean;
-  selectedValue: React.Key[] | undefined;
   currentPage: number;
   currentPageSize: number;
-  onPaginationChange: (page: number, pageSize: number) => void;
+  data: ListBusinessesQuery | undefined;
+  loading: boolean;
   onClose: () => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  onSearchBusiness: (value: string) => void;
+  onSubmit: () => void;
   onTableChange: (selectedRowKeys: React.Key[]) => void;
+  saving: boolean;
+  searchValue: string;
+  selectedValue: React.Key[] | undefined;
 }
 
 const AddBusiness = ({
@@ -24,37 +24,37 @@ const AddBusiness = ({
   currentPageSize,
   data,
   loading,
+  onClose,
   onPaginationChange,
   onSearchBusiness,
   onSubmit,
-  saving,
-  selectedValue,
-  onClose,
   onTableChange,
+  saving,
   searchValue,
+  selectedValue,
 }: Props) => {
   const intl = useIntl();
 
   return (
     <>
       <Input
-        style={{ marginBottom: 20 }}
+        onChange={(e) => onSearchBusiness(e.target.value)}
         placeholder={intl.formatMessage({
           defaultMessage: 'Search for a business...',
         })}
+        style={{ marginBottom: 20 }}
         value={searchValue}
-        onChange={(e) => onSearchBusiness(e.target.value)}
       />
       <Table
         columns={[
           {
-            key: 'name',
             dataIndex: 'name',
+            key: 'name',
             title: intl.formatMessage({ defaultMessage: 'Name' }),
           },
           {
-            key: 'address',
             dataIndex: 'address',
+            key: 'address',
             title: intl.formatMessage({
               defaultMessage: 'Address',
             }),
@@ -62,25 +62,25 @@ const AddBusiness = ({
         ]}
         dataSource={
           data?.listBusinesses.businesses.map((business) => ({
+            address: business.locations[0]?.full,
             key: business.id,
             name: business.name,
-            address: business.locations[0]?.full,
           })) || []
         }
+        loading={loading}
         pagination={{
-          hideOnSinglePage: true,
           current: currentPage,
           defaultPageSize: 50,
+          hideOnSinglePage: true,
           onChange: onPaginationChange,
-          total: data?.listBusinesses.total,
           pageSize: currentPageSize,
+          total: data?.listBusinesses.total,
         }}
         rowSelection={{
-          type: 'radio',
           onChange: onTableChange,
           selectedRowKeys: selectedValue,
+          type: 'radio',
         }}
-        loading={loading}
         size="small"
       />
       <Row gutter={16} justify="end">
@@ -91,10 +91,10 @@ const AddBusiness = ({
         </Col>
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
-            type="primary"
+            loading={saving}
             onClick={onSubmit}
+            type="primary"
           >
             {intl.formatMessage({
               defaultMessage: 'Link Business',

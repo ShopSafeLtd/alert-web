@@ -1,12 +1,14 @@
-import React from 'react';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
+
 import { Col, Row, Typography } from 'antd';
-import { Link } from 'react-router-dom';
 import SideListItem from 'components/side-list/SideListItem.view';
-import { useIntl } from 'react-intl';
-import useStyles from './IncidentSideList.styles';
-import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
 import { IncidentPriority } from 'graphql/types';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+
+import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
+import useStyles from './IncidentSideList.styles';
 
 const getPriorityBorder = (value: IncidentPriority) => {
   if (value === IncidentPriority.High) return '5px solid rgb(222, 68, 54)';
@@ -15,22 +17,22 @@ const getPriorityBorder = (value: IncidentPriority) => {
 };
 
 interface Props {
+  current?: string;
   data:
     | Exclude<
         ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-        undefined | null
+        null | undefined
       >
     | null
     | undefined;
   loading: boolean;
   next: () => void;
-  current?: string;
 }
 
 const IncidentSideList = ({
+  current,
   data,
   loading,
-  current,
   next,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -39,18 +41,18 @@ const IncidentSideList = ({
   const isLoading = loading && !data?.total;
 
   const incidentItems = data?.incidents?.map((incident) => (
-    <Link to={`/app/incidents/view/${incident.id}`} key={incident.id}>
+    <Link key={incident.id} to={`/app/incidents/view/${incident.id}`}>
       <SideListItem
+        current={current === incident.id}
         style={{
           borderLeft: getPriorityBorder(incident.priority),
         }}
-        current={current === incident.id}
       >
         <Row wrap={false}>
           <Col className={classes.itemContent} flex={1}>
             <Row>
               <Col flex={1}>
-                <Typography.Text strong={current === incident.id} ellipsis>
+                <Typography.Text ellipsis strong={current === incident.id}>
                   {incident.subject}
                 </Typography.Text>
               </Col>
@@ -73,8 +75,8 @@ const IncidentSideList = ({
 
             <Typography.Paragraph
               className={classes.itemDesc}
-              type="secondary"
               ellipsis
+              type="secondary"
             >
               {incident.description}
             </Typography.Paragraph>
@@ -82,9 +84,9 @@ const IncidentSideList = ({
               <Col flex={1}>
                 <Typography.Paragraph
                   className={classes.itemDetail}
+                  ellipsis
                   style={{ marginRight: 10 }}
                   type="secondary"
-                  ellipsis
                 >
                   {incident.business?.name || incident.location?.full}
                 </Typography.Paragraph>
@@ -92,8 +94,8 @@ const IncidentSideList = ({
               <Col>
                 <Typography.Paragraph
                   className={classes.itemDetail}
-                  type="secondary"
                   ellipsis
+                  type="secondary"
                 >
                   {incident.dayTime}
                 </Typography.Paragraph>
@@ -108,10 +110,10 @@ const IncidentSideList = ({
   return (
     <InfiniteSideScrollList
       dataLength={data?.incidents?.length}
-      next={next}
       hasMore={(data?.incidents?.length || 0) < (data?.total || 0)}
       isLoading={isLoading}
       items={incidentItems}
+      next={next}
     />
   );
 };

@@ -1,20 +1,20 @@
+import { useIndexImageMutation } from 'graphql/rekognition/mutations/__generated__/index-image.generated';
+import { Role } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
-import { Role } from 'graphql/types';
-import { useIndexImageMutation } from 'graphql/rekognition/mutations/index-image.generated';
 
 interface Return {
+  isAdmin: boolean;
+  linkNewOffender: boolean;
+  linkOffender: null | string;
   onReIndex: (imageId?: string) => void;
   reIndexing: boolean;
-  isAdmin: boolean;
-  toggleBoxes: () => void;
   showBoxes: boolean;
-  linkOffender: string | null;
-  toggleLinkOffender: (faceId: string | null) => void;
+  toggleBoxes: () => void;
   toggleLinkNewOffender: () => void;
-  linkNewOffender: boolean;
-  viewMatches: string | null;
-  toggleViewMatches: (offenderId: string | null) => void;
+  toggleLinkOffender: (faceId: null | string) => void;
+  toggleViewMatches: (offenderId: null | string) => void;
+  viewMatches: null | string;
 }
 
 const useLightBox = (): Return => {
@@ -23,8 +23,8 @@ const useLightBox = (): Return => {
   const [reIndexing, setReIndexing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showBoxes, setShowBoxes] = useState(true);
-  const [linkOffender, setLinkOffender] = useState<string | null>(null);
-  const [viewMatches, setViewMatches] = useState<string | null>(null);
+  const [linkOffender, setLinkOffender] = useState<null | string>(null);
+  const [viewMatches, setViewMatches] = useState<null | string>(null);
   const [linkNewOffender, setLinkNewOffender] = useState(false);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const useLightBox = (): Return => {
     setShowBoxes(!showBoxes);
   };
 
-  const toggleLinkOffender = (value: string | null) => {
+  const toggleLinkOffender = (value: null | string) => {
     setLinkOffender(value);
     if (value === null) setLinkNewOffender(false);
   };
@@ -59,16 +59,16 @@ const useLightBox = (): Return => {
   };
 
   return {
+    isAdmin,
+    linkNewOffender,
+    linkOffender,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onReIndex,
     reIndexing,
-    isAdmin,
-    toggleBoxes,
     showBoxes,
-    linkOffender,
-    toggleLinkOffender,
-    linkNewOffender,
+    toggleBoxes,
     toggleLinkNewOffender,
+    toggleLinkOffender,
     toggleViewMatches: setViewMatches,
     viewMatches,
   };

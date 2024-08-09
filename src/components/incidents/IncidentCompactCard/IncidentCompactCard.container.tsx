@@ -1,10 +1,11 @@
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { IncidentCardFragment } from 'graphql/fragments/__generated__/incident-card.generated';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
+
 import React from 'react';
 
-import type { MutationUpdaterFn } from '@apollo/client';
 import View from './IncidentCompactCard.view';
 import useIncidentCard from './useIncidentCompactCard';
-import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import type { IncidentCardFragment } from 'graphql/fragments/incident-card.generated';
 
 interface Props {
   incident: IncidentCardFragment;
@@ -18,19 +19,19 @@ const IncidentCard = ({
   update,
 }: Props): JSX.Element => {
   const {
+    addInvestigation,
     approvalRights,
     deleteRights,
-    menuRights,
-    editIncidentFeed,
-    toggleEditIncidentFeed,
-    onDelete,
     editImage,
-    toggleEditImage,
     editImageId,
-    setEditImageId,
+    editIncidentFeed,
+    menuRights,
+    onDelete,
     onEditImage,
-    addInvestigation,
+    setEditImageId,
     toggleAddInvestigation,
+    toggleEditImage,
+    toggleEditIncidentFeed,
   } = useIncidentCard({
     incident,
     update,
@@ -38,21 +39,21 @@ const IncidentCard = ({
 
   return (
     <View
+      addInvestigation={addInvestigation}
       approvalRights={approvalRights}
       deleteRights={deleteRights}
-      menuRights={menuRights}
-      incident={incident}
-      openLightbox={openLightbox}
-      onDelete={onDelete}
-      editIncidentFeed={editIncidentFeed}
-      toggleEditIncidentFeed={toggleEditIncidentFeed}
       editImage={editImage}
-      toggleEditImage={toggleEditImage}
       editImageId={editImageId}
-      setEditImageId={setEditImageId}
+      editIncidentFeed={editIncidentFeed}
+      incident={incident}
+      menuRights={menuRights}
+      onDelete={onDelete}
       onEditImage={onEditImage}
-      addInvestigation={addInvestigation}
+      openLightbox={openLightbox}
+      setEditImageId={setEditImageId}
       toggleAddInvestigation={toggleAddInvestigation}
+      toggleEditImage={toggleEditImage}
+      toggleEditIncidentFeed={toggleEditIncidentFeed}
     />
   );
 };

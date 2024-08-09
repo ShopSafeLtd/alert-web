@@ -1,46 +1,39 @@
-import type { SchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
+import type {
+  TodoListQuery,
+  TodoListQueryVariables,
+} from '#/views/adminTodo/TodoList/__generated__/TodoListQuery.generated';
 import type { TableItem } from '#/views/adminTodo/TodoList/TodoList.view';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { TableProps } from 'antd';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import type { ListTodosQuery } from 'graphql/todos/queries/list_todos.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 
-import { useSchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/groups.generated';
-import errorNotification from '#/types/mutation_notifications/error_notification';
-import hasPermission from '#/utils/has-permission';
-import { notification } from 'antd';
-import { useUpdateTodoMutation } from 'graphql/todos/mutations/update_todo.generated';
+import { useUserData } from '#/components/form-components/UsersSelect/UsersSelect.view';
+import { useGroupsContext } from '#/context/groups-context';
 import {
-  ListTodosDocument,
-  useListTodosQuery,
-} from 'graphql/todos/queries/list_todos.generated';
+  TodoListDocument,
+  useTodoListQuery,
+} from '#/views/adminTodo/TodoList/__generated__/TodoListQuery.generated';
+import { useDeleteTodoMutation } from '#/views/adminTodo/graphql/mutations/__generated__/delete-todo.generated';
+import { useUpdateTodoMutation } from 'graphql/todos/mutations/__generated__/update_todo.generated';
 import {
   PermissionMethod,
   PermissionModel,
-  QueryMode,
   SortOrder,
+  TodoStatusInput,
+  TodoUserModeInput,
 } from 'graphql/types';
-import { useMemo, useState } from 'react';
-import { useStoreActions, useStoreState } from 'state';
+import { useEffect, useState } from 'react';
+import { useStoreState } from 'state';
 
 import type { ListData } from '../useActivities';
 
-import { useDeleteTodoMutation } from '../graphql/mutations/delete-todo.generated';
-
 interface Return {
   addTodo: boolean;
-  allSchemes: boolean;
-  allUsers: boolean;
+  canDelete: boolean;
   currentPage: number;
   currentPageSize: number;
-  data:
-    | Exclude<ListTodosQuery['listTodos'], null | undefined>
-    | null
-    | undefined;
-  deleteRights: boolean;
-  editRights: boolean;
-  editTodo: null | string;
-  groupsData: SchemeGroupsSelectQuery | undefined;
+  data: TodoListQuery | null | undefined;
+  groupsData: { label: string; value: string }[];
   groupsFilter: string[];
   loading: boolean;
   onCompletedTodo: (id: string) => void;
@@ -52,14 +45,15 @@ interface Return {
   selectTemplate: (id: null | string) => void;
   selectedTemplate: ListData | null;
   selectedTodo: null | string;
-  setEditTodo: (id: null | string) => void;
   setGroupsFilter: (value: string[]) => void;
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
+  setStatusMode: (value: TodoStatusInput) => void;
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
   toggleAllUsers: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  userData: { label: string; value: string }[];
 }
 
 interface Props {
@@ -67,15 +61,9 @@ interface Props {
 }
 
 const useAdminTodos = ({ templateData }: Props): Return => {
-  const { id: userId, schemes: userSchemes } = useStoreState(
-    (state) => state.user
-  );
+  const { id: userId } = useStoreState((state) => state.user);
+  const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useStoreState((state) => state.scheme.id);
-  const currentScheme = useMemo(
-    () => userSchemes.find((scheme) => scheme.scheme.id === schemeId),
-    [userSchemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
 
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
@@ -83,15 +71,32 @@ const useAdminTodos = ({ templateData }: Props): Return => {
   const [allSchemes, setAllSchemes] = useState(false);
   const [search, setSearch] = useState('');
   const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
+  const [usersFilter, setUsersFilter] = useState<string[]>([]);
+  const [statusMode, setStatusMode] = useState<TodoStatusInput>(
+    TodoStatusInput.Uncompleted
+  );
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
-  const setTodoList = useStoreActions((actions) => actions.user.setTodos);
-  const userTodos = useStoreState((state) => state.user.userTodos);
   const [selectedTodo, setSelectedTodo] = useState<null | string>(null);
-  const [editTodo, setEditTodo] = useState<null | string>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<ListData | null>(
     null
   );
+  const [canDelete, setCanDelete] = useState(false);
+
+  useEffect(() => {
+    const currentScheme = userSchemes.find(
+      ({ scheme }) => scheme.id === schemeId
+    );
+    if (
+      currentScheme?.permissions.some(
+        ({ allowedMethods, model }) =>
+          model === PermissionModel.Tasks &&
+          allowedMethods.includes(PermissionMethod.Delete)
+      )
+    ) {
+      setCanDelete(true);
+    }
+  }, [userSchemes, schemeId]);
 
   const selectTemplate = (id: null | string) => {
     const template = templateData.find((t) => t.id === id);
@@ -100,66 +105,30 @@ const useAdminTodos = ({ templateData }: Props): Return => {
       setAddTodo(true);
     }
   };
-  const variables = {
+
+  const getUsersMode = (): TodoUserModeInput => {
+    if (allUsers && usersFilter.length > 0) return TodoUserModeInput.Selected;
+    if (allUsers) return TodoUserModeInput.All;
+    return TodoUserModeInput.Current;
+  };
+
+  const variables: TodoListQueryVariables = {
     orderBy: {
       createdAt: SortOrder.Desc,
     },
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          description: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
-      assignedUsers: allUsers
-        ? undefined
-        : {
-            some: {
-              id: {
-                in: [userId],
-              },
-            },
-          },
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : undefined,
-      schemes: {
-        some: {
-          id: allSchemes
-            ? {
-                in: userSchemes.map((scheme) => scheme.scheme.id),
-              }
-            : {
-                equals: schemeId,
-              },
-        },
-      },
+      assignedUsers: usersFilter,
+      groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
+      schemeIds: allSchemes ? undefined : [schemeId],
+      search,
+      status: statusMode,
+      userMode: getUsersMode(),
     },
   };
-  const { data, loading } = useListTodosQuery({
+  const { data, fetchMore, loading } = useTodoListQuery({
     fetchPolicy: 'cache-and-network',
-    onCompleted: (res) => {
-      if (res.listTodos) {
-        setTodoList({ userTodos: res.listTodos.uncompletedTotal || 0 });
-      }
-    },
     variables,
   });
 
@@ -170,33 +139,57 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     if (res?.createTodo === null || res?.createTodo === undefined) return;
 
     // get existing group list data from Apollo store
-    const existingData = store.readQuery<ListTodosQuery>({
-      query: ListTodosDocument,
-      variables,
-    });
+    const existingData = store.readQuery<TodoListQuery, TodoListQueryVariables>(
+      {
+        query: TodoListDocument,
+        variables,
+      }
+    );
 
-    if (!existingData?.listTodos) return;
+    if (!existingData?.todoRelay.edges) return;
 
     // write the new data to the Apollo store
-    store.writeQuery<ListTodosQuery>({
+    store.writeQuery<TodoListQuery, TodoListQueryVariables>({
       data: {
         __typename: 'Query',
-        listTodos: {
-          // TODO: add groups to create response if you can add groups on creation
-          todos: [...(existingData.listTodos.todos as []), res.createTodo],
-          total: existingData.listTodos.total + 1,
-          totalUserTodos: res.createTodo.completed
-            ? existingData.listTodos.totalUserTodos
-            : existingData.listTodos.totalUserTodos + 1,
-          uncompletedTotal: res.createTodo.completed
-            ? existingData.listTodos.uncompletedTotal
-            : existingData.listTodos.uncompletedTotal + 1,
+        todoRelay: {
+          ...existingData.todoRelay,
+          edges: [{ node: res.createTodo }, ...existingData.todoRelay.edges],
         },
       },
-      query: ListTodosDocument,
+      query: TodoListDocument,
       variables,
     });
   };
+
+  const [deleteTodo] = useDeleteTodoMutation({
+    update: (store, { data: res }) => {
+      if (res?.deleteTodo === null || res?.deleteTodo === undefined) return;
+
+      const existingData = store.readQuery<
+        TodoListQuery,
+        TodoListQueryVariables
+      >({
+        query: TodoListDocument,
+        variables,
+      });
+
+      if (!existingData?.todoRelay.edges) return;
+
+      store.writeQuery<TodoListQuery, TodoListQueryVariables>({
+        data: {
+          todoRelay: {
+            ...existingData.todoRelay,
+            edges: existingData.todoRelay.edges.filter(
+              (item) => item.node.id !== res.deleteTodo.id
+            ),
+          },
+        },
+        query: TodoListDocument,
+        variables,
+      });
+    },
+  });
 
   const [updateTodo] = useUpdateTodoMutation({
     onCompleted: () => {
@@ -206,56 +199,9 @@ const useAdminTodos = ({ templateData }: Props): Return => {
       setSaving(false);
     },
   });
-  const [deleteTodo] = useDeleteTodoMutation({
-    onCompleted: () => {
-      setSaving(false);
-      notification.success({
-        description: `The activity has been removed!`,
-        message: 'Successfully Removed',
-        placement: 'bottomRight',
-      });
-    },
-    onError: () => {
-      setSaving(false);
-      errorNotification();
-    },
-    update: (store, { data: res }) => {
-      if (res?.deleteTodo === null || res?.deleteTodo === undefined) return;
-
-      const existingData = store.readQuery<ListTodosQuery>({
-        query: ListTodosDocument,
-        variables,
-      });
-
-      if (!existingData?.listTodos) return;
-
-      store.writeQuery<ListTodosQuery>({
-        data: {
-          __typename: 'Query',
-          listTodos: {
-            todos: existingData.listTodos.todos.filter(
-              ({ id }) => id !== res.deleteTodo.id
-            ),
-            total: existingData.listTodos.total - 1,
-            totalUserTodos: res.deleteTodo.completed
-              ? existingData.listTodos.totalUserTodos - 1
-              : existingData.listTodos.totalUserTodos,
-            uncompletedTotal: res.deleteTodo.completed
-              ? existingData.listTodos.uncompletedTotal - 1
-              : existingData.listTodos.uncompletedTotal,
-          },
-        },
-        query: ListTodosDocument,
-        variables,
-      });
-    },
-  });
   // function
   const onCompletedTodo = (todoId: string) => {
     setSaving(true);
-    setTodoList({
-      userTodos: userTodos ? userTodos - 1 : 0,
-    });
     void updateTodo({
       variables: {
         data: {
@@ -287,40 +233,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
           id: todoId,
         },
       },
-      // optimisticResponse: {
-      //   __typename: 'Mutation',
-
-      //   updateTodo: {
-      //     assignedUsers: [],
-      //     id: '',
-      //     name: '',
-      //     createdBy: {
-      //       fullName,
-      //       id: userId,
-      //       __typename: 'User',
-      //     },
-      //     completedBy: {
-      //       fullName,
-      //       id: userId,
-      //       __typename: 'User',
-      //     },
-      //     __typename: 'Todo',
-      //     completedDate: new Date(),
-      //     completed: false,
-      //   },
-      // },
     });
-    setTodoList({
-      userTodos: userTodos ? userTodos + 1 : 1,
-    });
-  };
-  const onDeleteTodo = (currentId: string) => {
-    setSaving(true);
-    void deleteTodo({
-      variables: {
-        id: currentId,
-      },
-    }).finally(() => setSaving(false));
   };
   const toggleAddTodo = () => {
     setAddTodo(!addTodo);
@@ -337,62 +250,64 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     setAllSchemes(!allSchemes);
   };
 
-  const { data: groupsData } = useSchemeGroupsSelectQuery({
-    fetchPolicy: 'cache-first',
-    variables: {
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users: {
-          some: {
-            id: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-  });
+  const { groups: groupsData } = useGroupsContext();
+  const { userData } = useUserData();
 
   const onTableChange: TableProps<TableItem>['onChange'] = (_, filters) => {
+    console.log(filters);
     setGroupsFilter((filters.groups as string[]) ?? []);
+    setUsersFilter((filters.assignedUsers as string[]) ?? []);
   };
 
-  const deleteRights = hasPermission({
-    permission: {
-      method: PermissionMethod.Delete,
-      model: PermissionModel.Articles,
-    },
-    permissions,
-  });
-  const editRights = hasPermission({
-    permission: {
-      method: PermissionMethod.Edit,
-      model: PermissionModel.Articles,
-    },
-    permissions,
-  });
+  const onDeleteTodo = async (id: string) => {
+    await deleteTodo({
+      optimisticResponse: {
+        deleteTodo: {
+          id,
+        },
+      },
+      variables: {
+        where: { id },
+      },
+    });
+    void fetchMore({
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          todoRelay: {
+            ...fetchMoreResult.todoRelay,
+            edges: [
+              ...(prev.todoRelay?.edges || []),
+              ...(fetchMoreResult.todoRelay?.edges.filter(
+                (item) =>
+                  !prev.todoRelay.edges.some(
+                    ({ node }) => node.id === item.node.id
+                  )
+              ) || []),
+            ],
+          },
+        };
+      },
+      variables: {
+        after: data?.todoRelay.pageInfo.endCursor,
+        orderBy: variables.orderBy,
+        take: 1,
+        where: variables.where,
+      },
+    });
+  };
 
   return {
     addTodo,
-    allSchemes,
-    allUsers,
+    canDelete,
     currentPage: page,
     currentPageSize: pageSize,
-    data: data?.listTodos,
-    deleteRights,
-    editRights,
-    editTodo,
+    data,
     groupsData,
     groupsFilter,
     loading: (data === null || data === undefined) && loading,
     onCompletedTodo,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onDeleteTodo,
     onPaginationChange,
     onTableChange,
@@ -401,14 +316,15 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     selectTemplate,
     selectedTemplate,
     selectedTodo,
-    setEditTodo,
     setGroupsFilter,
     setSearch,
     setSelectedTodo,
+    setStatusMode,
     toggleAddTodo,
     toggleAllSchemes,
     toggleAllUsers,
     updateTodoList,
+    userData,
   };
 };
 

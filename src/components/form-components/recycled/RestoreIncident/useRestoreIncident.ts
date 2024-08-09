@@ -1,36 +1,37 @@
-import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/__generated__/delete-incident.generated';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/__generated__/restore-incident.generated';
+import type { RecycledItemQuery } from 'graphql/recycled/queries/__generated__/recycled-item.generated';
+
 import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useDeleteIncidentMutation } from 'graphql/recycled/mutations/__generated__/delete-incident.generated';
+import { useRestoreIncidentMutation } from 'graphql/recycled/mutations/__generated__/restore-incident.generated';
+import { useRecycledItemQuery } from 'graphql/recycled/queries/__generated__/recycled-item.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
-import { useRestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
-import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
-import { useDeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
-import type { RecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
-import { useRecycledItemQuery } from 'graphql/recycled/queries/recycled-item.generated';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
-  onClose: () => void;
   incidentId: string | undefined;
+  onClose: () => void;
   recycledId: string | undefined;
-  updateRestore: MutationUpdaterFn<RestoreIncidentMutation>;
   updateDelete: MutationUpdaterFn<DeleteIncidentMutation>;
+  updateRestore: MutationUpdaterFn<RestoreIncidentMutation>;
 }
 interface Return {
-  onSubmit: () => void;
-  onDelete: () => void;
   data: RecycledItemQuery | undefined;
   loading: boolean;
+  onDelete: () => void;
+  onSubmit: () => void;
   saving: boolean;
 }
 
 const useRestoreIncident = ({
-  onClose,
   incidentId,
+  onClose,
   recycledId,
-  updateRestore,
   updateDelete,
+  updateRestore,
 }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
@@ -48,11 +49,11 @@ const useRestoreIncident = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Restored!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The incident has been restored! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Restored!',
         }),
         placement: 'bottomRight',
       });
@@ -79,11 +80,11 @@ const useRestoreIncident = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The incident has been deleted.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -103,10 +104,10 @@ const useRestoreIncident = ({
       });
   };
   return {
-    onSubmit,
-    onDelete,
     data,
     loading,
+    onDelete,
+    onSubmit,
     saving,
   };
 };

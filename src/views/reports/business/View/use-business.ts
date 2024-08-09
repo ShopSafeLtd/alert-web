@@ -1,16 +1,16 @@
-import { useParams } from 'react-router-dom';
-
+import type { BusinessReportQuery } from 'graphql/businesses/queries/__generated__/business-report.generated';
 import type { Moment } from 'moment';
+
+import { useBusinessReportQuery } from 'graphql/businesses/queries/__generated__/business-report.generated';
 import moment from 'moment';
 import { useState } from 'react';
-import type { BusinessReportQuery } from 'graphql/businesses/queries/business-report.generated';
-import { useBusinessReportQuery } from 'graphql/businesses/queries/business-report.generated';
+import { useParams } from 'react-router-dom';
 
 interface Return {
   data: BusinessReportQuery | undefined;
+  dateRange: Moment[];
   loading: boolean;
   selectedBusiness: string | undefined;
-  dateRange: Moment[];
   setDateRange: (values: Moment[]) => void;
 }
 
@@ -21,19 +21,19 @@ const useBusiness = (): Return => {
   const { data } = useBusinessReportQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      endDate: dateRange[1]?.toDate(),
+      startDate: dateRange[0]?.toDate(),
       where: {
         id: selectedBusiness,
       },
-      startDate: dateRange[0]?.toDate(),
-      endDate: dateRange[1]?.toDate(),
     },
   });
 
   return {
     data,
+    dateRange,
     loading: !data,
     selectedBusiness,
-    dateRange,
     setDateRange,
   };
 };

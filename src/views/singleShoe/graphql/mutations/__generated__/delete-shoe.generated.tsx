@@ -8,7 +8,7 @@ export type DeleteShoeMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteShoeMutation = { readonly __typename?: 'Mutation', readonly deleteShoe: { readonly __typename?: 'Shoe', readonly id: string, readonly status: Types.ShoeStatus } };
+export type DeleteShoeMutation = { __typename?: 'Mutation', deleteShoe: { __typename?: 'Shoe', id: string, status: Types.ShoeStatus } };
 
 
 export const DeleteShoeDocument = gql`

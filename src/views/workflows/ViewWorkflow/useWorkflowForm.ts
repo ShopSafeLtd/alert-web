@@ -1,14 +1,17 @@
+import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
 import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useStoreState } from 'state';
-import { useParams } from 'react-router-dom';
-import { useApolloClient } from '@apollo/client';
-import { useIntl } from 'react-intl';
-import type { ListData } from '../../adminTodo/useActivities';
-import useActivityTemplates from '../../adminTodo/useActivities';
-import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/create-workflow.generated';
 import type { AnswerType, IncidentPriority } from 'graphql/types';
+
+import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
+import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
+import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
+import {
+  WorkflowDataDocument,
+  useWorkflowDataQuery,
+} from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
+import { useApolloClient } from '@apollo/client';
+import { Form, notification } from 'antd';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import {
   Model,
   QuestionModel,
@@ -16,38 +19,38 @@ import {
   WorkflowActionType,
   WorkflowTrigger,
 } from 'graphql/types';
-import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/workflow-data.generated';
-import {
-  useWorkflowDataQuery,
-  WorkflowDataDocument,
-} from '#/views/workflows/graphql/queries/workflow-data.generated';
-import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/view-workflow.generated';
-import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/update-workflow.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'state';
+
+import type { ListData } from '../../adminTodo/useActivities';
+
+import useActivityTemplates from '../../adminTodo/useActivities';
 
 interface WorkflowData {
   autoApprove?: boolean;
   sendEmail?: {
     message: string;
-    users: string[];
     title: string;
+    users: string[];
   };
   sendNotification?: {
     message: string;
-    users: string[];
     title: string;
+    users: string[];
   };
   setPriority?: string;
   task?: {
-    name: string;
     assignTo: string[];
     assignToGroups: string[];
     dueDays: number;
+    name: string;
     questions: string[];
   };
 }
 
-type AnyAll = 'any' | 'all';
+type AnyAll = 'all' | 'any';
 export type OverUnder = 'over' | 'under';
 
 interface WorkflowConditions {
@@ -64,32 +67,32 @@ interface WorkflowConditions {
     noDays: string;
     noIncidents: string;
   };
-  incidentWhileBan?: string | boolean;
+  incidentWhileBan?: boolean | string;
   lessThanValue?: string;
   questions?: {
     anyAll: AnyAll;
     questions: {
-      id: string;
       answer: string | string[];
-      type: AnswerType;
+      id: string;
       overUnder?: OverUnder;
+      type: AnswerType;
     }[];
   };
   tags?: {
     anyAll: AnyAll;
     tags: string[] | undefined;
   };
-  totalValue?: string | boolean;
+  totalValue?: boolean | string;
 }
 
 export type QuestionGroupData = ListData;
 export interface Question {
-  id: string;
-  type: AnswerType;
-  question: string;
-  options: { value: string; label: string }[];
   answer?: string | string[];
+  id: string;
+  options: { label: string; value: string }[];
   overUnder?: OverUnder;
+  question: string;
+  type: AnswerType;
 }
 
 export interface FormData {
@@ -172,7 +175,7 @@ interface Return {
   taskQuestions: Question[];
   updateTemplates: (
     item: ListData,
-    type: 'create' | 'update' | 'delete'
+    type: 'create' | 'delete' | 'update'
   ) => void;
   users: LabelValue[];
   valueSelected: boolean;
@@ -202,13 +205,13 @@ const useWorkflowForm = (): Return => {
 
   const { data, loading } = useWorkflowDataQuery({
     variables: {
-      where: {
-        id: currentScheme,
-      },
       questionsWhere: {
         deleted: {
           equals: false,
         },
+      },
+      where: {
+        id: currentScheme,
       },
     },
   });
@@ -216,26 +219,26 @@ const useWorkflowForm = (): Return => {
   const intl = useIntl();
 
   const [createWorkflow] = useCreateOneWorkflowMutation({
+    onCompleted: () => {
+      setSaving(false);
+      window.history.back();
+    },
     onError: () => {
       notification.error({
-        message: intl.formatMessage({
-          defaultMessage: 'Error!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Error!',
         }),
         placement: 'bottomRight',
       });
       setSaving(false);
     },
-    onCompleted: () => {
-      setSaving(false);
-      window.history.back();
-    },
   });
   const {
-    templateData,
     loading: templatesLoading,
+    templateData,
     updateTemplates,
   } = useActivityTemplates();
 
@@ -253,52 +256,25 @@ const useWorkflowForm = (): Return => {
 
   const { data: editWorkflowData, loading: editWorkflowLoading } =
     useViewWorkflowQuery({
-      skip: !EditId,
-      variables: {
-        where: {
-          id: EditId || '',
-        },
-      },
       onCompleted: ({ workflow }) => {
         if (workflow) {
           const action = workflow.actions[0]?.data as WorkflowData;
           const conditions = workflow.conditions as WorkflowConditions;
           form.setFieldsValue({
-            name: workflow.name,
-            taskName: action?.task?.name,
-            taskAssignee: action?.task?.assignTo,
             assigneeGroups: action?.task?.assignToGroups,
-            taskDueDays: action?.task?.dueDays,
-            taskQuestions: action?.task?.questions,
-            taskOutcome: !!action?.task?.name,
-
-            option: conditions?.anyAll,
-            tags: !!conditions?.tags?.tags,
-            tagMethod: conditions?.tags?.anyAll,
-            tagOptions: conditions?.tags?.tags,
-            valueCheck: !!conditions?.totalValue,
-            valuePrice: conditions?.totalValue
-              ? typeof conditions.totalValue === 'string'
-                ? Number.parseInt(conditions.totalValue, 10)
-                : 0
-              : 0,
-            questionChecked: !!conditions?.questions,
-            questionMethod: conditions?.questions?.anyAll,
-            workflowType: workflow.triggerModels,
             autoApprove: action?.autoApprove,
             autoApproveCheck: action?.autoApprove !== undefined,
             descriptionCheck:
-              conditions?.descriptionWords !== undefined &&
-              conditions.descriptionWords.words &&
+              conditions?.descriptionWords?.words &&
               conditions.descriptionWords.words?.length > 0,
             descriptionCondition: conditions?.descriptionWords?.anyAll,
             descriptionWords: conditions?.descriptionWords?.words || [],
+            goodsType: conditions?.goodsType?.goods || [],
+
             goodsTypeCheck:
-              conditions?.goodsType !== undefined &&
-              conditions.goodsType.goods &&
+              conditions?.goodsType?.goods &&
               conditions.goodsType.goods?.length > 0,
             goodsTypeCondition: conditions?.goodsType?.anyAll,
-            goodsType: conditions?.goodsType?.goods || [],
             incidentTimeCountCheck:
               conditions?.incidentTimeCount !== undefined &&
               !!conditions.incidentTimeCount.noDays &&
@@ -319,6 +295,10 @@ const useWorkflowForm = (): Return => {
             lessThanPrice: conditions?.lessThanValue
               ? Number.parseInt(conditions.lessThanValue, 10)
               : 0,
+            name: workflow.name,
+            option: conditions?.anyAll,
+            questionChecked: !!conditions?.questions,
+            questionMethod: conditions?.questions?.anyAll,
             sendEmailCheck:
               action?.sendEmail !== undefined && !!action?.sendEmail,
             sendEmailMessage: action?.sendEmail?.message || '',
@@ -333,13 +313,34 @@ const useWorkflowForm = (): Return => {
             setPrioCheck:
               action?.setPriority !== undefined && !!action?.setPriority,
             setPriority: action?.setPriority as IncidentPriority,
+            tagMethod: conditions?.tags?.anyAll,
+            tagOptions: conditions?.tags?.tags,
+            tags: !!conditions?.tags?.tags,
+            taskAssignee: action?.task?.assignTo,
+            taskDueDays: action?.task?.dueDays,
+            taskName: action?.task?.name,
+            taskOutcome: !!action?.task?.name,
+            taskQuestions: action?.task?.questions,
+            valueCheck: !!conditions?.totalValue,
+            valuePrice: conditions?.totalValue
+              ? typeof conditions.totalValue === 'string'
+                ? Number.parseInt(conditions.totalValue, 10)
+                : 0
+              : 0,
+            workflowType: workflow.triggerModels,
           });
         }
+      },
+      skip: !EditId,
+      variables: {
+        where: {
+          id: EditId || '',
+        },
       },
     });
 
   const groups = useMemo(() => {
-    if (data && data.scheme && data.scheme.groups) {
+    if (data?.scheme?.groups) {
       return data.scheme.groups.map(({ id, name }) => ({
         label: name,
         value: id,
@@ -348,8 +349,8 @@ const useWorkflowForm = (): Return => {
     return [];
   }, [data]);
   const tags = useMemo(() => {
-    if (data && data.scheme && data.scheme.schemeTags) {
-      return data.scheme.schemeTags.map(({ name, id }) => ({
+    if (data?.scheme?.schemeTags) {
+      return data.scheme.schemeTags.map(({ id, name }) => ({
         label: name,
         value: id,
       }));
@@ -357,35 +358,35 @@ const useWorkflowForm = (): Return => {
     return [];
   }, [data]);
   const questions: Question[] = useMemo(() => {
-    if (data && data.scheme && data.scheme.questions) {
+    if (data?.scheme?.questions) {
       return data.scheme.questions
         .filter(({ questionOn }) => questionOn === QuestionModel.Tag)
-        .map(({ id, questionFormatted, type, optionsFormFormatted }) => ({
+        .map(({ id, optionsFormFormatted, questionFormatted, type }) => ({
           id,
+          options:
+            optionsFormFormatted?.map(({ label, value }) => ({
+              label,
+              value: value.toLowerCase(),
+            })) || [],
           question: questionFormatted || '',
           type,
-          options:
-            optionsFormFormatted?.map(({ value, label }) => ({
-              value: value.toLowerCase(),
-              label,
-            })) || [],
         }));
     }
     return [];
   }, [data]);
   const taskQuestions: Question[] = useMemo(() => {
-    if (data && data.scheme && data.scheme.questions) {
+    if (data?.scheme?.questions) {
       return data.scheme.questions
         .filter(({ questionOn }) => questionOn === QuestionModel.Task)
-        .map(({ id, questionFormatted, type, optionsFormFormatted }) => ({
+        .map(({ id, optionsFormFormatted, questionFormatted, type }) => ({
           id,
+          options:
+            optionsFormFormatted?.map(({ label, value }) => ({
+              label,
+              value: value.toLowerCase(),
+            })) || [],
           question: questionFormatted || '',
           type,
-          options:
-            optionsFormFormatted?.map(({ value, label }) => ({
-              value: value.toLowerCase(),
-              label,
-            })) || [],
         }));
     }
     return [];
@@ -393,11 +394,11 @@ const useWorkflowForm = (): Return => {
   const questionGroups: QuestionGroupData[] = useMemo(() => {
     if (templateData) {
       return templateData.map(
-        ({ id, name, questions: qs, description, defaultDueDays }) => ({
+        ({ defaultDueDays, description, id, name, questions: qs }) => ({
+          defaultDueDays,
+          description,
           id,
           name,
-          description,
-          defaultDueDays,
           questions: qs,
         })
       );
@@ -405,10 +406,10 @@ const useWorkflowForm = (): Return => {
     return [];
   }, [templateData]);
   const users: { label: string; value: string }[] = useMemo(() => {
-    if (data && data.scheme && data.scheme.members) {
+    if (data?.scheme?.members) {
       return data.scheme.members
         .sort((a, b) => a.user.fullName.localeCompare(b.user.fullName))
-        .map(({ userId, role, user: { fullName } }) => ({
+        .map(({ role, user: { fullName }, userId }) => ({
           label: `${fullName} (${role === Role.User ? 'User' : 'Admin'})`,
           value: userId,
         }));
@@ -431,13 +432,13 @@ const useWorkflowForm = (): Return => {
     const existingData = client.readQuery<WorkflowDataQuery>({
       query: WorkflowDataDocument,
       variables: {
-        where: {
-          id: currentScheme,
-        },
         questionsWhere: {
           deleted: {
             equals: false,
           },
+        },
+        where: {
+          id: currentScheme,
         },
       },
     });
@@ -452,17 +453,6 @@ const useWorkflowForm = (): Return => {
       return;
 
     client.writeQuery<WorkflowDataQuery>({
-      query: WorkflowDataDocument,
-      variables: {
-        where: {
-          id: currentScheme,
-        },
-        questionsWhere: {
-          deleted: {
-            equals: false,
-          },
-        },
-      },
       data: {
         scheme: {
           ...existingData.scheme,
@@ -470,12 +460,23 @@ const useWorkflowForm = (): Return => {
             ...existingData.scheme.questions,
             {
               id,
-              type: 'TEXT' as AnswerType,
               optionsFormFormatted: [],
               questionFormatted: q,
               questionOn: QuestionModel.Task,
+              type: 'TEXT' as AnswerType,
             },
           ],
+        },
+      },
+      query: WorkflowDataDocument,
+      variables: {
+        questionsWhere: {
+          deleted: {
+            equals: false,
+          },
+        },
+        where: {
+          id: currentScheme,
         },
       },
     });
@@ -497,8 +498,8 @@ const useWorkflowForm = (): Return => {
       const conditions = editWorkflowData?.workflow
         ?.conditions as WorkflowConditions;
       const questionOnWorkflow = conditions?.questions?.questions as {
+        answer: string | string[];
         id: string;
-        answer: string[] | string;
         overUnder?: OverUnder;
       }[];
       const taskQuestionsWorkflow = action?.task?.questions;
@@ -538,37 +539,27 @@ const useWorkflowForm = (): Return => {
   ]);
 
   const [updateWorkflow] = useUpdateOneWorkflowMutation({
+    onCompleted: () => {
+      setSaving(false);
+      window.history.back();
+    },
     onError: () => {
       notification.error({
-        message: intl.formatMessage({
-          defaultMessage: 'Error!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there was an error.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Error!',
         }),
         placement: 'bottomRight',
       });
       setSaving(false);
     },
-    onCompleted: () => {
-      setSaving(false);
-      window.history.back();
-    },
   });
   const onFinish = (values: FormData) => {
     setSaving(true);
     const actionData: WorkflowData = {
-      task: values.taskName
-        ? {
-            name: values.taskName,
-            assignTo: values.taskAssignee,
-            assignToGroups: values.assigneeGroups,
-            dueDays: values.taskDueDays,
-            questions: values.taskQuestions,
-          }
-        : undefined,
       autoApprove: values.autoApprove ?? undefined,
-      setPriority: values.setPriority ?? undefined,
       sendEmail:
         values.sendEmailCheck && values.sendEmailTitle
           ? {
@@ -585,20 +576,51 @@ const useWorkflowForm = (): Return => {
               users: values.sendNotificationUsers,
             }
           : undefined,
+      setPriority: values.setPriority ?? undefined,
+      task: values.taskName
+        ? {
+            assignTo: values.taskAssignee,
+            assignToGroups: values.assigneeGroups,
+            dueDays: values.taskDueDays,
+            name: values.taskName,
+            questions: values.taskQuestions,
+          }
+        : undefined,
     };
 
     const conditionsData: WorkflowConditions = {
       anyAll: values.option,
       descriptionWords: values.descriptionCheck
         ? {
-            words: values.descriptionWords,
             anyAll: values.descriptionCondition,
+            words: values.descriptionWords,
+          }
+        : undefined,
+      goodsType: goodsTypeCheck
+        ? {
+            anyAll: values.goodsTypeCondition,
+            goods: values.goodsType,
           }
         : undefined,
       incidentTimeCount: values.incidentTimeCountCheck
         ? {
             noDays: values.incidentTimeCountDays.toFixed(0),
             noIncidents: values.incidentTimeCountIncidents.toFixed(0),
+          }
+        : undefined,
+      incidentWhileBan: values.incidentWhileBanCheck ? 'true' : undefined,
+      lessThanValue: lessThanSelected
+        ? values.lessThanPrice.toString()
+        : undefined,
+      questions: values.questionChecked
+        ? {
+            anyAll: values.questionMethod,
+            questions: selectedQuestions.map((q) => ({
+              answer: q.answer || '',
+              id: q.id,
+              overUnder: q.overUnder,
+              type: q.type,
+            })),
           }
         : undefined,
       tags: values.tags
@@ -608,27 +630,6 @@ const useWorkflowForm = (): Return => {
           }
         : undefined,
       totalValue: valueSelected ? values.valuePrice.toString() : false,
-      questions: values.questionChecked
-        ? {
-            anyAll: values.questionMethod,
-            questions: selectedQuestions.map((q) => ({
-              id: q.id,
-              answer: q.answer || '',
-              type: q.type,
-              overUnder: q.overUnder,
-            })),
-          }
-        : undefined,
-      lessThanValue: lessThanSelected
-        ? values.lessThanPrice.toString()
-        : undefined,
-      incidentWhileBan: values.incidentWhileBanCheck ? 'true' : undefined,
-      goodsType: goodsTypeCheck
-        ? {
-            anyAll: values.goodsTypeCondition,
-            goods: values.goodsType,
-          }
-        : undefined,
     };
     if (!modelSelected) {
       setSaving(false);
@@ -638,26 +639,26 @@ const useWorkflowForm = (): Return => {
     if (EditId) {
       void updateWorkflow({
         variables: {
-          where: {
-            id: EditId,
-          },
           data: {
-            name: {
-              set: values.name,
-            },
             actions: {
               update: [
                 {
-                  where: {
-                    id: editWorkflowData?.workflow?.actions[0]?.id || '',
-                  },
                   data: {
                     data: actionData,
+                  },
+                  where: {
+                    id: editWorkflowData?.workflow?.actions[0]?.id || '',
                   },
                 },
               ],
             },
             conditions: conditionsData,
+            name: {
+              set: values.name,
+            },
+          },
+          where: {
+            id: EditId,
           },
         },
       });
@@ -665,18 +666,16 @@ const useWorkflowForm = (): Return => {
       void createWorkflow({
         variables: {
           data: {
-            name: values.name,
-            trigger: WorkflowTrigger.Created,
-            triggerModels: modelSelected || Model.Incident,
             actions: {
               create: [
                 {
-                  type: WorkflowActionType.Create,
                   data: actionData,
+                  type: WorkflowActionType.Create,
                 },
               ],
             },
             conditions: conditionsData,
+            name: values.name,
             schemes: {
               connect: [
                 {
@@ -684,6 +683,8 @@ const useWorkflowForm = (): Return => {
                 },
               ],
             },
+            trigger: WorkflowTrigger.Created,
+            triggerModels: modelSelected || Model.Incident,
           },
         },
       });
@@ -701,44 +702,44 @@ const useWorkflowForm = (): Return => {
   });
 
   return {
-    groups,
-    onFinish,
-    form,
-    tagsSelected,
-    questionGroups,
-    taskQuestions,
-    questionsSelected,
-    questions,
-    setSelectedActivity,
-    tags,
-    valueSelected,
-    users,
-    setSelectedQuestions,
-    selectedQuestions,
-    availableQuestions,
-    setAvailableQuestions,
-    setActivityTemplateForm,
     activityTemplateForm,
-    updateTemplates,
-    onClose,
-    newQuestion,
+    availableQuestions,
     createNewQuestion,
-    loading: loading || templatesLoading || editWorkflowLoading || goodsLoading,
-    setNewQuestion,
-    saving,
-    modelSelected,
-    lessThanSelected,
-    goodsTypeCheck,
     descriptionCheck,
+    form,
     goods:
-      goodsData?.listGoodsTypes?.goodsTypes?.map(({ name, id }) => ({
+      goodsData?.listGoodsTypes?.goodsTypes?.map(({ id, name }) => ({
         label: name,
         value: id,
       })) || [],
+    goodsTypeCheck,
+    groups,
     incidentTimeCountCheck,
-    taskOutcome,
+    lessThanSelected,
+    loading: loading || templatesLoading || editWorkflowLoading || goodsLoading,
+    modelSelected,
+    newQuestion,
+    onClose,
+    onFinish,
+    questionGroups,
+    questions,
+    questionsSelected,
+    saving,
+    selectedQuestions,
     sendEmailCheck,
     sendNotificationCheck,
+    setActivityTemplateForm,
+    setAvailableQuestions,
+    setNewQuestion,
+    setSelectedActivity,
+    setSelectedQuestions,
+    tags,
+    tagsSelected,
+    taskOutcome,
+    taskQuestions,
+    updateTemplates,
+    users,
+    valueSelected,
   };
 };
 

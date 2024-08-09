@@ -1,38 +1,38 @@
-import React from 'react';
-import { BarGraph, DonutGraph } from '#/components/reports/graphs';
-import { Button, Typography } from 'antd';
+import type { BusinessIncidentCountGraphQueryVariables } from '#/components/reports/components/BusinessIncidentCountGraph/__generated__/BusinessIncidentCountGraph.generated';
+import type { MetaData } from '#/views/reports/types';
 
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useBusinessIncidentCountGraphQuery } from '#/components/reports/components/BusinessIncidentCountGraph/__generated__/BusinessIncidentCountGraph.generated';
+import { BarGraph, DonutGraph } from '#/components/reports/graphs';
 import {
   faChartBar,
   faChartPie,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import type { MetaData } from '#/views/reports/types';
-import type { BusinessIncidentCountGraphQueryVariables } from './BusinessIncidentCountGraph.generated';
-import { useBusinessIncidentCountGraphQuery } from './BusinessIncidentCountGraph.generated';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
 interface Props {
-  isPrinting: boolean;
-  editMode: boolean;
-  variables: BusinessIncidentCountGraphQueryVariables;
-  metaData: MetaData;
   allMeta: MetaData[];
-  removeItem: () => void;
+  editMode: boolean;
+  isPrinting: boolean;
+  metaData: MetaData;
   onNavigate: () => void;
+  removeItem: () => void;
   setMetaData: (arg0: MetaData[]) => void;
+  variables: BusinessIncidentCountGraphQueryVariables;
 }
 
 const BusinessIncidentCountGraph = ({
-  isPrinting,
-  variables,
-  editMode,
-  metaData,
-  setMetaData,
-  removeItem,
-  onNavigate,
   allMeta,
+  editMode,
+  isPrinting,
+  metaData,
+  onNavigate,
+  removeItem,
+  setMetaData,
+  variables,
 }: Props) => {
   const intl = useIntl();
 
@@ -54,12 +54,9 @@ const BusinessIncidentCountGraph = ({
       {editMode ? (
         <>
           <Button
-            type="text"
-            shape="circle"
             className="change-graph1 no-print"
             hidden={!editMode}
             icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-            size="small"
             onClick={() => {
               if (foundOrNew) {
                 const updatedMetadata = allMeta.map((item) => {
@@ -77,14 +74,14 @@ const BusinessIncidentCountGraph = ({
                 ]);
               }
             }}
+            shape="circle"
+            size="small"
+            type="text"
           />
           <Button
-            type="text"
-            shape="circle"
             className="change-graph2 no-print"
             hidden={!editMode}
             icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-            size="small"
             onClick={() => {
               if (foundOrNew) {
                 const updatedMetadata = allMeta.map((item) => {
@@ -102,25 +99,28 @@ const BusinessIncidentCountGraph = ({
                 ]);
               }
             }}
+            shape="circle"
+            size="small"
+            type="text"
           />
           <Button
-            type="text"
-            shape="circle"
             className="card-remove no-print"
             hidden={!editMode}
-            icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-            size="small"
+            icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
             onClick={removeItem}
+            shape="circle"
+            size="small"
+            type="text"
           />
         </>
       ) : (
         <Button
-          type="text"
           className="change-graph1-view-more"
+          danger
+          onClick={onNavigate}
           // style={{ position: 'absolute', right: 5, top: 15, zIndex: 1 }}
           size="small"
-          onClick={onNavigate}
-          danger
+          type="text"
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
@@ -129,19 +129,19 @@ const BusinessIncidentCountGraph = ({
       )}
       {metaData?.type === 'bar' ? (
         <BarGraph
-          isPrinting={isPrinting}
           data={data?.businessIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
           })}
+          isPrinting={isPrinting}
         />
       ) : (
         <DonutGraph
-          isPrinting={isPrinting}
           data={data?.businessIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
           })}
+          isPrinting={isPrinting}
           type={metaData?.type as 'donut' | 'pie'}
         />
       )}

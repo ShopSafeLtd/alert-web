@@ -1,4 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
+import type { ViewOffenderCompareQuery } from 'graphql/offenders/queries/__generated__/compare-offender.generated';
+import type { Layout } from 'react-grid-layout';
+
+import {
+  faColumns,
+  faImages,
+  faSave,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -11,59 +21,52 @@ import {
   Row,
   Typography,
 } from 'antd';
-import { getAge, getBuild, getEthnicity, getSex } from 'utils';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faColumns,
-  faImages,
-  faSave,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
-import type { Layout } from 'react-grid-layout';
-import GridLayout from 'react-grid-layout';
-import moment from 'moment';
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
-import useStyles from './CompareOffender.styles';
-import type { OffenderField, Selected } from './useCompareIncident';
-import type { ViewOffenderCompareQuery } from 'graphql/offenders/queries/compare-offender.generated';
 import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
+import GridLayout from 'react-grid-layout';
+import { useIntl } from 'react-intl';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+import { useStoreState } from 'state';
+import { getAge, getBuild, getEthnicity, getSex } from 'utils';
+
+import type { OffenderField, Selected } from './useCompareIncident';
+
+import useStyles from './CompareOffender.styles';
 
 const { Text, Title } = Typography;
 
-type Offender = Exclude<ViewOffenderCompareQuery['offender'], undefined | null>;
+type Offender = Exclude<ViewOffenderCompareQuery['offender'], null | undefined>;
 
 interface Props {
-  offenders: Offender[];
-  preview: Offender;
   addOffender: boolean;
-  toggleAddOffender: () => void;
   addOffenders: (value: OffenderData) => void;
-  toggleSelected: (offender: Offender, field: OffenderField) => void;
-  selected: Selected;
-  removeOffender: (offender: Offender) => void;
-  onMerge: () => void;
   mode: 'column' | 'grid';
-  setMode: (value: 'column' | 'grid') => void;
-  toggleSelectedImages: (value: string) => void;
-  selectedImages: string[];
+  offenders: Offender[];
+  onMerge: () => void;
   onSubmitImages: () => void;
+  preview: Offender;
+  removeOffender: (offender: Offender) => void;
+  selected: Selected;
+  selectedImages: string[];
+  setMode: (value: 'column' | 'grid') => void;
+  toggleAddOffender: () => void;
+  toggleSelected: (offender: Offender, field: OffenderField) => void;
+  toggleSelectedImages: (value: string) => void;
 }
 
 interface GridImageProps {
   image: {
     id: string;
-    optimised?: string | undefined | null;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
     offenderId: string;
+    optimised?: null | string | undefined;
   };
   layout: Layout[];
-  toggleSelectedImages: (value: string) => void;
   selected: boolean;
+  toggleSelectedImages: (value: string) => void;
 }
 
 const GridImage = ({
@@ -82,9 +85,9 @@ const GridImage = ({
   return (
     <div ref={cardRef} style={{ height: '100%', width: '100%' }}>
       <Card
-        key={image.id}
         bodyStyle={{ padding: 0 }}
-        style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+        key={image.id}
+        style={{ height: '100%', overflow: 'hidden', width: '100%' }}
       >
         <TransformWrapper
           panning={{
@@ -110,8 +113,8 @@ const GridImage = ({
           <Col>
             <Checkbox
               checked={selected}
-              onChange={() => toggleSelectedImages(image.offenderId)}
               className={classes.gridCheck}
+              onChange={() => toggleSelectedImages(image.offenderId)}
             />
           </Col>
         </Row>
@@ -121,20 +124,20 @@ const GridImage = ({
 };
 
 const CompareIncident = ({
-  offenders,
-  preview,
   addOffender,
   addOffenders,
+  mode,
+  offenders,
+  onMerge,
+  onSubmitImages,
+  preview,
+  removeOffender,
+  selected,
+  selectedImages,
+  setMode,
   toggleAddOffender,
   toggleSelected,
-  selected,
-  removeOffender,
-  onMerge,
-  mode,
-  setMode,
-  selectedImages,
   toggleSelectedImages,
-  onSubmitImages,
 }: Props) => {
   const pageRef = useRef<HTMLDivElement>(null);
   const classes = useStyles();
@@ -145,10 +148,10 @@ const CompareIncident = ({
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
     role !== Role.User;
   return (
-    <div ref={pageRef} className={classes.page}>
-      <Row justify="end" gutter={16} style={{ marginBottom: 10 }}>
+    <div className={classes.page} ref={pageRef}>
+      <Row gutter={16} justify="end" style={{ marginBottom: 10 }}>
         <Col>
-          <Button onClick={toggleAddOffender} type="ghost" danger>
+          <Button danger onClick={toggleAddOffender} type="ghost">
             {intl.formatMessage({
               defaultMessage: 'Add Offender',
             })}
@@ -167,9 +170,9 @@ const CompareIncident = ({
           {mode === 'column' && (
             <Button onClick={() => setMode('grid')}>
               <FontAwesomeIcon
+                icon={faImages}
                 size="lg"
                 style={{ marginRight: 10 }}
-                icon={faImages}
               />
               {intl.formatMessage({
                 defaultMessage: 'Image Comparison',
@@ -179,13 +182,13 @@ const CompareIncident = ({
           {mode === 'grid' && (
             <Button
               disabled={selectedImages.length === 0}
-              type="primary"
               onClick={onSubmitImages}
+              type="primary"
             >
               <FontAwesomeIcon
+                icon={faColumns}
                 size="lg"
                 style={{ marginRight: 10 }}
-                icon={faColumns}
               />
               {intl.formatMessage({
                 defaultMessage: 'Select Images & Compare Fields\n',
@@ -195,11 +198,11 @@ const CompareIncident = ({
         </Col>
         {mode === 'column' && (
           <Col>
-            <Button type="primary" size="small" onClick={onMerge}>
+            <Button onClick={onMerge} size="small" type="primary">
               <FontAwesomeIcon
+                icon={faSave}
                 size="lg"
                 style={{ marginRight: 10 }}
-                icon={faSave}
               />
               {intl.formatMessage({
                 defaultMessage: 'Save & Merge',
@@ -209,7 +212,7 @@ const CompareIncident = ({
         )}
       </Row>
       {mode === 'column' && (
-        <Row wrap={false} gutter={8}>
+        <Row gutter={8} wrap={false}>
           <Col>
             <Card bodyStyle={{ padding: 0 }} className={classes.firstCard}>
               <div className={classes.imagePlaceholder} />
@@ -292,7 +295,7 @@ const CompareIncident = ({
             </Card>
           </Col>
           <Col flex={1}>
-            <Row wrap={false} gutter={8} style={{ overflow: 'auto' }}>
+            <Row gutter={8} style={{ overflow: 'auto' }} wrap={false}>
               {offenders.map((offender, index) => (
                 <Col key={offender.id}>
                   <Row align="middle" className={classes.headerRow}>
@@ -311,13 +314,13 @@ const CompareIncident = ({
                     {offenders.length > 1 && (
                       <Col>
                         <Popconfirm
+                          onConfirm={() => removeOffender(offender)}
                           overlayInnerStyle={{
                             padding: '12px 16px',
                           }}
                           title={intl.formatMessage({
                             defaultMessage: 'Are you sure?',
                           })}
-                          onConfirm={() => removeOffender(offender)}
                         >
                           <Button size="small">
                             <FontAwesomeIcon icon={faTrash} />
@@ -326,21 +329,21 @@ const CompareIncident = ({
                       </Col>
                     )}
                   </Row>
-                  <Card className={classes.card} bodyStyle={{ padding: 0 }}>
+                  <Card bodyStyle={{ padding: 0 }} className={classes.card}>
                     {offender.images.length > 0 ? (
                       <Carousel>
                         {offender.images.map((image) => (
                           <div
-                            key={image.id}
                             className={classes.imageContainer}
+                            key={image.id}
                           >
                             <TransformWrapper>
                               <TransformComponent>
                                 <div className={classes.image}>
                                   <WatermarkImage
-                                    url={image.optimised}
-                                    rotation={image.rotation}
                                     position={image.position}
+                                    rotation={image.rotation}
+                                    url={image.optimised}
                                   />
                                 </div>
                               </TransformComponent>
@@ -483,17 +486,17 @@ const CompareIncident = ({
                 </Title>
               </Col>
             </Row>
-            <Card className={classes.card} bodyStyle={{ padding: 0 }}>
+            <Card bodyStyle={{ padding: 0 }} className={classes.card}>
               <Carousel>
                 {preview.images.map((image) => (
-                  <div key={image.id} className={classes.imageContainer}>
+                  <div className={classes.imageContainer} key={image.id}>
                     <TransformWrapper>
                       <TransformComponent>
                         <div className={classes.image}>
                           <WatermarkImage
-                            url={image.optimised}
-                            rotation={image.rotation}
                             position={image.position}
+                            rotation={image.rotation}
+                            url={image.optimised}
                           />
                         </div>
                       </TransformComponent>
@@ -566,18 +569,7 @@ const CompareIncident = ({
       {mode === 'grid' && (
         <GridLayout
           className="layout"
-          width={pageRef.current?.offsetWidth}
-          rowHeight={100}
           cols={12}
-          onLayoutChange={(e) => {
-            setLayout(e);
-          }}
-          onResizeStop={(e) => {
-            setLayout(e);
-          }}
-          onResize={(e) => {
-            setLayout(e);
-          }}
           layout={offenders
             .flatMap((offender) =>
               offender.images.map((image) => ({
@@ -587,13 +579,24 @@ const CompareIncident = ({
               }))
             )
             .map((image, index) => ({
-              i: image.id,
               h: 3,
+              i: image.id,
+              resizeHandles: ['se'],
               w: 3,
               x: index * 3,
               y: 0,
-              resizeHandles: ['se'],
             }))}
+          onLayoutChange={(e) => {
+            setLayout(e);
+          }}
+          onResize={(e) => {
+            setLayout(e);
+          }}
+          onResizeStop={(e) => {
+            setLayout(e);
+          }}
+          rowHeight={100}
+          width={pageRef.current?.offsetWidth}
         >
           {offenders
             .flatMap((offender) =>
@@ -606,9 +609,9 @@ const CompareIncident = ({
             .map((image) => (
               <div className={classes.gridCard} key={image.id}>
                 <GridImage
-                  selected={selectedImages.includes(image.offenderId)}
-                  layout={layout}
                   image={image}
+                  layout={layout}
+                  selected={selectedImages.includes(image.offenderId)}
                   toggleSelectedImages={toggleSelectedImages}
                 />
               </div>
@@ -616,19 +619,19 @@ const CompareIncident = ({
         </GridLayout>
       )}
       <Drawer
+        onClose={toggleAddOffender}
+        open={addOffender}
         title={intl.formatMessage({
           defaultMessage: 'Add Offender',
         })}
-        open={addOffender}
         width="800"
-        onClose={toggleAddOffender}
         zIndex={1001}
       >
         {addOffender ? (
           <AddExisitingOffender
-            update={addOffenders}
             offenderIds={offenders.map(({ id }) => id)}
             onClose={toggleAddOffender}
+            update={addOffenders}
           />
         ) : (
           <div />

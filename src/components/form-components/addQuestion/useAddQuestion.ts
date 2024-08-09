@@ -1,40 +1,42 @@
-import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
 import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
-import { useIntl } from 'react-intl';
 
-import errorNotification from '../../../types/mutation_notifications/error_notification';
-import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
-import { useStoreState } from '../../../state';
-import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
-import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
+import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/__generated__/create-question.generated';
+import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { Form, notification } from 'antd';
 import { AnswerType } from 'graphql/types';
-import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
-import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/create-question.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useParams } from 'react-router-dom';
+
+import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
+
+import { useStoreState } from '../../../state';
+import errorNotification from '../../../types/mutation_notifications/error_notification';
 
 interface Return {
-  questionData: AvailableQuestionsQuery | undefined;
-  loading: boolean;
-  form: FormInstance<FormData>;
-  data: FormData;
-  onSubmit: (value: FormData) => void;
-  saving: boolean;
   brands: {
     label: string;
     value: string;
   }[];
+  data: FormData;
+  form: FormInstance<FormData>;
+  loading: boolean;
+  onSubmit: (value: FormData) => void;
+  questionData: AvailableQuestionsQuery | undefined;
+  saving: boolean;
 }
 
 export interface FormData {
-  selectedId: string;
-  type: AnswerType;
+  dependentAnswer: number | string;
+  dependentBrands: string[];
+  dependentOn: string;
   options: string[];
   question: string;
   required: boolean;
-  dependentOn: string;
-  dependentAnswer: string | number;
-  dependentBrands: string[];
+  selectedId: string;
+  type: AnswerType;
 }
 
 const { useForm } = Form;
@@ -58,14 +60,14 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
 
   const [form] = useForm<FormData>();
   const [data] = useState<FormData>({
-    selectedId: '',
-    type: AnswerType.String,
+    dependentAnswer: '',
+    dependentBrands: [],
+    dependentOn: '',
     options: [],
     question: '',
     required: false,
-    dependentOn: '',
-    dependentAnswer: '',
-    dependentBrands: [],
+    selectedId: '',
+    type: AnswerType.String,
   });
   const { id: currentSchemeId } = useStoreState((state) => state.scheme);
 
@@ -85,11 +87,11 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully created/added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The question has been succesfully created/added!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully created/added!',
         }),
 
         placement: 'bottomRight',
@@ -117,23 +119,23 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     }
 
     const dataToSubmit = {
-      question: values.question,
-      options: values.options,
-      required: values.required,
-      type: values.type,
-      tagId: id || '',
+      brands: values.dependentBrands ?? [],
       dependentAnswer: answerString ?? undefined,
       dependentOnQId: dependentOnTag?.questionId ?? undefined,
       dependentOnTagQId: values.dependentOn ?? undefined,
-      brands: values.dependentBrands ?? [],
+      options: values.options,
+      question: values.question,
+      required: values.required,
+      tagId: id || '',
+      type: values.type,
     };
     void addQuestion({
       variables: values.selectedId
         ? {
+            data: { ...dataToSubmit },
             where: {
               id: values.selectedId || '',
             },
-            data: { ...dataToSubmit },
           }
         : {
             data: { ...dataToSubmit },
@@ -146,13 +148,13 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
       value: brand?.id || '',
     })) || [];
   return {
-    data,
-    loading: loading || brandsLoading,
-    form,
-    questionData,
-    onSubmit,
-    saving,
     brands,
+    data,
+    form,
+    loading: loading || brandsLoading,
+    onSubmit,
+    questionData,
+    saving,
   };
 };
 

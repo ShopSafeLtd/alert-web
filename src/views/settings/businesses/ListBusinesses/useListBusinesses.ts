@@ -1,24 +1,24 @@
-import { useMemo, useState } from 'react';
-
-import { useStoreState } from 'state';
-import { Modal, notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import type { BusinessData } from 'types/DataType';
-import { useIntl } from 'react-intl';
 import type {
   BusinessesListQuery,
   BusinessesListQueryVariables,
-} from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-businesses.generated';
+} from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
+import type { BusinessData } from 'types/DataType';
+
+import { useBusinessTagsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-business-tags.generated';
 import {
   BusinessesListDocument,
   useBusinessesListQuery,
-} from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-businesses.generated';
+} from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
+import { useListGroupsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-groups.generated';
+import { useParentBusinessesListQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-parent-business-ids.generated';
+import { Modal, notification } from 'antd';
+import { useCreateBusinessMutation } from 'graphql/businesses/mutations/__generated__/create-business.generated';
+import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/__generated__/delete-business.generated';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
-import { useListGroupsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-groups.generated';
-import { useParentBusinessesListQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-parent-business-ids.generated';
-import { useBusinessTagsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/list-business-tags.generated';
-import { useCreateBusinessMutation } from 'graphql/businesses/mutations/create-business.generated';
-import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/delete-business.generated';
+import { useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FilterLabels {
   label: string;
@@ -26,28 +26,28 @@ export interface FilterLabels {
 }
 
 interface Return {
-  data: BusinessesListQuery | undefined;
-  loading: boolean;
-  searchValue: string;
-  onSearchChange: (value: string) => void;
   addVisible: boolean;
-  toggleAddVisible: () => void;
-  linkVisible: boolean;
-  toggleLinkVisible: () => void;
-  onSubmit: (value: BusinessData) => void;
-  saving: boolean;
+  data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
-  pagination: { page: number; pageSize: number };
-  setPagination: (value: { page: number; pageSize: number }) => void;
-  parentFilter: string[];
-  parentData: FilterLabels[];
-  setParentFilter: (value: string[]) => void;
-  groupFilter: string[];
   groupData: FilterLabels[];
+  groupFilter: string[];
+  linkVisible: boolean;
+  loading: boolean;
+  onSearchChange: (value: string) => void;
+  onSubmit: (value: BusinessData) => void;
+  pagination: { page: number; pageSize: number };
+  parentData: FilterLabels[];
+  parentFilter: string[];
+  saving: boolean;
+  searchValue: string;
   setGroupFilter: (value: string[]) => void;
+  setPagination: (value: { page: number; pageSize: number }) => void;
+  setParentFilter: (value: string[]) => void;
+  setTagFilter: (value: string[]) => void;
   tagFilter: string[];
   tags: FilterLabels[];
-  setTagFilter: (value: string[]) => void;
+  toggleAddVisible: () => void;
+  toggleLinkVisible: () => void;
 }
 
 const useListBusinesses = (): Return => {
@@ -63,19 +63,22 @@ const useListBusinesses = (): Return => {
   const [tagFilter, setTagFilter] = useState<string[]>([]);
 
   const variables: BusinessesListQueryVariables = {
+    orderBy: {
+      name: SortOrder.Asc,
+    },
+    skip: (pagination.page - 1) * pagination.pageSize,
+    take: pagination.pageSize,
     where: {
+      groups:
+        groupFilter.length > 0
+          ? { some: { id: { in: groupFilter } } }
+          : undefined,
       name: {
         contains: searchValue,
         mode: QueryMode.Insensitive,
       },
       parent:
         parentFilter.length > 0 ? { id: { in: parentFilter } } : undefined,
-      groups:
-        groupFilter.length > 0
-          ? { some: { id: { in: groupFilter } } }
-          : undefined,
-      tags:
-        tagFilter.length > 0 ? { some: { id: { in: tagFilter } } } : undefined,
       schemes: {
         some: {
           id: {
@@ -83,16 +86,13 @@ const useListBusinesses = (): Return => {
           },
         },
       },
-    },
-    skip: (pagination.page - 1) * pagination.pageSize,
-    take: pagination.pageSize,
-    orderBy: {
-      name: SortOrder.Asc,
+      tags:
+        tagFilter.length > 0 ? { some: { id: { in: tagFilter } } } : undefined,
     },
   };
   const { data } = useBusinessesListQuery({
-    variables,
     nextFetchPolicy: 'cache-first',
+    variables,
   });
 
   const { data: QueryGroups } = useListGroupsQuery({
@@ -112,6 +112,10 @@ const useListBusinesses = (): Return => {
   const { data: QueryParentData } = useParentBusinessesListQuery({
     nextFetchPolicy: 'cache-first',
     variables: {
+      hasChildrenOnly: true,
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         schemes: {
           some: {
@@ -120,10 +124,6 @@ const useListBusinesses = (): Return => {
             },
           },
         },
-      },
-      hasChildrenOnly: true,
-      orderBy: {
-        name: SortOrder.Asc,
       },
     },
   });
@@ -132,6 +132,9 @@ const useListBusinesses = (): Return => {
     nextFetchPolicy: 'cache-first',
 
     variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         schemes: {
           some: {
@@ -140,9 +143,6 @@ const useListBusinesses = (): Return => {
             },
           },
         },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
       },
     },
   });
@@ -152,11 +152,11 @@ const useListBusinesses = (): Return => {
       setSaving(false);
       setAddVisible(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Business has been created',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'You new business has been add to alert.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Business has been created',
         }),
         placement: 'bottomRight',
       });
@@ -176,17 +176,17 @@ const useListBusinesses = (): Return => {
 
       if (existingData && result.data)
         store.writeQuery<BusinessesListQuery, BusinessesListQueryVariables>({
-          query: BusinessesListDocument,
-          variables,
           data: {
             businessRelay: {
-              totalCount: (existingData?.businessRelay.totalCount || 0) + 1,
               edges: [
                 ...existingData.businessRelay.edges,
                 { node: result.data?.createBusiness },
               ],
+              totalCount: (existingData?.businessRelay.totalCount || 0) + 1,
             },
           },
+          query: BusinessesListDocument,
+          variables,
         });
     },
   });
@@ -195,11 +195,11 @@ const useListBusinesses = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Removed!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The business has been removed!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Removed!',
         }),
         placement: 'bottomRight',
       });
@@ -223,16 +223,16 @@ const useListBusinesses = (): Return => {
       if (existingData.businessRelay.edges === undefined) return;
 
       store.writeQuery<BusinessesListQuery, BusinessesListQueryVariables>({
-        query: BusinessesListDocument,
         data: {
+          __typename: 'Query',
           businessRelay: {
             ...existingData.businessRelay,
             edges: existingData?.businessRelay?.edges?.filter(
               ({ node: business }) => business?.id !== res?.deleteBusiness?.id
             ),
           },
-          __typename: 'Query',
         },
+        query: BusinessesListDocument,
         variables,
       });
     },
@@ -240,9 +240,6 @@ const useListBusinesses = (): Return => {
 
   const deleteConfirm = (currentId: string) => {
     Modal.confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete this business?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
@@ -254,6 +251,9 @@ const useListBusinesses = (): Return => {
           },
         }).finally(() => setSaving(false));
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete this business?',
+      }),
     });
   };
   const onSubmit = (values: BusinessData) => {
@@ -261,8 +261,24 @@ const useListBusinesses = (): Return => {
     void createBusiness({
       variables: {
         data: {
+          groups: values?.groups?.map((id) => ({ id })) || [],
+          location: {
+            building: values.locations[0].building,
+            county: values.locations[0].county,
+            geoLat: values.locations[0].geoLat,
+            geoLng: values.locations[0].geoLng,
+            postcode: values.locations[0].postcode || '',
+            street: values.locations[0].street || '',
+            townCity: values.locations[0].townCity || '',
+          },
           name: values.name,
-          siteNumber: values.siteNumber,
+          parent: values.parent
+            ? {
+                connect: {
+                  id: values.parent.id,
+                },
+              }
+            : undefined,
           publicName: values.publicName || false,
           schemes: {
             connect: [
@@ -271,6 +287,7 @@ const useListBusinesses = (): Return => {
               },
             ],
           },
+          siteNumber: values.siteNumber,
           tags: {
             connect:
               values.tags && values.tags.length > 0
@@ -279,32 +296,15 @@ const useListBusinesses = (): Return => {
             create:
               values.newTags && values.newTags.length > 0
                 ? values.newTags.map((value) => ({
-                    name: value.name,
+                    createdBy: { connect: { id: value.createdById } },
+                    dataType: Model.Business,
                     description: value.description || '',
+                    name: value.name,
                     schemes: {
                       connect: value.schemes.map((id) => ({ id })),
                     },
-                    createdBy: { connect: { id: value.createdById } },
-                    dataType: Model.Business,
                   }))
                 : undefined,
-          },
-          groups: values?.groups?.map((id) => ({ id })) || [],
-          parent: values.parent
-            ? {
-                connect: {
-                  id: values.parent.id,
-                },
-              }
-            : undefined,
-          location: {
-            building: values.locations[0].building,
-            county: values.locations[0].county,
-            postcode: values.locations[0].postcode || '',
-            street: values.locations[0].street || '',
-            townCity: values.locations[0].townCity || '',
-            geoLat: values.locations[0].geoLat,
-            geoLng: values.locations[0].geoLng,
           },
         },
       },
@@ -346,28 +346,28 @@ const useListBusinesses = (): Return => {
   );
 
   return {
-    data,
-    loading: !data,
-    onSearchChange,
-    searchValue,
     addVisible,
-    toggleAddVisible,
-    linkVisible,
-    toggleLinkVisible,
-    onSubmit,
-    saving,
+    data,
     deleteConfirm,
-    pagination,
-    setPagination,
     groupData,
     groupFilter,
-    setGroupFilter,
+    linkVisible,
+    loading: !data,
+    onSearchChange,
+    onSubmit,
+    pagination,
     parentData,
     parentFilter,
+    saving,
+    searchValue,
+    setGroupFilter,
+    setPagination,
     setParentFilter,
-    tags,
-    tagFilter,
     setTagFilter,
+    tagFilter,
+    tags,
+    toggleAddVisible,
+    toggleLinkVisible,
   };
 };
 

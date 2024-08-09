@@ -91,6 +91,10 @@ query ViewOffender(
     }
     incidents {
       ...Incidents
+      business {
+        id
+        name
+      }
     }
     evidence {
       ...Documents

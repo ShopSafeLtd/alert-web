@@ -1,59 +1,59 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { useStoreActions, useStoreState } from 'state';
-
-import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useNavigate } from 'react-router';
-import { LocalStorageKeys } from 'types';
-import { useIntl } from 'react-intl';
+import type { UpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/__generated__/update_user_notification.generated';
 import type {
   ListUserNotificationsQuery,
   ListUserNotificationsQueryVariables,
-} from 'graphql/userNotification/queries/list-user-notifications.generated';
-import { useListUserNotificationsQuery } from 'graphql/userNotification/queries/list-user-notifications.generated';
+} from 'graphql/userNotification/queries/__generated__/list-user-notifications.generated';
+import type { UserNotificationsQuery } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
+
+import { notification } from 'antd';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
-import type { UpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
-import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
-import type { UserNotificationsQuery } from 'graphql/userNotification/queries/user_notifications.generated';
-import { UserNotificationsDocument } from 'graphql/userNotification/queries/user_notifications.generated';
+import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/__generated__/update_user_notification.generated';
+import { useListUserNotificationsQuery } from 'graphql/userNotification/queries/__generated__/list-user-notifications.generated';
+import { UserNotificationsDocument } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import { LocalStorageKeys } from 'types';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface NotificationData {
-  id: string;
-  type?: Model | null | undefined;
-  vehicleId?: string | null;
-  offenderId?: string | null;
-  crimeGroupId?: string | null;
-  incidentId?: string | null;
-  investigationId?: string | null;
-  chatId?: string | null;
-  articleId?: string | null;
+  articleId?: null | string;
   ban?: {
-    id: string | null;
-    offender: { id: string | null };
+    id: null | string;
+    offender: { id: null | string };
   } | null;
-  userId?: string | null;
+  chatId?: null | string;
+  crimeGroupId?: null | string;
+  id: string;
+  incidentId?: null | string;
+  investigationId?: null | string;
+  offenderId?: null | string;
   schemes: { id: string }[];
+  type?: Model | null | undefined;
+  userId?: null | string;
+  vehicleId?: null | string;
 }
 
 interface Return {
   data:
     | Exclude<
         ListUserNotificationsQuery['listUserNotifications'],
-        undefined | null
+        null | undefined
       >
     | null
     | undefined;
-  loading: boolean;
-  saving: boolean;
-  handleMarkAsRead: (value: NotificationData) => void;
   handleMarkAllRead: () => void;
+  handleMarkAsRead: (value: NotificationData) => void;
+  loading: boolean;
+  onRefresh: () => void;
+  refreshing: boolean;
+  saving: boolean;
+  setSearch: (value: string) => void;
   takeAllSchemes: boolean;
   toggleTakeAllSchemes: () => void;
-  setSearch: (value: string) => void;
-  refreshing: boolean;
-  onRefresh: () => void;
 }
 
 const useNotificationLists = (): Return => {
@@ -157,14 +157,16 @@ const useNotificationLists = (): Return => {
   };
 
   const variables: ListUserNotificationsQueryVariables = {
-    take: 20,
-    skip: 0,
-    where: {
-      user: {
-        id: {
-          equals: userId,
+    orderBy: [
+      {
+        notification: {
+          createdAt: SortOrder.Desc,
         },
       },
+    ],
+    skip: 0,
+    take: 20,
+    where: {
       AND: [
         {
           OR: [
@@ -198,14 +200,12 @@ const useNotificationLists = (): Return => {
           },
         },
       ],
-    },
-    orderBy: [
-      {
-        notification: {
-          createdAt: SortOrder.Desc,
+      user: {
+        id: {
+          equals: userId,
         },
       },
-    ],
+    },
   };
 
   const { data, loading, refetch } = useListUserNotificationsQuery({
@@ -233,9 +233,9 @@ const useNotificationLists = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<UserNotificationsQuery>({
-      query: UserNotificationsDocument,
       data: {
         ...existingData,
+        __typename: 'Query',
         user: {
           ...existingData.user,
           notifications: existingData.user?.notifications.map((el) => ({
@@ -243,8 +243,8 @@ const useNotificationLists = (): Return => {
             read: true,
           })),
         },
-        __typename: 'Query',
       },
+      query: UserNotificationsDocument,
       variables,
     });
   };
@@ -263,11 +263,11 @@ const useNotificationLists = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'All notifications have been updated to read!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -294,30 +294,30 @@ const useNotificationLists = (): Return => {
     );
 
     setScheme({
-      autoPopulateDescription: scheme.autoPopulateDescription,
-      needJustification: scheme.needJustification,
-      requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
-      oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
-      reportOnly: scheme.reportOnly,
-      languageCount: scheme.languageCount,
+      activityAssignToUser: scheme.activityAssignToUser,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
-      defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
-      restrictIncidentAccess: scheme.restrictIncidentAccess,
-      id: scheme.id,
-      name: scheme.name,
-      logo: scheme.logo?.optimisedPersisted,
-      darkLogo: scheme.darkLogo?.optimisedPersisted,
-      userTodos: scheme.userTodos,
-      userNotifications: scheme.userNotifications,
-      goodsMode: scheme.goodsMode,
-      facialRecognition: scheme.facialRecognition,
-      facialDetection: scheme.facialDetection,
-      activityAssignToUser: scheme.activityAssignToUser,
-      useBusinessGroupsOnIncident: scheme.useBusinessGroupsOnIncident,
-      imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
-      taskTimeTracking: scheme.taskTimeTracking,
+      autoPopulateDescription: scheme.autoPopulateDescription,
       connectedToSchemes: scheme.connectedToSchemes,
+      darkLogo: scheme.darkLogo?.optimisedPersisted,
+      defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
+      facialDetection: scheme.facialDetection,
+      facialRecognition: scheme.facialRecognition,
+      goodsMode: scheme.goodsMode,
+      id: scheme.id,
+      imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
+      languageCount: scheme.languageCount,
+      logo: scheme.logo?.optimisedPersisted,
+      name: scheme.name,
+      needJustification: scheme.needJustification,
+      oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
+      reportOnly: scheme.reportOnly,
+      requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
+      restrictIncidentAccess: scheme.restrictIncidentAccess,
+      taskTimeTracking: scheme.taskTimeTracking,
+      useBusinessGroupsOnIncident: scheme.useBusinessGroupsOnIncident,
+      userNotifications: scheme.userNotifications,
+      userTodos: scheme.userTodos,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(
@@ -377,16 +377,16 @@ const useNotificationLists = (): Return => {
 
   return {
     data: data?.listUserNotifications,
-    loading: (data === null || data === undefined) && loading,
-    saving,
-    takeAllSchemes,
-    toggleTakeAllSchemes,
-    handleMarkAsRead,
     handleMarkAllRead,
-    setSearch,
+    handleMarkAsRead,
+    loading: (data === null || data === undefined) && loading,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onRefresh,
     refreshing,
+    saving,
+    setSearch,
+    takeAllSchemes,
+    toggleTakeAllSchemes,
   };
 };
 

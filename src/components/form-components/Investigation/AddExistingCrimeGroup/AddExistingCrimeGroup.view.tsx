@@ -1,44 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access */
-import React from 'react';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
 import { Button, Col, Input, Row, Table } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: () => void;
-  saving: boolean;
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
+  onClose: () => void;
+  onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onSelect: (item: { key: string }) => void;
 }
 
 const AddExistingCrimeGroup = ({
-  onClose,
-  onSubmit,
-  saving,
   data,
   loading,
+  onClose,
+  onSelect,
+  onSubmit,
+  saving,
   search,
   setSearch,
-  onSelect,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <div className="add-existing-offender">
-      <Row gutter={8} className="search-offender">
+      <Row className="search-offender" gutter={8}>
         <Col span={18}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Crime Groups...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
       </Row>
@@ -46,85 +46,85 @@ const AddExistingCrimeGroup = ({
       <Table
         columns={[
           {
-            key: 'reference',
             dataIndex: 'reference',
+            key: 'reference',
             title: intl.formatMessage({
               defaultMessage: 'Alert ID',
             }),
           },
           {
-            key: 'alias',
             dataIndex: 'alias',
+            key: 'alias',
             title: intl.formatMessage({
               defaultMessage: 'Alias',
             }),
           },
           {
-            key: 'totalOffenders',
             dataIndex: 'totalOffenders',
+            key: 'totalOffenders',
             title: intl.formatMessage({
               defaultMessage: 'Members',
             }),
           },
           {
-            key: 'totalIncidents',
             dataIndex: 'totalIncidents',
+            key: 'totalIncidents',
             title: intl.formatMessage({
               defaultMessage: 'Incidents',
             }),
           },
           {
-            key: 'totalValue',
             dataIndex: 'totalValue',
+            key: 'totalValue',
+            render: (value) => `£${value || 0}`,
             title: intl.formatMessage({
               defaultMessage: 'Lost Value',
             }),
-            render: (value) => `£${value || 0}`,
           },
           {
-            key: 'totalRecoveredValue',
             dataIndex: 'totalRecoveredValue',
+            key: 'totalRecoveredValue',
+            render: (value) => `£${value || 0}`,
             title: intl.formatMessage({
               defaultMessage: 'Recovered Value',
             }),
-            render: (value) => `£${value || 0}`,
           },
           {
-            key: 'totalTheftSuccess',
             dataIndex: 'totalTheftSuccess',
+            key: 'totalTheftSuccess',
+            render: (value) => `${value?.toFixed(0) || 0}%`,
             title: intl.formatMessage({
               defaultMessage: 'Loss Rate',
             }),
-            render: (value) => `${value?.toFixed(0) || 0}%`,
           },
         ]}
         dataSource={data?.listCrimeGroups?.crimeGroups.map((crimeGroup) => ({
+          alias: crimeGroup.alias,
           key: crimeGroup.id,
           reference: crimeGroup.reference,
-          alias: crimeGroup.alias,
-          totalOffenders: crimeGroup.totalOffenders,
           totalIncidents: crimeGroup.totalIncidents,
-          totalValue: crimeGroup.totalValue,
+          totalOffenders: crimeGroup.totalOffenders,
           totalRecoveredValue: crimeGroup.totalRecoveredValue,
           totalTheftSuccess: crimeGroup.totalTheftSuccess,
+          totalValue: crimeGroup.totalValue,
         }))}
-        rowSelection={{
-          type: 'radio',
-          onSelect,
-        }}
         loading={loading}
+        rowSelection={{
+          onSelect,
+          type: 'radio',
+        }}
         size="small"
       />
-      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+      <Row gutter={16} justify="end" style={{ paddingBottom: 30 }}>
         <Col>
-          <Button onClick={onClose} disabled={saving} type="text">
+          <Button disabled={saving} onClick={onClose} type="text">
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
+            loading={saving}
             onClick={onSubmit}
             type="primary"
           >

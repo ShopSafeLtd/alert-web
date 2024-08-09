@@ -1,38 +1,40 @@
-import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/__generated__/delete-incident.generated';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/__generated__/restore-incident.generated';
+
+import React from 'react';
+
 import View from './RestoreIncident.view';
 import useRestoreIncident from './useRestoreIncident';
-import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
-import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
 
 interface Props {
-  onClose: () => void;
   incidentId: string | undefined;
+  onClose: () => void;
   recycledId: string | undefined;
-  updateRestore: MutationUpdaterFn<RestoreIncidentMutation>;
   updateDelete: MutationUpdaterFn<DeleteIncidentMutation>;
+  updateRestore: MutationUpdaterFn<RestoreIncidentMutation>;
 }
 
 const RestoreIncident = ({
-  onClose,
   incidentId,
+  onClose,
   recycledId,
-  updateRestore,
   updateDelete,
+  updateRestore,
 }: Props): JSX.Element => {
-  const { onSubmit, onDelete, data, loading, saving } = useRestoreIncident({
-    onClose,
+  const { data, loading, onDelete, onSubmit, saving } = useRestoreIncident({
     incidentId,
+    onClose,
     recycledId,
-    updateRestore,
     updateDelete,
+    updateRestore,
   });
   return (
     <View
-      onSubmit={onSubmit}
-      onDelete={onDelete}
       data={data}
       loading={loading}
+      onDelete={onDelete}
+      onSubmit={onSubmit}
       saving={saving}
     />
   );

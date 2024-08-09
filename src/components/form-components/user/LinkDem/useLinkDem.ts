@@ -1,23 +1,24 @@
+import type { ListDemUsersQuery } from 'graphql/dem/queries/__generated__/list-users.generated';
+
+import { useLinkUserToDemMutation } from 'graphql/dem/mutations/__generated__/link-user-to-dem.generated';
+import { useListDemUsersQuery } from 'graphql/dem/queries/__generated__/list-users.generated';
 import { useState } from 'react';
-import type { ListDemUsersQuery } from 'graphql/dem/queries/list-users.generated';
-import { useListDemUsersQuery } from 'graphql/dem/queries/list-users.generated';
-import { useLinkUserToDemMutation } from 'graphql/dem/mutations/link-user-to-dem.generated';
 
 interface Props {
-  onClose: () => void;
   businessId: string;
+  onClose: () => void;
   userId: string;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListDemUsersQuery | undefined;
   loading: boolean;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
 }
 
-const useLinkDem = ({ onClose, businessId, userId }: Props): Return => {
+const useLinkDem = ({ businessId, onClose, userId }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
 
@@ -38,11 +39,11 @@ const useLinkDem = ({ onClose, businessId, userId }: Props): Return => {
       if (user) {
         void linkToDem({
           variables: {
-            where: {
-              id: userId,
-            },
             data: {
               id: user.id || '',
+            },
+            where: {
+              id: userId,
             },
           },
         });
@@ -57,11 +58,11 @@ const useLinkDem = ({ onClose, businessId, userId }: Props): Return => {
   };
 
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listDemUsers ? false : loading,
     onSelect,
+    onSubmit,
+    saving,
   };
 };
 

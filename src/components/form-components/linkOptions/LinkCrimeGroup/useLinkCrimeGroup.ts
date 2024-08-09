@@ -1,39 +1,39 @@
-import { useState } from 'react';
-
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useStoreState } from 'state';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import type { CrimeGroupData } from 'types/DataType';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 // interface CrimeGroup {
 //   crimeGroup: CrimeGroupData;
 // }
 interface Props {
-  onClose: () => void;
-  update?: (value: CrimeGroupData) => void;
   crimeGroupIds: string[] | undefined;
-  takeAllSchemes?: boolean;
   getCrimeGroup?: (value: { crimeGroup: CrimeGroupData }) => void;
+  onClose: () => void;
+  takeAllSchemes?: boolean;
+  update?: (value: CrimeGroupData) => void;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
 const useLinkCrimeGroup = ({
-  onClose,
-  update,
   crimeGroupIds,
   getCrimeGroup,
+  onClose,
   takeAllSchemes,
+  update,
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
@@ -52,18 +52,9 @@ const useLinkCrimeGroup = ({
       order: {
         updatedAt: SortOrder.Desc,
       },
-      take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
       where: {
-        id: { notIn: crimeGroupIds },
-        schemes: {
-          some: {
-            id: {
-              in: takeAllSchemes ? userSchemeIds : [schemeId],
-            },
-          },
-        },
-
         OR: [
           {
             alias: {
@@ -86,6 +77,15 @@ const useLinkCrimeGroup = ({
             },
           },
         ],
+        id: { notIn: crimeGroupIds },
+
+        schemes: {
+          some: {
+            id: {
+              in: takeAllSchemes ? userSchemeIds : [schemeId],
+            },
+          },
+        },
       },
     },
   });
@@ -98,9 +98,9 @@ const useLinkCrimeGroup = ({
     if (selectedData) {
       if (update) {
         update({
+          alias: selectedData.alias,
           id: selectedData.id,
           reference: selectedData.reference,
-          alias: selectedData.alias,
           totalOffenders: selectedData.totalOffenders || 0,
         });
       }
@@ -127,14 +127,14 @@ const useLinkCrimeGroup = ({
     });
   };
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listCrimeGroups ? false : loading,
-    search,
-    setSearch,
     onPaginationChange,
     onSelect,
+    onSubmit,
+    saving,
+    search,
+    setSearch,
   };
 };
 

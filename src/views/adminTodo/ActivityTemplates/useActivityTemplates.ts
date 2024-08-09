@@ -1,23 +1,24 @@
+import { useDeleteQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/__generated__/deleteQuestionGroup.generated';
 import { useState } from 'react';
+
 import type { ListData } from '../useActivities';
-import { useDeleteQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/deleteQuestionGroup.generated';
 
 interface Return {
-  toggleAddTemplate: () => void;
-  createActivity: (id: string | null) => void;
-  toggleEdit: (id: string | null) => void;
-  deleteQuestion: (id: string) => void;
+  activityTemplateForm: boolean;
   addActivity: boolean;
+  createActivity: (id: null | string) => void;
+  deleteQuestion: (id: string) => void;
   onClose: () => void;
   selectedActivity: ListData | null;
-  activityTemplateForm: boolean;
+  toggleAddTemplate: () => void;
+  toggleEdit: (id: null | string) => void;
 }
 
 interface Props {
   tableData: ListData[];
   updateTemplates: (
     item: ListData,
-    type: 'create' | 'update' | 'delete'
+    type: 'create' | 'delete' | 'update'
   ) => void;
 }
 
@@ -41,7 +42,7 @@ const useActivityTemplates = ({
     setActivityTemplateForm(!activityTemplateForm);
   };
 
-  const toggleEdit = (id: string | null) => {
+  const toggleEdit = (id: null | string) => {
     if (id) {
       setSelectedActivity(tableData.find((item) => item.id === id) || null);
       setActivityTemplateForm(true);
@@ -51,7 +52,7 @@ const useActivityTemplates = ({
     }
   };
 
-  const createActivity = (id: string | null) => {
+  const createActivity = (id: null | string) => {
     if (id) {
       setSelectedActivity(tableData.find((item) => item.id === id) || null);
       setAddActivity(true);
@@ -77,14 +78,14 @@ const useActivityTemplates = ({
   };
 
   return {
-    toggleAddTemplate,
-    createActivity,
-    toggleEdit,
-    deleteQuestion,
+    activityTemplateForm,
     addActivity,
+    createActivity,
+    deleteQuestion,
     onClose,
     selectedActivity,
-    activityTemplateForm,
+    toggleAddTemplate,
+    toggleEdit,
   };
 };
 

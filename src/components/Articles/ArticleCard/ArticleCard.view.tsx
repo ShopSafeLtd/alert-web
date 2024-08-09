@@ -1,16 +1,6 @@
-import React, { useRef } from 'react';
-import {
-  Button,
-  Carousel,
-  Col,
-  Dropdown,
-  Menu,
-  Modal,
-  Row,
-  Typography,
-} from 'antd';
+import type { CarouselRef } from 'antd/lib/carousel';
+import type { ListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
   faEdit,
@@ -24,53 +14,61 @@ import {
   faAngleRight,
   faArrowsMaximize,
 } from '@fortawesome/pro-solid-svg-icons';
-import type { CarouselRef } from 'antd/lib/carousel';
-import { Link } from 'react-router-dom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Button,
+  Carousel,
+  Col,
+  Dropdown,
+  Menu,
+  Modal,
+  Row,
+  Typography,
+} from 'antd';
 import SkeletonImage from 'components/images/SkeletonImage.view';
-import FormatCalendar from 'utils/format-calendar-24h';
-import { FormattedMessage, useIntl } from 'react-intl';
-import useStyles from './ArticleCard.styles';
-import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ArticlePriority } from 'graphql/types';
+import React, { useRef } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import FormatCalendar from 'utils/format-calendar-24h';
 
-const { Title, Text, Paragraph } = Typography;
+import useStyles from './ArticleCard.styles';
+
+const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
   article:
-    | Exclude<
-        ListArticlesQuery['listArticles'],
-        undefined | null
-      >['articles'][0]
+    | NonNullable<ListArticlesQuery['listArticles']>['articles'][0]
     | null
     | undefined;
   deleteRights: boolean;
   menuRights: boolean;
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  onNavigate: (id: string) => void;
   onDelete: (id: string) => void;
+  onNavigate: (id: string) => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
 }
 
 const ArticleCard = ({
   article,
   deleteRights,
   menuRights,
-  openLightbox,
-  onNavigate,
   onDelete,
+  onNavigate,
+  openLightbox,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const imagesRef = useRef<CarouselRef>(null);
   const classes = useStyles();
   const {
+    createdBy,
     id,
-    title,
     images,
     previewText,
-    updatedAt,
     priority,
-    createdBy,
+    title,
+    updatedAt,
     // tags,
     watermarkImage,
   } = article || {};
@@ -78,43 +76,43 @@ const ArticleCard = ({
     <div className={classes.card}>
       {menuRights && (
         <Dropdown
-          trigger={['click']}
+          arrow={{ pointAtCenter: true }}
           overlay={
             <Menu
               items={[
                 {
+                  icon: <FontAwesomeIcon icon={faEdit} />,
                   key: 0,
                   label: <FormattedMessage defaultMessage="Edit Article" />,
                   onClick: () => onNavigate(id || ''),
-                  icon: <FontAwesomeIcon icon={faEdit} />,
                 },
                 {
+                  icon: <FontAwesomeIcon icon={faTrash} />,
                   key: 1,
                   label: <FormattedMessage defaultMessage="Delete Article" />,
                   onClick: () =>
                     confirm({
-                      title: (
-                        <FormattedMessage defaultMessage="Are you sure?" />
-                      ),
                       content: (
                         <FormattedMessage defaultMessage="Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted." />
                       ),
                       okText: <FormattedMessage defaultMessage="Delete" />,
                       onOk: () => onDelete(id || ''),
+                      title: (
+                        <FormattedMessage defaultMessage="Are you sure?" />
+                      ),
                     }),
-                  icon: <FontAwesomeIcon icon={faTrash} />,
                 },
               ].filter((item) => !(item.key === 1 && deleteRights))}
             />
           }
           placement="bottomRight"
-          arrow={{ pointAtCenter: true }}
+          trigger={['click']}
         >
           <Button className={classes.menuButton}>
             <FontAwesomeIcon
+              icon={faEllipsisV}
               // size="5x"
               style={{ height: '100%' }}
-              icon={faEllipsisV}
             />
           </Button>
         </Dropdown>
@@ -146,12 +144,12 @@ const ArticleCard = ({
       {images && images.length > 0 ? (
         <Carousel ref={imagesRef}>
           {images.map((image) => (
-            <div key={id} className={classes.image}>
+            <div className={classes.image} key={id}>
               <WatermarkImage
-                url={image.optimised}
-                rotation={image.rotation}
                 position={image.position}
+                rotation={image.rotation}
                 showWatermark={watermarkImage}
+                url={image.optimised}
               />
             </div>
           ))}
@@ -180,7 +178,6 @@ const ArticleCard = ({
       )}
       {images && images.length > 0 && (
         <FontAwesomeIcon
-          size="lg"
           className={classes.imageExpand}
           icon={faArrowsMaximize}
           onClick={() =>
@@ -191,22 +188,23 @@ const ArticleCard = ({
               0
             )
           }
+          size="lg"
         />
       )}
       <div className={classes.content}>
         <div className={classes.details}>
           <Title
-            level={4}
             ellipsis={{
               rows: 2,
               tooltip: title?.replace(/^\S/, (s) => s.toUpperCase()),
             }}
+            level={4}
           >
             {priority === ArticlePriority.High && (
               <FontAwesomeIcon
-                size="sm"
                 className="feedItem-card-icon"
                 icon={faExclamationCircle}
+                size="sm"
                 style={{ marginRight: 8 }}
               />
             )}
@@ -219,18 +217,18 @@ const ArticleCard = ({
         <Row style={{ marginBottom: 5 }}>
           <Col flex={1}>
             <FontAwesomeIcon
-              size="sm"
               className="feedItem-card-icon"
               icon={faUser}
+              size="sm"
               style={{ marginRight: 5 }}
             />
             <Text>{createdBy?.fullName}</Text>
           </Col>
           <Col>
             <FontAwesomeIcon
-              size="sm"
               className="feedItem-card-icon"
               icon={faClock}
+              size="sm"
               style={{ marginRight: 5 }}
             />
             {/* @ts-expect-error TODO fix */}

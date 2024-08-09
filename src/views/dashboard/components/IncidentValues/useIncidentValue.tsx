@@ -1,14 +1,13 @@
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-
+import { useTotalLossQuery } from '#/views/dashboard/graphql/queries/__generated__/value-lost.generated';
 import { useEffect, useMemo, useState } from 'react';
-import { useTotalLossQuery } from '#/views/dashboard/graphql/queries/value-lost.generated';
 
 const useIncidentValue = (): {
   data: number;
   loading: boolean;
 } => {
   const {
-    variables: { groups: groupsFilter, gallery, createdAt: createdAtFilter },
+    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
   } = useDashboardContext();
   const thirtyDaysAgoMemo = useMemo(() => {
     const date = new Date();
@@ -40,8 +39,8 @@ const useIncidentValue = (): {
       where: {
         dateRange,
         following: gallery.includes('FOLLOWING'),
-        myData: gallery.includes('MYDATA'),
         groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
+        myData: gallery.includes('MYDATA'),
       },
     },
   });

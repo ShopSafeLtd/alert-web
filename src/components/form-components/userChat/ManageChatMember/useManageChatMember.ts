@@ -1,26 +1,26 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
 import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import { useChatQuery } from 'graphql/chat/queries/chat.generated';
+import { useUpdateChatMutation } from 'graphql/chat/mutation/__generated__/update_chat.generated';
+import { useChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
 import { SortOrder } from 'graphql/types';
-import { useUpdateChatMutation } from 'graphql/chat/mutation/update_chat.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface FormData {
   user: string[];
 }
 
 export interface MemberData {
-  id: string;
-  fullName: string;
   businesses: { id: string; name: string }[];
-  firstLetter?: string | null | undefined;
+  firstLetter?: null | string | undefined;
+  fullName: string;
+  id: string;
+  origFirstLetter?: null | string | undefined;
   origName: string;
-  origFirstLetter?: string | null | undefined;
 }
 // type MemberData =
 //   | Exclude<
@@ -30,26 +30,26 @@ export interface MemberData {
 //   | null
 //   | undefined;
 interface Props {
-  onClose: () => void;
   chatId: string;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: () => void;
+  addMember: boolean;
   addMemberUpdate: (value: FormData) => void;
+  deleteConfirm: (value: string) => void;
   loading: boolean;
+  membersData: MemberData[] | undefined;
+  onSubmit: () => void;
+  saving: boolean;
+  toggleAddMember: () => void;
   usersData:
-    | Exclude<ListSchemeUsersQuery['users'], undefined | null>
+    | Exclude<ListSchemeUsersQuery['users'], null | undefined>
     | null
     | undefined;
-  saving: boolean;
-  addMember: boolean;
-  toggleAddMember: () => void;
-  membersData: MemberData[] | undefined;
-  deleteConfirm: (value: string) => void;
 }
 
-const useEditChat = ({ onClose, chatId }: Props): Return => {
+const useEditChat = ({ chatId, onClose }: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -61,32 +61,21 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
 
   const [membersData, setMembersData] = useState<MemberData[] | undefined>([]);
   const { data: chatData, loading } = useChatQuery({
-    variables: {
-      where: {
-        id: chatId,
-      },
-    },
     onCompleted: ({ chat }) => {
       if (chat?.members && chat.members.length > 0) {
         setMembersData(chat.members.map((userChat) => userChat.user));
       }
+    },
+    variables: {
+      where: {
+        id: chatId,
+      },
     },
   });
 
   const { data: usersData } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-      },
       groupWhere: {
         scheme: {
           id: {
@@ -104,6 +93,17 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
           },
         },
       },
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -112,11 +112,11 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The chat group has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -148,9 +148,6 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
     if (chatId)
       void updateChat({
         variables: {
-          where: {
-            id: chatId,
-          },
           data: {
             members: {
               create: membersData
@@ -161,8 +158,8 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
                       .includes(id)
                 )
                 .map(({ id }) => ({
-                  user: { connect: { id } },
                   newMessages: true,
+                  user: { connect: { id } },
                 })),
               delete: chatData?.chat?.members
                 .filter(
@@ -172,22 +169,25 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
                 .map((userChat) => ({ id: userChat.id })),
             },
           },
+          where: {
+            id: chatId,
+          },
         },
       });
   };
 
   return {
-    onSubmit,
+    addMember,
     addMemberUpdate,
+    deleteConfirm,
     loading,
+    membersData,
+    onSubmit,
+    saving,
+    toggleAddMember,
     usersData: usersData?.users
       .filter((user) => !membersData?.map((el) => el.id).includes(user.id))
       .map((user) => user),
-    saving,
-    addMember,
-    toggleAddMember,
-    membersData,
-    deleteConfirm,
   };
 };
 

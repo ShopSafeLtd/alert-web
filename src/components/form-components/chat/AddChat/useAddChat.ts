@@ -1,22 +1,22 @@
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
+import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+
 import { Form, notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
-import { useCreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useCreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
 import { SortOrder } from 'graphql/types';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { useForm } = Form;
 
 interface FormData {
-  name: string;
   description: string;
+  name: string;
   users: string[];
 }
 interface Props {
@@ -24,11 +24,11 @@ interface Props {
   update: MutationUpdaterFn<CreateChatMutation>;
 }
 interface Return {
+  form: FormInstance<FormData>;
   onSubmit: (value: FormData) => void;
+  saving: boolean;
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
-  saving: boolean;
-  form: FormInstance<FormData>;
 }
 
 const useAddChat = ({ onClose, update }: Props): Return => {
@@ -40,18 +40,10 @@ const useAddChat = ({ onClose, update }: Props): Return => {
   const [form] = useForm<FormData>();
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
+    onCompleted: () => {
+      form.setFieldValue('users', [userId]);
+    },
     variables: {
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-      },
       groupWhere: {
         scheme: {
           id: {
@@ -69,9 +61,17 @@ const useAddChat = ({ onClose, update }: Props): Return => {
           },
         },
       },
-    },
-    onCompleted: () => {
-      form.setFieldValue('users', [userId]);
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
     },
   });
   const [createChat] = useCreateChatMutation({
@@ -79,11 +79,11 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The Chat has been added!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -101,15 +101,14 @@ const useAddChat = ({ onClose, update }: Props): Return => {
     const usersToAdd = new Set(data.users);
 
     const usersToAddArray = [...usersToAdd].map((id) => ({
-      user: { connect: { id } },
       newMessages: false,
+      user: { connect: { id } },
     }));
 
     setSaving(true);
     void createChat({
       variables: {
         data: {
-          name: data.name,
           description: data.description || null,
           members:
             usersToAddArray.length > 0
@@ -117,6 +116,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
                   create: usersToAddArray,
                 }
               : undefined,
+          name: data.name,
           scheme: {
             connect: {
               id: schemeId,
@@ -128,11 +128,11 @@ const useAddChat = ({ onClose, update }: Props): Return => {
   };
 
   return {
+    form,
     onSubmit,
+    saving,
     usersData,
     usersLoading,
-    saving,
-    form,
   };
 };
 export default useAddChat;

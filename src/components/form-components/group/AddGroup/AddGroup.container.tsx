@@ -1,8 +1,10 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
+
 import React from 'react';
+
 import View from './AddGroup.view';
 import useAddGroup from './useAddGroup';
-import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
 
 interface Props {
   onClose: () => void;
@@ -11,15 +13,15 @@ interface Props {
 
 const AddGroup = ({ onClose, update }: Props): JSX.Element => {
   const {
-    onSubmit,
-    usersData,
     adminUsersData,
-    usersLoading,
+    onSubmit,
     saving,
     selectedUsers,
     setSelectedUsers,
-    showOffenderSettings,
     setShowOffenderSettings,
+    showOffenderSettings,
+    usersData,
+    usersLoading,
   } = useAddGroup({
     onClose,
     update,
@@ -27,16 +29,16 @@ const AddGroup = ({ onClose, update }: Props): JSX.Element => {
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      usersData={usersData}
       adminUsersData={adminUsersData}
-      usersLoading={usersLoading}
+      onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving}
       selectedUsers={selectedUsers}
       setSelectedUsers={setSelectedUsers}
-      showOffenderSettings={showOffenderSettings}
       setShowOffenderSettings={setShowOffenderSettings}
+      showOffenderSettings={showOffenderSettings}
+      usersData={usersData}
+      usersLoading={usersLoading}
     />
   );
 };

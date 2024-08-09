@@ -1,4 +1,4 @@
-fragment Shoes on Shoe {
+fragment SingleShoe on Shoe {
   type
   style
   size

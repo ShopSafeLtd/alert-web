@@ -1,130 +1,132 @@
-import { useState } from 'react';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import update from 'immutability-helper';
+import type { UpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-offenders.generated';
+import type { UpdateInvestigationVehiclesMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-vehicles.generated';
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import type {
   CrimeGroupCardData,
   OffenderData,
   VehicleData,
 } from 'types/DataType';
-import successNotification from 'types/mutation_notifications/success_notification';
+
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
+import { useCloseInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/__generated__/close-investigation.generated';
+import { useReopenInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/__generated__/reopen-investigation.generated';
+import { notification } from 'antd';
+import { useCreateCrimeGroupSuggestedDataMutation } from 'graphql/crime-groups/mutations/__generated__/create-crime-group-suggested-data.generated';
+import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/update_crime_group.generated';
+import { useDeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import { useDeleteInvestigationMutation } from 'graphql/investigations/mutations/__generated__/delete-investigation.generated';
+import { useSubscribeToInvestigationMutation } from 'graphql/investigations/mutations/__generated__/subscribe-to-investigation.generated';
+import { useUnsubscribeToInvestigationMutation } from 'graphql/investigations/mutations/__generated__/unsubscribe-from-incident.generated';
+import { useUpdateInvestigationCrimeGroupsMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-crime-group.generated';
+import { useUpdateInvestigationIncidentsMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-incidents.generated';
+import { useUpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-offenders.generated';
+import { useUpdateInvestigationVehiclesMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-vehicles.generated';
+import {
+  ViewInvestigationDocument,
+  useViewInvestigationQuery,
+} from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
+import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
+import update from 'immutability-helper';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
 } from 'types/enums/profile-update-type';
-import { notification } from 'antd';
-import { useIntl } from 'react-intl';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import successNotification from 'types/mutation_notifications/success_notification';
+
 import { useStoreState } from '../../../state';
-import type {
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
-} from 'graphql/investigations/queries/view-investigation.generated';
-import {
-  useViewInvestigationQuery,
-  ViewInvestigationDocument,
-} from 'graphql/investigations/queries/view-investigation.generated';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
-import { useSubscribeToInvestigationMutation } from 'graphql/investigations/mutations/subscribe-to-investigation.generated';
-import { useUnsubscribeToInvestigationMutation } from 'graphql/investigations/mutations/unsubscribe-from-incident.generated';
-import type { UpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/update-investigation-offenders.generated';
-import { useUpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/update-investigation-offenders.generated';
-import { useCloseInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/close-investigation.generated';
-import { useReopenInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/reopen-investigation.generated';
-import type { UpdateInvestigationVehiclesMutation } from 'graphql/investigations/mutations/update/update-investigation-vehicles.generated';
-import { useUpdateInvestigationVehiclesMutation } from 'graphql/investigations/mutations/update/update-investigation-vehicles.generated';
-import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
-import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
-import { useUpdateInvestigationCrimeGroupsMutation } from 'graphql/investigations/mutations/update/update-investigation-crime-group.generated';
-import { useCreateCrimeGroupSuggestedDataMutation } from 'graphql/crime-groups/mutations/create-crime-group-suggested-data.generated';
-import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/update_crime_group.generated';
-import { useUpdateInvestigationIncidentsMutation } from 'graphql/investigations/mutations/update/update-investigation-incidents.generated';
-import { useDeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import { useDeleteInvestigationMutation } from 'graphql/investigations/mutations/delete-investigation.generated';
 
 interface Return {
+  addCrimeGroup: boolean;
+  addDemDocument: boolean;
+  addDocument: boolean;
+  addExistingCrimeGroup: boolean;
+  addExistingIncident: boolean;
+  addExistingOffender: boolean;
+  addExistingVehicle: boolean;
+  addOffender: boolean;
+  addTodo: boolean;
+  addVehicle: boolean;
+  completeTodoVisible: null | string;
+  crimeGroupIds: string[];
   data: ViewInvestigationQuery | undefined;
+  demId: null | string | undefined;
+  editCrimeGroupData: CrimeGroupCardData | null;
+  editInvestigation: boolean;
+  editOffenderData: OffenderData | null;
+  editVehicleData: VehicleData | null;
+  incidentIds: string[];
   loading: boolean;
   offenderIds: string[];
-  vehicleIds: string[];
-  incidentIds: string[];
-  crimeGroupIds: string[];
-  addOffender: boolean;
-  addExistingOffender: boolean;
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
-  editOffenderData: OffenderData | null;
-  setEditOffenderData: (value: OffenderData | null) => void;
-  onDeleteOffender: (id: string) => void;
-  addVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleData: VehicleData | null;
-  setEditVehicleData: (value: VehicleData | null) => void;
-  onDeleteVehicle: (id: string) => void;
-  addCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupData: CrimeGroupCardData | null;
-  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
-  onDeleteCrimeGroup: (id: string) => void;
-  addExistingIncident: boolean;
-  toggleAddExistingIncident: () => void;
-  toggleAddDocument: () => void;
-  addDocument: boolean;
-  toggleAddDemDocument: () => void;
-  addDemDocument: boolean;
-  demId: string | null | undefined;
-  onAddExistingOffender: (value: string[]) => void;
-  onAddExistingVehicle: (value: string) => void;
+  onAddCrimeGroup: (value: CrimeGroupCardData) => void;
   onAddExistingCrimeGroup: (value: string) => void;
   onAddExistingIncident: (value: string[]) => void;
-  // onAddOffender: (value: OffenderData) => void;
+  onAddExistingOffender: (value: string[]) => void;
+  onAddExistingOffenders: (value: string[]) => void;
+  onAddExistingVehicle: (value: string) => void;
+  onAddExistingVehicles: (value: string[]) => void;
   // onEditOffender: (value: OffenderData) => void;
   onAddVehicle: (value: VehicleData) => void;
-  onEditVehicle: (value: VehicleData) => void;
-  onAddCrimeGroup: (value: CrimeGroupCardData) => void;
-  onEditCrimeGroup: (value: CrimeGroupCardData) => void;
+  onCloseInvestigation: () => void;
+  onCompletedAddOffender: () => void;
+  onCompletedEditOffender: () => void;
+  onDeleteCrimeGroup: (id: string) => void;
+  onDeleteDocument: (id: string) => void;
   onDeleteIncident: (id: string) => void;
-  toggleSubscribe: () => void;
+  onDeleteInvestigation: () => void;
+  onDeleteOffender: (id: string) => void;
+  onDeleteVehicle: (id: string) => void;
+  // onAddOffender: (value: OffenderData) => void;
+  onEditCrimeGroup: (value: CrimeGroupCardData) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onReopenInvestigation: () => void;
+  saving: boolean;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  setViewTodoVisible: (value: null | string) => void;
+  showSuggestedOffenders: boolean;
+  showSuggestedVehicles: boolean;
+  suggestedOffenders: OffenderData[] | undefined;
+  suggestedVehicles: VehicleData[] | undefined;
   takeAllSchemes: boolean;
-  addTodo: boolean;
-  toggleAddTodo: () => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
-  viewTodoVisible: string | null;
-  setViewTodoVisible: (value: string | null) => void;
-  completeTodoVisible: string | null;
-  setCompleteTodoVisible: (value: string | null) => void;
-  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
-  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  saving: boolean;
-  onDeleteInvestigation: () => void;
-  suggestedOffenders: OffenderData[] | undefined;
+  toggleAddCrimeGroup: () => void;
+  toggleAddDemDocument: () => void;
+  toggleAddDocument: () => void;
+  toggleAddExistingCrimeGroup: () => void;
+  toggleAddExistingIncident: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
+  toggleAddOffender: () => void;
+  toggleAddTodo: () => void;
+  toggleAddVehicle: () => void;
   toggleCloseSuggestedOffenders: () => void;
   toggleCloseSuggestedVehicles: () => void;
-  suggestedVehicles: VehicleData[] | undefined;
-  onAddExistingOffenders: (value: string[]) => void;
-  onAddExistingVehicles: (value: string[]) => void;
-  showSuggestedVehicles: boolean;
-  showSuggestedOffenders: boolean;
-  toggleShowSuggestedVehicles: () => void;
-  toggleShowSuggestedOffenders: () => void;
-  editInvestigation: boolean;
   toggleEditInvestigation: () => void;
-  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
-  onCompletedEditOffender: () => void;
+  toggleShowSuggestedOffenders: () => void;
+  toggleShowSuggestedVehicles: () => void;
+  toggleSubscribe: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
-  onCompletedAddOffender: () => void;
-  onCloseInvestigation: () => void;
-  onReopenInvestigation: () => void;
-  onDeleteDocument: (id: string) => void;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  vehicleIds: string[];
+  viewTodoVisible: null | string;
 }
 
 const onCompletedEditOffender = () => {
@@ -182,8 +184,8 @@ const useViewInvestigation = (investigationId: string): Return => {
   const [addDocument, setAddDocument] = useState(false);
   const [addDemDocument, setAddDemDocument] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
-  const [viewTodoVisible, setViewTodoVisible] = useState<string | null>(null);
-  const [completeTodoVisible, setCompleteTodoVisible] = useState<string | null>(
+  const [viewTodoVisible, setViewTodoVisible] = useState<null | string>(null);
+  const [completeTodoVisible, setCompleteTodoVisible] = useState<null | string>(
     null
   );
 
@@ -202,8 +204,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     },
   };
   const { data, loading } = useViewInvestigationQuery({
-    variables,
-    skip: !investigationId,
     onCompleted: ({ investigation }) => {
       if (investigation?.offenders && investigation.offenders.length > 0) {
         setOffenderIds(investigation.offenders.map(({ id }) => id));
@@ -218,6 +218,8 @@ const useViewInvestigation = (investigationId: string): Return => {
         setIncidentIds(investigation.incidents.map(({ id }) => id));
       }
     },
+    skip: !investigationId,
+    variables,
   });
   const onSetSuggestedOffenders = (values: OffenderData[]) => {
     if (values) {
@@ -236,13 +238,13 @@ const useViewInvestigation = (investigationId: string): Return => {
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
       variables: {
-        where: {
-          id: schemeId,
-        },
         questionGroupsWhere: {
           defaultForIncidents: {
             equals: true,
           },
+        },
+        where: {
+          id: schemeId,
         },
       },
     });
@@ -259,14 +261,14 @@ const useViewInvestigation = (investigationId: string): Return => {
 
     if (!existingData?.investigation) return;
     store.writeQuery<ViewInvestigationQuery>({
-      query: ViewInvestigationDocument,
       data: {
+        __typename: 'Query',
         investigation: {
           ...existingData.investigation,
           todos: [...existingData.investigation.todos, res.createTodo],
         },
-        __typename: 'Query',
       },
+      query: ViewInvestigationDocument,
       variables,
     });
   };
@@ -290,8 +292,8 @@ const useViewInvestigation = (investigationId: string): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<ViewInvestigationQuery, ViewInvestigationQueryVariables>({
-      query: ViewInvestigationDocument,
       data: {
+        __typename: 'Query',
         investigation: update<ViewInvestigationQuery['investigation']>(
           existingData.investigation,
           {
@@ -304,8 +306,8 @@ const useViewInvestigation = (investigationId: string): Return => {
             },
           }
         ),
-        __typename: 'Query',
       },
+      query: ViewInvestigationDocument,
       variables,
     });
   };
@@ -341,14 +343,14 @@ const useViewInvestigation = (investigationId: string): Return => {
 
     if (!existingData?.investigation) return;
     store.writeQuery<ViewInvestigationQuery>({
-      query: ViewInvestigationDocument,
       data: {
+        __typename: 'Query',
         investigation: {
           ...existingData.investigation,
           offenders: res.updateInvestigation.offenders,
         },
-        __typename: 'Query',
       },
+      query: ViewInvestigationDocument,
       variables,
     });
   };
@@ -356,10 +358,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value) {
       void updateInvestigationOffenders({
-        variables: {
-          id: investigationId,
-          offenderIds: value,
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Offender,
@@ -368,6 +366,10 @@ const useViewInvestigation = (investigationId: string): Return => {
           );
         },
         update: updateAddExistingOffenderList,
+        variables: {
+          id: investigationId,
+          offenderIds: value,
+        },
       }).finally(() => {
         toggleCloseSuggestedOffenders();
         setSaving(false);
@@ -378,10 +380,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (values) {
       void updateInvestigationOffenders({
-        variables: {
-          id: investigationId,
-          offenderIds: values,
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Offender,
@@ -390,6 +388,10 @@ const useViewInvestigation = (investigationId: string): Return => {
           );
         },
         update: updateAddExistingOffenderList,
+        variables: {
+          id: investigationId,
+          offenderIds: values,
+        },
       }).finally(() => {
         setAddExistingOffender(false);
         setSaving(false);
@@ -412,8 +414,8 @@ const useViewInvestigation = (investigationId: string): Return => {
       .indexOf(res.updateOffender.id);
 
     store.writeQuery<ViewInvestigationQuery>({
-      query: ViewInvestigationDocument,
       data: {
+        __typename: 'Query',
         investigation: {
           ...existingData.investigation,
           offenders: update(existingData.investigation.offenders, {
@@ -422,8 +424,8 @@ const useViewInvestigation = (investigationId: string): Return => {
             },
           }),
         },
-        __typename: 'Query',
       },
+      query: ViewInvestigationDocument,
       variables,
     });
   };
@@ -614,8 +616,8 @@ const useViewInvestigation = (investigationId: string): Return => {
 
     if (!existingData?.investigation) return;
     store.writeQuery<ViewInvestigationQuery>({
-      query: ViewInvestigationDocument,
       data: {
+        __typename: 'Query',
         investigation: {
           ...existingData.investigation,
           offenders: [
@@ -623,8 +625,8 @@ const useViewInvestigation = (investigationId: string): Return => {
             res.createOffender,
           ],
         },
-        __typename: 'Query',
       },
+      query: ViewInvestigationDocument,
       variables,
     });
   };
@@ -633,10 +635,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value)
       void updateInvestigationOffenders({
-        variables: {
-          id: investigationId,
-          disconnectOffenderIds: [value],
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Offender,
@@ -657,18 +655,22 @@ const useViewInvestigation = (investigationId: string): Return => {
 
           if (!existingData?.investigation) return;
           store.writeQuery<ViewInvestigationQuery>({
-            query: ViewInvestigationDocument,
             data: {
+              __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
                 offenders: existingData.investigation.offenders.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewInvestigationDocument,
             variables,
           });
+        },
+        variables: {
+          disconnectOffenderIds: [value],
+          id: investigationId,
         },
       }).finally(() => {
         setSaving(false);
@@ -704,14 +706,14 @@ const useViewInvestigation = (investigationId: string): Return => {
 
     if (!existingData?.investigation) return;
     store.writeQuery<ViewInvestigationQuery>({
-      query: ViewInvestigationDocument,
       data: {
+        __typename: 'Query',
         investigation: {
           ...existingData.investigation,
           vehicles: res.updateInvestigation.vehicles,
         },
-        __typename: 'Query',
       },
+      query: ViewInvestigationDocument,
       variables,
     });
   };
@@ -719,10 +721,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value) {
       void updateInvestigationVehicles({
-        variables: {
-          id: investigationId,
-          vehicleIds: value,
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Vehicle,
@@ -731,6 +729,10 @@ const useViewInvestigation = (investigationId: string): Return => {
           );
         },
         update: updateVehicleList,
+        variables: {
+          id: investigationId,
+          vehicleIds: value,
+        },
       }).finally(() => {
         toggleCloseSuggestedVehicles();
         setSaving(false);
@@ -741,10 +743,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value) {
       void updateInvestigationVehicles({
-        variables: {
-          id: investigationId,
-          vehicleIds: value,
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Vehicle,
@@ -753,6 +751,10 @@ const useViewInvestigation = (investigationId: string): Return => {
           );
         },
         update: updateVehicleList,
+        variables: {
+          id: investigationId,
+          vehicleIds: value,
+        },
       }).finally(() => {
         setAddExistingVehicle(false);
         setSaving(false);
@@ -777,8 +779,8 @@ const useViewInvestigation = (investigationId: string): Return => {
         .map((item) => item.id)
         .indexOf(res.updateVehicle.id);
       store.writeQuery<ViewInvestigationQuery>({
-        query: ViewInvestigationDocument,
         data: {
+          __typename: 'Query',
           investigation: {
             ...existingData.investigation,
             vehicles: update(existingData.investigation.vehicles, {
@@ -787,8 +789,8 @@ const useViewInvestigation = (investigationId: string): Return => {
               },
             }),
           },
-          __typename: 'Query',
         },
+        query: ViewInvestigationDocument,
         variables,
       });
     },
@@ -801,39 +803,40 @@ const useViewInvestigation = (investigationId: string): Return => {
         (id) => !value.images?.map((el) => el.id).includes(id)
       );
       void updateVehicle({
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Investigation,
+            ProfileUpdatedType.updated
+          );
+        },
         variables: {
-          where: {
-            id: value.id,
-          },
           data: {
-            make: { set: value.make || '' },
-            model: { set: value.model || '' },
             colour: { set: value.colour || '' },
-            registration: { set: value.registration || '' },
             images:
               value.images && value.images.length > 0
                 ? {
-                    delete:
-                      deleteIds && deleteIds.length > 0
-                        ? deleteIds.map((id) => ({ id }))
-                        : undefined,
                     connect: value.images
                       ?.filter((image) => !image.new)
                       .map((image) => ({
                         id: image.id,
                       })),
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
                     upload: value.images
                       ?.filter((image) => image.new)
                       .map((item) => ({
+                        policeImage: item.policeImage,
+                        position: item.position,
+                        primary: item.primary,
+                        rotation: item.rotation || 0,
                         url: {
                           filename: item.fileName || '',
                           mimetype: item.type || '',
                           url: item.url || '',
                         },
-                        position: item.position,
-                        primary: item.primary,
-                        policeImage: item.policeImage,
-                        rotation: item.rotation || 0,
                       }))
                       .filter((obj) => obj.url !== undefined),
                   }
@@ -843,14 +846,13 @@ const useViewInvestigation = (investigationId: string): Return => {
                         ? deleteIds.map((id) => ({ id }))
                         : undefined,
                   },
+            make: { set: value.make || '' },
+            model: { set: value.model || '' },
+            registration: { set: value.registration || '' },
           },
-        },
-        onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedModel.Investigation,
-            ProfileUpdatedType.updated
-          );
+          where: {
+            id: value.id,
+          },
         },
       }).finally(() => {
         setEditVehicleData(null);
@@ -872,8 +874,8 @@ const useViewInvestigation = (investigationId: string): Return => {
 
       if (!existingData?.investigation) return;
       store.writeQuery<ViewInvestigationQuery>({
-        query: ViewInvestigationDocument,
         data: {
+          __typename: 'Query',
           investigation: {
             ...existingData.investigation,
             vehicles: [
@@ -881,8 +883,8 @@ const useViewInvestigation = (investigationId: string): Return => {
               res.createVehicle,
             ],
           },
-          __typename: 'Query',
         },
+        query: ViewInvestigationDocument,
         variables,
       });
     },
@@ -891,15 +893,16 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value) {
       void createVehicle({
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Investigation,
+            ProfileUpdatedType.added
+          );
+        },
         variables: {
           data: {
-            make: value.make || '',
-            model: value.model || '',
             colour: value.colour || '',
-            registration: value.registration || '',
-            investigationId,
-            schemes: schemeId,
-
             image:
               value.images && value.images.length > 0
                 ? {
@@ -911,27 +914,26 @@ const useViewInvestigation = (investigationId: string): Return => {
                     upload: value.images
                       ?.filter((image) => image.new)
                       .map((item) => ({
+                        policeImage: item.policeImage,
+                        position: item.position,
+                        primary: item.primary,
+                        rotation: item.rotation || 0,
                         url: {
                           filename: item.fileName || '',
                           mimetype: item.type || '',
                           url: item.url || '',
                         },
-                        position: item.position,
-                        primary: item.primary,
-                        policeImage: item.policeImage,
-                        rotation: item.rotation || 0,
                       }))
                       .filter((obj) => obj.url !== undefined),
                   }
                 : {},
+            investigationId,
+            make: value.make || '',
+            model: value.model || '',
+            registration: value.registration || '',
+
+            schemes: schemeId,
           },
-        },
-        onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedModel.Investigation,
-            ProfileUpdatedType.added
-          );
         },
       }).finally(() => {
         setAddVehicle(false);
@@ -943,10 +945,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value)
       void updateInvestigationVehicles({
-        variables: {
-          id: investigationId,
-          disconnectVehicleIds: [value],
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Vehicle,
@@ -967,18 +965,22 @@ const useViewInvestigation = (investigationId: string): Return => {
 
           if (!existingData?.investigation) return;
           store.writeQuery<ViewInvestigationQuery>({
-            query: ViewInvestigationDocument,
             data: {
+              __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
                 vehicles: existingData.investigation.vehicles.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewInvestigationDocument,
             variables,
           });
+        },
+        variables: {
+          disconnectVehicleIds: [value],
+          id: investigationId,
         },
       }).finally(() => {
         setSaving(false);
@@ -997,10 +999,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value) {
       void updateInvestigationCrimeGroups({
-        variables: {
-          id: investigationId,
-          crimeGroupIds: [value],
-        },
         onCompleted: (res) => {
           const newData = res.updateInvestigation?.crimeGroups.find(
             ({ id }) => id === value
@@ -1029,16 +1027,20 @@ const useViewInvestigation = (investigationId: string): Return => {
 
           if (!existingData?.investigation) return;
           store.writeQuery<ViewInvestigationQuery>({
-            query: ViewInvestigationDocument,
             data: {
+              __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
                 crimeGroups: res.updateInvestigation.crimeGroups,
               },
-              __typename: 'Query',
             },
+            query: ViewInvestigationDocument,
             variables,
           });
+        },
+        variables: {
+          crimeGroupIds: [value],
+          id: investigationId,
         },
       }).finally(() => {
         setAddExistingCrimeGroup(false);
@@ -1050,10 +1052,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value)
       void updateInvestigationCrimeGroups({
-        variables: {
-          id: investigationId,
-          disconnectCrimeGroupIds: [value],
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Crime_Group,
@@ -1074,18 +1072,22 @@ const useViewInvestigation = (investigationId: string): Return => {
 
           if (!existingData?.investigation) return;
           store.writeQuery<ViewInvestigationQuery>({
-            query: ViewInvestigationDocument,
             data: {
+              __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
                 crimeGroups: existingData.investigation.crimeGroups.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewInvestigationDocument,
             variables,
           });
+        },
+        variables: {
+          disconnectCrimeGroupIds: [value],
+          id: investigationId,
         },
       }).finally(() => {
         setSaving(false);
@@ -1104,8 +1106,8 @@ const useViewInvestigation = (investigationId: string): Return => {
       });
       if (!existingData?.investigation) return;
       store.writeQuery<ViewInvestigationQuery>({
-        query: ViewInvestigationDocument,
         data: {
+          __typename: 'Query',
           investigation: {
             ...existingData.investigation,
             crimeGroups: [
@@ -1121,8 +1123,8 @@ const useViewInvestigation = (investigationId: string): Return => {
               },
             ],
           },
-          __typename: 'Query',
         },
+        query: ViewInvestigationDocument,
         variables,
       });
     },
@@ -1132,33 +1134,15 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value) {
       void createCrimeGroup({
-        variables: {
-          data: {
-            alias: value.alias,
-            schemes: {
-              connect: [
-                {
-                  id: schemeId,
-                },
-              ],
-            },
-            offenders: {
-              connect:
-                value?.offenders?.map(({ id }) => ({
-                  id,
-                })) || [],
-            },
-
-            vehicles: {
-              connect:
-                value?.vehicles?.map(({ id }) => ({
-                  id,
-                })) || [],
-            },
-            investigations: {
-              connect: [{ id: investigationId }],
-            },
-          },
+        // },
+        onCompleted: (res) => {
+          onSetSuggestedOffenders(res.createCrimeGroup.offenders);
+          onSetSuggestedVehicles(res.createCrimeGroup.offenders);
+          successNotification(
+            ProfileUpdatedModel.Crime_Group,
+            ProfileUpdatedModel.Investigation,
+            ProfileUpdatedType.added
+          );
         },
         // optimisticResponse: {
         //   createCrimeGroup: {
@@ -1172,15 +1156,33 @@ const useViewInvestigation = (investigationId: string): Return => {
         //     updatedAt: new Date(),
         //     alias: '',
         //   },
-        // },
-        onCompleted: (res) => {
-          onSetSuggestedOffenders(res.createCrimeGroup.offenders);
-          onSetSuggestedVehicles(res.createCrimeGroup.offenders);
-          successNotification(
-            ProfileUpdatedModel.Crime_Group,
-            ProfileUpdatedModel.Investigation,
-            ProfileUpdatedType.added
-          );
+        variables: {
+          data: {
+            alias: value.alias,
+            investigations: {
+              connect: [{ id: investigationId }],
+            },
+            offenders: {
+              connect:
+                value?.offenders?.map(({ id }) => ({
+                  id,
+                })) || [],
+            },
+
+            schemes: {
+              connect: [
+                {
+                  id: schemeId,
+                },
+              ],
+            },
+            vehicles: {
+              connect:
+                value?.vehicles?.map(({ id }) => ({
+                  id,
+                })) || [],
+            },
+          },
         },
       }).finally(() => {
         setAddCrimeGroup(false);
@@ -1206,8 +1208,8 @@ const useViewInvestigation = (investigationId: string): Return => {
       );
 
       store.writeQuery<ViewInvestigationQuery>({
-        query: ViewInvestigationDocument,
         data: {
+          __typename: 'Query',
           investigation: {
             ...existingData.investigation,
             // TODO fix the types ?????
@@ -1215,8 +1217,8 @@ const useViewInvestigation = (investigationId: string): Return => {
             // @ts-ignore
             crimeGroups: [...filterCrimeGroups, res.updateCrimeGroup],
           },
-          __typename: 'Query',
         },
+        query: ViewInvestigationDocument,
         variables,
       });
     },
@@ -1243,50 +1245,50 @@ const useViewInvestigation = (investigationId: string): Return => {
         ({ id }) => !existingVehicleIds?.includes(id)
       );
       void updateCrimeGroup({
-        variables: {
-          where: {
-            id: value.id,
-          },
-          data: {
-            alias: value.alias ?? undefined,
-            vehicles:
-              value.vehicles && value.vehicles.length > 0
-                ? {
-                    disconnect:
-                      disconnectVehicleIds && disconnectVehicleIds.length > 0
-                        ? disconnectVehicleIds.map((id) => ({ id }))
-                        : undefined,
-                    connect: connectVehicles?.map(({ id }) => ({ id })),
-                  }
-                : {
-                    disconnect:
-                      disconnectVehicleIds && disconnectVehicleIds.length > 0
-                        ? disconnectVehicleIds.map((id) => ({ id }))
-                        : undefined,
-                  },
-            offenders:
-              value.offenders && value.offenders.length > 0
-                ? {
-                    disconnect:
-                      disconnectOffenderIds && disconnectOffenderIds.length > 0
-                        ? disconnectOffenderIds.map((id) => ({ id }))
-                        : undefined,
-                    connect: connectOffenders?.map(({ id }) => ({ id })),
-                  }
-                : {
-                    disconnect:
-                      disconnectOffenderIds && disconnectOffenderIds.length > 0
-                        ? disconnectOffenderIds.map((id) => ({ id }))
-                        : undefined,
-                  },
-          },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Crime_Group,
             ProfileUpdatedModel.Investigation,
             ProfileUpdatedType.updated
           );
+        },
+        variables: {
+          data: {
+            alias: value.alias ?? undefined,
+            offenders:
+              value.offenders && value.offenders.length > 0
+                ? {
+                    connect: connectOffenders?.map(({ id }) => ({ id })),
+                    disconnect:
+                      disconnectOffenderIds && disconnectOffenderIds.length > 0
+                        ? disconnectOffenderIds.map((id) => ({ id }))
+                        : undefined,
+                  }
+                : {
+                    disconnect:
+                      disconnectOffenderIds && disconnectOffenderIds.length > 0
+                        ? disconnectOffenderIds.map((id) => ({ id }))
+                        : undefined,
+                  },
+            vehicles:
+              value.vehicles && value.vehicles.length > 0
+                ? {
+                    connect: connectVehicles?.map(({ id }) => ({ id })),
+                    disconnect:
+                      disconnectVehicleIds && disconnectVehicleIds.length > 0
+                        ? disconnectVehicleIds.map((id) => ({ id }))
+                        : undefined,
+                  }
+                : {
+                    disconnect:
+                      disconnectVehicleIds && disconnectVehicleIds.length > 0
+                        ? disconnectVehicleIds.map((id) => ({ id }))
+                        : undefined,
+                  },
+          },
+          where: {
+            id: value.id,
+          },
         },
       }).finally(() => {
         setEditCrimeGroupData(null);
@@ -1306,10 +1308,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (values) {
       void updateInvestigationIncidents({
-        variables: {
-          id: investigationId,
-          incidentIds: values,
-        },
         onCompleted: (res) => {
           const newData = res.updateInvestigation?.incidents.filter(({ id }) =>
             values.includes(id)
@@ -1343,16 +1341,20 @@ const useViewInvestigation = (investigationId: string): Return => {
 
           if (!existingData?.investigation) return;
           store.writeQuery<ViewInvestigationQuery>({
-            query: ViewInvestigationDocument,
             data: {
+              __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
                 incidents: res.updateInvestigation.incidents,
               },
-              __typename: 'Query',
             },
+            query: ViewInvestigationDocument,
             variables,
           });
+        },
+        variables: {
+          id: investigationId,
+          incidentIds: values,
         },
       }).finally(() => {
         setAddExistingIncident(false);
@@ -1365,10 +1367,6 @@ const useViewInvestigation = (investigationId: string): Return => {
     setSaving(true);
     if (value)
       void updateInvestigationIncidents({
-        variables: {
-          id: investigationId,
-          disconnectIncidentIds: [value],
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Incident,
@@ -1389,18 +1387,22 @@ const useViewInvestigation = (investigationId: string): Return => {
 
           if (!existingData?.investigation) return;
           store.writeQuery<ViewInvestigationQuery>({
-            query: ViewInvestigationDocument,
             data: {
+              __typename: 'Query',
               investigation: {
                 ...existingData.investigation,
                 incidents: existingData.investigation.incidents.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: ViewInvestigationDocument,
             variables,
           });
+        },
+        variables: {
+          disconnectIncidentIds: [value],
+          id: investigationId,
         },
       }).finally(() => {
         setSaving(false);
@@ -1410,11 +1412,11 @@ const useViewInvestigation = (investigationId: string): Return => {
   const [deleteDocument] = useDeleteDocumentMutation({
     onCompleted: () => {
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The document has been deleted.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -1430,16 +1432,16 @@ const useViewInvestigation = (investigationId: string): Return => {
 
       if (!existingData?.investigation) return;
       store.writeQuery<ViewInvestigationQuery>({
-        query: ViewInvestigationDocument,
         data: {
+          __typename: 'Query',
           investigation: {
             ...existingData.investigation,
             documents: existingData.investigation.documents.filter(
               ({ id }) => id !== res?.deleteDocument.id
             ),
           },
-          __typename: 'Query',
         },
+        query: ViewInvestigationDocument,
         variables,
       });
     },
@@ -1458,11 +1460,11 @@ const useViewInvestigation = (investigationId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The investigation has been deleted!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -1526,30 +1528,30 @@ const useViewInvestigation = (investigationId: string): Return => {
   const toggleSubscribe = () => {
     if (data?.investigation?.subscribed) {
       void unsubscribeFromInvestigation({
-        variables: {
-          where: { id: investigationId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           unsubscribeToInvestigation: {
-            id: investigationId,
             __typename: 'Investigation',
+            id: investigationId,
             subscribed: false,
           },
+        },
+        variables: {
+          where: { id: investigationId },
         },
       });
     } else {
       void subscribeToInvestigation({
-        variables: {
-          where: { id: investigationId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           subscribeToInvestigation: {
-            id: investigationId,
             __typename: 'Investigation',
+            id: investigationId,
             subscribed: true,
           },
+        },
+        variables: {
+          where: { id: investigationId },
         },
       });
     }
@@ -1576,84 +1578,84 @@ const useViewInvestigation = (investigationId: string): Return => {
   };
 
   return {
+    addCrimeGroup,
+    addDemDocument,
+    addDocument,
+    addExistingCrimeGroup,
+    addExistingIncident,
+    addExistingOffender,
+    addExistingVehicle,
+    addOffender,
+    addTodo,
+    addVehicle,
+    completeTodoVisible,
+    crimeGroupIds,
     data,
+    demId,
+    editCrimeGroupData,
+    editInvestigation,
+    editOffenderData,
+    editVehicleData,
+    incidentIds,
     loading,
     offenderIds,
-    vehicleIds,
-    incidentIds,
-    crimeGroupIds,
-    addDemDocument,
-    toggleAddDemDocument,
-    addDocument,
-    toggleAddDocument,
-    demId,
-    toggleSubscribe,
-    takeAllSchemes,
-    addTodo,
-    toggleAddTodo,
-    templatesData,
-    templatesLoading,
-    setViewTodoVisible,
-    setCompleteTodoVisible,
-    completeTodoVisible,
-    viewTodoVisible,
-    updateTodo,
-    updateTodoList,
-    addOffender,
-    addExistingOffender,
-    toggleAddOffender,
-    toggleAddExistingOffender,
-    editOffenderData,
-    setEditOffenderData,
-    onDeleteOffender,
-    addVehicle,
-    addExistingVehicle,
-    toggleAddVehicle,
-    toggleAddExistingVehicle,
-    editVehicleData,
-    setEditVehicleData,
-    onDeleteVehicle,
-    addCrimeGroup,
-    addExistingCrimeGroup,
-    toggleAddCrimeGroup,
-    toggleAddExistingCrimeGroup,
-    editCrimeGroupData,
-    setEditCrimeGroupData,
-    addExistingIncident,
-    toggleAddExistingIncident,
-    onAddExistingOffender,
-    onAddExistingVehicle,
+    onAddCrimeGroup,
     onAddExistingCrimeGroup,
     onAddExistingIncident,
-    // onAddOffender,
+    onAddExistingOffender,
+    onAddExistingOffenders,
+    onAddExistingVehicle,
+    onAddExistingVehicles,
     // onEditOffender,
     onAddVehicle,
-    onEditVehicle,
-    onAddCrimeGroup,
-    onEditCrimeGroup,
+    onCloseInvestigation,
+    onCompletedAddOffender,
+    onCompletedEditOffender,
     onDeleteCrimeGroup,
+    onDeleteDocument,
     onDeleteIncident,
-    saving,
     onDeleteInvestigation,
+    onDeleteOffender,
+    onDeleteVehicle,
+    onEditCrimeGroup,
+    onEditVehicle,
+    onReopenInvestigation,
+    saving,
+    setCompleteTodoVisible,
+    setEditCrimeGroupData,
+    setEditOffenderData,
+    setEditVehicleData,
+    setViewTodoVisible,
+    showSuggestedOffenders,
+    showSuggestedVehicles,
+    // onAddOffender,
     suggestedOffenders,
     suggestedVehicles,
+    takeAllSchemes,
+    templatesData,
+    templatesLoading,
+    toggleAddCrimeGroup,
+    toggleAddDemDocument,
+    toggleAddDocument,
+    toggleAddExistingCrimeGroup,
+    toggleAddExistingIncident,
+    toggleAddExistingOffender,
+    toggleAddExistingVehicle,
+    toggleAddOffender,
+    toggleAddTodo,
+    toggleAddVehicle,
     toggleCloseSuggestedOffenders,
     toggleCloseSuggestedVehicles,
-    onAddExistingOffenders,
-    onAddExistingVehicles,
-    showSuggestedVehicles,
-    showSuggestedOffenders,
-    toggleShowSuggestedVehicles,
-    toggleShowSuggestedOffenders,
-    editInvestigation,
     toggleEditInvestigation,
-    updateEditOffenderList,
-    onCompletedEditOffender,
-    onCompletedAddOffender,
+    toggleShowSuggestedOffenders,
+    toggleShowSuggestedVehicles,
+    toggleSubscribe,
     updateAddOffenderList,
-    onCloseInvestigation,
-    onReopenInvestigation,
-    onDeleteDocument,
+    updateEditOffenderList,
+    updateTodo,
+    updateTodoList,
+    vehicleIds,
+    viewTodoVisible,
   };
 };
 

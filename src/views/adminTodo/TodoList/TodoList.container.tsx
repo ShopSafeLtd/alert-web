@@ -1,77 +1,76 @@
 import React from 'react';
 
-import View from './TodoList.view';
-import useAdminTodos from './useTodoList';
 import type { ListData } from '../useActivities';
 
+import View from './TodoList.view';
+import useAdminTodos from './useTodoList';
+
 interface Props {
-  templateData: ListData[];
   loading: boolean;
+  templateData: ListData[];
 }
 const AdminTodos = ({
-  templateData,
   loading: TemplateLoading,
+  templateData,
 }: Props): JSX.Element => {
   const {
-    data,
-    loading,
-    saving,
-    onCompletedTodo,
-    onUncompletedTodo,
     addTodo,
-    toggleAddTodo,
-    updateTodoList,
-    setSearch,
-    onPaginationChange,
+    canDelete,
     currentPage,
     currentPageSize,
-    toggleAllUsers,
-    toggleAllSchemes,
-    setSelectedTodo,
-    selectedTodo,
+    data,
+    groupsData,
+    groupsFilter,
+    loading,
+    onCompletedTodo,
+    onDeleteTodo,
+    onPaginationChange,
+    onTableChange,
+    onUncompletedTodo,
+    saving,
     selectTemplate,
     selectedTemplate,
-    onTableChange,
-    groupsFilter,
+    selectedTodo,
     setGroupsFilter,
-    groupsData,
-    editRights,
-    deleteRights,
-    editTodo,
-    setEditTodo,
-    onDeleteTodo,
+    setSearch,
+    setSelectedTodo,
+    setStatusMode,
+    toggleAddTodo,
+    toggleAllSchemes,
+    toggleAllUsers,
+    updateTodoList,
+    userData,
   } = useAdminTodos({ templateData });
 
   return (
     <View
-      selectedTemplate={selectedTemplate}
-      selectTemplate={selectTemplate}
-      selectedTodo={selectedTodo}
-      setSelectedTodo={setSelectedTodo}
-      data={data}
-      loading={loading || TemplateLoading}
-      saving={saving}
-      onCompletedTodo={onCompletedTodo}
-      onUncompletedTodo={onUncompletedTodo}
       addTodo={addTodo}
-      toggleAddTodo={toggleAddTodo}
-      updateTodoList={updateTodoList}
-      setSearch={setSearch}
-      onPaginationChange={onPaginationChange}
+      canDelete={canDelete}
       currentPage={currentPage}
       currentPageSize={currentPageSize}
-      toggleAllUsers={toggleAllUsers}
-      toggleAllSchemes={toggleAllSchemes}
-      templateData={templateData}
-      onTableChange={onTableChange}
-      groupsFilter={groupsFilter}
-      setGroupsFilter={setGroupsFilter}
+      data={data}
       groupsData={groupsData}
-      editRights={editRights}
-      deleteRights={deleteRights}
-      editTodo={editTodo}
-      setEditTodo={setEditTodo}
+      groupsFilter={groupsFilter}
+      loading={loading || TemplateLoading}
+      onCompletedTodo={onCompletedTodo}
       onDeleteTodo={onDeleteTodo}
+      onPaginationChange={onPaginationChange}
+      onTableChange={onTableChange}
+      onUncompletedTodo={onUncompletedTodo}
+      saving={saving}
+      selectTemplate={selectTemplate}
+      selectedTemplate={selectedTemplate}
+      selectedTodo={selectedTodo}
+      setGroupsFilter={setGroupsFilter}
+      setSearch={setSearch}
+      setSelectedTodo={setSelectedTodo}
+      setStatusMode={setStatusMode}
+      templateData={templateData}
+      toggleAddTodo={toggleAddTodo}
+      toggleAllSchemes={toggleAllSchemes}
+      toggleAllUsers={toggleAllUsers}
+      updateTodoList={updateTodoList}
+      userData={userData}
     />
   );
 };

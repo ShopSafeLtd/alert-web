@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
-import Lightbox from 'yet-another-react-lightbox';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import IncidentTable from 'components/tables/IncidentTable/IncidentTable.view';
-import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/__generated__/investigation-suggestions.generated';
+
 import {
   faCircleInfo,
   faEarth,
@@ -15,6 +9,17 @@ import {
   faUserHair,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import CrimeGroupTable from 'components/tables/CrimeGroupTable/CrimeGroupTable.view';
+import IncidentTable from 'components/tables/IncidentTable/IncidentTable.view';
+import { Role } from 'graphql/types';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import { useStoreState } from 'state';
 import { calcAge } from 'utils';
 import {
   getOffenderAge,
@@ -22,26 +27,23 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import CrimeGroupTable from 'components/tables/CrimeGroupTable/CrimeGroupTable.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { useIntl } from 'react-intl';
-import useStyles from './SuggestedOffenders.style';
-import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
-import { Role } from 'graphql/types';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-const { Paragraph, Title, Text } = Typography;
+import useStyles from './SuggestedOffenders.style';
+
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  suggestedData: InvestigationSuggestionsQuery | undefined;
   handleAddSuggestion: (id: string) => void;
   onClose: () => void;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
 }
 
 const SuggestedOffenders = ({
-  suggestedData,
-  onClose,
   handleAddSuggestion,
+  onClose,
+  suggestedData,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
@@ -51,8 +53,8 @@ const SuggestedOffenders = ({
     role !== Role.User;
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
@@ -60,7 +62,7 @@ const SuggestedOffenders = ({
 
   const openLightbox = (
     offender: {
-      images: { id: string; optimised?: string | undefined | null }[];
+      images: { id: string; optimised?: null | string | undefined }[];
     },
     index: number
   ) => {
@@ -69,7 +71,7 @@ const SuggestedOffenders = ({
         src: image.optimised || '',
       })) || []
     );
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   return (
@@ -77,22 +79,22 @@ const SuggestedOffenders = ({
       {suggestedData?.investigation?.suggestedOffenders?.map((offender) => (
         <div>
           <Row
+            align="middle"
+            className={classes.images}
             gutter={8}
             justify="start"
-            align="middle"
-            wrap={false}
-            className={classes.images}
             style={{
               height: offender.images.length > 0 ? undefined : 0,
             }}
+            wrap={false}
           >
             {offender?.images.map((image, i) => (
               <Col key={image.id} onClick={() => openLightbox(offender, i)}>
                 <div className={classes.image}>
                   <WatermarkImage
-                    url={image.optimised}
-                    rotation={image.rotation}
                     position={image.position}
+                    rotation={image.rotation}
+                    url={image.optimised}
                   />
                 </div>
               </Col>
@@ -107,7 +109,7 @@ const SuggestedOffenders = ({
               { ref: offender.reference }
             )}
           </Text>
-          <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
+          <Descriptions style={{ marginBottom: 20, marginTop: 20 }}>
             {offender.alias.length > 0 ? (
               <Descriptions.Item
                 label={intl.formatMessage({
@@ -233,8 +235,8 @@ const SuggestedOffenders = ({
                   )}
                 </Paragraph>
                 <IncidentTable
-                  incidents={offender?.associatedIncidents || []}
                   hasNavigation
+                  incidents={offender?.associatedIncidents || []}
                 />
               </div>
             )}
@@ -260,7 +262,7 @@ const SuggestedOffenders = ({
             )}
           <Row gutter={8} justify="end">
             <Col>
-              <Link to={`/app/offenders/view/${offender.id}`} onClick={onClose}>
+              <Link onClick={onClose} to={`/app/offenders/view/${offender.id}`}>
                 <Button>
                   {intl.formatMessage({
                     defaultMessage: 'View Offender',
@@ -271,8 +273,8 @@ const SuggestedOffenders = ({
             <Col>
               <Button
                 danger
-                type="ghost"
                 onClick={() => handleAddSuggestion(offender.id)}
+                type="ghost"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add To Investigation',
@@ -284,19 +286,19 @@ const SuggestedOffenders = ({
         </div>
       ))}
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox({ images: [] }, 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

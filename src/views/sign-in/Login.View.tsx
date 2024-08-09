@@ -1,10 +1,10 @@
-import { SignIn } from '@clerk/clerk-react';
-import React from 'react';
-import { dark } from '@clerk/themes';
-import useStyles from '#/views/sign-in/Loading.styles';
-import { useSearchParams } from 'react-router-dom';
-import { useIntl } from 'react-intl';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import useStyles from '#/views/sign-in/Loading.styles';
+import { SignIn } from '@clerk/clerk-react';
+import { dark } from '@clerk/themes';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { useSearchParams } from 'react-router-dom';
 
 const LoginView = () => {
   const darkMode = localStorage.getItem('theme') === 'dark';
@@ -31,44 +31,44 @@ const LoginView = () => {
       <div className={classes.cover}>
         <div className={classes.position}>
           <SignIn
-            routing="hash"
             appearance={{
+              baseTheme: darkMode ? dark : undefined,
+
               elements: {
                 footerAction: { display: 'none' },
-                logoBox: { height: '100px' },
-                rootBox: {
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
+                formButtonPrimary: {
+                  '&:hover, &:focus, &:active': {
+                    background: 'rgb(184, 42, 35)',
+                    backgroundColor: 'rgb(184, 42, 35)',
+                    borderColor: 'rgb(184, 42, 35)',
+                    color: 'rgb(255, 255, 255)',
+                  },
+                  background: 'rgb(222, 68, 54)',
+                  backgroundColor: 'rgb(222, 68, 54)',
+                  borderColor: 'rgb(222, 68, 54)',
+                  boxShadow: 'none !important',
+                  color: 'rgb(255, 255, 255)',
+                  fontSize: 14,
+                  textTransform: 'none',
                 },
+                logoBox: { height: '100px' },
                 logoImage: {
                   height: '100%',
                   width: '100%',
                 },
-                formButtonPrimary: {
-                  boxShadow: 'none !important',
-                  fontSize: 14,
-                  color: 'rgb(255, 255, 255)',
-                  borderColor: 'rgb(222, 68, 54)',
-                  background: 'rgb(222, 68, 54)',
-                  backgroundColor: 'rgb(222, 68, 54)',
-                  textTransform: 'none',
-                  '&:hover, &:focus, &:active': {
-                    color: 'rgb(255, 255, 255)',
-                    borderColor: 'rgb(184, 42, 35)',
-                    background: 'rgb(184, 42, 35)',
-                    backgroundColor: 'rgb(184, 42, 35)',
-                  },
+                rootBox: {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: '100%',
                 },
               },
-
-              baseTheme: darkMode ? dark : undefined,
               layout: {
                 logoImageUrl: logo,
                 termsPageUrl: '/terms',
               },
             }}
             fallbackRedirectUrl={route}
+            routing="hash"
           />
         </div>
       </div>

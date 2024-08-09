@@ -1,89 +1,91 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
-
 import type { FormInstance } from 'antd';
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
+
+import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
+  Card,
+  Checkbox,
   Col,
   Empty,
   Form,
-  Space,
-  Tabs,
-  Upload,
-  Card,
-  Checkbox,
   Input,
   PageHeader,
   Radio,
   Row,
   Select,
+  Space,
+  Tabs,
   Typography,
+  Upload,
 } from 'antd';
+import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
-import useStyles from './CreateMg11.styles';
+
 import type { FormData } from './useCreateMg11';
+
+import SignatureInput from '../../../components/SignBox';
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import SignatureInput from '../../../components/SignBox';
-import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
+import useStyles from './CreateMg11.styles';
 
 const { Title } = Typography;
 const { TextArea } = Input;
 
 interface Props {
+  file: { file: string; name: string } | null;
+  form: FormInstance<FormData>;
+  interviewerFile: { file: string; name: string } | null;
+  interviewerName: string;
+  interviewerSelectedFont: string;
+  interviewerSetFile: (value: { file: string; name: string } | null) => void;
+  interviewerSetSelectedFont: (value: string) => void;
+  interviewerSetTab: (value: string) => void;
+  interviewerSign: string;
+  interviewerTab: string;
+  name: string;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  form: FormInstance<FormData>;
-  sign: string;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
   selectedFont: string;
-  name: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
-  interviewerSign: string;
   setInterviewerSign: (value: string) => void;
-  interviewerName: string;
-  updateInterviewer: (value: string) => void;
-  interviewerSelectedFont: string;
-  interviewerFile: { file: string; name: string } | null;
-  interviewerSetSelectedFont: (value: string) => void;
-  interviewerSetFile: (value: { file: string; name: string } | null) => void;
-  interviewerTab: string;
-  interviewerSetTab: (value: string) => void;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
+  sign: string;
   statementTemplates: ListStatementTemplatesQuery | undefined;
+  tab: string;
+  update: (value: string) => void;
+  updateInterviewer: (value: string) => void;
 }
 // wait to check
 const CreateMg11 = ({
-  onSubmit,
-  saving,
+  file,
   form,
-  setSign,
-  sign,
-  setInterviewerSign,
-  interviewerName,
   interviewerFile,
+  interviewerName,
+  interviewerSelectedFont,
   interviewerSetFile,
   interviewerSetSelectedFont,
-  interviewerSelectedFont,
-  interviewerSign,
-  file,
-  selectedFont,
-  name,
-  setFile,
-  setSelectedFont,
-  updateInterviewer,
-  update,
-  tab,
-  setTab,
   interviewerSetTab,
+  interviewerSign,
   interviewerTab,
+  name,
+  onSubmit,
+  saving,
+  selectedFont,
+  setFile,
+  setInterviewerSign,
+  setSelectedFont,
+  setSign,
+  setTab,
+  sign,
   statementTemplates,
+  tab,
+  update,
+  updateInterviewer,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const likelyToAttend = Form.useWatch('likelyToAttend', form);
@@ -101,79 +103,79 @@ const CreateMg11 = ({
       <Form<FormData>
         form={form}
         initialValues={{
-          urn: '',
-          station: '',
-          statementWhereWhen: '',
-          visualRecording: '',
-
-          statement: '',
-
           address: '',
-          postcode: '',
-          homeTel: '',
-          workTel: '',
-          mobileTel: '',
-          email: '',
-          name: '',
           age: '',
-          occupation: '',
-          prefContact: '',
-          gender: '',
-          dobPlace: '',
-          formerName: '',
-          height: '',
-          ethnicity: '',
           availability: '',
+          businessStatement: '',
+
+          careNeeds: '',
+
+          careNeedsDetails: '',
+          completeNow: '',
+          dobPlace: '',
+          email: '',
+          ethnicity: '',
+          formerName: '',
+          gender: '',
+          height: '',
+          homeTel: '',
           likelyToAttend: '',
           likelyToAttendReason: '',
+          mobileTel: '',
+          name: '',
+          occupation: '',
+          postcode: '',
+          prefContact: '',
           specialMeasures: '',
-          careNeeds: '',
-          careNeedsDetails: '',
-          businessStatement: '',
-          completeNow: '',
+          statement: '',
+          statementWhereWhen: '',
+          station: '',
+          urn: '',
+          visualRecording: '',
+          workTel: '',
         }}
-        onFinish={onSubmit}
         layout="vertical"
+        onFinish={onSubmit}
       >
         <Card className={classes.card}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0 }}>
                 1.
               </Title>
             </Col>
             <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 Basic Details
               </Title>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={6}>
-              <Form.Item name="urn" label="Urn">
+              <Form.Item label="Urn" name="urn">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item name="station" label="Station">
+              <Form.Item label="Station" name="station">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
           <Form.Item
-            name="statementWhereWhen"
             label="When and where was this statement made?"
+            name="statementWhereWhen"
             style={{ width: '50%' }}
           >
             <Input disabled={saving} />
           </Form.Item>
           <Form.Item
-            name="visualRecording"
             label="Was the witness evidence visually recorded?"
+            name="visualRecording"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -183,12 +185,12 @@ const CreateMg11 = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            name="businessStatement"
             label="Would you like to also create a Business Impact Statement?"
+            name="businessStatement"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -199,12 +201,12 @@ const CreateMg11 = ({
           </Form.Item>
 
           <Form.Item
-            name="completeNow"
             label="Would you like to complete this statement now or send to the witness to be finalised later?"
+            name="completeNow"
             rules={[
               {
-                required: true,
                 message: 'Please choose an option.',
+                required: true,
               },
             ]}
           >
@@ -218,12 +220,12 @@ const CreateMg11 = ({
         <Card className={classes.card}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0 }}>
                 2.
               </Title>
             </Col>
             <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 Witness Details
               </Title>
             </Col>
@@ -232,35 +234,35 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={6}>
               <Form.Item
+                label="Name"
+                name="name"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter a name for the witness.',
+                    required: true,
                   },
                 ]}
-                name="name"
-                label="Name"
               >
                 <Input disabled={saving} />
               </Form.Item>
-              <Form.Item name="formerName" label="Former Name (if applicable)">
+              <Form.Item label="Former Name (if applicable)" name="formerName">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item
+                label="Email"
+                name="email"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter an email for the witness.',
+                    required: true,
                   },
                 ]}
-                name="email"
-                label="Email"
               >
                 <Input disabled={saving} />
               </Form.Item>
-              <Form.Item name="occupation" label="Occupation">
+              <Form.Item label="Occupation" name="occupation">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
@@ -268,7 +270,7 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={2}>
               {' '}
-              <Form.Item name="height" label="Height">
+              <Form.Item label="Height" name="height">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
@@ -276,12 +278,12 @@ const CreateMg11 = ({
             <Col span={4}>
               {' '}
               <Form.Item
-                name="gender"
                 label="Gender"
+                name="gender"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter a gender.',
+                    required: true,
                   },
                 ]}
               >
@@ -292,12 +294,12 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={3}>
               <Form.Item
-                name="over18"
                 label="Is the witness over 18?"
+                name="over18"
                 rules={[
                   {
-                    required: true,
                     message: 'Please choose an option.',
+                    required: true,
                   },
                 ]}
               >
@@ -308,7 +310,7 @@ const CreateMg11 = ({
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="age" label="Age">
+              <Form.Item label="Age" name="age">
                 <Input disabled={saving || over18} />
               </Form.Item>
             </Col>
@@ -316,12 +318,12 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
-                name="ethnicity"
                 label="Ethnicity Code"
+                name="ethnicity"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter or select an ethnicity code.',
+                    required: true,
                   },
                 ]}
               >
@@ -402,12 +404,12 @@ const CreateMg11 = ({
             </Col>
             <Col span={4}>
               <Form.Item
-                name="ethnicityOther"
                 label="Other"
+                name="ethnicityOther"
                 rules={[
                   {
-                    required: otherEthnicity,
                     message: 'Please enter or select an ethnicity code.',
+                    required: otherEthnicity,
                   },
                 ]}
               >
@@ -418,12 +420,12 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="dobPlace"
                 label="Date and place of birth"
+                name="dobPlace"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter a DOB and place of birth.',
+                    required: true,
                   },
                 ]}
               >
@@ -434,30 +436,30 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
-                name="address"
                 label="Home Address"
+                name="address"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter an address.',
+                    required: true,
                   },
                 ]}
               >
                 <TextArea
                   autoComplete="off"
+                  autoSize={{ maxRows: 6, minRows: 2 }}
                   placeholder="Home address"
-                  autoSize={{ minRows: 2, maxRows: 6 }}
                 />
               </Form.Item>
             </Col>
             <Col span={2}>
               <Form.Item
-                name="postcode"
                 label="Postcode"
+                name="postcode"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter a postcode.',
+                    required: true,
                   },
                 ]}
               >
@@ -469,25 +471,25 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={4}>
               {' '}
-              <Form.Item name="homeTel" label="Home Phone no.">
+              <Form.Item label="Home Phone no." name="homeTel">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
             <Col span={4}>
               {' '}
-              <Form.Item name="workTel" label="Work Phone no.">
+              <Form.Item label="Work Phone no." name="workTel">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
             <Col span={4}>
               {' '}
               <Form.Item
-                name="mobileTel"
                 label="Mobile Phone no."
+                name="mobileTel"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter a mobile number.',
+                    required: true,
                   },
                 ]}
               >
@@ -498,7 +500,7 @@ const CreateMg11 = ({
 
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="prefContact" label="Preferred means of contact">
+              <Form.Item label="Preferred means of contact" name="prefContact">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
@@ -507,13 +509,13 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="availability"
                 label="Availability details for the next 6 months"
+                name="availability"
               >
                 <TextArea
                   autoComplete="off"
+                  autoSize={{ maxRows: 6, minRows: 2 }}
                   placeholder="Availabity"
-                  autoSize={{ minRows: 2, maxRows: 6 }}
                 />
               </Form.Item>
             </Col>
@@ -523,20 +525,20 @@ const CreateMg11 = ({
         <Card className={classes.card}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0 }}>
                 3.
               </Title>
             </Col>
             <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 Witness Care
               </Title>
             </Col>
           </Row>
 
           <Form.Item
-            name="likelyToAttend"
             label="Is the witness willing to attend court?"
+            name="likelyToAttend"
           >
             <Radio.Group size="small">
               <Radio.Button value="true">Yes</Radio.Button>
@@ -545,20 +547,20 @@ const CreateMg11 = ({
           </Form.Item>
           <Col span={12}>
             <Form.Item
-              name="likelyToAttendReason"
               label="What can be done to ensure
               attendance?"
+              name="likelyToAttendReason"
             >
               <TextArea
-                disabled={likelyToAttend !== 'true'}
                 autoComplete="off"
-                autoSize={{ minRows: 2, maxRows: 6 }}
+                autoSize={{ maxRows: 6, minRows: 2 }}
+                disabled={likelyToAttend !== 'true'}
               />
             </Form.Item>
           </Col>
           <Form.Item
-            name="specialMeasures"
             label="Does the witness require a Special Measures Assessment?"
+            name="specialMeasures"
           >
             <Radio.Group size="small">
               <Radio.Button value="true">Yes</Radio.Button>
@@ -567,8 +569,8 @@ const CreateMg11 = ({
           </Form.Item>
 
           <Form.Item
-            name="careNeeds"
             label="Does the witness have any special needs?"
+            name="careNeeds"
           >
             <Radio.Group size="small">
               <Radio.Button value="true">Yes</Radio.Button>
@@ -577,13 +579,13 @@ const CreateMg11 = ({
           </Form.Item>
           <Col span={12}>
             <Form.Item
-              name="careNeedsDetails"
               label="What are the special care needs?"
+              name="careNeedsDetails"
             >
               <TextArea
-                disabled={careNeeds !== 'true'}
                 autoComplete="off"
-                autoSize={{ minRows: 2, maxRows: 6 }}
+                autoSize={{ maxRows: 6, minRows: 2 }}
+                disabled={careNeeds !== 'true'}
               />
             </Form.Item>
           </Col>
@@ -592,12 +594,12 @@ const CreateMg11 = ({
         <Card className={classes.card}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0 }}>
                 4.
               </Title>
             </Col>
             <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 Statement
               </Title>
             </Col>
@@ -605,12 +607,12 @@ const CreateMg11 = ({
           <Row gutter={16}>
             <Col span={12}>
               <Select
-                onChange={(value) => form.setFieldValue('statement', value)}
-                placeholder="Select a statement template"
-                style={{ width: '100%', marginBottom: 20 }}
                 notFoundContent={
                   <Empty description="No Statements saved yet" />
                 }
+                onChange={(value) => form.setFieldValue('statement', value)}
+                placeholder="Select a statement template"
+                style={{ marginBottom: 20, width: '100%' }}
               >
                 {statementTemplates?.statementTemplates?.map((template) => (
                   <Select.Option value={template.content}>
@@ -621,15 +623,15 @@ const CreateMg11 = ({
             </Col>
             <Col span={24}>
               <Form.Item
-                name="statement"
                 label="Statement"
-                tooltip="Please enter the statement for the incident."
+                name="statement"
                 rules={[
                   {
-                    required: true,
                     message: 'Please enter a statement.',
+                    required: true,
                   },
                 ]}
+                tooltip="Please enter the statement for the incident."
               >
                 <TextArea autoComplete="off" autoSize={{ minRows: 6 }} />
               </Form.Item>
@@ -642,25 +644,25 @@ const CreateMg11 = ({
             <Card className={classes.card}>
               <Row align="bottom" style={{ marginBottom: 20 }}>
                 <Col>
-                  <Title style={{ marginBottom: 0 }} level={4}>
+                  <Title level={4} style={{ marginBottom: 0 }}>
                     5.
                   </Title>
                 </Col>
                 <Col>
-                  <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                  <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                     Witness Consent (To be completed by the witness)
                   </Title>
                 </Col>
               </Row>
 
               <Form.Item
-                name="detailsExplained"
                 label="The criminal justice process and Victim Personal Statement
                   scheme (victims only) has been explained to me"
+                name="detailsExplained"
                 rules={[
                   {
-                    required: true,
                     message: 'Please choose an option.',
+                    required: true,
                   },
                 ]}
               >
@@ -670,13 +672,13 @@ const CreateMg11 = ({
                 </Radio.Group>
               </Form.Item>
               <Form.Item
-                name="leafletReceived"
                 label="I have been given the leaflet &lsquo;Giving a witness
                   statement to police - what happens next?&lsquo;"
+                name="leafletReceived"
                 rules={[
                   {
-                    required: true,
                     message: 'Please choose an option.',
+                    required: true,
                   },
                 ]}
               >
@@ -686,13 +688,13 @@ const CreateMg11 = ({
                 </Radio.Group>
               </Form.Item>
               <Form.Item
-                name="medicalReleasedPolice"
                 label="I consent to the police having access to my medical records in
                   relation to this matter"
+                name="medicalReleasedPolice"
                 rules={[
                   {
-                    required: true,
                     message: 'Please choose an option.',
+                    required: true,
                   },
                 ]}
               >
@@ -703,13 +705,13 @@ const CreateMg11 = ({
                 </Radio.Group>
               </Form.Item>
               <Form.Item
-                name="medicalReleasedDefence"
                 label="I consent to the defence having access to my medical records
                   in relation to this matter"
+                name="medicalReleasedDefence"
                 rules={[
                   {
-                    required: true,
                     message: 'Please choose an option.',
+                    required: true,
                   },
                 ]}
               >
@@ -720,13 +722,13 @@ const CreateMg11 = ({
                 </Radio.Group>
               </Form.Item>
               <Form.Item
-                name="civilProceedingsRelease"
                 label="I consent to the statement being disclosed for the purposes of
                   civil proceedings (if applicable)"
+                name="civilProceedingsRelease"
                 rules={[
                   {
-                    required: true,
                     message: 'Please choose an option.',
+                    required: true,
                   },
                 ]}
               >
@@ -737,10 +739,10 @@ const CreateMg11 = ({
                 </Radio.Group>
               </Form.Item>
               <Form.Item
-                name="witnessServiceDisclose"
                 label="The information recorded above will be disclosed to the
                   Witness Service so they can offer help and support, unless you
                   ask them not to. Tick this box to decline their services."
+                name="witnessServiceDisclose"
                 valuePropName="checked"
               >
                 <Checkbox />
@@ -783,11 +785,11 @@ const CreateMg11 = ({
                   ]}
                 >
                   <div>
-                    <Card style={{ width: '100%', display: 'flex' }}>
+                    <Card style={{ display: 'flex', width: '100%' }}>
                       <Space
                         direction="vertical"
-                        style={{ fontSize: 14, marginBottom: 15 }}
                         size={1}
+                        style={{ fontSize: 14, marginBottom: 15 }}
                       >
                         This statement is true to the best of my knowledge and
                         belief and I make it knowing that, if it is tendered in
@@ -797,6 +799,7 @@ const CreateMg11 = ({
                       </Space>
                       <Tabs
                         activeKey={tab}
+                        destroyInactiveTabPane
                         onChange={(tabKey) => {
                           setTab(tabKey);
                           if (tabKey === 'upload' && file?.file) {
@@ -805,9 +808,9 @@ const CreateMg11 = ({
                             update(
                               ReactDOMServer.renderToString(
                                 <img
-                                  src={`data:application/pdf;base64,${file?.file}`}
                                   alt="file"
                                   height={100}
+                                  src={`data:application/pdf;base64,${file?.file}`}
                                   width={300}
                                 />
                               )
@@ -818,10 +821,10 @@ const CreateMg11 = ({
                             update(
                               ReactDOMServer.renderToString(
                                 <SigSeal
-                                  key={selectedFont}
-                                  name={name}
                                   font={selectedFont}
                                   height={100}
+                                  key={selectedFont}
+                                  name={name}
                                   width={300}
                                 />
                               )
@@ -831,56 +834,54 @@ const CreateMg11 = ({
                             update('');
                           }
                         }}
-                        type="card"
                         style={{ height: 250, width: 500 }}
-                        destroyInactiveTabPane
+                        type="card"
                       >
-                        <Tabs.TabPane tab="Generate" key="generate">
+                        <Tabs.TabPane key="generate" tab="Generate">
                           <Select
-                            style={{
-                              fontFamily: selectedFont,
-                              marginBottom: 20,
-                            }}
                             defaultValue={selectedFont}
                             onChange={(value) => {
                               setSelectedFont(value);
                               update(
                                 ReactDOMServer.renderToString(
                                   <SigSeal
-                                    key={selectedFont}
-                                    name={name}
                                     font={selectedFont}
                                     height={100}
+                                    key={selectedFont}
+                                    name={name}
                                     width={300}
                                   />
                                 )
                               );
                             }}
+                            style={{
+                              fontFamily: selectedFont,
+                              marginBottom: 20,
+                            }}
                           >
                             {FONT_FAMILIES.map((font) => (
                               <Select.Option
                                 key={font}
-                                value={font}
                                 style={{
                                   fontFamily: font,
                                 }}
+                                value={font}
                               >
                                 {name}
                               </Select.Option>
                             ))}
                           </Select>
                           <SigSeal
-                            key={selectedFont}
-                            name={name}
                             font={selectedFont}
                             height={100}
+                            key={selectedFont}
+                            name={name}
                             width={300}
                           />
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab="Upload" key="upload">
+                        <Tabs.TabPane key="upload" tab="Upload">
                           <>
                             <Upload
-                              showUploadList={false}
                               beforeUpload={(f) => {
                                 const reader = new FileReader();
                                 reader.addEventListener('load', (e) => {
@@ -897,9 +898,9 @@ const CreateMg11 = ({
                                       update(
                                         ReactDOMServer.renderToString(
                                           <img
-                                            src={base64File}
                                             alt="file"
                                             height={100}
+                                            src={base64File}
                                             width={300}
                                           />
                                         )
@@ -911,6 +912,7 @@ const CreateMg11 = ({
                                 // Prevent upload
                                 return false;
                               }}
+                              showUploadList={false}
                             >
                               <Button key="uploadButton" type="primary">
                                 <FontAwesomeIcon
@@ -921,18 +923,18 @@ const CreateMg11 = ({
                               </Button>
                             </Upload>
                             {file && (
-                              <div style={{ paddingTop: 10, paddingLeft: 10 }}>
+                              <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                                 <img
-                                  src={`data:application/pdf;base64,${file.file}`}
                                   alt="file"
                                   height={100}
+                                  src={`data:application/pdf;base64,${file.file}`}
                                   width={300}
                                 />
                               </div>
                             )}
                           </>
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab="Draw" key="draw">
+                        <Tabs.TabPane key="draw" tab="Draw">
                           <SignatureInput
                             hidden={false}
                             onChange={(val: string) => {
@@ -951,8 +953,8 @@ const CreateMg11 = ({
               <Row gutter={16}>
                 <Col span={24}>
                   <Form.Item
-                    name="interviewerSignature"
                     label="Interviewer Signature"
+                    name="interviewerSignature"
                     rules={[
                       () => ({
                         validator() {
@@ -986,9 +988,10 @@ const CreateMg11 = ({
                     ]}
                   >
                     <div>
-                      <Card style={{ width: '100%', display: 'flex' }}>
+                      <Card style={{ display: 'flex', width: '100%' }}>
                         <Tabs
                           activeKey={interviewerTab}
+                          destroyInactiveTabPane
                           onChange={(tabKey) => {
                             interviewerSetTab(tabKey);
                             if (tabKey === 'upload' && file?.file) {
@@ -997,9 +1000,9 @@ const CreateMg11 = ({
                               updateInterviewer(
                                 ReactDOMServer.renderToString(
                                   <img
-                                    src={`data:application/pdf;base64,${file?.file}`}
                                     alt="file"
                                     height={100}
+                                    src={`data:application/pdf;base64,${file?.file}`}
                                     width={300}
                                   />
                                 )
@@ -1010,10 +1013,10 @@ const CreateMg11 = ({
                               updateInterviewer(
                                 ReactDOMServer.renderToString(
                                   <SigSeal
-                                    key={selectedFont}
-                                    name={name}
                                     font={selectedFont}
                                     height={100}
+                                    key={selectedFont}
+                                    name={name}
                                     width={300}
                                   />
                                 )
@@ -1023,56 +1026,54 @@ const CreateMg11 = ({
                               updateInterviewer('');
                             }
                           }}
-                          type="card"
                           style={{ height: 250, width: 500 }}
-                          destroyInactiveTabPane
+                          type="card"
                         >
-                          <Tabs.TabPane tab="Generate" key="generate">
+                          <Tabs.TabPane key="generate" tab="Generate">
                             <Select
-                              style={{
-                                fontFamily: interviewerSelectedFont,
-                                marginBottom: 20,
-                              }}
                               defaultValue={interviewerSelectedFont}
                               onChange={(value) => {
                                 interviewerSetSelectedFont(value);
                                 updateInterviewer(
                                   ReactDOMServer.renderToString(
                                     <SigSeal
-                                      key={selectedFont}
-                                      name={name}
                                       font={selectedFont}
                                       height={100}
+                                      key={selectedFont}
+                                      name={name}
                                       width={300}
                                     />
                                   )
                                 );
                               }}
+                              style={{
+                                fontFamily: interviewerSelectedFont,
+                                marginBottom: 20,
+                              }}
                             >
                               {FONT_FAMILIES.map((font) => (
                                 <Select.Option
                                   key={font}
-                                  value={font}
                                   style={{
                                     fontFamily: font,
                                   }}
+                                  value={font}
                                 >
                                   {interviewerName}
                                 </Select.Option>
                               ))}
                             </Select>
                             <SigSeal
-                              key={interviewerSelectedFont}
-                              name={interviewerName}
                               font={interviewerSelectedFont}
                               height={100}
+                              key={interviewerSelectedFont}
+                              name={interviewerName}
                               width={300}
                             />
                           </Tabs.TabPane>
-                          <Tabs.TabPane tab="Upload" key="upload">
+                          <Tabs.TabPane key="upload" tab="Upload">
                             <>
                               <Upload
-                                showUploadList={false}
                                 beforeUpload={(f) => {
                                   const reader = new FileReader();
                                   reader.addEventListener('load', (e) => {
@@ -1086,9 +1087,9 @@ const CreateMg11 = ({
                                         console.log(
                                           ReactDOMServer.renderToString(
                                             <img
-                                              src={base64File}
                                               alt="file"
                                               height={100}
+                                              src={base64File}
                                               width={300}
                                             />
                                           )
@@ -1100,9 +1101,9 @@ const CreateMg11 = ({
                                         update(
                                           ReactDOMServer.renderToString(
                                             <img
-                                              src={base64File}
                                               alt="file"
                                               height={100}
+                                              src={base64File}
                                               width={300}
                                             />
                                           )
@@ -1114,6 +1115,7 @@ const CreateMg11 = ({
                                   // Prevent upload
                                   return false;
                                 }}
+                                showUploadList={false}
                               >
                                 <Button key="uploadButton" type="primary">
                                   <FontAwesomeIcon
@@ -1128,19 +1130,19 @@ const CreateMg11 = ({
                               </Upload>
                               {interviewerFile && (
                                 <div
-                                  style={{ paddingTop: 10, paddingLeft: 10 }}
+                                  style={{ paddingLeft: 10, paddingTop: 10 }}
                                 >
                                   <img
-                                    src={`data:application/pdf;base64,${interviewerFile.file}`}
                                     alt="file"
                                     height={100}
+                                    src={`data:application/pdf;base64,${interviewerFile.file}`}
                                     width={300}
                                   />
                                 </div>
                               )}
                             </>
                           </Tabs.TabPane>
-                          <Tabs.TabPane tab="Draw" key="draw">
+                          <Tabs.TabPane key="draw" tab="Draw">
                             <SignatureInput
                               hidden={false}
                               onChange={(val: string) => {
@@ -1161,7 +1163,7 @@ const CreateMg11 = ({
 
         {/* Buttons */}
         <Form.Item>
-          <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
             <Col>
               <Button disabled={saving} onClick={() => window.history.back()}>
                 Cancel
@@ -1170,9 +1172,9 @@ const CreateMg11 = ({
             <Col>
               <Button
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 {businessStatement
                   ? 'Create Mg11/Go to business impact statement'

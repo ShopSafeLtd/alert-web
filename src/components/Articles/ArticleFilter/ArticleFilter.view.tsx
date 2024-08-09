@@ -1,12 +1,14 @@
-import React from 'react';
-import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
-
-import type { DateType } from 'types/DataType';
-import { useIntl } from 'react-intl';
-import moment from 'moment';
 import type { ArticleFilters } from 'state/data-model';
-import useStyles from './ArticleFilter.styles';
+import type { DateType } from 'types/DataType';
+
+import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
 import { ArticlePriority, SortOrder } from 'graphql/types';
+// TP
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
+import useStyles from './ArticleFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -17,32 +19,32 @@ interface FormData {
 
 interface Props {
   clearFilters: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  setOrder: (value: SortOrder) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   filterVariables: ArticleFilters;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setPriorityFilter: (value: ArticlePriority[]) => void;
 }
 
 const ArticleFilter = ({
   clearFilters,
-  setGroupsFilter,
-  setPriorityFilter,
-  setCreatedAtFilter,
-  setOrder,
+  filterVariables,
   groups,
   groupsLoading,
-  filterVariables,
+  setCreatedAtFilter,
+  setGroupsFilter,
+  setOrder,
+  setPriorityFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
 
   const {
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    groups: groupsFilter,
     order,
     priorities: priorityFilter,
   } = filterVariables;
@@ -62,7 +64,6 @@ const ArticleFilter = ({
       <Row justify="end">
         <Col>
           <Button
-            type="text"
             danger
             onClick={() => {
               clearFilters();
@@ -70,6 +71,7 @@ const ArticleFilter = ({
                 date: [],
               });
             }}
+            type="text"
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
@@ -85,9 +87,9 @@ const ArticleFilter = ({
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            value={order}
             onChange={setOrder}
             size="small"
+            value={order}
           >
             <Select.Option value={SortOrder.Desc}>
               {intl.formatMessage({
@@ -115,8 +117,8 @@ const ArticleFilter = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
                 else setCreatedAtFilter(undefined);
               }}
@@ -130,20 +132,20 @@ const ArticleFilter = ({
             {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
           <Select
+            allowClear
             className={classes.select}
+            loading={groupsLoading}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setGroupsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
-            mode="multiple"
             size="small"
-            maxTagCount={2}
-            allowClear
-            loading={groupsLoading}
-            onChange={setGroupsFilter}
             value={groupsFilter}
           >
             {groups.map((group) => (
-              <Select.Option value={group.value} key={group.value}>
+              <Select.Option key={group.value} value={group.value}>
                 {group.label}
               </Select.Option>
             ))}
@@ -156,15 +158,15 @@ const ArticleFilter = ({
             {intl.formatMessage({ defaultMessage: 'Priority' })}
           </Typography.Paragraph>
           <Select
+            allowClear
             className={classes.select}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setPriorityFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Priority',
             })}
-            mode="multiple"
             size="small"
-            allowClear
-            maxTagCount={2}
-            onChange={setPriorityFilter}
             value={priorityFilter}
           >
             <Select.Option value={ArticlePriority.High}>

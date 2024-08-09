@@ -1,34 +1,29 @@
-mutation updateOffenderDetails($id: String!, $data: OffenderUpdateInput!) {
-  updateOffender(where: { id: $id }, data: $data) {
-    id
-    alias
-    infoSource
-    knownFor
-    targetedGoods
+mutation UpdateOffenderDetails($data: OffenderUpdateDetailsInput!, $where: String!) {
+  updateOffenderDetails(data: $data, where: $where) {
     age
+    alias
     build
-    height
-    dateOfBirth
-    dateSource
-    hair
-    gender
     comment
-    name
-    reference
-    race
-    peculiarities
-    approved
-    idVerified
-    idSource
-    justification
     customGalleries {
       id
       name
     }
+    dateOfBirth
+    dateSource
+    gender
     groups {
       id
       name
     }
+    hair
+    height
+    idSource
+    idVerified
+    infoSource
+    justification
+    name
+    peculiarities
+    race
     tags {
       id
       name

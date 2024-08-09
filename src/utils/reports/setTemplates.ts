@@ -1,20 +1,19 @@
 import type { IReportTemplate } from '#/views/reports/types';
+import type { ReportTemplatesFragment } from 'graphql/reports/mutations/__generated__/create-report-template.generated';
 import type RGL from 'react-grid-layout';
-import type { ReportTemplatesFragment } from 'graphql/reports/mutations/create-report-template.generated';
-
 // create a new type that is ReportTemplatesFragment with the layout inside it being of type RGL.Layout
 
 interface NullableLayout
-  extends Omit<RGL.Layout, 'minW' | 'maxW' | 'minH' | 'maxH'> {
-  minW?: number | undefined | null;
-  maxW?: number | undefined | null;
-  minH?: number | undefined | null;
-  maxH?: number | undefined | null;
+  extends Omit<RGL.Layout, 'maxH' | 'maxW' | 'minH' | 'minW'> {
+  maxH?: null | number | undefined;
+  maxW?: null | number | undefined;
+  minH?: null | number | undefined;
+  minW?: null | number | undefined;
 }
 
-type IExtendedTemplate = Omit<ReportTemplatesFragment, 'layout'> & {
+type IExtendedTemplate = {
   layout: NullableLayout[];
-};
+} & Omit<ReportTemplatesFragment, 'layout'>;
 
 const arrangeTemplates = (
   data: IExtendedTemplate[],
@@ -22,10 +21,8 @@ const arrangeTemplates = (
 ) => {
   const importedTemplates: IReportTemplate[] = (
     (data.map((template) => ({
-      id: template.id || '',
-      name: template.name || '',
-      metaData: template.metaData || [],
       default: template.default,
+      id: template.id || '',
       layout:
         (template.layout.map((item) => ({
           ...item,
@@ -35,6 +32,8 @@ const arrangeTemplates = (
           minW: item.minW ?? undefined,
           static: false,
         })) as RGL.Layout[]) || [],
+      metaData: template.metaData || [],
+      name: template.name || '',
     })) as IReportTemplate[]) || []
   ).sort((a) => (a.default ? -1 : 1));
 

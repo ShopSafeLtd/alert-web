@@ -1,27 +1,27 @@
-import type { RefObject } from 'react';
-import type { ArticleQuery } from 'graphql/article/queries/view-article.generated';
+import type { ArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
 import type { Role } from 'graphql/types';
+import type { RefObject } from 'react';
 
 export interface Props {
   id: string;
 }
 
 export interface ReturnProps {
+  componentRef: RefObject<HTMLDivElement>;
   data: ArticleQuery | undefined;
-  loading: boolean;
-  openLightbox: (elements: { src: string }[], index: number) => void;
+  editArticle: () => void;
+  handlePrint: () => void;
+  isPrinting: boolean;
   lightBoxOpen: {
-    open: boolean;
     index: number;
+    open: boolean;
   };
   lightboxElements: {
     src: string;
   }[];
-  onDeleteArticle: () => void;
-  role: Role;
-  editArticle: () => void;
+  loading: boolean;
 
-  componentRef: RefObject<HTMLDivElement>;
-  handlePrint: () => void;
-  isPrinting: boolean;
+  onDeleteArticle: () => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
+  role: Role;
 }

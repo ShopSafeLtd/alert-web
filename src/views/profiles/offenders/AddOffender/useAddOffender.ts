@@ -2,8 +2,8 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import type { CreateOffenderMutation } from 'graphql/offenders/mutations/crreate-offender.generated';
-import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
+import type { CreateOffenderMutation } from 'graphql/offenders/mutations/__generated__/crreate-offender.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 import type {
   Age,
   Build,
@@ -13,7 +13,7 @@ import type {
   IdSource,
   Race,
 } from 'graphql/types';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import type {
   BanData,
   CrimeGroupData,
@@ -27,15 +27,21 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
-import { useSearchOffendersLazyQuery } from '#/graphql/offenders/queries/search-offenders.generated';
 import { Form, Modal, message, notification } from 'antd';
-import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/business-offender-settings.generated';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import { useCreateOffenderMutation } from 'graphql/offenders/mutations/crreate-offender.generated';
-import { ListOffendersDocument } from 'graphql/offenders/queries/list-offenders.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { ImagePosition, Model, QueryMode, Role } from 'graphql/types';
-import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import { useCreateOffenderMutation } from 'graphql/offenders/mutations/__generated__/crreate-offender.generated';
+import { ListOffendersDocument } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import { useSearchOffendersLazyQuery } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import {
+  ImagePosition,
+  Model,
+  QueryMode,
+  Role,
+  SortOrder,
+} from 'graphql/types';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import update from 'immutability-helper';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -304,6 +310,9 @@ const useAddOffender = (): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         dataType: {
           equals: Model.Offender,
@@ -323,6 +332,10 @@ const useAddOffender = (): Return => {
     useListCustomGalleriesQuery({
       fetchPolicy: 'cache-and-network',
       variables: {
+        order: {
+          name: SortOrder.Asc,
+        },
+        take: 100,
         where: {
           schemes: {
             some: {

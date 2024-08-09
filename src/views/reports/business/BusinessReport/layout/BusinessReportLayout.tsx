@@ -1,5 +1,10 @@
-import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type {
+  IncidentsTableData,
+  TargetedGoodsTableData,
+} from 'components/reports/tableColumns';
+import type { TargetedBusinessReportQuery } from 'graphql/reports/queries/__generated__/business-report.generated';
+import type RGL from 'react-grid-layout';
+
 import {
   faCalendar,
   faChartBar,
@@ -11,56 +16,53 @@ import {
   faUserPolice,
   faUserPoliceTie,
 } from '@fortawesome/pro-light-svg-icons';
-import React, { useMemo } from 'react';
-import type RGL from 'react-grid-layout';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
 import { BarGraph, DonutGraph, LineGraph } from 'components/reports/graphs';
-import type {
-  IncidentsTableData,
-  TargetedGoodsTableData,
-} from 'components/reports/tableColumns';
 import {
   IncidentsColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
+import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import useStyles from '../../../styles/report.styles';
-import RadialGraph from '../../../../../components/reports/graphs/radialGraph';
 
 import type { AllowedValue, Elements, MetaData } from '../../../types';
-import type { TargetedBusinessReportQuery } from 'graphql/reports/queries/business-report.generated';
+
+import RadialGraph from '../../../../../components/reports/graphs/radialGraph';
+import useStyles from '../../../styles/report.styles';
 
 const { Title } = Typography;
 
 interface Props {
-  loading: boolean;
-  data: TargetedBusinessReportQuery | undefined;
-  targetedGoodsData: TargetedGoodsTableData[] | [];
-  incidentsTableData: IncidentsTableData[] | [];
-
-  removeItem: (arg0: string) => void;
-  layout: RGL.Layout[];
-  margin: [number, number];
-  rowHeight: number;
-  editMode: boolean;
   changeSize: (arg0: string, arg1: number) => void;
+  data: TargetedBusinessReportQuery | undefined;
+  editMode: boolean;
+  incidentsTableData: [] | IncidentsTableData[];
+
   isPrinting: boolean;
+  layout: RGL.Layout[];
+  loading: boolean;
+  margin: [number, number];
   metadata: MetaData[];
+  removeItem: (arg0: string) => void;
+  rowHeight: number;
   setMetadata: (arg0: MetaData[]) => void;
+  targetedGoodsData: [] | TargetedGoodsTableData[];
 }
 const BusinessReport = ({
-  loading,
-  data,
-  targetedGoodsData,
-  removeItem,
   changeSize,
-  layout,
-  margin,
-  rowHeight,
-  isPrinting,
+  data,
   editMode,
   incidentsTableData,
+  isPrinting,
+  layout,
+  loading,
+  margin,
   metadata,
+  removeItem,
+  rowHeight,
   setMetadata,
+  targetedGoodsData,
 }: Props) => {
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
@@ -73,21 +75,341 @@ const BusinessReport = ({
 
   const intl = useIntl();
   const components: Elements = {
-    incidentsSummary: (
+    crimeTypesDonut: (
       <Card
-        style={{ width: '100%' }}
-        bodyStyle={{ width: '100%' }}
+        bodyStyle={{ height: '90%' }}
+        className="no-break"
+        key="crimeTypesDonut"
         loading={loading}
-        key="incidentsSummary"
+        style={{ height: calculateHeight('crimeTypesDonut') }}
+        title={intl.formatMessage({
+          defaultMessage: 'Incident Types',
+        })}
       >
         <Button
-          type="text"
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'crimeTypesDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
           shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'crimeTypesDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
           className="card-remove no-print"
           hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('crimeTypesDonut')}
+          shape="circle"
           size="small"
+          type="text"
+        />
+        {metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
+          'donut' ||
+        metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            data={data?.businessReport?.crimeTypeDonut}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Incident Types',
+            })}
+            isPrinting={isPrinting}
+            type={
+              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
+                | 'donut'
+                | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.businessReport?.crimeTypeDonut}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Incident Types',
+            })}
+            isPrinting={isPrinting}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+            })}
+          />
+        )}
+      </Card>
+    ),
+    goodsTypeLossRecoveredRadial: (
+      <Card
+        bodyStyle={{ height: '90%' }}
+        className="no-break"
+        key="goodsTypeLossRecoveredRadial"
+        loading={loading}
+        style={{
+          height: calculateHeight('goodsTypeLossRecoveredRadial'),
+          pageBreakBefore: 'always',
+        }}
+        title={intl.formatMessage({
+          defaultMessage: 'Loss/Recovered by Goods Type',
+        })}
+      >
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('goodsTypeLossRecoveredRadial')}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <RadialGraph
+          data={data?.businessReport?.goodsTypeLossRecovered}
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Incident Types',
+          })}
+          isPrinting={isPrinting}
+        />
+      </Card>
+    ),
+
+    incidentMonthDonut: (
+      <Card
+        bodyStyle={{ height: '90%' }}
+        className="no-break"
+        key="incidentMonthDonut"
+        loading={loading}
+        style={{ height: calculateHeight('incidentMonthDonut') }}
+        title={intl.formatMessage({
+          defaultMessage: 'Incidents Month',
+        })}
+      >
+        <Button
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'incidentMonthDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'incidentMonthDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('incidentMonthDonut')}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        {metadata.find((item) => item.key === 'incidentMonthDonut')?.type ===
+          'donut' ||
+        metadata.find((item) => item.key === 'incidentMonthDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            data={data?.businessReport?.incidentMonthGraph}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No incidents',
+            })}
+            isPrinting={isPrinting}
+            type={
+              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
+                | 'donut'
+                | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.businessReport?.incidentMonthGraph}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No incidents',
+            })}
+            isPrinting={isPrinting}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+            })}
+          />
+        )}
+      </Card>
+    ),
+    incidentTimeOfDayDonut: (
+      <Card
+        bodyStyle={{ height: '90%' }}
+        className="no-break"
+        key="incidentTimeOfDayDonut"
+        loading={loading}
+        style={{ height: calculateHeight('incidentTimeOfDayDonut') }}
+        title={intl.formatMessage({
+          defaultMessage: 'Incidents Time of Day',
+        })}
+      >
+        <Button
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'incidentTimeOfDayDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'incidentTimeOfDayDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('incidentTimeOfDayDonut')}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        {metadata.find((item) => item.key === 'incidentTimeOfDayDonut')
+          ?.type === 'donut' ||
+        metadata.find((item) => item.key === 'incidentTimeOfDayDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            data={data?.businessReport?.incidentTimeOfDayDonut}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+            })}
+            isPrinting={isPrinting}
+            type={
+              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
+                | 'donut'
+                | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.businessReport?.incidentTimeOfDayDonut}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+            })}
+            isPrinting={isPrinting}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+            })}
+          />
+        )}
+      </Card>
+    ),
+    incidentsDayOfWeekGraph: (
+      <Card
+        bodyStyle={{ height: '90%' }}
+        className="no-break"
+        key="incidentsDayOfWeekGraph"
+        loading={loading}
+        style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
+      >
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('incidentsDayOfWeekGraph')}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <LineGraph
+          data={data?.businessReport?.incidentDayOfWeekGraph}
+          dataLabel={intl.formatMessage({
+            defaultMessage: 'incidents',
+          })}
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No incidents',
+          })}
+          isPrinting={isPrinting}
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents by day of week',
+          })}
+        />
+      </Card>
+    ),
+    incidentsSummary: (
+      <Card
+        bodyStyle={{ width: '100%' }}
+        key="incidentsSummary"
+        loading={loading}
+        style={{ width: '100%' }}
+      >
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
           onClick={() => removeItem('incidentsSummary')}
+          shape="circle"
+          size="small"
+          type="text"
         />
         <Row>
           <Col span={12}>
@@ -100,19 +422,25 @@ const BusinessReport = ({
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title={intl.formatMessage({
-                defaultMessage: 'Total Incidents',
-              })}
-              value={data?.businessReport?.incidentSummary?.totalIncidents || 0}
               prefix={
                 <FontAwesomeIcon
                   className={classes.prefixIcon}
                   icon={faUserPolice}
                 />
               }
+              title={intl.formatMessage({
+                defaultMessage: 'Total Incidents',
+              })}
+              value={data?.businessReport?.incidentSummary?.totalIncidents || 0}
             />
             <Statistic
               className={classes.stats}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faCalendar}
+                />
+              }
               title={intl.formatMessage({
                 defaultMessage: 'Last Incident (in range)',
               })}
@@ -125,16 +453,16 @@ const BusinessReport = ({
                       defaultMessage: 'unknown',
                     })
               }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faCalendar}
-                />
-              }
             />
 
             <Statistic
               className={classes.stats}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPolice}
+                />
+              }
               title={intl.formatMessage({
                 defaultMessage: 'Reported to Police',
               })}
@@ -142,16 +470,16 @@ const BusinessReport = ({
                 data?.businessReport?.incidentSummary
                   ?.incidentsReportedToPolice || 0
               }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faUserPolice}
-                />
-              }
             />
 
             <Statistic
               className={classes.stats}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPoliceTie}
+                />
+              }
               title={intl.formatMessage({
                 defaultMessage: 'Police Attended',
               })}
@@ -159,48 +487,171 @@ const BusinessReport = ({
                 data?.businessReport?.incidentSummary
                   ?.incidentsWherePoliceAttended || 0
               }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faUserPoliceTie}
-                />
-              }
             />
 
             <Statistic
               className={classes.stats}
-              title={intl.formatMessage({
-                defaultMessage: 'Most common crime type',
-              })}
-              value={
-                data?.businessReport?.incidentSummary?.mostCommonCrimeType || ''
-              }
               prefix={
                 <FontAwesomeIcon
                   className={classes.prefixIcon}
                   icon={faClipboard}
                 />
               }
+              title={intl.formatMessage({
+                defaultMessage: 'Most common incident type',
+              })}
+              value={
+                data?.businessReport?.incidentSummary?.mostCommonCrimeType || ''
+              }
             />
           </Row>
         </Row>
       </Card>
     ),
-    lossSummary: (
+
+    incidentsTable: (
       <Card
-        style={{ width: '100%' }}
-        bodyStyle={{ width: '100%' }}
+        bodyStyle={{ overflow: 'auto' }}
+        className="no-break"
+        key="incidentsTable"
         loading={loading}
-        key="lossSummary"
+        style={{ height: calculateHeight('incidentsTable') }}
       >
         <Button
-          type="text"
-          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('incidentsTable')}
+          shape="circle"
           size="small"
+          type="text"
+        />
+        <Title level={4}>
+          {intl.formatMessage({ defaultMessage: 'Incidents' })}
+        </Title>
+        <Table
+          className="no-break"
+          columns={IncidentsColumns}
+          dataSource={incidentsTableData}
+          pagination={{
+            defaultPageSize: 10,
+            hideOnSinglePage: true,
+            onChange: (_, pageSize) => {
+              changeSize('incidentsTable', pageSize);
+            },
+            showSizeChanger: true,
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} ${intl.formatMessage({
+                defaultMessage: 'of',
+              })} ${total}`,
+            total: data?.businessReport?.incidentsTable?.total || 0,
+          }}
+          size="small"
+        />
+      </Card>
+    ),
+
+    involvedTagsDonut: (
+      <Card
+        bodyStyle={{ height: '90%' }}
+        className="no-break"
+        key="involvedTagsDonut"
+        loading={loading}
+        style={{ height: calculateHeight('involvedTagsDonut') }}
+        title={intl.formatMessage({
+          defaultMessage: 'Involved Tags',
+        })}
+      >
+        <Button
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'involvedTagsDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'involvedTagsDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('involvedTagsDonut')}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+
+        {metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
+          'donut' ||
+        metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            data={data?.businessReport?.involvedTagDonut}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Involved Tags',
+            })}
+            isPrinting={isPrinting}
+            type={
+              metadata.find((item) => item.key === 'involvedTagsDonut')
+                ?.type as 'donut' | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.businessReport?.involvedTagDonut}
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Involved Tags',
+            })}
+            isPrinting={isPrinting}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+            })}
+          />
+        )}
+      </Card>
+    ),
+
+    lossSummary: (
+      <Card
+        bodyStyle={{ width: '100%' }}
+        key="lossSummary"
+        loading={loading}
+        style={{ width: '100%' }}
+      >
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
           onClick={() => removeItem('lossSummary')}
+          shape="circle"
+          size="small"
+          type="text"
         />
         <Row>
           <Col span={12}>
@@ -213,6 +664,13 @@ const BusinessReport = ({
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  color="red"
+                  icon={faMoneyBill}
+                />
+              }
               title={intl.formatMessage({
                 defaultMessage: 'Total lost value',
               })}
@@ -225,16 +683,16 @@ const BusinessReport = ({
                       defaultMessage: 'No Losses',
                     })
               }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faMoneyBill}
-                  color="red"
-                />
-              }
             />
             <Statistic
               className={classes.stats}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  color="green"
+                  icon={faMoneyBill}
+                />
+              }
               title={intl.formatMessage({
                 defaultMessage: 'Total recovered value',
               })}
@@ -247,16 +705,15 @@ const BusinessReport = ({
                       defaultMessage: 'No Recoveries',
                     })
               }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faMoneyBill}
-                  color="green"
-                />
-              }
             />
             <Statistic
               className={classes.stats}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faChartLineDown}
+                />
+              }
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss Rate',
               })}
@@ -264,15 +721,15 @@ const BusinessReport = ({
                 (data?.businessReport?.lossTotals?.averageSuccessRate || 0) *
                 100
               ).toFixed(2)}%`}
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faChartLineDown}
-                />
-              }
             />
             <Statistic
               className={classes.stats}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faMoneyBill}
+                />
+              }
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss per Incident',
               })}
@@ -281,508 +738,9 @@ const BusinessReport = ({
                   data?.businessReport?.lossTotals?.averagePerIncident || 0
                 ).toFixed(2)}` || ''
               }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faMoneyBill}
-                />
-              }
             />
           </Row>
         </Row>
-      </Card>
-    ),
-
-    crimeTypesDonut: (
-      <Card
-        title={intl.formatMessage({
-          defaultMessage: 'Crime Types',
-        })}
-        className="no-break"
-        loading={loading}
-        style={{ height: calculateHeight('crimeTypesDonut') }}
-        bodyStyle={{ height: '90%' }}
-        key="crimeTypesDonut"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph1 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'crimeTypesDonut') {
-                return { ...item, type: 'bar' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph2 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'crimeTypesDonut') {
-                if (item.type === 'donut') return { ...item, type: 'pie' };
-                return { ...item, type: 'donut' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('crimeTypesDonut')}
-        />
-        {metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
-          'donut' ||
-        metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
-          'pie' ? (
-          <DonutGraph
-            isPrinting={isPrinting}
-            data={data?.businessReport?.crimeTypeDonut}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No Crime Types',
-            })}
-            type={
-              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
-                | 'donut'
-                | 'pie'
-            }
-          />
-        ) : (
-          <BarGraph
-            isPrinting={isPrinting}
-            data={data?.businessReport?.crimeTypeDonut}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No Crime Types',
-            })}
-            labelFormat={intl.formatMessage({
-              defaultMessage: 'Incidents',
-            })}
-          />
-        )}
-      </Card>
-    ),
-    involvedTagsDonut: (
-      <Card
-        title={intl.formatMessage({
-          defaultMessage: 'Involved Tags',
-        })}
-        className="no-break"
-        loading={loading}
-        style={{ height: calculateHeight('involvedTagsDonut') }}
-        bodyStyle={{ height: '90%' }}
-        key="involvedTagsDonut"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph1 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'involvedTagsDonut') {
-                return { ...item, type: 'bar' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph2 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'involvedTagsDonut') {
-                if (item.type === 'donut') return { ...item, type: 'pie' };
-                return { ...item, type: 'donut' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('involvedTagsDonut')}
-        />
-
-        {metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
-          'donut' ||
-        metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
-          'pie' ? (
-          <DonutGraph
-            isPrinting={isPrinting}
-            data={data?.businessReport?.involvedTagDonut}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No Involved Tags',
-            })}
-            type={
-              metadata.find((item) => item.key === 'involvedTagsDonut')
-                ?.type as 'donut' | 'pie'
-            }
-          />
-        ) : (
-          <BarGraph
-            isPrinting={isPrinting}
-            data={data?.businessReport?.involvedTagDonut}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No Involved Tags',
-            })}
-            labelFormat={intl.formatMessage({
-              defaultMessage: 'Incidents',
-            })}
-          />
-        )}
-      </Card>
-    ),
-    incidentsDayOfWeekGraph: (
-      <Card
-        className="no-break"
-        loading={loading}
-        key="incidentsDayOfWeekGraph"
-        style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
-        bodyStyle={{ height: '90%' }}
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('incidentsDayOfWeekGraph')}
-        />
-        <LineGraph
-          isPrinting={isPrinting}
-          label={intl.formatMessage({
-            defaultMessage: 'Incidents by day of week',
-          })}
-          data={data?.businessReport?.incidentDayOfWeekGraph}
-          dataLabel={intl.formatMessage({
-            defaultMessage: 'incidents',
-          })}
-          emptyLabel={intl.formatMessage({
-            defaultMessage: 'No incidents',
-          })}
-        />
-      </Card>
-    ),
-    goodsTypeLossRecoveredRadial: (
-      <Card
-        title={intl.formatMessage({
-          defaultMessage: 'Loss/Recovered by Goods Type',
-        })}
-        className="no-break"
-        loading={loading}
-        style={{
-          height: calculateHeight('goodsTypeLossRecoveredRadial'),
-          pageBreakBefore: 'always',
-        }}
-        bodyStyle={{ height: '90%' }}
-        key="goodsTypeLossRecoveredRadial"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('goodsTypeLossRecoveredRadial')}
-        />
-        <RadialGraph
-          isPrinting={isPrinting}
-          data={data?.businessReport?.goodsTypeLossRecovered}
-          emptyLabel={intl.formatMessage({
-            defaultMessage: 'No Crime Types',
-          })}
-        />
-      </Card>
-    ),
-
-    incidentTimeOfDayDonut: (
-      <Card
-        title={intl.formatMessage({
-          defaultMessage: 'Incidents Time of Day',
-        })}
-        className="no-break"
-        loading={loading}
-        style={{ height: calculateHeight('incidentTimeOfDayDonut') }}
-        bodyStyle={{ height: '90%' }}
-        key="incidentTimeOfDayDonut"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph1 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'incidentTimeOfDayDonut') {
-                return { ...item, type: 'bar' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph2 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'incidentTimeOfDayDonut') {
-                if (item.type === 'donut') return { ...item, type: 'pie' };
-                return { ...item, type: 'donut' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('incidentTimeOfDayDonut')}
-        />
-        {metadata.find((item) => item.key === 'incidentTimeOfDayDonut')
-          ?.type === 'donut' ||
-        metadata.find((item) => item.key === 'incidentTimeOfDayDonut')?.type ===
-          'pie' ? (
-          <DonutGraph
-            isPrinting={isPrinting}
-            data={data?.businessReport?.incidentTimeOfDayDonut}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No goods count',
-            })}
-            type={
-              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
-                | 'donut'
-                | 'pie'
-            }
-          />
-        ) : (
-          <BarGraph
-            isPrinting={isPrinting}
-            data={data?.businessReport?.incidentTimeOfDayDonut}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No goods count',
-            })}
-            labelFormat={intl.formatMessage({
-              defaultMessage: 'Incidents',
-            })}
-          />
-        )}
-      </Card>
-    ),
-
-    incidentMonthDonut: (
-      <Card
-        title={intl.formatMessage({
-          defaultMessage: 'Incidents Month',
-        })}
-        className="no-break"
-        loading={loading}
-        style={{ height: calculateHeight('incidentMonthDonut') }}
-        bodyStyle={{ height: '90%' }}
-        key="incidentMonthDonut"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph1 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'incidentMonthDonut') {
-                return { ...item, type: 'bar' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph2 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'incidentMonthDonut') {
-                if (item.type === 'donut') return { ...item, type: 'pie' };
-                return { ...item, type: 'donut' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('incidentMonthDonut')}
-        />
-        {metadata.find((item) => item.key === 'incidentMonthDonut')?.type ===
-          'donut' ||
-        metadata.find((item) => item.key === 'incidentMonthDonut')?.type ===
-          'pie' ? (
-          <DonutGraph
-            data={data?.businessReport?.incidentMonthGraph}
-            isPrinting={isPrinting}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No incidents',
-            })}
-            type={
-              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
-                | 'donut'
-                | 'pie'
-            }
-          />
-        ) : (
-          <BarGraph
-            data={data?.businessReport?.incidentMonthGraph}
-            isPrinting={isPrinting}
-            emptyLabel={intl.formatMessage({
-              defaultMessage: 'No incidents',
-            })}
-            labelFormat={intl.formatMessage({
-              defaultMessage: 'Incidents',
-            })}
-          />
-        )}
-      </Card>
-    ),
-
-    targetedGoodsTable: (
-      <Card
-        loading={loading}
-        className="no-break"
-        style={{ height: calculateHeight('targetedGoodsTable') }}
-        bodyStyle={{ overflow: 'auto' }}
-        key="targetedGoodsTable"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('targetedGoodsTable')}
-        />
-        <Title level={4}>
-          {intl.formatMessage({
-            defaultMessage: 'Targeted Goods',
-          })}
-        </Title>
-        <Table
-          size="small"
-          className="no-break"
-          pagination={{
-            hideOnSinglePage: true,
-            onChange: (_, pageSize) => {
-              changeSize('targetedGoodsTable', pageSize);
-            },
-            total: data?.businessReport?.targetedGoods?.total,
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) =>
-              `${range[0]}-${range[1]} ${intl.formatMessage({
-                defaultMessage: 'of',
-              })} ${total}`,
-          }}
-          columns={TargetGoodsColumns}
-          dataSource={targetedGoodsData}
-        />
-      </Card>
-    ),
-
-    incidentsTable: (
-      <Card
-        loading={loading}
-        className="no-break"
-        key="incidentsTable"
-        style={{ height: calculateHeight('incidentsTable') }}
-        bodyStyle={{ overflow: 'auto' }}
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('incidentsTable')}
-        />
-        <Title level={4}>
-          {intl.formatMessage({ defaultMessage: 'Incidents' })}
-        </Title>
-        <Table
-          size="small"
-          className="no-break"
-          pagination={{
-            hideOnSinglePage: true,
-            onChange: (_, pageSize) => {
-              changeSize('incidentsTable', pageSize);
-            },
-            total: data?.businessReport?.incidentsTable?.total || 0,
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) =>
-              `${range[0]}-${range[1]} ${intl.formatMessage({
-                defaultMessage: 'of',
-              })} ${total}`,
-          }}
-          columns={IncidentsColumns}
-          dataSource={incidentsTableData}
-        />
       </Card>
     ),
 
@@ -792,8 +750,8 @@ const BusinessReport = ({
         key="pageBreak"
         style={{
           borderBottom: '1px solid grey',
-          height: '100%',
           display: isPrinting ? 'none' : 'block',
+          height: '100%',
           zIndex: 100,
         }}
       >
@@ -809,8 +767,8 @@ const BusinessReport = ({
         key="pageBreak2"
         style={{
           borderBottom: '1px solid grey',
-          height: '100%',
           display: isPrinting ? 'none' : 'block',
+          height: '100%',
           zIndex: 100,
         }}
       >
@@ -819,14 +777,15 @@ const BusinessReport = ({
         </Typography.Paragraph>
       </div>
     ),
+
     pageBreak3: (
       <div
         className="page-break"
         key="pageBreak3"
         style={{
           borderBottom: '1px solid grey',
-          height: '100%',
           display: isPrinting ? 'none' : 'block',
+          height: '100%',
           zIndex: 100,
         }}
       >
@@ -841,8 +800,8 @@ const BusinessReport = ({
         key="pageBreak4"
         style={{
           borderBottom: '1px solid grey',
-          height: '100%',
           display: isPrinting ? 'none' : 'block',
+          height: '100%',
           zIndex: 100,
         }}
       >
@@ -850,6 +809,49 @@ const BusinessReport = ({
           {intl.formatMessage({ defaultMessage: 'Page 4' })}
         </Typography.Paragraph>
       </div>
+    ),
+    targetedGoodsTable: (
+      <Card
+        bodyStyle={{ overflow: 'auto' }}
+        className="no-break"
+        key="targetedGoodsTable"
+        loading={loading}
+        style={{ height: calculateHeight('targetedGoodsTable') }}
+      >
+        <Button
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
+          onClick={() => removeItem('targetedGoodsTable')}
+          shape="circle"
+          size="small"
+          type="text"
+        />
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Goods',
+          })}
+        </Title>
+        <Table
+          className="no-break"
+          columns={TargetGoodsColumns}
+          dataSource={targetedGoodsData}
+          pagination={{
+            defaultPageSize: 10,
+            hideOnSinglePage: true,
+            onChange: (_, pageSize) => {
+              changeSize('targetedGoodsTable', pageSize);
+            },
+            showSizeChanger: true,
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} ${intl.formatMessage({
+                defaultMessage: 'of',
+              })} ${total}`,
+            total: data?.businessReport?.targetedGoods?.total,
+          }}
+          size="small"
+        />
+      </Card>
     ),
   };
 

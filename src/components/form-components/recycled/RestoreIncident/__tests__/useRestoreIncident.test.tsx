@@ -6,8 +6,8 @@ import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 
 import useRestoreIncident from '../useRestoreIncident';
-import { RecycledItemDocument } from 'graphql/recycled/queries/recycled-item.generated';
-import { RestoreIncidentDocument } from 'graphql/recycled/mutations/restore-incident.generated';
+import { RecycledItemDocument } from 'graphql/recycled/queries/__generated__/recycled-item.generated';
+import { RestoreIncidentDocument } from 'graphql/recycled/mutations/__generated__/restore-incident.generated';
 
 const mocks = [
   {

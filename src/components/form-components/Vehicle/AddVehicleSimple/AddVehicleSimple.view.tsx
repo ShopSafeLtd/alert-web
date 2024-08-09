@@ -1,47 +1,51 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
+
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { Button, Col, Form, Input, Row } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { FormData } from './useAddVehicleSimple';
+
 import type { ImageData } from '../../ImageSelect/ImageSelect.view';
+import type { FormData } from './useAddVehicleSimple';
+
 import ImageSelect from '../../ImageSelect/ImageSelect.view';
 
 interface Props {
+  form: FormInstance<FormData>;
+  images?: ImageData[] | undefined;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving?: boolean;
-  form: FormInstance<FormData>;
-  images?: ImageData[] | undefined;
 }
 
 const AddVehicle = ({
+  form,
+  images,
   onClose,
   onSubmit,
   saving,
-  form,
-  images,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div>
-      <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
+      <Form<FormData> form={form} layout="vertical" onFinish={onSubmit}>
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="registration"
               label={intl.formatMessage({
                 defaultMessage: 'Registration',
               })}
+              name="registration"
             >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="colour"
               label={intl.formatMessage({
                 defaultMessage: 'Colour',
               })}
+              name="colour"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -50,30 +54,48 @@ const AddVehicle = ({
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="make"
               label={intl.formatMessage({
                 defaultMessage: 'Make',
               })}
+              name="make"
             >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="model"
               label={intl.formatMessage({
                 defaultMessage: 'Model',
               })}
+              name="model"
             >
               <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Groups',
+              })}
+              name="groupIds"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Select at least one group for the vehicle',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <GroupsSelect disabled={saving} mode="multiple" />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item
-          name="images"
           label={intl.formatMessage({
             defaultMessage: 'Images',
           })}
+          name="images"
           tooltip={intl.formatMessage({
             defaultMessage: 'Select the images that the vehicle is in.',
           })}
@@ -81,7 +103,7 @@ const AddVehicle = ({
           <ImageSelect images={images} />
         </Form.Item>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -89,10 +111,10 @@ const AddVehicle = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Create Vehicle',

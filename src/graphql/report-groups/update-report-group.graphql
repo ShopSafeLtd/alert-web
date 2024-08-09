@@ -1,0 +1,13 @@
+mutation UpdateReportGroup($data: ReportGroupEditInput!, $where: UniqueId!) {
+    updateReportGroup(data: $data, where: $where) {
+        id
+        name
+        order
+        reports {
+            id
+            name
+            description
+            type
+        }
+    }
+}

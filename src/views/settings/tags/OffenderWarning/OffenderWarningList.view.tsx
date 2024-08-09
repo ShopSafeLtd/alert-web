@@ -19,7 +19,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { TagData } from 'types/DataType';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
 interface Props {
   data: TagsQuery | undefined;

@@ -1,10 +1,10 @@
-import { useStoreState } from 'state';
+import { Model, WorkflowTrigger } from '#/graphql/types';
+import { useWorkflowsQuery } from '#/views/workflows/graphql/queries/__generated__/list-workflows.generated';
 import { useMemo } from 'react';
 import { type IntlShape, useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 
 import type { WorkflowItem } from './types';
-import { Model, WorkflowTrigger } from '#/graphql/types';
-import { useWorkflowsQuery } from '#/views/workflows/graphql/queries/list-workflows.generated';
 
 interface Return {
   data: WorkflowItem[];
@@ -12,13 +12,13 @@ interface Return {
 }
 
 const worflowTriggerToReadable = ({
+  intl,
   trigger,
   triggerModels,
-  intl,
 }: {
+  intl: IntlShape;
   trigger: WorkflowTrigger;
   triggerModels: Model;
-  intl: IntlShape;
 }) => {
   if (triggerModels === Model.Offender)
     return intl.formatMessage({
@@ -85,16 +85,16 @@ const useListWorkflows = (): Return => {
       return workflows.map((workflow) => ({
         key: workflow.id,
         name: workflow.name,
-        triggeredOff: worflowTriggerToReadable({
-          trigger: workflow.trigger,
-          triggerModels: workflow.triggerModels,
-          intl,
-        }),
-
         timesRun: workflow.actions.reduce(
           (acc, action) => acc + (action?.timesRun || 0),
           0
         ),
+
+        triggeredOff: worflowTriggerToReadable({
+          intl,
+          trigger: workflow.trigger,
+          triggerModels: workflow.triggerModels,
+        }),
       }));
     }
     return [];

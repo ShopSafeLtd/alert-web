@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react';
-
-import { useStoreState } from 'state';
-import type { ListOffendersSelectQuery } from 'graphql/offenders/queries/list-offenders-select.generated';
-import { useListOffendersSelectQuery } from 'graphql/offenders/queries/list-offenders-select.generated';
+import type { ListOffendersSelectQuery } from 'graphql/offenders/queries/__generated__/list-offenders-select.generated';
 import type { Age, Build, Gender, Race } from 'graphql/types';
+
+import { useListOffendersSelectQuery } from 'graphql/offenders/queries/__generated__/list-offenders-select.generated';
 import { SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useStoreState } from 'state';
 
 export interface Offender {
+  age?: Age | null | undefined;
+  build?: Build | null | undefined;
+
+  dateOfBirth?: Date | null | undefined;
+  gender?: Gender | null | undefined;
+  id: string;
   images:
     | {
         id: string;
@@ -14,47 +20,41 @@ export interface Offender {
       }[]
     | null
     | undefined;
-  id: string;
-
-  name?: string | null | undefined;
-  totalIncidents?: number;
-  reference?: number | null | undefined;
-  updatedAt?: Date | null | undefined;
-  age?: Age | null | undefined;
-  dateOfBirth?: Date | null | undefined;
-  build?: Build | null | undefined;
-  gender?: Gender | null | undefined;
+  name?: null | string | undefined;
   race?: Race | null | undefined;
+  reference?: null | number | undefined;
+  totalIncidents?: number;
+  updatedAt?: Date | null | undefined;
 }
 
 interface Props {
+  investigationId: string;
   onClose: () => void;
   onSelect: (offender: Offender) => void;
-  investigationId: string;
 }
 
 interface Return {
-  onSubmit: (value: string | undefined) => void;
   data: ListOffendersSelectQuery | undefined;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   loading: boolean;
-  setCurrentId: (value: string | undefined) => void;
+  onSubmit: (value: string | undefined) => void;
+  openLightbox: (index: number) => void;
   selectedOffender:
     | Exclude<
         ListOffendersSelectQuery['listOffenders'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
+  setCurrentId: (value: string | undefined) => void;
 }
 
 const useSelectExistingOffender = ({
-  onClose,
   investigationId,
+  onClose,
   onSelect,
 }: Props): Return => {
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
@@ -62,23 +62,24 @@ const useSelectExistingOffender = ({
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
         ListOffendersSelectQuery['listOffenders'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined
   >(undefined);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const { data, loading } = useListOffendersSelectQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
-      scheme: {
-        id: schemeId,
-      },
       order: {
         updatedAt: SortOrder.Desc,
+      },
+      scheme: {
+        id: schemeId,
       },
       where: {
         investigations: {
@@ -90,7 +91,6 @@ const useSelectExistingOffender = ({
         },
       },
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   const onSubmit = () => {
@@ -105,7 +105,7 @@ const useSelectExistingOffender = ({
   };
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   useEffect(() => {
@@ -118,13 +118,13 @@ const useSelectExistingOffender = ({
     }
   }, [currentId]);
   return {
-    onSubmit,
     data,
-    loading: data?.listOffenders ? false : loading,
-    setCurrentId,
-    openLightbox,
     lightBoxOpen,
+    loading: data?.listOffenders ? false : loading,
+    onSubmit,
+    openLightbox,
     selectedOffender,
+    setCurrentId,
   };
 };
 

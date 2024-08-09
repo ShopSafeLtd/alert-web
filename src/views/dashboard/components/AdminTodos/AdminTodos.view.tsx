@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { FeedTodosQuery } from 'graphql/feedItems/queries/__generated__/feed-todos.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
+
+import AddTodo from '#/components/form-components/Todos/AddTodo';
+import FormatCalendar from '#/utils/format-calendar-24h';
+// import type { TodoData } from '../../../utils/get-to-do-url';
+import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -12,38 +21,30 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
-
-import type { MutationUpdaterFn } from '@apollo/client';
-import AddTodo from '#/components/form-components/Todos/AddTodo';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import FormatCalendar from '#/utils/format-calendar-24h';
-// import type { TodoData } from '../../../utils/get-to-do-url';
-import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
+import { Link } from 'react-router-dom';
+
 import getTodoUrl from '../../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
-import type { FeedTodosQuery } from 'graphql/feedItems/queries/feed-todos.generated';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
 
-const { Title, Text } = Typography;
+const { Text, Title } = Typography;
 
 interface Props {
-  data:
-    | Exclude<FeedTodosQuery['listTodos'], undefined | null>
-    | null
-    | undefined;
-  loading: boolean;
-  saving: boolean;
-  // onCompletedTodo: (id: string) => void;
   // onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
-  toggleAddTodo: () => void;
-  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  setSearch: (value: string) => void;
-
+  data:
+    | Exclude<FeedTodosQuery['listTodos'], null | undefined>
+    | null
+    | undefined;
   fetchMoreScroll: () => void;
+  // onCompletedTodo: (id: string) => void;
+  loading: boolean;
+  saving: boolean;
+  setSearch: (value: string) => void;
+  toggleAddTodo: () => void;
+
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
 }
 
 // interface TableItem {
@@ -57,16 +58,16 @@ interface Props {
 // }
 
 const AdminTodos = ({
-  data,
-  loading,
-  saving,
-  // onCompletedTodo,
   // onUncompletedTodo,
   addTodo,
+  data,
+  fetchMoreScroll,
+  // onCompletedTodo,
+  loading,
+  saving,
+  setSearch,
   toggleAddTodo,
   updateTodoList,
-  setSearch,
-  fetchMoreScroll,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -85,9 +86,9 @@ const AdminTodos = ({
   return (
     <Col
       style={{
-        height: 'inherit',
         display: 'flex',
         flexDirection: 'column',
+        height: 'inherit',
         overflow: 'hidden',
       }}
     >
@@ -100,8 +101,8 @@ const AdminTodos = ({
         <Row
           align="middle"
           gutter={8}
-          wrap={false}
           style={{ margin: '10px 0 10px 5px' }}
+          wrap={false}
         >
           <Col style={{ minWidth: 'min-content' }}>
             <Title className={classes.title} style={{ fontSize: 16 }}>
@@ -110,25 +111,25 @@ const AdminTodos = ({
               })}
             </Title>
           </Col>
-          <Col flex={1} style={{ marginRight: -10, marginLeft: 5 }}>
+          <Col flex={1} style={{ marginLeft: 5, marginRight: -10 }}>
             <Input
+              allowClear
+              onChange={(e) => setSearch(e.target.value)}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for a activity...',
               })}
-              onChange={(e) => setSearch(e.target.value)}
-              allowClear
             />
           </Col>
           <Col>
             <Button
-              type="text"
-              style={{ marginRight: -5 }}
               danger
               disabled={saving}
               icon={
                 <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
               }
               onClick={toggleAddTodo}
+              style={{ marginRight: -5 }}
+              type="text"
             >
               {intl.formatMessage({
                 defaultMessage: 'New',
@@ -139,9 +140,9 @@ const AdminTodos = ({
       </Card>
       {loading ? (
         <Row
-          gutter={[8, 8]}
           align="stretch"
-          style={{ padding: 10, alignItems: 'stretch' }}
+          gutter={[8, 8]}
+          style={{ alignItems: 'stretch', padding: 10 }}
         >
           {Array.from({ length: 5 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -151,14 +152,14 @@ const AdminTodos = ({
       ) : data?.uncompletedTotal ? (
         <DashboardInfiniteScroll
           dataLength={data?.uncompletedTodos?.length}
-          next={() => fetchMoreScroll()}
           hasMore={
             (data?.uncompletedTodos?.length || 0) <
             (data?.uncompletedTotal || 0)
           }
           id="scroll-todos"
+          next={() => fetchMoreScroll()}
         >
-          <Row wrap={false} className={classes.header}>
+          <Row className={classes.header} wrap={false}>
             <Col flex={1}>
               {intl.formatMessage({
                 defaultMessage: 'Name',
@@ -174,10 +175,10 @@ const AdminTodos = ({
           <div>
             {data?.uncompletedTodos.map((todo) => (
               <>
-                <Row wrap={false} className={classes.contentRow}>
+                <Row className={classes.contentRow} wrap={false}>
                   <Col flex={1}>
                     <Text style={{ fontSize: 14 }}>
-                      <Link to={`${getTodoUrl(todo)}`} key={todo.id}>
+                      <Link key={todo.id} to={`${getTodoUrl(todo)}`}>
                         {todo.name}
                       </Link>
                     </Text>
@@ -198,30 +199,30 @@ const AdminTodos = ({
       ) : (
         <div
           style={{
+            alignItems: 'center',
             display: 'flex',
             flex: 1,
-            alignItems: 'center',
             justifyContent: 'center',
           }}
         >
           <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
               defaultMessage: 'You have no open activities',
             })}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
         </div>
       )}
       <Drawer
+        onClose={toggleAddTodo}
+        open={addTodo}
         title={intl.formatMessage({
           defaultMessage: 'New Activity',
         })}
-        open={addTodo}
         width="400"
-        onClose={toggleAddTodo}
       >
         {addTodo ? (
-          <AddTodo update={updateTodoList} onClose={toggleAddTodo} />
+          <AddTodo onClose={toggleAddTodo} update={updateTodoList} />
         ) : (
           <div />
         )}

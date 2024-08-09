@@ -1,41 +1,45 @@
+import type { BusinessEngagementQuery } from 'graphql/reports/queries/__generated__/business-engagement.generated';
 import type { RefObject } from 'react';
-import React, { useState } from 'react';
-import { Button, Card, Col, Row, Table, Typography } from 'antd';
 
-import { useIntl } from 'react-intl';
-import useStyles from './performance-report.styles';
-import type { SelectOptions } from './useBusinessEngagement';
-import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import { faFileDownload } from '@fortawesome/pro-light-svg-icons';
-import type { BusinessEngagementQuery } from 'graphql/reports/queries/business-engagement.generated';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Row, Table, Typography } from 'antd';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+
+import type { SelectOptions } from './useBusinessEngagement';
+
+import useStyles from './performance-report.styles';
 
 const { Title } = Typography;
 
 interface Props {
-  loading: boolean;
-  data: BusinessEngagementQuery | undefined;
-  groups: SelectOptions[];
-  dateRange: { startDate: Date; endDate: Date };
-  setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-  setSelectedGroups: (groups: string[]) => void;
-  selectedGroups: string[];
   componentRef: RefObject<HTMLDivElement>;
+  data: BusinessEngagementQuery | undefined;
+  dateRange: { endDate: Date; startDate: Date };
+  groups: SelectOptions[];
   handlePrint: () => void;
+  loading: boolean;
+  selectedGroups: string[];
+  setDateRange: (
+    dateRange: { endDate: Date; startDate: Date } | undefined
+  ) => void;
+  setSelectedGroups: (groups: string[]) => void;
 }
 
 const PerformanceReport = ({
+  componentRef,
   data,
-  loading,
-  setDateRange,
   dateRange,
   groups,
-  setSelectedGroups,
-  selectedGroups,
   handlePrint,
-  componentRef,
+  loading,
+  selectedGroups,
+  setDateRange,
+  setSelectedGroups,
 }: Props) => {
   const classes = useStyles();
   const logo = localStorage.getItem('logo');
@@ -46,57 +50,57 @@ const PerformanceReport = ({
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
-          selectedId="business-enagement"
           collapsed={collapsed}
+          selectedId="business-enagement"
           setCollapsed={setCollapsed}
         />
       </Col>
-      <Col flex={1} className={classes.page} ref={componentRef}>
+      <Col className={classes.page} flex={1} ref={componentRef}>
         <div className="logo">
           <img
-            style={{ height: '100%', width: '25 %' }}
-            src={logo || ''}
             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
             alt="logo"
+            src={logo || ''}
+            style={{ height: '100%', width: '25 %' }}
           />
         </div>
-        <Title level={2} className="print-title">
+        <Title className="print-title" level={2}>
           {intl.formatMessage(
             {
               defaultMessage: ' Business Engagement: {startDate} - {endDate}',
             },
             {
-              startDate: dateRange.startDate.toLocaleDateString(),
               endDate: dateRange.endDate.toLocaleDateString(),
+              startDate: dateRange.startDate.toLocaleDateString(),
             }
           )}
         </Title>
-        <Row className="no-print" style={{ marginBottom: 10 }} gutter={8}>
+        <Row className="no-print" gutter={8} style={{ marginBottom: 10 }}>
           <Col span={6}>
             <GroupsSelect
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Groups',
-              })}
-              mode="multiple"
+              defaultValue={groups.map((group) => group.value)}
               maxTagCount="responsive"
+              mode="multiple"
               onChange={(value) => {
                 setSelectedGroups(value || []);
               }}
-              value={selectedGroups}
-              defaultValue={groups.map((group) => group.value)}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Groups',
+              })}
               style={{ width: '100%' }}
+              value={selectedGroups}
             />
           </Col>
           <Col>
-            <DateSelect onChange={setDateRange} defaultRange="last30Days" />
+            <DateSelect defaultRange="last30Days" onChange={setDateRange} />
           </Col>
           <Col flex={1} />
           <Col>
             <Button onClick={handlePrint}>
               <FontAwesomeIcon
+                icon={faFileDownload}
                 size="lg"
                 style={{ marginRight: 10 }}
-                icon={faFileDownload}
               />
               {intl.formatMessage({
                 defaultMessage: 'Download',
@@ -113,85 +117,85 @@ const PerformanceReport = ({
                 })}
               </Title>
               <Table
-                size="small"
-                pagination={{
-                  hideOnSinglePage: true,
-                  total: data?.businessContribution?.total || 0,
-                  defaultPageSize: 30,
-                  showSizeChanger: true,
-                  showTotal: (total, range) =>
-                    `${range[0]}-${range[1]} of ${total}`,
-                }}
                 columns={[
                   {
-                    key: 'fullName',
                     dataIndex: 'fullName',
+                    key: 'fullName',
                     title: intl.formatMessage({
                       defaultMessage: 'Name',
                     }),
                   },
                   {
-                    key: 'incidentsCreated',
                     dataIndex: 'incidentsCreated',
+                    defaultSortOrder: 'descend',
+                    key: 'incidentsCreated',
+                    sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
                     title: intl.formatMessage({
                       defaultMessage: 'Incidents',
                     }),
-                    defaultSortOrder: 'descend',
-                    sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
                   },
                   {
-                    key: 'offendersCreated',
                     dataIndex: 'offendersCreated',
+                    key: 'offendersCreated',
+                    sorter: (a, b) => a.offendersCreated - b.offendersCreated,
                     title: intl.formatMessage({
                       defaultMessage: 'Offenders',
                     }),
-                    sorter: (a, b) => a.offendersCreated - b.offendersCreated,
                   },
                   {
-                    key: 'updatesCreated',
                     dataIndex: 'updatesCreated',
+                    key: 'updatesCreated',
+                    sorter: (a, b) => a.updatesCreated - b.updatesCreated,
                     title: intl.formatMessage({
                       defaultMessage: 'Updates',
                     }),
-                    sorter: (a, b) => a.updatesCreated - b.updatesCreated,
                   },
                   {
-                    key: 'messagesSent',
                     dataIndex: 'messagesSent',
+                    key: 'messagesSent',
+                    sorter: (a, b) => a.messagesSent - b.messagesSent,
                     title: intl.formatMessage({
                       defaultMessage: 'Messages',
                     }),
-                    sorter: (a, b) => a.messagesSent - b.messagesSent,
                   },
                   {
-                    key: 'logins',
                     dataIndex: 'logins',
+                    key: 'logins',
+                    sorter: (a, b) => a.logins - b.logins,
                     title: intl.formatMessage({
                       defaultMessage: 'Logins',
                     }),
-                    sorter: (a, b) => a.logins - b.logins,
                   },
                   {
-                    key: 'users',
                     dataIndex: 'users',
+                    key: 'users',
+                    sorter: (a, b) => a.users - b.users,
                     title: intl.formatMessage({
                       defaultMessage: 'Users',
                     }),
-                    sorter: (a, b) => a.users - b.users,
                   },
                 ]}
                 dataSource={data?.businessContribution?.businessContributions?.map(
                   (business, i) => ({
-                    key: business.name + i.toString(),
                     fullName: business.name,
                     incidentsCreated: business.totalIncidents,
+                    key: business.name + i.toString(),
+                    logins: business.totalLogins,
+                    messagesSent: business.totalMessages,
                     offendersCreated: business.totalOffenders,
                     updatesCreated: business.totalUpdates,
-                    messagesSent: business.totalMessages,
-                    logins: business.totalLogins,
                     users: business.totalUsers,
                   })
                 )}
+                pagination={{
+                  defaultPageSize: 30,
+                  hideOnSinglePage: true,
+                  showSizeChanger: true,
+                  showTotal: (total, range) =>
+                    `${range[0]}-${range[1]} of ${total}`,
+                  total: data?.businessContribution?.total || 0,
+                }}
+                size="small"
               />
             </Card>
           </Col>

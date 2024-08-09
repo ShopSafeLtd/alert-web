@@ -1,6 +1,6 @@
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
+import { useTargetedGoodsDashboardQuery } from '#/views/dashboard/graphql/queries/__generated__/targeted-goods.generated';
 import { useEffect, useMemo, useState } from 'react';
-import { useTargetedGoodsDashboardQuery } from '#/views/dashboard/graphql/queries/targeted-goods.generated';
 
 interface Return {
   data: { label: string; value: number }[];
@@ -9,7 +9,7 @@ interface Return {
 
 const useTargetedGoods = (): Return => {
   const {
-    variables: { groups: groupsFilter, gallery, createdAt: createdAtFilter },
+    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
   } = useDashboardContext();
   const thirtyDaysAgo = useMemo(() => {
     const date = new Date();
@@ -36,8 +36,8 @@ const useTargetedGoods = (): Return => {
       where: {
         dateRange,
         following: gallery.includes('FOLLOWING'),
-        myData: gallery.includes('MYDATA'),
         groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
+        myData: gallery.includes('MYDATA'),
       },
     },
   });

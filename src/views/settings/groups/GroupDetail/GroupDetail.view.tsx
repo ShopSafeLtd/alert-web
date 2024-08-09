@@ -1,115 +1,115 @@
-import React from 'react';
+import type { GroupQuery } from 'graphql/group/queries/__generated__/group.generated';
 
+import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Drawer, PageHeader, Table } from 'antd';
 import EditGroup from 'components/form-components/group/EditGroup';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { GroupQuery } from 'graphql/group/queries/group.generated';
+import { Link } from 'react-router-dom';
 
 interface Props {
   data: GroupQuery | undefined;
-  loading: boolean;
-  editGroup: boolean;
-  toggleEditGroup: () => void;
-  saving: boolean;
   deleteConfirm: () => void;
+  editGroup: boolean;
+  loading: boolean;
+  saving: boolean;
+  toggleEditGroup: () => void;
 }
 
 const GroupDetail = ({
   data,
-  loading,
-  editGroup,
-  toggleEditGroup,
-  saving,
   deleteConfirm,
+  editGroup,
+  loading,
+  saving,
+  toggleEditGroup,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div className="list-view">
       <PageHeader
-        onBack={() => window.history.back()}
-        title={data?.group?.name}
-        subTitle={data?.group?.description}
         extra={[
           <Button
-            key="2"
             disabled={saving}
-            onClick={toggleEditGroup}
             icon={
               <FontAwesomeIcon
-                size="lg"
                 icon={faPenToSquare}
+                size="lg"
                 style={{ marginRight: 5 }}
               />
             }
+            key="2"
+            onClick={toggleEditGroup}
           >
             <FormattedMessage defaultMessage="Edit Group" />
           </Button>,
           <Button
-            key="1"
             disabled={saving}
-            onClick={deleteConfirm}
             icon={
               <FontAwesomeIcon
-                size="lg"
                 icon={faTrash}
+                size="lg"
                 style={{ marginRight: 5 }}
               />
             }
+            key="1"
+            onClick={deleteConfirm}
           >
             <FormattedMessage defaultMessage="Delete Group" />
           </Button>,
         ]}
+        onBack={() => window.history.back()}
+        subTitle={data?.group?.description}
+        title={data?.group?.name}
       />
       <Card>
         <Table
-          size="small"
-          loading={loading}
-          pagination={{
-            hideOnSinglePage: true,
-            defaultPageSize: 20,
-            pageSize: 20,
-          }}
           columns={[
             {
-              key: 'name',
-
-              title: intl.formatMessage({
-                defaultMessage: 'Name',
-              }),
               dataIndex: 'name',
-              width: 300,
+
+              key: 'name',
               render: (value, record) => (
                 <Link to={`/app/scheme-settings/users/view/${record.key}`}>
                   {value}
                 </Link>
               ),
+              title: intl.formatMessage({
+                defaultMessage: 'Name',
+              }),
+              width: 300,
             },
             {
-              key: 'business',
+              dataIndex: 'business',
 
+              key: 'business',
               title: intl.formatMessage({
                 defaultMessage: 'Business',
               }),
-              dataIndex: 'business',
             },
           ]}
           dataSource={data?.group?.users.map((user) => ({
+            business: user.businesses[0]?.name,
             key: user.id,
             name: user.fullName,
-            business: user.businesses[0]?.name,
           }))}
+          loading={loading}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            pageSize: 20,
+          }}
+          size="small"
         />
 
         <Drawer
+          onClose={toggleEditGroup}
+          open={editGroup}
           title={intl.formatMessage({
             defaultMessage: 'Edit Group Details',
           })}
-          open={editGroup}
           width="400"
-          onClose={toggleEditGroup}
         >
           {editGroup ? <EditGroup onClose={toggleEditGroup} /> : <div />}
         </Drawer>

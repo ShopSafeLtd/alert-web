@@ -1,19 +1,19 @@
-import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/create_blur_faces.generated';
+import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { UpdateOffenderBansMutation } from 'graphql/offenders/mutations/update/update-offender-ban.generated';
-import type { UpdateOffenderCrimeGroupsMutation } from 'graphql/offenders/mutations/update/update-offender-crime-group.generated';
-import type { UpdateOffenderVehiclesMutation } from 'graphql/offenders/mutations/update/update-offender-vehicles.generated';
-import type { AssociatedOffendersQuery } from 'graphql/offenders/queries/associated-offenders.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type { UpdateOffenderBansMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-ban.generated';
+import type { UpdateOffenderCrimeGroupsMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-crime-group.generated';
+import type { UpdateOffenderVehiclesMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-vehicles.generated';
+import type { AssociatedOffendersQuery } from 'graphql/offenders/queries/__generated__/associated-offenders.generated';
 import type {
   ViewOffenderQuery,
   ViewOffenderQueryVariables,
-} from 'graphql/offenders/queries/view-offender.generated';
+} from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import type { LanguageCode } from 'graphql/types';
-import type { CreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
+import type { CreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import type {
   BanData,
   EditFeedImage,
@@ -27,33 +27,33 @@ import hasPermission from '#/utils/has-permission';
 import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Modal, notification } from 'antd';
-import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/add-images-to-incident.generated';
-import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
-import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
-import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/add-images-to-offender.generated';
-import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
-import { useSubscribeToOffenderMutation } from 'graphql/offenders/mutations/subscribe-to-offender.generated';
-import { useUnsubscribeFromOffenderMutation } from 'graphql/offenders/mutations/unsubscribe-to-offender.generated';
-import { useUpdateOffenderAddressesMutation } from 'graphql/offenders/mutations/update/update-offender-address.generated';
-import { useUpdateOffenderBansMutation } from 'graphql/offenders/mutations/update/update-offender-ban.generated';
-import { useUpdateOffenderCrimeGroupsMutation } from 'graphql/offenders/mutations/update/update-offender-crime-group.generated';
-import { useUpdateOffenderImagesMutation } from 'graphql/offenders/mutations/update/update-offender-images.generated';
-import { useUpdateOffenderVehiclesMutation } from 'graphql/offenders/mutations/update/update-offender-vehicles.generated';
-import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
-import { useAssociatedOffendersQuery } from 'graphql/offenders/queries/associated-offenders.generated';
+import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/__generated__/add-images-to-incident.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
+import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/__generated__/add-images-to-offender.generated';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
+import { useSubscribeToOffenderMutation } from 'graphql/offenders/mutations/__generated__/subscribe-to-offender.generated';
+import { useUnsubscribeFromOffenderMutation } from 'graphql/offenders/mutations/__generated__/unsubscribe-to-offender.generated';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-offender.generated';
+import { useUpdateOffenderAddressesMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-address.generated';
+import { useUpdateOffenderBansMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-ban.generated';
+import { useUpdateOffenderCrimeGroupsMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-crime-group.generated';
+import { useUpdateOffenderImagesMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-images.generated';
+import { useUpdateOffenderVehiclesMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-vehicles.generated';
+import { useAssociatedOffendersQuery } from 'graphql/offenders/queries/__generated__/associated-offenders.generated';
 import {
   ViewOffenderDocument,
   useViewOffenderQuery,
-} from 'graphql/offenders/queries/view-offender.generated';
-import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
+} from 'graphql/offenders/queries/__generated__/view-offender.generated';
+import { useTranslateLazyQuery } from 'graphql/translate/queries/__generated__/translate.generated';
 import {
   PermissionMethod,
   PermissionModel,
   Role,
   TagType,
 } from 'graphql/types';
-import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
-import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
+import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
+import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -129,7 +129,7 @@ interface Return {
     addToIncident?: boolean
   ) => void;
   onAddUpdateImagesToIncident: (id: string) => void;
-  onAddVehicle: (value: VehicleData) => void;
+  onAddVehicle: (value: AddVehicleData) => void;
   onAssociateFilterChange: (value: string[]) => void;
   onDelete: (id: string) => void;
   onDeleteAddress: (id: string) => void;
@@ -196,7 +196,6 @@ interface Return {
   translateText: () => Promise<void>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
-  updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation>;
   updateIncidentList: (value: string) => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   userId: string;
@@ -632,42 +631,6 @@ const useViewOffender = (offenderId: string): Return => {
       },
     });
   };
-  const updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res?.createBlurFaces === null || res?.createBlurFaces === undefined)
-      return;
-
-    const existingData = store.readQuery<ViewOffenderQuery>({
-      query: ViewOffenderDocument,
-      variables,
-    });
-
-    if (!existingData?.offender) return;
-    const findIndex = existingData.offender.images.findIndex(
-      ({ id }) => id === res.createBlurFaces.id
-    );
-    store.writeQuery<ViewOffenderQuery>({
-      data: {
-        __typename: 'Query',
-
-        offender: update<ViewOffenderQuery['offender']>(existingData.offender, {
-          images: {
-            [findIndex]: {
-              $set: {
-                ...existingData.offender.images[findIndex],
-                optimised: res.createBlurFaces.optimised,
-                url: res.createBlurFaces.url,
-              },
-            },
-          },
-        }),
-      },
-      query: ViewOffenderDocument,
-      variables,
-    });
-  };
   // vehicle
   const [updateOffenderVehicles] = useUpdateOffenderVehiclesMutation({
     onError: () => {
@@ -851,7 +814,7 @@ const useViewOffender = (offenderId: string): Return => {
       });
     },
   });
-  const onAddVehicle = (value: VehicleData) => {
+  const onAddVehicle = (value: AddVehicleData) => {
     setSaving(true);
     if (value) {
       void createVehicle({
@@ -870,6 +833,10 @@ const useViewOffender = (offenderId: string): Return => {
         variables: {
           data: {
             colour: value.colour || '',
+            groups:
+              value.groupIds.length > 0
+                ? value.groupIds.map((id) => ({ id }))
+                : undefined,
             image:
               value.images && value.images.length > 0
                 ? {
@@ -1980,7 +1947,6 @@ const useViewOffender = (offenderId: string): Return => {
     translateText,
     updateDeleteDocument,
     updateDocumentList,
-    updateImagesList,
     updateIncidentList,
     updateInvestigationList,
     userId,

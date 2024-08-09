@@ -1,5 +1,5 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
+
 import {
   Button,
   Col,
@@ -12,38 +12,41 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
-import moment from 'moment';
-import { useIntl } from 'react-intl';
-import { heightValues } from 'types/enums/height';
 import { IdSource } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
-import type { FormData, OffenderData } from './useEditOffender';
+import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
+import { heightValues } from 'types/enums/height';
+
 import type { ImageData } from '../../../ImageSelect/ImageSelectAnalyse.view';
+import type { FormData, OffenderData } from './useEditOffender';
+
 import ImageSelectAnalyse from '../../../ImageSelect/ImageSelectAnalyse.view';
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  data: OffenderData;
-  onClose: () => void;
-  form: FormInstance<FormData>;
   ageCheck: boolean | undefined;
+  data: OffenderData;
+  form: FormInstance<FormData>;
   idVerified: boolean | undefined;
   images?: ImageData[];
-  uploading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
   setUploading: (value: boolean) => void;
+  uploading: boolean;
 }
 
 const EditOffender = ({
-  onSubmit,
-  data,
-  onClose,
-  form,
   ageCheck,
+  data,
+  form,
   idVerified,
   images,
-  uploading,
+  onClose,
+  onSubmit,
   setUploading,
+  uploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const imagesRequired = useStoreState(
@@ -59,39 +62,39 @@ const EditOffender = ({
   return (
     <div className="list-view">
       <Form<FormData>
-        onFinish={onSubmit}
-        layout="vertical"
         form={form}
         initialValues={{
-          name: data.name || null,
-          alias: data.alias || [],
           age: data.age || null,
-          gender: data.gender || null,
-          race: data.race || null,
-          build: data.build || null,
-          height: data.height || null,
-          hair: data.hair || null,
           ageCheck: !!data.dateOfBirth,
-          peculiarities: data.peculiarities || null,
+          alias: data.alias || [],
+          build: data.build || null,
+          comment: data.comment || null,
           dateOfBirth: data.dateOfBirth
             ? moment(data.dateOfBirth, 'YYYY-MM-DD')
             : null,
           dateSource: data.dateSource || null,
-          comment: data.comment || null,
-          idVerified: data.idVerified || null,
+          gender: data.gender || null,
+          hair: data.hair || null,
+          height: data.height || null,
           idSource: data.idSource || null,
+          idVerified: data.idVerified || null,
           images: data.images || null,
           knownFor: data.knownFor || [],
+          name: data.name || null,
+          peculiarities: data.peculiarities || null,
+          race: data.race || null,
           targetedGoods: data.targetedGoods || [],
         }}
+        layout="vertical"
+        onFinish={onSubmit}
       >
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Enter the offenders name if you know it.',
               })}
@@ -101,10 +104,10 @@ const EditOffender = ({
           </Col>
           <Col span={12}>
             <Form.Item
-              name="alias"
               label={intl.formatMessage({
                 defaultMessage: 'Alias',
               })}
+              name="alias"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Add the alias of the offender if known.',
               })}
@@ -116,10 +119,10 @@ const EditOffender = ({
         <Row gutter={16} wrap>
           <Col span={12}>
             <Form.Item
-              name="build"
               label={intl.formatMessage({
                 defaultMessage: 'Build',
               })}
+              name="build"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select the build of the offender if known.',
               })}
@@ -129,10 +132,10 @@ const EditOffender = ({
           </Col>
           <Col span={12}>
             <Form.Item
-              name="height"
               label={intl.formatMessage({
                 defaultMessage: 'Height',
               })}
+              name="height"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select the height of the offender if known.',
               })}
@@ -142,10 +145,10 @@ const EditOffender = ({
           </Col>
           <Col span={12}>
             <Form.Item
-              name="gender"
               label={intl.formatMessage({
                 defaultMessage: 'Sex',
               })}
+              name="gender"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select the gender of the offender if known.',
               })}
@@ -155,10 +158,10 @@ const EditOffender = ({
           </Col>
           <Col span={12}>
             <Form.Item
-              name="race"
               label={intl.formatMessage({
                 defaultMessage: 'Ethnicity',
               })}
+              name="race"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'Select the ethnicity of the offender if known.',
@@ -169,10 +172,10 @@ const EditOffender = ({
           </Col>
           <Col span={12}>
             <Form.Item
-              name="hair"
               label={intl.formatMessage({
                 defaultMessage: 'Hair',
               })}
+              name="hair"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The style and colour of the offenders hair if known.',
@@ -186,10 +189,10 @@ const EditOffender = ({
         <Row gutter={16} wrap>
           <Col span={24}>
             <Form.Item
-              name="peculiarities"
               label={intl.formatMessage({
                 defaultMessage: 'Characteristics',
               })}
+              name="peculiarities"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Any distinctive features of the offender.',
               })}
@@ -199,10 +202,10 @@ const EditOffender = ({
           </Col>
           <Col span={24}>
             <Form.Item
-              name="comment"
               label={intl.formatMessage({
                 defaultMessage: 'Comment',
               })}
+              name="comment"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Any other comments about this offender.',
               })}
@@ -220,10 +223,10 @@ const EditOffender = ({
             </Typography.Text>
             <Form.Item name="ageCheck" valuePropName="checked">
               <Switch
-                style={{ marginLeft: 10, marginTop: 10 }}
                 checkedChildren={intl.formatMessage({
                   defaultMessage: 'Yes',
                 })}
+                style={{ marginLeft: 10, marginTop: 10 }}
                 unCheckedChildren={intl.formatMessage({
                   defaultMessage: 'No',
                 })}
@@ -235,10 +238,10 @@ const EditOffender = ({
             <>
               <Col span={10}>
                 <Form.Item
-                  name="dateOfBirth"
                   label={intl.formatMessage({
                     defaultMessage: 'Date of Birth',
                   })}
+                  name="dateOfBirth"
                 >
                   <DatePicker
                     disabledDate={(current) =>
@@ -249,10 +252,10 @@ const EditOffender = ({
               </Col>
               <Col span={24}>
                 <Form.Item
-                  name="dateSource"
                   label={intl.formatMessage({
                     defaultMessage: 'Date of Birth Source',
                   })}
+                  name="dateSource"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       "Enter the information source of the offender's date of birth range of the offender.",
@@ -265,10 +268,10 @@ const EditOffender = ({
           ) : (
             <Col span={10}>
               <Form.Item
-                name="age"
                 label={intl.formatMessage({
                   defaultMessage: 'Age',
                 })}
+                name="age"
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'Select an estimated age range of the offender if known.',
@@ -282,10 +285,10 @@ const EditOffender = ({
         <Row gutter={50}>
           <Col>
             <Form.Item
-              name="idVerified"
               label={intl.formatMessage({
                 defaultMessage: "Has the offender's ID been verified?",
               })}
+              name="idVerified"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'Have you confirmed the offenders ID using an accepted method?',
@@ -304,24 +307,23 @@ const EditOffender = ({
           {idVerified && (
             <Col>
               <Form.Item
-                name="idSource"
                 label={intl.formatMessage({
                   defaultMessage: 'ID Source',
                 })}
-                tooltip={intl.formatMessage({
-                  defaultMessage: 'How did you confirm the ID?',
-                })}
+                name="idSource"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage: 'Please enter the source of the ID.',
                     }),
+                    required: true,
                   },
                 ]}
+                tooltip={intl.formatMessage({
+                  defaultMessage: 'How did you confirm the ID?',
+                })}
               >
                 <Select
-                  style={{ width: 200 }}
                   options={[
                     {
                       label: intl.formatMessage({
@@ -366,6 +368,7 @@ const EditOffender = ({
                       value: IdSource.Passport,
                     },
                   ]}
+                  style={{ width: 200 }}
                 />
               </Form.Item>
             </Col>
@@ -375,16 +378,16 @@ const EditOffender = ({
           <Row>
             <Col span={24}>
               <Form.Item
-                name="knownFor"
                 label={intl.formatMessage({
                   defaultMessage: 'Crime Types',
                 })}
+                name="knownFor"
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'Select the relevant crime types for this offender, these help to categorize the offender.',
                 })}
               >
-                <Select mode="multiple" maxTagCount={3}>
+                <Select maxTagCount={3} mode="multiple">
                   {data.knownFor.map((el) => (
                     <Select.Option key={el} value={el}>
                       {el}
@@ -399,15 +402,15 @@ const EditOffender = ({
           <Row>
             <Col span={24}>
               <Form.Item
-                name="targetedGoods"
                 label={intl.formatMessage({
                   defaultMessage: 'Goods',
                 })}
+                name="targetedGoods"
                 tooltip={intl.formatMessage({
                   defaultMessage: 'Select the Goods that this offender stole.',
                 })}
               >
-                <Select mode="multiple" maxTagCount={3}>
+                <Select maxTagCount={3} mode="multiple">
                   {data.targetedGoods.map((el) => (
                     <Select.Option key={el} value={el}>
                       {el}
@@ -510,41 +513,41 @@ const EditOffender = ({
         </Row> */}
 
         <Form.Item
-          name="images"
           label={intl.formatMessage({
             defaultMessage: 'Images',
           })}
-          tooltip={intl.formatMessage({
-            defaultMessage: 'Select the images that the offender is in.',
-          })}
+          name="images"
           rules={[
             {
-              required: imagesRequired,
               message: intl.formatMessage({
                 defaultMessage: 'Images are required for offenders.',
               }),
+              required: imagesRequired,
             },
           ]}
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Select the images that the offender is in.',
+          })}
         >
           <ImageSelectAnalyse
+            form={form}
             images={allImages}
-            value={data.images}
             setUploading={setUploading}
             uploading={uploading}
-            form={form}
+            value={data.images}
           />
         </Form.Item>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
-              <Button onClick={onClose} loading={uploading}>
+              <Button loading={uploading} onClick={onClose}>
                 {intl.formatMessage({
                   defaultMessage: 'Cancel',
                 })}
               </Button>
             </Col>
             <Col>
-              <Button type="primary" htmlType="submit" loading={uploading}>
+              <Button htmlType="submit" loading={uploading} type="primary">
                 {intl.formatMessage({
                   defaultMessage: 'Save',
                 })}

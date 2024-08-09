@@ -8,7 +8,6 @@
     "build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc && vite build ",
     "serve": "vite preview",
     "dev": "concurrently \"vite\" \"gulp watch\"",
-    "generate": "graphql-codegen --config codegen.yml",
     "postinstall": "node ./postInstall.js",
     "extract": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json",
     "compile": "formatjs compile",
@@ -16,7 +15,9 @@
     "upload-i18n": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json && simplelocalize upload --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --uploadPath en/lang.json --uploadFormat simplelocalize-json --languageKey en_US",
     "download-i18n": "simplelocalize download --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --downloadPath ./src/lang/locales/{lang}.json  --downloadFormat single-language-json",
     "e": "npx eslint .",
-    "validate-build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc --noEmit && vite build"
+    "validate-build": "NODE_OPTIONS='--max-old-space-size=8192' && tsc --noEmit && vite build",
+    "clean:graphql": "find ./src -type f -path '*/graphql/*' \\( -name '*.generated.ts' -o -name '*.generated.tsx' \\) -exec rm -f {} + && graphql-codegen --config codegen.yml",
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",

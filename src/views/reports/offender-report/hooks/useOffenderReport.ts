@@ -1,55 +1,61 @@
+import type { DateSelectModeType } from '#/components/reports/DateSelect/DateSelect.view';
+import type { DateRangeInput } from 'graphql/types';
+
+import { useStoreState } from '#/state';
+import arrangeTemplates from '#/utils/reports/setTemplates';
+import { useOffenderReportQuery } from 'graphql/reports/queries/__generated__/offender-report.generated';
+import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/__generated__/scheme-details.generated';
+import { ReportType } from 'graphql/types';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import moment from 'moment';
-import arrangeTemplates from '#/utils/reports/setTemplates';
-import { useStoreState } from '#/state';
-import useReportPrint from '../../../../utils/reportPrint/usePrintReports';
+
 import type { Props as Return } from './types';
 
-import OffenderLayout, { OffenderMetaData } from './initLayout';
+import useReportPrint from '../../../../utils/reportPrint/usePrintReports';
 import useReportState from '../../../../utils/reports/useReportState';
-import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/scheme-details.generated';
-import { ReportType } from 'graphql/types';
-import { useOffenderReportQuery } from 'graphql/reports/queries/offender-report.generated';
+import OffenderLayout, { OffenderMetaData } from './initLayout';
 
 const useOffenderReport = (): Return => {
   const { id: selectedOffender, reportId } = useParams();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const {
-    currentScheme,
-    logo,
-    businesses,
-    editMode,
-    setEditMode,
-    minDrawer,
-    setMinDrawer,
-    layout,
-    setLayout,
-    selectedBusiness,
-    setSelectedBusiness,
-    groups,
-    setGroups,
-    selectedGroups,
-    setSelectedGroups,
-    dateRange,
-    setDateRange,
-    addLogoDrawer,
-    setAddLogoDrawer,
-    logos,
-    setLogos,
-    metadata,
-    setMetadata,
-    templates,
-    setTemplates,
-    selectedTemplate,
-    saveAsDrawer,
-    setSaveAsDrawer,
-    removeLogo,
-    removeItem,
-    changeSize,
     addLogo,
-    selectTemplate,
+    addLogoDrawer,
+    businesses,
+    changeSize,
+    currentScheme,
+    dateRange,
+    editMode,
+    groups,
+    layout,
+    logo,
+    logos,
+    metadata,
+    minDrawer,
+    removeItem,
+    removeLogo,
+    saveAsDrawer,
     saveTemplate: saveTemplateState,
+    selectTemplate,
+    selectedBusiness,
+    selectedGroups,
+    selectedSchemes,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setDateRange,
+    setEditMode,
+    setGroups,
+    setLayout,
+    setLogos,
+    setMetadata,
+    setMinDrawer,
+    setSaveAsDrawer,
+    setSelectedBusiness,
+    setSelectedGroups,
+    setSelectedSchemes,
+    setTemplates,
+    templates,
   } = useReportState({
     InitLayout: OffenderLayout,
     InitMetaData: OffenderMetaData,
@@ -63,30 +69,6 @@ const useOffenderReport = (): Return => {
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
-      variables: {
-        where: {
-          scheme: {
-            id: {
-              equals: currentScheme,
-            },
-          },
-          users: {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          },
-        },
-        schemeWhere: {
-          id: currentScheme,
-        },
-        reportTemplatesWhere: {
-          type: {
-            equals: ReportType.Offender,
-          },
-        },
-      },
       onCompleted: (groupsData) => {
         const groupsFormatted = groupsData.groups.map((group) => ({
           label: group.name,
@@ -104,30 +86,72 @@ const useOffenderReport = (): Return => {
           setTemplates
         );
       },
+      variables: {
+        reportTemplatesWhere: {
+          type: {
+            equals: ReportType.Offender,
+          },
+        },
+        schemeWhere: {
+          id: currentScheme,
+        },
+        where: {
+          scheme: {
+            id: {
+              equals: currentScheme,
+            },
+          },
+          users: {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          },
+        },
+      },
     });
 
   const { data, loading } = useOffenderReportQuery({
     fetchPolicy: 'cache-and-network',
     skip: !currentScheme,
     variables: {
-      where: {
-        offenderId: selectedOffender || '',
-        businessIds: selectedBusiness,
-        dateRange,
-        schemeIds: [currentScheme],
-        groupIds:
-          selectedGroups.length > 0
-            ? selectedGroups
-            : groups.map(({ value }) => value),
-      },
       targetedWhere: {
-        offenderId: selectedOffender || '',
-        dateRange,
-        schemeIds: [currentScheme],
+        dateRange: dateRange ?? {
+          endDate: new Date(new Date().setHours(23, 59, 59)),
+          startDate: new Date(
+            new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+              0,
+              0,
+              59
+            )
+          ),
+        },
         groupIds:
           selectedGroups.length > 0
             ? selectedGroups
             : groups.map(({ value }) => value),
+        offenderId: selectedOffender || '',
+        schemeIds: [currentScheme],
+      },
+      where: {
+        businessIds: selectedBusiness,
+        dateRange: dateRange ?? {
+          endDate: new Date(new Date().setHours(23, 59, 59)),
+          startDate: new Date(
+            new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+              0,
+              0,
+              59
+            )
+          ),
+        },
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
+        offenderId: selectedOffender || '',
+        schemeIds: selectedSchemes,
       },
     },
   });
@@ -136,14 +160,14 @@ const useOffenderReport = (): Return => {
     data?.targetedGoods?.targetedGoods
       ?.filter((good) => good.totalIncidents > 0)
       .map((good, i) => ({
-        key: good.name + i.toString(),
+        avgLost: good?.averageLossValue?.toFixed(2),
         fullName: good.name,
         incidentsCreated: good.totalIncidents,
-        offendersCreated: good.totalOffenders,
+        key: good.name + i.toString(),
         lostValue: good.totalLostValue.toFixed(2),
+        offendersCreated: good.totalOffenders,
         recoveredValue: good.totalRecoveredValue.toFixed(2),
         successRate: ((good.totalSuccessRate || 0) * 100).toFixed(2),
-        avgLost: good?.averageLossValue?.toFixed(2),
       })) || [];
 
   const targetedBusinessData =
@@ -151,38 +175,38 @@ const useOffenderReport = (): Return => {
       ?.filter((business) => business.totalIncidents > 0)
 
       .map((business, i) => ({
-        key: business.name + i.toString(),
-        fullName: business.name,
-        incidentsCreated: business.totalIncidents,
-        offendersCreated: business.totalOffenders,
-        lostValue: business.totalLostValue.toFixed(2),
-        recoveredValue: business.totalRecoveredValue.toFixed(2),
-        successRate: ((business.totalSuccessRate || 0) * 100).toFixed(2),
+        avgLost: business?.averageLossValue?.toFixed(2) || '0',
         commonLost: business.mostCommonGoodLost || 'unknown',
+        fullName: business.name,
         highestValueLost:
           Number.parseFloat(
             (business.highestTotalValueGoodLost || 0).toFixed(2)
           ) || 0,
-        avgLost: business?.averageLossValue?.toFixed(2) || '0',
+        incidentsCreated: business.totalIncidents,
+        key: business.name + i.toString(),
+        lostValue: business.totalLostValue.toFixed(2),
+        offendersCreated: business.totalOffenders,
+        recoveredValue: business.totalRecoveredValue.toFixed(2),
+        successRate: ((business.totalSuccessRate || 0) * 100).toFixed(2),
       })) || [];
 
   const incidentsTableData =
     data?.offenderReport?.incidentsTable?.incidents?.map((incident) => ({
-      key: incident.id,
       alertId: incident.reference,
+      crimeRef: incident.policeRef || '',
+      crimeTypes: incident.crimeTypes?.map((t) => t.name).join(', ') || '',
       date: moment(incident.date).format('DD/MM/YYYY'),
+      key: incident.id,
+      location: incident.location?.alias || '',
+      policeAttended: incident.policeReported ? 'Yes' : 'No',
+      policeReported: incident.policeInvolved ? 'Yes' : 'No',
+      totalOffenders: incident.totalOffenders || 0,
       value: incident.incidentItems
         ?.reduce((acc, item) => acc + (item.value || 0), 0)
         .toFixed(2),
       valueRec: incident.incidentItems
         ?.reduce((acc, item) => acc + (item.recoveredValue || 0), 0)
         .toFixed(2),
-      location: incident.location?.alias || '',
-      totalOffenders: incident.totalOffenders || 0,
-      crimeTypes: incident.crimeTypes?.map((t) => t.name).join(', ') || '',
-      policeReported: incident.policeInvolved ? 'Yes' : 'No',
-      policeAttended: incident.policeReported ? 'Yes' : 'No',
-      crimeRef: incident.policeRef || '',
     })) || [];
 
   const saveTemplate = (name: string, method: 'create' | 'update') => {
@@ -194,52 +218,70 @@ const useOffenderReport = (): Return => {
             ?.layout.map((item) => item.id);
     saveTemplateState(name, method, idsToDelete);
   };
+  const onSetDateRange = (
+    rangeValue: DateRangeInput | undefined,
+    modeValue: DateSelectModeType | undefined
+  ) =>
+    setDateRange(
+      rangeValue ?? {
+        endDate: new Date(new Date().setHours(23, 59, 59)),
+        startDate: new Date(
+          new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+            0,
+            0,
+            59
+          )
+        ),
+      },
+      modeValue ?? 'last30Days'
+    );
 
   return {
+    addLogo,
+    addLogoDrawer,
     businesses: businesses
       ? businesses.map((business) => ({
           label: business.name,
           value: business.id,
         }))
       : [],
-    selectedOffender: selectedOffender || '',
-    loading,
-    data,
-    groups,
-    dateRange,
-    setDateRange,
-    setSelectedGroups,
-    groupsLoading,
-    selectedGroups,
-    selectedBusiness,
-    setSelectedBusiness,
+    changeSize,
     componentRef,
+    data,
+    dateRange,
+    editMode,
+    groups,
+    groupsLoading,
     handlePrint,
+    incidentsTableData,
     isPrinting,
     layout,
-    setLayout,
-    minDrawer,
-    setMinDrawer,
+    loading,
     logo,
-    removeItem,
-    changeSize,
-    targetedBusinessData,
-    targetedGoodsData,
-    incidentsTableData,
-    editMode,
-    setEditMode,
-    addLogo,
-    addLogoDrawer,
     logos,
     metadata,
+    minDrawer,
+    removeItem,
     removeLogo,
     saveAsDrawer,
     saveTemplate,
     selectTemplate,
+    selectedBusiness,
+    selectedGroups,
+    selectedOffender: selectedOffender || '',
     selectedTemplate,
-    setMetadata,
     setAddLogoDrawer,
+    setDateRange: onSetDateRange,
+    setEditMode,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
     setSaveAsDrawer,
+    setSelectedBusiness,
+    setSelectedGroups,
+    setSelectedSchemes,
+    targetedBusinessData,
+    targetedGoodsData,
     templates,
   };
 };

@@ -1,80 +1,78 @@
-import React from 'react';
-import { Button, Col, Drawer, Row, Table, Typography } from 'antd';
-import { SyncOutlined } from '@ant-design/icons';
 import type { MutationUpdaterFn } from '@apollo/client';
-import moment from 'moment';
+import type { ColumnsType } from 'antd/es/table/interface';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/__generated__/delete-incident.generated';
+import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/__generated__/delete-offender.generated';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/__generated__/restore-incident.generated';
+import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/__generated__/restore-offender.generated';
+import type { RecycledItemsQuery } from 'graphql/recycled/queries/__generated__/recycled-items.generated';
 
+import { SyncOutlined } from '@ant-design/icons';
+import { Button, Col, Drawer, Row, Table, Typography } from 'antd';
 import EditIncident from 'components/form-components/recycled/RestoreIncident';
 import EditOffender from 'components/form-components/recycled/RestoreOffender';
-import type { ColumnsType } from 'antd/es/table/interface';
+import moment from 'moment';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { RecycledItemsQuery } from 'graphql/recycled/queries/recycled-items.generated';
-import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
-import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
-import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
-import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
 
 interface Props {
+  currentId: string | undefined;
   data: RecycledItemsQuery | undefined;
   loading: boolean;
-  saving: boolean;
-  currentId: string | undefined;
-  setCurrentId: (value: string | undefined) => void;
   recycledId: string | undefined;
-  setRecycledId: (value: string | undefined) => void;
   restoreIncident: boolean;
-  toggleRestoreIncident: () => void;
-  updateRestoreIncident: MutationUpdaterFn<RestoreIncidentMutation>;
-  updateDeleteIncident: MutationUpdaterFn<DeleteIncidentMutation>;
-
   restoreOffender: boolean;
-  toggleRestoreOffender: () => void;
+  saving: boolean;
+  setCurrentId: (value: string | undefined) => void;
+  setRecycledId: (value: string | undefined) => void;
   toggleRestore: (value: string | undefined) => void;
-  updateRestoreOffender: MutationUpdaterFn<RestoreOffenderMutation>;
+  toggleRestoreIncident: () => void;
+
+  toggleRestoreOffender: () => void;
+  updateDeleteIncident: MutationUpdaterFn<DeleteIncidentMutation>;
   updateDeleteOffender: MutationUpdaterFn<DeleteOffenderMutation>;
+  updateRestoreIncident: MutationUpdaterFn<RestoreIncidentMutation>;
+  updateRestoreOffender: MutationUpdaterFn<RestoreOffenderMutation>;
 }
 
 interface ColumnType {
+  deletedAt: Date | undefined;
+  deletedBy: string;
+  expiresAt: Date | undefined;
+  id: string;
   key: string;
   title: string;
-  id: string;
-  deletedAt: Date | undefined;
-  expiresAt: Date | undefined;
-  deletedBy: string;
   type: string | undefined;
 }
 
 const RecycleBin = ({
+  currentId,
   data,
   loading,
-  saving,
-  currentId,
-  setCurrentId,
   recycledId,
+  restoreIncident,
+  restoreOffender,
+  saving,
+  setCurrentId,
   setRecycledId,
   toggleRestore,
-  restoreIncident,
   toggleRestoreIncident,
-  updateRestoreIncident,
-  updateDeleteIncident,
-  restoreOffender,
   toggleRestoreOffender,
-  updateRestoreOffender,
+  updateDeleteIncident,
   updateDeleteOffender,
+  updateRestoreIncident,
+  updateRestoreOffender,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const columns: ColumnsType<ColumnType> = [
     {
+      dataIndex: 'type',
       key: 'type',
       title: 'Type',
-      dataIndex: 'type',
       width: 200,
     },
     {
-      key: 'title',
-      title: 'Title',
       dataIndex: 'title',
-      width: 300,
+      key: 'title',
       render: (value, record) => (
         <Typography.Link
           disabled={saving}
@@ -87,46 +85,48 @@ const RecycleBin = ({
           {value}
         </Typography.Link>
       ),
+      title: 'Title',
+      width: 300,
     },
     {
-      key: 'deletedBy',
-      title: 'Deleted By',
       dataIndex: 'deletedBy',
       ellipsis: true,
+      key: 'deletedBy',
+      title: 'Deleted By',
     },
     {
-      key: 'deletedAt',
-      title: 'Deleted At',
       dataIndex: 'deletedAt',
       ellipsis: true,
+      key: 'deletedAt',
       render: (value: Date | undefined) =>
         moment(value).format('hh:mm DD/MM/YYYY'),
+      title: 'Deleted At',
     },
     {
-      key: 'expiresAt',
-      title: 'Scheduled Deletion',
       dataIndex: 'expiresAt',
       ellipsis: true,
+      key: 'expiresAt',
       render: (value: Date | undefined) =>
         moment(value).format('hh:mm DD/MM/YYYY'),
+      title: 'Scheduled Deletion',
     },
     {
-      key: 'restore',
-      title: 'Restore',
       dataIndex: 'restore',
-      width: 80,
+      key: 'restore',
       render: (value, record) => (
         <Button
           disabled={saving}
+          icon={<SyncOutlined />}
           onClick={() => {
             setCurrentId(record.key);
             setRecycledId(record.id);
             toggleRestore(record.type);
           }}
-          icon={<SyncOutlined />}
           size="small"
         />
       ),
+      title: 'Restore',
+      width: 80,
     },
   ];
 
@@ -149,59 +149,59 @@ const RecycleBin = ({
       </Row>
 
       <Table<ColumnType>
-        size="small"
-        style={{ marginRight: 10 }}
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
         columns={columns}
         dataSource={data?.recycledItems?.map((item) => ({
-          id: item?.id || '',
-          key: item?.incident?.id || item?.offender?.id || '',
-          // eslint-disable-next-line
-          type: item?.incident?.__typename || item?.offender?.__typename,
-          title: item?.incident?.subject || item?.offender?.name || '',
           deletedAt: item?.deletedAt,
-          expiresAt: item?.expiresAt,
           deletedBy: item?.deletedBy
             ? `${item?.deletedBy?.fullName}, ${item?.deletedBy?.businesses[0]?.name}.`
             : 'Automatically Expired',
+          expiresAt: item?.expiresAt,
+          id: item?.id || '',
+          key: item?.incident?.id || item?.offender?.id || '',
+          title: item?.incident?.subject || item?.offender?.name || '',
+          // eslint-disable-next-line
+          type: item?.incident?.__typename || item?.offender?.__typename,
         }))}
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          pageSize: 20,
+        }}
+        size="small"
+        style={{ marginRight: 10 }}
       />
       <Drawer
+        onClose={toggleRestoreIncident}
+        open={restoreIncident}
         title={intl.formatMessage({
           defaultMessage: 'Recycled Incident',
         })}
-        open={restoreIncident}
         width="400"
-        onClose={toggleRestoreIncident}
       >
         <EditIncident
-          updateRestore={updateRestoreIncident}
-          updateDelete={updateDeleteIncident}
           incidentId={currentId}
-          recycledId={recycledId}
           onClose={toggleRestoreIncident}
+          recycledId={recycledId}
+          updateDelete={updateDeleteIncident}
+          updateRestore={updateRestoreIncident}
         />
       </Drawer>
 
       <Drawer
+        onClose={toggleRestoreOffender}
+        open={restoreOffender}
         title={intl.formatMessage({
           defaultMessage: 'Recycled Offender',
         })}
-        open={restoreOffender}
         width="400"
-        onClose={toggleRestoreOffender}
       >
         <EditOffender
-          updateRestore={updateRestoreOffender}
-          updateDelete={updateDeleteOffender}
           offenderId={currentId}
-          recycledId={recycledId}
           onClose={toggleRestoreOffender}
+          recycledId={recycledId}
+          updateDelete={updateDeleteOffender}
+          updateRestore={updateRestoreOffender}
         />
       </Drawer>
     </div>

@@ -1,60 +1,61 @@
-import { useEffect, useState } from 'react';
-
-import errorNotification from 'types/mutation_notifications/error_notification';
 import type { FormInstance } from 'antd';
+
+import { useCreateOneQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/__generated__/createQuestionGroup.generated';
+import { useUpdateQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/__generated__/updateQuestionGroup.generated';
 import { Form, notification } from 'antd';
-import { useStoreState } from 'state';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
+
 import type { ListData } from '../../../views/adminTodo/useActivities';
-import { useCreateOneQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/createQuestionGroup.generated';
-import { useUpdateQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/updateQuestionGroup.generated';
 
 const { useForm } = Form;
 
 export interface FormData {
-  name: string;
+  defaultDueDate: number;
   description: string;
+  name: string;
   questions: {
     id: string;
     question: string;
   }[];
-  defaultDueDate: number;
 }
 
 interface Props {
-  onClose: () => void;
-  update: (item: ListData, type: 'create' | 'update' | 'delete') => void;
   id?: string;
   initData?: {
-    name: string;
+    defaultDueDays: number;
     description: string;
+    name: string;
     questions: {
       id: string;
       question: string;
     }[];
-    defaultDueDays: number;
   };
+  onClose: () => void;
+  update: (item: ListData, type: 'create' | 'delete' | 'update') => void;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-
-  saving: boolean;
   addQuestion: boolean;
-  setAddQuestion: (value: boolean) => void;
-  updateQs: (id: string, question: string) => void;
+
+  form: FormInstance<FormData>;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
   selectedIds?: string[];
   selectedQuestions: { id: string; question: string }[];
-  setSelectedQuestions: (value: { id: string; question: string }[]) => void;
+  setAddQuestion: (value: boolean) => void;
   setSelectedIds: (value: string[]) => void;
-  form: FormInstance<FormData>;
+  setSelectedQuestions: (value: { id: string; question: string }[]) => void;
+  updateQs: (id: string, question: string) => void;
 }
 
 const useCreateActivityTemplate = ({
+  id,
+  initData,
   onClose,
   update,
-  initData,
-  id,
 }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
@@ -69,7 +70,7 @@ const useCreateActivityTemplate = ({
 
   useEffect(() => {
     if (initData) {
-      const { name, description, questions, defaultDueDays } = initData;
+      const { defaultDueDays, description, name, questions } = initData;
       setSelectedIds(questions.map((question) => question.id));
       setSelectedQuestions(
         questions.map((question) => ({
@@ -79,9 +80,9 @@ const useCreateActivityTemplate = ({
       );
 
       form.setFieldsValue({
-        name,
-        description,
         defaultDueDate: defaultDueDays,
+        description,
+        name,
       });
     }
   }, [initData]);
@@ -91,11 +92,11 @@ const useCreateActivityTemplate = ({
       if (createOneQuestionGroup) {
         update(
           {
-            name: createOneQuestionGroup.name,
-            description: createOneQuestionGroup.description || '',
-            questions: selectedQuestions,
             defaultDueDays: createOneQuestionGroup.defaultDueDate,
+            description: createOneQuestionGroup.description || '',
             id: createOneQuestionGroup.id,
+            name: createOneQuestionGroup.name,
+            questions: selectedQuestions,
           },
           'create'
         );
@@ -103,11 +104,11 @@ const useCreateActivityTemplate = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The activity has been added.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -123,11 +124,11 @@ const useCreateActivityTemplate = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The activity has been added.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -143,18 +144,15 @@ const useCreateActivityTemplate = ({
     if (id) {
       void updateGroup({
         variables: {
-          where: {
-            id,
-          },
           data: {
-            name: {
-              set: data.name,
+            defaultDueDate: {
+              set: data.defaultDueDate,
             },
             description: {
               set: data.description,
             },
-            defaultDueDate: {
-              set: data.defaultDueDate,
+            name: {
+              set: data.name,
             },
             questions: {
               set: selectedQuestions.map((question) => ({
@@ -162,15 +160,18 @@ const useCreateActivityTemplate = ({
               })),
             },
           },
+          where: {
+            id,
+          },
         },
       });
       update(
         {
-          name: data.name,
-          description: data.description,
-          questions: selectedQuestions,
           defaultDueDays: data.defaultDueDate,
+          description: data.description,
           id,
+          name: data.name,
+          questions: selectedQuestions,
         },
         'update'
       );
@@ -178,9 +179,9 @@ const useCreateActivityTemplate = ({
       void createGroup({
         variables: {
           data: {
-            name: data.name,
-            description: data.description,
             defaultDueDate: data.defaultDueDate,
+            description: data.description,
+            name: data.name,
             questions: {
               connect: selectedQuestions.map((question) => ({
                 id: question.id,
@@ -205,15 +206,15 @@ const useCreateActivityTemplate = ({
   };
 
   return {
+    addQuestion,
+    form,
     onSubmit,
     saving,
-    addQuestion,
-    setAddQuestion,
     selectedIds,
     selectedQuestions,
-    setSelectedQuestions,
+    setAddQuestion,
     setSelectedIds,
-    form,
+    setSelectedQuestions,
     updateQs,
   };
 };

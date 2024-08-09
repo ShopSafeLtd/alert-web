@@ -1,36 +1,38 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+
 import React from 'react';
+
 import View from './AddInvestigation.view';
 import useAddInvestigation from './useAddInvestigation';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
 
 interface Props {
+  crimeGroupId?: null | string;
+  incidentId?: null | string;
+  offenderId?: null | string;
   onClose: () => void;
-  incidentId?: string | null;
-  offenderId?: string | null;
-  vehicleId?: string | null;
-  crimeGroupId?: string | null;
   update?: MutationUpdaterFn<CreateInvestigationMutation>;
+  vehicleId?: null | string;
 }
 
 const AddInvestigation = ({
+  crimeGroupId,
+  incidentId,
+  offenderId,
   onClose,
   update,
-  offenderId,
-  incidentId,
   vehicleId,
-  crimeGroupId,
 }: Props): JSX.Element => {
   const { onSubmit, saving } = useAddInvestigation({
+    crimeGroupId,
+    incidentId,
+    offenderId,
     onClose,
     update,
-    offenderId,
-    incidentId,
     vehicleId,
-    crimeGroupId,
   });
 
-  return <View onSubmit={onSubmit} onClose={onClose} saving={saving} />;
+  return <View onClose={onClose} onSubmit={onSubmit} saving={saving} />;
 };
 
 export default AddInvestigation;

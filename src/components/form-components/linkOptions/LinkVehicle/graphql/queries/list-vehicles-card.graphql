@@ -6,7 +6,12 @@ query ListVehiclesCard(
 ) {
   listVehicles(take: $take, skip: $skip, where: $where, order: $order) {
     vehicles {
-      ...Vehicles
+      id
+      reference
+      colour
+      model
+      make
+      registration
       images {
         id
         optimised

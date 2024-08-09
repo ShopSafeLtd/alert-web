@@ -1,7 +1,7 @@
-import type { IncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
+import type { IncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
 import type { IncidentFilters } from 'state/data-model';
 
 import { PrioButtonFilter } from '#/components/incidents/IncidentFilter/PrioFilter';
@@ -402,6 +402,17 @@ const IncidentFeed = ({
                   ),
                 },
                 {
+                  dataIndex: 'siteName',
+                  key: 'siteName',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Business Name',
+                      })}
+                    </Typography.Text>
+                  ),
+                },
+                {
                   dataIndex: 'offenders',
                   key: 'offenders',
                   render: (value: { id: string; name: string }[]) =>
@@ -442,6 +453,7 @@ const IncidentFeed = ({
                 description: item.node.description,
                 key: item.node.id,
                 offenders: item.node.offenders,
+                siteName: item.node.business?.name ?? '',
                 type: item.node.crimeTypes.map((type) => type.name).toString(),
               }))}
               onRow={(record) => ({

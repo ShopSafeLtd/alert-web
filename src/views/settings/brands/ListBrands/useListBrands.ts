@@ -1,47 +1,47 @@
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
-import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import type { MutationUpdaterFn } from '@apollo/client';
-import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
-import { QueryMode } from 'graphql/types';
+import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/upsert-brand.generated';
 import type {
   BrandsQuery,
   BrandsQueryVariables,
-} from '#/views/settings/brands/graphql/queries/brands.generated';
+} from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+
+import { useDeleteBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/delete-brand.generated';
 import {
   BrandsDocument,
   useBrandsQuery,
-} from '#/views/settings/brands/graphql/queries/brands.generated';
-import { useDeleteBrandMutation } from '#/views/settings/brands/graphql/mutations/delete-brand.generated';
+} from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { notification } from 'antd';
+import { QueryMode } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Return {
+  addBrand: boolean;
+  brandId: string;
   data:
     | {
         node: {
-          id: string;
-          name: string;
-          description?: string | null;
-          businesses: Array<{
+          businesses: {
             __typename?: 'Business';
             id: string;
             name: string;
-          }>;
+          }[];
+          description?: null | string;
+          id: string;
+          name: string;
         };
       }[]
     | null
     | undefined;
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  addBrand: boolean;
-  toggleAddBrand: () => void;
-  saving: boolean;
   onDelete: (value: string) => void;
-  updateNewBrandList: MutationUpdaterFn<UpsertBrandMutation>;
-  brandId: string;
+  saving: boolean;
+  search: string;
   setBrandId: (value: string) => void;
+  setSearch: (value: string) => void;
+  toggleAddBrand: () => void;
+  updateNewBrandList: MutationUpdaterFn<UpsertBrandMutation>;
 }
 
 const useBrandList = (): Return => {
@@ -54,10 +54,6 @@ const useBrandList = (): Return => {
 
   const variables = {
     where: {
-      schemeId: {
-        equals: schemeId,
-      },
-
       OR: search
         ? [
             {
@@ -74,6 +70,10 @@ const useBrandList = (): Return => {
             },
           ]
         : [],
+
+      schemeId: {
+        equals: schemeId,
+      },
     },
   };
   const { data, loading } = useBrandsQuery({
@@ -85,8 +85,8 @@ const useBrandList = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Removed',
         description: `The brand has been removed from ${schemeName}!`,
+        message: 'Successfully Removed',
         placement: 'bottomRight',
       });
     },
@@ -105,15 +105,15 @@ const useBrandList = (): Return => {
       let count = existingData?.brands?.totalCount || 1;
       count -= 1;
       store.writeQuery<BrandsQuery>({
-        query: BrandsDocument,
         data: {
           brands: {
-            totalCount: count,
             edges: existingData?.brands?.edges.filter(
               ({ node: brand }) => brand?.id !== res?.deleteBrand?.id
             ),
+            totalCount: count,
           },
         },
+        query: BrandsDocument,
 
         variables,
       });
@@ -145,13 +145,13 @@ const useBrandList = (): Return => {
     let count = existingData?.brands?.totalCount || 0;
     count += 1;
     store.writeQuery<BrandsQuery, BrandsQueryVariables>({
-      query: BrandsDocument,
       data: {
         brands: {
-          totalCount: count,
           edges: [...existingData.brands.edges, { node: res.upsertBrand }],
+          totalCount: count,
         },
       },
+      query: BrandsDocument,
       variables,
     });
   };
@@ -161,18 +161,18 @@ const useBrandList = (): Return => {
   };
 
   return {
+    addBrand,
+    brandId,
     data: data?.brands?.edges,
     loading: (data === null || data === undefined) && loading,
-    search,
-    setSearch,
-    addBrand,
-    toggleAddBrand,
-
-    saving,
     onDelete,
-    updateNewBrandList,
-    brandId,
+    saving,
+
+    search,
     setBrandId,
+    setSearch,
+    toggleAddBrand,
+    updateNewBrandList,
   };
 };
 

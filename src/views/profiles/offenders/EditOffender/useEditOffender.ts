@@ -1,24 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
-
 import type { FormInstance } from 'antd';
-import { Form, message, Modal, notification, Upload } from 'antd';
-import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import { useNavigate } from 'react-router';
-import type {
-  BanData,
-  CrimeGroupData,
-  CustomGalleryData,
-  Image,
-  SelectOptions,
-  TagData,
-  VehicleData,
-} from 'types/DataType';
-import update from 'immutability-helper';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { useGroupsContext } from '#/context/groups-context';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import type {
   Age,
   Build,
@@ -28,48 +11,65 @@ import type {
   OffenderUpdateInput,
   Race,
 } from 'graphql/types';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import type {
+  BanData,
+  CrimeGroupData,
+  CustomGalleryData,
+  Image,
+  SelectOptions,
+  TagData,
+  VehicleData,
+} from 'types/DataType';
+
+import { useGroupsContext } from '#/context/groups-context';
+import { Form, Modal, Upload, message, notification } from 'antd';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-offender.generated';
+import { useViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { ImagePosition, Model, Role } from 'graphql/types';
-import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
-import { useViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
-import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
 interface AddAddressForm {
   alias: string;
   building: string;
-  street: string;
-  townCity: string;
   county: string;
   postcode: string;
+  street: string;
+  townCity: string;
 }
 
 interface EditAddressForm {
-  id: string;
   alias: string;
   building: string;
+  county: string;
+  id: string;
+  postcode: string;
   street: string;
   townCity: string;
-  county: string;
-  postcode: string;
 }
 
 interface AddressesData {
-  id: string;
   alias: string;
   building: string;
+  county: string;
+  deleted: boolean;
+  id: string;
+  new: boolean;
+  postcode: string;
   street: string;
   townCity: string;
-  county: string;
-  postcode: string;
-  new: boolean;
   updated: boolean;
-  deleted: boolean;
 }
 
 interface Props {
@@ -78,46 +78,47 @@ interface Props {
 }
 
 export interface FormData {
-  name: string;
-  alias?: string[];
   age: Age;
-  gender: Gender;
-  race: Race;
+  alias?: string[];
   build: Build;
-  height: Height;
-  hair: string;
-  peculiarities: string;
   comment: string;
-  dateSource?: string;
+  customGalleries?: (SelectOptions | string)[];
   dateOfBirth?: Date;
+  dateSource?: string;
+  gender: Gender;
   groups: string[];
-  tags: Array<string | SelectOptions>;
-  images?: { id: string; url: string; optimised: string }[];
-  idVerified?: boolean;
+  hair: string;
+  height: Height;
   idSource?: IdSource;
-  customGalleries?: Array<string | SelectOptions>;
+  idVerified?: boolean;
+  images?: { id: string; optimised: string; url: string }[];
+  name: string;
+  peculiarities: string;
+  race: Race;
+  tags: (SelectOptions | string)[];
 }
 
 export interface BanType extends BanData {
+  deleted?: boolean;
   new?: boolean;
   updated?: boolean;
-  deleted?: boolean;
 }
 
 interface VehicleType extends VehicleData {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
   deleted: boolean;
+  edited: boolean;
+  existing: boolean;
+  new: boolean;
 }
 
 interface CrimeGroupType extends VehicleData {
-  existing: boolean;
   deleted: boolean;
+  existing: boolean;
 }
 
 interface Return {
   addAddress: boolean;
+  addCustomGallery: boolean;
   addExclusion: boolean;
   addOffenderTag: boolean;
   addressesData: AddressesData[] | null;
@@ -127,14 +128,16 @@ interface Return {
   bansData: BanType[];
   beforeUpload: (value: RcFile) => void;
   crimeGroupsData: CrimeGroupType[];
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
   data: ViewOffenderQuery | undefined;
   deleteConfirm: (value: string) => void;
-  editAddress: string | null;
+  editAddress: null | string;
   editExclusion: boolean;
   editImage: Image | null;
   fileList: Image[];
   form: FormInstance<FormData>;
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
   idVerified: boolean;
   imgChange: UploadProps['onChange'];
@@ -155,27 +158,24 @@ interface Return {
   onSubmitAddress: (data: AddAddressForm) => void;
   onUpdateExclusion: (value: BanData) => void;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  primaryImage: string;
   saving: boolean;
   setAgeCheck: (value: boolean) => void;
   setBanData: (value: BanType) => void;
-  tags: { value: string; label: string }[];
+  setPrimaryImage: (value: string) => void;
+  tags: { label: string; value: string }[];
   tagsLoading: boolean;
   toggleAddAddress: () => void;
+
+  toggleAddCustomGallery: () => void;
   toggleAddExclusion: () => void;
   toggleAddOffenderTag: () => void;
-  toggleEditAddress: (value: string | null) => void;
+  toggleEditAddress: (value: null | string) => void;
   toggleEditExclusion: () => void;
   toggleEditImage: (value?: Image) => void;
-
-  vehiclesData: VehicleType[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
-  addCustomGallery: boolean;
-  toggleAddCustomGallery: () => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
+  vehiclesData: VehicleType[];
 }
 
 const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
@@ -231,8 +231,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       ...addressesData,
       {
         ...data,
-        id: `${Math.random()}`,
         deleted: false,
+        id: `${Math.random()}`,
         new: true,
         updated: false,
       },
@@ -272,8 +272,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           [index]: {
             $set: {
               ...existingData,
-              updated: false,
               deleted: true,
+              updated: false,
             },
           },
         })
@@ -282,28 +282,23 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   };
 
   const { data: offenderData, loading } = useViewOffenderQuery({
-    variables: {
-      where: {
-        id: offenderId,
-      },
-    },
     onCompleted: ({ offender }) => {
       setAgeCheck(!!offender?.dateOfBirth);
       if (offender?.images && offender.images.length > 0) {
         setFileList(
           offender?.images.map((image) => ({
-            // id: image.id,
-            uid: `${image.id}`,
+            edited: false,
             name: `${image.id}.png`,
-            status: 'done',
-            url: `${image.optimised || image.url || ''}`,
+            new: false,
             optimised: `${image.optimised || image.url || ''}`,
+            policeImage: image.policeImage || false,
             position: image.position,
             primary: image.primary || false,
-            policeImage: image.policeImage || false,
             rotation: image.rotation || 0,
-            edited: false,
-            new: false,
+            status: 'done',
+            // id: image.id,
+            uid: `${image.id}`,
+            url: `${image.optimised || image.url || ''}`,
           }))
         );
         const findPrimaryImage = offender?.images.find(
@@ -317,12 +312,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             deleted: false,
             description: ban.description || '',
             endDate: ban.endDate,
-            startDate: ban.startDate,
             id: ban.id,
             location: ban.location,
             new: false,
-            updated: false,
+            startDate: ban.startDate,
             type: ban.type,
+            updated: false,
           }))
         );
       }
@@ -347,9 +342,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           offender.vehicles.map((item) => ({
             ...item,
             deleted: false,
-            new: false,
             edited: false,
             existing: false,
+            new: false,
           }))
         );
       }
@@ -364,6 +359,11 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       }
 
       if (offender?.idVerified) setIDVerified(true);
+    },
+    variables: {
+      where: {
+        id: offenderId,
+      },
     },
   });
 
@@ -403,12 +403,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   useEffect(() => {
     if (groups) {
       setOffendersState({
+        order,
         pagination,
         variables: {
           ...variables,
           groups: groups.map((group) => group.value),
         },
-        order,
       });
     }
   }, [groups]);
@@ -417,15 +417,15 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
+        dataType: {
+          equals: Model.Offender,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Offender,
         },
       },
     },
@@ -437,10 +437,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       setSaving(false);
       navigate(`/app/offenders/view/${offenderId}`);
       notification.success({
-        message: 'Successfully Updated!',
         description: reviewed
           ? 'The offender has been approved!'
           : 'The offender has been updated!',
+        message: 'Successfully Updated!',
         placement: 'bottomRight',
       });
     },
@@ -456,28 +456,28 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     const deleteAddresses = addressesData.filter((item) => item.deleted);
     return {
       create: createAddresses.map((item) => ({
-        postcode: item.postcode,
-        street: item.street,
-        townCity: item.townCity,
         alias: item.alias,
         building: item.building,
         county: item.county,
+        postcode: item.postcode,
+        street: item.street,
+        townCity: item.townCity,
+      })),
+      delete: deleteAddresses.map((item) => ({
+        id: item.id,
       })),
       update: updateAddresses.map((item) => ({
         data: {
-          postcode: { set: item.postcode },
-          street: { set: item.street },
-          townCity: { set: item.townCity },
           alias: { set: item.alias },
           building: { set: item.building },
           county: { set: item.county },
+          postcode: { set: item.postcode },
+          street: { set: item.street },
+          townCity: { set: item.townCity },
         },
         where: {
           id: item.id,
         },
-      })),
-      delete: deleteAddresses.map((item) => ({
-        id: item.id,
       })),
     };
   };
@@ -497,6 +497,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                   id: userId,
                 },
               },
+              description: ban.description,
               endDate: ban.endDate || new Date(),
               location: ban.location || '',
               scheme: {
@@ -505,27 +506,26 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 },
               },
               startDate: ban.startDate || new Date(),
-              description: ban.description,
               type: ban.type,
-            }))
-          : undefined,
-        update: updatedBans
-          ? updatedBans.map((ban) => ({
-              data: {
-                endDate: { set: ban.endDate },
-                location: { set: ban.location },
-                startDate: { set: ban.startDate },
-                description: { set: ban.description },
-                type: { set: ban.type },
-              },
-              where: {
-                id: ban.id,
-              },
             }))
           : undefined,
         delete: deletedBans
           ? deletedBans.map((ban) => ({
               id: ban.id,
+            }))
+          : undefined,
+        update: updatedBans
+          ? updatedBans.map((ban) => ({
+              data: {
+                description: { set: ban.description },
+                endDate: { set: ban.endDate },
+                location: { set: ban.location },
+                startDate: { set: ban.startDate },
+                type: { set: ban.type },
+              },
+              where: {
+                id: ban.id,
+              },
             }))
           : undefined,
       };
@@ -540,37 +540,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           existingVehicles.length > 0
             ? existingVehicles.map(({ id }) => ({ id }))
             : undefined,
-        disconnect:
-          removeVehicles && removeVehicles.length > 0
-            ? removeVehicles.map(({ id }) => ({ id }))
-            : undefined,
-        update: editedVehicles.map((vehicle) => ({
-          where: { id: vehicle.id },
-          data: {
-            make: { set: vehicle.make },
-            model: { set: vehicle.model },
-            colour: { set: vehicle.colour },
-            registration: { set: vehicle.registration },
-            crimeGroup:
-              vehicle.crimeGroup && vehicle.crimeGroup.length > 0
-                ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                : undefined,
-            incidents: vehicle.incidents
-              ? { connect: vehicle.incidents.map((id) => ({ id })) }
-              : undefined,
-            offenders:
-              vehicle.offenders && vehicle.offenders.length > 0
-                ? { connect: vehicle.offenders.map((id) => ({ id })) }
-                : undefined,
-          },
-        })),
         create:
           newVehicles.length > 0
             ? newVehicles.map((vehicle) => ({
-                make: vehicle.make,
-                model: vehicle.model,
                 colour: vehicle.colour,
-                registration: vehicle.registration,
                 crimeGroup:
                   vehicle.crimeGroup && vehicle.crimeGroup.length > 0
                     ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
@@ -578,8 +551,35 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 incidents: vehicle.incidents
                   ? { connect: vehicle.incidents.map((id) => ({ id })) }
                   : undefined,
+                make: vehicle.make,
+                model: vehicle.model,
+                registration: vehicle.registration,
               }))
             : undefined,
+        disconnect:
+          removeVehicles && removeVehicles.length > 0
+            ? removeVehicles.map(({ id }) => ({ id }))
+            : undefined,
+        update: editedVehicles.map((vehicle) => ({
+          data: {
+            colour: { set: vehicle.colour },
+            crimeGroup:
+              vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                : undefined,
+            incidents: vehicle.incidents
+              ? { connect: vehicle.incidents.map((id) => ({ id })) }
+              : undefined,
+            make: { set: vehicle.make },
+            model: { set: vehicle.model },
+            offenders:
+              vehicle.offenders && vehicle.offenders.length > 0
+                ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                : undefined,
+            registration: { set: vehicle.registration },
+          },
+          where: { id: vehicle.id },
+        })),
       };
     };
     const getCrimeGroups = (): OffenderUpdateInput['crimeGroups'] => {
@@ -602,22 +602,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     const getImages = (): OffenderUpdateInput['images'] => {
       const editedImages = fileList.filter((item) => item.edited && !item.new);
       return {
-        upload:
-          imageChange && fileList.length > 0
-            ? fileList
-                .filter((item) => !item.optimised)
-                .map((item) => ({
-                  url: {
-                    filename: item.fileName || '',
-                    mimetype: item.type || '',
-                    url: item.url || '',
-                  },
-                  position: item.position,
-                  primary: item.uid === primaryImage,
-                  policeImage: item.policeImage,
-                  rotation: item.rotation,
-                }))
-            : undefined,
         delete: imageChange
           ? fileList
               .filter((image) => image.deleted)
@@ -629,15 +613,31 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           editedImages.length > 0
             ? editedImages.map((item) => ({
                 data: {
+                  policeImage: { set: item.policeImage },
                   position: { set: item.position },
                   primary: { set: item.uid === primaryImage },
-                  policeImage: { set: item.policeImage },
                   rotation: { set: item.rotation || 0 },
                 },
                 where: {
                   id: item.uid,
                 },
               }))
+            : undefined,
+        upload:
+          imageChange && fileList.length > 0
+            ? fileList
+                .filter((item) => !item.optimised)
+                .map((item) => ({
+                  policeImage: item.policeImage,
+                  position: item.position,
+                  primary: item.uid === primaryImage,
+                  rotation: item.rotation,
+                  url: {
+                    filename: item.fileName || '',
+                    mimetype: item.type || '',
+                    url: item.url || '',
+                  },
+                }))
             : undefined,
       };
     };
@@ -669,14 +669,14 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         );
 
         return {
+          connect:
+            connectedCustomGalleries.length > 0
+              ? connectedCustomGalleries.map((id) => ({ id }))
+              : undefined,
           disconnect:
             disconnectedCustomGalleries &&
             disconnectedCustomGalleries.length > 0
               ? disconnectedCustomGalleries.map((id) => ({ id }))
-              : undefined,
-          connect:
-            connectedCustomGalleries.length > 0
-              ? connectedCustomGalleries.map((id) => ({ id }))
               : undefined,
           // create:
           //   newCustomGalleries.length > 0
@@ -728,10 +728,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           (id) => !offenderTagIds.includes(id)
         );
         return {
-          disconnect:
-            disconnectedOffenderTags && disconnectedOffenderTags.length > 0
-              ? disconnectedOffenderTags.map((id) => ({ id }))
-              : undefined,
           connect:
             connectedOffenderTags.length > 0
               ? connectedOffenderTags.map((id) => ({ id }))
@@ -739,8 +735,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           create:
             newOffenderTags.length > 0
               ? newOffenderTags.map((value) => ({
-                  name: value.name,
+                  createdBy: { connect: { id: userId } },
+                  dataType: Model.Offender,
                   description: value.description || '',
+                  name: value.name,
                   schemes: value.schemes.includes(schemeId)
                     ? {
                         connect: value.schemes.map((id) => ({
@@ -755,9 +753,11 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                           { id: schemeId },
                         ],
                       },
-                  createdBy: { connect: { id: userId } },
-                  dataType: Model.Offender,
                 }))
+              : undefined,
+          disconnect:
+            disconnectedOffenderTags && disconnectedOffenderTags.length > 0
+              ? disconnectedOffenderTags.map((id) => ({ id }))
               : undefined,
         };
       }
@@ -772,18 +772,22 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     };
     await updateOffender({
       variables: {
-        where: {
-          id: offenderId,
-        },
         data: {
-          approved: { set: true },
-          name: { set: data.name || null },
+          addresses: getAddresses(),
+          age: { set: ageCheck ? null : data.age || null },
           alias: { set: data.alias },
-          gender: { set: data.gender || null },
-          race: { set: data.race || null },
+          approved: { set: true },
+          bans: getBans(),
           build: { set: data.build || null },
-          height: { set: data.height || null },
           comment: { set: data.comment || '' },
+          crimeGroups: getCrimeGroups(),
+          customGalleries: getCustomGalleries(),
+          dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+          dateSource: { set: ageCheck ? data.dateSource || null : null },
+          gender: { set: data.gender || null },
+          groups: {
+            set: data.groups.map((id) => ({ id })),
+          },
           hair: {
             set:
               data.hair ||
@@ -791,23 +795,19 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 defaultMessage: 'Unknown',
               }),
           },
-          peculiarities: { set: data.peculiarities || '' },
-          age: { set: ageCheck ? null : data.age || null },
-          dateSource: { set: ageCheck ? data.dateSource || null : null },
-          dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
-          groups: {
-            set: data.groups.map((id) => ({ id })),
-          },
-          scheme: { connect: { id: schemeId } },
+          height: { set: data.height || null },
           idSource: data.idSource ? { set: data.idSource } : undefined,
           idVerified: data.idVerified ? { set: data.idVerified } : undefined,
-          bans: getBans(),
-          vehicles: getVehicles(),
-          crimeGroups: getCrimeGroups(),
-          addresses: getAddresses(),
           images: getImages(),
-          customGalleries: getCustomGalleries(),
+          name: { set: data.name || null },
+          peculiarities: { set: data.peculiarities || '' },
+          race: { set: data.race || null },
+          scheme: { connect: { id: schemeId } },
           tags: getOffenderTags(),
+          vehicles: getVehicles(),
+        },
+        where: {
+          id: offenderId,
         },
       },
     });
@@ -818,12 +818,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     onCompleted: () => {
       navigate('/app/offenders');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Rejected!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Rejected!',
         }),
         placement: 'bottomRight',
       });
@@ -834,9 +834,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   });
   const onReject = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -851,6 +848,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           },
         });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
   // function
@@ -875,13 +875,13 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
+          edited: false,
           fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
+          new: true,
           position: ImagePosition.CenterCenter,
           rotation: 0,
-          edited: false,
-          new: true,
+          type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
 
@@ -908,7 +908,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     setAddOffenderTag(false);
     const selectedOffenderTag = form.getFieldValue('tags');
     form.setFieldsValue({
-      tags: [...selectedOffenderTag, { value: values.id, label: values.name }],
+      tags: [...selectedOffenderTag, { label: values.name, value: values.id }],
     });
     setOffenderTagsData([...offenderTagsData, { ...values, isNew: true }]);
   };
@@ -918,7 +918,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     form.setFieldsValue({
       customGalleries: [
         ...selectedCustomGallery,
-        { value: values.id, label: values.name },
+        { label: values.name, value: values.id },
       ],
     });
     setCustomGalleryData([...customGalleryData, { ...values, isNew: true }]);
@@ -933,14 +933,14 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           [index]: {
             $set: {
               deleted: false,
+              description: value.description,
               endDate: value.endDate,
               id: value.id,
               location: value.location,
               new: true,
               startDate: value.startDate,
-              updated: false,
-              description: value.description,
               type: value.type,
+              updated: false,
             },
           },
         })
@@ -967,9 +967,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       {
         ...value,
         deleted: false,
+        id: `${(Math.random() * 1000).toFixed(0)}`,
         new: true,
         updated: false,
-        id: `${(Math.random() * 1000).toFixed(0)}`,
       },
     ]);
   };
@@ -999,10 +999,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       ...vehiclesData,
       {
         ...vehicle,
-        new: !existing,
-        existing,
         deleted: false,
         edited: false,
+        existing,
+        new: !existing,
       },
     ]);
   };
@@ -1066,13 +1066,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
 
   const onRemoveImage = (imageId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to remove the image?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
-
       onOk() {
         setImageChange(true);
         const image = fileList.find((item) => item.uid === imageId);
@@ -1091,20 +1087,24 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           );
         }
       },
+
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to remove the image?',
+      }),
     });
   };
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the exclusion?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
       onOk() {
         onRemoveExclusion(currentId);
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the exclusion?',
+      }),
     });
   };
 
@@ -1143,73 +1143,73 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   };
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onSubmit,
-    data: offenderData,
-    loading,
-    saving,
-    groups,
-    groupsLoading,
-    tags:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    tagsLoading,
-    imgChange,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    beforeUpload,
-    fileList: fileList.filter((item) => !item.deleted),
-    addOffenderTag,
-    toggleAddOffenderTag,
+    addAddress,
+    addCustomGallery,
     addExclusion,
-    toggleAddExclusion,
-    editExclusion,
-    toggleEditExclusion,
-    onUpdateExclusion,
-    onAddExclusion,
-    setBanData,
+    addOffenderTag,
+    addressesData: addressesData.filter((item) => !item.deleted),
+    adminRights: role !== Role.User,
+    ageCheck,
     banData,
     bansData: bansData.filter((item) => !item.deleted),
-    deleteConfirm,
-    ageCheck,
-    setAgeCheck,
-    onReject,
-    adminRights: role !== Role.User,
-    form,
-    vehiclesData: vehiclesData.filter((item) => !item.deleted),
-    onRemoveVehicle,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    beforeUpload,
     crimeGroupsData: crimeGroupsData.filter((item) => !item.crimeGroup),
-    onAddCrimeGroup,
-    onRemoveCrimeGroup,
-    listVehiclesData,
-    onValuesChange,
-    idVerified,
-    addAddress,
-    editAddress,
-    toggleAddAddress,
-    toggleEditAddress,
-    addressesData: addressesData.filter((item) => !item.deleted),
-    onSubmitAddress,
-    onDeleteAddress,
-    onEditAddress,
-    onAddVehicle,
-    editImage,
-    onEditImage,
-    toggleEditImage,
-    onEditVehicle,
-    onRemoveImage,
-    primaryImage,
-    setPrimaryImage,
     customGalleries:
       customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: tag }) => ({
-          value: tag.id,
           label: tag.name,
+          value: tag.id,
         })
       ) || [],
     customGalleriesLoading,
+    data: offenderData,
+    deleteConfirm,
+    editAddress,
+    editExclusion,
+    editImage,
+    fileList: fileList.filter((item) => !item.deleted),
+    form,
+    groups,
+    groupsLoading,
+    idVerified,
+    imgChange,
+    listVehiclesData,
+    loading,
+    onAddCrimeGroup,
+    onAddExclusion,
+    onAddVehicle,
+    onDeleteAddress,
+    onEditAddress,
+    onEditImage,
+    onEditVehicle,
+    onReject,
+    onRemoveCrimeGroup,
+    onRemoveImage,
+    onRemoveVehicle,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onSubmit,
+    onSubmitAddress,
+    onUpdateExclusion,
+    onValuesChange,
+    primaryImage,
+    saving,
+    setAgeCheck,
+    setBanData,
+    setPrimaryImage,
+    tags:
+      tagsData?.tags.map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    tagsLoading,
+    toggleAddAddress,
     toggleAddCustomGallery,
-    updateNewOffenderTagData,
-    addCustomGallery,
+    toggleAddExclusion,
+    toggleAddOffenderTag,
+    toggleEditAddress,
+    toggleEditExclusion,
+    toggleEditImage,
     updateNewCustomGalleryData,
+    updateNewOffenderTagData,
+    vehiclesData: vehiclesData.filter((item) => !item.deleted),
   };
 };
 

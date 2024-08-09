@@ -6,7 +6,7 @@ import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 
 import useAddPreviousLocation from '../useAddPreviousLocation';
-import { AddressesDocument } from 'graphql/incidents/queries/address.generated';
+import { AddressesDocument } from 'graphql/incidents/queries/__generated__/address.generated';
 
 const mocks = [
   {

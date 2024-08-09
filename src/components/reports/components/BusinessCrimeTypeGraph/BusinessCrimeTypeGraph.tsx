@@ -1,27 +1,28 @@
-import React from 'react';
-import { Button, Typography } from 'antd';
+import type { BusinessCrimeTypeGraphQueryVariables } from '#/components/reports/components/BusinessCrimeTypeGraph/__generated__/BusinessCrimeTypeGraph.generated';
 
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useBusinessCrimeTypeGraphQuery } from '#/components/reports/components/BusinessCrimeTypeGraph/__generated__/BusinessCrimeTypeGraph.generated';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import MultiBarGraph from '../../graphs/multiBarGraph';
-import type { BusinessCrimeTypeGraphQueryVariables } from './BusinessCrimeTypeGraph.generated';
-import { useBusinessCrimeTypeGraphQuery } from './BusinessCrimeTypeGraph.generated';
 
 interface Props {
   editMode: boolean;
-  variables: BusinessCrimeTypeGraphQueryVariables;
-  removeItem: () => void;
-  onNavigate: () => void;
   isPrinting: boolean;
+  onNavigate: () => void;
+  removeItem: () => void;
+  variables: BusinessCrimeTypeGraphQueryVariables;
 }
 
 const BusinessCrimeTypeGraph = ({
-  variables,
   editMode,
-  removeItem,
-  onNavigate,
   isPrinting,
+  onNavigate,
+  removeItem,
+  variables,
 }: Props) => {
   const intl = useIntl();
 
@@ -33,28 +34,28 @@ const BusinessCrimeTypeGraph = ({
     <>
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
-          defaultMessage: 'Business Crime Types',
+          defaultMessage: 'Business Incident Types',
         })}
       </Typography.Title>
 
       {editMode ? (
         <Button
-          type="text"
-          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
           onClick={removeItem}
+          shape="circle"
+          size="small"
+          type="text"
         />
       ) : (
         <Button
-          type="text"
           className="change-graph1-view-more"
+          danger
+          onClick={onNavigate}
           // style={{ position: 'absolute', right: 5, top: 15, zIndex: 1 }}
           size="small"
-          onClick={onNavigate}
-          danger
+          type="text"
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
@@ -62,13 +63,13 @@ const BusinessCrimeTypeGraph = ({
         </Button>
       )}
       <MultiBarGraph
-        isPrinting={isPrinting}
-        tooltip
         data={data?.businessCrimeTypeGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Crime Types or Incidents',
         })}
+        isPrinting={isPrinting}
         isStacked
+        tooltip
       />
     </>
   );

@@ -1,14 +1,14 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import type { ViewportData } from '#/types/DataType';
 import type { Role } from 'graphql/types';
-import type { UserQuery } from 'graphql/user/queries/user.generated';
+import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
 import type { RefObject } from 'react';
 
 import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import LocatingModal from '#/components/map/LocatingModal';
 import { CustomTermsView } from '#/components/onboarding/Onboarding/SchemeTerms/Terms.view';
 import FormatCalendar from '#/utils/format-calendar-24h';
-import { useTermQuery } from '#/views/settings/users/UserDetail/graphql/queries/view-users-signed-terms.generated';
+import { useTermQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-users-signed-terms.generated';
 import {
   faCalendarClock,
   faCalendarDays,

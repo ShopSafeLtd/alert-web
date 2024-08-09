@@ -1,75 +1,75 @@
-import { useApolloClient } from '@apollo/client';
-import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
-
-import { useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
-import type { LocationData, TagData } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useGroupsContext } from '#/context/groups-context';
-import { useEditBusinessQuery } from 'graphql/businesses/queries/edit-business.generated';
-import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
-import type { BusinessUpdateInput } from 'graphql/types';
-import { Model, QueryMode, SortOrder } from 'graphql/types';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useUpdateBusinessMutation } from 'graphql/businesses/mutations/update-business.generated';
 import type {
   BusinessesSideListQuery,
   BusinessesSideListQueryVariables,
-} from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
-import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
+} from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import type { FormInstance } from 'antd';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
-} from 'graphql/businesses/queries/search-businesses.generated';
-import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
+} from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import type { BusinessUpdateInput } from 'graphql/types';
+import type { LocationData, TagData } from 'types/DataType';
+
+import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import { useGroupsContext } from '#/context/groups-context';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { useApolloClient } from '@apollo/client';
+import { Form, notification } from 'antd';
+import { useUpdateBusinessMutation } from 'graphql/businesses/mutations/__generated__/update-business.generated';
+import { useEditBusinessQuery } from 'graphql/businesses/queries/__generated__/edit-business.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface OnSubmitValues {
+  brands?: string[];
+  building: string;
+  county: string;
+  groups?: string[];
   name: string;
   parent: {
     label: string;
     value: string;
   };
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
   postcode: string;
   publicName: boolean;
-  tags?: Array<string | { value: string; label: string }>;
-  groups?: string[];
-  brands?: string[];
   siteNumber: string;
+  street: string;
+  tags?: ({ label: string; value: string } | string)[];
+  townCity: string;
 }
 
 interface Props {
-  onClose: () => void;
   businessId: string | undefined;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: (values: OnSubmitValues) => void;
-  saving: boolean;
+  addTag: boolean;
+  brands: { label: string; value: string }[];
+  brandsLoading: boolean;
+  form: FormInstance<OnSubmitValues>;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
+  location: LocationData | undefined;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string }[]>;
-  form: FormInstance<OnSubmitValues>;
-  loading: boolean;
-  location: LocationData | undefined;
+  onSubmit: (values: OnSubmitValues) => void;
+  saving: boolean;
   setLocation: (value: LocationData) => void;
-  tags: { value: string; label: string }[];
+  tags: { label: string; value: string }[];
   tagsLoading: boolean;
-  addTag: boolean;
   toggleAddTag: () => void;
   updateNewTagData: (values: TagData) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  brands: { value: string; label: string }[];
-  brandsLoading: boolean;
 }
 
-const useEditBusiness = ({ onClose, businessId }: Props): Return => {
+const useEditBusiness = ({ businessId, onClose }: Props): Return => {
   const client = useApolloClient();
   const currentScheme = useStoreState((state) => state.scheme.id);
   const intl = useIntl();
@@ -83,24 +83,13 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
 
   const { data, loading } = useEditBusinessQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: businessId,
-      },
-    },
     onCompleted: (res) => {
       form.setFieldsValue({
+        brands: res.business?.brands,
         building: res.business?.locations[0]?.building || '',
         county: res.business?.locations[0]?.county || '',
-        name: res.business?.name || '',
-        siteNumber: res.business?.siteNumber || '',
-        publicName: res.business?.publicName,
         groups: res.business?.groups.map(({ id }) => id),
-        brands: res.business?.brands,
-        tags: res.business?.tags.map((el) => ({
-          label: el.name,
-          value: el.id,
-        })),
+        name: res.business?.name || '',
         parent: res.business
           ? {
               label: res.business?.parent?.name,
@@ -108,7 +97,13 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
             }
           : undefined,
         postcode: res.business?.locations[0]?.postcode || '',
+        publicName: res.business?.publicName,
+        siteNumber: res.business?.siteNumber || '',
         street: res.business?.locations[0]?.street || '',
+        tags: res.business?.tags.map((el) => ({
+          label: el.name,
+          value: el.id,
+        })),
         townCity: res.business?.locations[0]?.townCity || '',
       });
       if (
@@ -121,21 +116,26 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         });
       }
     },
+    variables: {
+      where: {
+        id: businessId,
+      },
+    },
   });
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
+        dataType: {
+          equals: Model.Business,
+        },
         schemes: {
           some: {
             id: {
               in: [currentScheme],
             },
           },
-        },
-        dataType: {
-          equals: Model.Business,
         },
       },
     },
@@ -161,9 +161,9 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     if (value) {
       setLocation(value);
       form.setFieldsValue({
+        postcode: value.postcode || '',
         street: value.street || '',
         townCity: value.townCity || '',
-        postcode: value.postcode || '',
       });
     }
     setSaving(false);
@@ -194,6 +194,8 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       >({
         query: BusinessesSideListDocument,
         variables: {
+          first: 24,
+          orderBy: { name: SortOrder.Asc },
           where: {
             schemes: {
               some: {
@@ -203,8 +205,6 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
               },
             },
           },
-          orderBy: { name: SortOrder.Asc },
-          first: 24,
         },
       });
 
@@ -220,8 +220,8 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         BusinessesSideListQuery,
         BusinessesSideListQueryVariables
       >({
-        query: BusinessesSideListDocument,
         data: {
+          __typename: 'Query',
           businessRelay: {
             ...existingData.businessRelay,
             edges: existingData?.businessRelay?.edges?.map(
@@ -266,9 +266,11 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
             //   }
             // ),
           },
-          __typename: 'Query',
         },
+        query: BusinessesSideListDocument,
         variables: {
+          first: 24,
+          orderBy: { name: SortOrder.Asc },
           where: {
             schemes: {
               some: {
@@ -278,8 +280,6 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
               },
             },
           },
-          orderBy: { name: SortOrder.Asc },
-          first: 24,
         },
       });
     },
@@ -322,10 +322,6 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         (id) => !tagIds?.includes(id)
       );
       return {
-        disconnect:
-          disconnectedTags && disconnectedTags.length > 0
-            ? disconnectedTags.map((id) => ({ id }))
-            : undefined,
         connect:
           connectedTags && connectedTags.length > 0
             ? connectedTags.map((id) => ({ id }))
@@ -333,12 +329,11 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         create:
           newTags.length > 0
             ? newTags.map((value) => ({
-                name: value.name,
-                description: value.description || '',
-                schemes: {
-                  connect: value.schemes.map((id) => ({ id })),
-                },
                 createdBy: { connect: { id: value.createdById } },
+                //     },
+                dataType: Model.Business,
+                description: value.description || '',
+                name: value.name,
                 // schemes: value.schemes.includes(currentScheme)
                 //   ? {
                 //       connect: value.schemes.map((id) => ({
@@ -352,52 +347,57 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
                 //         })),
                 //         { id: currentScheme },
                 //       ],
-                //     },
-                dataType: Model.Business,
+                schemes: {
+                  connect: value.schemes.map((id) => ({ id })),
+                },
               }))
+            : undefined,
+        disconnect:
+          disconnectedTags && disconnectedTags.length > 0
+            ? disconnectedTags.map((id) => ({ id }))
             : undefined,
       };
     };
 
     void updateBusiness({
       variables: {
-        where: {
-          id: businessId,
-        },
         data: {
-          name: { set: values.name },
-          siteNumber: values.siteNumber,
-          publicName: values.publicName,
-          parent: getParent(),
-          tags: getTags(),
-          groups: {
-            set: values.groups?.map((id: string) => ({ id })) || [],
-          },
           brands: {
             set: values.brands?.map((id: string) => ({ id })) || [],
+          },
+          groups: {
+            set: values.groups?.map((id: string) => ({ id })) || [],
           },
           locations: {
             update: [
               {
-                where: {
-                  id: data?.business?.locations[0]?.id,
-                },
                 data: {
                   building: { set: values.building },
                   county: { set: values.county },
-                  postcode: { set: values.postcode },
-                  street: { set: values.street },
-                  townCity: { set: values.townCity },
                   geoLat: location?.geoLat
                     ? { set: location?.geoLat }
                     : undefined,
                   geoLng: location?.geoLng
                     ? { set: location?.geoLng }
                     : undefined,
+                  postcode: { set: values.postcode },
+                  street: { set: values.street },
+                  townCity: { set: values.townCity },
+                },
+                where: {
+                  id: data?.business?.locations[0]?.id,
                 },
               },
             ],
           },
+          name: { set: values.name },
+          parent: getParent(),
+          publicName: values.publicName,
+          siteNumber: values.siteNumber,
+          tags: getTags(),
+        },
+        where: {
+          id: businessId,
         },
       },
       // optimisticResponse: {
@@ -426,7 +426,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       // },
     });
   };
-
+  // TODO swap to business select
   const onSearchBusiness = async (value: string) => {
     if (value.length < 2) {
       return [];
@@ -435,21 +435,23 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
+          take: 10,
           where: {
+            id: {
+              not: {
+                equals: businessId,
+              },
+            },
             name: {
               contains: value,
               mode: QueryMode.Insensitive,
             },
+
             schemes: {
               some: {
                 id: {
                   equals: currentScheme,
                 },
-              },
-            },
-            id: {
-              not: {
-                equals: businessId,
               },
             },
           },
@@ -459,16 +461,16 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
-              value: item?.id || '',
               location: item?.locations[0].full || '',
+              value: item?.id || '',
             }))
           : [
               {
+                disabled: true,
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
                 }),
                 value: '',
-                disabled: true,
               },
             ]
       );
@@ -480,11 +482,11 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     if (selectedTag) {
       form.setFieldsValue({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        tags: [...selectedTag, { value: values.id, label: values.name }],
+        tags: [...selectedTag, { label: values.name, value: values.id }],
       });
     } else {
       form.setFieldsValue({
-        tags: [{ value: values.id, label: values.name }],
+        tags: [{ label: values.name, value: values.id }],
       });
     }
     setTagData([...tagData, { ...values, isNew: true }]);
@@ -493,30 +495,30 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     setAddTag(!addTag);
   };
   return {
+    addTag,
+    brands:
+      brandsData?.brands.edges.map(({ node: group }) => ({
+        label: group.name,
+        value: group.id,
+      })) || [],
+    brandsLoading,
+    form,
+    groups,
+    groupsLoading,
+    loading: !data && loading,
+    location,
+    onSearchBusiness,
     onSubmit,
     saving,
-    onSearchBusiness,
-    loading: !data && loading,
-    form,
-    location,
     setLocation: onSetLocation,
     tags:
       tagsData?.tags.map((tag) => ({
-        value: tag.id,
         label: tag.name,
+        value: tag.id,
       })) || [],
     tagsLoading,
-    addTag,
     toggleAddTag,
     updateNewTagData,
-    groups,
-    brands:
-      brandsData?.brands.edges.map(({ node: group }) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
-    groupsLoading,
-    brandsLoading,
   };
 };
 

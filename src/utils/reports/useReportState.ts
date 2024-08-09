@@ -1,24 +1,26 @@
 /* eslint-disable array-bracket-newline */
-import { useEffect, useState } from 'react';
-import type RGL from 'react-grid-layout';
-import arrangeTemplates from '#/utils/reports/setTemplates';
-import { useStoreState } from '#/state';
+import type { DateSelectModeType } from '#/components/reports/DateSelect/DateSelect.view';
 import type {
   IReportTemplate,
   MetaData,
   SelectOptions,
 } from '#/views/reports/types';
-import { tableLengthToHeight } from '#/components/reports/utils/utils';
-import { notification } from 'antd';
-import { useIntl } from 'react-intl';
-import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/create-report-template.generated';
 import type {
   SchemeReportDetailsQuery,
   SchemeReportDetailsQueryVariables,
-} from 'graphql/reports/queries/scheme-details.generated';
-import { SchemeReportDetailsDocument } from 'graphql/reports/queries/scheme-details.generated';
-import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/update-report-template.generated';
+} from 'graphql/reports/queries/__generated__/scheme-details.generated';
 import type { ReportType as IReportType } from 'graphql/types';
+import type RGL from 'react-grid-layout';
+
+import { tableLengthToHeight } from '#/components/reports/utils/utils';
+import { useStoreState } from '#/state';
+import arrangeTemplates from '#/utils/reports/setTemplates';
+import { notification } from 'antd';
+import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/create-report-template.generated';
+import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/update-report-template.generated';
+import { SchemeReportDetailsDocument } from 'graphql/reports/queries/__generated__/scheme-details.generated';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 interface Props {
   InitLayout: RGL.Layout[];
@@ -29,8 +31,24 @@ interface Props {
 interface Return {
   addLogo: (arg0: string) => void;
   addLogoDrawer: boolean;
+  businesses: { demId?: null | string | undefined; id: string; name: string }[];
+  changeSize: (arg0: string, arg1: number) => void;
+  currentScheme: string;
+  dateRange: { endDate: Date; startDate: Date } | undefined;
+  dateRangeMode: DateSelectModeType | undefined;
+  defaultTemplate: IReportTemplate;
+  editMode: boolean;
+  filterCount: number;
+  filtersOpen: boolean;
+  filtersSet: boolean;
+  groups: SelectOptions[];
+  layout: RGL.Layout[];
+  logo: null | string | undefined;
   logos: string[];
   metadata: MetaData[];
+  minDrawer: boolean;
+  redactOnPrint: boolean;
+  removeItem: (arg0: string) => void;
   removeLogo: (arg0: number) => void;
   saveAsDrawer: boolean;
   saveTemplate: (
@@ -38,47 +56,40 @@ interface Return {
     method: 'create' | 'update',
     idsToDelete?: string[]
   ) => void;
-  selectTemplate: (arg0: string) => void;
-  selectedTemplate: string;
-  setMetadata: (arg0: MetaData[]) => void;
-  setAddLogoDrawer: (arg0: boolean) => void;
-  setSaveAsDrawer: (arg0: boolean) => void;
-  templates: IReportTemplate[];
-  editMode: boolean;
-  setEditMode: (arg0: boolean) => void;
-  layout: RGL.Layout[];
-  setLayout: (layout: RGL.Layout[]) => void;
-  minDrawer: boolean;
-  setMinDrawer: (arg0: boolean) => void;
-  logo: string | null | undefined;
-  removeItem: (arg0: string) => void;
-  changeSize: (arg0: string, arg1: number) => void;
-  selectedGroups: string[];
-  selectedBusiness: string[];
-  setSelectedBusiness: (businesses: string[]) => void;
-  businesses: { name: string; id: string; demId?: string | null | undefined }[];
-  groups: SelectOptions[];
-  dateRange: { startDate: Date; endDate: Date };
-  setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-  setSelectedGroups: (groups: string[]) => void;
-  setGroups: (groups: SelectOptions[]) => void;
-  currentScheme: string;
-  setTemplates: (templates: IReportTemplate[]) => void;
-  defaultTemplate: IReportTemplate;
-  setLogos: (logos: string[]) => void;
-  selectedBrands: string[];
-  setSelectedBrands: (value: string[]) => void;
-  selectedIndustries: string[];
-  setSelectedIndustries: (value: string[]) => void;
-  redactOnPrint: boolean;
-  setRedactOnPrint: (arg0: boolean) => void;
-  filtersOpen: boolean;
-  toggleFiltersOpen: () => void;
-  selectedRoles: string[];
-  setSelectedRoles: (arg: string[]) => void;
-  filterCount: number;
-  userId: string;
   saving: boolean;
+  selectTemplate: (arg0: string) => void;
+  selectedBrands: string[];
+  selectedBusiness: string[];
+  selectedGroups: string[];
+  selectedIndustries: string[];
+  selectedRoles: string[];
+  selectedSchemes: string[];
+  selectedTemplate: string;
+  setAddLogoDrawer: (arg0: boolean) => void;
+  setDateRange: (
+    dateRange: { endDate: Date; startDate: Date } | undefined,
+    mode: DateSelectModeType | undefined
+  ) => void;
+  setDateRangeMode: (value: DateSelectModeType | undefined) => void;
+  setEditMode: (arg0: boolean) => void;
+  setFiltersSet: (value: boolean) => void;
+  setGroups: (groups: SelectOptions[]) => void;
+  setLayout: (layout: RGL.Layout[]) => void;
+  setLogos: (logos: string[]) => void;
+  setMetadata: (arg0: MetaData[]) => void;
+  setMinDrawer: (arg0: boolean) => void;
+  setRedactOnPrint: (arg0: boolean) => void;
+  setSaveAsDrawer: (arg0: boolean) => void;
+  setSelectedBrands: (value: string[]) => void;
+  setSelectedBusiness: (businesses: string[]) => void;
+  setSelectedGroups: (groups: string[]) => void;
+  setSelectedIndustries: (value: string[]) => void;
+  setSelectedRoles: (arg: string[]) => void;
+  setSelectedSchemes: (value: string[]) => void;
+  setTemplates: (templates: IReportTemplate[]) => void;
+  templates: IReportTemplate[];
+  toggleFiltersOpen: () => void;
+  userId: string;
 }
 
 const useReportState = ({
@@ -141,6 +152,7 @@ const useReportState = ({
   // ];
 
   const businesses = useStoreState((state) => state.user.businesses);
+  const [filtersSet, setFiltersSet] = useState(false);
   const [filtersOpen, setFilterOpen] = useState(false);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
   const [redactOnPrint, setRedactOnPrint] = useState(false);
@@ -156,19 +168,28 @@ const useReportState = ({
     )
   );
   const [saving, setSaving] = useState(false);
+  const [selectedSchemes, setSelectedSchemes] = useState<string[]>([
+    currentScheme,
+  ]);
   const [selectedBusiness, setSelectedBusiness] = useState<string[]>([]);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
-  const [dateRange, setDateRangeState] = useState<{
-    startDate: Date;
-    endDate: Date;
-  }>({
-    startDate: initDate,
+  const [dateRangeMode, setDateRangeMode] = useState<
+    DateSelectModeType | undefined
+  >(undefined);
+  const [dateRange, setDateRangeState] = useState<
+    | {
+        endDate: Date;
+        startDate: Date;
+      }
+    | undefined
+  >({
     // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
+    startDate: initDate,
   });
   const [filterCount, setFilterCount] = useState(0);
 
@@ -183,9 +204,15 @@ const useReportState = ({
   }, [selectedRoles, selectedIndustries, selectedBrands, selectedBusiness]);
 
   const defaultTemplate: IReportTemplate = {
-    id: 'default',
-    name: 'Default',
     default: true,
+    id: 'default',
+    layout: InitLayout.filter(
+      (item) =>
+        item.i !== 'pageBreak' &&
+        item.i !== 'pageBreak2' &&
+        item.i !== 'pageBreak3' &&
+        item.i !== 'pageBreak4'
+    ),
     metaData: [
       ...InitMetaData,
       {
@@ -194,13 +221,7 @@ const useReportState = ({
         urls: logo ? [logo] : [],
       },
     ],
-    layout: InitLayout.filter(
-      (item) =>
-        item.i !== 'pageBreak' &&
-        item.i !== 'pageBreak2' &&
-        item.i !== 'pageBreak3' &&
-        item.i !== 'pageBreak4'
-    ),
+    name: 'Default',
   };
 
   const [logos, setLogos] = useState<string[]>(logo ? [logo] : []);
@@ -209,16 +230,29 @@ const useReportState = ({
   );
   const [templates, setTemplatesState] = useState<IReportTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
-  const setDateRange = (dateRangeInput: {
-    startDate: Date;
-    endDate: Date;
-  }): void => {
-    setDateRangeState({
-      startDate: new Date(
-        new Date(dateRangeInput.startDate).setHours(0, 0, 59)
-      ),
-      endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
-    });
+  const setDateRange = (
+    dateRangeInput:
+      | {
+          endDate: Date;
+          startDate: Date;
+        }
+      | undefined,
+    range: DateSelectModeType | undefined
+  ): void => {
+    if (dateRangeInput) {
+      setDateRangeMode(range);
+      setDateRangeState({
+        endDate: new Date(
+          new Date(dateRangeInput.endDate).setHours(23, 59, 59)
+        ),
+        startDate: new Date(
+          new Date(dateRangeInput.startDate).setHours(0, 0, 59)
+        ),
+      });
+    } else {
+      setDateRangeMode(undefined);
+      setDateRangeState(undefined);
+    }
   };
 
   const removeItem = (item: string) => {
@@ -270,6 +304,16 @@ const useReportState = ({
         })
       );
       setAddLogoDrawer(false);
+    } else {
+      setMetadata([
+        ...metadata,
+        {
+          key: 'logo',
+          type: 'logo',
+          urls: [url],
+        },
+      ]);
+      setAddLogoDrawer(false);
     }
   };
 
@@ -281,7 +325,6 @@ const useReportState = ({
           (item) => item.i !== 'pageBreak' && item.i !== 'pageBreak2'
         )
       );
-      console.log('selectTemplate', newTemplate.metaData);
       setMetadata(newTemplate.metaData);
       setSelectedTemplate(newTemplate.id);
     }
@@ -297,7 +340,6 @@ const useReportState = ({
             (item) => item.i !== 'pageBreak' && item.i !== 'pageBreak2'
           )
         );
-        console.log('setTemplates', newTemplate.metaData);
         setMetadata(newTemplate.metaData);
         setSelectedTemplate(newTemplate.id);
       }
@@ -310,10 +352,8 @@ const useReportState = ({
         setTemplates([
           ...templates,
           {
-            id: d.createReportTemplate.id || '',
-            name: d.createReportTemplate.name || '',
-            metaData: (d.createReportTemplate.metaData as MetaData[]) || [],
             default: false,
+            id: d.createReportTemplate.id || '',
             layout:
               (d.createReportTemplate.layout.map((item) => ({
                 ...item,
@@ -322,6 +362,8 @@ const useReportState = ({
                 minH: item.minH ?? undefined,
                 minW: item.minW ?? undefined,
               })) as RGL.Layout[]) || [],
+            metaData: (d.createReportTemplate.metaData as MetaData[]) || [],
+            name: d.createReportTemplate.name || '',
           },
         ]);
         setSelectedTemplate(d.createReportTemplate.id || '');
@@ -334,19 +376,19 @@ const useReportState = ({
       >({
         query: SchemeReportDetailsDocument,
         variables: {
-          where: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
+          reportTemplatesWhere: {
+            type: {
+              equals: ReportType,
             },
           },
           schemeWhere: {
             id: currentScheme,
           },
-          reportTemplatesWhere: {
-            type: {
-              equals: ReportType,
+          where: {
+            scheme: {
+              id: {
+                equals: currentScheme,
+              },
             },
           },
         },
@@ -356,7 +398,6 @@ const useReportState = ({
           SchemeReportDetailsQuery,
           SchemeReportDetailsQueryVariables
         >({
-          query: SchemeReportDetailsDocument,
           data: {
             groups: existingTemplates.groups,
             scheme: {
@@ -372,20 +413,21 @@ const useReportState = ({
               ],
             },
           },
+          query: SchemeReportDetailsDocument,
           variables: {
-            where: {
-              scheme: {
-                id: {
-                  equals: currentScheme,
-                },
+            reportTemplatesWhere: {
+              type: {
+                equals: ReportType,
               },
             },
             schemeWhere: {
               id: currentScheme,
             },
-            reportTemplatesWhere: {
-              type: {
-                equals: ReportType,
+            where: {
+              scheme: {
+                id: {
+                  equals: currentScheme,
+                },
               },
             },
           },
@@ -402,19 +444,19 @@ const useReportState = ({
       >({
         query: SchemeReportDetailsDocument,
         variables: {
-          where: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
+          reportTemplatesWhere: {
+            type: {
+              equals: ReportType,
             },
           },
           schemeWhere: {
             id: currentScheme,
           },
-          reportTemplatesWhere: {
-            type: {
-              equals: ReportType,
+          where: {
+            scheme: {
+              id: {
+                equals: currentScheme,
+              },
             },
           },
         },
@@ -425,11 +467,8 @@ const useReportState = ({
             ...(existingTemplates?.scheme?.reportTemplates
               .filter((item) => item.id !== d.updateReportTemplate?.id)
               .map((template) => ({
-                id: template.id || '',
-                name: template.name || '',
-                metaData: (template.metaData as MetaData[]) || [],
                 default: template.default,
-                type: template.type,
+                id: template.id || '',
                 layout:
                   (template.layout.map((item) => ({
                     ...item,
@@ -438,15 +477,14 @@ const useReportState = ({
                     minH: item.minH ?? undefined,
                     minW: item.minW ?? undefined,
                   })) as RGL.Layout[]) || [],
+                metaData: (template.metaData as MetaData[]) || [],
+                name: template.name || '',
+                type: template.type,
               })) || []),
             {
-              id: d.updateReportTemplate.id || '',
-              name: d.updateReportTemplate.name || '',
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
               default: d.updateReportTemplate.default,
-              type: d.updateReportTemplate.type,
+              id: d.updateReportTemplate.id || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               layout:
                 (d.updateReportTemplate.layout.map((item) => ({
                   ...item,
@@ -455,6 +493,10 @@ const useReportState = ({
                   minH: item.minH ?? undefined,
                   minW: item.minW ?? undefined,
                 })) as RGL.Layout[]) || [],
+              // @ts-ignore
+              metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
+              name: d.updateReportTemplate.name || '',
+              type: d.updateReportTemplate.type,
             },
           ],
           setTemplates
@@ -464,7 +506,6 @@ const useReportState = ({
           SchemeReportDetailsQuery,
           SchemeReportDetailsQueryVariables
         >({
-          query: SchemeReportDetailsDocument,
           data: {
             groups: existingTemplates.groups,
             scheme: {
@@ -478,20 +519,21 @@ const useReportState = ({
               ],
             },
           },
+          query: SchemeReportDetailsDocument,
           variables: {
-            where: {
-              scheme: {
-                id: {
-                  equals: currentScheme,
-                },
+            reportTemplatesWhere: {
+              type: {
+                equals: ReportType,
               },
             },
             schemeWhere: {
               id: currentScheme,
             },
-            reportTemplatesWhere: {
-              type: {
-                equals: ReportType,
+            where: {
+              scheme: {
+                id: {
+                  equals: currentScheme,
+                },
               },
             },
           },
@@ -510,41 +552,6 @@ const useReportState = ({
     setSaving(true);
     if (method === 'create')
       await createReportTemplate({
-        variables: {
-          data: {
-            name,
-            metaData: metadata,
-            schemes: {
-              connect: [
-                {
-                  id: currentScheme,
-                },
-              ],
-            },
-            type: ReportType,
-            layout: {
-              createMany: {
-                data: layout.map((item) => {
-                  const { i, x, y, w, h, minW, minH, maxW, maxH, moved } = item;
-
-                  return {
-                    i,
-                    x,
-                    y,
-                    w,
-                    h,
-                    minW,
-                    minH,
-                    maxW,
-                    maxH,
-                    static: false,
-                    moved,
-                  };
-                }),
-              },
-            },
-          },
-        },
         onCompleted: () => {
           notification.success({
             message: intl.formatMessage({
@@ -559,19 +566,19 @@ const useReportState = ({
           >({
             query: SchemeReportDetailsDocument,
             variables: {
-              where: {
-                scheme: {
-                  id: {
-                    equals: currentScheme,
-                  },
+              reportTemplatesWhere: {
+                type: {
+                  equals: ReportType,
                 },
               },
               schemeWhere: {
                 id: currentScheme,
               },
-              reportTemplatesWhere: {
-                type: {
-                  equals: ReportType,
+              where: {
+                scheme: {
+                  id: {
+                    equals: currentScheme,
+                  },
                 },
               },
             },
@@ -581,7 +588,6 @@ const useReportState = ({
               SchemeReportDetailsQuery,
               SchemeReportDetailsQueryVariables
             >({
-              query: SchemeReportDetailsDocument,
               data: {
                 groups: existingTemplates.groups,
                 scheme: {
@@ -595,7 +601,16 @@ const useReportState = ({
                   ],
                 },
               },
+              query: SchemeReportDetailsDocument,
               variables: {
+                reportTemplatesWhere: {
+                  type: {
+                    equals: ReportType,
+                  },
+                },
+                schemeWhere: {
+                  id: currentScheme,
+                },
                 where: {
                   scheme: {
                     id: {
@@ -603,28 +618,35 @@ const useReportState = ({
                     },
                   },
                 },
-                schemeWhere: {
-                  id: currentScheme,
-                },
-                reportTemplatesWhere: {
-                  type: {
-                    equals: ReportType,
-                  },
-                },
               },
             });
           }
         },
-      });
-
-    if (method === 'update') {
-      await updateReportTemplate({
         variables: {
-          where: {
-            id: selectedTemplate,
-          },
           data: {
+            layout: {
+              createMany: {
+                data: layout.map((item) => {
+                  const { h, i, maxH, maxW, minH, minW, moved, w, x, y } = item;
+
+                  return {
+                    h,
+                    i,
+                    maxH,
+                    maxW,
+                    minH,
+                    minW,
+                    moved,
+                    static: false,
+                    w,
+                    x,
+                    y,
+                  };
+                }),
+              },
+            },
             metaData: metadata,
+            name,
             schemes: {
               connect: [
                 {
@@ -632,23 +654,32 @@ const useReportState = ({
                 },
               ],
             },
+            type: ReportType,
+          },
+        },
+      });
+
+    if (method === 'update') {
+      await updateReportTemplate({
+        variables: {
+          data: {
             layout: {
               createMany: {
                 data: layout.map((item) => {
-                  const { i, x, y, w, h, minW, minH, maxW, maxH, moved } = item;
+                  const { h, i, maxH, maxW, minH, minW, moved, w, x, y } = item;
 
                   return {
+                    h,
                     i,
+                    maxH,
+                    maxW,
+                    minH,
+                    minW,
+                    moved,
+                    static: false,
+                    w,
                     x,
                     y,
-                    w,
-                    h,
-                    minW,
-                    minH,
-                    maxW,
-                    maxH,
-                    static: false,
-                    moved,
                   };
                 }),
               },
@@ -662,6 +693,17 @@ const useReportState = ({
                   ]
                 : undefined,
             },
+            metaData: metadata,
+            schemes: {
+              connect: [
+                {
+                  id: currentScheme,
+                },
+              ],
+            },
+          },
+          where: {
+            id: selectedTemplate,
           },
         },
       });
@@ -676,53 +718,59 @@ const useReportState = ({
   return {
     addLogo,
     addLogoDrawer,
+    businesses,
+    changeSize,
+    currentScheme,
+    dateRange,
+    dateRangeMode,
+    defaultTemplate,
+    editMode,
+    filterCount,
+    filtersOpen,
+    filtersSet,
+    groups,
+    layout: selectedTemplate ? layout : [],
+    logo,
     logos,
     metadata,
+    minDrawer,
+    redactOnPrint,
+    removeItem,
     removeLogo,
     saveAsDrawer,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     saveTemplate,
-    selectTemplate,
-    selectedTemplate,
-    setMetadata,
-    setAddLogoDrawer,
-    setSaveAsDrawer,
-    templates,
-    editMode,
-    setEditMode,
-    layout: selectedTemplate ? layout : [],
-    setLayout,
-    minDrawer,
-    setMinDrawer,
-    logo,
-    removeItem,
-    changeSize,
-    selectedGroups,
-    selectedBusiness,
-    setSelectedBusiness,
-    businesses,
-    groups,
-    dateRange,
-    setDateRange,
-    setSelectedGroups,
-    setGroups,
-    currentScheme,
-    setTemplates,
-    defaultTemplate,
-    setLogos,
-    selectedBrands,
-    setSelectedBrands,
-    selectedIndustries,
-    setSelectedIndustries,
-    redactOnPrint,
-    setRedactOnPrint,
-    filtersOpen,
-    toggleFiltersOpen,
-    setSelectedRoles,
-    selectedRoles,
-    filterCount,
-    userId,
     saving,
+    selectTemplate,
+    selectedBrands,
+    selectedBusiness,
+    selectedGroups,
+    selectedIndustries,
+    selectedRoles,
+    selectedSchemes,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setDateRange,
+    setDateRangeMode,
+    setEditMode,
+    setFiltersSet,
+    setGroups,
+    setLayout,
+    setLogos,
+    setMetadata,
+    setMinDrawer,
+    setRedactOnPrint,
+    setSaveAsDrawer,
+    setSelectedBrands,
+    setSelectedBusiness,
+    setSelectedGroups,
+    setSelectedIndustries,
+    setSelectedRoles,
+    setSelectedSchemes,
+    setTemplates,
+    templates,
+    toggleFiltersOpen,
+    userId,
   };
 };
 

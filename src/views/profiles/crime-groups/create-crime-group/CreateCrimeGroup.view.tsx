@@ -1,5 +1,3 @@
-import CompactSkeletonCard from '#/components/offenders/OffenderCard/OffenderSkeletonCard.view';
-import Loading from '#/components/shared-components/AntD/Loading';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,29 +7,30 @@ import {
   Col,
   Divider,
   Drawer,
-  Empty,
+  Input,
+  Pagination,
   Popconfirm,
   Row,
+  Spin,
   Typography,
 } from 'antd';
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import { Age, Build, Gender, Race, Role } from 'graphql/generated';
 import moment from 'moment';
 import React from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import {
   getAge,
   getBuild,
   getEthnicity,
   getEthnicityShort,
   getSex,
-} from 'utils';
+} from 'utils'; // Import the useIntl hook
+import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import type { SearchOffendersQuery } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
 
-import type { ListOffendersCardQuery } from './graphql/list-offender-card.generated';
-import type { SearchOffendersRelayQuery } from './graphql/search-offenders-relay.generated';
+import { useStoreState } from 'state';
 
 import useStyles from './CreateCrimeGroup.styles';
 
@@ -39,28 +38,30 @@ const { Text, Title } = Typography;
 
 interface Props {
   addOffender: boolean;
-  fetchMoreScroll: () => void;
   loading: boolean;
-  offendersData: ListOffendersCardQuery | undefined;
+  offendersData: ListOffendersQuery | undefined;
   offendersSelected: boolean;
+  onPaginationChange: (page: number, size: number) => void;
   onSubmit: () => void;
   removeOffender: (id: string) => void;
-  searchData: SearchOffendersRelayQuery | undefined;
+  searchData: SearchOffendersQuery | undefined;
   selectOffender: (id: string) => void;
+  setSearch: (value: string) => void;
   submitting: boolean;
   toggleAddOffender: () => void;
 }
 
 const CreateCrimeGroup = ({
   addOffender,
-  fetchMoreScroll,
   loading,
   offendersData,
   offendersSelected,
+  onPaginationChange,
   onSubmit,
   removeOffender,
   searchData,
   selectOffender,
+  setSearch,
   submitting,
   toggleAddOffender,
 }: Props) => {
@@ -77,7 +78,7 @@ const CreateCrimeGroup = ({
           <Title level={3} style={{ margin: 0 }}>
             {intl.formatMessage({
               defaultMessage:
-                'Select the offenders to be in the new crime group',
+                'Select the offenders to add in to the new crime group.',
             })}
           </Title>
         </Col>
@@ -94,319 +95,276 @@ const CreateCrimeGroup = ({
           </Button>
         </Col>
       </Row>
-
-      {loading ? (
-        <Row
-          align="stretch"
-          gutter={24}
-          style={{
-            alignItems: 'stretch',
-            overflowX: 'hidden',
-            padding: 10,
-          }}
-        >
-          {Array.from({ length: 18 }).map((_, index) => (
-            <Col
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
-              span={8}
-              style={{ marginBottom: 20 }}
-              xxl={6}
-            >
-              <CompactSkeletonCard />
-            </Col>
-          ))}
-        </Row>
-      ) : (
-        <div>
-          {offendersSelected ? (
-            <Row gutter={16}>
-              {offendersData?.listOffendersRelay.edges.map((t) => (
-                <Col key={t?.node?.id}>
-                  <Card
-                    bodyStyle={{ padding: 0 }}
-                    className={classes.offenderCol}
-                  >
-                    <Carousel>
-                      {t?.node?.images.map((image) => (
-                        <div className={classes.imageContainer} key={image.id}>
-                          <div className={classes.image}>
-                            <WatermarkImage
-                              position={image.position}
-                              rotation={image.rotation}
-                              url={image.optimised}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </Carousel>
-                    <div>
-                      <Row align="middle">
-                        <Col flex={1}>
-                          <Title className={classes.title} level={4}>
-                            {t?.node?.name}
-                          </Title>
-                        </Col>
-                        <Col>
-                          <Popconfirm
-                            disabled={submitting}
-                            onConfirm={() => removeOffender(t?.node?.id)}
-                            overlayInnerStyle={{ padding: 10 }}
-                            title={intl.formatMessage({
-                              defaultMessage: 'Are you sure?',
-                            })}
-                          >
-                            <Button
-                              className={classes.deleteButton}
-                              disabled={submitting}
-                              size="small"
-                            >
-                              <FontAwesomeIcon icon={faTrash} />
-                            </Button>
-                          </Popconfirm>
-                        </Col>
-                      </Row>
-                      <Divider style={{ margin: 0 }} />
-                      {publicOffenderDOB && (
-                        <div className={classes.field}>
-                          <Text>
-                            {intl.formatMessage({
-                              defaultMessage: 'Age:',
-                            })}
-                          </Text>
-                          <Text type="secondary">
-                            {getAge(t?.node?.age || Age.Unknown)}
-                          </Text>
-                        </div>
-                      )}
-                      <Divider style={{ margin: 0 }} />
-                      <div className={classes.field}>
-                        <Text>
-                          {intl.formatMessage({
-                            defaultMessage: 'Date Of Birth:',
-                          })}
-                        </Text>
-                        <Text type="secondary">
-                          {moment(t?.node?.dateOfBirth).format('DD/MM/YYYY') ||
-                            intl.formatMessage({
-                              defaultMessage: 'Unknown',
-                            })}
-                        </Text>
-                      </div>
-                      <Divider style={{ margin: 0 }} />
-                      <div className={classes.field}>
-                        <Text>
-                          {intl.formatMessage({
-                            defaultMessage: 'DoB Source:',
-                          })}
-                        </Text>
-                        <Text type="secondary">
-                          {t?.node?.dateSource ||
-                            intl.formatMessage({
-                              defaultMessage: 'None',
-                            })}
-                        </Text>
-                      </div>
-                      <Divider style={{ margin: 0 }} />
-                      <div className={classes.field}>
-                        <Text>
-                          {intl.formatMessage({
-                            defaultMessage: 'Build:',
-                          })}
-                        </Text>
-                        <Text type="secondary">
-                          {getBuild(t?.node?.build || Build.Unknown)}
-                        </Text>
-                      </div>
-                      <Divider style={{ margin: 0 }} />
-                      <div className={classes.field}>
-                        <Text>
-                          {intl.formatMessage({
-                            defaultMessage: 'Ethnicity:',
-                          })}
-                        </Text>
-                        <Text type="secondary">
-                          {getEthnicity(t?.node?.race || Race.Unknown)}
-                        </Text>
-                      </div>
-                      <Divider style={{ margin: 0 }} />
-                      <div className={classes.field}>
-                        <Text>
-                          {intl.formatMessage({
-                            defaultMessage: 'Sex:',
-                          })}
-                        </Text>
-                        <Text type="secondary">
-                          {getSex(t?.node?.gender || Gender.Unknown)}
-                        </Text>
-                      </div>
-                      <Divider style={{ margin: 0 }} />
-                      <div className={classes.field}>
-                        <Text>
-                          {intl.formatMessage({
-                            defaultMessage: 'Last Active:',
-                          })}
-                        </Text>
-                        <Text type="secondary">
-                          {t?.node?.lastActive?.dayTime ||
-                            intl.formatMessage({
-                              defaultMessage: 'Never',
-                            })}
-                        </Text>
-                      </div>
-                      <Divider style={{ margin: 0 }} />
-                    </div>
-                  </Card>
-                </Col>
-              ))}
-              <Col className={classes.addCol}>
-                <Button
-                  disabled={submitting}
-                  onClick={toggleAddOffender}
-                  type="primary"
+      <div>
+        {offendersSelected ? (
+          <Row gutter={16}>
+            {offendersData?.listOffenders?.offenders.map((offender) => (
+              <Col key={offender.id}>
+                <Card
+                  bodyStyle={{ padding: 0 }}
+                  className={classes.offenderCol}
                 >
-                  {intl.formatMessage({
-                    defaultMessage: 'Add Offender',
-                  })}
-                </Button>
-              </Col>
-            </Row>
-          ) : (
-            <div>
-              {searchData?.listOffendersRelay?.edges &&
-              searchData?.listOffendersRelay?.edges.length > 0 ? (
-                <InfiniteScroll
-                  dataLength={searchData?.listOffendersRelay?.edges.length}
-                  endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                      <b>-----------</b>
-                    </p>
-                  }
-                  hasMore={searchData?.listOffendersRelay.pageInfo.hasNextPage}
-                  height="calc(100vh - 78px)"
-                  loader={<Loading />}
-                  next={() => fetchMoreScroll()}
-                  style={{ overflowX: 'hidden' }}
-                >
-                  <Row
-                    align="stretch"
-                    gutter={[10, 10]}
-                    style={{
-                      alignItems: 'stretch',
-                      overflowX: 'hidden',
-                      padding: 10,
-                    }}
-                  >
-                    {searchData.listOffendersRelay.edges.map((t) => (
-                      <Col key={t?.node?.id}>
-                        <Card
-                          bodyStyle={{ display: 'flex', padding: 0 }}
-                          className={classes.offenderCard}
-                          onClick={() => selectOffender(t?.node?.id)}
-                        >
-                          <div className={classes.offenderImage}>
-                            <WatermarkImage
-                              position={t?.node?.images[0]?.position}
-                              url={t?.node?.images[0]?.optimised}
-                            />
-                          </div>
-                          <div className={classes.offenderContent}>
-                            <Text className={classes.offenderName}>
-                              {t?.node?.name}
-                            </Text>
-                            <Row gutter={8}>
-                              <Col>
-                                <Text className={classes.offenderDetail}>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Age: ',
-                                  })}
-                                </Text>
-                                <Text
-                                  className={classes.offenderDetail}
-                                  type="secondary"
-                                >
-                                  {getAge(t?.node?.age || Age.Unknown)}
-                                </Text>
-                              </Col>
-                              <Col>
-                                <Text className={classes.offenderDetail}>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Build: ',
-                                  })}
-                                </Text>
-                                <Text
-                                  className={classes.offenderDetail}
-                                  type="secondary"
-                                >
-                                  {getBuild(t?.node?.build || Build.Unknown)}
-                                </Text>
-                              </Col>
-                            </Row>
-                            <Row gutter={8}>
-                              <Col>
-                                <Text className={classes.offenderDetail}>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Sex: ',
-                                  })}
-                                </Text>
-                                <Text
-                                  className={classes.offenderDetail}
-                                  type="secondary"
-                                >
-                                  {getSex(t?.node?.gender || Gender.Unknown)}
-                                </Text>
-                              </Col>
-                              <Col>
-                                <Text className={classes.offenderDetail}>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Ethnicity: ',
-                                  })}
-                                </Text>
-                                <Text type="secondary">
-                                  {getEthnicityShort(
-                                    t?.node?.race || Race.Unknown
-                                  )}
-                                </Text>
-                              </Col>
-                            </Row>
-                          </div>
-                        </Card>
-                      </Col>
+                  <Carousel>
+                    {offender.images.map((image) => (
+                      <div className={classes.imageContainer} key={image.id}>
+                        <div className={classes.image}>
+                          <WatermarkImage
+                            position={image.position}
+                            rotation={image.rotation}
+                            url={image.optimised}
+                          />
+                        </div>
+                      </div>
                     ))}
-                  </Row>
-                </InfiniteScroll>
-              ) : (
-                <div
-                  style={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    flex: 1,
-                    height: 'calc(100vh - 100px)',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Empty
-                    description={
-                      intl.formatMessage({
-                        defaultMessage: 'No Offenders',
-                      })
-                      // search === ''
-                      //   ? intl.formatMessage({
-                      //       defaultMessage: 'No Offenders',
-                      //     })
-                      //   : intl.formatMessage({
-                      //       defaultMessage:
-                      //         'No offenders match your search criteria',
-                      //     })
-                    }
+                  </Carousel>
+                  <div>
+                    <Row align="middle">
+                      <Col flex={1}>
+                        <Title className={classes.title} level={4}>
+                          {offender.name}
+                        </Title>
+                      </Col>
+                      <Col>
+                        <Popconfirm
+                          disabled={submitting}
+                          onConfirm={() => removeOffender(offender.id)}
+                          overlayInnerStyle={{ padding: 10 }}
+                          title={intl.formatMessage({
+                            defaultMessage: 'Are you sure?',
+                          })}
+                        >
+                          <Button
+                            className={classes.deleteButton}
+                            disabled={submitting}
+                            size="small"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </Button>
+                        </Popconfirm>
+                      </Col>
+                    </Row>
+                    <Divider style={{ margin: 0 }} />
+                    {publicOffenderDOB && (
+                      <div className={classes.field}>
+                        <Text>
+                          {intl.formatMessage({
+                            defaultMessage: 'Age:',
+                          })}
+                        </Text>
+                        <Text type="secondary">
+                          {getAge(offender.age || Age.Unknown)}
+                        </Text>
+                      </div>
+                    )}
+                    <Divider style={{ margin: 0 }} />
+                    <div className={classes.field}>
+                      <Text>
+                        {intl.formatMessage({
+                          defaultMessage: 'Date Of Birth:',
+                        })}
+                      </Text>
+                      <Text type="secondary">
+                        {moment(offender.dateOfBirth).format('DD/MM/YYYY') ||
+                          intl.formatMessage({
+                            defaultMessage: 'Unknown',
+                          })}
+                      </Text>
+                    </div>
+                    <Divider style={{ margin: 0 }} />
+                    <div className={classes.field}>
+                      <Text>
+                        {intl.formatMessage({
+                          defaultMessage: 'DoB Source:',
+                        })}
+                      </Text>
+                      <Text type="secondary">
+                        {offender.dateSource ||
+                          intl.formatMessage({
+                            defaultMessage: 'None',
+                          })}
+                      </Text>
+                    </div>
+                    <Divider style={{ margin: 0 }} />
+                    <div className={classes.field}>
+                      <Text>
+                        {intl.formatMessage({
+                          defaultMessage: 'Build:',
+                        })}
+                      </Text>
+                      <Text type="secondary">
+                        {getBuild(offender.build || Build.Unknown)}
+                      </Text>
+                    </div>
+                    <Divider style={{ margin: 0 }} />
+                    <div className={classes.field}>
+                      <Text>
+                        {intl.formatMessage({
+                          defaultMessage: 'Ethnicity:',
+                        })}
+                      </Text>
+                      <Text type="secondary">
+                        {getEthnicity(offender.race || Race.Unknown)}
+                      </Text>
+                    </div>
+                    <Divider style={{ margin: 0 }} />
+                    <div className={classes.field}>
+                      <Text>
+                        {intl.formatMessage({
+                          defaultMessage: 'Sex:',
+                        })}
+                      </Text>
+                      <Text type="secondary">
+                        {getSex(offender.gender || Gender.Unknown)}
+                      </Text>
+                    </div>
+                    <Divider style={{ margin: 0 }} />
+                    <div className={classes.field}>
+                      <Text>
+                        {intl.formatMessage({
+                          defaultMessage: 'Last Active:',
+                        })}
+                      </Text>
+                      <Text type="secondary">
+                        {offender.lastActive?.dayTime ||
+                          intl.formatMessage({
+                            defaultMessage: 'Never',
+                          })}
+                      </Text>
+                    </div>
+                    <Divider style={{ margin: 0 }} />
+                  </div>
+                </Card>
+              </Col>
+            ))}
+            <Col className={classes.addCol}>
+              <Button
+                disabled={submitting}
+                onClick={toggleAddOffender}
+                type="primary"
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Add Offender',
+                })}
+              </Button>
+            </Col>
+          </Row>
+        ) : (
+          <Row gutter={16}>
+            <Col span={24}>
+              <Row>
+                <Col>
+                  <Input
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder={intl.formatMessage({
+                      defaultMessage: 'Search for an offender',
+                    })}
+                    style={{ marginBottom: 15, width: 400 }}
                   />
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+                </Col>
+              </Row>
+            </Col>
+            {searchData?.listOffenders?.offenders.map((offender) => (
+              <Col key={offender.id} span={8}>
+                <Card
+                  bodyStyle={{ display: 'flex', padding: 0 }}
+                  className={classes.offenderCard}
+                  key={offender.id}
+                  onClick={() => selectOffender(offender.id)}
+                >
+                  <div className={classes.offenderImage}>
+                    <WatermarkImage
+                      position={offender.images[0]?.position}
+                      url={offender.images[0]?.optimised}
+                    />
+                  </div>
+                  <div className={classes.offenderContent}>
+                    <Text className={classes.offenderName}>
+                      {offender.name}
+                    </Text>
+                    <Row gutter={8}>
+                      <Col>
+                        <Text className={classes.offenderDetail}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Age: ',
+                          })}
+                        </Text>
+                        <Text
+                          className={classes.offenderDetail}
+                          type="secondary"
+                        >
+                          {getAge(offender.age || Age.Unknown)}
+                        </Text>
+                      </Col>
+                      <Col>
+                        <Text className={classes.offenderDetail}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Build: ',
+                          })}
+                        </Text>
+                        <Text
+                          className={classes.offenderDetail}
+                          type="secondary"
+                        >
+                          {getBuild(offender.build || Build.Unknown)}
+                        </Text>
+                      </Col>
+                    </Row>
+                    <Row gutter={8}>
+                      <Col>
+                        <Text className={classes.offenderDetail}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Sex: ',
+                          })}
+                        </Text>
+                        <Text
+                          className={classes.offenderDetail}
+                          type="secondary"
+                        >
+                          {getSex(offender.gender || Gender.Unknown)}
+                        </Text>
+                      </Col>
+                      <Col>
+                        <Text className={classes.offenderDetail}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Ethnicity: ',
+                          })}
+                        </Text>
+                        <Text type="secondary">
+                          {getEthnicityShort(offender.race || Race.Unknown)}
+                        </Text>
+                      </Col>
+                    </Row>
+                  </div>
+                </Card>
+              </Col>
+            ))}
+            {loading && (
+              <Col
+                flex={1}
+                style={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '600px',
+                  justifyContent: 'center',
+                }}
+              >
+                <Spin />
+              </Col>
+            )}
+            <Col span={24}>
+              <Row justify="end">
+                <Col>
+                  <Pagination
+                    onChange={onPaginationChange}
+                    total={searchData?.listOffenders.total ?? 0}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        )}
+      </div>
+
       <Drawer
         onClose={toggleAddOffender}
         open={addOffender}
@@ -418,8 +376,8 @@ const CreateCrimeGroup = ({
       >
         {addOffender ? (
           <AddExisitingOffender
-            offenderIds={offendersData?.listOffendersRelay.edges?.map(
-              (t) => t.node.id
+            offenderIds={offendersData?.listOffenders?.offenders.map(
+              ({ id }) => id
             )}
             onClose={toggleAddOffender}
             update={(offender) => selectOffender(offender.id)}

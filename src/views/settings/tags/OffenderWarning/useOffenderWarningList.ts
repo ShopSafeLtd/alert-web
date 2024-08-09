@@ -7,16 +7,15 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import { Model, QueryMode } from 'graphql/types';
-import type {
-  TagsQuery,
-  TagsQueryVariables,
-} from 'graphql/tags/queries/tags.generated';
 import {
   TagsDocument,
+  TagsQuery,
+  TagsQueryVariables,
   useTagsQuery,
-} from 'graphql/tags/queries/tags.generated';
-import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import { useRecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
+} from 'graphql/tags/queries/__generated__/tags.generated';
+import { useCreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
+
 
 const { confirm } = Modal;
 

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/__generated__/investigation-suggestions.generated';
+
 import {
   Button,
   Card,
@@ -9,37 +11,37 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import Lightbox from 'yet-another-react-lightbox';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Link } from 'react-router-dom';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import useStyles from './SuggestedIncidents.style';
-import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
+import { Link } from 'react-router-dom';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-const { Paragraph, Title, Text } = Typography;
+import useStyles from './SuggestedIncidents.style';
+
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  suggestedData: InvestigationSuggestionsQuery | undefined;
   handleAddSuggestion: (id: string) => void;
   onClose: () => void;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
 }
 
 const SuggestedIncidents = ({
-  suggestedData,
-  onClose,
   handleAddSuggestion,
+  onClose,
+  suggestedData,
 }: Props) => {
   const classes = useStyles();
   const [lightBoxOpen, setLightBoxOpen] = useState<{
-    open: boolean;
     index: number;
+    open: boolean;
   }>({
-    open: false,
     index: 0,
+    open: false,
   });
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
@@ -47,7 +49,7 @@ const SuggestedIncidents = ({
 
   const openLightbox = (
     offender: {
-      images: { id: string; optimised?: string | undefined | null }[];
+      images: { id: string; optimised?: null | string | undefined }[];
     },
     index: number
   ) => {
@@ -56,30 +58,30 @@ const SuggestedIncidents = ({
         src: image.optimised || '',
       })) || []
     );
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   return (
     <div className={classes.container}>
       {suggestedData?.investigation?.suggestedIncidents?.map((incident) => (
-        <div>
+        <div key={incident.id}>
           <Row
+            align="middle"
+            className={classes.images}
             gutter={8}
             justify="start"
-            align="middle"
-            wrap={false}
-            className={classes.images}
             style={{
               height: incident.images.length > 0 ? undefined : 0,
             }}
+            wrap={false}
           >
             {incident?.images.map((image, i) => (
               <Col key={image.id} onClick={() => openLightbox(incident, i)}>
                 <div className={classes.image}>
                   <WatermarkImage
-                    url={image.optimised}
-                    rotation={image.rotation}
                     position={image.position}
+                    rotation={image.rotation}
+                    url={image.optimised}
                   />
                 </div>
               </Col>
@@ -95,12 +97,19 @@ const SuggestedIncidents = ({
             />
           </Text>
           <Paragraph>{incident.description}</Paragraph>
-          <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
+          <Descriptions style={{ marginBottom: 20, marginTop: 20 }}>
             <Descriptions.Item
               label={<FormattedMessage defaultMessage="Date/Time" />}
             >
               {incident.dayTime}
             </Descriptions.Item>
+            {incident.business && (
+              <Descriptions.Item
+                label={<FormattedMessage defaultMessage="Business" />}
+              >
+                {incident.business?.name}
+              </Descriptions.Item>
+            )}
             <Descriptions.Item
               label={<FormattedMessage defaultMessage="Location" />}
             >
@@ -112,7 +121,7 @@ const SuggestedIncidents = ({
               {incident.policeRef}
             </Descriptions.Item>
             <Descriptions.Item
-              label={<FormattedMessage defaultMessage="Crime Type" />}
+              label={<FormattedMessage defaultMessage="Incident Type" />}
             >
               <Row>
                 {incident.crimeTypes.map((item) => (
@@ -125,21 +134,21 @@ const SuggestedIncidents = ({
           </Descriptions>
           {incident.offenders && incident.offenders.length > 0 && (
             <Card
-              title={<FormattedMessage defaultMessage="Offenders" />}
-              headStyle={{ marginTop: -5 }}
               bodyStyle={{ padding: 0 }}
               className={classes.tableContainer}
+              headStyle={{ marginTop: -5 }}
+              title={<FormattedMessage defaultMessage="Offenders" />}
             >
               <OffenderTable
-                offenders={incident.offenders}
                 hasNavigation={false}
+                offenders={incident.offenders}
               />
             </Card>
           )}
 
           <Row gutter={8} justify="end">
             <Col>
-              <Link to={`/app/incidents/view/${incident.id}`} onClick={onClose}>
+              <Link onClick={onClose} to={`/app/incidents/view/${incident.id}`}>
                 <Button>
                   <FormattedMessage defaultMessage="View Incident" />
                 </Button>
@@ -148,8 +157,8 @@ const SuggestedIncidents = ({
             <Col>
               <Button
                 danger
-                type="ghost"
                 onClick={() => handleAddSuggestion(incident.id)}
+                type="ghost"
               >
                 <FormattedMessage defaultMessage="Add To Investigation" />
               </Button>
@@ -159,19 +168,19 @@ const SuggestedIncidents = ({
         </div>
       ))}
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox({ images: [] }, 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

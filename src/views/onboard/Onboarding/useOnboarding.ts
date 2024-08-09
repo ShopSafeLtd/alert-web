@@ -1,39 +1,37 @@
-import { useState } from 'react';
+import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 
 import { notification } from 'antd';
-
-import { useStoreActions, useStoreState } from 'state';
-
-import { useNavigate } from 'react-router-dom';
+import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
+import { useSignTermsMutation } from 'graphql/user/mutation/__generated__/sign-terms.generated';
+import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
-import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
-import { useSignTermsMutation } from 'graphql/user/mutation/sign-terms.generated';
-import { useUpdateUserMutation } from 'graphql/user/mutation/update_user.generated';
+import { useNavigate } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'state';
 
 export interface AccountData {
   fullName: string;
-  subscribedIncidentOnly: boolean;
   incidentEmail: boolean;
   incidentPush: boolean;
-  subscribedOffenderOnly: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
+  subscribedIncidentOnly: boolean;
+  subscribedOffenderOnly: boolean;
 }
 
 interface Return {
+  accountDetail: AccountData | undefined;
+  current: number;
+  loading: boolean;
+  name: string;
+  onBack: () => void;
   onSubmit: () => void;
   saving: boolean;
-  current: number;
-  onBack: () => void;
-  updateAccountDetail: (value: AccountData | undefined) => void;
-  updateTermsSigned: () => void;
-  setCurrent: (value: number) => void;
-  loading: boolean;
   schemeTerms: CurrentSchemeTermsQuery | undefined;
+  setCurrent: (value: number) => void;
+  updateAccountDetail: (value: AccountData | undefined) => void;
   updateSchemeTermsSigned: (value: unknown) => void;
-  name: string;
-  accountDetail: AccountData | undefined;
+  updateTermsSigned: () => void;
 }
 
 const useOnboarding = (): Return => {
@@ -99,11 +97,11 @@ const useOnboarding = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'Your account has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -113,11 +111,11 @@ const useOnboarding = (): Return => {
     onError: () => {
       setSaving(false);
       notification.error({
-        message: intl.formatMessage({
-          defaultMessage: 'Error!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'Whoops, there are some errors. Please try again.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Error!',
         }),
         placement: 'bottomRight',
       });
@@ -145,14 +143,20 @@ const useOnboarding = (): Return => {
       oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
       void updateUser({
         variables: {
-          where: {
-            id: userId,
+          chatWhere: {
+            chat: {
+              scheme: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
           },
           data: {
             fullName: { set: accountDetail?.fullName },
-            termsSigned: { set: true },
             newUser: { set: false },
             termsExpire: { set: oneYearAway },
+            termsSigned: { set: true },
             // status: { set: UserStatus.Active },
           },
           groupWhere: {
@@ -162,14 +166,8 @@ const useOnboarding = (): Return => {
               },
             },
           },
-          chatWhere: {
-            chat: {
-              scheme: {
-                id: {
-                  equals: schemeId,
-                },
-              },
-            },
+          where: {
+            id: userId,
           },
         },
       });
@@ -183,31 +181,9 @@ const useOnboarding = (): Return => {
       const oneYearAway = new Date();
       oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
       void signTerms({
-        variables: {
-          data: {
-            signature: schemeTermsSigned,
-            termsId: SchemeTerms?.scheme?.currentTerms?.id || '',
-          },
-        },
         onCompleted: () => {
           void updateUser({
             variables: {
-              where: {
-                id: userId,
-              },
-              data: {
-                fullName: { set: accountDetail?.fullName || '' },
-                termsSigned: { set: true },
-                newUser: { set: false },
-                termsExpire: { set: oneYearAway },
-              },
-              groupWhere: {
-                scheme: {
-                  id: {
-                    equals: schemeId,
-                  },
-                },
-              },
               chatWhere: {
                 chat: {
                   scheme: {
@@ -217,26 +193,48 @@ const useOnboarding = (): Return => {
                   },
                 },
               },
+              data: {
+                fullName: { set: accountDetail?.fullName || '' },
+                newUser: { set: false },
+                termsExpire: { set: oneYearAway },
+                termsSigned: { set: true },
+              },
+              groupWhere: {
+                scheme: {
+                  id: {
+                    equals: schemeId,
+                  },
+                },
+              },
+              where: {
+                id: userId,
+              },
             },
           });
+        },
+        variables: {
+          data: {
+            signature: schemeTermsSigned,
+            termsId: SchemeTerms?.scheme?.currentTerms?.id || '',
+          },
         },
       });
     }
   };
 
   return {
+    accountDetail,
+    current,
+    loading: SchemeTermsLoading,
+    name,
+    onBack,
     onSubmit,
     saving,
-    current,
-    setCurrent,
-    onBack,
-    updateAccountDetail,
-    updateTermsSigned,
-    loading: SchemeTermsLoading,
     schemeTerms: SchemeTerms,
+    setCurrent,
+    updateAccountDetail,
     updateSchemeTermsSigned,
-    name,
-    accountDetail,
+    updateTermsSigned,
   };
 };
 

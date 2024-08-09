@@ -1,5 +1,11 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { DeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
+import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
+import type { UserChatsQuery } from 'graphql/userChat/queries/__generated__/user_chats.generated';
+
+import { faPenToSquare, faUser } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Avatar,
   Badge,
@@ -12,33 +18,26 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faUser } from '@fortawesome/pro-light-svg-icons';
-import { Link } from 'react-router-dom';
-import ViewMessage from 'components/viewChat/ViewMessage';
-
 import AddChat from 'components/form-components/chat/AddChat';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { formatDate } from 'utils';
+import ViewMessage from 'components/viewChat/ViewMessage';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { UserChatsQuery } from 'graphql/userChat/queries/user_chats.generated';
-import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
-import type { DeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
+import { Link } from 'react-router-dom';
+import { formatDate } from 'utils';
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  data: UserChatsQuery | undefined;
-  saving: boolean;
-  handleMarkAsRead: (value: string | undefined) => void;
-  chatId: string;
   addChat: boolean;
+  adminRights: boolean;
+  chatId: string;
+  data: UserChatsQuery | undefined;
+  handleMarkAsRead: (value: string | undefined) => void;
+  loading: boolean;
+  saving: boolean;
   toggleAddChat: () => void;
   updateAddUserChat: MutationUpdaterFn<CreateChatMutation>;
   updateDeletedUserChat: MutationUpdaterFn<DeleteChatMutation>;
-  adminRights: boolean;
-  loading: boolean;
 }
 
 const getContent = (content: string) =>
@@ -53,16 +52,16 @@ const getContent = (content: string) =>
 // .join('');
 
 const ViewOffender = ({
-  data,
-  saving,
-  handleMarkAsRead,
-  chatId,
   addChat,
+  adminRights,
+  chatId,
+  data,
+  handleMarkAsRead,
+  loading,
+  saving,
   toggleAddChat,
   updateAddUserChat,
   updateDeletedUserChat,
-  loading,
-  adminRights,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const list = () => {
@@ -70,25 +69,25 @@ const ViewOffender = ({
       return (
         <>
           <Skeleton
-            className="chat-item"
+            active
             avatar
+            className="chat-item"
             paragraph={{ rows: 1 }}
             style={{ paddingLeft: 10, paddingRight: 10 }}
-            active
           />
           <Skeleton
-            className="chat-item"
+            active
             avatar
+            className="chat-item"
             paragraph={{ rows: 1 }}
             style={{ paddingLeft: 10, paddingRight: 10 }}
-            active
           />
           <Skeleton
-            className="chat-item"
+            active
             avatar
+            className="chat-item"
             paragraph={{ rows: 1 }}
             style={{ paddingLeft: 10, paddingRight: 10 }}
-            active
           />
         </>
       );
@@ -96,10 +95,10 @@ const ViewOffender = ({
       return (
         <div
           style={{
-            display: 'flex',
-            width: '100%',
             alignItems: 'center',
+            display: 'flex',
             justifyContent: 'center',
+            width: '100%',
             // height: 'calc(100vh - 400px)',
           }}
         >
@@ -112,96 +111,46 @@ const ViewOffender = ({
       );
     return (
       <List
-        itemLayout="horizontal"
-        // loading={loading}
-        split
         dataSource={data?.user?.chats}
+        itemLayout="horizontal"
         renderItem={({
-          id: userChatId,
-          newMessages,
+          chat: { firstLetter, id, messageCount, messages, name, totalMembers },
           createdAt,
+          id: userChatId,
           mentioned,
-          chat: { id, name, firstLetter, messages, totalMembers, messageCount },
+          newMessages,
         }) => (
-          <Link to={`/app/chat/${id}`} key={id}>
+          <Link key={id} to={`/app/chat/${id}`}>
             <List.Item
               className={chatId === id ? 'chat-item current' : 'chat-item'}
-              onClick={() => !saving && handleMarkAsRead(userChatId)}
               key={id}
+              onClick={() => !saving && handleMarkAsRead(userChatId)}
             >
               <List.Item.Meta
                 avatar={
                   <Badge
-                    offset={[8, 0]}
-                    size="default"
                     count={messageCount || 0}
+                    offset={[8, 0]}
                     overflowCount={99}
-                    style={{ zIndex: 100, right: 3, top: 5 }}
+                    size="default"
+                    style={{ right: 3, top: 5, zIndex: 100 }}
                   >
                     <Avatar className="chat-item-avatar">{firstLetter}</Avatar>
                   </Badge>
                 }
-                title={
-                  <Row style={{ marginRight: 5 }}>
-                    <Col>
-                      <Paragraph
-                        style={{
-                          fontSize: 16,
-                          marginBottom: 0,
-                          fontWeight: newMessages || mentioned ? 600 : 400,
-                        }}
-                      >
-                        {name}
-                      </Paragraph>
-                    </Col>
-                    <Col flex={1}>
-                      <span className="chat-item-tag" color="red">
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={faUser}
-                          style={{
-                            marginRight: 3,
-                            color: 'rgb(222, 68, 54)',
-                          }}
-                        />
-                        <span style={{ fontSize: '14px' }}>
-                          ({totalMembers})
-                        </span>
-                      </span>
-                    </Col>
-                    <Col>
-                      <Row align="middle">
-                        <Col>
-                          <Paragraph
-                            style={{
-                              fontSize: 13,
-                              marginTop: 3,
-                              marginBottom: 3,
-                              fontWeight: newMessages || mentioned ? 600 : 400,
-                            }}
-                          >
-                            {messages && messages.length > 0
-                              ? formatDate(messages?.slice(-1)[0].createdAt)
-                              : formatDate(createdAt)}
-                          </Paragraph>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                }
                 description={
-                  <Row wrap={false} style={{ marginRight: 5 }}>
+                  <Row style={{ marginRight: 5 }} wrap={false}>
                     <Col flex={1}>
                       <Paragraph
+                        ellipsis
+                        strong={newMessages || mentioned || false}
                         style={{
                           fontSize: 12,
                           marginBottom: 0,
                         }}
-                        ellipsis
-                        strong={newMessages || mentioned || false}
                       >
                         {mentioned && (
-                          <Text type="danger" style={{ marginRight: 3 }}>
+                          <Text style={{ marginRight: 3 }} type="danger">
                             {intl.formatMessage({
                               defaultMessage: '[You were mentioned]',
                             })}
@@ -250,10 +199,60 @@ const ViewOffender = ({
                     </Col>
                   </Row>
                 }
+                title={
+                  <Row style={{ marginRight: 5 }}>
+                    <Col>
+                      <Paragraph
+                        style={{
+                          fontSize: 16,
+                          fontWeight: newMessages || mentioned ? 600 : 400,
+                          marginBottom: 0,
+                        }}
+                      >
+                        {name}
+                      </Paragraph>
+                    </Col>
+                    <Col flex={1}>
+                      <span className="chat-item-tag" color="red">
+                        <FontAwesomeIcon
+                          icon={faUser}
+                          size="lg"
+                          style={{
+                            color: 'rgb(222, 68, 54)',
+                            marginRight: 3,
+                          }}
+                        />
+                        <span style={{ fontSize: '14px' }}>
+                          ({totalMembers})
+                        </span>
+                      </span>
+                    </Col>
+                    <Col>
+                      <Row align="middle">
+                        <Col>
+                          <Paragraph
+                            style={{
+                              fontSize: 13,
+                              fontWeight: newMessages || mentioned ? 600 : 400,
+                              marginBottom: 3,
+                              marginTop: 3,
+                            }}
+                          >
+                            {messages && messages.length > 0
+                              ? formatDate(messages?.slice(-1)[0].createdAt)
+                              : formatDate(createdAt)}
+                          </Paragraph>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                }
               />
             </List.Item>
           </Link>
         )}
+        // loading={loading}
+        split
       />
     );
   };
@@ -274,10 +273,7 @@ const ViewOffender = ({
               {adminRights && (
                 <Col>
                   <Button
-                    type="ghost"
                     danger
-                    size="small"
-                    onClick={toggleAddChat}
                     icon={
                       <FontAwesomeIcon
                         icon={faPenToSquare}
@@ -285,6 +281,9 @@ const ViewOffender = ({
                         style={{ marginRight: 5 }}
                       />
                     }
+                    onClick={toggleAddChat}
+                    size="small"
+                    type="ghost"
                   >
                     {intl.formatMessage({
                       defaultMessage: 'New Chat',
@@ -304,29 +303,29 @@ const ViewOffender = ({
             />
           ) : (
             <Empty
-              style={{
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-              }}
               description={intl.formatMessage({
                 defaultMessage: 'Select or create a chat to view messages',
               })}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                justifyContent: 'center',
+              }}
             />
           )}
         </Col>
       </Row>
       <Drawer
+        onClose={toggleAddChat}
+        open={addChat}
         title={intl.formatMessage({
           defaultMessage: 'Create A New Chat',
         })}
-        open={addChat}
         width="400"
-        onClose={toggleAddChat}
       >
         {addChat ? (
-          <AddChat update={updateAddUserChat} onClose={toggleAddChat} />
+          <AddChat onClose={toggleAddChat} update={updateAddUserChat} />
         ) : (
           <div />
         )}

@@ -1,27 +1,29 @@
-import React from 'react';
-import { Button, Typography } from 'antd';
+import type { TotalUserSessionsGraphQueryVariables } from '#/components/reports/components/UserSessionsGraph/__generated__/TotalUserSessionsGraph.generated';
+import type { Props } from 'react';
 
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTotalUserSessionsGraphQuery } from '#/components/reports/components/UserSessionsGraph/__generated__/TotalUserSessionsGraph.generated';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import { DonutGraph } from '../../graphs';
-import type { TotalUserSessionsGraphQueryVariables } from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph.generated';
-import { useTotalUserSessionsGraphQuery } from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph.generated';
 
 interface Props {
   editMode: boolean;
-  variables: TotalUserSessionsGraphQueryVariables;
-  removeItem: () => void;
-  onNavigate: () => void;
   isPrinting: boolean;
+  onNavigate: () => void;
+  removeItem: () => void;
+  variables: TotalUserSessionsGraphQueryVariables;
 }
 
 const TotalUserSessionsGraph = ({
-  variables,
   editMode,
-  removeItem,
-  onNavigate,
   isPrinting,
+  onNavigate,
+  removeItem,
+  variables,
 }: Props) => {
   const intl = useIntl();
 
@@ -39,22 +41,22 @@ const TotalUserSessionsGraph = ({
 
       {editMode ? (
         <Button
-          type="text"
-          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
           onClick={removeItem}
+          shape="circle"
+          size="small"
+          type="text"
         />
       ) : (
         <Button
-          type="text"
           className="change-graph1-view-more"
+          danger
+          onClick={onNavigate}
           // style={{ position: 'absolute', right: 5, top: 15, zIndex: 1 }}
           size="small"
-          onClick={onNavigate}
-          danger
+          type="text"
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
@@ -63,11 +65,11 @@ const TotalUserSessionsGraph = ({
       )}
 
       <DonutGraph
-        isPrinting={isPrinting}
         data={data?.totalUserSessionsGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Users',
         })}
+        isPrinting={isPrinting}
       />
     </>
   );

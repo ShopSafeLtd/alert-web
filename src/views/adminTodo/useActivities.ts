@@ -1,31 +1,32 @@
-import { useMemo } from 'react';
-import { useApolloClient } from '@apollo/client';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 
-import { useStoreState } from '../../state';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
 import {
   QuestionGroupOnSchemeDocument,
   useQuestionGroupOnSchemeQuery,
-} from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+} from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
+import { useApolloClient } from '@apollo/client';
+import { useMemo } from 'react';
+
+import { useStoreState } from '../../state';
 
 interface Return {
-  templateData: ListData[];
   loading: boolean;
+  templateData: ListData[];
   updateTemplates: (
     item: ListData,
-    type: 'create' | 'update' | 'delete'
+    type: 'create' | 'delete' | 'update'
   ) => void;
 }
 
 export interface ListData {
+  defaultDueDays: number;
+  description: string;
   id: string;
   name: string;
-  description: string;
   questions: {
     id: string;
     question: string;
   }[];
-  defaultDueDays: number;
 }
 const useActivityTemplates = (): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
@@ -39,16 +40,16 @@ const useActivityTemplates = (): Return => {
   });
 
   const templateData: ListData[] = useMemo(() => {
-    if (data && data.scheme && data.scheme.questionGroups) {
+    if (data?.scheme?.questionGroups) {
       return data.scheme.questionGroups.map((qGroup) => ({
+        defaultDueDays: qGroup.defaultDueDate || 0,
+        description: qGroup.description || '',
         id: qGroup.id,
         name: qGroup.name,
-        description: qGroup.description || '',
-        questions: qGroup.questions.map(({ questionFormatted, id }) => ({
-          question: questionFormatted || '',
+        questions: qGroup.questions.map(({ id, questionFormatted }) => ({
           id,
+          question: questionFormatted || '',
         })),
-        defaultDueDays: qGroup.defaultDueDate || 0,
       }));
     }
     return [];
@@ -56,7 +57,7 @@ const useActivityTemplates = (): Return => {
 
   const updateTemplates = (
     item: ListData,
-    type: 'create' | 'update' | 'delete'
+    type: 'create' | 'delete' | 'update'
   ) => {
     const existing = store.readQuery<QuestionGroupOnSchemeQuery>({
       query: QuestionGroupOnSchemeDocument,
@@ -69,28 +70,22 @@ const useActivityTemplates = (): Return => {
     if (existing && existing.scheme && existing.scheme.questionGroups) {
       if (type === 'create') {
         store.writeQuery({
-          query: QuestionGroupOnSchemeDocument,
-          variables: {
-            where: {
-              id: currentScheme,
-            },
-          },
           data: {
             scheme: {
               ...existing.scheme,
               questionGroups: [...existing.scheme.questionGroups, item],
             },
           },
-        });
-      }
-      if (type === 'update') {
-        store.writeQuery({
           query: QuestionGroupOnSchemeDocument,
           variables: {
             where: {
               id: currentScheme,
             },
           },
+        });
+      }
+      if (type === 'update') {
+        store.writeQuery({
           data: {
             scheme: {
               ...existing.scheme,
@@ -102,16 +97,16 @@ const useActivityTemplates = (): Return => {
               }),
             },
           },
-        });
-      }
-      if (type === 'delete') {
-        store.writeQuery({
           query: QuestionGroupOnSchemeDocument,
           variables: {
             where: {
               id: currentScheme,
             },
           },
+        });
+      }
+      if (type === 'delete') {
+        store.writeQuery({
           data: {
             scheme: {
               ...existing.scheme,
@@ -120,14 +115,20 @@ const useActivityTemplates = (): Return => {
               ),
             },
           },
+          query: QuestionGroupOnSchemeDocument,
+          variables: {
+            where: {
+              id: currentScheme,
+            },
+          },
         });
       }
     }
   };
 
   return {
-    templateData,
     loading,
+    templateData,
     updateTemplates,
   };
 };

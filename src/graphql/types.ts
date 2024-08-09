@@ -13032,8 +13032,6 @@ export type Query = {
   auth0User: Auth0User;
   availableQuestions: Array<Question>;
   availableTaskQuestions: Array<Question>;
-  awaitingMatchShoes: QueryAwaitingMatchShoesConnection;
-  awaitingShippingShoes: QueryAwaitingShippingShoesConnection;
   ban: Ban;
   bans: Array<Ban>;
   brand: Brand;
@@ -13136,7 +13134,6 @@ export type Query = {
   performanceReport: PerformanceReport;
   previewIncidentExport: IncidentExport;
   question: Question;
-  receivedShoes: QueryReceivedShoesConnection;
   recycledItem?: Maybe<RecycledItem>;
   recycledItems: Array<RecycledItem>;
   reportGroup: ReportGroup;
@@ -13151,7 +13148,6 @@ export type Query = {
   schemes: Array<Scheme>;
   sharingConfig: SharingConfig;
   sharingConfigs: Array<SharingConfig>;
-  shippedShoes: QueryShippedShoesConnection;
   shoe: Shoe;
   shoes: QueryShoesConnection;
   statementTemplate: StatementTemplate;
@@ -13176,6 +13172,7 @@ export type Query = {
   userChat: UserChat;
   userChats: Array<UserChat>;
   userContributions: ListUserContribution;
+  userGroupRelay: QueryUserGroupRelayConnection;
   userIncidentCountGraph: Array<Graph>;
   userNew: UserNew;
   userNotification: UserNotification;
@@ -13262,31 +13259,6 @@ export type QueryAvailableQuestionsArgs = {
 
 export type QueryAvailableTaskQuestionsArgs = {
   where: Array<Scalars['String']>;
-};
-
-
-export type QueryAwaitingMatchShoesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ShoeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ShoeWhereInput>;
-};
-
-
-export type QueryAwaitingShippingShoesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<ShoeWhereUniqueInput>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ShoeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ShoeWhereInput>;
 };
 
 
@@ -14042,19 +14014,6 @@ export type QueryQuestionArgs = {
 };
 
 
-export type QueryReceivedShoesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<ShoeWhereUniqueInput>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ShoeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ShoeWhereInput>;
-};
-
-
 export type QueryRecycledItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
@@ -14157,19 +14116,6 @@ export type QuerySharingConfigsArgs = {
 };
 
 
-export type QueryShippedShoesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<ShoeWhereUniqueInput>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ShoeOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ShoeWhereInput>;
-};
-
-
 export type QueryShoeArgs = {
   where: ShoeWhereUniqueInput;
 };
@@ -14178,7 +14124,6 @@ export type QueryShoeArgs = {
 export type QueryShoesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
-  cursor?: InputMaybe<ShoeWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<ShoeOrderByWithRelationInput>>;
@@ -14328,6 +14273,17 @@ export type QueryUserContributionsArgs = {
 };
 
 
+export type QueryUserGroupRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserGroupsReplayWhere>;
+};
+
+
 export type QueryUserIncidentCountGraphArgs = {
   take?: InputMaybe<Scalars['Int']>;
   where: UserIncidentsCountGraphInput;
@@ -14416,32 +14372,6 @@ export type QueryActiveChecklistsConnectionEdge = {
   __typename?: 'QueryActiveChecklistsConnectionEdge';
   cursor: Scalars['String'];
   node: ActiveChecklist;
-};
-
-export type QueryAwaitingMatchShoesConnection = {
-  __typename?: 'QueryAwaitingMatchShoesConnection';
-  edges: Array<QueryAwaitingMatchShoesConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QueryAwaitingMatchShoesConnectionEdge = {
-  __typename?: 'QueryAwaitingMatchShoesConnectionEdge';
-  cursor: Scalars['String'];
-  node: Shoe;
-};
-
-export type QueryAwaitingShippingShoesConnection = {
-  __typename?: 'QueryAwaitingShippingShoesConnection';
-  edges: Array<QueryAwaitingShippingShoesConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QueryAwaitingShippingShoesConnectionEdge = {
-  __typename?: 'QueryAwaitingShippingShoesConnectionEdge';
-  cursor: Scalars['String'];
-  node: Shoe;
 };
 
 export type QueryBrandsConnection = {
@@ -14626,19 +14556,6 @@ export type QueryNotificationRelayConnectionEdge = {
   node: UserNotification;
 };
 
-export type QueryReceivedShoesConnection = {
-  __typename?: 'QueryReceivedShoesConnection';
-  edges: Array<QueryReceivedShoesConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QueryReceivedShoesConnectionEdge = {
-  __typename?: 'QueryReceivedShoesConnectionEdge';
-  cursor: Scalars['String'];
-  node: Shoe;
-};
-
 export type QueryReportGroupsConnection = {
   __typename?: 'QueryReportGroupsConnection';
   edges: Array<QueryReportGroupsConnectionEdge>;
@@ -14663,19 +14580,6 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
-};
-
-export type QueryShippedShoesConnection = {
-  __typename?: 'QueryShippedShoesConnection';
-  edges: Array<QueryShippedShoesConnectionEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type QueryShippedShoesConnectionEdge = {
-  __typename?: 'QueryShippedShoesConnectionEdge';
-  cursor: Scalars['String'];
-  node: Shoe;
 };
 
 export type QueryShoesConnection = {
@@ -14715,6 +14619,19 @@ export type QueryTodoRelayConnectionEdge = {
   __typename?: 'QueryTodoRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Todo;
+};
+
+export type QueryUserGroupRelayConnection = {
+  __typename?: 'QueryUserGroupRelayConnection';
+  edges: Array<QueryUserGroupRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryUserGroupRelayConnectionEdge = {
+  __typename?: 'QueryUserGroupRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Group;
 };
 
 export type Question = {
@@ -20200,6 +20117,11 @@ export type UserContributionWhereInput = {
   rolesIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
+};
+
+export type UserGroupsReplayWhere = {
+  reportGroupsOnly?: InputMaybe<Scalars['Boolean']>;
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type UserIncidentsCountGraphInput = {

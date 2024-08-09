@@ -1,18 +1,39 @@
 mutation CreateTodo($data: TodoCreateInput!) {
   createTodo(data: $data) {
-    type
-    description
-    dueDate
-    createdAt
-    completedDate
-    completed
     id
     name
-    similarOffenderIds
-    createdBy {
+    description
+    dueDate
+    completedDate
+    completed
+    createdAt
+    type
+    vehicleId
+    vehicle {
       id
-      fullName
+      reference
     }
+    offenderId
+    offender {
+      id
+      reference
+    }
+    crimeGroupId
+    crimeGroup {
+      id
+      reference
+    }
+    incidentId
+    incident {
+      id
+      reference
+    }
+    investigationId
+    investigation {
+      id
+      reference
+    }
+    chatId
     assignedUsers {
       id
       fullName

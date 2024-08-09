@@ -1,20 +1,21 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+
 import {
   SchemeGroupsDocument,
   useSchemeGroupsQuery,
-} from 'graphql/groups/queries/scheme-groups.generated';
-import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
+} from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { QueryMode } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface Return {
+  addGroup: boolean;
   data: SchemeGroupsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addGroup: boolean;
   toggleAddGroup: () => void;
   updateGroupList: MutationUpdaterFn<CreateGroupMutation>;
 }
@@ -28,7 +29,6 @@ const useGroupList = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
-        scheme: { id: { equals: schemeId } },
         OR: [
           {
             name: {
@@ -43,6 +43,7 @@ const useGroupList = (): Return => {
             },
           },
         ],
+        scheme: { id: { equals: schemeId } },
       },
     },
   });
@@ -62,7 +63,6 @@ const useGroupList = (): Return => {
       query: SchemeGroupsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
           OR: [
             {
               name: {
@@ -77,6 +77,7 @@ const useGroupList = (): Return => {
               },
             },
           ],
+          scheme: { id: { equals: schemeId } },
         },
       },
     });
@@ -85,14 +86,13 @@ const useGroupList = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<SchemeGroupsQuery>({
-      query: SchemeGroupsDocument,
       data: {
-        groups: [...existingData.groups, res.createGroup],
         __typename: 'Query',
+        groups: [...existingData.groups, res.createGroup],
       },
+      query: SchemeGroupsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
           OR: [
             {
               name: {
@@ -107,17 +107,18 @@ const useGroupList = (): Return => {
               },
             },
           ],
+          scheme: { id: { equals: schemeId } },
         },
       },
     });
   };
 
   return {
+    addGroup,
     data,
     loading,
     search,
     setSearch,
-    addGroup,
     toggleAddGroup,
     updateGroupList,
   };

@@ -1,5 +1,6 @@
-import type { ListDemEvidenceQuery } from '#/graphql/dem/queries/list-evidence.generated';
-import { useListDemEvidenceQuery } from '#/graphql/dem/queries/list-evidence.generated';
+import type { ListDemEvidenceQuery } from 'graphql/dem/queries/__generated__/list-evidence.generated';
+
+import { useListDemEvidenceQuery } from 'graphql/dem/queries/__generated__/list-evidence.generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 
@@ -9,11 +10,11 @@ interface Props {
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListDemEvidenceQuery | undefined;
   loading: boolean;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
 }
 
 const useLinkDem = ({ onClose, selectEvidence }: Props): Return => {
@@ -45,11 +46,11 @@ const useLinkDem = ({ onClose, selectEvidence }: Props): Return => {
   };
 
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listDemEvidence ? false : loading,
     onSelect,
+    onSubmit,
+    saving,
   };
 };
 

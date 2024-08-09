@@ -1,41 +1,25 @@
-import React from 'react';
 import type { GoodsData } from 'types/DataType';
-import useAddGoods from './useAddGoods';
+
+import React from 'react';
+
 import View from './AddGoods.view';
+import useAddGoods from './useAddGoods';
 
 interface Props {
-  onClose: () => void;
-  update: (value: GoodsData[]) => void;
   businessId?: string;
+  onClose: () => void;
   saving: boolean;
+  update: (value: GoodsData) => void;
 }
-const AddGoods = ({
-  onClose,
-  update,
-  businessId,
-  saving,
-}: Props): JSX.Element => {
-  const {
-    onSubmit,
-    goodsTypesData,
-    goodsMode,
-    goods,
-    form,
-    division,
-    onAddItem,
-  } = useAddGoods({ update, businessId });
+const AddGoods = ({ onClose, update }: Props): JSX.Element => {
+  const { goodsMode, goodsTypesData, onSubmit } = useAddGoods({ update });
   return (
     <div>
       <View
-        onSubmit={onSubmit}
-        onClose={onClose}
-        goodsTypesData={goodsTypesData}
         goodsMode={goodsMode}
-        form={form}
-        goods={goods}
-        division={division}
-        onAddItem={onAddItem}
-        saving={saving}
+        goodsTypesData={goodsTypesData}
+        onClose={onClose}
+        onSubmit={onSubmit}
       />
     </div>
   );

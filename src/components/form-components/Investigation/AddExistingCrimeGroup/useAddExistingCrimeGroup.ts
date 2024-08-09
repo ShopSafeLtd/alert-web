@@ -1,33 +1,33 @@
-import { useState } from 'react';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useStoreState } from 'state';
 import { notification } from 'antd';
-import { useParams } from 'react-router';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
+import { useParams } from 'react-router';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
-  onClose: () => void;
   crimeGroupIds: string[] | undefined;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
+  onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onSelect: (item: { key: string }) => void;
 }
 
 const useAddExistingCrimeGroup = ({
-  onClose,
   crimeGroupIds,
+  onClose,
 }: Props): Return => {
   const params = useParams();
   const intl = useIntl();
@@ -43,14 +43,6 @@ const useAddExistingCrimeGroup = ({
         updatedAt: SortOrder.Desc,
       },
       where: {
-        id: { notIn: crimeGroupIds },
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
         OR: [
           {
             id: {
@@ -59,6 +51,14 @@ const useAddExistingCrimeGroup = ({
             },
           },
         ],
+        id: { notIn: crimeGroupIds },
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
       },
     },
   });
@@ -70,11 +70,11 @@ const useAddExistingCrimeGroup = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added to the crime group.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
 
         placement: 'bottomRight',
@@ -94,13 +94,13 @@ const useAddExistingCrimeGroup = ({
     if (selectedData) {
       void updateInvestigation({
         variables: {
-          where: {
-            id: params.id || '',
-          },
           data: {
             incidentIds: [selectedData.id],
 
             // schemes: schemeId,
+          },
+          where: {
+            id: params.id || '',
           },
         },
       });
@@ -114,13 +114,13 @@ const useAddExistingCrimeGroup = ({
   // };
 
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listCrimeGroups ? false : loading,
+    onSelect,
+    onSubmit,
+    saving,
     search,
     setSearch,
-    onSelect,
     // openLightbox,
     // lightBoxOpen,
   };

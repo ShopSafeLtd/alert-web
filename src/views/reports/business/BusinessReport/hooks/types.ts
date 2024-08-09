@@ -1,55 +1,60 @@
+import type { DateSelectModeType } from '#/components/reports/DateSelect/DateSelect.view';
+import type { TargetedBusinessReportQuery } from 'graphql/reports/queries/__generated__/business-report.generated';
 import type { RefObject } from 'react';
 import type RGL from 'react-grid-layout';
+
 import type {
   IncidentsTableData,
   TargetedGoodsTableData,
 } from '../../../../../components/reports/tableColumns';
 import type { IReportTemplate, MetaData, SelectOptions } from '../../../types';
-import type { TargetedBusinessReportQuery } from 'graphql/reports/queries/business-report.generated';
 
 export interface Return {
-  loading: boolean;
-  data: TargetedBusinessReportQuery | undefined;
-  groupsLoading: boolean;
-  dateRange: { startDate: Date; endDate: Date };
-  setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-  groups: SelectOptions[];
-  setSelectedGroups: (groups: string[]) => void;
-  crimeGroups: SelectOptions[];
-  setSelectedCrimeGroups: (crimeGroups: string[]) => void;
-  selectedGroups: string[];
-  componentRef: RefObject<HTMLDivElement>;
-  handlePrint: () => void;
-  editMode: boolean;
-  setEditMode: (editMode: boolean) => void;
-  offenders: SelectOptions[];
-  setSelectedOffenders: (offenders: string[]) => void;
-  targetedGoodsData: TargetedGoodsTableData[] | [];
-  layout: RGL.Layout[];
-  setLayout: (layout: RGL.Layout[]) => void;
-  minDrawer: boolean;
-  setMinDrawer: (arg0: boolean) => void;
-  removeItem: (arg0: string) => void;
-  changeSize: (arg0: string, arg1: number) => void;
-  isPrinting: boolean;
-  businessName: string;
-  selectedOffenders: string[];
-  selectedCrimeGroups: string[];
-  incidentsTableData: IncidentsTableData[] | [];
   addLogo: (arg0: string) => void;
   addLogoDrawer: boolean;
+  businessName: string;
+  changeSize: (arg0: string, arg1: number) => void;
+  componentRef: RefObject<HTMLDivElement>;
+  crimeGroups: SelectOptions[];
+  data: TargetedBusinessReportQuery | undefined;
+  dateRange: { endDate: Date; startDate: Date } | undefined;
+  editMode: boolean;
+  filterCount: number;
+  filtersOpen: boolean;
+  groups: SelectOptions[];
+  groupsLoading: boolean;
+  handlePrint: () => void;
+  incidentsTableData: [] | IncidentsTableData[];
+  isPrinting: boolean;
+  layout: RGL.Layout[];
+  loading: boolean;
   logos: string[];
   metadata: MetaData[];
+  minDrawer: boolean;
+  offenders: SelectOptions[];
+  removeItem: (arg0: string) => void;
   removeLogo: (arg0: number) => void;
   saveAsDrawer: boolean;
   saveTemplate: (name: string, method: 'create' | 'update') => void;
   selectTemplate: (arg0: string) => void;
+  selectedCrimeGroups: string[];
+  selectedGroups: string[];
+  selectedOffenders: string[];
   selectedTemplate: string;
-  setMetadata: (arg0: MetaData[]) => void;
   setAddLogoDrawer: (arg0: boolean) => void;
+  setDateRange: (
+    dateRange: { endDate: Date; startDate: Date } | undefined,
+    modeValue: DateSelectModeType | undefined
+  ) => void;
+  setEditMode: (editMode: boolean) => void;
+  setLayout: (layout: RGL.Layout[]) => void;
+  setMetadata: (arg0: MetaData[]) => void;
+  setMinDrawer: (arg0: boolean) => void;
   setSaveAsDrawer: (arg0: boolean) => void;
+  setSelectedCrimeGroups: (crimeGroups: string[]) => void;
+  setSelectedGroups: (groups: string[]) => void;
+  setSelectedOffenders: (offenders: string[]) => void;
+  targetedGoodsData: [] | TargetedGoodsTableData[];
   templates: IReportTemplate[];
-  filtersOpen: boolean;
   toggleFiltersOpen: () => void;
-  filterCount: number;
 }

@@ -1,8 +1,9 @@
-import type { BusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
-
-import { useBusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
 import { SortOrder } from 'graphql/types';
 import { useStoreState } from 'state';
+
+import type { BusinessesSideListQuery } from './graphql/queries/__generated__/sidelist.generated';
+
+import { useBusinessesSideListQuery } from './graphql/queries/__generated__/sidelist.generated';
 
 interface Return {
   data:

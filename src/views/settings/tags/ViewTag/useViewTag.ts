@@ -1,25 +1,26 @@
 /* eslint-disable no-restricted-syntax */
-import { useEffect, useState } from 'react';
+import type { ExtendedLayout } from '#/views/reports/types';
+import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/__generated__/view-tag.generated';
+import type { AnswerType } from 'graphql/types';
 import type { Scheme } from 'state';
-import { useStoreState } from 'state';
-import { useParams } from 'react-router-dom';
+
+import { useRemoveQuestionFromTagMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/remove-question.generated';
+import { useUpsertIncidentFormMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-incident-form-fields.generated';
+import { useUpdateTagQsMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-question-order.generated';
+import {
+  ViewTagDocument,
+  useViewTagQuery,
+} from '#/views/settings/tags/ViewTag/graphql/__generated__/view-tag.generated';
 import { useApolloClient } from '@apollo/client';
 import { Modal, notification } from 'antd';
-import { useIntl } from 'react-intl';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import type { ExtendedLayout } from '#/views/reports/types';
-import type { AnswerType } from 'graphql/types';
+import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
 import { IncidentFormField, Model, TagType } from 'graphql/types';
-import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/view-tag.generated';
-import {
-  useViewTagQuery,
-  ViewTagDocument,
-} from '#/views/settings/tags/ViewTag/graphql/view-tag.generated';
-import { useUpdateTagQsMutation } from '#/views/settings/tags/ViewTag/graphql/update-question-order.generated';
-import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
-import { useRemoveQuestionFromTagMutation } from '#/views/settings/tags/ViewTag/graphql/remove-question.generated';
-import { useUpsertIncidentFormMutation } from '#/views/settings/tags/ViewTag/graphql/update-incident-form-fields.generated';
-import { useRecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
@@ -32,75 +33,75 @@ export type IncidentFormFieldState = {
 };
 
 interface Return {
-  saving: boolean;
-  userSchemes: Scheme[];
-  schemeId: string;
-  toggleAddQuestion: () => void;
   addQuestion: boolean;
-  loading: boolean;
   data: ViewTagQuery | undefined;
-  questionsLayout: ExtendedLayout[];
-  setQuestionsLayout: (value: ExtendedLayout[]) => void;
-  setQuestionLayoutChanged: (value: boolean) => void;
-  questionLayoutChanged: boolean;
-  saveQOrder: () => void;
-  parentTag: string | undefined | null;
-  setParentTag: (value: string) => void;
-  updateTagParent: (tagId: string, parentTagId: string | null) => void;
+  deleteConfirm: (value: string) => void;
   deleteQuestion: (questionId: string) => void;
+  editIncidentType: string;
+  incidentFormFields: IncidentFormFieldState;
   incidentFormLayout: ExtendedLayout[];
+  incidentFormLayoutChanged: boolean;
+  loading: boolean;
+  parentTag: null | string | undefined;
+  questionLayoutChanged: boolean;
+  questionsLayout: ExtendedLayout[];
+  saveIncidentForm: () => void;
+  saveQOrder: () => void;
+  saving: boolean;
+  schemeId: string;
+  selectedQuestion: null | string;
+  setEditIncidentType: (value: string) => void;
   setIncidentFormLayout: (value: ExtendedLayout[]) => void;
   setIncidentFormLayoutChanged: (value: boolean) => void;
+  setParentTag: (value: string) => void;
+  setQuestionLayoutChanged: (value: boolean) => void;
+  setQuestionsLayout: (value: ExtendedLayout[]) => void;
+  setSelectedQuestion: (value: null | string) => void;
+  toggleAddQuestion: () => void;
   toggleField: (field: IncidentFormField) => void;
-  incidentFormFields: IncidentFormFieldState;
-  incidentFormLayoutChanged: boolean;
-  saveIncidentForm: () => void;
   updateQuestionOnTag: (
     question: string,
     tagId: string,
     dependentOn?: {
-      tagQuestionId: string;
-      questionId: string;
       answer: string;
+      questionId: string;
+      tagQuestionId: string;
     }
   ) => void;
-  selectedQuestion: string | null;
-  setSelectedQuestion: (value: string | null) => void;
-  editIncidentType: string;
-  setEditIncidentType: (value: string) => void;
-  deleteConfirm: (value: string) => void;
+  updateTagParent: (tagId: string, parentTagId: null | string) => void;
+  userSchemes: Scheme[];
 }
 
 const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
-  tags: [
-    IncidentFormField.Types,
-    IncidentFormField.Impact,
-    IncidentFormField.Involved,
-  ],
-  when: [IncidentFormField.Where],
+  cctv: [IncidentFormField.Cctv],
+  custom: [IncidentFormField.Custom],
   goods: [IncidentFormField.Goods],
+  groups: [IncidentFormField.Groups],
   images: [IncidentFormField.Images],
+  police: [IncidentFormField.Police, IncidentFormField.Details],
   profiles: [
     IncidentFormField.Offenders,
     IncidentFormField.Vehicles,
     IncidentFormField.Victims,
     IncidentFormField.Witnesses,
   ],
-  police: [IncidentFormField.Police, IncidentFormField.Details],
-  groups: [IncidentFormField.Groups],
-  custom: [IncidentFormField.Custom],
-  cctv: [IncidentFormField.Cctv],
+  tags: [
+    IncidentFormField.Types,
+    IncidentFormField.Impact,
+    IncidentFormField.Involved,
+  ],
+  when: [IncidentFormField.Where],
 };
 export type FieldLayout =
-  | 'tags'
-  | 'when'
-  | 'goods'
-  | 'images'
-  | 'profiles'
-  | 'police'
-  | 'groups'
   | 'cctv'
-  | 'custom';
+  | 'custom'
+  | 'goods'
+  | 'groups'
+  | 'images'
+  | 'police'
+  | 'profiles'
+  | 'tags'
+  | 'when';
 
 export type Elements = {
   [K in FieldLayout]?: JSX.Element;
@@ -108,85 +109,85 @@ export type Elements = {
 const useViewTag = (): Return => {
   const defaultIncidentFormLayout = [
     {
-      w: 1,
       h: 4.3,
-      x: 0,
-      y: 0,
       i: 'tags',
       moved: false,
       static: true,
+      w: 1,
+      x: 0,
+      y: 0,
     },
     {
-      w: 1,
       h: 3,
-      x: 0,
-      y: 1,
       i: 'when',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 1,
     },
     {
-      w: 1,
       h: 3,
-      x: 0,
-      y: 2,
       i: 'goods',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 2,
     },
     {
-      w: 1,
       h: 5,
-      x: 0,
-      y: 3,
       i: 'profiles',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 3,
     },
     {
-      w: 1,
       h: 3,
-      x: 0,
-      y: 4,
       i: 'images',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 4,
     },
     {
-      w: 1,
       h: 3.8,
-      x: 0,
-      y: 5,
       i: 'police',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 5,
     },
     {
-      w: 1,
       h: 3,
-      x: 0,
-      y: 6,
       i: 'groups',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 6,
     },
     {
-      w: 1,
       h: 3,
-      x: 0,
-      y: 7,
       i: 'custom',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 7,
     },
     {
-      w: 1,
       h: 3,
-      x: 0,
-      y: 8,
       i: 'cctv',
       moved: false,
       static: false,
+      w: 1,
+      x: 0,
+      y: 8,
     },
   ];
 
@@ -208,6 +209,7 @@ const useViewTag = (): Return => {
   }
 
   const defaultIncidentFormFieldsTrue: IncidentFormFieldState = {
+    [IncidentFormField.Cctv]: false,
     [IncidentFormField.Custom]: true,
     [IncidentFormField.Details]: true,
     [IncidentFormField.Goods]: true,
@@ -218,10 +220,9 @@ const useViewTag = (): Return => {
     [IncidentFormField.Offenders]: true,
     [IncidentFormField.Police]: true,
     [IncidentFormField.Types]: true,
-    [IncidentFormField.Where]: true,
-    [IncidentFormField.Cctv]: false,
     [IncidentFormField.Vehicles]: false,
     [IncidentFormField.Victims]: false,
+    [IncidentFormField.Where]: true,
     [IncidentFormField.Witnesses]: false,
   };
 
@@ -236,7 +237,7 @@ const useViewTag = (): Return => {
   const [editIncidentType, setEditIncidentType] = useState('');
   const [questionLayoutChanged, setQuestionLayoutChanged] = useState(false);
   const [questionsLayout, setQuestionsLayout] = useState<ExtendedLayout[]>([]);
-  const [parentTag, setPTag] = useState<string | undefined | null>(undefined);
+  const [parentTag, setPTag] = useState<null | string | undefined>(undefined);
   const [incidentFormLayout, setIncidentFormLayout] = useState<
     ExtendedLayout[]
   >(defaultIncidentFormLayout);
@@ -246,18 +247,7 @@ const useViewTag = (): Return => {
     useState<IncidentFormFieldState>(defaultIncidentFormFieldsTrue);
   const { data, loading, refetch } = useViewTagQuery({
     variables: {
-      where: {
-        id: id || '',
-      },
-      tagQuestionsWhere: {
-        deleted: {
-          equals: false,
-        },
-      },
       listWhere: {
-        type: {
-          equals: TagType.IncidentCrimeType,
-        },
         dataType: {
           equals: Model.Incident,
         },
@@ -268,38 +258,49 @@ const useViewTag = (): Return => {
             },
           },
         },
+        type: {
+          equals: TagType.IncidentCrimeType,
+        },
+      },
+      tagQuestionsWhere: {
+        deleted: {
+          equals: false,
+        },
+      },
+      where: {
+        id: id || '',
       },
     },
   });
 
-  const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<null | string>(null);
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ behavior: 'smooth', top: 0 });
   }, []);
   useEffect(() => {
-    if (data && data.tag?.tagQuestions) {
+    if (data?.tag?.tagQuestions) {
       // eslint-disable-next-line no-unsafe-optional-chaining
       const dataQs = [...data?.tag?.tagQuestions].filter(Boolean) || [];
       const qs = dataQs
         .sort((a, b) => b.priority - a.priority)
         .map((q, index) => ({
-          w: 1,
           h: 1,
-          x: 0,
-          y: index,
           i: q.id,
-          minW: 1,
-          minH: 1,
-          maxW: 1,
           maxH: 1,
+          maxW: 1,
+          minH: 1,
+          minW: 1,
           moved: false,
           static: false,
+          w: 1,
+          x: 0,
+          y: index,
         }));
       setQuestionsLayout(qs || []);
       setQuestionLayoutChanged(false);
       setPTag(data?.tag?.parentTag?.id || null);
     }
-    if (data && data.tag?.incidentForm) {
+    if (data?.tag?.incidentForm) {
       const iFormFields = [...data.tag.incidentForm.fields];
       const sortedArray = iFormFields.sort((a, b) => b.position - a.position);
       const fieldsAndOrder = sortedArray.map((f) => ({
@@ -392,9 +393,6 @@ const useViewTag = (): Return => {
       setPTag(value);
       void updateTag({
         variables: {
-          where: {
-            id: id || '',
-          },
           data: {
             parentTag: {
               connect: {
@@ -402,20 +400,20 @@ const useViewTag = (): Return => {
               },
             },
           },
+          where: {
+            id: id || '',
+          },
         },
       });
     }
   };
 
-  const updateTagParent = (tagId: string, parentTagId: string | null) => {
+  const updateTagParent = (tagId: string, parentTagId: null | string) => {
     if (tagId === id) setPTag(parentTagId);
     if (parentTagId) {
       if (checkTag(tagId, parentTagId))
         void updateTag({
           variables: {
-            where: {
-              id: tagId,
-            },
             data: {
               parentTag: {
                 connect: {
@@ -423,14 +421,14 @@ const useViewTag = (): Return => {
                 },
               },
             },
+            where: {
+              id: tagId,
+            },
           },
         });
     } else {
       void updateTag({
         variables: {
-          where: {
-            id: tagId,
-          },
           data: {
             parentTag: {
               // ???
@@ -438,6 +436,9 @@ const useViewTag = (): Return => {
               // @ts-ignore
               disconnect: true,
             },
+          },
+          where: {
+            id: tagId,
           },
         },
       });
@@ -448,27 +449,11 @@ const useViewTag = (): Return => {
 
   const deleteQuestion = (questionId: string) => {
     void deleteTagq({
-      variables: {
-        where: {
-          id: questionId,
-        },
-      },
       update: (cache, result) => {
         const existingData = cache.readQuery<ViewTagQuery>({
           query: ViewTagDocument,
           variables: {
-            where: {
-              id: id || '',
-            },
-            tagQuestionsWhere: {
-              deleted: {
-                equals: false,
-              },
-            },
             listWhere: {
-              type: {
-                equals: TagType.IncidentCrimeType,
-              },
               dataType: {
                 equals: Model.Incident,
               },
@@ -479,13 +464,23 @@ const useViewTag = (): Return => {
                   },
                 },
               },
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+            },
+            tagQuestionsWhere: {
+              deleted: {
+                equals: false,
+              },
+            },
+            where: {
+              id: id || '',
             },
           },
         });
 
-        if (!existingData || !existingData.tag) return;
+        if (!existingData?.tag) return;
         cache.writeQuery<ViewTagQuery>({
-          query: ViewTagDocument,
           data: {
             ...existingData,
             tag: {
@@ -495,19 +490,9 @@ const useViewTag = (): Return => {
               ),
             },
           },
+          query: ViewTagDocument,
           variables: {
-            where: {
-              id: id || '',
-            },
-            tagQuestionsWhere: {
-              deleted: {
-                equals: false,
-              },
-            },
             listWhere: {
-              type: {
-                equals: TagType.IncidentCrimeType,
-              },
               dataType: {
                 equals: Model.Incident,
               },
@@ -518,9 +503,25 @@ const useViewTag = (): Return => {
                   },
                 },
               },
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+            },
+            tagQuestionsWhere: {
+              deleted: {
+                equals: false,
+              },
+            },
+            where: {
+              id: id || '',
             },
           },
         });
+      },
+      variables: {
+        where: {
+          id: questionId,
+        },
       },
     });
     const tagQs = questionsLayout.filter((q) => q.i !== questionId);
@@ -533,26 +534,15 @@ const useViewTag = (): Return => {
     question: string,
     qId: string,
     dependentOn?: {
-      tagQuestionId: string;
-      questionId: string;
       answer: string;
+      questionId: string;
+      tagQuestionId: string;
     }
   ) => {
     const existingData = apolloStore.readQuery<ViewTagQuery>({
       query: ViewTagDocument,
       variables: {
-        where: {
-          id: id || '',
-        },
-        tagQuestionsWhere: {
-          deleted: {
-            equals: false,
-          },
-        },
         listWhere: {
-          type: {
-            equals: TagType.IncidentCrimeType,
-          },
           dataType: {
             equals: Model.Incident,
           },
@@ -563,11 +553,22 @@ const useViewTag = (): Return => {
               },
             },
           },
+          type: {
+            equals: TagType.IncidentCrimeType,
+          },
+        },
+        tagQuestionsWhere: {
+          deleted: {
+            equals: false,
+          },
+        },
+        where: {
+          id: id || '',
         },
       },
     });
 
-    if (!existingData || !existingData.tag) return;
+    if (!existingData?.tag) return;
 
     const updatedQs = existingData.tag?.tagQuestions?.map((tq) => {
       if (tq.question.id === qId) {
@@ -581,22 +582,21 @@ const useViewTag = (): Return => {
         };
       }
       return tq;
-    }) as Array<{
+    }) as {
       __typename?: 'TagQuestion';
-      req: boolean;
-      priority: number;
+      dependentQuestions: never[];
       id: string;
-      dependentQuestions: Array<never>;
+      priority: number;
       question: {
         __typename?: 'Question';
-        questionFormatted: string;
         id: string;
+        questionFormatted: string;
         type: AnswerType;
       };
-    }>;
+      req: boolean;
+    }[];
 
     apolloStore.writeQuery<ViewTagQuery>({
-      query: ViewTagDocument,
       data: {
         ...existingData,
         tag: {
@@ -604,19 +604,9 @@ const useViewTag = (): Return => {
           tagQuestions: updatedQs,
         },
       },
+      query: ViewTagDocument,
       variables: {
-        where: {
-          id: id || '',
-        },
-        tagQuestionsWhere: {
-          deleted: {
-            equals: false,
-          },
-        },
         listWhere: {
-          type: {
-            equals: TagType.IncidentCrimeType,
-          },
           dataType: {
             equals: Model.Incident,
           },
@@ -627,6 +617,17 @@ const useViewTag = (): Return => {
               },
             },
           },
+          type: {
+            equals: TagType.IncidentCrimeType,
+          },
+        },
+        tagQuestionsWhere: {
+          deleted: {
+            equals: false,
+          },
+        },
+        where: {
+          id: id || '',
         },
       },
     });
@@ -665,11 +666,11 @@ const useViewTag = (): Return => {
     void saveIncidentFormLayout({
       variables: {
         data: {
-          tagId: id || '',
           formFields: getTypeArrayWithTagsFirst.map((t, index) => ({
-            type: t.type,
             position: 1000 - index,
+            type: t.type,
           })),
+          tagId: id || '',
         },
       },
     });
@@ -681,9 +682,6 @@ const useViewTag = (): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Removed',
-        }),
         description: intl.formatMessage(
           {
             defaultMessage:
@@ -691,6 +689,9 @@ const useViewTag = (): Return => {
           },
           { schemeName }
         ),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Removed',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -714,50 +715,50 @@ const useViewTag = (): Return => {
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'This will remove this incident type from this scheme, bu not any other schemes you may have added it to.',
       }),
-
       onOk() {
         openDelete(currentId);
       },
+
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
   return {
-    toggleField,
-    setIncidentFormLayoutChanged,
+    addQuestion,
+    data,
+    deleteConfirm,
+    deleteQuestion,
+    editIncidentType,
     incidentFormFields,
+    incidentFormLayout,
+    incidentFormLayoutChanged,
+    loading,
     parentTag,
-    setParentTag,
+    questionLayoutChanged,
+    questionsLayout,
+    saveIncidentForm,
     saveQOrder,
     saving,
     schemeId,
-    userSchemes,
-    toggleAddQuestion,
-    addQuestion,
-    data,
-    loading,
-    questionsLayout,
-    setQuestionsLayout,
-    setQuestionLayoutChanged,
-    questionLayoutChanged,
-    updateTagParent,
-    deleteQuestion,
-    incidentFormLayout,
-    incidentFormLayoutChanged,
-    setIncidentFormLayout,
-    saveIncidentForm,
-    updateQuestionOnTag,
     selectedQuestion,
-    setSelectedQuestion,
-    deleteConfirm,
-    editIncidentType,
     setEditIncidentType,
+    setIncidentFormLayout,
+    setIncidentFormLayoutChanged,
+    setParentTag,
+    setQuestionLayoutChanged,
+    setQuestionsLayout,
+    setSelectedQuestion,
+    toggleAddQuestion,
+    toggleField,
+    updateQuestionOnTag,
+    updateTagParent,
+    userSchemes,
   };
 };
 export default useViewTag;

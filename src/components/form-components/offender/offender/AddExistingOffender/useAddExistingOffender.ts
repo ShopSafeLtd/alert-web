@@ -1,50 +1,50 @@
-import { useEffect, useState } from 'react';
-
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
 import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
+
+import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
-import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
-import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
 
 export interface OffenderData {
-  id: string;
-  reference?: number | null;
-  updatedAt?: Date;
-  name?: string | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
+  approved?: boolean | null;
   build?: Build | null;
   dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
   groups?:
     | {
         id: string;
         name: string;
       }[]
     | undefined;
+  hair?: null | string;
+  id: string;
+  imageUid?: string[] | undefined;
   images?: {
+    fileName?: null | string;
     id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
     new?: boolean;
+    optimised?: null | string;
     position: ImagePosition;
     rotation: number;
+    type?: null | string;
+    url?: null | string;
   }[];
-  imageUid?: string[] | undefined;
+  lastActive:
+    | { dayTime?: null | string | undefined; id: string }
+    | null
+    | undefined;
+  name?: null | string;
+  peculiarities?: null | string;
+  race?: Race | null;
+  reference?: null | number;
   tags: {
     id: string;
     name: string;
   }[];
-  lastActive:
-    | { id: string; dayTime?: string | null | undefined }
-    | null
-    | undefined;
+  updatedAt?: Date;
 }
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -56,54 +56,54 @@ const getSizeOptions = () => {
   return ['12'];
 };
 interface Props {
-  onClose: () => void;
-  update: (value: OffenderData) => void;
   offenderIds: string[] | undefined;
+  onClose: () => void;
   takeAllSchemes?: boolean;
+  update: (value: OffenderData) => void;
 }
 
 interface Return {
-  onSubmit: (value: string | undefined) => void;
-  saving: boolean;
+  age: Age[];
+  build: Build[];
+  clearFilters: () => void;
   data: ListOffendersAllSchemesQuery | undefined;
+  ethnicity: Race[];
+  hair: string;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  pagination: { page: number; pageSize: number };
   onPaginationChange: (page: number, pageSize: number) => void;
-  setCurrentId: (value: string | undefined) => void;
+  onSubmit: (value: string | undefined) => void;
+  openLightbox: (index: number) => void;
+  pagination: { page: number; pageSize: number };
+  peculiarities: string;
+  saving: boolean;
+  search: string;
   selectedOffender:
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  ethnicity: Race[];
-  setEthnicity: (value: Race[]) => void;
-  age: Age[];
   setAge: (value: Age[]) => void;
-  build: Build[];
   setBuild: (value: Build[]) => void;
-  sex: Gender[];
-  setSex: (value: Gender[]) => void;
+  setCurrentId: (value: string | undefined) => void;
+  setEthnicity: (value: Race[]) => void;
   setHair: (value: string) => void;
   setPeculiarities: (value: string) => void;
-  hair: string;
-  peculiarities: string;
-  clearFilters: () => void;
+  setSearch: (value: string) => void;
+  setSex: (value: Gender[]) => void;
+  sex: Gender[];
 }
 
 const useAddExistingOffender = ({
-  onClose,
-  update,
   offenderIds,
+  onClose,
   takeAllSchemes,
+  update,
 }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemeIds = useStoreState((state) => state.user.schemes).map(
@@ -121,85 +121,31 @@ const useAddExistingOffender = ({
     (actions) => actions.data.setOffenders
   );
 
-  const { search, groups, peculiarities, hair, ethnicity, age, build, sex } =
+  const { age, build, ethnicity, groups, hair, peculiarities, search, sex } =
     variables;
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined
   >(undefined);
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const { data, loading } = useListOffendersAllSchemesQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       order: {
         updatedAt:
           order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
       },
-      take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
       where: {
-        schemeId: {
-          in: takeAllSchemes ? userSchemeIds : [schemeId],
-        },
-        id:
-          offenderIds && offenderIds?.length > 0
-            ? {
-                notIn: offenderIds,
-              }
-            : undefined,
-        groups:
-          groups.length > 0
-            ? {
-                some: {
-                  id: {
-                    in: groups,
-                  },
-                },
-              }
-            : undefined,
-        gender:
-          sex.length > 0
-            ? {
-                in: sex,
-              }
-            : undefined,
-        age:
-          age.length > 0
-            ? {
-                in: age,
-              }
-            : undefined,
-        build:
-          build.length > 0
-            ? {
-                in: build,
-              }
-            : undefined,
-        race:
-          ethnicity.length > 0
-            ? {
-                in: ethnicity,
-              }
-            : undefined,
-        hair: hair
-          ? {
-              contains: hair,
-              mode: QueryMode.Insensitive,
-            }
-          : undefined,
-        peculiarities: peculiarities
-          ? {
-              mode: QueryMode.Insensitive,
-              contains: peculiarities,
-            }
-          : undefined,
         OR: [
           {
             name: {
@@ -218,15 +164,70 @@ const useAddExistingOffender = ({
             },
           },
         ],
+        age:
+          age.length > 0
+            ? {
+                in: age,
+              }
+            : undefined,
+        build:
+          build.length > 0
+            ? {
+                in: build,
+              }
+            : undefined,
+        gender:
+          sex.length > 0
+            ? {
+                in: sex,
+              }
+            : undefined,
+        groups:
+          groups.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: groups,
+                  },
+                },
+              }
+            : undefined,
+        hair: hair
+          ? {
+              contains: hair,
+              mode: QueryMode.Insensitive,
+            }
+          : undefined,
+        id:
+          offenderIds && offenderIds?.length > 0
+            ? {
+                notIn: offenderIds,
+              }
+            : undefined,
+        peculiarities: peculiarities
+          ? {
+              contains: peculiarities,
+              mode: QueryMode.Insensitive,
+            }
+          : undefined,
+        race:
+          ethnicity.length > 0
+            ? {
+                in: ethnicity,
+              }
+            : undefined,
+        schemeId: {
+          in: takeAllSchemes ? userSchemeIds : [schemeId],
+        },
       },
     },
-    fetchPolicy: 'cache-and-network',
   });
   // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions();
     if (groups.length === 0) {
       setOffendersState({
+        order,
         pagination: {
           ...pagination,
           sizeOptions,
@@ -238,58 +239,57 @@ const useAddExistingOffender = ({
               ?.filter(({ scheme }) => scheme.id === schemeId)
               ?.map(({ id }) => id) || [],
         },
-        order,
       });
     } else {
       setOffendersState({
+        order,
         pagination: {
           ...pagination,
           sizeOptions,
         },
         variables,
-        order,
       });
     }
   }, []);
   const setSearch = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         search: value,
       },
-      order,
     });
   };
   const setPeculiarities = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         peculiarities: value,
       },
-      order,
     });
   };
   const setHair = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         hair: value,
       },
-      order,
     });
   };
   const onPaginationChange = (page: number, pageSize: number) => {
     setOffendersState({
+      order,
       pagination: {
         ...pagination,
         page,
         pageSize,
       },
       variables,
-      order,
     });
     // setPagination({
     //   ...pagination,
@@ -299,67 +299,67 @@ const useAddExistingOffender = ({
 
   const setEthnicity = (values: Race[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         ethnicity: values,
       },
-      order,
     });
   };
 
   const setBuild = (values: Build[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         build: values,
       },
-      order,
     });
   };
   const setAge = (values: Age[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         age: values,
       },
-      order,
     });
   };
   const setSex = (values: Gender[]) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         sex: values,
       },
-      order,
     });
   };
   const clearFilters = () => {
     setOffendersState({
+      order: OffenderSort.updatedAtDesc,
       pagination,
       variables: {
-        createdBy: [],
-        search: '',
-        warnings: [],
-        groups: [],
-        businesses: [],
-        createdAt: undefined,
-        gallery: [],
-        customGalleries: [],
-        peculiarities: '',
-        hair: '',
-        ethnicity: [],
-        build: [],
         age: [],
-        sex: [],
+        build: [],
+        businesses: [],
         compactView: false,
+        createdAt: undefined,
+        createdBy: [],
+        customGalleries: [],
+        ethnicity: [],
+        gallery: [],
+        groups: [],
+        hair: '',
+        peculiarities: '',
+        search: '',
+        sex: [],
         tableView: false,
+        warnings: [],
       },
-      order: OffenderSort.updatedAtDesc,
     });
   };
 
@@ -372,18 +372,12 @@ const useAddExistingOffender = ({
       selectedOffender
     ) {
       update({
-        id: selectedOffender.id,
-        reference: selectedOffender.reference,
-        name: selectedOffender.name,
         age: selectedOffender.age || null,
-        gender: selectedOffender.gender || null,
-        race: selectedOffender.race || null,
         build: selectedOffender.build || null,
         dateOfBirth: selectedOffender.dateOfBirth || null,
+        gender: selectedOffender.gender || null,
         hair: selectedOffender.hair,
-        peculiarities: selectedOffender.peculiarities,
-        tags: selectedOffender.tags,
-        lastActive: selectedOffender.lastActive || null,
+        id: selectedOffender.id,
         images:
           selectedOffender.images.map(
             ({ id, optimised, position, rotation }) => ({
@@ -395,6 +389,12 @@ const useAddExistingOffender = ({
               rotation,
             })
           ) || null,
+        lastActive: selectedOffender.lastActive || null,
+        name: selectedOffender.name,
+        peculiarities: selectedOffender.peculiarities,
+        race: selectedOffender.race || null,
+        reference: selectedOffender.reference,
+        tags: selectedOffender.tags,
       });
     }
     setSaving(false);
@@ -402,7 +402,7 @@ const useAddExistingOffender = ({
   };
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   useEffect(() => {
@@ -417,31 +417,31 @@ const useAddExistingOffender = ({
     }
   }, [currentId]);
   return {
-    onSubmit,
-    saving,
-    data,
-    loading: data?.listOffendersAllSchemes ? false : loading,
-    search,
-    setSearch,
-    onPaginationChange,
-    setCurrentId,
-    openLightbox,
-    lightBoxOpen,
-    selectedOffender,
     age,
     build,
+    clearFilters,
+    data,
     ethnicity,
+    hair,
+    lightBoxOpen,
+    loading: data?.listOffendersAllSchemes ? false : loading,
+    onPaginationChange,
+    onSubmit,
+    openLightbox,
+    pagination,
+    peculiarities,
+    saving,
+    search,
+    selectedOffender,
     setAge,
     setBuild,
+    setCurrentId,
     setEthnicity,
-    setSex,
-    sex,
-    pagination,
-    hair,
-    peculiarities,
     setHair,
     setPeculiarities,
-    clearFilters,
+    setSearch,
+    setSex,
+    sex,
   };
 };
 

@@ -1,44 +1,45 @@
 import React from 'react';
+
 import View from './EditIncidentFeed.view';
 import useEditIncidentFeed from './useEditIncidentFeed';
 
 interface Props {
-  onClose: () => void;
   incidentId: string;
+  onClose: () => void;
 }
 
-const EditIncidentFeed = ({ onClose, incidentId }: Props): JSX.Element => {
+const EditIncidentFeed = ({ incidentId, onClose }: Props): JSX.Element => {
   const {
-    onSubmit,
-    data,
-    loading,
     crimeTypes,
-    impactTags,
-    involvedTags,
-    tagsLoading,
+    data,
     groups,
     groupsLoading,
+    impactTags,
+    involvedTags,
+    loading,
+    onSubmit,
     saving,
-    onSearchBusiness,
+    tagsLoading,
+    // onSearchBusiness,
   } = useEditIncidentFeed({
-    onClose,
     incidentId,
+    onClose,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
+      crimeTypes={crimeTypes}
       data={data}
-      loading={loading}
       groups={groups}
       groupsLoading={groupsLoading}
-      saving={saving}
-      crimeTypes={crimeTypes}
       impactTags={impactTags}
       involvedTags={involvedTags}
+      loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
       tagsLoading={tagsLoading}
-      onSearchBusiness={onSearchBusiness}
+      // onSearchBusiness={onSearchBusiness}
     />
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument,no-restricted-syntax */
-import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
+import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import type { FormInstance } from 'antd';
 
 import FormattedMessageFixed from '#/components/util-components/FormattedMessageFixed';

@@ -1,20 +1,21 @@
-import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-import { useEffect, useMemo, useState } from 'react';
 import type {
   LatestIncidentsQuery,
   LatestIncidentsQueryVariables,
-} from '#/views/dashboard/graphql/queries/latest-incidents.generated';
-import { useLatestIncidentsQuery } from '#/views/dashboard/graphql/queries/latest-incidents.generated';
+} from '#/views/dashboard/graphql/queries/__generated__/latest-incidents.generated';
+
+import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
+import { useLatestIncidentsQuery } from '#/views/dashboard/graphql/queries/__generated__/latest-incidents.generated';
+import { useEffect, useMemo, useState } from 'react';
 
 interface Return {
   data: LatestIncidentsQuery | undefined;
-  loading: boolean;
   fetchMoreScroll: () => void;
+  loading: boolean;
 }
 
 const useLatestIncidents = (): Return => {
   const {
-    variables: { groups: groupsFilter, gallery, createdAt: createdAtFilter },
+    variables: { createdAt: createdAtFilter, gallery, groups: groupsFilter },
   } = useDashboardContext();
   const thirtyDaysAgo = useMemo(() => {
     const date = new Date();
@@ -39,24 +40,20 @@ const useLatestIncidents = (): Return => {
     where: {
       dateRange,
       following: gallery.includes('FOLLOWING'),
-      myData: gallery.includes('MYDATA'),
       groupIds: groupsFilter.length > 0 ? groupsFilter : undefined,
+      myData: gallery.includes('MYDATA'),
     },
   };
 
-  const { data, loading, fetchMore } = useLatestIncidentsQuery({
+  const { data, fetchMore, loading } = useLatestIncidentsQuery({
     variables: {
-      where,
       first: 18,
+      where,
     },
   });
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        where,
-        after: data?.latestIncidents.pageInfo.endCursor,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -69,13 +66,17 @@ const useLatestIncidents = (): Return => {
           },
         };
       },
+      variables: {
+        after: data?.latestIncidents.pageInfo.endCursor,
+        where,
+      },
     });
   };
 
   return {
     data,
-    loading: (data === null || data === undefined) && loading,
     fetchMoreScroll,
+    loading: (data === null || data === undefined) && loading,
   };
 };
 

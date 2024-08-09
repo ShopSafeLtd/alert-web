@@ -1,33 +1,34 @@
-import React from 'react';
+import type { ChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
 
 interface FormData {
-  name: string;
   description: string;
+  name: string;
   user: string[];
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
   data: ChatQuery | undefined;
   loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
-  saving: boolean;
 }
 
 const EditChat = ({
-  onSubmit,
-  onClose,
   data,
   loading,
+  onClose,
+  onSubmit,
+  saving,
   usersData,
   usersLoading,
-  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -36,8 +37,8 @@ const EditChat = ({
   ) : (
     <Form
       initialValues={{
-        name: data?.chat?.name,
         description: data?.chat?.description,
+        name: data?.chat?.name,
         user:
           data?.chat?.members && data.chat.members.length > 0
             ? data.chat.members.map(({ user }) => user.id)
@@ -49,14 +50,14 @@ const EditChat = ({
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the chat group.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -67,10 +68,10 @@ const EditChat = ({
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>
@@ -80,30 +81,30 @@ const EditChat = ({
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item
-            name="user"
             label={intl.formatMessage({
               defaultMessage: 'Users',
             })}
+            name="user"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please add at least one user for the chat group.',
                 }),
+                required: true,
               },
             ]}
           >
             <Select
-              loading={usersLoading}
               disabled={saving}
-              mode="multiple"
-              maxTagCount={3}
               filterOption
+              loading={usersLoading}
+              maxTagCount={3}
+              mode="multiple"
               optionFilterProp="label"
               options={usersData?.users.map((user) => ({
-                value: user.id,
                 label: `${user.fullName} (${user.businesses[0]?.name})`,
+                value: user.id,
               }))}
             />
           </Form.Item>
@@ -111,7 +112,7 @@ const EditChat = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -120,9 +121,9 @@ const EditChat = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>

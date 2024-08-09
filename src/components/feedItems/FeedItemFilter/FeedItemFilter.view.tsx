@@ -1,12 +1,13 @@
-import React from 'react';
-import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
-
-import type { DateType } from 'types/DataType';
-import { useIntl } from 'react-intl';
 import type { FeedItemFilters } from 'state/data-model';
-import moment from 'moment';
-import useStyles from './FeedItemFilter.styles';
+import type { DateType } from 'types/DataType';
+
+import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
 import { Model, SortOrder } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
+import useStyles from './FeedItemFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -14,34 +15,35 @@ interface FormData {
   date: Date;
 }
 interface Props {
-  setOrder: (value: SortOrder) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  setGroupsFilter: (value: string[]) => void;
-  setTypesFilter: (value: Model[]) => void;
   clearFilters: () => void;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setTypesFilter: (value: Model[]) => void;
+
   variables: FeedItemFilters;
 }
 
 const FeedItemFilter = ({
-  setOrder,
+  clearFilters,
   groups,
   groupsLoading,
-  setTypesFilter,
-  setGroupsFilter,
-  clearFilters,
   setCreatedAtFilter,
+  setGroupsFilter,
+  setOrder,
+  setTypesFilter,
   variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const {
-    groups: groupsFilter,
     createdAt: createdAtFilter,
-    types: typesFilter,
+    groups: groupsFilter,
     order,
+    types: typesFilter,
   } = variables;
 
   return (
@@ -59,7 +61,6 @@ const FeedItemFilter = ({
       <Row justify="end">
         <Col>
           <Button
-            type="text"
             danger
             onClick={() => {
               clearFilters();
@@ -67,6 +68,7 @@ const FeedItemFilter = ({
                 date: [],
               });
             }}
+            type="text"
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
@@ -81,9 +83,9 @@ const FeedItemFilter = ({
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            value={order}
             onChange={setOrder}
             size="small"
+            value={order}
           >
             <Select.Option value={SortOrder.Desc}>
               {intl.formatMessage({
@@ -112,8 +114,8 @@ const FeedItemFilter = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
               }}
             />
@@ -126,16 +128,16 @@ const FeedItemFilter = ({
             {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
           <Select
+            allowClear
             className={classes.select}
+            loading={groupsLoading}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setGroupsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
-            mode="multiple"
             size="small"
-            maxTagCount={2}
-            allowClear
-            loading={groupsLoading}
-            onChange={setGroupsFilter}
             value={groupsFilter}
           >
             {groups.map((group) => (
@@ -152,15 +154,15 @@ const FeedItemFilter = ({
             {intl.formatMessage({ defaultMessage: 'Types' })}
           </Typography.Paragraph>
           <Select
+            allowClear
             className={classes.select}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setTypesFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Types',
             })}
-            mode="multiple"
             size="small"
-            allowClear
-            maxTagCount={2}
-            onChange={setTypesFilter}
             value={typesFilter}
           >
             <Select.Option value={Model.Incident}>

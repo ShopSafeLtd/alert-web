@@ -1,61 +1,61 @@
-import React from 'react';
-import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
   faExclamationCircle,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-
-import { getLastOffence } from 'utils/offender/get-offender-desc';
-import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
-import useStyles from './OffenderFeed.styles';
-import UpdateContent from '../UpdateContent';
-import ImageContainer from '../ImageContainer';
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
+import { getLastOffence } from 'utils/offender/get-offender-desc';
 
-const { Title, Text, Paragraph } = Typography;
+import ImageContainer from '../ImageContainer';
+import UpdateContent from '../UpdateContent';
+import useStyles from './OffenderFeed.styles';
+
+const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 interface Props {
+  adminRights: boolean;
   feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], undefined | null>['feedItems'][0]
+    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
     | null
     | undefined;
   isNewImage?: boolean;
   isNewOffender?: boolean;
   onDeleteFeedItem: (value: string) => void;
-  saving: boolean;
-  adminRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  saving: boolean;
 }
 
 const OffenderFeed = ({
+  adminRights,
   feedItem,
   isNewImage,
   isNewOffender,
   onDeleteFeedItem,
-  saving,
-  adminRights,
   openLightbox,
+  saving,
 }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
 
   const {
     // age,
     // build,
-    // gender,
-    name,
-    // race,
-    // dateOfBirth,
-    reference,
-    id,
-    latestUpdate,
     feedImage,
+    // race,
+    id,
     // tags,
     latestIncident,
+    latestUpdate,
+    // gender,
+    name,
+    // dateOfBirth,
+    reference,
     totalIncidents,
     // lastActive,
   } = feedItem?.offender || {};
@@ -70,7 +70,7 @@ const OffenderFeed = ({
   //   useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
   //   role !== Role.User;
   return (
-    <Row wrap={false} key={id || ''}>
+    <Row key={id || ''} wrap={false}>
       <div style={{ cursor: 'pointer', zIndex: 2 }}>
         {(isNewOffender || isNewImage) && feedImage ? (
           <Col
@@ -91,7 +91,7 @@ const OffenderFeed = ({
             />
           </Col>
         ) : null}
-        {!isNewImage && latestUpdate && latestUpdate?.feedImage ? (
+        {!isNewImage && latestUpdate?.feedImage ? (
           <Col
             onClick={() =>
               openLightbox(
@@ -105,47 +105,47 @@ const OffenderFeed = ({
             }
           >
             <ImageContainer
-              src={latestUpdate?.feedImage.low || ''}
               position={latestUpdate?.feedImage.position}
+              src={latestUpdate?.feedImage.low || ''}
             />
           </Col>
         ) : null}
       </div>
 
-      <Col flex={1} className={classes.contentContainer}>
-        <Row className={classes.contentHeader} align="middle" wrap={false}>
+      <Col className={classes.contentContainer} flex={1}>
+        <Row align="middle" className={classes.contentHeader} wrap={false}>
           <Col flex={1}>
-            <Title style={{ margin: 0, fontSize: 14 }} level={4} ellipsis>
+            <Title ellipsis level={4} style={{ fontSize: 14, margin: 0 }}>
               {feedItem?.message}
             </Title>
           </Col>
           <Col>
             {adminRights && (
               <Button
-                type="text"
-                style={{ height: 28, width: 25 }}
                 disabled={saving}
                 icon={
                   <FontAwesomeIcon
-                    style={{ marginBottom: 2 }}
                     icon={faTrash}
                     size="sm"
+                    style={{ marginBottom: 2 }}
                   />
                 }
                 onClick={() => {
                   confirm({
-                    title: intl.formatMessage({
-                      defaultMessage: 'Do you want to delete the feed item?',
-                    }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
                     },
+                    title: intl.formatMessage({
+                      defaultMessage: 'Do you want to delete the feed item?',
+                    }),
                   });
                 }}
                 size="small"
+                style={{ height: 28, width: 25 }}
+                type="text"
               />
             )}
           </Col>
@@ -167,7 +167,7 @@ const OffenderFeed = ({
               <>
                 <Row>
                   <Col flex={1}>
-                    <Title level={4} ellipsis>
+                    <Title ellipsis level={4}>
                       {name}
                     </Title>
                   </Col>
@@ -185,12 +185,12 @@ const OffenderFeed = ({
                   </Col>
                 </Row>
                 <Paragraph
-                  type="secondary"
+                  ellipsis={{ rows: 1 }}
                   style={{
                     fontSize: 14,
                     // width: '100%',
                   }}
-                  ellipsis={{ rows: 1 }}
+                  type="secondary"
                 >
                   {intl.formatMessage(
                     {
@@ -211,16 +211,16 @@ const OffenderFeed = ({
                 </Paragraph>
               </>
             )}
-            <Row wrap={false} className={classes.bottomRow}>
+            <Row className={classes.bottomRow} wrap={false}>
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faExclamationCircle}
+                  size="sm"
                 />
               </Col>
               <Col flex={1}>
-                <Text style={{ fontSize: 14 }} ellipsis type="secondary">
+                <Text ellipsis style={{ fontSize: 14 }} type="secondary">
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Total Incident: {totalIncidents}',
@@ -234,13 +234,13 @@ const OffenderFeed = ({
 
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faClock}
+                  size="sm"
                 />
               </Col>
               <Col>
-                <Text type="secondary" style={{ fontSize: 14 }}>
+                <Text style={{ fontSize: 14 }} type="secondary">
                   {FormatCalendar(feedItem?.updatedAt || new Date())}
                 </Text>
               </Col>

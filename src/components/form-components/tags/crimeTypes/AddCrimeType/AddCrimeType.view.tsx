@@ -3,7 +3,8 @@ import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
 import type { Scheme } from 'state';
 import { useIntl } from 'react-intl';
 import { CrimeType, TagType } from 'graphql/types';
-import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
+import { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
+
 
 const { Text } = Typography;
 
@@ -47,7 +48,7 @@ const AddCrimeType = ({
           <Text type="secondary">
             {intl.formatMessage({
               defaultMessage:
-                'Crime types are used to categorize incidents that are submitted by members.',
+                'Incident types are used to categorize incidents that are submitted by members.',
             })}
           </Text>
         </Col>
@@ -61,7 +62,7 @@ const AddCrimeType = ({
               {
                 required: true,
                 message: intl.formatMessage({
-                  defaultMessage: 'Please enter a name for the new crime type.',
+                  defaultMessage: 'Please enter a name for the new incident type.',
                 }),
               },
             ]}
@@ -102,14 +103,14 @@ const AddCrimeType = ({
               <Form.Item
                 name="crimeType"
                 label={intl.formatMessage({
-                  defaultMessage: 'Crime Type Category',
+                  defaultMessage: 'Incident Type Category',
                 })}
                 rules={[
                   {
                     required: true,
                     message: intl.formatMessage({
                       defaultMessage:
-                        'Please select a category for the new crime type.',
+                        'Please select a category for the new incident type.',
                     }),
                   },
                 ]}

@@ -1,4 +1,13 @@
-import React from 'react';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import type { ImagePosition, SortOrder } from 'graphql/types';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import type { Moment } from 'moment';
+import type { VehicleFilters } from 'state/data-model';
+import type { DateType } from 'types/DataType';
+
+import { faChevronDown, faFilter } from '@fortawesome/pro-light-svg-icons';
+// import type { MutationUpdaterFn } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Checkbox,
@@ -11,70 +20,62 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-
-import { Link } from 'react-router-dom';
-// import type { MutationUpdaterFn } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faFilter } from '@fortawesome/pro-light-svg-icons';
-import type { DateType } from 'types/DataType';
-import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import VehicleFilter from 'components/vehicles/VehicleFilter';
-import { useIntl } from 'react-intl';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
-import type { VehicleFilters } from 'state/data-model';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import VehicleFilter from 'components/vehicles/VehicleFilter';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
-import type { Moment } from 'moment';
+
 import useStyles from './ListVehicles.styles';
-import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import type { ImagePosition, SortOrder } from 'graphql/types';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
 interface Props {
-  data: ListVehiclesQuery | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
+  addInvestigation: string;
   clearFilters: () => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
+  customGalleriesData: ListCustomGalleriesQuery | undefined;
+  data: ListVehiclesQuery | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
+  onNavigate: () => void;
+  onSelectCustomGalleries: (values: string) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
   setGallery: (values: string[]) => void;
   setGroupsFilter: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  customGalleriesData: ListCustomGalleriesQuery | undefined;
-  onSelectCustomGalleries: (values: string) => void;
   setOrder: (value: SortOrder) => void;
-  addInvestigation: string;
+  setSearch: (value: string) => void;
+  sortFilter: boolean;
   toggleAddInvestigation: (value: string) => void;
+  toggleSortFilter: () => void;
   variables: VehicleFilters;
-  onNavigate: () => void;
 }
 
 const ListVehicles = ({
+  addInvestigation,
+  clearFilters,
+  customGalleriesData,
   data,
-  loading,
-  setSearch,
   // updateVehicleList,
   groups,
   groupsLoading,
-  setGroupsFilter,
-  setCreatedAtFilter,
-  clearFilters,
-  sortFilter,
-  toggleSortFilter,
-  customGalleriesData,
-  onSelectCustomGalleries,
-  setGallery,
-  setOrder,
-  addInvestigation,
-  toggleAddInvestigation,
-  variables,
+  loading,
   onNavigate,
+  onSelectCustomGalleries,
+  setCreatedAtFilter,
+  setGallery,
+  setGroupsFilter,
+  setOrder,
+  setSearch,
+  sortFilter,
+  toggleAddInvestigation,
+  toggleSortFilter,
+  variables,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const { search, gallery, customGalleries } = variables;
+  const { customGalleries, gallery, search } = variables;
 
   const galleryOptions = [
     {
@@ -93,8 +94,8 @@ const ListVehicles = ({
         ({ node: { id, name } }) => (
           <Menu.Item key={id}>
             <Checkbox
-              key={id}
               checked={customGalleries.includes(id)}
+              key={id}
               onChange={() => {
                 onSelectCustomGalleries(id);
               }}
@@ -109,33 +110,33 @@ const ListVehicles = ({
 
   return (
     <div className={classes.page}>
-      <Row align="middle" gutter={12} className={classes.headerRow}>
+      <Row align="middle" className={classes.headerRow} gutter={12}>
         <Col span={8} xxl={6}>
           <Input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
             allowClear
+            onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search vehicles...',
             })}
+            value={search}
           />
         </Col>
         <Col>
           <CheckTags
             mode="check"
             noGutter
-            value={gallery}
             onChange={setGallery}
             options={galleryOptions}
+            value={gallery}
           />
         </Col>
         <Col flex={1}>
           {customGalleriesData?.customGalleriesRelay?.totalCount &&
           customGalleriesData?.customGalleriesRelay?.totalCount > 0 ? (
             <Dropdown
+              arrow={{ pointAtCenter: true }}
               overlay={menu}
               placement="bottom"
-              arrow={{ pointAtCenter: true }}
             >
               <Button className={classes.selectBox}>
                 {intl.formatMessage({
@@ -156,13 +157,13 @@ const ListVehicles = ({
             })}
           >
             <Button
-              onClick={toggleSortFilter}
               icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
+              onClick={toggleSortFilter}
             />
           </Tooltip>
         </Col>
         <Col>
-          <Button type="primary" onClick={onNavigate}>
+          <Button onClick={onNavigate} type="primary">
             {intl.formatMessage({
               defaultMessage: 'Add New Vehicle',
             })}
@@ -170,95 +171,78 @@ const ListVehicles = ({
         </Col>
       </Row>
       <Table
-        dataSource={data?.listVehicles.vehicles.map((vehicle) => ({
-          key: vehicle.id,
-          images: vehicle.images,
-          make: vehicle.make,
-          reference: vehicle?.reference,
-          colour: vehicle.colour,
-          model: vehicle.model,
-          registration: vehicle.registration,
-          updatedAt: vehicle.updatedAt,
-        }))}
-        loading={loading}
-        size="small"
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
         columns={[
           {
-            key: 'images',
             dataIndex: 'images',
-            title: '',
-            width: 120,
+            key: 'images',
             render: (
               item: {
+                optimised?: null | string | undefined;
                 position: ImagePosition | undefined;
                 rotation: number | undefined;
-                optimised?: string | null | undefined;
               }[]
             ) => (
               <div style={{ height: 100, width: 100 }}>
                 <WatermarkImage
-                  url={item[0]?.optimised}
-                  rotation={item[0]?.rotation}
                   position={item[0]?.position}
+                  rotation={item[0]?.rotation}
+                  url={item[0]?.optimised}
                 />
               </div>
             ),
+            title: '',
+            width: 120,
           },
           {
-            key: 'reference',
             dataIndex: 'reference',
-            title: intl.formatMessage({
-              defaultMessage: 'Alert ID',
-            }),
+            key: 'reference',
             render: (value, item) => (
               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Alert ID',
+            }),
             // sorter: (a, b) => a.reference - b.reference,
           },
           {
-            key: 'registration',
             dataIndex: 'registration',
-            title: intl.formatMessage({
-              defaultMessage: 'Registration',
-            }),
+            key: 'registration',
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Registration',
+            }),
           },
           {
-            key: 'make',
             dataIndex: 'make',
+            key: 'make',
             title: intl.formatMessage({ defaultMessage: 'Make' }),
           },
           {
-            key: 'colour',
             dataIndex: 'colour',
+            key: 'colour',
             title: intl.formatMessage({
               defaultMessage: 'Colour',
             }),
           },
           {
-            key: 'model',
             dataIndex: 'model',
+            key: 'model',
             title: intl.formatMessage({
               defaultMessage: 'Model',
             }),
           },
           {
-            key: 'updatedAt',
             dataIndex: 'updatedAt',
-            title: intl.formatMessage({
-              defaultMessage: 'UpdatedAt',
-            }),
+            key: 'updatedAt',
             render: (value: Date | Moment) => FormatCalendar(value),
             sorter: (a, b) =>
               new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
+            title: intl.formatMessage({
+              defaultMessage: 'UpdatedAt',
+            }),
           },
 
           // {
@@ -288,39 +272,56 @@ const ListVehicles = ({
           //   ),
           // },
         ]}
+        dataSource={data?.listVehicles.vehicles.map((vehicle) => ({
+          colour: vehicle.colour,
+          images: vehicle.images,
+          key: vehicle.id,
+          make: vehicle.make,
+          model: vehicle.model,
+          reference: vehicle?.reference,
+          registration: vehicle.registration,
+          updatedAt: vehicle.updatedAt,
+        }))}
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          pageSize: 20,
+        }}
+        size="small"
       />
 
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Vehicle Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <VehicleFilter
-          variables={variables}
-          setOrder={setOrder}
+          clearFilters={clearFilters}
           groups={groups}
           groupsLoading={groupsLoading}
-          setGroupsFilter={setGroupsFilter}
-          clearFilters={clearFilters}
           setCreatedAtFilter={setCreatedAtFilter}
+          setGroupsFilter={setGroupsFilter}
+          setOrder={setOrder}
+          variables={variables}
         />
       </Drawer>
       {/* investigation */}
       <Drawer
+        onClose={() => toggleAddInvestigation('')}
+        open={!!addInvestigation}
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
         })}
-        open={!!addInvestigation}
         width="500"
-        onClose={() => toggleAddInvestigation('')}
       >
         {addInvestigation ? (
           <AddInvestigation
-            vehicleId={addInvestigation}
             onClose={() => toggleAddInvestigation('')}
+            vehicleId={addInvestigation}
           />
         ) : (
           <div />

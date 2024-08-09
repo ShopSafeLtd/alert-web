@@ -7,12 +7,12 @@ const defaultOptions = {} as const;
 export type ShoesQueryVariables = Types.Exact<{
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
   take?: Types.InputMaybe<Types.Scalars['Int']>;
-  orderBy?: Types.InputMaybe<ReadonlyArray<Types.ShoeOrderByWithRelationInput> | Types.ShoeOrderByWithRelationInput>;
+  orderBy?: Types.InputMaybe<Array<Types.ShoeOrderByWithRelationInput> | Types.ShoeOrderByWithRelationInput>;
   where?: Types.InputMaybe<Types.ShoeWhereInput>;
 }>;
 
 
-export type ShoesQuery = { readonly __typename?: 'Query', readonly shoes: { readonly __typename?: 'QueryShoesConnection', readonly totalCount: number, readonly edges: ReadonlyArray<{ readonly __typename?: 'QueryShoesConnectionEdge', readonly node: { readonly __typename?: 'Shoe', readonly type: Types.ShoeType, readonly style: string, readonly size: number, readonly status: Types.ShoeStatus, readonly side: Types.ShoeSide, readonly retailPrice: number, readonly recycled: boolean, readonly id: string, readonly description: string, readonly colour: string, readonly box: boolean, readonly updatedAt: Date, readonly stockItem: { readonly __typename?: 'StockItem', readonly id: string, readonly sku?: string | null }, readonly business: { readonly __typename?: 'Business', readonly id: string, readonly name: string, readonly locations: ReadonlyArray<{ readonly __typename?: 'Address', readonly full: string }> }, readonly primaryShoe?: { readonly __typename?: 'Shoe', readonly id: string, readonly business: { readonly __typename?: 'Business', readonly id: string, readonly name: string, readonly locations: ReadonlyArray<{ readonly __typename?: 'Address', readonly full: string }> } } | null } }> } };
+export type ShoesQuery = { __typename?: 'Query', shoes: { __typename?: 'QueryShoesConnection', totalCount: number, edges: Array<{ __typename?: 'QueryShoesConnectionEdge', node: { __typename?: 'Shoe', type: Types.ShoeType, style: string, size: number, status: Types.ShoeStatus, side: Types.ShoeSide, retailPrice: number, recycled: boolean, id: string, description: string, colour: string, box: boolean, updatedAt: Date, stockItem: { __typename?: 'StockItem', id: string, sku?: string | null }, business: { __typename?: 'Business', id: string, name: string, locations: Array<{ __typename?: 'Address', full: string }> }, primaryShoe?: { __typename?: 'Shoe', id: string, business: { __typename?: 'Business', id: string, name: string, locations: Array<{ __typename?: 'Address', full: string }> } } | null } }> } };
 
 
 export const ShoesDocument = gql`

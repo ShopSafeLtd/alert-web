@@ -1,13 +1,13 @@
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { ListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
-import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
-import type { BusinessQuery } from 'graphql/businesses/queries/business.generated';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
-import type { ListBusinessUsersQuery } from 'graphql/users/queries/list-business-users.generated';
+import type { ListActionsQuery } from 'graphql/actions/queries/__generated__/list-actions.generated';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/__generated__/add-users-to-business.generated';
+import type { BusinessQuery } from 'graphql/businesses/queries/__generated__/business.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
+import type { ListBusinessUsersQuery } from 'graphql/users/queries/__generated__/list-business-users.generated';
 import type { LocationData } from 'types/DataType';
 
 import {

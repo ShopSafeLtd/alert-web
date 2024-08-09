@@ -1,10 +1,11 @@
+import type { SchemeRekognitionQuery } from 'graphql/rekognition/queries/__generated__/scheme-rekognition.generated';
+
+import { useSchemeRekognitionQuery } from 'graphql/rekognition/queries/__generated__/scheme-rekognition.generated';
 import { useStoreState } from 'state';
-import type { SchemeRekognitionQuery } from 'graphql/rekognition/queries/scheme-rekognition.generated';
-import { useSchemeRekognitionQuery } from 'graphql/rekognition/queries/scheme-rekognition.generated';
 
 interface Return {
-  loading: boolean;
   data: SchemeRekognitionQuery | undefined;
+  loading: boolean;
 }
 
 const useDashboard = (): Return => {
@@ -19,8 +20,8 @@ const useDashboard = (): Return => {
   });
 
   return {
-    loading,
     data,
+    loading,
   };
 };
 

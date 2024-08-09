@@ -1,67 +1,66 @@
-import React from 'react';
-import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
   faExclamationCircle,
   faTrash,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-
-import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
+
+import ImageContainer from '../ImageContainer';
 import UpdateContent from '../UpdateContent';
 import useStyles from './CrimeGroupFeed.styles';
-import ImageContainer from '../ImageContainer';
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
 
-const { Title, Text } = Typography;
+const { Text, Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
+  adminRights: boolean;
   feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], undefined | null>['feedItems'][0]
+    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
     | null
     | undefined;
   isNewCrimeGroup?: boolean;
   isNewImage?: boolean;
   onDeleteFeedItem: (value: string) => void;
-  saving: boolean;
-  adminRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  saving: boolean;
 }
 
 const CrimeGroupFeed = ({
-  feedItem,
-  isNewImage,
-  isNewCrimeGroup,
-  onDeleteFeedItem,
-  saving,
   adminRights,
+  feedItem,
+  isNewCrimeGroup,
+  isNewImage,
+  onDeleteFeedItem,
   openLightbox,
+  saving,
 }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
 
   const {
-    totalIncidents,
     alias,
     // totalUpdates,
     id,
     latestUpdate,
-    totalOffenders,
     reference,
+    totalIncidents,
+    totalOffenders,
     // totalValue,
   } = feedItem?.crimeGroup || {};
   const intl = useIntl();
   const classes = useStyles();
 
   return (
-    <Row wrap={false} key={id || ''}>
-      {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
+    <Row key={id || ''} wrap={false}>
+      {!isNewImage && latestUpdate?.feedImage ? (
         <Col
-          style={{ cursor: 'pointer', zIndex: 2 }}
           onClick={() =>
             openLightbox(
               [
@@ -72,47 +71,48 @@ const CrimeGroupFeed = ({
               0
             )
           }
+          style={{ cursor: 'pointer', zIndex: 2 }}
         >
           <ImageContainer
-            src={latestUpdate.feedImage.low || ''}
             position={latestUpdate.feedImage.position}
+            src={latestUpdate.feedImage.low || ''}
           />
         </Col>
       ) : null}
-      <Col flex={1} className={classes.contentContainer}>
-        <Row className={classes.contentHeader} align="middle" wrap={false}>
+      <Col className={classes.contentContainer} flex={1}>
+        <Row align="middle" className={classes.contentHeader} wrap={false}>
           <Col flex={1}>
-            <Title style={{ margin: 0, fontSize: 14 }} level={4} ellipsis>
+            <Title ellipsis level={4} style={{ fontSize: 14, margin: 0 }}>
               {feedItem?.message}
             </Title>
           </Col>
           <Col>
             {adminRights && (
               <Button
-                type="text"
-                style={{ height: 28, width: 25 }}
                 disabled={saving}
                 icon={
                   <FontAwesomeIcon
-                    style={{ marginBottom: 2 }}
                     icon={faTrash}
                     size="sm"
+                    style={{ marginBottom: 2 }}
                   />
                 }
                 onClick={() => {
                   confirm({
-                    title: intl.formatMessage({
-                      defaultMessage: 'Do you want to delete the feed item?',
-                    }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
                     },
+                    title: intl.formatMessage({
+                      defaultMessage: 'Do you want to delete the feed item?',
+                    }),
                   });
                 }}
                 size="small"
+                style={{ height: 28, width: 25 }}
+                type="text"
               />
             )}
           </Col>
@@ -138,7 +138,7 @@ const CrimeGroupFeed = ({
               <>
                 <Row>
                   <Col flex={1}>
-                    <Title level={4} ellipsis>
+                    <Title ellipsis level={4}>
                       {alias ||
                         intl.formatMessage(
                           {
@@ -169,9 +169,9 @@ const CrimeGroupFeed = ({
                 <Row>
                   <Col>
                     <FontAwesomeIcon
-                      size="sm"
-                      icon={faUsers}
                       className={classes.icon}
+                      icon={faUsers}
+                      size="sm"
                     />
                     <Text style={{ fontSize: 14 }} type="secondary">
                       {intl.formatMessage(
@@ -185,12 +185,12 @@ const CrimeGroupFeed = ({
                 </Row>
               </>
             )}
-            <Row wrap={false} className={classes.bottomRow}>
+            <Row className={classes.bottomRow} wrap={false}>
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faExclamationCircle}
+                  size="sm"
                 />
               </Col>
               <Col flex={1}>
@@ -207,13 +207,13 @@ const CrimeGroupFeed = ({
               </Col>
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faClock}
+                  size="sm"
                 />
               </Col>
               <Col>
-                <Text type="secondary" style={{ fontSize: 14 }}>
+                <Text style={{ fontSize: 14 }} type="secondary">
                   {FormatCalendar(feedItem?.updatedAt || new Date())}
                 </Text>
               </Col>

@@ -1,116 +1,121 @@
 import React from 'react';
+
 import View from './PerformanceReport.view';
 import usePerformanceReport from './hooks/usePerformanceReport';
 
 const PerformanceReport = (): JSX.Element => {
   const {
+    addLogo,
+    addLogoDrawer,
+    businessContributionTableData,
+    changeSize,
+    componentRef,
+    crimeGroupPerformanceTableData,
     data,
-    loading,
-    setDateRange,
     dateRange,
+    editMode,
+    filterCount,
+    filtersOpen,
     groups,
     groupsLoading,
-    setSelectedGroups,
-    selectedGroups,
-    componentRef,
     handlePrint,
-    editMode,
-    setEditMode,
-    businessContributionTableData,
-    userContributionTableData,
+    incidentTypeIds,
+    investigationsData,
+    isPrinting,
+    layout,
+    loading,
+    logos,
+    metadata,
+    minDrawer,
     offendersTableData,
-    crimeGroupPerformanceTableData,
+    redactOnPrint,
+    removeItem,
+    removeLogo,
+    saveAsDrawer,
+    saveTemplate,
+    saving,
+    schemeId,
+    selectTemplate,
+    selectedBrands,
+    selectedGroups,
+    selectedIndustries,
+    selectedRoles,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setDateRange,
+    setEditMode,
+    setIncidentTypeIds,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
+    setRedactOnPrint,
+    setSaveAsDrawer,
+    setSelectedBrands,
+    setSelectedGroups,
+    setSelectedIndustries,
+    setSelectedRoles,
     targetedBusinessData,
     targetedGoodsData,
-    minDrawer,
-    setMinDrawer,
-    layout,
-    setLayout,
-    removeItem,
-    changeSize,
-    isPrinting,
-    metadata,
-    setMetadata,
-    removeLogo,
-    setAddLogoDrawer,
-    addLogoDrawer,
-    logos,
-    addLogo,
-    selectTemplate,
-    saveTemplate,
     templates,
-    selectedTemplate,
-    setSaveAsDrawer,
-    saveAsDrawer,
-    selectedBrands,
-    setSelectedBrands,
-    investigationsData,
-    setSelectedIndustries,
-    selectedIndustries,
-    setRedactOnPrint,
-    redactOnPrint,
-    filtersOpen,
     toggleFiltersOpen,
-    setSelectedRoles,
-    selectedRoles,
-    filterCount,
-    schemeId,
-    saving,
+    userContributionTableData,
   } = usePerformanceReport();
   return (
     <View
-      saving={saving}
-      redactOnPrint={redactOnPrint}
-      setRedactOnPrint={setRedactOnPrint}
-      selectedTemplate={selectedTemplate}
-      selectTemplate={selectTemplate}
-      saveTemplate={saveTemplate}
-      saveAsDrawer={saveAsDrawer}
-      setSaveAsDrawer={setSaveAsDrawer}
-      templates={templates}
       addLogo={addLogo}
-      logos={logos}
-      setAddLogoDrawer={setAddLogoDrawer}
       addLogoDrawer={addLogoDrawer}
-      removeLogo={removeLogo}
-      metadata={metadata}
-      setMetadata={setMetadata}
-      isPrinting={isPrinting}
-      removeItem={removeItem}
-      changeSize={changeSize}
-      layout={layout}
-      setLayout={setLayout}
-      minDrawer={minDrawer}
-      setMinDrawer={setMinDrawer}
-      targetedGoodsData={targetedGoodsData}
-      targetedBusinessData={targetedBusinessData}
-      crimeGroupPerformanceTableData={crimeGroupPerformanceTableData}
-      offendersTableData={offendersTableData}
-      userContributionTableData={userContributionTableData}
       businessContributionTableData={businessContributionTableData}
-      editMode={editMode}
-      setEditMode={setEditMode}
+      changeSize={changeSize}
       componentRef={componentRef}
-      handlePrint={handlePrint}
-      setSelectedGroups={setSelectedGroups}
-      selectedGroups={selectedGroups}
-      loading={loading}
+      crimeGroupPerformanceTableData={crimeGroupPerformanceTableData}
       data={data}
-      setDateRange={setDateRange}
       dateRange={dateRange}
+      editMode={editMode}
+      filterCount={filterCount}
+      filtersOpen={filtersOpen}
       groups={groups}
       groupsLoading={groupsLoading}
-      selectedBrands={selectedBrands}
-      setSelectedBrands={setSelectedBrands}
+      handlePrint={handlePrint}
+      incidentTypeIds={incidentTypeIds}
       investigationsData={investigationsData}
-      setSelectedIndustries={setSelectedIndustries}
-      selectedIndustries={selectedIndustries}
-      filtersOpen={filtersOpen}
-      toggleFiltersOpen={toggleFiltersOpen}
-      setSelectedRoles={setSelectedRoles}
-      selectedRoles={selectedRoles}
-      filterCount={filterCount}
+      isPrinting={isPrinting}
+      layout={layout}
+      loading={loading}
+      logos={logos}
+      metadata={metadata}
+      minDrawer={minDrawer}
+      offendersTableData={offendersTableData}
+      redactOnPrint={redactOnPrint}
+      removeItem={removeItem}
+      removeLogo={removeLogo}
+      saveAsDrawer={saveAsDrawer}
+      saveTemplate={saveTemplate}
+      saving={saving}
       schemeId={schemeId}
+      selectTemplate={selectTemplate}
+      selectedBrands={selectedBrands}
+      selectedGroups={selectedGroups}
+      selectedIndustries={selectedIndustries}
+      selectedRoles={selectedRoles}
+      selectedTemplate={selectedTemplate}
+      setAddLogoDrawer={setAddLogoDrawer}
+      setDateRange={setDateRange}
+      setEditMode={setEditMode}
+      setIncidentTypeIds={setIncidentTypeIds}
+      setLayout={setLayout}
+      setMetadata={setMetadata}
+      setMinDrawer={setMinDrawer}
+      setRedactOnPrint={setRedactOnPrint}
+      setSaveAsDrawer={setSaveAsDrawer}
+      setSelectedBrands={setSelectedBrands}
+      setSelectedGroups={setSelectedGroups}
+      setSelectedIndustries={setSelectedIndustries}
+      setSelectedRoles={setSelectedRoles}
+      targetedBusinessData={targetedBusinessData}
+      targetedGoodsData={targetedGoodsData}
+      templates={templates}
+      toggleFiltersOpen={toggleFiltersOpen}
+      userContributionTableData={userContributionTableData}
     />
   );
 };

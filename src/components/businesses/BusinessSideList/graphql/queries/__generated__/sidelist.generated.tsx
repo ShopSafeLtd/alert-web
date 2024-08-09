@@ -5,13 +5,13 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type BusinessesSideListQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.BusinessWhereInput>;
-  orderBy?: Types.InputMaybe<ReadonlyArray<Types.BusinessOrderBy> | Types.BusinessOrderBy>;
+  orderBy?: Types.InputMaybe<Array<Types.BusinessOrderBy> | Types.BusinessOrderBy>;
   first?: Types.InputMaybe<Types.Scalars['Int']>;
   after?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type BusinessesSideListQuery = { readonly __typename?: 'Query', readonly businessRelay: { readonly __typename?: 'QueryBusinessRelayConnection', readonly totalCount: number, readonly edges: ReadonlyArray<{ readonly __typename?: 'QueryBusinessRelayConnectionEdge', readonly node: { readonly __typename?: 'Business', readonly id: string, readonly name: string, readonly siteNumber?: string | null, readonly locations: ReadonlyArray<{ readonly __typename?: 'Address', readonly full: string }> } }>, readonly pageInfo: { readonly __typename?: 'PageInfo', readonly endCursor?: string | null, readonly hasNextPage: boolean } } };
+export type BusinessesSideListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, locations: Array<{ __typename?: 'Address', full: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 
 export const BusinessesSideListDocument = gql`

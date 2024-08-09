@@ -1,80 +1,81 @@
-import { useState } from 'react';
-
-import { useNavigate, useParams } from 'react-router';
-import { useStoreState } from 'state';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { Modal, notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import update from 'immutability-helper';
-import type { LocationData } from 'types/DataType';
-import type {
-  ListBusinessUsersQuery,
-  ListBusinessUsersQueryVariables,
-} from 'graphql/users/queries/list-business-users.generated';
-import { ListBusinessUsersDocument } from 'graphql/users/queries/list-business-users.generated';
-import { useListBusinessUsersQuery } from 'graphql/users/queries/list-business-users.generated';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type {
-  BusinessQuery,
-  BusinessQueryVariables,
-} from 'graphql/businesses/queries/business.generated';
-import {
-  BusinessDocument,
-  useBusinessQuery,
-} from 'graphql/businesses/queries/business.generated';
-
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
-import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
-import type { ListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
-import { useListActionsQuery } from 'graphql/actions/queries/list-actions.generated';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
-import { SortOrder } from 'graphql/types';
 import type {
   BusinessesSideListQuery,
   BusinessesSideListQueryVariables,
-} from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
-import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
-import { useUpdateBusinessLocationMutation } from 'graphql/businesses/mutations/update-business-location.generated';
-import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/delete-business.generated';
-import { useRemoveUserFromBusinessMutation } from 'graphql/businesses/mutations/remove-user-from-business.generated';
+} from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { ListActionsQuery } from 'graphql/actions/queries/__generated__/list-actions.generated';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/__generated__/add-users-to-business.generated';
+import type {
+  BusinessQuery,
+  BusinessQueryVariables,
+} from 'graphql/businesses/queries/__generated__/business.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
+import type {
+  ListBusinessUsersQuery,
+  ListBusinessUsersQueryVariables,
+} from 'graphql/users/queries/__generated__/list-business-users.generated';
+import type { LocationData } from 'types/DataType';
+
+import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
+import { Modal, notification } from 'antd';
+import { useListActionsQuery } from 'graphql/actions/queries/__generated__/list-actions.generated';
+import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/__generated__/delete-business.generated';
+import { useRemoveUserFromBusinessMutation } from 'graphql/businesses/mutations/__generated__/remove-user-from-business.generated';
+import { useUpdateBusinessLocationMutation } from 'graphql/businesses/mutations/__generated__/update-business-location.generated';
+import {
+  BusinessDocument,
+  useBusinessQuery,
+} from 'graphql/businesses/queries/__generated__/business.generated';
+import { SortOrder } from 'graphql/types';
+import {
+  ListBusinessUsersDocument,
+  useListBusinessUsersQuery,
+} from 'graphql/users/queries/__generated__/list-business-users.generated';
+import update from 'immutability-helper';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate, useParams } from 'react-router';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Return {
-  data: BusinessQuery | undefined;
-  loading: boolean;
-  businessId: string | undefined;
-  editVisible: boolean;
-  toggleEdit: () => void;
-  inviteUserVisible: boolean;
-  toggleInviteUser: () => void;
-  addUserVisible: boolean;
-  toggleAddUser: () => void;
-  usersData: ListBusinessUsersQuery | undefined;
-  usersLoading: boolean;
-  updateUsersList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
-  updateUsersListExisting: MutationUpdaterFn<InviteExistingUserMutation>;
-  updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
   actionsData: ListActionsQuery | undefined;
   actionsLoading: boolean;
-  onRemoveBusiness: (value: string) => void;
-  toggleLinkDem: () => void;
-  linkDemVisible: boolean;
-  saving: boolean;
-  deleteConfirm: (value: string) => void;
   addTodo: boolean;
-  toggleAddTodo: () => void;
+  addUserVisible: boolean;
+  businessId: string | undefined;
+  completeTodoVisible: null | string;
+  data: BusinessQuery | undefined;
+  deleteConfirm: (value: string) => void;
+  editVisible: boolean;
+  inviteUserVisible: boolean;
+  linkDemVisible: boolean;
+  loading: boolean;
+  onEditAddress: (value: LocationData) => void;
+  onRemoveBusiness: (value: string) => void;
+  saving: boolean;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setViewTodoVisible: (value: null | string) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
-  viewTodoVisible: string | null;
-  setViewTodoVisible: (value: string | null) => void;
-  completeTodoVisible: string | null;
-  setCompleteTodoVisible: (value: string | null) => void;
+  toggleAddTodo: () => void;
+  toggleAddUser: () => void;
+  toggleEdit: () => void;
+  toggleInviteUser: () => void;
+  toggleLinkDem: () => void;
+  updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
-  onEditAddress: (value: LocationData) => void;
+  updateUsersList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+  updateUsersListExisting: MutationUpdaterFn<InviteExistingUserMutation>;
+  usersData: ListBusinessUsersQuery | undefined;
+  usersLoading: boolean;
+  viewTodoVisible: null | string;
 }
 
 const useViewBusiness = (): Return => {
@@ -87,21 +88,21 @@ const useViewBusiness = (): Return => {
   const [addUserVisible, setAddUserVisible] = useState(false);
   const [linkDemVisible, setLinkDemVisible] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
-  const [viewTodoVisible, setViewTodoVisible] = useState<string | null>(null);
-  const [completeTodoVisible, setCompleteTodoVisible] = useState<string | null>(
+  const [viewTodoVisible, setViewTodoVisible] = useState<null | string>(null);
+  const [completeTodoVisible, setCompleteTodoVisible] = useState<null | string>(
     null
   );
   const [saving, setSaving] = useState(false);
   const variables: BusinessQueryVariables = {
-    where: {
-      id: params.id,
-    },
     incidentsWhere: {
       scheme: {
         id: {
           equals: currentScheme,
         },
       },
+    },
+    where: {
+      id: params.id,
     },
   };
   const { data } = useBusinessQuery({
@@ -118,6 +119,9 @@ const useViewBusiness = (): Return => {
             equals: currentScheme,
           },
         },
+      },
+      orderBy: {
+        fullName: SortOrder.Asc,
       },
       where: {
         businesses: {
@@ -137,15 +141,15 @@ const useViewBusiness = (): Return => {
           },
         },
       },
-      orderBy: {
-        fullName: SortOrder.Asc,
-      },
     },
   });
 
   const { data: actionsData } = useListActionsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      orderBy: {
+        createdAt: SortOrder.Desc,
+      },
       where: {
         business: {
           id: {
@@ -158,21 +162,18 @@ const useViewBusiness = (): Return => {
           },
         },
       },
-      orderBy: {
-        createdAt: SortOrder.Desc,
-      },
     },
   });
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
       variables: {
-        where: {
-          id: currentScheme,
-        },
         questionGroupsWhere: {
           defaultForIncidents: {
             equals: true,
           },
+        },
+        where: {
+          id: currentScheme,
         },
       },
     });
@@ -201,6 +202,8 @@ const useViewBusiness = (): Return => {
       >({
         query: BusinessesSideListDocument,
         variables: {
+          first: 24,
+          orderBy: { name: SortOrder.Asc },
           where: {
             schemes: {
               some: {
@@ -210,8 +213,6 @@ const useViewBusiness = (): Return => {
               },
             },
           },
-          orderBy: { name: SortOrder.Asc },
-          first: 24,
         },
       });
 
@@ -227,8 +228,8 @@ const useViewBusiness = (): Return => {
         BusinessesSideListQuery,
         BusinessesSideListQueryVariables
       >({
-        query: BusinessesSideListDocument,
         data: {
+          __typename: 'Query',
           businessRelay: {
             ...existingData.businessRelay,
             edges: existingData?.businessRelay?.edges?.map(
@@ -245,9 +246,11 @@ const useViewBusiness = (): Return => {
               }
             ),
           },
-          __typename: 'Query',
         },
+        query: BusinessesSideListDocument,
         variables: {
+          first: 24,
+          orderBy: { name: SortOrder.Asc },
           where: {
             schemes: {
               some: {
@@ -257,8 +260,6 @@ const useViewBusiness = (): Return => {
               },
             },
           },
-          orderBy: { name: SortOrder.Asc },
-          first: 24,
         },
       });
     },
@@ -267,25 +268,25 @@ const useViewBusiness = (): Return => {
     setSaving(true);
     void updateBusinessLocation({
       variables: {
-        where: {
-          id: data?.business?.id,
-        },
         data: {
-          name: { set: data?.business?.name || '' },
-          publicName: data?.business?.publicName || false,
           locations: {
             update: [
               {
-                where: {
-                  id: data?.business?.locations[0]?.id,
-                },
                 data: {
                   geoLat: { set: values.geoLat },
                   geoLng: { set: values.geoLng },
                 },
+                where: {
+                  id: data?.business?.locations[0]?.id,
+                },
               },
             ],
           },
+          name: { set: data?.business?.name || '' },
+          publicName: data?.business?.publicName || false,
+        },
+        where: {
+          id: data?.business?.id,
         },
       },
       // optimisticResponse: {
@@ -316,11 +317,11 @@ const useViewBusiness = (): Return => {
   const [removeUserFromBusiness] = useRemoveUserFromBusinessMutation({
     onCompleted: () => {
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Business has been created',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'You new business has been add to alert.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Business has been created',
         }),
         placement: 'bottomRight',
       });
@@ -359,6 +360,9 @@ const useViewBusiness = (): Return => {
           ListBusinessUsersQuery,
           ListBusinessUsersQueryVariables
         >({
+          data: {
+            users: result.data?.removeUserFromBusiness.users,
+          },
           query: ListBusinessUsersDocument,
           variables: {
             groupWhere: {
@@ -378,9 +382,6 @@ const useViewBusiness = (): Return => {
               },
             },
           },
-          data: {
-            users: result.data?.removeUserFromBusiness.users,
-          },
         });
     },
   });
@@ -391,18 +392,18 @@ const useViewBusiness = (): Return => {
         data: {
           id: userId,
         },
-        schemeWhere: {
-          id: currentScheme,
-        },
-        where: {
-          id: params.id,
-        },
         groupWhere: {
           scheme: {
             id: {
               equals: currentScheme,
             },
           },
+        },
+        schemeWhere: {
+          id: currentScheme,
+        },
+        where: {
+          id: params.id,
         },
       },
     });
@@ -414,11 +415,11 @@ const useViewBusiness = (): Return => {
       setSaving(false);
       navigate('businesses');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Removed!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The business has been removed!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Removed!',
         }),
         placement: 'bottomRight',
       });
@@ -430,9 +431,6 @@ const useViewBusiness = (): Return => {
   });
   const deleteConfirm = (currentId: string) => {
     Modal.confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete this business?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
@@ -444,6 +442,9 @@ const useViewBusiness = (): Return => {
           },
         }).finally(() => setSaving(false));
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete this business?',
+      }),
     });
   };
 
@@ -460,14 +461,14 @@ const useViewBusiness = (): Return => {
 
     if (!existingData?.business) return;
     store.writeQuery<BusinessQuery>({
-      query: BusinessDocument,
       data: {
+        __typename: 'Query',
         business: {
           ...existingData.business,
           todos: [...existingData.business.todos, res.createTodo],
         },
-        __typename: 'Query',
       },
+      query: BusinessDocument,
       variables,
     });
   };
@@ -490,8 +491,8 @@ const useViewBusiness = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<BusinessQuery, BusinessQueryVariables>({
-      query: BusinessDocument,
       data: {
+        __typename: 'Query',
         business: update<BusinessQuery['business']>(existingData.business, {
           todos: {
             [existingData.business.todos.findIndex(
@@ -501,8 +502,8 @@ const useViewBusiness = (): Return => {
             },
           },
         }),
-        __typename: 'Query',
       },
+      query: BusinessDocument,
       variables,
     });
   };
@@ -565,11 +566,11 @@ const useViewBusiness = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
-      query: ListBusinessUsersDocument,
       data: {
-        users: [...existingData.users, res.createUserInDatabase],
         __typename: 'Query',
+        users: [...existingData.users, res.createUserInDatabase],
       },
+      query: ListBusinessUsersDocument,
       variables: {
         groupWhere: {
           scheme: {
@@ -630,11 +631,11 @@ const useViewBusiness = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
-      query: ListBusinessUsersDocument,
       data: {
-        users: [...existingData.users, res.inviteExistingUser],
         __typename: 'Query',
+        users: [...existingData.users, res.inviteExistingUser],
       },
+      query: ListBusinessUsersDocument,
       variables: {
         groupWhere: {
           scheme: {
@@ -679,6 +680,9 @@ const useViewBusiness = (): Return => {
             },
           },
         },
+        orderBy: {
+          fullName: SortOrder.Asc,
+        },
         where: {
           businesses: {
             some: {
@@ -687,9 +691,6 @@ const useViewBusiness = (): Return => {
               },
             },
           },
-        },
-        orderBy: {
-          fullName: SortOrder.Asc,
         },
       },
     });
@@ -698,11 +699,11 @@ const useViewBusiness = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
-      query: ListBusinessUsersDocument,
       data: {
-        users: [...existingData.users, ...res.addUsersToBusiness.users],
         __typename: 'Query',
+        users: [...existingData.users, ...res.addUsersToBusiness.users],
       },
+      query: ListBusinessUsersDocument,
       variables: {
         groupWhere: {
           scheme: {
@@ -710,6 +711,9 @@ const useViewBusiness = (): Return => {
               equals: currentScheme,
             },
           },
+        },
+        orderBy: {
+          fullName: SortOrder.Asc,
         },
         where: {
           businesses: {
@@ -720,46 +724,43 @@ const useViewBusiness = (): Return => {
             },
           },
         },
-        orderBy: {
-          fullName: SortOrder.Asc,
-        },
       },
     });
   };
 
   return {
-    data,
-    loading: !data,
-    businessId: params.id,
-    editVisible,
-    toggleEdit,
-    inviteUserVisible,
-    toggleInviteUser,
-    usersData,
-    usersLoading: !usersData,
-    updateUsersList,
-    updateUsersListExisting,
-    addUserVisible,
-    toggleAddUser,
-    updateAddUsersToBusiness,
     actionsData,
     actionsLoading: !actionsData,
-    onRemoveBusiness,
-    toggleLinkDem,
-    linkDemVisible,
-    saving,
-    deleteConfirm,
     addTodo,
-    toggleAddTodo,
+    addUserVisible,
+    businessId: params.id,
+    completeTodoVisible,
+    data,
+    deleteConfirm,
+    editVisible,
+    inviteUserVisible,
+    linkDemVisible,
+    loading: !data,
+    onEditAddress,
+    onRemoveBusiness,
+    saving,
+    setCompleteTodoVisible,
+    setViewTodoVisible,
     templatesData,
     templatesLoading,
-    setViewTodoVisible,
-    setCompleteTodoVisible,
-    completeTodoVisible,
-    viewTodoVisible,
+    toggleAddTodo,
+    toggleAddUser,
+    toggleEdit,
+    toggleInviteUser,
+    toggleLinkDem,
+    updateAddUsersToBusiness,
     updateTodo,
     updateTodoList,
-    onEditAddress,
+    updateUsersList,
+    updateUsersListExisting,
+    usersData,
+    usersLoading: !usersData,
+    viewTodoVisible,
   };
 };
 

@@ -1,40 +1,42 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument */
-import { useEffect, useRef, useState } from 'react';
 import type { SelectProps, UploadProps } from 'antd';
-import { Form } from 'antd';
-import type { Editor } from 'tinymce';
 import type { UploadFile } from 'antd/es/upload/interface';
+import type { Editor } from 'tinymce';
+
+import { Form } from 'antd';
+import { useCreateArticleMutation } from 'graphql/article/mutations/__generated__/create-article.generated';
+import { useEditArticleMutation } from 'graphql/article/mutations/__generated__/edit-article.generated';
+import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import { useCreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { ArticlePriority, Model, Role } from 'graphql/types';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+
+import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
+import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import type { Props } from '../types/CreateArticle';
 
 import { useStoreState } from '../../../../state';
-import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
-import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
 import extracted from '../../../../utils/add-default-to-article';
 import customRequest from '../../../../utils/custom-request';
-import { ArticlePriority, Model, Role } from 'graphql/types';
-import { useArticleQuery } from 'graphql/article/queries/view-article.generated';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useCreateArticleMutation } from 'graphql/article/mutations/create-article.generated';
-import { useEditArticleMutation } from 'graphql/article/mutations/edit-article.generated';
 
 const { useForm } = Form;
 
 interface FormData {
-  title: string;
+  categories: SelectProps['options'];
   content: string;
   groups: string[];
-  categories: SelectProps['options'];
   importance: ArticlePriority;
   schemes: string[];
+  title: string;
   watermarkImage: boolean;
 }
 
 export type { FormData };
 
-export function extractFilename(url: string): string | null {
+export function extractFilename(url: string): null | string {
   const match = /\/temp\/([^?]+)/.exec(url);
   return match ? match[1] : null;
 }
@@ -44,15 +46,15 @@ const useCreateEditArticle = (): Props => {
 
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { schemes, id: userId } = useStoreState((state) => state.user);
+  const { id: userId, schemes } = useStoreState((state) => state.user);
   const [form] = useForm<FormData>();
   const [data, setData] = useState<FormData>({
-    title: '',
+    categories: [],
     content: '',
     groups: [],
-    categories: [],
     importance: ArticlePriority.Normal,
     schemes: [],
+    title: '',
     watermarkImage: true,
   });
   const currentUserId = useStoreState((state) => state.user.id);
@@ -64,11 +66,11 @@ const useCreateEditArticle = (): Props => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const [imageList, setImageList] = useState<UploadFile[]>([]);
 
-  const [groups, setGroups] = useState<{ value: string; label: string }[]>([]);
+  const [groups, setGroups] = useState<{ label: string; value: string }[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
   const [categoryIds, setCategoryIds] = useState<
-    { value: string; id: string }[]
+    { id: string; value: string }[]
   >([]);
   const [offenders, setOffenders] = useState<OffenderData[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
@@ -85,25 +87,21 @@ const useCreateEditArticle = (): Props => {
 
   const navigate = useNavigate();
   const { data: res, loading } = useArticleQuery({
-    variables: {
-      where: { id: articleId },
-    },
-    skip: !articleId,
     fetchPolicy: 'network-only',
     onCompleted: (result) => {
       setData({
-        title: result?.article?.title || '',
-        content: result?.article?.rows[0].columns[0].text || '',
-        groups: result?.article?.groups.map((group) => group.id || '') || [],
         categories:
           result?.article?.tags.map((tag) => ({
-            value: tag.name || '',
             label: tag.name || '',
+            value: tag.name || '',
           })) || [],
+        content: result?.article?.rows[0].columns[0].text || '',
+        groups: result?.article?.groups.map((group) => group.id || '') || [],
         importance: result?.article?.priority || ArticlePriority.Normal,
-        watermarkImage: !!result?.article?.watermarkImage,
         schemes:
           result?.article?.groups.map((group) => group.scheme.id || '') || [],
+        title: result?.article?.title || '',
+        watermarkImage: !!result?.article?.watermarkImage,
       });
       setSelectedSchemes(
         result?.article?.groups.map((group) => group.scheme.id || '') || []
@@ -118,23 +116,23 @@ const useCreateEditArticle = (): Props => {
         result?.article?.rows[0].columns[0].incidents.map((i) => ({
           incident: {
             ...i,
-            totalImages: i.images.length,
             incidentItems: [],
+            totalImages: i.images.length,
           },
         })) || []
       );
       setFileList(
         result?.article?.documents.map((document) => ({
-          uid: document.id,
           name: document.name,
           status: 'done',
+          uid: document.id,
           url: document.url,
         })) || []
       );
       setSelectedCategories(
         result?.article?.tags.map((tag) => ({
-          value: tag.name || '',
           label: tag.name || '',
+          value: tag.name || '',
         })) || []
       );
       const html = result?.article?.rows[0].columns[0].text || '';
@@ -159,31 +157,43 @@ const useCreateEditArticle = (): Props => {
 
       setImageList(
         imageSrcs?.map((image) => ({
-          uid: image,
           name: image,
           status: 'done',
+          uid: image,
           url: image || '',
         })) || []
       );
 
       form.setFieldsValue({
-        title: result?.article?.title || '',
-        content: result?.article?.rows[0].columns[0].text || '',
-        groups: result?.article?.groups.map((group) => group.id || '') || [],
-        watermarkImage: !!result?.article?.watermarkImage,
         categories:
           result?.article?.tags.map((tag) => ({
-            value: tag.name || '',
             label: tag.name || '',
+            value: tag.name || '',
           })) || [],
+        content: result?.article?.rows[0].columns[0].text || '',
+        groups: result?.article?.groups.map((group) => group.id || '') || [],
         importance: result?.article?.priority || ArticlePriority.Normal,
         schemes: [],
+        title: result?.article?.title || '',
+        watermarkImage: !!result?.article?.watermarkImage,
       });
       setInitialValue(res?.article?.rows[0].columns[0].text || '');
+    },
+    skip: !articleId,
+    variables: {
+      where: { id: articleId },
     },
   });
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (r) => {
+      const groupsFormatted = r.groups.map((group) => ({
+        label: `${group.name} (${group.scheme.name})`,
+        value: group.id,
+      }));
+      setGroups(groupsFormatted);
+    },
     variables: {
       where: {
         scheme: {
@@ -217,34 +227,42 @@ const useCreateEditArticle = (): Props => {
         },
       },
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (r) => {
-      const groupsFormatted = r.groups.map((group) => ({
-        value: group.id,
-        label: `${group.name} (${group.scheme.name})`,
-      }));
-      setGroups(groupsFormatted);
-    },
   });
 
   const [createTag] = useCreateTagMutation({
     onCompleted: (r) => {
       const newCategory = {
-        value: r.createTag.name,
         label: r.createTag.name,
+        value: r.createTag.name,
       };
       const newCategoryIds = {
-        value: r.createTag.name,
         id: r.createTag.id,
+        value: r.createTag.name,
       };
-      setCategoryIds([...(<[]>categoryIds), newCategoryIds]);
-      setCategories([...(<[]>categories), newCategory]);
+      setCategoryIds([...(categoryIds as []), newCategoryIds]);
+      setCategories([...(categories as []), newCategory]);
     },
   });
 
   const { loading: tagsLoading } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (r) => {
+      const categoriesFormatted = r.tags.map((tag) => ({
+        label: tag.name,
+        value: tag.name,
+      }));
+      const categoryIdsFormatted = r.tags.map((tag) => ({
+        id: tag.id,
+        value: tag.name,
+      }));
+      setCategoryIds(categoryIdsFormatted);
+      setCategories(categoriesFormatted);
+    },
     variables: {
       where: {
+        dataType: {
+          equals: Model.Article,
+        },
         schemes: {
           some: {
             id: {
@@ -252,23 +270,7 @@ const useCreateEditArticle = (): Props => {
             },
           },
         },
-        dataType: {
-          equals: Model.Article,
-        },
       },
-    },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (r) => {
-      const categoriesFormatted = r.tags.map((tag) => ({
-        value: tag.name,
-        label: tag.name,
-      }));
-      const categoryIdsFormatted = r.tags.map((tag) => ({
-        value: tag.name,
-        id: tag.id,
-      }));
-      setCategoryIds(categoryIdsFormatted);
-      setCategories(categoriesFormatted);
     },
   });
 
@@ -295,13 +297,14 @@ const useCreateEditArticle = (): Props => {
         void createTag({
           variables: {
             data: {
-              name: value.value,
               createdBy: {
                 connect: {
                   id: userId,
                 },
               },
+              dataType: Model.Article,
               description: '',
+              name: value.value,
               schemes: {
                 connect: [
                   {
@@ -309,7 +312,6 @@ const useCreateEditArticle = (): Props => {
                   },
                 ],
               },
-              dataType: Model.Article,
             },
           },
         }).then((r) => {
@@ -325,14 +327,14 @@ const useCreateEditArticle = (): Props => {
     if (categories && categories?.length > 0 && res) {
       setSelectedCategories(
         res?.article?.tags.map((tag) => ({
-          value: tag.name || '',
           label: tag.name || '',
+          value: tag.name || '',
         })) || []
       );
     }
   }, [categories, res]);
 
-  const log = (): { text: string; img: string; imgSrc: string[] } => {
+  const log = (): { img: string; imgSrc: string[]; text: string } => {
     if (editorRef.current) {
       const html = editorRef.current.getContent();
       const parser = new DOMParser();
@@ -367,20 +369,20 @@ const useCreateEditArticle = (): Props => {
       setPreviewText(innerText);
 
       return {
-        text: innerText,
         img: imageSrcs[0] || '',
         imgSrc: imageSrcs,
+        text: innerText,
       };
     }
     return {
-      text: '',
       img: '',
       imgSrc: [],
+      text: '',
     };
   };
 
   const exampleImageUploadHandler = (
-    blobInfo: { blob: () => string | Blob; filename: () => string | undefined },
+    blobInfo: { blob: () => Blob | string; filename: () => string | undefined },
     progress: (arg0: number) => void
   ): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -512,18 +514,18 @@ const useCreateEditArticle = (): Props => {
           if (meta.filetype === 'file') {
             fileList.push({
               ...file,
-              url,
-              name: file.name,
               fileName: originalFileName,
+              name: file.name,
               uid: id,
+              url,
             } as UploadFile);
           }
           if (meta.filetype === 'image') {
             imageList.push({
               ...file,
-              url,
               name: file.name,
               uid: id,
+              url,
             } as UploadFile);
           }
           callback(url, { title: file.name });
@@ -585,7 +587,7 @@ const useCreateEditArticle = (): Props => {
       .getFieldValue('importance')
       .toString()
       .toUpperCase() as ArticlePriority;
-    const { img, text, imgSrc } = log();
+    const { img, imgSrc, text } = log();
     // const previewImageFile = imageList?.filter(({ url }) => url === img);
     const articleImages = imageList?.filter(({ url }) =>
       imgSrc.includes(url || '')
@@ -599,33 +601,16 @@ const useCreateEditArticle = (): Props => {
 
     const variables = {
       data: {
-        title: form.getFieldValue('title'),
         categories: selectedCategoryIds,
-        groups: selectedGroups,
-        watermarkImage: form.getFieldValue('watermarkImage'),
         documents:
           fileList.map((file) => ({
-            url: file.url || '',
-            name: file.name || '',
             fileType: file.type || '',
+            name: file.name || '',
             origFileName: file.fileName || file.name || '',
+            url: file.url || '',
           })) || [],
+        groups: selectedGroups,
         htmlBody: htmlWithDefaultWidth || '',
-        previewImage: img,
-        previewText: text,
-        schemes:
-          submittedSchemes && submittedSchemes.length > 1
-            ? submittedSchemes.map((scheme) => scheme)
-            : [schemeId],
-        priority,
-        incidents:
-          submittedSchemes && submittedSchemes.length > 1
-            ? []
-            : incidents.map((incident) => incident.incident.id),
-        offenders:
-          submittedSchemes && submittedSchemes.length > 1
-            ? []
-            : offenders.map((offender) => offender.id),
         images: {
           upload:
             articleImages && articleImages.length > 0
@@ -638,6 +623,23 @@ const useCreateEditArticle = (): Props => {
                 }))
               : undefined,
         },
+        incidents:
+          submittedSchemes && submittedSchemes.length > 1
+            ? []
+            : incidents.map((incident) => incident.incident.id),
+        offenders:
+          submittedSchemes && submittedSchemes.length > 1
+            ? []
+            : offenders.map((offender) => offender.id),
+        previewImage: img,
+        previewText: text,
+        priority,
+        schemes:
+          submittedSchemes && submittedSchemes.length > 1
+            ? submittedSchemes.map((scheme) => scheme)
+            : [schemeId],
+        title: form.getFieldValue('title'),
+        watermarkImage: form.getFieldValue('watermarkImage'),
         // images: {
         //   upload: previewImageFile
         //     ? [
@@ -656,12 +658,6 @@ const useCreateEditArticle = (): Props => {
 
     await (articleId
       ? editArticle({
-          variables: {
-            where: {
-              id: articleId,
-            },
-            data: variables.data,
-          },
           onCompleted: (resData) => {
             if (resData && resData.editArticle) {
               setSaving(false);
@@ -672,9 +668,14 @@ const useCreateEditArticle = (): Props => {
           onError: () => {
             setSaving(false);
           },
+          variables: {
+            data: variables.data,
+            where: {
+              id: articleId,
+            },
+          },
         })
       : submitArticle({
-          variables,
           onCompleted: (resData) => {
             if (resData && resData.createArticle) {
               setSaving(false);
@@ -685,6 +686,7 @@ const useCreateEditArticle = (): Props => {
           onError: () => {
             setSaving(false);
           },
+          variables,
         }));
     setSaving(false);
   };
@@ -707,8 +709,8 @@ const useCreateEditArticle = (): Props => {
 
   const documentUploadProps: UploadProps = {
     customRequest,
-    onChange: handleChange,
     multiple: true,
+    onChange: handleChange,
   };
 
   const insertIncident = (incident: Incident) => {
@@ -747,40 +749,40 @@ const useCreateEditArticle = (): Props => {
   };
 
   return {
-    editorRef,
-    log,
-    preview,
-    exampleImageUploadHandler,
-
-    previewText,
-    previewImage,
-    setPreviewImage,
-    setPreviewText,
-    filePickerCallback,
-    groupsLoading,
-    groups,
-    onGroupsChange,
-    selectedGroups,
     categories,
-    categoriesLoading: false,
     categoriesChange,
-    selectedCategories,
-    form,
+    categoriesLoading: false,
     data,
+
+    documentUploadProps,
+    editorRef,
+    exampleImageUploadHandler,
+    fileList,
+    filePickerCallback,
+    form,
+    groups,
+    groupsLoading,
+    id: articleId,
+    incidents,
+    initData: initialValue,
+    insertIncident,
+    insertOffender,
+    loading: tagsLoading || loading || saving,
+    log,
+    offenders,
+    onGroupsChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
-    loading: tagsLoading || loading || saving,
-    fileList,
-    documentUploadProps,
-    insertOffender,
-    insertIncident,
-    offenders,
-    incidents,
-    removeOffender,
+    preview,
+    previewImage,
+    previewText,
     removeIncident,
+    removeOffender,
+    selectedCategories,
+    selectedGroups,
     selectedSchemes,
-    id: articleId,
-    initData: initialValue,
+    setPreviewImage,
+    setPreviewText,
   };
 };
 

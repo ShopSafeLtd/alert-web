@@ -1,12 +1,13 @@
+import type { OffenderProfileQuery } from 'graphql/reports/queries/__generated__/offender-profile.generated';
+
+import { useOffenderProfileQuery } from 'graphql/reports/queries/__generated__/offender-profile.generated';
 import { useParams } from 'react-router-dom';
-import type { OffenderProfileQuery } from 'graphql/reports/queries/offender-profile.generated';
-import { useOffenderProfileQuery } from 'graphql/reports/queries/offender-profile.generated';
 
 interface Return {
   offenderProfileData: OffenderProfileQuery | undefined;
   offenderProfileLoading: boolean;
-  selectedOffender: string | undefined;
   reportId: string | undefined;
+  selectedOffender: string | undefined;
 }
 
 const useOffenderProfile = (): Return => {
@@ -17,19 +18,19 @@ const useOffenderProfile = (): Return => {
   const { data: offenderProfileData, loading: offenderProfileLoading } =
     useOffenderProfileQuery({
       fetchPolicy: 'cache-and-network',
+      skip: !selectedOffender,
       variables: {
         where: {
           id: selectedOffender,
         },
       },
-      skip: !selectedOffender,
     });
 
   return {
     offenderProfileData,
     offenderProfileLoading,
-    selectedOffender,
     reportId,
+    selectedOffender,
   };
 };
 

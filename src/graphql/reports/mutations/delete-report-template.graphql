@@ -1,5 +1,8 @@
 mutation DeleteReportTemplate($where: ReportTemplateWhereUniqueInput!) {
     deleteReportTemplate(where: $where) {
         id
+        reportGroup {
+            id
+        }
     }
 }

@@ -1,93 +1,102 @@
-import React from 'react';
-import {
-  Typography,
-  Card,
-  Row,
-  Col,
-  Button,
-  Input,
-  Skeleton,
-  Dropdown,
-  Drawer,
-  Modal,
-} from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { createUseStyles } from 'react-jss';
-import { ReportType } from 'graphql/types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { Theme } from '#/configs/ThemeConfig';
+import type { ReportsCentreQuery } from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
+
+import CreateReport from '#/components/form-components/reports/CreateReport/CreateReport.view';
+import CreateReportGroup from '#/components/form-components/reports/CreateReportGroup/CreateReportGroup.view';
+import EditReport from '#/components/form-components/reports/EditReport/EditReport.view';
+import EditReportGroup from '#/components/form-components/reports/EditReportGroup/EditGroup.view';
 import {
   faCircleEllipsis,
   faEdit,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import CreateReport from '#/components/form-components/reports/CreateReport/CreateReport.view';
-import type { Theme } from '#/configs/ThemeConfig';
-import EditReport from '#/components/form-components/reports/EditReport/EditReport.view';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Dropdown,
+  Input,
+  Modal,
+  Row,
+  Skeleton,
+  Typography,
+} from 'antd';
+import { ReportType } from 'graphql/types';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import type { ReportsCentreQuery } from '#/views/reports/reports-centre/reports-centre.generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
+  editButton: {
+    borderRadius: 100,
+    height: 25,
+    padding: '0px !important',
+    position: 'absolute',
+    right: 5,
+    top: 5,
+    width: 25,
+  },
+  linkContainer: {
+    height: '100%',
+    width: '100%',
+  },
   page: {
     padding: 20,
   },
+  pageTitle: {
+    marginBottom: '0px !important',
+  },
   reportCard: {
-    width: 250,
-    cursor: 'pointer',
-    height: 100,
-    position: 'relative',
     '&:hover': {
       backgroundColor: theme.itemHoverBackground,
     },
-  },
-  reportTitle: {
-    fontSize: 16,
+    cursor: 'pointer',
+    height: 100,
+    maxWidth: 300,
+    minWidth: 250,
+    position: 'relative',
   },
   reportText: {
     marginBottom: '0px !important',
     marginTop: 5,
   },
+  reportTitle: {
+    fontSize: 16,
+  },
+  rowButton: {
+    borderRadius: '100%',
+    height: 30,
+    padding: '3px 8px 3px 8px',
+  },
   search: {
     width: 450,
   },
-  pageTitle: {
-    marginBottom: '0px !important',
-  },
   skeleton: {
-    height: '100px !important',
-    width: '250px !important',
     borderRadius: 10,
+    height: '100px !important',
     marginBottom: 20,
-  },
-  editButton: {
-    position: 'absolute',
-    top: 5,
-    right: 5,
-    height: 25,
-    width: 25,
-    padding: '0px !important',
-    borderRadius: 100,
-  },
-  linkContainer: {
-    width: '100%',
-    height: '100%',
+    width: '250px !important',
   },
 }));
 
 interface ReportCardProps {
   item: {
+    description?: null | string;
     id: string;
-    name?: string | null;
-    description?: string | null;
+    name?: null | string;
     type: ReportType;
   };
-  toggleEditOpen: (id: string) => void;
   onDeleteReportTemplate: (id: string) => void;
+  toggleEditOpen: (id: string) => void;
 }
 
 const ReportCard = ({
   item,
-  toggleEditOpen,
   onDeleteReportTemplate,
+  toggleEditOpen,
 }: ReportCardProps) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -95,49 +104,55 @@ const ReportCard = ({
   const getRoute = () => {
     if (item.type === ReportType.CrimeGroup) return 'crime-groups';
     if (item.type === ReportType.Offender) return 'offender-profile';
+    if (item.type === ReportType.OffenderTable) return 'offender-table';
     if (item.type === ReportType.Business) return 'business';
+    if (item.type === ReportType.BusinessEngagementTable)
+      return 'business-engagement';
+    if (item.type === ReportType.UserEngagementTable) return 'user-engagement';
+    if (item.type === ReportType.IncidentMap) return 'incident-map';
+    if (item.type === ReportType.IncidentItemsTable) return 'incident-items';
     return 'summary-report';
   };
 
   return (
     <Col key={item.id}>
       <Card
+        bodyStyle={{ height: '100%', padding: '15px 20px' }}
         className={classes.reportCard}
-        bodyStyle={{ padding: '15px 20px', height: '100%' }}
       >
         <Dropdown
           menu={{
             items: [
               {
-                key: `${item.id}-edit`,
+                // @ts-expect-error issue with antd types for dropdown
+                children: null,
                 icon: <FontAwesomeIcon icon={faEdit} />,
+                key: `${item.id}-edit`,
                 label: intl.formatMessage({
                   defaultMessage: 'Edit Report',
                 }),
                 onClick: () => toggleEditOpen(item.id),
-                // @ts-expect-error issue with antd types for dropdown
-                children: null,
               },
               {
-                key: `${item.id}-delete`,
+                // @ts-expect-error issue with antd types for dropdown
+                children: null,
                 icon: <FontAwesomeIcon icon={faTrash} />,
+                key: `${item.id}-delete`,
                 label: intl.formatMessage({
                   defaultMessage: 'Delete Report',
                 }),
-                // @ts-expect-error issue with antd types for dropdown
-                children: null,
                 onClick: () =>
                   Modal.confirm({
-                    title: intl.formatMessage({
-                      defaultMessage: 'Are you sure?',
-                    }),
-                    onOk: () => onDeleteReportTemplate(item.id),
-                    okText: intl.formatMessage({
-                      defaultMessage: 'Delete',
-                    }),
                     content: intl.formatMessage({
                       defaultMessage:
                         'Once deleted a  report cannot be restored.',
+                    }),
+                    okText: intl.formatMessage({
+                      defaultMessage: 'Delete',
+                    }),
+                    onOk: () => onDeleteReportTemplate(item.id),
+                    title: intl.formatMessage({
+                      defaultMessage: 'Are you sure?',
                     }),
                   }),
               },
@@ -146,7 +161,7 @@ const ReportCard = ({
           placement="bottom"
         >
           <Button className={classes.editButton} type="text">
-            <FontAwesomeIcon size="lg" icon={faCircleEllipsis} />
+            <FontAwesomeIcon icon={faCircleEllipsis} size="lg" />
           </Button>
         </Dropdown>
         <Link to={`/app/reports/${getRoute()}/${item.id}`}>
@@ -155,11 +170,11 @@ const ReportCard = ({
               {item.name}
             </Typography.Text>
             <Typography.Paragraph
+              className={classes.reportText}
               ellipsis={{
                 rows: 2,
               }}
               type="secondary"
-              className={classes.reportText}
             >
               {item.description}
             </Typography.Paragraph>
@@ -175,49 +190,128 @@ const LoadingRow = () => {
   return (
     <Row gutter={16}>
       <Col>
-        <Skeleton.Input className={classes.skeleton} active />
+        <Skeleton.Input active className={classes.skeleton} />
       </Col>
       <Col>
-        <Skeleton.Input className={classes.skeleton} active />
+        <Skeleton.Input active className={classes.skeleton} />
       </Col>
       <Col>
-        <Skeleton.Input className={classes.skeleton} active />
+        <Skeleton.Input active className={classes.skeleton} />
       </Col>
     </Row>
   );
 };
 
+interface RowTitleProps {
+  name?: null | string;
+  onDelete: () => void;
+  onEdit: () => void;
+}
+
+const RowTitle = ({ name, onDelete, onEdit }: RowTitleProps) => {
+  const classes = useStyles();
+  const intl = useIntl();
+  const [hover, setHover] = useState(false);
+
+  const onMouseEnter = () => setHover(true);
+  const onMouseLeave = () => setHover(false);
+
+  return (
+    <Row
+      gutter={8}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={{ height: 40 }}
+    >
+      <Col>
+        <Typography.Title className={classes.pageTitle} level={4}>
+          {name}
+        </Typography.Title>
+      </Col>
+      {hover && (
+        <Col>
+          <Button
+            className={classes.rowButton}
+            onClick={onEdit}
+            size="small"
+            type="ghost"
+          >
+            <FontAwesomeIcon icon={faEdit} />
+          </Button>
+        </Col>
+      )}
+      {hover && (
+        <Col>
+          <Button
+            className={classes.rowButton}
+            onClick={() =>
+              Modal.confirm({
+                content: intl.formatMessage({
+                  defaultMessage: 'This action cannot be undone.',
+                }),
+                onOk: onDelete,
+                title: intl.formatMessage({
+                  defaultMessage: 'Are you sure?',
+                }),
+              })
+            }
+            size="small"
+            type="ghost"
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </Button>
+        </Col>
+      )}
+    </Row>
+  );
+};
+
 interface Props {
+  createGroupOpen: boolean;
+  createOpen: boolean;
   data: ReportsCentreQuery | undefined;
+  editGroupOpen: null | string;
+  editOpen: null | string;
   loading: boolean;
+  onDeleteReportGroup: (id: string) => void;
+  onDeleteReportTemplate: (id: string) => void;
   search: string;
   setSearch: (value: string) => void;
-  onDeleteReportTemplate: (id: string) => void;
+  toggleCreateGroupOpen: () => void;
   toggleCreateOpen: () => void;
-  toggleEditOpen: (id: string | null) => void;
-  editOpen: string | null;
-  createOpen: boolean;
+  toggleEditGroupOpen: (id: null | string) => void;
+  toggleEditOpen: (id: null | string) => void;
 }
 
 const ReportsCentre = ({
-  loading,
+  createGroupOpen,
+  createOpen,
   data,
+  editGroupOpen,
+  editOpen,
+  loading,
+  onDeleteReportGroup,
+  onDeleteReportTemplate,
   search,
   setSearch,
-  onDeleteReportTemplate,
-  toggleEditOpen,
+  toggleCreateGroupOpen,
   toggleCreateOpen,
-  editOpen,
-  createOpen,
+  toggleEditGroupOpen,
+  toggleEditOpen,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+
+  const onMenuClick = (e: { key: string }) => {
+    if (e.key === 'addGroup') toggleCreateGroupOpen();
+  };
+
   return (
     <div className={classes.page}>
       <Card bodyStyle={{ padding: '10px 20px' }}>
         <Row align="middle">
           <Col>
-            <Typography.Title level={3} className={classes.pageTitle}>
+            <Typography.Title className={classes.pageTitle} level={3}>
               <FormattedMessage defaultMessage="Reports Centre" />
             </Typography.Title>
           </Col>
@@ -226,170 +320,104 @@ const ReportsCentre = ({
               <Col>
                 <Input
                   className={classes.search}
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Search reports',
                   })}
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
                 />
               </Col>
             </Row>
           </Col>
           <Col>
-            <Button type={'primary'} onClick={toggleCreateOpen}>
+            <Dropdown.Button
+              menu={{
+                items: [
+                  {
+                    key: 'addGroup',
+                    label: intl.formatMessage({
+                      defaultMessage: 'Add Report Group',
+                    }),
+                  },
+                ],
+                onClick: onMenuClick,
+              }}
+              onClick={toggleCreateOpen}
+            >
               <FormattedMessage defaultMessage="Create New Report" />
-            </Button>
+            </Dropdown.Button>
           </Col>
         </Row>
       </Card>
-      <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Summary Reports" />
-      </Typography.Title>
       {loading && <LoadingRow />}
-      {!loading && (
-        <Row gutter={16}>
-          {data?.reportsCentre.summaryReports.map((item) => (
-            <ReportCard
-              key={item.id}
-              item={item}
-              onDeleteReportTemplate={onDeleteReportTemplate}
-              toggleEditOpen={toggleEditOpen}
+      {!loading &&
+        data?.reportsCentre.map((group) => (
+          <>
+            <RowTitle
+              name={group.name}
+              onDelete={() => onDeleteReportGroup(group.id)}
+              onEdit={() => toggleEditGroupOpen(group.id)}
             />
-          ))}
-        </Row>
-      )}
-
-      <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Offender Reports" />
-      </Typography.Title>
-      {loading && <LoadingRow />}
-      {!loading && (
-        <Row gutter={16}>
-          {data?.reportsCentre.offenderReports.map((item) => (
-            <ReportCard
-              key={item.id}
-              item={item}
-              onDeleteReportTemplate={onDeleteReportTemplate}
-              toggleEditOpen={toggleEditOpen}
-            />
-          ))}
-        </Row>
-      )}
-
-      <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Business Reports" />
-      </Typography.Title>
-      {loading && <LoadingRow />}
-      {!loading && (
-        <Row gutter={16}>
-          {data?.reportsCentre.businessReports.map((item) => (
-            <ReportCard
-              key={item.id}
-              item={item}
-              onDeleteReportTemplate={onDeleteReportTemplate}
-              toggleEditOpen={toggleEditOpen}
-            />
-          ))}
-        </Row>
-      )}
-
-      <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Crime Group Reports" />
-      </Typography.Title>
-      {loading && <LoadingRow />}
-      {!loading && (
-        <Row gutter={16}>
-          {data?.reportsCentre.crimeGroupReports.map((item) => (
-            <ReportCard
-              key={item.id}
-              item={item}
-              onDeleteReportTemplate={onDeleteReportTemplate}
-              toggleEditOpen={toggleEditOpen}
-            />
-          ))}
-        </Row>
-      )}
-
-      <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Engagement Reports" />
-      </Typography.Title>
-      <Row gutter={16}>
-        <Col>
-          <Link to="/app/reports/user-engagement">
-            <Card
-              className={classes.reportCard}
-              bodyStyle={{ padding: '15px 20px' }}
-            >
-              <Typography.Text className={classes.reportTitle} strong>
-                <FormattedMessage defaultMessage="User Engagement Table" />
-              </Typography.Text>
-              <Typography.Paragraph
-                type="secondary"
-                className={classes.reportText}
-              >
-                <FormattedMessage defaultMessage="Summary of all data added into the system." />
-              </Typography.Paragraph>
-            </Card>
-          </Link>
-        </Col>
-        <Col>
-          <Link to="/app/reports/business-engagement">
-            <Card
-              className={classes.reportCard}
-              bodyStyle={{ padding: '15px 20px' }}
-            >
-              <Typography.Text className={classes.reportTitle} strong>
-                <FormattedMessage defaultMessage="Business Engagement Table" />
-              </Typography.Text>
-              <Typography.Paragraph
-                type="secondary"
-                className={classes.reportText}
-              >
-                <FormattedMessage defaultMessage="Analysis and breakdown of incident data over time." />
-              </Typography.Paragraph>
-            </Card>
-          </Link>
-        </Col>
-      </Row>
-
-      <Typography.Title level={4}>
-        <FormattedMessage defaultMessage="Mapping Reports" />
-      </Typography.Title>
-      <Link to="/app/reports/incident-map">
-        <Card
-          className={classes.reportCard}
-          bodyStyle={{ padding: '15px 20px' }}
-        >
-          <Typography.Text className={classes.reportTitle} strong>
-            <FormattedMessage defaultMessage="Incident Map" />
-          </Typography.Text>
-          <Typography.Paragraph type="secondary" className={classes.reportText}>
-            <FormattedMessage defaultMessage="Plotting of incident data on a map." />
-          </Typography.Paragraph>
-        </Card>
-      </Link>
+            <Row gutter={16} key={group.id}>
+              {group.reports.map((item) => (
+                <ReportCard
+                  item={item}
+                  key={item.id}
+                  onDeleteReportTemplate={onDeleteReportTemplate}
+                  toggleEditOpen={toggleEditOpen}
+                />
+              ))}
+            </Row>
+          </>
+        ))}
 
       <Drawer
+        onClose={toggleCreateOpen}
+        open={createOpen}
         title={intl.formatMessage({
           defaultMessage: 'Create Report',
         })}
-        open={createOpen}
         width={500}
-        onClose={toggleCreateOpen}
       >
         {createOpen && <CreateReport onClose={toggleCreateOpen} />}
       </Drawer>
       <Drawer
+        onClose={() => toggleEditOpen(null)}
+        open={!!editOpen}
         title={intl.formatMessage({
           defaultMessage: 'Edit Report',
         })}
-        open={!!editOpen}
-        onClose={() => toggleEditOpen(null)}
       >
         {editOpen && (
           <EditReport
             onClose={() => toggleEditOpen(null)}
             reportId={editOpen}
+          />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={toggleCreateGroupOpen}
+        open={createGroupOpen}
+        title={intl.formatMessage({
+          defaultMessage: 'Create Report Goup',
+        })}
+        width={500}
+      >
+        {createGroupOpen && (
+          <CreateReportGroup onClose={toggleCreateGroupOpen} />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={() => toggleEditGroupOpen(null)}
+        open={!!editGroupOpen}
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Report Group',
+        })}
+      >
+        {editGroupOpen && (
+          <EditReportGroup
+            onClose={() => toggleEditGroupOpen(null)}
+            reportGroupId={editGroupOpen}
           />
         )}
       </Drawer>

@@ -1,43 +1,43 @@
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+
+import { Button, Col, Input, Row, Table } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Button, Col, Input, Row, Table } from 'antd';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-
 interface Props {
-  onClose: () => void;
-  onSubmit: () => void;
-  saving: boolean;
   data: ListVehiclesQuery | undefined;
   loading: boolean;
+  onClose: () => void;
+  onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onSelect: (item: { key: string }) => void;
 }
 
 const AddExistingVehicle = ({
-  onClose,
-  onSubmit,
-  saving,
   data,
   loading,
+  onClose,
+  onSelect,
+  onSubmit,
+  saving,
   search,
   setSearch,
-  onSelect,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <div className="add-existing-offender">
-      <Row gutter={8} className="search-offender">
+      <Row className="search-offender" gutter={8}>
         <Col span={18}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Vehicles...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
       </Row>
@@ -45,76 +45,76 @@ const AddExistingVehicle = ({
       <Table
         columns={[
           {
-            key: 'make',
             dataIndex: 'make',
+            key: 'make',
             title: intl.formatMessage({
               defaultMessage: 'Make',
             }),
           },
           {
-            key: 'colour',
             dataIndex: 'colour',
+            key: 'colour',
             title: intl.formatMessage({
               defaultMessage: 'Colour',
             }),
           },
           {
-            key: 'model',
             dataIndex: 'model',
+            key: 'model',
             title: intl.formatMessage({
               defaultMessage: 'Model',
             }),
           },
           {
-            key: 'totalOffenders',
             dataIndex: 'totalOffenders',
+            key: 'totalOffenders',
             title: intl.formatMessage({
               defaultMessage: 'Members',
             }),
           },
           {
-            key: 'totalIncidents',
             dataIndex: 'totalIncidents',
+            key: 'totalIncidents',
             title: intl.formatMessage({
               defaultMessage: 'Incidents',
             }),
           },
           {
-            key: 'totalCrimeGroups',
             dataIndex: 'totalCrimeGroups',
+            key: 'totalCrimeGroups',
             title: intl.formatMessage({
               defaultMessage: 'Crime Groups',
             }),
           },
           {
-            key: 'registration',
             dataIndex: 'registration',
+            key: 'registration',
             title: intl.formatMessage({
               defaultMessage: 'Registration',
             }),
           },
         ]}
         dataSource={data?.listVehicles?.vehicles.map((vehicle) => ({
+          colour: vehicle.colour,
           key: vehicle.id,
           make: vehicle.make,
-          colour: vehicle.colour,
           model: vehicle.model,
           registration: vehicle.registration,
-          updatedAt: vehicle.updatedAt,
           totalCrimeGroup: vehicle.totalCrimeGroups,
-          totalOffenders: vehicle.totalOffenders,
           totalIncidents: vehicle.totalIncidents,
+          totalOffenders: vehicle.totalOffenders,
+          updatedAt: vehicle.updatedAt,
         }))}
-        rowSelection={{
-          type: 'radio',
-          onSelect,
-        }}
         loading={loading}
+        rowSelection={{
+          onSelect,
+          type: 'radio',
+        }}
         size="small"
       />
-      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+      <Row gutter={16} justify="end" style={{ paddingBottom: 30 }}>
         <Col>
-          <Button onClick={onClose} disabled={saving} type="text">
+          <Button disabled={saving} onClick={onClose} type="text">
             {intl.formatMessage({
               defaultMessage: 'Cancel',
             })}
@@ -122,8 +122,8 @@ const AddExistingVehicle = ({
         </Col>
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
+            loading={saving}
             onClick={onSubmit}
             type="primary"
           >

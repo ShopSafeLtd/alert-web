@@ -1,33 +1,34 @@
-import React from 'react';
-import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
+import type { ImagePosition } from 'graphql/types';
 
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
-import WatermarkImageView from 'components/images/WatermarkImage.view';
 import {
   faEye,
   faFilter,
   faPenToSquare,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
 import AddJustification from 'components/form-components/offender/AddJustification';
+import WatermarkImageView from 'components/images/WatermarkImage.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+
 import useStyles from './DataAudit.styles';
-import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
-import type { ImagePosition } from 'graphql/types';
 
 interface Props {
-  loading: boolean;
   data:
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >
     | null
     | undefined;
+  loading: boolean;
   offenderId: string;
-  setOffenderId: (id: string) => void;
   search: string;
+  setOffenderId: (id: string) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
@@ -37,32 +38,31 @@ const DataAudit = ({
   data,
   loading,
   offenderId,
-  setOffenderId,
   search,
+  setOffenderId,
   setSearch,
-  toggleSortFilter,
   sortFilter,
+  toggleSortFilter,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
   return (
     <div className={classes.page}>
-      <Row gutter={16} className={classes.headerRow}>
+      <Row className={classes.headerRow} gutter={16}>
         <Col flex={1}>
           <Input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
             allowClear
             className={classes.searchInput}
+            onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Offenders...',
             })}
+            value={search}
           />
         </Col>
         <Col>
           <Button
-            onClick={toggleSortFilter}
             icon={
               <FontAwesomeIcon
                 icon={faFilter}
@@ -70,6 +70,7 @@ const DataAudit = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleSortFilter}
           >
             {intl.formatMessage({
               defaultMessage: 'Sort & Filter',
@@ -87,50 +88,48 @@ const DataAudit = ({
         </Col>
       </Row>
       <Table
-        size="small"
-        loading={loading}
         columns={[
           {
-            key: 'images',
             dataIndex: 'images',
-            title: '',
+            key: 'images',
             render: (
               item: {
+                optimised?: null | string | undefined;
                 position: ImagePosition | undefined;
                 rotation: number | undefined;
-                optimised?: string | null | undefined;
               }[]
             ) => (
               <div style={{ height: 100, width: 80 }}>
                 <WatermarkImageView
-                  url={item[0]?.optimised}
-                  rotation={item[0]?.rotation}
                   position={item[0]?.position}
+                  rotation={item[0]?.rotation}
+                  url={item[0]?.optimised}
                 />
               </div>
             ),
+            title: '',
           },
           {
-            key: 'reference',
             dataIndex: 'reference',
-            title: intl.formatMessage({
-              defaultMessage: 'Alert ID',
-            }),
-            width: 80,
+            key: 'reference',
             render: (
               _,
-              record: { key: string; reference: number | null | undefined }
+              record: { key: string; reference: null | number | undefined }
             ) => (
               <Link to={`/app/offenders/view/${record.key}`}>
                 {record.reference}
               </Link>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Alert ID',
+            }),
+            width: 80,
           },
 
           {
-            title: intl.formatMessage({ defaultMessage: 'Name' }),
             dataIndex: 'name',
             key: 'name',
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
           },
           // {
           //   title: intl.formatMessage({
@@ -162,10 +161,8 @@ const DataAudit = ({
           //   key: 'build',
           // },
           {
-            key: 'Options',
-            title: '',
             dataIndex: 'Options',
-            width: 100,
+            key: 'Options',
             render: (_, record) => (
               <Row gutter={8}>
                 <Col>
@@ -176,9 +173,9 @@ const DataAudit = ({
                   >
                     <Link to={`/app/offenders/view/${record.key}`}>
                       <Button
-                        size="small"
                         // disabled={saving}
                         icon={<FontAwesomeIcon icon={faEye} />}
+                        size="small"
                       />
                     </Link>
                   </Tooltip>
@@ -191,23 +188,26 @@ const DataAudit = ({
                     })}
                   >
                     <Button
-                      size="small"
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       // disabled={saving}
                       onClick={() => {
                         if (record?.key) setOffenderId(record?.key);
                       }}
-                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
               </Row>
             ),
+            title: '',
+            width: 100,
           },
         ]}
         dataSource={
           data?.offenders?.map((offender) => ({
+            //     : getOffenderBuild(offender.build),
+            images: offender.images,
             key: offender.id,
-            reference: offender.reference,
             name: offender.name,
             // gender:
             //   getOffenderGender(offender.gender) === 'Unknown'
@@ -221,38 +221,39 @@ const DataAudit = ({
             // build:
             //   getOffenderBuild(offender.build) === 'Unknown'
             //     ? ''
-            //     : getOffenderBuild(offender.build),
-            images: offender.images,
             offender,
+            reference: offender.reference,
           })) || []
         }
+        loading={loading}
         pagination={{
           hideOnSinglePage: true,
           pageSize: 10,
         }}
+        size="small"
       />
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Offender Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <OffenderFilter />
       </Drawer>
       <Drawer
+        onClose={() => setOffenderId('')}
+        open={!!offenderId}
         title={intl.formatMessage({
           defaultMessage: 'Add Justification for Offender',
         })}
-        open={!!offenderId}
         width="400"
-        onClose={() => setOffenderId('')}
       >
         {offenderId ? (
           <AddJustification
-            onClose={() => setOffenderId('')}
             offenderId={offenderId}
+            onClose={() => setOffenderId('')}
           />
         ) : (
           <div />

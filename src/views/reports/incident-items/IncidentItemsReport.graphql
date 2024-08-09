@@ -1,0 +1,31 @@
+query IncidentItemsReport($where: IncidentItemsWhereInput!, $take: Int, $skip: Int) {
+    incidentItems(where: $where, take: $take, skip: $skip) {
+        edges {
+            node {
+                id
+                name
+                quantity
+                recoveredQuantity
+                incident {
+                    id
+                    date
+                    createdAt
+                    business {
+                        id
+                        name
+                        siteNumber
+                    }
+                }
+                sku
+                stockItem {
+                    goodsType {
+                        id
+                        name
+                    }
+                    variant
+                }
+            }
+        }
+        totalCount
+    }
+}

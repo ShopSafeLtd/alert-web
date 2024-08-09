@@ -1,36 +1,39 @@
 import React from 'react';
+
 import View from './ListDocument.view';
 import useEvidenceList from './useListDocuments';
 
 const EvidenceList = (): JSX.Element => {
   const {
+    addEvidence,
+    createRights,
     data,
+    deleteRights,
+    downloadRights,
     loading,
+    onDelete,
+    onTableChange,
+    saving,
     search,
     setSearch,
-    addEvidence,
     toggleAddEvidence,
     updateNewEvidenceList,
-    saving,
-    onDelete,
-    deleteRights,
-    createRights,
-    downloadRights,
   } = useEvidenceList();
   return (
     <View
+      addEvidence={addEvidence}
+      createRights={createRights}
       data={data}
+      deleteRights={deleteRights}
+      downloadRights={downloadRights}
       loading={loading}
+      onDelete={onDelete}
+      onTableChange={onTableChange}
+      saving={saving}
       search={search}
       setSearch={setSearch}
-      addEvidence={addEvidence}
       toggleAddEvidence={toggleAddEvidence}
       updateNewEvidenceList={updateNewEvidenceList}
-      saving={saving}
-      onDelete={onDelete}
-      deleteRights={deleteRights}
-      createRights={createRights}
-      downloadRights={downloadRights}
     />
   );
 };

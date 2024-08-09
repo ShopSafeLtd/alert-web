@@ -1,34 +1,34 @@
-import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
-
 import type { MutationUpdaterFn } from '@apollo/client';
-import { useNavigate } from 'react-router';
-import type { UserChatsQuery } from 'graphql/userChat/queries/user_chats.generated';
+import type { DeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
+import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
+import type { UserChatsQuery } from 'graphql/userChat/queries/__generated__/user_chats.generated';
+
+import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/__generated__/update_todo_mention.generated';
+import { Role, SortOrder, TodoType } from 'graphql/types';
+import { useMarkAsReadMessagesMutation } from 'graphql/userChat/mutations/__generated__/mark_ad_read_messages.generated';
 import {
   UserChatsDocument,
   useUserChatsQuery,
-} from 'graphql/userChat/queries/user_chats.generated';
-import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
-import type { DeleteChatMutation } from 'graphql/chat/mutation/delete_chat.generated';
-import { Role, SortOrder, TodoType } from 'graphql/types';
-import { useMarkAsReadMessagesMutation } from 'graphql/userChat/mutations/mark_ad_read_messages.generated';
-import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/update_todo_mention.generated';
+} from 'graphql/userChat/queries/__generated__/user_chats.generated';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useStoreState } from 'state';
 
 interface Props {
   chatId: string;
 }
 interface Return {
+  addChat: boolean;
+  adminRights: boolean;
   currentId: string;
   data: UserChatsQuery | undefined;
-  loading: boolean;
-  saving: boolean;
   handleMarkAsRead: (value: string | undefined) => void;
-  addChat: boolean;
+  loading: boolean;
+  refetch: () => void;
+  saving: boolean;
   toggleAddChat: () => void;
   updateAddUserChat: MutationUpdaterFn<CreateChatMutation>;
   updateDeletedUserChat: MutationUpdaterFn<DeleteChatMutation>;
-  adminRights: boolean;
-  refetch: () => void;
 }
 
 const useViewChat = ({ chatId }: Props): Return => {
@@ -42,23 +42,23 @@ const useViewChat = ({ chatId }: Props): Return => {
 
   const { data, loading, refetch } = useUserChatsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: userId,
-      },
-      scheme: schemeId,
-      orderBy: {
-        chat: {
-          updatedAt: SortOrder.Desc,
-        },
-      },
-    },
     onCompleted: ({ user }) => {
       if (user && user.chats.length > 0) {
         setCurrentId(user.chats[0].chat.id);
       } else {
         setCurrentId('');
       }
+    },
+    variables: {
+      orderBy: {
+        chat: {
+          updatedAt: SortOrder.Desc,
+        },
+      },
+      scheme: schemeId,
+      where: {
+        id: userId,
+      },
     },
   });
 
@@ -85,9 +85,9 @@ const useViewChat = ({ chatId }: Props): Return => {
       void updateTodoMention({
         variables: {
           where: {
-            userId,
             chatId: userChatId,
             type: TodoType.ChatMessage,
+            userId,
           },
         },
       });
@@ -109,14 +109,14 @@ const useViewChat = ({ chatId }: Props): Return => {
     const existingData = store.readQuery<UserChatsQuery>({
       query: UserChatsDocument,
       variables: {
-        where: {
-          id: userId,
-        },
-        scheme: schemeId,
         orderBy: {
           chat: {
             updatedAt: SortOrder.Desc,
           },
+        },
+        scheme: schemeId,
+        where: {
+          id: userId,
         },
       },
     });
@@ -130,24 +130,24 @@ const useViewChat = ({ chatId }: Props): Return => {
       return;
 
     store.writeQuery<UserChatsQuery>({
-      query: UserChatsDocument,
       data: {
+        __typename: 'Query',
         user: {
+          chats: [...existingData.user.chats, res.createChat.members[0]],
           id: userId,
           totalChats: existingData.user.totalChats + 1,
-          chats: [...existingData.user.chats, res.createChat.members[0]],
         },
-        __typename: 'Query',
       },
+      query: UserChatsDocument,
       variables: {
-        where: {
-          id: userId,
-        },
-        scheme: schemeId,
         orderBy: {
           chat: {
             updatedAt: SortOrder.Desc,
           },
+        },
+        scheme: schemeId,
+        where: {
+          id: userId,
         },
       },
     });
@@ -163,14 +163,14 @@ const useViewChat = ({ chatId }: Props): Return => {
     const existingData = store.readQuery<UserChatsQuery>({
       query: UserChatsDocument,
       variables: {
-        where: {
-          id: userId,
-        },
-        scheme: schemeId,
         orderBy: {
           chat: {
             updatedAt: SortOrder.Desc,
           },
+        },
+        scheme: schemeId,
+        where: {
+          id: userId,
         },
       },
     });
@@ -183,44 +183,44 @@ const useViewChat = ({ chatId }: Props): Return => {
       return;
 
     store.writeQuery<UserChatsQuery>({
-      query: UserChatsDocument,
       data: {
         ...existingData,
+        __typename: 'Query',
         user: {
           ...existingData.user,
           chats: existingData.user?.chats.filter(
             (userChat) => userChat.chat.id !== res.deleteChat?.id
           ),
         },
-        __typename: 'Query',
       },
+      query: UserChatsDocument,
       variables: {
-        where: {
-          id: userId,
-        },
-        scheme: schemeId,
         orderBy: {
           chat: {
             updatedAt: SortOrder.Desc,
           },
+        },
+        scheme: schemeId,
+        where: {
+          id: userId,
         },
       },
     });
   };
 
   return {
-    data,
-    loading,
-    saving,
-    handleMarkAsRead,
-    currentId,
     addChat,
+    adminRights: role !== Role.User,
+    currentId,
+    data,
+    handleMarkAsRead,
+    loading,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    refetch,
+    saving,
     toggleAddChat,
     updateAddUserChat,
     updateDeletedUserChat,
-    adminRights: role !== Role.User,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    refetch,
   };
 };
 

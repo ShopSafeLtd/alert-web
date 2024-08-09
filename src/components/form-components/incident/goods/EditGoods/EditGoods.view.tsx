@@ -1,26 +1,27 @@
-import React from 'react';
-import { Button, Form, Row, Col, Select, InputNumber, Input } from 'antd';
-import { useIntl } from 'react-intl';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { GoodsData } from 'types/DataType';
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+
+import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { GoodsMode } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
 const { useForm } = Form;
 
 interface Props {
   data: GoodsData;
+  goodsMode: GoodsMode;
+  goodsTypesData: ListGoodsTypesQuery | undefined;
   onClose: () => void;
   onSubmit: (value: GoodsData) => void;
-  goodsTypesData: ListGoodsTypesQuery | undefined;
-  goodsMode: GoodsMode;
   saving: boolean;
 }
 
 const EditGoods = ({
   data,
+  goodsMode,
+  goodsTypesData,
   onClose,
   onSubmit,
-  goodsTypesData,
-  goodsMode,
   saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
@@ -31,69 +32,68 @@ const EditGoods = ({
 
   return (
     <Form<GoodsData>
-      layout="vertical"
-      onFinish={onSubmit}
       initialValues={{
-        goodsTypeId: data.goodsType,
         goodsType: data.goodsType,
+        goodsTypeId: data.goodsType,
         name: data.name,
-        value: data.value || 0,
-        recoveredValue: data.recoveredValue || 0,
-        sku: data.sku,
         quantity: data.quantity,
         recoveredQuantity: data.recoveredQuantity,
-        stockItem: data.stockItem,
+        recoveredValue: data.recoveredValue || 0,
+        sku: data.sku,
+        // TODO check this works
+        stockItemId: data.stockItemId,
+        value: data.value || 0,
       }}
+      layout="vertical"
+      onFinish={onSubmit}
     >
       {goodsMode === GoodsMode.Generic && (
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
-              name="goodsType"
               label={intl.formatMessage({
                 defaultMessage: 'Type of Goods',
               })}
+              name="goodsType"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a type',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Select
+                allowClear
                 disabled={saving}
+                options={
+                  goodsTypesData?.listGoodsTypes.goodsTypes.map(
+                    (goodsType) => ({
+                      label: goodsType.name,
+                      value: goodsType.id,
+                    })
+                  ) || []
+                }
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select goods...',
                 })}
-                allowClear
-                options={
-                  (goodsTypesData &&
-                    goodsTypesData.listGoodsTypes.goodsTypes.map(
-                      (goodsType) => ({
-                        value: goodsType.id,
-                        label: goodsType.name,
-                      })
-                    )) ||
-                  []
-                }
               />
             </Form.Item>
           </Col>
 
           <Col span={12}>
             <Form.Item
-              name="value"
               label={intl.formatMessage({
                 defaultMessage: 'Value',
               })}
+              name="value"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a value',
                   }),
+                  required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
@@ -103,25 +103,25 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                style={{ width: '100%' }}
-                prefix="£"
-                precision={2}
                 min={0}
+                precision={2}
+                prefix="£"
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="recoveredValue"
               label={intl.formatMessage({
                 defaultMessage: 'Value Recovered',
               })}
+              name="recoveredValue"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a value',
                   }),
+                  required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
@@ -130,11 +130,11 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                style={{ width: '100%' }}
-                prefix="£"
-                precision={2}
-                min={0}
                 max={value}
+                min={0}
+                precision={2}
+                prefix="£"
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
@@ -144,58 +144,58 @@ const EditGoods = ({
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name={'name'}
               label={intl.formatMessage({
                 defaultMessage: 'Item Name',
               })}
+              name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter the name',
                   }),
+                  required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
                 defaultMessage: 'The SKU of the name.',
               })}
             >
-              <Input readOnly disabled={saving} style={{ width: 250 }} />
+              <Input disabled={saving} readOnly style={{ width: 250 }} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name={'sku'}
               label={intl.formatMessage({
                 defaultMessage: 'SKU',
               })}
+              name="sku"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter the SKU',
                   }),
+                  required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
                 defaultMessage: 'The SKU of the item.',
               })}
             >
-              <Input readOnly disabled={saving} style={{ width: 250 }} />
+              <Input disabled={saving} readOnly style={{ width: 250 }} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="value"
               label={intl.formatMessage({
                 defaultMessage: 'Value',
               })}
+              name="value"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a value',
                   }),
+                  required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
@@ -205,25 +205,25 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                style={{ width: '100%' }}
-                prefix="£"
-                precision={2}
                 min={0}
+                precision={2}
+                prefix="£"
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="recoveredValue"
               label={intl.formatMessage({
                 defaultMessage: 'Value Recovered',
               })}
+              name="recoveredValue"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a value',
                   }),
+                  required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
@@ -232,26 +232,26 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                style={{ width: '100%' }}
-                prefix="£"
-                precision={2}
-                min={0}
                 max={value}
+                min={0}
+                precision={2}
+                prefix="£"
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="recoveredQuantity"
               label={intl.formatMessage({
                 defaultMessage: 'Quantity Recovered',
               })}
+              name="recoveredQuantity"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a recovered quantity.',
                   }),
+                  required: true,
                 },
               ]}
               tooltip={intl.formatMessage({
@@ -261,28 +261,28 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                style={{ width: '100%' }}
-                precision={0}
-                min={0}
                 max={quantity}
+                min={0}
+                precision={0}
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
         </Row>
       )}
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
-            <Button onClick={onClose} loading={saving} disabled={saving}>
+            <Button disabled={saving} loading={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
           </Col>
           <Col>
             <Button
-              type="primary"
+              disabled={saving}
               htmlType="submit"
               loading={saving}
-              disabled={saving}
+              type="primary"
             >
               {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>

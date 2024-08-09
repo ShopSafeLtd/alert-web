@@ -1,46 +1,34 @@
-import { useState } from 'react';
+import type { BrandQuery } from '#/views/settings/brands/graphql/queries/__generated__/brand.generated';
 import type { FormInstance } from 'antd';
+
+import { useUpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/upsert-brand.generated';
+import { useBrandQuery } from '#/views/settings/brands/graphql/queries/__generated__/brand.generated';
 import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import type { SelectOptions } from '#/types/DataType';
-import { useStoreState } from '#/state';
-import { useApolloClient } from '@apollo/client';
 import { useForm } from 'antd/lib/form/Form';
-import type { BrandQuery } from '#/views/settings/brands/graphql/queries/brand.generated';
-import { useBrandQuery } from '#/views/settings/brands/graphql/queries/brand.generated';
-import type {
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-} from 'graphql/businesses/queries/search-businesses.generated';
-import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
-import { QueryMode } from 'graphql/types';
-import { useUpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
-  name: string;
+  businesses: string[];
   description: string;
-  businesses: SelectOptions[];
+  name: string;
 }
 interface Props {
-  onClose: () => void;
   brandId: string;
+  onClose: () => void;
 }
 interface Return {
-  onSubmit: (value: FormData) => void;
-  data: Exclude<BrandQuery['brand'], undefined | null> | null | undefined;
-  loading: boolean;
-  saving: boolean;
+  data: Exclude<BrandQuery['brand'], null | undefined> | null | undefined;
   form: FormInstance<FormData>;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string; location?: string }[]>;
+  loading: boolean;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
 }
 
-const useEditBrand = ({ onClose, brandId }: Props): Return => {
-  const client = useApolloClient();
+const useEditBrand = ({ brandId, onClose }: Props): Return => {
   const [form] = useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+
   const [saving, setSaving] = useState(false);
   const intl = useIntl();
   const { data: brandData, loading } = useBrandQuery({
@@ -52,52 +40,16 @@ const useEditBrand = ({ onClose, brandId }: Props): Return => {
     },
   });
 
-  const onSearchBusiness = async (value: string) =>
-    client
-      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
-        query: SearchBusinessesDocument,
-        variables: {
-          where: {
-            schemes: {
-              some: {
-                id: {
-                  equals: schemeId,
-                },
-              },
-            },
-            name: {
-              contains: value,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        },
-      })
-      .then((response) =>
-        response.data.listBusinesses.businesses.length > 0
-          ? [...response.data.listBusinesses.businesses].map((item) => ({
-              label: item.name || '',
-              value: item?.id || '',
-              location: item?.locations[0].full || '',
-            }))
-          : [
-              {
-                label: 'No results found',
-                value: '',
-                disabled: true,
-              },
-            ]
-      );
-
   const [updateBrand] = useUpsertBrandMutation({
     onCompleted: () => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The brand has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -111,27 +63,26 @@ const useEditBrand = ({ onClose, brandId }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (brandId) {
-      const businessIds = new Set(data.businesses.map(({ value }) => value));
+      const businessIds = new Set(data.businesses.map((id) => id));
       void updateBrand({
         variables: {
           data: {
-            name: data.name,
-            description: data.description,
             brandId,
-            schemeId: brandData?.brand.scheme.id || '',
             businesses: [...businessIds],
+            description: data.description,
+            name: data.name,
+            schemeId: brandData?.brand.scheme.id || '',
           },
         },
       });
     }
   };
   return {
-    onSubmit,
     data: brandData?.brand,
-    loading,
-    saving,
     form,
-    onSearchBusiness,
+    loading,
+    onSubmit,
+    saving,
   };
 };
 

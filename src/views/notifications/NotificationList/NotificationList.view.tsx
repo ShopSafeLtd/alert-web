@@ -1,70 +1,72 @@
-import React from 'react';
-import { Button, Card, Col, Empty, Row, Skeleton, Table } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { UserNotificationsQuery } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
+
+import DebouncedInput from '#/utils/debounced-input';
 import {
   faBellOn,
   faBellSlash,
   faRotate,
   faSquareCheck,
 } from '@fortawesome/pro-light-svg-icons';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Empty, Row, Skeleton, Table } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
-import DebouncedInput from '#/utils/debounced-input';
-import useStyles from './NotificationList.styles';
+
 import type { NotificationData } from './useNotificationList';
-import type { UserNotificationsQuery } from 'graphql/userNotification/queries/user_notifications.generated';
+
+import useStyles from './NotificationList.styles';
 
 interface Props {
-  data:
-    | Exclude<UserNotificationsQuery['user'], undefined | null>
-    | null
-    | undefined;
-  loading: boolean;
-  saving: boolean;
-  handleMarkAsRead: (value: NotificationData) => void;
-  handleMarkAllRead: () => void;
-  takeAllSchemes: boolean;
-  toggleTakeAllSchemes: () => void;
-  setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
   currentPage: number;
   currentPageSize: number;
+  data:
+    | Exclude<UserNotificationsQuery['user'], null | undefined>
+    | null
+    | undefined;
+  handleMarkAllRead: () => void;
+  handleMarkAsRead: (value: NotificationData) => void;
+  loading: boolean;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  saving: boolean;
+  setSearch: (value: string) => void;
+  takeAllSchemes: boolean;
+  toggleTakeAllSchemes: () => void;
 }
 
 const NotificationLists = ({
-  data,
-  loading,
-  saving,
-  takeAllSchemes,
-  toggleTakeAllSchemes,
-  setSearch,
-  onPaginationChange,
   currentPage,
   currentPageSize,
-  handleMarkAsRead,
+  data,
   handleMarkAllRead,
+  handleMarkAsRead,
+  loading,
+  onPaginationChange,
+  saving,
+  setSearch,
+  takeAllSchemes,
+  toggleTakeAllSchemes,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   return (
     <div className="list-view">
-      <Row gutter={8} className={classes.head}>
+      <Row className={classes.head} gutter={8}>
         <Col span={8}>
           <DebouncedInput
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a notification...',
             })}
-            allowClear
           />
         </Col>
         <Col flex={1} />
         <Col>
           <Button
-            type={takeAllSchemes ? 'default' : 'primary'}
-            onClick={toggleTakeAllSchemes}
             disabled={saving}
+            onClick={toggleTakeAllSchemes}
+            type={takeAllSchemes ? 'default' : 'primary'}
           >
             {intl.formatMessage({
               defaultMessage: 'Current Scheme',
@@ -73,17 +75,17 @@ const NotificationLists = ({
         </Col>
         <Col>
           <Button
-            type="text"
-            onClick={toggleTakeAllSchemes}
             disabled={saving}
             icon={<FontAwesomeIcon icon={faRotate} size="10x" />}
+            onClick={toggleTakeAllSchemes}
+            type="text"
           />
         </Col>
         <Col>
           <Button
-            type={takeAllSchemes ? 'primary' : 'default'}
-            onClick={toggleTakeAllSchemes}
             disabled={saving}
+            onClick={toggleTakeAllSchemes}
+            type={takeAllSchemes ? 'primary' : 'default'}
           >
             {intl.formatMessage({
               defaultMessage: 'All Schemes',
@@ -92,9 +94,7 @@ const NotificationLists = ({
         </Col>
         <Col>
           <Button
-            type="text"
             danger
-            onClick={handleMarkAllRead}
             disabled={saving}
             icon={
               <FontAwesomeIcon
@@ -103,6 +103,8 @@ const NotificationLists = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={handleMarkAllRead}
+            type="text"
           >
             {intl.formatMessage({
               defaultMessage: 'View ALL',
@@ -118,26 +120,57 @@ const NotificationLists = ({
           ))
         ) : data?.totalNotifications && data?.totalNotifications > 0 ? (
           <Table
+            columns={[
+              {
+                dataIndex: 'actions',
+                key: 'actions',
+                render: (_, record) => (
+                  <FontAwesomeIcon
+                    className={record.read ? classes.read : classes.unread}
+                    icon={record.read ? faBellSlash : faBellOn}
+                    size="lg"
+                  />
+                ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Read',
+                }),
+                width: 80,
+              },
+              {
+                dataIndex: 'title',
+                key: 'title',
+                title: intl.formatMessage({
+                  defaultMessage: 'Title',
+                }),
+              },
+              {
+                dataIndex: 'body',
+                ellipsis: true,
+                key: 'body',
+                title: intl.formatMessage({
+                  defaultMessage: 'Description',
+                }),
+              },
+              {
+                dataIndex: 'createdAt',
+                key: 'createdAt',
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                render: (value) => FormatCalendar(value),
+                title: intl.formatMessage({
+                  defaultMessage: 'Created At',
+                }),
+                width: 120,
+              },
+            ]}
             dataSource={data?.notifications?.map((el) => ({
-              key: el.id,
-              title: el.notification.title,
               body: el.notification.body || '',
               createdAt: el.createdAt,
-              read: el.read,
+              key: el.id,
               notification: el.notification,
+              read: el.read,
+              title: el.notification.title,
             }))}
             loading={loading}
-            style={{ cursor: 'pointer' }}
-            size="small"
-            pagination={{
-              hideOnSinglePage: true,
-              total: data?.totalNotifications,
-              onChange: onPaginationChange,
-              pageSize: currentPageSize,
-              current: currentPage,
-              showSizeChanger: false,
-              position: ['bottomCenter'],
-            }}
             onRow={(record) => ({
               // TODO fix this
               onClick: () =>
@@ -147,63 +180,32 @@ const NotificationLists = ({
                   schemes: record.notification.schemes,
                 }),
             })}
-            columns={[
-              {
-                title: intl.formatMessage({
-                  defaultMessage: 'Read',
-                }),
-                dataIndex: 'actions',
-                key: 'actions',
-                width: 80,
-                render: (_, record) => (
-                  <FontAwesomeIcon
-                    icon={record.read ? faBellSlash : faBellOn}
-                    size="lg"
-                    className={record.read ? classes.read : classes.unread}
-                  />
-                ),
-              },
-              {
-                key: 'title',
-                dataIndex: 'title',
-                title: intl.formatMessage({
-                  defaultMessage: 'Title',
-                }),
-              },
-              {
-                key: 'body',
-                dataIndex: 'body',
-                title: intl.formatMessage({
-                  defaultMessage: 'Description',
-                }),
-                ellipsis: true,
-              },
-              {
-                key: 'createdAt',
-                dataIndex: 'createdAt',
-                title: intl.formatMessage({
-                  defaultMessage: 'Created At',
-                }),
-                width: 120,
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                render: (value) => FormatCalendar(value),
-              },
-            ]}
+            pagination={{
+              current: currentPage,
+              hideOnSinglePage: true,
+              onChange: onPaginationChange,
+              pageSize: currentPageSize,
+              position: ['bottomCenter'],
+              showSizeChanger: false,
+              total: data?.totalNotifications,
+            }}
+            size="small"
+            style={{ cursor: 'pointer' }}
           />
         ) : (
           <div
             style={{
+              alignItems: 'center',
               display: 'flex',
               flex: 1,
-              alignItems: 'center',
               justifyContent: 'center',
             }}
           >
             <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={intl.formatMessage({
                 defaultMessage: "There's no new notification",
               })}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
             />
           </div>
         )}

@@ -1,9 +1,9 @@
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
-import { notification } from 'antd';
 import type { IntelOneCSVData } from '#/components/form-components/IntelOneCSV/IntelOneCSV.types';
-import { useIntelOneImportDataMutation } from 'graphql/imports/intel-one-import.generated';
+
+import { notification } from 'antd';
+import { useIntelOneImportDataMutation } from 'graphql/imports/__generated__/intel-one-import.generated';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface FormData {
   groups: string[];
@@ -42,31 +42,31 @@ const useIntelOne = (): Return => {
       await importData({
         variables: {
           data: {
-            scheme: {
-              id: schemeId,
-            },
             groups: data.groups.map((id) => ({
               id,
             })),
             incidents: data.intelOne
               .map((item) => ({
-                description: item.description,
-                offenderName: item.offenderName,
+                colour: item.colour,
                 crimeRef: item.crimeRef,
-                reference: item.reference,
-                reportDate: item.reportDate,
-                siteName: item.siteName,
-                value: item.value,
-                type: item.type,
-                registration: item.registration,
+                description: item.description,
+                group: item.group,
                 make: item.make,
                 model: item.model,
-                colour: item.colour,
-                group: item.group,
+                offenderName: item.offenderName,
+                reference: item.reference,
+                registration: item.registration,
+                reportDate: item.reportDate,
+                siteName: item.siteName,
+                type: item.type,
+                value: item.value,
               }))
               .filter(
                 (item) => item.description && item.type && item.reportDate
               ),
+            scheme: {
+              id: schemeId,
+            },
           },
         },
       });

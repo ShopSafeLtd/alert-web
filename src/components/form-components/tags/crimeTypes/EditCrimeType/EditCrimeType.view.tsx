@@ -12,7 +12,8 @@ import {
   Typography,
 } from 'antd';
 import { useIntl } from 'react-intl';
-import type { TagQuery } from 'graphql/tag/queries/tag.generated';
+import { TagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
+
 
 const { Text } = Typography;
 

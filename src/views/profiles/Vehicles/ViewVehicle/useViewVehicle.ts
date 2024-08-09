@@ -1,120 +1,120 @@
-import { Modal, notification } from 'antd';
-
-import { useEffect, useMemo, useState } from 'react';
-import update from 'immutability-helper';
-import { useStoreState } from 'state';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
+import type { VehicleUpdateInput } from 'graphql/types';
+import type {
+  VehicleQuery,
+  VehicleQueryVariables,
+} from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
 import type {
   EditFeedImage,
   ImageCardData,
   OffenderData,
   VehicleData,
 } from 'types/DataType';
+
+import hasPermission from '#/utils/has-permission';
+import { Modal, notification } from 'antd';
+import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useDeleteVehicleMutation } from 'graphql/vehicles/mutations/__generated__/delete_vehicle.generated';
+import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/__generated__/subscribe-to-vehicle.generated';
+import { useUnsubscribeToVehicleMutation } from 'graphql/vehicles/mutations/__generated__/unsubscribe-from-vehicle.generated';
+import { useUpdateVehicleDetailsMutation } from 'graphql/vehicles/mutations/update/__generated__/update_vehicle_details.generated';
+import { useUpdateVehicleImagesMutation } from 'graphql/vehicles/mutations/update/__generated__/update-vehicle-images.generated';
+import { useUpdateVehicleOffendersMutation } from 'graphql/vehicles/mutations/update/__generated__/update-vehicle-offenders.generated';
+import {
+  VehicleDocument,
+  useVehicleQuery,
+} from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
+import update from 'immutability-helper';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { MutationUpdaterFn } from '@apollo/client';
-import successNotifications from 'types/mutation_notifications/show_success_notification';
+import { useStoreState } from 'state';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
 } from 'types/enums/profile-update-type';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import successNotifications from 'types/mutation_notifications/show_success_notification';
 import successNotification from 'types/mutation_notifications/success_notification';
-import hasPermission from '#/utils/has-permission';
-import type {
-  VehicleQuery,
-  VehicleQueryVariables,
-} from 'graphql/vehicles/queries/view-vehicle.generated';
-import {
-  useVehicleQuery,
-  VehicleDocument,
-} from 'graphql/vehicles/queries/view-vehicle.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
-import { useUpdateVehicleDetailsMutation } from 'graphql/vehicles/mutations/update/update_vehicle_details.generated';
-import type { VehicleUpdateInput } from 'graphql/types';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useDeleteVehicleMutation } from 'graphql/vehicles/mutations/delete_vehicle.generated';
-import { useUpdateVehicleImagesMutation } from 'graphql/vehicles/mutations/update/update-vehicle-images.generated';
-import { useUpdateVehicleOffendersMutation } from 'graphql/vehicles/mutations/update/update-vehicle-offenders.generated';
-import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
-import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
-import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/subscribe-to-vehicle.generated';
-import { useUnsubscribeToVehicleMutation } from 'graphql/vehicles/mutations/unsubscribe-from-vehicle.generated';
 
 const { confirm } = Modal;
 
 interface Return {
-  data: VehicleQuery | undefined;
-  loading: boolean;
-  editVehicle: boolean;
-  toggleEditVehicle: () => void;
-  saving: boolean;
-  onDeleteVehicle: () => void;
-  loadMore: boolean;
-  scrolledToTop: () => void;
-  userId: string;
-  replyTo: {
-    id: string;
-    text: string;
-    createdAt: string;
-    createdBy: string;
-  } | null;
-  setReplyTo: (
-    value: {
-      id: string;
-      text: string;
-      createdAt: string;
-      createdBy: string;
-    } | null
-  ) => void;
+  addDocument: boolean;
+  addExistingOffender: boolean;
+  addInvestigation: boolean;
+  addOffender: boolean;
   confirmDeleteUpdate: (updateId: string) => void;
+  data: VehicleQuery | undefined;
+  editImageData: EditFeedImage | null;
+  editImages: boolean;
+  editOffenderData: OffenderData | null;
+  // optionMenuItems: ItemType[];
+  editRights: boolean;
   editUpdate: { id: string; text: string } | null;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
-  handleEditUpdate: () => void;
   editUpdateInput: string;
-  setEditUpdateInput: (value: string) => void;
+  editVehicle: boolean;
+  handleEditUpdate: () => void;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  // optionMenuItems: ItemType[];
-  editRights: boolean;
-  toggleSubscribe: () => void;
-  submitEditVehicle: (value: VehicleData) => void;
-  toggleAddDocument: () => void;
-  addDocument: boolean;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
-  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
-  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  editImages: boolean;
-  toggleEditImages: () => void;
-  editImageData: EditFeedImage | null;
-  setEditImageData: (value: EditFeedImage | null) => void;
+  loadMore: boolean;
+  loading: boolean;
+  onAddExistingOffender: (id: string) => void;
+  onCompletedAddOffender: () => void;
+  onCompletedEditOffender: () => void;
   onDeleteImage: (id: string) => void;
+  onDeleteOffender: (id: string) => void;
+  onDeleteVehicle: () => void;
   onEditImage: (id: EditFeedImage) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
-  onAddExistingOffender: (id: string) => void;
-  addOffender: boolean;
-  addExistingOffender: boolean;
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
-  editOffenderData: OffenderData | null;
+  openLightbox: (index: number) => void;
+  optionRowShow: boolean;
+  replyTo: {
+    createdAt: string;
+    createdBy: string;
+    id: string;
+    text: string;
+  } | null;
+  saving: boolean;
+  scrolledToTop: () => void;
+  setEditImageData: (value: EditFeedImage | null) => void;
   setEditOffenderData: (value: OffenderData | null) => void;
-  onDeleteOffender: (id: string) => void;
-  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
-  onCompletedEditOffender: () => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setOptionRowShow: (value: boolean) => void;
+  setReplyTo: (
+    value: {
+      createdAt: string;
+      createdBy: string;
+      id: string;
+      text: string;
+    } | null
+  ) => void;
+  submitEditVehicle: (value: VehicleData) => void;
+  toggleAddDocument: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddInvestigation: () => void;
+  toggleAddOffender: () => void;
+  toggleEditImages: () => void;
+  toggleEditVehicle: () => void;
+  toggleSubscribe: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
-  onCompletedAddOffender: () => void;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  userId: string;
 }
 const onCompletedEditOffender = () => {
   successNotification(
@@ -166,14 +166,14 @@ const useViewVehicle = (vehicleId: string): Return => {
   // const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
 
   const [replyTo, setReplyTo] = useState<{
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null>(null);
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
 
   useEffect(() => {
@@ -188,7 +188,6 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const { data: vehicleData, loading } = useVehicleQuery({
     fetchPolicy: 'cache-and-network',
-    variables,
     onCompleted: (res) => {
       setLightboxElements(
         res.vehicle?.images.map((image) => ({
@@ -196,16 +195,17 @@ const useViewVehicle = (vehicleId: string): Return => {
         })) || []
       );
     },
+    variables,
   });
   const [updateVehicle] = useUpdateVehicleDetailsMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -228,36 +228,36 @@ const useViewVehicle = (vehicleId: string): Return => {
       const newImages = data.images?.filter((el) => el.new);
 
       return {
+        delete: disconnect && disconnect.length > 0 ? disconnect : undefined,
+        update:
+          editedImages && editedImages.length > 0
+            ? editedImages.map((item) => ({
+                data: {
+                  policeImage: { set: item.policeImage },
+                  position: { set: item.position },
+                  primary: { set: item.primary },
+                  rotation: { set: item.rotation },
+                },
+                where: {
+                  id: item.id,
+                },
+              }))
+            : undefined,
         upload:
           newImages && newImages.length > 0
             ? newImages
                 .map((item) => ({
+                  policeImage: item.policeImage,
+                  position: item.position,
+                  primary: item.primary,
+                  rotation: item.rotation || 0,
                   url: {
                     filename: item.fileName || '',
                     mimetype: item.type || '',
                     url: item.url || '',
                   },
-                  position: item.position,
-                  primary: item.primary,
-                  policeImage: item.policeImage,
-                  rotation: item.rotation || 0,
                 }))
                 .filter((obj) => obj.url !== undefined)
-            : undefined,
-        delete: disconnect && disconnect.length > 0 ? disconnect : undefined,
-        update:
-          editedImages && editedImages.length > 0
-            ? editedImages.map((item) => ({
-                where: {
-                  id: item.id,
-                },
-                data: {
-                  position: { set: item.position },
-                  primary: { set: item.primary },
-                  policeImage: { set: item.policeImage },
-                  rotation: { set: item.rotation },
-                },
-              }))
             : undefined,
       };
     };
@@ -279,55 +279,37 @@ const useViewVehicle = (vehicleId: string): Return => {
       );
 
       return {
-        disconnect:
-          disconnectedCustomGalleries && disconnectedCustomGalleries.length > 0
-            ? disconnectedCustomGalleries.map((id) => ({ id }))
-            : undefined,
-
         connect:
           connectedCustomGalleries && connectedCustomGalleries.length > 0
             ? connectedCustomGalleries.map((id) => ({ id }))
             : undefined,
+
         create:
           newCustomGalleries && newCustomGalleries.length > 0
             ? newCustomGalleries.map((value) => ({
-                name: value.name,
                 description: value.description || '',
-                schemes: { connect: { id: schemeId } },
                 groups: {
                   connect:
                     data.groups && data.groups.length > 0
                       ? data.groups.map((id) => ({ id }))
                       : [],
                 },
+                name: value.name,
+                schemes: { connect: { id: schemeId } },
               }))
+            : undefined,
+        disconnect:
+          disconnectedCustomGalleries && disconnectedCustomGalleries.length > 0
+            ? disconnectedCustomGalleries.map((id) => ({ id }))
             : undefined,
       };
     };
 
     void updateVehicle({
       variables: {
-        where: {
-          id: vehicleId,
-        },
         data: {
-          make: {
-            set: data.make || '',
-          },
-          model: {
-            set: data.model || '',
-          },
           colour: {
             set: data.colour || '',
-          },
-          registration: {
-            set: data.registration || '',
-          },
-          groups: {
-            set:
-              data?.groups && data?.groups.length > 0
-                ? data?.groups?.map((id) => ({ id }))
-                : [],
           },
           crimeGroup: {
             set:
@@ -336,7 +318,25 @@ const useViewVehicle = (vehicleId: string): Return => {
                 : [],
           },
           customGalleries: getCustomGalleries(),
+          groups: {
+            set:
+              data?.groups && data?.groups.length > 0
+                ? data?.groups?.map((id) => ({ id }))
+                : [],
+          },
           images: getImages(),
+          make: {
+            set: data.make || '',
+          },
+          model: {
+            set: data.model || '',
+          },
+          registration: {
+            set: data.registration || '',
+          },
+        },
+        where: {
+          id: vehicleId,
         },
       },
     });
@@ -346,11 +346,11 @@ const useViewVehicle = (vehicleId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been deleted!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -385,57 +385,57 @@ const useViewVehicle = (vehicleId: string): Return => {
     const editedImages = value.filter(({ edited }) => edited);
 
     void updateVehicleImages({
+      onCompleted: () => {
+        notification.success({
+          description: intl.formatMessage({
+            defaultMessage: 'The images have been updated',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully updated!',
+          }),
+          placement: 'bottomRight',
+        });
+      },
       variables: {
-        where: {
-          id: vehicleId,
-        },
         data: {
           images: {
             disconnect:
               disconnect && disconnect.length > 0 ? disconnect : undefined,
+            update:
+              editedImages && editedImages.length > 0
+                ? editedImages.map((item) => ({
+                    data: {
+                      policeImage: { set: item.policeImage },
+                      position: { set: item.position },
+                      primary: { set: item.primary },
+                      rotation: { set: item.rotation },
+                    },
+                    where: {
+                      id: item.id,
+                    },
+                  }))
+                : undefined,
             upload:
               newImages && newImages.length > 0
                 ? newImages
                     .map((item) => ({
+                      policeImage: item.policeImage,
+                      position: item.position,
+                      primary: item.primary,
+                      rotation: item.rotation || 0,
                       url: {
                         filename: item.fileName || '',
                         mimetype: item.type || '',
                         url: item.url || '',
                       },
-                      position: item.position,
-                      primary: item.primary,
-                      policeImage: item.policeImage,
-                      rotation: item.rotation || 0,
                     }))
                     .filter((obj) => obj.url !== undefined)
                 : undefined,
-            update:
-              editedImages && editedImages.length > 0
-                ? editedImages.map((item) => ({
-                    where: {
-                      id: item.id,
-                    },
-                    data: {
-                      position: { set: item.position },
-                      primary: { set: item.primary },
-                      policeImage: { set: item.policeImage },
-                      rotation: { set: item.rotation },
-                    },
-                  }))
-                : undefined,
           },
         },
-      },
-      onCompleted: () => {
-        notification.success({
-          message: intl.formatMessage({
-            defaultMessage: 'Successfully updated!',
-          }),
-          description: intl.formatMessage({
-            defaultMessage: 'The images have been updated',
-          }),
-          placement: 'bottomRight',
-        });
+        where: {
+          id: vehicleId,
+        },
       },
     }).finally(() => {
       setEditImages(false);
@@ -450,42 +450,42 @@ const useViewVehicle = (vehicleId: string): Return => {
         ({ primary }) => primary
       )?.id;
       void updateVehicleImages({
-        variables: {
-          where: {
-            id: vehicleId,
-          },
-          data: {
-            images: {
-              update: [
-                {
-                  where: {
-                    id: value.id,
-                  },
-                  data: {
-                    position: { set: value.position },
-                    primary: { set: value.primary || false },
-                    policeImage: { set: value.policeImage || false },
-                    rotation: { set: value.rotation || 0 },
-                  },
-                },
-                {
-                  where: {
-                    id: findPrimaryId,
-                  },
-                  data: {
-                    primary: { set: !value.primary },
-                  },
-                },
-              ],
-            },
-          },
-        },
         onCompleted: () => {
           successNotifications(
             ProfileUpdatedModel.Vehicle,
             ProfileUpdatedType.updated,
             ProfileUpdatedModel.Image
           );
+        },
+        variables: {
+          data: {
+            images: {
+              update: [
+                {
+                  data: {
+                    policeImage: { set: value.policeImage || false },
+                    position: { set: value.position },
+                    primary: { set: value.primary || false },
+                    rotation: { set: value.rotation || 0 },
+                  },
+                  where: {
+                    id: value.id,
+                  },
+                },
+                {
+                  data: {
+                    primary: { set: !value.primary },
+                  },
+                  where: {
+                    id: findPrimaryId,
+                  },
+                },
+              ],
+            },
+          },
+          where: {
+            id: vehicleId,
+          },
         },
         // update: updateImageList,
       }).finally(() => {
@@ -497,23 +497,13 @@ const useViewVehicle = (vehicleId: string): Return => {
   const onDeleteImage = (value: string) => {
     setSaving(false);
     void updateVehicleImages({
-      variables: {
-        where: {
-          id: vehicleId,
-        },
-        data: {
-          images: {
-            disconnect: [{ id: value }],
-          },
-        },
-      },
       onCompleted: () => {
         notification.success({
-          message: intl.formatMessage({
-            defaultMessage: 'Successfully deleted!',
-          }),
           description: intl.formatMessage({
             defaultMessage: 'The image/s have been deleted',
+          }),
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully deleted!',
           }),
           placement: 'bottomRight',
         });
@@ -528,18 +518,28 @@ const useViewVehicle = (vehicleId: string): Return => {
 
         if (!existingData?.vehicle) return;
         store.writeQuery<VehicleQuery>({
-          query: VehicleDocument,
           data: {
+            __typename: 'Query',
             vehicle: {
               ...existingData.vehicle,
               images: existingData.vehicle.images.filter(
                 ({ id }) => id !== value
               ),
             },
-            __typename: 'Query',
           },
+          query: VehicleDocument,
           variables,
         });
+      },
+      variables: {
+        data: {
+          images: {
+            disconnect: [{ id: value }],
+          },
+        },
+        where: {
+          id: vehicleId,
+        },
       },
     });
   };
@@ -559,8 +559,8 @@ const useViewVehicle = (vehicleId: string): Return => {
       .indexOf(res.updateOffender.id);
 
     store.writeQuery<VehicleQuery>({
-      query: VehicleDocument,
       data: {
+        __typename: 'Query',
         vehicle: {
           ...existingData.vehicle,
           offenders: update(existingData.vehicle.offenders, {
@@ -569,8 +569,8 @@ const useViewVehicle = (vehicleId: string): Return => {
             },
           }),
         },
-        __typename: 'Query',
       },
+      query: VehicleDocument,
       variables,
     });
   };
@@ -698,14 +698,14 @@ const useViewVehicle = (vehicleId: string): Return => {
 
     if (!existingData?.vehicle) return;
     store.writeQuery<VehicleQuery>({
-      query: VehicleDocument,
       data: {
+        __typename: 'Query',
         vehicle: {
           ...existingData.vehicle,
           offenders: [...existingData.vehicle.offenders, res.createOffender],
         },
-        __typename: 'Query',
       },
+      query: VehicleDocument,
       variables,
     });
   };
@@ -813,16 +813,6 @@ const useViewVehicle = (vehicleId: string): Return => {
     setSaving(true);
     if (value)
       void updateVehicleOffenders({
-        variables: {
-          where: {
-            id: vehicleId,
-          },
-          data: {
-            offenders: {
-              connect: [{ id: value }],
-            },
-          },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Offender,
@@ -841,16 +831,26 @@ const useViewVehicle = (vehicleId: string): Return => {
 
           if (!existingData?.vehicle) return;
           store.writeQuery<VehicleQuery>({
-            query: VehicleDocument,
             data: {
+              __typename: 'Query',
               vehicle: {
                 ...existingData.vehicle,
                 offenders: res.updateVehicle.offenders,
               },
-              __typename: 'Query',
             },
+            query: VehicleDocument,
             variables,
           });
+        },
+        variables: {
+          data: {
+            offenders: {
+              connect: [{ id: value }],
+            },
+          },
+          where: {
+            id: vehicleId,
+          },
         },
       }).finally(() => {
         setAddExistingOffender(false);
@@ -861,14 +861,6 @@ const useViewVehicle = (vehicleId: string): Return => {
     setSaving(true);
     if (value)
       void updateVehicleOffenders({
-        variables: {
-          where: {
-            id: vehicleId,
-          },
-          data: {
-            offenders: { disconnect: [{ id: value }] },
-          },
-        },
         onCompleted: () => {
           successNotification(
             ProfileUpdatedModel.Offender,
@@ -886,18 +878,26 @@ const useViewVehicle = (vehicleId: string): Return => {
 
           if (!existingData?.vehicle) return;
           store.writeQuery<VehicleQuery>({
-            query: VehicleDocument,
             data: {
+              __typename: 'Query',
               vehicle: {
                 ...existingData.vehicle,
                 offenders: existingData.vehicle.offenders.filter(
                   ({ id }) => id !== value
                 ),
               },
-              __typename: 'Query',
             },
+            query: VehicleDocument,
             variables,
           });
+        },
+        variables: {
+          data: {
+            offenders: { disconnect: [{ id: value }] },
+          },
+          where: {
+            id: vehicleId,
+          },
         },
       }).finally(() => {
         setSaving(false);
@@ -908,16 +908,11 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const handleDeleteUpdate = (updateId: string) => {
     void deleteUpdate({
-      variables: {
-        where: {
-          id: updateId,
-        },
-      },
       optimisticResponse: {
         __typename: 'Mutation',
         deleteUpdate: {
-          id: updateId,
           __typename: 'Update',
+          id: updateId,
           replyToId: '',
         },
       },
@@ -939,12 +934,6 @@ const useViewVehicle = (vehicleId: string): Return => {
               );
               if (updateItem) {
                 store.writeQuery<VehicleQuery, VehicleQueryVariables>({
-                  query: VehicleDocument,
-                  variables: {
-                    where: {
-                      id: vehicleId,
-                    },
-                  },
                   data: {
                     vehicle: {
                       ...oldData.vehicle,
@@ -962,16 +951,16 @@ const useViewVehicle = (vehicleId: string): Return => {
                       }),
                     },
                   },
+                  query: VehicleDocument,
+                  variables: {
+                    where: {
+                      id: vehicleId,
+                    },
+                  },
                 });
               }
             } else {
               store.writeQuery<VehicleQuery, VehicleQueryVariables>({
-                query: VehicleDocument,
-                variables: {
-                  where: {
-                    id: vehicleId,
-                  },
-                },
                 data: {
                   vehicle: {
                     ...oldData.vehicle,
@@ -980,31 +969,42 @@ const useViewVehicle = (vehicleId: string): Return => {
                     ),
                   },
                 },
+                query: VehicleDocument,
+                variables: {
+                  where: {
+                    id: vehicleId,
+                  },
+                },
               });
             }
         }
+      },
+      variables: {
+        where: {
+          id: updateId,
+        },
       },
     });
   };
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-
-        description: 'Confirmation dialog title',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
 
         description: 'Confirmation dialog content',
       }),
-      onOk() {
-        handleDeleteUpdate(updateId);
-      },
       okText: intl.formatMessage({
         defaultMessage: 'Delete',
 
         description: 'Delete button text',
+      }),
+      onOk() {
+        handleDeleteUpdate(updateId);
+      },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+
+        description: 'Confirmation dialog title',
       }),
     });
   };
@@ -1014,20 +1014,20 @@ const useViewVehicle = (vehicleId: string): Return => {
   const handleEditUpdate = () => {
     if (editUpdate !== null)
       void updateUpdate({
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateUpdate: {
+            __typename: 'Update',
+            id: editUpdate.id || '',
+            text: editUpdateInput,
+          },
+        },
         variables: {
           data: {
             text: editUpdateInput,
           },
           where: {
             id: editUpdate.id,
-          },
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateUpdate: {
-            id: editUpdate.id || '',
-            __typename: 'Update',
-            text: editUpdateInput,
           },
         },
       });
@@ -1040,30 +1040,30 @@ const useViewVehicle = (vehicleId: string): Return => {
   const toggleSubscribe = () => {
     if (vehicleData?.vehicle?.subscribed) {
       void unsubscribeFromVehicle({
-        variables: {
-          where: { id: vehicleId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           unsubscribeToVehicle: {
-            id: vehicleId,
             __typename: 'Vehicle',
+            id: vehicleId,
             subscribed: false,
           },
+        },
+        variables: {
+          where: { id: vehicleId },
         },
       });
     } else {
       void subscribeToVehicle({
-        variables: {
-          where: { id: vehicleId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           subscribeToVehicle: {
-            id: vehicleId,
             __typename: 'Vehicle',
+            id: vehicleId,
             subscribed: true,
           },
+        },
+        variables: {
+          where: { id: vehicleId },
         },
       });
     }
@@ -1083,14 +1083,14 @@ const useViewVehicle = (vehicleId: string): Return => {
 
     if (!existingData?.vehicle) return;
     store.writeQuery<VehicleQuery>({
-      query: VehicleDocument,
       data: {
+        __typename: 'Query',
         vehicle: {
           ...existingData.vehicle,
           evidence: [...existingData.vehicle.evidence, res.createDocument],
         },
-        __typename: 'Query',
       },
+      query: VehicleDocument,
       variables,
     });
   };
@@ -1107,16 +1107,16 @@ const useViewVehicle = (vehicleId: string): Return => {
 
     if (!existingData?.vehicle) return;
     store.writeQuery<VehicleQuery>({
-      query: VehicleDocument,
       data: {
+        __typename: 'Query',
         vehicle: {
           ...existingData.vehicle,
           evidence: existingData.vehicle.evidence.filter(
             ({ id }) => id !== res.deleteDocument?.id
           ),
         },
-        __typename: 'Query',
       },
+      query: VehicleDocument,
       variables,
     });
   };
@@ -1136,8 +1136,8 @@ const useViewVehicle = (vehicleId: string): Return => {
 
     if (!existingData?.vehicle) return;
     store.writeQuery<VehicleQuery>({
-      query: VehicleDocument,
       data: {
+        __typename: 'Query',
         vehicle: {
           ...existingData.vehicle,
           investigations: [
@@ -1145,8 +1145,8 @@ const useViewVehicle = (vehicleId: string): Return => {
             res.createInvestigation,
           ],
         },
-        __typename: 'Query',
       },
+      query: VehicleDocument,
       variables,
     });
   };
@@ -1158,7 +1158,7 @@ const useViewVehicle = (vehicleId: string): Return => {
   };
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
   const toggleAddDocument = () => {
     setAddDocument(() => !addDocument);
@@ -1176,66 +1176,66 @@ const useViewVehicle = (vehicleId: string): Return => {
     setAddExistingOffender(!addExistingOffender);
   };
   const editRights = hasPermission({
-    permissions,
     permission: {
-      model: PermissionModel.Vehicles,
       method: PermissionMethod.Edit,
+      model: PermissionModel.Vehicles,
     },
+    permissions,
   });
   return {
-    data: vehicleData,
-    loading: (vehicleData === null || vehicleData === undefined) && loading,
-    editVehicle,
-    toggleEditVehicle,
-    saving,
-    onDeleteVehicle,
-    editRights,
-    optionRowShow,
-    setOptionRowShow,
-    userId,
-    openLightbox,
-    lightBoxOpen,
-    editUpdate,
-    editUpdateInput,
-    handleEditUpdate,
-    lightboxElements,
-    replyTo,
-    scrolledToTop,
-    setEditUpdate,
-    setEditUpdateInput,
-    setReplyTo,
-    loadMore,
-    confirmDeleteUpdate,
-    toggleSubscribe,
-    submitEditVehicle,
-    toggleAddDocument,
     addDocument,
-    updateDocumentList,
-    updateDeleteDocument,
+    addExistingOffender,
     // optionMenuItems,
     addInvestigation,
-    toggleAddInvestigation,
-    updateInvestigationList,
-    editImages,
-    toggleEditImages,
-    onUpdateImages,
-    editImageData,
-    setEditImageData,
-    onDeleteImage,
-    onEditImage,
     addOffender,
-    addExistingOffender,
+    confirmDeleteUpdate,
+    data: vehicleData,
+    editImageData,
+    editImages,
     editOffenderData,
-    setEditOffenderData,
-    onDeleteOffender,
-    toggleAddOffender,
-    toggleAddExistingOffender,
-
+    editRights,
+    editUpdate,
+    editUpdateInput,
+    editVehicle,
+    handleEditUpdate,
+    lightBoxOpen,
+    lightboxElements,
+    loadMore,
+    loading: (vehicleData === null || vehicleData === undefined) && loading,
     onAddExistingOffender,
-    updateEditOffenderList,
-    onCompletedEditOffender,
     onCompletedAddOffender,
+    onCompletedEditOffender,
+    onDeleteImage,
+    onDeleteOffender,
+    onDeleteVehicle,
+    onEditImage,
+    onUpdateImages,
+    openLightbox,
+    optionRowShow,
+    replyTo,
+    saving,
+    scrolledToTop,
+    setEditImageData,
+    setEditOffenderData,
+    setEditUpdate,
+    setEditUpdateInput,
+    setOptionRowShow,
+    setReplyTo,
+    submitEditVehicle,
+    toggleAddDocument,
+    toggleAddExistingOffender,
+    toggleAddInvestigation,
+    toggleAddOffender,
+    toggleEditImages,
+    toggleEditVehicle,
+    toggleSubscribe,
     updateAddOffenderList,
+
+    updateDeleteDocument,
+    updateDocumentList,
+    updateEditOffenderList,
+    updateInvestigationList,
+    userId,
   };
 };
 

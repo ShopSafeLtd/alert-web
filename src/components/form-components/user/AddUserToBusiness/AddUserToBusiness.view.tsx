@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React from 'react';
-import { Button, Col, Row, Table, Typography } from 'antd';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
+import { Button, Col, Row, Table, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;
@@ -12,13 +12,13 @@ interface Props {
   onSelectChange: (
     selectedRowKeys: React.Key[],
     selectedRows: {
-      key: string;
-      fullName: string;
-      status: string | null | undefined;
       business: {
         id: string;
         name: string;
       } | null;
+      fullName: string;
+      key: string;
+      status: null | string | undefined;
     }[]
   ) => void;
   onSubmit: () => void;
@@ -28,8 +28,8 @@ interface Props {
 const AddUserToBusiness = ({
   data,
   loading,
-  onSelectChange,
   onClose,
+  onSelectChange,
   onSubmit,
   saving,
 }: Props) => {
@@ -37,20 +37,15 @@ const AddUserToBusiness = ({
   return (
     <div>
       <Table
-        size="small"
-        loading={loading}
         columns={[
           {
-            key: 'fullName',
             dataIndex: 'fullName',
+            key: 'fullName',
             title: intl.formatMessage({ defaultMessage: 'Name' }),
           },
           {
-            key: 'status',
             dataIndex: 'status',
-            title: intl.formatMessage({
-              defaultMessage: 'Status',
-            }),
+            key: 'status',
             render: (value) => (
               <Typography.Text
                 type={value === 'Enabled' ? 'success' : 'warning'}
@@ -58,31 +53,36 @@ const AddUserToBusiness = ({
                 {value}
               </Typography.Text>
             ),
+            title: intl.formatMessage({
+              defaultMessage: 'Status',
+            }),
           },
           {
-            key: 'business',
             dataIndex: 'business',
+            key: 'business',
+            render: (value) => <Typography.Text>{value?.name}</Typography.Text>,
             title: intl.formatMessage({
               defaultMessage: 'Business',
             }),
-            render: (value) => <Typography.Text>{value?.name}</Typography.Text>,
           },
         ]}
         dataSource={
           data?.users.map((user) => ({
-            key: user.id,
-            fullName: user.fullName,
-            status: user.status,
             business: user.businesses.length > 0 ? user.businesses[0] : null,
+            fullName: user.fullName,
+            key: user.id,
+            status: user.status,
           })) || []
         }
-        rowSelection={{
-          type: 'checkbox',
-          onChange: onSelectChange,
-        }}
+        loading={loading}
         pagination={false}
+        rowSelection={{
+          onChange: onSelectChange,
+          type: 'checkbox',
+        }}
+        size="small"
       />
-      <Row style={{ marginTop: 30 }} justify="end" gutter={16}>
+      <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
         <Col>
           <Button onClick={onClose}>
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -92,8 +92,8 @@ const AddUserToBusiness = ({
           <Button
             disabled={saving}
             loading={saving}
-            type="primary"
             onClick={onSubmit}
+            type="primary"
           >
             {intl.formatMessage({ defaultMessage: 'Add Users' })}
           </Button>

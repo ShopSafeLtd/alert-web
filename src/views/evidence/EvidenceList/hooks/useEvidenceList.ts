@@ -1,19 +1,21 @@
 import type React from 'react';
+
 import { useState } from 'react';
 import { useStoreState } from 'state';
 
+import type { ListDemEvidenceExtendedWithoutUserQuery } from '../../grapqhl/queries/__generated__/list-evidence.generated';
 import type { TableItem } from '../EvidenceList.view';
-import type { ListDemEvidenceExtendedWithoutUserQuery } from '#/views/evidence/grapqhl/queries/list-evidence.generated';
-import { useListDemEvidenceExtendedWithoutUserQuery } from '#/views/evidence/grapqhl/queries/list-evidence.generated';
+
+import { useListDemEvidenceExtendedWithoutUserQuery } from '../../grapqhl/queries/__generated__/list-evidence.generated';
 
 interface Return {
   data: ListDemEvidenceExtendedWithoutUserQuery | undefined;
+  demIds: { id: string; name: string }[];
   loading: boolean;
+  onPaginationChange: (page: number, pageSize: number) => void;
   selectedData: TableItem | undefined;
   setSelectedData: React.Dispatch<React.SetStateAction<TableItem | undefined>>;
   setSelectedId: React.Dispatch<React.SetStateAction<string>>;
-  demIds: { id: string; name: string }[];
-  onPaginationChange: (page: number, pageSize: number) => void;
 }
 
 const useViewEvidenceList = (): Return => {
@@ -28,12 +30,12 @@ const useViewEvidenceList = (): Return => {
   });
 
   const { data, loading } = useListDemEvidenceExtendedWithoutUserQuery({
-    variables: {
-      where: selectedId,
-      take: pagination.pageSize,
-      skip: (pagination.page - 1) * pagination.pageSize,
-    },
     fetchPolicy: 'cache-and-network',
+    variables: {
+      skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
+      where: selectedId,
+    },
   });
 
   const onPaginationChange = (page: number) => {
@@ -45,12 +47,12 @@ const useViewEvidenceList = (): Return => {
 
   return {
     data,
+    demIds,
     loading: !data?.listDemEvidenceExtendedWithoutUser.demEvidence || loading,
+    onPaginationChange,
     selectedData,
     setSelectedData,
-    demIds,
     setSelectedId,
-    onPaginationChange,
   };
 };
 export default useViewEvidenceList;

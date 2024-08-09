@@ -1,4 +1,6 @@
-import React from 'react';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
+
 import {
   Button,
   Col,
@@ -11,92 +13,91 @@ import {
   Select,
   Typography,
 } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import OffenderTile from 'components/offenders/OffenderTile';
+import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import { useStoreState } from 'state';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
+import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-import OffenderTile from 'components/offenders/OffenderTile';
-import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
-import Lightbox from 'yet-another-react-lightbox';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
-import { Link } from 'react-router-dom';
 import useStyles from './AddExistingOffender.styles';
-import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/list-offenders-all-schemes.generated';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
 
 const { Paragraph, Text } = Typography;
 
 interface Props {
-  onSubmit: (value: string | undefined) => void;
+  addOverride?: string;
+  age: Age[];
+  build: Build[];
+  clearFilters: () => void;
   data: ListOffendersAllSchemesQuery | undefined;
+  ethnicity: Race[];
+  hair: string;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  pagination: { page: number; pageSize: number };
   onPaginationChange: (page: number, pageSize: number) => void;
-  setCurrentId: (value: string | undefined) => void;
+  onSubmit: (value: string | undefined) => void;
+  openLightbox: (index: number) => void;
+  pagination: { page: number; pageSize: number };
+  peculiarities: string;
+  search: string;
   selectedOffender:
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
-    | undefined
-    | null;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  ethnicity: Race[];
-  setEthnicity: (value: Race[]) => void;
-  age: Age[];
+    | null
+    | undefined;
   setAge: (value: Age[]) => void;
-  build: Build[];
   setBuild: (value: Build[]) => void;
-  sex: Gender[];
-  setSex: (value: Gender[]) => void;
+  setCurrentId: (value: string | undefined) => void;
+  setEthnicity: (value: Race[]) => void;
   setHair: (value: string) => void;
   setPeculiarities: (value: string) => void;
-  hair: string;
-  peculiarities: string;
-  clearFilters: () => void;
-  addOverride?: string;
+  setSearch: (value: string) => void;
+  setSex: (value: Gender[]) => void;
+  sex: Gender[];
 }
 
 const AddExistingOffender = ({
-  onSubmit,
-  data,
-  loading,
-  search,
-  setSearch,
-  onPaginationChange,
-  setCurrentId,
-  openLightbox,
-  selectedOffender,
-  lightBoxOpen,
+  addOverride,
   age,
   build,
+  clearFilters,
+  data,
   ethnicity,
+  hair,
+  lightBoxOpen,
+  loading,
+  onPaginationChange,
+  onSubmit,
+  openLightbox,
+  pagination,
+  peculiarities,
+  search,
+  selectedOffender,
   setAge,
   setBuild,
+  setCurrentId,
   setEthnicity,
-  setSex,
-  sex,
-  pagination,
-  hair,
-  peculiarities,
   setHair,
   setPeculiarities,
-  clearFilters,
-  addOverride,
+  setSearch,
+  setSex,
+  sex,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -107,11 +108,11 @@ const AddExistingOffender = ({
   const existingOffenders = (): JSX.Element => {
     if (!data?.listOffendersAllSchemes && loading) {
       return (
-        <Row wrap gutter={16}>
+        <Row gutter={16} wrap>
           {Array.from({ length: data?.listOffendersAllSchemes?.total || 24 })
             .fill(0)
             .map(() => (
-              <Col span={4} className="offender-item">
+              <Col className="offender-item" span={4}>
                 <OffenderTileSkeleton />
               </Col>
             ))}
@@ -120,14 +121,13 @@ const AddExistingOffender = ({
     }
 
     if (
-      data &&
-      data.listOffendersAllSchemes &&
+      data?.listOffendersAllSchemes &&
       data.listOffendersAllSchemes.offenders.length > 0
     ) {
       return (
-        <Row wrap gutter={16} style={{ marginRight: 0 }}>
+        <Row gutter={16} style={{ marginRight: 0 }} wrap>
           {data.listOffendersAllSchemes.offenders.map((offender) => (
-            <Col span={4} key={offender.id} className="offender-item">
+            <Col className="offender-item" key={offender.id} span={4}>
               <OffenderTile
                 offender={offender}
                 onClick={() => setCurrentId(offender.id)}
@@ -139,7 +139,7 @@ const AddExistingOffender = ({
     }
 
     return (
-      <Row justify="center" align="middle" className="no-offenders">
+      <Row align="middle" className="no-offenders" justify="center">
         <Col>
           <Empty
             description={intl.formatMessage({
@@ -153,31 +153,31 @@ const AddExistingOffender = ({
   return (
     <div className="add-existing-offender">
       <Row wrap={false}>
-        <Col span={20} className={classes.offenders}>
+        <Col className={classes.offenders} span={20}>
           <Input
-            value={search}
+            allowClear
             className={classes.searchBar}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Offenders...',
             })}
-            allowClear
+            value={search}
           />
           <div className="add-existing-offender-row">
             {existingOffenders()}
             <Pagination
-              style={{
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'center',
-              }}
-              total={data?.listOffendersAllSchemes?.total}
-              size="small"
-              showSizeChanger={false}
+              current={pagination.page}
+              hideOnSinglePage
               onChange={onPaginationChange}
               pageSize={pagination.pageSize}
-              hideOnSinglePage
-              current={pagination.page}
+              showSizeChanger={false}
+              size="small"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                width: '100%',
+              }}
+              total={data?.listOffendersAllSchemes?.total}
             />
           </div>
         </Col>
@@ -192,14 +192,14 @@ const AddExistingOffender = ({
               })}
             </Text>
             <Select
-              value={ethnicity}
+              allowClear
+              className={classes.filterSelect}
+              mode="multiple"
               onChange={setEthnicity}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Ethnicity',
               })}
-              className={classes.filterSelect}
-              mode="multiple"
-              allowClear
+              value={ethnicity}
             >
               <Select.Option value={Race.Ic1}>
                 {intl.formatMessage({
@@ -241,14 +241,14 @@ const AddExistingOffender = ({
           <div className={classes.filter}>
             <Text>{intl.formatMessage({ defaultMessage: 'Build' })}</Text>
             <Select
-              mode="multiple"
               allowClear
-              value={build}
+              className={classes.filterSelect}
+              mode="multiple"
               onChange={setBuild}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Build',
               })}
-              className={classes.filterSelect}
+              value={build}
             >
               <Select.Option value={Build.Small}>
                 {intl.formatMessage({ defaultMessage: 'Small' })}
@@ -270,14 +270,14 @@ const AddExistingOffender = ({
             <div className={classes.filter}>
               <Text>{intl.formatMessage({ defaultMessage: 'Age' })}</Text>
               <Select
-                mode="multiple"
                 allowClear
-                value={age}
+                className={classes.filterSelect}
+                mode="multiple"
                 onChange={setAge}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Age',
                 })}
-                className={classes.filterSelect}
+                value={age}
               >
                 <Select.Option value={Age.UnderEighteen}>
                   {intl.formatMessage({
@@ -330,14 +330,14 @@ const AddExistingOffender = ({
           <div className={classes.filter}>
             <Text>{intl.formatMessage({ defaultMessage: 'Sex' })}</Text>
             <Select
-              mode="multiple"
               allowClear
-              value={sex}
+              className={classes.filterSelect}
+              mode="multiple"
               onChange={setSex}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Sex',
               })}
-              className={classes.filterSelect}
+              value={sex}
             >
               <Select.Option value={Gender.Female}>
                 {intl.formatMessage({ defaultMessage: 'Female' })}
@@ -355,8 +355,8 @@ const AddExistingOffender = ({
           <div className={classes.filter}>
             <Text>{intl.formatMessage({ defaultMessage: 'Hair' })}</Text>
             <Input.TextArea
-              value={hair}
               onChange={(e) => setHair(e.target.value)}
+              value={hair}
             />
           </div>
           <div className={classes.filter}>
@@ -366,11 +366,11 @@ const AddExistingOffender = ({
               })}
             </Text>
             <Input.TextArea
-              value={peculiarities}
               onChange={(e) => setPeculiarities(e.target.value)}
+              value={peculiarities}
             />
           </div>
-          <Row justify="end" className={classes.clearRow}>
+          <Row className={classes.clearRow} justify="end">
             <Col>
               <Button onClick={clearFilters}>
                 {intl.formatMessage({
@@ -383,28 +383,28 @@ const AddExistingOffender = ({
       </Row>
 
       <Modal
-        open={!!selectedOffender}
-        zIndex={1010}
+        bodyStyle={{ padding: 0 }}
         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
         okText={`${
           addOverride || intl.formatMessage({ defaultMessage: 'Add' })
         } Offender`}
-        onOk={() => onSubmit(selectedOffender?.id)}
         onCancel={() => setCurrentId(undefined)}
-        bodyStyle={{ padding: 0 }}
+        onOk={() => onSubmit(selectedOffender?.id)}
+        open={!!selectedOffender}
         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
         title={`${
           addOverride || intl.formatMessage({ defaultMessage: 'Add' })
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         } ${selectedOffender?.name}`}
+        zIndex={1010}
       >
         <Row gutter={16} wrap={false}>
           {selectedOffender && selectedOffender.images.length > 0 && (
             <Col>
               <div
                 style={{
-                  width: 200,
                   height: 250,
+                  width: 200,
                 }}
               >
                 <WatermarkImage
@@ -472,7 +472,7 @@ const AddExistingOffender = ({
               </Descriptions.Item>
             </Descriptions>
             <Link to={`/app/offenders/view/${selectedOffender?.id || ''}`}>
-              <Button type="ghost" danger>
+              <Button danger type="ghost">
                 {intl.formatMessage({
                   defaultMessage: 'View Offender',
                 })}
@@ -483,22 +483,22 @@ const AddExistingOffender = ({
       </Modal>
 
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox(0)}
-        plugins={[Zoom]}
         controller={{
           closeOnBackdropClick: true,
+        }}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
         }}
         slides={
           selectedOffender?.images.map((image) => ({
             src: image.optimised || '',
           })) || []
         }
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
       />
     </div>
   );

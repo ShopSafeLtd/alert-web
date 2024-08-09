@@ -1,21 +1,24 @@
 import React from 'react';
-import useListInvestigations from './useListInvestigations';
+
 import View from './ListInvestigations.view';
+import useListInvestigations from './useListInvestigations';
 
 const ListInvestigations = () => {
   const {
+    addInvestigation,
     data,
     loading,
-    addInvestigation,
+    onPaginationChange,
     toggleAddInvestigation,
     updateInvestigationList,
   } = useListInvestigations();
 
   return (
     <View
+      addInvestigation={addInvestigation}
       data={data}
       loading={loading}
-      addInvestigation={addInvestigation}
+      onPaginationChange={onPaginationChange}
       toggleAddInvestigation={toggleAddInvestigation}
       updateInvestigationList={updateInvestigationList}
     />

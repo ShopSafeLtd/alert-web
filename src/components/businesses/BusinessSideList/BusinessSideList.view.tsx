@@ -1,55 +1,56 @@
-import React from 'react';
-
 import { Typography } from 'antd';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import useStyles from './BusinessSideList.styles';
-import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
-import type { BusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/sidelist.generated';
 
-const { Text, Paragraph } = Typography;
+import type { BusinessesSideListQuery } from './graphql/queries/__generated__/sidelist.generated';
+
+import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
+import useStyles from './BusinessSideList.styles';
+
+const { Paragraph, Text } = Typography;
 
 interface Props {
+  current?: string;
   data:
-    | Exclude<BusinessesSideListQuery['businessRelay'], undefined | null>
+    | Exclude<BusinessesSideListQuery['businessRelay'], null | undefined>
     | null
     | undefined;
   loading: boolean;
-  current?: string;
-  to?: string;
   next: () => void;
+  to?: string;
 }
 
 const BusinessSideList = ({
+  current,
   data,
   loading,
-  current,
-  to,
   next,
+  to,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const isLoading = loading && !data?.pageInfo.hasNextPage;
 
   const businessItems = data?.edges?.map(({ node: business }) => (
     <Link
-      to={`${to || '/app/scheme-settings/businesses/view/'}${business.id}`}
       key={business.id}
+      to={`${to || '/app/scheme-settings/businesses/view/'}${business.id}`}
     >
       <div
-        key={business.id}
         className={`${classes.offenderItem} ${
           current === business.id ? 'current' : ''
         }`}
+        key={business.id}
       >
         <div className={classes.content}>
           <Text
             className={classes.name}
-            strong={current === business.id}
             ellipsis
+            strong={current === business.id}
           >
             {business.name}
           </Text>
           {business.locations[0] && (
-            <Paragraph type="secondary" className={classes.text}>
+            <Paragraph className={classes.text} type="secondary">
               {business.locations[0].full}
             </Paragraph>
           )}
@@ -61,10 +62,10 @@ const BusinessSideList = ({
   return (
     <InfiniteSideScrollList
       dataLength={data?.edges?.length}
-      next={next}
       hasMore={data?.pageInfo.hasNextPage}
       isLoading={isLoading}
       items={businessItems}
+      next={next}
     />
   );
 };

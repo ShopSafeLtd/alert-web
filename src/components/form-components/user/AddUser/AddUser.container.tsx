@@ -1,6 +1,6 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 
 import React from 'react';
 

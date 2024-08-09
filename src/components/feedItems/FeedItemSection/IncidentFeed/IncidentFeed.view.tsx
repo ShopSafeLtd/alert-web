@@ -1,66 +1,67 @@
-import React from 'react';
-import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
   faLocationDot,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
-import UpdateContent from '../UpdateContent';
-import ImageContainer from '../ImageContainer';
-import useStyles from './IncidentFeed.styles';
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
 
-const { Title, Text, Paragraph } = Typography;
+import ImageContainer from '../ImageContainer';
+import UpdateContent from '../UpdateContent';
+import useStyles from './IncidentFeed.styles';
+
+const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
+  adminRights: boolean;
   feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], undefined | null>['feedItems'][0]
+    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
     | null
     | undefined;
   isNewImage?: boolean;
   isNewIncident?: boolean;
   onDeleteFeedItem: (value: string) => void;
-  saving: boolean;
-  adminRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  saving: boolean;
 }
 
 const IncidentFeed = ({
+  adminRights,
   feedItem,
   isNewImage,
   isNewIncident,
   onDeleteFeedItem,
-  saving,
-  adminRights,
   openLightbox,
+  saving,
 }: Props): JSX.Element => {
   const {
-    feedImage,
-    latestUpdate,
-    description,
     business,
-    subject,
-    reference,
+    description,
+    feedImage,
     id,
+    latestUpdate,
+    reference,
+    subject,
     // totalOffenders,
     // offenders,
   } = feedItem?.incident || {};
   const intl = useIntl();
   const classes = useStyles();
   const hasImage =
-    (!isNewImage && latestUpdate && latestUpdate.feedImage) ||
+    (!isNewImage && latestUpdate?.feedImage) ||
     ((isNewIncident || isNewImage) && feedImage);
 
   return (
-    <Row wrap={false} key={id || ''}>
+    <Row key={id || ''} wrap={false}>
       <div style={{ cursor: 'pointer', zIndex: 2 }}>
-        {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
+        {!isNewImage && latestUpdate?.feedImage ? (
           <Col
             onClick={() =>
               openLightbox(
@@ -74,8 +75,8 @@ const IncidentFeed = ({
             }
           >
             <ImageContainer
-              src={latestUpdate.feedImage.low || ''}
               position={latestUpdate.feedImage.position}
+              src={latestUpdate.feedImage.low || ''}
             />
           </Col>
         ) : null}
@@ -93,43 +94,43 @@ const IncidentFeed = ({
             }
           >
             <ImageContainer
-              src={feedImage.low || ''}
               position={feedImage.position}
+              src={feedImage.low || ''}
             />
           </Col>
         ) : null}
       </div>
 
-      <Col flex={1} className={classes.contentContainer}>
-        <Row className={classes.contentHeader} align="middle" wrap={false}>
+      <Col className={classes.contentContainer} flex={1}>
+        <Row align="middle" className={classes.contentHeader} wrap={false}>
           <Col flex={1}>
-            <Title style={{ margin: 0, fontSize: 14 }} level={4} ellipsis>
+            <Title ellipsis level={4} style={{ fontSize: 14, margin: 0 }}>
               {feedItem?.message}
             </Title>
           </Col>
           <Col>
             {adminRights && (
               <Button
-                type="text"
-                style={{ height: 28, width: 25 }}
                 disabled={saving}
                 icon={
-                  <FontAwesomeIcon style={{ marginBottom: 2 }} icon={faTrash} />
+                  <FontAwesomeIcon icon={faTrash} style={{ marginBottom: 2 }} />
                 }
                 onClick={() => {
                   confirm({
-                    title: intl.formatMessage({
-                      defaultMessage: 'Do you want to delete the feed item?',
-                    }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
                     },
+                    title: intl.formatMessage({
+                      defaultMessage: 'Do you want to delete the feed item?',
+                    }),
                   });
                 }}
                 size="small"
+                style={{ height: 28, width: 25 }}
+                type="text"
               />
             )}
           </Col>
@@ -143,7 +144,7 @@ const IncidentFeed = ({
               <>
                 <Row>
                   <Col flex={1}>
-                    <Title level={4} ellipsis>
+                    <Title ellipsis level={4}>
                       {subject}
                     </Title>
                   </Col>
@@ -163,12 +164,12 @@ const IncidentFeed = ({
                 <div style={hasImage ? { height: 35 } : undefined}>
                   {description && (
                     <Paragraph
-                      type="secondary"
+                      ellipsis={{ rows: 1 }}
                       style={{
                         fontSize: 14,
                         // width: '100%',
                       }}
-                      ellipsis={{ rows: 1 }}
+                      type="secondary"
                     >
                       {description}
                     </Paragraph>
@@ -177,16 +178,16 @@ const IncidentFeed = ({
               </>
             )}
 
-            <Row wrap={false} className={classes.bottomRow}>
+            <Row className={classes.bottomRow} wrap={false}>
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faLocationDot}
+                  size="sm"
                 />
               </Col>
               <Col flex={1}>
-                <Text style={{ fontSize: 14 }} ellipsis type="secondary">
+                <Text ellipsis style={{ fontSize: 14 }} type="secondary">
                   {business?.name ||
                     intl.formatMessage({
                       defaultMessage: 'Unknown',
@@ -195,13 +196,13 @@ const IncidentFeed = ({
               </Col>
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faClock}
+                  size="sm"
                 />
               </Col>
               <Col>
-                <Text type="secondary" style={{ fontSize: 14 }}>
+                <Text style={{ fontSize: 14 }} type="secondary">
                   {FormatCalendar(feedItem?.updatedAt || new Date())}
                 </Text>
               </Col>

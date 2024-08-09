@@ -1,49 +1,53 @@
-import { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from 'state';
-import { useNavigate } from 'react-router-dom';
-import type { DateType } from 'types/DataType';
+import type {
+  ListArticlesFeedQuery,
+  ListArticlesFeedQueryVariables,
+} from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { DeleteArticleMutation } from 'graphql/article/mutations/__generated__/delete_article.generated';
+import type { ArticlePriority } from 'graphql/types';
 import type { ArticleFilters } from 'state/data-model';
+import type { DateType } from 'types/DataType';
+
 import { useGroupsContext } from '#/context/groups-context';
-import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
 import {
   ListArticlesFeedDocument,
   useListArticlesFeedQuery,
-} from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
-import type { ArticlePriority } from 'graphql/types';
+} from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
-import type { DeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
+  clearFilters: () => void;
   data:
-    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], undefined | null>
+    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  clearFilters: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  setOrder: (value: SortOrder) => void;
+  fetchMoreScroll: () => void;
+  filterVariables: ArticleFilters;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  hasCreateRights: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
+  loading: boolean;
   onNavigate: () => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
   setGallery: (values: string[]) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setPriorityFilter: (value: ArticlePriority[]) => void;
+  setSearch: (value: string) => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
-  fetchMoreScroll: () => void;
-  filterVariables: ArticleFilters;
-  hasCreateRights: boolean;
 }
 
 const useArticleFeed = (): Return => {
@@ -53,9 +57,9 @@ const useArticleFeed = (): Return => {
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
   const {
-    role,
-    id: userId,
     filterDefaultGroups: defaultGroups,
+    id: userId,
+    role,
   } = useStoreState((state) => state.user);
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
@@ -63,12 +67,12 @@ const useArticleFeed = (): Return => {
 
   const setFilterState = useStoreActions((actions) => actions.data.setArticles);
   const {
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    gallery,
+    groups: groupsFilter,
     order,
     priorities: priorityFilter,
     search,
-    gallery,
   } = filterVariables;
   const [sortFilter, setSortFilter] = useState(false);
 
@@ -77,19 +81,27 @@ const useArticleFeed = (): Return => {
     []
   );
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
 
-  const variables = {
+  const variables: ListArticlesFeedQueryVariables = {
     order: {
       updatedAt: order,
     },
-    take: 12,
     scheme: {
       id: schemeId,
     },
+    take: 12,
     where: {
+      OR: [
+        {
+          title: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
       createdAt: createdAtFilter
         ? {
             gte: createdAtFilter.startDate,
@@ -119,14 +131,6 @@ const useArticleFeed = (): Return => {
               in: priorityFilter,
             }
           : undefined,
-      OR: [
-        {
-          title: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
     },
   };
   // On mount
@@ -147,7 +151,7 @@ const useArticleFeed = (): Return => {
   //   variables,
   // });
 
-  const { data, loading, fetchMore } = useListArticlesFeedQuery({
+  const { data, fetchMore, loading } = useListArticlesFeedQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
@@ -167,16 +171,16 @@ const useArticleFeed = (): Return => {
     if (existingData?.listArticlesRelay?.edges === undefined) return;
 
     store.writeQuery<ListArticlesFeedQuery>({
-      query: ListArticlesFeedDocument,
       data: {
+        __typename: 'Query',
         listArticlesRelay: {
           ...existingData.listArticlesRelay,
           edges: existingData.listArticlesRelay?.edges.filter(
             (article) => article?.node?.id !== res?.deleteArticle?.id
           ),
         },
-        __typename: 'Query',
       },
+      query: ListArticlesFeedDocument,
       variables,
     });
   };
@@ -188,15 +192,15 @@ const useArticleFeed = (): Return => {
     setLightboxElements(elements);
     if (lightBoxOpen.open) {
       setLightBoxOpen({
-        open: !lightBoxOpen.open,
         index,
+        open: !lightBoxOpen.open,
       });
     } else {
       setTimeout(
         () =>
           setLightBoxOpen({
-            open: !lightBoxOpen.open,
             index,
+            open: !lightBoxOpen.open,
           }),
         0.3
       );
@@ -205,10 +209,6 @@ const useArticleFeed = (): Return => {
 
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        after: data?.listArticlesRelay?.pageInfo?.endCursor,
-      },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -220,6 +220,10 @@ const useArticleFeed = (): Return => {
             ],
           },
         };
+      },
+      variables: {
+        ...variables,
+        after: data?.listArticlesRelay?.pageInfo?.endCursor,
       },
     });
   };
@@ -280,38 +284,38 @@ const useArticleFeed = (): Return => {
   const clearFilters = () => {
     setFilterState({
       variables: {
-        search: '',
-        gallery: [],
-        order: SortOrder.Desc,
         createdAt: undefined,
+        gallery: [],
         groups: [],
+        order: SortOrder.Desc,
         priorities: [],
+        search: '',
       },
     });
   };
   return {
-    fetchMoreScroll,
+    clearFilters,
     data: data?.listArticlesRelay || null,
-    loading: (data === null || data === undefined) && loading,
-    setOrder,
-    setGallery,
-    setSearch,
-    setPriorityFilter,
+    fetchMoreScroll,
+    filterVariables,
     groups,
     groupsLoading,
-    onNavigate,
-    lightboxElements,
-    lightBoxOpen,
-    openLightbox: triggerLightbox,
-    sortFilter,
-    toggleSortFilter,
-    clearFilters,
-    setGroupsFilter,
-    setCreatedAtFilter,
-    updateArticleList,
-    filterVariables,
     // TODO change to new permissions model
     hasCreateRights: role === 'SCHEME_ADMIN' || role === 'GROUP_ADMIN',
+    lightBoxOpen,
+    lightboxElements,
+    loading: (data === null || data === undefined) && loading,
+    onNavigate,
+    openLightbox: triggerLightbox,
+    setCreatedAtFilter,
+    setGallery,
+    setGroupsFilter,
+    setOrder,
+    setPriorityFilter,
+    setSearch,
+    sortFilter,
+    toggleSortFilter,
+    updateArticleList,
   };
 };
 

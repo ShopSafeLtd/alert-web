@@ -1,22 +1,23 @@
+import type { ListDemCompaniesQuery } from 'graphql/dem/queries/__generated__/list-companies.generated';
+
+import { useLinkOrgToDemMutation } from 'graphql/dem/mutations/__generated__/link-org-to-dem.generated';
+import { useListDemCompaniesQuery } from 'graphql/dem/queries/__generated__/list-companies.generated';
 import { useState } from 'react';
-import type { ListDemCompaniesQuery } from 'graphql/dem/queries/list-companies.generated';
-import { useListDemCompaniesQuery } from 'graphql/dem/queries/list-companies.generated';
-import { useLinkOrgToDemMutation } from 'graphql/dem/mutations/link-org-to-dem.generated';
 
 interface Props {
-  onClose: () => void;
   businessId: string;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListDemCompaniesQuery | undefined;
   loading: boolean;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
 }
 
-const useLinkDem = ({ onClose, businessId }: Props): Return => {
+const useLinkDem = ({ businessId, onClose }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
 
@@ -34,11 +35,11 @@ const useLinkDem = ({ onClose, businessId }: Props): Return => {
       if (company) {
         void linkToDem({
           variables: {
-            where: {
-              id: businessId,
-            },
             data: {
               id: company.id || '',
+            },
+            where: {
+              id: businessId,
             },
           },
         });
@@ -53,11 +54,11 @@ const useLinkDem = ({ onClose, businessId }: Props): Return => {
   };
 
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listDemCompanies ? false : loading,
     onSelect,
+    onSubmit,
+    saving,
   };
 };
 

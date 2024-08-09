@@ -8,10 +8,12 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { CrimeType } from 'graphql/types';
 import { Model, TagType } from 'graphql/types';
-import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
-import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
+import { CreateTagMutation, useCreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import {
+  ListSchemeTagsQuery,
+  useListSchemeTagsQuery,
+} from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
+
 
 interface FormData {
   name: string;
@@ -76,8 +78,8 @@ const useAddCrimeType = ({
           defaultMessage: 'Successfully Added!',
         }),
         description: intl.formatMessage({
-          defaultMessage: 'The crime type has been added! ',
-        }),
+          defaultMessage: 'The incident type has been added! ',
+          id: 'Td7ZrB',        }),
         placement: 'bottomRight',
       });
     },

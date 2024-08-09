@@ -1,14 +1,15 @@
-import { useStoreState } from 'state';
 import type {
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables,
-} from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+} from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { QueryMode } from 'graphql/types';
+import { useStoreState } from 'state';
 
 interface Return {
   data:
-    | Exclude<ListCrimeGroupsQuery['listCrimeGroups'], undefined | null>
+    | Exclude<ListCrimeGroupsQuery['listCrimeGroups'], null | undefined>
     | null
     | undefined;
   loading: boolean;
@@ -22,66 +23,18 @@ const useCrimeGroupSideList = (): Return => {
     (state) => state.data.crimeGroups.variables
   );
   const {
-    search,
-    groups: groupsFilter,
     createdAt: createdAtFilter,
     gallery,
+    groups: groupsFilter,
     order,
+    search,
   } = filterVariables;
   const variables: ListCrimeGroupsQueryVariables = {
     order: {
       updatedAt: order,
     },
+    take: 12,
     where: {
-      schemes: {
-        some: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      createdAt: createdAtFilter
-        ? {
-            gte: createdAtFilter.startDate,
-            lte: createdAtFilter.endDate,
-          }
-        : undefined,
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : {
-              some: {
-                users: {
-                  some: {
-                    id: {
-                      equals: userId,
-                    },
-                  },
-                },
-              },
-            },
-      createdBy: gallery.includes('MYDATA')
-        ? {
-            id: {
-              equals: userId,
-            },
-          }
-        : undefined,
-      subscribedUsers: gallery.includes('FOLLOWING')
-        ? {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          }
-        : undefined,
       OR: [
         {
           alias: {
@@ -109,36 +62,84 @@ const useCrimeGroupSideList = (): Return => {
           },
         },
       ],
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
+      createdBy: gallery.includes('MYDATA')
+        ? {
+            id: {
+              equals: userId,
+            },
+          }
+        : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : {
+              some: {
+                users: {
+                  some: {
+                    id: {
+                      equals: userId,
+                    },
+                  },
+                },
+              },
+            },
+      schemes: {
+        some: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      subscribedUsers: gallery.includes('FOLLOWING')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
     },
-    take: 12,
   };
 
-  const { data, loading, fetchMore } = useListCrimeGroupsQuery({
+  const { data, fetchMore, loading } = useListCrimeGroupsQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
   const next = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        skip: data?.listCrimeGroups.crimeGroups?.length || 0,
-      },
-
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           listCrimeGroups: {
             ...fetchMoreResult.listCrimeGroups,
-            total:
-              fetchMoreResult.listCrimeGroups?.total ||
-              prev.listCrimeGroups?.total ||
-              0,
             crimeGroups: [
               ...(prev.listCrimeGroups?.crimeGroups || []),
               ...(fetchMoreResult.listCrimeGroups?.crimeGroups || []),
             ],
+            total:
+              fetchMoreResult.listCrimeGroups?.total ||
+              prev.listCrimeGroups?.total ||
+              0,
           },
         };
+      },
+
+      variables: {
+        ...variables,
+        skip: data?.listCrimeGroups.crimeGroups?.length || 0,
       },
     });
   };

@@ -6,8 +6,9 @@ import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 
 import useArticlesSection from '../useArticlesSection';
-import { ListArticlesDocument } from 'graphql/article/queries/list_articles.generated';
 import { ArticlePriority, QueryMode, SortOrder } from 'graphql/types';
+
+import { ListArticlesDocument } from 'graphql/article/queries/__generated__/list_articles.generated';
 
 const mocks = [
   {

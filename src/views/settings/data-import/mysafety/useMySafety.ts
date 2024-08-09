@@ -1,9 +1,9 @@
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
-import { notification } from 'antd';
 import type { MySafetyCSVData } from '#/components/form-components/MySafetyCSV/MySafetyCSV.types';
-import { useMySafetyImportDataMutation } from 'graphql/imports/mysafety-import.generated';
+
+import { notification } from 'antd';
+import { useMySafetyImportDataMutation } from 'graphql/imports/__generated__/mysafety-import.generated';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface FormData {
   groups: string[];
@@ -42,24 +42,24 @@ const useMySafety = (): Return => {
       await importData({
         variables: {
           data: {
-            scheme: {
-              id: schemeId,
-            },
             groups: groups.map((id) => ({ id })) || [],
             incidents: mySafety.map((item) => ({
-              site: item.site,
               actualValue: item.actualValue,
               createdByName: item.createdByName,
               crimeReferenceNumber: item.crimeReferenceNumber,
               crimeType: item.crimeType,
-              incidentID: item.incidentID,
               dateOccurred: item.dateOccurred,
               description: item.description,
               emergencyServicesAttend: item.emergencyServicesAttend,
               estimatedValue: item.estimatedValue,
+              incidentID: item.incidentID,
+              site: item.site,
               specificArea: item.specificArea,
               wereWeaponsUsed: item.wereWeaponsUsed,
             })),
+            scheme: {
+              id: schemeId,
+            },
           },
         },
       });

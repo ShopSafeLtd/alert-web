@@ -1,34 +1,35 @@
-import React, { useState } from 'react';
-import { Button, Col, Row, Skeleton, Table, Tag, Typography } from 'antd';
+import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
 
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl';
-import DebouncedInput from 'utils/debounced-input';
-import useStyles from './search.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { Button, Col, Row, Skeleton, Table, Tag, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/search-offender-report.generated';
+import DebouncedInput from 'utils/debounced-input';
+
+import useStyles from './search.styles';
 
 const { Title } = Typography;
 
 interface Props {
-  searchOffendersData: SearchOffenderReportsQuery | undefined;
-  searchOffenderLoading: boolean;
-  searchValue: string;
-  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setSelectedOffender: (value: string) => void;
   currentSearchPage: number;
+  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSearchPageChange: (page: number, pageSize: number) => void;
+  searchOffenderLoading: boolean;
+  searchOffendersData: SearchOffenderReportsQuery | undefined;
+  searchValue: string;
+  setSelectedOffender: (value: string) => void;
 }
 
 const OffenderProfile = ({
+  currentSearchPage,
+  handleSearchChange,
+  onSearchPageChange,
   searchOffenderLoading,
   searchOffendersData,
   searchValue: _,
-  handleSearchChange,
   setSelectedOffender,
-  currentSearchPage,
-  onSearchPageChange,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -38,8 +39,8 @@ const OffenderProfile = ({
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
-          selectedId={reportId ?? ''}
           collapsed={collapsed}
+          selectedId={reportId ?? ''}
           setCollapsed={setCollapsed}
         />
       </Col>
@@ -53,20 +54,22 @@ const OffenderProfile = ({
           <Row className={classes.toolbar}>
             <Col span={8}>
               <DebouncedInput
+                allowClear
+                onChange={handleSearchChange}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Search for an offender...',
                 })}
-                allowClear
-                onChange={handleSearchChange}
               />
             </Col>
           </Row>
           <Table
             columns={[
               {
-                key: 'images',
                 dataIndex: 'images',
-                title: '',
+                key: 'images',
+                onCell: () => ({
+                  className: classes.imageCell,
+                }),
                 // eslint-disable-next-line
                 render: (images: { id: string; optimised: string }[]) =>
                   // eslint-disable-next-line
@@ -79,35 +82,30 @@ const OffenderProfile = ({
                   ) : (
                     <Skeleton.Image className={classes.imageSkeleton} />
                   ),
-                onCell: () => ({
-                  className: classes.imageCell,
-                }),
+                title: '',
               },
               {
-                key: 'name',
                 dataIndex: 'name',
-                title: intl.formatMessage({
-                  defaultMessage: 'Name',
-                }),
+                key: 'name',
                 render: (value) => (
-                  <Typography.Text style={{ fontSize: 14 }} strong>
+                  <Typography.Text strong style={{ fontSize: 14 }}>
                     {value}
                   </Typography.Text>
                 ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Name',
+                }),
               },
               {
-                key: 'totalIncidents',
                 dataIndex: 'totalIncidents',
+                key: 'totalIncidents',
                 title: intl.formatMessage({
                   defaultMessage: 'Incident Count',
                 }),
               },
               {
-                key: 'totalValue',
                 dataIndex: 'totalValue',
-                title: intl.formatMessage({
-                  defaultMessage: 'Total Loss',
-                }),
+                key: 'totalValue',
                 render: (value: number) =>
                   intl.formatMessage(
                     {
@@ -117,61 +115,63 @@ const OffenderProfile = ({
                       value: value.toFixed(0),
                     }
                   ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Total Loss',
+                }),
               },
               {
-                key: 'lastIncident',
                 dataIndex: 'lastIncident',
+                key: 'lastIncident',
                 title: intl.formatMessage({
                   defaultMessage: 'Last Incident',
                 }),
               },
               {
-                key: 'tags',
                 dataIndex: 'tags',
+                key: 'tags',
+                render: (tags: { id: string; name: string }[]) =>
+                  tags.map((tag) => <Tag key={tag.id}>{tag.name}</Tag>),
                 title: intl.formatMessage({
                   defaultMessage: 'Tags',
                 }),
-                render: (tags: { id: string; name: string }[]) =>
-                  tags.map((tag) => <Tag key={tag.id}>{tag.name}</Tag>),
               },
               {
-                key: 'action',
                 dataIndex: 'action',
-                title: '',
+                key: 'action',
+                onCell: () => ({
+                  className: classes.actionCell,
+                }),
                 render: (__, item) => (
                   <Button
-                    style={{ marginRight: 20 }}
                     onClick={() => setSelectedOffender(item.key)}
+                    style={{ marginRight: 20 }}
                   >
                     {intl.formatMessage({
                       defaultMessage: 'View Report',
                     })}
                   </Button>
                 ),
-                onCell: () => ({
-                  className: classes.actionCell,
-                }),
+                title: '',
               },
             ]}
-            loading={searchOffenderLoading}
             dataSource={searchOffendersData?.listOffenders?.offenders.map(
               (offender) => ({
-                key: offender.id,
-                name: offender.name,
                 images: offender.images,
+                key: offender.id,
+                lastIncident: offender.latestIncident?.dayTime,
+                name: offender.name,
                 tags: offender.tags,
                 totalIncidents: offender.totalIncidents,
                 totalValue: offender.totalValue,
-                lastIncident: offender.latestIncident?.dayTime,
               })
             )}
+            loading={searchOffenderLoading}
             pagination={{
-              hideOnSinglePage: true,
               current: currentSearchPage,
-              onChange: onSearchPageChange,
-              total: searchOffendersData?.listOffenders?.total,
-              pageSizeOptions: ['20', '50', '100'],
               defaultPageSize: 20,
+              hideOnSinglePage: true,
+              onChange: onSearchPageChange,
+              pageSizeOptions: ['20', '50', '100'],
               showTotal: (total) =>
                 intl.formatMessage(
                   {
@@ -181,6 +181,7 @@ const OffenderProfile = ({
                     total,
                   }
                 ),
+              total: searchOffendersData?.listOffenders?.total,
             }}
             size="small"
           />

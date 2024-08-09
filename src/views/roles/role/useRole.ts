@@ -1,9 +1,9 @@
-import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
+import type { RoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
 import type { FormInstance } from 'antd';
 import type { PermissionModel, Role } from 'graphql/types';
 
-import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/upsertPermissions.generated';
-import { useRoleQuery } from '#/views/roles/graphql/queries/role.generated';
+import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/__generated__/upsertPermissions.generated';
+import { useRoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
 import { Form } from 'antd';
 import { PermissionMethod } from 'graphql/types';
 import { useState } from 'react';

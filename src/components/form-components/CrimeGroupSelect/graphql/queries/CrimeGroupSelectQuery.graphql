@@ -1,0 +1,16 @@
+query CrimeGroupsSelect($first: Int, $orderBy: [CrimeGroupsWhereOrder!], $where: CrimeGroupsWhere!, $after: String) {
+    crimeGroups(first: $first, orderBy: $orderBy, where: $where, after: $after) {
+        edges {
+            node {
+                id
+                alias
+                reference
+            }
+        }
+        totalCount
+        pageInfo {
+            endCursor
+            hasNextPage
+        }
+    }
+}

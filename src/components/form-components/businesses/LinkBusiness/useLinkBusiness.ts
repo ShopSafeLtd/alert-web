@@ -1,34 +1,35 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
 import type {
   ListBusinessesQuery,
   ListBusinessesQueryVariables,
-} from 'graphql/businesses/queries/list-businesses.generated';
+} from 'graphql/businesses/queries/__generated__/list-businesses.generated';
+
+import { useLinkBusinessToSchemeMutation } from 'graphql/businesses/mutations/__generated__/link-business-to-scheme.generated';
 import {
   ListBusinessesDocument,
   useListBusinessesQuery,
-} from 'graphql/businesses/queries/list-businesses.generated';
+} from 'graphql/businesses/queries/__generated__/list-businesses.generated';
 import { QueryMode, Role, SortOrder } from 'graphql/types';
-import { useLinkBusinessToSchemeMutation } from 'graphql/businesses/mutations/link-business-to-scheme.generated';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface Props {
   onClose: () => void;
 }
 
 interface Return {
-  data: ListBusinessesQuery | undefined;
-  onSubmit: () => void;
-  saving: boolean;
-  onSearchBusiness: (value: string) => void;
-  loading: boolean;
-  selectedValue: React.Key[];
   currentPage: number;
   currentPageSize: number;
+  data: ListBusinessesQuery | undefined;
+  loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
-  searchValue: string;
+  onSearchBusiness: (value: string) => void;
+  onSubmit: () => void;
   onTableChange: (selectedRowKeys: React.Key[]) => void;
+  saving: boolean;
+  searchValue: string;
+  selectedValue: React.Key[];
 }
-
+// TODO change to business select
 const useLinkBusiness = ({ onClose }: Props): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
@@ -45,6 +46,7 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
       orderBy: {
         name: SortOrder.Asc,
       },
+      take: 100,
       where: {
         name: {
           contains: searchValue,
@@ -100,6 +102,9 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
       >({
         query: ListBusinessesDocument,
         variables: {
+          orderBy: {
+            name: SortOrder.Asc,
+          },
           where: {
             name: {
               contains: '',
@@ -113,16 +118,25 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
               },
             },
           },
-          orderBy: {
-            name: SortOrder.Asc,
-          },
         },
       });
 
       if (existingData && result.data)
         store.writeQuery<ListBusinessesQuery, ListBusinessesQueryVariables>({
+          data: {
+            listBusinesses: {
+              businesses: [
+                ...existingData.listBusinesses.businesses,
+                result.data?.linkBusinessToScheme,
+              ],
+              total: (existingData?.listBusinesses.total || 0) + 1,
+            },
+          },
           query: ListBusinessesDocument,
           variables: {
+            orderBy: {
+              name: SortOrder.Asc,
+            },
             where: {
               name: {
                 contains: '',
@@ -135,18 +149,6 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
                   },
                 },
               },
-            },
-            orderBy: {
-              name: SortOrder.Asc,
-            },
-          },
-          data: {
-            listBusinesses: {
-              total: (existingData?.listBusinesses.total || 0) + 1,
-              businesses: [
-                ...existingData.listBusinesses.businesses,
-                result.data?.linkBusinessToScheme,
-              ],
             },
           },
         });
@@ -179,17 +181,17 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
   };
 
   return {
-    onSubmit,
-    saving,
-    onSearchBusiness,
-    data,
-    loading,
-    selectedValue,
     currentPage,
     currentPageSize,
+    data,
+    loading,
     onPaginationChange,
-    searchValue,
+    onSearchBusiness,
+    onSubmit,
     onTableChange,
+    saving,
+    searchValue,
+    selectedValue,
   };
 };
 

@@ -1,65 +1,66 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
-import { useState } from 'react';
+import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
+import type { SchemeDetailsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/scheme.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import { message, notification, Upload } from 'antd';
-import { useStoreState } from 'state';
-import { useIntl } from 'react-intl';
-import type { SchemeDetailsQuery } from './graphql/scheme.generated';
-import { useSchemeDetailsQuery } from './graphql/scheme.generated';
-import type { GoodsMode } from 'graphql/types';
-import { Model, TagType } from 'graphql/types';
-import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
-import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/list-tags.generated';
-import { useUpdateSchemeMutation } from 'graphql/scheme/mutation/update_scheme.generated';
-import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
 import type { RcFile } from 'antd/lib/upload/interface';
+import type { GoodsMode } from 'graphql/types';
+
+import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
+import { useSchemeDetailsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/scheme.generated';
+import { Upload, message, notification } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import { useUpdateSchemeMutation } from 'graphql/scheme/mutation/__generated__/update_scheme.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
+import { Model, TagType } from 'graphql/types';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 
 export interface FormData {
-  name: string;
-  logo?: { id: string; url: string; optimised: string };
-  restrictIncidentAccess: boolean;
-  autoApproveOffenders: boolean;
-  reportOnly: boolean;
+  activityAssignToUser: boolean;
   autoApproveIncidents: boolean;
-  defaultIncidentEmail: boolean;
-  defaultIncidentPush: boolean;
+  autoApproveOffenders: boolean;
+  autoPopulateDescription: boolean;
   defaultBulletinEmails: boolean;
   defaultBulletinPush: boolean;
-  defaultSubscribedIncidentOnly: boolean;
-  defaultSubscribedOffenderOnly: boolean;
+  defaultIncidentEmail: boolean;
+  defaultIncidentPush: boolean;
   defaultMessagePush: boolean;
   defaultOffenderEmail: boolean;
   defaultOffenderPush: boolean;
-  autoPopulateDescription: boolean;
-  needJustification: boolean;
-  requireSiteNumberForUsers: boolean;
-  oneSelectedIncidentTypeOnly: boolean;
   defaultPublicOffenderDOB: boolean;
-  incidentRetention: number | null;
-  offenderRetention: number | null;
-  facialRecognition: boolean;
+  defaultSubscribedIncidentOnly: boolean;
+  defaultSubscribedOffenderOnly: boolean;
   facialDetection: boolean;
-  activityAssignToUser: boolean;
-  useBusinessGroupsOnIncident: boolean;
-  imagesRequiredOnOffenders: boolean;
+  facialRecognition: boolean;
   goodsMode: GoodsMode;
+  imagesRequiredOnOffenders: boolean;
+  incidentRetention: null | number;
+  logo?: { id: string; optimised: string; url: string };
+  name: string;
+  needJustification: boolean;
+  offenderRetention: null | number;
+  oneSelectedIncidentTypeOnly: boolean;
+  reportOnly: boolean;
+  requireSiteNumberForUsers: boolean;
+  restrictIncidentAccess: boolean;
+  useBusinessGroupsOnIncident: boolean;
 }
 
 interface Return {
-  data: SchemeDetailsQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  onSubmit: (value: FormData) => void;
-  onPreview: (value: UploadFile) => void;
-  fileList: UploadFile[];
-  imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile, dark?: string) => void;
   darkFileList: UploadFile[];
   darkImgChange: UploadProps['onChange'];
-  updateTagParent: (tagId: string, parentTagId: string | null) => void;
-  tags: ListSchemeTagsQuery | undefined;
+  data: SchemeDetailsQuery | undefined;
+  fileList: UploadFile[];
   form: FormInstance<FormData>;
+  imgChange: UploadProps['onChange'];
+  loading: boolean;
+  onPreview: (value: UploadFile) => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  tags: ListSchemeTagsQuery | undefined;
+  updateTagParent: (tagId: string, parentTagId: null | string) => void;
 }
 
 const useSchemeDetail = (): Return => {
@@ -67,12 +68,12 @@ const useSchemeDetail = (): Return => {
 
   const errorNotification = () =>
     notification.error({
-      message: intl.formatMessage({
-        defaultMessage: 'Error',
-      }),
       description: intl.formatMessage({
         defaultMessage:
           'This error has been reported to our team, if it continues to happen reach out to our support team.',
+      }),
+      message: intl.formatMessage({
+        defaultMessage: 'Error',
       }),
       placement: 'bottomRight',
     });
@@ -87,9 +88,6 @@ const useSchemeDetail = (): Return => {
   const { data: tags } = useListSchemeTagsQuery({
     variables: {
       listWhere: {
-        type: {
-          equals: TagType.IncidentCrimeType,
-        },
         dataType: {
           equals: Model.Incident,
         },
@@ -100,23 +98,21 @@ const useSchemeDetail = (): Return => {
             },
           },
         },
+        type: {
+          equals: TagType.IncidentCrimeType,
+        },
       },
     },
   });
 
   const { data: schemeData, loading } = useSchemeDetailsQuery({
-    variables: {
-      where: {
-        id: schemeId,
-      },
-    },
     onCompleted: ({ scheme }) => {
       if (scheme?.logo?.url) {
         setFileList([
           {
-            uid: `${scheme?.logo?.id}`,
             name: 'image.png',
             status: 'done',
+            uid: `${scheme?.logo?.id}`,
             url: `${scheme?.logo?.optimised || scheme?.logo?.url}`,
           },
         ]);
@@ -124,13 +120,18 @@ const useSchemeDetail = (): Return => {
       if (scheme?.darkLogo?.url) {
         setDarkFileList([
           {
-            uid: `${scheme?.darkLogo?.id}`,
             name: 'darkImage.png',
             status: 'done',
+            uid: `${scheme?.darkLogo?.id}`,
             url: `${scheme?.darkLogo?.optimised || scheme?.darkLogo?.url}`,
           },
         ]);
       }
+    },
+    variables: {
+      where: {
+        id: schemeId,
+      },
     },
   });
 
@@ -138,11 +139,11 @@ const useSchemeDetail = (): Return => {
     onCompleted: (res) => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The scheme has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -166,65 +167,11 @@ const useSchemeDetail = (): Return => {
 
     void updateScheme({
       variables: {
-        where: {
-          id: schemeId,
-        },
         data: {
-          name: { set: data.name },
-          autoPopulateDescription: { set: data.autoPopulateDescription },
-          needJustification: { set: data.needJustification },
-          requireSiteNumberForUsers: { set: data.requireSiteNumberForUsers },
-          oneSelectedIncidentTypeOnly: {
-            set: data.oneSelectedIncidentTypeOnly,
-          },
-          restrictIncidentAccess: { set: data.restrictIncidentAccess },
-          reportOnly: { set: data.reportOnly },
+          activityAssignToUser: { set: data.activityAssignToUser },
           autoApproveIncidents: { set: data.autoApproveOffenders },
           autoApproveOffenders: { set: data.autoApproveIncidents },
-          incidentRetention: { set: data.incidentRetention },
-          offenderRetention: { set: data.offenderRetention },
-          defaultIncidentEmail: { set: data.defaultIncidentEmail },
-          defaultIncidentPush: { set: data.defaultIncidentPush },
-          defaultBulletinEmails: { set: data.defaultBulletinEmails },
-          defaultBulletinPush: { set: data.defaultBulletinPush },
-          defaultSubscribedIncidentOnly: {
-            set: data.defaultSubscribedIncidentOnly,
-          },
-          defaultSubscribedOffenderOnly: {
-            set: data.defaultSubscribedOffenderOnly,
-          },
-          defaultMessagePush: { set: data.defaultMessagePush },
-          defaultOffenderEmail: { set: data.defaultOffenderEmail },
-          defaultOffenderPush: { set: data.defaultOffenderPush },
-          defaultPublicOffenderDOB: { set: data.defaultPublicOffenderDOB },
-          facialRecognition: { set: data.facialRecognition },
-          facialDetection: { set: data.facialDetection },
-          activityAssignToUser: { set: data.activityAssignToUser },
-          useBusinessGroupsOnIncident: {
-            set: data.useBusinessGroupsOnIncident,
-          },
-          imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
-          goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
-          // ???
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          logo: {
-            ...(imageChange && fileList.length > 0
-              ? {
-                  upload: {
-                    url: {
-                      filename: fileList[0].fileName || '',
-                      mimetype: fileList[0].type || '',
-                      url: fileList[0].url || '',
-                    },
-                  },
-                }
-              : undefined),
-
-            ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
-          },
-          // ???
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          autoPopulateDescription: { set: data.autoPopulateDescription },
           // @ts-ignore
           darkLogo: {
             ...(darkImageChange && darkFileList.length > 0
@@ -243,6 +190,60 @@ const useSchemeDetail = (): Return => {
               ? { delete: true }
               : {}),
           },
+          defaultBulletinEmails: { set: data.defaultBulletinEmails },
+          defaultBulletinPush: { set: data.defaultBulletinPush },
+          defaultIncidentEmail: { set: data.defaultIncidentEmail },
+          defaultIncidentPush: { set: data.defaultIncidentPush },
+          defaultMessagePush: { set: data.defaultMessagePush },
+          defaultOffenderEmail: { set: data.defaultOffenderEmail },
+          defaultOffenderPush: { set: data.defaultOffenderPush },
+          defaultPublicOffenderDOB: { set: data.defaultPublicOffenderDOB },
+          defaultSubscribedIncidentOnly: {
+            set: data.defaultSubscribedIncidentOnly,
+          },
+          defaultSubscribedOffenderOnly: {
+            set: data.defaultSubscribedOffenderOnly,
+          },
+          facialDetection: { set: data.facialDetection },
+          facialRecognition: { set: data.facialRecognition },
+          goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
+          imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
+          incidentRetention: { set: data.incidentRetention },
+          // @ts-ignore
+          logo: {
+            ...(imageChange && fileList.length > 0
+              ? {
+                  upload: {
+                    url: {
+                      filename: fileList[0].fileName || '',
+                      mimetype: fileList[0].type || '',
+                      url: fileList[0].url || '',
+                    },
+                  },
+                }
+              : undefined),
+
+            ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
+          },
+          name: { set: data.name },
+          needJustification: { set: data.needJustification },
+          offenderRetention: { set: data.offenderRetention },
+          oneSelectedIncidentTypeOnly: {
+            set: data.oneSelectedIncidentTypeOnly,
+          },
+          reportOnly: { set: data.reportOnly },
+          requireSiteNumberForUsers: { set: data.requireSiteNumberForUsers },
+          // ???
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          restrictIncidentAccess: { set: data.restrictIncidentAccess },
+          // ???
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          useBusinessGroupsOnIncident: {
+            set: data.useBusinessGroupsOnIncident,
+          },
+        },
+        where: {
+          id: schemeId,
         },
       },
     });
@@ -270,9 +271,9 @@ const useSchemeDetail = (): Return => {
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
@@ -288,9 +289,9 @@ const useSchemeDetail = (): Return => {
         ...darkFileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setDarkImageChange(true);
@@ -316,13 +317,10 @@ const useSchemeDetail = (): Return => {
 
   const [updateTag] = useUpdateTagMutation();
 
-  const updateTagParent = (tagId: string, parentTagId: string | null) => {
+  const updateTagParent = (tagId: string, parentTagId: null | string) => {
     if (parentTagId) {
       void updateTag({
         variables: {
-          where: {
-            id: tagId,
-          },
           data: {
             parentTag: {
               connect: {
@@ -330,18 +328,21 @@ const useSchemeDetail = (): Return => {
               },
             },
           },
+          where: {
+            id: tagId,
+          },
         },
       });
     } else {
       void updateTag({
         variables: {
-          where: {
-            id: tagId,
-          },
           data: {
             parentTag: {
               disconnect: true,
             },
+          },
+          where: {
+            id: tagId,
           },
         },
       });
@@ -349,20 +350,20 @@ const useSchemeDetail = (): Return => {
   };
 
   return {
-    updateTagParent,
-    data: schemeData,
-    loading,
-    saving,
-    onSubmit,
     beforeUpload,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onPreview,
-    imgChange,
-    fileList,
     darkFileList,
     darkImgChange,
-    tags,
+    data: schemeData,
+    fileList,
     form,
+    imgChange,
+    loading,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onPreview,
+    onSubmit,
+    saving,
+    tags,
+    updateTagParent,
   };
 };
 

@@ -1,37 +1,37 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { RecycledItemsQuery } from 'graphql/recycled/queries/recycled-items.generated';
+import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/__generated__/delete-incident.generated';
+import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/__generated__/delete-offender.generated';
+import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/__generated__/restore-incident.generated';
+import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/__generated__/restore-offender.generated';
+import type { RecycledItemsQuery } from 'graphql/recycled/queries/__generated__/recycled-items.generated';
+
 import {
   RecycledItemsDocument,
   useRecycledItemsQuery,
-} from 'graphql/recycled/queries/recycled-items.generated';
-import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/restore-incident.generated';
-import type { DeleteIncidentMutation } from 'graphql/recycled/mutations/delete-incident.generated';
-import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/restore-offender.generated';
-import type { DeleteOffenderMutation } from 'graphql/recycled/mutations/delete-offender.generated';
+} from 'graphql/recycled/queries/__generated__/recycled-items.generated';
 import { SortOrder } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface Return {
+  currentId: string | undefined;
   data: RecycledItemsQuery | undefined;
   loading: boolean;
-  saving: boolean;
-  currentId: string | undefined;
-  setCurrentId: (value: string | undefined) => void;
   recycledId: string | undefined;
-  setRecycledId: (value: string | undefined) => void;
-
   restoreIncident: boolean;
-  toggleRestoreIncident: () => void;
-  updateRestoreIncident: MutationUpdaterFn<RestoreIncidentMutation>;
-  updateDeleteIncident: MutationUpdaterFn<DeleteIncidentMutation>;
-
   restoreOffender: boolean;
-  toggleRestoreOffender: () => void;
+  saving: boolean;
+
+  setCurrentId: (value: string | undefined) => void;
+  setRecycledId: (value: string | undefined) => void;
   toggleRestore: (value: string | undefined) => void;
-  updateRestoreOffender: MutationUpdaterFn<RestoreOffenderMutation>;
+  toggleRestoreIncident: () => void;
+
+  toggleRestoreOffender: () => void;
+  updateDeleteIncident: MutationUpdaterFn<DeleteIncidentMutation>;
   updateDeleteOffender: MutationUpdaterFn<DeleteOffenderMutation>;
+  updateRestoreIncident: MutationUpdaterFn<RestoreIncidentMutation>;
+  updateRestoreOffender: MutationUpdaterFn<RestoreOffenderMutation>;
 }
 
 const useRecycleBin = (): Return => {
@@ -44,10 +44,10 @@ const useRecycleBin = (): Return => {
   const [restoreOffender, setRestoreOffender] = useState(false);
   const [restoreIncident, setRestoreIncident] = useState(false);
   const variables = {
-    schemeId,
     order: {
       deletedAt: SortOrder.Desc,
     },
+    schemeId,
   };
   const { data, loading } = useRecycledItemsQuery({
     fetchPolicy: 'cache-and-network',
@@ -71,13 +71,13 @@ const useRecycleBin = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<RecycledItemsQuery>({
-      query: RecycledItemsDocument,
       data: {
+        __typename: 'Query',
         recycledItems: existingData?.recycledItems?.filter(
           (item) => item?.incident?.id !== res.restoreIncident?.id
         ),
-        __typename: 'Query',
       },
+      query: RecycledItemsDocument,
       variables,
     });
   };
@@ -96,13 +96,13 @@ const useRecycleBin = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<RecycledItemsQuery>({
-      query: RecycledItemsDocument,
       data: {
+        __typename: 'Query',
         recycledItems: existingData?.recycledItems?.filter(
           (item) => item?.incident?.id !== res.deleteIncident?.id
         ),
-        __typename: 'Query',
       },
+      query: RecycledItemsDocument,
       variables,
     });
   };
@@ -122,13 +122,13 @@ const useRecycleBin = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<RecycledItemsQuery>({
-      query: RecycledItemsDocument,
       data: {
+        __typename: 'Query',
         recycledItems: existingData?.recycledItems?.filter(
           (item) => item?.offender?.id !== res.restoreOffender?.id
         ),
-        __typename: 'Query',
       },
+      query: RecycledItemsDocument,
       variables,
     });
   };
@@ -147,13 +147,13 @@ const useRecycleBin = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<RecycledItemsQuery>({
-      query: RecycledItemsDocument,
       data: {
+        __typename: 'Query',
         recycledItems: existingData?.recycledItems?.filter(
           (item) => item?.offender?.id !== res.deleteOffender?.id
         ),
-        __typename: 'Query',
       },
+      query: RecycledItemsDocument,
       variables,
     });
   };
@@ -175,22 +175,22 @@ const useRecycleBin = (): Return => {
     }
   };
   return {
+    currentId,
     data,
     loading,
-    saving,
-    currentId,
-    setCurrentId,
     recycledId,
+    restoreIncident,
+    restoreOffender,
+    saving,
+    setCurrentId,
     setRecycledId,
     toggleRestore,
-    restoreIncident,
     toggleRestoreIncident,
-    updateRestoreIncident,
-    updateDeleteIncident,
-    restoreOffender,
     toggleRestoreOffender,
-    updateRestoreOffender,
+    updateDeleteIncident,
     updateDeleteOffender,
+    updateRestoreIncident,
+    updateRestoreOffender,
   };
 };
 

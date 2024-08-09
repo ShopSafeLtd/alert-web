@@ -1,35 +1,35 @@
-import { useState } from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
+import type { SelectOptions } from 'types/DataType';
 
 import { notification } from 'antd';
-import { useStoreState } from 'state';
-import type { MutationUpdaterFn } from '@apollo/client';
-import type { SelectOptions } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useCreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
 import { Role, SortOrder } from 'graphql/types';
-import type { CreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
-import { useCreateGroupMutation } from 'graphql/groups/mutations/create-group.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
-  name: string;
-  description: string;
-  users: string[];
   approvers: string[];
-  showName: boolean;
-  showAlias: boolean;
-  showEthnicity: boolean;
-  showGender: boolean;
-  showBuild: boolean;
-  showHeight: boolean;
-  showHair: boolean;
+  description: string;
+  name: string;
   showAge: boolean;
+  showAlias: boolean;
+  showBuild: boolean;
+  showComment: boolean;
   showDateOfBirth: boolean;
   showDateOfBirthSource: boolean;
+  showEthnicity: boolean;
+  showGender: boolean;
+  showHair: boolean;
+  showHeight: boolean;
   showIdVerified: boolean;
-  showPeculiarities: boolean;
-  showComment: boolean;
   showImages: boolean;
+  showName: boolean;
+  showPeculiarities: boolean;
+  users: string[];
 }
 
 interface Props {
@@ -38,15 +38,15 @@ interface Props {
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  usersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
   adminUsersData: SelectOptions[] | undefined;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
   selectedUsers: string[] | undefined;
   setSelectedUsers: (value: string[]) => void;
-  showOffenderSettings: boolean;
   setShowOffenderSettings: (value: boolean) => void;
+  showOffenderSettings: boolean;
+  usersData: SelectOptions[] | undefined;
+  usersLoading: boolean;
 }
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
@@ -59,17 +59,6 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-      },
       groupWhere: {
         scheme: {
           id: {
@@ -87,6 +76,17 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
           },
         },
       },
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -95,11 +95,11 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The group has been added.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -116,61 +116,61 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     void createGroup({
       variables: {
         data: {
-          name: data.name,
-          description: data.description,
-          users: { connect: data.users.map((id) => ({ id })) },
           approver:
             data.approvers && data.approvers.length > 0
               ? { connect: data.approvers.map((id) => ({ id })) }
               : undefined,
+          description: data.description,
+          name: data.name,
+          offenderSettings: showOffenderSettings
+            ? {
+                create: {
+                  age: data.showAge,
+                  alias: data.showAlias,
+                  build: data.showBuild,
+                  comment: data.showComment,
+                  dateOfBirth: data.showDateOfBirth,
+                  dateOfBirthSource: data.showDateOfBirthSource,
+                  ethnicity: data.showEthnicity,
+                  gender: data.showGender,
+                  hair: data.showHair,
+                  height: data.showHeight,
+                  idVerified: data.showIdVerified,
+                  images: data.showImages,
+                  name: data.showName,
+                  peculiarities: data.showPeculiarities,
+                },
+              }
+            : undefined,
           scheme: {
             connect: {
               id: schemeId,
             },
           },
-          offenderSettings: showOffenderSettings
-            ? {
-                create: {
-                  name: data.showName,
-                  alias: data.showAlias,
-                  ethnicity: data.showEthnicity,
-                  gender: data.showGender,
-                  build: data.showBuild,
-                  height: data.showHeight,
-                  hair: data.showHair,
-                  age: data.showAge,
-                  dateOfBirth: data.showDateOfBirth,
-                  dateOfBirthSource: data.showDateOfBirthSource,
-                  idVerified: data.showIdVerified,
-                  peculiarities: data.showPeculiarities,
-                  comment: data.showComment,
-                  images: data.showImages,
-                },
-              }
-            : undefined,
+          users: { connect: data.users.map((id) => ({ id })) },
         },
       },
     });
   };
 
   return {
-    onSubmit,
-    usersData: usersData?.users.map((user) => ({
-      value: user.id,
-      label: user.fullName,
-    })),
     adminUsersData: usersData?.users
       .filter((user) => user.schemes[0].role === Role.SchemeAdmin)
       .map((user) => ({
-        value: user.id,
         label: user.fullName,
+        value: user.id,
       })),
-    usersLoading,
+    onSubmit,
     saving,
     selectedUsers,
     setSelectedUsers,
-    showOffenderSettings,
     setShowOffenderSettings,
+    showOffenderSettings,
+    usersData: usersData?.users.map((user) => ({
+      label: user.fullName,
+      value: user.id,
+    })),
+    usersLoading,
   };
 };
 export default useAddGroup;

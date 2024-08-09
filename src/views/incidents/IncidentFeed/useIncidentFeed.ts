@@ -1,9 +1,9 @@
 import type {
   IncidentsFeedQuery,
   IncidentsFeedQueryVariables,
-} from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
+} from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
 import type { IncidentFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
@@ -11,9 +11,9 @@ import { useGroupsContext } from '#/context/groups-context';
 import {
   IncidentsFeedDocument,
   useIncidentsFeedQuery,
-} from '#/views/incidents/IncidentFeed/graphql/queries/incident-feed.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+} from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

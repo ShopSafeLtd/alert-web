@@ -1,19 +1,22 @@
 import type { FormInstance } from 'antd';
-import { Form } from 'antd';
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
 import type {
   BusinessData,
   LocationData,
   SelectOptions,
   TagData,
 } from 'types/DataType';
+
 import { useGroupsContext } from '#/context/groups-context';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { Form } from 'antd';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 export interface FormData {
+  building: string;
+  county: string;
+  groups?: string[];
   name: string;
   parent:
     | {
@@ -21,15 +24,12 @@ export interface FormData {
         value: string;
       }
     | string;
-  tags?: Array<string | { value: string; label: string }>;
-  groups?: string[];
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
   postcode: string;
   publicName: boolean;
   siteNumber: string;
+  street: string;
+  tags?: ({ label: string; value: string } | string)[];
+  townCity: string;
 }
 
 interface Props {
@@ -37,7 +37,7 @@ interface Props {
   update: (value: BusinessData) => void;
 }
 
-const stringOrOption = (inputOb: string | SelectOptions) => {
+const stringOrOption = (inputOb: SelectOptions | string) => {
   if (typeof inputOb === 'string') {
     return inputOb;
   }
@@ -45,17 +45,17 @@ const stringOrOption = (inputOb: string | SelectOptions) => {
 };
 
 interface Return {
-  onSubmit: (values: FormData) => void;
-  form: FormInstance<FormData>;
-  location: LocationData | undefined;
-  setLocation: (value: LocationData) => void;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
   addTag: boolean;
+  form: FormInstance<FormData>;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  location: LocationData | undefined;
+  onSubmit: (values: FormData) => void;
+  setLocation: (value: LocationData) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
   toggleAddTag: () => void;
   updateNewTagData: (values: TagData) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
 }
 
 const useAddBusiness = ({ update }: Props): Return => {
@@ -70,15 +70,15 @@ const useAddBusiness = ({ update }: Props): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
+        dataType: {
+          equals: Model.Business,
+        },
         schemes: {
           some: {
             id: {
               in: [currentScheme],
             },
           },
-        },
-        dataType: {
-          equals: Model.Business,
         },
       },
     },
@@ -90,9 +90,9 @@ const useAddBusiness = ({ update }: Props): Return => {
     if (value) {
       setLocation(value);
       form.setFieldsValue({
+        postcode: value.postcode || '',
         street: value.street || '',
         townCity: value.townCity || '',
-        postcode: value.postcode || '',
       });
     }
   };
@@ -112,32 +112,32 @@ const useAddBusiness = ({ update }: Props): Return => {
 
     console.log('values', values);
     update({
-      id: Math.floor(Math.random() * 1000).toString(),
-      name: values.name,
-      publicName: values.publicName,
-      parent: values.parent
-        ? { id: stringOrOption(values.parent), name: '' }
-        : undefined,
-      tags: connectTagIds || [],
-      newTags: newTags || [],
       groups: values.groups || [],
-      siteNumber: values.siteNumber,
+      id: Math.floor(Math.random() * 1000).toString(),
       locations: [
         {
           building: values.building,
           county: values.county,
-          postcode: values.postcode,
-          street: values.street,
-          townCity: values.townCity,
-          geoLat: location?.geoLat,
-          geoLng: location?.geoLng,
           full: `${values.building ? `${values.building}, ` : ''}${
             values.street ? `${values.street}, ` : ''
           }${values.townCity ? `${values.townCity}, ` : ''}${
             values.county ? `${values.county}, ` : ''
           }${values.postcode ? `${values.postcode} ` : ''}`,
+          geoLat: location?.geoLat,
+          geoLng: location?.geoLng,
+          postcode: values.postcode,
+          street: values.street,
+          townCity: values.townCity,
         },
       ],
+      name: values.name,
+      newTags: newTags || [],
+      parent: values.parent
+        ? { id: stringOrOption(values.parent), name: '' }
+        : undefined,
+      publicName: values.publicName,
+      siteNumber: values.siteNumber,
+      tags: connectTagIds || [],
     });
   };
 
@@ -148,11 +148,11 @@ const useAddBusiness = ({ update }: Props): Return => {
     if (selectedTag) {
       form.setFieldsValue({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        tags: [...selectedTag, { value: values.id, label: values.name }],
+        tags: [...selectedTag, { label: values.name, value: values.id }],
       });
     } else {
       form.setFieldsValue({
-        tags: [{ value: values.id, label: values.name }],
+        tags: [{ label: values.name, value: values.id }],
       });
     }
     setTagData([...tagData, { ...values, isNew: true }]);
@@ -162,21 +162,21 @@ const useAddBusiness = ({ update }: Props): Return => {
   };
 
   return {
-    onSubmit,
+    addTag,
     form,
+    groups,
+    groupsLoading,
     location,
+    onSubmit,
     setLocation: onSetLocation,
     tags:
       tagsData?.tags.map((tag) => ({
-        value: tag.id,
         label: tag.name,
+        value: tag.id,
       })) || [],
     tagsLoading,
-    addTag,
     toggleAddTag,
     updateNewTagData,
-    groups,
-    groupsLoading,
   };
 };
 

@@ -1,4 +1,27 @@
-import React, { useRef } from 'react';
+import type { CarouselRef } from 'antd/lib/carousel';
+import type { OffenderCardFragment } from 'graphql/fragments/__generated__/offender-card.generated';
+import type { EditFeedImage } from 'types/DataType';
+
+import {
+  faEdit,
+  faEllipsisV,
+  faExclamationCircle,
+  faImage,
+  faLocationDot,
+  faMoneyBill,
+  faPeople,
+  faPlus,
+  faShieldCheck,
+  faShirt,
+  faTags,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import {
+  faAngleLeft,
+  faAngleRight,
+  faArrowsMaximize,
+} from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -13,89 +36,66 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTags,
-  faMoneyBill,
-  faEdit,
-  faEllipsisV,
-  faExclamationCircle,
-  faImage,
-  faLocationDot,
-  faShirt,
-  faPeople,
-  faPlus,
-  faTrash,
-  faShieldCheck,
-} from '@fortawesome/pro-light-svg-icons';
-import {
-  faAngleLeft,
-  faAngleRight,
-  faArrowsMaximize,
-} from '@fortawesome/pro-solid-svg-icons';
+import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
+import KnowOffender from 'components/form-components/offender/KnowOffender';
+import SkeletonImage from 'components/images/SkeletonImage.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import React, { useRef } from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { getLastOffence } from 'utils/offender/get-offender-desc';
 
-import type { CarouselRef } from 'antd/lib/carousel';
-
-import { Link } from 'react-router-dom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import SkeletonImage from 'components/images/SkeletonImage.view';
-import { useIntl } from 'react-intl';
-import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
-import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
-import type { EditFeedImage } from 'types/DataType';
-import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
-import KnowOffender from 'components/form-components/offender/KnowOffender';
 import useStyles from './OffenderCard.styles';
-import type { OffenderCardFragment } from 'graphql/fragments/offender-card.generated';
 
-const { Title, Text, Paragraph } = Typography;
+const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  offender: OffenderCardFragment;
+  addInvestigation: boolean;
   approvalRights: boolean;
+  compactView: boolean;
   deleteRights: boolean;
-  menuRights: boolean;
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  onDelete: (id: string) => void;
-  isArticle?: boolean;
-  editOffenderFeed: boolean;
-  toggleEditOffenderFeed: () => void;
   editImage: boolean;
-  toggleEditImage: () => void;
   editImageId: string;
-  setEditImageId: (id: string) => void;
+  editOffenderFeed: boolean;
+  isArticle?: boolean;
+  knowOffender: boolean;
+  menuRights: boolean;
+  offender: OffenderCardFragment;
+  onDelete: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
   onNavigate: (id?: string | undefined, url?: string | undefined) => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
+  setEditImageId: (id: string) => void;
   toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
-  compactView: boolean;
-  knowOffender: boolean;
+  toggleEditImage: () => void;
+  toggleEditOffenderFeed: () => void;
   toggleKnowOffender: () => void;
 }
 
 const OffenderCard = ({
-  offender,
-  approvalRights,
-  deleteRights,
-  menuRights,
-  openLightbox,
-  onNavigate,
-  onDelete,
-  isArticle,
-  editOffenderFeed,
-  toggleEditOffenderFeed,
-  editImage,
-  toggleEditImage,
-  editImageId,
-  setEditImageId,
-  onEditImage,
   addInvestigation,
-  toggleAddInvestigation,
+  approvalRights,
   compactView,
-  toggleKnowOffender,
+  deleteRights,
+  editImage,
+  editImageId,
+  editOffenderFeed,
+  isArticle,
   knowOffender,
+  menuRights,
+  offender,
+  onDelete,
+  onEditImage,
+  onNavigate,
+  openLightbox,
+  setEditImageId,
+  toggleAddInvestigation,
+  toggleEditImage,
+  toggleEditOffenderFeed,
+  toggleKnowOffender,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const imagesRef = useRef<CarouselRef>(null);
@@ -104,14 +104,14 @@ const OffenderCard = ({
     <div style={{ height: '100%' }}>
       {compactView ? (
         <Card
-          key={offender.id || ''}
-          style={{ marginBottom: 0 }}
           bodyStyle={{
             borderRadius: 10,
-            padding: 0,
-            overflow: 'hidden',
             height: 150,
+            overflow: 'hidden',
+            padding: 0,
           }}
+          key={offender.id || ''}
+          style={{ marginBottom: 0 }}
         >
           {!offender?.approved && (
             <div className={classes.cardOverlay}>
@@ -145,17 +145,17 @@ const OffenderCard = ({
               <Col>
                 <div className={classes.imageContainer}>
                   <Carousel
-                    ref={imagesRef}
                     afterChange={(currentSlide: number) => {
                       setEditImageId(offender.images[currentSlide].id);
                     }}
+                    ref={imagesRef}
                   >
                     {offender?.images.map((image) => (
                       <div className={classes.image} key={image.id}>
                         <WatermarkImage
-                          url={image.optimised}
-                          rotation={image.rotation}
                           position={image.position}
+                          rotation={image.rotation}
+                          url={image.optimised}
                         />
                       </div>
                     ))}
@@ -200,39 +200,42 @@ const OffenderCard = ({
               <div />
             )}
 
-            <Col flex={1} className={classes.cardContent}>
+            <Col className={classes.cardContent} flex={1}>
               <Link to={`/app/offenders/view/${offender?.id}`}>
                 <Row align="middle" wrap={false}>
                   <Col flex={1}>
-                    <Title style={{ marginBottom: 0 }} level={4} ellipsis>
+                    <Title ellipsis level={4} style={{ marginBottom: 0 }}>
                       {offender?.name}
                     </Title>
                   </Col>
                   {menuRights && (
                     <Dropdown
-                      trigger={['click']}
+                      arrow={{ pointAtCenter: true }}
                       overlay={
                         <Menu
                           items={[
                             {
+                              icon: <FontAwesomeIcon icon={faEdit} />,
                               key: 0,
                               label: intl.formatMessage({
                                 defaultMessage: 'Edit Offender',
                               }),
                               onClick: () => toggleEditOffenderFeed(),
-                              icon: <FontAwesomeIcon icon={faEdit} />,
                             },
                             offender.totalImages && offender.totalImages > 0
                               ? {
+                                  icon: <FontAwesomeIcon icon={faImage} />,
                                   key: 1,
                                   label: intl.formatMessage({
                                     defaultMessage: 'Edit Image',
                                   }),
                                   onClick: () => toggleEditImage(),
-                                  icon: <FontAwesomeIcon icon={faImage} />,
                                 }
                               : null,
                             {
+                              icon: (
+                                <FontAwesomeIcon icon={faPeople} size="lg" />
+                              ),
                               key: 2,
                               label: intl.formatMessage({
                                 defaultMessage: 'Compare Offender',
@@ -242,20 +245,17 @@ const OffenderCard = ({
                                   undefined,
                                   `/app/offenders/compare/${offender?.id}`
                                 ),
-                              icon: (
-                                <FontAwesomeIcon size="lg" icon={faPeople} />
-                              ),
                             },
                             {
+                              icon: (
+                                <FontAwesomeIcon icon={faTrash} size="lg" />
+                              ),
                               key: 3,
                               label: intl.formatMessage({
                                 defaultMessage: 'Delete Offender',
                               }),
                               onClick: () =>
                                 confirm({
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Are you sure?',
-                                  }),
                                   content: intl.formatMessage({
                                     defaultMessage:
                                       'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -264,34 +264,34 @@ const OffenderCard = ({
                                     defaultMessage: 'Delete',
                                   }),
                                   onOk: () => onDelete(offender?.id || ''),
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Are you sure?',
+                                  }),
                                 }),
-                              icon: (
-                                <FontAwesomeIcon size="lg" icon={faTrash} />
-                              ),
                             },
                             {
+                              icon: <FontAwesomeIcon icon={faPlus} />,
                               key: 4,
                               label: intl.formatMessage({
                                 defaultMessage: 'Add Investigation',
                               }),
                               onClick: () => toggleAddInvestigation(),
-                              icon: <FontAwesomeIcon icon={faPlus} />,
                             },
                           ].filter((item) => item?.key !== 3 || deleteRights)}
                         />
                       }
                       placement="bottomRight"
-                      arrow={{ pointAtCenter: true }}
+                      trigger={['click']}
                     >
                       <Button className={classes.menuButton}>
-                        <FontAwesomeIcon size="lg" icon={faEllipsisV} />
+                        <FontAwesomeIcon icon={faEllipsisV} size="lg" />
                       </Button>
                     </Dropdown>
                   )}
                 </Row>
               </Link>
               <Link to={`/app/offenders/view/${offender?.id}`}>
-                <Text type="secondary" className={classes.alertId}>
+                <Text className={classes.alertId} type="secondary">
                   {intl.formatMessage(
                     { defaultMessage: 'Alert ID: {ref}' },
                     { ref: offender?.reference }
@@ -320,7 +320,7 @@ const OffenderCard = ({
                     </Text>
                   </Col>
                 </Row> */}
-                <Row gutter={[16, 6]} className={classes.descriptionRow}>
+                <Row className={classes.descriptionRow} gutter={[16, 6]}>
                   <Col>
                     <Row gutter={6} wrap={false}>
                       <Col>
@@ -343,7 +343,7 @@ const OffenderCard = ({
                   </Col>
                   {offender.totalValue ? (
                     <Col>
-                      <Row wrap={false} gutter={6}>
+                      <Row gutter={6} wrap={false}>
                         <Col>
                           <FontAwesomeIcon
                             className={classes.cardIcon}
@@ -448,7 +448,7 @@ const OffenderCard = ({
                       />
                     </Col>
                     <Col>
-                      <Text type="secondary" ellipsis>
+                      <Text ellipsis type="secondary">
                         {intl.formatMessage({
                           defaultMessage: 'Last Incident: ',
                         })}
@@ -474,18 +474,18 @@ const OffenderCard = ({
         </Card>
       ) : (
         <Card
-          className="offender-card"
-          key={offender.id || ''}
-          style={{ overflow: 'hidden', marginBottom: 0 }}
           bodyStyle={{
-            height: '100%',
             display: 'flex',
             flexDirection: 'column',
+            height: '100%',
           }}
+          className="offender-card"
+          key={offender.id || ''}
+          style={{ marginBottom: 0, overflow: 'hidden' }}
         >
           {!offender?.approved && (
             <div className="offender-card-overlay">
-              <Title level={4} className="offender-card-approval-title">
+              <Title className="offender-card-approval-title" level={4}>
                 {intl.formatMessage({
                   defaultMessage: 'This offender is awaiting approval',
                 })}
@@ -503,29 +503,30 @@ const OffenderCard = ({
           )}
           {menuRights && (
             <Dropdown
-              trigger={['click']}
+              arrow={{ pointAtCenter: true }}
               overlay={
                 <Menu
                   items={[
                     {
+                      icon: <FontAwesomeIcon icon={faEdit} />,
                       key: 0,
                       label: intl.formatMessage({
                         defaultMessage: 'Edit Offender',
                       }),
                       onClick: () => toggleEditOffenderFeed(),
-                      icon: <FontAwesomeIcon icon={faEdit} />,
                     },
                     offender.totalImages && offender.totalImages > 0
                       ? {
+                          icon: <FontAwesomeIcon icon={faImage} />,
                           key: 1,
                           label: intl.formatMessage({
                             defaultMessage: 'Edit Image',
                           }),
                           onClick: () => toggleEditImage(),
-                          icon: <FontAwesomeIcon icon={faImage} />,
                         }
                       : null,
                     {
+                      icon: <FontAwesomeIcon icon={faPeople} size="lg" />,
                       key: 2,
                       label: intl.formatMessage({
                         defaultMessage: 'Compare Offender',
@@ -535,18 +536,15 @@ const OffenderCard = ({
                           undefined,
                           `/app/offenders/compare/${offender?.id}`
                         ),
-                      icon: <FontAwesomeIcon size="lg" icon={faPeople} />,
                     },
                     {
+                      icon: <FontAwesomeIcon icon={faTrash} size="lg" />,
                       key: 3,
                       label: intl.formatMessage({
                         defaultMessage: 'Delete Offender',
                       }),
                       onClick: () =>
                         confirm({
-                          title: intl.formatMessage({
-                            defaultMessage: 'Are you sure?',
-                          }),
                           content: intl.formatMessage({
                             defaultMessage:
                               'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -555,25 +553,27 @@ const OffenderCard = ({
                             defaultMessage: 'Delete',
                           }),
                           onOk: () => onDelete(offender?.id || ''),
+                          title: intl.formatMessage({
+                            defaultMessage: 'Are you sure?',
+                          }),
                         }),
-                      icon: <FontAwesomeIcon size="lg" icon={faTrash} />,
                     },
                     {
+                      icon: <FontAwesomeIcon icon={faPlus} />,
                       key: 4,
                       label: intl.formatMessage({
                         defaultMessage: 'Add Investigation',
                       }),
                       onClick: () => toggleAddInvestigation(),
-                      icon: <FontAwesomeIcon icon={faPlus} />,
                     },
                   ].filter((item) => item?.key !== 3 || deleteRights)}
                 />
               }
               placement="bottomRight"
-              arrow={{ pointAtCenter: true }}
+              trigger={['click']}
             >
               <Button className="offender-card-menu">
-                <FontAwesomeIcon size="lg" icon={faEllipsisV} />
+                <FontAwesomeIcon icon={faEllipsisV} size="lg" />
               </Button>
             </Dropdown>
           )}
@@ -602,19 +602,19 @@ const OffenderCard = ({
           </div>
           {offender.totalImages && offender.totalImages > 0 ? (
             <Carousel
-              ref={imagesRef}
               afterChange={(currentSlide: number) => {
                 setEditImageId(offender.images[currentSlide].id);
               }}
+              ref={imagesRef}
             >
               {offender?.images.map((image) => (
                 <div key={image.id}>
                   <div className="offender-card-image">
                     <WatermarkImage
                       // ???
+                      position={image.position}
                       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                       rotation={image.rotation}
-                      position={image.position}
                       url={image.optimised}
                     />
                   </div>
@@ -628,26 +628,25 @@ const OffenderCard = ({
             <Row className="offender-card-controls">
               <Col>
                 <FontAwesomeIcon
-                  size="lg"
                   className="offender-card-control"
                   icon={faAngleLeft}
                   onClick={() => imagesRef.current?.prev()}
+                  size="lg"
                 />
               </Col>
               <Col flex={1} />
               <Col>
                 <FontAwesomeIcon
-                  size="lg"
                   className="offender-card-control"
                   icon={faAngleRight}
                   onClick={() => imagesRef.current?.next()}
+                  size="lg"
                 />
               </Col>
             </Row>
           ) : null}
           {offender.totalImages && offender.totalImages > 0 ? (
             <FontAwesomeIcon
-              size="lg"
               className="offender-card-expand"
               icon={faArrowsMaximize}
               onClick={() =>
@@ -658,6 +657,7 @@ const OffenderCard = ({
                   0
                 )
               }
+              size="lg"
             />
           ) : null}
           {/* {!menuRights && offender.name === 'Unidentified Offender' && ( */}
@@ -690,9 +690,9 @@ const OffenderCard = ({
                 }
               >
                 <div style={{ marginBottom: 10 }}>
-                  <Row wrap={false} gutter={8} align="middle">
+                  <Row align="middle" gutter={8} wrap={false}>
                     <Col>
-                      <Title level={4} ellipsis style={{ marginBottom: 0 }}>
+                      <Title ellipsis level={4} style={{ marginBottom: 0 }}>
                         {offender?.name}
                       </Title>
                     </Col>
@@ -703,7 +703,7 @@ const OffenderCard = ({
                             defaultMessage: 'Verified ID',
                           })}
                         >
-                          <FontAwesomeIcon size="xl" icon={faShieldCheck} />
+                          <FontAwesomeIcon icon={faShieldCheck} size="xl" />
                         </Tooltip>
                       </Col>
                     )}
@@ -717,7 +717,7 @@ const OffenderCard = ({
                   </Text>
                 </div>
 
-                <Row gutter={16} className={classes.descriptionRow}>
+                <Row className={classes.descriptionRow} gutter={16}>
                   <Col span={12}>
                     <Row gutter={6} wrap={false}>
                       <Col>
@@ -740,7 +740,7 @@ const OffenderCard = ({
                   </Col>
                   {offender.totalValue ? (
                     <Col span={12}>
-                      <Row wrap={false} gutter={6}>
+                      <Row gutter={6} wrap={false}>
                         <Col>
                           <FontAwesomeIcon
                             className={classes.cardIcon}
@@ -836,14 +836,14 @@ const OffenderCard = ({
                   >
                     <Col flex={1}>
                       <Paragraph
-                        style={{
-                          maxHeight:
-                            offender.targetedGoods.length === 0 ? 40 : 20,
-                          marginBottom: 2,
-                          overflow: 'hidden',
-                        }}
                         ellipsis={{
                           rows: 2,
+                        }}
+                        style={{
+                          marginBottom: 2,
+                          maxHeight:
+                            offender.targetedGoods.length === 0 ? 40 : 20,
+                          overflow: 'hidden',
                         }}
                       >
                         {offender.comment}
@@ -862,7 +862,7 @@ const OffenderCard = ({
                     : ''
                 }
               >
-                <Row wrap={false} className={classes.descriptionRow} gutter={6}>
+                <Row className={classes.descriptionRow} gutter={6} wrap={false}>
                   <Col>
                     <FontAwesomeIcon
                       className={classes.cardIcon}
@@ -901,7 +901,7 @@ const OffenderCard = ({
                       : `view/${offender?.id}`
                   }
                 >
-                  <Button size="small" type="text" style={{ marginTop: 10 }}>
+                  <Button size="small" style={{ marginTop: 10 }} type="text">
                     {intl.formatMessage({
                       defaultMessage: 'View Full Offender',
                     })}
@@ -913,34 +913,34 @@ const OffenderCard = ({
         </Card>
       )}
       <Drawer
+        onClose={toggleEditOffenderFeed}
+        open={editOffenderFeed}
         title={intl.formatMessage({
           defaultMessage: 'Edit Offender',
         })}
-        open={editOffenderFeed}
         width="600"
-        onClose={toggleEditOffenderFeed}
       >
         {editOffenderFeed ? (
           <EditOffenderFeed
-            onClose={toggleEditOffenderFeed}
             offenderId={offender.id}
+            onClose={toggleEditOffenderFeed}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleKnowOffender}
+        open={knowOffender}
         title={intl.formatMessage({
           defaultMessage: 'Know This Offender',
         })}
-        open={knowOffender}
         width="400"
-        onClose={toggleKnowOffender}
       >
         {knowOffender ? (
           <KnowOffender
-            onClose={toggleKnowOffender}
             offenderId={offender.id || ''}
+            onClose={toggleKnowOffender}
           />
         ) : (
           <div />
@@ -948,12 +948,12 @@ const OffenderCard = ({
       </Drawer>
       {/* investigation */}
       <Drawer
+        onClose={toggleAddInvestigation}
+        open={addInvestigation}
         title={intl.formatMessage({
           defaultMessage: 'Add New Investigation',
         })}
-        open={addInvestigation}
         width="500"
-        onClose={toggleAddInvestigation}
       >
         {addInvestigation ? (
           <AddInvestigation
@@ -965,10 +965,10 @@ const OffenderCard = ({
         )}
       </Drawer>
       <FeedImageEditor
-        submitImage={onEditImage}
+        image={offender.images.find((image) => editImageId === image.id)}
         onClose={toggleEditImage}
         open={editImage}
-        image={offender.images.find((image) => editImageId === image.id)}
+        submitImage={onEditImage}
       />
     </div>
   );

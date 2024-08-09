@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-syntax */
-import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/view-active-checklist.generated';
+import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import type { ActiveChecklist } from 'graphql/types';
 
-import { useCompleteChecklistMutation } from '#/views/checklist/graphql/mutations/complete-checklist.generated';
+import { useCompleteChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/complete-checklist.generated';
 import {
   ActiveChecklistDocument,
   useActiveChecklistQuery,
-} from '#/views/checklist/graphql/queries/view-active-checklist.generated';
+} from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import { Form, type FormInstance } from 'antd';
 import { useState } from 'react';
 import { useParams } from 'react-router';

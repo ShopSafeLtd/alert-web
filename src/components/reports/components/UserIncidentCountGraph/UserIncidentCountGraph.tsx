@@ -1,36 +1,36 @@
-import React from 'react';
-import { BarGraph, DonutGraph } from '#/components/reports/graphs';
-import { Button, Typography } from 'antd';
+import type { UserIncidentCountGraphQueryVariables } from '#/components/reports/components/UserIncidentCountGraph/__generated__/UserIncidentCountGraph.generated';
+import type { MetaData } from '#/views/reports/types';
 
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useUserIncidentCountGraphQuery } from '#/components/reports/components/UserIncidentCountGraph/__generated__/UserIncidentCountGraph.generated';
+import { BarGraph, DonutGraph } from '#/components/reports/graphs';
 import {
   faChartBar,
   faChartPie,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import type { MetaData } from '#/views/reports/types';
-import type { UserIncidentCountGraphQueryVariables } from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph.generated';
-import { useUserIncidentCountGraphQuery } from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph.generated';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
 interface Props {
-  isPrinting: boolean;
   editMode: boolean;
-  variables: UserIncidentCountGraphQueryVariables;
+  isPrinting: boolean;
   metaData?: MetaData;
-  setMetaData: (arg0: MetaData) => void;
-  removeItem: () => void;
   onNavigate: () => void;
+  removeItem: () => void;
+  setMetaData: (arg0: MetaData) => void;
+  variables: UserIncidentCountGraphQueryVariables;
 }
 
 const UserIncidentCountGraph = ({
-  isPrinting,
-  variables,
   editMode,
+  isPrinting,
   metaData,
-  setMetaData,
-  removeItem,
   onNavigate,
+  removeItem,
+  setMetaData,
+  variables,
 }: Props) => {
   const intl = useIntl();
 
@@ -49,25 +49,22 @@ const UserIncidentCountGraph = ({
       {editMode ? (
         <>
           <Button
-            type="text"
-            shape="circle"
             className="change-graph1 no-print"
             hidden={!editMode}
             icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-            size="small"
             onClick={() => {
               if (metaData && setMetaData) {
                 setMetaData({ ...metaData, type: 'bar' });
               }
             }}
+            shape="circle"
+            size="small"
+            type="text"
           />
           <Button
-            type="text"
-            shape="circle"
             className="change-graph2 no-print"
             hidden={!editMode}
             icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-            size="small"
             onClick={() => {
               if (metaData && setMetaData) {
                 if (metaData?.type === 'donut') {
@@ -77,24 +74,27 @@ const UserIncidentCountGraph = ({
                 }
               }
             }}
+            shape="circle"
+            size="small"
+            type="text"
           />
           <Button
-            type="text"
-            shape="circle"
             className="card-remove no-print"
             hidden={!editMode}
-            icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-            size="small"
+            icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
             onClick={removeItem}
+            shape="circle"
+            size="small"
+            type="text"
           />
         </>
       ) : (
         <Button
-          type="text"
           className="change-graph1-view-more"
-          size="small"
-          onClick={onNavigate}
           danger
+          onClick={onNavigate}
+          size="small"
+          type="text"
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
@@ -103,19 +103,19 @@ const UserIncidentCountGraph = ({
       )}
       {metaData?.type === 'bar' ? (
         <BarGraph
-          isPrinting={isPrinting}
           data={data?.userIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
           })}
+          isPrinting={isPrinting}
         />
       ) : (
         <DonutGraph
-          isPrinting={isPrinting}
           data={data?.userIncidentCountGraph}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No incidents',
           })}
+          isPrinting={isPrinting}
           type={metaData?.type as 'donut' | 'pie'}
         />
       )}

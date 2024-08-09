@@ -6,29 +6,30 @@ import useCreateCrimeGroup from './useCreateCrimeGroup';
 const CreateCrimeGroup = () => {
   const {
     addOffender,
-    fetchMoreScroll,
     loading,
     offendersData,
     offendersSelected,
+    onPaginationChange,
     onSubmit,
     removeOffender,
     searchData,
     selectOffender,
+    setSearch,
     submitting,
     toggleAddOffender,
   } = useCreateCrimeGroup();
-
   return (
     <View
       addOffender={addOffender}
-      fetchMoreScroll={fetchMoreScroll}
       loading={loading}
       offendersData={offendersData}
       offendersSelected={offendersSelected}
+      onPaginationChange={onPaginationChange}
       onSubmit={onSubmit}
       removeOffender={removeOffender}
       searchData={searchData}
       selectOffender={selectOffender}
+      setSearch={setSearch}
       submitting={submitting}
       toggleAddOffender={toggleAddOffender}
     />

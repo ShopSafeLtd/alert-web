@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
+
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
-import {
-  TagsDocument,
-  useTagsQuery,
-} from 'graphql/tags/queries/tags.generated';
-import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
+import { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import { TagsDocument, TagsQuery, useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, QueryMode, TagType } from 'graphql/types';
-import type { RecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
-import { useRecycleTagMutation } from 'graphql/tag/mutation/recycle-tag.generated';
-import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
+import { RecycleTagMutation, useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
 
 const { confirm } = Modal;
 
@@ -371,11 +367,14 @@ const useCrimeTypeList = (): Return => {
       setSaving(false);
       notification.success({
         message: intl.formatMessage({
+          id: 'NzVm0o',
           defaultMessage: 'Successfully Removed',
         }),
         description: intl.formatMessage(
           {
-            defaultMessage: 'The crime type has been removed from {schemeName}',
+            defaultMessage:
+              'The incident type has been removed from {schemeName}',
+            id: 'NoJPMG',
           },
           { schemeName }
         ),
@@ -403,11 +402,13 @@ const useCrimeTypeList = (): Return => {
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: intl.formatMessage({
+        id: '2oCaym',
         defaultMessage: 'Are you sure?',
       }),
       content: intl.formatMessage({
+        id: 'Zyk6ao',
         defaultMessage:
-          'This will remove this crime type from this scheme, bu not any other schemes you may have added it to.',
+          'This will remove this incident type from this scheme, bu not any other schemes you may have added it to.',
       }),
 
       onOk() {
@@ -431,6 +432,7 @@ const useCrimeTypeList = (): Return => {
       // if the parentTagId is not the same as the tagId, check the children of the child
       if (!checkTag(child?.id, parentTagId)) return false;
     }
+    console.log('valid');
     return true;
   };
 

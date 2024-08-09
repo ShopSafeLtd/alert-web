@@ -1,5 +1,5 @@
+import type { ListIncidentsQuery } from '#/graphql/incidents/queries/__generated__/list-incidents.generated';
 import type { UploadFile } from 'antd';
-import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
 import type {
   Age,
   AnswerType,
@@ -11,9 +11,6 @@ import type {
   IdSource,
   ImagePosition,
   Race,
-  ShoeSide,
-  ShoeStatus,
-  ShoeType,
   UpdateType,
 } from 'graphql/types';
 import type { Moment } from 'moment';
@@ -245,23 +242,7 @@ export interface EditFeedImage {
   rotation?: number;
   url?: null | string | undefined;
 }
-export interface FaceType {
-  AgeRange: {
-    High: number;
-    Low: number;
-  };
-  Beard: boolean;
-  BoundingBox: {
-    Height: string;
-    Left: string;
-    Top: string;
-    Width: string;
-  };
-  Gender: 'Female' | 'Male';
-  Mustache: boolean;
-  id: string;
-  imageURL?: string;
-}
+
 // LocationData
 export interface LocationData {
   alias?: null | string;
@@ -424,26 +405,21 @@ export interface CustomQuestion {
 }
 
 export interface GoodsData {
-  goodsType?: string;
+  goodsType?:
+    | {
+        id: string;
+      }
+    | null
+    | undefined;
+  goodsTypeId?: string;
   id: string;
-  name?: string;
-  quantity?: number;
-  recoveredQuantity?: number;
-  recoveredValue?: number;
-  sku?: string;
-  stockItem?: string;
-  value?: number;
-  // id: string;
-  // name?: string | undefined | null;
-  // value?: number | undefined | null;
-  // recoveredValue?: number | undefined | null;
-  // goodsType?:
-  //   | {
-  //       id: string;
-  //     }
-  //   | undefined
-  //   | null;
-  // goodsTypeId?: string;
+  name?: null | string | undefined;
+  quantity?: null | number | undefined;
+  recoveredQuantity?: null | number | undefined;
+  recoveredValue?: null | number | undefined;
+  sku?: null | string;
+  stockItemId?: string;
+  value?: null | number | undefined;
 }
 
 export enum UserSort {
@@ -507,40 +483,4 @@ export interface OffenderSettingsType {
   images: boolean;
   name: boolean;
   peculiarities: boolean;
-}
-
-export interface ActivityData {
-  assignedUsers: { fullName: string; id: string }[];
-  completed?: boolean | null | undefined;
-  completedDate?: Date | null | undefined;
-  createdAt?: Date | null | undefined;
-  description?: null | string | undefined;
-  groups: { id: string; name: string }[];
-  id: string;
-  name?: null | string | undefined;
-}
-export interface ShoeData {
-  box: boolean;
-  business: { id: string; locations?: { full?: string }[]; name: string };
-  colour: string;
-  description: string;
-  id: string;
-  primaryShoe?: {
-    __typename?: 'Shoe';
-    business: { id: string; locations?: { full?: string }[]; name: string };
-    id: string;
-  } | null;
-  // recycled: boolean;
-  retailPrice: number;
-  side: ShoeSide;
-  size: number;
-  status: ShoeStatus;
-  stockItem: {
-    id: string;
-    name?: null | string;
-    sku?: null | string | undefined;
-  };
-  style: string;
-  type: ShoeType;
-  updatedAt: Date;
 }

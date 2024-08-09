@@ -1,25 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import type { SelectProps, UploadProps } from 'antd';
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import type { UploadFile } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
-import customRequest from '../../../../utils/custom-request';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import { useCreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { Model, DocumentType } from 'graphql/types';
+import type { SelectProps, UploadProps } from 'antd';
+import type { UploadFile } from 'antd/es/upload/interface';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type {
   ListDocumentsOnSchemeQuery,
   ListDocumentsOnSchemeQueryVariables,
-} from 'graphql/documents/queries/list-documents.generated';
-import { ListDocumentsOnSchemeDocument } from 'graphql/documents/queries/list-documents.generated';
+} from 'graphql/documents/queries/__generated__/list-documents.generated';
 import type {
   ViewInvestigationQuery,
   ViewInvestigationQueryVariables,
-} from 'graphql/investigations/queries/view-investigation.generated';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
+} from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+
+import { useCreateTagMutation } from '#/graphql/tags/mutations/__generated__/create-tag.generated';
+import { useCreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+import { ListDocumentsOnSchemeDocument } from 'graphql/documents/queries/__generated__/list-documents.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { DocumentType, Model } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
+
+import customRequest from '../../../../utils/custom-request';
 
 interface OnSubmitValues {
   name: string;
@@ -27,35 +29,35 @@ interface OnSubmitValues {
 }
 
 interface Props {
-  onClose: () => void;
-  investigationId?: string | null;
-  incidentId?: string | null;
-  offenderId?: string | null;
-  vehicleId?: string | null;
-  crimeGroupId?: string | null;
-  update?: MutationUpdaterFn<CreateDocumentMutation> | undefined;
+  crimeGroupId?: null | string;
+  incidentId?: null | string;
+  investigationId?: null | string;
   isEvidence?: boolean;
+  offenderId?: null | string;
+  onClose: () => void;
+  update?: MutationUpdaterFn<CreateDocumentMutation> | undefined;
+  vehicleId?: null | string;
 }
 
 interface Return {
+  categories: SelectProps['options'];
+  categoriesChange: (categories: { value: string }[]) => void;
+  categoriesLoading: boolean;
+  documentUploadProps: UploadProps;
   onSubmit: (values: OnSubmitValues) => void;
   saving: boolean;
-  categories: SelectProps['options'];
-  categoriesLoading: boolean;
   selectedCategories: { value: string }[];
-  categoriesChange: (categories: { value: string }[]) => void;
-  documentUploadProps: UploadProps;
 }
 
 const useAddDocument = ({
-  onClose,
-  offenderId,
+  crimeGroupId,
   incidentId,
   investigationId,
-  vehicleId,
-  crimeGroupId,
-  update,
   isEvidence,
+  offenderId,
+  onClose,
+  update,
+  vehicleId,
 }: Props): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
@@ -65,28 +67,45 @@ const useAddDocument = ({
   >([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
   const [categoryIds, setCategoryIds] = useState<
-    { value: string; id: string }[]
+    { id: string; value: string }[]
   >([]);
 
   const [createTag] = useCreateTagMutation({
     onCompleted: (result) => {
       const newCategory = {
-        value: result.createTag.name,
         label: result.createTag.name,
+        value: result.createTag.name,
       };
       const newCategoryIds = {
-        value: result.createTag.name,
         id: result.createTag.id,
+        value: result.createTag.name,
       };
-      setCategoryIds([...(<[]>categoryIds), newCategoryIds]);
-      setCategories([...(<[]>categories), newCategory]);
-      setSelectedCategories([...(<[]>selectedCategories), newCategory]);
+      setCategoryIds([...(categoryIds as []), newCategoryIds]);
+      setCategories([...(categories as []), newCategory]);
+      setSelectedCategories([...(selectedCategories as []), newCategory]);
     },
   });
 
   const { loading: tagsLoading } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (result) => {
+      const categoriesFormatted = result.tags.map((tag) => ({
+        label: tag.name,
+        value: tag.name,
+      }));
+      const categoryIdsFormatted = result.tags.map((tag) => ({
+        id: tag.id,
+        value: tag.name,
+      }));
+      setCategoryIds(categoryIdsFormatted);
+      setCategories(categoriesFormatted);
+    },
+
     variables: {
       where: {
+        dataType: {
+          equals: Model.Document,
+        },
         schemes: {
           some: {
             id: {
@@ -94,24 +113,7 @@ const useAddDocument = ({
             },
           },
         },
-        dataType: {
-          equals: Model.Document,
-        },
       },
-    },
-    fetchPolicy: 'cache-and-network',
-
-    onCompleted: (result) => {
-      const categoriesFormatted = result.tags.map((tag) => ({
-        value: tag.name,
-        label: tag.name,
-      }));
-      const categoryIdsFormatted = result.tags.map((tag) => ({
-        value: tag.name,
-        id: tag.id,
-      }));
-      setCategoryIds(categoryIdsFormatted);
-      setCategories(categoriesFormatted);
     },
   });
 
@@ -128,13 +130,14 @@ const useAddDocument = ({
         void createTag({
           variables: {
             data: {
-              name: value.value,
               createdBy: {
                 connect: {
                   id: userId,
                 },
               },
+              dataType: Model.Document,
               description: '',
+              name: value.value,
               schemes: {
                 connect: [
                   {
@@ -142,7 +145,6 @@ const useAddDocument = ({
                   },
                 ],
               },
-              dataType: Model.Document,
             },
           },
         }).then((result) => {
@@ -182,18 +184,18 @@ const useAddDocument = ({
               ListDocumentsOnSchemeQuery,
               ListDocumentsOnSchemeQueryVariables
             >({
-              query: ListDocumentsOnSchemeDocument,
-              variables: {
-                where: {
-                  id: currentScheme,
-                },
-              },
               data: {
                 scheme: {
                   ...existingData.scheme,
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   documents: [...oldDocuments, ...newDocuments],
+                },
+              },
+              query: ListDocumentsOnSchemeDocument,
+              variables: {
+                where: {
+                  id: currentScheme,
                 },
               },
             });
@@ -217,18 +219,18 @@ const useAddDocument = ({
               ViewInvestigationQuery,
               ViewInvestigationQueryVariables
             >({
-              query: ViewInvestigationDocument,
-              variables: {
-                where: {
-                  id: investigationId,
-                },
-              },
               data: {
                 investigation: {
                   ...existingData.investigation,
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   documents: [...oldDocuments, ...newDocuments],
+                },
+              },
+              query: ViewInvestigationDocument,
+              variables: {
+                where: {
+                  id: investigationId,
                 },
               },
             });
@@ -254,11 +256,13 @@ const useAddDocument = ({
       void createDocument({
         variables: {
           data: {
-            investigationId: investigationId || null,
-            incidentId: incidentId || null,
-            offenderId: offenderId || null,
-            vehicleId: vehicleId || null,
             crimeGroupId: crimeGroupId || null,
+            fileType: fileList[0].type || '',
+            incidentId: incidentId || null,
+            investigationId: investigationId || null,
+            name: values.name,
+            offenderId: offenderId || null,
+            origFileName: fileList[0].fileName || '',
             schemeId:
               investigationId ||
               offenderId ||
@@ -267,12 +271,10 @@ const useAddDocument = ({
               crimeGroupId
                 ? undefined
                 : currentScheme,
-            type: isEvidence ? DocumentType.Evidence : undefined,
-            name: values.name,
-            url: fileList[0].url || '',
             tags: selectedCategoryIds,
-            fileType: fileList[0].type || '',
-            origFileName: fileList[0].fileName || '',
+            type: isEvidence ? DocumentType.Evidence : undefined,
+            url: fileList[0].url || '',
+            vehicleId: vehicleId || null,
           },
         },
       });
@@ -300,21 +302,21 @@ const useAddDocument = ({
 
   const documentUploadProps: UploadProps = {
     customRequest,
-    onChange: handleChange,
-    multiple: false,
     headers: {
       type: 'pdf',
     },
+    multiple: false,
+    onChange: handleChange,
   };
 
   return {
-    onSubmit,
-    saving,
-    selectedCategories,
     categories,
     categoriesChange,
     categoriesLoading: tagsLoading,
     documentUploadProps,
+    onSubmit,
+    saving,
+    selectedCategories,
   };
 };
 

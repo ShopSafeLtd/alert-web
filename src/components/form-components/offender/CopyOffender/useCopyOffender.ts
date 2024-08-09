@@ -1,17 +1,18 @@
-import { useState } from 'react';
 import type { FormInstance } from 'antd';
+
+import { useGroupsContext } from '#/context/groups-context';
 import { Form, notification } from 'antd';
+import { useCopyOffenderMutation } from 'graphql/offenders/mutations/__generated__/copy-offender.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { useGroupsContext } from '#/context/groups-context';
-import { useCopyOffenderMutation } from 'graphql/offenders/mutations/copy-offender.generated';
 
 const { useForm } = Form;
 
 export interface FormData {
-  scheme: string;
   groups: string[];
+  scheme: string;
 }
 
 interface Props {
@@ -20,14 +21,14 @@ interface Props {
 }
 
 interface Return {
+  form: FormInstance<FormData>;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  userSchemes: { value: string; label: string }[];
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  form: FormInstance<FormData>;
   selectSchemeId: string;
   setSelectSchemeId: (value: string) => void;
+  userSchemes: { label: string; value: string }[];
 }
 
 const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
@@ -49,15 +50,15 @@ const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
       )?.scheme.name;
 
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Copied',
-        }),
         description: intl.formatMessage(
           {
             defaultMessage: 'The offender has been copied to {schemeName}!',
           },
           { schemeName }
         ),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Copied',
+        }),
         placement: 'bottomRight',
       });
       onClose();
@@ -73,9 +74,6 @@ const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
 
     void copyOffender({
       variables: {
-        where: {
-          id: offenderId,
-        },
         data: {
           groups: {
             connect:
@@ -85,25 +83,28 @@ const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
           },
           scheme: data.scheme,
         },
+        where: {
+          id: offenderId,
+        },
       },
     });
   };
 
   return {
+    form,
+    groups,
+    groupsLoading,
     onSubmit,
+    saving,
+    selectSchemeId,
+    setSelectSchemeId,
     userSchemes:
       userSchemes
         .filter(({ scheme }) => scheme.id !== schemeId)
         .map((scheme) => ({
-          value: scheme.scheme.id,
           label: scheme.scheme.name,
+          value: scheme.scheme.id,
         })) || [],
-    groups,
-    groupsLoading,
-    saving,
-    selectSchemeId,
-    setSelectSchemeId,
-    form,
   };
 };
 export default useCopyOffender;

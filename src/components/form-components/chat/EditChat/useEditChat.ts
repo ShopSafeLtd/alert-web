@@ -1,34 +1,35 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
+import type { ChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+
 import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
-import { useChatQuery } from 'graphql/chat/queries/chat.generated';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useUpdateChatMutation } from 'graphql/chat/mutation/__generated__/update_chat.generated';
+import { useChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
 import { SortOrder } from 'graphql/types';
-import { useUpdateChatMutation } from 'graphql/chat/mutation/update_chat.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface FormData {
-  name: string;
   description: string;
+  name: string;
   user: string[];
 }
 interface Props {
-  onClose: () => void;
   chatId: string;
+  onClose: () => void;
 }
 interface Return {
-  onSubmit: (value: FormData) => void;
   data: ChatQuery | undefined;
   loading: boolean;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
-  saving: boolean;
 }
 
-const useEditChat = ({ onClose, chatId }: Props): Return => {
+const useEditChat = ({ chatId, onClose }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const intl = useIntl();
@@ -43,17 +44,6 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-      },
       groupWhere: {
         scheme: {
           id: {
@@ -71,6 +61,17 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
           },
         },
       },
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -79,11 +80,11 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The chat group has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -99,11 +100,7 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
     if (chatId)
       void updateChat({
         variables: {
-          where: {
-            id: chatId,
-          },
           data: {
-            name: { set: data.name },
             description: { set: data.description },
             members: {
               create: data.user
@@ -114,25 +111,29 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
                       .includes(userId)
                 )
                 .map((userId) => ({
-                  user: { connect: { id: userId } },
                   newMessages: true,
+                  user: { connect: { id: userId } },
                 })),
               delete: chatData?.chat?.members
                 .filter((userChat) => !data.user.includes(userChat.user.id))
                 .map((userChat) => ({ id: userChat.id })),
             },
+            name: { set: data.name },
+          },
+          where: {
+            id: chatId,
           },
         },
       });
   };
 
   return {
-    onSubmit,
     data: chatData,
     loading,
+    onSubmit,
+    saving,
     usersData,
     usersLoading,
-    saving,
   };
 };
 

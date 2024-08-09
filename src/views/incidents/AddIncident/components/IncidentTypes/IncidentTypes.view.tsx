@@ -1,29 +1,31 @@
-import React from 'react';
+import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+
 import { Card, Col, Form, Row, Typography } from 'antd';
-import { useIntl } from 'react-intl';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import useStyles from '../../AddIncident.styles';
-import type { ListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
 import { IncidentFormField, TagType } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
+import useStyles from '../../AddIncident.styles';
 
 const { Paragraph, Title } = Typography;
 
 interface Props {
-  incidentTagsLoading: boolean;
-  incidentTagsData: ListIncidentTagsQuery | undefined;
-  tagsLoading: boolean;
-  tags: { value: string; label: string; tooltip: string; type: TagType }[];
   incidentForm: IncidentFormField[];
+  incidentTagsData: ListIncidentTagsQuery | undefined;
+  incidentTagsLoading: boolean;
   oneSelectedIncidentTypeOnly: boolean;
+  tags: { label: string; tooltip: string; type: TagType; value: string }[];
+  tagsLoading: boolean;
 }
 
 const IncidentTypes = ({
-  incidentTagsLoading,
-  incidentTagsData,
-  tagsLoading,
-  tags,
   incidentForm,
+  incidentTagsData,
+  incidentTagsLoading,
   oneSelectedIncidentTypeOnly,
+  tags,
+  tagsLoading,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -32,7 +34,7 @@ const IncidentTypes = ({
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'What incident are you reporting?',
             })}
@@ -40,9 +42,9 @@ const IncidentTypes = ({
         </Col>
         <Col>
           <Paragraph
+            italic
             style={{ marginBottom: 1, marginLeft: 5 }}
             type="secondary"
-            italic
           >
             {intl.formatMessage({
               defaultMessage: '- Select the types that apply to this incident.',
@@ -51,21 +53,21 @@ const IncidentTypes = ({
         </Col>
       </Row>
       <Form.Item
+        label={intl.formatMessage({
+          defaultMessage: 'Incident Type',
+        })}
         name="tags"
+        rules={[
+          {
+            message: intl.formatMessage({
+              defaultMessage: 'Please add at least one incident type.',
+            }),
+            required: true,
+          },
+        ]}
         tooltip={intl.formatMessage({
           defaultMessage:
             'Select the relevant incident type; this helps to categorise the incident',
-        })}
-        rules={[
-          {
-            required: true,
-            message: intl.formatMessage({
-              defaultMessage: 'Please add at least one crime type.',
-            }),
-          },
-        ]}
-        label={intl.formatMessage({
-          defaultMessage: 'Incident Type',
         })}
       >
         <CheckTags
@@ -76,22 +78,22 @@ const IncidentTypes = ({
       </Form.Item>
       {incidentForm.includes(IncidentFormField.Involved) && (
         <Form.Item
-          name="involvedTags"
-          tooltip={intl.formatMessage({
-            defaultMessage:
-              'Select the relevant crime types for this incident, these help to categorize the incident.',
-          })}
           label={intl.formatMessage({
             defaultMessage: 'Did this incident involve any of the following?',
           })}
+          name="involvedTags"
           rules={[
             {
-              required: true,
               message: intl.formatMessage({
                 defaultMessage: 'Please select an option for this field',
               }),
+              required: true,
             },
           ]}
+          tooltip={intl.formatMessage({
+            defaultMessage:
+              'Select the relevant incident types for this incident, these help to categorize the incident.',
+          })}
         >
           <CheckTags
             loading={tagsLoading}
@@ -103,22 +105,22 @@ const IncidentTypes = ({
       )}
       {incidentForm.includes(IncidentFormField.Impact) && (
         <Form.Item
-          name="fellingTags"
-          tooltip={intl.formatMessage({
-            defaultMessage:
-              'Select the relevant crime types for this incident, these help to categorize the incident.',
-          })}
           label={intl.formatMessage({
             defaultMessage: 'How did this make you feel?',
           })}
+          name="fellingTags"
           rules={[
             {
-              required: true,
               message: intl.formatMessage({
                 defaultMessage: 'Please select an option for this field',
               }),
+              required: true,
             },
           ]}
+          tooltip={intl.formatMessage({
+            defaultMessage:
+              'Select the relevant incident types for this incident, these help to categorize the incident.',
+          })}
         >
           <CheckTags
             loading={tagsLoading}

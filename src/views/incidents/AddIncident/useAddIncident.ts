@@ -804,20 +804,14 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                   '',
                 quantity: item.quantity,
                 recoveredQuantity: item.recoveredQuantity,
-                recoveredValue:
-                  goodsMode === GoodsMode.Specific
-                    ? (item.recoveredValue || 0) * (item.recoveredQuantity || 0)
-                    : item.recoveredValue || 0,
+                recoveredValue: item.recoveredValue || 0,
                 sku: item.sku,
                 stockItem: item.stockItem
                   ? {
                       id: item.stockItem,
                     }
                   : undefined,
-                value:
-                  goodsMode === GoodsMode.Specific
-                    ? (item.value || 0) * (item.quantity || 0)
-                    : item.value || 0,
+                value: item.value || 0,
               })),
             location: getLocation(),
             offenders: addOffenderRights

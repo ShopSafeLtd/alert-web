@@ -1,14 +1,7 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from 'react';
-import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/__generated__/suggested-memebrs.generated';
 
-import Lightbox from 'yet-another-react-lightbox';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import IncidentTable from 'components/tables/IncidentTable/IncidentTable.view';
-import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleInfo,
   faEarth,
@@ -17,6 +10,16 @@ import {
   faUserHair,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import IncidentTable from 'components/tables/IncidentTable/IncidentTable.view';
+import { Role } from 'graphql/types';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import { useStoreState } from 'state';
 import { calcAge } from 'utils';
 import {
   getOffenderAge,
@@ -24,25 +27,24 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { useIntl } from 'react-intl';
-import useStyles from './SuggestedMembers.style';
-import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/suggested-memebrs.generated';
-import { Role } from 'graphql/types';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-const { Paragraph, Title, Text } = Typography;
+import useStyles from './SuggestedMembers.style';
+
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
   handleAddSuggestion: (id: string) => void;
   onClose: () => void;
+  suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
 }
-
+type Offender =
+  SuggestedCrimeGroupMembersQuery['crimeGroup']['suggestedMembers'][number];
 const SuggestedMembers = ({
-  suggestedData,
-  onClose,
   handleAddSuggestion,
+  onClose,
+  suggestedData,
 }: Props) => {
   const classes = useStyles();
 
@@ -52,25 +54,20 @@ const SuggestedMembers = ({
     role !== Role.User;
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
 
-  const openLightbox = (
-    offender: {
-      images: { id: string; optimised?: string | undefined | null }[];
-    },
-    index: number
-  ) => {
+  const openLightbox = (offender: Pick<Offender, 'images'>, index: number) => {
     setLightboxElements(
       offender.images.map((image) => ({
         src: image.optimised || '',
       })) || []
     );
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
   const intl = useIntl();
   return (
@@ -78,22 +75,22 @@ const SuggestedMembers = ({
       {suggestedData?.crimeGroup?.suggestedMembers?.map((offender) => (
         <div>
           <Row
+            align="middle"
+            className={classes.images}
             gutter={8}
             justify="start"
-            align="middle"
-            wrap={false}
-            className={classes.images}
             style={{
               height: offender.images.length > 0 ? undefined : 0,
             }}
+            wrap={false}
           >
             {offender?.images.map((image, i) => (
               <Col key={image.id} onClick={() => openLightbox(offender, i)}>
                 <div className={classes.image}>
                   <WatermarkImage
-                    url={image.optimised}
-                    rotation={image.rotation}
                     position={image.position}
+                    rotation={image.rotation}
+                    url={image.optimised}
                   />
                 </div>
               </Col>
@@ -110,7 +107,7 @@ const SuggestedMembers = ({
               }
             )}
           </Text>
-          <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
+          <Descriptions style={{ marginBottom: 20, marginTop: 20 }}>
             {offender.alias.length > 0 ? (
               <Descriptions.Item
                 label={intl.formatMessage({
@@ -238,14 +235,14 @@ const SuggestedMembers = ({
                   )}
                 </Paragraph>
                 <IncidentTable
-                  incidents={offender?.associatedIncidents || []}
                   hasNavigation
+                  incidents={offender?.associatedIncidents || []}
                 />
               </div>
             )}
           <Row gutter={8} justify="end">
             <Col>
-              <Link to={`/app/offenders/view/${offender.id}`} onClick={onClose}>
+              <Link onClick={onClose} to={`/app/offenders/view/${offender.id}`}>
                 <Button>
                   {intl.formatMessage({
                     defaultMessage: 'View Offender',
@@ -256,8 +253,8 @@ const SuggestedMembers = ({
             <Col>
               <Button
                 danger
-                type="ghost"
                 onClick={() => handleAddSuggestion(offender.id)}
+                type="ghost"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Offender',
@@ -269,19 +266,19 @@ const SuggestedMembers = ({
         </div>
       ))}
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox({ images: [] }, 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

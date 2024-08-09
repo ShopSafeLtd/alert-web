@@ -24,7 +24,6 @@ generates:
       - 'typescript-react-apollo'
     config:
       {
-        immutableTypes: true,
         withHooks: true,
         addDocBlocks: false,
         useTypeImports: true,

@@ -1,16 +1,16 @@
-import React from 'react';
-import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
-import { createUseStyles } from 'react-jss';
-import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEye,
   faPenToSquare,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
+import { Role } from 'graphql/generated';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import { Role } from 'graphql/types';
+import { useStoreState } from 'state';
 
 const useStyles = createUseStyles({
   row: {
@@ -19,43 +19,47 @@ const useStyles = createUseStyles({
 });
 
 interface Props {
+  deleteRights?: boolean;
+  hasNavigation?: boolean;
   incidents:
     | {
+        business?: {
+          id: string;
+          name?: null | string | undefined;
+        } | null;
+        dayTime?: null | string;
         id: string;
-        reference?: number | null;
-        dayTime?: string | null;
-        policeRef?: string | null;
-        subject?: string | null;
-        totalValue?: number | null;
-        totalRecoveredValue?: number | null;
+        // };
+        location?: {
+          full?: null | string | undefined;
+          id: string;
+        } | null;
+        policeRef?: null | string;
+        reference?: null | number;
+        subject?: null | string;
         // crimeTypes?: Array<{ id: string; name: string }>;
         // createdBy?: {
         //   id: string;
         //   fullName?: string;
         //   businesses: Array<{ id: string; name: string }>;
-        // };
-        location?: {
-          id: string;
-          full?: string | undefined | null;
-        } | null;
+        totalRecoveredValue?: null | number;
+        totalValue?: null | number;
       }[]
     | undefined;
-  hasNavigation?: boolean;
-  setEditData?: (id: string) => void;
-  pageSize?: number;
   onDelete?: (id: string) => void;
-  deleteRights?: boolean;
+  pageSize?: number;
   saving?: boolean;
+  setEditData?: (id: string) => void;
 }
 
 const IncidentTable = ({
-  incidents,
-  pageSize,
-  hasNavigation,
-  onDelete,
   deleteRights,
-  setEditData,
+  hasNavigation,
+  incidents,
+  onDelete,
+  pageSize,
   saving,
+  setEditData,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -66,18 +70,13 @@ const IncidentTable = ({
 
   return (
     <Table
-      size="small"
-      rowClassName={classes.row}
       columns={[
         {
-          key: 'reference',
           dataIndex: 'reference',
-          title: intl.formatMessage({
-            defaultMessage: 'Alert ID',
-          }),
+          key: 'reference',
           render: (
             _,
-            record: { key: string; reference: number | null | undefined }
+            record: { key: string; reference: null | number | undefined }
           ) => {
             if (hasNavigation && !restrictIncidentAccess) {
               return (
@@ -88,49 +87,50 @@ const IncidentTable = ({
             }
             return <Typography.Text>{record.reference}</Typography.Text>;
           },
+          title: intl.formatMessage({
+            defaultMessage: 'Alert ID',
+          }),
           width: 80,
         },
         {
-          key: 'policeRef',
           dataIndex: 'policeRef',
+          key: 'policeRef',
           title: intl.formatMessage({
             defaultMessage: 'Crime No.',
           }),
         },
         {
-          key: 'subject',
           dataIndex: 'subject',
+          key: 'subject',
           title: intl.formatMessage({
             defaultMessage: 'Subject',
           }),
         },
         {
-          key: 'date',
           dataIndex: 'date',
+          key: 'date',
           title: intl.formatMessage({
             defaultMessage: 'Date',
           }),
         },
         {
-          key: 'loss',
           dataIndex: 'loss',
+          key: 'loss',
+          render: (value: number) => `£${value.toLocaleString()}`,
           title: intl.formatMessage({
             defaultMessage: 'Loss',
           }),
-          render: (value: number) => `£${value.toLocaleString()}`,
         },
         {
-          key: 'location',
           dataIndex: 'location',
+          key: 'location',
           title: intl.formatMessage({
             defaultMessage: 'Location',
           }),
         },
         {
-          key: 'Options',
-          title: '',
           dataIndex: 'Options',
-          width: 100,
+          key: 'Options',
           render: (_, record: { key: string }) => (
             <Row gutter={8}>
               {hasNavigation && (
@@ -142,9 +142,9 @@ const IncidentTable = ({
                   >
                     <Link to={`/app/incidents/view/${record.key}`}>
                       <Button
-                        size="small"
                         disabled={saving}
                         icon={<FontAwesomeIcon icon={faEye} />}
+                        size="small"
                       />
                     </Link>
                   </Tooltip>
@@ -158,12 +158,12 @@ const IncidentTable = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       onClick={() => {
                         setEditData(record.key);
                       }}
-                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
@@ -176,25 +176,25 @@ const IncidentTable = ({
                     })}
                   >
                     <Popconfirm
-                      placement="topLeft"
-                      title={intl.formatMessage({
-                        defaultMessage: 'Remove the incident?',
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                      })}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
                       })}
                       onConfirm={() => {
                         onDelete(record.key);
                       }}
-                      okText={intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
-                      cancelText={intl.formatMessage({
-                        defaultMessage: 'No',
-                      })}
                       overlayInnerStyle={{ padding: 10 }}
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the incident?',
+                      })}
                     >
                       <Button
-                        size="small"
                         disabled={saving}
                         icon={<FontAwesomeIcon icon={faTrash} />}
+                        size="small"
                       />
                     </Popconfirm>
                   </Tooltip>
@@ -202,25 +202,29 @@ const IncidentTable = ({
               )}
             </Row>
           ),
+          title: '',
+          width: 100,
         },
       ].filter((item) => item?.key !== 'Options' || deleteRights)}
       dataSource={
         incidents?.map((incident) => ({
-          key: incident?.id,
-          reference: incident?.reference,
-          policeRef: incident?.policeRef,
-          subject: incident?.subject,
           date: incident?.dayTime,
-          location: incident?.location?.full,
+          key: incident?.id,
+          location: incident?.business?.name ?? incident?.location?.full,
           loss:
             (incident?.totalValue || 0) - (incident?.totalRecoveredValue || 0),
+          policeRef: incident?.policeRef,
+          reference: incident?.reference,
+          subject: incident?.subject,
         })) || []
       }
       pagination={{
+        defaultPageSize: 5 || pageSize,
         pageSizeOptions: [5, 10, 20, 50, 100],
         showSizeChanger: true,
-        defaultPageSize: 5 || pageSize,
       }}
+      rowClassName={classes.row}
+      size="small"
     />
   );
 };

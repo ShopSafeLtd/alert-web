@@ -1,78 +1,91 @@
 /* eslint-disable no-restricted-syntax,@typescript-eslint/no-unsafe-enum-comparison */
-import { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
-import { Form } from 'antd';
-import { useNavigate, useParams } from 'react-router';
-import { useStoreState } from '#/state';
 import type { ChecklistAnswerType } from 'graphql/types';
-import { useListBusinessesChecklistQuery } from '#/views/checklist/graphql/queries/list-businesses.generated';
-import { useUserListChecklistQuery } from '#/views/checklist/graphql/queries/list-users-checklist.generated';
-import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
-import { useCreateUpdateChecklistMutation } from '#/views/checklist/graphql/mutations/create-update-checklist.generated';
-import { useChecklistQuery } from '#/views/checklist/graphql/queries/view-checklist.generated';
+
+import { useStoreState } from '#/state';
+import { useCreateUpdateChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-update-checklist.generated';
+import { useListBusinessesChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/list-businesses.generated';
+import { useUserListChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/list-users-checklist.generated';
+import { useChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-checklist.generated';
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { Form } from 'antd';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
 export interface SelectOption {
   label: string;
   value: string;
 }
 export interface Section {
-  order: number;
-  title: string;
   description: string;
+  order: number;
   subsections: Subsection[];
+  title: string;
 }
 
 interface Subsection {
-  order: number;
-  title: string;
   description: string;
+  order: number;
   questions: Question[];
+  title: string;
 }
 
 interface Question {
+  brandIds?: string[];
+  dependent?: {
+    answer: string;
+    question: string;
+  } | null;
+  dependentAnswer?: string;
+  dependentCheck: boolean;
+  dependentQuestion?: string;
+  failWeight?: number;
   order: number;
+  passWeight?: number;
   title: string;
   type:
-    | 'PASS_FAIL_NA'
-    | 'YES_NO_NA'
+    | 'GOOD_BAD'
     | 'GOOD_BAD_NA'
     | 'PASS_FAIL'
+    | 'PASS_FAIL_NA'
+    | 'TEXT'
     | 'YES_NO'
-    | 'GOOD_BAD'
-    | 'TEXT';
+    | 'YES_NO_NA';
   weighted: boolean;
-  passWeight?: number;
-  failWeight?: number;
-  dependentCheck: boolean;
-  dependent?: {
-    question: string;
-    answer: string;
-  } | null;
-  dependentQuestion?: string;
-  dependentAnswer?: string;
-  brandIds?: string[];
   // Add other question properties here
 }
 
 export function findChangedSectionIndex(
-  data: Section[] | Subsection[] | Question[]
+  data: Question[] | Section[] | Subsection[]
 ) {
   return data.findIndex(Boolean);
 }
 
 export interface FormData {
-  title: string;
-  description: string;
   businessIds: string[];
-  userIds: string[];
+  description: string;
   sections: Section[];
+  title: string;
+  userIds: string[];
 }
 
 interface Return {
+  brands: SelectOption[];
+  businesses: SelectOption[];
   form: FormInstance<FormData>;
-  onFinish: (data: FormData) => void;
+  handleAddQuestion: (sectionIndex: number, subSectionIndex: number) => void;
   handleAddSection: () => void;
+  handleAddSubsection: (index: number) => void;
+  handleRemoveQuestion: (
+    sectionIndex: number,
+    subsectionIndex: number,
+    questionIndex: number
+  ) => void;
   handleRemoveSection: (index: number) => void;
+  handleRemoveSubsection: (
+    sectionIndex: number,
+    subsectionIndex: number
+  ) => void;
   handleSectionChange: (
     changedValues: {
       sections: Section[];
@@ -81,21 +94,9 @@ interface Return {
       sections: Section[];
     }
   ) => void;
-  handleAddSubsection: (index: number) => void;
-  handleRemoveSubsection: (
-    sectionIndex: number,
-    subsectionIndex: number
-  ) => void;
-  handleAddQuestion: (sectionIndex: number, subSectionIndex: number) => void;
-  handleRemoveQuestion: (
-    sectionIndex: number,
-    subsectionIndex: number,
-    questionIndex: number
-  ) => void;
   loading: boolean;
-  businesses: SelectOption[];
+  onFinish: (data: FormData) => void;
   users: SelectOption[];
-  brands: SelectOption[];
 }
 
 // create a funciton that gets an object of the following shape and an language code
@@ -129,32 +130,32 @@ const getWeight = (
   switch (type) {
     case 'PASS_FAIL': {
       return {
-        passWeight: weights.find((weight) => weight.answer === 'PASS')?.weight,
         failWeight: weights.find((weight) => weight.answer === 'FAIL')?.weight,
+        passWeight: weights.find((weight) => weight.answer === 'PASS')?.weight,
       };
     }
     case 'YES_NO': {
       return {
-        passWeight: weights.find((weight) => weight.answer === 'YES')?.weight,
         failWeight: weights.find((weight) => weight.answer === 'NO')?.weight,
+        passWeight: weights.find((weight) => weight.answer === 'YES')?.weight,
       };
     }
     case 'GOOD_BAD': {
       return {
-        passWeight: weights.find((weight) => weight.answer === 'GOOD')?.weight,
         failWeight: weights.find((weight) => weight.answer === 'BAD')?.weight,
+        passWeight: weights.find((weight) => weight.answer === 'GOOD')?.weight,
       };
     }
     case 'TEXT': {
       return {
-        passWeight: weights.find((weight) => weight.answer === 'TEXT')?.weight,
         failWeight: undefined,
+        passWeight: weights.find((weight) => weight.answer === 'TEXT')?.weight,
       };
     }
     default: {
       return {
-        passWeight: weights.find((weight) => weight.answer === 'PASS')?.weight,
         failWeight: weights.find((weight) => weight.answer === 'FAIL')?.weight,
+        passWeight: weights.find((weight) => weight.answer === 'PASS')?.weight,
       };
     }
   }
@@ -162,13 +163,13 @@ const getWeight = (
 
 const createAnswerWeight = (
   type:
-    | 'PASS_FAIL_NA'
-    | 'YES_NO_NA'
+    | 'GOOD_BAD'
     | 'GOOD_BAD_NA'
     | 'PASS_FAIL'
+    | 'PASS_FAIL_NA'
+    | 'TEXT'
     | 'YES_NO'
-    | 'GOOD_BAD'
-    | 'TEXT',
+    | 'YES_NO_NA',
   passWeight: number,
   failWeight: number
 ) => {
@@ -209,7 +210,7 @@ const createAnswerWeight = (
 export function useCreateChecklist(): Return {
   const [form] = Form.useForm<FormData>();
   const [sections, setSections] = useState<Section[]>([
-    { order: 1, title: '', description: '', subsections: [] },
+    { description: '', order: 1, subsections: [], title: '' },
   ]);
 
   const [businesses, setBusinesses] = useState<SelectOption[]>([]);
@@ -221,13 +222,7 @@ export function useCreateChecklist(): Return {
   const language = useStoreState((state) => state.theme.locale);
 
   const { loading } = useChecklistQuery({
-    skip: !id,
     fetchPolicy: 'network-only',
-    variables: {
-      where: {
-        id: id || '',
-      },
-    },
     onCompleted: (data) => {
       //      case 'PASS_FAIL': {
       //         return [
@@ -260,63 +255,68 @@ export function useCreateChecklist(): Return {
       // use the above when given a type find what format the pass and fail weight should be
 
       form.setFieldsValue({
-        title: data.checklist.title,
-        description: data.checklist.description ?? undefined,
-        userIds: data.checklist.users.map((user) => user.id) || [],
         businessIds:
           data.checklist.business.map((business) => business.id) || [],
+        description: data.checklist.description ?? undefined,
         // @ts-expect-error types not liking generics
         sections: data.checklist.sections.map((section) => ({
           order: section.order,
-          title: section.title,
           subsections: section.subsections.map((subsection) => ({
             order: subsection.order,
-            title: subsection.title,
             questions: subsection.questions.map((question) => ({
+              brandIds: question.brandIds,
+              dependent: question.dependent,
+              dependentAnswer: (question.dependent?.answer as string) ?? '',
+              dependentCheck: !!question.dependent,
+              dependentQuestion: (question.dependent?.question as string) ?? '',
+              failWeight: getWeight(question.type, question.weight).failWeight,
               order: question.order,
+              passWeight: getWeight(question.type, question.weight).passWeight,
               title: getQuestion(question.question, language),
               type: question.type,
               weighted: question.weight.length > 0,
-              passWeight: getWeight(question.type, question.weight).passWeight,
-              failWeight: getWeight(question.type, question.weight).failWeight,
-              brandIds: question.brandIds,
-              dependent: question.dependent,
-              dependentQuestion: (question.dependent?.question as string) ?? '',
-              dependentAnswer: (question.dependent?.answer as string) ?? '',
-              dependentCheck: !!question.dependent,
             })),
+            title: subsection.title,
           })),
+          title: section.title,
         })),
+        title: data.checklist.title,
+        userIds: data.checklist.users.map((user) => user.id) || [],
       });
+    },
+    skip: !id,
+    variables: {
+      where: {
+        id: id || '',
+      },
     },
   });
   const navigate = useNavigate();
   const onFinish = (values: FormData) => {
     void createUpdateChecklist({
+      onCompleted: () => {
+        navigate('/app/checklists');
+      },
       variables: {
         createUpdateChecklistId: id,
         data: {
           businessIds: values.businessIds,
-          userIds: values.userIds,
-          title: values.title,
           description: values.description,
           sections: values.sections.map((section) => ({
-            title: section.title,
             order: section.order,
             subsections: section.subsections.map((subsection) => ({
               order: subsection.order,
-              title: subsection.title,
               questions: subsection.questions.map((question) => ({
-                order: question.order,
-                question: question.title,
-                type: question.type as ChecklistAnswerType,
                 brandIds: question.brandIds ?? [],
                 dependOn: question.dependentCheck
                   ? {
-                      question: question.dependentQuestion ?? '',
                       answer: question.dependentAnswer ?? '',
+                      question: question.dependentQuestion ?? '',
                     }
                   : null,
+                order: question.order,
+                question: question.title,
+                type: question.type as ChecklistAnswerType,
 
                 weight: question.weighted
                   ? createAnswerWeight(
@@ -326,12 +326,13 @@ export function useCreateChecklist(): Return {
                     )
                   : [],
               })),
+              title: subsection.title,
             })),
+            title: section.title,
           })),
+          title: values.title,
+          userIds: values.userIds,
         },
-      },
-      onCompleted: () => {
-        navigate('/app/checklists');
       },
     });
   };
@@ -344,7 +345,7 @@ export function useCreateChecklist(): Return {
         : 1;
     setSections([
       ...formSections,
-      { order: newOrder, title: '', description: '', subsections: [] },
+      { description: '', order: newOrder, subsections: [], title: '' },
     ]);
   };
 
@@ -484,10 +485,10 @@ export function useCreateChecklist(): Return {
         ? Math.max(...subsections.map((s) => s.order)) + 1
         : 1;
     subsections.push({
-      order: newOrder,
-      title: '',
       description: '',
+      order: newOrder,
       questions: [],
+      title: '',
     });
     setSections(newSections);
   };
@@ -515,13 +516,13 @@ export function useCreateChecklist(): Return {
     const newOrder =
       questions.length > 0 ? Math.max(...questions.map((s) => s.order)) + 1 : 1;
     questions.push({
+      brandIds: [],
+      dependent: null,
+      dependentCheck: false,
       order: newOrder,
       title: '',
       type: 'PASS_FAIL',
       weighted: false,
-      brandIds: [],
-      dependent: null,
-      dependentCheck: false,
     });
     setSections(newSections);
   };
@@ -542,17 +543,6 @@ export function useCreateChecklist(): Return {
     setSections(newSections);
   };
   const { loading: businessLoading } = useListBusinessesChecklistQuery({
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-      },
-    },
     onCompleted: (businessData) => {
       if (
         businessData &&
@@ -567,22 +557,20 @@ export function useCreateChecklist(): Return {
           }))
         );
     },
-  });
-
-  const { loading: usersLoading } = useUserListChecklistQuery({
     variables: {
       where: {
         schemes: {
           some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
+            id: {
+              equals: schemeId,
             },
           },
         },
       },
     },
+  });
+
+  const { loading: usersLoading } = useUserListChecklistQuery({
     onCompleted: (usersData) => {
       if (
         usersData &&
@@ -596,6 +584,19 @@ export function useCreateChecklist(): Return {
             value: business.id,
           }))
         );
+    },
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -624,18 +625,18 @@ export function useCreateChecklist(): Return {
     })) || [];
 
   return {
+    brands: brandsFormatted,
+    businesses,
     form,
+    handleAddQuestion,
+    handleAddSection,
+    handleAddSubsection,
+    handleRemoveQuestion,
+    handleRemoveSection,
+    handleRemoveSubsection,
+    handleSectionChange,
     loading: loading || businessLoading || usersLoading,
     onFinish,
-    handleAddSection,
-    handleRemoveSection,
-    handleSectionChange,
-    handleAddSubsection,
-    handleRemoveSubsection,
-    handleAddQuestion,
-    handleRemoveQuestion,
-    businesses,
     users,
-    brands: brandsFormatted,
   };
 }

@@ -1,112 +1,112 @@
-import { Modal, notification } from 'antd';
-
-import { useEffect, useMemo, useState } from 'react';
-import update from 'immutability-helper';
-import { useStoreState } from 'state';
-import type { VehicleData } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
 import type { MutationUpdaterFn } from '@apollo/client';
-import successNotification from '#/types/mutation_notifications/success_notification';
+import type {
+  SuggestedCrimeGroupMembersQuery,
+  SuggestedCrimeGroupMembersQueryVariables,
+} from 'graphql/crime-groups/queries/__generated__/suggested-memebrs.generated';
+import type {
+  CrimeGroupQuery,
+  CrimeGroupQueryVariables,
+} from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
+import type { VehicleCreateWithoutCrimeGroupInput } from 'graphql/types';
+import type { VehicleData } from 'types/DataType';
+
+import { useGroupsContext } from '#/context/groups-context';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
 } from '#/types/enums/profile-update-type';
-import { useGroupsContext } from '#/context/groups-context';
+import successNotification from '#/types/mutation_notifications/success_notification';
 import hasPermission from '#/utils/has-permission';
-import type {
-  CrimeGroupQuery,
-  CrimeGroupQueryVariables,
-} from 'graphql/crime-groups/queries/view-crime-group.generated';
-import {
-  CrimeGroupDocument,
-  useCrimeGroupQuery,
-} from 'graphql/crime-groups/queries/view-crime-group.generated';
-import type {
-  SuggestedCrimeGroupMembersQuery,
-  SuggestedCrimeGroupMembersQueryVariables,
-} from 'graphql/crime-groups/queries/suggested-memebrs.generated';
+import { Modal, notification } from 'antd';
+import { useDeleteCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/delete_crime_group.generated';
+import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/subscribe-to-crime-group.generated';
+import { useUnsubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/unsubscribe-from-crime-group.generated';
+import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/update_crime_group.generated';
 import {
   SuggestedCrimeGroupMembersDocument,
   useSuggestedCrimeGroupMembersQuery,
-} from 'graphql/crime-groups/queries/suggested-memebrs.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
-import type { VehicleCreateWithoutCrimeGroupInput } from 'graphql/types';
+} from 'graphql/crime-groups/queries/__generated__/suggested-memebrs.generated';
+import {
+  CrimeGroupDocument,
+  useCrimeGroupQuery,
+} from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
 import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
-import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/update_crime_group.generated';
-import { useDeleteCrimeGroupMutation } from 'graphql/crime-groups/mutations/delete_crime_group.generated';
-import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
-import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
-import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/subscribe-to-crime-group.generated';
-import { useUnsubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/unsubscribe-from-crime-group.generated';
+import update from 'immutability-helper';
+import { useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 interface Return {
-  data: CrimeGroupQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  offenderIds: string[];
-  vehicleIds: string[];
-  addOffender: boolean;
-  toggleAddOffender: () => void;
-  addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
   addAlias: boolean;
-  toggleAddAlias: () => void;
-  toggleAddExistingVehicle: () => void;
-  onDeleteCrimeGroup: () => void;
+  addDocument: boolean;
+  addExistingOffender: boolean;
+  addExistingVehicle: boolean;
+  addInvestigation: boolean;
+  addNewVehicle: boolean;
+  addOffender: boolean;
+  confirmDeleteUpdate: (updateId: string) => void;
+  data: CrimeGroupQuery | undefined;
+  editRights: boolean;
+  editUpdate: { id: string; text: string } | null;
+  editUpdateInput: string;
+  handleAddSuggestion: (id: string) => void;
+  handleEditUpdate: () => void;
   loadMore: boolean;
-  scrolledToTop: () => void;
-  userId: string;
+  loading: boolean;
+  offenderIds: string[];
+  onCompletedAddOffender: () => void;
+  onDeleteCrimeGroup: () => void;
+  optionRowShow: boolean;
   replyTo: {
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null;
+  saving: boolean;
+  scrolledToTop: () => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setOptionRowShow: (value: boolean) => void;
   setReplyTo: (
     value: {
-      id: string;
-      text: string;
       createdAt: string;
       createdBy: string;
+      id: string;
+      text: string;
     } | null
   ) => void;
-  confirmDeleteUpdate: (updateId: string) => void;
-  editUpdate: { id: string; text: string } | null;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
-  handleEditUpdate: () => void;
-  editUpdateInput: string;
-  setEditUpdateInput: (value: string) => void;
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  editRights: boolean;
-  toggleSubscribe: () => void;
+  showIntel: boolean;
   submitNewVehicle: (value: VehicleData) => void;
   submitOffender: (value: string[]) => void;
   submitVehicle: (value: string) => void;
   // submitNewOffender: (value: OffenderData) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
-  viewSuggestedOpen: boolean;
-  toggleViewSuggested: () => void;
-  handleAddSuggestion: (id: string) => void;
+  toggleAddAlias: () => void;
   toggleAddDocument: () => void;
-  addDocument: boolean;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
-  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
   toggleAddInvestigation: () => void;
-  addInvestigation: boolean;
-  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  showIntel: boolean;
+  toggleAddNewVehicle: () => void;
+  toggleAddOffender: () => void;
   toggleShowIntel: () => void;
+  toggleSubscribe: () => void;
+  toggleViewSuggested: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
-  onCompletedAddOffender: () => void;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  userId: string;
+  vehicleIds: string[];
+  viewSuggestedOpen: boolean;
 }
 const onCompletedAddOffender = () => {
   successNotification(
@@ -144,10 +144,10 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     text: string;
   } | null>(null);
   const [replyTo, setReplyTo] = useState<{
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null>(null);
   const { groups } = useGroupsContext();
   useEffect(() => {
@@ -160,7 +160,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   };
   const { data: crimeGroupsData, loading } = useCrimeGroupQuery({
     fetchPolicy: 'cache-and-network',
-    variables,
     onCompleted: ({ crimeGroup }) => {
       if (crimeGroup?.offenders && crimeGroup.offenders.length > 0) {
         setOffenderIds(crimeGroup.offenders.map(({ id }) => id));
@@ -169,13 +168,11 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
         setVehicleIds(crimeGroup.vehicles.map(({ id }) => id));
       }
     },
+    variables,
   });
 
   const { data: suggestedData } = useSuggestedCrimeGroupMembersQuery({
     variables: {
-      where: {
-        id: crimeGroupId,
-      },
       associatedCrimeGroup: {
         id: crimeGroupId,
       },
@@ -183,6 +180,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
         type: {
           equals: TagType.IncidentCrimeType,
         },
+      },
+      where: {
+        id: crimeGroupId,
       },
     },
   });
@@ -208,11 +208,11 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The crime group has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -280,13 +280,13 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     if (values) {
       void updateCrimeGroup({
         variables: {
-          where: {
-            id: crimeGroupId,
-          },
           data: {
             offenders: {
               connect: values.map((value) => ({ id: value })),
             },
+          },
+          where: {
+            id: crimeGroupId,
           },
         },
       });
@@ -297,13 +297,13 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     if (value) {
       void updateCrimeGroup({
         variables: {
-          where: {
-            id: crimeGroupId,
-          },
           data: {
             vehicles: {
               connect: [{ id: value }],
             },
+          },
+          where: {
+            id: crimeGroupId,
           },
         },
       });
@@ -328,9 +328,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
               data.newCustomGalleriesData &&
               data.newCustomGalleriesData.length > 0
                 ? data.newCustomGalleriesData.map((value) => ({
-                    name: value.name,
                     description: value.description || '',
-                    schemes: { connect: [{ id: schemeId }] },
                     groups: {
                       connect:
                         crimeGroupsData?.crimeGroup?.groups &&
@@ -342,6 +340,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                             )
                           : groups.map(({ value: id }) => ({ id })),
                     },
+                    name: value.name,
+                    schemes: { connect: [{ id: schemeId }] },
                   }))
                 : undefined,
           };
@@ -353,29 +353,12 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       };
     void updateCrimeGroup({
       variables: {
-        where: {
-          id: crimeGroupId,
-        },
         data: {
           vehicles: {
             create: [
               {
-                make: data.make || '',
-                model: data.model || '',
                 colour: data.colour || '',
-                registration: data.registration || '',
-                incidents: {
-                  connect:
-                    data.incidents && data.incidents.length > 0
-                      ? data.incidents.map((id) => ({ id }))
-                      : undefined,
-                },
-                offenders: {
-                  connect:
-                    data.offenders && data.offenders.length > 0
-                      ? data.offenders.map((id) => ({ id }))
-                      : undefined,
-                },
+                customGalleries: getCustomGalleries(),
                 groups: {
                   connect:
                     crimeGroupsData?.crimeGroup?.groups &&
@@ -385,7 +368,21 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                         }))
                       : groups.map(({ value: id }) => ({ id })),
                 },
-                customGalleries: getCustomGalleries(),
+                incidents: {
+                  connect:
+                    data.incidents && data.incidents.length > 0
+                      ? data.incidents.map((id) => ({ id }))
+                      : undefined,
+                },
+                make: data.make || '',
+                model: data.model || '',
+                offenders: {
+                  connect:
+                    data.offenders && data.offenders.length > 0
+                      ? data.offenders.map((id) => ({ id }))
+                      : undefined,
+                },
+                registration: data.registration || '',
                 schemes: { connect: [{ id: schemeId }] },
                 // ???
                 // images: {
@@ -426,6 +423,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
             ],
           },
         },
+        where: {
+          id: crimeGroupId,
+        },
       },
     });
   };
@@ -442,14 +442,14 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
     if (!existingData?.crimeGroup) return;
     store.writeQuery<CrimeGroupQuery>({
-      query: CrimeGroupDocument,
       data: {
+        __typename: 'Query',
         crimeGroup: {
           ...existingData.crimeGroup,
           offenders: [...existingData.crimeGroup.offenders, res.createOffender],
         },
-        __typename: 'Query',
       },
+      query: CrimeGroupDocument,
       variables,
     });
   };
@@ -459,11 +459,11 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been deleted!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -487,16 +487,11 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
   const handleDeleteUpdate = (updateId: string) => {
     void deleteUpdate({
-      variables: {
-        where: {
-          id: updateId,
-        },
-      },
       optimisticResponse: {
         __typename: 'Mutation',
         deleteUpdate: {
-          id: updateId,
           __typename: 'Update',
+          id: updateId,
           replyToId: '',
         },
       },
@@ -521,12 +516,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
               );
               if (updateItem) {
                 store.writeQuery<CrimeGroupQuery, CrimeGroupQueryVariables>({
-                  query: CrimeGroupDocument,
-                  variables: {
-                    where: {
-                      id: crimeGroupId,
-                    },
-                  },
                   data: {
                     crimeGroup: {
                       ...oldData.crimeGroup,
@@ -544,16 +533,16 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                       }),
                     },
                   },
+                  query: CrimeGroupDocument,
+                  variables: {
+                    where: {
+                      id: crimeGroupId,
+                    },
+                  },
                 });
               }
             } else {
               store.writeQuery<CrimeGroupQuery, CrimeGroupQueryVariables>({
-                query: CrimeGroupDocument,
-                variables: {
-                  where: {
-                    id: crimeGroupId,
-                  },
-                },
                 data: {
                   crimeGroup: {
                     ...oldData.crimeGroup,
@@ -562,24 +551,35 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                     ),
                   },
                 },
+                query: CrimeGroupDocument,
+                variables: {
+                  where: {
+                    id: crimeGroupId,
+                  },
+                },
               });
             }
         }
+      },
+      variables: {
+        where: {
+          id: updateId,
+        },
       },
     });
   };
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
       }),
+      okText: intl.formatMessage({ defaultMessage: 'Delete' }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: intl.formatMessage({ defaultMessage: 'Delete' }),
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
@@ -588,20 +588,20 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const handleEditUpdate = () => {
     if (editUpdate !== null)
       void updateUpdate({
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateUpdate: {
+            __typename: 'Update',
+            id: editUpdate.id || '',
+            text: editUpdateInput,
+          },
+        },
         variables: {
           data: {
             text: editUpdateInput,
           },
           where: {
             id: editUpdate.id,
-          },
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateUpdate: {
-            id: editUpdate.id || '',
-            __typename: 'Update',
-            text: editUpdateInput,
           },
         },
       });
@@ -614,30 +614,30 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const toggleSubscribe = () => {
     if (crimeGroupsData?.crimeGroup?.subscribed) {
       void unsubscribeFromCrimeGroup({
-        variables: {
-          where: { id: crimeGroupId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           unsubscribeToCrimeGroup: {
-            id: crimeGroupId,
             __typename: 'CrimeGroup',
+            id: crimeGroupId,
             subscribed: false,
           },
+        },
+        variables: {
+          where: { id: crimeGroupId },
         },
       });
     } else {
       void subscribeToCrimeGroup({
-        variables: {
-          where: { id: crimeGroupId },
-        },
         optimisticResponse: {
           __typename: 'Mutation',
           subscribeToCrimeGroup: {
-            id: crimeGroupId,
             __typename: 'CrimeGroup',
+            id: crimeGroupId,
             subscribed: true,
           },
+        },
+        variables: {
+          where: { id: crimeGroupId },
         },
       });
     }
@@ -653,6 +653,57 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const handleAddSuggestion = (id: string) => {
     setViewSuggestedOpen(false);
     void updateCrimeGroup({
+      update: (store, result) => {
+        const existingData = store.readQuery<
+          SuggestedCrimeGroupMembersQuery,
+          SuggestedCrimeGroupMembersQueryVariables
+        >({
+          query: SuggestedCrimeGroupMembersDocument,
+          variables: {
+            associatedCrimeGroup: {
+              id: crimeGroupId,
+            },
+            crimeTypesWhere: {
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+            },
+            where: {
+              id: crimeGroupId,
+            },
+          },
+        });
+
+        if (existingData?.crimeGroup && result.data?.updateCrimeGroup)
+          store.writeQuery<
+            SuggestedCrimeGroupMembersQuery,
+            SuggestedCrimeGroupMembersQueryVariables
+          >({
+            data: {
+              crimeGroup: {
+                ...result.data.updateCrimeGroup,
+                suggestedMembers:
+                  existingData.crimeGroup?.suggestedMembers?.filter(
+                    (offender) => offender.id !== id
+                  ),
+              },
+            },
+            query: SuggestedCrimeGroupMembersDocument,
+            variables: {
+              associatedCrimeGroup: {
+                id: crimeGroupId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+              where: {
+                id: crimeGroupId,
+              },
+            },
+          });
+      },
       variables: {
         data: {
           offenders: {
@@ -666,57 +717,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
         where: {
           id: crimeGroupId,
         },
-      },
-      update: (store, result) => {
-        const existingData = store.readQuery<
-          SuggestedCrimeGroupMembersQuery,
-          SuggestedCrimeGroupMembersQueryVariables
-        >({
-          query: SuggestedCrimeGroupMembersDocument,
-          variables: {
-            where: {
-              id: crimeGroupId,
-            },
-            associatedCrimeGroup: {
-              id: crimeGroupId,
-            },
-            crimeTypesWhere: {
-              type: {
-                equals: TagType.IncidentCrimeType,
-              },
-            },
-          },
-        });
-
-        if (existingData?.crimeGroup && result.data?.updateCrimeGroup)
-          store.writeQuery<
-            SuggestedCrimeGroupMembersQuery,
-            SuggestedCrimeGroupMembersQueryVariables
-          >({
-            query: SuggestedCrimeGroupMembersDocument,
-            variables: {
-              where: {
-                id: crimeGroupId,
-              },
-              associatedCrimeGroup: {
-                id: crimeGroupId,
-              },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
-              },
-            },
-            data: {
-              crimeGroup: {
-                ...result.data.updateCrimeGroup,
-                suggestedMembers:
-                  existingData.crimeGroup?.suggestedMembers?.filter(
-                    (offender) => offender.id !== id
-                  ),
-              },
-            },
-          });
       },
     });
   };
@@ -734,14 +734,14 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
     if (!existingData?.crimeGroup) return;
     store.writeQuery<CrimeGroupQuery>({
-      query: CrimeGroupDocument,
       data: {
+        __typename: 'Query',
         crimeGroup: {
           ...existingData.crimeGroup,
           evidence: [...existingData.crimeGroup.evidence, res.createDocument],
         },
-        __typename: 'Query',
       },
+      query: CrimeGroupDocument,
       variables,
     });
   };
@@ -758,16 +758,16 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
     if (!existingData?.crimeGroup) return;
     store.writeQuery<CrimeGroupQuery>({
-      query: CrimeGroupDocument,
       data: {
+        __typename: 'Query',
         crimeGroup: {
           ...existingData.crimeGroup,
           evidence: existingData.crimeGroup.evidence.filter(
             ({ id }) => id !== res.deleteDocument?.id
           ),
         },
-        __typename: 'Query',
       },
+      query: CrimeGroupDocument,
       variables,
     });
   };
@@ -788,8 +788,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
     if (!existingData?.crimeGroup) return;
     store.writeQuery<CrimeGroupQuery>({
-      query: CrimeGroupDocument,
       data: {
+        __typename: 'Query',
         crimeGroup: {
           ...existingData.crimeGroup,
           investigations: [
@@ -797,8 +797,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
             res.createInvestigation,
           ],
         },
-        __typename: 'Query',
       },
+      query: CrimeGroupDocument,
       variables,
     });
   };
@@ -813,63 +813,63 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     setShowIntel(!showIntel);
   };
   const editRights = hasPermission({
-    permissions,
     permission: {
-      model: PermissionModel.CrimeGroups,
       method: PermissionMethod.Edit,
+      model: PermissionModel.CrimeGroups,
     },
+    permissions,
   });
   return {
-    data: crimeGroupsData,
-    loading:
-      (crimeGroupsData === null || crimeGroupsData === undefined) && loading,
-    saving,
-    offenderIds,
-    vehicleIds,
-    addOffender,
-    toggleAddOffender,
-    addExistingOffender,
-    toggleAddExistingOffender,
-    addNewVehicle,
-    addExistingVehicle,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
     addAlias,
-    toggleAddAlias,
-    onDeleteCrimeGroup,
+    addDocument,
+    addExistingOffender,
+    addExistingVehicle,
+    addInvestigation,
+    addNewVehicle,
+    addOffender,
+    confirmDeleteUpdate,
+    data: crimeGroupsData,
     editRights,
-    optionRowShow,
-    setOptionRowShow,
-    userId,
     editUpdate,
     editUpdateInput,
+    handleAddSuggestion,
     handleEditUpdate,
+    loadMore,
+    loading:
+      (crimeGroupsData === null || crimeGroupsData === undefined) && loading,
+    offenderIds,
+    onCompletedAddOffender,
+    onDeleteCrimeGroup,
+    optionRowShow,
     replyTo,
+    saving,
     scrolledToTop,
     setEditUpdate,
     setEditUpdateInput,
+    setOptionRowShow,
     setReplyTo,
-    loadMore,
-    confirmDeleteUpdate,
-    toggleSubscribe,
+    showIntel,
     submitNewVehicle,
     submitOffender,
     submitVehicle,
     suggestedData,
-    viewSuggestedOpen,
-    toggleViewSuggested,
-    handleAddSuggestion,
+    toggleAddAlias,
     toggleAddDocument,
-    addDocument,
-    updateDocumentList,
-    updateDeleteDocument,
-    addInvestigation,
+    toggleAddExistingOffender,
+    toggleAddExistingVehicle,
     toggleAddInvestigation,
-    updateInvestigationList,
-    showIntel,
+    toggleAddNewVehicle,
+    toggleAddOffender,
     toggleShowIntel,
+    toggleSubscribe,
+    toggleViewSuggested,
     updateAddOffenderList,
-    onCompletedAddOffender,
+    updateDeleteDocument,
+    updateDocumentList,
+    updateInvestigationList,
+    userId,
+    vehicleIds,
+    viewSuggestedOpen,
   };
 };
 

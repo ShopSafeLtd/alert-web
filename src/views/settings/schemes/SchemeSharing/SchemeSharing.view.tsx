@@ -1,13 +1,14 @@
-import React from 'react';
-import { Col, Row, Typography, Card, Button, Drawer, Table } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd } from '@fortawesome/pro-light-svg-icons';
-import ConnectScheme from '#/components/form-components/ConnectScheme/ConnectScheme';
-import { createUseStyles } from 'react-jss';
-import type { SchemeSharingQuery } from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
+import type { SchemeSharingQuery } from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
 
-const { Title, Text } = Typography;
+import ConnectScheme from '#/components/form-components/ConnectScheme/ConnectScheme';
+import { faAdd } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Drawer, Row, Table, Typography } from 'antd';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+
+const { Text, Title } = Typography;
 const useStyles = createUseStyles({
   schemes: {
     marginTop: 20,
@@ -15,19 +16,19 @@ const useStyles = createUseStyles({
 });
 
 interface Props {
+  connectOpen: boolean;
   data: SchemeSharingQuery | undefined;
   loading: boolean;
-  connectOpen: boolean;
-  toggleDrawerOpen: () => void;
   onUnlink: (id: string) => void;
+  toggleDrawerOpen: () => void;
 }
 
 const SchemeDetail = ({
+  connectOpen,
   data,
   loading,
-  toggleDrawerOpen,
-  connectOpen,
   onUnlink,
+  toggleDrawerOpen,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -42,7 +43,7 @@ const SchemeDetail = ({
         </Col>
       </Row>
       <Card>
-        <Row style={{ marginBottom: 10 }} align="middle">
+        <Row align="middle" style={{ marginBottom: 10 }}>
           <Col flex={1}>
             <Title level={4} style={{ marginBottom: 0 }}>
               <FormattedMessage defaultMessage="Connected Schemes" />
@@ -67,7 +68,6 @@ const SchemeDetail = ({
         {loading ? undefined : (
           <div className={classes.schemes}>
             <Table
-              size="small"
               columns={[
                 {
                   dataIndex: 'name',
@@ -77,38 +77,39 @@ const SchemeDetail = ({
                 {
                   dataIndex: 'actions',
                   key: 'actions',
-                  title: '',
-                  width: 150,
                   render: (_, item: { key: string }) => (
                     <Button onClick={() => onUnlink(item.key)}>
                       <FormattedMessage defaultMessage="Unlink" />
                     </Button>
                   ),
+                  title: '',
+                  width: 150,
                 },
               ]}
               dataSource={data?.scheme.connectedToSchemes.map((scheme) => ({
                 key: scheme.id,
                 name: scheme.name,
               }))}
+              size="small"
             />
           </div>
         )}
       </Card>
 
       <Drawer
+        bodyStyle={{ padding: 0 }}
+        onClose={toggleDrawerOpen}
         title={intl.formatMessage({
           defaultMessage: 'Connect Scheme',
         })}
         visible={connectOpen}
-        onClose={toggleDrawerOpen}
         width={500}
-        bodyStyle={{ padding: 0 }}
       >
         <ConnectScheme
-          onClose={toggleDrawerOpen}
           connectedScheme={
             data?.scheme.connectedToSchemes.map(({ id }) => id) || []
           }
+          onClose={toggleDrawerOpen}
         />
       </Drawer>
     </div>

@@ -1,10 +1,11 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+
 
 import React from 'react';
 
 import View from './AddTodo.view';
 import useAddTodo from './useAddTodo';
+import { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 
 interface Props {
   businessId?: string;

@@ -1,9 +1,10 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
 
 import React from 'react';
+
 import View from './AddChat.view';
 import useAddChat from './useAddChat';
-import type { CreateChatMutation } from 'graphql/chats/mutations/create-chat.generated';
 
 interface Props {
   onClose: () => void;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const AddChat = ({ onClose, update }: Props): JSX.Element => {
-  const { onSubmit, usersData, usersLoading, saving, form } = useAddChat({
+  const { form, onSubmit, saving, usersData, usersLoading } = useAddChat({
     onClose,
     update,
   });
@@ -19,11 +20,11 @@ const AddChat = ({ onClose, update }: Props): JSX.Element => {
   return (
     <View
       form={form}
-      onSubmit={onSubmit}
       onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
       usersData={usersData}
       usersLoading={usersLoading}
-      saving={saving}
     />
   );
 };

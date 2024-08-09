@@ -1,42 +1,43 @@
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { OffenderCardFragment } from 'graphql/fragments/__generated__/offender-card.generated';
+import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
+
 import React from 'react';
 
-import type { MutationUpdaterFn } from '@apollo/client';
 import View from './OffenderCard.view';
 import useOffenderCard from './useOffenderCard';
-import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
-import type { OffenderCardFragment } from 'graphql/fragments/offender-card.generated';
 
 interface Props {
+  compactView?: boolean;
+  isArticle?: boolean;
   offender: OffenderCardFragment;
   openLightbox: (elements: { src: string }[], index: number) => void;
   update?: MutationUpdaterFn<RecycleOffenderMutation>;
-  isArticle?: boolean;
-  compactView?: boolean;
 }
 
 const OffenderCard = ({
+  compactView,
+  isArticle,
   offender,
   openLightbox,
   update,
-  isArticle,
-  compactView,
 }: Props): JSX.Element => {
   const {
+    addInvestigation,
     approvalRights,
     deleteRights,
+    editImage,
+    editImageId,
+    editOffenderFeed,
+    knowOffender,
     menuRights,
     onDelete,
-    editOffenderFeed,
-    toggleEditOffenderFeed,
-    editImage,
-    toggleEditImage,
-    editImageId,
-    setEditImageId,
     onEditImage,
     onNavigate,
-    addInvestigation,
+    setEditImageId,
     toggleAddInvestigation,
-    knowOffender,
+    toggleEditImage,
+    toggleEditOffenderFeed,
     toggleKnowOffender,
   } = useOffenderCard({
     offender,
@@ -45,25 +46,25 @@ const OffenderCard = ({
 
   return (
     <View
-      isArticle={isArticle}
+      addInvestigation={addInvestigation}
       approvalRights={approvalRights}
+      compactView={compactView || false}
       deleteRights={deleteRights}
+      editImage={editImage}
+      editImageId={editImageId}
+      editOffenderFeed={editOffenderFeed}
+      isArticle={isArticle}
+      knowOffender={knowOffender}
       menuRights={menuRights}
       offender={offender}
-      openLightbox={openLightbox}
       onDelete={onDelete}
-      editOffenderFeed={editOffenderFeed}
-      toggleEditOffenderFeed={toggleEditOffenderFeed}
-      editImage={editImage}
-      toggleEditImage={toggleEditImage}
-      editImageId={editImageId}
-      setEditImageId={setEditImageId}
       onEditImage={onEditImage}
       onNavigate={onNavigate}
-      addInvestigation={addInvestigation}
+      openLightbox={openLightbox}
+      setEditImageId={setEditImageId}
       toggleAddInvestigation={toggleAddInvestigation}
-      compactView={compactView || false}
-      knowOffender={knowOffender}
+      toggleEditImage={toggleEditImage}
+      toggleEditOffenderFeed={toggleEditOffenderFeed}
       toggleKnowOffender={toggleKnowOffender}
     />
   );

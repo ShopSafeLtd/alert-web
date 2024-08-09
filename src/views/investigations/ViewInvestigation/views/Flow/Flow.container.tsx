@@ -1,11 +1,12 @@
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ReactFlowProvider } from 'reactflow';
-import React from 'react';
-import useFlow from './hooks/useFlow';
-import ReactFlowView from './Flow.view';
 
+import ReactFlowView from './Flow.view';
+import useFlow from './hooks/useFlow';
 import { WebRtcProviderContextProvider } from './hooks/useWebRtcProvidor';
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
 
 interface Props {
   importData: ViewInvestigationQuery | undefined;
@@ -14,59 +15,59 @@ interface Props {
 const ReactFlowPro = ({ importData }: Props) => {
   const { id: investigationId } = useParams();
   const {
-    nodes,
-    onNodesChange,
-    edges,
-    onEdgesChange,
-    onConnect,
     clientCount,
+    // reactFlowInstance,
+    downloadImage,
+    edges,
+    flowScreen,
+    isFullScreen,
     isSynced,
-    setReactFlowInstance,
-    savedWhen,
-    onSave,
-    onNodeClick,
-    onDrop,
-    onDragOver,
-    wrapperRef,
     loading,
-    saving,
+    nodes,
+    onConnect,
+    onDragOver,
+    onDrop,
+    onEdgesChange,
+    onNodeClick,
+    onNodesChange,
+    onSave,
+    savedWhen,
     // handlePointMove,
     // users,
     // provider,
-    // reactFlowInstance,
-    downloadImage,
-    flowScreen,
-    isFullScreen,
+    saving,
     setFullScreen,
+    setReactFlowInstance,
+    wrapperRef,
   } = useFlow({
-    investigationId: investigationId || '',
     importData,
+    investigationId: investigationId || '',
   });
   return (
     <ReactFlowView
-      flowScreen={flowScreen}
-      isFullScreen={isFullScreen}
-      setFullScreen={setFullScreen}
+      clientCount={clientCount}
       downloadImage={downloadImage}
+      edges={edges}
+      flowScreen={flowScreen}
       // reactFlowInstance={reactFlowInstance}
       // provider={provider}
       // users={users}
-      // handlePointMove={handlePointMove}
-      saving={saving}
+      isFullScreen={isFullScreen}
+      isSynced={isSynced}
       loading={loading}
       nodes={nodes}
-      onNodesChange={onNodesChange}
-      edges={edges}
-      onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      clientCount={clientCount}
-      isSynced={isSynced}
-      setReactFlowInstance={setReactFlowInstance}
-      savedWhen={savedWhen}
-      onSave={onSave}
-      onNodeClick={onNodeClick}
-      onDrop={onDrop}
       onDragOver={onDragOver}
+      onDrop={onDrop}
+      onEdgesChange={onEdgesChange}
+      onNodeClick={onNodeClick}
+      onNodesChange={onNodesChange}
+      onSave={onSave}
+      savedWhen={savedWhen}
+      // handlePointMove={handlePointMove}
+      saving={saving}
+      setFullScreen={setFullScreen}
+      setReactFlowInstance={setReactFlowInstance}
       wrapperRef={wrapperRef}
     />
   );

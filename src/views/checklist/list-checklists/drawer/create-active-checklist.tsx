@@ -1,63 +1,64 @@
-import React from 'react';
+import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import type { FetchResult } from '@apollo/client';
+
 import { Button, Form, Input, Select } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 import { useStoreState } from '../../../../state';
-import type { CreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/create-active-checklist.generated';
 
 interface Props {
+  checklistId: string;
+  close: () => void;
   createActive: ({
-    checklistId,
-
     businessId,
+
+    checklistId,
     title,
   }: {
+    businessId: null | string;
     checklistId: string;
-    businessId: string | null;
     title: string;
   }) => Promise<FetchResult<CreateActiveChecklistMutation>>;
-  checklistId: string;
   defaultTitle: string;
-  close: () => void;
 }
 
 interface FormData {
+  businessId: null | string;
   title: string;
-  businessId: string | null;
 }
 
 const createActiveChecklistDrawer = ({
-  createActive,
   checklistId,
-  defaultTitle,
   close,
+  createActive,
+  defaultTitle,
 }: Props) => {
   const userBusinesses = useStoreState((state) => state.user.businesses);
   const intl = useIntl();
   const handleSubmit = (formData: FormData) => {
-    const { title, businessId } = formData;
-    void createActive({ checklistId, businessId, title });
+    const { businessId, title } = formData;
+    void createActive({ businessId, checklistId, title });
     close();
   };
 
   return (
     <Form
-      onFinish={handleSubmit}
       initialValues={{
-        title: defaultTitle,
         businessId: null,
+        title: defaultTitle,
       }}
+      onFinish={handleSubmit}
     >
       <Form.Item
-        name="title"
         label={intl.formatMessage({ defaultMessage: 'Title' })}
+        name="title"
       >
         <Input />
       </Form.Item>
       <Form.Item
-        name="businessId"
         label={intl.formatMessage({ defaultMessage: 'Business' })}
+        name="businessId"
       >
         <Select>
           {userBusinesses.map((business) => (
@@ -71,7 +72,7 @@ const createActiveChecklistDrawer = ({
         <Button onClick={close} style={{ marginRight: 12 }}>
           {intl.formatMessage({ defaultMessage: 'Cancel' })}
         </Button>
-        <Button type="primary" htmlType="submit">
+        <Button htmlType="submit" type="primary">
           {intl.formatMessage({ defaultMessage: 'Create' })}
         </Button>
       </Form.Item>

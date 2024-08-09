@@ -1,62 +1,63 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
 import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
-import type { BusinessData, SelectOptions } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { useGroupsContext } from '#/context/groups-context';
-import { stringOrOption } from '#/components/form-components/user/AddUser/useAddUser';
-import type { UserQuery } from 'graphql/user/queries/user.generated';
-import { useUserQuery } from 'graphql/user/queries/user.generated';
-import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
-import { useSchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
 import type { UserUpdateInput } from 'graphql/types';
+import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+
+import { stringOrOption } from '#/components/form-components/user/AddUser/useAddUser';
+import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/__generated__/custom-roles.generated';
+import { useGroupsContext } from '#/context/groups-context';
+import { Form, notification } from 'antd';
+import { useSchemeChatsQuery } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
 import { Model, SortOrder } from 'graphql/types';
-import { useUpdateUserMutation } from 'graphql/user/mutation/update_user.generated';
+import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
+import { useUserQuery } from 'graphql/user/queries/__generated__/user.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
-  fullName: string;
-  email: string;
-  businesses: string[] | SelectOptions[];
-  role: string;
-  groups: string[];
   approverGroups: string[];
-  defaultGroups: string[];
-  chats: string[];
-  incidentEmail: boolean;
-  incidentPush: boolean;
   bulletinEmails: boolean;
   bulletinPush: boolean;
-  subscribedIncidentOnly: boolean;
-  subscribedOffenderOnly: boolean;
+  businesses: SelectOptions[] | string[];
+  chats: string[];
+  defaultGroups: string[];
+  email: string;
+  fullName: string;
+  groups: string[];
+  incidentEmail: boolean;
+  incidentPush: boolean;
   messagePush: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
   reportToAllBusinesses: boolean;
+  role: string;
+  subscribedIncidentOnly: boolean;
+  subscribedOffenderOnly: boolean;
 }
 interface Props {
   onClose: () => void;
   userId: string;
 }
 interface Return {
-  onSubmit: (value: FormData) => void;
-  data: UserQuery | undefined;
-  loading: boolean;
-  groupsData: SelectOptions[] | undefined;
-  groupsLoading: boolean;
+  addBusinessVisible: boolean;
+  availableRoles: SelectOptions[];
   chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
-  saving: boolean;
-
-  selectedRole: string | undefined;
-  setSelectedRole: (value: string) => void;
-  availableRoles: SelectOptions[];
-  selectedGroups: string[] | undefined;
-  setSelectedGroups: (value: string[]) => void;
+  data: UserQuery | undefined;
   form: FormInstance<FormData>;
-  addBusinessVisible: boolean;
+  groupsData: SelectOptions[] | undefined;
+  groupsLoading: boolean;
+
+  loading: boolean;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  selectedGroups: string[] | undefined;
+  selectedRole: string | undefined;
+  setSelectedGroups: (value: string[]) => void;
+  setSelectedRole: (value: string) => void;
   toggleAddBusinessVisible: () => void;
   updateNewBusinessData: (values: BusinessData) => void;
 }
@@ -75,10 +76,6 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   const [availableRoles, setAvailableRoles] = useState<SelectOptions[]>([]);
 
   const { data: rolesData, loading: rolesLoading } = useUserRolesQuery({
-    variables: {
-      schemeId,
-    },
-    skip: !schemeId,
     onCompleted: ({ roles }) => {
       const rolesFormatted = roles.edges.map(({ node: role }) => ({
         label: role.name,
@@ -86,26 +83,31 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       }));
       setAvailableRoles(rolesFormatted);
     },
+    skip: !schemeId,
+    variables: {
+      schemeId,
+    },
   });
 
   const { data: userData, loading } = useUserQuery({
+    onCompleted: ({ user }) => {
+      setSelectedRole(user?.schemes[0].role);
+      setSelectedGroups(user?.groups.map(({ id }) => id));
+    },
     variables: {
-      where: {
-        id: userId,
-      },
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
       chatWhere: {
         chat: {
           scheme: {
             id: {
               equals: schemeId,
             },
+          },
+        },
+      },
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
           },
         },
       },
@@ -116,10 +118,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
           },
         },
       },
-    },
-    onCompleted: ({ user }) => {
-      setSelectedRole(user?.schemes[0].role);
-      setSelectedGroups(user?.groups.map(({ id }) => id));
+      where: {
+        id: userId,
+      },
     },
   });
 
@@ -128,15 +129,15 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   const { data: chatsData, loading: chatsLoading } = useSchemeChatsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         scheme: {
           id: {
             equals: schemeId,
           },
         },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
       },
     },
   });
@@ -145,11 +146,11 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The user has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -171,7 +172,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       const getBusiness = (): UserUpdateInput['businesses'] => {
         if (data.businesses) {
           const businessIds = new Set(
-            data.businesses.map((value: string | SelectOptions) =>
+            data.businesses.map((value: SelectOptions | string) =>
               stringOrOption(value)
             )
           );
@@ -191,10 +192,6 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             ({ id }) => !businessIds.has(id)
           );
           return {
-            disconnect:
-              disconnectedBusinesses && disconnectedBusinesses.length > 0
-                ? disconnectedBusinesses.map(({ id }) => ({ id }))
-                : undefined,
             connect:
               connectedBusinesses && connectedBusinesses.length > 0
                 ? connectedBusinesses.map((value) => ({
@@ -204,41 +201,6 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             create:
               newBusinesses && newBusinesses.length > 0
                 ? newBusinesses.map((el) => ({
-                    name: el.name,
-                    siteNumber: el.siteNumber,
-                    publicName: el.publicName || false,
-                    schemes: {
-                      connect: [
-                        {
-                          id: schemeId,
-                        },
-                      ],
-                    },
-                    parent: el.parent
-                      ? {
-                          connect: {
-                            id: el.parent.id,
-                          },
-                        }
-                      : undefined,
-                    tags: {
-                      connect:
-                        el.tags && el.tags.length > 0
-                          ? el.tags.map((id) => ({ id }))
-                          : undefined,
-                      create:
-                        el.newTags && el.newTags.length > 0
-                          ? el.newTags.map((value) => ({
-                              name: value.name,
-                              description: value.description || '',
-                              schemes: {
-                                connect: value.schemes.map((id) => ({ id })),
-                              },
-                              createdBy: { connect: { id: value.createdById } },
-                              dataType: Model.Business,
-                            }))
-                          : undefined,
-                    },
                     groups: el?.groups
                       ? { connect: el?.groups?.map((id) => ({ id })) }
                       : undefined,
@@ -253,7 +215,46 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                         },
                       ],
                     },
+                    name: el.name,
+                    parent: el.parent
+                      ? {
+                          connect: {
+                            id: el.parent.id,
+                          },
+                        }
+                      : undefined,
+                    publicName: el.publicName || false,
+                    schemes: {
+                      connect: [
+                        {
+                          id: schemeId,
+                        },
+                      ],
+                    },
+                    siteNumber: el.siteNumber,
+                    tags: {
+                      connect:
+                        el.tags && el.tags.length > 0
+                          ? el.tags.map((id) => ({ id }))
+                          : undefined,
+                      create:
+                        el.newTags && el.newTags.length > 0
+                          ? el.newTags.map((value) => ({
+                              createdBy: { connect: { id: value.createdById } },
+                              dataType: Model.Business,
+                              description: value.description || '',
+                              name: value.name,
+                              schemes: {
+                                connect: value.schemes.map((id) => ({ id })),
+                              },
+                            }))
+                          : undefined,
+                    },
                   }))
+                : undefined,
+            disconnect:
+              disconnectedBusinesses && disconnectedBusinesses.length > 0
+                ? disconnectedBusinesses.map(({ id }) => ({ id }))
                 : undefined,
           };
         }
@@ -275,53 +276,16 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       }
       void updateUser({
         variables: {
-          where: {
-            id: userId,
+          chatWhere: {
+            chat: {
+              scheme: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
           },
           data: {
-            email: { set: data.email },
-            fullName: { set: data.fullName },
-            incidentEmail: { set: data.incidentEmail },
-            incidentPush: { set: data.incidentPush },
-            bulletinEmails: { set: data.bulletinEmails },
-            bulletinPush: { set: data.bulletinPush },
-            publicName: { set: data.publicName },
-            reportToAllBusinesses: { set: data.reportToAllBusinesses },
-            subscribedIncidentOnly: { set: data.subscribedIncidentOnly },
-            subscribedOffenderOnly: { set: data.subscribedOffenderOnly },
-            messagePush: { set: data.messagePush },
-            offenderEmail: { set: data.offenderEmail },
-            offenderPush: { set: data.offenderPush },
-            businesses: getBusiness(),
-            schemes: {
-              update: [
-                {
-                  data: {
-                    role: { set: foundRole.type },
-                    permissions: {
-                      connect: {
-                        id: foundRole.id,
-                      },
-                    },
-                  },
-                  where: {
-                    id: userData?.user?.schemes[0].id,
-                  },
-                },
-              ],
-            },
-            groups: {
-              connect: data.groups
-                .filter(
-                  (id) =>
-                    !userData?.user?.groups.map((item) => item.id).includes(id)
-                )
-                .map((id) => ({ id })),
-              disconnect:
-                disconnectGroupsId && disconnectGroupsId.length > 0
-                  ? disconnectGroupsId?.map((id) => ({ id }))
-                  : undefined,
-            },
             approverGroups: data.approverGroups
               ? {
                   connect: data.approverGroups
@@ -341,25 +305,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                     .map(({ id }) => ({ id })),
                 }
               : undefined,
-            defaultGroups: data.defaultGroups
-              ? {
-                  connect: data.defaultGroups
-                    .filter(
-                      (id) =>
-                        !userData?.user?.defaultGroups
-                          .map((item) => item.id)
-                          .includes(id)
-                    )
-                    .map((id) => ({ id })),
-                  disconnect: userData?.user?.defaultGroups
-                    .filter(
-                      ({ id }) =>
-                        !data.defaultGroups.map((item) => item).includes(id) ||
-                        disconnectGroupsId?.includes(id)
-                    )
-                    .map(({ id }) => ({ id })),
-                }
-              : undefined,
+            bulletinEmails: { set: data.bulletinEmails },
+            bulletinPush: { set: data.bulletinPush },
+            businesses: getBusiness(),
             chats: {
               create: data.chats
                 .filter(
@@ -382,6 +330,65 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                   id: userChat.id,
                 })),
             },
+            defaultGroups: data.defaultGroups
+              ? {
+                  connect: data.defaultGroups
+                    .filter(
+                      (id) =>
+                        !userData?.user?.defaultGroups
+                          .map((item) => item.id)
+                          .includes(id)
+                    )
+                    .map((id) => ({ id })),
+                  disconnect: userData?.user?.defaultGroups
+                    .filter(
+                      ({ id }) =>
+                        !data.defaultGroups.map((item) => item).includes(id) ||
+                        disconnectGroupsId?.includes(id)
+                    )
+                    .map(({ id }) => ({ id })),
+                }
+              : undefined,
+            email: { set: data.email },
+            fullName: { set: data.fullName },
+            groups: {
+              connect: data.groups
+                .filter(
+                  (id) =>
+                    !userData?.user?.groups.map((item) => item.id).includes(id)
+                )
+                .map((id) => ({ id })),
+              disconnect:
+                disconnectGroupsId && disconnectGroupsId.length > 0
+                  ? disconnectGroupsId?.map((id) => ({ id }))
+                  : undefined,
+            },
+            incidentEmail: { set: data.incidentEmail },
+            incidentPush: { set: data.incidentPush },
+            messagePush: { set: data.messagePush },
+            offenderEmail: { set: data.offenderEmail },
+            offenderPush: { set: data.offenderPush },
+            publicName: { set: data.publicName },
+            reportToAllBusinesses: { set: data.reportToAllBusinesses },
+            schemes: {
+              update: [
+                {
+                  data: {
+                    permissions: {
+                      connect: {
+                        id: foundRole.id,
+                      },
+                    },
+                    role: { set: foundRole.type },
+                  },
+                  where: {
+                    id: userData?.user?.schemes[0].id,
+                  },
+                },
+              ],
+            },
+            subscribedIncidentOnly: { set: data.subscribedIncidentOnly },
+            subscribedOffenderOnly: { set: data.subscribedOffenderOnly },
           },
           groupWhere: {
             scheme: {
@@ -390,14 +397,8 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               },
             },
           },
-          chatWhere: {
-            chat: {
-              scheme: {
-                id: {
-                  equals: schemeId,
-                },
-              },
-            },
+          where: {
+            id: userId,
           },
         },
       });
@@ -417,33 +418,33 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
         ...(selectedBusinesses && selectedBusinesses.length > 0
           ? selectedBusinesses
           : []),
-        { value: values.id, label: values.name },
+        { label: values.name, value: values.id },
       ],
     });
     setBusinessesData([...businessesData, { ...values, isNew: true }]);
   };
   return {
-    onSubmit,
-    data: userData,
-    loading: loading || rolesLoading,
-    groupsData: groups,
-    groupsLoading,
+    addBusinessVisible,
+    availableRoles,
     chatsData: chatsData?.chats.map((chat) => ({
-      value: chat.id,
       label: chat.name,
+      value: chat.id,
     })),
     chatsLoading,
-    saving,
-
-    selectedRole,
-    setSelectedRole,
-    selectedGroups,
-    setSelectedGroups,
+    data: userData,
     form,
-    addBusinessVisible,
+    groupsData: groups,
+    groupsLoading,
+
+    loading: loading || rolesLoading,
+    onSubmit,
+    saving,
+    selectedGroups,
+    selectedRole,
+    setSelectedGroups,
+    setSelectedRole,
     toggleAddBusinessVisible,
     updateNewBusinessData,
-    availableRoles,
   };
 };
 

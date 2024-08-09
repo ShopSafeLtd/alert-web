@@ -1,5 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import type { BusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
+import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
+import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
+import type { Scheme } from 'state';
 
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import {
   Button,
   Col,
@@ -12,68 +19,60 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
-import { Layer, Map, Source } from 'react-map-gl';
-import type { Scheme } from 'state';
-import { useStoreState } from 'state';
 import mapboxgl from 'mapbox-gl';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Layer, Map, Source } from 'react-map-gl';
+import { useStoreState } from 'state';
+
 import useStyles from './IncidentMap.styles';
 import policeJSON from './police-areas';
-import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import type { IncidentMapQuery } from 'graphql/reports/queries/incident-map.generated';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import type { BusinessLocationsQuery } from 'graphql/businesses/queries/business-locations.generated';
-import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
-import type { IndustriesQuery } from 'graphql/industry/industries.generated';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
 export const dataLayer: FillLayer = {
   id: 'data',
-  source: 'police-data',
-  type: 'fill',
   paint: {
     'fill-color': '#3288bd',
     'fill-opacity': 0.5,
   },
+  source: 'police-data',
+  type: 'fill',
 };
 
 export const lineLayer: LineLayer = {
   id: 'line',
-  source: 'police-data',
-  type: 'line',
   paint: {
     'line-color': '#000',
     'line-width': 1,
   },
+  source: 'police-data',
+  type: 'line',
 };
 
 const PoliceDataLayer = (
   <Layer
     id="policeData"
+    paint={{ 'fill-color': '#3288bd', 'fill-opacity': 0.5 }}
     source="police-data"
     type="fill"
-    paint={{ 'fill-color': '#3288bd', 'fill-opacity': 0.5 }}
   />
 );
 
 const PoliceLineLayer = (
   <Layer
     id="policeLine"
+    paint={{ 'line-color': '#000', 'line-width': 1 }}
     source="police-data"
     type="line"
-    paint={{ 'line-color': '#000', 'line-width': 1 }}
   />
 );
 
 const ClusterLayer = (
   <Layer
-    id="clusters"
-    type="circle"
-    source="incidents"
     filter={['has', 'point_count']}
+    id="clusters"
     paint={{
       'circle-color': [
         'step',
@@ -86,57 +85,57 @@ const ClusterLayer = (
       ],
       'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
     }}
+    source="incidents"
+    type="circle"
   />
 );
 
 const ClusterCountLayer = (
   <Layer
-    id="cluster-count"
-    type="symbol"
-    source="incidents"
     filter={['has', 'point_count']}
+    id="cluster-count"
     layout={{
       'text-field': '{point_count_abbreviated}',
       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
       'text-size': 12,
     }}
+    source="incidents"
+    type="symbol"
   />
 );
 
 const UnClusteredLayer = (
   <Layer
-    id="unclustered-point"
-    type="circle"
-    source="incidents"
     filter={['!', ['has', 'point_count']]}
+    id="unclustered-point"
     paint={{
       'circle-color': '#11b4da',
       'circle-radius': 6,
-      'circle-stroke-width': 0.5,
       'circle-stroke-color': '#fff',
+      'circle-stroke-width': 0.5,
     }}
+    source="incidents"
+    type="circle"
   />
 );
 
 const BusinessClusterLayer = (
   <Layer
-    id="clusters"
-    type="circle"
-    source="businesses"
     filter={['has', 'point_count']}
+    id="clusters"
     paint={{
       'circle-color': 'rgb(222, 68, 54)',
       'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
     }}
+    source="businesses"
+    type="circle"
   />
 );
 
 const BusinessClusterCountLayer = (
   <Layer
-    id="cluster-count"
-    type="symbol"
-    source="businesses"
     filter={['has', 'point_count']}
+    id="cluster-count"
     layout={{
       'text-field': '{point_count_abbreviated}',
       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
@@ -145,21 +144,23 @@ const BusinessClusterCountLayer = (
     paint={{
       'text-color': '#FFF',
     }}
+    source="businesses"
+    type="symbol"
   />
 );
 
 const BusinessUnClusteredLayer = (
   <Layer
-    id="unclustered-point"
-    type="circle"
-    source="businesses"
     filter={['!', ['has', 'point_count']]}
+    id="unclustered-point"
     paint={{
       'circle-color': 'rgb(222, 68, 54)',
       'circle-radius': 5,
-      'circle-stroke-width': 0.5,
       'circle-stroke-color': '#fff',
+      'circle-stroke-width': 0.5,
     }}
+    source="businesses"
+    type="circle"
   />
 );
 
@@ -167,22 +168,21 @@ const HeatMapLayer = (
   <Layer
     id="heatmap"
     maxzoom={20}
-    type="heatmap"
     paint={{
-      'heatmap-weight': 1,
       'heatmap-intensity': {
         stops: [
           [11, 1],
           [15, 3],
         ],
       },
+      'heatmap-opacity': 0.3,
       'heatmap-radius': {
         stops: [
           [11, 15],
           [15, 30],
         ],
       },
-      'heatmap-opacity': 0.3,
+      'heatmap-weight': 1,
       // 'heatmap-intensity': {
       //   stops: [
       //     [11, 1],
@@ -190,51 +190,52 @@ const HeatMapLayer = (
       //   ]
       // },
     }}
+    type="heatmap"
   />
 );
 
 interface Props {
-  data: IncidentMapQuery | undefined;
-  loading: boolean;
-  groupsData: SchemeGroupsQuery | undefined;
-  groupsLoading: boolean;
-  businessData: BusinessLocationsQuery | undefined;
-  schemes: Scheme[];
-  onChangeSchemes: (value: string[]) => void;
-  selectedSchemes: string[];
-  onChangeGroups: (value: string[]) => void;
-  selectedGroups: string[];
-  onChangeDateRange: (value: { startDate: Date; endDate: Date }) => void;
   brandsData: BrandsQuery | undefined;
   brandsLoading: boolean;
+  businessData: BusinessLocationsQuery | undefined;
+  data: IncidentMapQuery | undefined;
+  groupsData: SchemeGroupsQuery | undefined;
+  groupsLoading: boolean;
   industriesData: IndustriesQuery | undefined;
   industriesLoading: boolean;
-  selectedBrands: string[];
-  selectedIndustries: string[];
+  loading: boolean;
   onChangeBrands: (value: string[]) => void;
+  onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
+  onChangeGroups: (value: string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangeSchemes: (value: string[]) => void;
+  schemes: Scheme[];
+  selectedBrands: string[];
+  selectedGroups: string[];
+  selectedIndustries: string[];
+  selectedSchemes: string[];
 }
 
 const IncidentMap = ({
+  brandsData,
+  brandsLoading,
+  businessData,
   data,
-  loading,
   groupsData,
   groupsLoading,
-  businessData,
-  schemes,
-  onChangeSchemes,
-  selectedSchemes,
-  onChangeGroups,
-  selectedGroups,
-  onChangeDateRange,
-  brandsLoading,
-  industriesLoading,
-  brandsData,
   industriesData,
-  selectedIndustries,
-  onChangeIndustries,
-  selectedBrands,
+  industriesLoading,
+  loading,
   onChangeBrands,
+  onChangeDateRange,
+  onChangeGroups,
+  onChangeIndustries,
+  onChangeSchemes,
+  schemes,
+  selectedBrands,
+  selectedGroups,
+  selectedIndustries,
+  selectedSchemes,
 }: Props) => {
   const mapRef = useRef<MapRef>(null);
 
@@ -280,13 +281,13 @@ const IncidentMap = ({
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
-          selectedId="incident-map"
           collapsed={collapsed}
+          selectedId="incident-map"
           setCollapsed={setCollapsed}
         />
       </Col>
-      <Col flex={1} className={classes.page}>
-        <Row align="middle" gutter={16} className={classes.titleContainer}>
+      <Col className={classes.page} flex={1}>
+        <Row align="middle" className={classes.titleContainer} gutter={16}>
           <Col flex={1}>
             <Title className={classes.title} level={3}>
               {intl.formatMessage({
@@ -308,52 +309,52 @@ const IncidentMap = ({
         ) : (
           <div className={classes.mapContainer}>
             <Map
-              onError={() => {}}
-              ref={mapRef}
+              initialViewState={{
+                latitude: 55.37,
+                longitude: 3.43,
+                zoom: 5,
+              }}
               mapLib={mapboxgl}
-              mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-              style={{ width: '100%', height: 'calc(100vh - 60px)' }}
               mapStyle={
                 currentTheme === 'dark'
                   ? 'mapbox://styles/wgarrod/clua60bxj016401qse8vj1qfu'
                   : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
               }
-              initialViewState={{
-                longitude: 3.43,
-                latitude: 55.37,
-                zoom: 5,
-              }}
+              mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+              onError={() => {}}
+              ref={mapRef}
+              style={{ height: 'calc(100vh - 60px)', width: '100%' }}
             >
               {showPolice && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore Polygon / multipolygon issue
-                <Source id="police-data" type="geojson" data={policeJSON}>
+                <Source data={policeJSON} id="police-data" type="geojson">
                   {PoliceDataLayer}
                   {PoliceLineLayer}
                 </Source>
               )}
               {showMarkers && (
                 <Source
-                  id="incidents"
-                  type="geojson"
+                  cluster={cluster}
+                  clusterMaxZoom={14}
+                  clusterRadius={50}
                   data={{
-                    type: 'FeatureCollection',
                     features:
                       data?.incidents.map((incident) => ({
-                        type: 'Feature',
-                        properties: {},
                         geometry: {
-                          type: 'Point',
                           coordinates: [
                             incident.location?.geoLng || 0,
                             incident.location?.geoLat || 0,
                           ],
+                          type: 'Point',
                         },
+                        properties: {},
+                        type: 'Feature',
                       })) || [],
+                    type: 'FeatureCollection',
                   }}
-                  cluster={cluster}
-                  clusterMaxZoom={14}
-                  clusterRadius={50}
+                  id="incidents"
+                  type="geojson"
                 >
                   {ClusterLayer}
                   {ClusterCountLayer}
@@ -361,50 +362,50 @@ const IncidentMap = ({
                 </Source>
               )}
               <Source
-                id="incidents-heatmap"
-                type="geojson"
                 data={{
-                  type: 'FeatureCollection',
                   features:
                     data?.incidents.map((incident) => ({
-                      type: 'Feature',
-                      properties: {},
                       geometry: {
-                        type: 'Point',
                         coordinates: [
                           incident.location?.geoLng || 0,
                           incident.location?.geoLat || 0,
                         ],
+                        type: 'Point',
                       },
+                      properties: {},
+                      type: 'Feature',
                     })) || [],
+                  type: 'FeatureCollection',
                 }}
+                id="incidents-heatmap"
+                type="geojson"
               >
                 {showHeatmap && HeatMapLayer}
               </Source>
               {showBusinesses && (
                 <Source
-                  id="businesses"
-                  type="geojson"
                   cluster={cluster}
                   clusterMaxZoom={14}
                   clusterRadius={50}
                   data={{
-                    type: 'FeatureCollection',
                     features:
                       businessData?.listBusinesses.businesses.map(
                         (business) => ({
-                          type: 'Feature',
-                          properties: {},
                           geometry: {
-                            type: 'Point',
                             coordinates: [
                               business.locations[0]?.geoLng || 0,
                               business.locations[0]?.geoLat || 0,
                             ],
+                            type: 'Point',
                           },
+                          properties: {},
+                          type: 'Feature',
                         })
                       ) || [],
+                    type: 'FeatureCollection',
                   }}
+                  id="businesses"
+                  type="geojson"
                 >
                   {BusinessClusterLayer}
                   {BusinessClusterCountLayer}
@@ -415,7 +416,7 @@ const IncidentMap = ({
           </div>
         )}
 
-        <Drawer visible={drawerOpen} onClose={toggleDrawerOpen}>
+        <Drawer onClose={toggleDrawerOpen} visible={drawerOpen}>
           <Form layout="vertical">
             <Row>
               <Col flex={1}>
@@ -424,7 +425,7 @@ const IncidentMap = ({
                     defaultMessage: 'Show Businesses',
                   })}
                 >
-                  <Switch onClick={toggleBusinesses} checked={showBusinesses} />
+                  <Switch checked={showBusinesses} onClick={toggleBusinesses} />
                 </Form.Item>
               </Col>
               <Col flex={1}>
@@ -433,7 +434,7 @@ const IncidentMap = ({
                     defaultMessage: 'Show Incidents',
                   })}
                 >
-                  <Switch onClick={toggleMarkers} checked={showMarkers} />
+                  <Switch checked={showMarkers} onClick={toggleMarkers} />
                 </Form.Item>
               </Col>
             </Row>
@@ -444,7 +445,7 @@ const IncidentMap = ({
                     defaultMessage: 'Show Heatmap',
                   })}
                 >
-                  <Switch onClick={toggleHeatmap} checked={showHeatmap} />
+                  <Switch checked={showHeatmap} onClick={toggleHeatmap} />
                 </Form.Item>
               </Col>
               <Col flex={1}>
@@ -453,7 +454,7 @@ const IncidentMap = ({
                     defaultMessage: 'Show Police Areas',
                   })}
                 >
-                  <Switch onClick={togglePolice} checked={showPolice} />
+                  <Switch checked={showPolice} onClick={togglePolice} />
                 </Form.Item>
               </Col>
             </Row>
@@ -464,7 +465,7 @@ const IncidentMap = ({
                     defaultMessage: 'Cluster Points',
                   })}
                 >
-                  <Switch onClick={toggleCluster} checked={cluster} />
+                  <Switch checked={cluster} onClick={toggleCluster} />
                 </Form.Item>
               </Col>
             </Row>
@@ -474,15 +475,15 @@ const IncidentMap = ({
               })}
             >
               <Select
+                className={classes.groupSelect}
+                maxTagCount={2}
+                mode="multiple"
+                onChange={onChangeSchemes}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select Scheme',
                 })}
-                className={classes.groupSelect}
-                onChange={onChangeSchemes}
-                value={selectedSchemes}
-                mode="multiple"
-                maxTagCount={2}
                 style={{ minWidth: 150 }}
+                value={selectedSchemes}
               >
                 {schemes.map((scheme) => (
                   <Select.Option
@@ -500,20 +501,20 @@ const IncidentMap = ({
               })}
             >
               <Select
+                className={classes.groupSelect}
+                maxTagCount={1}
+                mode="multiple"
+                onChange={onChangeGroups}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select Groups',
                 })}
-                className={classes.groupSelect}
                 style={{ minWidth: 150 }}
-                onChange={onChangeGroups}
                 value={selectedGroups}
-                mode="multiple"
-                maxTagCount={1}
               >
                 {groupsData?.groups.map((group) => (
                   <Select.Option
-                    loading={groupsLoading}
                     key={group.id}
+                    loading={groupsLoading}
                     value={group.id}
                   >
                     {group.name}
@@ -530,8 +531,8 @@ const IncidentMap = ({
                 onChange={(value) => {
                   if (value && value[0] && value[1])
                     onChangeDateRange({
-                      startDate: new Date(value[0].valueOf()),
                       endDate: new Date(value[1].valueOf()),
+                      startDate: new Date(value[0].valueOf()),
                     });
                 }}
               />
@@ -542,16 +543,16 @@ const IncidentMap = ({
               })}
             >
               <Select
+                className={classes.groupSelect}
+                loading={brandsLoading}
+                maxTagCount={1}
+                mode="multiple"
+                onChange={onChangeBrands}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Brands Groups',
                 })}
-                className={classes.groupSelect}
                 style={{ minWidth: 150 }}
-                onChange={onChangeBrands}
                 value={selectedBrands}
-                mode="multiple"
-                maxTagCount={1}
-                loading={brandsLoading}
               >
                 {brandsData?.brands.edges.map(({ node: group }) => (
                   <Select.Option key={group.id} value={group.id}>
@@ -566,16 +567,16 @@ const IncidentMap = ({
               })}
             >
               <Select
+                className={classes.groupSelect}
+                loading={industriesLoading}
+                maxTagCount={1}
+                mode="multiple"
+                onChange={onChangeIndustries}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Industries Groups',
                 })}
-                className={classes.groupSelect}
                 style={{ minWidth: 150 }}
-                onChange={onChangeIndustries}
                 value={selectedIndustries}
-                mode="multiple"
-                maxTagCount={1}
-                loading={industriesLoading}
               >
                 {industriesData?.industries.map((group) => (
                   <Select.Option key={group.id} value={group.id}>

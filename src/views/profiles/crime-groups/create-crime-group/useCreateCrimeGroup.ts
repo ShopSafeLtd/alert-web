@@ -1,31 +1,30 @@
 import type {
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables,
-} from 'graphql/crime-groups/queries/list-crime-groups.generated';
+} from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import type { SearchOffendersQuery } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
 
-import { useCreateCrimeGroupMutation } from 'graphql/crime-groups/mutations/create-crime-group.generated';
-import { ListCrimeGroupsDocument } from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { SortOrder } from 'graphql/types';
+import { useCreateCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/create-crime-group.generated';
+import { ListCrimeGroupsDocument } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import { useListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import { useSearchOffendersQuery } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
 
-import type { ListOffendersCardQuery } from './graphql/list-offender-card.generated';
-import type { SearchOffendersRelayQuery } from './graphql/search-offenders-relay.generated';
-
-import { useListOffendersCardQuery } from './graphql/list-offender-card.generated';
-import { useSearchOffendersRelayQuery } from './graphql/search-offenders-relay.generated';
-
 interface Return {
   addOffender: boolean;
-  fetchMoreScroll: () => void;
   loading: boolean;
-  offendersData: ListOffendersCardQuery | undefined;
+  offendersData: ListOffendersQuery | undefined;
   offendersSelected: boolean;
+  onPaginationChange: (page: number, size: number) => void;
   onSubmit: () => void;
   removeOffender: (id: string) => void;
-  searchData: SearchOffendersRelayQuery | undefined;
+  searchData: SearchOffendersQuery | undefined;
   selectOffender: (id: string) => void;
+  setSearch: (value: string) => void;
   submitting: boolean;
   toggleAddOffender: () => void;
 }
@@ -36,21 +35,39 @@ const useCreateCrimeGroup = (): Return => {
   const [selectedOffenders, setSelectedOffenders] = useState<string[]>([]);
   const [addOffender, setAddOffender] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const variables = {
-    first: 18,
-    order: {
-      updatedAt: SortOrder.Desc,
-    },
-    scheme: {
-      id: currentScheme,
-    },
-  };
-  const { data: searchData, fetchMore } = useSearchOffendersRelayQuery({
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+
+  const { data: searchData } = useSearchOffendersQuery({
     fetchPolicy: 'cache-and-network',
-    variables,
+    variables: {
+      order: {
+        updatedAt: SortOrder.Desc,
+      },
+      scheme: {
+        id: currentScheme,
+      },
+      skip: (page - 1) * 15,
+      take: 15,
+      where: {
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            referenceStr: {
+              contains: search,
+            },
+          },
+        ],
+      },
+    },
   });
 
-  const { data: offendersData } = useListOffendersCardQuery({
+  const { data: offendersData } = useListOffendersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
@@ -63,26 +80,7 @@ const useCreateCrimeGroup = (): Return => {
       },
     },
   });
-  const fetchMoreScroll = () => {
-    void fetchMore({
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        return {
-          listOffendersRelay: {
-            ...fetchMoreResult.listOffendersRelay,
-            edges: [
-              ...(prev.listOffendersRelay?.edges || []),
-              ...(fetchMoreResult.listOffendersRelay?.edges || []),
-            ],
-          },
-        };
-      },
-      variables: {
-        ...variables,
-        after: searchData?.listOffendersRelay?.pageInfo?.endCursor,
-      },
-    });
-  };
+
   const selectOffender = (id: string) => {
     setSelectedOffenders([...selectedOffenders, id]);
   };
@@ -189,17 +187,22 @@ const useCreateCrimeGroup = (): Return => {
     );
   };
 
+  const onPaginationChange = (page: number) => {
+    setPage(page);
+  };
+
   return {
     addOffender,
-    fetchMoreScroll,
     loading: !searchData,
     offendersData,
     offendersSelected: selectedOffenders.length > 0,
+    onPaginationChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     removeOffender,
     searchData,
     selectOffender,
+    setSearch,
     submitting,
     toggleAddOffender,
   };

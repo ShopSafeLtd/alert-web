@@ -1,45 +1,46 @@
-import React from 'react';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+
 import { Col, Divider, Row, Typography } from 'antd';
+import InfiniteSideScrollList from 'components/side-list/InfiniteSideList';
+import SideListItem from 'components/side-list/SideListItem.view';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-import SideListItem from 'components/side-list/SideListItem.view';
-import InfiniteSideScrollList from 'components/side-list/InfiniteSideList';
 import useStyles from './CrimeGroupSideList.styles';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
 
 const { Paragraph } = Typography;
 
 interface Props {
+  // eslint-disable-next-line react/require-default-props
+  current?: string;
   data:
-    | Exclude<ListCrimeGroupsQuery['listCrimeGroups'], undefined | null>
+    | Exclude<ListCrimeGroupsQuery['listCrimeGroups'], null | undefined>
     | null
     | undefined;
   loading: boolean;
   next: () => void;
-  // eslint-disable-next-line react/require-default-props
-  current?: string;
   to?: string;
 }
 
 const CrimeGroupSideList = ({
+  current,
   data,
   loading,
-  current,
-  to,
   next,
+  to,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const isLoading = loading && !data?.total;
   const items = data?.crimeGroups.map((group) => (
-    <Link to={`${to || '/app/crime-groups/view/'}${group.id}`} key={group.id}>
-      <SideListItem key={group.id} current={current === group.id}>
+    <Link key={group.id} to={`${to || '/app/crime-groups/view/'}${group.id}`}>
+      <SideListItem current={current === group.id} key={group.id}>
         <Row wrap={false}>
           <Col className={classes.content} flex={1}>
             {group.reference && (
               <Paragraph
                 className={classes.name}
-                strong={current === group.id}
                 ellipsis
+                strong={current === group.id}
               >
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                 {`CG-${group.reference}`}
@@ -48,8 +49,8 @@ const CrimeGroupSideList = ({
             {group.alias && (
               <Paragraph
                 className={classes.name}
-                strong={current === group.id}
                 ellipsis
+                strong={current === group.id}
               >
                 {group.alias}
               </Paragraph>
@@ -63,10 +64,10 @@ const CrimeGroupSideList = ({
   return (
     <InfiniteSideScrollList
       dataLength={data?.crimeGroups?.length}
-      next={next}
       hasMore={(data?.crimeGroups?.length || 0) < (data?.total || 0)}
       isLoading={isLoading}
       items={items}
+      next={next}
     />
   );
 };

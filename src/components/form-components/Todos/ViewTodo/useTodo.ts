@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
+
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
-import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
+import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
 import { Form } from 'antd';
 import { Role, SortOrder } from 'graphql/types';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 import { useEffect, useState } from 'react';
 
 import { useStoreState } from '../../../../state';

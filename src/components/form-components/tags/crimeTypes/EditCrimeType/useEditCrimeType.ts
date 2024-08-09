@@ -1,30 +1,30 @@
-import { useState } from 'react';
+import type { TagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
 import type { CrimeType } from 'graphql/types';
 
 import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
+import { useTagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { TagQuery } from 'graphql/tag/queries/tag.generated';
-import { useTagQuery } from 'graphql/tag/queries/tag.generated';
-import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface FormData {
-  name: string;
-  description: string;
   crimeType: CrimeType;
+  description: string;
+  name: string;
 }
 interface Props {
-  onClose: () => void;
   incidentId: string | undefined;
+  onClose: () => void;
 }
 interface Return {
-  onSubmit: (value: FormData) => void;
   data: TagQuery | undefined;
   loading: boolean;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
 }
 
-const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
+const useEditCrimeType = ({ incidentId, onClose }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
 
@@ -42,11 +42,11 @@ const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The crime type has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -62,22 +62,22 @@ const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
     if (incidentId)
       void updateTag({
         variables: {
+          data: {
+            crimeType: data.crimeType ? { set: data.crimeType } : undefined,
+            description: { set: data.description },
+            name: { set: data.name },
+          },
           where: {
             id: incidentId,
-          },
-          data: {
-            name: { set: data.name },
-            description: { set: data.description },
-            crimeType: data.crimeType ? { set: data.crimeType } : undefined,
           },
         },
       });
   };
 
   return {
-    onSubmit,
     data: TagData,
     loading,
+    onSubmit,
     saving,
   };
 };

@@ -1,15 +1,16 @@
 import type { SelectProps } from 'antd';
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import { useCopyEvidenceMutation } from 'graphql/dem/mutations/import-evidence.generated';
 import type {
   ViewInvestigationQuery,
   ViewInvestigationQueryVariables,
-} from 'graphql/investigations/queries/view-investigation.generated';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
-import { useCreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+} from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+
+import { useCreateTagMutation } from '#/graphql/tags/mutations/__generated__/create-tag.generated';
+import { useCopyEvidenceMutation } from 'graphql/dem/mutations/__generated__/import-evidence.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model } from 'graphql/types';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface OnSubmitValues {
   name: string;
@@ -17,26 +18,26 @@ interface OnSubmitValues {
 }
 
 interface Props {
-  onClose: () => void;
   investigationId: string;
+  onClose: () => void;
 }
 
 interface Return {
+  categories: SelectProps['options'];
+  categoriesChange: (categories: { value: string }[]) => void;
+  categoriesLoading: boolean;
   onSubmit: (values: OnSubmitValues) => void;
   saving: boolean;
-  categories: SelectProps['options'];
-  categoriesLoading: boolean;
-  selectedCategories: { value: string }[];
-  categoriesChange: (categories: { value: string }[]) => void;
-  toggleSearchEvidence: () => void;
   searchEvidence: boolean;
+  selectEvidence: (evidence: { url: string }) => void;
+  selectedCategories: { value: string }[];
   selectedEvidence: {
     url: string;
   } | null;
-  selectEvidence: (evidence: { url: string }) => void;
+  toggleSearchEvidence: () => void;
 }
 
-const useAddDocument = ({ onClose, investigationId }: Props): Return => {
+const useAddDocument = ({ investigationId, onClose }: Props): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
@@ -45,7 +46,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
   >([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
   const [categoryIds, setCategoryIds] = useState<
-    { value: string; id: string }[]
+    { id: string; value: string }[]
   >([]);
   const [searchEvidence, setSearchEvidence] = useState(false);
   const [selectedEvidence, setSelectedEvidence] = useState<{
@@ -62,21 +63,37 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
   const [createTag] = useCreateTagMutation({
     onCompleted: (result) => {
       const newCategory = {
-        value: result.createTag.name,
         label: result.createTag.name,
+        value: result.createTag.name,
       };
       const newCategoryIds = {
-        value: result.createTag.name,
         id: result.createTag.id,
+        value: result.createTag.name,
       };
-      setCategoryIds([...(<[]>categoryIds), newCategoryIds]);
-      setCategories([...(<[]>categories), newCategory]);
+      setCategoryIds([...(categoryIds as []), newCategoryIds]);
+      setCategories([...(categories as []), newCategory]);
     },
   });
 
   const { loading: tagsLoading } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (result) => {
+      const categoriesFormatted = result.tags.map((tag) => ({
+        label: tag.name,
+        value: tag.name,
+      }));
+      const categoryIdsFormatted = result.tags.map((tag) => ({
+        id: tag.id,
+        value: tag.name,
+      }));
+      setCategoryIds(categoryIdsFormatted);
+      setCategories(categoriesFormatted);
+    },
     variables: {
       where: {
+        dataType: {
+          equals: Model.Document,
+        },
         schemes: {
           some: {
             id: {
@@ -84,23 +101,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
             },
           },
         },
-        dataType: {
-          equals: Model.Document,
-        },
       },
-    },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (result) => {
-      const categoriesFormatted = result.tags.map((tag) => ({
-        value: tag.name,
-        label: tag.name,
-      }));
-      const categoryIdsFormatted = result.tags.map((tag) => ({
-        value: tag.name,
-        id: tag.id,
-      }));
-      setCategoryIds(categoryIdsFormatted);
-      setCategories(categoriesFormatted);
     },
   });
 
@@ -117,13 +118,14 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
         void createTag({
           variables: {
             data: {
-              name: value.value,
               createdBy: {
                 connect: {
                   id: userId,
                 },
               },
+              dataType: Model.Document,
               description: '',
+              name: value.value,
               schemes: {
                 connect: [
                   {
@@ -131,7 +133,6 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
                   },
                 ],
               },
-              dataType: Model.Document,
             },
           },
         }).then((result) => {
@@ -167,12 +168,6 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
           ViewInvestigationQuery,
           ViewInvestigationQueryVariables
         >({
-          query: ViewInvestigationDocument,
-          variables: {
-            where: {
-              id: investigationId,
-            },
-          },
           data: {
             investigation: {
               ...existingData.investigation,
@@ -180,6 +175,12 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
               // @ts-ignore
 
               documents: [...oldDocuments, ...newDocuments],
+            },
+          },
+          query: ViewInvestigationDocument,
+          variables: {
+            where: {
+              id: investigationId,
             },
           },
         });
@@ -202,13 +203,13 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
     if (selectedEvidence) {
       void createDocument({
         variables: {
+          data: {
+            id: selectedEvidence.url,
+            name: values.name,
+            tags: selectedCategoryIds,
+          },
           where: {
             id: investigationId,
-          },
-          data: {
-            name: values.name,
-            id: selectedEvidence.url,
-            tags: selectedCategoryIds,
           },
         },
       });
@@ -218,16 +219,16 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
   };
 
   return {
-    onSubmit,
-    saving,
-    selectedCategories,
     categories,
     categoriesChange,
     categoriesLoading: tagsLoading,
-    selectedEvidence,
-    toggleSearchEvidence,
+    onSubmit,
+    saving,
     searchEvidence,
     selectEvidence,
+    selectedCategories,
+    selectedEvidence,
+    toggleSearchEvidence,
   };
 };
 

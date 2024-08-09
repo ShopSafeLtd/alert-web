@@ -1,18 +1,20 @@
 import type React from 'react';
-import { useRef } from 'react';
 import type { Editor } from 'tinymce';
-import { useNavigate } from 'react-router';
+
 import { notification } from 'antd';
+import { useCreateTermsAndConditionsMutation } from 'graphql/scheme/mutation/__generated__/create-terms.generated';
+import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
+import { useRef } from 'react';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+
 import { useStoreState } from '../../../../state';
-import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
-import { useCreateTermsAndConditionsMutation } from 'graphql/scheme/mutation/create-terms.generated';
 
 interface Return {
-  onSubmit: () => void;
+  data: null | string;
   editorRef: React.MutableRefObject<Editor | null>;
-  data: string | null;
   onClose: () => void;
+  onSubmit: () => void;
 }
 
 const useCreateTerms = (): Return => {
@@ -31,11 +33,11 @@ const useCreateTerms = (): Return => {
   const [saveTerms] = useCreateTermsAndConditionsMutation({
     onCompleted: () => {
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The terms has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -61,10 +63,10 @@ const useCreateTerms = (): Return => {
   const data = SchemeTerms?.scheme?.currentTerms?.content || null;
 
   return {
-    onSubmit,
-    editorRef,
     data,
+    editorRef,
     onClose,
+    onSubmit,
   };
 };
 

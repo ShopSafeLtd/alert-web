@@ -7,8 +7,8 @@ import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 import { CrimeType } from 'graphql/types';
 import useEditCrimeType from '../useEditCrimeType';
-import { TagDocument } from 'graphql/tag/queries/tag.generated';
-import { UpdateTagDocument } from 'graphql/tag/mutation/update_tag.generated';
+import { TagDocument } from 'graphql/tag/queries/__generated__/tag.generated';
+import { UpdateTagDocument } from 'graphql/tag/mutation/__generated__/update_tag.generated';
 
 const mocks = [
   {

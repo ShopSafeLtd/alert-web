@@ -1,17 +1,17 @@
 import type {
   CustomGalleriesQuery,
   CustomGalleriesQueryVariables,
-} from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
+} from '#/views/settings/customGallery/graphql/queries/__generated__/list_custom_galleries.generated';
 import type { CustomGalleryData } from 'types/DataType';
 
 import {
   CustomGalleriesDocument,
   useCustomGalleriesQuery,
-} from '#/views/settings/customGallery/graphql/queries/list_custom_galleries.generated';
+} from '#/views/settings/customGallery/graphql/queries/__generated__/list_custom_galleries.generated';
 import { Modal, notification } from 'antd';
-import { useCreateCustomGalleryMutation } from 'graphql/customGallery/mutations/create-custom-gallery.generated';
-import { useDeleteCustomGalleryMutation } from 'graphql/customGallery/mutations/delete_custom-gallery.generated';
-import { useUpdateCustomGalleryMutation } from 'graphql/customGallery/mutations/update_custom-gallery.generated';
+import { useCreateCustomGalleryMutation } from 'graphql/customGallery/mutations/__generated__/create-custom-gallery.generated';
+import { useDeleteCustomGalleryMutation } from 'graphql/customGallery/mutations/__generated__/delete_custom-gallery.generated';
+import { useUpdateCustomGalleryMutation } from 'graphql/customGallery/mutations/__generated__/update_custom-gallery.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';

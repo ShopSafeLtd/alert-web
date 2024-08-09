@@ -1,4 +1,4 @@
-import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/view-task.generated';
+
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
 import MapCard from '#/components/map/LocatingCard/MapCard.view';
@@ -24,6 +24,7 @@ import type { CustomQuestion } from '../../../../types/DataType';
 import type { FormData } from './useTodo';
 
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
+import { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
 
 interface Props {
   availableUsers: { id: string; name: string; timeTaken: number }[];

@@ -1,0 +1,3 @@
+mutation ImportStockItemCsv($where: String!) {
+  importStockItemCsv(where: $where)
+}

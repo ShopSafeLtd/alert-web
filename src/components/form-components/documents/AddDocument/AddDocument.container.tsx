@@ -1,61 +1,60 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 
 import React, { memo } from 'react';
+
 import View from './AddDocument.view';
 import useAddDocument from './useAddDocument';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
 
 interface Props {
-  onClose: () => void;
-  investigationId?: string | null;
-  incidentId?: string | null;
-  offenderId?: string | null;
-  vehicleId?: string | null;
-  crimeGroupId?: string | null;
-  update?: MutationUpdaterFn<CreateDocumentMutation> | undefined;
+  crimeGroupId?: null | string;
+  incidentId?: null | string;
+  investigationId?: null | string;
   isEvidence?: boolean;
+  offenderId?: null | string;
+  onClose: () => void;
+  update?: MutationUpdaterFn<CreateDocumentMutation> | undefined;
+  vehicleId?: null | string;
 }
 
 const AddDocument = memo(
   ({
-    onClose,
-    offenderId,
+    crimeGroupId,
     incidentId,
     investigationId,
-    vehicleId,
-    crimeGroupId,
-    update,
     isEvidence,
+    offenderId,
+    onClose,
+    update,
+    vehicleId,
   }: Props) => {
     const {
-      onSubmit,
-      selectedCategories,
       categories,
       categoriesChange,
       categoriesLoading,
-      saving,
       documentUploadProps,
+      onSubmit,
+      saving,
+      selectedCategories,
     } = useAddDocument({
-      onClose,
-      offenderId,
+      crimeGroupId,
       incidentId,
       investigationId,
-      vehicleId,
-      crimeGroupId,
-      update,
       isEvidence,
+      offenderId,
+      onClose,
+      update,
+      vehicleId,
     });
 
     return (
       <View
-        documentUploadProps={documentUploadProps}
-        onSubmit={onSubmit}
-        onClose={onClose}
-        saving={saving}
         categories={categories}
-        selectedCategories={selectedCategories}
         categoriesChange={categoriesChange}
         categoriesLoading={categoriesLoading}
+        documentUploadProps={documentUploadProps}
+        onClose={onClose}
+        onSubmit={onSubmit}
         providedId={
           !!(
             investigationId ||
@@ -65,6 +64,8 @@ const AddDocument = memo(
             crimeGroupId
           )
         }
+        saving={saving}
+        selectedCategories={selectedCategories}
       />
     );
   }

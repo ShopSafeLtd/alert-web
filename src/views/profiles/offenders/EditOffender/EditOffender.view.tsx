@@ -1,6 +1,22 @@
-import React from 'react';
-
 import type { FormInstance } from 'antd';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import type {
+  BanData,
+  CrimeGroupData,
+  CustomGalleryData,
+  Image,
+  TagData,
+  VehicleData,
+} from 'types/DataType';
+
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -16,185 +32,170 @@ import {
   Table,
   Typography,
 } from 'antd';
-import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import moment from 'moment';
-import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
-import type {
-  BanData,
-  CrimeGroupData,
-  CustomGalleryData,
-  Image,
-  TagData,
-  VehicleData,
-} from 'types/DataType';
-import Profiles from 'components/offenders/OffenderForm/Profiles';
+import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
 // import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
-import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
+import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
 import OffenderExclusions from 'components/offenders/OffenderForm/OffenderExclusions';
 import OffenderImage from 'components/offenders/OffenderForm/OffenderImage';
+import Profiles from 'components/offenders/OffenderForm/Profiles';
+import moment from 'moment';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { BanType, FormData } from './useEditOffender';
-import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
-const { Title, Paragraph } = Typography;
+import type { BanType, FormData } from './useEditOffender';
+
+const { Paragraph, Title } = Typography;
 
 interface AddressForm {
   alias: string;
   building: string;
-  street: string;
-  townCity: string;
   county: string;
   postcode: string;
+  street: string;
+  townCity: string;
 }
 
 interface AddressesData {
-  id: string;
   alias: string;
   building: string;
+  county: string;
+  id: string;
+  postcode: string;
   street: string;
   townCity: string;
-  county: string;
-  postcode: string;
 }
 
 interface EditAddressForm {
-  id: string;
   alias: string;
   building: string;
+  county: string;
+  id: string;
+  postcode: string;
   street: string;
   townCity: string;
-  county: string;
-  postcode: string;
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  data: ViewOffenderQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  imgChange: UploadProps['onChange'];
-  beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  addExclusion: boolean;
-  toggleAddExclusion: () => void;
-  editExclusion: boolean;
-  toggleEditExclusion: () => void;
-  addOffenderTag: boolean;
-  toggleAddOffenderTag: () => void;
-  onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onUpdateExclusion: (value: BanData) => void;
-  onAddExclusion: (value: BanData) => void;
-  setBanData: (value: BanType) => void;
-  bansData: BanType[];
-  banData: BanType | null;
-  addressesData: AddressesData[] | null;
-  deleteConfirm: (value: string) => void;
-  ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  reviewed: boolean;
-  onReject: () => void;
-  adminRights: boolean;
-  form: FormInstance<FormData> | undefined;
-  listVehiclesData: ListVehiclesQuery | undefined;
-  vehiclesData: VehicleData[];
-  onRemoveVehicle: (vehicleId: string) => void;
-  crimeGroupsData: CrimeGroupData[];
-  onValuesChange?: (changedValues: FormData, values: FormData) => void;
-  idVerified: boolean;
-  onSubmitAddress: (data: AddressForm) => void;
   addAddress: boolean;
-  toggleAddAddress: () => void;
-  editAddress: string | null;
-  toggleEditAddress: (value: string | null) => void;
-  onEditAddress: (data: EditAddressForm) => void;
-  onDeleteAddress: (addressId: string) => void;
-  onEditImage: (value: Image) => void;
-  toggleEditImage: (value?: Image) => void;
+  addCustomGallery: boolean;
+  addExclusion: boolean;
+  addOffenderTag: boolean;
+  addressesData: AddressesData[] | null;
+  adminRights: boolean;
+  ageCheck: boolean;
+  banData: BanType | null;
+  bansData: BanType[];
+  beforeUpload: (value: RcFile) => void;
+  crimeGroupsData: CrimeGroupData[];
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
+  data: ViewOffenderQuery | undefined;
+  deleteConfirm: (value: string) => void;
+  editAddress: null | string;
+  editExclusion: boolean;
   editImage: Image | null;
+  fileList: Image[];
+  form: FormInstance<FormData> | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  idVerified: boolean;
+  imgChange: UploadProps['onChange'];
+  listVehiclesData: ListVehiclesQuery | undefined;
+  loading: boolean;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
+  onAddExclusion: (value: BanData) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onDeleteAddress: (addressId: string) => void;
+  onEditAddress: (data: EditAddressForm) => void;
+  onEditImage: (value: Image) => void;
+  onReject: () => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   onRemoveImage: (imageId: string) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
+  onSubmit: (value: FormData) => void;
+  onSubmitAddress: (data: AddressForm) => void;
+  onUpdateExclusion: (value: BanData) => void;
+  onValuesChange?: (changedValues: FormData, values: FormData) => void;
   primaryImage: string;
+  reviewed: boolean;
+  saving: boolean;
+  setAgeCheck: (value: boolean) => void;
+  setBanData: (value: BanType) => void;
   setPrimaryImage: (value: string) => void;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
-  addCustomGallery: boolean;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
+  toggleAddAddress: () => void;
   toggleAddCustomGallery: () => void;
+  toggleAddExclusion: () => void;
+  toggleAddOffenderTag: () => void;
+  toggleEditAddress: (value: null | string) => void;
+  toggleEditExclusion: () => void;
+  toggleEditImage: (value?: Image) => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
+  vehiclesData: VehicleData[];
 }
 
 const EditOffender = ({
-  onSubmit,
-  data,
-  loading,
-  saving,
-  groups,
-  groupsLoading,
-  tags,
-  tagsLoading,
-  imgChange,
-  beforeUpload,
-  fileList,
-  addOffenderTag,
-  toggleAddOffenderTag,
+  addAddress,
+  addCustomGallery,
   addExclusion,
-  toggleAddExclusion,
-  editExclusion,
-  toggleEditExclusion,
+  addOffenderTag,
+  addressesData,
+  adminRights,
+  ageCheck,
   banData,
   bansData,
-  onAddExclusion,
-  onUpdateExclusion,
-  setBanData,
-  deleteConfirm,
-  ageCheck,
-  setAgeCheck,
-  reviewed,
-  onReject,
-  onAddVehicle,
-  form,
-  adminRights,
-  vehiclesData,
-  onRemoveVehicle,
+  beforeUpload,
   crimeGroupsData,
-  listVehiclesData,
-  onValuesChange,
-  idVerified,
-  addAddress,
-  toggleAddAddress,
-  onSubmitAddress,
-  addressesData,
-  editAddress,
-  toggleEditAddress,
-  onDeleteAddress,
-  onEditAddress,
-  editImage,
-  onEditImage,
-  toggleEditImage,
-  onAddCrimeGroup,
-  onRemoveCrimeGroup,
-  onRemoveImage,
-  primaryImage,
-  setPrimaryImage,
   customGalleries,
   customGalleriesLoading,
+  data,
+  deleteConfirm,
+  editAddress,
+  editExclusion,
+  editImage,
+  fileList,
+  form,
+  groups,
+  groupsLoading,
+  idVerified,
+  imgChange,
+  listVehiclesData,
+  loading,
+  onAddCrimeGroup,
+  onAddExclusion,
+  onAddVehicle,
+  onDeleteAddress,
+  onEditAddress,
+  onEditImage,
+  onReject,
+  onRemoveCrimeGroup,
+  onRemoveImage,
+  onRemoveVehicle,
+  onSubmit,
+  onSubmitAddress,
+  onUpdateExclusion,
+  onValuesChange,
+  primaryImage,
+  reviewed,
+  saving,
+  setAgeCheck,
+  setBanData,
+  setPrimaryImage,
+  tags,
+  tagsLoading,
+  toggleAddAddress,
   toggleAddCustomGallery,
-  updateNewOffenderTagData,
-  addCustomGallery,
+  toggleAddExclusion,
+  toggleAddOffenderTag,
+  toggleEditAddress,
+  toggleEditExclusion,
+  toggleEditImage,
   updateNewCustomGalleryData,
+  updateNewOffenderTagData,
+  vehiclesData,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -216,78 +217,78 @@ const EditOffender = ({
       ) : (
         <>
           <Form
-            onFinish={onSubmit}
-            onValuesChange={onValuesChange}
-            layout="vertical"
             form={form}
             initialValues={{
-              name: data?.offender?.name || null,
-              alias: data?.offender?.alias || [],
               age: data?.offender?.age || null,
-              gender: data?.offender?.gender || null,
-              race: data?.offender?.race || null,
-              build: data?.offender?.build || null,
-              height: data?.offender?.height || null,
-              hair: data?.offender?.hair || null,
               ageCheck: !!data?.offender?.dateOfBirth,
-              peculiarities: data?.offender?.peculiarities || null,
-              dateOfBirth: data?.offender?.dateOfBirth
-                ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
-                : null,
-              dateSource: data?.offender?.dateSource || null,
-              groups:
-                data?.offender?.groups && data?.offender?.groups.length > 0
-                  ? data?.offender?.groups.map(({ id }) => id)
-                  : [],
-              tags:
-                data?.offender?.tags && data?.offender?.tags.length > 0
-                  ? data?.offender?.tags.map(({ id }) => id)
-                  : [],
+              alias: data?.offender?.alias || [],
+              build: data?.offender?.build || null,
               customGalleries:
                 data?.offender?.customGalleries &&
                 data.offender.customGalleries.length > 0
                   ? data.offender.customGalleries.map(({ id }) => id)
                   : [],
-              idVerified: data?.offender?.idVerified || false,
+              dateOfBirth: data?.offender?.dateOfBirth
+                ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
+                : null,
+              dateSource: data?.offender?.dateSource || null,
+              gender: data?.offender?.gender || null,
+              groups:
+                data?.offender?.groups && data?.offender?.groups.length > 0
+                  ? data?.offender?.groups.map(({ id }) => id)
+                  : [],
+              hair: data?.offender?.hair || null,
+              height: data?.offender?.height || null,
               idSource: data?.offender?.idSource,
+              idVerified: data?.offender?.idVerified || false,
+              name: data?.offender?.name || null,
+              peculiarities: data?.offender?.peculiarities || null,
+              race: data?.offender?.race || null,
+              tags:
+                data?.offender?.tags && data?.offender?.tags.length > 0
+                  ? data?.offender?.tags.map(({ id }) => id)
+                  : [],
             }}
+            layout="vertical"
+            onFinish={onSubmit}
+            onValuesChange={onValuesChange}
           >
             <Card>
               <OffenderDetails
-                tags={tags}
-                tagsLoading={tagsLoading}
-                saving={saving}
-                ageCheck={ageCheck}
-                setAgeCheck={setAgeCheck}
+                addCustomGallery={addCustomGallery}
+                addOffenderTag={addOffenderTag}
                 adminRights={adminRights}
-                toggleAddOffenderTag={toggleAddOffenderTag}
-                idVerified={idVerified}
+                ageCheck={ageCheck}
                 customGalleries={customGalleries}
                 customGalleriesLoading={customGalleriesLoading}
-                toggleAddCustomGallery={toggleAddCustomGallery}
-                addOffenderTag={addOffenderTag}
-                updateNewOffenderTagData={updateNewOffenderTagData}
-                addCustomGallery={addCustomGallery}
-                updateNewCustomGalleryData={updateNewCustomGalleryData}
-                onSearchOffender={() => {}}
-                potentialOffenders={0}
-                toggleViewPotentialOffenders={() => {}}
+                idVerified={idVerified}
                 offenderSettings={{
-                  name: true,
-                  alias: true,
-                  ethnicity: true,
-                  gender: true,
-                  build: true,
-                  height: true,
-                  hair: true,
                   age: true,
+                  alias: true,
+                  build: true,
+                  comment: true,
                   dateOfBirth: true,
                   dateOfBirthSource: true,
+                  ethnicity: true,
+                  gender: true,
+                  hair: true,
+                  height: true,
                   idVerified: true,
-                  peculiarities: true,
-                  comment: true,
                   images: true,
+                  name: true,
+                  peculiarities: true,
                 }}
+                onSearchOffender={() => {}}
+                potentialOffenders={0}
+                saving={saving}
+                setAgeCheck={setAgeCheck}
+                tags={tags}
+                tagsLoading={tagsLoading}
+                toggleAddCustomGallery={toggleAddCustomGallery}
+                toggleAddOffenderTag={toggleAddOffenderTag}
+                toggleViewPotentialOffenders={() => {}}
+                updateNewCustomGalleryData={updateNewCustomGalleryData}
+                updateNewOffenderTagData={updateNewOffenderTagData}
               />
             </Card>
             {adminRights && (
@@ -295,12 +296,12 @@ const EditOffender = ({
                 <Row align="middle" style={{ marginBottom: 20 }}>
                   <Col>
                     {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                    <Title style={{ marginBottom: 0 }} level={4}>
+                    <Title level={4} style={{ marginBottom: 0 }}>
                       2.
                     </Title>
                   </Col>
                   <Col>
-                    <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                    <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                       {intl.formatMessage({
                         defaultMessage: 'Addresses',
                       })}
@@ -310,9 +311,9 @@ const EditOffender = ({
                     <>
                       <Col style={{ marginRight: 5 }}>
                         <Paragraph
+                          italic
                           style={{ marginBottom: 1, marginLeft: 5 }}
                           type="secondary"
-                          italic
                         >
                           {intl.formatMessage({
                             defaultMessage:
@@ -323,18 +324,18 @@ const EditOffender = ({
                       <Col>
                         <Button
                           disabled={saving}
-                          onClick={toggleAddAddress}
-                          style={{
-                            marginTop: -30,
-                            marginLeft: 15,
-                            color: 'red',
-                          }}
                           icon={
                             <FontAwesomeIcon
                               icon={faPlus}
                               style={{ marginRight: 5 }}
                             />
                           }
+                          onClick={toggleAddAddress}
+                          style={{
+                            color: 'red',
+                            marginLeft: 15,
+                            marginTop: -30,
+                          }}
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Add Address',
@@ -346,80 +347,70 @@ const EditOffender = ({
                 </Row>
                 {addressesData && addressesData.length > 0 ? (
                   <Table
-                    size="small"
-                    pagination={{
-                      hideOnSinglePage: true,
-                      defaultPageSize: 20,
-                      pageSize: 20,
-                    }}
                     columns={[
                       {
+                        dataIndex: 'alias',
                         key: 'alias',
                         title: intl.formatMessage({
                           defaultMessage: 'Label',
                         }),
-                        dataIndex: 'alias',
                       },
                       {
+                        dataIndex: 'street',
                         key: 'street',
                         title: intl.formatMessage({
                           defaultMessage: 'Street',
                         }),
-                        dataIndex: 'street',
                       },
                       {
+                        dataIndex: 'townCity',
                         key: 'townCity',
                         title: intl.formatMessage({
                           defaultMessage: 'City',
                         }),
-                        dataIndex: 'townCity',
                       },
                       {
+                        dataIndex: 'county',
                         key: 'county',
                         title: intl.formatMessage({
                           defaultMessage: 'County',
                         }),
-                        dataIndex: 'county',
                       },
                       {
+                        dataIndex: 'postcode',
                         key: 'postcode',
                         title: intl.formatMessage({
                           defaultMessage: 'Postcode',
                         }),
-                        dataIndex: 'postcode',
                       },
                       {
+                        dataIndex: 'Edit',
                         key: 'Edit',
+                        render: (_, record) => (
+                          <Button
+                            disabled={saving}
+                            icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                            onClick={() => toggleEditAddress(record.key)}
+                          />
+                        ),
                         title: intl.formatMessage({
                           defaultMessage: 'Edit',
                         }),
                         width: 50,
-                        dataIndex: 'Edit',
-                        render: (_, record) => (
-                          <Button
-                            disabled={saving}
-                            onClick={() => toggleEditAddress(record.key)}
-                            icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                          />
-                        ),
                       },
                       {
-                        key: 'Delete',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Delete',
-                        }),
                         dataIndex: 'Delete',
-                        width: 60,
+                        key: 'Delete',
                         render: (_, record) => (
                           <Popconfirm
-                            title={intl.formatMessage({
-                              defaultMessage: 'Are you sure?',
-                            })}
                             okText={intl.formatMessage({
                               defaultMessage: 'Delete',
                             })}
                             onConfirm={() => onDeleteAddress(record.key)}
                             overlayInnerStyle={{ padding: 10 }}
+                            title={intl.formatMessage({
+                              defaultMessage: 'Are you sure?',
+                            })}
                           >
                             <Button
                               disabled={saving}
@@ -427,27 +418,37 @@ const EditOffender = ({
                             />
                           </Popconfirm>
                         ),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Delete',
+                        }),
+                        width: 60,
                       },
                     ]}
                     dataSource={
                       addressesData?.map((address) => ({
-                        key: address.id,
                         alias: address.alias,
+                        county: address.county,
+                        key: address.id,
+                        postcode: address.postcode,
                         street: address.street,
                         townCity: address.townCity,
-                        county: address.county,
-                        postcode: address.postcode,
                       })) || []
                     }
+                    pagination={{
+                      defaultPageSize: 20,
+                      hideOnSinglePage: true,
+                      pageSize: 20,
+                    }}
+                    size="small"
                   />
                 ) : (
                   <Row justify="start">
                     <Empty
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
                       description={intl.formatMessage({
                         defaultMessage:
                           'There are no addresses for this offender.',
                       })}
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
                       style={{ marginLeft: 150 }}
                     />
                   </Row>
@@ -457,59 +458,59 @@ const EditOffender = ({
             {adminRights && (
               <Card>
                 <Profiles
-                  saving={saving}
-                  vehiclesData={vehiclesData}
-                  onRemoveVehicle={onRemoveVehicle}
-                  onRemoveCrimeGroup={onRemoveCrimeGroup}
                   crimeGroupsData={crimeGroupsData}
                   listVehiclesData={listVehiclesData}
+                  onAddCrimeGroup={onAddCrimeGroup}
+                  onAddVehicle={onAddVehicle}
+                  onRemoveCrimeGroup={onRemoveCrimeGroup}
+                  onRemoveVehicle={onRemoveVehicle}
+                  saving={saving}
                   // titleNumber={adminRights ? 3 : 2}
                   titleNumber={3}
-                  onAddVehicle={onAddVehicle}
-                  onAddCrimeGroup={onAddCrimeGroup}
+                  vehiclesData={vehiclesData}
                 />
               </Card>
             )}
             {adminRights && (
               <OffenderExclusions
                 addExclusion={addExclusion}
-                toggleAddExclusion={toggleAddExclusion}
-                onAddExclusion={onAddExclusion}
-                editExclusion={editExclusion}
-                toggleEditExclusion={toggleEditExclusion}
-                onUpdateExclusion={onUpdateExclusion}
-                bansData={bansData}
                 banData={banData}
-                setBanData={setBanData}
+                bansData={bansData}
                 deleteConfirm={deleteConfirm}
-                saving={saving}
-                titleOrder={4}
+                editExclusion={editExclusion}
                 emptyDescription={intl.formatMessage({
                   defaultMessage:
                     "You haven't added any exclusion for this offender yet.",
                 })}
+                onAddExclusion={onAddExclusion}
+                onUpdateExclusion={onUpdateExclusion}
+                saving={saving}
+                setBanData={setBanData}
+                titleOrder={4}
+                toggleAddExclusion={toggleAddExclusion}
+                toggleEditExclusion={toggleEditExclusion}
               />
             )}
             <OffenderImage
-              titleOrder={adminRights ? 5 : 2}
-              imgChange={imgChange}
               beforeUpload={beforeUpload}
-              fileList={fileList}
+              // TODO: add document upload
+              documentList={[]}
               editImage={editImage}
+              fileList={fileList}
+              imgChange={imgChange}
               onEditImage={onEditImage}
-              toggleEditImage={toggleEditImage}
               onRemoveImage={onRemoveImage}
               primaryImage={primaryImage}
               setPrimaryImage={setPrimaryImage}
-              // TODO: add document upload
-              documentList={[]}
+              titleOrder={adminRights ? 5 : 2}
+              toggleEditImage={toggleEditImage}
             />
 
             <Card>
               <>
                 <Row align="bottom">
                   <Col>
-                    <Title style={{ marginBottom: 0 }} level={4}>
+                    <Title level={4} style={{ marginBottom: 0 }}>
                       {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                       {adminRights ? '6.' : '3.'}
                     </Title>
@@ -523,9 +524,9 @@ const EditOffender = ({
                   </Col>
                   <Col>
                     <Paragraph
+                      italic
                       style={{ marginBottom: 1, marginLeft: 5 }}
                       type="secondary"
-                      italic
                     >
                       {intl.formatMessage({
                         defaultMessage:
@@ -537,29 +538,29 @@ const EditOffender = ({
                 <Row>
                   <Col span={8}>
                     <Form.Item
-                      name="groups"
                       label={intl.formatMessage({
                         defaultMessage: 'Content Groups',
                       })}
-                      tooltip={intl.formatMessage({
-                        defaultMessage:
-                          'Select the groups that you would like this offender to be visible to.',
-                      })}
+                      name="groups"
                       rules={[
                         {
-                          required: true,
                           message: intl.formatMessage({
                             defaultMessage:
                               'Please select at least one group for the offender.',
                           }),
+                          required: true,
                         },
                       ]}
+                      tooltip={intl.formatMessage({
+                        defaultMessage:
+                          'Select the groups that you would like this offender to be visible to.',
+                      })}
                     >
                       <Select
-                        loading={groupsLoading}
                         disabled={saving}
-                        mode="multiple"
+                        loading={groupsLoading}
                         maxTagCount={3}
+                        mode="multiple"
                       >
                         {groups.map((group) => (
                           <Select.Option key={group.value} value={group.value}>
@@ -574,7 +575,7 @@ const EditOffender = ({
             </Card>
 
             <Form.Item>
-              <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+              <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
                 <Col>
                   <Button
                     disabled={saving}
@@ -594,9 +595,9 @@ const EditOffender = ({
                 <Col>
                   <Button
                     disabled={saving}
+                    htmlType="submit"
                     loading={saving}
                     type="primary"
-                    htmlType="submit"
                   >
                     {reviewed
                       ? intl.formatMessage({
@@ -612,12 +613,12 @@ const EditOffender = ({
           </Form>
 
           <Drawer
+            onClose={toggleAddAddress}
+            open={addAddress}
             title={intl.formatMessage({
               defaultMessage: 'Add Address',
             })}
-            open={addAddress}
             width="600"
-            onClose={toggleAddAddress}
           >
             {addAddress && (
               <NewOffenderAddress
@@ -627,18 +628,18 @@ const EditOffender = ({
             )}
           </Drawer>
           <Drawer
+            onClose={() => toggleEditAddress(null)}
+            open={editAddress !== null}
             title={intl.formatMessage({
               defaultMessage: 'Edit Address',
             })}
-            open={editAddress !== null}
             width="600"
-            onClose={() => toggleEditAddress(null)}
           >
             {editAddress && (
               <EditOffenderAddress
+                data={addressesData?.find(({ id }) => id === editAddress)}
                 onClose={() => toggleEditAddress(null)}
                 onSubmit={onEditAddress}
-                data={addressesData?.find(({ id }) => id === editAddress)}
               />
             )}
           </Drawer>

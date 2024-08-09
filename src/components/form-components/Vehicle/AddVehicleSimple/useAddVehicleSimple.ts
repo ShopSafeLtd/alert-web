@@ -1,65 +1,66 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { FormInstance } from 'antd';
+
 import { Form } from 'antd';
+import { ImagePosition } from 'graphql/types';
+
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 import type { ImageValue } from '../../ImageSelect/ImageSelect.view';
 
-import { ImagePosition } from 'graphql/types';
-
 export interface AddVehicleData {
+  colour?: null | string | undefined;
+  groupIds: string[];
   id: string;
-  make?: string | null | undefined;
-  model?: string | null | undefined;
-  colour?: string | null | undefined;
-  reference?: number | null;
-  registration?: string | null | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-  }[];
+  images?: ImageValue[];
+  make?: null | string | undefined;
+  model?: null | string | undefined;
+  reference?: null | number;
+  registration?: null | string | undefined;
 }
 
 interface Props {
-  update: (value: AddVehicleData) => void;
   onImagesUploaded?: (values: StateImageData[]) => void;
+  update: (value: AddVehicleData) => void;
 }
 
 export interface FormData {
+  colour?: string;
+  groupIds: string[];
+  images?: ImageValue[];
   make?: string;
   model?: string;
-  colour?: string;
   registration?: string;
-  images?: ImageValue[];
 }
 interface Return {
-  onSubmit: (value: FormData) => void;
   form: FormInstance<FormData>;
+  onSubmit: (value: FormData) => void;
 }
 
 const useAddVehicleSimple = ({
-  update: updateVehicle,
   onImagesUploaded,
+  update: updateVehicle,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
     updateVehicle({
-      id: Math.floor(Math.random() * 1000).toString(),
-      make: data.make || '',
-      model: data.model || '',
       colour: data.colour || '',
-      registration: data.registration || '',
+      groupIds: data.groupIds,
+      id: Math.floor(Math.random() * 1000).toString(),
       images: data?.images?.map((item) => ({
+        fileName: item.file?.response?.[0].blobName,
         id: item.id || `${Math.random()}`,
-        fileName: item.file?.response && item.file.response[0].blobName,
-        type: item.file?.response && item.file.response[0].mimetype,
-        url: item.url || '',
+        new: !!item.file,
+        policeImage: item.policeImage || false,
         position: item.position,
         primary: false,
-        policeImage: item.policeImage || false,
         rotation: item.rotation,
-        new: !!item.file,
+        type: item.file?.response?.[0].mimetype,
+        url: item.url || '',
       })),
+      make: data.make || '',
+      model: data.model || '',
+      registration: data.registration || '',
     });
 
     const uploadedImages = data.images?.filter((image) => image.file) || [];
@@ -69,22 +70,22 @@ const useAddVehicleSimple = ({
           (image) =>
             ({
               ...image.file,
-              url: image.file?.response && image.file.response[0].url,
-              fileName: image.file?.response && image.file.response[0].blobName,
-              type: image.file?.response && image.file.response[0].mimetype,
+              fileName: image.file?.response?.[0].blobName,
               policeImage: false,
+              position: ImagePosition.CenterCenter,
               primary: false,
               rotation: 0,
-              position: ImagePosition.CenterCenter,
-            } as StateImageData)
+              type: image.file?.response?.[0].mimetype,
+              url: image.file?.response?.[0].url,
+            }) as StateImageData
         )
       );
     }
   };
 
   return {
-    onSubmit,
     form,
+    onSubmit,
   };
 };
 export default useAddVehicleSimple;

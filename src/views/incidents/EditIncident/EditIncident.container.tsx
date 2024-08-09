@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import View from './EditIncident.view';
 import useEditIncident from './useEditIncident';
 
@@ -15,19 +16,31 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     addRecentOffender,
     assignOffendersToImages,
     beforeUpload,
+    crimeTypes,
     data,
     fileList,
+    goodsTypesData,
     groups,
     groupsLoading,
     imgChange,
+    impactTags,
+    involvedTags,
     loading,
     newImage,
     offenderImgChange,
     offendersData,
+    onAddOffender,
+    onAddVehicle,
     onCancelNewImage,
+    onEditImage,
+    onEditOffender,
+    onEditVehicle,
     onReject,
-    onSearchBusiness,
+    onRemoveOffender,
+    onRemoveVehicle,
+    // onSearchBusiness,
     onSubmit,
+    primaryImage,
     recentOffenderData,
     recentOffenderLoading,
     removeImage,
@@ -36,47 +49,45 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     searchOffenders,
     setAddRecentOffender,
     setAssignToImage,
+    setPrimaryImage,
     setSearchOffenders,
-    crimeTypes,
-    impactTags,
-    involvedTags,
     tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
     vehiclesData,
-    goodsTypesData,
-    onAddOffender,
-    onEditOffender,
-    onRemoveOffender,
-    onEditImage,
-    onAddVehicle,
-    onEditVehicle,
-    onRemoveVehicle,
-    primaryImage,
-    setPrimaryImage,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
       <View
-        onEditImage={onEditImage}
         addIncidentTag={addIncidentTag}
         addRecentOffender={addRecentOffender}
         assignOffendersToImages={assignOffendersToImages}
         beforeUpload={beforeUpload}
+        crimeTypes={crimeTypes}
         data={data}
         fileList={fileList}
         goodsTypesData={goodsTypesData}
         groups={groups}
         groupsLoading={groupsLoading}
         imgChange={imgChange}
+        impactTags={impactTags}
+        involvedTags={involvedTags}
         loading={loading}
         newImage={newImage}
         offenderImgChange={offenderImgChange}
         offendersData={offendersData}
+        onAddOffender={onAddOffender}
+        onAddVehicle={onAddVehicle}
         onCancelNewImage={onCancelNewImage}
+        onEditImage={onEditImage}
+        onEditOffender={onEditOffender}
+        onEditVehicle={onEditVehicle}
         onReject={onReject}
-        onSearchBusiness={onSearchBusiness}
+        onRemoveOffender={onRemoveOffender}
+        onRemoveVehicle={onRemoveVehicle}
+        // onSearchBusiness={onSearchBusiness}
         onSubmit={onSubmit}
+        primaryImage={primaryImage}
         recentOffenderData={recentOffenderData}
         recentOffenderLoading={recentOffenderLoading}
         removeImage={removeImage}
@@ -86,22 +97,12 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         searchOffenders={searchOffenders}
         setAddRecentOffender={setAddRecentOffender}
         setAssignToImage={setAssignToImage}
+        setPrimaryImage={setPrimaryImage}
         setSearchOffenders={setSearchOffenders}
-        crimeTypes={crimeTypes}
-        impactTags={impactTags}
-        involvedTags={involvedTags}
         tagsLoading={tagsLoading}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}
         vehiclesData={vehiclesData}
-        onAddOffender={onAddOffender}
-        onEditOffender={onEditOffender}
-        onRemoveOffender={onRemoveOffender}
-        onAddVehicle={onAddVehicle}
-        onEditVehicle={onEditVehicle}
-        onRemoveVehicle={onRemoveVehicle}
-        primaryImage={primaryImage}
-        setPrimaryImage={setPrimaryImage}
       />
     </div>
   );

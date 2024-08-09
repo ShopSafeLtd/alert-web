@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useStoreState } from 'state';
 import { notification } from 'antd';
-import { useParams } from 'react-router';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
+import { useParams } from 'react-router';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
   onClose: () => void;
@@ -17,13 +17,13 @@ interface Props {
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
   data: ListVehiclesQuery | undefined;
   loading: boolean;
+  onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onSelect: (item: { key: string }) => void;
 }
 
 const useAddExistingVehicle = ({
@@ -45,14 +45,6 @@ const useAddExistingVehicle = ({
         updatedAt: SortOrder.Desc,
       },
       where: {
-        id: { notIn: vehicleIds },
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
         OR: [
           {
             make: {
@@ -67,6 +59,14 @@ const useAddExistingVehicle = ({
             },
           },
         ],
+        id: { notIn: vehicleIds },
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
       },
     },
   });
@@ -78,11 +78,11 @@ const useAddExistingVehicle = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added to the crime group! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
 
         placement: 'bottomRight',
@@ -98,13 +98,13 @@ const useAddExistingVehicle = ({
     if (selected) {
       void updateInvestigation({
         variables: {
-          where: {
-            id: params.id || '',
-          },
           data: {
             vehicleIds: [selected],
 
             // schemes: schemeId,
+          },
+          where: {
+            id: params.id || '',
           },
         },
       });
@@ -119,13 +119,13 @@ const useAddExistingVehicle = ({
   // };
 
   return {
-    onSubmit,
-    saving,
     data,
     loading: data?.listVehicles ? false : loading,
+    onSelect,
+    onSubmit,
+    saving,
     search,
     setSearch,
-    onSelect,
     // openLightbox,
     // lightBoxOpen,
   };

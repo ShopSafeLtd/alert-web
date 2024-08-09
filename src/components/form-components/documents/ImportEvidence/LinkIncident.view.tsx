@@ -1,27 +1,28 @@
-import React from 'react';
+import type { ListDemEvidenceQuery } from 'graphql/dem/queries/__generated__/list-evidence.generated';
 
 import { Button, Col, Row, Skeleton, Table } from 'antd';
-import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import moment from 'moment';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListDemEvidenceQuery } from '#/graphql/dem/queries/list-evidence.generated';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: () => void;
-  saving: boolean;
   data: ListDemEvidenceQuery | undefined;
   loading: boolean;
+  onClose: () => void;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  s;
+  saving: boolean;
 }
 
 const LinkDemCompany = ({
-  onClose,
-  onSubmit,
-  saving,
   data,
   loading,
+  onClose,
   onSelect,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -30,69 +31,69 @@ const LinkDemCompany = ({
       <Table
         columns={[
           {
-            title: intl.formatMessage({
-              defaultMessage: 'Thumbnail',
-            }),
             dataIndex: 'thumbnail',
             key: 'thumbnail',
-            render: (thumbnail: string | null | undefined) =>
+            render: (thumbnail: null | string | undefined) =>
               thumbnail ? (
-                <div style={{ width: 180, height: 180 }}>
+                <div style={{ height: 180, width: 180 }}>
                   <WatermarkImage url={thumbnail} />
                 </div>
               ) : (
                 <Skeleton.Image style={{ width: 180 }} />
               ),
+            title: intl.formatMessage({
+              defaultMessage: 'Thumbnail',
+            }),
           },
           {
+            dataIndex: 'type',
+            key: 'type',
             title: intl.formatMessage({
               defaultMessage: 'Type',
             }),
-            dataIndex: 'type',
-            key: 'type',
           },
           {
+            dataIndex: 'importance',
+            key: 'importance',
             title: intl.formatMessage({
               defaultMessage: 'Importance',
             }),
-            dataIndex: 'importance',
-            key: 'importance',
           },
           {
-            title: intl.formatMessage({
-              defaultMessage: 'Recorded On',
-            }),
             dataIndex: 'createdAt',
             key: 'createdAt',
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             render: (value) => moment(value).format('DD/MM/YYYY'),
+            title: intl.formatMessage({
+              defaultMessage: 'Recorded On',
+            }),
           },
         ]}
         dataSource={data?.listDemEvidence.demEvidence.map((evidence) => ({
+          createdAt: evidence.createdAt,
+          importance: evidence.importance || '',
           key: evidence.id || '',
           thumbnail: evidence.thumbnailUrl || '',
-          url: evidence.playbackUrl || '',
           type: evidence.type || '',
-          importance: evidence.importance || '',
-          createdAt: evidence.createdAt,
+          url: evidence.playbackUrl || '',
         }))}
-        rowSelection={{
-          type: 'radio',
-          onSelect,
-        }}
+        loading={loading}
         pagination={{
           hideOnSinglePage: true,
-          total: data?.listDemEvidence?.total,
           pageSize: 24,
-          showSizeChanger: false,
           position: ['bottomCenter'],
+          showSizeChanger: false,
+          total: data?.listDemEvidence?.total,
         }}
-        loading={loading}
+        rowSelection={{
+          onSelect,
+          type: 'radio',
+        }}
         size="small"
       />
-      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+      <Row gutter={16} justify="end" style={{ paddingBottom: 30 }}>
         <Col>
-          <Button onClick={onClose} disabled={saving} type="text">
+          <Button disabled={saving} onClick={onClose} type="text">
             {intl.formatMessage({
               defaultMessage: 'Cancel',
             })}
@@ -100,8 +101,8 @@ const LinkDemCompany = ({
         </Col>
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
+            loading={saving}
             onClick={onSubmit}
             type="primary"
           >

@@ -1,45 +1,45 @@
 import type { MutationUpdaterFn } from '@apollo/client';
-import { notification } from 'antd';
-
-import { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from 'state';
-import type { DateType, VehicleData } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
+import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import type { CreateVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-vehicle.generated';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import type { VehicleFilters } from 'state/data-model';
-import { useNavigate } from 'react-router';
+import type { DateType, VehicleData } from 'types/DataType';
+
 import { useGroupsContext } from '#/context/groups-context';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import { notification } from 'antd';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useCreateVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-vehicle.generated';
 import {
   ListVehiclesDocument,
   useListVehiclesQuery,
-} from 'graphql/vehicles/queries/list-vehicles.generated';
-import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
-import type { CreateVehicleMutation } from 'graphql/vehicles/mutations/create-vehicle.generated';
-import { useCreateVehicleMutation } from 'graphql/vehicles/mutations/create-vehicle.generated';
+} from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Return {
-  data: ListVehiclesQuery | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  onSubmit: (value: VehicleData) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
+  addInvestigation: string;
   clearFilters: () => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
+  customGalleriesData: ListCustomGalleriesQuery | undefined;
+  data: ListVehiclesQuery | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
+  onNavigate: () => void;
+  onSelectCustomGalleries: (values: string) => void;
+  onSubmit: (value: VehicleData) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
   setGallery: (values: string[]) => void;
   setGroupsFilter: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  customGalleriesData: ListCustomGalleriesQuery | undefined;
-  onSelectCustomGalleries: (values: string) => void;
   setOrder: (value: SortOrder) => void;
-  addInvestigation: string;
+  setSearch: (value: string) => void;
+  sortFilter: boolean;
   toggleAddInvestigation: (value: string) => void;
+  toggleSortFilter: () => void;
   variables: VehicleFilters;
-  onNavigate: () => void;
 }
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -55,7 +55,7 @@ const useListVehicles = (): Return => {
   const navigate = useNavigate();
   const onNavigate = () => navigate('/app/vehicles/add');
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { id: userId, filterDefaultGroups: defaultGroups } = useStoreState(
+  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
     (state) => state.user
   );
   const pagination = useStoreState((state) => state.data.vehicles.pagination);
@@ -66,12 +66,12 @@ const useListVehicles = (): Return => {
   const [sortFilter, setSortFilter] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState('');
   const {
-    search,
-    groups: groupsFilter,
     createdAt: createdAtFilter,
-    gallery,
     customGalleries,
+    gallery,
+    groups: groupsFilter,
     order,
+    search,
   } = filterVariables;
 
   const variables = {
@@ -79,56 +79,6 @@ const useListVehicles = (): Return => {
       updatedAt: order,
     },
     where: {
-      schemes: {
-        some: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      createdAt: createdAtFilter
-        ? {
-            gte: createdAtFilter.startDate,
-            lte: createdAtFilter.endDate,
-          }
-        : undefined,
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : undefined,
-      createdBy: gallery.includes('MYDATA')
-        ? {
-            id: {
-              equals: userId,
-            },
-          }
-        : undefined,
-      subscribedUsers: gallery.includes('FOLLOWING')
-        ? {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          }
-        : undefined,
-      customGalleries:
-        customGalleries && customGalleries.length > 0
-          ? {
-              some: {
-                id: {
-                  in: customGalleries,
-                },
-              },
-            }
-          : undefined,
-
       OR: [
         {
           make: {
@@ -154,6 +104,56 @@ const useListVehicles = (): Return => {
           },
         },
       ],
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
+      createdBy: gallery.includes('MYDATA')
+        ? {
+            id: {
+              equals: userId,
+            },
+          }
+        : undefined,
+      customGalleries:
+        customGalleries && customGalleries.length > 0
+          ? {
+              some: {
+                id: {
+                  in: customGalleries,
+                },
+              },
+            }
+          : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
+      schemes: {
+        some: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+
+      subscribedUsers: gallery.includes('FOLLOWING')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
     },
   };
 
@@ -164,8 +164,8 @@ const useListVehicles = (): Return => {
       setFilterState({
         pagination: {
           ...pagination,
-          sizeOptions,
           pageSize: Number(sizeOptions[0]),
+          sizeOptions,
         },
         variables: {
           ...filterVariables,
@@ -179,8 +179,8 @@ const useListVehicles = (): Return => {
       setFilterState({
         pagination: {
           ...pagination,
-          sizeOptions,
           pageSize: Number(sizeOptions[0]),
+          sizeOptions,
         },
         variables: filterVariables,
       });
@@ -225,8 +225,8 @@ const useListVehicles = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<ListVehiclesQuery>({
-      query: ListVehiclesDocument,
       data: {
+        __typename: 'Query',
         listVehicles: {
           ...existingData.listVehicles,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -241,8 +241,8 @@ const useListVehicles = (): Return => {
                 ]
               : [res.createVehicle],
         },
-        __typename: 'Query',
       },
+      query: ListVehiclesDocument,
       variables,
     });
   };
@@ -251,11 +251,11 @@ const useListVehicles = (): Return => {
     onCompleted: () => {
       // setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Added!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The vehicle has been added!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
         }),
         placement: 'bottomRight',
       });
@@ -271,13 +271,10 @@ const useListVehicles = (): Return => {
     void createVehicle({
       variables: {
         data: {
-          make: data.make || '',
-          model: data.model || '',
           colour: data.colour || '',
-          registration: data.registration || '',
-          groups:
-            data?.groups && data.groups.length > 0
-              ? data?.groups?.map((id) => ({ id }))
+          crimeGroup:
+            data?.crimeGroup && data.crimeGroup.length > 0
+              ? data?.crimeGroup?.map((id) => ({ id }))
               : [],
           customGalleries: {
             connect:
@@ -288,48 +285,51 @@ const useListVehicles = (): Return => {
               data.newCustomGalleriesData &&
               data.newCustomGalleriesData.length > 0
                 ? data.newCustomGalleriesData.map((value) => ({
-                    name: value.name,
                     description: value.description || '',
-                    schemes: { connect: [{ id: schemeId }] },
                     groups: {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
                           : data?.groups?.map((id) => ({ id })) || [],
                     },
+                    name: value.name,
+                    schemes: { connect: [{ id: schemeId }] },
                   }))
                 : undefined,
           },
-          crimeGroup:
-            data?.crimeGroup && data.crimeGroup.length > 0
-              ? data?.crimeGroup?.map((id) => ({ id }))
+          groups:
+            data?.groups && data.groups.length > 0
+              ? data?.groups?.map((id) => ({ id }))
               : [],
-          incidents:
-            data.incidents && data.incidents.length > 0
-              ? data.incidents.map((id) => ({ id }))
-              : [],
-          offenders:
-            data.offenders && data.offenders.length > 0
-              ? data.offenders.map((id) => ({ id }))
-              : [],
-          schemes: schemeId,
-
           image: {
             upload:
               data.images && data.images.length > 0
                 ? data.images.map((item) => ({
+                    policeImage: item.policeImage,
+                    position: item.position,
+                    primary: item.primary,
+                    rotation: item.rotation || 0,
                     url: {
                       filename: item.fileName || '',
                       mimetype: item.type || '',
                       url: item.url || '',
                     },
-                    position: item.position,
-                    primary: item.primary,
-                    policeImage: item.policeImage,
-                    rotation: item.rotation || 0,
                   }))
                 : undefined,
           },
+          incidents:
+            data.incidents && data.incidents.length > 0
+              ? data.incidents.map((id) => ({ id }))
+              : [],
+          make: data.make || '',
+          model: data.model || '',
+          offenders:
+            data.offenders && data.offenders.length > 0
+              ? data.offenders.map((id) => ({ id }))
+              : [],
+          registration: data.registration || '',
+
+          schemes: schemeId,
         },
       },
     });
@@ -417,37 +417,37 @@ const useListVehicles = (): Return => {
     setFilterState({
       pagination,
       variables: {
+        createdAt: undefined,
+        customGalleries: [],
+        gallery: [],
+        groups: [],
         order: SortOrder.Desc,
         search: '',
-        createdAt: undefined,
-        gallery: [],
-        customGalleries: [],
-        groups: [],
       },
     });
   };
   return {
-    data: vehiclesData,
-    loading,
-    setSearch,
+    addInvestigation,
+    clearFilters,
+    customGalleriesData,
 
-    // updateVehicleList,
-    onSubmit,
+    data: vehiclesData,
     groups,
     groupsLoading,
-    setGroupsFilter,
-    setCreatedAtFilter,
-    clearFilters,
-    sortFilter,
-    toggleSortFilter,
-    customGalleriesData,
-    onSelectCustomGalleries,
-    setGallery,
-    setOrder,
-    addInvestigation,
-    toggleAddInvestigation: setAddInvestigation,
-    variables: filterVariables,
+    loading,
     onNavigate,
+    onSelectCustomGalleries,
+    // updateVehicleList,
+    onSubmit,
+    setCreatedAtFilter,
+    setGallery,
+    setGroupsFilter,
+    setOrder,
+    setSearch,
+    sortFilter,
+    toggleAddInvestigation: setAddInvestigation,
+    toggleSortFilter,
+    variables: filterVariables,
   };
 };
 

@@ -1,38 +1,38 @@
+import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import type { BusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
+import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
 import type { Scheme } from 'state';
+
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { useBusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import { useIndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
+import { useIncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
+import { useState } from 'react';
 import { useStoreState } from 'state';
 
-import { useState } from 'react';
-import type { IncidentMapQuery } from 'graphql/reports/queries/incident-map.generated';
-import { useIncidentMapQuery } from 'graphql/reports/queries/incident-map.generated';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import type { BusinessLocationsQuery } from 'graphql/businesses/queries/business-locations.generated';
-import { useBusinessLocationsQuery } from 'graphql/businesses/queries/business-locations.generated';
-import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
-import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
-import type { IndustriesQuery } from 'graphql/industry/industries.generated';
-import { useIndustriesQuery } from 'graphql/industry/industries.generated';
-
 interface Return {
-  data: IncidentMapQuery | undefined;
-  loading: boolean;
-  groupsData: SchemeGroupsQuery | undefined;
-  groupsLoading: boolean;
-  businessData: BusinessLocationsQuery | undefined;
-  schemes: Scheme[];
-  onChangeSchemes: (value: string[]) => void;
-  onChangeGroups: (value: string[]) => void;
-  selectedSchemes: string[];
-  selectedGroups: string[];
-  onChangeDateRange: (value: { startDate: Date; endDate: Date }) => void;
   brandsData: BrandsQuery | undefined;
   brandsLoading: boolean;
+  businessData: BusinessLocationsQuery | undefined;
+  data: IncidentMapQuery | undefined;
+  groupsData: SchemeGroupsQuery | undefined;
+  groupsLoading: boolean;
   industriesData: IndustriesQuery | undefined;
   industriesLoading: boolean;
-  selectedBrands: string[];
-  selectedIndustries: string[];
+  loading: boolean;
   onChangeBrands: (value: string[]) => void;
+  onChangeDateRange: (value: { endDate: Date; startDate: Date }) => void;
+  onChangeGroups: (value: string[]) => void;
   onChangeIndustries: (value: string[]) => void;
+  onChangeSchemes: (value: string[]) => void;
+  schemes: Scheme[];
+  selectedBrands: string[];
+  selectedGroups: string[];
+  selectedIndustries: string[];
+  selectedSchemes: string[];
 }
 
 const useIncidentMap = (): Return => {
@@ -44,8 +44,8 @@ const useIncidentMap = (): Return => {
   const [selectedBrands, setBrands] = useState<string[]>([]);
   const [selectedIndustries, setIndustries] = useState<string[]>([]);
   const [dateRange, setDateRange] = useState<{
-    startDate: Date;
     endDate: Date;
+    startDate: Date;
   } | null>(null);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -70,11 +70,12 @@ const useIncidentMap = (): Return => {
   const { data, loading } = useIncidentMapQuery({
     variables: {
       where: {
-        scheme: {
-          id: {
-            in: selectedSchemes,
-          },
-        },
+        date: dateRange
+          ? {
+              gte: dateRange.startDate,
+              lte: dateRange.endDate,
+            }
+          : undefined,
         groups: {
           some: {
             id: {
@@ -85,12 +86,11 @@ const useIncidentMap = (): Return => {
             },
           },
         },
-        date: dateRange
-          ? {
-              gte: dateRange.startDate,
-              lte: dateRange.endDate,
-            }
-          : undefined,
+        scheme: {
+          id: {
+            in: selectedSchemes,
+          },
+        },
       },
     },
   });
@@ -98,27 +98,6 @@ const useIncidentMap = (): Return => {
   const { data: businessData } = useBusinessLocationsQuery({
     variables: {
       where: {
-        schemes: {
-          some: {
-            id: {
-              in: selectedSchemes,
-            },
-          },
-        },
-        users:
-          selectedGroups.length > 0
-            ? {
-                some: {
-                  groups: {
-                    some: {
-                      id: {
-                        in: selectedGroups,
-                      },
-                    },
-                  },
-                },
-              }
-            : undefined,
         brands:
           selectedBrands.length > 0 || selectedIndustries.length > 0
             ? {
@@ -137,6 +116,27 @@ const useIncidentMap = (): Return => {
                           },
                         }
                       : undefined,
+                },
+              }
+            : undefined,
+        schemes: {
+          some: {
+            id: {
+              in: selectedSchemes,
+            },
+          },
+        },
+        users:
+          selectedGroups.length > 0
+            ? {
+                some: {
+                  groups: {
+                    some: {
+                      id: {
+                        in: selectedGroups,
+                      },
+                    },
+                  },
                 },
               }
             : undefined,
@@ -168,25 +168,25 @@ const useIncidentMap = (): Return => {
   };
 
   return {
-    data,
-    loading,
-    groupsData,
-    groupsLoading,
-    businessData,
-    schemes,
-    onChangeSchemes,
-    selectedSchemes,
-    onChangeGroups,
-    selectedGroups,
-    onChangeDateRange: setDateRange,
     brandsData,
     brandsLoading,
+    businessData,
+    data,
+    groupsData,
+    groupsLoading,
     industriesData,
     industriesLoading,
-    selectedIndustries,
+    loading,
     onChangeBrands: setBrands,
+    onChangeDateRange: setDateRange,
+    onChangeGroups,
     onChangeIndustries: setIndustries,
+    onChangeSchemes,
+    schemes,
     selectedBrands,
+    selectedGroups,
+    selectedIndustries,
+    selectedSchemes,
   };
 };
 

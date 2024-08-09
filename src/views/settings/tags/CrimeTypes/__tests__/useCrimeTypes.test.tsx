@@ -8,7 +8,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import useTagList from '../useCrimeTypeList';
 import { Model, QueryMode } from 'graphql/types';
-import { TagsDocument } from 'graphql/tags/queries/tags.generated';
+import { TagsDocument } from 'graphql/tags/queries/__generated__/tags.generated';
 
 const mocks = [
   {

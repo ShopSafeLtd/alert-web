@@ -1,17 +1,18 @@
+import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import type { TagType } from 'graphql/types';
+
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model } from 'graphql/types';
 import { useMemo } from 'react';
 import { useStoreState } from 'state';
-import type { ListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
-import { useListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import type { TagType } from 'graphql/types';
-import { Model } from 'graphql/types';
 
 interface Return {
-  incidentTagsLoading: boolean;
   incidentTagsData: ListIncidentTagsQuery | undefined;
-  tagsLoading: boolean;
-  tags: { value: string; label: string; tooltip: string; type: TagType }[];
+  incidentTagsLoading: boolean;
   oneSelectedIncidentTypeOnly: boolean;
+  tags: { label: string; tooltip: string; type: TagType; value: string }[];
+  tagsLoading: boolean;
 }
 
 const useIncidentTypes = (): Return => {
@@ -32,6 +33,9 @@ const useIncidentTypes = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
+        dataType: {
+          equals: Model.Incident,
+        },
         schemes: {
           some: {
             id: {
@@ -39,28 +43,25 @@ const useIncidentTypes = (): Return => {
             },
           },
         },
-        dataType: {
-          equals: Model.Incident,
-        },
       },
     },
   });
 
   return {
-    incidentTagsLoading,
     incidentTagsData,
+    incidentTagsLoading,
+    oneSelectedIncidentTypeOnly,
     tags: useMemo(
       () =>
         tagsData?.tags.map((tag) => ({
-          value: tag.id,
           label: tag.name,
           tooltip: tag.description,
           type: tag.type,
+          value: tag.id,
         })) || [],
       [tagsData]
     ),
     tagsLoading,
-    oneSelectedIncidentTypeOnly,
   };
 };
 

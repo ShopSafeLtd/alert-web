@@ -6,7 +6,7 @@ import { OffenderSort, storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryMode, SortOrder } from 'graphql/types';
 import useAddExistingOffender from '../useSelectOffenders';
-import { ListOffendersDocument } from 'graphql/offenders/queries/list-offenders.generated';
+import { ListOffendersDocument } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 
 const mocks = [
   {

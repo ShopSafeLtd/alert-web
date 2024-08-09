@@ -1,85 +1,89 @@
-import React, { useMemo, useState } from 'react';
+import type { IntlShape } from 'react-intl';
+
+import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import IncidentTypesSelect from '#/components/form-components/IncidentTypesSelect/IncidentTypesSelect.view';
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
+import IndustrySelect from '#/components/industry/IndustrySelect';
+import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
+import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Badge, Button, Col, Drawer, Form, Row, Typography } from 'antd';
+import { margin, rowHeight } from 'components/reports/utils/utils';
 import { Page } from 'components/shared-components/AntD/Page/Page';
+import React, { useMemo, useState } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
-import { margin, rowHeight } from 'components/reports/utils/utils';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
-import 'react-resizable/css/styles.css';
-import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
-import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
-import IndustrySelect from '#/components/industry/IndustrySelect';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
-import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
-import AddLogo from '../../../components/reports/addLogo';
-import PerformanceReportLayout from './layout/PerformanceReportLayout';
-import SaveAs from '../../../components/reports/saveAs';
-import type { Props } from './hooks/types';
-import { LayoutToReadable } from '../types';
-import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
-import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
+import 'react-resizable/css/styles.css';
 import { useParams } from 'react-router-dom';
-import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+
+import type { Props } from './hooks/types';
+
+import AddLogo from '../../../components/reports/addLogo';
+import SaveAs from '../../../components/reports/saveAs';
+import { LayoutToReadable } from '../types';
+import PerformanceReportLayout from './layout/PerformanceReportLayout';
 
 // const ReactGridLayout = WidthProvider(RGL);
 
 const { Title } = Typography;
 
-type FilterProps = Pick<
-  Props,
-  | 'groups'
-  | 'setSelectedGroups'
-  | 'selectedGroups'
-  | 'dateRange'
-  | 'setDateRange'
-  | 'groupsLoading'
-  | 'toggleFiltersOpen'
-  | 'filterCount'
-> & {
+type FilterProps = {
   intl: IntlShape;
-};
+} & Pick<
+  Props,
+  | 'dateRange'
+  | 'filterCount'
+  | 'groups'
+  | 'groupsLoading'
+  | 'selectedGroups'
+  | 'setDateRange'
+  | 'setSelectedGroups'
+  | 'toggleFiltersOpen'
+>;
 
 const FilterOptions = ({
+  filterCount,
   groups,
   intl,
-  setSelectedGroups,
   selectedGroups,
   setDateRange,
+  setSelectedGroups,
   toggleFiltersOpen,
-  filterCount,
 }: FilterProps) => (
   <Form layout="vertical">
     <Row className="no-print" gutter={8} wrap={false}>
       <Col span={8}>
         <Form.Item style={{ marginBottom: 0 }}>
           <GroupsSelect
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Groups',
-            })}
-            mode="multiple"
+            defaultValue={groups.map((group) => group.value)}
             maxTagCount="responsive"
+            mode="multiple"
             onChange={(value) => {
               setSelectedGroups(value || []);
             }}
-            value={selectedGroups}
-            defaultValue={groups.map((group) => group.value)}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Groups',
+            })}
             style={{ width: '100%' }}
+            value={selectedGroups}
           />
         </Form.Item>
       </Col>
       <Col>
         <Form.Item style={{ marginBottom: 0 }}>
-          <DateSelect onChange={setDateRange} defaultRange="last30Days" />
+          <DateSelect defaultRange="last30Days" onChange={setDateRange} />
         </Form.Item>
       </Col>
       <Col>
         <Button onClick={toggleFiltersOpen}>
           <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
-          <Badge count={filterCount} showZero={false} offset={[8, 0]}>
+          <Badge count={filterCount} offset={[8, 0]} showZero={false}>
             {intl.formatMessage({
               defaultMessage: 'More Filters',
             })}
@@ -91,55 +95,57 @@ const FilterOptions = ({
 );
 
 const PerformanceReport = ({
-  data,
-  loading,
-  setDateRange,
-  dateRange,
-  groups,
-  setSelectedGroups,
-  groupsLoading,
-  selectedGroups,
-  componentRef,
-  handlePrint,
-  editMode,
-  setEditMode,
+  addLogo,
+  addLogoDrawer,
   businessContributionTableData,
-  userContributionTableData,
-  offendersTableData,
+  changeSize,
+  componentRef,
   crimeGroupPerformanceTableData,
+  data,
+  dateRange,
+  editMode,
+  filterCount,
+  filtersOpen,
+  groups,
+  groupsLoading,
+  handlePrint,
+  incidentTypeIds,
+  investigationsData,
+  isPrinting,
+  layout,
+  loading,
+  logos,
+  metadata,
+  minDrawer,
+  offendersTableData,
+  redactOnPrint,
+  removeItem,
+  removeLogo,
+  saveAsDrawer,
+  saveTemplate,
+  saving,
+  schemeId,
+  selectedBrands,
+  selectedGroups,
+  selectedIndustries,
+  selectedRoles,
+  setAddLogoDrawer,
+  setDateRange,
+  setEditMode,
+  setIncidentTypeIds,
+  setLayout,
+  setMetadata,
+  setMinDrawer,
+  setRedactOnPrint,
+  setSaveAsDrawer,
+  setSelectedBrands,
+  setSelectedGroups,
+  setSelectedIndustries,
+  setSelectedRoles,
   targetedBusinessData,
   targetedGoodsData,
-  minDrawer,
-  setMinDrawer,
-  layout,
-  setLayout,
-  removeItem,
-  changeSize,
-  isPrinting,
-  metadata,
-  setMetadata,
-  removeLogo,
-  setAddLogoDrawer,
-  addLogoDrawer,
-  addLogo,
-  logos,
-  saveTemplate,
-  setSaveAsDrawer,
-  saveAsDrawer,
-  setSelectedBrands,
-  selectedBrands,
-  investigationsData,
-  setSelectedIndustries,
-  selectedIndustries,
-  setRedactOnPrint,
-  redactOnPrint,
-  filtersOpen,
   toggleFiltersOpen,
-  setSelectedRoles,
-  selectedRoles,
-  filterCount,
-  schemeId,
-  saving,
+  userContributionTableData,
 }: Props) => {
   const { reportId } = useParams();
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
@@ -151,8 +157,8 @@ const PerformanceReport = ({
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
-          selectedId={reportId ?? ''}
           collapsed={collapsed}
+          selectedId={reportId ?? ''}
           setCollapsed={setCollapsed}
         />
       </Col>
@@ -161,74 +167,74 @@ const PerformanceReport = ({
           <Row
             className="no-print"
             style={{
-              position: 'absolute',
+              alignItems: 'center',
               display: 'flex',
               justifyContent: 'flex-end',
-              alignItems: 'center',
-              top: 20,
               left: 20,
+              position: 'absolute',
               right: 20,
+              top: 20,
               zIndex: 1000,
             }}
           >
             <Col flex={1}>
               <FilterOptions
-                groups={groups}
-                intl={intl}
-                setSelectedGroups={setSelectedGroups}
-                selectedGroups={selectedGroups}
                 dateRange={dateRange}
-                setDateRange={setDateRange}
-                groupsLoading={groupsLoading}
-                toggleFiltersOpen={toggleFiltersOpen}
                 filterCount={filterCount}
+                groups={groups}
+                groupsLoading={groupsLoading}
+                intl={intl}
+                selectedGroups={selectedGroups}
+                setDateRange={setDateRange}
+                setSelectedGroups={setSelectedGroups}
+                toggleFiltersOpen={toggleFiltersOpen}
               />
             </Col>
             <Col>
               <ReportToolbar
-                handlePrint={handlePrint}
-                setMinDrawer={setMinDrawer}
                 editMode={editMode}
+                handlePrint={handlePrint}
                 minDrawer={minDrawer}
                 redactOnPrint={redactOnPrint}
                 saveTemplate={saveTemplate}
+                saving={saving}
                 setEditMode={setEditMode}
+                setMinDrawer={setMinDrawer}
                 setRedactOnPrint={setRedactOnPrint}
                 setSaveAsDrawer={setSaveAsDrawer}
-                saving={saving}
               />
             </Col>
           </Row>
 
           {editMode ? (
-            <div style={{ paddingTop: 60 }} className="print-page">
+            <div className="print-page" style={{ paddingTop: 60 }}>
               <div className="logo">
                 {metadata
                   ?.find((item) => item.key === 'logo')
                   ?.urls?.map((url, _i, array) => (
                     <>
                       <Button
-                        type="text"
                         className="no-print"
                         hidden={!editMode}
                         icon={
                           <FontAwesomeIcon
-                            icon={faTrash}
                             color="red"
+                            icon={faTrash}
                             size="lg"
                           />
                         }
                         onClick={() => removeLogo(_i)}
+                        type="text"
                       />
                       <img
-                        style={{
-                          height: '100%',
-                          width: '25 %',
-                          marginRight: array.length - 1 === _i ? 0 : 10,
-                        }}
-                        src={url || ''}
                         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                         alt="logo"
+                        src={url || ''}
+                        style={{
+                          height: '100%',
+                          marginRight: array.length - 1 === _i ? 0 : 10,
+                          width: '25 %',
+                        }}
                       />
                     </>
                   ))}
@@ -236,22 +242,22 @@ const PerformanceReport = ({
                   className="no-print"
                   hidden={!editMode}
                   onClick={() => setAddLogoDrawer(true)}
-                  type="primary"
                   style={{ marginLeft: 10 }}
+                  type="primary"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Logo',
                   })}
                 </Button>
               </div>
-              <Title level={2} className="print-title">
+              <Title className="print-title" level={2}>
                 {intl.formatMessage(
                   {
                     defaultMessage: 'Summary Report: {startDate} - {endDate}',
                   },
                   {
-                    startDate: dateRange.startDate.toLocaleDateString(),
-                    endDate: dateRange.endDate.toLocaleDateString(),
+                    endDate: dateRange?.endDate.toLocaleDateString() ?? '',
+                    startDate: dateRange?.startDate.toLocaleDateString() ?? '',
                   }
                 )}
               </Title>
@@ -259,44 +265,44 @@ const PerformanceReport = ({
               <div className="print-container">
                 <div className="print-body">
                   <ReactGridLayout
-                    layout={layout}
+                    autoSize
                     cols={2}
-                    rowHeight={rowHeight}
-                    width={400}
                     isDraggable={editMode}
                     isResizable={editMode}
-                    autoSize
+                    layout={layout}
                     margin={margin}
                     onLayoutChange={(newLayout) => setLayout(newLayout)}
+                    rowHeight={rowHeight}
                     useCSSTransforms={!isPrinting}
+                    width={400}
                   >
                     {...PerformanceReportLayout({
-                      data,
-                      loading,
-                      offendersTableData,
                       businessContributionTableData,
-                      userContributionTableData,
-                      crimeGroupPerformanceTableData,
-                      targetedBusinessData,
-                      targetedGoodsData,
-                      removeItem,
-                      layout,
-                      margin,
-                      rowHeight,
-                      editMode,
                       changeSize,
-                      isPrinting,
-                      metadata,
-                      setMetadata,
-                      investigationsData,
+                      crimeGroupPerformanceTableData,
+                      data,
+                      editMode,
                       filters: {
+                        dateRange,
+                        schemeId,
                         selectedBrands,
+                        selectedGroups,
                         selectedIndustries,
                         selectedRoles,
-                        dateRange,
-                        selectedGroups,
-                        schemeId,
                       },
+                      investigationsData,
+                      isPrinting,
+                      layout,
+                      loading,
+                      margin,
+                      metadata,
+                      offendersTableData,
+                      removeItem,
+                      rowHeight,
+                      setMetadata,
+                      targetedBusinessData,
+                      targetedGoodsData,
+                      userContributionTableData,
                     })}
                   </ReactGridLayout>
                 </div>
@@ -304,8 +310,38 @@ const PerformanceReport = ({
             </div>
           ) : (
             <div>
+              <div className="no-print" style={{ paddingTop: 60 }} />
               <GeneratePrintPage
                 componentRef={componentRef}
+                elements={PerformanceReportLayout({
+                  businessContributionTableData,
+                  changeSize,
+                  crimeGroupPerformanceTableData,
+                  data,
+                  editMode,
+                  filters: {
+                    dateRange,
+                    schemeId,
+                    selectedBrands,
+                    selectedGroups,
+                    selectedIndustries,
+                    selectedRoles,
+                  },
+                  investigationsData,
+                  isPrinting,
+                  layout,
+                  loading,
+                  margin,
+                  metadata,
+                  offendersTableData,
+                  removeItem,
+                  rowHeight,
+                  setMetadata,
+                  targetedBusinessData,
+                  targetedGoodsData,
+                  userContributionTableData,
+                })}
+                layout={layout}
                 logo={
                   <>
                     <div className="logo">
@@ -314,27 +350,27 @@ const PerformanceReport = ({
                         ?.urls?.map((url, _i, array) => (
                           <>
                             <Button
-                              type="text"
                               className="no-print"
                               hidden={!editMode}
                               icon={
                                 <FontAwesomeIcon
-                                  icon={faTrash}
                                   color="red"
+                                  icon={faTrash}
                                   size="lg"
                                 />
                               }
                               onClick={() => removeLogo(_i)}
+                              type="text"
                             />
                             <img
-                              style={{
-                                height: '100%',
-                                width: '25 %',
-                                marginRight: array.length - 1 === _i ? 0 : 10,
-                              }}
-                              src={url || ''}
                               // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                               alt="logo"
+                              src={url || ''}
+                              style={{
+                                height: '100%',
+                                marginRight: array.length - 1 === _i ? 0 : 10,
+                                width: '25 %',
+                              }}
                             />
                           </>
                         ))}
@@ -342,62 +378,34 @@ const PerformanceReport = ({
                   </>
                 }
                 title={
-                  <Title level={2} className="print-title">
+                  <Title className="print-title" level={2}>
                     {intl.formatMessage(
                       {
                         defaultMessage:
                           'Summary Report: {startDate} - {endDate}',
                       },
                       {
-                        startDate: dateRange.startDate.toLocaleDateString(),
-                        endDate: dateRange.endDate.toLocaleDateString(),
+                        endDate: dateRange?.endDate.toLocaleDateString() || '',
+                        startDate:
+                          dateRange?.startDate.toLocaleDateString() || '',
                       }
                     )}
                   </Title>
                 }
-                elements={PerformanceReportLayout({
-                  data,
-                  loading,
-                  offendersTableData,
-                  businessContributionTableData,
-                  userContributionTableData,
-                  crimeGroupPerformanceTableData,
-                  targetedBusinessData,
-                  targetedGoodsData,
-                  removeItem,
-                  layout,
-                  margin,
-                  rowHeight,
-                  editMode,
-                  changeSize,
-                  isPrinting,
-                  metadata,
-                  setMetadata,
-                  investigationsData,
-                  filters: {
-                    selectedBrands,
-                    selectedIndustries,
-                    selectedRoles,
-                    dateRange,
-                    selectedGroups,
-                    schemeId,
-                  },
-                })}
-                layout={layout}
               />
             </div>
           )}
 
           <Drawer
+            bodyStyle={{ padding: 0 }}
+            closable
+            onClose={() => setMinDrawer(!minDrawer)}
+            open={editMode && minDrawer}
+            placement="right"
             title={intl.formatMessage({
               defaultMessage: 'Components available to add',
             })}
-            placement="right"
-            closable
-            open={editMode && minDrawer}
             width={600}
-            onClose={() => setMinDrawer(!minDrawer)}
-            bodyStyle={{ padding: 0 }}
           >
             <ComponentList
               components={LayoutToReadable.filter(
@@ -406,7 +414,9 @@ const PerformanceReport = ({
               )
                 .filter(({ reportViews }) => reportViews.includes('summary'))
                 .map((item) => ({
+                  description: item.description,
                   key: item.i,
+                  name: item.readable,
                   onAdd: () => {
                     setLayout([
                       ...layout,
@@ -426,22 +436,20 @@ const PerformanceReport = ({
                       { key: item.i, type: item.reportItemTypes[0] },
                     ]);
                   },
-                  description: item.description,
-                  name: item.readable,
                   reportItemTypes: item.reportItemTypes,
                 }))}
             />
           </Drawer>
           <Drawer
+            closable
+            destroyOnClose
+            onClose={() => setAddLogoDrawer(!addLogoDrawer)}
+            open={editMode && addLogoDrawer}
+            placement="right"
             title={intl.formatMessage({
               defaultMessage: 'Add Logo',
             })}
-            placement="right"
-            closable
-            open={editMode && addLogoDrawer}
             width={700}
-            onClose={() => setAddLogoDrawer(!addLogoDrawer)}
-            destroyOnClose
           >
             <AddLogo
               logos={logos}
@@ -450,48 +458,66 @@ const PerformanceReport = ({
             />
           </Drawer>
           <Drawer
+            closable
+            destroyOnClose
+            onClose={() => setSaveAsDrawer(false)}
+            open={saveAsDrawer}
+            placement="right"
             title={intl.formatMessage({
               defaultMessage: 'Save As',
             })}
-            placement="right"
-            closable
-            open={saveAsDrawer}
             width={700}
-            onClose={() => setSaveAsDrawer(false)}
-            destroyOnClose
           >
             <div>
               <SaveAs
-                onSubmit={saveTemplate}
                 onClose={() => setSaveAsDrawer(false)}
+                onSubmit={saveTemplate}
               />
             </div>
           </Drawer>
 
           <Drawer
+            onClose={toggleFiltersOpen}
+            open={filtersOpen}
             title={intl.formatMessage({
               defaultMessage: 'Report Filters',
             })}
-            open={filtersOpen}
-            onClose={toggleFiltersOpen}
           >
             <Form layout="vertical">
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Incident Types',
+                })}
+              >
+                <IncidentTypesSelect
+                  maxTagCount="responsive"
+                  multiple
+                  onChange={(value) => {
+                    setIncidentTypeIds(value || []);
+                  }}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select incident tyes',
+                  })}
+                  style={{ width: '100%' }}
+                  value={incidentTypeIds}
+                />
+              </Form.Item>
               <Form.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Brands',
                 })}
               >
                 <BrandsSelect
-                  placeholder={intl.formatMessage({
-                    defaultMessage: 'Select Brands',
-                  })}
-                  mode="multiple"
                   maxTagCount="responsive"
+                  mode="multiple"
                   onChange={(value) => {
                     setSelectedBrands(value || []);
                   }}
-                  value={selectedBrands}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Brands',
+                  })}
                   style={{ width: '100%' }}
+                  value={selectedBrands}
                 />
               </Form.Item>
               <Form.Item
@@ -500,13 +526,13 @@ const PerformanceReport = ({
                 })}
               >
                 <IndustrySelect
-                  value={selectedIndustries}
+                  maxTagCount="responsive"
+                  mode="multiple"
                   onChange={(value) => {
                     setSelectedIndustries(value || []);
                   }}
-                  mode="multiple"
-                  maxTagCount="responsive"
                   style={{ width: '100%' }}
+                  value={selectedIndustries}
                 />
               </Form.Item>
               <Form.Item
@@ -515,16 +541,16 @@ const PerformanceReport = ({
                 })}
               >
                 <RolesSelect
-                  value={selectedRoles}
+                  maxTagCount="responsive"
+                  mode="multiple"
                   onChange={(value) => {
                     setSelectedRoles(value || []);
                   }}
-                  mode="multiple"
-                  maxTagCount="responsive"
-                  style={{ width: '100%' }}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select User Roles',
                   })}
+                  style={{ width: '100%' }}
+                  value={selectedRoles}
                 />
               </Form.Item>
             </Form>

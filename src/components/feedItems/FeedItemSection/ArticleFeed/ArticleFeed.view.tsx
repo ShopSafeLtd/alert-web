@@ -1,8 +1,5 @@
-import React from 'react';
-import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import type { FeedItemsQuery } from 'graphql/feedItems/queries/__generated__/feed-items.generated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import {
   faClock,
   faExclamationCircle,
@@ -10,45 +7,48 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
-import FormatCalendar from 'utils/format-calendar-24h';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Divider, Modal, Row, Typography } from 'antd';
+import { ArticlePriority } from 'graphql/types';
+import React from 'react';
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+import FormatCalendar from 'utils/format-calendar-24h';
+
 import ImageContainer from '../ImageContainer';
 import useStyles from './ArticleFeed.styles';
-import type { FeedItemsQuery } from 'graphql/feedItems/queries/feed-items.generated';
-import { ArticlePriority } from 'graphql/types';
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 const { confirm } = Modal;
 
 interface Props {
+  adminRights: boolean;
   feedItem:
-    | Exclude<FeedItemsQuery['listFeedItems'], undefined | null>['feedItems'][0]
+    | Exclude<FeedItemsQuery['listFeedItems'], null | undefined>['feedItems'][0]
     | null
     | undefined;
   onDeleteFeedItem: (value: string) => void;
-  saving: boolean;
-  adminRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  saving: boolean;
 }
 
 const ArticleFeed = ({
+  adminRights,
   feedItem,
   onDeleteFeedItem,
-  saving,
-  adminRights,
   openLightbox,
+  saving,
 }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
 
-  const { id, title, image, previewText, priority, createdBy } =
+  const { createdBy, id, image, previewText, priority, title } =
     feedItem?.article || {};
   const intl = useIntl();
   const classes = useStyles();
   return (
-    <Row wrap={false} key={id || ''}>
+    <Row key={id || ''} wrap={false}>
       {image ? (
         <Col
-          style={{ cursor: 'pointer', zIndex: 2 }}
           onClick={() =>
             openLightbox(
               [
@@ -59,49 +59,50 @@ const ArticleFeed = ({
               0
             )
           }
+          style={{ cursor: 'pointer', zIndex: 2 }}
         >
           <ImageContainer
-            rotation={image.rotation}
             position={image.position}
+            rotation={image.rotation}
             src={image.optimised || image.url || ''}
           />
         </Col>
       ) : null}
 
-      <Col flex={1} className={classes.contentContainer}>
-        <Row className={classes.contentHeader} align="middle" wrap={false}>
+      <Col className={classes.contentContainer} flex={1}>
+        <Row align="middle" className={classes.contentHeader} wrap={false}>
           <Col flex={1}>
-            <Title style={{ margin: 0, fontSize: 16 }} level={4} ellipsis>
-              <FontAwesomeIcon icon={faNewspaper} className={classes.icon} />
+            <Title ellipsis level={4} style={{ fontSize: 16, margin: 0 }}>
+              <FontAwesomeIcon className={classes.icon} icon={faNewspaper} />
               {feedItem?.message}
             </Title>
           </Col>
           <Col>
             {adminRights && (
               <Button
-                type="text"
-                style={{
-                  height: 28,
-                  width: 25,
-                }}
                 disabled={saving}
                 icon={
-                  <FontAwesomeIcon style={{ marginBottom: 2 }} icon={faTrash} />
+                  <FontAwesomeIcon icon={faTrash} style={{ marginBottom: 2 }} />
                 }
                 onClick={() => {
                   confirm({
-                    title: intl.formatMessage({
-                      defaultMessage: 'Do you want to delete the feed item?',
-                    }),
                     content: intl.formatMessage({
                       defaultMessage: 'This action cannot be undone.',
                     }),
                     onOk() {
                       onDeleteFeedItem(feedItem?.id || '');
                     },
+                    title: intl.formatMessage({
+                      defaultMessage: 'Do you want to delete the feed item?',
+                    }),
                   });
                 }}
                 size="small"
+                style={{
+                  height: 28,
+                  width: 25,
+                }}
+                type="text"
               />
             )}
           </Col>
@@ -109,46 +110,46 @@ const ArticleFeed = ({
         <Divider style={{ margin: 0 }} />
         <Link to={`/app/article/view/${id || ''}`}>
           <div className={classes.content}>
-            <Title style={{ marginBottom: 2 }} italic level={4} ellipsis>
+            <Title ellipsis italic level={4} style={{ marginBottom: 2 }}>
               {priority === ArticlePriority.High && (
                 <FontAwesomeIcon
-                  icon={faExclamationCircle}
                   className={classes.icon}
+                  icon={faExclamationCircle}
                 />
               )}
               {title?.replace(/^\S/, (s) => s.toUpperCase())}
             </Title>
             {previewText && (
               <Paragraph
-                type="secondary"
-                style={{ fontSize: 14 }}
                 ellipsis={{ rows: 1 }}
+                style={{ fontSize: 14 }}
+                type="secondary"
               >
                 {previewText}
               </Paragraph>
             )}
-            <Row wrap={false} className={classes.bottomRow}>
+            <Row className={classes.bottomRow} wrap={false}>
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faUser}
+                  size="sm"
                 />
               </Col>
               <Col flex={1}>
-                <Text style={{ fontSize: 14 }} ellipsis type="secondary">
+                <Text ellipsis style={{ fontSize: 14 }} type="secondary">
                   {createdBy?.fullName}
                 </Text>
               </Col>
               <Col>
                 <FontAwesomeIcon
-                  size="sm"
                   className={classes.icon}
                   icon={faClock}
+                  size="sm"
                 />
               </Col>
               <Col>
-                <Text type="secondary" style={{ fontSize: 14 }}>
+                <Text style={{ fontSize: 14 }} type="secondary">
                   {FormatCalendar(feedItem?.updatedAt || new Date())}
                 </Text>
               </Col>

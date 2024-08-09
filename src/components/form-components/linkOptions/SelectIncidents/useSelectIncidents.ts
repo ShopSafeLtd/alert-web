@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
-
-import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
-import { useStoreActions, useStoreState } from 'state';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
 import type { IncidentFilters } from 'state/data-model';
+
 import { useGroupsContext } from '#/context/groups-context';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
-import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useListBusinessesQuery } from 'graphql/businesses/queries/list-businesses.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
+import { useListBusinessesQuery } from 'graphql/businesses/queries/__generated__/list-businesses.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Props {
-  onClose: () => void;
-  update: (value: string[]) => void;
   incidentIds: string[] | undefined;
+  onClose: () => void;
   takeAllSchemes?: boolean;
+  update: (value: string[]) => void;
 }
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -26,52 +26,52 @@ const getSizeOptions = () => {
   return ['12'];
 };
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
+  businesses: { label: string; location: string; value: string }[];
+  businessesLoading: boolean;
+  clearFilters: () => void;
+  crimeTypes: { label: string; value: string }[];
   data:
     | Exclude<
         ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-        undefined | null
+        null | undefined
       >
     | null
     | undefined;
+  goods: { label: string; value: string }[];
+  goodsLoading: boolean;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  pagination: { page: number; pageSize: number; sizeOptions: string[] };
   onPaginationChange: (page: number, pageSize: number) => void;
   onSelect: (item: { key: string }) => void;
-  variables: IncidentFilters;
-  clearFilters: () => void;
-  goods: { value: string; label: string }[];
-  setGoodsFilter: (value: string[]) => void;
-  businesses: { value: string; label: string; location: string }[];
+  onSubmit: () => void;
+  pagination: { page: number; pageSize: number; sizeOptions: string[] };
+  saving: boolean;
+  search: string;
   setBusinessesFilter: (value: string[]) => void;
-  businessesLoading: boolean;
-  goodsLoading: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  crimeTypes: { value: string; label: string }[];
-  tagsLoading: boolean;
+  setCrimeTypesFilter: (value: string[]) => void;
+  setGoodsFilter: (value: string[]) => void;
   setGroupsFilter: (value: string[]) => void;
   setPeculiarities: (value: string) => void;
-  setCrimeTypesFilter: (value: string[]) => void;
+  setSearch: (value: string) => void;
+  tagsLoading: boolean;
+  variables: IncidentFilters;
 }
 
 const useSelectIncidents = ({
-  onClose,
-  update,
   incidentIds,
+  onClose,
   takeAllSchemes,
+  update,
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const schemeId = useStoreState((state) => state.scheme.id);
 
   const {
+    filterDefaultGroups: defaultGroups,
     role,
     schemes: userSchemes,
-    filterDefaultGroups: defaultGroups,
   } = useStoreState((state) => state.user);
 
   const pagination = useStoreState((state) => state.data.incidents.pagination);
@@ -81,74 +81,18 @@ const useSelectIncidents = ({
     (actions) => actions.data.setIncidents
   );
 
-  const { search, crimeTypes, groups, businesses, goods, peculiarities } =
+  const { businesses, crimeTypes, goods, groups, peculiarities, search } =
     variables;
 
   const { data, loading } = useListIncidentsAllSchemesQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       order: {
         createdAt: SortOrder.Desc,
       },
-      take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
       where: {
-        schemeId: {
-          in: takeAllSchemes
-            ? userSchemes.map((el) => el.scheme.id)
-            : [schemeId],
-        },
-        id:
-          incidentIds && incidentIds?.length > 0
-            ? {
-                notIn: incidentIds,
-              }
-            : undefined,
-        crimeTypes:
-          crimeTypes.length > 0
-            ? {
-                some: {
-                  id: {
-                    in: crimeTypes,
-                  },
-                },
-              }
-            : undefined,
-        groups:
-          groups.length > 0
-            ? {
-                some: {
-                  id: {
-                    in: groups,
-                  },
-                },
-              }
-            : undefined,
-        business:
-          businesses.length > 0
-            ? {
-                id: {
-                  in: businesses,
-                },
-              }
-            : undefined,
-        incidentItems:
-          goods.length > 0
-            ? {
-                some: {
-                  goodsType: {
-                    id: {
-                      in: goods,
-                    },
-                  },
-                },
-              }
-            : undefined,
-        description: peculiarities
-          ? {
-              mode: QueryMode.Insensitive,
-              contains: peculiarities,
-            }
-          : undefined,
         OR: [
           {
             subject: {
@@ -185,9 +129,65 @@ const useSelectIncidents = ({
             },
           },
         ],
+        business:
+          businesses.length > 0
+            ? {
+                id: {
+                  in: businesses,
+                },
+              }
+            : undefined,
+        crimeTypes:
+          crimeTypes.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: crimeTypes,
+                  },
+                },
+              }
+            : undefined,
+        description: peculiarities
+          ? {
+              contains: peculiarities,
+              mode: QueryMode.Insensitive,
+            }
+          : undefined,
+        groups:
+          groups.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: groups,
+                  },
+                },
+              }
+            : undefined,
+        id:
+          incidentIds && incidentIds?.length > 0
+            ? {
+                notIn: incidentIds,
+              }
+            : undefined,
+        incidentItems:
+          goods.length > 0
+            ? {
+                some: {
+                  goodsType: {
+                    id: {
+                      in: goods,
+                    },
+                  },
+                },
+              }
+            : undefined,
+        schemeId: {
+          in: takeAllSchemes
+            ? userSchemes.map((el) => el.scheme.id)
+            : [schemeId],
+        },
       },
     },
-    fetchPolicy: 'cache-and-network',
   });
   // Fetch scheme groups if scheme admin
   const { groups: groupsData, groupsLoading } = useGroupsContext();
@@ -196,15 +196,15 @@ const useSelectIncidents = ({
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
+        dataType: {
+          equals: Model.Incident,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Incident,
         },
         type: {
           equals: TagType.IncidentCrimeType,
@@ -258,6 +258,7 @@ const useSelectIncidents = ({
     const sizeOptions = getSizeOptions();
     if (groups.length === 0) {
       setIncidentsState({
+        order,
         pagination: {
           ...pagination,
           sizeOptions,
@@ -269,29 +270,28 @@ const useSelectIncidents = ({
               ?.filter(({ scheme }) => scheme.id === schemeId)
               ?.map(({ id }) => id) || [],
         },
-        order,
       });
     } else {
       setIncidentsState({
+        order,
         pagination: {
           ...pagination,
           sizeOptions,
         },
         variables,
-        order,
       });
     }
   }, []);
 
   const onPaginationChange = (page: number, pageSize: number) => {
     setIncidentsState({
+      order,
       pagination: {
         ...pagination,
         page,
         pageSize,
       },
       variables,
-      order,
     });
   };
 
@@ -317,118 +317,118 @@ const useSelectIncidents = ({
   };
   const setGroupsFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         groups: values,
       },
-      order,
     });
   };
   const setBusinessesFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         businesses: values,
       },
-      order,
     });
   };
   const setGoodsFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         goods: values,
       },
-      order,
     });
   };
   const setPeculiarities = (value: string) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         peculiarities: value,
       },
-      order,
     });
   };
   const setSearch = (value: string) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         search: value,
       },
-      order,
     });
   };
   const setCrimeTypesFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         crimeTypes: values,
       },
-      order,
     });
   };
   const clearFilters = () => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
-        search: '',
-        crimeTypes: [],
-        groups: [],
         businesses: [],
+        crimeTypes: [],
         goods: [],
+        groups: [],
         peculiarities: '',
+        search: '',
       },
-      order,
     });
   };
 
   return {
-    onSubmit,
-    saving,
-    data: data?.listIncidentsAllSchemes,
-    loading: data?.listIncidentsAllSchemes ? false : loading,
-    search,
-    setSearch,
-    pagination,
-    onPaginationChange,
-    onSelect,
-    clearFilters,
-    setPeculiarities,
-    setGroupsFilter,
     businesses:
       businessesData?.listBusinesses.businesses.map((item) => ({
-        value: item.id,
         label: item.name,
         location: item.locations[0]?.full || '',
-      })) || [],
-    goods:
-      goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
         value: item.id,
-        label: item.name,
       })) || [],
-    setGoodsFilter,
-    setBusinessesFilter,
-    setCrimeTypesFilter,
-    goodsLoading,
     businessesLoading,
-    groups: groupsData,
-    groupsLoading,
-    variables,
+    clearFilters,
     crimeTypes:
       tagsData?.tags?.map((tag) => ({
-        value: tag?.id || '',
         label: tag?.name || '',
+        value: tag?.id || '',
       })) || [],
+    data: data?.listIncidentsAllSchemes,
+    goods:
+      goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
+        label: item.name,
+        value: item.id,
+      })) || [],
+    goodsLoading,
+    groups: groupsData,
+    groupsLoading,
+    loading: data?.listIncidentsAllSchemes ? false : loading,
+    onPaginationChange,
+    onSelect,
+    onSubmit,
+    pagination,
+    saving,
+    search,
+    setBusinessesFilter,
+    setCrimeTypesFilter,
+    setGoodsFilter,
+    setGroupsFilter,
+    setPeculiarities,
+    setSearch,
     tagsLoading,
+    variables,
   };
 };
 

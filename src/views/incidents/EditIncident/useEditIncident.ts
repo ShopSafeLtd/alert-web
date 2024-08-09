@@ -1,30 +1,36 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
-import { useEffect, useState } from 'react';
-
-import { message, Modal, notification, Upload } from 'antd';
-import { useStoreActions, useStoreState } from 'state';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { useApolloClient } from '@apollo/client';
-import { useNavigate } from 'react-router';
-import update from 'immutability-helper';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { UploadChangeParam } from 'antd/lib/upload';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { EditIncidentQuery } from 'graphql/incidents/queries/__generated__/edit-incident.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import type { IncidentUpdateInput } from 'graphql/types';
 import type {
   Image,
   OffenderData as OffenderDataGlobal,
   VehicleData,
 } from 'types/DataType';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
+
 import { useGroupsContext } from '#/context/groups-context';
-import type { EditIncidentQuery } from 'graphql/incidents/queries/edit-incident.generated';
-import { useEditIncidentQuery } from 'graphql/incidents/queries/edit-incident.generated';
-import type { TagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useApolloClient } from '@apollo/client';
+import { Modal, Upload, message, notification } from 'antd';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
+import { useEditIncidentQuery } from 'graphql/incidents/queries/__generated__/edit-incident.generated';
+import { useListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 import {
   TagsDocument,
   useTagsQuery,
-} from 'graphql/tags/queries/tags.generated';
-import type { IncidentUpdateInput } from 'graphql/types';
+} from 'graphql/tags/queries/__generated__/tags.generated';
 import {
   ImagePosition,
   Model,
@@ -33,18 +39,12 @@ import {
   SortOrder,
   TagType,
 } from 'graphql/types';
-import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import { useListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
-import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import type {
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-} from 'graphql/businesses/queries/search-businesses.generated';
-import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
@@ -59,63 +59,63 @@ type Offender = Exclude<
 >['offenders'][0];
 
 interface FormData {
-  subject: string;
-  description: string;
-  date: Date;
-  value?: number;
-  recoveredValue?: number;
-  policeReported?: boolean;
-  policeInvolved?: boolean;
-  policeRef?: string;
-  policeNo?: string;
-  goods: {
-    id: string;
-    goodsType?: string;
-    value?: number;
-    recoveredValue: number;
-  }[];
+  building: string;
   business?: {
     label: React.ReactNode;
     value: string;
   };
-  groups: string[];
-  tagsCrimeTypes: string[];
-  tagsInvolved: string[];
-  tagsImpact: string[];
-  images: [{ id: string; url: string; optimised: string }];
-  building: string;
-  street: string;
-  townCity: string;
   county: string;
+  date: Date;
+  description: string;
+  goods: {
+    goodsType?: string;
+    id: string;
+    recoveredValue: number;
+    value?: number;
+  }[];
+  groups: string[];
+  images: [{ id: string; optimised: string; url: string }];
+  policeInvolved?: boolean;
+  policeNo?: string;
+  policeRef?: string;
+  policeReported?: boolean;
   postcode: string;
+  recoveredValue?: number;
+  street: string;
+  subject: string;
+  tagsCrimeTypes: string[];
+  tagsImpact: string[];
+  tagsInvolved: string[];
+  townCity: string;
+  value?: number;
 }
 
 interface OffenderData extends OffenderDataGlobal {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
   deleted: boolean;
+  edited: boolean;
+  existing: boolean;
+  new: boolean;
 }
 
 export interface EditImage extends Image {
   offenders?: {
     id: string;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
   }[];
 }
 
 interface ImagePayload extends UploadFile {
   offenders?: {
     id: string;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
   }[];
-  optimised?: string | null;
+  optimised?: null | string;
 }
 interface VehicleType extends VehicleData {
-  edited: boolean;
-  new: boolean;
-  existing: boolean;
   deleted: boolean;
+  edited: boolean;
+  existing: boolean;
+  new: boolean;
 }
 
 interface Return {
@@ -127,12 +127,15 @@ interface Return {
     offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
+  crimeTypes: { label: string; value: string }[];
   data: EditIncidentQuery | undefined;
   fileList: EditImage[];
   goodsTypesData: ListGoodsTypesQuery | undefined;
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
   imgChange: UploadProps['onChange'];
+  impactTags: { label: string; value: string }[];
+  involvedTags: { label: string; value: string }[];
   loading: boolean;
   newImage: EditImage | null;
   offenderImgChange: (
@@ -140,12 +143,20 @@ interface Return {
     currentId: string
   ) => void;
   offendersData: OffenderData[];
+  onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onCancelNewImage: () => void;
+  onEditImage: (value: EditImage) => void;
+  onEditOffender: (offender: OffenderDataGlobal) => void;
+  onEditVehicle: (data: VehicleData) => void;
   onReject: () => void;
+  onRemoveOffender: (offenderId: string) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
   onSubmit: (value: FormData) => void;
+  primaryImage: string;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeImage: (uid: string) => void;
@@ -157,23 +168,12 @@ interface Return {
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
   setAssignToImage: (image: ImagePayload) => void;
+  setPrimaryImage: (value: string) => void;
   setSearchOffenders: (value: string) => void;
-  crimeTypes: { value: string; label: string }[];
-  involvedTags: { value: string; label: string }[];
-  impactTags: { value: string; label: string }[];
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
   vehiclesData: VehicleType[];
-  onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
-  onEditOffender: (offender: OffenderDataGlobal) => void;
-  onRemoveOffender: (offenderId: string) => void;
-  onEditImage: (value: EditImage) => void;
-  onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onEditVehicle: (data: VehicleData) => void;
-  onRemoveVehicle: (vehicleId: string) => void;
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
 }
 
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
@@ -223,12 +223,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   // Query
   const { data: incidentData, loading } = useEditIncidentQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: incidentId,
-      },
-    },
-
     onCompleted: ({ incident }) => {
       if (incident?.offenders && incident.offenders.length > 0) {
         setOffendersData(
@@ -245,8 +239,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         setVehiclesData(
           incident.vehicles.map((item) => ({
             ...item,
-            edited: false,
             deleted: false,
+            edited: false,
             existing: false,
             new: false,
           }))
@@ -256,18 +250,18 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       if (incident?.images && incident.images.length > 0) {
         setFileList(
           incident?.images.map((image) => ({
-            uid: `${image.id}`,
-            name: `${image.id}.png`,
-            status: 'done',
-            url: `${image.optimised || ''}`,
-            optimised: `${image.optimised || ''}`,
-            offenders: image.offenders,
             edited: false,
+            name: `${image.id}.png`,
+            new: false,
+            offenders: image.offenders,
+            optimised: `${image.optimised || ''}`,
+            policeImage: image.policeImage || false,
             position: image.position,
             primary: image.primary || false,
-            policeImage: image.policeImage || false,
             rotation: image.rotation || 0,
-            new: false,
+            status: 'done',
+            uid: `${image.id}`,
+            url: `${image.optimised || ''}`,
           }))
         );
         const findPrimaryImage = incident?.images.find(
@@ -276,6 +270,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         if (findPrimaryImage) setPrimaryImage(findPrimaryImage);
       }
     },
+
+    variables: {
+      where: {
+        id: incidentId,
+      },
+    },
   });
 
   const { groups, groupsLoading } = useGroupsContext();
@@ -283,12 +283,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   useEffect(() => {
     if (groups)
       setIncidentsState({
+        order,
         pagination,
         variables: {
           ...variables,
           groups: groups.map((group) => group.value),
         },
-        order,
       });
   }, [groups]);
 
@@ -296,15 +296,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
+        dataType: {
+          equals: Model.Incident,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Incident,
         },
       },
     },
@@ -317,11 +317,11 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({
       variables: {
-        scheme: {
-          id: schemeId,
-        },
         order: {
           updatedAt: SortOrder.Desc,
+        },
+        scheme: {
+          id: schemeId,
         },
         take: 20,
         where:
@@ -346,10 +346,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       query: TagsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
           dataType: {
             equals: Model.Incident,
           },
+          scheme: { id: { equals: schemeId } },
         },
       },
     });
@@ -357,17 +357,17 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     if (existingData === null) return;
 
     store.writeQuery<TagsQuery>({
-      query: TagsDocument,
       data: {
-        tags: [...existingData.tags, res.createTag],
         __typename: 'Query',
+        tags: [...existingData.tags, res.createTag],
       },
+      query: TagsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
           dataType: {
             equals: Model.Incident,
           },
+          scheme: { id: { equals: schemeId } },
         },
       },
     });
@@ -377,9 +377,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: reviewed
           ? intl.formatMessage({
               defaultMessage: 'The Incident has been approved!',
@@ -387,6 +384,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           : intl.formatMessage({
               defaultMessage: 'The Incident has been updated!',
             }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+        }),
         placement: 'bottomRight',
       });
       navigate(`/app/incidents/view/${incidentId}`);
@@ -402,12 +402,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     onCompleted: () => {
       navigate('/app/incidents');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Rejected!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The incident has been deleted from the feed and moved to the recycle bin.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Rejected!',
         }),
         placement: 'bottomRight',
       });
@@ -418,9 +418,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   });
   const onReject = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -433,6 +430,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           },
         });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
@@ -454,23 +454,23 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     if (info.file.response) {
       setNewImage({
         ...info.file,
-        url: info.file.response[0].url,
-        fileName: info.file.response[0].blobName,
-        type: info.file.response[0].mimetype,
         edited: false,
-        position: ImagePosition.CenterCenter,
+        fileName: info.file.response[0].blobName,
         new: true,
+        position: ImagePosition.CenterCenter,
+        type: info.file.response[0].mimetype,
+        url: info.file.response[0].url,
       });
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
-          fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
           edited: false,
-          position: ImagePosition.CenterCenter,
+          fileName: info.file.response[0].blobName,
           new: true,
+          position: ImagePosition.CenterCenter,
+          type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
@@ -519,20 +519,20 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       setFileList([
         ...fileList,
         ...offender.images.map((image) => ({
-          uid: image.id || '',
+          edited: false,
           name: image.fileName || '',
-          type: image.type || '',
-          url: image.url || '',
-          optimised: image.optimised,
+          new: true,
           offenders: [
             {
               id: offender.id,
               name: offender.name,
             },
           ],
-          edited: false,
+          optimised: image.optimised,
           position: ImagePosition.CenterCenter,
-          new: true,
+          type: image.type || '',
+          uid: image.id || '',
+          url: image.url || '',
         })),
       ]);
     }
@@ -578,8 +578,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             [index]: {
               $set: {
                 ...existingOffender,
-                edited: false,
                 deleted: true,
+                edited: false,
               },
             },
           })
@@ -593,10 +593,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       ...vehiclesData,
       {
         ...vehicle,
-        new: !existing,
-        existing,
         deleted: false,
         edited: false,
+        existing,
+        new: !existing,
       },
     ]);
   };
@@ -673,7 +673,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         .map(({ id }) => id)
         .indexOf(data.offenderId);
       const offender = offendersData.find(({ id }) => data.offenderId === id);
-      if (offender && offender.images)
+      if (offender?.images)
         setOffendersData(
           update(offendersData, {
             [offenderIndex]: {
@@ -763,11 +763,11 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         assignOffendersToImages({
           image: {
             ...info.file,
-            url: info.file.response[0].url,
             fileName: info.file.response[0].blobName,
+            offenders: [currentOffender],
             type: info.file.response[0].mimetype,
             uid: info.file.uid,
-            offenders: [currentOffender],
+            url: info.file.response[0].url,
           },
           offenders: [currentOffender].map((offender) => {
             let images: OffenderData['images'] = [];
@@ -777,12 +777,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               images: [
                 ...images,
                 {
+                  fileName: info.file.response[0].blobName,
                   id: info.file.uid,
                   new: true,
                   optimised: info.file.response[0].url,
-                  url: info.file.response[0].url,
-                  fileName: info.file.response[0].blobName,
                   type: info.file.response[0].mimetype,
+                  url: info.file.response[0].url,
                 },
               ],
             };
@@ -794,12 +794,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.fileList[0].url,
-          fileName: info.fileList[0].fileName,
-          type: info.fileList[0].type,
           edited: false,
-          position: ImagePosition.CenterCenter,
+          fileName: info.fileList[0].fileName,
           new: true,
+          position: ImagePosition.CenterCenter,
+          type: info.fileList[0].type,
+          url: info.fileList[0].url,
         },
       ]);
     }
@@ -822,24 +822,19 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           create:
             newOffenders.length > 0
               ? newOffenders.map((offender) => ({
-                  name: offender.name,
-                  gender: offender.gender || null,
-                  race: offender.race || null,
-                  build: offender.build || null,
-                  height: offender.height || null,
-                  hair: offender.hair || null,
-                  peculiarities: offender.peculiarities || null,
-                  comment: offender.comment || null,
                   age: offender.age || null,
-                  dateSource: offender.dateSource || null,
+                  build: offender.build || null,
+                  comment: offender.comment || null,
+                  createdBy: { connect: { id: userId } },
                   dateOfBirth: offender.dateOfBirth || null,
+                  dateSource: offender.dateSource || null,
+                  gender: offender.gender || null,
                   groups:
                     data.groups.length > 0
                       ? { connect: data.groups.map((id) => ({ id })) }
                       : undefined,
-                  scheme: { connect: { id: schemeId } },
-                  createdBy: { connect: { id: userId } },
-                  localId: offender.id,
+                  hair: offender.hair || null,
+                  height: offender.height || null,
                   images:
                     offender?.images &&
                     offender.images.length > 0 &&
@@ -853,6 +848,11 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                               })) || [],
                         }
                       : undefined,
+                  localId: offender.id,
+                  name: offender.name,
+                  peculiarities: offender.peculiarities || null,
+                  race: offender.race || null,
+                  scheme: { connect: { id: schemeId } },
                 }))
               : undefined,
           disconnect:
@@ -877,51 +877,13 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             existingVehicles.length > 0
               ? existingVehicles.map(({ id }) => ({ id }))
               : undefined,
-          disconnect:
-            removeVehicles && removeVehicles.length > 0
-              ? removeVehicles.map(({ id }) => ({ id }))
-              : undefined,
-          update: editedVehicles.map((vehicle) => ({
-            where: { id: vehicle.id },
-            data: {
-              make: { set: vehicle.make },
-              model: { set: vehicle.model },
-              colour: { set: vehicle.colour },
-              registration: { set: vehicle.registration },
-              crimeGroup:
-                vehicle.crimeGroup && vehicle.crimeGroup.length > 0
-                  ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                  : undefined,
-              incidents: vehicle.incidents
-                ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                : undefined,
-              offenders:
-                vehicle.offenders && vehicle.offenders.length > 0
-                  ? { connect: vehicle.offenders.map((id) => ({ id })) }
-                  : undefined,
-              groups: {
-                connect:
-                  groups && groups.length === 1
-                    ? groups.map(({ value: id }) => ({ id }))
-                    : data.groups.map((id) => ({ id })),
-              },
-            },
-          })),
-
           create:
             newVehicles.length > 0
               ? newVehicles.map((vehicle) => ({
-                  make: vehicle.make,
-                  model: vehicle.model,
                   colour: vehicle.colour,
-                  registration: vehicle.registration,
                   crimeGroup:
                     vehicle.crimeGroup && vehicle.crimeGroup.length > 0
                       ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                      : undefined,
-                  offenders:
-                    vehicle.offenders && vehicle.offenders.length > 0
-                      ? { connect: vehicle.offenders.map((id) => ({ id })) }
                       : undefined,
                   groups: {
                     connect:
@@ -929,8 +891,46 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                         ? groups.map(({ value: id }) => ({ id }))
                         : data.groups.map((id) => ({ id })),
                   },
+                  make: vehicle.make,
+                  model: vehicle.model,
+                  offenders:
+                    vehicle.offenders && vehicle.offenders.length > 0
+                      ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                      : undefined,
+                  registration: vehicle.registration,
                 }))
               : undefined,
+          disconnect:
+            removeVehicles && removeVehicles.length > 0
+              ? removeVehicles.map(({ id }) => ({ id }))
+              : undefined,
+
+          update: editedVehicles.map((vehicle) => ({
+            data: {
+              colour: { set: vehicle.colour },
+              crimeGroup:
+                vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                  ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                  : undefined,
+              groups: {
+                connect:
+                  groups && groups.length === 1
+                    ? groups.map(({ value: id }) => ({ id }))
+                    : data.groups.map((id) => ({ id })),
+              },
+              incidents: vehicle.incidents
+                ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                : undefined,
+              make: { set: vehicle.make },
+              model: { set: vehicle.model },
+              offenders:
+                vehicle.offenders && vehicle.offenders.length > 0
+                  ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                  : undefined,
+              registration: { set: vehicle.registration },
+            },
+            where: { id: vehicle.id },
+          })),
         };
       };
       const getImages = (): IncidentUpdateInput['images'] => {
@@ -939,23 +939,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         );
 
         return {
-          upload:
-            imageChange && fileList.length > 0
-              ? fileList
-                  .filter((item) => !item.optimised)
-                  .map((item) => ({
-                    url: {
-                      filename: item.fileName || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                    position: item.position,
-                    primary: item.uid === primaryImage,
-                    policeImage: item.policeImage,
-                    rotation: item.rotation || 0,
-                  }))
-                  .filter((obj) => obj.url !== undefined)
-              : undefined,
           disconnect: incidentData?.incident?.images
             .filter(
               (image) => !fileList.map((item) => item.uid).includes(image.id)
@@ -967,9 +950,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             editedImages.length > 0
               ? editedImages.map((item) => ({
                   data: {
+                    policeImage: { set: item.policeImage },
                     position: { set: item.position },
                     primary: { set: item.uid === primaryImage },
-                    policeImage: { set: item.policeImage },
                     rotation: { set: item.rotation },
                   },
                   where: {
@@ -977,46 +960,30 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   },
                 }))
               : undefined,
+          upload:
+            imageChange && fileList.length > 0
+              ? fileList
+                  .filter((item) => !item.optimised)
+                  .map((item) => ({
+                    policeImage: item.policeImage,
+                    position: item.position,
+                    primary: item.uid === primaryImage,
+                    rotation: item.rotation || 0,
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                  }))
+                  .filter((obj) => obj.url !== undefined)
+              : undefined,
         };
       };
 
       void updateIncident({
         variables: {
-          where: {
-            id: incidentId,
-          },
           data: {
             approved: { set: true },
-            subject: { set: data.subject },
-            description: { set: data.description },
-            date: { set: data.date },
-            time: { set: data.date },
-            value: { set: data.value || 0 },
-            recoveredValue: { set: data.recoveredValue || 0 },
-            policeInvolved: { set: data.policeInvolved },
-            policeRef: { set: data.policeRef },
-            policeNo: { set: data.policeNo },
-            policeReported: { set: data.policeReported },
-            location: {
-              upsert: {
-                update: {
-                  premises: { set: '' },
-                  building: { set: data.building || '' },
-                  street: { set: data.street || '' },
-                  townCity: { set: data.townCity || '' },
-                  county: { set: data.county || '' },
-                  postcode: { set: data.postcode || '' },
-                },
-                create: {
-                  premises: '',
-                  building: data.building || '',
-                  street: data.street || '',
-                  townCity: data.townCity || '',
-                  county: data.county || '',
-                  postcode: data.postcode || '',
-                },
-              },
-            },
             business: {
               connect: data.business?.value
                 ? {
@@ -1032,6 +999,19 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   ? true
                   : undefined,
             },
+            crimeTypes: {
+              set: [
+                ...data.tagsCrimeTypes.map((id) => ({ id })),
+                ...data.tagsImpact.map((id) => ({ id })),
+                ...data.tagsInvolved.map((id) => ({ id })),
+              ],
+            },
+            date: { set: data.date },
+            description: { set: data.description },
+            groups: {
+              set: data.groups.map((id) => ({ id })),
+            },
+            images: getImages(),
             incidentItems:
               data.goods?.length > 0
                 ? {
@@ -1048,8 +1028,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                             goodsTypesData?.listGoodsTypes.goodsTypes.find(
                               ({ id }) => id === item.goodsType
                             )?.name || '',
-                          value: item.value || 0,
                           recoveredValue: item.recoveredValue || 0,
+                          value: item.value || 0,
                         })) || undefined,
                     update:
                       data.goods
@@ -1067,46 +1047,66 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                                   ({ id }) => id === item.goodsType
                                 )?.name || '',
                             },
-                            value: { set: item.value || 0 },
                             recoveredValue: { set: item.recoveredValue || 0 },
+                            value: { set: item.value || 0 },
                           },
                           where: { id: item.id },
                         })) || undefined,
                   }
                 : undefined,
-            groups: {
-              set: data.groups.map((id) => ({ id })),
-            },
-            crimeTypes: {
-              set: [
-                ...data.tagsCrimeTypes.map((id) => ({ id })),
-                ...data.tagsImpact.map((id) => ({ id })),
-                ...data.tagsInvolved.map((id) => ({ id })),
-              ],
+            location: {
+              upsert: {
+                create: {
+                  building: data.building || '',
+                  county: data.county || '',
+                  postcode: data.postcode || '',
+                  premises: '',
+                  street: data.street || '',
+                  townCity: data.townCity || '',
+                },
+                update: {
+                  building: { set: data.building || '' },
+                  county: { set: data.county || '' },
+                  postcode: { set: data.postcode || '' },
+                  premises: { set: '' },
+                  street: { set: data.street || '' },
+                  townCity: { set: data.townCity || '' },
+                },
+              },
             },
             offenders: getOffenders(),
+            policeInvolved: { set: data.policeInvolved },
+            policeNo: { set: data.policeNo },
+            policeRef: { set: data.policeRef },
+            policeReported: { set: data.policeReported },
+            recoveredValue: { set: data.recoveredValue || 0 },
+            subject: { set: data.subject },
+            time: { set: data.date },
+            value: { set: data.value || 0 },
             vehicles: getVehicles(),
-            images: getImages(),
+          },
+          where: {
+            id: incidentId,
           },
         },
       });
     } else {
       confirm({
-        title: intl.formatMessage({
-          defaultMessage: 'No Offenders',
+        cancelText: intl.formatMessage({
+          defaultMessage: 'Find Offenders',
         }),
         content: intl.formatMessage({
           defaultMessage:
             'Please select or add at least one offender for the incident.',
         }),
-        cancelText: intl.formatMessage({
-          defaultMessage: 'Find Offenders',
-        }),
-        onCancel: toggleAddExistingOffender,
         okText: intl.formatMessage({
           defaultMessage: 'Add New Offender',
         }),
+        onCancel: toggleAddExistingOffender,
         onOk: toggleAddOffender,
+        title: intl.formatMessage({
+          defaultMessage: 'No Offenders',
+        }),
       });
       setSaving(false);
     }
@@ -1119,9 +1119,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const setAssignToImage = (image: ImagePayload) => {
     setNewImage({
       ...image,
-      position: ImagePosition.CenterCenter,
       edited: false,
       new: false,
+      position: ImagePosition.CenterCenter,
     });
   };
 
@@ -1152,16 +1152,16 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
-              value: item?.id || '',
               location: item?.locations[0].full || '',
+              value: item?.id || '',
             }))
           : [
               {
+                disabled: true,
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
                 }),
                 value: '',
-                disabled: true,
               },
             ]
       );
@@ -1173,20 +1173,40 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     adminRights: role !== Role.User,
     assignOffendersToImages,
     beforeUpload,
+    crimeTypes:
+      tagsData?.tags
+        .filter((item) => item.type === TagType.IncidentCrimeType)
+        .map((tag) => ({ label: tag.name, value: tag.id })) || [],
     data: incidentData,
     fileList,
     goodsTypesData,
     groups,
     groupsLoading,
     imgChange,
+    impactTags:
+      tagsData?.tags
+        .filter((item) => item.type === TagType.IncidentImpact)
+        .map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    involvedTags:
+      tagsData?.tags
+        .filter((item) => item.type === TagType.IncidentInvolved)
+        .map((tag) => ({ label: tag.name, value: tag.id })) || [],
     loading,
     newImage,
     offenderImgChange,
     offendersData: offendersData.filter((item) => !item.deleted),
+    onAddOffender,
+    onAddVehicle,
     onCancelNewImage,
+    onEditImage,
+    onEditOffender,
+    onEditVehicle,
     onReject,
+    onRemoveOffender,
+    onRemoveVehicle,
     onSearchBusiness,
     onSubmit,
+    primaryImage,
     recentOffenderData,
     recentOffenderLoading,
     removeImage,
@@ -1195,32 +1215,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     searchOffenders,
     setAddRecentOffender,
     setAssignToImage,
+    setPrimaryImage,
     setSearchOffenders,
-    crimeTypes:
-      tagsData?.tags
-        .filter((item) => item.type === TagType.IncidentCrimeType)
-        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    impactTags:
-      tagsData?.tags
-        .filter((item) => item.type === TagType.IncidentImpact)
-        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    involvedTags:
-      tagsData?.tags
-        .filter((item) => item.type === TagType.IncidentInvolved)
-        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
     vehiclesData: vehiclesData.filter((item) => !item.deleted),
-    onAddOffender,
-    onEditOffender,
-    onRemoveOffender,
-    onEditImage,
-    onAddVehicle,
-    onEditVehicle,
-    onRemoveVehicle,
-    primaryImage,
-    setPrimaryImage,
   };
 };
 

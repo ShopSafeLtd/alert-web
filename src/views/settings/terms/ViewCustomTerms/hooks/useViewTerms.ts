@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router';
-import type { ReturnProps } from '../types/ViewCustomTerms';
 import { useStoreState } from '#/state';
-import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/current-terms.generated';
+import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 import { Role } from 'graphql/types';
+import { useNavigate } from 'react-router';
+
+import type { ReturnProps } from '../types/ViewCustomTerms';
 
 const useViewTerms = (): ReturnProps => {
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -21,9 +22,9 @@ const useViewTerms = (): ReturnProps => {
   };
   return {
     data,
-    loading,
-    isAdmin,
     editTerms,
+    isAdmin,
+    loading,
   };
 };
 

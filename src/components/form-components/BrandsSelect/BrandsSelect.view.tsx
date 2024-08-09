@@ -1,37 +1,37 @@
-import React from 'react';
-
-import { Select } from 'antd';
-import { useStoreState } from 'state';
+import type { BrandsQueryVariables } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
-import type { BrandsQueryVariables } from '#/views/settings/brands/graphql/queries/brands.generated';
-import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/brands.generated';
+
+import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
+import { Select } from 'antd';
 import { SortOrder } from 'graphql/types';
+import React from 'react';
+import { useStoreState } from 'state';
 
 interface Props {
-  value?: string[];
-  onChange?: (value: string[]) => void;
-  mode?: 'multiple' | 'tags';
-  style?: React.CSSProperties;
   allowClear?: boolean;
-  placeholder?: string;
   className?: string;
-  size?: SizeType;
-  maxTagCount?: number | 'responsive';
+  maxTagCount?: 'responsive' | number;
+  mode?: 'multiple' | 'tags';
+  onChange?: (value: string[]) => void;
+  placeholder?: string;
   queryVars?: BrandsQueryVariables;
+  size?: SizeType;
+  style?: React.CSSProperties;
+  value?: string[];
 }
 
-const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
-  onChange,
-  value,
-  mode,
-  style,
-  size,
-  className,
-  placeholder,
+const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   allowClear,
+  className,
   maxTagCount,
+  mode,
+  onChange,
+  placeholder,
   queryVars,
+  size,
+  style,
+  value,
   ...props
 }) => {
   const currentSchemeId = useStoreState((state) => state.scheme.id);
@@ -53,24 +53,24 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
 
   return (
     <Select
-      value={value}
-      onChange={onChange}
+      allowClear={allowClear}
+      className={className}
+      disabled={loading}
+      loading={loading}
+      maxTagCount={maxTagCount}
       mode={mode}
+      onChange={onChange}
+      optionFilterProp="label"
       options={
         data?.brands.edges.map(({ node: brand }) => ({
-          value: brand.id,
           label: brand.name,
+          value: brand.id,
         })) || []
       }
-      loading={loading}
-      disabled={loading}
-      style={style}
-      size={size}
-      className={className}
       placeholder={placeholder}
-      allowClear={allowClear}
-      maxTagCount={maxTagCount}
-      optionFilterProp="label"
+      size={size}
+      style={style}
+      value={value}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     />

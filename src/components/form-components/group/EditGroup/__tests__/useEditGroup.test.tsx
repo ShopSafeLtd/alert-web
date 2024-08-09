@@ -6,10 +6,11 @@ import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 
 import useEditGroup from '../useEditGroup';
-import { UpdateGroupDocument } from 'graphql/group/mutation/update_group.generated';
-import { GroupDocument } from 'graphql/group/queries/group.generated';
-import { ListSchemeUsersDocument } from 'graphql/users/queries/list-scheme-users.generated';
+
 import { SortOrder } from 'graphql/types';
+import { UpdateGroupDocument } from 'graphql/group/mutation/__generated__/update_group.generated';
+import { GroupDocument } from 'graphql/group/queries/__generated__/group.generated';
+import { ListSchemeUsersDocument } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
 const mocks = [
   {

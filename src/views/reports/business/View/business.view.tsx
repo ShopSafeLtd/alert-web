@@ -1,4 +1,8 @@
-import React from 'react';
+import type { BusinessReportQuery } from 'graphql/businesses/queries/__generated__/business-report.generated';
+import type { Moment } from 'moment';
+
+import { faDownload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -11,34 +15,31 @@ import {
   Tag,
   Typography,
 } from 'antd';
-
-import type { Moment } from 'moment';
-import moment from 'moment';
 import BusinessSideList from 'components/businesses/BusinessSideList';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/pro-light-svg-icons';
+import moment from 'moment';
+import React from 'react';
 // eslint-disable-next-line import/default
 import Chart from 'react-apexcharts';
 import { FormattedMessage, useIntl } from 'react-intl';
+
 import useStyles from './business.styles';
-import type { BusinessReportQuery } from 'graphql/businesses/queries/business-report.generated';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
 interface Props {
   data: BusinessReportQuery | undefined;
+  dateRange: Moment[];
   loading: boolean;
   selectedBusiness: string | undefined;
-  dateRange: Moment[];
   setDateRange: (values: Moment[]) => void;
 }
 
 const Business = ({
   data,
+  dateRange,
   loading,
   selectedBusiness,
-  dateRange,
   setDateRange,
 }: Props) => {
   const classes = useStyles();
@@ -47,13 +48,13 @@ const Business = ({
     <Row wrap={false}>
       <Col>
         <BusinessSideList
-          to="/app/reports/business/"
           current={selectedBusiness || ''}
+          to="/app/reports/business/"
         />
       </Col>
       <Col flex={1}>
         <div className={classes.page}>
-          <Row gutter={32} align="middle" className={classes.actionBar}>
+          <Row align="middle" className={classes.actionBar} gutter={32}>
             <Col>
               <Title className={classes.title} level={3}>
                 {data?.business?.name}
@@ -61,13 +62,13 @@ const Business = ({
             </Col>
             <Col flex={1}>
               {/* @ts-expect-error date value */}
-              <RangePicker value={dateRange} onChange={setDateRange} />
+              <RangePicker onChange={setDateRange} value={dateRange} />
             </Col>
             <Col>
               <Button type="primary">
                 <FontAwesomeIcon
-                  icon={faDownload}
                   className={classes.buttonIcon}
+                  icon={faDownload}
                 />
                 {intl.formatMessage({
                   defaultMessage: 'Download Report',
@@ -86,10 +87,10 @@ const Business = ({
                   <Card>
                     <Statistic
                       prefix="£"
-                      value={data?.business?.valueStats?.totalLostValue || 0}
                       title={intl.formatMessage({
                         defaultMessage: 'Total Lost Value',
                       })}
+                      value={data?.business?.valueStats?.totalLostValue || 0}
                     />
                   </Card>
                 </Col>
@@ -97,47 +98,47 @@ const Business = ({
                   <Card>
                     <Statistic
                       prefix="£"
-                      value={
-                        data?.business?.valueStats?.totalRecoveredValue || 0
-                      }
                       title={intl.formatMessage({
                         defaultMessage: 'Total Recovered Value',
                       })}
+                      value={
+                        data?.business?.valueStats?.totalRecoveredValue || 0
+                      }
                     />
                   </Card>
                 </Col>
                 <Col>
                   <Card>
                     <Statistic
-                      value={
-                        data?.business?.valueStats?.successRate?.toFixed(2) || 0
-                      }
                       suffix="%"
                       title={intl.formatMessage({
                         defaultMessage: 'Loss Rate',
                       })}
+                      value={
+                        data?.business?.valueStats?.successRate?.toFixed(2) || 0
+                      }
                     />
                   </Card>
                 </Col>
                 <Col>
                   <Card>
                     <Statistic
-                      value={data?.business?.valueStats?.totalLostValue || 0}
                       prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Avg Lost Value',
                       })}
+                      value={data?.business?.valueStats?.totalLostValue || 0}
                     />
                   </Card>
                 </Col>
                 <Col>
                   <Card>
                     <Statistic
-                      value={data?.business?.valueStats?.avgRecoveredValue || 0}
                       prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Avg Recovered Value',
                       })}
+                      value={data?.business?.valueStats?.avgRecoveredValue || 0}
                     />
                   </Card>
                 </Col>
@@ -149,6 +150,7 @@ const Business = ({
                       <FormattedMessage defaultMessage="Goods Types By Value Lost" />
                     </Title>
                     <Chart
+                      height="200"
                       options={{
                         chart: {
                           id: 'business-goods-donut',
@@ -169,7 +171,6 @@ const Business = ({
                       }
                       type="donut"
                       width="95%"
-                      height="200"
                     />
                   </Card>
                 </Col>
@@ -181,43 +182,43 @@ const Business = ({
                 <Table
                   columns={[
                     {
-                      key: 'name',
                       dataIndex: 'name',
+                      key: 'name',
                       title: intl.formatMessage({
                         defaultMessage: 'Name',
                       }),
                     },
                     {
-                      key: 'lost',
                       dataIndex: 'lost',
+                      key: 'lost',
+                      render: (value: number) => `£${value.toFixed(2)}`,
                       title: intl.formatMessage({
                         defaultMessage: 'Total Lost',
                       }),
-                      render: (value: number) => `£${value.toFixed(2)}`,
                     },
                     {
-                      key: 'recovered',
                       dataIndex: 'recovered',
+                      key: 'recovered',
+                      render: (value: number) => `£${value.toFixed(2)}`,
                       title: intl.formatMessage({
                         defaultMessage: 'Total Recovered',
                       }),
-                      render: (value: number) => `£${value.toFixed(2)}`,
                     },
                     {
-                      key: 'successRate',
                       dataIndex: 'successRate',
+                      key: 'successRate',
+                      render: (value: number) => `${value.toFixed(0)}%`,
                       title: intl.formatMessage({
                         defaultMessage: 'Loss Rate',
                       }),
-                      render: (value: number) => `${value.toFixed(0)}%`,
                     },
                     {
-                      key: 'avgLost',
                       dataIndex: 'avgLost',
+                      key: 'avgLost',
+                      render: (value: number) => `£${value.toFixed(2)}`,
                       title: intl.formatMessage({
                         defaultMessage: 'Avg Lost',
                       }),
-                      render: (value: number) => `£${value.toFixed(2)}`,
                     },
                   ]}
                   dataSource={data?.business?.goodsTypesTotals
@@ -230,14 +231,14 @@ const Business = ({
                         type.totalRecoveredValue
                     )
                     .map((type) => ({
-                      key: type.goodsType?.id,
-                      name: type.goodsType?.name,
-                      lost: type.totalLostValue || 0,
-                      recovered: type.totalRecoveredValue || 0,
-                      successRate: type.successRate || 0,
-                      incidents: type.count || 0,
                       avgLost: type.avgLostValue || 0,
                       avgRecovered: type.avgRecoveredValue || 0,
+                      incidents: type.count || 0,
+                      key: type.goodsType?.id,
+                      lost: type.totalLostValue || 0,
+                      name: type.goodsType?.name,
+                      recovered: type.totalRecoveredValue || 0,
+                      successRate: type.successRate || 0,
                     }))}
                   size="small"
                 />
@@ -251,49 +252,46 @@ const Business = ({
                 <Table
                   columns={[
                     {
-                      key: 'reference',
                       dataIndex: 'reference',
+                      key: 'reference',
                       title: intl.formatMessage({
                         defaultMessage: 'Alert ID',
                       }),
                     },
                     {
-                      key: 'date',
                       dataIndex: 'date',
+                      key: 'date',
+                      render: (value: Date) => moment(value).format('DD/MM/YY'),
                       title: intl.formatMessage({
                         defaultMessage: 'Date',
                       }),
-                      render: (value: Date) => moment(value).format('DD/MM/YY'),
                     },
                     {
-                      key: 'value',
                       dataIndex: 'value',
+                      key: 'value',
+                      render: (value: number) => `£${value}`,
                       title: intl.formatMessage({
                         defaultMessage: 'Value',
                       }),
-                      render: (value: number) => `£${value}`,
                     },
                     {
-                      key: 'recoveredValue',
                       dataIndex: 'recoveredValue',
+                      key: 'recoveredValue',
+                      render: (value: number) => `£${value}`,
                       title: intl.formatMessage({
                         defaultMessage: 'Recovered Value',
                       }),
-                      render: (value: number) => `£${value}`,
                     },
                     {
-                      key: 'createdBy',
                       dataIndex: 'createdBy',
+                      key: 'createdBy',
                       title: intl.formatMessage({
                         defaultMessage: 'Created By',
                       }),
                     },
                     {
-                      key: 'crimeTypes',
                       dataIndex: 'crimeTypes',
-                      title: intl.formatMessage({
-                        defaultMessage: 'Types',
-                      }),
+                      key: 'crimeTypes',
                       render: (value: { id: string; name: string }[]) =>
                         value.map(
                           // eslint-disable-next-line
@@ -301,16 +299,19 @@ const Business = ({
                             <Tag key={id}>{name}</Tag>
                           )
                         ),
+                      title: intl.formatMessage({
+                        defaultMessage: 'Types',
+                      }),
                     },
                   ]}
                   dataSource={data?.business?.incidents.map((incident) => ({
-                    key: incident.id,
-                    reference: incident.reference,
-                    date: incident.date,
-                    crimeTypes: incident.crimeTypes,
-                    value: incident.totalValue || 0,
-                    recoveredValue: incident.totalRecoveredValue || 0,
                     createdBy: incident.createdBy.businesses[0]?.name,
+                    crimeTypes: incident.crimeTypes,
+                    date: incident.date,
+                    key: incident.id,
+                    recoveredValue: incident.totalRecoveredValue || 0,
+                    reference: incident.reference,
+                    value: incident.totalValue || 0,
                   }))}
                   size="small"
                 />

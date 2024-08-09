@@ -2,42 +2,44 @@ import { Col, Row } from 'antd';
 import { Role } from 'graphql/types';
 import React, { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
+
 import CheckTag from '../check-tag/CheckTag.view';
 import CheckTagsLoading from './CheckTagsLoading.view';
 
 export type Mode = 'check' | 'radio';
 
 interface Option {
-  label: string;
-  value: string;
-  tooltip?: string | null;
-  needAdminRight?: boolean;
   hasChildren?: boolean;
-  parentId?: string | null;
+  label: string;
+  needAdminRight?: boolean;
+  parentId?: null | string;
   parents?: string[];
   tier?: number;
+  tooltip?: null | string;
+  value: string;
 }
 
 interface Props {
-  value?: string[];
+  disabled?: boolean;
+  loading?: boolean;
+  mode?: Mode;
+  noGutter?: boolean;
   onChange?: (value: string[]) => void;
   options: Option[];
-  mode?: Mode;
-  loading?: boolean;
-  disabled?: boolean;
-  noGutter?: boolean;
+  value?: string[];
 }
 
 const CheckTags = ({
+  disabled = false,
+  loading = false,
+  mode: modeProp,
+  noGutter,
   onChange: onChangeProp = () => {},
   options = [],
   value: valueProp = [],
-  mode: modeProp,
-  loading = false,
-  disabled = false,
-  noGutter,
 }: Props) => {
   // Global State
+  // TODO change to new role methods
   const role = useStoreState((state) => state.user.role);
   // Local State
   const [pristine, setPristine] = useState<boolean>(true);
@@ -152,16 +154,16 @@ const CheckTags = ({
               <Col key={option.value}>
                 {mode === 'check' && (
                   <CheckTag
-                    option={option}
                     active={checkValues.includes(option.value)}
                     onClick={toggleCheckOption}
+                    option={option}
                   />
                 )}
                 {mode === 'radio' && (
                   <CheckTag
-                    option={option}
                     active={primaryValue?.value === option.value}
                     onClick={setPrimary}
+                    option={option}
                   />
                 )}
               </Col>
@@ -178,9 +180,9 @@ const CheckTags = ({
               !option.needAdminRight || adminRights ? (
                 <Col key={option.value}>
                   <CheckTag
-                    option={option}
                     active={secondaryValue?.value === option.value}
                     onClick={setSecondary}
+                    option={option}
                   />
                 </Col>
               ) : (
@@ -197,9 +199,9 @@ const CheckTags = ({
               !option.needAdminRight || adminRights ? (
                 <Col key={option.value}>
                   <CheckTag
-                    option={option}
                     active={tertiaryValue?.value === option.value}
                     onClick={setTertiary}
+                    option={option}
                   />
                 </Col>
               ) : (

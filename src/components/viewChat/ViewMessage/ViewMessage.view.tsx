@@ -60,10 +60,10 @@ import { useIntl } from 'react-intl';
 import LinkArticle from 'components/form-components/linkOptions/LinkArticle';
 import Content from '../Message/Message.view';
 import customRequest from '../../../utils/custom-request';
-import type { ChatMessagesQuery } from 'graphql/messages/queries/chat-messages.generated';
-import type { ChatQuery } from 'graphql/chat/queries/chat.generated';
 import type { Age, Build, Gender, Race } from 'graphql/types';
 import { MessageItemType } from 'graphql/types';
+import { ChatMessagesQuery } from 'graphql/messages/queries/__generated__/chat-messages.generated';
+import { ChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
 
 const { Option, getMentions } = Mentions;
 const { Text } = Typography;

@@ -1,5 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React from 'react';
+import type { DocumentsQuery } from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { TableProps } from 'antd';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+
+import AddDocument from '#/components/form-components/documents/AddDocument';
+import {
+  faFileArrowDown,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -11,72 +22,57 @@ import {
   Tag,
   Tooltip,
 } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faFileArrowDown,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { MutationUpdaterFn } from '@apollo/client';
 import { Link } from 'react-router-dom';
-import AddDocument from '#/components/form-components/documents/AddDocument';
+
 import useStyles from '../EvidenceList/ListEvidence.styles';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
+
+interface TableItem {
+  fileUrl: string;
+  key: string;
+  name: string;
+  tags: { id: string; name: string }[];
+}
 
 interface Props {
-  data:
-    | {
-        node: {
-          id: string;
-          name: string;
-          url: string;
-          description?: string | null;
-          fileType?: string | null;
-          tags: Array<{
-            __typename?: 'Tag';
-            id: string;
-            name: string;
-          }>;
-        };
-      }[]
-    | null
-    | undefined;
+  addEvidence: boolean;
+  createRights: boolean;
+  data: DocumentsQuery | null | undefined;
+  deleteRights: boolean;
+  downloadRights: boolean;
   loading: boolean;
+  onDelete: (value: string) => void;
+  onTableChange: TableProps<TableItem>['onChange'];
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addEvidence: boolean;
   toggleAddEvidence: () => void;
-  saving: boolean;
-  onDelete: (value: string) => void;
   updateNewEvidenceList: MutationUpdaterFn<CreateDocumentMutation>;
-  deleteRights: boolean;
-  createRights: boolean;
-  downloadRights: boolean;
 }
 
 const EvidenceList = ({
+  addEvidence,
+  createRights,
   data,
+  deleteRights,
+  downloadRights,
   loading,
+  onDelete,
+  onTableChange,
+  saving,
   search,
   setSearch,
-  addEvidence,
   toggleAddEvidence,
   updateNewEvidenceList,
-  saving,
-  onDelete,
-  deleteRights,
-  createRights,
-  downloadRights,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
 
   const tagIds = new Set(
-    data?.flatMap(({ node: el }) => el.tags.map(({ id }) => id))
+    data?.documents.edges.flatMap(({ node: el }) => el.tags.map(({ id }) => id))
   );
-  const tagData = data?.flatMap(({ node: el }) => ({
+  const tagData = data?.documents.edges.flatMap(({ node: el }) => ({
     text: el?.name || '',
     value: el?.id || '',
   }));
@@ -87,23 +83,21 @@ const EvidenceList = ({
   return (
     // <div className="list-view">
     <div className={classes.page}>
-      <Row gutter={8} className={classes.headerRow}>
+      <Row className={classes.headerRow} gutter={8}>
         <Col span={8}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Evidence...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
         <Col flex={1} />
         {createRights && (
           <Col>
             <Button
-              type="primary"
-              onClick={toggleAddEvidence}
               icon={
                 <FontAwesomeIcon
                   icon={faPlus}
@@ -111,65 +105,61 @@ const EvidenceList = ({
                   style={{ marginRight: 5 }}
                 />
               }
+              onClick={toggleAddEvidence}
+              type="primary"
             >
               <FormattedMessage defaultMessage="Add Evidence" />
             </Button>
           </Col>
         )}
       </Row>
-      <Table
-        size="small"
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
+      <Table<TableItem>
         columns={
           [
             {
+              dataIndex: 'name',
               key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
               }),
-              dataIndex: 'name',
               // width: 200,
             },
             {
-              key: 'tags',
-              title: intl.formatMessage({
-                defaultMessage: 'Tags',
-              }),
               dataIndex: 'tags',
               filters: tagFilter.length > 0 ? tagFilter : undefined,
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              key: 'tags',
               // @ts-ignore
               onFilter: (
-                value: string | number | boolean,
+                value: boolean | number | string,
                 record: { tags: { id: string; name: string }[] }
               ) => record.tags.some(({ id }) => id === value),
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               render: (value: { id: string; name: string }[]) =>
                 value.map(({ id, name }, index) => (
-                  <Link to={`/app/scheme-settings/tags/view/${id || ''}`}>
+                  <Link
+                    key={id}
+                    to={`/app/scheme-settings/tags/view/${id || ''}`}
+                  >
                     {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                     <Tag color="red"> {index === 0 ? name : ` ${name}`}</Tag>
                   </Link>
                 )),
+              title: intl.formatMessage({
+                defaultMessage: 'Tags',
+              }),
             },
             {
+              dataIndex: 'description',
+              ellipsis: true,
               key: 'description',
               title: intl.formatMessage({
                 defaultMessage: 'Description',
               }),
-              dataIndex: 'description',
-              ellipsis: true,
             },
 
             {
-              title: '',
               dataIndex: 'fileUrl',
               key: 'fileUrl',
-              width: 100,
               render: (_, record) => (
                 <Row gutter={8}>
                   {downloadRights && (
@@ -180,12 +170,12 @@ const EvidenceList = ({
                         })}
                       >
                         <Button
-                          size="small"
                           disabled={saving}
+                          icon={<FontAwesomeIcon icon={faFileArrowDown} />}
                           onClick={() => {
                             window.open(record.fileUrl);
                           }}
-                          icon={<FontAwesomeIcon icon={faFileArrowDown} />}
+                          size="small"
                         />
                       </Tooltip>
                     </Col>
@@ -198,25 +188,25 @@ const EvidenceList = ({
                         })}
                       >
                         <Popconfirm
-                          placement="topLeft"
-                          title={intl.formatMessage({
-                            defaultMessage: 'Remove the evidence?',
+                          cancelText={intl.formatMessage({
+                            defaultMessage: 'No',
+                          })}
+                          okText={intl.formatMessage({
+                            defaultMessage: 'Yes',
                           })}
                           onConfirm={() => {
                             onDelete(record.key);
                           }}
-                          okText={intl.formatMessage({
-                            defaultMessage: 'Yes',
-                          })}
-                          cancelText={intl.formatMessage({
-                            defaultMessage: 'No',
-                          })}
                           overlayInnerStyle={{ padding: 10 }}
+                          placement="topLeft"
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove the evidence?',
+                          })}
                         >
                           <Button
-                            size="small"
                             disabled={saving}
                             icon={<FontAwesomeIcon icon={faTrash} />}
+                            size="small"
                           />
                         </Popconfirm>
                       </Tooltip>
@@ -224,6 +214,8 @@ const EvidenceList = ({
                   )}
                 </Row>
               ),
+              title: '',
+              width: 100,
             },
           ]
           //   .filter(
@@ -231,27 +223,35 @@ const EvidenceList = ({
           //     !(item.key === 'fileUrl' && (deleteRights || downloadRights))
           // )
         }
-        dataSource={data?.map(({ node: evidence }) => ({
+        dataSource={data?.documents.edges.map(({ node: evidence }) => ({
+          fileUrl: evidence.url,
           key: evidence.id || '',
           name: evidence.name || 'File',
-          fileUrl: evidence.url,
           tags: evidence.tags,
         }))}
+        loading={loading}
+        onChange={onTableChange}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          total: data?.documents.totalCount,
+        }}
+        size="small"
       />
 
       <Drawer
+        destroyOnClose
+        onClose={toggleAddEvidence}
+        open={addEvidence}
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
         })}
-        open={addEvidence}
         width="600"
-        onClose={toggleAddEvidence}
-        destroyOnClose
       >
         <AddDocument
-          update={updateNewEvidenceList}
-          onClose={toggleAddEvidence}
           isEvidence
+          onClose={toggleAddEvidence}
+          update={updateNewEvidenceList}
         />
       </Drawer>
     </div>

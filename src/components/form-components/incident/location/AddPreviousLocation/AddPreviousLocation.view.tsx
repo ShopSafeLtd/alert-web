@@ -1,8 +1,8 @@
-import React from 'react';
+import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 
 import { Button, Col, Form, Radio, Row, Skeleton, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
 
 const { Paragraph } = Typography;
 
@@ -11,61 +11,60 @@ interface FormData {
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  saving: boolean;
   data: AddressesQuery | undefined;
   loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
 }
 
 const ViewOffender = ({
+  data,
+  loading,
   onClose,
   onSubmit,
   saving,
-  data,
-  loading,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return !data && loading ? (
     <Skeleton />
   ) : (
-    <Form layout="vertical" onFinish={onSubmit} className="previous-location">
+    <Form className="previous-location" layout="vertical" onFinish={onSubmit}>
       <Form.Item
-        name="selectedLocation"
         label={intl.formatMessage({
           defaultMessage: 'Previous Locations:',
         })}
+        name="selectedLocation"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage:
                 'Please select at least one location for the incident.',
             }),
+            required: true,
           },
         ]}
       >
         <Radio.Group>
-          {data?.addresses &&
-            data.addresses.map((location) => (
-              <Row wrap={false} key={location.id} align="bottom">
-                <Radio
-                  value={location.id}
-                  key={location.id}
-                  style={{ placeItems: 'normal' }}
-                >
-                  <Paragraph ellipsis key={location.id}>
-                    {location.full}
-                  </Paragraph>
-                </Radio>
-              </Row>
-            ))}
+          {data?.addresses?.map((location) => (
+            <Row align="bottom" key={location.id} wrap={false}>
+              <Radio
+                key={location.id}
+                style={{ placeItems: 'normal' }}
+                value={location.id}
+              >
+                <Paragraph ellipsis key={location.id}>
+                  {location.full}
+                </Paragraph>
+              </Radio>
+            </Row>
+          ))}
         </Radio.Group>
       </Form.Item>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -74,9 +73,9 @@ const ViewOffender = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Select Location',

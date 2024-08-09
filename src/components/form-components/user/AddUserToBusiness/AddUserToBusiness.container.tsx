@@ -1,8 +1,10 @@
-import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/__generated__/add-users-to-business.generated';
+
+import React from 'react';
+
 import View from './AddUserToBusiness.view';
 import useAddUserToBusiness from './useAddUserToBusiness';
-import type { AddUsersToBusinessMutation } from 'graphql/businesses/mutations/add-users-to-business.generated';
 
 interface Props {
   businessId: string;
@@ -16,9 +18,9 @@ const AddUserToBusiness = ({ businessId, onClose, update }: Props) => {
 
   return (
     <View
-      onClose={onClose}
       data={data}
       loading={loading}
+      onClose={onClose}
       onSelectChange={onSelectChange}
       onSubmit={onSubmit}
       saving={saving}

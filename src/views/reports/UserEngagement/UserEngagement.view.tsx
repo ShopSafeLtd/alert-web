@@ -1,5 +1,13 @@
+import type { UserEngagementQuery } from 'graphql/reports/queries/__generated__/list-user-engagement.generated';
 import type { RefObject } from 'react';
-import React, { useState } from 'react';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import { faFileDownload, faFilters } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -12,59 +20,54 @@ import {
   Tag,
   Typography,
 } from 'antd';
-
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileDownload, faFilters } from '@fortawesome/pro-light-svg-icons';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
+
 import useStyles from './UserEngagement.styles';
-import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
-import type { UserEngagementQuery } from 'graphql/reports/queries/list-user-engagement.generated';
 
 const { Title } = Typography;
 
 interface Props {
-  loading: boolean;
+  componentRef: RefObject<HTMLDivElement>;
   data:
-    | Exclude<UserEngagementQuery['listUserContribution'], undefined | null>
+    | Exclude<UserEngagementQuery['listUserContribution'], null | undefined>
     | null
     | undefined;
-  dateRange: { startDate: Date; endDate: Date };
-  setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-  setSelectedGroups: (groups: string[]) => void;
-  selectedGroups: string[];
-  componentRef: RefObject<HTMLDivElement>;
-  handlePrint: () => void;
+  dateRange: { endDate: Date; startDate: Date };
   filtersOpen: boolean;
-  toggleFiltersOpen: () => void;
-  selectedRoles: string[];
-  setSelectedRoles: (value: string[]) => void;
-  selectedBusinesses: string[];
-  setSelectedBusinesses: (value: string[]) => void;
+  handlePrint: () => void;
+  loading: boolean;
   search: string;
+  selectedBusinesses: string[];
+  selectedGroups: string[];
+  selectedRoles: string[];
+  setDateRange: (
+    dateRange: { endDate: Date; startDate: Date } | undefined
+  ) => void;
   setSearch: (value: string) => void;
+  setSelectedBusinesses: (value: string[]) => void;
+  setSelectedGroups: (groups: string[]) => void;
+  setSelectedRoles: (value: string[]) => void;
+  toggleFiltersOpen: () => void;
 }
 
 const PerformanceReport = ({
-  data,
-  loading,
-  setDateRange,
-  dateRange,
-  setSelectedGroups,
-  selectedGroups,
-  handlePrint,
   componentRef,
-  toggleFiltersOpen,
+  data,
+  dateRange,
   filtersOpen,
-  selectedBusinesses,
-  setSelectedBusinesses,
-  setSelectedRoles,
-  selectedRoles,
+  handlePrint,
+  loading,
   search,
+  selectedBusinesses,
+  selectedGroups,
+  selectedRoles,
+  setDateRange,
   setSearch,
+  setSelectedBusinesses,
+  setSelectedGroups,
+  setSelectedRoles,
+  toggleFiltersOpen,
 }: Props) => {
   const classes = useStyles();
   const logo = localStorage.getItem('logo');
@@ -75,47 +78,47 @@ const PerformanceReport = ({
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
           collapsed={collapsed}
+          selectedId="user-engagement"
           setCollapsed={setCollapsed}
-          selectedId={'user-engagement'}
         />
       </Col>
-      <Col flex={1} className={classes.page} ref={componentRef}>
+      <Col className={classes.page} flex={1} ref={componentRef}>
         <div className="logo">
           <img
-            style={{ height: '100%', width: '25 %' }}
-            src={logo || ''}
             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
             alt="logo"
+            src={logo || ''}
+            style={{ height: '100%', width: '25 %' }}
           />
         </div>
-        <Title level={2} className="print-title">
+        <Title className="print-title" level={2}>
           {intl.formatMessage(
             {
               defaultMessage: ' User Engagement: {startDate} - {endDate}',
             },
             {
-              startDate: dateRange.startDate.toLocaleDateString(),
               endDate: dateRange.endDate.toLocaleDateString(),
+              startDate: dateRange.startDate.toLocaleDateString(),
             }
           )}
         </Title>
         <Row
-          gutter={6}
-          style={{ position: 'absolute', top: 20, right: 20, left: 20 }}
           className="no-print"
+          gutter={6}
+          style={{ left: 20, position: 'absolute', right: 20, top: 20 }}
         >
           <Col>
             <Input
-              style={{ width: 350 }}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for users...',
               })}
+              style={{ width: 350 }}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
             />
           </Col>
           <Col>
-            <DateSelect onChange={setDateRange} defaultRange="last30Days" />
+            <DateSelect defaultRange="last30Days" onChange={setDateRange} />
           </Col>
           <Col>
             <Button onClick={toggleFiltersOpen}>
@@ -129,9 +132,9 @@ const PerformanceReport = ({
           <Col>
             <Button onClick={handlePrint}>
               <FontAwesomeIcon
+                icon={faFileDownload}
                 size="lg"
                 style={{ marginRight: 10 }}
-                icon={faFileDownload}
               />
               {intl.formatMessage({
                 defaultMessage: 'Download',
@@ -148,36 +151,24 @@ const PerformanceReport = ({
                 })}
               </Title>
               <Table
-                size="small"
-                pagination={{
-                  hideOnSinglePage: true,
-                  total: data?.total || 0,
-                  defaultPageSize: 30,
-                  showSizeChanger: true,
-                  showTotal: (total, range) =>
-                    `${range[0]}-${range[1]} of ${total}`,
-                }}
                 columns={[
                   {
-                    key: 'name',
                     dataIndex: 'name',
+                    key: 'name',
                     title: intl.formatMessage({
                       defaultMessage: 'Name',
                     }),
                   },
                   {
-                    key: 'businesses',
                     dataIndex: 'businesses',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Businesses',
-                    }),
+                    key: 'businesses',
                     render: (value: string[]) => {
                       if (value.length > 2) {
                         return (
                           <>
-                            {value?.slice(0, 2).map((el) => (
-                              <Tag key={el}>{el}</Tag>
-                            ))}
+                            {value
+                              ?.slice(0, 2)
+                              .map((el) => <Tag key={el}>{el}</Tag>)}
                             <Tag>
                               {intl.formatMessage(
                                 {
@@ -193,51 +184,54 @@ const PerformanceReport = ({
                       }
                       return value?.map((el) => <Tag key={el}>{el}</Tag>);
                     },
+                    title: intl.formatMessage({
+                      defaultMessage: 'Businesses',
+                    }),
                   },
                   {
-                    key: 'incidentsCreated',
                     dataIndex: 'incidentsCreated',
+                    defaultSortOrder: 'descend',
+                    key: 'incidentsCreated',
+                    sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
                     title: intl.formatMessage({
                       defaultMessage: 'Incidents',
                     }),
-                    defaultSortOrder: 'descend',
-                    sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
                   },
                   {
-                    key: 'offendersCreated',
                     dataIndex: 'offendersCreated',
+                    key: 'offendersCreated',
+                    sorter: (a, b) => a.offendersCreated - b.offendersCreated,
                     title: intl.formatMessage({
                       defaultMessage: 'Offenders',
                     }),
-                    sorter: (a, b) => a.offendersCreated - b.offendersCreated,
                   },
                   {
-                    key: 'updatesCreated',
                     dataIndex: 'updatesCreated',
+                    key: 'updatesCreated',
+                    sorter: (a, b) => a.updatesCreated - b.updatesCreated,
                     title: intl.formatMessage({
                       defaultMessage: 'Updates',
                     }),
-                    sorter: (a, b) => a.updatesCreated - b.updatesCreated,
                   },
                   {
-                    key: 'messagesSent',
                     dataIndex: 'messagesSent',
+                    key: 'messagesSent',
+                    sorter: (a, b) => a.messagesSent - b.messagesSent,
                     title: intl.formatMessage({
                       defaultMessage: 'Messages',
                     }),
-                    sorter: (a, b) => a.messagesSent - b.messagesSent,
                   },
                   {
-                    key: 'logins',
                     dataIndex: 'logins',
+                    key: 'logins',
+                    sorter: (a, b) => a.logins - b.logins,
                     title: intl.formatMessage({
                       defaultMessage: 'Logins',
                     }),
-                    sorter: (a, b) => a.logins - b.logins,
                   },
                   {
-                    key: 'lastLogin',
                     dataIndex: 'lastLogin',
+                    key: 'lastLogin',
                     title: intl.formatMessage({
                       defaultMessage: 'Last Login',
                     }),
@@ -245,26 +239,35 @@ const PerformanceReport = ({
                   },
                 ]}
                 dataSource={data?.userContributions.map((user, i) => ({
-                  key: user.name + i.toString(),
-                  name: user.name,
+                  businesses: user.businesses,
                   incidentsCreated: user.totalIncidents,
+                  key: user.name + i.toString(),
+                  lastLogin: user.lastLogin,
+                  logins: user.totalLogins,
+                  messagesSent: user.totalMessages,
+                  name: user.name,
                   offendersCreated: user.totalOffenders,
                   updatesCreated: user.totalUpdates,
-                  messagesSent: user.totalMessages,
-                  logins: user.totalLogins,
-                  lastLogin: user.lastLogin,
-                  businesses: user.businesses,
                 }))}
+                pagination={{
+                  defaultPageSize: 30,
+                  hideOnSinglePage: true,
+                  showSizeChanger: true,
+                  showTotal: (total, range) =>
+                    `${range[0]}-${range[1]} of ${total}`,
+                  total: data?.total || 0,
+                }}
+                size="small"
               />
             </Card>
           </Col>
         </Row>
 
         <Drawer
+          onClose={toggleFiltersOpen}
           title={intl.formatMessage({
             defaultMessage: 'Report Filters',
           })}
-          onClose={toggleFiltersOpen}
           visible={filtersOpen}
           width={700}
         >
@@ -275,13 +278,13 @@ const PerformanceReport = ({
               })}
             >
               <GroupsSelect
-                mode="multiple"
                 maxTagCount="responsive"
+                mode="multiple"
                 onChange={(value) => {
                   setSelectedGroups(value || []);
                 }}
-                value={selectedGroups}
                 style={{ width: '100%' }}
+                value={selectedGroups}
               />
             </Form.Item>
             <Form.Item
@@ -290,13 +293,13 @@ const PerformanceReport = ({
               })}
             >
               <BusinessesSelect
-                mode="multiple"
                 maxTagCount="responsive"
+                mode="multiple"
                 onChange={(value) => {
                   setSelectedBusinesses(value || []);
                 }}
-                value={selectedBusinesses}
                 style={{ width: '100%' }}
+                value={selectedBusinesses}
               />
             </Form.Item>
             <Form.Item
@@ -305,13 +308,13 @@ const PerformanceReport = ({
               })}
             >
               <RolesSelect
-                mode="multiple"
                 maxTagCount="responsive"
+                mode="multiple"
                 onChange={(value) => {
                   setSelectedRoles(value || []);
                 }}
-                value={selectedRoles}
                 style={{ width: '100%' }}
+                value={selectedRoles}
               />
             </Form.Item>
           </Form>

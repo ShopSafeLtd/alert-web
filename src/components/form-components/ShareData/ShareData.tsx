@@ -13,9 +13,11 @@ import {
 } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import { useShareDataMutation } from '#/components/form-components/ShareData/share-data-mutation.generated';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
 import { SortOrder } from 'graphql/types';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import {
+  useShareDataMutation
+} from '#/components/form-components/ShareData/__generated__/share-data-mutation.generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   scheme: {

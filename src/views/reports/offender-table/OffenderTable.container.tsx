@@ -1,0 +1,133 @@
+import React from 'react';
+
+import View from './OffenderTable.view';
+import useOffenderTable from './hooks/useOffenderTable';
+
+const PerformanceReport = (): JSX.Element => {
+  const {
+    addLogo,
+    addLogoDrawer,
+    businessesIds,
+    changeSize,
+    componentRef,
+    crimeGroupIds,
+    data,
+    dateRange,
+    dateRangeMode,
+    editMode,
+    filterCount,
+    filtersOpen,
+    groups,
+    handlePrint,
+    incidentCount,
+    isPrinting,
+    layout,
+    loading,
+    logoMetaData,
+    logos,
+    metadata,
+    minDrawer,
+    offendersTableData,
+    redactOnPrint,
+    removeItem,
+    removeLogo,
+    reportData,
+    saveAsDrawer,
+    saveTemplate,
+    saving,
+    schemeId,
+    search,
+    selectTemplate,
+    selectedBrands,
+    selectedGroups,
+    selectedIndustries,
+    selectedRoles,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setBusinessesIds,
+    setCrimeGroupIds,
+    setDateRange,
+    setEditMode,
+    setIncidentCount,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
+    setRedactOnPrint,
+    setSaveAsDrawer,
+    setSearch,
+    setSelectedBrands,
+    setSelectedGroups,
+    setSelectedIndustries,
+    setSelectedRoles,
+    setTotalValue,
+    tableReportLoading,
+    templates,
+    toggleFiltersOpen,
+    totalValue,
+  } = useOffenderTable();
+  return (
+    <View
+      addLogo={addLogo}
+      addLogoDrawer={addLogoDrawer}
+      businessesIds={businessesIds}
+      changeSize={changeSize}
+      componentRef={componentRef}
+      crimeGroupIds={crimeGroupIds}
+      data={data}
+      dateRange={dateRange}
+      dateRangeMode={dateRangeMode}
+      editMode={editMode}
+      filterCount={filterCount}
+      filtersOpen={filtersOpen}
+      groups={groups}
+      handlePrint={handlePrint}
+      incidentCount={incidentCount}
+      isPrinting={isPrinting}
+      layout={layout}
+      loading={loading}
+      logoMetaData={logoMetaData}
+      logos={logos}
+      metadata={metadata}
+      minDrawer={minDrawer}
+      offendersTableData={offendersTableData}
+      redactOnPrint={redactOnPrint}
+      removeItem={removeItem}
+      removeLogo={removeLogo}
+      reportData={reportData}
+      saveAsDrawer={saveAsDrawer}
+      saveTemplate={saveTemplate}
+      saving={saving}
+      schemeId={schemeId}
+      search={search}
+      selectTemplate={selectTemplate}
+      selectedBrands={selectedBrands}
+      selectedGroups={selectedGroups}
+      selectedIndustries={selectedIndustries}
+      selectedRoles={selectedRoles}
+      selectedTemplate={selectedTemplate}
+      setAddLogoDrawer={setAddLogoDrawer}
+      setBusinessesIds={setBusinessesIds}
+      setCrimeGroupIds={setCrimeGroupIds}
+      setDateRange={setDateRange}
+      setEditMode={setEditMode}
+      setIncidentCount={setIncidentCount}
+      setLayout={setLayout}
+      setMetadata={setMetadata}
+      setMinDrawer={setMinDrawer}
+      setRedactOnPrint={setRedactOnPrint}
+      setSaveAsDrawer={setSaveAsDrawer}
+      setSearch={setSearch}
+      setSelectedBrands={setSelectedBrands}
+      setSelectedGroups={setSelectedGroups}
+      setSelectedIndustries={setSelectedIndustries}
+      setSelectedRoles={setSelectedRoles}
+      setTotalValue={setTotalValue}
+      tableReportLoading={tableReportLoading}
+      templates={templates}
+      toggleFiltersOpen={toggleFiltersOpen}
+      totalValue={totalValue}
+    />
+  );
+};
+
+export default PerformanceReport;

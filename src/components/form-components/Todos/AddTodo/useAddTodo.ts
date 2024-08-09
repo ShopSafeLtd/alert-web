@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import type { Moment } from 'moment';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
-import { useCreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+import { useCreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -18,7 +20,6 @@ import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import customRequest from '../../../../utils/custom-request';
-import { useAddTodoUsersQuery } from './graphql/AddTodoUsers.generated';
 
 const { useForm } = Form;
 

@@ -3,6 +3,10 @@ query EditReportTemplate($where: ReportTemplateWhereUniqueInput!) {
         id
         name
         description
+        type
+        reportGroup {
+            id
+        }
         groups {
             id
             name

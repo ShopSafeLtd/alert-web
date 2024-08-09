@@ -1,5 +1,12 @@
 /* eslint-disable quotes */
 
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+
+import StockItemSelect, {
+  type StockItemValue,
+} from '#/components/form-components/StockItemSelect/StockItemSelect.view';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -11,49 +18,44 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import Input from 'antd/es/input/Input';
+import { GoodsMode } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import Input from 'antd/es/input/Input';
 import useStyles from '../../AddIncident.styles';
-import type { StockItemValue } from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
-import StockItemSearch from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { GoodsMode } from 'graphql/types';
 
 const { Paragraph, Title } = Typography;
 
 interface Props {
-  goodsVisible: boolean;
-  dontKnowGoods: () => void;
-  knowGoods: () => void;
-  goodsTypesData: ListGoodsTypesQuery | undefined;
-  goodsMode: string;
-  onAddItem: (data: StockItemValue) => void;
   division: string | undefined;
+  dontKnowGoods: () => void;
   goods: {
     goodsType?: string;
-    value?: number;
-    recoveredValue?: number;
+    name?: string;
     quantity?: number;
     recoveredQuantity?: number;
+    recoveredValue?: number;
     sku?: string;
-    name?: string;
     stockItem?: string;
+    value?: number;
   }[];
+  goodsMode: string;
+  goodsTypesData: ListGoodsTypesQuery | undefined;
+  goodsVisible: boolean;
+  knowGoods: () => void;
+  onAddItem: (data: StockItemValue) => void;
 }
 
 const IncidentGoods = ({
+  division,
+  dontKnowGoods,
+  goods,
+  goodsMode,
+  goodsTypesData,
   goodsVisible,
   knowGoods,
-  dontKnowGoods,
-  goodsTypesData,
-  goodsMode,
   onAddItem,
-  division,
-  goods,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -61,7 +63,7 @@ const IncidentGoods = ({
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {goodsVisible
               ? intl.formatMessage({
                   defaultMessage: 'What goods were involved?',
@@ -73,9 +75,9 @@ const IncidentGoods = ({
         </Col>
         <Col>
           <Paragraph
+            italic
             style={{ marginBottom: 1, marginLeft: 5 }}
             type="secondary"
-            italic
           >
             {intl.formatMessage({
               defaultMessage:
@@ -89,10 +91,14 @@ const IncidentGoods = ({
           name="goods"
           rules={[
             {
+              message: intl.formatMessage({
+                defaultMessage: 'Add at least one item',
+              }),
               // eslint-disable-next-line @typescript-eslint/require-await
               validator: async (rule, value) => {
+                console.log(rule);
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                if (value && value.length === 0)
+                if (value === undefined || (value && value.length === 0))
                   throw new Error(
                     intl.formatMessage({
                       defaultMessage: 'Something wrong!',
@@ -106,51 +112,51 @@ const IncidentGoods = ({
             <>
               {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
               {goodsMode === GoodsMode.Specific && (
-                <StockItemSearch
-                  showSearch
+                <StockItemSelect
                   allowClear
+                  division={division}
+                  onChange={onAddItem}
                   placeholder={intl.formatMessage({
                     defaultMessage:
                       'Search for an item to add to the incident...',
                   })}
-                  style={{ width: 500, marginBottom: 20 }}
-                  onAddItem={onAddItem}
-                  division={division}
+                  showSearch
+                  style={{ marginBottom: 20, width: 500 }}
                 />
               )}
               {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
               {goodsMode === GoodsMode.Specific && fields.length === 0 && (
                 <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description={intl.formatMessage({
                     defaultMessage:
                       'Search for an item to add to this incident.',
                   })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
               )}
               {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
               {goodsMode === GoodsMode.Generic && fields.length === 0 && (
                 <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description={intl.formatMessage({
                     defaultMessage: 'No goods added to incident',
                   })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
                 >
                   <Form.Item>
                     <Row justify="center">
                       <Col>
                         <Button
+                          block
+                          icon={
+                            <FontAwesomeIcon
+                              icon={faPlus}
+                              style={{ marginRight: 8 }}
+                            />
+                          }
                           onClick={() =>
                             add({
                               recoveredValue: 0,
                             })
-                          }
-                          block
-                          icon={
-                            <FontAwesomeIcon
-                              style={{ marginRight: 8 }}
-                              icon={faPlus}
-                            />
                           }
                         >
                           {intl.formatMessage({
@@ -163,7 +169,7 @@ const IncidentGoods = ({
                 </Empty>
               )}
               {fields.map(({ key, name, ...restField }, index) => (
-                <Row key={key} gutter={8}>
+                <Row gutter={8} key={key}>
                   {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
                   {goodsMode === GoodsMode.Generic && (
                     <>
@@ -180,36 +186,33 @@ const IncidentGoods = ({
                           name={[name, 'goodsType']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a type',
                               }),
+                              required: index === 0,
                             },
                           ]}
                         >
                           <Select
+                            allowClear
+                            options={
+                              goodsTypesData?.listGoodsTypes.goodsTypes.map(
+                                (goodsType) => ({
+                                  label: goodsType.name,
+                                  value: goodsType.id,
+                                })
+                              ) || []
+                            }
                             placeholder={intl.formatMessage({
                               defaultMessage: 'Select goods...',
                             })}
                             style={{ width: 300 }}
-                            allowClear
-                            options={
-                              (goodsTypesData &&
-                                goodsTypesData.listGoodsTypes.goodsTypes.map(
-                                  (goodsType) => ({
-                                    value: goodsType.id,
-                                    label: goodsType.name,
-                                  })
-                                )) ||
-                              []
-                            }
                           />
                         </Form.Item>
                       </Col>
                       <Col>
                         <Form.Item
                           {...restField}
-                          name={[name, 'value']}
                           label={
                             index
                               ? ''
@@ -217,12 +220,13 @@ const IncidentGoods = ({
                                   defaultMessage: 'Value',
                                 })
                           }
+                          name={[name, 'value']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a value',
                               }),
+                              required: index === 0,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -231,17 +235,16 @@ const IncidentGoods = ({
                           })}
                         >
                           <InputNumber
-                            style={{ width: 150 }}
-                            prefix="£"
-                            precision={2}
                             min={0}
+                            precision={2}
+                            prefix="£"
+                            style={{ width: 150 }}
                           />
                         </Form.Item>
                       </Col>
                       <Col>
                         <Form.Item
                           {...restField}
-                          name={[name, 'recoveredValue']}
                           label={
                             index
                               ? ''
@@ -249,12 +252,13 @@ const IncidentGoods = ({
                                   defaultMessage: 'Value Recovered',
                                 })
                           }
+                          name={[name, 'recoveredValue']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a value',
                               }),
+                              required: index === 0,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -263,11 +267,11 @@ const IncidentGoods = ({
                           })}
                         >
                           <InputNumber
-                            style={{ width: 150 }}
-                            prefix="£"
-                            precision={2}
-                            min={0}
                             max={goods[index]?.value ?? undefined}
+                            min={0}
+                            precision={2}
+                            prefix="£"
+                            style={{ width: 150 }}
                           />
                         </Form.Item>
                       </Col>
@@ -279,7 +283,6 @@ const IncidentGoods = ({
                       <Col>
                         <Form.Item
                           {...restField}
-                          name={[name, 'name']}
                           label={
                             index
                               ? ''
@@ -287,12 +290,13 @@ const IncidentGoods = ({
                                   defaultMessage: 'Item Name',
                                 })
                           }
+                          name={[name, 'name']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the name',
                               }),
+                              required: index === 0,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -305,7 +309,6 @@ const IncidentGoods = ({
                       <Col>
                         <Form.Item
                           {...restField}
-                          name={[name, 'sku']}
                           label={
                             index
                               ? ''
@@ -313,12 +316,13 @@ const IncidentGoods = ({
                                   defaultMessage: 'SKU',
                                 })
                           }
+                          name={[name, 'sku']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the SKU',
                               }),
+                              required: index === 0,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -331,7 +335,6 @@ const IncidentGoods = ({
                       <Col>
                         <Form.Item
                           {...restField}
-                          name={[name, 'value']}
                           label={
                             index
                               ? ''
@@ -339,12 +342,13 @@ const IncidentGoods = ({
                                   defaultMessage: 'Value',
                                 })
                           }
+                          name={[name, 'value']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter the value',
                               }),
+                              required: index === 0,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -352,17 +356,16 @@ const IncidentGoods = ({
                           })}
                         >
                           <InputNumber
-                            style={{ width: 150 }}
+                            min={0}
                             // prefix="£"
                             precision={2}
-                            min={0}
+                            style={{ width: 150 }}
                           />
                         </Form.Item>
                       </Col>
                       <Col>
                         <Form.Item
                           {...restField}
-                          name={[name, 'quantity']}
                           label={
                             index
                               ? ''
@@ -370,12 +373,21 @@ const IncidentGoods = ({
                                   defaultMessage: 'Quantity',
                                 })
                           }
+                          name={[name, 'quantity']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage: 'Please enter a quantity.',
                               }),
+                              required: index === 0,
+                            },
+                            {
+                              message: intl.formatMessage({
+                                defaultMessage:
+                                  'Please enter a quantity over 0.',
+                              }),
+                              min: 1,
+                              type: 'number',
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -384,16 +396,15 @@ const IncidentGoods = ({
                           })}
                         >
                           <InputNumber
-                            style={{ width: 150 }}
-                            precision={0}
                             min={0}
+                            precision={0}
+                            style={{ width: 150 }}
                           />
                         </Form.Item>
                       </Col>
                       <Col>
                         <Form.Item
                           {...restField}
-                          name={[name, 'recoveredQuantity']}
                           label={
                             index
                               ? ''
@@ -401,13 +412,14 @@ const IncidentGoods = ({
                                   defaultMessage: 'Quantity Recovered',
                                 })
                           }
+                          name={[name, 'recoveredQuantity']}
                           rules={[
                             {
-                              required: index === 0,
                               message: intl.formatMessage({
                                 defaultMessage:
                                   'Please enter a recovered quantity.',
                               }),
+                              required: index === 0,
                             },
                           ]}
                           tooltip={intl.formatMessage({
@@ -416,10 +428,10 @@ const IncidentGoods = ({
                           })}
                         >
                           <InputNumber
-                            style={{ width: 150 }}
-                            precision={0}
-                            min={0}
                             max={goods[index].quantity}
+                            min={0}
+                            precision={0}
+                            style={{ width: 150 }}
                           />
                         </Form.Item>
                       </Col>
@@ -429,11 +441,11 @@ const IncidentGoods = ({
                   {fields.length > 1 && (
                     <Col>
                       <Button
-                        style={{ marginTop: index === 0 ? 30 : 0 }}
-                        size="small"
                         onClick={() => remove(name)}
+                        size="small"
+                        style={{ marginTop: index === 0 ? 30 : 0 }}
                       >
-                        <FontAwesomeIcon size="lg" icon={faTrash} />
+                        <FontAwesomeIcon icon={faTrash} size="lg" />
                       </Button>
                     </Col>
                   )}
@@ -445,17 +457,17 @@ const IncidentGoods = ({
                   <Row justify="center">
                     <Col>
                       <Button
+                        block
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 8 }}
+                          />
+                        }
                         onClick={() =>
                           add({
                             recoveredValue: 0,
                           })
-                        }
-                        block
-                        icon={
-                          <FontAwesomeIcon
-                            style={{ marginRight: 8 }}
-                            icon={faPlus}
-                          />
                         }
                       >
                         {intl.formatMessage({
@@ -470,10 +482,10 @@ const IncidentGoods = ({
           )}
         </Form.List>
       ) : (
-        <div style={{ paddingTop: 10, paddingBottom: 20 }}>
+        <div style={{ paddingBottom: 20, paddingTop: 10 }}>
           <Row gutter={16}>
             <Col>
-              <Button onClick={knowGoods} danger>
+              <Button danger onClick={knowGoods}>
                 {intl.formatMessage({
                   defaultMessage: 'I know the goods involved',
                 })}

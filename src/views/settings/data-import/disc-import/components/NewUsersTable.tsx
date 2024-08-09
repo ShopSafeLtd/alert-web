@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useEffect, useState } from 'react';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+
+import {
+  faClose,
+  faTrash,
+  faUserMagnifyingGlass,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -13,51 +20,45 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-
-import { createUseStyles } from 'react-jss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faClose,
-  faTrash,
-  faUserMagnifyingGlass,
-} from '@fortawesome/pro-light-svg-icons';
-import { useStoreState } from 'state';
-import { FormattedMessage, useIntl } from 'react-intl';
-import type { NewBusiness, NewUser } from '../DiscImport.types';
-import type { SchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 import { Role } from 'graphql/types';
+import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import { useStoreState } from 'state';
+
+import type { NewBusiness, NewUser } from '../DiscImport.types';
 
 const { Text } = Typography;
 
 const useStyles = createUseStyles(() => ({
   cell: {},
+  headerCell: {},
+  headerRow: {
+    borderTopLeftRadius: 10,
+    marginLeft: '0px !important',
+    marginRight: '0px !important',
+  },
   row: {
     paddingLeft: 7,
   },
-  headerRow: {
-    marginLeft: '0px !important',
-    marginRight: '0px !important',
-    borderTopLeftRadius: 10,
-  },
-  headerCell: {},
 }));
 
 interface NewUserRowProps {
   groupsData: SchemeGroupsQuery | undefined;
   newBusinesses: NewBusiness[];
-  user: NewUser;
   onDelete: (id: string) => void;
   onUpdateUser: (data: NewUser) => void;
+  user: NewUser;
 }
 
 const NewUserRow = React.memo(
   ({
     groupsData,
     newBusinesses,
-    user,
     onDelete,
     onUpdateUser,
+    user,
   }: NewUserRowProps) => {
     const [form] = Form.useForm<NewUser>();
     const currentSchemeId = useStoreState((state) => state.scheme.id);
@@ -67,17 +68,6 @@ const NewUserRow = React.memo(
 
     const { data } = useListSchemeUsersQuery({
       variables: {
-        where: {
-          schemes: {
-            some: {
-              scheme: {
-                id: {
-                  equals: currentSchemeId,
-                },
-              },
-            },
-          },
-        },
         groupWhere: {
           scheme: {
             id: {
@@ -89,6 +79,17 @@ const NewUserRow = React.memo(
           scheme: {
             id: {
               equals: currentSchemeId,
+            },
+          },
+        },
+        where: {
+          schemes: {
+            some: {
+              scheme: {
+                id: {
+                  equals: currentSchemeId,
+                },
+              },
             },
           },
         },
@@ -126,10 +127,10 @@ const NewUserRow = React.memo(
 
     const clearLink = () => {
       form.setFieldsValue({
-        existing: undefined,
         business: '',
-        role: undefined,
+        existing: undefined,
         groups: undefined,
+        role: undefined,
       });
       void form.validateFields();
       setLink(false);
@@ -142,78 +143,78 @@ const NewUserRow = React.memo(
 
     const intl = useIntl();
     return (
-      <Form form={form} className={classes.row} onValuesChange={onValuesChange}>
+      <Form className={classes.row} form={form} onValuesChange={onValuesChange}>
         <Row gutter={8}>
-          <Col span={4} className={classes.cell}>
+          <Col className={classes.cell} span={4}>
             <Form.Item
               name="fullName"
-              rules={[{ required: true, message: 'Enter a name' }]}
+              rules={[{ message: 'Enter a name', required: true }]}
             >
               {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
               <Input disabled={link} onBlur={onBlur} />
             </Form.Item>
           </Col>
-          <Col span={4} className={classes.cell}>
+          <Col className={classes.cell} span={4}>
             <Form.Item
               name="email"
-              rules={[{ required: true, message: 'Enter an email' }]}
+              rules={[{ message: 'Enter an email', required: true }]}
             >
-              <Input onBlur={onBlur} disabled={link} />
+              <Input disabled={link} onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col className={classes.cell} style={{ width: 160 }}>
             <Form.Item
               name="role"
-              rules={[{ required: true, message: 'Choose a role' }]}
+              rules={[{ message: 'Choose a role', required: true }]}
             >
               <Select
-                style={{ width: 150 }}
                 onBlur={onBlur}
                 options={[
                   {
-                    value: Role.User,
                     label: 'User',
+                    value: Role.User,
                   },
                   {
-                    value: Role.ContentAdmin,
                     label: 'Content Admin',
+                    value: Role.ContentAdmin,
                   },
                   {
-                    value: Role.SchemeAdmin,
                     label: 'Scheme Admin',
+                    value: Role.SchemeAdmin,
                   },
                 ]}
+                style={{ width: 150 }}
               />
             </Form.Item>
           </Col>
-          <Col flex={1} className={classes.cell} style={{ maxWidth: 250 }}>
+          <Col className={classes.cell} flex={1} style={{ maxWidth: 250 }}>
             <Form.Item
               name="business"
-              rules={[{ required: true, message: 'Choose a business' }]}
+              rules={[{ message: 'Choose a business', required: true }]}
             >
               <Select
                 disabled={link}
                 onBlur={onBlur}
                 options={newBusinesses.map((item) => ({
-                  value: item.id,
                   label: item.name,
+                  value: item.id,
                 }))}
               />
             </Form.Item>
           </Col>
-          <Col flex={1} className={classes.cell} style={{ maxWidth: 250 }}>
+          <Col className={classes.cell} flex={1} style={{ maxWidth: 250 }}>
             <Form.Item
               name="groups"
-              rules={[{ required: true, message: 'Choose at least one group' }]}
+              rules={[{ message: 'Choose at least one group', required: true }]}
             >
               <Select
                 disabled={link}
+                mode="multiple"
                 onBlur={onBlur}
                 options={groupsData?.groups?.map((item) => ({
-                  value: item.id,
                   label: item.name,
+                  value: item.id,
                 }))}
-                mode="multiple"
               />
             </Form.Item>
           </Col>
@@ -224,7 +225,7 @@ const NewUserRow = React.memo(
                   defaultMessage: 'Link to an existing user',
                 })}
               >
-                <Button size="small" onClick={() => setLink(true)}>
+                <Button onClick={() => setLink(true)} size="small">
                   <FontAwesomeIcon icon={faUserMagnifyingGlass} />
                 </Button>
               </Tooltip>
@@ -234,15 +235,15 @@ const NewUserRow = React.memo(
                 <Col>
                   <Form.Item
                     name="existing"
-                    rules={[{ required: true, message: 'Select a business' }]}
+                    rules={[{ message: 'Select a business', required: true }]}
                   >
                     <Select
-                      style={{ width: 160 }}
                       onBlur={onBlur}
                       options={data?.users.map((item) => ({
-                        value: item.id,
                         label: item.fullName,
+                        value: item.id,
                       }))}
+                      style={{ width: 160 }}
                     />
                   </Form.Item>
                 </Col>
@@ -252,7 +253,7 @@ const NewUserRow = React.memo(
                       defaultMessage: 'Clear Link',
                     })}
                   >
-                    <Button size="small" onClick={clearLink}>
+                    <Button onClick={clearLink} size="small">
                       <FontAwesomeIcon icon={faClose} />
                     </Button>
                   </Tooltip>
@@ -262,11 +263,11 @@ const NewUserRow = React.memo(
           </Col>
           <Col>
             <Popconfirm
+              onConfirm={() => onDelete(user.id)}
               overlayInnerStyle={{ padding: 10 }}
               title={intl.formatMessage({
                 defaultMessage: 'Are you sure you want to remove this user?',
               })}
-              onConfirm={() => onDelete(user.id)}
             >
               <Button size="small">
                 <FontAwesomeIcon icon={faTrash} />
@@ -281,17 +282,17 @@ const NewUserRow = React.memo(
 
 interface Props {
   groupsData: SchemeGroupsQuery | undefined;
-  onAdd: () => void;
-  newUsers: NewUser[];
   newBusinesses: NewBusiness[];
+  newUsers: NewUser[];
+  onAdd: () => void;
   onUpdateUser: (data: NewUser) => void;
 }
 
 const NewUsersTable = ({
   groupsData,
-  onAdd,
-  newUsers,
   newBusinesses,
+  newUsers,
+  onAdd,
   onUpdateUser,
 }: Props) => {
   const classes = useStyles();
@@ -307,46 +308,46 @@ const NewUsersTable = ({
 
   return (
     <Card
-      title={intl.formatMessage({
-        defaultMessage: 'Users',
-      })}
       extra={
-        <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
+        <Button onClick={onAdd} style={{ marginBottom: 16 }} type="primary">
           <FormattedMessage defaultMessage="Add User" />
         </Button>
       }
+      title={intl.formatMessage({
+        defaultMessage: 'Users',
+      })}
     >
       <Row
+        className={classes.headerRow}
         gutter={8}
         style={{ marginBottom: 10 }}
-        className={classes.headerRow}
       >
         <Col
-          span={4}
           className={classes.headerCell}
+          span={4}
           style={{ borderTopLeftRadius: 10 }}
         >
-          <Text style={{ paddingLeft: 5 }} strong>
+          <Text strong style={{ paddingLeft: 5 }}>
             <FormattedMessage defaultMessage="Name" />
           </Text>
         </Col>
-        <Col span={4} className={classes.headerCell}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} span={4}>
+          <Text strong style={{ paddingLeft: 5 }}>
             <FormattedMessage defaultMessage="Email" />
           </Text>
         </Col>
-        <Col style={{ width: 160 }} className={classes.headerCell}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} style={{ width: 160 }}>
+          <Text strong style={{ paddingLeft: 5 }}>
             <FormattedMessage defaultMessage="Role" />
           </Text>
         </Col>
-        <Col flex={1} className={classes.headerCell} style={{ maxWidth: 250 }}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} flex={1} style={{ maxWidth: 250 }}>
+          <Text strong style={{ paddingLeft: 5 }}>
             <FormattedMessage defaultMessage="Business" />
           </Text>
         </Col>
-        <Col flex={1} className={classes.headerCell} style={{ maxWidth: 250 }}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} flex={1} style={{ maxWidth: 250 }}>
+          <Text strong style={{ paddingLeft: 5 }}>
             <FormattedMessage defaultMessage="Groups" />
           </Text>
         </Col>
@@ -354,22 +355,22 @@ const NewUsersTable = ({
 
       {activeUsers.map((user) => (
         <NewUserRow
-          key={user.id}
-          user={user}
-          newBusinesses={newBusinesses}
           groupsData={groupsData}
+          key={user.id}
+          newBusinesses={newBusinesses}
           onDelete={() => {}}
           onUpdateUser={onUpdateUser}
+          user={user}
         />
       ))}
 
       <Pagination
         current={currentPage}
-        onChange={setCurrentPage}
-        total={newUsers.length}
-        showTotal={(total) => `Total Users: ${total}`}
-        pageSizeOptions={[10]}
         hideOnSinglePage
+        onChange={setCurrentPage}
+        pageSizeOptions={[10]}
+        showTotal={(total) => `Total Users: ${total}`}
+        total={newUsers.length}
       />
     </Card>
   );

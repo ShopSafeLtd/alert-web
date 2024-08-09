@@ -1,18 +1,18 @@
-import { useViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
+import { useViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 
 interface Props {
+  investigationId: string;
   onClose: () => void;
   onSelect: (value: string) => void;
-  investigationId: string;
 }
 
 export interface ImagesData {
   offenders: {
-    name: string;
     images: {
-      url: string;
       optimisedPersisted?: string;
+      url: string;
     }[];
+    name: string;
   }[];
 }
 
@@ -23,9 +23,9 @@ interface Return {
 }
 
 const useSelectImage = ({
+  investigationId,
   onClose,
   onSelect,
-  investigationId,
 }: Props): Return => {
   const { data: ImportData, loading } = useViewInvestigationQuery({
     variables: {
@@ -38,10 +38,10 @@ const useSelectImage = ({
   const data = ImportData?.investigation?.offenders
     ? {
         offenders: ImportData?.investigation?.offenders.map((offender) => ({
-          name: offender.name || '',
           images: offender.images.map((image) => ({
             url: image.optimisedPersisted || '',
           })),
+          name: offender.name || '',
         })),
       }
     : undefined;
@@ -52,9 +52,9 @@ const useSelectImage = ({
   };
 
   return {
-    onSubmit,
     data,
     loading,
+    onSubmit,
   };
 };
 

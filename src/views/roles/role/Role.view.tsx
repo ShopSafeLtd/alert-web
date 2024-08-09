@@ -1,4 +1,4 @@
-import type { RoleQuery } from '#/views/roles/graphql/queries/role.generated';
+import type { RoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
 import type { FormInstance } from 'antd';
 import type { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
@@ -161,9 +161,6 @@ const RoleView = ({
     }),
     SINGLE_SHOE: formatMessage({
       defaultMessage: 'Single Shoe',
-    }),
-    TASKS: formatMessage({
-      defaultMessage: 'Tasks',
     }),
     USERS: formatMessage({
       defaultMessage: 'Users',

@@ -1,48 +1,48 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-
-import { Modal, notification } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
+import type { CurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
 import type { SelectOptions } from 'types/DataType';
+
 import { useGroupsContext } from '#/context/groups-context';
-import type { CurrentUserQuery } from '#/hooks/user/queries/current-user.generated';
-import { useCurrentUserQuery } from '#/hooks/user/queries/current-user.generated';
-import { useUpdateUserMutation } from 'graphql/user/mutation/update_user.generated';
-import { useResetPasswordMutation } from 'graphql/auth/mutations/reset_password.generated';
+import { useCurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
+import { Modal, notification } from 'antd';
+import { useResetPasswordMutation } from 'graphql/auth/mutations/__generated__/reset_password.generated';
+import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
 export interface FormData {
-  fullName: string;
-  email: string;
-  incidentEmail: boolean;
-  incidentPush: boolean;
-  offenderEmail: boolean;
-  offenderPush: boolean;
   bulletinEmails: boolean;
   bulletinPush: boolean;
-  messagePush: boolean;
   defaultGroups: string[];
   defaultScheme: string;
+  email: string;
+  fullName: string;
+  incidentEmail: boolean;
+  incidentPush: boolean;
+  messagePush: boolean;
+  offenderEmail: boolean;
+  offenderPush: boolean;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  resetConfirm: () => void;
   data: CurrentUserQuery | undefined;
-  loading: boolean;
-  saving: boolean;
   groups: SelectOptions[] | undefined;
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  resetConfirm: () => void;
+  saving: boolean;
   userDefaultGroups: string[] | undefined;
 }
 
 const useEditProfile = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const { id: userId, filterDefaultGroups: defaultGroups } = useStoreState(
+  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
     (state) => state.user
   );
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -62,11 +62,11 @@ const useEditProfile = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'Your Profile has been updated.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -89,38 +89,6 @@ const useEditProfile = (): Return => {
       );
       void updateUser({
         variables: {
-          where: {
-            id: userId,
-          },
-          data: {
-            email: { set: data.email },
-            fullName: { set: data.fullName },
-            incidentEmail: { set: data.incidentEmail },
-            incidentPush: { set: data.incidentPush },
-            offenderEmail: { set: data.offenderEmail },
-            offenderPush: { set: data.offenderPush },
-            bulletinEmails: { set: data.bulletinEmails },
-            bulletinPush: { set: data.bulletinPush },
-            messagePush: { set: data.messagePush },
-            defaultScheme: data.defaultScheme
-              ? { set: data.defaultScheme }
-              : undefined,
-            defaultGroups: {
-              connect: connectDefaultGroups
-                ? connectDefaultGroups.map((id) => ({ id }))
-                : undefined,
-              disconnect: disconnectDefaultGroups
-                ? disconnectDefaultGroups.map((id) => ({ id }))
-                : undefined,
-            },
-          },
-          groupWhere: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
           chatWhere: {
             chat: {
               scheme: {
@@ -129,6 +97,38 @@ const useEditProfile = (): Return => {
                 },
               },
             },
+          },
+          data: {
+            bulletinEmails: { set: data.bulletinEmails },
+            bulletinPush: { set: data.bulletinPush },
+            defaultGroups: {
+              connect: connectDefaultGroups
+                ? connectDefaultGroups.map((id) => ({ id }))
+                : undefined,
+              disconnect: disconnectDefaultGroups
+                ? disconnectDefaultGroups.map((id) => ({ id }))
+                : undefined,
+            },
+            defaultScheme: data.defaultScheme
+              ? { set: data.defaultScheme }
+              : undefined,
+            email: { set: data.email },
+            fullName: { set: data.fullName },
+            incidentEmail: { set: data.incidentEmail },
+            incidentPush: { set: data.incidentPush },
+            messagePush: { set: data.messagePush },
+            offenderEmail: { set: data.offenderEmail },
+            offenderPush: { set: data.offenderPush },
+          },
+          groupWhere: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+          where: {
+            id: userId,
           },
         },
       }).finally(() => {
@@ -140,9 +140,6 @@ const useEditProfile = (): Return => {
   const [resetPassword] = useResetPasswordMutation();
   const resetConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you Want to reset your password?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'You will receive a reset email.',
       }),
@@ -155,17 +152,20 @@ const useEditProfile = (): Return => {
           },
         });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you Want to reset your password?',
+      }),
     });
   };
 
   return {
-    onSubmit,
-    onClose,
-    resetConfirm,
     data: userData,
-    loading,
-    saving,
     groups,
+    loading,
+    onClose,
+    onSubmit,
+    resetConfirm,
+    saving,
     userDefaultGroups: (userDefaultGroups || defaultGroups).map(({ id }) => id),
   };
 };

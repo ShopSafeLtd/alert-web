@@ -1,46 +1,48 @@
-import React from 'react';
+import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import { Button, Col, Form, Input, Radio, Row, Select, Skeleton } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import DebounceSelect from 'components/form-components/DebounceSelect';
 import DatePicker from 'components/util-components/DatePicker';
-import type { FormData } from './useEditIncidentFeed';
-import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/edit-incident-feed.generated';
 import { IncidentPriority } from 'graphql/types';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import type { FormData } from './useEditIncidentFeed';
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
+  crimeTypes: { label: string; value: string }[];
   data:
-    | Exclude<EditIncidentFeedQuery['incident'], undefined | null>
+    | Exclude<EditIncidentFeedQuery['incident'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  saving: boolean;
-  crimeTypes: { value: string; label: string }[];
-  involvedTags: { value: string; label: string }[];
-  impactTags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  impactTags: { label: string; value: string }[];
+  involvedTags: { label: string; value: string }[];
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  tagsLoading: boolean;
+  // onSearchBusiness: (
+  //   value: string
+  // ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const EditGroup = ({
-  onSubmit,
-  onClose,
-  data,
-  loading,
   crimeTypes,
-  impactTags,
-  involvedTags,
-  tagsLoading,
+  data,
   groups,
   groupsLoading,
+  impactTags,
+  involvedTags,
+  loading,
+  onClose,
+  onSubmit,
   saving,
-  onSearchBusiness,
-}: Props): JSX.Element => {
+  tagsLoading,
+}: // onSearchBusiness,
+Props): JSX.Element => {
   const intl = useIntl();
 
   return !data && loading ? (
@@ -48,36 +50,36 @@ const EditGroup = ({
   ) : (
     <Form
       initialValues={{
-        subject: data?.subject,
-        customerRef: data?.customerRef,
-        description: data?.description,
-        date: data?.date ? new Date(data?.date) : '',
-
         // moment(data?.date, 'YYYY-MM-DD,HH:mm:ss'),
         business: {
           label: data?.business?.name,
           value: data?.business?.id,
         },
-        policeInvolved: data?.policeInvolved || false,
-        policeRef: data?.policeRef,
-        policeNo: data?.policeNo,
-        policeReported: data?.policeReported || false,
-        priority: data?.priority || false,
+        customerRef: data?.customerRef,
+        date: data?.date ? new Date(data?.date) : '',
+        description: data?.description,
+
         groups:
           data?.groups && data?.groups.length > 0
             ? data?.groups.map(({ id }) => id)
             : [],
+        policeInvolved: data?.policeInvolved || false,
+        policeNo: data?.policeNo,
+        policeRef: data?.policeRef,
+        policeReported: data?.policeReported || false,
+        priority: data?.priority || false,
+        subject: data?.subject,
         tagsCrimeTypes:
           data?.crimeTypes && data?.crimeTypes.length > 0
             ? data?.crimeTypes.map(({ id }) => id)
             : [],
-        tagsInvolved:
-          data?.involvedTags && data?.involvedTags.length > 0
-            ? data?.involvedTags.map(({ id }) => id)
-            : [],
         tagsImpact:
           data?.impactTags && data?.impactTags.length > 0
             ? data?.impactTags.map(({ id }) => id)
+            : [],
+        tagsInvolved:
+          data?.involvedTags && data?.involvedTags.length > 0
+            ? data?.involvedTags.map(({ id }) => id)
             : [],
       }}
       layout="vertical"
@@ -86,34 +88,34 @@ const EditGroup = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="tagsCrimeTypes"
             label={intl.formatMessage({
               defaultMessage: 'Incident Type',
             })}
-            tooltip={intl.formatMessage({
-              defaultMessage:
-                'Select the relevant crime types for this incident, these help to categorise the incident.',
-            })}
+            name="tagsCrimeTypes"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
-                  defaultMessage: 'Please add at least one crime type.',
+                  defaultMessage: 'Please add at least one incident type.',
                 }),
+                required: true,
               },
             ]}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Select the relevant incident types for this incident, these help to categorise the incident.',
+            })}
           >
             <Select
-              loading={tagsLoading}
               disabled={saving}
-              mode="multiple"
+              loading={tagsLoading}
               maxTagCount={2}
+              mode="multiple"
               placeholder={intl.formatMessage({
-                defaultMessage: 'Search for a crime type...',
+                defaultMessage: 'Search for a incident type...',
               })}
             >
               {crimeTypes.map((tag) => (
-                <Select.Option value={tag.value} key={tag.value}>
+                <Select.Option key={tag.value} value={tag.value}>
                   {tag.label}
                 </Select.Option>
               ))}
@@ -122,22 +124,22 @@ const EditGroup = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="tagsInvolved"
             label={intl.formatMessage({
               defaultMessage: 'Aggravating Factors',
             })}
+            name="tagsInvolved"
           >
             <Select
-              loading={tagsLoading}
               disabled={saving}
-              mode="multiple"
+              loading={tagsLoading}
               maxTagCount={2}
+              mode="multiple"
               placeholder={intl.formatMessage({
-                defaultMessage: 'Search for a crime type...',
+                defaultMessage: 'Search for a incident type...',
               })}
             >
               {involvedTags.map((tag) => (
-                <Select.Option value={tag.value} key={tag.value}>
+                <Select.Option key={tag.value} value={tag.value}>
                   {tag.label}
                 </Select.Option>
               ))}
@@ -146,22 +148,22 @@ const EditGroup = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="tagsImpact"
             label={intl.formatMessage({
               defaultMessage: 'Incident Impact',
             })}
+            name="tagsImpact"
           >
             <Select
-              loading={tagsLoading}
               disabled={saving}
-              mode="multiple"
+              loading={tagsLoading}
               maxTagCount={2}
+              mode="multiple"
               placeholder={intl.formatMessage({
-                defaultMessage: 'Search for a crime type...',
+                defaultMessage: 'Search for a incident type...',
               })}
             >
               {impactTags.map((tag) => (
-                <Select.Option value={tag.value} key={tag.value}>
+                <Select.Option key={tag.value} value={tag.value}>
                   {tag.label}
                 </Select.Option>
               ))}
@@ -170,10 +172,10 @@ const EditGroup = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="priority"
             label={intl.formatMessage({
               defaultMessage: 'Priority',
             })}
+            name="priority"
           >
             <Select disabled={saving}>
               <Select.Option value={IncidentPriority.Low}>
@@ -195,73 +197,73 @@ const EditGroup = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="date"
             label={intl.formatMessage({
               defaultMessage: 'Time & Date',
             })}
-            tooltip={intl.formatMessage({
-              defaultMessage: 'The date and time that the incident occurred.',
-            })}
+            name="date"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please select a date for the incident.',
                 }),
+                required: true,
               },
             ]}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'The date and time that the incident occurred.',
+            })}
           >
             <DatePicker
-              style={{ width: '100%' }}
               disabled={saving}
               disabledDate={(current) =>
                 current && current.getTime() > Date.now()
               }
               format="HH:mm - DD/MM/YY"
-              showTime={{ showSecond: false, showNow: true }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Set Date & Time',
               })}
+              showTime={{ showNow: true, showSecond: false }}
+              style={{ width: '100%' }}
             />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="subject"
             label={intl.formatMessage({
               defaultMessage: 'Subject',
             })}
+            name="subject"
           >
             <Input disabled={saving} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="customerRef"
             label={intl.formatMessage({
               defaultMessage: 'Customer Reference',
             })}
+            name="customerRef"
           >
             <Input disabled={saving} />
           </Form.Item>
         </Col>
       </Row>
       <Form.Item
-        name="description"
         label={intl.formatMessage({
           defaultMessage: 'Description',
         })}
-        tooltip={intl.formatMessage({
-          defaultMessage: 'A more detailed description of the incident.',
-        })}
+        name="description"
         rules={[
           {
-            required: true,
             message: intl.formatMessage({
               defaultMessage: 'Please enter a description for the incident.',
             }),
+            required: true,
           },
         ]}
+        tooltip={intl.formatMessage({
+          defaultMessage: 'A more detailed description of the incident.',
+        })}
       >
         <Input.TextArea disabled={saving} />
       </Form.Item>
@@ -269,29 +271,29 @@ const EditGroup = ({
       <Row>
         <Col span={24}>
           <Form.Item
-            name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
-            tooltip={intl.formatMessage({
-              defaultMessage:
-                'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
-            })}
+            name="groups"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please add at least one group that you would like this incident to be visible to.',
                 }),
+                required: true,
               },
             ]}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
+            })}
           >
             <Select
-              loading={groupsLoading}
               disabled={saving}
-              mode="multiple"
+              loading={groupsLoading}
               maxTagCount={3}
+              mode="multiple"
               placeholder={intl.formatMessage({
                 defaultMessage:
                   'Select the groups that you would like this incident to be visible to.',
@@ -310,20 +312,19 @@ const EditGroup = ({
       <Row>
         <Col flex={1}>
           <Form.Item
-            name="business"
             label={intl.formatMessage({
               defaultMessage: 'Business',
             })}
+            name="business"
           >
-            <DebounceSelect
-              style={{ width: '100%' }}
-              showSearch
+            <BusinessesSelect
               allowClear
               disabled={saving}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for a business...',
               })}
-              fetchOptions={onSearchBusiness}
+              showSearch
+              style={{ width: '100%' }}
             />
           </Form.Item>
         </Col>
@@ -332,15 +333,17 @@ const EditGroup = ({
       <Row>
         <Col span={12}>
           <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Was this incident reported to the police?',
+            })}
             name="policeReported"
             tooltip={intl.formatMessage({
               defaultMessage: 'The incident has been reported to the police',
             })}
-            label={intl.formatMessage({
-              defaultMessage: 'Was this incident reported to the police?',
-            })}
           >
             <Radio.Group
+              disabled={saving}
+              optionType="button"
               options={[
                 {
                   label: intl.formatMessage({
@@ -355,18 +358,16 @@ const EditGroup = ({
                   value: false,
                 },
               ]}
-              optionType="button"
-              disabled={saving}
             />
           </Form.Item>
         </Col>
         <Col span={1} />
         <Col span={11}>
           <Form.Item
-            name="policeRef"
             label={intl.formatMessage({
               defaultMessage: 'Crime Ref No.',
             })}
+            name="policeRef"
             tooltip={intl.formatMessage({
               defaultMessage:
                 'The crime reference number provided by the police.',
@@ -378,15 +379,17 @@ const EditGroup = ({
 
         <Col span={12}>
           <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Were the police involved in this incident?',
+            })}
             name="policeInvolved"
             tooltip={intl.formatMessage({
               defaultMessage: 'The police have been involved in the incident.',
             })}
-            label={intl.formatMessage({
-              defaultMessage: 'Were the police involved in this incident?',
-            })}
           >
             <Radio.Group
+              disabled={saving}
+              optionType="button"
               options={[
                 {
                   label: intl.formatMessage({
@@ -401,18 +404,16 @@ const EditGroup = ({
                   value: false,
                 },
               ]}
-              optionType="button"
-              disabled={saving}
             />
           </Form.Item>
         </Col>
         <Col span={1} />
         <Col span={11}>
           <Form.Item
-            name="policeNo"
             label={intl.formatMessage({
               defaultMessage: 'Officer Collar No.',
             })}
+            name="policeNo"
             tooltip={intl.formatMessage({
               defaultMessage: 'The collar number of the officer(s) involved.',
             })}
@@ -422,7 +423,7 @@ const EditGroup = ({
         </Col>
       </Row>
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
@@ -433,9 +434,9 @@ const EditGroup = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Save',

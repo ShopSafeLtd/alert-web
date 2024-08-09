@@ -1,0 +1,10 @@
+query EditReportGroup($where: UniqueId!) {
+    reportGroup(where: $where) {
+        id
+        name
+        order
+        groups {
+            id
+        }
+    }
+}

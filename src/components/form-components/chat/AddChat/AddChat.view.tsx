@@ -1,47 +1,48 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
+import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+
 import { Button, Col, Form, Input, Row, Select } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListSchemeUsersQuery } from 'graphql/users/queries/list-scheme-users.generated';
 
 export interface FormData {
-  name: string;
   description: string;
+  name: string;
   users: string[];
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
+  form: FormInstance<FormData>;
   onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
-  saving: boolean;
-  form: FormInstance<FormData>;
 }
 
 const AddChat = ({
-  onSubmit,
+  form,
   onClose,
+  onSubmit,
+  saving,
   usersData,
   usersLoading,
-  saving,
-  form,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
-    <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
+    <Form<FormData> form={form} layout="vertical" onFinish={onSubmit}>
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the new chat group.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -51,10 +52,10 @@ const AddChat = ({
 
         <Col span={23}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>
@@ -64,30 +65,30 @@ const AddChat = ({
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item
-            name="users"
             label={intl.formatMessage({
               defaultMessage: 'Users',
             })}
+            name="users"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please add at least one user for the new chat group.',
                 }),
+                required: true,
               },
             ]}
           >
             <Select
-              loading={usersLoading}
               disabled={saving}
-              mode="multiple"
-              maxTagCount={3}
               filterOption
+              loading={usersLoading}
+              maxTagCount={3}
+              mode="multiple"
               optionFilterProp="label"
               options={usersData?.users.map((user) => ({
-                value: user.id,
                 label: `${user.fullName} (${user.businesses[0]?.name})`,
+                value: user.id,
               }))}
             />
           </Form.Item>
@@ -95,7 +96,7 @@ const AddChat = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -103,10 +104,10 @@ const AddChat = ({
           </Col>
           <Col>
             <Button
-              type="primary"
-              htmlType="submit"
               disabled={saving}
+              htmlType="submit"
               loading={saving}
+              type="primary"
             >
               {intl.formatMessage({
                 defaultMessage: 'Create Chat Group',

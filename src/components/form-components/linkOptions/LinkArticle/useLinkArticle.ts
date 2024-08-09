@@ -1,47 +1,47 @@
-import { useEffect, useState } from 'react';
-
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import type { ArticlePriority } from 'graphql/types';
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useStoreActions, useStoreState } from 'state';
-import type { ArticleData, DateType } from 'types/DataType';
 import type { ArticleFilters } from 'state/data-model';
+import type { ArticleData, DateType } from 'types/DataType';
+
 import { useGroupsContext } from '#/context/groups-context';
-import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
-import { useListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/list-articles-feed.generated';
+import { useListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Props {
+  articleIds: string[] | undefined;
   onClose: () => void;
   update: (value: ArticleData) => void;
-  articleIds: string[] | undefined;
 }
 
 interface Return {
-  onSubmit: () => void;
+  clearFilters: () => void;
   data:
-    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], undefined | null>
+    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], null | undefined>
     | null
     | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  selectedArticle: ArticleData | undefined;
-  setSelectedArticle: (value: ArticleData | undefined) => void;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  filterVariables: ArticleFilters;
-  setOrder: (value: SortOrder) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  clearFilters: () => void;
   fetchMoreScroll: () => void;
+  filterVariables: ArticleFilters;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
+  loading: boolean;
+  onSubmit: () => void;
+  openLightbox: (index: number) => void;
+  selectedArticle: ArticleData | undefined;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setPriorityFilter: (value: ArticlePriority[]) => void;
+  setSearch: (value: string) => void;
+  setSelectedArticle: (value: ArticleData | undefined) => void;
 }
 
-const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
+const useLinkArticle = ({ articleIds, onClose, update }: Props): Return => {
   const { filterDefaultGroups: defaultGroups } = useStoreState(
     (state) => state.user
   );
@@ -57,26 +57,33 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
   >(undefined);
 
   const {
-    groups: groupsFilter,
     createdAt: createdAtFilter,
+    groups: groupsFilter,
     order,
     priorities: priorityFilter,
     search,
   } = filterVariables;
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const variables = {
-    take: 18,
     order: {
       updatedAt: order,
     },
     scheme: {
       id: schemeId,
     },
+    take: 18,
     where: {
-      id: { notIn: articleIds },
+      OR: [
+        {
+          title: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
 
       createdAt: createdAtFilter
         ? {
@@ -94,20 +101,13 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
               },
             }
           : undefined,
+      id: { notIn: articleIds },
       priority:
         priorityFilter.length > 0
           ? {
               in: priorityFilter,
             }
           : undefined,
-      OR: [
-        {
-          title: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
     },
   };
 
@@ -126,17 +126,12 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
     }
   }, []);
 
-  const { data, loading, fetchMore } = useListArticlesFeedQuery({
+  const { data, fetchMore, loading } = useListArticlesFeedQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
   const fetchMoreScroll = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        after: data?.listArticlesRelay?.pageInfo?.endCursor,
-      },
-
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -148,6 +143,11 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
             ],
           },
         };
+      },
+
+      variables: {
+        ...variables,
+        after: data?.listArticlesRelay?.pageInfo?.endCursor,
       },
     });
   };
@@ -162,7 +162,7 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
   };
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   // filter function
@@ -210,33 +210,33 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
   const clearFilters = () => {
     setFilterState({
       variables: {
-        search: '',
-        gallery: [],
-        order: SortOrder.Desc,
         createdAt: undefined,
+        gallery: [],
         groups: [],
+        order: SortOrder.Desc,
         priorities: [],
+        search: '',
       },
     });
   };
   return {
-    onSubmit,
+    clearFilters,
     data: data?.listArticlesRelay,
-    loading: data?.listArticlesRelay ? false : loading,
+    fetchMoreScroll,
+    filterVariables,
     groups,
     groupsLoading,
-    setSearch,
-    openLightbox,
     lightBoxOpen,
+    loading: data?.listArticlesRelay ? false : loading,
+    onSubmit,
+    openLightbox,
     selectedArticle,
-    setSelectedArticle,
-    filterVariables,
-    setOrder,
-    setGroupsFilter,
     setCreatedAtFilter,
-    clearFilters,
-    fetchMoreScroll,
+    setGroupsFilter,
+    setOrder,
     setPriorityFilter,
+    setSearch,
+    setSelectedArticle,
   };
 };
 

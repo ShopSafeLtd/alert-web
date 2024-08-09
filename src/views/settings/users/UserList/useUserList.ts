@@ -1,49 +1,49 @@
-import { useState } from 'react';
-
-import { useStoreState } from 'state';
+import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { UserSort } from 'types/enums/user_sort';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type { UserListQuery } from '#/views/settings/users/UserList/UserList.generated';
-import { useUserListQuery } from '#/views/settings/users/UserList/UserList.generated';
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
 import type { UserStatus } from 'graphql/types';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
+
+import { useUserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { QueryMode, Role, SortOrder } from 'graphql/types';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/scheme-groups.generated';
-import { ListUsersDocument } from 'graphql/users/queries/list-users.generated';
+import { ListUsersDocument } from 'graphql/users/queries/__generated__/list-users.generated';
+import { useState } from 'react';
+import { useStoreState } from 'state';
+import { UserSort } from 'types/enums/user_sort';
 
 interface Return {
-  data: UserListQuery | undefined;
-  loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  selectedGroups: string[];
-  setSelectedGroups: (value: string[]) => void;
   addUser: boolean;
-  toggleAddUser: () => void;
-  updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
-  updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
-  onPaginationChange: (page: number, pageSize: number) => void;
+  clearFilters: () => void;
   currentPage: number;
   currentPageSize: number;
-  toggleEditUser: (value?: string | undefined) => void;
+  data: UserListQuery | undefined;
   editUser: string | undefined;
-  userStatus: UserStatus[] | undefined;
-  setUserStatus: (value: UserStatus[]) => void;
-  userRole: Role | undefined;
-  setUserRole: (value: Role) => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
+  onPaginationChange: (page: number, pageSize: number) => void;
   order: UserSort;
+  search: string;
+  selectedGroups: string[];
   setOrder: (value: UserSort) => void;
-  clearFilters: () => void;
+  setSearch: (value: string) => void;
+  setSelectedGroups: (value: string[]) => void;
+  setUserRole: (value: Role) => void;
+  setUserStatus: (value: UserStatus[]) => void;
+  sortFilter: boolean;
+  toggleAddUser: () => void;
+  toggleEditUser: (value?: string | undefined) => void;
+  toggleSortFilter: () => void;
+  updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
+  updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+  userRole: Role | undefined;
+  userStatus: UserStatus[] | undefined;
 }
 
 const useUserList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const { id: userId, role } = useStoreState((state) => state.user);
   const [addUser, setAddUser] = useState(false);
   const [editUser, toggleEditUser] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState('');
@@ -56,11 +56,11 @@ const useUserList = (): Return => {
   const [userRole, setUserRole] = useState<Role>();
 
   const getOrderBy = {
-    [UserSort.createdAtDesc]: {
-      createdAt: SortOrder.Desc,
-    },
     [UserSort.createdAtAsc]: {
       createdAt: SortOrder.Asc,
+    },
+    [UserSort.createdAtDesc]: {
+      createdAt: SortOrder.Desc,
     },
     [UserSort.nameAsc]: {
       fullName: SortOrder.Asc,
@@ -71,45 +71,27 @@ const useUserList = (): Return => {
   };
 
   const variables = {
+    groupWhere: {
+      scheme: {
+        id: {
+          equals: schemeId,
+        },
+      },
+      users:
+        role === Role.User || role === Role.GroupAdmin
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+    },
     orderBy: getOrderBy[order],
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
-      schemes: {
-        some: {
-          scheme: {
-            id: {
-              equals: schemeId,
-            },
-          },
-          recycled: {
-            equals: false,
-          },
-          role: userRole
-            ? {
-                equals: userRole,
-              }
-            : undefined,
-        },
-      },
-      recycled: {
-        equals: false,
-      },
-      status: {
-        in: userStatus,
-      },
-      groups:
-        selectedGroups.length > 0
-          ? {
-              some: {
-                id: {
-                  in: selectedGroups,
-                },
-              },
-            }
-          : role === Role.GroupAdmin
-          ? { some: { users: { some: { id: { equals: userId } } } } }
-          : undefined,
       OR: [
         {
           fullName: {
@@ -134,23 +116,41 @@ const useUserList = (): Return => {
           },
         },
       ],
-    },
-    groupWhere: {
-      scheme: {
-        id: {
-          equals: schemeId,
-        },
-      },
-      users:
-        role === Role.User || role === Role.GroupAdmin
+      groups:
+        selectedGroups.length > 0
           ? {
               some: {
                 id: {
-                  equals: userId,
+                  in: selectedGroups,
                 },
               },
             }
-          : undefined,
+          : role === Role.GroupAdmin
+            ? { some: { users: { some: { id: { equals: userId } } } } }
+            : undefined,
+      recycled: {
+        equals: false,
+      },
+      schemes: {
+        some: {
+          recycled: {
+            equals: false,
+          },
+          role: userRole
+            ? {
+                equals: userRole,
+              }
+            : undefined,
+          scheme: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+      status: {
+        in: userStatus,
+      },
     },
   };
 
@@ -213,14 +213,14 @@ const useUserList = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<UserListQuery>({
-      query: ListUsersDocument,
       data: {
+        __typename: 'Query',
         listUsers: {
           total: existingData.listUsers.total + 1,
           users: [...existingData.listUsers.users, res.createUserInDatabase],
         },
-        __typename: 'Query',
       },
+      query: ListUsersDocument,
       variables,
     });
   };
@@ -244,15 +244,15 @@ const useUserList = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<UserListQuery>({
-      query: ListUsersDocument,
       data: {
+        __typename: 'Query',
         listUsers: {
           total: existingData.listUsers.total + 1,
 
           users: [...existingData.listUsers.users, res.inviteExistingUser],
         },
-        __typename: 'Query',
       },
+      query: ListUsersDocument,
       variables,
     });
   };
@@ -263,36 +263,36 @@ const useUserList = (): Return => {
   };
 
   return {
-    data,
-    loading,
-    search,
-    setSearch,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
-    groupsLoading,
-    selectedGroups,
-    setSelectedGroups,
     addUser,
-    toggleAddUser,
-    updateUserList,
-    updateExitingUserList,
-    onPaginationChange,
+    clearFilters,
     currentPage: page,
     currentPageSize: pageSize,
+    data,
     editUser,
-    toggleEditUser,
-    userStatus,
-    setUserStatus,
-    userRole,
-    setUserRole,
+    groups:
+      groupsData?.groups.map((group) => ({
+        label: group.name,
+        value: group.id,
+      })) || [],
+    groupsLoading,
+    loading,
+    onPaginationChange,
     order,
+    search,
+    selectedGroups,
     setOrder,
+    setSearch,
+    setSelectedGroups,
+    setUserRole,
+    setUserStatus,
     sortFilter,
+    toggleAddUser,
+    toggleEditUser,
     toggleSortFilter,
-    clearFilters,
+    updateExitingUserList,
+    updateUserList,
+    userRole,
+    userStatus,
   };
 };
 

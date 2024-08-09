@@ -1,39 +1,40 @@
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useApolloClient } from '@apollo/client';
-
-import { useStoreState } from 'state';
-import { useIntl } from 'react-intl';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
-} from 'graphql/businesses/queries/search-businesses.generated';
-import { SearchBusinessesDocument } from 'graphql/businesses/queries/search-businesses.generated';
+} from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import type React from 'react';
+
+import { useApolloClient } from '@apollo/client';
+import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
+import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { QueryMode, Role } from 'graphql/types';
-import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/business-brands.generated';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
+// TODO use businesses select
 
 interface Props {
-  showSiteNumber: boolean;
   brands: string[];
   setBrands: (value: string[]) => void;
+  showSiteNumber: boolean;
 }
 interface Return {
+  hideField: boolean;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
-  hideField: boolean;
   onSelectedBusiness: (value: string) => void;
 }
 
 const useIncidentWhere = ({
-  showSiteNumber,
   brands: _,
   setBrands,
+  showSiteNumber,
 }: Props): Return => {
   const client = useApolloClient();
   const intl = useIntl();
   const { id: schemeId } = useStoreState((state) => state.scheme);
-  const { role, businesses, reportToAllBusinesses } = useStoreState(
+  const { businesses, reportToAllBusinesses, role } = useStoreState(
     (state) => state.user
   );
   const [hideField, setHideField] = useState(true);
@@ -53,6 +54,7 @@ const useIncidentWhere = ({
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
+          take: 100,
           where: {
             OR: [
               {
@@ -89,17 +91,17 @@ const useIncidentWhere = ({
         response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
-              value: item?.id || '',
-              siteNumber: item?.siteNumber || '',
               location: item?.locations[0].full || '',
+              siteNumber: item?.siteNumber || '',
+              value: item?.id || '',
             }))
           : [
               {
+                disabled: true,
                 label: intl.formatMessage({
                   defaultMessage: 'No results found',
                 }),
                 value: '',
-                disabled: true,
               },
             ]
       );
@@ -120,8 +122,8 @@ const useIncidentWhere = ({
   };
 
   return {
-    onSearchBusiness,
     hideField,
+    onSearchBusiness,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSelectedBusiness,
   };

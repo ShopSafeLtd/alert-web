@@ -1,68 +1,68 @@
-import { useState } from 'react';
-
+import type { EditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/__generated__/edit-offender.generated';
+import type { OffenderSettingsType } from '#/types/DataType';
 import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
-import { Model, Role } from 'graphql/types';
+
+import { useUpdateOffenderDetailsMutation } from '#/components/form-components/offender/EditOffenderFeed/graphql/mutation/__generated__/update-offender-details.generated';
+import { useEditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/__generated__/edit-offender.generated';
+import { useGroupsContext } from '#/context/groups-context';
 import { notification } from 'antd';
+import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
+import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, Role } from 'graphql/types';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import type { OffenderSettingsType } from '#/types/DataType';
-import { useGroupsContext } from '#/context/groups-context';
-import type { EditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/edit-offender.generated';
-import { useEditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/edit-offender.generated';
-import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/list_custom_galleries.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
-import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/business-offender-settings.generated';
 
 interface Props {
-  onClose: () => void;
   offenderId: string;
+  onClose: () => void;
 }
 export interface FormData {
-  name: string;
-  alias?: string[];
-  ageCheck: boolean;
   age: Age;
-  gender: Gender;
-  race: Race;
+  ageCheck: boolean;
+  alias?: string[];
   build: Build;
-  height: Height;
-  hair: string;
-  peculiarities: string;
   comment: string;
-  dateSource?: string;
-  dateOfBirth?: Date;
-  groups: string[];
-  tags: string[];
   customGalleries: string[];
-  idVerified?: boolean;
+  dateOfBirth?: Date;
+  dateSource?: string;
+  gender: Gender;
+  groups: string[];
+  hair: string;
+  height: Height;
   idSource?: IdSource;
+  idVerified?: boolean;
   infoSource: string;
-  knownFor: string[];
-  targetedGoods: string[];
   justification: string;
+  knownFor: string[];
+  name: string;
+  peculiarities: string;
+  race: Race;
+  tags: string[];
+  targetedGoods: string[];
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  data: EditOffenderQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
   adminRights: boolean;
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
+  data: EditOffenderQuery | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
   needJustification: boolean;
   offenderSettings: OffenderSettingsType | undefined;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
 }
 
 const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
-  const { needJustification, id: schemeId } = useStoreState(
+  const { id: schemeId, needJustification } = useStoreState(
     (state) => state.scheme
   );
   const { role } = useStoreState((state) => state.user);
@@ -108,6 +108,9 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
+        dataType: {
+          equals: Model.Offender,
+        },
         schemes: {
           some: {
             id: {
@@ -115,22 +118,19 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
             },
           },
         },
-        dataType: {
-          equals: Model.Offender,
-        },
       },
     },
   });
 
-  const [updateOffender] = useUpdateOffenderMutation({
+  const [updateOffender] = useUpdateOffenderDetailsMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated',
         }),
         placement: 'bottomRight',
       });
@@ -147,79 +147,58 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
 
     void updateOffender({
       variables: {
-        where: {
-          id: offenderId,
-        },
         data: {
-          approved: { set: true },
-          name:
-            data.name === offenderData?.offender?.name
-              ? undefined
-              : { set: data.name },
-          gender: { set: data.gender || null },
-          race: { set: data.race || null },
-          build: { set: data.build || null },
-          height: { set: data.height || null },
-          hair: {
-            set:
-              data.hair ||
-              intl.formatMessage({
-                defaultMessage: 'Unknown',
-              }),
-          },
-          comment: { set: data.comment || '' },
-          peculiarities: { set: data.peculiarities || '' },
-          age: { set: data.age ? null : data.age || null },
-          dateSource: { set: data.dateSource ? data.dateSource || null : null },
-          dateOfBirth: {
-            set: data.dateOfBirth ? data.dateOfBirth || null : null,
-          },
-          idSource: data.idSource ? { set: data.idSource } : undefined,
-          idVerified: data.idVerified ? { set: data.idVerified } : undefined,
-          groups: {
-            set:
-              groups.length > 1
-                ? data.groups.map((id) => ({ id }))
-                : groups.map(({ value: id }) => ({ id })),
-          },
-          tags: {
-            set: data.tags.map((id) => ({ id })) || undefined,
-          },
-          customGalleries: {
-            set: data.customGalleries.map((id) => ({ id })) || undefined,
-          },
-          scheme: { connect: { id: schemeId } },
-          infoSource: { set: data.infoSource || '' },
-          knownFor: { set: data.knownFor },
-          targetedGoods: { set: data.targetedGoods },
-          alias: { set: data.alias },
-          justification: { set: data.justification || '' },
+          age: data.age,
+          alias: data.alias,
+          build: data.build,
+          comment: data.comment,
+          customGalleryIds: data.customGalleries,
+          dateOfBirth: data.dateOfBirth,
+          dateSource: data.dateSource,
+          gender: data.gender,
+          groupIds:
+            groups.length > 1 ? data.groups : groups.map(({ value: id }) => id),
+          hair:
+            data.hair ??
+            intl.formatMessage({
+              defaultMessage: 'Unknown',
+            }),
+          height: data.height,
+          idSource: data.idSource,
+          idVerified: data.idVerified,
+          infoSource: data.infoSource,
+          justification: data.justification,
+          name: data.name,
+          peculiarities: data.peculiarities,
+          race: data.race,
+          tagIds: data.tags,
         },
+        where: offenderId,
       },
     });
   };
 
   return {
-    onSubmit,
-    data: offenderData,
-    loading: loading || businessLoading,
-    saving,
-    groups,
-    groupsLoading,
-    tags:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    tagsLoading,
+    adminRights: role !== Role.User,
     customGalleries:
       customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: tag }) => ({
-          value: tag.id,
           label: tag.name,
+          value: tag.id,
         })
       ) || [],
     customGalleriesLoading,
-    adminRights: role !== Role.User,
+    data: offenderData,
+    groups,
+    groupsLoading,
+    loading: loading || businessLoading,
     needJustification,
     offenderSettings: businessData?.business.offenderSettings,
+    onSubmit,
+    saving,
+    tags:
+      tagsData?.tags.map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    tagsLoading,
   };
 };
 

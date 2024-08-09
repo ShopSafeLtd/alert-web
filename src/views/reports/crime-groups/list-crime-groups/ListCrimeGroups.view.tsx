@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Col, Input, Row, Table } from 'antd';
+import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
-import { Link, useParams } from 'react-router-dom';
-import { useIntl } from 'react-intl';
-import useStyles from './ListCrimeGroups.styles';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+import { Col, Input, Row, Table } from 'antd';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { Link, useParams } from 'react-router-dom';
+
+import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
   data: ListCrimeGroupsQuery | undefined;
@@ -24,45 +25,30 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
-          selectedId={reportId ?? ''}
           collapsed={collapsed}
+          selectedId={reportId ?? ''}
           setCollapsed={setCollapsed}
         />
       </Col>
-      <Col flex={1} className={classes.page}>
-        <Row gutter={16} className={classes.headerRow}>
+      <Col className={classes.page} flex={1}>
+        <Row className={classes.headerRow} gutter={16}>
           <Col flex={1}>
             <Input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
               allowClear
               className={classes.searchInput}
+              onChange={(event) => setSearch(event.target.value)}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search crime groups...',
               })}
+              value={search}
             />
           </Col>
         </Row>
         <Table
-          dataSource={data?.listCrimeGroups.crimeGroups.map((crimeGroup) => ({
-            key: crimeGroup.id,
-            reference: crimeGroup.reference,
-            totalOffenders: crimeGroup.totalOffenders,
-            totalIncidents: crimeGroup.totalIncidents,
-            totalValue: crimeGroup.totalValue,
-            totalRecoveredValue: crimeGroup.totalRecoveredValue,
-            totalTheftSuccess: crimeGroup.totalTheftSuccess,
-            alias: crimeGroup.alias,
-          }))}
-          loading={loading}
-          size="small"
           columns={[
             {
-              key: 'reference',
               dataIndex: 'reference',
-              title: intl.formatMessage({
-                defaultMessage: 'Alert ID',
-              }),
+              key: 'reference',
               render: (value: string, item) => (
                 <Link to={`${item.key}`}>
                   {intl.formatMessage(
@@ -73,54 +59,69 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
                   )}
                 </Link>
               ),
+              title: intl.formatMessage({
+                defaultMessage: 'Alert ID',
+              }),
             },
             {
-              key: 'alias',
               dataIndex: 'alias',
+              key: 'alias',
               title: intl.formatMessage({
                 defaultMessage: 'Alias',
               }),
             },
             {
-              key: 'totalOffenders',
               dataIndex: 'totalOffenders',
+              key: 'totalOffenders',
               title: intl.formatMessage({
                 defaultMessage: 'Members',
               }),
             },
             {
-              key: 'totalIncidents',
               dataIndex: 'totalIncidents',
+              key: 'totalIncidents',
               title: intl.formatMessage({
                 defaultMessage: 'Incidents',
               }),
             },
             {
-              key: 'totalValue',
               dataIndex: 'totalValue',
+              key: 'totalValue',
+              render: (value: number | undefined) => `£${value || 0}`,
               title: intl.formatMessage({
                 defaultMessage: 'Lost Value',
               }),
-              render: (value: number | undefined) => `£${value || 0}`,
             },
             {
-              key: 'totalRecoveredValue',
               dataIndex: 'totalRecoveredValue',
+              key: 'totalRecoveredValue',
+              render: (value: number | undefined) => `£${value || 0}`,
               title: intl.formatMessage({
                 defaultMessage: 'Recovered Value',
               }),
-              render: (value: number | undefined) => `£${value || 0}`,
             },
             {
-              key: 'totalTheftSuccess',
               dataIndex: 'totalTheftSuccess',
+              key: 'totalTheftSuccess',
+              render: (value: number | undefined) =>
+                `${value?.toFixed(0) || 0}%`,
               title: intl.formatMessage({
                 defaultMessage: 'Loss Rate',
               }),
-              render: (value: number | undefined) =>
-                `${value?.toFixed(0) || 0}%`,
             },
           ]}
+          dataSource={data?.listCrimeGroups.crimeGroups.map((crimeGroup) => ({
+            alias: crimeGroup.alias,
+            key: crimeGroup.id,
+            reference: crimeGroup.reference,
+            totalIncidents: crimeGroup.totalIncidents,
+            totalOffenders: crimeGroup.totalOffenders,
+            totalRecoveredValue: crimeGroup.totalRecoveredValue,
+            totalTheftSuccess: crimeGroup.totalTheftSuccess,
+            totalValue: crimeGroup.totalValue,
+          }))}
+          loading={loading}
+          size="small"
         />
       </Col>
     </Row>

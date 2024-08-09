@@ -1,25 +1,25 @@
-import React from 'react';
+import type { ListDemUsersQuery } from 'graphql/dem/queries/__generated__/list-users.generated';
 
 import { Button, Col, Row, Table } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { ListDemUsersQuery } from 'graphql/dem/queries/list-users.generated';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: () => void;
-  saving: boolean;
   data: ListDemUsersQuery | undefined;
   loading: boolean;
+  onClose: () => void;
   onSelect: (item: { key: string }) => void;
+  onSubmit: () => void;
+  saving: boolean;
 }
 
 const LinkDemUser = ({
-  onClose,
-  onSubmit,
-  saving,
   data,
   loading,
+  onClose,
   onSelect,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -27,49 +27,49 @@ const LinkDemUser = ({
       <Table
         columns={[
           {
-            title: intl.formatMessage({ defaultMessage: 'Name' }),
             dataIndex: 'name',
             key: 'name',
+            title: intl.formatMessage({ defaultMessage: 'Name' }),
           },
           {
+            dataIndex: 'email',
+            key: 'email',
             title: intl.formatMessage({
               defaultMessage: 'Email',
             }),
-            dataIndex: 'email',
-            key: 'email',
           },
         ]}
         dataSource={data?.listDemUsers?.demUsers?.map((user) => ({
-          name: user.name || '',
-          id: user.id || '',
           email: user.email || '',
-
+          id: user.id || '',
           key: user.id || '',
+
+          name: user.name || '',
         }))}
-        rowSelection={{
-          type: 'radio',
-          onSelect,
-        }}
+        loading={loading}
         pagination={{
           hideOnSinglePage: true,
-          total: data?.listDemUsers?.total,
           pageSize: 24,
-          showSizeChanger: false,
           position: ['bottomCenter'],
+          showSizeChanger: false,
+          total: data?.listDemUsers?.total,
         }}
-        loading={loading}
+        rowSelection={{
+          onSelect,
+          type: 'radio',
+        }}
         size="small"
       />
-      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+      <Row gutter={16} justify="end" style={{ paddingBottom: 30 }}>
         <Col>
-          <Button onClick={onClose} disabled={saving} type="text">
+          <Button disabled={saving} onClick={onClose} type="text">
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
         </Col>
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
+            loading={saving}
             onClick={onSubmit}
             type="primary"
           >

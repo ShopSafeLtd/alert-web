@@ -1,45 +1,45 @@
-import { useEffect, useState } from 'react';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 
-import { Role, QueryMode, SortOrder } from 'graphql/types';
-import { useStoreActions, useStoreState } from 'state';
 import { notification } from 'antd';
-import { useParams } from 'react-router';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
+import { useListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import { QueryMode, Role, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import { useListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
+import { useParams } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
-  onClose: () => void;
   offenderIds: string[] | undefined;
+  onClose: () => void;
 }
 
 interface Return {
-  onSubmit: (value: string | undefined) => void;
-  saving: boolean;
   data: ListOffendersQuery | undefined;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  setCurrentId: (value: string | undefined) => void;
+  onSubmit: (value: string | undefined) => void;
+  openLightbox: (index: number) => void;
+  publicOffenderDOB: boolean;
+  saving: boolean;
+  search: string;
   selectedOffender:
     | Exclude<
         ListOffendersQuery['listOffenders'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  publicOffenderDOB: boolean;
+  setCurrentId: (value: string | undefined) => void;
+  setSearch: (value: string) => void;
 }
 
-const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
+const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
   const params = useParams();
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
@@ -53,7 +53,7 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
         ListOffendersQuery['listOffenders'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
     | null
     | undefined
@@ -66,23 +66,21 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
     (actions) => actions.data.setOffenders
   );
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const { data, loading } = useListOffendersQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
-      scheme: {
-        id: schemeId,
-      },
       order: {
         updatedAt: SortOrder.Desc,
       },
-      take: pagination.pageSize,
+      scheme: {
+        id: schemeId,
+      },
       skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
       where: {
-        id: {
-          notIn: offenderIds,
-        },
         OR: [
           {
             name: {
@@ -96,29 +94,31 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
             },
           },
         ],
+        id: {
+          notIn: offenderIds,
+        },
       },
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   const onPaginationChange = (page: number) => {
     setOffendersState({
+      order,
       pagination: {
         ...pagination,
         page,
       },
       variables,
-      order,
     });
   };
   const setSearch = (value: string) => {
     setOffendersState({
+      order,
       pagination,
       variables: {
         ...variables,
         search: value,
       },
-      order,
     });
   };
   const [updateInvestigation] = useUpdateInvestigationMutation({
@@ -126,11 +126,11 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been added to the investigation! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
 
         placement: 'bottomRight',
@@ -150,11 +150,11 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
     ) {
       void updateInvestigation({
         variables: {
-          where: {
-            id: params.id || '',
-          },
           data: {
             offenderIds: [selectedOffender.id],
+          },
+          where: {
+            id: params.id || '',
           },
         },
       });
@@ -164,7 +164,7 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
   };
 
   const openLightbox = (index: number) => {
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   useEffect(() => {
@@ -177,18 +177,18 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
     }
   }, [currentId]);
   return {
-    onSubmit,
-    saving,
     data,
-    loading: data?.listOffenders ? false : loading,
-    search: variables.search,
-    setSearch,
-    onPaginationChange,
-    setCurrentId,
-    openLightbox,
     lightBoxOpen,
-    selectedOffender,
+    loading: data?.listOffenders ? false : loading,
+    onPaginationChange,
+    onSubmit,
+    openLightbox,
     publicOffenderDOB,
+    saving,
+    search: variables.search,
+    selectedOffender,
+    setCurrentId,
+    setSearch,
   };
 };
 

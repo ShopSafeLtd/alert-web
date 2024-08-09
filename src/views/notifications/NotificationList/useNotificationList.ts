@@ -1,59 +1,59 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { useStoreActions, useStoreState } from 'state';
-
-import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useNavigate } from 'react-router';
-import { LocalStorageKeys } from 'types';
-import { useIntl } from 'react-intl';
-import { Model, QueryMode, SortOrder } from 'graphql/types';
+import type { UpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/__generated__/update_user_notification.generated';
 import type {
   UserNotificationsQuery,
   UserNotificationsQueryVariables,
-} from 'graphql/userNotification/queries/user_notifications.generated';
+} from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
+
+import { notification } from 'antd';
+import { Model, QueryMode, SortOrder } from 'graphql/types';
+import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/__generated__/update_user_notification.generated';
 import {
   UserNotificationsDocument,
   useUserNotificationsQuery,
-} from 'graphql/userNotification/queries/user_notifications.generated';
-import type { UpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
-import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/update_user_notification.generated';
+} from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import { LocalStorageKeys } from 'types';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface NotificationData {
-  id: string;
-  type?: Model | null | undefined;
-  vehicleId?: string | null;
-  offenderId?: string | null;
-  crimeGroupId?: string | null;
-  incidentId?: string | null;
-  investigationId?: string | null;
-  chatId?: string | null;
-  articleId?: string | null;
+  articleId?: null | string;
   ban?: {
-    id: string | null;
-    offender: { id: string | null };
+    id: null | string;
+    offender: { id: null | string };
   } | null;
-  userId?: string | null;
-  schemes: { id: string }[];
+  chatId?: null | string;
+  crimeGroupId?: null | string;
+  id: string;
+  incidentId?: null | string;
+  investigationId?: null | string;
+  offenderId?: null | string;
   read: boolean;
+  schemes: { id: string }[];
+  type?: Model | null | undefined;
+  userId?: null | string;
+  vehicleId?: null | string;
 }
 
 interface Return {
-  data:
-    | Exclude<UserNotificationsQuery['user'], undefined | null>
-    | null
-    | undefined;
-  loading: boolean;
-  saving: boolean;
-  handleMarkAsRead: (value: NotificationData) => void;
-  handleMarkAllRead: () => void;
-  takeAllSchemes: boolean;
-  toggleTakeAllSchemes: () => void;
-  setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
   currentPage: number;
   currentPageSize: number;
+  data:
+    | Exclude<UserNotificationsQuery['user'], null | undefined>
+    | null
+    | undefined;
+  handleMarkAllRead: () => void;
+  handleMarkAsRead: (value: NotificationData) => void;
+  loading: boolean;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  saving: boolean;
+  setSearch: (value: string) => void;
+  takeAllSchemes: boolean;
+  toggleTakeAllSchemes: () => void;
 }
 
 const useNotificationLists = (): Return => {
@@ -78,11 +78,6 @@ const useNotificationLists = (): Return => {
   const [page, setPage] = useState(1);
 
   const variables: UserNotificationsQueryVariables = {
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    where: {
-      id: userId,
-    },
     notificationWhere: {
       AND: [
         {
@@ -127,11 +122,15 @@ const useNotificationLists = (): Return => {
         },
       },
     ],
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    where: {
+      id: userId,
+    },
   };
 
   const { data, loading } = useUserNotificationsQuery({
     fetchPolicy: 'cache-and-network',
-    variables,
     onCompleted: (res) => {
       if (
         res.user?.totalUnreadNotifications &&
@@ -145,6 +144,7 @@ const useNotificationLists = (): Return => {
     onError: (err) => {
       console.log('useUserNotificationsQuery', err);
     },
+    variables,
   });
 
   const update: MutationUpdaterFn<UpdateUserNotificationsMutation> = (
@@ -167,9 +167,9 @@ const useNotificationLists = (): Return => {
 
     // write the new data to the Apollo store
     store.writeQuery<UserNotificationsQuery>({
-      query: UserNotificationsDocument,
       data: {
         ...existingData,
+        __typename: 'Query',
         user: {
           ...existingData.user,
           notifications: existingData.user?.notifications.map((el) => ({
@@ -177,8 +177,8 @@ const useNotificationLists = (): Return => {
             read: true,
           })),
         },
-        __typename: 'Query',
       },
+      query: UserNotificationsDocument,
       variables,
     });
   };
@@ -198,11 +198,11 @@ const useNotificationLists = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'All notifications have been updated to read!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -308,30 +308,30 @@ const useNotificationLists = (): Return => {
     );
 
     setScheme({
-      autoPopulateDescription: scheme.autoPopulateDescription,
-      needJustification: scheme.needJustification,
-      requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
-      oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
-      reportOnly: scheme.reportOnly,
-      languageCount: scheme.languageCount,
+      activityAssignToUser: scheme.activityAssignToUser,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
-      defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
-      restrictIncidentAccess: scheme.restrictIncidentAccess,
-      id: scheme.id,
-      name: scheme.name,
-      logo: scheme.logo?.optimisedPersisted,
-      darkLogo: scheme.darkLogo?.optimisedPersisted,
-      userTodos: scheme.userTodos,
-      userNotifications: scheme.userNotifications,
-      goodsMode: scheme.goodsMode,
-      facialRecognition: scheme.facialRecognition,
-      facialDetection: scheme.facialDetection,
-      imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
-      taskTimeTracking: scheme.taskTimeTracking,
+      autoPopulateDescription: scheme.autoPopulateDescription,
       connectedToSchemes: scheme.connectedToSchemes,
-      activityAssignToUser: scheme.activityAssignToUser,
+      darkLogo: scheme.darkLogo?.optimisedPersisted,
+      defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
+      facialDetection: scheme.facialDetection,
+      facialRecognition: scheme.facialRecognition,
+      goodsMode: scheme.goodsMode,
+      id: scheme.id,
+      imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
+      languageCount: scheme.languageCount,
+      logo: scheme.logo?.optimisedPersisted,
+      name: scheme.name,
+      needJustification: scheme.needJustification,
+      oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
+      reportOnly: scheme.reportOnly,
+      requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
+      restrictIncidentAccess: scheme.restrictIncidentAccess,
+      taskTimeTracking: scheme.taskTimeTracking,
       useBusinessGroupsOnIncident: scheme.useBusinessGroupsOnIncident,
+      userNotifications: scheme.userNotifications,
+      userTodos: scheme.userTodos,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(
@@ -388,17 +388,17 @@ const useNotificationLists = (): Return => {
     setPageSize(pageSizeValue);
   };
   return {
-    data: data?.user,
-    loading: (data === null || data === undefined) && loading,
-    saving,
-    takeAllSchemes,
-    toggleTakeAllSchemes,
-    handleMarkAsRead,
-    handleMarkAllRead,
-    setSearch,
-    onPaginationChange,
     currentPage: page,
     currentPageSize: pageSize,
+    data: data?.user,
+    handleMarkAllRead,
+    handleMarkAsRead,
+    loading: (data === null || data === undefined) && loading,
+    onPaginationChange,
+    saving,
+    setSearch,
+    takeAllSchemes,
+    toggleTakeAllSchemes,
   };
 };
 

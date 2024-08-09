@@ -1,27 +1,28 @@
-import React from 'react';
-import { Button, Typography } from 'antd';
+import type { BusinessLossRecoveredGraphQueryVariables } from '#/components/reports/components/BusinessLossRecoveredGraph/__generated__/BusinessLossRecoveredGraph.generated';
 
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useBusinessLossRecoveredGraphQuery } from '#/components/reports/components/BusinessLossRecoveredGraph/__generated__/BusinessLossRecoveredGraph.generated';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import MultiBarGraph from '../../graphs/multiBarGraph';
-import type { BusinessLossRecoveredGraphQueryVariables } from './BusinessLossRecoveredGraph.generated';
-import { useBusinessLossRecoveredGraphQuery } from './BusinessLossRecoveredGraph.generated';
 
 interface Props {
-  isPrinting: boolean;
   editMode: boolean;
-  variables: BusinessLossRecoveredGraphQueryVariables;
-  removeItem: () => void;
+  isPrinting: boolean;
   onNavigate: () => void;
+  removeItem: () => void;
+  variables: BusinessLossRecoveredGraphQueryVariables;
 }
 
 const BusinessLossRecoveredGraph = ({
-  isPrinting,
-  variables,
   editMode,
-  removeItem,
+  isPrinting,
   onNavigate,
+  removeItem,
+  variables,
 }: Props) => {
   const intl = useIntl();
 
@@ -39,22 +40,22 @@ const BusinessLossRecoveredGraph = ({
 
       {editMode ? (
         <Button
-          type="text"
-          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
+          icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
           onClick={removeItem}
+          shape="circle"
+          size="small"
+          type="text"
         />
       ) : (
         <Button
-          type="text"
           className="change-graph1-view-more"
+          danger
+          onClick={onNavigate}
           // style={{ position: 'absolute', right: 5, top: 15, zIndex: 1 }}
           size="small"
-          onClick={onNavigate}
-          danger
+          type="text"
         >
           {intl.formatMessage({
             defaultMessage: 'View More',
@@ -62,11 +63,11 @@ const BusinessLossRecoveredGraph = ({
         </Button>
       )}
       <MultiBarGraph
-        isPrinting={isPrinting}
         data={data?.businessLossRecoveredGraph}
         emptyLabel={intl.formatMessage({
-          defaultMessage: 'No Crime Types',
+          defaultMessage: 'No Incident Types',
         })}
+        isPrinting={isPrinting}
         valueSymbol="£"
       />
     </>

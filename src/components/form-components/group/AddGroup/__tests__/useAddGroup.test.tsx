@@ -7,9 +7,10 @@ import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 
 import useAddGroup from '../useAddGroup';
-import { ListSchemeUsersDocument } from 'graphql/users/queries/list-scheme-users.generated';
-import { CreateGroupDocument } from 'graphql/groups/mutations/create-group.generated';
+
 import { SortOrder } from 'graphql/types';
+import { CreateGroupDocument } from 'graphql/groups/mutations/__generated__/create-group.generated';
+import { ListSchemeUsersDocument } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
 const mocks = [
   {

@@ -1,30 +1,31 @@
-import { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from 'state';
-import type { CrimeGroupFilters } from 'state/data-model';
-import type { DateType } from 'types/DataType';
-import { useGroupsContext } from '#/context/groups-context';
 import type {
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables,
-} from 'graphql/crime-groups/queries/list-crime-groups.generated';
-import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/list-crime-groups.generated';
+} from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import type { CrimeGroupFilters } from 'state/data-model';
+import type { DateType } from 'types/DataType';
+
+import { useGroupsContext } from '#/context/groups-context';
+import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
-  data: ListCrimeGroupsQuery | undefined;
-  loading: boolean;
-  setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
+  addInvestigation: string;
   clearFilters: () => void;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
+  data: ListCrimeGroupsQuery | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
   setGallery: (values: string[]) => void;
   setGroupsFilter: (value: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
   setOrder: (value: SortOrder) => void;
-  addInvestigation: string;
+  setSearch: (value: string) => void;
+  sortFilter: boolean;
   toggleAddInvestigation: (value: string) => void;
+  toggleSortFilter: () => void;
   variables: CrimeGroupFilters;
 }
 const getSizeOptions = () => {
@@ -38,7 +39,7 @@ const getSizeOptions = () => {
 };
 const useListCrimeGroups = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { id: userId, filterDefaultGroups: defaultGroups } = useStoreState(
+  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
     (state) => state.user
   );
 
@@ -55,66 +56,17 @@ const useListCrimeGroups = (): Return => {
   const [sortFilter, setSortFilter] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState('');
   const {
-    search,
-    groups: groupsFilter,
     createdAt: createdAtFilter,
     gallery,
+    groups: groupsFilter,
     order,
+    search,
   } = filterVariables;
   const variables: ListCrimeGroupsQueryVariables = {
     order: {
       updatedAt: order,
     },
     where: {
-      schemes: {
-        some: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      createdAt: createdAtFilter
-        ? {
-            gte: createdAtFilter.startDate,
-            lte: createdAtFilter.endDate,
-          }
-        : undefined,
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : {
-              some: {
-                users: {
-                  some: {
-                    id: {
-                      equals: userId,
-                    },
-                  },
-                },
-              },
-            },
-      createdBy: gallery.includes('MYDATA')
-        ? {
-            id: {
-              equals: userId,
-            },
-          }
-        : undefined,
-      subscribedUsers: gallery.includes('FOLLOWING')
-        ? {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          }
-        : undefined,
       OR: [
         {
           alias: {
@@ -142,6 +94,55 @@ const useListCrimeGroups = (): Return => {
           },
         },
       ],
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
+      createdBy: gallery.includes('MYDATA')
+        ? {
+            id: {
+              equals: userId,
+            },
+          }
+        : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : {
+              some: {
+                users: {
+                  some: {
+                    id: {
+                      equals: userId,
+                    },
+                  },
+                },
+              },
+            },
+      schemes: {
+        some: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      subscribedUsers: gallery.includes('FOLLOWING')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
     },
   };
 
@@ -152,8 +153,8 @@ const useListCrimeGroups = (): Return => {
       setFilterState({
         pagination: {
           ...pagination,
-          sizeOptions,
           pageSize: Number(sizeOptions[0]),
+          sizeOptions,
         },
         variables: {
           ...filterVariables,
@@ -167,8 +168,8 @@ const useListCrimeGroups = (): Return => {
       setFilterState({
         pagination: {
           ...pagination,
-          sizeOptions,
           pageSize: Number(sizeOptions[0]),
+          sizeOptions,
         },
         variables: filterVariables,
       });
@@ -236,30 +237,30 @@ const useListCrimeGroups = (): Return => {
     setFilterState({
       pagination,
       variables: {
-        order: SortOrder.Desc,
-        search: '',
         createdAt: undefined,
         gallery: [],
         groups: [],
+        order: SortOrder.Desc,
+        search: '',
       },
     });
   };
 
   return {
+    addInvestigation,
+    clearFilters,
     data,
-    loading,
-    setSearch,
     groups,
     groupsLoading,
-    setGroupsFilter,
+    loading,
     setCreatedAtFilter,
-    clearFilters,
-    sortFilter,
-    toggleSortFilter,
     setGallery,
+    setGroupsFilter,
     setOrder,
-    addInvestigation,
+    setSearch,
+    sortFilter,
     toggleAddInvestigation: setAddInvestigation,
+    toggleSortFilter,
     variables: filterVariables,
   };
 };

@@ -1,24 +1,25 @@
-import React from 'react';
-import { createUseStyles } from 'react-jss';
+import type { SchemeRekognitionQuery } from 'graphql/rekognition/queries/__generated__/scheme-rekognition.generated';
+
 import { Col, Row, Spin, Typography } from 'antd';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { SchemeRekognitionQuery } from 'graphql/rekognition/queries/scheme-rekognition.generated';
+import { createUseStyles } from 'react-jss';
 
 const { Title } = Typography;
 
 const useStyles = createUseStyles({
+  headerRow: {
+    marginBottom: 20,
+  },
   loading: {
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
   },
   page: {
     padding: 20,
-  },
-  headerRow: {
-    marginBottom: 20,
   },
   title: {
     marginBottom: '0px !important',
@@ -131,8 +132,8 @@ const useStyles = createUseStyles({
 // };
 
 interface Props {
-  loading: boolean;
   data: SchemeRekognitionQuery | undefined;
+  loading: boolean;
 }
 
 const Dashboard = ({ data, loading = true }: Props) => {
@@ -146,7 +147,7 @@ const Dashboard = ({ data, loading = true }: Props) => {
     <div className={classes.page}>
       {data?.scheme?.facialRecognition ? (
         <div>
-          <Row gutter={16} align="middle" className={classes.headerRow}>
+          <Row align="middle" className={classes.headerRow} gutter={16}>
             <Col flex={1}>
               <Title className={classes.title} level={3}>
                 <FormattedMessage defaultMessage="Face Matches" />

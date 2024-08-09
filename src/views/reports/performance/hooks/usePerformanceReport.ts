@@ -1,101 +1,120 @@
-import useReportPrint from 'utils/reportPrint/usePrintReports';
+import type { DateSelectModeType } from '#/components/reports/DateSelect/DateSelect.view';
 import type { InvestigationsTableData } from '#/components/reports/tableColumns';
+import type { DateRangeInput } from 'graphql/types';
+
 import arrangeTemplates from '#/utils/reports/setTemplates';
-import { redactedText } from '../../types';
-import type { Props as Return } from './types';
-import useReportState from '../../../../utils/reports/useReportState';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { usePerformanceReportQuery } from 'graphql/reports/queries/__generated__/performance-report.generated';
+import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/__generated__/scheme-details.generated';
 import { ReportType, SortOrder } from 'graphql/types';
-import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/scheme-details.generated';
-import { usePerformanceReportQuery } from 'graphql/reports/queries/performance-report.generated';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useReportPrint from 'utils/reportPrint/usePrintReports';
+
+import type { Props as Return } from './types';
+
+import useReportState from '../../../../utils/reports/useReportState';
+import { type MetaData, redactedText } from '../../types';
 
 const usePerformanceReport = (): Return => {
   const { reportId } = useParams();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const {
-    currentScheme,
-    editMode,
-    setEditMode,
-    minDrawer,
-    setMinDrawer,
-    layout,
-    setLayout,
-    groups,
-    setGroups,
-    selectedGroups,
-    setSelectedGroups,
-    dateRange,
-    setDateRange,
-    addLogoDrawer,
-    setAddLogoDrawer,
-    logos,
-    setLogos,
-    metadata,
-    setMetadata,
-    templates,
-    setTemplates,
-    selectedTemplate,
-    saveAsDrawer,
-    setSaveAsDrawer,
-    removeLogo,
-    removeItem,
-    changeSize,
     addLogo,
-    selectTemplate,
-    saveTemplate: saveTemplateState,
-    setSelectedBrands,
-    selectedBrands,
-    selectedIndustries,
-    setSelectedIndustries,
-    setRedactOnPrint,
-    redactOnPrint,
-    filtersOpen,
-    toggleFiltersOpen,
-    selectedRoles,
-    setSelectedRoles,
+    addLogoDrawer,
+    changeSize,
+    currentScheme,
+    dateRange = {
+      endDate: new Date(new Date().setHours(23, 59, 59)),
+      startDate: new Date(
+        new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+          0,
+          0,
+          59
+        )
+      ),
+    },
+    dateRangeMode,
+    editMode,
     filterCount,
-    userId,
+    filtersOpen,
+    filtersSet,
+    groups,
+    layout,
+    logos,
+    metadata,
+    minDrawer,
+    redactOnPrint,
+    removeItem,
+    removeLogo,
+    saveAsDrawer,
+    saveTemplate: saveTemplateState,
     saving,
+    selectTemplate,
+    selectedBrands,
+    selectedGroups,
+    selectedIndustries,
+    selectedRoles,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setDateRange,
+    setEditMode,
+    setFiltersSet,
+    setGroups,
+    setLayout,
+    setLogos,
+    setMetadata,
+    setMinDrawer,
+    setRedactOnPrint,
+    setSaveAsDrawer,
+    setSelectedBrands,
+    setSelectedGroups,
+    setSelectedIndustries,
+    setSelectedRoles,
+    setTemplates,
+    templates,
+    toggleFiltersOpen,
+    userId,
   } = useReportState({
     InitLayout: [],
     InitMetaData: [],
     ReportType: ReportType.Performance,
   });
+  const [incidentTypeIds, setIncidentTypeIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (templates.length > 0 && reportId) selectTemplate(reportId);
   }, [templates, reportId]);
 
+  useEffect(() => {
+    const globalFilter = metadata.find((item) => item.key === 'globalFilter');
+    if (!globalFilter || filtersSet) {
+      setMetadata([
+        ...metadata.filter((item) => item.key !== 'globalFilter'),
+        {
+          data: {
+            dateRangeMode,
+            incidentTypeIds,
+            selectedBrands,
+            selectedGroups,
+            selectedIndustries,
+            selectedRoles,
+          },
+          key: 'globalFilter',
+          type: 'globalFilter',
+        },
+      ]);
+    }
+  }, [
+    selectedGroups,
+    selectedIndustries,
+    selectedBrands,
+    selectedRoles,
+    dateRangeMode,
+    incidentTypeIds,
+  ]);
+
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
-      variables: {
-        where: {
-          scheme: {
-            id: {
-              equals: currentScheme,
-            },
-          },
-          users: {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          },
-        },
-        orderBy: {
-          name: SortOrder.Asc,
-        },
-        schemeWhere: {
-          id: currentScheme,
-        },
-        reportTemplatesWhere: {
-          type: {
-            equals: ReportType.Performance,
-          },
-        },
-      },
       onCompleted: (groupsData) => {
         const groupsFormatted = groupsData.groups.map((group) => ({
           label: group.name,
@@ -113,6 +132,70 @@ const usePerformanceReport = (): Return => {
           groupsData?.scheme?.reportTemplates || [],
           setTemplates
         );
+
+        const globalFilter =
+          groupsData.scheme.reportTemplates[0]?.metaData.find(
+            (item) => item.key === 'globalFilter'
+          ) as MetaData;
+        if (globalFilter) {
+          setFiltersSet(true);
+          if (globalFilter.data?.selectedGroups) {
+            setSelectedGroups(globalFilter.data.selectedGroups as string[]);
+          } else {
+            setSelectedGroups([]);
+          }
+          if (globalFilter.data?.selectedIndustries) {
+            setSelectedIndustries(
+              globalFilter.data.selectedIndustries as string[]
+            );
+          } else {
+            setSelectedIndustries([]);
+          }
+          if (globalFilter.data?.selectedBrands) {
+            setSelectedBrands(globalFilter.data.selectedBrands as string[]);
+          } else {
+            setSelectedBrands([]);
+          }
+          if (globalFilter.data?.selectedIndustries) {
+            setSelectedIndustries(
+              globalFilter.data.selectedIndustries as string[]
+            );
+          } else {
+            setSelectedIndustries([]);
+          }
+          if (globalFilter.data?.incidentTypeIds) {
+            setIncidentTypeIds(globalFilter.data.incidentTypeIds as string[]);
+          } else {
+            setIncidentTypeIds([]);
+          }
+        }
+      },
+      variables: {
+        orderBy: {
+          name: SortOrder.Asc,
+        },
+        reportTemplatesWhere: {
+          id: {
+            equals: reportId,
+          },
+        },
+        schemeWhere: {
+          id: currentScheme,
+        },
+        where: {
+          scheme: {
+            id: {
+              equals: currentScheme,
+            },
+          },
+          users: {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -131,16 +214,21 @@ const usePerformanceReport = (): Return => {
     skip: !currentScheme || !groups || groupsLoading || !selectedGroups,
     variables: {
       where: {
-        dateRange,
-        schemeIds: [currentScheme],
+        brandsIds: selectedBrands.length > 0 ? selectedBrands : undefined,
+        dateRange: {
+          endDate: dateRange.endDate,
+          startDate: dateRange.startDate,
+        },
         groupIds:
           selectedGroups.length > 0
             ? selectedGroups
             : groups.map(({ value }) => value),
-        brandsIds: selectedBrands.length > 0 ? selectedBrands : undefined,
+        incidentTypeIds:
+          incidentTypeIds.length > 0 ? incidentTypeIds : undefined,
         industryIds:
           selectedIndustries.length > 0 ? selectedIndustries : undefined,
         rolesIds: selectedRoles.length > 0 ? selectedRoles : undefined,
+        schemeIds: [currentScheme],
       },
     },
   });
@@ -148,58 +236,58 @@ const usePerformanceReport = (): Return => {
   const shouldRedact = isPrinting && redactOnPrint;
   const businessContributionTableData =
     data?.businessContribution?.businessContributions?.map((business, i) => ({
-      key: business.name + i.toString(),
       fullName: business.name,
       incidentsCreated: business.totalIncidents,
+      key: business.name + i.toString(),
+      logins: business.totalLogins,
+      messagesSent: business.totalMessages,
       offendersCreated: business.totalOffenders,
       updatesCreated: business.totalUpdates,
-      messagesSent: business.totalMessages,
-      logins: business.totalLogins,
       users: business.totalUsers,
     })) || [];
 
   const userContributionTableData =
     data?.userContributions?.userContributions?.map((user, index) => ({
-      key: user.name + index.toString(),
       fullName: shouldRedact ? redactedText : user.name,
       incidentsCreated: user.totalIncidents,
+      key: user.name + index.toString(),
+      logins: user.totalLogins,
+      messagesSent: user.totalMessages,
       offendersCreated: user.totalOffenders,
       updatesCreated: user.totalUpdates,
-      messagesSent: user.totalMessages,
-      logins: user.totalLogins,
     })) || [];
 
   const offendersTableData =
     data?.offendersPerformance?.offenderPerformance?.map((offender, i) => ({
-      totalIncidents: offender.totalIncidents,
-      key: offender.name + i.toString(),
       alertId: offender.alertId,
       fullName: shouldRedact ? redactedText : offender.name,
+      id: offender.id,
       image: offender.primaryPhoto,
+      key: offender.name + i.toString(),
       lastIncident: offender.lastIncidentDate
         ? new Date(offender.lastIncidentDate).toLocaleDateString()
         : 'N/A',
       lostValue: offender.totalLostValue.toFixed(2),
       recoveredValue: offender.totalRecoveredValue.toFixed(2),
       successRate: ((offender.totalSuccessRate || 0) * 100).toFixed(2),
-      id: offender.id,
       totalBulletins: offender.totalBulletins,
+      totalIncidents: offender.totalIncidents,
     })) || [];
 
   const crimeGroupPerformanceTableData =
     data?.crimeGroupPerformance?.crimeGroupPerformance?.map(
       (crimeGroup, i) => ({
-        totalIncidents: crimeGroup.totalIncidents,
-        key: `${crimeGroup.alias}${i}`,
         alertId: crimeGroup.alertId,
         fullName: crimeGroup.alias,
-        totalOffenders: crimeGroup.totalOffenders,
-        lostValue: crimeGroup.totalLostValue.toFixed(2),
+        key: `${crimeGroup.alias}${i}`,
         lastIncident: crimeGroup.lastIncident
           ? new Date(crimeGroup.lastIncident).toLocaleDateString()
           : '',
+        lostValue: crimeGroup.totalLostValue.toFixed(2),
         recoveredValue: crimeGroup.totalRecoveredValue.toFixed(2),
         successRate: ((crimeGroup.totalSuccessRate || 0) * 100).toFixed(2),
+        totalIncidents: crimeGroup.totalIncidents,
+        totalOffenders: crimeGroup.totalOffenders,
       })
     ) || [];
 
@@ -208,19 +296,19 @@ const usePerformanceReport = (): Return => {
       ?.filter((business) => business.totalIncidents > 0)
 
       .map((business, i) => ({
-        key: `${business.name}${i}`,
+        avgLost: business?.averageLossValue?.toFixed(2) || '',
+        commonLost: business.mostCommonGoodLost || 'unknown',
         fullName: business.name,
+        highestValueLost: business.highestTotalValueGoodLost || 0,
         incidentsCreated: business.totalIncidents,
-        offendersCreated: business.totalOffenders,
+        key: `${business.name}${i}`,
         lostValue: business.totalLostValue.toFixed(2),
+        offendersCreated: business.totalOffenders,
         recoveredValue: business.totalRecoveredValue.toFixed(2),
         successRate: ((business.totalSuccessRate || 0) * 100 > 100
           ? 100
           : (business.totalSuccessRate || 0) * 100
         ).toFixed(2),
-        commonLost: business.mostCommonGoodLost || 'unknown',
-        highestValueLost: business.highestTotalValueGoodLost || 0,
-        avgLost: business?.averageLossValue?.toFixed(2) || '',
       })) || [];
 
   const targetedGoodsData =
@@ -228,33 +316,50 @@ const usePerformanceReport = (): Return => {
       ?.filter((good) => good.totalIncidents > 0)
 
       .map((good, i) => ({
-        key: `${good.name}${i}`,
+        avgLost: good?.averageLossValue?.toFixed(2),
         fullName: good.name,
         incidentsCreated: good.totalIncidents,
-        offendersCreated: good.totalOffenders,
+        key: `${good.name}${i}`,
         lostValue: good.totalLostValue.toFixed(2),
+        offendersCreated: good.totalOffenders,
         recoveredValue: good.totalRecoveredValue.toFixed(2),
         successRate: ((good.totalSuccessRate || 0) * 100 > 100
           ? 100
           : (good.totalSuccessRate || 0) * 100
         ).toFixed(2),
-        avgLost: good?.averageLossValue?.toFixed(2),
       })) || [];
 
   const investigationsData: InvestigationsTableData[] =
     data?.investigationPerformance?.investigationPerformance.map(
       (investigation) => ({
+        alertId: investigation.alertId,
+        closedAt: investigation.closedAt,
+        createdAt: investigation.createdAt,
         key: investigation.id,
         name: investigation.name,
-        alertId: investigation.alertId,
+        status: investigation.status,
         totalIncidents: investigation.totalIncidents,
         totalOffenders: investigation.totalOffenders,
-        status: investigation.status,
         totalValue: investigation.totalValue,
-        createdAt: investigation.createdAt,
-        closedAt: investigation.closedAt,
       })
     ) || [];
+  const onSetDateRange = (
+    rangeValue: DateRangeInput | undefined,
+    modeValue: DateSelectModeType | undefined
+  ) =>
+    setDateRange(
+      rangeValue ?? {
+        endDate: new Date(new Date().setHours(23, 59, 59)),
+        startDate: new Date(
+          new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+            0,
+            0,
+            59
+          )
+        ),
+      },
+      modeValue ?? 'last30Days'
+    );
 
   return {
     addLogo,
@@ -266,9 +371,13 @@ const usePerformanceReport = (): Return => {
     data,
     dateRange,
     editMode,
+    filterCount,
+    filtersOpen,
     groups,
     groupsLoading,
     handlePrint,
+    incidentTypeIds,
+    investigationsData,
     isPrinting,
     layout,
     loading,
@@ -276,39 +385,37 @@ const usePerformanceReport = (): Return => {
     metadata,
     minDrawer,
     offendersTableData,
+    redactOnPrint,
     removeItem,
     removeLogo,
     saveAsDrawer,
     saveTemplate,
+    saving,
+    schemeId: currentScheme,
     selectTemplate,
+    selectedBrands,
     selectedGroups,
+    selectedIndustries,
+    selectedRoles,
     selectedTemplate,
     setAddLogoDrawer,
-    setDateRange,
+    setDateRange: onSetDateRange,
     setEditMode,
+    setIncidentTypeIds,
     setLayout,
     setMetadata,
     setMinDrawer,
+    setRedactOnPrint,
     setSaveAsDrawer,
+    setSelectedBrands,
     setSelectedGroups,
+    setSelectedIndustries,
+    setSelectedRoles,
     targetedBusinessData,
     targetedGoodsData,
     templates,
-    userContributionTableData,
-    setSelectedBrands,
-    selectedBrands,
-    investigationsData,
-    selectedIndustries,
-    setSelectedIndustries,
-    setRedactOnPrint,
-    redactOnPrint,
-    filtersOpen,
     toggleFiltersOpen,
-    selectedRoles,
-    setSelectedRoles,
-    filterCount,
-    schemeId: currentScheme,
-    saving,
+    userContributionTableData,
   };
 };
 

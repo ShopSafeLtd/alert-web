@@ -1,7 +1,7 @@
+import { useCreateSessionMutation } from 'graphql/sessions/__generated__/create-session.generated';
+import { AppType } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
-import { useCreateSessionMutation } from 'graphql/sessions/create-session.generated';
-import { AppType } from 'graphql/types';
 
 const useManageSession = () => {
   const globalStateSchemeId = useStoreState((state) => state.scheme.id);
@@ -9,7 +9,7 @@ const useManageSession = () => {
   const setSessionId = useStoreActions((actions) => actions.user.setSession);
 
   const [pristine, setPristine] = useState(true);
-  const [schemeId, setSchemeId] = useState<string | null>(null);
+  const [schemeId, setSchemeId] = useState<null | string>(null);
 
   const [createSession] = useCreateSessionMutation({
     onCompleted: (data) => {
@@ -29,10 +29,10 @@ const useManageSession = () => {
       void createSession({
         variables: {
           data: {
+            app: AppType.Web,
             scheme: {
               id: globalStateSchemeId,
             },
-            app: AppType.Web,
             user: { id: globalStateUserId },
           },
         },
@@ -43,10 +43,10 @@ const useManageSession = () => {
       void createSession({
         variables: {
           data: {
+            app: AppType.Web,
             scheme: {
               id: globalStateSchemeId,
             },
-            app: AppType.Web,
             user: { id: globalStateUserId },
           },
         },

@@ -46,8 +46,12 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         isFace
       }
     }
-    incidents {
+    incidents(orderBy: { date: desc }) {
       ...Incidents
+      business {
+        id
+        name
+      }
       vehicles {
         ...Vehicles
       }

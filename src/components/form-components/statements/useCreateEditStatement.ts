@@ -3,8 +3,12 @@ import { Form } from 'antd';
 import { useState } from 'react';
 import type { FormData } from './createEditStatement.view';
 import { useStoreState } from '../../../state';
-import { useCreateOneStatementTemplateMutation } from 'graphql/statementTemplates/mutations/create-one-statement.generated';
-import { useUpdateOneStatementTemplateMutation } from 'graphql/statementTemplates/mutations/update-one-statement.generated';
+import {
+  useCreateOneStatementTemplateMutation
+} from 'graphql/statementTemplates/mutations/__generated__/create-one-statement.generated';
+import {
+  useUpdateOneStatementTemplateMutation
+} from 'graphql/statementTemplates/mutations/__generated__/update-one-statement.generated';
 
 interface Return {
   data: FormData;

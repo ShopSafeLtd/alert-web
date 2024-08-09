@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
-import { Button, Carousel, Col, Descriptions, Row, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { CarouselRef } from 'antd/lib/carousel';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { ListOffendersSelectQuery } from 'graphql/offenders/queries/__generated__/list-offenders-select.generated';
+
 import {
   faCircleInfo,
   faClock,
@@ -11,6 +12,16 @@ import {
   faUserHair,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
+import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Carousel, Col, Descriptions, Row, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import OffenderTile from 'components/offenders/OffenderTile';
+import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
+import React, { useRef } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import FormatCalendar from 'utils/format-calendar-24h';
 import {
   calcAge,
   getLastOffence,
@@ -19,74 +30,64 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import OffenderTile from 'components/offenders/OffenderTile';
-import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
-import type { CarouselRef } from 'antd/lib/carousel';
-import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { FormattedMessage, useIntl } from 'react-intl';
-import FormatCalendar from 'utils/format-calendar-24h';
-import type { ListOffendersSelectQuery } from 'graphql/offenders/queries/list-offenders-select.generated';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 const { Title } = Typography;
 
 interface Props {
+  data: ListOffendersSelectQuery | undefined;
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
+  loading: boolean;
   onClose: () => void;
   onSubmit: (value: string | undefined) => void;
-  data: ListOffendersSelectQuery | undefined;
-  loading: boolean;
-  setCurrentId: (value: string | undefined) => void;
+  openLightbox: (index: number) => void;
   selectedOffender:
     | Exclude<
         ListOffendersSelectQuery['listOffenders'],
-        undefined | null
+        null | undefined
       >['offenders'][0]
-    | undefined
-    | null;
-  openLightbox: (index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
+    | null
+    | undefined;
+  setCurrentId: (value: string | undefined) => void;
 }
 
 const AddExistingOffender = ({
+  data,
+  lightBoxOpen,
+  loading,
   onClose,
   onSubmit,
-  data,
-  loading,
-  setCurrentId,
   openLightbox,
   selectedOffender,
-  lightBoxOpen,
+  setCurrentId,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
   const existingOffenders = (): JSX.Element => {
     if (!data?.listOffenders && loading)
       return (
-        <Row wrap gutter={16}>
+        <Row gutter={16} wrap>
           {Array.from({ length: data?.listOffenders?.total || 24 })
             .fill(0)
             .map(() => (
-              <Col span={4} className="offender-item">
+              <Col className="offender-item" span={4}>
                 <OffenderTileSkeleton />
               </Col>
             ))}
         </Row>
       );
-    if (data && data.listOffenders && data.listOffenders.offenders.length > 0) {
+    if (data?.listOffenders && data.listOffenders.offenders.length > 0) {
       return (
-        <Row wrap gutter={16} style={{ marginRight: 0 }}>
+        <Row gutter={16} style={{ marginRight: 0 }} wrap>
           {data?.listOffenders?.offenders.map((offender) => (
             <Col
-              span={selectedOffender ? 12 : 4}
-              key={offender.id}
               className="offender-item"
+              key={offender.id}
+              span={selectedOffender ? 12 : 4}
             >
               <OffenderTile
                 offender={offender}
@@ -98,7 +99,7 @@ const AddExistingOffender = ({
       );
     }
     return (
-      <Row justify="center" align="middle" className="no-offenders">
+      <Row align="middle" className="no-offenders" justify="center">
         <Col>
           <Title level={4}>
             <FormattedMessage defaultMessage="No Offenders Found" />
@@ -111,20 +112,20 @@ const AddExistingOffender = ({
     <div className="add-existing-offender">
       <Row className="add-existing-offender-row">
         <Col
-          span={selectedOffender ? 12 : 24}
           className={selectedOffender ? 'offenders-side-list' : ''}
+          span={selectedOffender ? 12 : 24}
         >
           {existingOffenders()}
         </Col>
         {selectedOffender && (
-          <Col span={12} className="view-offender">
+          <Col className="view-offender" span={12}>
             {selectedOffender && selectedOffender.images.length > 0 && (
               <Row
+                align="middle"
+                className="offender-images"
                 gutter={8}
                 justify="start"
-                align="middle"
                 wrap={false}
-                className="offender-images"
               >
                 <Col span={12}>
                   <Carousel ref={imagesRef}>
@@ -143,19 +144,19 @@ const AddExistingOffender = ({
                     <Row className="offender-image-controls">
                       <Col>
                         <FontAwesomeIcon
-                          size="lg"
                           className="offender-image-control"
                           icon={faAngleLeft}
                           onClick={() => imagesRef.current?.prev()}
+                          size="lg"
                         />
                       </Col>
                       <Col flex={1} />
                       <Col>
                         <FontAwesomeIcon
-                          size="lg"
                           className="offender-image-control"
                           icon={faAngleRight}
                           onClick={() => imagesRef.current?.next()}
+                          size="lg"
                         />
                       </Col>
                     </Row>
@@ -167,7 +168,7 @@ const AddExistingOffender = ({
             <Row>
               <Col span={24} style={{ margin: 10 }}>
                 <Title level={4}>{selectedOffender?.name}</Title>
-                <Descriptions column={1} className="offender-descriptions">
+                <Descriptions className="offender-descriptions" column={1}>
                   <Descriptions.Item
                     label={
                       <span>
@@ -302,7 +303,7 @@ const AddExistingOffender = ({
                 </Descriptions>
               </Col>
             </Row>
-            <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
               <Col>
                 <Button onClick={onClose}>
                   {intl.formatMessage({
@@ -312,8 +313,8 @@ const AddExistingOffender = ({
               </Col>
               <Col>
                 <Button
-                  type="primary"
                   onClick={() => onSubmit(selectedOffender?.id)}
+                  type="primary"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Offender',
@@ -325,22 +326,22 @@ const AddExistingOffender = ({
         )}
       </Row>
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox(0)}
-        plugins={[Zoom]}
         controller={{
           closeOnBackdropClick: true,
+        }}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
         }}
         slides={
           selectedOffender?.images.map((image) => ({
             src: image.optimisedPersisted || '',
           })) || []
         }
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
       />
     </div>
   );

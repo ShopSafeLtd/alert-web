@@ -1,6 +1,19 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { EditIncidentQuery } from 'graphql/incidents/queries/__generated__/edit-incident.generated';
+import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
+import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import type {
+  OffenderData as OffenderDataGlobal,
+  VehicleData,
+} from 'types/DataType';
 
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -19,68 +32,54 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
+import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
+import AddIncidentTag from 'components/form-components/tags/crimeTypes/AddCrimeType';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import { CrimeType } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { useIntl } from 'react-intl';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { MutationUpdaterFn } from '@apollo/client';
-import AddIncidentTag from 'components/form-components/tags/crimeTypes/AddCrimeType';
 
-import moment from 'moment';
-
-import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
-import type { UploadChangeParam } from 'antd/lib/upload';
-import type {
-  OffenderData as OffenderDataGlobal,
-  VehicleData,
-} from 'types/DataType';
-import DebounceSelect from 'components/form-components/DebounceSelect';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl';
 import type { EditImage } from './useEditIncident';
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import type { EditIncidentQuery } from 'graphql/incidents/queries/edit-incident.generated';
-import type { ListOffendersQuery } from 'graphql/offenders/queries/list-offenders.generated';
-import type { CreateTagMutation } from 'graphql/tags/mutations/create-tag.generated';
-import { CrimeType } from 'graphql/types';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface FormData {
-  subject: string;
-  description: string;
-  date: Date;
-  value?: number;
-  recoveredValue?: number;
-  policeReported?: boolean;
-  policeInvolved?: boolean;
-  policeRef?: string;
-  policeNo?: string;
-  goods: {
-    id: string;
-    goodsType?: string;
-    value?: number;
-    recoveredValue: number;
-  }[];
+  building: string;
   business?: {
     label: React.ReactNode;
     value: string;
   };
-  groups: string[];
-  tagsCrimeTypes: string[];
-  tagsInvolved: string[];
-  tagsImpact: string[];
-  images: [{ id: string; url: string; optimised: string }];
-  building: string;
-  street: string;
-  townCity: string;
   county: string;
+  date: Date;
+  description: string;
+  goods: {
+    goodsType?: string;
+    id: string;
+    recoveredValue: number;
+    value?: number;
+  }[];
+  groups: string[];
+  images: [{ id: string; optimised: string; url: string }];
+  policeInvolved?: boolean;
+  policeNo?: string;
+  policeRef?: string;
+  policeReported?: boolean;
   postcode: string;
+  recoveredValue?: number;
+  street: string;
+  subject: string;
+  tagsCrimeTypes: string[];
+  tagsImpact: string[];
+  tagsInvolved: string[];
+  townCity: string;
+  value?: number;
 }
 
 type Offender = Exclude<
@@ -89,10 +88,10 @@ type Offender = Exclude<
 >['offenders'][0];
 
 interface OffenderData extends OffenderDataGlobal {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
   deleted: boolean;
+  edited: boolean;
+  existing: boolean;
+  new: boolean;
 }
 
 interface Props {
@@ -103,12 +102,15 @@ interface Props {
     offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
+  crimeTypes: { label: string; value: string }[];
   data: EditIncidentQuery | undefined;
   fileList: EditImage[];
   goodsTypesData: ListGoodsTypesQuery | undefined;
-  groups: { value: string; label: string }[];
+  groups: { label: string; value: string }[];
   groupsLoading: boolean;
   imgChange: UploadProps['onChange'];
+  impactTags: { label: string; value: string }[];
+  involvedTags: { label: string; value: string }[];
   loading: boolean;
   newImage: EditImage | null;
   offenderImgChange: (
@@ -116,9 +118,18 @@ interface Props {
     currentId: string
   ) => void;
   offendersData: OffenderData[];
+  // ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onCancelNewImage: () => void;
+  onEditImage: (value: EditImage) => void;
+  onEditOffender: (offender: OffenderDataGlobal) => void;
+  onEditVehicle: (data: VehicleData) => void;
   onReject: () => void;
+  onRemoveOffender: (offenderId: string) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
   onSubmit: (value: FormData) => void;
+  primaryImage: string;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeImage: (uid: string) => void;
@@ -128,56 +139,44 @@ interface Props {
   }) => void;
   reviewed: boolean;
   saving: boolean;
+  // onSearchBusiness: (
+  //   value: string
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
   setAssignToImage: (image: EditImage) => void;
+  setPrimaryImage: (value: string) => void;
   setSearchOffenders: (value: string) => void;
-  crimeTypes: { value: string; label: string }[];
-  involvedTags: { value: string; label: string }[];
-  impactTags: { value: string; label: string }[];
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
   vehiclesData: VehicleData[];
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: React.ReactNode; value: string }[]>;
-  onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
-  onEditOffender: (offender: OffenderDataGlobal) => void;
-  onRemoveOffender: (offenderId: string) => void;
-  onEditImage: (value: EditImage) => void;
-  onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onEditVehicle: (data: VehicleData) => void;
-  onRemoveVehicle: (vehicleId: string) => void;
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
 }
 
 const EditIncident = ({
   addIncidentTag,
   addRecentOffender,
   assignOffendersToImages,
+  crimeTypes,
   data,
   goodsTypesData,
   groups,
   groupsLoading,
+  impactTags,
+  involvedTags,
   loading,
   newImage,
   offendersData,
+  onAddOffender,
   onCancelNewImage,
   onReject,
-  onSearchBusiness,
+  // onSearchBusiness,
   onSubmit,
   reviewed,
   saving,
   setAddRecentOffender,
-  crimeTypes,
-  involvedTags,
-  impactTags,
   tagsLoading,
   toggleAddIncidentTag,
   updateIncidentTag,
-  onAddOffender,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -198,63 +197,63 @@ const EditIncident = ({
         <Skeleton />
       ) : (
         <Form<FormData>
-          onFinish={onSubmit}
-          layout="vertical"
           initialValues={{
-            subject: data?.incident?.subject,
-            description: data?.incident?.description,
-            date: moment(data?.incident?.date, 'YYYY-MM-DD,HH:mm:ss'),
+            building: data?.incident?.location?.building,
             business: {
               label: data?.incident?.business?.name,
               value: data?.incident?.business?.id,
             },
+            county: data?.incident?.location?.county,
+            date: moment(data?.incident?.date, 'YYYY-MM-DD,HH:mm:ss'),
+            description: data?.incident?.description,
             goods: data?.incident?.incidentItems.map((item) => ({
-              id: item.id,
               // TODO: fix this
               goodsType: item.goodsType?.id || '',
-              value: item.value,
+              id: item.id,
               recoveredValue: item.recoveredValue,
+              value: item.value,
             })),
-            policeInvolved: data?.incident?.policeInvolved || false,
-            policeRef: data?.incident?.policeRef,
-            policeNo: data?.incident?.policeNo,
-            policeReported: data?.incident?.policeReported || false,
-            building: data?.incident?.location?.building,
-            street: data?.incident?.location?.street,
-            townCity: data?.incident?.location?.townCity,
-            county: data?.incident?.location?.county,
-            postcode: data?.incident?.location?.postcode,
             groups:
               data?.incident?.groups && data?.incident?.groups.length > 0
                 ? data?.incident?.groups.map(({ id }) => id)
                 : [],
+            policeInvolved: data?.incident?.policeInvolved || false,
+            policeNo: data?.incident?.policeNo,
+            policeRef: data?.incident?.policeRef,
+            policeReported: data?.incident?.policeReported || false,
+            postcode: data?.incident?.location?.postcode,
+            street: data?.incident?.location?.street,
+            subject: data?.incident?.subject,
             tagsCrimeTypes:
               data?.incident?.crimeTypes &&
               data?.incident?.crimeTypes.length > 0
                 ? data?.incident?.crimeTypes.map(({ id }) => id)
-                : [],
-            tagsInvolved:
-              data?.incident?.involvedTags &&
-              data?.incident?.involvedTags.length > 0
-                ? data?.incident?.involvedTags.map(({ id }) => id)
                 : [],
             tagsImpact:
               data?.incident?.impactTags &&
               data?.incident?.impactTags.length > 0
                 ? data?.incident?.impactTags.map(({ id }) => id)
                 : [],
+            tagsInvolved:
+              data?.incident?.involvedTags &&
+              data?.incident?.involvedTags.length > 0
+                ? data?.incident?.involvedTags.map(({ id }) => id)
+                : [],
+            townCity: data?.incident?.location?.townCity,
           }}
+          layout="vertical"
+          onFinish={onSubmit}
         >
           <Card style={{ marginBottom: 10 }}>
             <Row style={{ marginBottom: 20 }}>
               <Col>
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                <Title style={{ marginBottom: 0 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0 }}>
                   1.
                 </Title>
               </Col>
               <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Incident Details',
                   })}
@@ -264,34 +263,35 @@ const EditIncident = ({
             <Row gutter={16}>
               <Col flex={1}>
                 <Form.Item
-                  name="tagsCrimeTypes"
                   label={intl.formatMessage({
                     defaultMessage: 'Incident Type',
                   })}
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'Select the relevant crime types for this incident, these help to categorise the incident.',
-                  })}
+                  name="tagsCrimeTypes"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
-                        defaultMessage: 'Please add at least one crime type.',
+                        defaultMessage:
+                          'Please add at least one incident type.',
                       }),
+                      required: true,
                     },
                   ]}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'Select the relevant incident types for this incident, these help to categorise the incident.',
+                  })}
                 >
                   <Select
-                    loading={tagsLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={tagsLoading}
                     maxTagCount={3}
+                    mode="multiple"
                     placeholder={intl.formatMessage({
-                      defaultMessage: 'Search for a crime type...',
+                      defaultMessage: 'Search for a incident type...',
                     })}
                   >
                     {crimeTypes.map((tag) => (
-                      <Select.Option value={tag.value} key={tag.value}>
+                      <Select.Option key={tag.value} value={tag.value}>
                         {tag.label}
                       </Select.Option>
                     ))}
@@ -300,22 +300,22 @@ const EditIncident = ({
               </Col>
               <Col flex={1}>
                 <Form.Item
-                  name="tagsInvolved"
                   label={intl.formatMessage({
                     defaultMessage: 'Aggravating Factors',
                   })}
+                  name="tagsInvolved"
                 >
                   <Select
-                    loading={tagsLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={tagsLoading}
                     maxTagCount={3}
+                    mode="multiple"
                     placeholder={intl.formatMessage({
-                      defaultMessage: 'Search for a crime type...',
+                      defaultMessage: 'Search for a incident type...',
                     })}
                   >
                     {involvedTags.map((tag) => (
-                      <Select.Option value={tag.value} key={tag.value}>
+                      <Select.Option key={tag.value} value={tag.value}>
                         {tag.label}
                       </Select.Option>
                     ))}
@@ -324,22 +324,22 @@ const EditIncident = ({
               </Col>
               <Col flex={1}>
                 <Form.Item
-                  name="tagsImpact"
                   label={intl.formatMessage({
                     defaultMessage: 'Incident Impact',
                   })}
+                  name="tagsImpact"
                 >
                   <Select
-                    loading={tagsLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={tagsLoading}
                     maxTagCount={3}
+                    mode="multiple"
                     placeholder={intl.formatMessage({
-                      defaultMessage: 'Search for a crime type...',
+                      defaultMessage: 'Search for a incident type...',
                     })}
                   >
                     {impactTags.map((tag) => (
-                      <Select.Option value={tag.value} key={tag.value}>
+                      <Select.Option key={tag.value} value={tag.value}>
                         {tag.label}
                       </Select.Option>
                     ))}
@@ -351,33 +351,33 @@ const EditIncident = ({
             <Row gutter={16}>
               <Col>
                 <Form.Item
-                  name="subject"
                   label={intl.formatMessage({
                     defaultMessage: 'Subject',
                   })}
+                  name="subject"
                 >
-                  <Input style={{ width: 500 }} disabled={saving} />
+                  <Input disabled={saving} style={{ width: 500 }} />
                 </Form.Item>
               </Col>
               <Col>
                 <Form.Item
-                  name="date"
                   label={intl.formatMessage({
                     defaultMessage: 'Time & Date',
                   })}
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'The date and time that the incident occurred.',
-                  })}
+                  name="date"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please select a date for the incident.',
                       }),
+                      required: true,
                     },
                   ]}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'The date and time that the incident occurred.',
+                  })}
                 >
                   <DatePicker
                     disabled={saving}
@@ -385,31 +385,31 @@ const EditIncident = ({
                       current && current.valueOf() > Date.now()
                     }
                     format="HH:mm - DD/MM/YY"
-                    showTime={{ showSecond: false, showNow: true }}
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Set Date & Time',
                     })}
+                    showTime={{ showNow: true, showSecond: false }}
                   />
                 </Form.Item>
               </Col>
             </Row>
             <Form.Item
-              name="description"
               label={intl.formatMessage({
                 defaultMessage: 'Description',
               })}
-              tooltip={intl.formatMessage({
-                defaultMessage: 'A more detailed description of the incident.',
-              })}
+              name="description"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please enter a description for the incident.',
                   }),
+                  required: true,
                 },
               ]}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'A more detailed description of the incident.',
+              })}
             >
               <Input.TextArea disabled={saving} />
             </Form.Item>
@@ -418,12 +418,12 @@ const EditIncident = ({
             <Row style={{ marginBottom: 20 }}>
               <Col>
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                <Title style={{ marginBottom: 0 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0 }}>
                   2.
                 </Title>
               </Col>
               <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Location',
                   })}
@@ -433,19 +433,18 @@ const EditIncident = ({
             <Row>
               <Col>
                 <Form.Item
-                  name="business"
                   label={intl.formatMessage({
                     defaultMessage: 'Business',
                   })}
+                  name="business"
                 >
-                  <DebounceSelect
-                    showSearch
+                  <BusinessesSelect
                     allowClear
                     disabled={saving}
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Search for a business...',
                     })}
-                    fetchOptions={onSearchBusiness}
+                    showSearch
                     style={{ width: 300 }}
                   />
                 </Form.Item>
@@ -459,27 +458,27 @@ const EditIncident = ({
             <Row gutter={16}>
               <Col span={6}>
                 <Form.Item
-                  name="building"
                   label={intl.formatMessage({
                     defaultMessage: 'Building',
                   })}
+                  name="building"
                 >
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item
-                  name="street"
                   label={intl.formatMessage({
                     defaultMessage: 'Street',
                   })}
+                  name="street"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a street for the incident.',
                       }),
+                      required: true,
                     },
                   ]}
                 >
@@ -488,17 +487,17 @@ const EditIncident = ({
               </Col>
               <Col span={6}>
                 <Form.Item
-                  name="townCity"
                   label={intl.formatMessage({
                     defaultMessage: 'Town/City',
                   })}
+                  name="townCity"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a town/city for the incident.',
                       }),
+                      required: true,
                     },
                   ]}
                 >
@@ -507,27 +506,27 @@ const EditIncident = ({
               </Col>
               <Col span={6}>
                 <Form.Item
-                  name="county"
                   label={intl.formatMessage({
                     defaultMessage: 'County',
                   })}
+                  name="county"
                 >
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item
-                  name="postcode"
                   label={intl.formatMessage({
                     defaultMessage: 'Postcode',
                   })}
+                  name="postcode"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a postcode for the incident.',
                       }),
+                      required: true,
                     },
                   ]}
                 >
@@ -543,12 +542,12 @@ const EditIncident = ({
               <Row align="bottom" style={{ marginBottom: 20 }}>
                 <Col>
                   {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                  <Title style={{ marginBottom: 0 }} level={4}>
+                  <Title level={4} style={{ marginBottom: 0 }}>
                     3.
                   </Title>
                 </Col>
                 <Col>
-                  <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                  <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                     {intl.formatMessage({
                       defaultMessage: 'What goods were involved?',
                     })}
@@ -559,7 +558,8 @@ const EditIncident = ({
                 name="goods"
                 rules={[
                   {
-                    validator: (rule, value) => {
+                    // eslint-disable-next-line
+                    validator: async (rule, value) => {
                       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                       if (value.length === 0)
                         throw new Error(
@@ -574,7 +574,7 @@ const EditIncident = ({
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }, index) => (
-                      <Row key={key} gutter={8}>
+                      <Row gutter={8} key={key}>
                         <Col>
                           <Form.Item
                             {...restField}
@@ -588,32 +588,31 @@ const EditIncident = ({
                             name={[name, 'goodsType']}
                             rules={[
                               {
-                                required: index === 0,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please enter a type',
                                 }),
+                                required: index === 0,
                               },
                             ]}
                           >
                             <Select
+                              allowClear
+                              options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
+                                (goodsType) => ({
+                                  label: goodsType.name,
+                                  value: goodsType.id,
+                                })
+                              )}
                               placeholder={intl.formatMessage({
                                 defaultMessage: 'Select goods...',
                               })}
                               style={{ width: 300 }}
-                              allowClear
-                              options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
-                                (goodsType) => ({
-                                  value: goodsType.id,
-                                  label: goodsType.name,
-                                })
-                              )}
                             />
                           </Form.Item>
                         </Col>
                         <Col>
                           <Form.Item
                             {...restField}
-                            name={[name, 'value']}
                             label={
                               index
                                 ? ''
@@ -621,12 +620,13 @@ const EditIncident = ({
                                     defaultMessage: 'Value',
                                   })
                             }
+                            name={[name, 'value']}
                             rules={[
                               {
-                                required: index === 0,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please enter a value',
                                 }),
+                                required: index === 0,
                               },
                             ]}
                             tooltip={intl.formatMessage({
@@ -635,17 +635,16 @@ const EditIncident = ({
                             })}
                           >
                             <InputNumber
-                              style={{ width: 150 }}
-                              prefix="£"
-                              precision={2}
                               min={0}
+                              precision={2}
+                              prefix="£"
+                              style={{ width: 150 }}
                             />
                           </Form.Item>
                         </Col>
                         <Col>
                           <Form.Item
                             {...restField}
-                            name={[name, 'recoveredValue']}
                             label={
                               index
                                 ? ''
@@ -653,12 +652,13 @@ const EditIncident = ({
                                     defaultMessage: 'Value Recovered',
                                   })
                             }
+                            name={[name, 'recoveredValue']}
                             rules={[
                               {
-                                required: index === 0,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please enter a value',
                                 }),
+                                required: index === 0,
                               },
                             ]}
                             tooltip={intl.formatMessage({
@@ -667,21 +667,21 @@ const EditIncident = ({
                             })}
                           >
                             <InputNumber
-                              style={{ width: 150 }}
-                              prefix="£"
-                              precision={2}
                               min={0}
+                              precision={2}
+                              prefix="£"
+                              style={{ width: 150 }}
                             />
                           </Form.Item>
                         </Col>
                         {fields.length > 1 && (
                           <Col>
                             <Button
-                              style={{ marginTop: index === 0 ? 30 : 0 }}
-                              size="small"
                               onClick={() => remove(name)}
+                              size="small"
+                              style={{ marginTop: index === 0 ? 30 : 0 }}
                             >
-                              <FontAwesomeIcon size="lg" icon={faTrash} />
+                              <FontAwesomeIcon icon={faTrash} size="lg" />
                             </Button>
                           </Col>
                         )}
@@ -691,17 +691,17 @@ const EditIncident = ({
                       <Row justify="center">
                         <Col>
                           <Button
+                            block
+                            icon={
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                style={{ marginRight: 8 }}
+                              />
+                            }
                             onClick={() =>
                               add({
                                 recoveredValue: 0,
                               })
-                            }
-                            block
-                            icon={
-                              <FontAwesomeIcon
-                                style={{ marginRight: 8 }}
-                                icon={faPlus}
-                              />
                             }
                           >
                             {intl.formatMessage({
@@ -720,12 +720,12 @@ const EditIncident = ({
             <Row align="bottom" style={{ marginBottom: 20 }}>
               <Col>
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                <Title style={{ marginBottom: 0 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0 }}>
                   4.
                 </Title>
               </Col>
               <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Police involvement',
                   })}
@@ -735,16 +735,18 @@ const EditIncident = ({
             <Row gutter={50}>
               <Col>
                 <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Was this incident reported to the police?',
+                  })}
                   name="policeReported"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The incident has been reported to the police',
                   })}
-                  label={intl.formatMessage({
-                    defaultMessage: 'Was this incident reported to the police?',
-                  })}
                 >
                   <Radio.Group
+                    disabled={saving}
+                    optionType="button"
                     options={[
                       {
                         label: intl.formatMessage({
@@ -759,22 +761,22 @@ const EditIncident = ({
                         value: false,
                       },
                     ]}
-                    optionType="button"
-                    disabled={saving}
                   />
                 </Form.Item>
                 <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Were the police involved in this incident?',
+                  })}
                   name="policeInvolved"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The police have been involved in the incident.',
                   })}
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Were the police involved in this incident?',
-                  })}
                 >
                   <Radio.Group
+                    disabled={saving}
+                    optionType="button"
                     options={[
                       {
                         label: intl.formatMessage({
@@ -789,18 +791,16 @@ const EditIncident = ({
                         value: false,
                       },
                     ]}
-                    optionType="button"
-                    disabled={saving}
                   />
                 </Form.Item>
               </Col>
 
               <Col>
                 <Form.Item
-                  name="policeRef"
                   label={intl.formatMessage({
                     defaultMessage: 'Crime Ref No.',
                   })}
+                  name="policeRef"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The crime reference number provided by the police.',
@@ -809,10 +809,10 @@ const EditIncident = ({
                   <Input disabled={saving} />
                 </Form.Item>
                 <Form.Item
-                  name="policeNo"
                   label={intl.formatMessage({
                     defaultMessage: 'Officer Collar No.',
                   })}
+                  name="policeNo"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The collar number of the officer(s) involved.',
@@ -827,12 +827,12 @@ const EditIncident = ({
             <Row align="bottom" style={{ marginBottom: 20 }}>
               <Col>
                 {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                <Title style={{ marginBottom: 0 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0 }}>
                   7.
                 </Title>
               </Col>
               <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Who is it visible to?',
                   })}
@@ -840,9 +840,9 @@ const EditIncident = ({
               </Col>
               <Col>
                 <Paragraph
+                  italic
                   style={{ marginBottom: 1, marginLeft: 5 }}
                   type="secondary"
-                  italic
                 >
                   {intl.formatMessage({
                     defaultMessage:
@@ -854,29 +854,29 @@ const EditIncident = ({
             <Row>
               <Col span={8}>
                 <Form.Item
-                  name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Groups',
                   })}
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
-                  })}
+                  name="groups"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please add at least one group that you would like this incident to be visible to.',
                       }),
+                      required: true,
                     },
                   ]}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
+                  })}
                 >
                   <Select
-                    loading={groupsLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={groupsLoading}
                     maxTagCount={3}
+                    mode="multiple"
                     placeholder={intl.formatMessage({
                       defaultMessage:
                         'Select the groups that you would like this incident to be visible to.',
@@ -893,10 +893,11 @@ const EditIncident = ({
             </Row>
           </Card>
           <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
               <Col>
                 <Button
                   disabled={saving}
+                  // eslint-disable-next-line
                   onClick={() =>
                     reviewed ? onReject() : window.history.back()
                   }
@@ -913,9 +914,9 @@ const EditIncident = ({
               <Col>
                 <Button
                   disabled={saving}
+                  htmlType="submit"
                   loading={saving}
                   type="primary"
-                  htmlType="submit"
                 >
                   {reviewed
                     ? intl.formatMessage({
@@ -931,17 +932,17 @@ const EditIncident = ({
         </Form>
       )}
       <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Add Crime Type',
-        })}
-        open={addIncidentTag}
-        width="400"
         onClose={toggleAddIncidentTag}
+        open={addIncidentTag}
+        title={intl.formatMessage({
+          defaultMessage: 'Add Incident Type',
+        })}
+        width="400"
       >
         {addIncidentTag ? (
           <AddIncidentTag
-            update={updateIncidentTag}
             onClose={toggleAddIncidentTag}
+            update={updateIncidentTag}
           />
         ) : (
           <div />
@@ -949,8 +950,13 @@ const EditIncident = ({
       </Drawer>
 
       <Modal
+        bodyStyle={{
+          padding: 0,
+        }}
+        okText={intl.formatMessage({
+          defaultMessage: 'Add to incident',
+        })}
         onCancel={() => setAddRecentOffender(null)}
-        open={addRecentOffender !== null}
         onOk={() => {
           // TODO fix this
           if (addRecentOffender)
@@ -959,17 +965,15 @@ const EditIncident = ({
                 ...addRecentOffender,
                 images: addRecentOffender.images.map((image) => ({
                   ...image,
-                  primary: !!image.primary,
                   policeImage: !!image.policeImage,
+                  primary: !!image.primary,
                 })),
               },
               true
             );
           setAddRecentOffender(null);
         }}
-        okText={intl.formatMessage({
-          defaultMessage: 'Add to incident',
-        })}
+        open={addRecentOffender !== null}
         title={intl.formatMessage(
           {
             defaultMessage: 'Are you sure you want to add {name}?',
@@ -978,17 +982,14 @@ const EditIncident = ({
             name: addRecentOffender?.name,
           }
         )}
-        bodyStyle={{
-          padding: 0,
-        }}
       >
         <Row>
           {addRecentOffender && addRecentOffender.images.length > 0 && (
             <Col span={8}>
               <div
                 style={{
-                  width: 180,
                   height: 200,
+                  width: 180,
                 }}
               >
                 <WatermarkImage url={addRecentOffender?.images[0]?.optimised} />

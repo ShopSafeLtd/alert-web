@@ -1,11 +1,12 @@
-import { useStoreState } from 'state';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
-import { useListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+
 import { QueryMode } from 'graphql/types';
+import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import { useStoreState } from 'state';
 
 interface Return {
   data:
-    | Exclude<ListVehiclesQuery['listVehicles'], undefined | null>
+    | Exclude<ListVehiclesQuery['listVehicles'], null | undefined>
     | null
     | undefined;
   loading: boolean;
@@ -20,69 +21,21 @@ const useVehicleSideList = (): Return => {
   );
 
   const {
-    search,
-    groups: groupsFilter,
     createdAt: createdAtFilter,
-    gallery,
     customGalleries,
+    gallery,
+    groups: groupsFilter,
     order,
+    search,
   } = filterVariables;
 
   const variables = {
     order: {
       updatedAt: order,
     },
+    skip: 0,
+    take: 12,
     where: {
-      schemes: {
-        some: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      createdAt: createdAtFilter
-        ? {
-            gte: createdAtFilter.startDate,
-            lte: createdAtFilter.endDate,
-          }
-        : undefined,
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : undefined,
-      createdBy: gallery.includes('MYDATA')
-        ? {
-            id: {
-              equals: userId,
-            },
-          }
-        : undefined,
-      subscribedUsers: gallery.includes('FOLLOWING')
-        ? {
-            some: {
-              id: {
-                equals: userId,
-              },
-            },
-          }
-        : undefined,
-      customGalleries:
-        customGalleries && customGalleries.length > 0
-          ? {
-              some: {
-                id: {
-                  in: customGalleries,
-                },
-              },
-            }
-          : undefined,
-
       OR: [
         {
           make: {
@@ -108,22 +61,65 @@ const useVehicleSideList = (): Return => {
           },
         },
       ],
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
+      createdBy: gallery.includes('MYDATA')
+        ? {
+            id: {
+              equals: userId,
+            },
+          }
+        : undefined,
+      customGalleries:
+        customGalleries && customGalleries.length > 0
+          ? {
+              some: {
+                id: {
+                  in: customGalleries,
+                },
+              },
+            }
+          : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
+      schemes: {
+        some: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+
+      subscribedUsers: gallery.includes('FOLLOWING')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
     },
-    take: 12,
-    skip: 0,
   };
-  const { data, loading, fetchMore } = useListVehiclesQuery({
-    variables,
+  const { data, fetchMore, loading } = useListVehiclesQuery({
     fetchPolicy: 'cache-and-network',
+    variables,
   });
 
   const next = () => {
     void fetchMore({
-      variables: {
-        ...variables,
-        skip: data?.listVehicles.vehicles?.length || 0,
-      },
-
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -139,6 +135,11 @@ const useVehicleSideList = (): Return => {
             ],
           },
         };
+      },
+
+      variables: {
+        ...variables,
+        skip: data?.listVehicles.vehicles?.length || 0,
       },
     });
   };

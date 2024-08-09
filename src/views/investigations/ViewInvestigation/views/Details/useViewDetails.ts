@@ -1,68 +1,69 @@
-import { useEffect, useMemo, useState } from 'react';
-import update from 'immutability-helper';
-import { Modal } from 'antd';
-import { useIntl } from 'react-intl';
-import { useStoreState } from '#/state';
-import hasPermission from '#/utils/has-permission';
 import type {
   InvestigationSuggestionsQuery,
   InvestigationSuggestionsQueryVariables,
-} from 'graphql/investigations/queries/investigation-suggestions.generated';
-import {
-  InvestigationSuggestionsDocument,
-  useInvestigationSuggestionsQuery,
-} from 'graphql/investigations/queries/investigation-suggestions.generated';
-import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
-import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
-import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/update-investigation.generated';
-import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
+} from 'graphql/investigations/queries/__generated__/investigation-suggestions.generated';
 import type {
   ViewInvestigationQuery,
   ViewInvestigationQueryVariables,
-} from 'graphql/investigations/queries/view-investigation.generated';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
+} from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+
+import { useStoreState } from '#/state';
+import hasPermission from '#/utils/has-permission';
+import { Modal } from 'antd';
+import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
+import {
+  InvestigationSuggestionsDocument,
+  useInvestigationSuggestionsQuery,
+} from 'graphql/investigations/queries/__generated__/investigation-suggestions.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
+import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
+import update from 'immutability-helper';
+import { useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
 interface Return {
-  scrolledToTop: () => void;
-  loadMore: boolean;
-  handleEditUpdate: () => void;
-  editRights: boolean;
-  userId: string;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
   confirmDeleteUpdate: (updateId: string) => void;
-  setReplyTo: (
-    value: {
-      id: string;
-      text: string;
-      createdAt: string;
-      createdBy: string;
-    } | null
-  ) => void;
+  editIncidentId: string;
+  editRights: boolean;
+  editUpdate: { id: string; text: string } | null;
+  editUpdateInput: string;
+  handleConnectIncident: (id: string) => void;
+  handleConnectOffender: (id: string) => void;
+  handleConnectVehicle: (id: string) => void;
+  handleEditUpdate: () => void;
+  loadMore: boolean;
+  optionRowShow: boolean;
   replyTo: {
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null;
-  editUpdate: { id: string; text: string } | null;
-  setEditUpdateInput: (value: string) => void;
-  editUpdateInput: string;
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  suggestedData: InvestigationSuggestionsQuery | undefined;
-  viewSuggestedOffenders: boolean;
-  toggleViewSuggestedOffenders: () => void;
-  handleConnectOffender: (id: string) => void;
-  handleConnectIncident: (id: string) => void;
-  handleConnectVehicle: (id: string) => void;
-  viewSuggestedIncidents: boolean;
-  toggleViewSuggestedIncidents: () => void;
-  viewSuggestedVehicles: boolean;
-  toggleViewSuggestedVehicles: () => void;
-  editIncidentId: string;
+  scrolledToTop: () => void;
   setEditIncidentId: (value: string) => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setOptionRowShow: (value: boolean) => void;
+  setReplyTo: (
+    value: {
+      createdAt: string;
+      createdBy: string;
+      id: string;
+      text: string;
+    } | null
+  ) => void;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
+  toggleViewSuggestedIncidents: () => void;
+  toggleViewSuggestedOffenders: () => void;
+  toggleViewSuggestedVehicles: () => void;
+  userId: string;
+  viewSuggestedIncidents: boolean;
+  viewSuggestedOffenders: boolean;
+  viewSuggestedVehicles: boolean;
 }
 
 interface Props {
@@ -93,10 +94,10 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const [editIncidentId, setEditIncidentId] = useState('');
 
   const [replyTo, setReplyTo] = useState<{
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null>(null);
 
   // const { data, loading } = useViewInvestigationQuery({
@@ -111,9 +112,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const { data: suggestedData } = useInvestigationSuggestionsQuery({
     skip: !investigationId,
     variables: {
-      where: {
-        id: investigationId,
-      },
       associatedInvestigation: {
         id: investigationId,
       },
@@ -121,6 +119,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
         type: {
           equals: TagType.IncidentCrimeType,
         },
+      },
+      where: {
+        id: investigationId,
       },
     },
   });
@@ -133,20 +134,20 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const handleEditUpdate = () => {
     if (editUpdate !== null)
       void updateUpdate({
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateUpdate: {
+            __typename: 'Update',
+            id: editUpdate.id || '',
+            text: editUpdateInput,
+          },
+        },
         variables: {
           data: {
             text: editUpdateInput,
           },
           where: {
             id: editUpdate.id,
-          },
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateUpdate: {
-            id: editUpdate.id || '',
-            __typename: 'Update',
-            text: editUpdateInput,
           },
         },
       });
@@ -164,16 +165,11 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   const handleDeleteUpdate = (updateId: string) => {
     void deleteUpdate({
-      variables: {
-        where: {
-          id: updateId,
-        },
-      },
       optimisticResponse: {
         __typename: 'Mutation',
         deleteUpdate: {
-          id: updateId,
           __typename: 'Update',
+          id: updateId,
           replyToId: '',
         },
       },
@@ -201,12 +197,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                   ViewInvestigationQuery,
                   ViewInvestigationQueryVariables
                 >({
-                  query: ViewInvestigationDocument,
-                  variables: {
-                    where: {
-                      id: investigationId,
-                    },
-                  },
                   data: {
                     investigation: {
                       ...oldData.investigation,
@@ -224,6 +214,12 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                       }),
                     },
                   },
+                  query: ViewInvestigationDocument,
+                  variables: {
+                    where: {
+                      id: investigationId,
+                    },
+                  },
                 });
               }
             } else {
@@ -231,12 +227,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                 ViewInvestigationQuery,
                 ViewInvestigationQueryVariables
               >({
-                query: ViewInvestigationDocument,
-                variables: {
-                  where: {
-                    id: investigationId,
-                  },
-                },
                 data: {
                   investigation: {
                     ...oldData.investigation,
@@ -245,28 +235,39 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                     ),
                   },
                 },
+                query: ViewInvestigationDocument,
+                variables: {
+                  where: {
+                    id: investigationId,
+                  },
+                },
               });
             }
         }
+      },
+      variables: {
+        where: {
+          id: updateId,
+        },
       },
     });
   };
 
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'The update will be permanently deleted.',
       }),
       okText: intl.formatMessage({
         defaultMessage: 'Delete',
       }),
-
       onOk() {
         handleDeleteUpdate(updateId);
       },
+
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
@@ -283,14 +284,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const handleConnectOffender = (offenderId: string) => {
     toggleViewSuggestedOffenders();
     void updateInvestigation({
-      variables: {
-        data: {
-          offenderIds: [offenderId],
-        },
-        where: {
-          id: investigationId,
-        },
-      },
       update: (store, result) => {
         const existingData = store.readQuery<
           InvestigationSuggestionsQuery,
@@ -298,9 +291,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
         >({
           query: InvestigationSuggestionsDocument,
           variables: {
-            where: {
-              id: investigationId,
-            },
             associatedInvestigation: {
               id: investigationId,
             },
@@ -308,6 +298,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
               type: {
                 equals: TagType.IncidentCrimeType,
               },
+            },
+            where: {
+              id: investigationId,
             },
           },
         });
@@ -317,20 +310,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
             InvestigationSuggestionsQuery,
             InvestigationSuggestionsQueryVariables
           >({
-            query: InvestigationSuggestionsDocument,
-            variables: {
-              where: {
-                id: investigationId,
-              },
-              associatedInvestigation: {
-                id: investigationId,
-              },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
-              },
-            },
             data: {
               investigation: {
                 ...existingData.investigation,
@@ -340,21 +319,35 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                   ),
               },
             },
+            query: InvestigationSuggestionsDocument,
+            variables: {
+              associatedInvestigation: {
+                id: investigationId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+              where: {
+                id: investigationId,
+              },
+            },
           });
+      },
+      variables: {
+        data: {
+          offenderIds: [offenderId],
+        },
+        where: {
+          id: investigationId,
+        },
       },
     });
   };
   const handleConnectIncident = (incidentId: string) => {
     toggleViewSuggestedIncidents();
     void updateInvestigation({
-      variables: {
-        data: {
-          incidentIds: [incidentId],
-        },
-        where: {
-          id: investigationId,
-        },
-      },
       update: (store, result) => {
         const existingData = store.readQuery<
           InvestigationSuggestionsQuery,
@@ -362,9 +355,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
         >({
           query: InvestigationSuggestionsDocument,
           variables: {
-            where: {
-              id: investigationId,
-            },
             associatedInvestigation: {
               id: investigationId,
             },
@@ -372,6 +362,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
               type: {
                 equals: TagType.IncidentCrimeType,
               },
+            },
+            where: {
+              id: investigationId,
             },
           },
         });
@@ -381,20 +374,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
             InvestigationSuggestionsQuery,
             InvestigationSuggestionsQueryVariables
           >({
-            query: InvestigationSuggestionsDocument,
-            variables: {
-              where: {
-                id: investigationId,
-              },
-              associatedInvestigation: {
-                id: investigationId,
-              },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
-              },
-            },
             data: {
               investigation: {
                 ...existingData.investigation,
@@ -404,21 +383,35 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                   ),
               },
             },
+            query: InvestigationSuggestionsDocument,
+            variables: {
+              associatedInvestigation: {
+                id: investigationId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+              where: {
+                id: investigationId,
+              },
+            },
           });
+      },
+      variables: {
+        data: {
+          incidentIds: [incidentId],
+        },
+        where: {
+          id: investigationId,
+        },
       },
     });
   };
   const handleConnectVehicle = (vehicleId: string) => {
     toggleViewSuggestedVehicles();
     void updateInvestigation({
-      variables: {
-        data: {
-          vehicleIds: [vehicleId],
-        },
-        where: {
-          id: investigationId,
-        },
-      },
       update: (store, result) => {
         const existingData = store.readQuery<
           InvestigationSuggestionsQuery,
@@ -426,9 +419,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
         >({
           query: InvestigationSuggestionsDocument,
           variables: {
-            where: {
-              id: investigationId,
-            },
             associatedInvestigation: {
               id: investigationId,
             },
@@ -436,6 +426,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
               type: {
                 equals: TagType.IncidentCrimeType,
               },
+            },
+            where: {
+              id: investigationId,
             },
           },
         });
@@ -445,20 +438,6 @@ const useViewDetails = ({ investigationId }: Props): Return => {
             InvestigationSuggestionsQuery,
             InvestigationSuggestionsQueryVariables
           >({
-            query: InvestigationSuggestionsDocument,
-            variables: {
-              where: {
-                id: investigationId,
-              },
-              associatedInvestigation: {
-                id: investigationId,
-              },
-              crimeTypesWhere: {
-                type: {
-                  equals: TagType.IncidentCrimeType,
-                },
-              },
-            },
             data: {
               investigation: {
                 ...existingData.investigation,
@@ -468,45 +447,67 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                   ),
               },
             },
+            query: InvestigationSuggestionsDocument,
+            variables: {
+              associatedInvestigation: {
+                id: investigationId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+              where: {
+                id: investigationId,
+              },
+            },
           });
+      },
+      variables: {
+        data: {
+          vehicleIds: [vehicleId],
+        },
+        where: {
+          id: investigationId,
+        },
       },
     });
   };
   const editRights = hasPermission({
-    permissions,
     permission: {
-      model: PermissionModel.Investigations,
       method: PermissionMethod.Edit,
+      model: PermissionModel.Investigations,
     },
+    permissions,
   });
 
   return {
     confirmDeleteUpdate,
-    scrolledToTop,
-    loadMore,
-    editRights,
-    replyTo,
-    setEditUpdate,
-    setReplyTo,
-    userId,
-    handleEditUpdate,
-    editUpdate,
-    setEditUpdateInput,
-    editUpdateInput,
-    optionRowShow,
-    setOptionRowShow,
-    suggestedData,
-    viewSuggestedOffenders,
-    toggleViewSuggestedOffenders,
-    handleConnectOffender,
-    handleConnectIncident,
-    handleConnectVehicle,
-    toggleViewSuggestedIncidents,
-    toggleViewSuggestedVehicles,
-    viewSuggestedIncidents,
-    viewSuggestedVehicles,
     editIncidentId,
+    editRights,
+    editUpdate,
+    editUpdateInput,
+    handleConnectIncident,
+    handleConnectOffender,
+    handleConnectVehicle,
+    handleEditUpdate,
+    loadMore,
+    optionRowShow,
+    replyTo,
+    scrolledToTop,
     setEditIncidentId,
+    setEditUpdate,
+    setEditUpdateInput,
+    setOptionRowShow,
+    setReplyTo,
+    suggestedData,
+    toggleViewSuggestedIncidents,
+    toggleViewSuggestedOffenders,
+    toggleViewSuggestedVehicles,
+    userId,
+    viewSuggestedIncidents,
+    viewSuggestedOffenders,
+    viewSuggestedVehicles,
   };
 };
 

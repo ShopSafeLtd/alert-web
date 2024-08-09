@@ -1,29 +1,30 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import RGL, { WidthProvider } from 'react-grid-layout';
-import 'react-grid-layout/css/styles.css';
-import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffenders/ActiveOffendersTemplate';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
+
+import Loading from '#/components/shared-components/AntD/Loading';
 import { generateHeight } from '#/views/dashboard/Dashboard.context';
-import Marquee from 'react-fast-marquee';
+import ActiveOffendersTemplate from '#/views/dashboard/components/ActiveOffenders/ActiveOffendersTemplate';
 import AdminTodosTemplate from '#/views/dashboard/components/AdminTodos/AdminTodosTemplate';
-import SearchRow from '#/views/dashboard/components/SearchRow/SearchRowTemplate';
 import ArticlesSection from '#/views/dashboard/components/ArticlesSection/ArticlesSectionTemplate';
 import DayOfWeekBar from '#/views/dashboard/components/DayOfWeek/DayOfWeekGraphTemplate';
 import FeedItemCol from '#/views/dashboard/components/FeedItems/FeedItemColTemplate';
 import IncidentCount from '#/views/dashboard/components/IncidentCount/IncidentCountTemplate.view';
 import IncidentValue from '#/views/dashboard/components/IncidentValues/IncidentValueTemplate.view';
-import { Button, Drawer, Input, Space } from 'antd';
-import { useIntl } from 'react-intl';
 import LatestIncident from '#/views/dashboard/components/LatestIncident/LatestIncidentTemplate.view';
 import LatestIncidentsTemplate from '#/views/dashboard/components/LatestIncidents/LatestIncidentsTemplate';
+import SearchRow from '#/views/dashboard/components/SearchRow/SearchRowTemplate';
 import TargetedGoodsGraph from '#/views/dashboard/components/TargetedGoods/TargetedGoodsTemplate';
+import { useUpdateDashboardTemplateMutation } from '#/views/dashboard-management/graphql/mutations/__generated__/dashboard.generated';
+import { useDashboardTemplateQuery } from '#/views/dashboard-management/graphql/queries/__generated__/dashboard-template.generated';
+import { Button, Drawer, Input, Space } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import Marquee from 'react-fast-marquee';
+import RGL, { WidthProvider } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Loading from '#/components/shared-components/AntD/Loading';
-import type { AvailableDashboardElements } from '#/state/dashboard-model';
 import DashboardSelectorDrawer from '../../../components/dashboard/elements/DashboardElementSelector.view';
 import TimeOfDay from '../../dashboard/components/TimeOfDay/TimeOfDayTemplate.view';
-import { useDashboardTemplateQuery } from '#/views/dashboard-management/graphql/queries/dashboard-template.generated';
-import { useUpdateDashboardTemplateMutation } from '#/views/dashboard-management/graphql/mutations/dashboard.generated';
 
 const ViewDashboardEditor = () => {
   const { id: DashboardId } = useParams();
@@ -42,27 +43,27 @@ const ViewDashboardEditor = () => {
     setOpen(false);
   };
   const intl = useIntl();
-  const [marquee, setMarquee] = useState<string | null>(null);
+  const [marquee, setMarquee] = useState<null | string>(null);
   // eslint-disable-next-line func-call-spacing
   const [layout, setLayout] = useState<
-    (RGL.Layout & {
+    ({
       i: AvailableDashboardElements;
-    })[]
+    } & RGL.Layout)[]
   >([
     {
-      w: 12,
       h: 2,
+      i: 'searchRow',
+      isDraggable: false,
+      isResizable: false,
       maxH: 12,
+      maxW: 2,
       minH: 2,
       minW: 12,
-      maxW: 2,
-      x: 0,
-      y: 0,
-      i: 'searchRow',
       moved: false,
       static: true,
-      isResizable: false,
-      isDraggable: false,
+      w: 12,
+      x: 0,
+      y: 0,
     },
   ]);
   const navigate = useNavigate();
@@ -73,54 +74,54 @@ const ViewDashboardEditor = () => {
       const initLayout = initData.dashboard.layout.map((item) => {
         Ids.push(item.id);
         return {
+          h: item.h,
           i: item.i as AvailableDashboardElements,
+          maxH: item.maxH ?? undefined,
+          maxW: item.maxW ?? undefined,
+          minH: item.minH ?? 2,
+          minW: item.minW ?? 2,
+          moved: false,
+          static: false,
+          w: item.w,
           x: item.x,
           y: item.y,
-          w: item.w,
-          h: item.h,
-          minW: item.minW ?? 2,
-          minH: item.minH ?? 2,
-          maxW: item.maxW ?? undefined,
-          maxH: item.maxH ?? undefined,
-          static: false,
-          moved: false,
         };
       });
       if (initLayout.some(({ i }) => i === 'searchRow')) {
         setLayout([
           {
-            w: 12,
             h: 2,
+            i: 'searchRow',
+            isDraggable: false,
+            isResizable: false,
             maxH: 2,
+            maxW: 12,
             minH: 2,
             minW: 12,
-            maxW: 12,
-            x: 0,
-            y: 0,
-            i: 'searchRow',
             moved: false,
             static: true,
-            isResizable: false,
-            isDraggable: false,
+            w: 12,
+            x: 0,
+            y: 0,
           },
           ...initLayout.filter(({ i }) => i !== 'searchRow'),
         ]);
       } else {
         setLayout([
           {
-            w: 12,
             h: 2,
+            i: 'searchRow',
+            isDraggable: false,
+            isResizable: false,
             maxH: 2,
+            maxW: 12,
             minH: 2,
             minW: 12,
-            maxW: 12,
-            x: 0,
-            y: 0,
-            i: 'searchRow',
             moved: false,
             static: true,
-            isResizable: false,
-            isDraggable: false,
+            w: 12,
+            x: 0,
+            y: 0,
           },
           ...initLayout,
         ]);
@@ -135,29 +136,26 @@ const ViewDashboardEditor = () => {
   const onSubmit = () => {
     if (!DashboardId) return;
     void editDashbaord({
+      onCompleted: () => navigate('/app/manage-dashboard'),
       variables: {
-        where: {
-          id: DashboardId,
-        },
         data: {
-          runningBanner: { set: marquee ?? '' },
           layout: {
             createMany: {
               data: layout.map((item) => {
-                const { i, x, y, w, h, minW, minH, maxW, maxH, moved } = item;
+                const { h, i, maxH, maxW, minH, minW, moved, w, x, y } = item;
 
                 return {
+                  h,
                   i,
+                  maxH,
+                  maxW,
+                  minH,
+                  minW,
+                  moved,
+                  static: true,
+                  w,
                   x,
                   y,
-                  w,
-                  h,
-                  minW,
-                  minH,
-                  maxW,
-                  maxH,
-                  static: true,
-                  moved,
                 };
               }),
             },
@@ -171,9 +169,12 @@ const ViewDashboardEditor = () => {
                 ]
               : undefined,
           },
+          runningBanner: { set: marquee ?? '' },
+        },
+        where: {
+          id: DashboardId,
         },
       },
-      onCompleted: () => navigate('/app/manage-dashboard'),
     });
   };
 
@@ -191,16 +192,11 @@ const ViewDashboardEditor = () => {
         <AdminTodosTemplate removeItem={removeItem} />
       </div>
     ),
-    searchRow: (
-      <div key="searchRow">
-        <SearchRow />
-      </div>
-    ),
     articlesSection: (
       <div key="articlesSection">
         <ArticlesSection
-          w={layout.find(({ i }) => i === 'articlesSection')?.w ?? 0}
           removeItem={removeItem}
+          w={layout.find(({ i }) => i === 'articlesSection')?.w ?? 0}
         />
       </div>
     ),
@@ -234,6 +230,11 @@ const ViewDashboardEditor = () => {
         <LatestIncidentsTemplate removeItem={removeItem} />
       </div>
     ),
+    searchRow: (
+      <div key="searchRow">
+        <SearchRow />
+      </div>
+    ),
     targetedGoods: (
       <div key="targetedGoods">
         <TargetedGoodsGraph removeItem={removeItem} />
@@ -250,19 +251,19 @@ const ViewDashboardEditor = () => {
 
   const [droppingItem, setDroppingItem] = useState<
     | {
+        h: number;
         i: AvailableDashboardElements;
         w: number;
-        h: number;
       }
     | undefined
   >(undefined);
   const onDrop = (
-    lay: (RGL.Layout & {
+    lay: ({
       i: AvailableDashboardElements;
-    })[],
-    _layoutItem: RGL.Layout & {
+    } & RGL.Layout)[],
+    _layoutItem: {
       i: AvailableDashboardElements;
-    },
+    } & RGL.Layout,
     _event: never
   ) => {
     setLayout(lay.map((i) => ({ ...i, minH: 2, minW: 2 })));
@@ -272,9 +273,9 @@ const ViewDashboardEditor = () => {
     return (
       <div
         style={{
-          height: '100vh',
-          display: 'flex',
           alignItems: 'center',
+          display: 'flex',
+          height: '100vh',
           justifyContent: 'center',
         }}
       >
@@ -286,9 +287,9 @@ const ViewDashboardEditor = () => {
       className="feed-container"
       style={{
         height: '100vh',
+        overflow: 'hidden',
         padding: 15,
         paddingTop: 0,
-        overflow: 'hidden',
       }}
     >
       {marquee ? (
@@ -298,30 +299,30 @@ const ViewDashboardEditor = () => {
         </Marquee>
       ) : null}
       <DashboardSelectorDrawer
-        setDroppingItem={setDroppingItem}
-        layout={layout}
         droppingItem={droppingItem}
+        layout={layout}
+        setDroppingItem={setDroppingItem}
       />
       <ReactGridLayout
-        layout={layout}
-        rowHeight={generateHeight()}
-        containerPadding={[0, 0]}
-        isDraggable
-        isResizable
         autoSize
+        containerPadding={[0, 0]}
+        droppingItem={droppingItem}
+        isBounded
+        isDraggable
+        isDroppable
+        isResizable
+        layout={layout}
         margin={[8, 8]}
+        onDrop={onDrop}
         onLayoutChange={(e) =>
           setLayout(
-            e as (RGL.Layout & {
+            e as ({
               i: AvailableDashboardElements;
-            })[]
+            } & RGL.Layout)[]
           )
         }
+        rowHeight={generateHeight()}
         style={{ height: '100vh' }}
-        isDroppable
-        droppingItem={droppingItem}
-        onDrop={onDrop}
-        isBounded
       >
         {Object.values(layoutItems).map((l) => {
           if (layout.some(({ i }) => i === l.key)) return l;
@@ -329,13 +330,13 @@ const ViewDashboardEditor = () => {
         })}
       </ReactGridLayout>
       <Button
+        onClick={() => navigate('/app/manage-dashboard')}
         style={{
-          position: 'absolute',
           bottom: 140,
+          position: 'absolute',
           right: 100,
           zIndex: 10_000,
         }}
-        onClick={() => navigate('/app/manage-dashboard')}
         type="default"
       >
         {intl.formatMessage({
@@ -343,13 +344,13 @@ const ViewDashboardEditor = () => {
         })}
       </Button>
       <Button
+        onClick={onSubmit}
         style={{
-          position: 'absolute',
           bottom: 140,
+          position: 'absolute',
           right: 20,
           zIndex: 10_000,
         }}
-        onClick={onSubmit}
         type="primary"
       >
         {intl.formatMessage({
@@ -357,13 +358,13 @@ const ViewDashboardEditor = () => {
         })}
       </Button>
       <Button
+        onClick={showDrawer}
         style={{
-          position: 'absolute',
           bottom: 80,
+          position: 'absolute',
           right: 20,
           zIndex: 10_000,
         }}
-        onClick={showDrawer}
         type="default"
       >
         {intl.formatMessage({
@@ -372,22 +373,22 @@ const ViewDashboardEditor = () => {
       </Button>
 
       <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Dashboard Banner',
-        })}
-        placement="left"
-        width={400}
-        onClose={onClose}
-        open={open}
-        mask={false}
         closeIcon={null}
         extra={
           <Space>
-            <Button type="primary" onClick={onClose}>
+            <Button onClick={onClose} type="primary">
               {intl.formatMessage({ defaultMessage: 'Close' })}
             </Button>
           </Space>
         }
+        mask={false}
+        onClose={onClose}
+        open={open}
+        placement="left"
+        title={intl.formatMessage({
+          defaultMessage: 'Dashboard Banner',
+        })}
+        width={400}
       >
         {intl.formatMessage({
           defaultMessage: 'Banner Text:',
@@ -395,8 +396,8 @@ const ViewDashboardEditor = () => {
 
         <Input
           allowClear
-          style={{ marginTop: 10 }}
           onChange={(e) => setMarquee(e.target.value ?? '')}
+          style={{ marginTop: 10 }}
           value={marquee ?? ''}
         />
       </Drawer>

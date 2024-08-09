@@ -1,15 +1,15 @@
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 
 export interface ViewProps {
   data:
     | Exclude<
         ViewInvestigationQuery['investigation'],
-        undefined | null
+        null | undefined
       >['documents']
     | null
     | undefined;
+  demId: null | string | undefined;
+  onDeleteDocument: (id: string) => void;
   toggleAddDemDocument: () => void;
   toggleAddDocument: () => void;
-  demId: string | undefined | null;
-  onDeleteDocument: (id: string) => void;
 }

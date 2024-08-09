@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
+import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
 import type { FormInstance } from 'antd';
+
 import {
   Button,
   Card,
@@ -13,9 +15,13 @@ import {
   Row,
   Select,
 } from 'antd';
+import { AnswerType } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+
+import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
 import type { FormData } from './useAddQuestion';
+
 import {
   DatePreview,
   NumberPreview,
@@ -24,35 +30,32 @@ import {
   TimePreview,
   YesNoPreview,
 } from './previews';
-import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
-import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
-import { AnswerType } from 'graphql/types';
 
 interface AddQuestionViewProps {
-  questionData: AvailableQuestionsQuery | undefined;
-  loading: boolean;
-  form: FormInstance<FormData>;
-  data: FormData;
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  saving: boolean;
-  tagQuestions?: TagQuestion[];
   brands: {
     label: string;
     value: string;
   }[];
+  data: FormData;
+  form: FormInstance<FormData>;
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  questionData: AvailableQuestionsQuery | undefined;
+  saving: boolean;
+  tagQuestions?: TagQuestion[];
 }
 
 const AddQuestionView = ({
+  brands,
   data,
-  questionData,
-  loading,
   form,
-  onSubmit,
+  loading,
   onClose,
+  onSubmit,
+  questionData,
   saving,
   tagQuestions,
-  brands,
 }: AddQuestionViewProps) => {
   const answerType = Form.useWatch('type', form);
   const question = Form.useWatch('question', form) || '';
@@ -79,7 +82,7 @@ const AddQuestionView = ({
     }
     if (answerType === AnswerType.Select) {
       return (
-        <SelectPreview question={question} options={opt.filter(Boolean)} />
+        <SelectPreview options={opt.filter(Boolean)} question={question} />
       );
     }
 
@@ -137,8 +140,8 @@ const AddQuestionView = ({
     <Form<FormData>
       form={form}
       initialValues={data}
-      onFinish={onSubmit}
       layout="vertical"
+      onFinish={onSubmit}
     >
       <Card>
         <Form.Item
@@ -160,9 +163,9 @@ const AddQuestionView = ({
               const qQuestion = ques?.questionFormatted;
               const qOptions = ques?.optionsFormatted;
               form.setFieldsValue({
-                type: qType,
-                question: qQuestion,
                 options: qOptions || [],
+                question: qQuestion,
+                type: qType,
               });
             }}
             options={questionData?.availableQuestions.map((q) => ({
@@ -172,11 +175,11 @@ const AddQuestionView = ({
           />
         </Form.Item>
         <Form.Item
+          hidden={!!selectedId}
           label={intl.formatMessage({
             defaultMessage: 'Question',
           })}
           name="question"
-          hidden={!!selectedId}
           required
         >
           <Input />
@@ -194,11 +197,11 @@ const AddQuestionView = ({
 
       <Card hidden={!!selectedId || !question}>
         <Form.Item
+          hidden={!!selectedId || !question}
           label={intl.formatMessage({
             defaultMessage: 'Select type for answer',
           })}
           name="type"
-          hidden={!!selectedId || !question}
         >
           <Select
             options={[
@@ -245,6 +248,7 @@ const AddQuestionView = ({
 
       {answerType === AnswerType.Select && (
         <Card
+          hidden={!!selectedId}
           style={{
             maxHeight: 300,
             overflow: 'auto',
@@ -252,7 +256,6 @@ const AddQuestionView = ({
           title={intl.formatMessage({
             defaultMessage: 'Options',
           })}
-          hidden={!!selectedId}
         >
           <Form.List
             name="options"
@@ -269,7 +272,7 @@ const AddQuestionView = ({
                       )
                     );
                   }
-                  if (options.some((o: string | null | undefined) => !o)) {
+                  if (options.some((o: null | string | undefined) => !o)) {
                     return Promise.reject(
                       new Error(
                         intl.formatMessage({
@@ -285,7 +288,7 @@ const AddQuestionView = ({
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map((field) => (
-                  <Row key={field.key} gutter={10}>
+                  <Row gutter={10} key={field.key}>
                     <Col span={20}>
                       <Form.Item
                         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -306,16 +309,16 @@ const AddQuestionView = ({
                 ))}
                 <Form.Item>
                   <Button
-                    type="dashed"
-                    onClick={() => add()}
                     block
                     icon={
                       <i
-                        className="fa fa-plus"
                         aria-hidden="true"
+                        className="fa fa-plus"
                         style={{ color: '#1890ff' }}
                       />
                     }
+                    onClick={() => add()}
+                    type="dashed"
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Option',
@@ -353,37 +356,37 @@ const AddQuestionView = ({
             />
           </Form.Item>
           <Form.Item
+            hidden={!dependentOn}
             label={intl.formatMessage({
               defaultMessage: 'Dependent Answer',
             })}
+            name="dependentAnswer"
+            required={!!dependentOn}
             rules={[
               {
-                required: !!dependentOn,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select an answer that this question will depend on to show in the form',
                 }),
+                required: !!dependentOn,
               },
             ]}
-            required={!!dependentOn}
-            hidden={!dependentOn}
-            name="dependentAnswer"
           >
             {generateFormItem()}
           </Form.Item>
           <Form.Item
+            hidden={brands?.length === 0}
             label={intl.formatMessage({
               defaultMessage: 'Dependent Brands',
             })}
             name="dependentBrands"
-            hidden={brands?.length === 0}
           >
-            <Select options={brands} mode="multiple" showSearch />
+            <Select mode="multiple" options={brands} showSearch />
           </Form.Item>
         </Card>
       )}
       <Form.Item>
-        <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
           <Col>
             <Button disabled={saving || loading} onClick={() => onClose()}>
               {intl.formatMessage({
@@ -394,9 +397,9 @@ const AddQuestionView = ({
           <Col>
             <Button
               disabled={saving || loading}
+              htmlType="submit"
               loading={saving || loading}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Submit',

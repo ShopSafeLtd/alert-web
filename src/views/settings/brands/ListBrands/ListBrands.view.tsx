@@ -1,5 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React from 'react';
+import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/upsert-brand.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+
+import AddBrand from '#/components/form-components/brands/AddBrand';
+import EditBrand from '#/components/form-components/brands/EditBrand';
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -11,62 +21,52 @@ import {
   Tag,
   Tooltip,
 } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import AddBrand from '#/components/form-components/brands/AddBrand';
-import type { MutationUpdaterFn } from '@apollo/client';
-import EditBrand from '#/components/form-components/brands/EditBrand';
 import { Link } from 'react-router-dom';
-import type { UpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/upsert-brand.generated';
 
 const { confirm } = Modal;
 
 interface Props {
+  addBrand: boolean;
+  brandId: string;
   data:
     | {
         node: {
-          id: string;
-          name: string;
-          description?: string | null;
-          businesses: Array<{
+          businesses: {
             __typename?: 'Business';
             id: string;
             name: string;
-          }>;
+          }[];
+          description?: null | string;
+          id: string;
+          name: string;
         };
       }[]
     | null
     | undefined;
   loading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
-  addBrand: boolean;
-  toggleAddBrand: () => void;
-  saving: boolean;
   onDelete: (value: string) => void;
-  updateNewBrandList: MutationUpdaterFn<UpsertBrandMutation>;
-  brandId: string;
+  saving: boolean;
+  search: string;
   setBrandId: (value: string) => void;
+  setSearch: (value: string) => void;
+  toggleAddBrand: () => void;
+  updateNewBrandList: MutationUpdaterFn<UpsertBrandMutation>;
 }
 
 const BrandList = ({
+  addBrand,
+  brandId,
   data,
   loading,
+  onDelete,
+  saving,
   search,
+  setBrandId,
   setSearch,
-  addBrand,
   toggleAddBrand,
   updateNewBrandList,
-  saving,
-  onDelete,
-  brandId,
-  setBrandId,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const businessIds = new Set(
@@ -85,19 +85,17 @@ const BrandList = ({
       <Row gutter={8} style={{ marginBottom: 10 }}>
         <Col span={8}>
           <Input
-            value={search}
+            allowClear
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Brands...',
             })}
-            allowClear
+            value={search}
           />
         </Col>
         <Col flex={1} />
         <Col>
           <Button
-            type="primary"
-            onClick={toggleAddBrand}
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -105,27 +103,21 @@ const BrandList = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={toggleAddBrand}
+            type="primary"
           >
             <FormattedMessage defaultMessage="Add Brand" />
           </Button>
         </Col>
       </Row>
       <Table
-        size="small"
-        style={{ marginRight: 10 }}
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
         columns={[
           {
+            dataIndex: 'name',
             key: 'name',
             title: intl.formatMessage({
               defaultMessage: 'Name',
             }),
-            dataIndex: 'name',
             width: 200,
             // render: (value, record) => (
             //   <Typography.Link
@@ -139,18 +131,15 @@ const BrandList = ({
             // ),
           },
           {
-            key: 'businesses',
-            title: intl.formatMessage({
-              defaultMessage: 'Businesses',
-            }),
             dataIndex: 'businesses',
             filters: businessFilter,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            key: 'businesses',
             // @ts-ignore
             onFilter: (
-              value: string | number | boolean,
+              value: boolean | number | string,
               record: { businesses: { id: string; name: string }[] }
             ) => record.businesses.some(({ id }) => id === value),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (value: { id: string; name: string }[]) =>
               value.map(({ id, name }, index) => (
                 <Link to={`/app/scheme-settings/businesses/view/${id || ''}`}>
@@ -158,21 +147,22 @@ const BrandList = ({
                   <Tag color="red"> {index === 0 ? name : ` ${name}`}</Tag>
                 </Link>
               )),
+            title: intl.formatMessage({
+              defaultMessage: 'Businesses',
+            }),
           },
           {
+            dataIndex: 'description',
+            ellipsis: true,
             key: 'description',
             title: intl.formatMessage({
               defaultMessage: 'Description',
             }),
-            dataIndex: 'description',
-            ellipsis: true,
           },
 
           {
-            key: 'Options',
-            title: '',
             dataIndex: 'Options',
-            width: 100,
+            key: 'Options',
             render: (_, record) => (
               <Row gutter={8}>
                 <Col>
@@ -182,12 +172,12 @@ const BrandList = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       onClick={() => {
                         setBrandId(record.key);
                       }}
-                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
@@ -207,17 +197,13 @@ const BrandList = ({
                       onConfirm={() => onDelete(record.key)}
                     > */}
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faTrash} />}
                       // onClick={() => {
                       //   onDelete(record.key);
                       // }}
                       onClick={() =>
                         confirm({
-                          title: intl.formatMessage({
-                            defaultMessage:
-                              'Do you want to delete this business?',
-                          }),
                           content: intl.formatMessage({
                             defaultMessage:
                               'Click delete if you wish to delete this brand. It will be removed from the list and added to the recycle bin for 30 days before being permanently deleted.',
@@ -226,46 +212,60 @@ const BrandList = ({
                             defaultMessage: 'Delete',
                           }),
                           onOk: () => onDelete(record.key),
+                          title: intl.formatMessage({
+                            defaultMessage:
+                              'Do you want to delete this business?',
+                          }),
                         })
                       }
-                      icon={<FontAwesomeIcon icon={faTrash} />}
+                      size="small"
                     />
                     {/* </Popconfirm> */}
                   </Tooltip>
                 </Col>
               </Row>
             ),
+            title: '',
+            width: 100,
           },
         ]}
         dataSource={data?.map(({ node: brand }) => ({
+          businesses: brand.businesses,
+          description: brand.description || '',
           key: brand.id || '',
           name: brand.name || '',
-          description: brand.description || '',
-          businesses: brand.businesses,
         }))}
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          pageSize: 20,
+        }}
+        size="small"
+        style={{ marginRight: 10 }}
       />
 
       <Drawer
+        onClose={toggleAddBrand}
+        open={addBrand}
         title={intl.formatMessage({
           defaultMessage: 'Add Brand',
         })}
-        open={addBrand}
         width="400"
-        onClose={toggleAddBrand}
       >
         {addBrand ? (
-          <AddBrand update={updateNewBrandList} onClose={toggleAddBrand} />
+          <AddBrand onClose={toggleAddBrand} update={updateNewBrandList} />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => setBrandId('')}
+        open={!!brandId}
         title={intl.formatMessage({
           defaultMessage: 'Edit Brand',
         })}
-        open={!!brandId}
         width="400"
-        onClose={() => setBrandId('')}
       >
         <EditBrand brandId={brandId} onClose={() => setBrandId('')} />
       </Drawer>

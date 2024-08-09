@@ -1,21 +1,21 @@
-import { useState } from 'react';
+import type { GroupQuery } from 'graphql/group/queries/__generated__/group.generated';
 
 import { Modal, notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
+import { useDeleteGroupMutation } from 'graphql/group/mutation/__generated__/delete_group.generated';
+import { useGroupQuery } from 'graphql/group/queries/__generated__/group.generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { GroupQuery } from 'graphql/group/queries/group.generated';
-import { useGroupQuery } from 'graphql/group/queries/group.generated';
-import { useDeleteGroupMutation } from 'graphql/group/mutation/delete_group.generated';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
 interface Return {
   data: GroupQuery | undefined;
-  loading: boolean;
-  editGroup: boolean;
-  toggleEditGroup: () => void;
-  saving: boolean;
   deleteConfirm: () => void;
+  editGroup: boolean;
+  loading: boolean;
+  saving: boolean;
+  toggleEditGroup: () => void;
 }
 
 const useGroupDetail = (groupId: string): Return => {
@@ -37,11 +37,11 @@ const useGroupDetail = (groupId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The group has been deleted.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
         }),
         placement: 'bottomRight',
       });
@@ -63,16 +63,16 @@ const useGroupDetail = (groupId: string): Return => {
   };
   const deleteConfirm = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the group?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
-
       onOk() {
         openDelete();
       },
+
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the group?',
+      }),
     });
   };
   const toggleEditGroup = () => {
@@ -80,11 +80,11 @@ const useGroupDetail = (groupId: string): Return => {
   };
   return {
     data,
-    loading,
-    editGroup,
-    toggleEditGroup,
-    saving,
     deleteConfirm,
+    editGroup,
+    loading,
+    saving,
+    toggleEditGroup,
   };
 };
 

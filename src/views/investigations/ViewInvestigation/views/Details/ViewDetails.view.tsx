@@ -1,4 +1,16 @@
-import React from 'react';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type {
+  CrimeGroupCardData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
+
+import {
+  faMagnifyingGlass,
+  faPenToSquare,
+  faPlus,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -13,106 +25,92 @@ import {
   Tag,
   Typography,
 } from 'antd';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMagnifyingGlass,
-  faPenToSquare,
-  faPlus,
-} from '@fortawesome/pro-light-svg-icons';
-
-import { useNavigate } from 'react-router';
-import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
-import MapCard from 'components/map/MapCard/MapCard.view';
+import IntelSection from 'components/ViewPage/IntelSection';
+import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
+import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
 import SuggestedOffenders from 'components/investigations/SuggestedOffenders';
 import SuggestedVehicles from 'components/investigations/SuggestedVehicles';
-import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
-import { useIntl } from 'react-intl';
-import GetInvestigationStatusValues from 'types/enums/investigation-status';
+import MapCard from 'components/map/MapCard/MapCard.view';
 import ActivityTable from 'components/tables/ActivityTable';
-import type {
-  CrimeGroupCardData,
-  OffenderData,
-  VehicleData,
-} from 'types/DataType';
-import IncidentTable from 'components/tables/IncidentTable';
-import VehicleTable from 'components/tables/VehicleTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
-import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
-import IntelSection from 'components/ViewPage/IntelSection';
-import useStyles from './ViewDetails.styles';
+import IncidentTable from 'components/tables/IncidentTable';
+import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
+import VehicleTable from 'components/tables/VehicleTable';
+import { InvestigationStatus } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import GetInvestigationStatusValues from 'types/enums/investigation-status';
 
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
 import TabContent from '../../../../../components/TabContent';
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
-import type { InvestigationSuggestionsQuery } from 'graphql/investigations/queries/investigation-suggestions.generated';
-import { InvestigationStatus } from 'graphql/types';
+import useStyles from './ViewDetails.styles';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  data: ViewInvestigationQuery | undefined;
-  loading: boolean;
-
-  loadMore: boolean;
-  scrolledToTop: () => void;
-  editRights: boolean;
-  userId: string;
-  saving: boolean;
-  setEditUpdate: (value: { id: string; text: string } | null) => void;
   confirmDeleteUpdate: (updateId: string) => void;
-  setReplyTo: (
-    value: {
-      id: string;
-      text: string;
-      createdAt: string;
-      createdBy: string;
-    } | null
-  ) => void;
-  replyTo: {
-    id: string;
-    text: string;
-    createdAt: string;
-    createdBy: string;
-  } | null;
-  investigationId: string;
-  handleEditUpdate: () => void;
+  data: ViewInvestigationQuery | undefined;
+
+  editIncidentId: string;
+  editRights: boolean;
   editUpdate: { id: string; text: string } | null;
   editUpdateInput: string;
-  setEditUpdateInput: (value: string) => void;
-  optionRowShow: boolean;
-  setOptionRowShow: (value: boolean) => void;
-  suggestedData: InvestigationSuggestionsQuery | undefined;
-  viewSuggestedOffenders: boolean;
-  toggleViewSuggestedOffenders: () => void;
-  handleConnectOffender: (id: string) => void;
   handleConnectIncident: (id: string) => void;
+  handleConnectOffender: (id: string) => void;
   handleConnectVehicle: (id: string) => void;
-  viewSuggestedIncidents: boolean;
-  toggleViewSuggestedIncidents: () => void;
-  viewSuggestedVehicles: boolean;
-  toggleViewSuggestedVehicles: () => void;
-  templatesLoading: boolean;
-  toggleAddTodo: () => void;
-  setViewTodoVisible: (value: string | null) => void;
-  setCompleteTodoVisible: (value: string | null) => void;
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
-  setEditOffenderData: (value: OffenderData | null) => void;
+  handleEditUpdate: () => void;
+  investigationId: string;
+  loadMore: boolean;
+  loading: boolean;
+  onDeleteCrimeGroup: (id: string) => void;
+  onDeleteIncident: (id: string) => void;
   onDeleteOffender: (id: string) => void;
-  toggleAddVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  setEditVehicleData: (value: VehicleData | null) => void;
   onDeleteVehicle: (id: string) => void;
+  optionRowShow: boolean;
+  replyTo: {
+    createdAt: string;
+    createdBy: string;
+    id: string;
+    text: string;
+  } | null;
+  saving: boolean;
+  scrolledToTop: () => void;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
+  setEditIncidentId: (value: string) => void;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  setEditUpdateInput: (value: string) => void;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  setOptionRowShow: (value: boolean) => void;
+  setReplyTo: (
+    value: {
+      createdAt: string;
+      createdBy: string;
+      id: string;
+      text: string;
+    } | null
+  ) => void;
+  setViewTodoVisible: (value: null | string) => void;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
+  templatesLoading: boolean;
   toggleAddCrimeGroup: () => void;
   toggleAddExistingCrimeGroup: () => void;
-  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
-  onDeleteCrimeGroup: (id: string) => void;
   toggleAddExistingIncident: () => void;
-  onDeleteIncident: (id: string) => void;
-  editIncidentId: string;
-  setEditIncidentId: (value: string) => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
+  toggleAddOffender: () => void;
+  toggleAddTodo: () => void;
+  toggleAddVehicle: () => void;
   toggleEditInvestigation: () => void;
+  toggleViewSuggestedIncidents: () => void;
+  toggleViewSuggestedOffenders: () => void;
+  toggleViewSuggestedVehicles: () => void;
+  userId: string;
+  viewSuggestedIncidents: boolean;
+  viewSuggestedOffenders: boolean;
+  viewSuggestedVehicles: boolean;
 }
 const getTextStatus = (value: InvestigationStatus) => {
   if (value === InvestigationStatus.Open) return 'green';
@@ -121,55 +119,55 @@ const getTextStatus = (value: InvestigationStatus) => {
   return 'green';
 };
 const ViewInvestigation = ({
-  data,
-  loading,
-  scrolledToTop,
-  loadMore,
-  userId,
-  editRights,
-  replyTo,
-  setEditUpdate,
   confirmDeleteUpdate,
-  setReplyTo,
-  investigationId,
-  handleEditUpdate,
-  setEditUpdateInput,
-  editUpdateInput,
+  data,
+  editIncidentId,
+  editRights,
   editUpdate,
-  optionRowShow,
-  setOptionRowShow,
-  suggestedData,
-  toggleViewSuggestedOffenders,
-  viewSuggestedOffenders,
+  editUpdateInput,
   handleConnectIncident,
   handleConnectOffender,
   handleConnectVehicle,
-  toggleViewSuggestedIncidents,
-  toggleViewSuggestedVehicles,
-  viewSuggestedIncidents,
-  viewSuggestedVehicles,
-  templatesLoading,
-  setViewTodoVisible,
-  setCompleteTodoVisible,
-  toggleAddTodo,
-  toggleAddOffender,
-  toggleAddExistingOffender,
-  setEditOffenderData,
+  handleEditUpdate,
+  investigationId,
+  loadMore,
+  loading,
+  onDeleteCrimeGroup,
+  onDeleteIncident,
   onDeleteOffender,
-  toggleAddVehicle,
-  toggleAddExistingVehicle,
-  setEditVehicleData,
   onDeleteVehicle,
+  optionRowShow,
+  replyTo,
+  saving,
+  scrolledToTop,
+  setCompleteTodoVisible,
+  setEditCrimeGroupData,
+  setEditIncidentId,
+  setEditOffenderData,
+  setEditUpdate,
+  setEditUpdateInput,
+  setEditVehicleData,
+  setOptionRowShow,
+  setReplyTo,
+  setViewTodoVisible,
+  suggestedData,
+  templatesLoading,
   toggleAddCrimeGroup,
   toggleAddExistingCrimeGroup,
-  setEditCrimeGroupData,
-  onDeleteCrimeGroup,
   toggleAddExistingIncident,
-  onDeleteIncident,
-  editIncidentId,
-  setEditIncidentId,
-  saving,
+  toggleAddExistingOffender,
+  toggleAddExistingVehicle,
+  toggleAddOffender,
+  toggleAddTodo,
+  toggleAddVehicle,
   toggleEditInvestigation,
+  toggleViewSuggestedIncidents,
+  toggleViewSuggestedOffenders,
+  toggleViewSuggestedVehicles,
+  userId,
+  viewSuggestedIncidents,
+  viewSuggestedOffenders,
+  viewSuggestedVehicles,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -178,9 +176,9 @@ const ViewInvestigation = ({
     <>
       <TabContent>
         <Row className={classes.content}>
-          <Col span={18} className={classes.detailsContainer}>
+          <Col className={classes.detailsContainer} span={18}>
             <Card>
-              <Row gutter={8} align="middle">
+              <Row align="middle" gutter={8}>
                 <Col flex={1}>
                   <Title className={classes.headerTitle} level={4}>
                     {data?.investigation?.name}
@@ -204,9 +202,9 @@ const ViewInvestigation = ({
                     disabled={saving}
                     icon={
                       <FontAwesomeIcon
-                        style={{ marginRight: 5 }}
-                        size="lg"
                         icon={faPenToSquare}
+                        size="lg"
+                        style={{ marginRight: 5 }}
                       />
                     }
                     onClick={toggleEditInvestigation}
@@ -274,7 +272,7 @@ const ViewInvestigation = ({
               </Row>
             </Card>
             <Card loading={loading}>
-              <Row gutter={8} align="middle">
+              <Row align="middle" gutter={8}>
                 <Col flex={1}>
                   <Title level={4}>
                     {intl.formatMessage({
@@ -287,11 +285,11 @@ const ViewInvestigation = ({
                     0 && (
                     <Col>
                       <Button
-                        disabled={saving}
-                        size="small"
                         danger
-                        type="ghost"
+                        disabled={saving}
                         onClick={toggleViewSuggestedOffenders}
+                        size="small"
+                        type="ghost"
                       >
                         {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                         {suggestedData.investigation?.suggestedOffenders.length}{' '}
@@ -307,29 +305,29 @@ const ViewInvestigation = ({
                       <Menu
                         items={[
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Add Existing Offender',
-                            }),
-                            key: '1',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faMagnifyingGlass}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '1',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing Offender',
+                            }),
                             onClick: () => toggleAddExistingOffender(),
                           },
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Create New Offender',
-                            }),
-                            key: '2',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faPlus}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '2',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Create New Offender',
+                            }),
                             onClick: () => toggleAddOffender(),
                           },
                         ]}
@@ -337,13 +335,13 @@ const ViewInvestigation = ({
                     }
                   >
                     <Button
-                      size="small"
                       icon={
                         <FontAwesomeIcon
                           icon={faPlus}
                           style={{ marginRight: 5 }}
                         />
                       }
+                      size="small"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Offenders',
@@ -354,13 +352,13 @@ const ViewInvestigation = ({
               </Row>
               <div className={classes.table}>
                 <OffenderTable
-                  offenders={data?.investigation?.offenders || []}
                   deleteRights={editRights}
                   editRights={editRights}
-                  saving={saving}
-                  onDeleteOffender={onDeleteOffender}
-                  setEditOffenderData={setEditOffenderData}
                   hasNavigation
+                  offenders={data?.investigation?.offenders || []}
+                  onDeleteOffender={onDeleteOffender}
+                  saving={saving}
+                  setEditOffenderData={setEditOffenderData}
                 />
               </div>
             </Card>
@@ -377,10 +375,10 @@ const ViewInvestigation = ({
                   suggestedData.investigation.suggestedIncidents.length > 0 && (
                     <Col>
                       <Button
-                        disabled={saving}
                         danger
-                        size="small"
+                        disabled={saving}
                         onClick={toggleViewSuggestedIncidents}
+                        size="small"
                       >
                         {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                         {suggestedData.investigation.suggestedIncidents.length}{' '}
@@ -397,29 +395,29 @@ const ViewInvestigation = ({
                       <Menu
                         items={[
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Add Existing Incidents',
-                            }),
-                            key: '1',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faMagnifyingGlass}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '1',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing Incidents',
+                            }),
                             onClick: () => toggleAddExistingIncident(),
                           },
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Create New Incident',
-                            }),
-                            key: '2',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faPlus}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '2',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Create New Incident',
+                            }),
                             onClick: () =>
                               navigate(`/app/incidents/add/${investigationId}`),
                           },
@@ -428,13 +426,13 @@ const ViewInvestigation = ({
                     }
                   >
                     <Button
-                      size="small"
                       icon={
                         <FontAwesomeIcon
                           icon={faPlus}
                           style={{ marginRight: 5 }}
                         />
                       }
+                      size="small"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Add Incidents',
@@ -445,19 +443,18 @@ const ViewInvestigation = ({
               </Row>
               <div className={classes.table}>
                 <IncidentTable
+                  deleteRights={editRights}
+                  hasNavigation
+                  incidents={data?.investigation?.incidents}
+                  onDelete={onDeleteIncident}
                   // className={classes.table}
                   setEditData={setEditIncidentId}
-                  incidents={data?.investigation?.incidents}
-                  deleteRights={editRights}
-                  onDelete={onDeleteIncident}
-                  hasNavigation
                 />
               </div>
             </Card>
             {data?.investigation?.incidents &&
               data?.investigation?.incidents.length > 0 && (
                 <MapCard
-                  width="100%"
                   height={500}
                   markers={
                     data?.investigation?.incidents.map((incident) => ({
@@ -465,6 +462,7 @@ const ViewInvestigation = ({
                       geoLng: incident?.location?.geoLng,
                     })) || []
                   }
+                  width="100%"
                 />
               )}
             <Card loading={loading}>
@@ -480,10 +478,10 @@ const ViewInvestigation = ({
                   suggestedData.investigation.suggestedVehicles.length > 0 && (
                     <Col>
                       <Button
-                        disabled={saving}
                         danger
-                        size="small"
+                        disabled={saving}
                         onClick={toggleViewSuggestedVehicles}
+                        size="small"
                       >
                         {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                         {suggestedData.investigation.suggestedVehicles.length}{' '}
@@ -500,29 +498,29 @@ const ViewInvestigation = ({
                       <Menu
                         items={[
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Add Existing Vehicles',
-                            }),
-                            key: '1',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faMagnifyingGlass}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '1',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing Vehicles',
+                            }),
                             onClick: () => toggleAddExistingVehicle(),
                           },
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Create New Vehicle',
-                            }),
-                            key: '2',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faPlus}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '2',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Create New Vehicle',
+                            }),
                             onClick: () => toggleAddVehicle(),
                           },
                         ]}
@@ -547,13 +545,13 @@ const ViewInvestigation = ({
               </Row>
               <div className={classes.table}>
                 <VehicleTable
-                  vehicles={data?.investigation?.vehicles}
-                  setEditVehicleData={setEditVehicleData}
+                  deleteRights={editRights}
+                  editRights={editRights}
+                  hasNavigation
                   onDeleteVehicle={onDeleteVehicle}
                   saving={saving}
-                  editRights={editRights}
-                  deleteRights={editRights}
-                  hasNavigation
+                  setEditVehicleData={setEditVehicleData}
+                  vehicles={data?.investigation?.vehicles}
                 />
               </div>
             </Card>
@@ -574,29 +572,29 @@ const ViewInvestigation = ({
                       <Menu
                         items={[
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Add Existing Crime Groups',
-                            }),
-                            key: '1',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faMagnifyingGlass}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '1',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing Crime Groups',
+                            }),
                             onClick: () => toggleAddExistingCrimeGroup(),
                           },
                           {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Create New Crime Group',
-                            }),
-                            key: '2',
                             icon: (
                               <FontAwesomeIcon
                                 icon={faPlus}
                                 style={{ marginRight: 5 }}
                               />
                             ),
+                            key: '2',
+                            label: intl.formatMessage({
+                              defaultMessage: 'Create New Crime Group',
+                            }),
                             onClick: () => toggleAddCrimeGroup(),
                           },
                         ]}
@@ -622,11 +620,11 @@ const ViewInvestigation = ({
               <div className={classes.table}>
                 <CrimeGroupTable
                   crimeGroups={data?.investigation?.crimeGroups}
-                  setEditData={setEditCrimeGroupData}
-                  onDelete={onDeleteCrimeGroup}
-                  saving={saving}
                   deleteRights={editRights}
                   hasNavigation
+                  onDelete={onDeleteCrimeGroup}
+                  saving={saving}
+                  setEditData={setEditCrimeGroupData}
                 />
               </div>
             </Card>
@@ -643,16 +641,16 @@ const ViewInvestigation = ({
                 <Col>
                   <Button
                     disabled={templatesLoading}
-                    key="3"
-                    size="small"
-                    onClick={toggleAddTodo}
-                    loading={templatesLoading}
                     icon={
                       <FontAwesomeIcon
                         icon={faPlus}
                         style={{ marginRight: 5 }}
                       />
                     }
+                    key="3"
+                    loading={templatesLoading}
+                    onClick={toggleAddTodo}
+                    size="small"
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Activity',
@@ -662,10 +660,10 @@ const ViewInvestigation = ({
               </Row>
               <div className={classes.table}>
                 <ActivityTable
-                  todos={data?.investigation?.todos}
                   saving={saving || loading}
-                  setViewTodoVisible={setViewTodoVisible}
                   setCompleteTodoVisible={setCompleteTodoVisible}
+                  setViewTodoVisible={setViewTodoVisible}
+                  todos={data?.investigation?.todos}
                 />
               </div>
             </Card>
@@ -676,100 +674,101 @@ const ViewInvestigation = ({
           >
             <div className={classes.updatesContainer}>
               <IntelSection
-                updates={data?.investigation?.updates}
-                scrolledToTop={scrolledToTop}
-                loadMore={loadMore}
-                saving={saving}
-                editRights={editRights}
-                userId={userId}
                 confirmDeleteUpdate={confirmDeleteUpdate}
+                editRights={editRights}
+                heightOffset={83}
+                loadMore={loadMore}
+                optionRowShow={optionRowShow}
+                saving={saving}
+                scrolledToTop={scrolledToTop}
                 setEditUpdate={setEditUpdate}
                 setReplyTo={setReplyTo}
-                optionRowShow={optionRowShow}
+                updates={data?.investigation?.updates}
+                userId={userId}
               />
               <UpdateBar
-                replyTo={replyTo}
                 investigationId={investigationId}
+                replyTo={replyTo}
+                setOptionRowShow={setOptionRowShow}
                 setReplyTo={setReplyTo}
                 subscribed={data?.investigation?.subscribed || false}
-                setOptionRowShow={setOptionRowShow}
               />
             </div>
           </Col>
         </Row>
       </TabContent>
       <Modal
+        okText={intl.formatMessage({ defaultMessage: 'Save' })}
+        onCancel={() => setEditUpdate(null)}
+        onOk={handleEditUpdate}
+        open={editUpdate !== null}
         title={intl.formatMessage({
           defaultMessage: 'Edit Update Content',
         })}
-        open={editUpdate !== null}
-        onOk={handleEditUpdate}
-        onCancel={() => setEditUpdate(null)}
-        okText={intl.formatMessage({ defaultMessage: 'Save' })}
       >
         <Input
-          value={editUpdateInput}
           onChange={(e) => setEditUpdateInput(e.target.value)}
+          value={editUpdateInput}
         />
       </Modal>
 
       <Drawer
+        onClose={toggleViewSuggestedOffenders}
+        open={viewSuggestedOffenders}
         title={intl.formatMessage({
           defaultMessage: 'Suggested Offenders',
         })}
-        open={viewSuggestedOffenders}
-        onClose={toggleViewSuggestedOffenders}
         width="900"
       >
         <SuggestedOffenders
-          suggestedData={suggestedData}
-          onClose={toggleViewSuggestedOffenders}
           handleAddSuggestion={handleConnectOffender}
+          onClose={toggleViewSuggestedOffenders}
+          suggestedData={suggestedData}
         />
       </Drawer>
 
       <Drawer
+        onClose={toggleViewSuggestedIncidents}
+        open={viewSuggestedIncidents}
         title={intl.formatMessage({
           defaultMessage: 'Suggested Incidents',
         })}
-        open={viewSuggestedIncidents}
-        onClose={toggleViewSuggestedIncidents}
         width="900"
       >
         <SuggestedIncidents
-          suggestedData={suggestedData}
-          onClose={toggleViewSuggestedIncidents}
           handleAddSuggestion={handleConnectIncident}
+          onClose={toggleViewSuggestedIncidents}
+          suggestedData={suggestedData}
         />
       </Drawer>
       {/* vehicle */}
       <Drawer
+        onClose={toggleViewSuggestedVehicles}
+        open={viewSuggestedVehicles}
         title={intl.formatMessage({
           defaultMessage: 'Suggested Vehicles',
         })}
-        open={viewSuggestedVehicles}
-        onClose={toggleViewSuggestedVehicles}
         width="900"
       >
         <SuggestedVehicles
-          suggestedData={suggestedData}
           handleAddSuggestion={handleConnectVehicle}
+          suggestedData={suggestedData}
         />
       </Drawer>
 
       {/* incident */}
       <Drawer
+        onClose={() => setEditIncidentId('')}
+        open={!!editIncidentId}
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident',
         })}
-        open={!!editIncidentId}
         width="600"
-        onClose={() => setEditIncidentId('')}
       >
         {editIncidentId ? (
           <EditIncidentFeed
-            onClose={() => setEditIncidentId('null')}
             incidentId={editIncidentId}
+            onClose={() => setEditIncidentId('null')}
           />
         ) : (
           <div />

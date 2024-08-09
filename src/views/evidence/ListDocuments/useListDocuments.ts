@@ -1,57 +1,43 @@
-import { useMemo, useState } from 'react';
-
-import { useStoreState } from 'state';
-import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import type { MutationUpdaterFn } from '@apollo/client';
-import hasPermission from '#/utils/has-permission';
-import {
-  DocumentType,
-  PermissionMethod,
-  PermissionModel,
-  QueryMode,
-} from 'graphql/types';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
 import type {
   DocumentsQuery,
   DocumentsQueryVariables,
-} from '#/views/evidence/grapqhl/queries/documents.generated';
+} from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+
+import hasPermission from '#/utils/has-permission';
 import {
   DocumentsDocument,
   useDocumentsQuery,
-} from '#/views/evidence/grapqhl/queries/documents.generated';
-import { useDeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-// import hasPermission from '#/utils/has-permission';
+} from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
+import { type TableProps, notification } from 'antd';
+import { useDeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import { PermissionMethod, PermissionModel, QueryMode } from 'graphql/types';
+import { useMemo, useState } from 'react';
+import { useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
+
+interface TableItem {
+  fileUrl: string;
+  key: string;
+  name: string;
+  tags: { id: string; name: string }[];
+}
 
 interface Return {
-  data:
-    | {
-        node: {
-          id: string;
-          name: string;
-          url: string;
-          description?: string | null;
-          fileType?: string | null;
-          tags: Array<{
-            __typename?: 'Tag';
-            id: string;
-            name: string;
-          }>;
-        };
-      }[]
-    | null
-    | undefined;
+  addEvidence: boolean;
+  createRights: boolean;
+  data: DocumentsQuery | null | undefined;
+  deleteRights: boolean;
+  downloadRights: boolean;
   loading: boolean;
+  onDelete: (value: string) => void;
+  onTableChange: TableProps<TableItem>['onChange'];
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addEvidence: boolean;
   toggleAddEvidence: () => void;
-  saving: boolean;
-  onDelete: (value: string) => void;
   updateNewEvidenceList: MutationUpdaterFn<CreateDocumentMutation>;
-  deleteRights: boolean;
-  createRights: boolean;
-  downloadRights: boolean;
 }
 
 const useDocumentList = (): Return => {
@@ -68,16 +54,12 @@ const useDocumentList = (): Return => {
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
   const [addEvidence, setAddEvidence] = useState(false);
+  const [skip, setSkip] = useState(0);
 
-  const variables = {
+  const variables: DocumentsQueryVariables = {
+    skip,
+    take: 20,
     where: {
-      schemeId: {
-        equals: currentSchemeId,
-      },
-      type: {
-        equals: DocumentType.Evidence,
-      },
-
       OR: search
         ? [
             {
@@ -94,6 +76,12 @@ const useDocumentList = (): Return => {
             },
           ]
         : undefined,
+      schemeId: {
+        equals: currentSchemeId,
+      },
+      type: {
+        equals: DocumentType.Evidence,
+      },
     },
   };
   const { data, loading } = useDocumentsQuery({
@@ -105,8 +93,8 @@ const useDocumentList = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Removed',
         description: `The evidence has been removed from ${schemeName}!`,
+        message: 'Successfully Removed',
         placement: 'bottomRight',
       });
     },
@@ -125,15 +113,15 @@ const useDocumentList = (): Return => {
       let count = existingData?.documents?.totalCount || 1;
       count -= 1;
       store.writeQuery<DocumentsQuery>({
-        query: DocumentsDocument,
         data: {
           documents: {
-            totalCount: count,
             edges: existingData?.documents?.edges.filter(
               ({ node: document }) => document?.id !== res?.deleteDocument?.id
             ),
+            totalCount: count,
           },
         },
+        query: DocumentsDocument,
 
         variables,
       });
@@ -168,16 +156,16 @@ const useDocumentList = (): Return => {
     let count = existingData?.documents?.totalCount || 0;
     count += 1;
     store.writeQuery<DocumentsQuery, DocumentsQueryVariables>({
-      query: DocumentsDocument,
       data: {
         documents: {
-          totalCount: count,
           edges: [
             ...existingData.documents.edges,
             { node: res.createDocument },
           ],
+          totalCount: count,
         },
       },
+      query: DocumentsDocument,
       variables,
     });
   };
@@ -187,40 +175,45 @@ const useDocumentList = (): Return => {
   };
 
   const deleteRights = hasPermission({
-    permissions,
     permission: {
-      model: PermissionModel.Evidence,
       method: PermissionMethod.Delete,
+      model: PermissionModel.Evidence,
     },
+    permissions,
   });
   const createRights = hasPermission({
-    permissions,
     permission: {
-      model: PermissionModel.Evidence,
       method: PermissionMethod.Write,
+      model: PermissionModel.Evidence,
     },
+    permissions,
   });
   const downloadRights = hasPermission({
-    permissions,
     permission: {
-      model: PermissionModel.Evidence,
       method: PermissionMethod.Read,
+      model: PermissionModel.Evidence,
     },
+    permissions,
   });
 
+  const onTableChange: TableProps<TableItem>['onChange'] = (pagination) => {
+    if (pagination.current) setSkip(pagination.current * 20 - 20);
+  };
+
   return {
-    data: data?.documents.edges,
+    addEvidence,
+    createRights,
+    data,
+    deleteRights,
+    downloadRights,
     loading: (data === null || data === undefined) && loading,
+    onDelete,
+    onTableChange,
+    saving,
     search,
     setSearch,
-    addEvidence,
     toggleAddEvidence,
-    saving,
-    onDelete,
     updateNewEvidenceList,
-    deleteRights,
-    createRights,
-    downloadRights,
   };
 };
 

@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type { FormInstance } from 'antd';
-import { Form, notification } from 'antd';
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
 
+import { Form, notification } from 'antd';
+import { useCreateMg11Mutation } from 'graphql/mg11/mutations/__generated__/create-mg11.generated';
+import { useListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
+import { Mg11Status } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
+
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
-import { useListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/list-templates.generated';
-import { useCreateMg11Mutation } from 'graphql/mg11/mutations/create-mg11.generated';
-import { Mg11Status } from 'graphql/types';
 
 const { useForm } = Form;
 
@@ -58,30 +59,30 @@ export interface FormData {
 }
 
 interface Return {
+  file: { file: string; name: string } | null;
+  form: FormInstance<FormData>;
+  interviewerFile: { file: string; name: string } | null;
+  interviewerName: string;
+  interviewerSelectedFont: string;
+  interviewerSetFile: (value: { file: string; name: string } | null) => void;
+  interviewerSetSelectedFont: (value: string) => void;
+  interviewerSetTab: (value: string) => void;
+  interviewerSign: string;
+  interviewerTab: string;
+  name: string;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  form: FormInstance<FormData>;
-  sign: string;
-  setSign: (value: string) => void;
-  update: (value: string) => void;
   selectedFont: string;
-  name: string;
-  file: { file: string; name: string } | null;
-  setTab: (value: string) => void;
-  tab: string;
-  setSelectedFont: (value: string) => void;
   setFile: (value: { file: string; name: string } | null) => void;
-  interviewerSign: string;
   setInterviewerSign: (value: string) => void;
-  interviewerName: string;
-  updateInterviewer: (value: string) => void;
-  interviewerSelectedFont: string;
-  interviewerFile: { file: string; name: string } | null;
-  interviewerSetSelectedFont: (value: string) => void;
-  interviewerSetFile: (value: { file: string; name: string } | null) => void;
-  interviewerTab: string;
-  interviewerSetTab: (value: string) => void;
+  setSelectedFont: (value: string) => void;
+  setSign: (value: string) => void;
+  setTab: (value: string) => void;
+  sign: string;
   statementTemplates: ListStatementTemplatesQuery | undefined;
+  tab: string;
+  update: (value: string) => void;
+  updateInterviewer: (value: string) => void;
 }
 
 const useCreateMg11 = (): Return => {
@@ -118,12 +119,12 @@ const useCreateMg11 = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Created!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The Mg11 has been created and sent to the witness to sign!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Created!',
         }),
         placement: 'bottomRight',
       });
@@ -161,16 +162,15 @@ const useCreateMg11 = (): Return => {
     setSaving(true);
 
     const {
-      over18,
       businessStatement: _,
       completeNow: __,
+      over18,
       termsSignature: ___,
       ...data
     } = formData;
 
     void createMg11({
       variables: {
-        schemeId,
         data: {
           ...data,
           age: over18 && over18 === 'true' ? 'Over 18' : data.age,
@@ -203,6 +203,7 @@ const useCreateMg11 = (): Return => {
           witnessSignature: sign,
           witnessSignatureDate: new Date(),
         },
+        schemeId,
       },
     }).finally(() => {
       setSaving(false);
@@ -220,30 +221,30 @@ const useCreateMg11 = (): Return => {
   const name = Form.useWatch('name', form) || '';
 
   return {
-    onSubmit,
-    saving,
+    file,
     form,
-    setSign,
-    sign,
-    setInterviewerSign,
-    interviewerName,
     interviewerFile,
+    interviewerName,
+    interviewerSelectedFont,
     interviewerSetFile,
     interviewerSetSelectedFont,
-    interviewerSelectedFont,
-    interviewerSign,
-    file,
-    selectedFont,
-    name,
-    setFile,
-    setSelectedFont,
-    updateInterviewer,
-    update,
-    tab,
-    setTab,
     interviewerSetTab,
+    interviewerSign,
     interviewerTab,
+    name,
+    onSubmit,
+    saving,
+    selectedFont,
+    setFile,
+    setInterviewerSign,
+    setSelectedFont,
+    setSign,
+    setTab,
+    sign,
     statementTemplates,
+    tab,
+    update,
+    updateInterviewer,
   };
 };
 

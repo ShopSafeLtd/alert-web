@@ -138,7 +138,7 @@ module.exports = {
         after: true,
       },
     ],
-
+    'unicorn/no-invalid-fetch-options': 'off',
     'no-var': 'error',
     'object-shorthand': 'error',
     'prefer-arrow-callback': 'error',

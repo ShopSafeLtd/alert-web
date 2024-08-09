@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import React, { useState } from 'react';
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import type { CrimeGroupData, VehicleData } from 'types/DataType';
+
+import {
+  faMagnifyingGlass,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -12,42 +20,35 @@ import {
   Table,
   Typography,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMagnifyingGlass,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import type { CrimeGroupData, VehicleData } from 'types/DataType';
-
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import ProfileDrawer from '../ProfileDrawer';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
 
-const { Title, Paragraph } = Typography;
+import ProfileDrawer from '../ProfileDrawer';
+
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  saving: boolean;
+  crimeGroupsData: CrimeGroupData[];
   listVehiclesData: ListVehiclesQuery | undefined;
+  onAddCrimeGroup: (value: CrimeGroupData) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onRemoveCrimeGroup: (crimeGroupId: string) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
+  saving: boolean;
   titleNumber?: number;
   vehiclesData: VehicleData[];
-  onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onRemoveVehicle: (vehicleId: string) => void;
-  onRemoveCrimeGroup: (crimeGroupId: string) => void;
-  crimeGroupsData: CrimeGroupData[];
-  onAddCrimeGroup: (value: CrimeGroupData) => void;
 }
 
 const Profiles = ({
-  saving,
-  titleNumber,
-  vehiclesData,
-  onAddVehicle,
   crimeGroupsData,
   listVehiclesData,
   onAddCrimeGroup,
+  onAddVehicle,
   onRemoveCrimeGroup,
   onRemoveVehicle,
+  saving,
+  titleNumber,
+  vehiclesData,
 }: Props): JSX.Element => {
   const [addNewVehicle, setAddNewVehicle] = useState(false);
   const [addExistingVehicle, setAddExistingVehicle] = useState(false);
@@ -68,25 +69,25 @@ const Profiles = ({
   return (
     <div style={{ width: '100%' }}>
       <Row
-        gutter={10}
         align="middle"
+        gutter={10}
         style={{ marginBottom: 20, width: '100%' }}
       >
         <Col>
-          <Title style={{ marginBottom: 0 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0 }}>
             {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
             {titleNumber}.
           </Title>
         </Col>
         <Col>
-          <Title style={{ marginBottom: 0 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0 }}>
             {intl.formatMessage({
               defaultMessage: 'Profiles',
             })}
           </Title>
         </Col>
         <Col style={{ marginRight: 20 }}>
-          <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
+          <Paragraph italic style={{ marginBottom: 1 }} type="secondary">
             {intl.formatMessage({
               defaultMessage:
                 '- Please add the profiles that were involved in the offender.',
@@ -100,30 +101,30 @@ const Profiles = ({
               <Menu
                 items={[
                   {
-                    label: intl.formatMessage({
-                      defaultMessage: 'Add Existing Vehicles',
-                    }),
-                    key: '1',
+                    disabled: !listVehiclesData?.listVehicles.total,
                     icon: (
                       <FontAwesomeIcon
                         icon={faMagnifyingGlass}
                         style={{ marginRight: 5 }}
                       />
                     ),
-                    disabled: !listVehiclesData?.listVehicles.total,
+                    key: '1',
+                    label: intl.formatMessage({
+                      defaultMessage: 'Add Existing Vehicles',
+                    }),
                     onClick: () => toggleAddExistingVehicle(),
                   },
                   {
-                    label: intl.formatMessage({
-                      defaultMessage: 'Create New Vehicle',
-                    }),
-                    key: '2',
                     icon: (
                       <FontAwesomeIcon
                         icon={faPlus}
                         style={{ marginRight: 5 }}
                       />
                     ),
+                    key: '2',
+                    label: intl.formatMessage({
+                      defaultMessage: 'Create New Vehicle',
+                    }),
                     onClick: () => toggleAddNewVehicle(),
                   },
                 ]}
@@ -131,10 +132,10 @@ const Profiles = ({
             }
           >
             <Button
-              style={{ color: 'red' }}
               icon={
                 <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
               }
+              style={{ color: 'red' }}
             >
               {intl.formatMessage({
                 defaultMessage: 'Vehicles',
@@ -144,9 +145,9 @@ const Profiles = ({
         </Col>
         <Col>
           <Button
-            style={{ color: 'red' }}
-            onClick={toggleAddExistingCrimeGroup}
             icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
+            onClick={toggleAddExistingCrimeGroup}
+            style={{ color: 'red' }}
           >
             {intl.formatMessage({
               defaultMessage: 'Crime Groups',
@@ -170,85 +171,81 @@ const Profiles = ({
                   <Table
                     columns={[
                       {
-                        key: 'reference',
                         dataIndex: 'reference',
+                        key: 'reference',
                         title: intl.formatMessage({
                           defaultMessage: 'Alert ID',
                         }),
                         width: 100,
                       },
                       {
-                        key: 'images',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Image',
-                        }),
                         dataIndex: 'images',
-                        width: 150,
+                        key: 'images',
                         render: (_, record) => {
                           if (record.images && record.images.length > 0) {
                             return (
                               <img
-                                style={{ width: 80 }}
+                                alt={record.images[0]?.optimised || ''}
                                 key={record.images[0]?.id || ''}
                                 src={record.images[0]?.optimised || ''}
-                                alt={record.images[0]?.optimised || ''}
+                                style={{ width: 80 }}
                               />
                             );
                           }
                           return <div />;
                         },
+                        title: intl.formatMessage({
+                          defaultMessage: 'Image',
+                        }),
+                        width: 150,
                       },
                       {
-                        key: 'registration',
                         dataIndex: 'registration',
+                        key: 'registration',
                         title: intl.formatMessage({
                           defaultMessage: 'Registration',
                         }),
                       },
                       {
-                        key: 'make',
                         dataIndex: 'make',
+                        key: 'make',
                         title: intl.formatMessage({
                           defaultMessage: 'Make',
                         }),
                       },
                       {
-                        key: 'model',
                         dataIndex: 'model',
+                        key: 'model',
                         title: intl.formatMessage({
                           defaultMessage: 'Model',
                         }),
                       },
                       {
-                        key: 'colour',
                         dataIndex: 'colour',
+                        key: 'colour',
                         title: intl.formatMessage({
                           defaultMessage: 'Colour',
                         }),
                       },
                       {
-                        key: 'delete',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Delete',
-                        }),
                         dataIndex: 'delete',
-                        width: 50,
+                        key: 'delete',
                         render: (_, record) => (
                           <Popconfirm
-                            placement="topLeft"
-                            title={intl.formatMessage({
-                              defaultMessage: 'Remove the vehicle?',
+                            cancelText={intl.formatMessage({
+                              defaultMessage: 'No',
+                            })}
+                            okText={intl.formatMessage({
+                              defaultMessage: 'Yes',
                             })}
                             onConfirm={() => {
                               onRemoveVehicle(record.key);
                             }}
-                            okText={intl.formatMessage({
-                              defaultMessage: 'Yes',
-                            })}
-                            cancelText={intl.formatMessage({
-                              defaultMessage: 'No',
-                            })}
                             overlayInnerStyle={{ padding: 10 }}
+                            placement="topLeft"
+                            title={intl.formatMessage({
+                              defaultMessage: 'Remove the vehicle?',
+                            })}
                           >
                             <Button
                               disabled={saving}
@@ -256,18 +253,21 @@ const Profiles = ({
                             />
                           </Popconfirm>
                         ),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Delete',
+                        }),
+                        width: 50,
                       },
                     ]}
                     dataSource={vehiclesData.map((vehicle) => ({
-                      key: vehicle.id,
-                      reference: vehicle.reference,
-                      make: vehicle.make,
                       colour: vehicle.colour,
-                      model: vehicle.model,
-                      registration: vehicle.registration,
                       images: vehicle.images,
+                      key: vehicle.id,
+                      make: vehicle.make,
+                      model: vehicle.model,
+                      reference: vehicle.reference,
+                      registration: vehicle.registration,
                     }))}
-                    size="small"
                     pagination={
                       vehiclesData && vehiclesData.length > 5
                         ? {
@@ -275,6 +275,7 @@ const Profiles = ({
                           }
                         : false
                     }
+                    size="small"
                   />
                 </>
               ) : null}
@@ -288,81 +289,77 @@ const Profiles = ({
                   <Table
                     columns={[
                       {
-                        key: 'reference',
                         dataIndex: 'reference',
+                        key: 'reference',
                         title: intl.formatMessage({
                           defaultMessage: 'Alert ID',
                         }),
                       },
                       {
-                        key: 'alias',
                         dataIndex: 'alias',
+                        key: 'alias',
                         title: intl.formatMessage({
                           defaultMessage: 'Alias',
                         }),
                       },
                       {
-                        key: 'totalOffenders',
                         dataIndex: 'totalOffenders',
+                        key: 'totalOffenders',
                         title: intl.formatMessage({
                           defaultMessage: 'Members',
                         }),
                       },
                       {
-                        key: 'totalIncidents',
                         dataIndex: 'totalIncidents',
+                        key: 'totalIncidents',
                         title: intl.formatMessage({
                           defaultMessage: 'Incidents',
                         }),
                       },
                       {
-                        key: 'totalValue',
                         dataIndex: 'totalValue',
+                        key: 'totalValue',
+                        render: (value) => `£${value || 0}`,
                         title: intl.formatMessage({
                           defaultMessage: 'Lost Value',
                         }),
-                        render: (value) => `£${value || 0}`,
                       },
                       {
-                        key: 'totalRecoveredValue',
                         dataIndex: 'totalRecoveredValue',
+                        key: 'totalRecoveredValue',
+                        render: (value) => `£${value || 0}`,
                         title: intl.formatMessage({
                           defaultMessage: 'Recovered Value',
                         }),
-                        render: (value) => `£${value || 0}`,
                       },
                       {
-                        key: 'totalTheftSuccess',
                         dataIndex: 'totalTheftSuccess',
+                        key: 'totalTheftSuccess',
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+                        render: (value) => `${value?.toFixed(0) || 0}%`,
                         title: intl.formatMessage({
                           defaultMessage: 'Loss Rate',
                         }),
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-                        render: (value) => `${value?.toFixed(0) || 0}%`,
                       },
                       {
-                        key: 'delete',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Delete',
-                        }),
                         dataIndex: 'delete',
-                        width: 50,
+                        key: 'delete',
                         render: (_, record) => (
                           <Popconfirm
-                            placement="topLeft"
-                            title={intl.formatMessage({
-                              defaultMessage: 'Remove the crime group?',
+                            cancelText={intl.formatMessage({
+                              defaultMessage: 'No',
+                            })}
+                            okText={intl.formatMessage({
+                              defaultMessage: 'Yes',
                             })}
                             onConfirm={() => {
                               onRemoveCrimeGroup(record.key);
                             }}
-                            okText={intl.formatMessage({
-                              defaultMessage: 'Yes',
-                            })}
-                            cancelText={intl.formatMessage({
-                              defaultMessage: 'No',
-                            })}
                             overlayInnerStyle={{ padding: 10 }}
+                            placement="topLeft"
+                            title={intl.formatMessage({
+                              defaultMessage: 'Remove the crime group?',
+                            })}
                           >
                             <Button
                               disabled={saving}
@@ -370,19 +367,22 @@ const Profiles = ({
                             />
                           </Popconfirm>
                         ),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Delete',
+                        }),
+                        width: 50,
                       },
                     ]}
                     dataSource={crimeGroupsData.map((crimeGroup) => ({
+                      alias: crimeGroup.alias,
                       key: crimeGroup.id,
                       reference: crimeGroup.reference,
-                      alias: crimeGroup.alias,
-                      totalOffenders: crimeGroup.totalOffenders,
                       totalIncidents: crimeGroup.totalIncidents,
-                      totalValue: crimeGroup.totalValue,
+                      totalOffenders: crimeGroup.totalOffenders,
                       totalRecoveredValue: crimeGroup.totalRecoveredValue,
                       totalTheftSuccess: crimeGroup.totalTheftSuccess,
+                      totalValue: crimeGroup.totalValue,
                     }))}
-                    size="small"
                     pagination={
                       crimeGroupsData && crimeGroupsData.length > 5
                         ? {
@@ -390,6 +390,7 @@ const Profiles = ({
                           }
                         : false
                     }
+                    size="small"
                   />
                 </>
               ) : null}
@@ -397,10 +398,10 @@ const Profiles = ({
           ) : (
             <Row justify="center">
               <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={intl.formatMessage({
                   defaultMessage: 'No profiles added yet.',
                 })}
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
               />
             </Row>
           )}
@@ -408,17 +409,17 @@ const Profiles = ({
       </Row>
 
       <ProfileDrawer
-        addExistingVehicle={addExistingVehicle}
-        toggleAddNewVehicle={toggleAddNewVehicle}
-        toggleAddExistingVehicle={toggleAddExistingVehicle}
-        vehiclesData={vehiclesData}
-        onAddVehicle={onAddVehicle}
         addExistingCrimeGroup={addExistingCrimeGroup}
-        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+        addExistingVehicle={addExistingVehicle}
+        addNewVehicle={addNewVehicle}
         crimeGroupsData={crimeGroupsData}
         fromOffender
         onAddCrimeGroup={onAddCrimeGroup}
-        addNewVehicle={addNewVehicle}
+        onAddVehicle={onAddVehicle}
+        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+        toggleAddExistingVehicle={toggleAddExistingVehicle}
+        toggleAddNewVehicle={toggleAddNewVehicle}
+        vehiclesData={vehiclesData}
       />
     </div>
   );

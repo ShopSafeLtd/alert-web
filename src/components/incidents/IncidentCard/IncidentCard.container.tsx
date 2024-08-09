@@ -1,38 +1,39 @@
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { IncidentCardFragment } from 'graphql/fragments/__generated__/incident-card.generated';
+import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
+
 import React from 'react';
 
-import type { MutationUpdaterFn } from '@apollo/client';
 import View from './IncidentCard.view';
 import useIncidentCard from './useIncidentCard';
-import type { IncidentCardFragment } from 'graphql/fragments/incident-card.generated';
-import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
 
 interface Props {
+  compactView?: boolean;
   incident: IncidentCardFragment;
   openLightbox: (elements: { src: string }[], index: number) => void;
   update?: MutationUpdaterFn<RecycleIncidentMutation>;
-  compactView?: boolean;
 }
 
 const IncidentCard = ({
+  compactView,
   incident,
   openLightbox,
   update,
-  compactView,
 }: Props): JSX.Element => {
   const {
+    addInvestigation,
     approvalRights,
     deleteRights,
-    menuRights,
-    editIncidentFeed,
-    toggleEditIncidentFeed,
-    onDelete,
     editImage,
-    toggleEditImage,
     editImageId,
-    setEditImageId,
+    editIncidentFeed,
+    menuRights,
+    onDelete,
     onEditImage,
-    addInvestigation,
+    setEditImageId,
     toggleAddInvestigation,
+    toggleEditImage,
+    toggleEditIncidentFeed,
   } = useIncidentCard({
     incident,
     update,
@@ -40,22 +41,22 @@ const IncidentCard = ({
 
   return (
     <View
-      approvalRights={approvalRights}
-      deleteRights={deleteRights}
-      menuRights={menuRights}
-      incident={incident}
-      openLightbox={openLightbox}
-      onDelete={onDelete}
-      editIncidentFeed={editIncidentFeed}
-      toggleEditIncidentFeed={toggleEditIncidentFeed}
-      editImage={editImage}
-      toggleEditImage={toggleEditImage}
-      editImageId={editImageId}
-      setEditImageId={setEditImageId}
-      onEditImage={onEditImage}
       addInvestigation={addInvestigation}
-      toggleAddInvestigation={toggleAddInvestigation}
+      approvalRights={approvalRights}
       compactView={compactView || false}
+      deleteRights={deleteRights}
+      editImage={editImage}
+      editImageId={editImageId}
+      editIncidentFeed={editIncidentFeed}
+      incident={incident}
+      menuRights={menuRights}
+      onDelete={onDelete}
+      onEditImage={onEditImage}
+      openLightbox={openLightbox}
+      setEditImageId={setEditImageId}
+      toggleAddInvestigation={toggleAddInvestigation}
+      toggleEditImage={toggleEditImage}
+      toggleEditIncidentFeed={toggleEditIncidentFeed}
     />
   );
 };

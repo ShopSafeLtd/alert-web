@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import { Modal } from 'antd';
-import { useIntl } from 'react-intl';
 import type {
   SchemeSharingQuery,
   SchemeSharingQueryVariables,
-} from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
+} from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
+
+import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/__generated__/conenct-scheme-mutation.generated';
 import {
   SchemeSharingDocument,
   useSchemeSharingQuery,
-} from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
-import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/conenct-scheme-mutation.generated';
+} from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
+import { Modal } from 'antd';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 
 const { confirm } = Modal;
 
 interface Return {
+  connectOpen: boolean;
   data: SchemeSharingQuery | undefined;
   loading: boolean;
-  connectOpen: boolean;
-  toggleDrawerOpen: () => void;
   onUnlink: (id: string) => void;
+  toggleDrawerOpen: () => void;
 }
 
 const useSchemeSharing = (): Return => {
@@ -52,18 +53,18 @@ const useSchemeSharing = (): Return => {
 
       if (existingData && result.data)
         store.writeQuery<SchemeSharingQuery, SchemeSharingQueryVariables>({
-          query: SchemeSharingDocument,
-          variables: {
-            where: {
-              id: schemeId,
-            },
-          },
           data: {
             ...existingData,
             scheme: {
               ...existingData.scheme,
               connectedToSchemes:
                 result.data.setSchemeSharing.connectedToSchemes,
+            },
+          },
+          query: SchemeSharingDocument,
+          variables: {
+            where: {
+              id: schemeId,
             },
           },
         });
@@ -74,9 +75,6 @@ const useSchemeSharing = (): Return => {
 
   const onUnlink = (id: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'This will unlink the scheme and no more offender or incidents will be able to be shared. Any previously shared data will remained shared.',
@@ -95,15 +93,18 @@ const useSchemeSharing = (): Return => {
           },
         });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
   return {
+    connectOpen,
     data,
     loading,
-    connectOpen,
-    toggleDrawerOpen,
     onUnlink,
+    toggleDrawerOpen,
   };
 };
 

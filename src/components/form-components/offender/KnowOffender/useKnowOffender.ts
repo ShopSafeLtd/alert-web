@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
-import { useState } from 'react';
+import { useUpdateOffenderNameMutation } from '#/components/form-components/offender/KnowOffender/graphql/mutation/__generated__/update-offender-name.generated';
 import { notification } from 'antd';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-import { useIntl } from 'react-intl';
-import { useUpdateOffenderNameMutation } from '#/components/form-components/offender/KnowOffender/graphql/mutation/update-offender-name.generated';
-
 interface Props {
-  onClose: () => void;
   offenderId: string;
+  onClose: () => void;
 }
 export interface FormData {
-  name: string;
   infoSource: string;
+  name: string;
 }
 
 interface Return {
@@ -28,11 +27,11 @@ const useKnowOffender = ({ offenderId, onClose }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated',
         }),
         placement: 'bottomRight',
       });
@@ -48,11 +47,11 @@ const useKnowOffender = ({ offenderId, onClose }: Props): Return => {
     setSaving(true);
     void updateOffender({
       variables: {
-        id: offenderId,
         data: {
-          name: { set: data.name },
           infoSource: { set: data.infoSource },
+          name: { set: data.name },
         },
+        id: offenderId,
       },
     });
   };

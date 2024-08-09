@@ -1,42 +1,43 @@
-import React from 'react';
-import { Button, Card, Col, Drawer, Empty, Input, Row, Typography } from 'antd';
+import type { ListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
+import ArticleFilter from '#/components/Articles/ArticleFilter';
 import ArticleSkeletonCard from '#/components/Articles/ArticleSkeletonCard';
 import ArticleCard from '#/components/feedItems/Articles/ArticleCard';
-import ArticleFilter from '#/components/Articles/ArticleFilter';
 import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
+import { faFilter } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Drawer, Empty, Input, Row, Typography } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import useStyles from './ArticlesSection.styles';
-import type { ListArticlesQuery } from 'graphql/article/queries/list_articles.generated';
 
 const { Title } = Typography;
 
 interface Props {
   data:
-    | Exclude<ListArticlesQuery['listArticles'], undefined | null>
+    | Exclude<ListArticlesQuery['listArticles'], null | undefined>
     | null
     | undefined;
+  fetchMoreScroll: () => void;
   loading: boolean;
+  saving: boolean;
   search: string;
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  fetchMoreScroll: () => void;
-  saving: boolean;
   width: number;
 }
 
 const ArticlesSection = ({
   data,
+  fetchMoreScroll,
   loading,
+  saving,
   search,
   setSearch,
   sortFilter,
   toggleSortFilter,
-  fetchMoreScroll,
-  saving,
   width,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -44,9 +45,9 @@ const ArticlesSection = ({
   return (
     <Col
       style={{
-        height: 'inherit',
         display: 'flex',
         flexDirection: 'column',
+        height: 'inherit',
         overflow: 'hidden',
       }}
     >
@@ -59,8 +60,8 @@ const ArticlesSection = ({
         <Row
           align="middle"
           gutter={8}
-          wrap={false}
           style={{ margin: '10px 0 10px 5px' }}
+          wrap={false}
         >
           <Col>
             <Title className={classes.title} level={4}>
@@ -71,20 +72,20 @@ const ArticlesSection = ({
           </Col>
           <Col flex={1}>
             <Input
-              size="small"
+              // value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for Bulletins...',
               })}
-              // value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              size="small"
             />
           </Col>
           <Col>
             <Button
-              type="text"
               disabled={saving}
               icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
               onClick={toggleSortFilter}
+              type="text"
             />
           </Col>
         </Row>
@@ -92,9 +93,9 @@ const ArticlesSection = ({
 
       {loading ? (
         <Row
-          gutter={[8, 8]}
           align="stretch"
-          style={{ padding: 10, alignItems: 'stretch' }}
+          gutter={[8, 8]}
+          style={{ alignItems: 'stretch', padding: 10 }}
         >
           {Array.from({ length: 24 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -106,39 +107,39 @@ const ArticlesSection = ({
       ) : data?.total ? (
         <DashboardInfiniteScroll
           dataLength={data?.articles.length}
-          next={() => fetchMoreScroll()}
           hasMore={data?.articles.length < data?.total}
           id="scroll-articles"
+          next={() => fetchMoreScroll()}
         >
           <Row
-            gutter={[8, 8]}
             align="stretch"
+            gutter={[8, 8]}
             style={{ alignItems: 'stretch', padding: 10 }}
           >
             {data?.articles.map((article) => (
               <Col
-                xxl={4 % width === 0 ? 24 : 24 / (4 % width)}
                 sm={2 % width === 0 ? 24 : 24 / (2 % width)}
                 style={{ marginBottom: 10 }}
+                xxl={4 % width === 0 ? 24 : 24 / (4 % width)}
               >
-                <ArticleCard key={article.id} article={article} />
+                <ArticleCard article={article} key={article.id} />
               </Col>
             ))}
           </Row>
         </DashboardInfiniteScroll>
       ) : (
         <Row
-          gutter={[8, 8]}
           align="stretch"
-          style={{ padding: 10, alignItems: 'stretch' }}
+          gutter={[8, 8]}
+          style={{ alignItems: 'stretch', padding: 10 }}
         >
           <div
             style={{
-              display: 'flex',
-              width: '100%',
               alignItems: 'center',
-              justifyContent: 'center',
+              display: 'flex',
               height: 'calc(100vh - 400px)',
+              justifyContent: 'center',
+              width: '100%',
             }}
           >
             <Empty
@@ -157,11 +158,11 @@ const ArticlesSection = ({
       )}
 
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <ArticleFilter />

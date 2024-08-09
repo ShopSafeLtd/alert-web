@@ -1,22 +1,24 @@
-import React, { memo, useState } from 'react';
-import { faLanguage } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
-import { Tooltip } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useStoreState } from '../../state';
-import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
 import type { LanguageCode } from 'graphql/types';
 
+import { faLanguage } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from 'antd';
+import { useTranslateLazyQuery } from 'graphql/translate/queries/__generated__/translate.generated';
+import React, { memo, useState } from 'react';
+import { useIntl } from 'react-intl';
+
+import { useStoreState } from '../../state';
+
 const TranslateButton = ({
-  text,
   buttonStyle,
+  text,
 }: {
-  text: string;
   buttonStyle?: React.CSSProperties;
+  text: string;
 }) => {
   const { languageCount } = useStoreState((state) => state.scheme);
   const currentLanguage = useStoreState((state) => state.theme.locale);
-  const [isTranslated, setIsTranslated] = useState<string | null>(null);
+  const [isTranslated, setIsTranslated] = useState<null | string>(null);
 
   const intl = useIntl();
   const [translate] = useTranslateLazyQuery({
@@ -24,8 +26,8 @@ const TranslateButton = ({
     fetchPolicy: 'cache-first',
     variables: {
       data: {
-        text: [text],
         targetLang: currentLanguage as LanguageCode,
+        text: [text],
       },
     },
   });
@@ -50,13 +52,13 @@ const TranslateButton = ({
           })}
         >
           <FontAwesomeIcon
-            icon={faLanguage}
             color="lightblue"
+            icon={faLanguage}
             // eslint-disable-next-line no-void
             onClick={() => void translateText()}
             style={{
-              marginLeft: '10px',
               cursor: 'pointer',
+              marginLeft: '10px',
               ...buttonStyle,
             }}
           />

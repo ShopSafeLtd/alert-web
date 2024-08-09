@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
-import { DonutGraph } from '#/components/reports/graphs';
-import { Button, Typography, Empty, Modal, Select } from 'antd';
-
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCogs, faTrash } from '@fortawesome/pro-light-svg-icons';
+import type { CustomQuestionsCountGraphQueryVariables } from '#/components/reports/components/CustomQuestionsCountGraph/__generated__/CustomQuestionsCountGraph.generated';
 import type { MetaData } from '#/views/reports/types';
 
-import type { CustomQuestionsCountGraphQueryVariables } from './CustomQuestionsCountGraph.generated';
-import { useCustomQuestionsCountGraphQuery } from './CustomQuestionsCountGraph.generated';
-import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/get-questions.generated';
+import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
+import { useCustomQuestionsCountGraphQuery } from '#/components/reports/components/CustomQuestionsCountGraph/__generated__/CustomQuestionsCountGraph.generated';
+import { DonutGraph } from '#/components/reports/graphs';
+import { faCogs, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Empty, Modal, Select, Typography } from 'antd';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+
 interface Props {
-  isPrinting: boolean;
   editMode: boolean;
-  variables: CustomQuestionsCountGraphQueryVariables;
-  updateQuestionId: (value: string) => void;
+  isPrinting: boolean;
   metaData?: MetaData;
   removeItem?: () => void;
+  updateQuestionId: (value: string) => void;
+  variables: CustomQuestionsCountGraphQueryVariables;
 }
 
 const CustomQuestionsCountGraph = ({
-  isPrinting,
-  variables,
   editMode,
-  updateQuestionId,
+  isPrinting,
   metaData,
   removeItem,
+  updateQuestionId,
+  variables,
 }: Props) => {
   const intl = useIntl();
   const [selectOpen, setSelectOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [selectedValue, setSelectedValue] = useState<null | string>(null);
   const toggleSelectOpen = () => setSelectOpen(!selectOpen);
 
   const { data } = useCustomQuestionsCountGraphQuery({
-    variables,
     skip: !variables.where.questionId,
+    variables,
   });
 
   const { data: questionsData, loading } = useAvailableQuestionsQuery({
@@ -47,32 +47,32 @@ const CustomQuestionsCountGraph = ({
         {data?.customQuestionsCountGraph.title}
       </Typography.Title>
       <Button
-        type="text"
-        shape="circle"
         className="change-graph1 no-print"
         hidden={!editMode}
         icon={<FontAwesomeIcon icon={faCogs} size="lg" />}
-        size="small"
         onClick={() => {
           toggleSelectOpen();
         }}
+        shape="circle"
+        size="small"
+        type="text"
       />
       <Button
-        type="text"
-        shape="circle"
         className="card-remove no-print"
         hidden={!editMode}
-        icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-        size="small"
+        icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
         onClick={removeItem}
+        shape="circle"
+        size="small"
+        type="text"
       />
       {metaData?.propId ? (
         <DonutGraph
-          isPrinting={isPrinting}
           data={data?.customQuestionsCountGraph.data}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Data',
           })}
+          isPrinting={isPrinting}
           type="donut"
         />
       ) : (
@@ -84,10 +84,6 @@ const CustomQuestionsCountGraph = ({
       )}
 
       <Modal
-        title={intl.formatMessage({
-          defaultMessage: 'Select Question',
-        })}
-        open={selectOpen}
         onCancel={toggleSelectOpen}
         onOk={() => {
           if (selectedValue) {
@@ -95,15 +91,19 @@ const CustomQuestionsCountGraph = ({
             toggleSelectOpen();
           }
         }}
+        open={selectOpen}
+        title={intl.formatMessage({
+          defaultMessage: 'Select Question',
+        })}
       >
         <Select
           loading={loading}
-          style={{ width: '100%' }}
+          onChange={setSelectedValue}
           options={questionsData?.availableQuestions.map((option) => ({
             label: option.question,
             value: option.id,
           }))}
-          onChange={setSelectedValue}
+          style={{ width: '100%' }}
           value={selectedValue}
         />
       </Modal>

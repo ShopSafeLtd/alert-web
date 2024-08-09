@@ -1,4 +1,9 @@
-import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type { InvestigationRelayQuery } from 'graphql/investigations/queries/__generated__/list-investigations-all-schemes.generated';
+
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { useStoreActions, useStoreState } from '#/state';
 import {
   Button,
   Col,
@@ -9,26 +14,23 @@ import {
   Table,
   Typography,
 } from 'antd';
-
-import { Link } from 'react-router-dom';
-import type { MutationUpdaterFn } from '@apollo/client';
-import { useNavigate } from 'react-router';
-import { FormattedMessage, useIntl } from 'react-intl';
-import GetInvestigationStatusValues from 'types/enums/investigation-status';
-import moment from 'moment';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import { useStoreActions, useStoreState } from '#/state';
-import { FormattedList } from 'react-intl/lib';
-import useStyles from './ListInvestigations.styles';
-import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
-import type { ListInvestigationsAllSchemesQuery } from 'graphql/investigations/queries/list-investigations-all-schemes.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
 import { InvestigationStatus } from 'graphql/types';
+import moment from 'moment';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedList } from 'react-intl/lib';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+import GetInvestigationStatusValues from 'types/enums/investigation-status';
+
+import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
+import useStyles from './ListInvestigations.styles';
 
 interface Props {
-  data: ListInvestigationsAllSchemesQuery | undefined;
-  loading: boolean;
   addInvestigation: boolean;
+  data: InvestigationRelayQuery | undefined;
+  loading: boolean;
+  onPaginationChange: (pageValue: number, sizeValue: number) => void;
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
@@ -40,9 +42,10 @@ const getTextStatus = (value: InvestigationStatus) => {
   return 'success';
 };
 const ListInvestigations = ({
+  addInvestigation,
   data,
   loading,
-  addInvestigation,
+  onPaginationChange,
   toggleAddInvestigation,
   updateInvestigationList,
 }: Props) => {
@@ -73,57 +76,57 @@ const ListInvestigations = ({
       <Row className={classes.headerRow} gutter={8}>
         <Col>
           <Input
+            allowClear
+            onChange={(e) => setInvestigationSearch(e.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search investigations...',
             })}
             style={{ width: 400 }}
             value={search}
-            onChange={(e) => setInvestigationSearch(e.target.value)}
-            allowClear
           />
         </Col>
         <Col>
           <GroupsSelect
-            value={groupsFilter}
-            onChange={setInvestigationGroupsFilter}
             allowClear
-            style={{ minWidth: 200, maxWidth: 400 }}
+            maxTagCount={1}
+            mode="multiple"
+            onChange={setInvestigationGroupsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select groups...',
             })}
-            mode="multiple"
-            maxTagCount={1}
+            style={{ maxWidth: 400, minWidth: 200 }}
+            value={groupsFilter}
           />
         </Col>
         <Col>
           <Select
             allowClear
-            value={statusFilter}
-            onChange={setInvestigationStatusFilter}
             mode="multiple"
-            style={{ width: 200 }}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select status...',
-            })}
+            onChange={setInvestigationStatusFilter}
             options={[
               {
-                value: InvestigationStatus.Open,
                 label: intl.formatMessage({
                   defaultMessage: 'Open',
                 }),
+                value: InvestigationStatus.Open,
               },
               {
-                value: InvestigationStatus.Closed,
                 label: intl.formatMessage({
                   defaultMessage: 'Closed',
                 }),
+                value: InvestigationStatus.Closed,
               },
             ]}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select status...',
+            })}
+            style={{ width: 200 }}
+            value={statusFilter}
           />
         </Col>
         <Col flex={1} />
         <Col>
-          <Button type="primary" onClick={toggleAddInvestigation}>
+          <Button onClick={toggleAddInvestigation} type="primary">
             <FormattedMessage defaultMessage="Create Investigation" />
           </Button>
         </Col>
@@ -168,100 +171,101 @@ const ListInvestigations = ({
         {/*  </Col> */}
       </Row>
       <Table
-        dataSource={data?.listInvestigationsAllSchemes?.investigations.map(
-          (investigation) => ({
-            key: investigation.id,
-            name: investigation.name,
-            description: investigation.description || '',
-            status: investigation.status || InvestigationStatus.Open,
-            groups: investigation.groups || [],
-            reference: investigation.reference,
-            createdAt: investigation.createdAt,
-            closedAt: investigation.closedAt,
-          })
-        )}
-        loading={loading}
-        pagination={{
-          hideOnSinglePage: true,
-          defaultPageSize: 50,
-          // pageSize: currentPageSize,
-          showSizeChanger: true,
-          // current: currentPage,
-          // onChange: onPaginationChange,
-          total: data?.listInvestigationsAllSchemes?.total || 0,
-          showTotal: (total) => `Total Investigations: ${total}`,
-        }}
-        size="small"
-        onRow={(record) => ({
-          onClick: () => navigate(`/app/investigations/view/${record.key}`),
-        })}
         columns={[
           {
-            key: 'name',
             dataIndex: 'name',
-            title: <FormattedMessage defaultMessage="Name" />,
+            key: 'name',
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
+            title: <FormattedMessage defaultMessage="Name" />,
           },
           {
-            key: 'reference',
             dataIndex: 'reference',
+            key: 'reference',
             title: <FormattedMessage defaultMessage="Alert ID" />,
           },
           {
-            key: 'status',
             dataIndex: 'status',
-            title: <FormattedMessage defaultMessage="Status" />,
+            key: 'status',
             render: (value: InvestigationStatus) => (
               <Typography.Text type={getTextStatus(value)}>
                 {GetInvestigationStatusValues[value]}
               </Typography.Text>
             ),
+            title: <FormattedMessage defaultMessage="Status" />,
           },
           {
-            key: 'createdAt',
             dataIndex: 'createdAt',
-            title: <FormattedMessage defaultMessage="Date Opened" />,
+            key: 'createdAt',
             render: (value: string) => moment(value).format('DD/MM/YYYY'),
+            title: <FormattedMessage defaultMessage="Date Opened" />,
           },
           {
-            key: 'closedAt',
             dataIndex: 'closedAt',
-            title: <FormattedMessage defaultMessage="Date Closed" />,
+            key: 'closedAt',
+            // eslint-disable-next-line
             render: (value: string) =>
               value ? moment(value).format('DD/MM/YYYY') : undefined,
+            title: <FormattedMessage defaultMessage="Date Closed" />,
           },
           {
-            key: 'groups',
             dataIndex: 'groups',
-            title: <FormattedMessage defaultMessage="Groups" />,
+            key: 'groups',
             render: (value, item) => (
               <div>
                 <FormattedList
-                  value={item.groups.map((group) => group.name)}
                   type="unit"
+                  value={item.groups.map((group) => group.name)}
                 />
               </div>
             ),
+            title: <FormattedMessage defaultMessage="Groups" />,
           },
           {
-            key: 'description',
             dataIndex: 'description',
+            key: 'description',
             title: <FormattedMessage defaultMessage="Description" />,
           },
         ]}
+        dataSource={data?.investigationRelay.edges.map(
+          ({ node: investigation }) => ({
+            closedAt: investigation.closedAt,
+            createdAt: investigation.createdAt,
+            description: investigation.description || '',
+            groups: investigation.groups || [],
+            key: investigation.id,
+            name: investigation.name,
+            reference: investigation.reference,
+            status: investigation.status || InvestigationStatus.Open,
+          })
+        )}
+        loading={loading}
+        onRow={(record) => ({
+          onClick: () => navigate(`/app/investigations/view/${record.key}`),
+        })}
+        pagination={{
+          defaultPageSize: 50,
+          hideOnSinglePage: true,
+          // current: currentPage,
+          onChange: onPaginationChange,
+          // pageSize: currentPageSize,
+          showSizeChanger: true,
+          showTotal: (total) => `Total Investigations: ${total}`,
+          total: data?.investigationRelay.totalCount ?? 0,
+        }}
+        size="small"
       />
       <Drawer
-        title={<FormattedMessage defaultMessage="Add New Investigation" />}
-        open={addInvestigation}
-        width="500"
         onClose={toggleAddInvestigation}
+        open={addInvestigation}
+        title={<FormattedMessage defaultMessage="Add New Investigation" />}
+        width="500"
       >
         {addInvestigation ? (
           <AddInvestigation
-            update={updateInvestigationList}
             onClose={toggleAddInvestigation}
+            update={updateInvestigationList}
           />
         ) : (
           <div />

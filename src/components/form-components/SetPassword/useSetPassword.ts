@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { useSetPasswordMutation } from './graphql/mutations/set-password.generated';
+
 import { notification } from 'antd';
 import { useIntl } from 'react-intl';
+import {
+  useSetPasswordMutation
+} from '#/components/form-components/SetPassword/graphql/mutations/__generated__/set-password.generated';
 
 interface FormData {
   password: string;

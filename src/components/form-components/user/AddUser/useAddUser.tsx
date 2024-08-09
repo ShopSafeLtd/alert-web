@@ -2,19 +2,19 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import type { CreateUserData, UserUpdateInput } from 'graphql/types';
-import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import type { InviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
+import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 
-import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/custom-roles.generated';
+import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/__generated__/custom-roles.generated';
 import { useGroupsContext } from '#/context/groups-context';
 import { Form, Modal, notification } from 'antd';
-import { useSchemeChatsQuery } from 'graphql/chats/queries/scheme-chats.generated';
-import { useSchemeQuery } from 'graphql/scheme/queries/scheme.generated';
+import { useSchemeChatsQuery } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
+import { useSchemeQuery } from 'graphql/scheme/queries/__generated__/scheme.generated';
 import { Model, SortOrder } from 'graphql/types';
-import { useCreateUserInDatabaseMutation } from 'graphql/users/mutations/create-user-in-databse.generated';
-import { useInviteExistingUserMutation } from 'graphql/users/mutations/invite-exiting-user.generated';
-import { useSearchUserQuery } from 'graphql/users/queries/search-user.generated';
+import { useCreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
+import { useInviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
+import { useSearchUserQuery } from 'graphql/users/queries/__generated__/search-user.generated';
 import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';

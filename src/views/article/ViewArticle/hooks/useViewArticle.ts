@@ -1,19 +1,20 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import { Modal } from 'antd';
-import { useNavigate } from 'react-router';
-import { useIntl } from 'react-intl';
-
-import type { Props, ReturnProps } from '../types/ViewArticle';
-import useReportPrint from '#/utils/reportPrint/usePrintReports';
-import { useArticleQuery } from 'graphql/article/queries/view-article.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useDeleteArticleMutation } from 'graphql/article/mutations/delete_article.generated';
 import type {
   ListArticlesQuery,
   ListArticlesQueryVariables,
-} from 'graphql/article/queries/list_articles.generated';
-import { ListArticlesDocument } from 'graphql/article/queries/list_articles.generated';
+} from 'graphql/article/queries/__generated__/list_articles.generated';
+
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
+import { Modal } from 'antd';
+import { useDeleteArticleMutation } from 'graphql/article/mutations/__generated__/delete_article.generated';
+import { ListArticlesDocument } from 'graphql/article/queries/__generated__/list_articles.generated';
+import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
+import { QueryMode, SortOrder } from 'graphql/types';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreState } from 'state';
+
+import type { Props, ReturnProps } from '../types/ViewArticle';
 
 const useViewArticle = ({ id }: Props): ReturnProps => {
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
@@ -29,8 +30,8 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     []
   );
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const { data, loading } = useArticleQuery({
     variables: {
@@ -39,9 +40,12 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
   });
 
   const listArticlesVars = {
+    order: { updatedAt: SortOrder.Desc },
     scheme: {
       id: schemeId,
     },
+    skip: 0,
+    take: 12,
     where: {
       OR: [
         {
@@ -52,9 +56,6 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
         },
       ],
     },
-    order: { updatedAt: SortOrder.Desc },
-    take: 12,
-    skip: 0,
   };
 
   const [deleteArticle] = useDeleteArticleMutation({
@@ -69,16 +70,16 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
 
       if (existingData && result.data) {
         store.writeQuery<ListArticlesQuery, ListArticlesQueryVariables>({
-          query: ListArticlesDocument,
-          variables: listArticlesVars,
           data: {
             listArticles: {
-              total: (existingData?.listArticles.total || 1) - 1,
               articles: existingData.listArticles.articles.filter(
                 (item) => item.id !== result.data?.deleteArticle?.id
               ),
+              total: (existingData?.listArticles.total || 1) - 1,
             },
           },
+          query: ListArticlesDocument,
+          variables: listArticlesVars,
         });
       }
     },
@@ -86,29 +87,29 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
 
   const onDeleteArticle = () => {
     Modal.confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'Are you sure you want to delete this article?',
       }),
       onOk() {
         void deleteArticle({
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deleteArticle: {
+              __typename: 'Article',
+              id,
+            },
+          },
           variables: {
             where: {
               id,
             },
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            deleteArticle: {
-              id,
-              __typename: 'Article',
-            },
-          },
         });
         navigation('/app/dashboard');
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
@@ -116,15 +117,15 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     setLightboxElements(elements);
     if (lightBoxOpen.open) {
       setLightBoxOpen({
-        open: !lightBoxOpen.open,
         index,
+        open: !lightBoxOpen.open,
       });
     } else {
       setTimeout(
         () =>
           setLightBoxOpen({
-            open: !lightBoxOpen.open,
             index,
+            open: !lightBoxOpen.open,
           }),
         0.3
       );
@@ -132,17 +133,17 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
   };
 
   return {
-    data,
-    loading,
-    lightboxElements,
-    lightBoxOpen,
-    openLightbox: triggerLightbox,
-    onDeleteArticle,
-    role,
-    editArticle,
     componentRef,
+    data,
+    editArticle,
     handlePrint,
     isPrinting,
+    lightBoxOpen,
+    lightboxElements,
+    loading,
+    onDeleteArticle,
+    openLightbox: triggerLightbox,
+    role,
   };
 };
 

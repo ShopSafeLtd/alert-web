@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-import type { TagQuery } from 'graphql/tag/queries/tag.generated';
-import { useTagQuery } from 'graphql/tag/queries/tag.generated';
-import { useUpdateTagMutation } from 'graphql/tag/mutation/update_tag.generated';
+import { TagQuery, useTagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
+import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
+
 
 interface FormData {
   name: string;

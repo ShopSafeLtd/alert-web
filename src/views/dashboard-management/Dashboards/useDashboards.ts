@@ -1,51 +1,52 @@
-import { useState } from 'react';
-import { useStoreState } from 'state';
-import { useNavigate } from 'react-router-dom';
-import type { CreateDashboardMutationVariables } from '#/views/dashboard-management/graphql/mutations/dashboard.generated';
+import type { CreateDashboardMutationVariables } from '#/views/dashboard-management/graphql/mutations/__generated__/dashboard.generated';
+import type { AvailRolesQuery } from '#/views/dashboard-management/graphql/queries/__generated__/available-roles.generated';
+import type { DashboardTemplatesQuery } from '#/views/dashboard-management/graphql/queries/__generated__/dashboard-templates.generated';
+
 import {
   useCreateDashboardMutation,
   useDeleteDashboardMutation,
   useUpdateDashboardTemplateMutation,
-} from '#/views/dashboard-management/graphql/mutations/dashboard.generated';
-import type { DashboardTemplatesQuery } from '#/views/dashboard-management/graphql/queries/dashboard-templates.generated';
+} from '#/views/dashboard-management/graphql/mutations/__generated__/dashboard.generated';
+import { useAvailRolesQuery } from '#/views/dashboard-management/graphql/queries/__generated__/available-roles.generated';
 import {
   DashboardTemplatesDocument,
   useDashboardTemplatesQuery,
-} from '#/views/dashboard-management/graphql/queries/dashboard-templates.generated';
-import type { AvailRolesQuery } from '#/views/dashboard-management/graphql/queries/available-roles.generated';
-import { useAvailRolesQuery } from '#/views/dashboard-management/graphql/queries/available-roles.generated';
+} from '#/views/dashboard-management/graphql/queries/__generated__/dashboard-templates.generated';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useStoreState } from 'state';
 
 interface Return {
-  data: DashboardTemplatesQuery | undefined;
-  loading: boolean;
   addDashboard: boolean;
-  toggleCreateDashboard: () => void;
   createDashboard: (data: CreateDashboardMutationVariables) => void;
+  data: DashboardTemplatesQuery | undefined;
   deleteDashboard: (id: string) => void;
+  editDashboard: string | undefined;
+  loading: boolean;
+  rolesData: AvailRolesQuery | undefined;
+  schemeId: string;
+  toggleCreateDashboard: () => void;
+  toggleEditDashboard: (arg: string | undefined) => void;
   updateDashboard: ({
     defaultAdmin,
     defaultUser,
+    id,
     name,
     roles,
-    id,
   }: {
     defaultAdmin?: boolean;
     defaultUser?: boolean;
+    id: string;
     name?: string;
     roles?: string[];
-    id: string;
   }) => void;
-  editDashboard: string | undefined;
-  toggleEditDashboard: (arg: string | undefined) => void;
-  rolesData: AvailRolesQuery | undefined;
-  schemeId: string;
 }
 
 const useDashboards = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
 
   const [addDashboard, setAddDashboard] = useState(false);
-  const [editDashboard, setEditDashboard] = useState<undefined | string>(
+  const [editDashboard, setEditDashboard] = useState<string | undefined>(
     undefined
   );
 
@@ -63,22 +64,17 @@ const useDashboards = (): Return => {
   const [deleteDashboardMutation] = useDeleteDashboardMutation();
   const createDashboard = (d: CreateDashboardMutationVariables) => {
     void createDashboardMutation({
-      variables: d,
       onCompleted: ({ createDashboard: Res }) => {
         if (Res) {
           navigate(`/app/manage-dashboard/edit/${Res.id}`);
         }
       },
+      variables: d,
     });
   };
 
   const deleteDashboard = (dashId: string) => {
     void deleteDashboardMutation({
-      variables: {
-        where: {
-          id: dashId,
-        },
-      },
       update: (store, { data: res }) => {
         if (
           res?.deleteDashboardTemplate === null ||
@@ -96,22 +92,27 @@ const useDashboards = (): Return => {
 
         if (!existingData?.dashboards) return;
         store.writeQuery<DashboardTemplatesQuery>({
-          query: DashboardTemplatesDocument,
           data: {
+            __typename: 'Query',
             dashboards: {
               ...existingData.dashboards,
               edges: existingData.dashboards.edges.filter(
                 ({ node }) => node.id !== dashId
               ),
             },
-            __typename: 'Query',
           },
+          query: DashboardTemplatesDocument,
           variables: {
             scheme: {
               id: schemeId,
             },
           },
         });
+      },
+      variables: {
+        where: {
+          id: dashId,
+        },
       },
     });
   };
@@ -124,15 +125,15 @@ const useDashboards = (): Return => {
   const updateDashboard = ({
     defaultAdmin,
     defaultUser,
+    id,
     name,
     roles,
-    id,
   }: {
     defaultAdmin?: boolean;
     defaultUser?: boolean;
+    id: string;
     name?: string;
     roles?: string[];
-    id: string;
   }) => {
     let rolesFormatted:
       | { connect: { id: string }[]; disconnect: { id: string }[] }
@@ -155,17 +156,6 @@ const useDashboards = (): Return => {
     }
 
     void editDashbaordMutation({
-      variables: {
-        where: {
-          id,
-        },
-        data: {
-          defaultAdmin: defaultAdmin ?? undefined,
-          defaultUser: defaultUser ?? undefined,
-          name: name ? { set: name } : undefined,
-          roles: rolesFormatted ?? undefined,
-        },
-      },
       update: (store, { data: res }) => {
         if (
           res?.updateDashboardTemplate === null ||
@@ -183,13 +173,13 @@ const useDashboards = (): Return => {
 
         if (!existingData?.dashboards) return;
         store.writeQuery<DashboardTemplatesQuery>({
-          query: DashboardTemplatesDocument,
           data: {
+            __typename: 'Query',
             dashboards: {
               ...existingData.dashboards,
               edges: existingData.dashboards.edges.map(({ node }) => {
                 if (node.id === res.updateDashboardTemplate.id) {
-                  const { roles: newRoles, name: newName } =
+                  const { name: newName, roles: newRoles } =
                     res.updateDashboardTemplate;
                   return {
                     node: {
@@ -202,8 +192,8 @@ const useDashboards = (): Return => {
                 return { node };
               }),
             },
-            __typename: 'Query',
           },
+          query: DashboardTemplatesDocument,
           variables: {
             scheme: {
               id: schemeId,
@@ -211,28 +201,39 @@ const useDashboards = (): Return => {
           },
         });
       },
+      variables: {
+        data: {
+          defaultAdmin: defaultAdmin ?? undefined,
+          defaultUser: defaultUser ?? undefined,
+          name: name ? { set: name } : undefined,
+          roles: rolesFormatted ?? undefined,
+        },
+        where: {
+          id,
+        },
+      },
     });
     toggleEditDashboard(undefined);
   };
 
   const { data: rolesData } = useAvailRolesQuery({
+    skip: !schemeId,
     variables: {
       schemeId,
     },
-    skip: !schemeId,
   });
   return {
-    data,
-    loading,
     addDashboard,
-    toggleCreateDashboard,
     createDashboard,
+    data,
     deleteDashboard,
-    updateDashboard,
-    toggleEditDashboard,
     editDashboard,
+    loading,
     rolesData,
     schemeId,
+    toggleCreateDashboard,
+    toggleEditDashboard,
+    updateDashboard,
   };
 };
 

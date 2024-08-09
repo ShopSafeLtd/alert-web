@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading,@typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx */
 import type { FormInstance } from 'antd';
-import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
+import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';

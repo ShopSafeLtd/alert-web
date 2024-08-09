@@ -1,23 +1,21 @@
-import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/create_blur_faces.generated';
-import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/update-todo.generated';
-import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/create-document.generated';
-import type { DeleteDocumentMutation } from 'graphql/documents/mutations/delete-document.generated';
-import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
+import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
+import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-goods.generated';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
 import type {
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
-} from 'graphql/incidents/queries/view-incident.generated';
-import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/create-investigations.generated';
-import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/create-simple-offender.generated';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
-import type { CreateTodoMutation } from 'graphql/todos/mutations/create-todo.generated';
+} from 'graphql/incidents/queries/__generated__/view-incident.generated';
+import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
+import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
+import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import type {
   GoodsMode,
   ImageUpdateWhereDataWithoutIncidentInput,
-  LanguageCode,
 } from 'graphql/types';
 import type {
   EditFeedImage,
@@ -29,27 +27,26 @@ import type {
 } from 'types/DataType';
 
 import hasPermission from '#/utils/has-permission';
-import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/listTemplates.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Modal, notification } from 'antd';
-import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/add-images-to-incident.generated';
-import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/recycle-incident.generated';
-import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/subscribe-to-incident.generated';
-import { useUnsubscribeFromIncidentMutation } from 'graphql/incidents/mutations/unsubscribe-from-incident.generated';
-import { useUpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/update-incident-goods.generated';
-import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/update-incident-images.generated';
-import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/update-incident-location.generated';
-import { useUpdateIncidentOffendersMutation } from 'graphql/incidents/mutations/update/update-incident-offenders.generated';
-import { useUpdateIncidentVehiclesMutation } from 'graphql/incidents/mutations/update/update-incident-vehicles.generated';
-import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/update-incident.generated';
-import { ListIncidentsAllSchemesDocument } from 'graphql/incidents/queries/list-incidents-all-schemes.generated';
+import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/__generated__/add-images-to-incident.generated';
+import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
+import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/__generated__/subscribe-to-incident.generated';
+import { useUnsubscribeFromIncidentMutation } from 'graphql/incidents/mutations/__generated__/unsubscribe-from-incident.generated';
+import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
+import { useUpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-goods.generated';
+import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-images.generated';
+import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-location.generated';
+import { useUpdateIncidentOffendersMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-offenders.generated';
+import { useUpdateIncidentVehiclesMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-vehicles.generated';
+import { ListIncidentsAllSchemesDocument } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
 import {
   ViewIncidentDocument,
   useViewIncidentQuery,
-} from 'graphql/incidents/queries/view-incident.generated';
-import { useDeleteUpdateMutation } from 'graphql/mutations/delete-update.generated';
-import { useUpdateUpdateMutation } from 'graphql/mutations/update-update.generated';
-import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/add-images-to-offender.generated';
-import { useTranslateLazyQuery } from 'graphql/translate/queries/translate.generated';
+} from 'graphql/incidents/queries/__generated__/view-incident.generated';
+import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
+import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
+import { useAddImagesToOffenderMutation } from 'graphql/offenders/mutations/__generated__/add-images-to-offender.generated';
 import {
   PermissionMethod,
   PermissionModel,
@@ -57,8 +54,8 @@ import {
   Role,
   SortOrder,
 } from 'graphql/types';
-import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/create-simple-vehicle.generated';
-import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/update-simple-vehicle.generated';
+import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
+import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -108,7 +105,6 @@ interface Return {
   handleEditUpdate: () => void;
   hasConnectedSchemes: boolean;
   hideIncident: boolean;
-  isTranslated: null | string;
   languageCount: number;
   lightBoxOpen: {
     index: number;
@@ -122,7 +118,7 @@ interface Return {
   loading: boolean;
   onAddExistingOffender: (id: string) => void;
   onAddExistingVehicle: (id: string) => void;
-  onAddGoods: (value: GoodsData[]) => void;
+  onAddGoods: (value: GoodsData) => void;
   onAddUpdateImages: (
     images: { id: string; url: string }[],
     addToOffender?: boolean
@@ -174,6 +170,7 @@ interface Return {
   setViewTodoVisible: (value: null | string) => void;
   shareOpen: boolean;
   showOffenderOptions: boolean;
+  showOriginal: boolean;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
   toggleAddDocument: () => void;
@@ -191,13 +188,12 @@ interface Return {
   toggleSelectImages: (id: string) => void;
   toggleShareOpen: () => void;
   toggleShowOffenderOptions: () => void;
+  toggleShowOriginalDescription: () => void;
   toggleSubscribe: () => void;
-  translateText: () => Promise<void>;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
-  updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation>;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   updateOffendersList: (value: OffenderData) => void;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
@@ -757,40 +753,6 @@ const useViewIncident = (incidentId: string): Return => {
           disconnect: [{ id: value }],
         },
       },
-    });
-  };
-  const updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res?.createBlurFaces === null || res?.createBlurFaces === undefined)
-      return;
-
-    const existingData = store.readQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
-      variables,
-    });
-
-    if (!existingData?.incident) return;
-    const findIndex = existingData.incident.images.findIndex(
-      ({ id }) => id === res.createBlurFaces.id
-    );
-    store.writeQuery<ViewIncidentQuery>({
-      data: {
-        __typename: 'Query',
-
-        incident: update<ViewIncidentQuery['incident']>(existingData.incident, {
-          images: {
-            [findIndex]: {
-              $set: {
-                ...res.createBlurFaces,
-              },
-            },
-          },
-        }),
-      },
-      query: ViewIncidentDocument,
-      variables,
     });
   };
   // vehicle
@@ -1367,9 +1329,9 @@ const useViewIncident = (incidentId: string): Return => {
       variables,
     });
   };
-  const onEditGoods = (item: GoodsData) => {
+  const onEditGoods = (value: GoodsData) => {
     setSaving(true);
-    if (item)
+    if (value)
       void updateIncidentGoods({
         onCompleted: () => {
           successNotification(
@@ -1384,29 +1346,17 @@ const useViewIncident = (incidentId: string): Return => {
             update: [
               {
                 data: {
-                  goodsType: item.goodsType
-                    ? {
-                        connect: {
-                          id: item.goodsType,
-                        },
-                      }
-                    : undefined,
-                  name: { set: item.name },
-                  quantity: { set: item.quantity || 0 },
-                  recoveredQuantity: { set: item.recoveredQuantity || 0 },
-                  recoveredValue: { set: item.recoveredValue || 0 },
-                  sku: { set: item.sku },
-                  stockItem: item.stockItem
-                    ? {
-                        connect: {
-                          id: item.stockItem,
-                        },
-                      }
-                    : undefined,
-                  value: { set: item.value || 0 },
+                  goodsType: {
+                    connect: {
+                      id: value.goodsTypeId || '',
+                    },
+                  },
+                  name: { set: value.name },
+                  recoveredValue: { set: value.recoveredValue || 0 },
+                  value: { set: value.value || 0 },
                 },
                 where: {
-                  id: item.id,
+                  id: value.id,
                 },
               },
             ],
@@ -1418,9 +1368,9 @@ const useViewIncident = (incidentId: string): Return => {
         setSaving(false);
       });
   };
-  const onAddGoods = (values: GoodsData[]) => {
+  const onAddGoods = (value: GoodsData) => {
     setSaving(true);
-    if (values) {
+    if (value) {
       void updateIncidentGoods({
         onCompleted: () => {
           successNotification(
@@ -1433,28 +1383,30 @@ const useViewIncident = (incidentId: string): Return => {
         variables: {
           id: incidentId,
           incidentItems: {
-            create: values.map((item) => ({
-              goodsType: item.goodsType
-                ? {
-                    connect: {
-                      id: item.goodsType,
-                    },
-                  }
-                : undefined,
-              name: item.name,
-              quantity: item.quantity,
-              recoveredQuantity: item.recoveredQuantity,
-              recoveredValue: item.recoveredValue,
-              sku: item.sku,
-              stockItem: item.stockItem
-                ? {
-                    connect: {
-                      id: item.stockItem,
-                    },
-                  }
-                : undefined,
-              value: item.value,
-            })),
+            create: [
+              {
+                goodsType: value.goodsTypeId
+                  ? {
+                      connect: {
+                        id: value.goodsTypeId || '',
+                      },
+                    }
+                  : undefined,
+                name: value.name,
+                quantity: value.quantity,
+                recoveredQuantity: value.recoveredQuantity,
+                recoveredValue: value.recoveredValue || 0,
+                sku: value.sku,
+                stockItem: value.stockItemId
+                  ? {
+                      connect: {
+                        id: value.stockItemId,
+                      },
+                    }
+                  : undefined,
+                value: value.value || 0,
+              },
+            ],
           },
         },
       }).finally(() => {
@@ -1559,6 +1511,7 @@ const useViewIncident = (incidentId: string): Return => {
     if (existingData === null) return;
     if (existingData?.incident?.todos === undefined) return;
 
+    // write the new data to the Apollo store
     store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
       data: {
         __typename: 'Query',
@@ -1573,21 +1526,6 @@ const useViewIncident = (incidentId: string): Return => {
         }),
       },
       query: ViewIncidentDocument,
-      // data: {
-      //   incident: {
-      //     ...existingData.incident,
-      //     todos: update(existingData.incident.todos, {
-      //       [todoIndex]: {
-      //         $set: {
-      //           ...existingData.incident.todos[todoIndex],
-      //           ...res.updateTodo,
-      //         },
-      //       },
-      //     }),
-      //   },
-
-      //   __typename: 'Query',
-      // },
       variables,
     });
   };
@@ -2030,31 +1968,9 @@ const useViewIncident = (incidentId: string): Return => {
     setShowOffenderOptions(!showOffenderOptions);
   };
 
-  const [isTranslated, setIsTranslated] = useState<null | string>(null);
-  const currentLanguage = useStoreState((state) => state.theme.locale);
-
-  const [translate] = useTranslateLazyQuery({
-    canonizeResults: true,
-    fetchPolicy: 'cache-first',
-    variables: {
-      data: {
-        targetLang: currentLanguage as LanguageCode,
-        text: [data?.incident?.description || ''],
-      },
-    },
-  });
-
-  const translateText = async () => {
-    if (isTranslated) {
-      setIsTranslated(null);
-      return;
-    }
-    const { data: newTranslation } = await translate();
-    setIsTranslated(
-      newTranslation?.translateText[0].translatedText ||
-        data?.incident?.description ||
-        ''
-    );
+  const [showOriginal, setShowOriginal] = useState(false);
+  const toggleShowOriginalDescription = () => {
+    setShowOriginal(!showOriginal);
   };
 
   const toggleShareOpen = () => {
@@ -2099,7 +2015,6 @@ const useViewIncident = (incidentId: string): Return => {
     handleEditUpdate,
     hasConnectedSchemes,
     hideIncident: role === Role.User && restrictIncidentAccess,
-    isTranslated,
     languageCount,
     lightBoxOpen,
     lightboxElements,
@@ -2145,6 +2060,7 @@ const useViewIncident = (incidentId: string): Return => {
     setViewTodoVisible,
     shareOpen,
     showOffenderOptions,
+    showOriginal,
     templatesData,
     templatesLoading,
     toggleAddDocument,
@@ -2162,13 +2078,12 @@ const useViewIncident = (incidentId: string): Return => {
     toggleSelectImages,
     toggleShareOpen,
     toggleShowOffenderOptions,
+    toggleShowOriginalDescription,
     toggleSubscribe,
-    translateText,
     updateAddOffenderList,
     updateDeleteDocument,
     updateDocumentList,
     updateEditOffenderList,
-    updateImagesList,
     updateInvestigationList,
     updateOffendersList,
     updateTodo,

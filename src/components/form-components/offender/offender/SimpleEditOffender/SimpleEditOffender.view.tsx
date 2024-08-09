@@ -1,51 +1,54 @@
 /* eslint-disable quotes */
-import React from 'react';
+import type { OffenderSettingsType } from '#/types/DataType';
 import type { FormInstance } from 'antd';
-import { Input, Skeleton, Button, Col, Form, Row, Select } from 'antd';
+
+import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import moment from 'moment';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
-import type { OffenderSettingsType } from '#/types/DataType';
-import type { FormData, OffenderData } from './useSimpleEditOffender';
+
 import type { ImageData } from '../../../ImageSelect/ImageSelectAnalyse.view';
+import type { FormData, OffenderData } from './useSimpleEditOffender';
+
 import ImageSelectAnalyse from '../../../ImageSelect/ImageSelectAnalyse.view';
-import OffenderFormDetails from '../OffenderForm/OffenderFormDetails.view';
 import OffenderFormAddress from '../OffenderForm/OffenderFormAddress.view';
+import OffenderFormDetails from '../OffenderForm/OffenderFormDetails.view';
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  data: OffenderData;
-  onClose: () => void;
-  form: FormInstance<FormData>;
   ageCheck: boolean | undefined;
+  data: OffenderData;
+  form: FormInstance<FormData>;
   idVerified: boolean | undefined;
   images?: ImageData[];
-  offenderSettings: OffenderSettingsType | undefined;
-  loading: boolean;
-  saving: boolean;
-  needJustification: boolean;
-  uploading: boolean;
-  setUploading: (value: boolean) => void;
   knowAddress: boolean | undefined;
+  loading: boolean;
+  needJustification: boolean;
+  offenderSettings: OffenderSettingsType | undefined;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  setUploading: (value: boolean) => void;
   showAddress?: boolean;
+  uploading: boolean;
 }
 
 const EditOffender = ({
-  onSubmit,
-  data,
-  onClose,
-  form,
   ageCheck,
+  data,
+  form,
   idVerified,
   images,
-  offenderSettings,
+  knowAddress,
   loading,
-  saving,
   needJustification,
-  uploading,
+  offenderSettings,
+  onClose,
+  onSubmit,
+  saving,
   setUploading,
   showAddress,
-  knowAddress,
+  uploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const imagesRequired = useStoreState(
@@ -65,40 +68,40 @@ const EditOffender = ({
         <Skeleton />
       ) : (
         <Form<FormData>
-          onFinish={onSubmit}
-          layout="vertical"
           form={form}
           initialValues={{
-            name: data.name || null,
-            alias: data.alias || [],
+            addressAlias: data.address?.alias || '',
             age: data.age || null,
-            gender: data.gender || null,
-            race: data.race || null,
-            build: data.build || null,
-            height: data.height || null,
-            hair: data.hair || null,
             ageCheck: !!data.dateOfBirth,
-            peculiarities: data.peculiarities || null,
+            alias: data.alias || [],
+            build: data.build || null,
+            building: data.address?.building || '',
+            comment: data.comment || null,
+            county: data.address?.county || '',
             dateOfBirth: data.dateOfBirth
               ? moment(data.dateOfBirth, 'YYYY-MM-DD')
               : null,
             dateSource: data.dateSource || null,
-            comment: data.comment || null,
-            idVerified: data.idVerified || null,
+            gender: data.gender || null,
+            hair: data.hair || null,
+            height: data.height || null,
             idSource: data.idSource || null,
+            idVerified: data.idVerified || null,
             images: data.images || null,
-            knownFor: data.knownFor || [],
-            targetedGoods: data.targetedGoods || [],
-            justification: data.justification || '',
             infoSource: data.infoSource || '',
+            justification: data.justification || '',
             knowAddress: data.knowAddress || false,
-            addressAlias: data.address?.alias || '',
-            building: data.address?.building || '',
-            street: data.address?.street || '',
-            townCity: data.address?.townCity || '',
-            county: data.address?.county || '',
+            knownFor: data.knownFor || [],
+            name: data.name || null,
+            peculiarities: data.peculiarities || null,
             postcode: data.address?.postcode || '',
+            race: data.race || null,
+            street: data.address?.street || '',
+            targetedGoods: data.targetedGoods || [],
+            townCity: data.address?.townCity || '',
           }}
+          layout="vertical"
+          onFinish={onSubmit}
         >
           <OffenderFormDetails
             ageCheck={ageCheck}
@@ -110,16 +113,16 @@ const EditOffender = ({
             <Row>
               <Col span={24}>
                 <Form.Item
-                  name="knownFor"
                   label={intl.formatMessage({
-                    defaultMessage: 'Crime Types',
+                    defaultMessage: 'Incident Types',
                   })}
+                  name="knownFor"
                   tooltip={intl.formatMessage({
                     defaultMessage:
-                      'Select the relevant crime types for this offender, these help to categorize the offender.',
+                      'Select the relevant incident types for this offender, these help to categorize the offender.',
                   })}
                 >
-                  <Select mode="multiple" maxTagCount={3}>
+                  <Select maxTagCount={3} mode="multiple">
                     {data.knownFor.map((el) => (
                       <Select.Option key={el} value={el}>
                         {el}
@@ -134,16 +137,16 @@ const EditOffender = ({
             <Row>
               <Col span={24}>
                 <Form.Item
-                  name="targetedGoods"
                   label={intl.formatMessage({
                     defaultMessage: 'Goods',
                   })}
+                  name="targetedGoods"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the Goods that this offender stole.',
                   })}
                 >
-                  <Select mode="multiple" maxTagCount={3}>
+                  <Select maxTagCount={3} mode="multiple">
                     {data.targetedGoods.map((el) => (
                       <Select.Option key={el} value={el}>
                         {el}
@@ -158,10 +161,10 @@ const EditOffender = ({
             {data.infoSource && (
               <Col span={23}>
                 <Form.Item
-                  name="infoSource"
                   label={intl.formatMessage({
                     defaultMessage: 'Information Source',
                   })}
+                  name="infoSource"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       "Enter the information source of the offender's name",
@@ -175,23 +178,23 @@ const EditOffender = ({
             {(needJustification || data.justification) && (
               <Col span={23}>
                 <Form.Item
-                  name="justification"
                   label={intl.formatMessage({
                     defaultMessage: 'Justification',
                   })}
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      "Enter a justification to explain why this offender doesn't connect with an incident.",
-                  })}
+                  name="justification"
                   rules={[
                     {
-                      required: needJustification,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a justification for the offender.',
                       }),
+                      required: needJustification,
                     },
                   ]}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      "Enter a justification to explain why this offender doesn't connect with an incident.",
+                  })}
                 >
                   <Input.TextArea disabled={saving} />
                 </Form.Item>
@@ -204,33 +207,33 @@ const EditOffender = ({
 
           {offenderSettings?.images && (
             <Form.Item
-              name="images"
               label={intl.formatMessage({
                 defaultMessage: 'Images',
               })}
-              tooltip={intl.formatMessage({
-                defaultMessage: 'Select the images that the offender is in.',
-              })}
+              name="images"
               rules={[
                 {
-                  required: imagesRequired,
                   message: intl.formatMessage({
                     defaultMessage: 'Images are required for offenders.',
                   }),
+                  required: imagesRequired,
                 },
               ]}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'Select the images that the offender is in.',
+              })}
             >
               <ImageSelectAnalyse
-                images={allImages}
-                value={data.images}
                 form={form}
+                images={allImages}
                 setUploading={setUploading}
                 uploading={uploading}
+                value={data.images}
               />
             </Form.Item>
           )}
           <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
               <Col>
                 <Button onClick={onClose}>
                   {intl.formatMessage({
@@ -239,7 +242,7 @@ const EditOffender = ({
                 </Button>
               </Col>
               <Col>
-                <Button type="primary" htmlType="submit">
+                <Button htmlType="submit" type="primary">
                   {intl.formatMessage({
                     defaultMessage: 'Save',
                   })}

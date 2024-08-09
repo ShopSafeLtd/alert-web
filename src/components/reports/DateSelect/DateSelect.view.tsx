@@ -1,22 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Dropdown, Button, Row, Col, Tooltip } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import dayjs from 'dayjs';
 import DatePicker from '#/components/util-components/DatePicker';
+import { faChevronDown, faClose } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose, faChevronDown } from '@fortawesome/pro-light-svg-icons';
+import { Button, Col, Dropdown, Row, Tooltip } from 'antd';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-type SelectedType =
-  | 'last30Days'
-  | 'last7Days'
+export type DateSelectModeType =
   | 'last1Years'
-  | 'yearToDate'
-  | 'prev1Years'
+  | 'last7Days'
+  | 'last30Days'
+  | 'lastDay'
   | 'monthToDate'
-  | 'prevMonth';
+  | 'none'
+  | 'prev1Years'
+  | 'prevMonth'
+  | 'yearToDate';
 
-const selectedToText = (value: SelectedType) => {
+const selectedToText = (value: DateSelectModeType | undefined) => {
   switch (value) {
+    case 'lastDay': {
+      return <FormattedMessage defaultMessage="Yesterday" />;
+    }
     case 'last7Days': {
       return <FormattedMessage defaultMessage="Last 7 Days" />;
     }
@@ -35,38 +40,58 @@ const selectedToText = (value: SelectedType) => {
     case 'prevMonth': {
       return <FormattedMessage defaultMessage="Previous Month" />;
     }
-    default: {
+    case 'last30Days': {
       return <FormattedMessage defaultMessage="Last 30 Days" />;
+    }
+    default: {
+      return <FormattedMessage defaultMessage="None" />;
     }
   }
 };
 
-const selectedToDate = (value: SelectedType) => {
+export const selectedModeToDate = (value: DateSelectModeType | undefined) => {
   switch (value) {
+    case 'lastDay': {
+      return {
+        endDate: dayjs()
+          .subtract(1, 'days')
+          .hour(23)
+          .minute(59)
+          .minute(59)
+          .toDate(),
+        startDate: dayjs()
+          .hour(0)
+          .minute(0)
+          .second(1)
+          .subtract(1, 'days')
+          .toDate(),
+      };
+    }
     case 'last7Days': {
       return {
+        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
         startDate: dayjs()
           .hour(0)
           .minute(0)
           .second(1)
           .subtract(7, 'days')
           .toDate(),
-        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
       };
     }
     case 'last1Years': {
       return {
+        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
         startDate: dayjs()
           .hour(0)
           .minute(0)
           .second(1)
           .subtract(1, 'years')
           .toDate(),
-        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
       };
     }
     case 'yearToDate': {
       return {
+        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
         startDate: dayjs()
           .hour(0)
           .minute(0)
@@ -74,19 +99,10 @@ const selectedToDate = (value: SelectedType) => {
           .date(1)
           .month(0)
           .toDate(),
-        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
       };
     }
     case 'prev1Years': {
       return {
-        startDate: dayjs()
-          .hour(0)
-          .minute(0)
-          .second(1)
-          .date(1)
-          .month(0)
-          .subtract(2, 'years')
-          .toDate(),
         endDate: dayjs()
           .hour(23)
           .minute(59)
@@ -96,16 +112,25 @@ const selectedToDate = (value: SelectedType) => {
           .subtract(1, 'years')
           .subtract(1, 'days')
           .toDate(),
+        startDate: dayjs()
+          .hour(0)
+          .minute(0)
+          .second(1)
+          .date(1)
+          .month(0)
+          .subtract(2, 'years')
+          .toDate(),
       };
     }
     case 'monthToDate': {
       return {
-        startDate: dayjs().hour(0).minute(0).second(1).date(1).toDate(),
         endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
+        startDate: dayjs().hour(0).minute(0).second(1).date(1).toDate(),
       };
     }
     case 'prevMonth': {
       return {
+        endDate: dayjs().hour(23).minute(59).minute(59).date(-1).toDate(),
         startDate: dayjs()
           .hour(0)
           .minute(0)
@@ -113,53 +138,58 @@ const selectedToDate = (value: SelectedType) => {
           .date(1)
           .subtract(1, 'months')
           .toDate(),
-        endDate: dayjs().hour(23).minute(59).minute(59).date(-1).toDate(),
       };
     }
-    default: {
+    case 'last30Days': {
       return {
+        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
         startDate: dayjs()
           .hour(0)
           .minute(0)
           .second(1)
           .subtract(1, 'months')
           .toDate(),
-        endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
       };
+    }
+    default: {
+      return undefined;
     }
   }
 };
 
 interface Props {
-  defaultRange: SelectedType;
-  onChange: (value: { startDate: Date; endDate: Date }) => void;
+  defaultRange?: DateSelectModeType;
+  onChange: (
+    value: { endDate: Date; startDate: Date } | undefined,
+    range: DateSelectModeType | undefined
+  ) => void;
 }
 
 const DateSelect = ({ defaultRange, onChange }: Props) => {
   const intl = useIntl();
-  const [selected, setSelected] = useState<SelectedType>(
-    defaultRange ?? 'last30Days'
+  const [selected, setSelected] = useState<DateSelectModeType | undefined>(
+    defaultRange ?? undefined
   );
   const [customRangeOpen, setCustomRangeOpen] = useState(false);
   const [dateRange, setDateRange] = useState<{
-    startDate: Date;
     endDate: Date;
+    startDate: Date;
   }>({
+    // today at 23:59:59
+    endDate: dayjs().hour(23).minute(59).second(59).toDate(),
     startDate: dayjs()
       .hour(0)
       .minute(0)
       .second(1)
       .subtract(30, 'days')
       .toDate(),
-    // today at 23:59:59
-    endDate: dayjs().hour(23).minute(59).second(59).toDate(),
   });
 
   useEffect(() => {
     if (customRangeOpen) {
-      onChange(dateRange);
+      onChange(dateRange, selected);
     } else {
-      onChange(selectedToDate(selected));
+      onChange(selectedModeToDate(selected), selected);
     }
   }, [selected, dateRange]);
 
@@ -169,19 +199,16 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
     <Row>
       <Col>
         <DatePicker.RangePicker
-          style={{
-            width: 190,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-          }}
-          defaultValue={[dateRange.startDate, dateRange.endDate]}
-          value={[dateRange.startDate, dateRange.endDate]}
           allowClear={false}
-          format={'DD/MM/YY'}
+          defaultValue={[dateRange.startDate, dateRange.endDate]}
+          format="DD/MM/YY"
           onChange={(value) =>
             setDateRange(
               value
                 ? {
+                    endDate:
+                      value?.[1] ??
+                      dayjs().hour(23).minute(59).minute(59).toDate(),
                     startDate:
                       value?.[0] ??
                       dayjs()
@@ -190,21 +217,24 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
                         .second(1)
                         .subtract(30, 'days')
                         .toDate(),
-                    endDate:
-                      value?.[1] ??
-                      dayjs().hour(23).minute(59).minute(59).toDate(),
                   }
                 : {
+                    endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
                     startDate: dayjs()
                       .hour(0)
                       .minute(0)
                       .second(1)
                       .subtract(30, 'days')
                       .toDate(),
-                    endDate: dayjs().hour(23).minute(59).minute(59).toDate(),
                   }
             )
           }
+          style={{
+            borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
+            width: 190,
+          }}
+          value={[dateRange.startDate, dateRange.endDate]}
         />
       </Col>
       <Col>
@@ -214,14 +244,14 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
           })}
         >
           <Button
+            onClick={toggleCustomRange}
             style={{
-              paddingLeft: 14,
-              paddingRight: 14,
-              borderTopLeftRadius: 0,
               borderBottomLeftRadius: 0,
               borderLeft: 'none',
+              borderTopLeftRadius: 0,
+              paddingLeft: 14,
+              paddingRight: 14,
             }}
-            onClick={toggleCustomRange}
           >
             <FontAwesomeIcon icon={faClose} />
           </Button>
@@ -233,43 +263,53 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
       menu={{
         items: [
           {
-            label: selectedToText('last7Days'),
+            key: 'none',
+            label: selectedToText(undefined),
+            onClick: () => setSelected(undefined),
+          },
+          {
+            key: 'lastDay',
+            label: selectedToText('lastDay'),
+            onClick: () => setSelected('lastDay'),
+          },
+          {
             key: 'last7Days',
+            label: selectedToText('last7Days'),
             onClick: () => setSelected('last7Days'),
           },
           {
-            label: selectedToText('last30Days'),
             key: 'last30Days',
+            label: selectedToText('last30Days'),
             onClick: () => setSelected('last30Days'),
           },
           {
-            label: selectedToText('monthToDate'),
             key: 'monthToDate',
+            label: selectedToText('monthToDate'),
             onClick: () => setSelected('monthToDate'),
           },
           {
-            label: selectedToText('prevMonth'),
             key: 'prevMonth',
+            label: selectedToText('prevMonth'),
             onClick: () => setSelected('prevMonth'),
           },
           {
-            label: selectedToText('last1Years'),
             key: 'last1Years',
+            label: selectedToText('last1Years'),
             onClick: () => setSelected('last1Years'),
           },
           {
-            label: selectedToText('yearToDate'),
             key: 'yearToDate',
+            label: selectedToText('yearToDate'),
             onClick: () => setSelected('yearToDate'),
           },
           {
-            label: selectedToText('prev1Years'),
             key: 'prev1Years',
+            label: selectedToText('prev1Years'),
             onClick: () => setSelected('prev1Years'),
           },
           {
-            label: <FormattedMessage defaultMessage="Custom Date Range" />,
             key: 'custom',
+            label: <FormattedMessage defaultMessage="Custom Date Range" />,
             onClick: toggleCustomRange,
           },
         ],
@@ -281,9 +321,9 @@ const DateSelect = ({ defaultRange, onChange }: Props) => {
           values={{ value1: selectedToText(selected) }}
         />
         <FontAwesomeIcon
+          icon={faChevronDown}
           size="lg"
           style={{ marginLeft: 10 }}
-          icon={faChevronDown}
         />
       </Button>
     </Dropdown>

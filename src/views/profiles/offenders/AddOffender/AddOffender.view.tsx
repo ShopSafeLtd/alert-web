@@ -1,21 +1,6 @@
-import React from 'react';
-
 import type { FormInstance } from 'antd';
-import {
-  Skeleton,
-  Drawer,
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  PageHeader,
-  Row,
-  Select,
-  Typography,
-} from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
+import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import type {
   BanData,
   CrimeGroupData,
@@ -26,133 +11,148 @@ import type {
   TagData,
   VehicleData,
 } from 'types/DataType';
-import Profiles from 'components/offenders/OffenderForm/Profiles';
+
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Form,
+  Input,
+  PageHeader,
+  Row,
+  Select,
+  Skeleton,
+  Typography,
+} from 'antd';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
 import OffenderExclusions from 'components/offenders/OffenderForm/OffenderExclusions';
 import OffenderImage from 'components/offenders/OffenderForm/OffenderImage';
-import { useIntl } from 'react-intl';
+import Profiles from 'components/offenders/OffenderForm/Profiles';
 import PotentialOffenders from 'components/offenders/potentialOffenders';
-import type { FormData } from './useAddOffender';
-import type { ListVehiclesQuery } from 'graphql/vehicles/queries/list-vehicles.generated';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
-const { Title, Paragraph } = Typography;
+import type { FormData } from './useAddOffender';
+
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  imgChange: UploadProps['onChange'];
+  addCustomGallery: boolean;
+  addExclusion: boolean;
+  addOffenderTag: boolean;
+  adminRights: boolean;
+  ageCheck: boolean;
+  banData: BanData | null;
+  bansData: BanData[];
   // onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
-  addOffenderTag: boolean;
-  toggleAddOffenderTag: () => void;
-  updateNewOffenderTagData: (values: TagData) => void;
-  addExclusion: boolean;
-  toggleAddExclusion: () => void;
-  editExclusion: boolean;
-  toggleEditExclusion: () => void;
-  banData: BanData | null;
-  setBanData: (value: BanData | null) => void;
-  deleteConfirm: (value: string | undefined) => void;
-  ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  bansData: BanData[];
-  updateExclusion: (value: BanData) => void;
-  adminRights: boolean;
-  form: FormInstance<FormData> | undefined;
-  listVehiclesData: ListVehiclesQuery | undefined;
-  vehiclesData: VehicleData[];
   crimeGroupsData: CrimeGroupData[];
-  idVerified: boolean;
-  onValuesChange?: (changedValues: FormData, values: FormData) => void;
-  onEditImage: (value: Image) => void;
-  toggleEditImage: (value?: Image) => void;
-  editImage: Image | null;
-  onAddVehicle: (value: VehicleData, existing: boolean) => void;
-  onRemoveVehicle: (vehicleId: string) => void;
-  onAddCrimeGroup: (value: CrimeGroupData) => void;
-  onRemoveCrimeGroup: (crimeGroupId: string) => void;
-  onRemoveImage: (imageId: string) => void;
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
-  customGalleries: { value: string; label: string }[];
+  customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
-  addCustomGallery: boolean;
-  toggleAddCustomGallery: () => void;
-  updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  deleteConfirm: (value: string | undefined) => void;
   documentList: UploadFile[];
   documentUploadProps: UploadProps;
-  reportOnly: boolean;
-  potentialOffenders: OffenderData[];
-  viewPotentialOffenders: boolean;
-  toggleViewPotentialOffenders: () => void;
-  onSearchOffender: () => void;
+  editExclusion: boolean;
+  editImage: Image | null;
+  fileList: UploadFile[];
+  form: FormInstance<FormData> | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  idVerified: boolean;
+  imgChange: UploadProps['onChange'];
+  listVehiclesData: ListVehiclesQuery | undefined;
+  loading: boolean;
   needJustification: boolean;
   offenderSettings: OffenderSettingsType;
-  loading: boolean;
+  onAddCrimeGroup: (value: CrimeGroupData) => void;
+  onAddVehicle: (value: VehicleData, existing: boolean) => void;
+  onEditImage: (value: Image) => void;
+  onRemoveCrimeGroup: (crimeGroupId: string) => void;
+  onRemoveImage: (imageId: string) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
+  onSearchOffender: () => void;
+  onSubmit: (value: FormData) => void;
+  onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  potentialOffenders: OffenderData[];
+  primaryImage: string;
+  reportOnly: boolean;
+  saving: boolean;
+  setAgeCheck: (value: boolean) => void;
+  setBanData: (value: BanData | null) => void;
+  setPrimaryImage: (value: string) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
+  toggleAddCustomGallery: () => void;
+  toggleAddExclusion: () => void;
+  toggleAddOffenderTag: () => void;
+  toggleEditExclusion: () => void;
+  toggleEditImage: (value?: Image) => void;
+  toggleViewPotentialOffenders: () => void;
+  updateExclusion: (value: BanData) => void;
+  updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  updateNewOffenderTagData: (values: TagData) => void;
+  vehiclesData: VehicleData[];
+  viewPotentialOffenders: boolean;
 }
 
 const AddOffender = ({
-  onSubmit,
-  saving,
-  groups,
-  groupsLoading,
-  tags,
-  tagsLoading,
-  imgChange,
+  addCustomGallery,
+  addExclusion,
+  addOffenderTag,
+  adminRights,
+  ageCheck,
+  banData,
+  bansData,
   // onPreview,
   beforeUpload,
-  fileList,
-  addOffenderTag,
-  toggleAddOffenderTag,
-  updateNewOffenderTagData,
-  addExclusion,
-  toggleAddExclusion,
-  editExclusion,
-  toggleEditExclusion,
-  banData,
-  setBanData,
-  deleteConfirm,
-  ageCheck,
-  setAgeCheck,
-  bansData,
-  updateExclusion,
-  adminRights,
-  form,
-  vehiclesData,
   crimeGroupsData,
-  listVehiclesData,
-  idVerified,
-  onValuesChange,
-  editImage,
-  onEditImage,
-  toggleEditImage,
-  onAddCrimeGroup,
-  onAddVehicle,
-  onRemoveCrimeGroup,
-  onRemoveVehicle,
-  onRemoveImage,
-  primaryImage,
-  setPrimaryImage,
   customGalleries,
   customGalleriesLoading,
-  addCustomGallery,
-  toggleAddCustomGallery,
-  updateNewCustomGalleryData,
+  deleteConfirm,
   documentList,
   documentUploadProps,
-  reportOnly,
-  potentialOffenders,
-  viewPotentialOffenders,
-  toggleViewPotentialOffenders,
-  onSearchOffender,
+  editExclusion,
+  editImage,
+  fileList,
+  form,
+  groups,
+  groupsLoading,
+  idVerified,
+  imgChange,
+  listVehiclesData,
+  loading,
   needJustification,
   offenderSettings,
-  loading,
+  onAddCrimeGroup,
+  onAddVehicle,
+  onEditImage,
+  onRemoveCrimeGroup,
+  onRemoveImage,
+  onRemoveVehicle,
+  onSearchOffender,
+  onSubmit,
+  onValuesChange,
+  potentialOffenders,
+  primaryImage,
+  reportOnly,
+  saving,
+  setAgeCheck,
+  setBanData,
+  setPrimaryImage,
+  tags,
+  tagsLoading,
+  toggleAddCustomGallery,
+  toggleAddExclusion,
+  toggleAddOffenderTag,
+  toggleEditExclusion,
+  toggleEditImage,
+  toggleViewPotentialOffenders,
+  updateExclusion,
+  updateNewCustomGalleryData,
+  updateNewOffenderTagData,
+  vehiclesData,
+  viewPotentialOffenders,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -184,47 +184,47 @@ const AddOffender = ({
       ) : (
         <Form
           form={form}
-          onFinish={onSubmit}
-          layout="vertical"
-          onValuesChange={onValuesChange}
           initialValues={{
             idVerified: false,
           }}
+          layout="vertical"
+          onFinish={onSubmit}
+          onValuesChange={onValuesChange}
         >
           <Card>
             <OffenderDetails
-              tags={tags}
-              tagsLoading={tagsLoading}
-              saving={saving}
-              ageCheck={ageCheck}
-              setAgeCheck={setAgeCheck}
+              addCustomGallery={addCustomGallery}
+              addOffenderTag={addOffenderTag}
               adminRights={adminRights}
-              toggleAddOffenderTag={toggleAddOffenderTag}
-              idVerified={idVerified}
+              ageCheck={ageCheck}
               customGalleries={customGalleries}
               customGalleriesLoading={customGalleriesLoading}
-              toggleAddCustomGallery={toggleAddCustomGallery}
-              addOffenderTag={addOffenderTag}
-              updateNewOffenderTagData={updateNewOffenderTagData}
-              addCustomGallery={addCustomGallery}
-              updateNewCustomGalleryData={updateNewCustomGalleryData}
+              idVerified={idVerified}
+              offenderSettings={offenderSettings}
+              onSearchOffender={onSearchOffender}
               potentialOffenders={
                 potentialOffenders ? potentialOffenders.length : 0
               }
+              saving={saving}
+              setAgeCheck={setAgeCheck}
+              tags={tags}
+              tagsLoading={tagsLoading}
+              toggleAddCustomGallery={toggleAddCustomGallery}
+              toggleAddOffenderTag={toggleAddOffenderTag}
               toggleViewPotentialOffenders={toggleViewPotentialOffenders}
-              onSearchOffender={onSearchOffender}
-              offenderSettings={offenderSettings}
+              updateNewCustomGalleryData={updateNewCustomGalleryData}
+              updateNewOffenderTagData={updateNewOffenderTagData}
             />
           </Card>
           <Card>
             <Row align="middle" style={{ marginBottom: 20 }}>
               <Col>
-                <Title style={{ marginBottom: 0 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0 }}>
                   {intl.formatMessage({ defaultMessage: '2. ' })}
                 </Title>
               </Col>
               <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Addresses',
                   })}
@@ -232,9 +232,9 @@ const AddOffender = ({
               </Col>
               <Col style={{ marginRight: 10 }}>
                 <Paragraph
+                  italic
                   style={{ marginBottom: 1, marginLeft: 5 }}
                   type="secondary"
-                  italic
                 >
                   {intl.formatMessage({
                     defaultMessage:
@@ -246,10 +246,10 @@ const AddOffender = ({
             <Row gutter={16}>
               <Col span={4}>
                 <Form.Item
-                  name="addressAlias"
                   label={intl.formatMessage({
                     defaultMessage: 'Label',
                   })}
+                  name="addressAlias"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'A friendly name for the address to identify it, such as home',
@@ -260,30 +260,30 @@ const AddOffender = ({
               </Col>
               <Col span={4}>
                 <Form.Item
-                  name="building"
                   label={intl.formatMessage({
                     defaultMessage: 'Building',
                   })}
+                  name="building"
                 >
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={4}>
                 <Form.Item
-                  name="street"
                   label={intl.formatMessage({
                     defaultMessage: 'Street',
                   })}
+                  name="street"
                 >
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={4}>
                 <Form.Item
-                  name="townCity"
                   label={intl.formatMessage({
                     defaultMessage: 'Town/City',
                   })}
+                  name="townCity"
                 >
                   <Input />
                 </Form.Item>
@@ -292,20 +292,20 @@ const AddOffender = ({
             <Row gutter={16}>
               <Col span={4}>
                 <Form.Item
-                  name="county"
                   label={intl.formatMessage({
                     defaultMessage: 'County',
                   })}
+                  name="county"
                 >
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={4}>
                 <Form.Item
-                  name="postcode"
                   label={intl.formatMessage({
                     defaultMessage: 'Postcode',
                   })}
+                  name="postcode"
                 >
                   <Input />
                 </Form.Item>
@@ -316,15 +316,15 @@ const AddOffender = ({
             <Card>
               {/* <Divider /> */}
               <Profiles
-                saving={saving}
-                vehiclesData={vehiclesData}
                 crimeGroupsData={crimeGroupsData}
                 listVehiclesData={listVehiclesData}
-                titleNumber={3}
                 onAddCrimeGroup={onAddCrimeGroup}
                 onAddVehicle={onAddVehicle}
                 onRemoveCrimeGroup={onRemoveCrimeGroup}
                 onRemoveVehicle={onRemoveVehicle}
+                saving={saving}
+                titleNumber={3}
+                vehiclesData={vehiclesData}
               />
             </Card>
           )}
@@ -332,38 +332,38 @@ const AddOffender = ({
           {adminRights && (
             <OffenderExclusions
               addExclusion={addExclusion}
-              toggleAddExclusion={toggleAddExclusion}
-              onAddExclusion={updateExclusion}
-              editExclusion={editExclusion}
-              toggleEditExclusion={toggleEditExclusion}
-              onUpdateExclusion={updateExclusion}
-              bansData={bansData}
               banData={banData}
-              setBanData={setBanData}
+              bansData={bansData}
               deleteConfirm={deleteConfirm}
-              saving={saving}
-              titleOrder={4}
+              editExclusion={editExclusion}
               emptyDescription={intl.formatMessage({
                 defaultMessage:
                   "You haven't added any outcomes for this offender yet.",
               })}
+              onAddExclusion={updateExclusion}
+              onUpdateExclusion={updateExclusion}
+              saving={saving}
+              setBanData={setBanData}
+              titleOrder={4}
+              toggleAddExclusion={toggleAddExclusion}
+              toggleEditExclusion={toggleEditExclusion}
             />
           )}
           {offenderSettings.images && (
             <OffenderImage
-              titleOrder={adminRights ? 5 : 3}
-              imgChange={imgChange}
               // onPreview={onPreview}
               beforeUpload={beforeUpload}
-              fileList={fileList}
+              documentList={documentList}
+              documentUploadProps={documentUploadProps}
               editImage={editImage}
+              fileList={fileList}
+              imgChange={imgChange}
               onEditImage={onEditImage}
-              toggleEditImage={toggleEditImage}
               onRemoveImage={onRemoveImage}
               primaryImage={primaryImage}
               setPrimaryImage={setPrimaryImage}
-              documentList={documentList}
-              documentUploadProps={documentUploadProps}
+              titleOrder={adminRights ? 5 : 3}
+              toggleEditImage={toggleEditImage}
             />
           )}
           {groups.length > 1 && (
@@ -371,7 +371,7 @@ const AddOffender = ({
               <>
                 <Row align="bottom" style={{ marginBottom: 30 }}>
                   <Col>
-                    <Title style={{ marginBottom: 0 }} level={4}>
+                    <Title level={4} style={{ marginBottom: 0 }}>
                       {adminRights
                         ? offenderSettings.images
                           ? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
@@ -379,10 +379,10 @@ const AddOffender = ({
                           : // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                             '5.'
                         : offenderSettings.images
-                        ? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                          '4.'
-                        : // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                          '3.'}
+                          ? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                            '4.'
+                          : // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                            '3.'}
                     </Title>
                   </Col>
                   <Col>
@@ -394,9 +394,9 @@ const AddOffender = ({
                   </Col>
                   <Col>
                     <Paragraph
+                      italic
                       style={{ marginBottom: 1, marginLeft: 5 }}
                       type="secondary"
-                      italic
                     >
                       {intl.formatMessage({
                         defaultMessage:
@@ -408,29 +408,29 @@ const AddOffender = ({
                 <Row>
                   <Col span={8}>
                     <Form.Item
-                      name="groups"
                       label={intl.formatMessage({
                         defaultMessage: 'Content Groups',
                       })}
-                      tooltip={intl.formatMessage({
-                        defaultMessage:
-                          'Select the content groups that you would like this offender to be visible to.',
-                      })}
+                      name="groups"
                       rules={[
                         {
-                          required: true,
                           message: intl.formatMessage({
                             defaultMessage:
                               'Please select at least one group for the offender.',
                           }),
+                          required: true,
                         },
                       ]}
+                      tooltip={intl.formatMessage({
+                        defaultMessage:
+                          'Select the content groups that you would like this offender to be visible to.',
+                      })}
                     >
                       <Select
-                        loading={groupsLoading}
                         disabled={saving}
-                        mode="multiple"
+                        loading={groupsLoading}
                         maxTagCount={3}
+                        mode="multiple"
                       >
                         {groups.map((group) => (
                           <Select.Option key={group.value} value={group.value}>
@@ -449,7 +449,7 @@ const AddOffender = ({
               <>
                 <Row align="bottom" style={{ marginBottom: 30 }}>
                   <Col>
-                    <Title style={{ marginBottom: 0 }} level={4}>
+                    <Title level={4} style={{ marginBottom: 0 }}>
                       {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                       {adminRights ? '7.' : '5.'}
                     </Title>
@@ -464,9 +464,9 @@ const AddOffender = ({
                   </Col>
                   <Col>
                     <Paragraph
+                      italic
                       style={{ marginBottom: 1, marginLeft: 5 }}
                       type="secondary"
-                      italic
                     >
                       {intl.formatMessage({
                         defaultMessage:
@@ -478,23 +478,23 @@ const AddOffender = ({
                 <Row>
                   <Col span={23}>
                     <Form.Item
-                      name="justification"
                       label={intl.formatMessage({
                         defaultMessage: 'Justification',
                       })}
-                      tooltip={intl.formatMessage({
-                        defaultMessage:
-                          "Enter a justification to explain why this offender doesn't connect with an incident.",
-                      })}
+                      name="justification"
                       rules={[
                         {
-                          required: true,
                           message: intl.formatMessage({
                             defaultMessage:
                               'Please enter a justification for the offender.',
                           }),
+                          required: true,
                         },
                       ]}
+                      tooltip={intl.formatMessage({
+                        defaultMessage:
+                          "Enter a justification to explain why this offender doesn't connect with an incident.",
+                      })}
                     >
                       <Input.TextArea disabled={saving} />
                     </Form.Item>
@@ -504,7 +504,7 @@ const AddOffender = ({
             </Card>
           )}
           <Form.Item>
-            <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+            <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
               {!reportOnly && (
                 <Col>
                   <Button
@@ -520,9 +520,9 @@ const AddOffender = ({
               <Col>
                 <Button
                   disabled={saving}
+                  htmlType="submit"
                   loading={saving}
                   type="primary"
-                  htmlType="submit"
                 >
                   {intl.formatMessage({ defaultMessage: 'Save' })}
                 </Button>
@@ -532,16 +532,16 @@ const AddOffender = ({
         </Form>
       )}
       <Drawer
+        onClose={toggleViewPotentialOffenders}
+        open={viewPotentialOffenders}
         title={intl.formatMessage({
           defaultMessage: 'Potential Offenders',
         })}
-        open={viewPotentialOffenders}
-        onClose={toggleViewPotentialOffenders}
         width="900"
       >
         <PotentialOffenders
-          suggestedData={potentialOffenders}
           onClose={toggleViewPotentialOffenders}
+          suggestedData={potentialOffenders}
         />
       </Drawer>
     </div>

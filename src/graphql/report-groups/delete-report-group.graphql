@@ -1,0 +1,5 @@
+mutation DeleteReportGroup($where: UniqueId!) {
+    deleteReportGroup(where: $where) {
+        id
+    }
+}

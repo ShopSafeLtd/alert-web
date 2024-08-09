@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import {
+  faClose,
+  faMagnifyingGlass,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -12,32 +17,27 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { createUseStyles } from 'react-jss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faClose,
-  faMagnifyingGlass,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-
-import { useStoreState } from 'state';
+import { useListBusinessesLocationsQuery } from 'graphql/businesses/queries/__generated__/list-businesses-locations.generated';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import { useStoreState } from 'state';
+
 import type { NewBusiness } from '../DiscImport.types';
-import { useListBusinessesLocationsQuery } from 'graphql/businesses/queries/list-businesses-locations.generated';
 
 const { Text } = Typography;
 
 const useStyles = createUseStyles(() => ({
   cell: {},
+  headerCell: {},
+  headerRow: {
+    borderTopLeftRadius: 10,
+    marginLeft: '0px !important',
+    marginRight: '0px !important',
+  },
   row: {
     paddingLeft: 7,
   },
-  headerRow: {
-    marginLeft: '0px !important',
-    marginRight: '0px !important',
-    borderTopLeftRadius: 10,
-  },
-  headerCell: {},
 }));
 
 interface NewBusinessRowProps {
@@ -105,72 +105,72 @@ const NewBusinessRow = React.memo(
     };
 
     return (
-      <Form form={form} className={classes.row} onValuesChange={onValuesChange}>
+      <Form className={classes.row} form={form} onValuesChange={onValuesChange}>
         <Row gutter={8}>
-          <Col span={4} className={classes.cell}>
+          <Col className={classes.cell} span={4}>
             <Form.Item
               name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a name',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
-          <Col span={3} className={classes.cell}>
+          <Col className={classes.cell} span={3}>
             <Form.Item name="building">
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
-          <Col span={3} className={classes.cell} style={{ maxWidth: 200 }}>
+          <Col className={classes.cell} span={3} style={{ maxWidth: 200 }}>
             <Form.Item
               name="street"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a street',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
-          <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
+          <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
             <Form.Item
               name="townCity"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a town/city',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
-          <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
+          <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
             <Form.Item name="county">
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
-          <Col span={2} className={classes.cell} style={{ maxWidth: 250 }}>
+          <Col className={classes.cell} span={2} style={{ maxWidth: 250 }}>
             <Form.Item
               name="postcode"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Enter a postcode',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -184,7 +184,7 @@ const NewBusinessRow = React.memo(
                   defaultMessage: 'Link to existing business',
                 })}
               >
-                <Button size="small" onClick={() => setLink(true)}>
+                <Button onClick={() => setLink(true)} size="small">
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </Button>
               </Tooltip>
@@ -196,20 +196,20 @@ const NewBusinessRow = React.memo(
                     name="existing"
                     rules={[
                       {
-                        required: true,
                         message: intl.formatMessage({
                           defaultMessage: 'Select a business',
                         }),
+                        required: true,
                       },
                     ]}
                   >
                     <Select
-                      style={{ width: 160 }}
-                      options={data?.listBusinesses.businesses.map((item) => ({
-                        value: item.id,
-                        label: item.name,
-                      }))}
                       onBlur={onBlur}
+                      options={data?.listBusinesses.businesses.map((item) => ({
+                        label: item.name,
+                        value: item.id,
+                      }))}
+                      style={{ width: 160 }}
                     />
                   </Form.Item>
                 </Col>
@@ -219,7 +219,7 @@ const NewBusinessRow = React.memo(
                       defaultMessage: 'Clear link',
                     })}
                   >
-                    <Button size="small" onClick={clearLink}>
+                    <Button onClick={clearLink} size="small">
                       <FontAwesomeIcon icon={faClose} />
                     </Button>
                   </Tooltip>
@@ -229,12 +229,12 @@ const NewBusinessRow = React.memo(
           </Col>
           <Col>
             <Popconfirm
+              onConfirm={() => onDelete(business.id)}
               overlayInnerStyle={{ padding: 10 }}
               title={intl.formatMessage({
                 defaultMessage:
                   'Are you sure you want to remove this business?',
               })}
-              onConfirm={() => onDelete(business.id)}
             >
               <Button size="small">
                 <FontAwesomeIcon icon={faTrash} />
@@ -248,15 +248,15 @@ const NewBusinessRow = React.memo(
 );
 
 interface Props {
+  newBusinesses: NewBusiness[];
   onAdd: () => void;
   onDelete: (id: string) => void;
-  newBusinesses: NewBusiness[];
   onUpdateBusiness: (data: NewBusiness) => void;
 }
 
 const NewBusinessTable = ({
-  onAdd,
   newBusinesses,
+  onAdd,
   onDelete,
   onUpdateBusiness,
 }: Props) => {
@@ -275,63 +275,63 @@ const NewBusinessTable = ({
   const intl = useIntl();
   return (
     <Card
-      title={intl.formatMessage({
-        defaultMessage: 'Businesses',
-      })}
       extra={
-        <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
+        <Button onClick={onAdd} style={{ marginBottom: 16 }} type="primary">
           {intl.formatMessage({
             defaultMessage: 'Add business',
           })}
         </Button>
       }
+      title={intl.formatMessage({
+        defaultMessage: 'Businesses',
+      })}
     >
       <Row
+        className={classes.headerRow}
         gutter={8}
         style={{ marginBottom: 10 }}
-        className={classes.headerRow}
       >
         <Col
-          span={4}
           className={classes.headerCell}
+          span={4}
           style={{ borderTopLeftRadius: 10 }}
         >
-          <Text style={{ paddingLeft: 5 }} strong>
+          <Text strong style={{ paddingLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Name',
             })}
           </Text>
         </Col>
-        <Col span={3} className={classes.headerCell}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} span={3}>
+          <Text strong style={{ paddingLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Building',
             })}
           </Text>
         </Col>
-        <Col span={3} className={classes.headerCell}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} span={3}>
+          <Text strong style={{ paddingLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Street',
             })}
           </Text>
         </Col>
-        <Col span={3} className={classes.headerCell}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} span={3}>
+          <Text strong style={{ paddingLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Town/City',
             })}
           </Text>
         </Col>
-        <Col span={3} className={classes.headerCell}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} span={3}>
+          <Text strong style={{ paddingLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'County',
             })}
           </Text>
         </Col>
-        <Col span={2} className={classes.headerCell}>
-          <Text style={{ paddingLeft: 5 }} strong>
+        <Col className={classes.headerCell} span={2}>
+          <Text strong style={{ paddingLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Postcode',
             })}
@@ -341,8 +341,8 @@ const NewBusinessTable = ({
 
       {activeIncidents.map((business) => (
         <NewBusinessRow
-          key={business.id}
           business={business}
+          key={business.id}
           onDelete={onDelete}
           onUpdateBusiness={onUpdateBusiness}
         />
@@ -350,8 +350,9 @@ const NewBusinessTable = ({
 
       <Pagination
         current={currentPage}
+        hideOnSinglePage
         onChange={setCurrentPage}
-        total={newBusinesses.length}
+        pageSizeOptions={[10]}
         showTotal={(total) =>
           intl.formatMessage(
             {
@@ -362,8 +363,7 @@ const NewBusinessTable = ({
             }
           )
         }
-        pageSizeOptions={[10]}
-        hideOnSinglePage
+        total={newBusinesses.length}
       />
     </Card>
   );

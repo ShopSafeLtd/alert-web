@@ -1,45 +1,46 @@
-import React from 'react';
+import type { EditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/__generated__/edit-offender.generated';
+import type { OffenderSettingsType } from '#/types/DataType';
 
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import OffenderFormDetails from '#/components/form-components/offender/offender/OffenderForm/OffenderFormDetails.view';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import moment from 'moment';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { OffenderSettingsType } from '#/types/DataType';
-import OffenderFormDetails from '#/components/form-components/offender/offender/OffenderForm/OffenderFormDetails.view';
+
 import type { FormData } from './useEditOffenderFeed';
-import type { EditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/edit-offender.generated';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: (value: FormData) => void;
-  data: EditOffenderQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
   adminRights: boolean;
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
+  data: EditOffenderQuery | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  loading: boolean;
   needJustification: boolean;
   offenderSettings: OffenderSettingsType | undefined;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
 }
 
 const EditOffender = ({
-  onSubmit,
-  data,
-  loading,
-  saving,
-  groups,
-  groupsLoading,
-  tags,
-  tagsLoading,
+  adminRights,
   customGalleries,
   customGalleriesLoading,
-  onClose,
-  adminRights,
+  data,
+  groups,
+  loading,
   needJustification,
   offenderSettings,
+  onClose,
+  onSubmit,
+  saving,
+  tags,
+  tagsLoading,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -53,45 +54,45 @@ const EditOffender = ({
         <Skeleton />
       ) : (
         <Form
-          onFinish={onSubmit}
-          layout="vertical"
           form={form}
           initialValues={{
-            name: data?.offender?.name || null,
-            alias: data?.offender?.alias || [],
             age: data?.offender?.age || null,
-            gender: data?.offender?.gender || null,
-            race: data?.offender?.race || null,
-            build: data?.offender?.build || null,
-            height: data?.offender?.height || null,
-            hair: data?.offender?.hair || null,
             ageCheck: !!data?.offender?.dateOfBirth,
-            peculiarities: data?.offender?.peculiarities || null,
-            dateOfBirth: data?.offender?.dateOfBirth
-              ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
-              : null,
-            dateSource: data?.offender?.dateSource || null,
-            groups:
-              data?.offender?.groups && data?.offender?.groups.length > 0
-                ? data?.offender?.groups.map(({ id }) => id)
-                : [],
-            tags:
-              data?.offender?.tags && data?.offender?.tags.length > 0
-                ? data?.offender?.tags.map(({ id }) => id)
-                : [],
+            alias: data?.offender?.alias || [],
+            build: data?.offender?.build || null,
+            comment: data?.offender?.comment || '',
             customGalleries:
               data?.offender?.customGalleries &&
               data.offender.customGalleries.length > 0
                 ? data.offender.customGalleries.map(({ id }) => id)
                 : [],
-            idVerified: data?.offender?.idVerified || undefined,
+            dateOfBirth: data?.offender?.dateOfBirth
+              ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
+              : null,
+            dateSource: data?.offender?.dateSource || null,
+            gender: data?.offender?.gender || null,
+            groups:
+              data?.offender?.groups && data?.offender?.groups.length > 0
+                ? data?.offender?.groups.map(({ id }) => id)
+                : [],
+            hair: data?.offender?.hair || null,
+            height: data?.offender?.height || null,
             idSource: data?.offender?.idSource,
+            idVerified: data?.offender?.idVerified || undefined,
             infoSource: data?.offender?.infoSource || '',
-            knownFor: data?.offender?.knownFor || [],
-            targetedGoods: data?.offender?.targetedGoods || [],
             justification: data?.offender?.justification || '',
-            comment: data?.offender?.comment || '',
+            knownFor: data?.offender?.knownFor || [],
+            name: data?.offender?.name || null,
+            peculiarities: data?.offender?.peculiarities || null,
+            race: data?.offender?.race || null,
+            tags:
+              data?.offender?.tags && data?.offender?.tags.length > 0
+                ? data?.offender?.tags.map(({ id }) => id)
+                : [],
+            targetedGoods: data?.offender?.targetedGoods || [],
           }}
+          layout="vertical"
+          onFinish={onSubmit}
         >
           <OffenderFormDetails
             ageCheck={ageCheck}
@@ -104,24 +105,28 @@ const EditOffender = ({
             <Row gutter={30}>
               <Col span={12}>
                 <Form.Item
-                  name="tags"
                   label={intl.formatMessage({
                     defaultMessage: 'Offender Warnings',
                   })}
+                  name="tags"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'select any warning labels that are relevant to this offender or add your own.',
                   })}
                 >
                   <Select
-                    loading={tagsLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={tagsLoading}
                     maxTagCount={2}
+                    mode="multiple"
                     optionFilterProp="label"
                   >
                     {tags.map((tag) => (
-                      <Select.Option value={tag.value} label={tag.label}>
+                      <Select.Option
+                        key={tag.value}
+                        label={tag.label}
+                        value={tag.value}
+                      >
                         {tag.label}
                       </Select.Option>
                     ))}
@@ -130,24 +135,28 @@ const EditOffender = ({
               </Col>
               <Col span={12}>
                 <Form.Item
-                  name="customGalleries"
                   label={intl.formatMessage({
                     defaultMessage: 'Custom Galleries',
                   })}
+                  name="customGalleries"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'select any custom galleries that are relevant to this offender or add your own.',
                   })}
                 >
                   <Select
-                    loading={customGalleriesLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={customGalleriesLoading}
                     maxTagCount={2}
+                    mode="multiple"
                     optionFilterProp="label"
                   >
                     {customGalleries.map((el) => (
-                      <Select.Option value={el.value} label={el.label}>
+                      <Select.Option
+                        key={el.value}
+                        label={el.label}
+                        value={el.value}
+                      >
                         {el.label}
                       </Select.Option>
                     ))}
@@ -160,36 +169,29 @@ const EditOffender = ({
             <Row>
               <Col span={24}>
                 <Form.Item
-                  name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Groups',
                   })}
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'Select the groups that you would like this offender to be visible to.',
-                  })}
+                  name="groups"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please select at least one group for the offender.',
                       }),
+                      required: true,
                     },
                   ]}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'Select the groups that you would like this offender to be visible to.',
+                  })}
                 >
-                  <Select
-                    loading={groupsLoading}
+                  <GroupsSelect
                     disabled={saving}
+                    maxTagCount="responsive"
                     mode="multiple"
-                    maxTagCount={3}
-                  >
-                    {groups.map((group) => (
-                      <Select.Option key={group.value} value={group.value}>
-                        {group.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  />
                 </Form.Item>
               </Col>
             </Row>
@@ -198,16 +200,16 @@ const EditOffender = ({
             <Row>
               <Col span={24}>
                 <Form.Item
-                  name="knownFor"
                   label={intl.formatMessage({
-                    defaultMessage: 'Crime Types',
+                    defaultMessage: 'Incident Types',
                   })}
+                  name="knownFor"
                   tooltip={intl.formatMessage({
                     defaultMessage:
-                      'Select the relevant crime types for this offender, these help to categorize the offender.',
+                      'Select the relevant incident types for this offender, these help to categorize the offender.',
                   })}
                 >
-                  <Select disabled={saving} mode="multiple" maxTagCount={3}>
+                  <Select disabled={saving} maxTagCount={3} mode="multiple">
                     {data?.offender.knownFor.map((el) => (
                       <Select.Option key={el} value={el}>
                         {el}
@@ -223,16 +225,16 @@ const EditOffender = ({
               <Row>
                 <Col span={24}>
                   <Form.Item
-                    name="targetedGoods"
                     label={intl.formatMessage({
                       defaultMessage: 'Goods',
                     })}
+                    name="targetedGoods"
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'Select the Goods that this offender stole.',
                     })}
                   >
-                    <Select disabled={saving} mode="multiple" maxTagCount={3}>
+                    <Select disabled={saving} maxTagCount={3} mode="multiple">
                       {data?.offender.targetedGoods.map((el) => (
                         <Select.Option key={el} value={el}>
                           {el}
@@ -247,12 +249,13 @@ const EditOffender = ({
             {data?.offender?.infoSource && (
               <Col span={24}>
                 <Form.Item
-                  name="infoSource"
                   label={intl.formatMessage({
                     defaultMessage: 'Information Source',
                   })}
+                  name="infoSource"
                   tooltip={intl.formatMessage({
                     defaultMessage:
+                      // eslint-disable-next-line
                       "Enter the information source of the offender's name",
                   })}
                 >
@@ -264,23 +267,24 @@ const EditOffender = ({
             {(needJustification || data?.offender.justification) && (
               <Col span={24}>
                 <Form.Item
-                  name="justification"
                   label={intl.formatMessage({
                     defaultMessage: 'Justification',
                   })}
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      "Enter a justification to explain why this offender doesn't connect with an incident.",
-                  })}
+                  name="justification"
                   rules={[
                     {
-                      required: needJustification,
                       message: intl.formatMessage({
                         defaultMessage:
                           'Please enter a justification for the offender.',
                       }),
+                      required: needJustification,
                     },
                   ]}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      // eslint-disable-next-line
+                      "Enter a justification to explain why this offender doesn't connect with an incident.",
+                  })}
                 >
                   <Input.TextArea disabled={saving} />
                 </Form.Item>
@@ -289,7 +293,7 @@ const EditOffender = ({
           </Row>
 
           <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
               <Col>
                 <Button disabled={saving} onClick={onClose}>
                   {intl.formatMessage({
@@ -300,9 +304,9 @@ const EditOffender = ({
               <Col>
                 <Button
                   disabled={saving}
+                  htmlType="submit"
                   loading={saving}
                   type="primary"
-                  htmlType="submit"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Save',
