@@ -1,47 +1,48 @@
-import { useState } from 'react';
+import type { AvailableTaskQuestionsQuery } from '#/components/form-components/createQuestion/graphql/__generated__/available-questions.generated';
 import type { FormInstance } from 'antd';
+
+import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/__generated__/create-question.generated';
+import { useAvailableTaskQuestionsQuery } from '#/components/form-components/createQuestion/graphql/__generated__/available-questions.generated';
 import { Form, notification } from 'antd';
+import { AnswerType, QuestionModel } from 'graphql/types';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import errorNotification from '../../../types/mutation_notifications/error_notification';
-import type { AvailableTaskQuestionsQuery } from '#/components/form-components/createQuestion/graphql/available-questions.generated';
-import { useAvailableTaskQuestionsQuery } from '#/components/form-components/createQuestion/graphql/available-questions.generated';
-import { AnswerType, QuestionModel } from 'graphql/types';
-import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/create-question.generated';
 
 interface Return {
-  questionData: AvailableTaskQuestionsQuery | undefined;
-  loading: boolean;
-  form: FormInstance<FormData>;
   data: FormData;
+  form: FormInstance<FormData>;
+  loading: boolean;
   onSubmit: (value: FormData) => void;
+  questionData: AvailableTaskQuestionsQuery | undefined;
   saving: boolean;
 }
 
 export interface FormData {
-  selectedId: string;
-  type: AnswerType;
   options: string[];
   question: string;
+  selectedId: string;
+  type: AnswerType;
 }
 
 const { useForm } = Form;
 
 interface Props {
+  ids?: string[];
   onClose: () => void;
   update: (id: string, question: string) => void;
-  ids?: string[];
 }
 
-const useCreateQuestion = ({ onClose, update, ids }: Props): Return => {
+const useCreateQuestion = ({ ids, onClose, update }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
   const [data] = useState<FormData>({
-    selectedId: '',
-    type: AnswerType.String,
     options: [],
     question: '',
+    selectedId: '',
+    type: AnswerType.String,
   });
 
   const { data: questionData, loading } = useAvailableTaskQuestionsQuery({
@@ -59,11 +60,11 @@ const useCreateQuestion = ({ onClose, update, ids }: Props): Return => {
       );
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successful!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The operation was successful!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successful!',
         }),
 
         placement: 'bottomRight',
@@ -82,11 +83,11 @@ const useCreateQuestion = ({ onClose, update, ids }: Props): Return => {
       update(values.selectedId || '', values.question || '');
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully created!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The question has been successfully created!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully created!',
         }),
 
         placement: 'bottomRight',
@@ -94,10 +95,10 @@ const useCreateQuestion = ({ onClose, update, ids }: Props): Return => {
       onClose();
     } else {
       const dataToSubmit = {
-        question: values.question,
-        options: values.options,
-        type: values.type,
         model: QuestionModel.Task,
+        options: values.options,
+        question: values.question,
+        type: values.type,
       };
       void addQuestion({
         variables: {
@@ -106,7 +107,7 @@ const useCreateQuestion = ({ onClose, update, ids }: Props): Return => {
       });
     }
   };
-  return { data, form, onSubmit, saving, questionData, loading };
+  return { data, form, loading, onSubmit, questionData, saving };
 };
 
 export default useCreateQuestion;

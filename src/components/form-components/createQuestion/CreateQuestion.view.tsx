@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
+import type { AvailableTaskQuestionsQuery } from '#/components/form-components/createQuestion/graphql/__generated__/available-questions.generated';
 import type { FormInstance } from 'antd';
+
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
+import { AnswerType } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { FormData } from './useCreateQuestion';
+
 import {
   DatePreview,
   NumberPreview,
@@ -12,27 +17,25 @@ import {
   TimePreview,
   YesNoPreview,
 } from './previews';
-import type { AvailableTaskQuestionsQuery } from '#/components/form-components/createQuestion/graphql/available-questions.generated';
-import { AnswerType } from 'graphql/types';
 
 interface AddQuestionViewProps {
-  form: FormInstance<FormData>;
   data: FormData;
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  saving: boolean;
-  questionData: AvailableTaskQuestionsQuery | undefined;
+  form: FormInstance<FormData>;
   loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  questionData: AvailableTaskQuestionsQuery | undefined;
+  saving: boolean;
 }
 
 const CreateQuestionView = ({
   data,
   form,
-  onSubmit,
-  onClose,
-  saving,
-  questionData,
   loading,
+  onClose,
+  onSubmit,
+  questionData,
+  saving,
 }: AddQuestionViewProps) => {
   const answerType = Form.useWatch('type', form);
   const question = Form.useWatch('question', form) || '';
@@ -57,7 +60,7 @@ const CreateQuestionView = ({
     }
     if (answerType === AnswerType.Select) {
       return (
-        <SelectPreview question={question} options={opt.filter(Boolean)} />
+        <SelectPreview options={opt.filter(Boolean)} question={question} />
       );
     }
     return <div />;
@@ -66,8 +69,8 @@ const CreateQuestionView = ({
     <Form<FormData>
       form={form}
       initialValues={data}
-      onFinish={onSubmit}
       layout="vertical"
+      onFinish={onSubmit}
     >
       <Card>
         <Form.Item
@@ -89,9 +92,9 @@ const CreateQuestionView = ({
               const qQuestion = ques?.questionFormatted;
               const qOptions = ques?.optionsFormatted;
               form.setFieldsValue({
-                type: qType,
-                question: qQuestion,
                 options: qOptions || [],
+                question: qQuestion,
+                type: qType,
               });
             }}
             options={questionData?.availableTaskQuestions.map((q) => ({
@@ -101,11 +104,11 @@ const CreateQuestionView = ({
           />
         </Form.Item>
         <Form.Item
+          hidden={!!selectedId}
           label={intl.formatMessage({
             defaultMessage: 'Question',
           })}
           name="question"
-          hidden={!!selectedId}
           required
         >
           <Input />
@@ -114,11 +117,11 @@ const CreateQuestionView = ({
 
       <Card hidden={!!selectedId || !question}>
         <Form.Item
+          hidden={!!selectedId || !question}
           label={intl.formatMessage({
             defaultMessage: 'Select type for answer',
           })}
           name="type"
-          hidden={!!selectedId || !question}
         >
           <Select
             options={[
@@ -165,6 +168,7 @@ const CreateQuestionView = ({
 
       {answerType === AnswerType.Select && (
         <Card
+          hidden={!!selectedId}
           style={{
             maxHeight: 300,
             overflow: 'auto',
@@ -172,7 +176,6 @@ const CreateQuestionView = ({
           title={intl.formatMessage({
             defaultMessage: 'Options',
           })}
-          hidden={!!selectedId}
         >
           <Form.List
             name="options"
@@ -189,7 +192,7 @@ const CreateQuestionView = ({
                       )
                     );
                   }
-                  if (options.some((o: string | null | undefined) => !o)) {
+                  if (options.some((o: null | string | undefined) => !o)) {
                     return Promise.reject(
                       new Error(
                         intl.formatMessage({
@@ -205,7 +208,7 @@ const CreateQuestionView = ({
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map((field) => (
-                  <Row key={field.key} gutter={10}>
+                  <Row gutter={10} key={field.key}>
                     <Col span={20}>
                       <Form.Item
                         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -226,16 +229,16 @@ const CreateQuestionView = ({
                 ))}
                 <Form.Item>
                   <Button
-                    type="dashed"
-                    onClick={() => add()}
                     block
                     icon={
                       <i
-                        className="fa fa-plus"
                         aria-hidden="true"
+                        className="fa fa-plus"
                         style={{ color: '#1890ff' }}
                       />
                     }
+                    onClick={() => add()}
+                    type="dashed"
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Option',
@@ -257,7 +260,7 @@ const CreateQuestionView = ({
         {generatePreview()}
       </Card>
       <Form.Item>
-        <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
           <Col>
             <Button disabled={saving || loading} onClick={() => onClose()}>
               {intl.formatMessage({
@@ -268,9 +271,9 @@ const CreateQuestionView = ({
           <Col>
             <Button
               disabled={saving || loading}
+              htmlType="submit"
               loading={saving || loading}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Submit',
