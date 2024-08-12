@@ -130,8 +130,8 @@ const CrimeGroupSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   // Use useCallback to memoize the debounced function
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const changeHandler = useCallback(
-    debounce(handleChange, 500), // 500ms delay
-    [] // Empty dependency array because debounce and handleChange won't change
+    debounce(handleChange, 500), // 800ms delay
+    [debounce, handleChange]
   );
   const sortedData = [...(data?.crimeGroups?.edges || [])].sort((a, b) => {
     if (!value) return 0;

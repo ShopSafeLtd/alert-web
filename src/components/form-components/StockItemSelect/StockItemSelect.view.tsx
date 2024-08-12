@@ -281,8 +281,8 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 
   // Use useCallback to memoize the debounced function
   const changeHandler = useCallback(
-    debounce(handleChange, 800), // 800ms delay
-    [] // Empty dependency array because debounce and handleChange won't change
+    debounce(handleChange, 500), // 800ms delay
+    [debounce, handleChange]
   );
 
   const options: SelectProps['options'] = data?.stockItemsRelay.edges.map(

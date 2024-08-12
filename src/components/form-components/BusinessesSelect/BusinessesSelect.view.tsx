@@ -255,7 +255,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   // Use useCallback to memoize the debounced function
   const changeHandler = useCallback(
     debounce(handleChange, 800), // 800ms delay
-    [] // Empty dependency array because debounce and handleChange won't change
+    [debounce, handleChange]
   );
 
   const sortedData = [...(data?.businessRelay?.edges || [])].sort((a, b) => {

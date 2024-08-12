@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import type { InputProps } from 'antd';
+import type { ChangeEvent } from 'react';
+
 import { Input } from 'antd';
 import debounce from 'lodash/debounce';
-import type { ChangeEvent } from 'react';
 import React, { useCallback } from 'react';
 
 /**
@@ -23,8 +24,8 @@ const DebouncedInput = ({ onChange, ...props }: InputProps): JSX.Element => {
   // Use useCallback to memoize the debounced function
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const changeHandler = useCallback(
-    debounce(handleChange, 500), // 500ms delay
-    [] // Empty dependency array because debounce and handleChange won't change
+    debounce(handleChange, 500), // 800ms delay
+    [debounce, handleChange]
   );
 
   return (
