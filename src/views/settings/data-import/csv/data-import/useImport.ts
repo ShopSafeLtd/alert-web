@@ -1,43 +1,44 @@
 import type { Dispatch } from 'react';
-import { useEffect, useReducer, useState } from 'react';
 import type { IFileInfo } from 'react-csv-reader';
-import { useNavigate } from 'react-router';
+
+import { useCreateCsvImportMutation } from '#/views/settings/data-import/csv/data-import/graphql/mutation/__generated__/create-csv.generated';
+import { useGoodsTypesQuery } from '#/views/settings/data-import/csv/data-import/graphql/queries/__generated__/goods-types.generated';
 import { notification } from 'antd';
+import { CsvType } from 'graphql/types';
+import { useEffect, useReducer, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
 
 import { useStoreState } from '../../../../../state';
-import { useGoodsTypesQuery } from '#/views/settings/data-import/csv/data-import/graphql/queries/goods-types.generated';
-import { CsvType } from 'graphql/types';
-import { useCreateCsvImportMutation } from '#/views/settings/data-import/csv/data-import/graphql/mutation/create-csv.generated';
 
 export type CSVData = string[][];
 export type DataType =
-  | 'stockItems'
-  | 'users'
+  | 'businesses'
+  | 'groups'
   // | 'offenders'
   // | 'vehicles'
-  | 'groups'
-  | 'businesses';
+  | 'stockItems'
+  | 'users';
 
 export interface TableData {
   [key: number]: string;
 }
 
 export interface AdditionalInfo {
-  password: string | null;
-  goodsType: string | null;
-  role: string | null;
-  organisation: string | null;
+  goodsType: null | string;
+  organisation: null | string;
+  password: null | string;
+  role: null | string;
 }
 
 export type ActionType =
-  | 'SET_TABLE_DATA'
-  | 'SET_UPLOAD_URL'
-  | 'SET_DATA_TYPE'
-  | 'SET_SAVING'
-  | 'SET_ADDITIONAL_INFO'
   | 'RESET'
-  | 'SET_GOODS';
+  | 'SET_ADDITIONAL_INFO'
+  | 'SET_DATA_TYPE'
+  | 'SET_GOODS'
+  | 'SET_SAVING'
+  | 'SET_TABLE_DATA'
+  | 'SET_UPLOAD_URL';
 
 export interface SelectValue {
   label: string;
@@ -45,38 +46,38 @@ export interface SelectValue {
 }
 
 export type Action = {
-  type: ActionType;
   payload:
-    | number
-    | string
+    | AdditionalInfo
+    | SelectValue[]
+    | TableData[]
     | boolean
-    | string[]
     | null
     // | DataType
-    | AdditionalInfo
-    | TableData[]
-    | SelectValue[];
+    | number
+    | string
+    | string[];
+  type: ActionType;
 };
 
 export interface State {
-  tableData: TableData[];
-  uploadedUrl: string | null;
-  dataTypes: DataType | null;
-  saving: boolean;
-  goods: SelectValue[];
   additionalInfo: AdditionalInfo;
+  dataTypes: DataType | null;
+  goods: SelectValue[];
+  saving: boolean;
+  tableData: TableData[];
+  uploadedUrl: null | string;
 }
 
 interface Return {
+  dispatch: Dispatch<Action>;
   onItemsLoaded: (
     data: CSVData,
     _: IFileInfo,
     originalFile: File | undefined
   ) => void;
-  dispatch: Dispatch<Action>;
-  state: State;
-  saving: boolean;
   onSubmit: () => void;
+  saving: boolean;
+  state: State;
 }
 
 const dataTypeToCsvType = (type: DataType) => {
@@ -105,17 +106,17 @@ const useImport = (): Return => {
   const { data: goods } = useGoodsTypesQuery();
   const intl = useIntl();
   const initState: State = {
+    additionalInfo: {
+      goodsType: null,
+      organisation: null,
+      password: null,
+      role: null,
+    },
+    dataTypes: null,
+    goods: [],
+    saving: false,
     tableData: [],
     uploadedUrl: null,
-    dataTypes: null,
-    saving: false,
-    goods: [],
-    additionalInfo: {
-      password: null,
-      goodsType: null,
-      role: null,
-      organisation: null,
-    },
   };
 
   function reducer(state: State, action: Action): State {
@@ -124,7 +125,7 @@ const useImport = (): Return => {
         return { ...state, tableData: action.payload as TableData[] };
       }
       case 'SET_UPLOAD_URL': {
-        return { ...state, uploadedUrl: action.payload as string | null };
+        return { ...state, uploadedUrl: action.payload as null | string };
       }
       case 'SET_DATA_TYPE': {
         return { ...state, dataTypes: action.payload as DataType | null };
@@ -153,11 +154,11 @@ const useImport = (): Return => {
   useEffect(() => {
     if (goods) {
       dispatch({
-        type: 'SET_GOODS',
         payload: goods.goodsTypes.map((value) => ({
           label: value.name,
           value: value.id,
         })),
+        type: 'SET_GOODS',
       });
     }
   }, [goods]);
@@ -168,31 +169,31 @@ const useImport = (): Return => {
     originalFile: File | undefined
   ) => {
     dispatch({
-      type: 'SET_UPLOAD_URL',
       payload: null,
+      type: 'SET_UPLOAD_URL',
     });
     if (originalFile) {
       const formData = new FormData();
       formData.append('file', originalFile);
       const res = await fetch(import.meta.env.VITE_CSV_UPLOAD_ENDPOINT, {
-        method: 'POST',
         body: formData,
         headers: {},
+        method: 'POST',
       });
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const resData: { url: string }[] = await res.json();
       dispatch({
-        type: 'SET_UPLOAD_URL',
         payload: resData[0].url,
+        type: 'SET_UPLOAD_URL',
       });
     }
 
     dispatch({
-      type: 'SET_TABLE_DATA',
       payload: data
         .map((value) => Object.fromEntries(value.map((cur, i) => [i, cur])))
         .filter((__, i) => i !== 0),
+      type: 'SET_TABLE_DATA',
     });
   };
 
@@ -208,8 +209,8 @@ const useImport = (): Return => {
       });
       setSaving(false);
       dispatch({
-        type: 'RESET',
         payload: null,
+        type: 'RESET',
       });
       navigate('/app/scheme-settings/data-import/csv');
     },
@@ -229,32 +230,32 @@ const useImport = (): Return => {
     void createCsvImport({
       variables: {
         data: {
-          type: dataTypeToCsvType(state.dataTypes as DataType),
+          additionalInfo: state.additionalInfo,
           file: state.uploadedUrl as string,
           scheme: {
             connect: {
               id: schemeId,
             },
           },
+          total: state.tableData.length,
+          type: dataTypeToCsvType(state.dataTypes as DataType),
           user: {
             connect: {
               id: userId,
             },
           },
-          additionalInfo: state.additionalInfo,
-          total: state.tableData.length,
         },
       },
     });
   };
 
   return {
-    state,
     dispatch,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onItemsLoaded,
     onSubmit,
     saving,
+    state,
   };
 };
 

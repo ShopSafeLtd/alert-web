@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Age, Build, Gender, Race, Role } from 'graphql/generated';
+import { Age, Build, Gender, Race, Role } from 'graphql/types';
 import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';

@@ -4,10 +4,10 @@ import type { FormInstance, UploadFile } from 'antd';
 import type { StateImageData } from 'components/incidents/IncidentForm/ImageSection/useImageSection';
 import type { StateOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import type { StateVehicleData } from 'components/incidents/IncidentForm/Profiles/Vehicles/useVehicles';
-import type { CreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
-import type { AddressesQuery } from 'graphql/incidents/queries/address.generated';
-import type { ListIncidentsQuery } from 'graphql/incidents/queries/list-incidents.generated';
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
+import type { CreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
+import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
+import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import type {
   Age,
   Build,
@@ -24,13 +24,13 @@ import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
 import hasPermission from '#/utils/has-permission';
 import { Form, Modal, notification } from 'antd';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/list-goods-types.generated';
-import { useCreateIncidentMutation } from 'graphql/incidents/mutations/crreate-incident.generated';
-import { useAddressesQuery } from 'graphql/incidents/queries/address.generated';
-import { ListIncidentsDocument } from 'graphql/incidents/queries/list-incidents.generated';
-import { ViewInvestigationDocument } from 'graphql/investigations/queries/view-investigation.generated';
-import { useListIncidentTagsQuery } from 'graphql/tags/queries/list-incident-tags.generated';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
+import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
+import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
+import { ListIncidentsDocument } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
+import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import {
   AnswerType,
   GoodsMode,

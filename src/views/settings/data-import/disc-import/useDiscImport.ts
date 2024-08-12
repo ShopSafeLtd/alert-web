@@ -1,11 +1,29 @@
-import { useEffect, useState } from 'react';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import { Form } from 'antd';
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
+import { Form } from 'antd';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import {
+  Age,
+  Build,
+  Gender,
+  Height,
+  Model,
+  Race,
+  Role,
+  SortOrder,
+  TagType,
+} from 'graphql/types';
+import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
+import update from 'immutability-helper';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
 import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment';
-import update from 'immutability-helper';
+
 import type {
   Business,
   CSVData,
@@ -22,23 +40,6 @@ import type {
   NewOffender,
   NewUser,
 } from './DiscImport.types';
-
-import {
-  Age,
-  Build,
-  Gender,
-  Height,
-  Model,
-  Race,
-  Role,
-  SortOrder,
-  TagType,
-} from 'graphql/types';
-import { TagsQuery, useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { SchemeGroupsQuery, useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
-import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
-import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
-
 
 const calcAge = (value: string) => {
   if (value === '45 - 64') return Age.FortyFifty;
@@ -84,47 +85,47 @@ const calcRace = (value: string) => {
 };
 
 interface Return {
-  knownSubjects: KnownSubject[];
-  members: Member[];
+  activeTags: IncidentTags;
+  areas: string[];
+  currentStep: number;
+  fileList: UploadFile[];
+  galleries: string[];
+  generating: boolean;
+  groupsData: SchemeGroupsQuery | undefined;
+  handleFileListChange: UploadProps['onChange'];
   idSought: IDSought[];
-  incidents: Incident[];
+  idSoughtModalOpen: boolean;
+  imageModalOpen: boolean;
   images: Image[];
+  incidentModalOpen: boolean;
+  incidents: Incident[];
+  knownSubjectModalOpen: boolean;
+  knownSubjects: KnownSubject[];
+  mappingForm: FormInstance<GenerateData>;
+  memberModalOpen: boolean;
+  members: Member[];
   newBusinesses: NewBusiness[];
+  newIncidents: NewIncident[];
   newOffenders: NewOffender[];
   newUsers: NewUser[];
-  onKnownSubjectFileLoaded: (data: CSVData) => void;
-  onMembersFileLoaded: (data: CSVData) => void;
+  onDeleteNewBusiness: (id: string) => void;
+  onGenerateData: (values: GenerateData) => void;
   onIDSoughtFileLoaded: (data: CSVData) => void;
   onIncidentFileLoaded: (data: CSVData) => void;
-  onGenerateData: (values: GenerateData) => void;
-  onDeleteNewBusiness: (id: string) => void;
-  fileList: UploadFile[];
-  handleFileListChange: UploadProps['onChange'];
-  groupsData: SchemeGroupsQuery | undefined;
-  memberModalOpen: boolean;
-  knownSubjectModalOpen: boolean;
-  idSoughtModalOpen: boolean;
-  incidentModalOpen: boolean;
-  imageModalOpen: boolean;
-  toggleMemberModal: () => void;
-  toggleKnownSubjectModal: () => void;
-  toggleIdSoughtModal: () => void;
-  toggleIncidentModal: () => void;
-  toggleImageModal: () => void;
-  generating: boolean;
-  tagData: TagsQuery | undefined;
-  newIncidents: NewIncident[];
-  activeTags: IncidentTags;
-  onSubmit: () => void;
-  onUpdateOffender: (data: NewOffender) => void;
-  onUpdateIncident: (data: NewIncident) => void;
-  onUpdateBusiness: (data: NewBusiness) => void;
-  onUpdateUser: (data: NewUser) => void;
-  mappingForm: FormInstance<GenerateData>;
-  areas: string[];
-  galleries: string[];
-  currentStep: number;
+  onKnownSubjectFileLoaded: (data: CSVData) => void;
+  onMembersFileLoaded: (data: CSVData) => void;
   onStepChange: (value: number) => void;
+  onSubmit: () => void;
+  onUpdateBusiness: (data: NewBusiness) => void;
+  onUpdateIncident: (data: NewIncident) => void;
+  onUpdateOffender: (data: NewOffender) => void;
+  onUpdateUser: (data: NewUser) => void;
+  tagData: TagsQuery | undefined;
+  toggleIdSoughtModal: () => void;
+  toggleImageModal: () => void;
+  toggleIncidentModal: () => void;
+  toggleKnownSubjectModal: () => void;
+  toggleMemberModal: () => void;
 }
 
 const useDiscImport = (): Return => {
@@ -151,46 +152,46 @@ const useDiscImport = (): Return => {
   const [galleries, setGalleries] = useState<string[]>([]);
   const [activeTags, setActiveTags] = useState<IncidentTags>({
     assaultViolenceAffray: false,
-    beggingPersistent: false,
+    attemptedTheft: false,
     begging: false,
+    beggingPersistent: false,
+    beingOnPremisesWhilstBanned: false,
+    breachOfBan: false,
+    breachOfSection35Order: false,
+    breachPoliceBail: false,
+    covidRelated: false,
     criminalDamageGraffitiVandalism: false,
-    possessionWithIntentToSupplyDrugs: false,
+    drunkenDisorderlyBehaviour: false,
+    fareEvasion: false,
+    goingEquippedToSteal: false,
     harassmentThreateningBehaviour: false,
+    hateCrime: false,
+    illegalGambling: false,
+    inappropriateSexualContact: false,
     joyRiding: false,
     kerbCrawling: false,
-    noiseNuisance: false,
-    inappropriateSexualContact: false,
-    racialAbuse: false,
-    smokingUnderageOrInProhibitedArea: false,
-    streetDrinking: false,
-    possessionOfDrugs: false,
-    theft: false,
-    verbalAbuse: false,
-    beingOnPremisesWhilstBanned: false,
-    breachOfSection35Order: false,
-    other: false,
-    unlicensedTaxiCab: false,
-    unlicensedStreetTrading: false,
     misuseOfID: false,
-    underageIntoxication: false,
-    goingEquippedToSteal: false,
-    hateCrime: false,
-    roughSleeping: false,
-    breachOfBan: false,
-    drunkenDisorderlyBehaviour: false,
-    possessionOfAnOffensiveWeapon: false,
-    attemptedTheft: false,
-    illegalGambling: false,
-    robbery: false,
-    section35Issued: false,
-    breachPoliceBail: false,
+    noiseNuisance: false,
+    other: false,
     otherAlcoholDrugRelated: false,
     otherAntiSocialBehaviour: false,
+    otherBreachBan: false,
     otherTheftFraud: false,
     otherViolentOffensiveBehaviour: false,
-    otherBreachBan: false,
-    fareEvasion: false,
-    covidRelated: false,
+    possessionOfAnOffensiveWeapon: false,
+    possessionOfDrugs: false,
+    possessionWithIntentToSupplyDrugs: false,
+    racialAbuse: false,
+    robbery: false,
+    roughSleeping: false,
+    section35Issued: false,
+    smokingUnderageOrInProhibitedArea: false,
+    streetDrinking: false,
+    theft: false,
+    underageIntoxication: false,
+    unlicensedStreetTrading: false,
+    unlicensedTaxiCab: false,
+    verbalAbuse: false,
   });
 
   const [generating, setGenerating] = useState<boolean>(false);
@@ -230,15 +231,15 @@ const useDiscImport = (): Return => {
 
   const { data: groupsData } = useSchemeGroupsQuery({
     variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         scheme: {
           id: {
             equals: schemeId,
           },
         },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
       },
     },
   });
@@ -250,15 +251,15 @@ const useDiscImport = (): Return => {
         name: SortOrder.Asc,
       },
       where: {
+        dataType: {
+          equals: Model.Incident,
+        },
         schemes: {
           some: {
             id: {
               equals: schemeId,
             },
           },
-        },
-        dataType: {
-          equals: Model.Incident,
         },
       },
     },
@@ -296,28 +297,28 @@ const useDiscImport = (): Return => {
   const onKnownSubjectFileLoaded = (data: CSVData) => {
     const knownSubjectData = data
       .map((item) => ({
+        address: item[17],
+        ageRange: item[11],
+        build: item[13],
+        comments: `${item[15]}${item[16]}`,
+        databaseDeletionDate: item[21],
+        dateAdded: item[20],
+        dateOfBirth: item[8],
+        distinguishingFeatures: item[14],
+        firstName: item[4],
+        galleryStatus: item[22],
+        gender: item[7],
+        height: item[12],
+        icCodes: item[10],
+        id: item[3],
+        incidentCount: item[19],
+        lastName: item[5],
+        memberEmail: item[2],
+        nicknames: item[6],
+        postcode: item[18],
+        prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
         workspaceId: item[0],
         workspaceName: item[1],
-        memberEmail: item[2],
-        id: item[3],
-        firstName: item[4],
-        lastName: item[5],
-        nicknames: item[6],
-        gender: item[7],
-        dateOfBirth: item[8],
-        prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
-        icCodes: item[10],
-        ageRange: item[11],
-        height: item[12],
-        build: item[13],
-        distinguishingFeatures: item[14],
-        comments: `${item[15]}${item[16]}`,
-        address: item[17],
-        postcode: item[18],
-        incidentCount: item[19],
-        dateAdded: item[20],
-        databaseDeletionDate: item[21],
-        galleryStatus: item[22],
       }))
       .filter((item) => item.workspaceId !== 'Workspace Id')
       .filter((item) => item.workspaceId !== '');
@@ -338,16 +339,16 @@ const useDiscImport = (): Return => {
 
   const onMembersFileLoaded = (data: CSVData) => {
     const importedMembers = data.map((item) => ({
-      id: item[0],
-      firstName: item[1],
-      lastName: item[2],
+      areas: item[8],
+      categories: item[7],
       email: item[3],
+      firstName: item[1],
+      id: item[0],
+      lastName: item[2],
+      lastSignedIn: moment(item[9]),
       organisation: item[4],
       placeOfWork: item[5],
       premises: item[6],
-      categories: item[7],
-      areas: item[8],
-      lastSignedIn: moment(item[9]),
     }));
     const filteredMembers = importedMembers
       .filter((item) => !item.email?.includes('littoralis'))
@@ -364,8 +365,8 @@ const useDiscImport = (): Return => {
     setMembers(filteredMembers);
     setBusinesses(
       filteredMembers.map((item) => ({
-        name: item.organisation,
         lastSignedIn: item.lastSignedIn,
+        name: item.organisation,
       }))
     );
   };
@@ -373,28 +374,28 @@ const useDiscImport = (): Return => {
   const onIDSoughtFileLoaded = (data: CSVData) => {
     const idSoughtData = data
       .map((item) => ({
+        address: item[17],
+        ageRange: item[11],
+        build: item[13],
+        comments: `${item[15]}${item[16]}`,
+        databaseDeletionDate: item[21],
+        dateAdded: item[20],
+        dateOfBirth: item[8],
+        distinguishingFeatures: item[14],
+        firstName: item[4],
+        galleryStatus: item[22],
+        gender: item[7],
+        height: item[12],
+        icCodes: item[10],
+        id: item[3],
+        incidentCount: item[19],
+        lastName: item[5],
+        memberEmail: item[2],
+        nicknames: item[6],
+        postcode: item[18],
+        prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
         workspaceId: item[0],
         workspaceName: item[1],
-        memberEmail: item[2],
-        id: item[3],
-        firstName: item[4],
-        lastName: item[5],
-        nicknames: item[6],
-        gender: item[7],
-        dateOfBirth: item[8],
-        prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
-        icCodes: item[10],
-        ageRange: item[11],
-        height: item[12],
-        build: item[13],
-        distinguishingFeatures: item[14],
-        comments: `${item[15]}${item[16]}`,
-        address: item[17],
-        postcode: item[18],
-        incidentCount: item[19],
-        dateAdded: item[20],
-        databaseDeletionDate: item[21],
-        galleryStatus: item[22],
       }))
       .filter((item) => item.workspaceId !== 'Workspace Id')
       .filter((item) => item.workspaceId !== '');
@@ -416,130 +417,130 @@ const useDiscImport = (): Return => {
   const onIncidentFileLoaded = (data: CSVData) => {
     const incidentsValue = data
       .map((item) => ({
-        workspaceName: item[0],
-        id: item[1],
+        address: item[26],
+        assaultViolenceAffray: item[34],
+        attemptedTheft: item[63],
+        begging: item[36],
+        beggingPersistent: item[35],
+        beingOnPremisesWhilstBanned: item[50],
+        breachOfBan: item[60],
+        breachOfSection35Order: item[51],
+        breachPoliceBail: item[67],
+        covidRelated: item[74],
+        crimeReportStatus: item[8],
+        criminalDamageGraffitiVandalism: item[37],
         date: item[2],
         dateTime: item[3],
-        summary: item[4],
+        dealingInvolved: item[17],
         description: item[5],
-        policeContacted: item[6],
-        sentToEmails: item[7],
-        crimeReportStatus: item[8],
-        internalReference: item[9],
-        vehicleDescriptions: item[10],
-        vehicleRegistrations: item[11],
-        fraudInvolved: item[12],
-        outcome: item[13],
-        otherOutcome: item[14],
         drinkInvolved: item[15],
         drugsInvolved: item[16],
-        dealingInvolved: item[17],
-        weaponInvolved: item[18],
+        drunkenDisorderlyBehaviour: item[61],
+        fareEvasion: item[73],
+        fraudInvolved: item[12],
+        goingEquippedToSteal: item[57],
         groupInvolved: item[19],
-        violenceInvolved: item[20],
-        verbalAbuseInvolved: item[21],
-        lossValue: item[22],
-        lossRecovered: item[23],
-        policeReference: item[24],
-        lossRecoveredAtTime: item[25],
-        address: item[26],
-        postcode: item[27],
-        memberId: item[28],
-        memberName: item[29],
-        memberEmail: item[30],
-        locationName: item[31],
-        premises: item[32],
-        typeOfOffence: item[33],
-        assaultViolenceAffray: item[34],
-        beggingPersistent: item[35],
-        begging: item[36],
-        criminalDamageGraffitiVandalism: item[37],
-        possessionWithIntentToSupplyDrugs: item[38],
         harassmentThreateningBehaviour: item[39],
+        hateCrime: item[58],
+        id: item[1],
+        illegalGambling: item[64],
+        inappropriateSexualContact: item[43],
+        incidentNotes: item[124],
+        internalReference: item[9],
         joyRiding: item[40],
         kerbCrawling: item[41],
-        noiseNuisance: item[42],
-        inappropriateSexualContact: item[43],
-        racialAbuse: item[44],
-        smokingUnderageOrInProhibitedArea: item[45],
-        streetDrinking: item[46],
-        possessionOfDrugs: item[47],
-        theft: item[48],
-        verbalAbuse: item[49],
-        beingOnPremisesWhilstBanned: item[50],
-        breachOfSection35Order: item[51],
-        other: item[52],
-        unlicensedTaxiCab: item[53],
-        unlicensedStreetTrading: item[54],
+        locationName: item[31],
+        lossRecovered: item[23],
+        lossRecoveredAtTime: item[25],
+        lossValue: item[22],
+        memberEmail: item[30],
+        memberId: item[28],
+        memberName: item[29],
         misuseOfID: item[55],
-        underageIntoxication: item[56],
-        goingEquippedToSteal: item[57],
-        hateCrime: item[58],
-        roughSleeping: item[59],
-        breachOfBan: item[60],
-        drunkenDisorderlyBehaviour: item[61],
-        possessionOfAnOffensiveWeapon: item[62],
-        attemptedTheft: item[63],
-        illegalGambling: item[64],
-        robbery: item[65],
-        section35Issued: item[66],
-        breachPoliceBail: item[67],
+        noiseNuisance: item[42],
+        other: item[52],
         otherAlcoholDrugRelated: item[68],
         otherAntiSocialBehaviour: item[69],
+        otherBreachBan: item[72],
+        otherOutcome: item[14],
         otherTheftFraud: item[70],
         otherViolentOffensiveBehaviour: item[71],
-        otherBreachBan: item[72],
-        fareEvasion: item[73],
-        covidRelated: item[74],
-        subjectID: item[75],
-        subjectFirstName: item[76],
-        subjectLastName: item[77],
+        outcome: item[13],
+        policeContacted: item[6],
+        policeReference: item[24],
+        possessionOfAnOffensiveWeapon: item[62],
+        possessionOfDrugs: item[47],
+        possessionWithIntentToSupplyDrugs: item[38],
+        postcode: item[27],
+        premises: item[32],
+        racialAbuse: item[44],
+        robbery: item[65],
+        roughSleeping: item[59],
+        section35Issued: item[66],
+        sentToEmails: item[7],
+        smokingUnderageOrInProhibitedArea: item[45],
+        streetDrinking: item[46],
         subjectDOB: item[78],
-        subjectGender: item[79],
-        subjectProhibitions: item[80],
-        subjectDeletionDate: item[81],
-        subjectID1: item[82],
-        subjectFirstName1: item[83],
-        subjectLastName1: item[84],
         subjectDOB1: item[85],
-        subjectGender1: item[86],
-        subjectProhibitions1: item[87],
-        subjectDeletionDate1: item[88],
-        subjectID2: item[89],
-        subjectFirstName2: item[90],
-        subjectLastName2: item[91],
         subjectDOB2: item[92],
-        subjectGender2: item[93],
-        subjectProhibitions2: item[94],
-        subjectDeletionDate2: item[95],
-        subjectID3: item[96],
-        subjectFirstName3: item[97],
-        subjectLastName3: item[98],
-        subjectGender3: item[100],
-        subjectProhibitions3: item[101],
-        subjectDeletionDate3: item[102],
-        subjectID4: item[103],
-        subjectFirstName4: item[104],
-        subjectLastName4: item[105],
         subjectDOB4: item[106],
-        subjectGender4: item[107],
-        subjectProhibitions4: item[108],
-        subjectDeletionDate4: item[109],
-        subjectID5: item[110],
-        subjectFirstName5: item[111],
-        subjectLastName5: item[112],
         subjectDOB5: item[112],
-        subjectGender5: item[114],
-        subjectProhibitions5: item[115],
-        subjectDeletionDate5: item[116],
-        subjectID6: item[117],
-        subjectFirstName6: item[118],
-        subjectLastName6: item[119],
         subjectDOB6: item[120],
-        subjectGender6: item[121],
-        subjectProhibitions6: item[122],
+        subjectDeletionDate: item[81],
+        subjectDeletionDate1: item[88],
+        subjectDeletionDate2: item[95],
+        subjectDeletionDate3: item[102],
+        subjectDeletionDate4: item[109],
+        subjectDeletionDate5: item[116],
         subjectDeletionDate6: item[123],
-        incidentNotes: item[124],
+        subjectFirstName: item[76],
+        subjectFirstName1: item[83],
+        subjectFirstName2: item[90],
+        subjectFirstName3: item[97],
+        subjectFirstName4: item[104],
+        subjectFirstName5: item[111],
+        subjectFirstName6: item[118],
+        subjectGender: item[79],
+        subjectGender1: item[86],
+        subjectGender2: item[93],
+        subjectGender3: item[100],
+        subjectGender4: item[107],
+        subjectGender5: item[114],
+        subjectGender6: item[121],
+        subjectID: item[75],
+        subjectID1: item[82],
+        subjectID2: item[89],
+        subjectID3: item[96],
+        subjectID4: item[103],
+        subjectID5: item[110],
+        subjectID6: item[117],
+        subjectLastName: item[77],
+        subjectLastName1: item[84],
+        subjectLastName2: item[91],
+        subjectLastName3: item[98],
+        subjectLastName4: item[105],
+        subjectLastName5: item[112],
+        subjectLastName6: item[119],
+        subjectProhibitions: item[80],
+        subjectProhibitions1: item[87],
+        subjectProhibitions2: item[94],
+        subjectProhibitions3: item[101],
+        subjectProhibitions4: item[108],
+        subjectProhibitions5: item[115],
+        subjectProhibitions6: item[122],
+        summary: item[4],
+        theft: item[48],
+        typeOfOffence: item[33],
+        underageIntoxication: item[56],
+        unlicensedStreetTrading: item[54],
+        unlicensedTaxiCab: item[53],
+        vehicleDescriptions: item[10],
+        vehicleRegistrations: item[11],
+        verbalAbuse: item[49],
+        verbalAbuseInvolved: item[21],
+        violenceInvolved: item[20],
+        weaponInvolved: item[18],
+        workspaceName: item[0],
       }))
       .filter((item) => item.workspaceName !== 'Workspace Name')
       .filter((item) => item.workspaceName !== '');
@@ -548,20 +549,53 @@ const useDiscImport = (): Return => {
       assaultViolenceAffray: incidentsValue
         .map((incident) => incident.assaultViolenceAffray)
         .includes('Yes'),
-      beggingPersistent: incidentsValue
-        .map((incident) => incident.beggingPersistent)
+      attemptedTheft: incidentsValue
+        .map((incident) => incident.attemptedTheft)
         .includes('Yes'),
       begging: incidentsValue
         .map((incident) => incident.begging)
         .includes('Yes'),
+      beggingPersistent: incidentsValue
+        .map((incident) => incident.beggingPersistent)
+        .includes('Yes'),
+      beingOnPremisesWhilstBanned: incidentsValue
+        .map((incident) => incident.beingOnPremisesWhilstBanned)
+        .includes('Yes'),
+      breachOfBan: incidentsValue
+        .map((incident) => incident.breachOfBan)
+        .includes('Yes'),
+      breachOfSection35Order: incidentsValue
+        .map((incident) => incident.breachOfSection35Order)
+        .includes('Yes'),
+      breachPoliceBail: incidentsValue
+        .map((incident) => incident.breachPoliceBail)
+        .includes('Yes'),
+      covidRelated: incidentsValue
+        .map((incident) => incident.covidRelated)
+        .includes('Yes'),
       criminalDamageGraffitiVandalism: incidentsValue
         .map((incident) => incident.criminalDamageGraffitiVandalism)
         .includes('Yes'),
-      possessionWithIntentToSupplyDrugs: incidentsValue
-        .map((incident) => incident.possessionWithIntentToSupplyDrugs)
+      drunkenDisorderlyBehaviour: incidentsValue
+        .map((incident) => incident.drunkenDisorderlyBehaviour)
+        .includes('Yes'),
+      fareEvasion: incidentsValue
+        .map((incident) => incident.fareEvasion)
+        .includes('Yes'),
+      goingEquippedToSteal: incidentsValue
+        .map((incident) => incident.goingEquippedToSteal)
         .includes('Yes'),
       harassmentThreateningBehaviour: incidentsValue
         .map((incident) => incident.harassmentThreateningBehaviour)
+        .includes('Yes'),
+      hateCrime: incidentsValue
+        .map((incident) => incident.hateCrime)
+        .includes('Yes'),
+      illegalGambling: incidentsValue
+        .map((incident) => incident.illegalGambling)
+        .includes('Yes'),
+      inappropriateSexualContact: incidentsValue
+        .map((incident) => incident.inappropriateSexualContact)
         .includes('Yes'),
       joyRiding: incidentsValue
         .map((incident) => incident.joyRiding)
@@ -569,85 +603,21 @@ const useDiscImport = (): Return => {
       kerbCrawling: incidentsValue
         .map((incident) => incident.kerbCrawling)
         .includes('Yes'),
-      noiseNuisance: incidentsValue
-        .map((incident) => incident.noiseNuisance)
-        .includes('Yes'),
-      inappropriateSexualContact: incidentsValue
-        .map((incident) => incident.inappropriateSexualContact)
-        .includes('Yes'),
-      racialAbuse: incidentsValue
-        .map((incident) => incident.racialAbuse)
-        .includes('Yes'),
-      smokingUnderageOrInProhibitedArea: incidentsValue
-        .map((incident) => incident.smokingUnderageOrInProhibitedArea)
-        .includes('Yes'),
-      streetDrinking: incidentsValue
-        .map((incident) => incident.streetDrinking)
-        .includes('Yes'),
-      possessionOfDrugs: incidentsValue
-        .map((incident) => incident.possessionOfDrugs)
-        .includes('Yes'),
-      theft: incidentsValue.map((incident) => incident.theft).includes('Yes'),
-      verbalAbuse: incidentsValue
-        .map((incident) => incident.verbalAbuse)
-        .includes('Yes'),
-      beingOnPremisesWhilstBanned: incidentsValue
-        .map((incident) => incident.beingOnPremisesWhilstBanned)
-        .includes('Yes'),
-      breachOfSection35Order: incidentsValue
-        .map((incident) => incident.breachOfSection35Order)
-        .includes('Yes'),
-      other: incidentsValue.map((incident) => incident.other).includes('Yes'),
-      unlicensedTaxiCab: incidentsValue
-        .map((incident) => incident.unlicensedTaxiCab)
-        .includes('Yes'),
-      unlicensedStreetTrading: incidentsValue
-        .map((incident) => incident.unlicensedStreetTrading)
-        .includes('Yes'),
       misuseOfID: incidentsValue
         .map((incident) => incident.misuseOfID)
         .includes('Yes'),
-      underageIntoxication: incidentsValue
-        .map((incident) => incident.underageIntoxication)
+      noiseNuisance: incidentsValue
+        .map((incident) => incident.noiseNuisance)
         .includes('Yes'),
-      goingEquippedToSteal: incidentsValue
-        .map((incident) => incident.goingEquippedToSteal)
-        .includes('Yes'),
-      hateCrime: incidentsValue
-        .map((incident) => incident.hateCrime)
-        .includes('Yes'),
-      roughSleeping: incidentsValue
-        .map((incident) => incident.roughSleeping)
-        .includes('Yes'),
-      breachOfBan: incidentsValue
-        .map((incident) => incident.breachOfBan)
-        .includes('Yes'),
-      drunkenDisorderlyBehaviour: incidentsValue
-        .map((incident) => incident.drunkenDisorderlyBehaviour)
-        .includes('Yes'),
-      possessionOfAnOffensiveWeapon: incidentsValue
-        .map((incident) => incident.possessionOfAnOffensiveWeapon)
-        .includes('Yes'),
-      attemptedTheft: incidentsValue
-        .map((incident) => incident.attemptedTheft)
-        .includes('Yes'),
-      illegalGambling: incidentsValue
-        .map((incident) => incident.illegalGambling)
-        .includes('Yes'),
-      robbery: incidentsValue
-        .map((incident) => incident.robbery)
-        .includes('Yes'),
-      section35Issued: incidentsValue
-        .map((incident) => incident.section35Issued)
-        .includes('Yes'),
-      breachPoliceBail: incidentsValue
-        .map((incident) => incident.breachPoliceBail)
-        .includes('Yes'),
+      other: incidentsValue.map((incident) => incident.other).includes('Yes'),
       otherAlcoholDrugRelated: incidentsValue
         .map((incident) => incident.otherAlcoholDrugRelated)
         .includes('Yes'),
       otherAntiSocialBehaviour: incidentsValue
         .map((incident) => incident.otherAntiSocialBehaviour)
+        .includes('Yes'),
+      otherBreachBan: incidentsValue
+        .map((incident) => incident.otherBreachBan)
         .includes('Yes'),
       otherTheftFraud: incidentsValue
         .map((incident) => incident.otherTheftFraud)
@@ -655,14 +625,45 @@ const useDiscImport = (): Return => {
       otherViolentOffensiveBehaviour: incidentsValue
         .map((incident) => incident.otherViolentOffensiveBehaviour)
         .includes('Yes'),
-      otherBreachBan: incidentsValue
-        .map((incident) => incident.otherBreachBan)
+      possessionOfAnOffensiveWeapon: incidentsValue
+        .map((incident) => incident.possessionOfAnOffensiveWeapon)
         .includes('Yes'),
-      fareEvasion: incidentsValue
-        .map((incident) => incident.fareEvasion)
+      possessionOfDrugs: incidentsValue
+        .map((incident) => incident.possessionOfDrugs)
         .includes('Yes'),
-      covidRelated: incidentsValue
-        .map((incident) => incident.covidRelated)
+      possessionWithIntentToSupplyDrugs: incidentsValue
+        .map((incident) => incident.possessionWithIntentToSupplyDrugs)
+        .includes('Yes'),
+      racialAbuse: incidentsValue
+        .map((incident) => incident.racialAbuse)
+        .includes('Yes'),
+      robbery: incidentsValue
+        .map((incident) => incident.robbery)
+        .includes('Yes'),
+      roughSleeping: incidentsValue
+        .map((incident) => incident.roughSleeping)
+        .includes('Yes'),
+      section35Issued: incidentsValue
+        .map((incident) => incident.section35Issued)
+        .includes('Yes'),
+      smokingUnderageOrInProhibitedArea: incidentsValue
+        .map((incident) => incident.smokingUnderageOrInProhibitedArea)
+        .includes('Yes'),
+      streetDrinking: incidentsValue
+        .map((incident) => incident.streetDrinking)
+        .includes('Yes'),
+      theft: incidentsValue.map((incident) => incident.theft).includes('Yes'),
+      underageIntoxication: incidentsValue
+        .map((incident) => incident.underageIntoxication)
+        .includes('Yes'),
+      unlicensedStreetTrading: incidentsValue
+        .map((incident) => incident.unlicensedStreetTrading)
+        .includes('Yes'),
+      unlicensedTaxiCab: incidentsValue
+        .map((incident) => incident.unlicensedTaxiCab)
+        .includes('Yes'),
+      verbalAbuse: incidentsValue
+        .map((incident) => incident.verbalAbuse)
         .includes('Yes'),
     });
   };
@@ -670,10 +671,10 @@ const useDiscImport = (): Return => {
   const generateBusiness = (business: Business) =>
     new Promise<NewBusiness>((resolve) => {
       resolve({
-        id: uuidv4(),
-        name: business.name,
         building: '',
         county: '',
+        id: uuidv4(),
+        name: business.name,
         postcode: '',
         street: '',
         townCity: '',
@@ -725,44 +726,34 @@ const useDiscImport = (): Return => {
     const generateUser = (user: Member) =>
       new Promise<NewUser>((resolve) => {
         resolve({
-          id: uuidv4(),
           business: newBusinessData.find(
             (business) => business.name === user.organisation
           )?.id,
           email: user.email,
-          fullName: `${user.firstName} ${user.lastName}`,
-          groups: getUserGroups(user),
-          role: undefined,
-          lastLogin: user.lastSignedIn,
           existing:
             usersData?.listUsers.users.find((item) => item.email === user.email)
               ?.id || undefined,
+          fullName: `${user.firstName} ${user.lastName}`,
+          groups: getUserGroups(user),
+          id: uuidv4(),
+          lastLogin: user.lastSignedIn,
+          role: undefined,
         });
       });
 
-    const generateOffender = (offender: KnownSubject | IDSought) =>
+    const generateOffender = (offender: IDSought | KnownSubject) =>
       new Promise<NewOffender>((resolve) => {
         resolve({
-          id: uuidv4(),
-          discId: offender.id,
-          name:
-            `${offender.firstName}${
-              offender.lastName ? ` ${offender.lastName}` : ''
-            }` || 'Unidentified Offender',
-          images: images.filter((image) =>
-            image.fileName?.includes(offender.id)
-          ),
+          age: calcAge(offender.ageRange),
           alias: offender.nicknames.split(','),
+          build: calcBuild(offender.build),
+          comments: offender.comments,
           dateOfBirth: offender.dateOfBirth
             ? moment(offender.dateOfBirth)
             : undefined,
+          deletionDate: moment(offender.databaseDeletionDate),
+          discId: offender.id,
           gender: calcGender(offender.gender),
-          race: calcRace(offender.icCodes),
-          height: calcHeight(offender.height),
-          build: calcBuild(offender.build),
-          peculiarities: offender.distinguishingFeatures,
-          comments: offender.comments,
-          age: calcAge(offender.ageRange),
           groups: [
             ...new Set(
               ...(values.defaultGroup || ''),
@@ -778,8 +769,18 @@ const useDiscImport = (): Return => {
           ]
             .flat()
             .filter((item) => item !== ''),
-          deletionDate: moment(offender.databaseDeletionDate),
+          height: calcHeight(offender.height),
+          id: uuidv4(),
+          images: images.filter((image) =>
+            image.fileName?.includes(offender.id)
+          ),
+          name:
+            `${offender.firstName}${
+              offender.lastName ? ` ${offender.lastName}` : ''
+            }` || 'Unidentified Offender',
+          peculiarities: offender.distinguishingFeatures,
           postcode: offender.postcode,
+          race: calcRace(offender.icCodes),
           street: offender.address,
         });
       });
@@ -860,27 +861,12 @@ const useDiscImport = (): Return => {
           (user) => user.email === incident.memberEmail
         )?.id;
         resolve({
-          id: uuidv4(),
-          discId: incident.id,
-          date: moment(incident.dateTime),
-          description: incident.description
-            ?.replace(/(<([^>]+)>)/gi, '')
-            .replace('&nbsp;', ''),
-          subject: '',
-          time: moment(incident.dateTime),
-          policeInvolved: incident.policeContacted.includes('attended'),
-          policeRef: incident.policeReference,
-          policeReported: incident.policeContacted.includes('Yes'),
-          lostValue: Number(incident.lossValue),
-          recoveredValue: Number(incident.lossRecovered),
           building: '',
-          street: incident.address.replace(values.townCity, '') || 'London',
-          townCity: values.townCity,
+          business: newUserData.find(
+            (user) => user.email === incident.memberEmail
+          )?.business,
           county: '',
-          postcode: incident.postcode,
-          images: images.filter((image) =>
-            image.fileName?.includes(incident.subjectID)
-          ),
+          createdBy,
           crimeTypes: [
             ...new Set(
               [
@@ -966,6 +952,16 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
+          date: moment(incident.dateTime),
+          description: incident.description
+            ?.replace(/(<([^>]+)>)/gi, '')
+            .replace('&nbsp;', ''),
+          discId: incident.id,
+          groups: getIncidentGroups(incident, offendersIds, createdBy || ''),
+          id: uuidv4(),
+          images: images.filter((image) =>
+            image.fileName?.includes(incident.subjectID)
+          ),
           impactTypes: [
             ...new Set(
               [
@@ -1136,12 +1132,17 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
+          lostValue: Number(incident.lossValue),
           offenders: offendersIds,
-          business: newUserData.find(
-            (user) => user.email === incident.memberEmail
-          )?.business,
-          createdBy,
-          groups: getIncidentGroups(incident, offendersIds, createdBy || ''),
+          policeInvolved: incident.policeContacted.includes('attended'),
+          policeRef: incident.policeReference,
+          policeReported: incident.policeContacted.includes('Yes'),
+          postcode: incident.postcode,
+          recoveredValue: Number(incident.lossRecovered),
+          street: incident.address.replace(values.townCity, '') || 'London',
+          subject: '',
+          time: moment(incident.dateTime),
+          townCity: values.townCity,
         });
       });
 
@@ -1152,20 +1153,6 @@ const useDiscImport = (): Return => {
         )?.id;
 
         resolve({
-          id: uuidv4(),
-          discId: incident.id,
-          date: moment(incident.dateTime),
-          description: incident.description,
-          subject: '',
-          time: moment(incident.dateTime),
-          policeInvolved: incident.policeContacted.includes('attended'),
-          policeRef: incident.policeReference,
-          policeReported: incident.policeContacted.includes('Yes'),
-          lostValue: Number(incident.lossValue),
-          recoveredValue: Number(incident.lossRecovered),
-          street: incident.address || 'London',
-          postcode: incident.postcode,
-          groups: getIncidentGroups(incident, [], createdBy || ''),
           business: newUserData.find(
             (user) => user.email === incident.memberEmail
           )?.business,
@@ -1254,6 +1241,11 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
+          date: moment(incident.dateTime),
+          description: incident.description,
+          discId: incident.id,
+          groups: getIncidentGroups(incident, [], createdBy || ''),
+          id: uuidv4(),
           impactTypes: [
             ...new Set(
               [
@@ -1424,6 +1416,15 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
+          lostValue: Number(incident.lossValue),
+          policeInvolved: incident.policeContacted.includes('attended'),
+          policeRef: incident.policeReference,
+          policeReported: incident.policeContacted.includes('Yes'),
+          postcode: incident.postcode,
+          recoveredValue: Number(incident.lossRecovered),
+          street: incident.address || 'London',
+          subject: '',
+          time: moment(incident.dateTime),
         });
       });
 
@@ -1574,20 +1575,19 @@ const useDiscImport = (): Return => {
             create: business.existing
               ? undefined
               : {
+                  building: business.street,
+                  county: business.county,
                   importId: business.id,
                   name: business.name,
                   postcode: business.postcode,
                   street: business.street,
-                  building: business.street,
-                  county: business.county,
                   townCity: business.townCity,
                 },
           })),
-          historicIncidents: newHistoricIn cidents.map((incident) => ({
-            importId: incident.id,
+          historicIncidents: newHistoricIncidents.map((incident) => ({
             building: '',
-            county: '',
             business: incident.business ? { id: incident.business } : undefined,
+            county: '',
             crimeTypes: [
               ...incident.crimeTypes,
               ...incident.impactTypes,
@@ -1595,6 +1595,8 @@ const useDiscImport = (): Return => {
             ].map((id) => ({ id })),
             // TODO check
             date: moment(incident.date).toDate(),
+            groups: incident.groups.map((id) => ({ id })),
+            importId: incident.id,
             lostValue: incident.lostValue,
             policeInvolved: incident.policeInvolved,
             policeReported: incident.policeReported,
@@ -1604,7 +1606,6 @@ const useDiscImport = (): Return => {
             // TODO check
             time: moment(incident.time).toDate(),
             townCity: '',
-            groups: incident.groups.map((id) => ({ id })),
           })),
           images: images.map((image) => ({
             fileName: image.fileName,
@@ -1613,7 +1614,6 @@ const useDiscImport = (): Return => {
             url: image.url,
           })),
           incidents: newIncidents.map((incident) => ({
-            importId: incident.id,
             building: '',
             business: incident.business ? { id: incident.business } : undefined,
             county: '',
@@ -1630,6 +1630,7 @@ const useDiscImport = (): Return => {
             description: incident.description,
             groups: incident.groups.map((id) => ({ id })),
             images: incident.images.map(({ id }) => ({ id })),
+            importId: incident.id,
             lostValue: incident.lostValue,
             offenders: incident.offenders.map((id) => ({ id })),
             policeInvolved: incident.policeInvolved,
@@ -1644,8 +1645,6 @@ const useDiscImport = (): Return => {
           })),
           offenders: newOffenders
             .map((offender) => ({
-              importId: offender.id,
-              name: offender.name,
               age: offender.age,
               build: offender.build,
               comment: offender.comments,
@@ -1656,10 +1655,12 @@ const useDiscImport = (): Return => {
               groups: offender.groups.map((id) => ({ id })),
               height: offender.height,
               images: offender.images.map(({ id }) => ({ id })),
+              importId: offender.id,
+              name: offender.name,
               peculiarities: offender.peculiarities,
+              postcode: offender.postcode,
               race: offender.race,
               street: offender.street,
-              postcode: offender.postcode,
             }))
             .reverse(),
           scheme: {
@@ -1668,10 +1669,10 @@ const useDiscImport = (): Return => {
           users: newUsers.map((user) => ({
             connect: user.existing
               ? {
+                  groups: user.groups.map((id) => ({ id })),
                   id: user.existing,
                   importId: user.id,
                   role: user.role || Role.User,
-                  groups: user.groups.map((id) => ({ id })),
                 }
               : undefined,
             create: user.existing
@@ -1682,9 +1683,9 @@ const useDiscImport = (): Return => {
                   },
                   email: user.email,
                   fullName: user.fullName,
+                  groups: user.groups.map((id) => ({ id })),
                   importId: user.id,
                   role: user.role || Role.User,
-                  groups: user.groups.map((id) => ({ id })),
                 },
           })),
         },
@@ -1693,48 +1694,48 @@ const useDiscImport = (): Return => {
   };
 
   return {
-    knownSubjects,
-    onKnownSubjectFileLoaded,
-    onMembersFileLoaded,
-    onIDSoughtFileLoaded,
-    onIncidentFileLoaded,
-    members,
-    idSought,
-    incidents,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onGenerateData,
-    newBusinesses,
-    onDeleteNewBusiness,
-    newOffenders,
-    handleFileListChange,
+    activeTags,
+    areas,
+    currentStep,
     fileList,
-    images,
-    newUsers,
+    galleries,
+    generating,
     groupsData,
+    handleFileListChange,
+    idSought,
     idSoughtModalOpen,
     imageModalOpen,
+    images,
     incidentModalOpen,
+    incidents,
     knownSubjectModalOpen,
+    knownSubjects,
+    mappingForm,
     memberModalOpen,
+    members,
+    newBusinesses,
+    newIncidents,
+    newOffenders,
+    newUsers,
+    onDeleteNewBusiness,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onGenerateData,
+    onIDSoughtFileLoaded,
+    onIncidentFileLoaded,
+    onKnownSubjectFileLoaded,
+    onMembersFileLoaded,
+    onStepChange: setCurrentStep,
+    onSubmit,
+    onUpdateBusiness,
+    onUpdateIncident,
+    onUpdateOffender,
+    onUpdateUser,
+    tagData,
     toggleIdSoughtModal,
     toggleImageModal,
     toggleIncidentModal,
     toggleKnownSubjectModal,
     toggleMemberModal,
-    generating,
-    tagData,
-    newIncidents,
-    activeTags,
-    onSubmit,
-    onUpdateOffender,
-    onUpdateIncident,
-    onUpdateBusiness,
-    onUpdateUser,
-    mappingForm,
-    areas,
-    galleries,
-    currentStep,
-    onStepChange: setCurrentStep,
   };
 };
 

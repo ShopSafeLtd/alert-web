@@ -1,6 +1,6 @@
+import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import type React from 'react';
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
+import type { FullScreenHandle } from 'react-full-screen';
 import type {
   Edge,
   Node,
@@ -9,78 +9,78 @@ import type {
   OnNodesChange,
   ReactFlowInstance,
 } from 'reactflow';
-import { useReactFlow } from 'reactflow';
-import moment from 'moment/moment';
-import { useDebouncedCallback } from 'use-debounce';
-
 import type { YMap } from 'yjs/dist/src/internals';
-import { useUsers } from 'y-presence';
-import type { FullScreenHandle } from 'react-full-screen';
-import { useFullScreenHandle } from 'react-full-screen';
-import useObservableListener from './useObservableListener';
-import styles from '../style.module.css';
 
+import { useUpdateFlowMutation } from 'graphql/investigations/mutations/__generated__/update-flow.generated';
+import moment from 'moment/moment';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useFullScreenHandle } from 'react-full-screen';
+import { useReactFlow } from 'reactflow';
+import { useDebouncedCallback } from 'use-debounce';
+import { useUsers } from 'y-presence';
+
+import styles from '../style.module.css';
 import useDownloadImage from './useDownloadImage';
 import useGraphStateSynced from './useNodesEdgesStateSynced';
+import useObservableListener from './useObservableListener';
 import { useWebRtcContext } from './useWebRtcProvidor';
-import type { ViewInvestigationQuery } from 'graphql/investigations/queries/view-investigation.generated';
-import { useUpdateFlowMutation } from 'graphql/investigations/mutations/update-flow.generated';
 
 interface Return {
-  nodes: Node[];
-  onNodesChange: OnNodesChange;
-  edges: Edge[];
-  onEdgesChange: OnEdgesChange;
-  onConnect: OnConnect;
   clientCount: number;
+  downloadImage: () => void;
+  edges: Edge[];
+  flowScreen: FullScreenHandle;
+  handlePointMove: (e: React.PointerEvent) => void;
+  isFullScreen: boolean;
   isSynced: boolean;
-  setReactFlowInstance: (instance: ReactFlowInstance | null) => void;
-  savedWhen: string | null;
-  onSave: () => void;
-  onNodeClick: (event: React.MouseEvent, node: Node) => void;
+  loading: boolean;
+  nodes: Node[];
+  nodesMap: YMap<Node>;
+  offenders: {
+    name: string;
+    url: string[];
+  }[];
+  onConnect: OnConnect;
+  onDragOver: (event: DragEvent) => void;
   onDrop: (
     event: DragEvent,
     data?: {
       url?: string;
     }
   ) => void;
-  onDragOver: (event: DragEvent) => void;
-  wrapperRef: React.RefObject<HTMLDivElement>;
-  nodesMap: YMap<Node>;
-  loading: boolean;
-  offenders: {
-    name: string;
-    url: string[];
-  }[];
-  setSelected: (id: string) => void;
-  saving: boolean;
+  onEdgesChange: OnEdgesChange;
+  onNodeClick: (event: React.MouseEvent, node: Node) => void;
+  onNodesChange: OnNodesChange;
+  onSave: () => void;
+  reactFlowInstance: ReactFlowInstance | null;
 
+  savedWhen: null | string;
+  saving: boolean;
+  setFullScreen: () => void;
+  setReactFlowInstance: (instance: ReactFlowInstance | null) => void;
+  setSelected: (id: string) => void;
   // eslint-disable-next-line
   users: Map<number, { [p: string]: any }>;
-  handlePointMove: (e: React.PointerEvent) => void;
-  reactFlowInstance: ReactFlowInstance | null;
-  downloadImage: () => void;
-  flowScreen: FullScreenHandle;
-  isFullScreen: boolean;
-  setFullScreen: () => void;
+  wrapperRef: React.RefObject<HTMLDivElement>;
 }
 
 const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
 
 interface Props {
-  investigationId: string;
   importData: ViewInvestigationQuery | undefined;
+  investigationId: string;
 }
 
-const useFlow = ({ investigationId, importData }: Props): Return => {
+const useFlow = ({ importData, investigationId }: Props): Return => {
   const provider = useWebRtcContext();
 
   // const provider: WebsocketProvider = useWebRtcProvider(
   //   currentUser,
   //   investigationId
   // );
-  const [selected, setSelected] = useState<string | null>(null);
-  const [savedWhen, setSavedWhen] = useState<string | null>(
+  const [selected, setSelected] = useState<null | string>(null);
+  const [savedWhen, setSavedWhen] = useState<null | string>(
     importData?.investigation?.flows[0].updatedAt
       ? moment(importData?.investigation?.flows[0].updatedAt).fromNow()
       : null
@@ -90,7 +90,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   const nodesMap = provider.doc.getMap<Node>('nodes');
   const edgesMap = provider.doc.getMap<Edge>('edges');
   const [nodes, edges, onNodesChange, onEdgesChange, onConnect] =
-    useGraphStateSynced({ nodesMap, edgesMap });
+    useGraphStateSynced({ edgesMap, nodesMap });
   // const [edges, onEdgesChange, onConnect] = useEdgesStateSynced({ edgesMap });
   const [clientCount, setClientCount] = useState<number>(0);
   const [isSynced, setIsSynced] = useState<boolean>(false);
@@ -122,31 +122,31 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
 
       void updateFlow({
         variables: {
-          where: {
-            id: importData?.investigation?.flows[0].id || '',
-          },
           data: {
-            nodes: flow.nodes.map((node: Node) => ({
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              data: node.data,
-              id: node.id,
-              positionX: Math.round(node.position.x),
-              positionY: Math.round(node.position.y),
-              type: node.type || '',
-              height: node.height || 0,
-              width: node.width || 0,
-              positionAbX: Math.round(node.positionAbsolute?.x || 0),
-              positionAbY: Math.round(node.positionAbsolute?.y || 0),
-            })),
             edges: flow.edges.map((edge: Edge) => ({
               id: edge.id,
-              type: edge.type || '',
               markerEnd: edge.markerEnd || {},
               source: edge.source || '',
               sourceHandle: edge.sourceHandle || '',
               target: edge.target || '',
               targetHandle: edge.targetHandle || '',
+              type: edge.type || '',
             })),
+            nodes: flow.nodes.map((node: Node) => ({
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              data: node.data,
+              height: node.height || 0,
+              id: node.id,
+              positionAbX: Math.round(node.positionAbsolute?.x || 0),
+              positionAbY: Math.round(node.positionAbsolute?.y || 0),
+              positionX: Math.round(node.position.x),
+              positionY: Math.round(node.position.y),
+              type: node.type || '',
+              width: node.width || 0,
+            })),
+          },
+          where: {
+            id: importData?.investigation?.flows[0].id || '',
           },
         },
       });
@@ -207,17 +207,17 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
             for (const edge of initData.edges) {
               const newEdge = {
                 ...edge,
-                style: {
-                  stroke: 'red',
-                  color: 'red',
-                  strokeWidth: 2,
-                },
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 markerEnd: {
                   // eslint-disable-next-line
                   // @ts-ignore
                   ...edge.markerEnd,
                   color: 'red',
+                },
+                style: {
+                  color: 'red',
+                  stroke: 'red',
+                  strokeWidth: 2,
                 },
               };
               console.log(newEdge);
@@ -314,67 +314,67 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
       const id = getId();
       if (type === 'offenderDetailsNode') {
         const newNode: Node = {
-          id,
-          type,
-          position,
+          data: {
+            id,
+            imageUrl: selected,
+            label: `${type}`,
+            onChange,
+            text: '',
+          },
           height: 550,
-          width: 290,
+          id,
+          position,
           style: {
             height: 550,
             width: 290,
           },
+          type,
+          width: 290,
           zIndex: 1,
-          data: {
-            label: `${type}`,
-            id,
-            onChange,
-            imageUrl: selected,
-            text: '',
-          },
         };
         setSelected(null);
         nodesMap.set(newNode.id, newNode);
       } else if (type === 'incidentDetailsNode') {
         const newNode: Node = {
-          id,
-          type,
-          position,
+          data: {
+            id,
+            imageUrl: selected,
+            label: `${type}`,
+            onChange,
+            text: '',
+          },
           height: 350,
-          width: 290,
+          id,
+          position,
           style: {
             height: 350,
             width: 290,
           },
+          type,
+          width: 290,
           zIndex: 1,
-          data: {
-            label: `${type}`,
-            id,
-            onChange,
-            imageUrl: selected,
-            text: '',
-          },
         };
         setSelected(null);
         nodesMap.set(newNode.id, newNode);
       } else {
         const newNode: Node = {
-          id,
-          type,
-          position,
+          data: {
+            id,
+            imageUrl: selected,
+            label: `${type}`,
+            onChange,
+            text: '',
+          },
           height: 200,
-          width: 200,
+          id,
+          position,
           style: {
             height: 200,
             width: 200,
           },
+          type,
+          width: 200,
           zIndex: 1,
-          data: {
-            label: `${type}`,
-            id,
-            onChange,
-            imageUrl: selected,
-            text: '',
-          },
         };
         setSelected(null);
         nodesMap.set(newNode.id, newNode);
@@ -473,32 +473,32 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   ]);
 
   return {
-    nodes,
-    onNodesChange,
-    edges,
-    onEdgesChange,
-    onConnect,
     clientCount,
-    isSynced,
-    reactFlowInstance,
-    setReactFlowInstance,
-    savedWhen,
-    onSave,
-    onNodeClick,
-    onDrop,
-    onDragOver,
-    wrapperRef,
-    nodesMap,
-    loading,
-    offenders,
-    setSelected,
-    saving,
-    users,
-    handlePointMove,
     downloadImage,
+    edges,
     flowScreen,
+    handlePointMove,
     isFullScreen,
+    isSynced,
+    loading,
+    nodes,
+    nodesMap,
+    offenders,
+    onConnect,
+    onDragOver,
+    onDrop,
+    onEdgesChange,
+    onNodeClick,
+    onNodesChange,
+    onSave,
+    reactFlowInstance,
+    savedWhen,
+    saving,
     setFullScreen,
+    setReactFlowInstance,
+    setSelected,
+    users,
+    wrapperRef,
   };
 };
 

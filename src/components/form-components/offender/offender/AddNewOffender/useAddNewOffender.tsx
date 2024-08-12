@@ -4,13 +4,13 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   SearchOffendersQuery,
   SearchOffendersQueryVariables,
-} from 'graphql/offenders/queries/search-offenders.generated';
+} from 'graphql/offenders/queries/__generated__/search-offenders.generated';
 import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
 import type { Image, OffenderData } from 'types/DataType';
 
 import { useApolloClient } from '@apollo/client';
 import { Form, message } from 'antd';
-import { SearchOffendersDocument } from 'graphql/offenders/queries/search-offenders.generated';
+import { SearchOffendersDocument } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import update from 'immutability-helper';
 import React, { useState } from 'react';

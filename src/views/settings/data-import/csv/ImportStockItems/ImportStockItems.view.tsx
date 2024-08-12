@@ -1,19 +1,19 @@
+import { Button, Card, Col, Row, Table, Typography, notification } from 'antd';
+import { useStockItemImportMutation } from 'graphql/imports/__generated__/import-stock-items.generated';
 import React, { useState } from 'react';
-import { Typography, Row, Col, Table, Card, Button, notification } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
 import CSVReader from 'react-csv-reader';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useStoreState } from 'state';
-import { useStockItemImportMutation } from 'graphql/imports/import-stock-items.generated';
 
 export type CSVData = string[][];
 
 interface StockItem {
-  name: string;
-  brand: string;
-  sku: string;
   barcode: string;
+  brand: string;
   costPrice: string;
   division: string;
+  name: string;
+  sku: string;
 }
 
 const ImportStockItems = () => {
@@ -28,10 +28,10 @@ const ImportStockItems = () => {
         .map((value) => ({
           barcode: value[0],
           brand: value[1],
+          costPrice: value[5],
+          division: value[4],
           name: value[2],
           sku: value[3],
-          division: value[4],
-          costPrice: value[5],
         }))
         .filter((_, i) => i !== 0)
     );
@@ -65,19 +65,19 @@ const ImportStockItems = () => {
         data: stockItems.map((item) => ({
           barcode: item.barcode,
           brand: item.brand,
-          division: item.division,
-          sku: item.sku,
-          name: item.name,
           costPriceLocal: item.costPrice,
           costPriceStandard: item.costPrice,
+          division: item.division,
           goodsType: {
             id: 'clewopn4m000ipio8o3hcrhn8',
           },
+          name: item.name,
           salesPriceLocal: '',
+          salesPriceStandard: '',
           scheme: {
             id: schemeId,
           },
-          salesPriceStandard: '',
+          sku: item.sku,
         })),
       },
     });
@@ -100,66 +100,66 @@ const ImportStockItems = () => {
       </Row>
       <Card>
         <Table
-          dataSource={stockItems}
-          size="small"
           columns={[
             {
+              dataIndex: 'name',
+              key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
               }),
-              key: 'name',
-              dataIndex: 'name',
             },
             {
+              dataIndex: 'brand',
+              key: 'brand',
               title: intl.formatMessage({
                 defaultMessage: 'Brand',
               }),
-              key: 'brand',
-              dataIndex: 'brand',
             },
             {
+              dataIndex: 'sku',
               key: 'sku',
               title: intl.formatMessage({
                 defaultMessage: 'SKU',
               }),
-              dataIndex: 'sku',
             },
             {
+              dataIndex: 'barcode',
               key: 'barcode',
               title: intl.formatMessage({
                 defaultMessage: 'Barcode',
               }),
-              dataIndex: 'barcode',
             },
             {
+              dataIndex: 'costPrice',
               key: 'costPrice',
               title: intl.formatMessage({
                 defaultMessage: 'Cost Price',
               }),
-              dataIndex: 'costPrice',
             },
             {
+              dataIndex: 'salePrice',
               key: 'salePrice',
               title: intl.formatMessage({
                 defaultMessage: 'Sale Price',
               }),
-              dataIndex: 'salePrice',
             },
             {
+              dataIndex: 'division',
               key: 'division',
               title: intl.formatMessage({
                 defaultMessage: 'Division',
               }),
-              dataIndex: 'division',
             },
           ]}
+          dataSource={stockItems}
+          size="small"
         />
       </Card>
       <Row justify="end">
         <Col>
           <Button
-            loading={saving}
             disabled={saving}
+            loading={saving}
             onClick={onSubmit}
             type="primary"
           >

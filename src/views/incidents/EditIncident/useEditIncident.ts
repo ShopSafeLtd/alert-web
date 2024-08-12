@@ -111,6 +111,7 @@ interface ImagePayload extends UploadFile {
   }[];
   optimised?: null | string;
 }
+
 interface VehicleType extends VehicleData {
   deleted: boolean;
   edited: boolean;
@@ -281,7 +282,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const { groups, groupsLoading } = useGroupsContext();
 
   useEffect(() => {
-    if (groups)
+    if (groups) {
       setIncidentsState({
         order,
         pagination,
@@ -290,6 +291,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           groups: groups.map((group) => group.value),
         },
       });
+    }
   }, [groups]);
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
@@ -652,7 +654,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     const file = fileList.find(({ uid }) => uid === data.image.uid);
     const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
     // update the file object in the array with the new value, update will replace value in same place in array
-    if (file)
+    if (file) {
       setFileList(
         update(fileList, {
           [fileIndex]: {
@@ -666,6 +668,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           },
         })
       );
+    }
 
     if (offendersData) {
       // find index of file in fileList array
@@ -673,7 +676,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         .map(({ id }) => id)
         .indexOf(data.offenderId);
       const offender = offendersData.find(({ id }) => data.offenderId === id);
-      if (offender?.images)
+      if (offender?.images) {
         setOffendersData(
           update(offendersData, {
             [offenderIndex]: {
@@ -686,6 +689,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             },
           })
         );
+      }
     }
   };
   const isOffenderData = (
@@ -705,15 +709,17 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           ?.offenders?.map(({ id }) => id) || [];
       const updatedOffenders = offendersData
         .map((offender) => {
-          if (changedOffendersIds.has(offender.id))
+          if (changedOffendersIds.has(offender.id)) {
             return data.offenders.find(({ id }) => id === offender.id);
-          if (originalImageOffendersIds.includes(offender.id))
+          }
+          if (originalImageOffendersIds.includes(offender.id)) {
             return {
               ...offender,
               images: offender.images?.filter(
                 ({ id }) => id !== data.image.uid
               ),
             };
+          }
           return offender;
         })
         // @ts-expect-error type mismatch
