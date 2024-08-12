@@ -15,7 +15,9 @@ const GroupList = lazy(() => import('views/settings/groups/GroupList'));
 const ViewGroup = lazy(() => import('views/settings/groups/GroupDetail'));
 const ChatGroupsList = lazy(() => import('views/settings/chats/ChatList'));
 const ViewChatGroup = lazy(() => import('views/settings/chats/ChatDetail'));
-const SchemeDetails = lazy(() => import('views/settings/schemes/SchemeDetail'));
+const SchemeDetails = lazy(
+  () => import('views/settings/schemes/SchemeDetail/SchemeDetail.container')
+);
 const OffenderWarnings = lazy(
   () => import('views/settings/tags/OffenderWarning')
 );
@@ -69,9 +71,6 @@ const MySafety = lazy(
 );
 const IntelOne = lazy(
   () => import('../../../views/settings/data-import/intel-one/IntelOne.view')
-);
-const PermissionCheckWrapper = lazy(
-  () => import('../../../components/PermissionCheck/PermissionCheckWrapper')
 );
 const DashboardManagement = lazy(
   () => import('../dashboard-management/router')

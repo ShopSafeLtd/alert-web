@@ -1,84 +1,87 @@
-import React, { useMemo, useState } from 'react';
+import type { IntlShape } from 'react-intl';
+
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
+import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
+import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
+import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
+import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Badge,
   Button,
   Col,
   Drawer,
+  Form,
   Row,
   Select,
   Typography,
-  Form,
 } from 'antd';
-import { Page } from 'components/shared-components/AntD/Page/Page';
-import RGL, { WidthProvider } from 'react-grid-layout';
 import { margin, rowHeight } from 'components/reports/utils/utils';
+import { Page } from 'components/shared-components/AntD/Page/Page';
+import React, { useMemo, useState } from 'react';
+import RGL, { WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
-import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
-import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
-import BusinessReport from './layout/BusinessReportLayout';
+import 'react-resizable/css/styles.css';
+import { useParams } from 'react-router-dom';
+
 import type { Return as Props } from './hooks/types';
+
 import AddLogo from '../../../../components/reports/addLogo';
 import SaveAs from '../../../../components/reports/saveAs';
 import { LayoutToReadable } from '../../types';
-import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import { useParams } from 'react-router-dom';
-import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import ReportToolbar from '#/components/reports/ReportToolbar/ReportToolbar.view';
-import ComponentList from '#/components/reports/ComponentList/ComponentList.view';
+import BusinessReport from './layout/BusinessReportLayout';
 
 const { Title } = Typography;
 
-type FilterProps = Pick<
+type FilterProps = {
+  intl: IntlShape;
+} & Pick<
   Props,
-  | 'setDateRange'
   | 'dateRange'
+  | 'filterCount'
   | 'groups'
-  | 'setSelectedGroups'
   | 'groupsLoading'
   | 'selectedGroups'
+  | 'setDateRange'
+  | 'setSelectedGroups'
   | 'toggleFiltersOpen'
-  | 'filterCount'
-> & {
-  intl: IntlShape;
-};
+>;
 
 const FilterOptions = ({
-  setDateRange,
-  groups,
-  setSelectedGroups,
-  selectedGroups,
-  intl,
   filterCount,
+  groups,
+  intl,
+  selectedGroups,
+  setDateRange,
+  setSelectedGroups,
   toggleFiltersOpen,
 }: FilterProps) => (
   <Row className="no-print" gutter={10}>
     <Col span={6}>
       <GroupsSelect
-        placeholder={intl.formatMessage({
-          defaultMessage: 'Select Groups',
-        })}
-        mode="multiple"
+        defaultValue={groups.map((group) => group.value)}
         maxTagCount="responsive"
+        mode="multiple"
         onChange={(value) => {
           setSelectedGroups(value || []);
         }}
-        value={selectedGroups}
-        defaultValue={groups.map((group) => group.value)}
+        placeholder={intl.formatMessage({
+          defaultMessage: 'Select Groups',
+        })}
         style={{ width: '100%' }}
+        value={selectedGroups}
       />
     </Col>
     <Col>
-      <DateSelect onChange={setDateRange} defaultRange="last30Days" />
+      <DateSelect defaultRange="last30Days" onChange={setDateRange} />
     </Col>
     <Col>
       <Button onClick={toggleFiltersOpen}>
         <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
-        <Badge count={filterCount} showZero={false} offset={[8, 0]}>
+        <Badge count={filterCount} offset={[8, 0]} showZero={false}>
           {intl.formatMessage({
             defaultMessage: 'More Filters',
           })}
@@ -89,47 +92,47 @@ const FilterOptions = ({
 );
 
 const BusinessReportView = ({
-  removeItem,
-  changeSize,
-  minDrawer,
-  setMinDrawer,
-  layout,
-  setLayout,
-  data,
-  loading,
-  setDateRange,
-  dateRange,
-  groups,
-  setSelectedGroups,
-  groupsLoading,
-  selectedGroups,
-  componentRef,
-  handlePrint,
-  isPrinting,
-  editMode,
-  setEditMode,
-  incidentsTableData,
-  targetedGoodsData,
-  crimeGroups,
-  setSelectedCrimeGroups,
-  selectedCrimeGroups,
-  offenders,
-  setSelectedOffenders,
-  selectedOffenders,
-  businessName,
   addLogo,
   addLogoDrawer,
+  businessName,
+  changeSize,
+  componentRef,
+  crimeGroups,
+  data,
+  dateRange,
+  editMode,
+  filterCount,
+  filtersOpen,
+  groups,
+  groupsLoading,
+  handlePrint,
+  incidentsTableData,
+  isPrinting,
+  layout,
+  loading,
   logos,
   metadata,
+  minDrawer,
+  offenders,
+  removeItem,
   removeLogo,
   saveAsDrawer,
   saveTemplate,
-  setMetadata,
+  selectedCrimeGroups,
+  selectedGroups,
+  selectedOffenders,
   setAddLogoDrawer,
+  setDateRange,
+  setEditMode,
+  setLayout,
+  setMetadata,
+  setMinDrawer,
   setSaveAsDrawer,
-  filterCount,
+  setSelectedCrimeGroups,
+  setSelectedGroups,
+  setSelectedOffenders,
+  targetedGoodsData,
   toggleFiltersOpen,
-  filtersOpen,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const [collapsed, setCollapsed] = useState(false);
@@ -140,8 +143,8 @@ const BusinessReportView = ({
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
-          selectedId={reportId ?? ''}
           collapsed={collapsed}
+          selectedId={reportId ?? ''}
           setCollapsed={setCollapsed}
         />
       </Col>
@@ -150,70 +153,70 @@ const BusinessReportView = ({
           <Row
             className="no-print"
             style={{
-              position: 'absolute',
+              alignItems: 'center',
               display: 'flex',
               justifyContent: 'flex-end',
-              alignItems: 'center',
-              top: 20,
               left: 20,
+              position: 'absolute',
               right: 20,
+              top: 20,
               zIndex: 1000,
             }}
           >
             <Col flex={1}>
               <FilterOptions
-                groups={groups}
-                intl={intl}
-                setSelectedGroups={setSelectedGroups}
-                selectedGroups={selectedGroups}
                 dateRange={dateRange}
-                setDateRange={setDateRange}
-                groupsLoading={groupsLoading}
-                toggleFiltersOpen={toggleFiltersOpen}
                 filterCount={filterCount}
+                groups={groups}
+                groupsLoading={groupsLoading}
+                intl={intl}
+                selectedGroups={selectedGroups}
+                setDateRange={setDateRange}
+                setSelectedGroups={setSelectedGroups}
+                toggleFiltersOpen={toggleFiltersOpen}
               />
             </Col>
             <Col>
               <ReportToolbar
-                handlePrint={handlePrint}
-                setMinDrawer={setMinDrawer}
                 editMode={editMode}
+                handlePrint={handlePrint}
                 minDrawer={minDrawer}
                 saveTemplate={saveTemplate}
                 setEditMode={setEditMode}
+                setMinDrawer={setMinDrawer}
                 setSaveAsDrawer={setSaveAsDrawer}
               />
             </Col>
           </Row>
           {editMode ? (
-            <div style={{ paddingTop: 60 }} className="print-page">
+            <div className="print-page" style={{ paddingTop: 60 }}>
               <div className="logo">
                 {metadata
                   ?.find((item) => item.key === 'logo')
                   ?.urls?.map((url, _i, array) => (
                     <>
                       <Button
-                        type="text"
                         className="no-print"
                         hidden={!editMode}
                         icon={
                           <FontAwesomeIcon
-                            icon={faTrash}
                             color="red"
+                            icon={faTrash}
                             size="lg"
                           />
                         }
                         onClick={() => removeLogo(_i)}
+                        type="text"
                       />
                       <img
-                        style={{
-                          height: '100%',
-                          width: '25 %',
-                          marginRight: array.length - 1 === _i ? 0 : 10,
-                        }}
-                        src={url || ''}
                         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                         alt="logo"
+                        src={url || ''}
+                        style={{
+                          height: '100%',
+                          marginRight: array.length - 1 === _i ? 0 : 10,
+                          width: '25 %',
+                        }}
                       />
                     </>
                   ))}
@@ -221,15 +224,15 @@ const BusinessReportView = ({
                   className="no-print"
                   hidden={!editMode}
                   onClick={() => setAddLogoDrawer(true)}
-                  type="primary"
                   style={{ marginLeft: 10 }}
+                  type="primary"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Logo',
                   })}
                 </Button>
               </div>
-              <Title level={2} className="print-title">
+              <Title className="print-title" level={2}>
                 {intl.formatMessage(
                   {
                     defaultMessage:
@@ -237,39 +240,39 @@ const BusinessReportView = ({
                   },
                   {
                     businessName,
-                    startDate: dateRange.startDate.toLocaleDateString(),
-                    endDate: dateRange.endDate.toLocaleDateString(),
+                    endDate: dateRange?.endDate.toLocaleDateString(),
+                    startDate: dateRange?.startDate.toLocaleDateString(),
                   }
                 )}
               </Title>
               <div className="print-container">
                 <div className="print-body">
                   <ReactGridLayout
-                    layout={layout}
+                    autoSize
                     cols={2}
-                    rowHeight={rowHeight}
-                    width={400}
                     isDraggable={editMode}
                     isResizable={editMode}
-                    autoSize
+                    layout={layout}
                     margin={margin}
                     onLayoutChange={(newLayout) => setLayout(newLayout)}
+                    rowHeight={rowHeight}
                     useCSSTransforms={!isPrinting}
+                    width={400}
                   >
                     {...BusinessReport({
-                      data,
-                      loading,
-                      targetedGoodsData,
-                      removeItem,
-                      layout,
-                      margin,
-                      rowHeight,
-                      editMode,
                       changeSize,
-                      isPrinting,
+                      data,
+                      editMode,
                       incidentsTableData,
+                      isPrinting,
+                      layout,
+                      loading,
+                      margin,
                       metadata,
+                      removeItem,
+                      rowHeight,
                       setMetadata,
+                      targetedGoodsData,
                     })}
                   </ReactGridLayout>
                 </div>
@@ -279,6 +282,22 @@ const BusinessReportView = ({
             <div>
               <GeneratePrintPage
                 componentRef={componentRef}
+                elements={BusinessReport({
+                  changeSize,
+                  data,
+                  editMode,
+                  incidentsTableData,
+                  isPrinting,
+                  layout,
+                  loading,
+                  margin,
+                  metadata,
+                  removeItem,
+                  rowHeight,
+                  setMetadata,
+                  targetedGoodsData,
+                })}
+                layout={layout}
                 logo={
                   <>
                     <div className="logo">
@@ -287,27 +306,27 @@ const BusinessReportView = ({
                         ?.urls?.map((url, _i, array) => (
                           <>
                             <Button
-                              type="text"
                               className="no-print"
                               hidden={!editMode}
                               icon={
                                 <FontAwesomeIcon
-                                  icon={faTrash}
                                   color="red"
+                                  icon={faTrash}
                                   size="lg"
                                 />
                               }
                               onClick={() => removeLogo(_i)}
+                              type="text"
                             />
                             <img
-                              style={{
-                                height: '100%',
-                                width: '25 %',
-                                marginRight: array.length - 1 === _i ? 0 : 10,
-                              }}
-                              src={url || ''}
                               // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                               alt="logo"
+                              src={url || ''}
+                              style={{
+                                height: '100%',
+                                marginRight: array.length - 1 === _i ? 0 : 10,
+                                width: '25 %',
+                              }}
                             />
                           </>
                         ))}
@@ -315,7 +334,7 @@ const BusinessReportView = ({
                   </>
                 }
                 title={
-                  <Title level={2} className="print-title">
+                  <Title className="print-title" level={2}>
                     {intl.formatMessage(
                       {
                         defaultMessage:
@@ -323,38 +342,22 @@ const BusinessReportView = ({
                       },
                       {
                         businessName,
-                        startDate: dateRange.startDate.toLocaleDateString(),
-                        endDate: dateRange.endDate.toLocaleDateString(),
+                        endDate: dateRange?.endDate.toLocaleDateString(),
+                        startDate: dateRange?.startDate.toLocaleDateString(),
                       }
                     )}
                   </Title>
                 }
-                elements={BusinessReport({
-                  data,
-                  loading,
-                  targetedGoodsData,
-                  removeItem,
-                  layout,
-                  margin,
-                  rowHeight,
-                  editMode,
-                  changeSize,
-                  isPrinting,
-                  incidentsTableData,
-                  metadata,
-                  setMetadata,
-                })}
-                layout={layout}
               />
             </div>
           )}
 
           <Drawer
+            onClose={toggleFiltersOpen}
+            open={filtersOpen}
             title={intl.formatMessage({
               defaultMessage: 'Filters',
             })}
-            open={filtersOpen}
-            onClose={toggleFiltersOpen}
           >
             <Form layout="vertical">
               <Form.Item
@@ -363,21 +366,21 @@ const BusinessReportView = ({
                 })}
               >
                 <Select
-                  placeholder={intl.formatMessage({
-                    defaultMessage: 'Select Offenders',
-                  })}
-                  mode="multiple"
                   maxTagCount="responsive"
+                  mode="multiple"
                   onChange={(value) => {
                     setSelectedOffenders(value || []);
                   }}
-                  value={selectedOffenders}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Offenders',
+                  })}
                   style={{ width: '100%' }}
+                  value={selectedOffenders}
                 >
                   {offenders?.map((offender) => (
                     <Select.Option
-                      loading={groupsLoading}
                       key={offender.value}
+                      loading={groupsLoading}
                       value={offender.value}
                     >
                       {offender.label}
@@ -391,23 +394,23 @@ const BusinessReportView = ({
                 })}
               >
                 <Select
-                  placeholder={intl.formatMessage({
-                    defaultMessage: 'Select Crime Groups',
-                  })}
-                  mode="multiple"
                   allowClear
+                  defaultValue={crimeGroups.map((group) => group.value)}
                   maxTagCount="responsive"
+                  mode="multiple"
                   onChange={(value) => {
                     setSelectedCrimeGroups(value || []);
                   }}
-                  value={selectedCrimeGroups}
-                  defaultValue={crimeGroups.map((group) => group.value)}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Crime Groups',
+                  })}
                   style={{ width: '100%' }}
+                  value={selectedCrimeGroups}
                 >
                   {crimeGroups?.map((group) => (
                     <Select.Option
-                      loading={groupsLoading}
                       key={group.value}
+                      loading={groupsLoading}
                       value={group.value}
                     >
                       {group.label}
@@ -419,15 +422,15 @@ const BusinessReportView = ({
           </Drawer>
 
           <Drawer
+            bodyStyle={{ padding: 0 }}
+            closable
+            onClose={() => setMinDrawer(!minDrawer)}
+            open={editMode && minDrawer}
+            placement="right"
             title={intl.formatMessage({
               defaultMessage: 'Components available to add',
             })}
-            placement="right"
-            closable
-            open={editMode && minDrawer}
             width={600}
-            onClose={() => setMinDrawer(!minDrawer)}
-            bodyStyle={{ padding: 0 }}
           >
             <ComponentList
               components={LayoutToReadable.filter(
@@ -436,7 +439,9 @@ const BusinessReportView = ({
               )
                 .filter(({ reportViews }) => reportViews.includes('business'))
                 .map((item) => ({
+                  description: item.description,
                   key: item.i,
+                  name: item.readable,
                   onAdd: () => {
                     setLayout([
                       ...layout,
@@ -456,22 +461,20 @@ const BusinessReportView = ({
                       { key: item.i, type: item.reportItemTypes[0] },
                     ]);
                   },
-                  description: item.description,
-                  name: item.readable,
                   reportItemTypes: item.reportItemTypes,
                 }))}
             />
           </Drawer>
           <Drawer
+            closable
+            destroyOnClose
+            onClose={() => setAddLogoDrawer(!addLogoDrawer)}
+            open={editMode && addLogoDrawer}
+            placement="right"
             title={intl.formatMessage({
               defaultMessage: 'Add Logo',
             })}
-            placement="right"
-            closable
-            open={editMode && addLogoDrawer}
             width={700}
-            onClose={() => setAddLogoDrawer(!addLogoDrawer)}
-            destroyOnClose
           >
             <AddLogo
               logos={logos}
@@ -480,20 +483,20 @@ const BusinessReportView = ({
             />
           </Drawer>
           <Drawer
+            closable
+            destroyOnClose
+            onClose={() => setSaveAsDrawer(false)}
+            open={saveAsDrawer}
+            placement="right"
             title={intl.formatMessage({
               defaultMessage: 'Save As',
             })}
-            placement="right"
-            closable
-            open={saveAsDrawer}
             width={700}
-            onClose={() => setSaveAsDrawer(false)}
-            destroyOnClose
           >
             <div>
               <SaveAs
-                onSubmit={saveTemplate}
                 onClose={() => setSaveAsDrawer(false)}
+                onSubmit={saveTemplate}
               />
             </div>
           </Drawer>

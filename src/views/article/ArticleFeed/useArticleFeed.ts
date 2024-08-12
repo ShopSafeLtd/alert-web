@@ -86,13 +86,13 @@ const useArticleFeed = (): Return => {
   });
 
   const variables: ListArticlesFeedQueryVariables = {
+    first: 12,
     order: {
       updatedAt: order,
     },
     scheme: {
       id: schemeId,
     },
-    take: 12,
     where: {
       OR: [
         {

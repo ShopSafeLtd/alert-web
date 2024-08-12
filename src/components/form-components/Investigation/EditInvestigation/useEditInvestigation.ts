@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
 import type { InvestigationDetails } from 'types/DataType';
-import { useUpdateInvestigationDetailsMutation } from 'graphql/investigations/mutations/update/update-investigation-details.generated';
+
+import { notification } from 'antd';
+import { useUpdateInvestigationDetailsMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-details.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
-  onClose: () => void;
   investigationData: InvestigationDetails;
+  onClose: () => void;
 }
 
 interface Return {
@@ -16,13 +17,13 @@ interface Return {
 }
 
 export interface InvestigationData {
-  id?: string;
-  name?: string;
   description?: string;
   groupIds?: string[];
+  id?: string;
+  name?: string;
 }
 
-const useAddInvestigation = ({ onClose, investigationData }: Props): Return => {
+const useAddInvestigation = ({ investigationData, onClose }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
   const [updateInvestigation] = useUpdateInvestigationDetailsMutation({
@@ -30,12 +31,12 @@ const useAddInvestigation = ({ onClose, investigationData }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The details of this investigation has been updated! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -60,13 +61,13 @@ const useAddInvestigation = ({ onClose, investigationData }: Props): Return => {
 
     void updateInvestigation({
       variables: {
-        where: { id: investigationData.id },
         data: {
-          name: data.name || '',
           description: data.description,
           groupIds: addedGroupIds,
           groupIdsToRemove: removedGroupIds,
+          name: data.name || '',
         },
+        where: { id: investigationData.id },
       },
     });
   };

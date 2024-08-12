@@ -1,5 +1,4 @@
 import type { TotalUserSessionsGraphQueryVariables } from '#/components/reports/components/UserSessionsGraph/__generated__/TotalUserSessionsGraph.generated';
-import type { Props } from 'react';
 
 import { useTotalUserSessionsGraphQuery } from '#/components/reports/components/UserSessionsGraph/__generated__/TotalUserSessionsGraph.generated';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';

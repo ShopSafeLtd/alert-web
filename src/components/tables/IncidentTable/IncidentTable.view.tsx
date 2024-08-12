@@ -5,7 +5,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
-import { Role } from 'graphql/generated';
+import { Role } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';

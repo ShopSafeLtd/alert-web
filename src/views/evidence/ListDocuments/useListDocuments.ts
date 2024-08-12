@@ -12,7 +12,12 @@ import {
 } from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
 import { type TableProps, notification } from 'antd';
 import { useDeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
-import { PermissionMethod, PermissionModel, QueryMode } from 'graphql/types';
+import {
+  DocumentType,
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+} from 'graphql/types';
 import { useMemo, useState } from 'react';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';

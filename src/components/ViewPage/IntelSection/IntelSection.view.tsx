@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Dropdown, Menu, Popover, Row } from 'antd';
 import { UpdateType } from 'graphql/types';
 import moment from 'moment';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';

@@ -1,130 +1,129 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
-
+import type { FormInstance } from 'antd';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import type {
   Age,
   BanType,
   Build,
   Gender,
-  Race,
   OffenderUpdateInput,
+  Race,
 } from 'graphql/types';
-import { Model, Role } from 'graphql/types';
-import type { FormInstance } from 'antd';
-import { Form, message, Modal, notification, Upload } from 'antd';
-import { useStoreActions, useStoreState } from 'state';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-import { useNavigate } from 'react-router';
-import errorNotification from 'types/mutation_notifications/error_notification';
 import type { TagData } from 'types/DataType';
-import { useIntl } from 'react-intl';
+
 import { useGroupsContext } from '#/context/groups-context';
-import { useTagsQuery } from 'graphql/tags/queries/tags.generated';
-import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/update-offender.generated';
-import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
-import { useViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
-import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/recycle-offender.generated';
+import { Form, Modal, Upload, message, notification } from 'antd';
+import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
+import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-offender.generated';
+import { useViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, Role } from 'graphql/types';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
+import { useStoreActions, useStoreState } from 'state';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface OffenderData {
-  id: string;
-  name?: string | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
+  approved?: boolean | null;
   build?: Build | null;
   dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
   groups?:
     | {
         id: string;
         name: string;
       }[]
     | undefined;
+  hair?: null | string;
+  id: string;
+  imageUid?: string[] | undefined;
   images?: {
     id: string;
-    optimised?: string | null;
-    url?: string | null;
     new?: boolean;
+    optimised?: null | string;
+    url?: null | string;
   }[];
-  imageUid?: string[] | undefined;
+  name?: null | string;
+  peculiarities?: null | string;
+  race?: Race | null;
 }
 
 const { confirm } = Modal;
 
 interface Props {
-  onClose: () => void;
   offenderId: string;
+  onClose: () => void;
   update: (value: OffenderData) => void;
 }
 
 interface BanData {
-  id: string;
-  type?: BanType | null;
+  description?: null | string | undefined;
   endDate?: Date;
-  startDate?: Date;
+  fineValue?: null | number | undefined;
+  id: string;
   location?: string;
-  description?: string | null | undefined;
-  months?: number | null | undefined;
-  fineValue?: number | null | undefined;
+  months?: null | number | undefined;
+  startDate?: Date;
+  type?: BanType | null;
 }
 
 export interface FormData {
-  name: string;
   age: Age;
-  gender: Gender;
-  race: Race;
-  build: Build;
-  hair: string;
-  peculiarities: string;
-  dateSource?: string;
-  dateOfBirth?: Date;
-  groups: string[];
-  tags: string[];
-  images?: { id: string; url: string; optimised: string }[];
   bans?: {
-    endDate: Date;
-    startDate: Date;
-    location: string;
     description: string;
+    endDate: Date;
+    location: string;
+    startDate: Date;
   }[];
+  build: Build;
+  dateOfBirth?: Date;
+  dateSource?: string;
+  gender: Gender;
+  groups: string[];
+  hair: string;
+  images?: { id: string; optimised: string; url: string }[];
+  name: string;
+  peculiarities: string;
+  race: Race;
+  tags: string[];
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  data: ViewOffenderQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  imgChange: UploadProps['onChange'];
-  beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
-  addOffenderTag: boolean;
-  toggleAddOffenderTag: () => void;
-  updateNewOffenderTagData: (values: TagData) => void;
-
   addExclusion: boolean;
-  toggleAddExclusion: () => void;
+  addOffenderTag: boolean;
+  adminRights: boolean;
+  ageCheck: boolean;
+  banData: BanData | null;
+  bansData: BanData[];
+  beforeUpload: (value: RcFile) => void;
+  data: ViewOffenderQuery | undefined;
+  deleteConfirm: (value: string) => void;
   editExclusion: boolean;
+  fileList: UploadFile[];
+  form: FormInstance<FormData>;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+
+  imgChange: UploadProps['onChange'];
+  loading: boolean;
+  onReject: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  selectedItems: string[];
+  setAgeCheck: (value: boolean) => void;
+  setBanData: (value: BanData | null) => void;
+  setSelectedItems: (value: string[]) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
+  toggleAddExclusion: () => void;
+  toggleAddOffenderTag: () => void;
   toggleEditExclusion: () => void;
   updateExclusion: (value: BanData) => void;
-  bansData: BanData[];
-  banData: BanData | null;
-  setBanData: (value: BanData | null) => void;
-  ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  onReject: () => void;
-  deleteConfirm: (value: string) => void;
-  adminRights: boolean;
-  form: FormInstance<FormData>;
-  selectedItems: string[];
-  setSelectedItems: (value: string[]) => void;
+  updateNewOffenderTagData: (values: TagData) => void;
 }
 
 const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
@@ -154,20 +153,14 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const [offenderTagsData, setOffenderTagsData] = useState<TagData[]>([]);
 
   const { data: offenderData, loading } = useViewOffenderQuery({
-    variables: {
-      where: {
-        id: offenderId,
-      },
-    },
-
     onCompleted: ({ offender }) => {
       setAgeCheck(!!offender?.dateOfBirth);
       if (offender?.images && offender.images.length > 0) {
         setFileList(
           offender?.images.map((image) => ({
-            uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
+            uid: `${image.id}`,
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             url: `${image.optimised || image.url}`,
           }))
@@ -177,6 +170,12 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
         setBansData(offender.bans);
       }
     },
+
+    variables: {
+      where: {
+        id: offenderId,
+      },
+    },
   });
 
   const { groups, groupsLoading } = useGroupsContext();
@@ -184,12 +183,12 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   useEffect(() => {
     if (groups) {
       setOffendersState({
+        order,
         pagination,
         variables: {
           ...variables,
           groups: groups.map((group) => group.value),
         },
-        order,
       });
     }
   }, [groups]);
@@ -197,15 +196,15 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
+        dataType: {
+          equals: Model.Offender,
+        },
         schemes: {
           some: {
             id: {
               in: [schemeId],
             },
           },
-        },
-        dataType: {
-          equals: Model.Offender,
         },
       },
     },
@@ -219,11 +218,11 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       });
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The offender has been updated!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated',
         }),
         placement: 'bottomRight',
       });
@@ -255,36 +254,36 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
           bansData.map((ban) => ban.id).includes(banId)
         );
         return {
-          update:
-            existingBans.length > 0
-              ? existingBans.map((ban) => ({
-                  where: { id: ban.id },
-                  data: {
-                    startDate: { set: ban.startDate },
-                    endDate: { set: ban.endDate },
-                    location: { set: ban.location },
-                    description: { set: ban.description || null },
-                  },
-                }))
-              : undefined,
           create:
             newBans.length > 0
               ? newBans.map((ban) => ({
-                  startDate: ban?.startDate || new Date(),
+                  createdBy: { connect: { id: userId } },
+                  description: ban?.description || null,
                   endDate: ban?.endDate || new Date(),
                   location: ban?.location || '',
-                  description: ban?.description || null,
                   scheme: {
                     connect: {
                       id: schemeId,
                     },
                   },
-                  createdBy: { connect: { id: userId } },
+                  startDate: ban?.startDate || new Date(),
                 }))
               : undefined,
           delete:
             deleteBanIds.length > 0
               ? deleteBanIds.map((banId) => ({ id: banId }))
+              : undefined,
+          update:
+            existingBans.length > 0
+              ? existingBans.map((ban) => ({
+                  data: {
+                    description: { set: ban.description || null },
+                    endDate: { set: ban.endDate },
+                    location: { set: ban.location },
+                    startDate: { set: ban.startDate },
+                  },
+                  where: { id: ban.id },
+                }))
               : undefined,
         };
       }
@@ -296,48 +295,22 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
 
     void updateOffender({
       variables: {
-        where: {
-          id: offenderId,
-        },
         data: {
-          approved: { set: true },
-          name: { set: data.name },
-          gender: { set: data.gender || null },
-          race: { set: data.race || null },
-          build: { set: data.build || null },
-          hair: { set: data.hair || 'Unknown' },
-          peculiarities: { set: data.peculiarities || '' },
           age: { set: ageCheck ? null : data.age || null },
-          dateSource: { set: ageCheck ? data.dateSource || null : null },
+          approved: { set: true },
+          bans: getBans(),
+          build: { set: data.build || null },
           dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+          dateSource: { set: ageCheck ? data.dateSource || null : null },
+          gender: { set: data.gender || null },
           groups: {
             set:
               userGroups.length > 1
                 ? data.groups.map((id) => ({ id }))
                 : userGroups.map(({ value: id }) => ({ id })),
           },
-          tags: {
-            set: data.tags.map((id) => ({ id })) || undefined,
-          },
-          scheme: { connect: { id: schemeId } },
-          bans: getBans(),
+          hair: { set: data.hair || 'Unknown' },
           images: {
-            upload:
-              imageChange && fileList.length > 0
-                ? fileList.map((item) => ({
-                    url: {
-                      filename: item.fileName || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                  }))
-                : undefined,
-            // imageChange && fileList.length > 0
-            //   ? fileList
-            //       .map((item) => ({
-            //         file: item.originFileObj,
-            //       }))
-            //       .filter((obj) => obj.file !== undefined)
             //   : [],
             delete: imageChange
               ? offenderData?.offender?.images
@@ -349,7 +322,33 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
                     id: image.id,
                   }))
               : [],
+            // imageChange && fileList.length > 0
+            //   ? fileList
+            //       .map((item) => ({
+            //         file: item.originFileObj,
+            //       }))
+            //       .filter((obj) => obj.file !== undefined)
+            upload:
+              imageChange && fileList.length > 0
+                ? fileList.map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                  }))
+                : undefined,
           },
+          name: { set: data.name },
+          peculiarities: { set: data.peculiarities || '' },
+          race: { set: data.race || null },
+          scheme: { connect: { id: schemeId } },
+          tags: {
+            set: data.tags.map((id) => ({ id })) || undefined,
+          },
+        },
+        where: {
+          id: offenderId,
         },
       },
     });
@@ -360,12 +359,12 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     onCompleted: () => {
       navigate('/app/offenders');
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Rejected!',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'The offender has been deleted from the feed and moved to the recycle bin.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Rejected!',
         }),
         placement: 'bottomRight',
       });
@@ -376,9 +375,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   });
   const onReject = () => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Are you sure you want to delete this article?',
-      }),
       content: intl.formatMessage({
         defaultMessage:
           'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
@@ -393,6 +389,9 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
           },
         });
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure you want to delete this article?',
+      }),
     });
   };
   // function
@@ -413,9 +412,9 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
 
@@ -440,15 +439,15 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   };
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to delete the exclusion?',
-      }),
       content: intl.formatMessage({
         defaultMessage: 'This action cannot be undone.',
       }),
       onOk() {
         openDelete(currentId);
       },
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the exclusion?',
+      }),
     });
   };
   const updateExclusion = (value: BanData) => {
@@ -473,43 +472,43 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     setAddOffenderTag(false);
     const selectedOffenderTag = form.getFieldValue('tags');
     form.setFieldsValue({
-      tags: [...selectedOffenderTag, { value: values.id, label: values.name }],
+      tags: [...selectedOffenderTag, { label: values.name, value: values.id }],
     });
     setOffenderTagsData([...offenderTagsData, { ...values, isNew: true }]);
   };
 
   return {
-    onSubmit,
+    addExclusion,
+    addOffenderTag,
+    adminRights: role !== Role.User,
+    ageCheck,
+    banData,
+    bansData,
+    beforeUpload,
     data: offenderData,
-    loading,
-    saving,
+    deleteConfirm,
+    editExclusion,
+    fileList,
+    form,
     groups,
     groupsLoading,
-    tags:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
-    tagsLoading,
     imgChange,
-    beforeUpload,
-    fileList,
-    addOffenderTag,
-    toggleAddOffenderTag,
-    updateNewOffenderTagData,
-    addExclusion,
+    loading,
+    onReject,
+    onSubmit,
+    saving,
+    selectedItems,
+    setAgeCheck,
+    setBanData,
+    setSelectedItems,
+    tags:
+      tagsData?.tags.map((tag) => ({ label: tag.name, value: tag.id })) || [],
+    tagsLoading,
     toggleAddExclusion,
-    editExclusion,
+    toggleAddOffenderTag,
     toggleEditExclusion,
     updateExclusion,
-    banData,
-    setBanData,
-    bansData,
-    deleteConfirm,
-    ageCheck,
-    setAgeCheck,
-    onReject,
-    selectedItems,
-    setSelectedItems,
-    adminRights: role !== Role.User,
-    form,
+    updateNewOffenderTagData,
   };
 };
 

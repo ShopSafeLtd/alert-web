@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { notification } from 'antd';
+import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
 
+import { notification } from 'antd';
+import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/update_crime_group.generated';
+import { useCrimeGroupQuery } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useParams } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/view-crime-group.generated';
-import { useCrimeGroupQuery } from 'graphql/crime-groups/queries/view-crime-group.generated';
-import { useUpdateCrimeGroupMutation } from 'graphql/crime-groups/mutations/update_crime_group.generated';
 
 interface FormData {
   alias: string;
@@ -17,9 +17,9 @@ interface Props {
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
   data: CrimeGroupQuery | undefined;
   loading: boolean;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
 }
 
@@ -41,11 +41,11 @@ const useAddAlias = ({ onClose }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Updated!',
-        }),
         description: intl.formatMessage({
           defaultMessage: 'The alias has been added to the crime group! ',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
 
         placement: 'bottomRight',
@@ -61,21 +61,21 @@ const useAddAlias = ({ onClose }: Props): Return => {
     setSaving(true);
     void updateCrimeGroup({
       variables: {
-        where: {
-          id: params.id || '',
-        },
         data: {
           alias: data.alias,
+        },
+        where: {
+          id: params.id || '',
         },
       },
     });
   };
 
   return {
-    onSubmit,
-    saving,
     data: crimeGroupData,
     loading,
+    onSubmit,
+    saving,
   };
 };
 export default useAddAlias;

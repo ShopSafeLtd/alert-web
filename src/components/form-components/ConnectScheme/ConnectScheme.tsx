@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React from 'react';
-
-import { useStoreState } from 'state';
-import { Button, Col, Row, Skeleton, Typography } from 'antd';
-import { FormattedMessage } from 'react-intl';
-import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
-import { useConnectSchemesQuery } from '#/components/form-components/ConnectScheme/connect-schemes-query.generated';
-import { Role, SortOrder } from 'graphql/types';
-import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/conenct-scheme-mutation.generated';
 import type {
   SchemeSharingQuery,
   SchemeSharingQueryVariables,
-} from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
-import { SchemeSharingDocument } from '#/views/settings/schemes/SchemeSharing/graphql/scheme-sharing.generated';
+} from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
+import type { Theme } from 'configs/ThemeConfig';
+
+import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/conenct-scheme-mutation.generated';
+import { useConnectSchemesQuery } from '#/components/form-components/ConnectScheme/connect-schemes-query.generated';
+import { SchemeSharingDocument } from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
+import { Button, Col, Row, Skeleton, Typography } from 'antd';
+import { Role, SortOrder } from 'graphql/types';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import { useStoreState } from 'state';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  scheme: {
-    padding: '10px 20px',
-    borderBottom: `1px solid ${theme.borderColor}`,
-  },
   name: {
-    width: '100%',
     flex: 1,
+    width: '100%',
+  },
+  scheme: {
+    borderBottom: `1px solid ${theme.borderColor}`,
+    padding: '10px 20px',
   },
 }));
 
@@ -40,25 +40,25 @@ const ConnectScheme = ({ connectedScheme, onClose }: Props) => {
 
   const { data, loading } = useConnectSchemesQuery({
     variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
       where: {
         id: {
           notIn: connectedScheme,
         },
         members: {
           some: {
+            role: {
+              equals: Role.SchemeAdmin,
+            },
             user: {
               id: {
                 equals: userId,
               },
             },
-            role: {
-              equals: Role.SchemeAdmin,
-            },
           },
         },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
       },
     },
   });
@@ -79,18 +79,18 @@ const ConnectScheme = ({ connectedScheme, onClose }: Props) => {
 
       if (existingData && result.data)
         store.writeQuery<SchemeSharingQuery, SchemeSharingQueryVariables>({
-          query: SchemeSharingDocument,
-          variables: {
-            where: {
-              id: schemeId,
-            },
-          },
           data: {
             ...existingData,
             scheme: {
               ...existingData.scheme,
               connectedToSchemes:
                 result.data.setSchemeSharing.connectedToSchemes,
+            },
+          },
+          query: SchemeSharingDocument,
+          variables: {
+            where: {
+              id: schemeId,
             },
           },
         });
@@ -119,7 +119,7 @@ const ConnectScheme = ({ connectedScheme, onClose }: Props) => {
       {loading && <Skeleton />}
       {!loading &&
         data?.schemes.map((scheme) => (
-          <Row align="middle" key={scheme.id} className={classes.scheme}>
+          <Row align="middle" className={classes.scheme} key={scheme.id}>
             <Col flex={1}>
               <Text className={classes.name} ellipsis>
                 {scheme.name}

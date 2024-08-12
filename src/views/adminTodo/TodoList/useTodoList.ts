@@ -267,7 +267,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
         },
       },
       variables: {
-        where: { id },
+        id,
       },
     });
     void fetchMore({

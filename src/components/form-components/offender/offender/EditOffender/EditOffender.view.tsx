@@ -1,7 +1,16 @@
-import React from 'react';
-import type { BanType } from 'graphql/types';
-
 import type { FormInstance } from 'antd';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { ViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
+import type { BanType } from 'graphql/types';
+import type { TagData } from 'types/DataType';
+
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+  faUpload,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -18,30 +27,20 @@ import {
   Typography,
   Upload,
 } from 'antd';
-
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
-
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
-
 // import type { RangePickerProps } from 'antd/es/date-picker';
 import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-  faUpload,
-} from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
-import type { TagData } from 'types/DataType';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { FormData } from './useEditOffender';
-import customRequest from '../../../../../utils/custom-request';
-import type { ViewOffenderQuery } from 'graphql/offenders/queries/view-offender.generated';
+import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 
-const { Title, Paragraph } = Typography;
+import type { FormData } from './useEditOffender';
+
+import customRequest from '../../../../../utils/custom-request';
+
+const { Paragraph, Title } = Typography;
 
 // interface FormData {
 //   name: string;
@@ -59,81 +58,81 @@ const { Title, Paragraph } = Typography;
 // }
 
 interface BanData {
-  id: string;
-  type?: BanType | null;
+  description?: null | string | undefined;
   endDate?: Date;
-  startDate?: Date;
+  fineValue?: null | number | undefined;
+  id: string;
   location?: string;
-  description?: string | null | undefined;
-  months?: number | null | undefined;
-  fineValue?: number | null | undefined;
+  months?: null | number | undefined;
+  startDate?: Date;
+  type?: BanType | null;
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  data: ViewOffenderQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  imgChange: UploadProps['onChange'];
-  beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
   addExclusion: boolean;
-  toggleAddExclusion: () => void;
-  editExclusion: boolean;
-  toggleEditExclusion: () => void;
   addOffenderTag: boolean;
-  toggleAddOffenderTag: () => void;
-  updateNewOffenderTagData: (values: TagData) => void;
-
-  updateExclusion: (value: BanData) => void;
-  bansData: BanData[];
-  banData: BanData | null;
-  setBanData: (value: BanData | null) => void;
-  deleteConfirm: (value: string) => void;
-  ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  onClose: () => void;
   adminRights: boolean;
-  selectedItems: string[];
-  setSelectedItems: (value: string[]) => void;
+  ageCheck: boolean;
+  banData: BanData | null;
+  bansData: BanData[];
+  beforeUpload: (value: RcFile) => void;
+  data: ViewOffenderQuery | undefined;
+  deleteConfirm: (value: string) => void;
+  editExclusion: boolean;
+  fileList: UploadFile[];
   form: FormInstance<FormData> | undefined;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  imgChange: UploadProps['onChange'];
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+
+  saving: boolean;
+  selectedItems: string[];
+  setAgeCheck: (value: boolean) => void;
+  setBanData: (value: BanData | null) => void;
+  setSelectedItems: (value: string[]) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
+  toggleAddExclusion: () => void;
+  toggleAddOffenderTag: () => void;
+  toggleEditExclusion: () => void;
+  updateExclusion: (value: BanData) => void;
+  updateNewOffenderTagData: (values: TagData) => void;
 }
 
 const EditOffender = ({
-  onSubmit,
+  addExclusion,
+  addOffenderTag,
+  adminRights,
+  ageCheck,
+  banData,
+  bansData,
+  beforeUpload,
   data,
-  loading,
-  saving,
+  deleteConfirm,
+  editExclusion,
+  fileList,
+  form,
   groups,
   groupsLoading,
+  imgChange,
+  loading,
+  onClose,
+  onSubmit,
+  saving,
+  selectedItems,
+  setAgeCheck,
+  setBanData,
+  setSelectedItems,
   tags,
   tagsLoading,
-  imgChange,
-  beforeUpload,
-  fileList,
-  addOffenderTag,
-  toggleAddOffenderTag,
-  updateNewOffenderTagData,
-  addExclusion,
   toggleAddExclusion,
-  editExclusion,
+  toggleAddOffenderTag,
   toggleEditExclusion,
   updateExclusion,
-  banData,
-  setBanData,
-  bansData,
-  deleteConfirm,
-  ageCheck,
-  setAgeCheck,
-  onClose,
-  selectedItems,
-  setSelectedItems,
-  form,
-  adminRights,
+  updateNewOffenderTagData,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -143,35 +142,35 @@ const EditOffender = ({
       ) : (
         <>
           <Form
-            onFinish={onSubmit}
-            layout="vertical"
             form={form}
             initialValues={{
-              name: data?.offender?.name || null,
               age: data?.offender?.age || null,
-              gender: data?.offender?.gender || null,
-              race: data?.offender?.race || null,
-              build: data?.offender?.build || null,
-              hair: data?.offender?.hair || null,
               ageCheck: !!data?.offender?.dateOfBirth,
-              peculiarities: data?.offender?.peculiarities || null,
+              build: data?.offender?.build || null,
               dateOfBirth: data?.offender?.dateOfBirth
                 ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
                 : null,
               dateSource: data?.offender?.dateSource || null,
+              gender: data?.offender?.gender || null,
               groups:
                 data?.offender?.groups && data?.offender?.groups.length > 0
                   ? data?.offender?.groups.map(({ id }) => id)
                   : [],
+              hair: data?.offender?.hair || null,
+              name: data?.offender?.name || null,
+              peculiarities: data?.offender?.peculiarities || null,
+              race: data?.offender?.race || null,
               tags:
                 data?.offender?.tags && data?.offender?.tags.length > 0
                   ? data?.offender?.tags.map(({ id }) => id)
                   : [],
             }}
+            layout="vertical"
+            onFinish={onSubmit}
           >
             <Row align="bottom" style={{ marginBottom: 30 }}>
               <Col>
-                <Title style={{ marginBottom: 0 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0 }}>
                   {intl.formatMessage({ defaultMessage: '1. ' })}
                 </Title>
               </Col>
@@ -184,9 +183,9 @@ const EditOffender = ({
               </Col>
               <Col>
                 <Paragraph
+                  italic
                   style={{ marginBottom: 1, marginLeft: 5 }}
                   type="secondary"
-                  italic
                 >
                   {intl.formatMessage({
                     defaultMessage:
@@ -198,10 +197,10 @@ const EditOffender = ({
             <Row gutter={60}>
               <Col span={8}>
                 <Form.Item
-                  name="name"
                   label={intl.formatMessage({
                     defaultMessage: 'Name',
                   })}
+                  name="name"
                   tooltip={intl.formatMessage({
                     defaultMessage: 'Enter the offenders name if you know it.',
                   })}
@@ -212,31 +211,31 @@ const EditOffender = ({
 
               <Col span={7}>
                 <Form.Item
-                  name="build"
                   label={intl.formatMessage({
                     defaultMessage: 'Build',
                   })}
+                  name="build"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the build of the offender if known.',
                   })}
                 >
-                  <Select options={buildValues} disabled={saving} />
+                  <Select disabled={saving} options={buildValues} />
                 </Form.Item>
               </Col>
 
               <Col span={8}>
                 <Form.Item
-                  name="gender"
                   label={intl.formatMessage({
                     defaultMessage: 'Sex',
                   })}
+                  name="gender"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the gender of the offender if known.',
                   })}
                 >
-                  <Select options={genderValues} disabled={saving} />
+                  <Select disabled={saving} options={genderValues} />
                 </Form.Item>
               </Col>
             </Row>
@@ -244,25 +243,25 @@ const EditOffender = ({
             <Row gutter={60}>
               <Col span={8}>
                 <Form.Item
-                  name="race"
                   label={intl.formatMessage({
                     defaultMessage: 'Ethnicity',
                   })}
+                  name="race"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Select the ethnicity of the offender if known.',
                   })}
                 >
-                  <Select options={raceValues} disabled={saving} />
+                  <Select disabled={saving} options={raceValues} />
                 </Form.Item>
               </Col>
 
               <Col span={7}>
                 <Form.Item
-                  name="hair"
                   label={intl.formatMessage({
                     defaultMessage: 'Hair',
                   })}
+                  name="hair"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'The style and colour of the offenders hair if known.',
@@ -273,29 +272,29 @@ const EditOffender = ({
               </Col>
 
               <Col span={8}>
-                <Row gutter={5} align="middle">
+                <Row align="middle" gutter={5}>
                   <Col flex={1}>
                     <Form.Item
-                      name="tags"
                       label={intl.formatMessage({
                         defaultMessage: 'Offender Warnings',
                       })}
+                      name="tags"
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           'Select any warning labels that are relevant to this offender or add your own.',
                       })}
                     >
                       <Select
-                        loading={tagsLoading}
                         disabled={saving}
-                        mode="multiple"
+                        loading={tagsLoading}
                         maxTagCount={3}
-                        value={selectedItems}
+                        mode="multiple"
                         onChange={setSelectedItems}
                         optionFilterProp="label"
+                        value={selectedItems}
                       >
                         {tags.map((tag) => (
-                          <Select.Option value={tag.value} label={tag.label}>
+                          <Select.Option label={tag.label} value={tag.value}>
                             {tag.label}
                           </Select.Option>
                         ))}
@@ -307,14 +306,14 @@ const EditOffender = ({
                     <Col>
                       <Button
                         disabled={saving}
-                        style={{ color: 'red', padding: 8 }}
-                        onClick={toggleAddOffenderTag}
                         icon={
                           <FontAwesomeIcon
                             icon={faPlus}
                             style={{ marginRight: 5 }}
                           />
                         }
+                        onClick={toggleAddOffenderTag}
+                        style={{ color: 'red', padding: 8 }}
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Add Label',
@@ -329,23 +328,23 @@ const EditOffender = ({
             <Row gutter={60}>
               <Col span={8}>
                 <Form.Item
-                  name="ageCheck"
                   label={intl.formatMessage({
                     defaultMessage: "Do you know the offender's date of birth?",
                   })}
+                  name="ageCheck"
                 >
                   <Switch
-                    style={{ width: 70, marginLeft: 10 }}
                     checked={ageCheck}
                     checkedChildren={intl.formatMessage({
                       defaultMessage: 'Yes',
                     })}
-                    unCheckedChildren={intl.formatMessage({
-                      defaultMessage: 'No',
-                    })}
                     onChange={() => {
                       setAgeCheck(!ageCheck);
                     }}
+                    style={{ marginLeft: 10, width: 70 }}
+                    unCheckedChildren={intl.formatMessage({
+                      defaultMessage: 'No',
+                    })}
                   />
                 </Form.Item>
               </Col>
@@ -354,10 +353,10 @@ const EditOffender = ({
                 <>
                   <Col span={7}>
                     <Form.Item
-                      name="dateOfBirth"
                       label={intl.formatMessage({
                         defaultMessage: 'Date of Birth',
                       })}
+                      name="dateOfBirth"
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           "Enter the offender's date of birth if known.",
@@ -373,10 +372,10 @@ const EditOffender = ({
                   </Col>
                   <Col span={8}>
                     <Form.Item
-                      name="dateSource"
                       label={intl.formatMessage({
                         defaultMessage: 'Information Source',
                       })}
+                      name="dateSource"
                       tooltip={intl.formatMessage({
                         defaultMessage:
                           "Enter the information source of the offender's date of birth range of the offender.",
@@ -389,16 +388,16 @@ const EditOffender = ({
               ) : (
                 <Col span={7}>
                   <Form.Item
-                    name="age"
                     label={intl.formatMessage({
                       defaultMessage: 'Age',
                     })}
+                    name="age"
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         'Select an estimated age range of the offender if known.',
                     })}
                   >
-                    <Select options={ageValues} disabled={saving} />
+                    <Select disabled={saving} options={ageValues} />
                   </Form.Item>
                 </Col>
               )}
@@ -406,10 +405,10 @@ const EditOffender = ({
             <Row gutter={16}>
               <Col span={23}>
                 <Form.Item
-                  name="peculiarities"
                   label={intl.formatMessage({
                     defaultMessage: 'Characteristics',
                   })}
+                  name="peculiarities"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'Enter any distinctive features of the offender.',
@@ -424,29 +423,29 @@ const EditOffender = ({
               <Row>
                 <Col span={8}>
                   <Form.Item
-                    name="groups"
                     label={intl.formatMessage({
                       defaultMessage: 'Groups',
                     })}
-                    tooltip={intl.formatMessage({
-                      defaultMessage:
-                        'Select the groups that you would like this offender to be visible to.',
-                    })}
+                    name="groups"
                     rules={[
                       {
-                        required: true,
                         message: intl.formatMessage({
                           defaultMessage:
                             'Please select at least one group for the offender.',
                         }),
+                        required: true,
                       },
                     ]}
+                    tooltip={intl.formatMessage({
+                      defaultMessage:
+                        'Select the groups that you would like this offender to be visible to.',
+                    })}
                   >
                     <Select
-                      loading={groupsLoading}
                       disabled={saving}
-                      mode="multiple"
+                      loading={groupsLoading}
                       maxTagCount={3}
+                      mode="multiple"
                     >
                       {groups.map((group) => (
                         <Select.Option key={group.value} value={group.value}>
@@ -459,14 +458,14 @@ const EditOffender = ({
               </Row>
             )}
 
-            <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+            <Row align="middle" style={{ marginBottom: 20, marginTop: 70 }}>
               <Col>
-                <Title style={{ marginBottom: 0 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0 }}>
                   {intl.formatMessage({ defaultMessage: '2.' })}
                 </Title>
               </Col>
               <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                   {intl.formatMessage({
                     defaultMessage: 'Exclusions',
                   })}
@@ -474,9 +473,9 @@ const EditOffender = ({
               </Col>
               <Col style={{ marginRight: 5 }}>
                 <Paragraph
+                  italic
                   style={{ marginBottom: 1, marginLeft: 5 }}
                   type="secondary"
-                  italic
                 >
                   {intl.formatMessage({
                     defaultMessage:
@@ -487,11 +486,11 @@ const EditOffender = ({
               <Col>
                 <Button
                   disabled={saving}
-                  onClick={toggleAddExclusion}
-                  style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
                   icon={
                     <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                   }
+                  onClick={toggleAddExclusion}
+                  style={{ color: 'red', marginLeft: 15, marginTop: -30 }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Exclusion',
@@ -503,74 +502,74 @@ const EditOffender = ({
               <Row gutter={20}>
                 <Col>
                   <Table
-                    size="small"
-                    pagination={{
-                      hideOnSinglePage: true,
-                      defaultPageSize: 20,
-                      pageSize: 20,
-                    }}
                     columns={[
                       {
+                        dataIndex: 'location',
+                        ellipsis: true,
                         key: 'location',
                         title: intl.formatMessage({
                           defaultMessage: 'Location',
                         }),
-                        dataIndex: 'location',
-                        ellipsis: true,
                       },
                       {
+                        dataIndex: 'description',
+                        ellipsis: true,
                         key: 'description',
                         title: intl.formatMessage({
                           defaultMessage: 'Description',
                         }),
-                        dataIndex: 'description',
-                        ellipsis: true,
                       },
                       {
-                        key: 'Options',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Options',
-                        }),
                         dataIndex: 'Options',
-                        width: 100,
+                        key: 'Options',
                         render: (value, record) => (
                           <>
                             <Button
                               disabled={saving}
-                              onClick={() => {
-                                setBanData(record.item);
-                                toggleEditExclusion();
-                              }}
                               icon={
                                 <FontAwesomeIcon
                                   icon={faPenToSquare}
                                   style={{ marginRight: 5 }}
                                 />
                               }
+                              onClick={() => {
+                                setBanData(record.item);
+                                toggleEditExclusion();
+                              }}
                             />
                             <Button
                               disabled={saving}
-                              onClick={() => {
-                                deleteConfirm(record.key || '');
-                              }}
                               icon={
                                 <FontAwesomeIcon
                                   icon={faTrash}
                                   style={{ marginRight: 5 }}
                                 />
                               }
+                              onClick={() => {
+                                deleteConfirm(record.key || '');
+                              }}
                             />
                           </>
                         ),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Options',
+                        }),
+                        width: 100,
                       },
                     ]}
                     dataSource={bansData.map((ban) => ({
-                      endDate: ban.endDate,
-                      key: ban.id,
-                      item: ban,
-                      location: ban.location,
                       description: ban.description,
+                      endDate: ban.endDate,
+                      item: ban,
+                      key: ban.id,
+                      location: ban.location,
                     }))}
+                    pagination={{
+                      defaultPageSize: 20,
+                      hideOnSinglePage: true,
+                      pageSize: 20,
+                    }}
+                    size="small"
                   />
                 </Col>
               </Row>
@@ -578,11 +577,11 @@ const EditOffender = ({
               <>
                 <Row justify="start">
                   <Empty
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
                     description={intl.formatMessage({
                       defaultMessage:
                         'There are no exclusions for this offender.',
                     })}
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
                 </Row>
                 {/* <Divider /> */}
@@ -593,12 +592,12 @@ const EditOffender = ({
                 <Row align="middle" style={{ marginBottom: 20 }}>
                   <Col>
                     {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                    <Title style={{ marginBottom: 0 }} level={4}>
+                    <Title level={4} style={{ marginBottom: 0 }}>
                       3.
                     </Title>
                   </Col>
                   <Col>
-                    <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                    <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                       {intl.formatMessage({
                         defaultMessage: 'Images',
                       })}
@@ -606,9 +605,9 @@ const EditOffender = ({
                   </Col>
                   <Col>
                     <Paragraph
+                      italic
                       style={{ marginBottom: 1, marginLeft: 5 }}
                       type="secondary"
-                      italic
                     >
                       {intl.formatMessage({
                         defaultMessage:
@@ -618,10 +617,10 @@ const EditOffender = ({
                   </Col>
                   <Col style={{ marginLeft: 30 }}>
                     <Upload
+                      beforeUpload={beforeUpload}
                       customRequest={customRequest}
                       fileList={fileList}
                       onChange={imgChange}
-                      beforeUpload={beforeUpload}
                       showUploadList={false}
                     >
                       <Button
@@ -643,12 +642,12 @@ const EditOffender = ({
 
                 <Form.Item name="images">
                   <Upload
-                    customRequest={customRequest}
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={imgChange}
-                    beforeUpload={beforeUpload}
                     accept=".png,.jpeg,.webp"
+                    beforeUpload={beforeUpload}
+                    customRequest={customRequest}
+                    fileList={fileList}
+                    listType="picture-card"
+                    onChange={imgChange}
                   >
                     {fileList.length < 10 &&
                       intl.formatMessage({
@@ -660,7 +659,7 @@ const EditOffender = ({
             </Row>
 
             <Form.Item>
-              <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+              <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
                 <Col>
                   <Button disabled={saving} onClick={onClose}>
                     {intl.formatMessage({
@@ -671,9 +670,9 @@ const EditOffender = ({
                 <Col>
                   <Button
                     disabled={saving}
+                    htmlType="submit"
                     loading={saving}
                     type="primary"
-                    htmlType="submit"
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Save',
@@ -684,52 +683,52 @@ const EditOffender = ({
             </Form.Item>
           </Form>
           <Drawer
+            onClose={toggleAddOffenderTag}
+            open={addOffenderTag}
             title={intl.formatMessage({
               defaultMessage: 'Add Offender Warning',
             })}
-            open={addOffenderTag}
             width="400"
-            onClose={toggleAddOffenderTag}
           >
             {addOffenderTag ? (
               <AddOffenderTag
-                update={updateNewOffenderTagData}
                 onClose={toggleAddOffenderTag}
+                update={updateNewOffenderTagData}
               />
             ) : (
               <div />
             )}
           </Drawer>
           <Drawer
+            onClose={toggleAddExclusion}
+            open={addExclusion}
             title={intl.formatMessage({
               defaultMessage: 'Add Exclusion',
             })}
-            open={addExclusion}
             width="400"
-            onClose={toggleAddExclusion}
           >
             {addExclusion ? (
               <AddExclusion
-                update={updateExclusion}
                 onClose={toggleAddExclusion}
+                update={updateExclusion}
               />
             ) : (
               <div />
             )}
           </Drawer>
           <Drawer
+            onClose={toggleEditExclusion}
+            open={editExclusion}
             title={intl.formatMessage({
               defaultMessage: 'Edit Exclusion',
             })}
-            open={editExclusion}
             width="400"
-            onClose={toggleEditExclusion}
           >
             {editExclusion ? (
               <EditExclusion
-                update={updateExclusion}
-                onClose={toggleEditExclusion}
                 banData={banData}
+                onClose={toggleEditExclusion}
+                update={updateExclusion}
               />
             ) : (
               <div />

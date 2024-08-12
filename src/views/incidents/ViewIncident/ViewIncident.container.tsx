@@ -84,7 +84,7 @@ const ViewIncident = (): JSX.Element => {
     setViewTodoVisible,
     shareOpen,
     showOffenderOptions,
-    showOriginal,
+    // showOriginal,
     templatesData,
     templatesLoading,
     toggleAddDocument,
@@ -200,7 +200,7 @@ const ViewIncident = (): JSX.Element => {
       setViewTodoVisible={setViewTodoVisible}
       shareOpen={shareOpen}
       showOffenderOptions={showOffenderOptions}
-      showOriginal={showOriginal}
+      // showOriginal={showOriginal}
       templatesData={templatesData}
       templatesLoading={templatesLoading}
       toggleAddDocument={toggleAddDocument}

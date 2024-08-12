@@ -1,26 +1,27 @@
-import React from 'react';
+import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
+
 import { Button, Col, Form, Input, Row, Skeleton } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/view-crime-group.generated';
 
 interface FormData {
   alias: string;
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  saving: boolean;
   data: CrimeGroupQuery | undefined;
   loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
 }
 
 const AddAlias = ({
-  onSubmit,
-  onClose,
-  saving,
   data,
   loading,
+  onClose,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -28,25 +29,25 @@ const AddAlias = ({
     <Skeleton />
   ) : (
     <Form
-      layout="vertical"
-      onFinish={onSubmit}
       initialValues={{
         alias: data?.crimeGroup?.alias,
       }}
+      layout="vertical"
+      onFinish={onSubmit}
     >
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item
-            name="alias"
             label={intl.formatMessage({
               defaultMessage: 'Alias',
             })}
+            name="alias"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter an alias for the crime group.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -56,7 +57,7 @@ const AddAlias = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -64,10 +65,10 @@ const AddAlias = ({
           </Col>
           <Col>
             <Button
-              type="primary"
-              htmlType="submit"
               disabled={saving}
+              htmlType="submit"
               loading={saving}
+              type="primary"
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Alias',

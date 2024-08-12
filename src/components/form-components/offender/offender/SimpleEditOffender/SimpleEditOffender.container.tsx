@@ -1,79 +1,82 @@
-import React from 'react';
-import type { ImageValue } from 'components/form-components/ImageSelect/ImageSelect.view';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { ImageValue } from 'components/form-components/ImageSelect/ImageSelect.view';
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
-import View from './SimpleEditOffender.view';
-import type { OffenderData } from './useSimpleEditOffender';
-import useEditOffender from './useSimpleEditOffender';
+import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
+
+import React from 'react';
+
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
-import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/update-simple-offender.generated';
+import type { OffenderData } from './useSimpleEditOffender';
+
+import View from './SimpleEditOffender.view';
+import useEditOffender from './useSimpleEditOffender';
 
 interface Props {
   data: OffenderData;
+  images?: ImageValue[];
+  incidentBusinessId?: string;
   onClose: () => void;
   onCompleted?: () => void;
-  update?: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
   onEditOffender?: (value: AddOffenderData) => void;
-  images?: ImageValue[];
   onImagesUploaded?: (values: StateImageData[]) => void;
-  incidentBusinessId?: string;
   showAddress?: boolean;
+  update?: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
 }
 
 const EditOffender = ({
   data,
-  onClose,
-  update,
-  onEditOffender,
-  onCompleted,
   images,
-  onImagesUploaded,
   incidentBusinessId,
+  onClose,
+  onCompleted,
+  onEditOffender,
+  onImagesUploaded,
   showAddress,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
     ageCheck,
-    saving,
-    needJustification,
     form,
     idVerified,
-    offenderSettings,
-    loading,
-    uploading,
-    setUploading,
     knowAddress,
+    loading,
+    needJustification,
+    offenderSettings,
+    onSubmit,
+    saving,
+    setUploading,
+    uploading,
   } = useEditOffender({
     data,
+    incidentBusinessId,
     onClose,
-    update,
+    onCompleted,
     onEditOffender,
     onImagesUploaded,
-    onCompleted,
-    incidentBusinessId,
+    update,
   });
   return (
     <div>
       <View
-        form={form}
-        onSubmit={onSubmit}
-        data={data}
         ageCheck={ageCheck}
-        onClose={onClose}
+        data={data}
+        form={form}
         idVerified={idVerified}
         images={images?.map((el) => ({
           ...el,
-          uid: el.id,
           isFace: el.isFace || false,
+          uid: el.id,
         }))}
-        offenderSettings={offenderSettings}
+        knowAddress={knowAddress}
         loading={loading}
         needJustification={needJustification}
+        offenderSettings={offenderSettings}
+        onClose={onClose}
+        onSubmit={onSubmit}
         saving={saving}
         setUploading={setUploading}
-        uploading={uploading}
-        knowAddress={knowAddress}
         showAddress={showAddress}
+        uploading={uploading}
       />
     </div>
   );

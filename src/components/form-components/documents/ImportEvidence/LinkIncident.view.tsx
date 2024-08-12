@@ -12,7 +12,6 @@ interface Props {
   onClose: () => void;
   onSelect: (item: { key: string }) => void;
   onSubmit: () => void;
-  s;
   saving: boolean;
 }
 

@@ -1,6 +1,7 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import type { SearchOffendersQuery } from '#/graphql/offenders/queries/search-offenders.generated';
+
 import type { Theme } from 'configs/ThemeConfig';
+import type { SearchOffendersQuery } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
 
 import { Col, Row, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';

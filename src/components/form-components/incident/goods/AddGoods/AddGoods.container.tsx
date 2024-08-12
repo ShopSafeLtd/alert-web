@@ -8,7 +8,6 @@ import useAddGoods from './useAddGoods';
 interface Props {
   businessId?: string;
   onClose: () => void;
-  saving: boolean;
   update: (value: GoodsData) => void;
 }
 const AddGoods = ({ onClose, update }: Props): JSX.Element => {
