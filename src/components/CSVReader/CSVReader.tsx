@@ -15,6 +15,7 @@ export interface CSVReaderProps {
   cssClass?: string;
   cssInputClass?: string;
   cssLabelClass?: string;
+
   fileEncoding?: string;
   inputId?: string;
   inputName?: string;
@@ -60,7 +61,7 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
       const files: FileList = e.target.files!;
 
       if (files.length > 0) {
-        setLoading(true);
+        if (setLoading) setLoading(true);
         const fileInfo: IFileInfo = {
           name: files[0].name,
           size: files[0].size,
@@ -68,12 +69,12 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
         };
 
         if (strict && accept.indexOf(fileInfo.type) <= 0) {
-          setLoading(false),
-            onError(
-              new Error(
-                `[strict mode] Accept type not respected: got '${fileInfo.type}' but not in '${accept}'`
-              )
-            );
+          if (setLoading) setLoading(false);
+          onError(
+            new Error(
+              `[strict mode] Accept type not respected: got '${fileInfo.type}' but not in '${accept}'`
+            )
+          );
           return;
         }
 
@@ -86,7 +87,7 @@ const CSVReader = React.forwardRef<HTMLInputElement, CSVReaderProps>(
               encoding: fileEncoding,
             })
           );
-          setLoading(false);
+          if (setLoading) setLoading(false);
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
           onFileLoaded(csvData?.data ?? [], fileInfo, files[0]);
         };
