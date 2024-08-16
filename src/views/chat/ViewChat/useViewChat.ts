@@ -1,15 +1,15 @@
+import type { DeleteChatMutation } from '#/graphql/chat/mutation/__generated__/delete_chat.generated';
+import type { CreateChatMutation } from '#/graphql/chats/mutations/__generated__/create-chat.generated';
+import type { UserChatsQuery } from '#/graphql/userChat/queries/__generated__/user_chats.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { DeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
-import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
-import type { UserChatsQuery } from 'graphql/userChat/queries/__generated__/user_chats.generated';
 
-import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/__generated__/update_todo_mention.generated';
-import { Role, SortOrder, TodoType } from 'graphql/types';
-import { useMarkAsReadMessagesMutation } from 'graphql/userChat/mutations/__generated__/mark_ad_read_messages.generated';
+import { useUpdateTodoMentionMutation } from '#/graphql/todos/mutations/__generated__/update_todo_mention.generated';
+import { useMarkAsReadMessagesMutation } from '#/graphql/userChat/mutations/__generated__/mark_ad_read_messages.generated';
 import {
   UserChatsDocument,
   useUserChatsQuery,
-} from 'graphql/userChat/queries/__generated__/user_chats.generated';
+} from '#/graphql/userChat/queries/__generated__/user_chats.generated';
+import { Role, SortOrder, TodoType } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
@@ -43,7 +43,9 @@ const useViewChat = ({ chatId }: Props): Return => {
   const { data, loading, refetch } = useUserChatsQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: ({ user }) => {
-      if (user && user.chats.length > 0) {
+      if (chatId) {
+        setCurrentId(chatId);
+      } else if (user && user.chats.length > 0) {
         setCurrentId(user.chats[0].chat.id);
       } else {
         setCurrentId('');
@@ -63,8 +65,10 @@ const useViewChat = ({ chatId }: Props): Return => {
   });
 
   useEffect(() => {
-    void refetch();
-    navigate('/app/chat');
+    if (!chatId) {
+      void refetch();
+      navigate('/app/chat');
+    }
   }, [schemeId]);
 
   const [markAsReadMessages] = useMarkAsReadMessagesMutation({
@@ -95,7 +99,7 @@ const useViewChat = ({ chatId }: Props): Return => {
   };
   useEffect(() => {
     if (chatId === currentId) handleMarkAsRead(currentId);
-  }, [chatId]);
+  }, [chatId, currentId]);
 
   const toggleAddChat = () => {
     setAddChat(!addChat);
