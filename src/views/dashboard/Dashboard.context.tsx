@@ -206,7 +206,11 @@ export const DashboardProvider: React.FC<{
 
   const openLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
-    setLightBoxOpen({ open: true, index });
+    if (elements.length === 0) {
+      setLightBoxOpen({ open: false, index });
+    } else {
+      setLightBoxOpen({ open: true, index });
+    }
   };
 
   const { groups, groupsLoading } = useGroupsContext();
