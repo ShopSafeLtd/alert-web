@@ -1,27 +1,31 @@
-import React from 'react';
 import type { GoodsData } from 'types/DataType';
-import useEditGoods from './useEditGoods';
+
+import React from 'react';
+
 import View from './EditGoods.view';
+import useEditGoods from './useEditGoods';
 
 interface Props {
   data: GoodsData;
   onClose: () => void;
-  update: (value: GoodsData) => void;
   saving: boolean;
+  update: (value: GoodsData) => void;
 }
-const EditGoods = ({ onClose, update, data, saving }: Props): JSX.Element => {
-  const { onSubmit, goodsTypesData, goodsMode } = useEditGoods({
-    update,
+const EditGoods = ({ data, onClose, saving, update }: Props): JSX.Element => {
+  const { goodsMode, goodsTypesData, onSubmit } = useEditGoods({
     data,
+    update,
   });
+  console.log('EditGoods', data);
+
   return (
     <div>
       <View
         data={data}
-        onSubmit={onSubmit}
-        onClose={onClose}
-        goodsTypesData={goodsTypesData}
         goodsMode={goodsMode}
+        goodsTypesData={goodsTypesData}
+        onClose={onClose}
+        onSubmit={onSubmit}
         saving={saving || false}
       />
     </div>

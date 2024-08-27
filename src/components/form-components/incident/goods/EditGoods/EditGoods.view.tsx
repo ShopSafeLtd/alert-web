@@ -1,4 +1,4 @@
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { ListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { GoodsData } from 'types/DataType';
 
 import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
@@ -33,14 +33,13 @@ const EditGoods = ({
   return (
     <Form<GoodsData>
       initialValues={{
-        goodsType: data.goodsType,
-        goodsTypeId: data.goodsType,
+        goodsTypeId: data.goodsType?.id,
+        // goodsTypeId: data.goodsTypeId,
         name: data.name,
         quantity: data.quantity,
         recoveredQuantity: data.recoveredQuantity,
         recoveredValue: data.recoveredValue || 0,
         sku: data.sku,
-        // TODO check this works
         stockItemId: data.stockItemId,
         value: data.value || 0,
       }}
@@ -54,7 +53,7 @@ const EditGoods = ({
               label={intl.formatMessage({
                 defaultMessage: 'Type of Goods',
               })}
-              name="goodsType"
+              name="goodsTypeId"
               rules={[
                 {
                   message: intl.formatMessage({
@@ -130,7 +129,7 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                max={value}
+                max={value ?? undefined}
                 min={0}
                 precision={2}
                 prefix="£"
@@ -232,7 +231,7 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                max={value}
+                max={value ?? undefined}
                 min={0}
                 precision={2}
                 prefix="£"
@@ -261,7 +260,7 @@ const EditGoods = ({
             >
               <InputNumber
                 disabled={saving}
-                max={quantity}
+                max={quantity ?? undefined}
                 min={0}
                 precision={0}
                 style={{ width: '100%' }}
