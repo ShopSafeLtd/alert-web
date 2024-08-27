@@ -415,10 +415,6 @@ const AdminTodos = ({
             {
               dataIndex: 'actions',
               key: 'actions',
-              // @ts-ignore
-              onFilter: (value: boolean, record) => record.completed === value,
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // eslint-disable-next-line no-confusing-arrow
               render: (_, record) => (
                 <Row wrap={false}>
                   <Col>
@@ -524,6 +520,20 @@ const AdminTodos = ({
               ),
               width: 170,
             },
+            {
+              dataIndex: 'view',
+              key: 'view',
+              render: (_, record) => (
+                <Typography.Link
+                  onClick={() => setSelectedTodo(record.todo.node.id)}
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'View',
+                  })}
+                </Typography.Link>
+              ),
+              width: 100,
+            },
           ]}
           dataSource={data?.todoRelay.edges?.map((todo) => ({
             assignedUsers: todo.node.assignedUsers,
@@ -583,6 +593,11 @@ const AdminTodos = ({
         {selectedTodo ? (
           <ViewTodo
             id={selectedTodo}
+            minimal={
+              !!data?.todoRelay.edges.find(
+                ({ node }) => node.id === selectedTodo
+              )?.node.completed
+            }
             onClose={() => setSelectedTodo(null)}
             updateTodo={completeTodo}
           />

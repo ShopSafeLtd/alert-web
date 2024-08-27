@@ -1,23 +1,29 @@
-import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from 'react-jss';
-import { IntlProvider } from 'react-intl';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { useThemeLanguage } from '#/hooks/useThemeLanguage';
+import { GuestLayout } from '#/layouts/guest-layout';
+import { useAuth0 } from '@auth0/auth0-react';
+import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import { ConfigProvider } from 'antd';
 import theme from 'configs/ThemeConfig';
-import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
-import { GuestLayout } from '#/layouts/guest-layout';
-import { SignedIn, SignedOut } from '@clerk/clerk-react';
-import LoginView from '#/views/sign-in/Login.View';
-import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
-import { useTokenContext } from '#/context/token-context';
-import Loading from '#/components/shared-components/AntD/Loading';
-import AppLayout from '#/layouts/app-layout';
-import Terms from '#/navigation/auth-views/components/Terms';
-import { useThemeLanguage } from '#/hooks/useThemeLanguage';
+import { useAuth } from 'hooks';
+import AppLayout from 'layouts/app-layout';
+import { AuthLayout } from 'layouts/auth-layout';
+import React, { useEffect } from 'react';
+import { IntlProvider } from 'react-intl';
+import { ThemeProvider } from 'react-jss';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useStoreState } from 'state';
+
+import Loading from '../components/loading';
+import PrimaryOnboarding from '../views/onboard/SetPassword';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
 const Views = () => {
+  const { isLoading } = useAuth0();
+  const location = useLocation();
+
   // check if current url is staging. If so, redirect to  https://app.shopsafealert.co.uk/ unless localstorage has been set with staging:true
   if (
     window?.location?.href?.includes('staging.shopsafealert') &&
@@ -32,14 +38,41 @@ const Views = () => {
   } else if (navigator?.userAgent?.toLowerCase().includes('iphone')) {
     window.location.href = 'https://apps.apple.com/gb/app/alert/id1497736226';
   }
-  const { token } = useTokenContext();
+
+  const currentRoute = location.pathname;
+  const guestRoutes = ['/generated', '/ext/'];
+  const guestRoute = guestRoutes.some((route) => currentRoute.includes(route));
+
+  const isSet = useStoreState((state) => state.auth.isSet);
+  const userId = useStoreState((state) => state.user.id);
+
+  const { loading, rehydrateAuth } = useAuth();
 
   const {
-    theme: currentTheme,
-    messages,
     currentAppLocale,
+    messages,
+    theme: currentTheme,
   } = useThemeLanguage();
 
+  useEffect(() => {
+    if (!guestRoute) rehydrateAuth();
+  }, []);
+
+  if ((loading || isLoading || !isSet) && !guestRoute) {
+    return <Loading />;
+  }
+
+  if (guestRoute) {
+    return (
+      <div style={{ colorScheme: currentTheme }}>
+        <ThemeProvider theme={theme[currentTheme]}>
+          <Routes>
+            <Route element={<GuestLayout />} path="ext/*" />
+          </Routes>
+        </ThemeProvider>
+      </div>
+    );
+  }
   return (
     <div style={{ colorScheme: currentTheme }}>
       <IntlProvider
@@ -50,38 +83,25 @@ const Views = () => {
         <ErrorBoundary>
           <ThemeProvider theme={theme[currentTheme]}>
             <ConfigProvider locale={currentAppLocale.antd}>
-              <SentryRoutes>
-                <Route path="*" element={<Navigate to="app" />} />
-                <Route path="/terms/*" element={<Terms />} />
-
-                <Route
-                  path="/app/*"
-                  element={
-                    <>
-                      <SignedOut>
-                        <Navigate to={GenerateSignInRedirect()} />
-                      </SignedOut>
-                      <SignedIn>
-                        {token ? <AppLayout /> : <Loading cover="content" />}
-                      </SignedIn>
-                    </>
-                  }
-                />
-                <Route
-                  path={'/sign-in/*'}
-                  element={
-                    <>
-                      <SignedOut>
-                        <LoginView />
-                      </SignedOut>
-                      <SignedIn>
-                        <Navigate to="/app" />
-                      </SignedIn>
-                    </>
-                  }
-                />
-                <Route path="/ext/*" element={<GuestLayout />} />
-              </SentryRoutes>
+              {isSet ? (
+                <SentryRoutes>
+                  <Route path="/">
+                    <Route element={<Navigate to="app" />} index />
+                    <Route element={<AuthLayout />} path="auth/*" />
+                    <Route
+                      element={<AppLayout location={location} />}
+                      path="app/*"
+                    />
+                    <Route
+                      element={<PrimaryOnboarding userId={userId} />}
+                      path="onboarding/password"
+                    />
+                    <Route element={<Navigate to="app" />} path="*" />
+                  </Route>
+                </SentryRoutes>
+              ) : (
+                <Loading />
+              )}
             </ConfigProvider>
           </ThemeProvider>
         </ErrorBoundary>

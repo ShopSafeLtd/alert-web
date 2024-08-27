@@ -1,7 +1,7 @@
 import type { CurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
 import type { SelectOptions } from 'types/DataType';
 
-import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
+// import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import {
   Button,
   Card,
@@ -28,6 +28,7 @@ interface Props {
   loading: boolean;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
+  resetConfirm: () => void;
   saving: boolean;
   userDefaultGroups: string[] | undefined;
 }
@@ -37,6 +38,7 @@ const EditProfile = ({
   loading,
   onClose,
   onSubmit,
+  resetConfirm,
   saving,
   userDefaultGroups,
 }: Props): JSX.Element => {
@@ -51,7 +53,17 @@ const EditProfile = ({
     <div className="list-view">
       <>
         <PageHeader
-          extra={[<EditPasswordButton key="editPassword" saving={saving} />]}
+          // extra={[<EditPasswordButton key="editPassword" saving={saving} />]}
+          extra={[
+            <Button
+              disabled={saving}
+              key="1"
+              onClick={resetConfirm}
+              type="primary"
+            >
+              <FormattedMessage defaultMessage="Reset Password" />
+            </Button>,
+          ]}
           onBack={() => window.history.back()}
           subTitle={intl.formatMessage({
             defaultMessage:

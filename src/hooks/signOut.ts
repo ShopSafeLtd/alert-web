@@ -1,10 +1,13 @@
-import { useAuth as useAuthClerk } from '@clerk/clerk-react';
+// import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import { useStoreActions } from '#/state';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const useSignOut = (): {
   signOut: () => void;
 } => {
-  const { signOut: signOutClerk } = useAuthClerk();
+  // const { signOut: signOutClerk } = useAuthClerk();
+  // TODO clerk change
+  const { logout: signOutClerk } = useAuth0();
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
   const signOut = (): void => {

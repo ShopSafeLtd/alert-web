@@ -1,4 +1,4 @@
-
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
@@ -27,7 +27,6 @@ import type { FormData } from './useAddTodo';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 import BusinessesSelect from '../../BusinessesSelect/BusinessesSelect.view';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
-import { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 
 interface Props {
   addQuestion: boolean;
@@ -414,7 +413,11 @@ const AddTodo = ({
                   danger
                   disabled={saving}
                   loading={saving}
-                  onClick={() => onSubmit(form.getFieldsValue())}
+                  onClick={() => {
+                    void form.validateFields().then(() => {
+                      onSubmit(form.getFieldsValue());
+                    });
+                  }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Create Activity',

@@ -26,7 +26,7 @@ const { useForm } = Form;
 export interface FormData {
   [answer: string]: Moment | number | string | string[] | undefined;
   assignedUsers: string[];
-  business: string;
+  businesses: string[];
   description: string;
   dueDate: Moment;
   groups: string[];
@@ -105,10 +105,11 @@ const useAddTodo = ({
   useEffect(() => {
     if (businessId) {
       form.setFieldsValue({
-        businesses: businessId,
+        businesses: [businessId],
       });
     }
   }, [businessId]);
+
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
       variables: {
@@ -273,6 +274,7 @@ const useAddTodo = ({
         userId: time.id,
       }))
       ?.filter((time) => time.timeTaken && time.timeTaken > 0);
+
     void createTodo({
       onCompleted: () => {
         setSaving(false);
@@ -296,8 +298,8 @@ const useAddTodo = ({
               : undefined,
           business: businessId
             ? { connect: { id: businessId } }
-            : data.business
-              ? { connect: { id: data.business } }
+            : data.businesses
+              ? { connect: { id: data.businesses[0] } }
               : undefined,
           completed: false,
           createdBy: { connect: { id: userId } },

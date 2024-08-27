@@ -1,35 +1,28 @@
+import { Button, Card, Col, Form, Image, Input, Row, Typography } from 'antd';
 import React from 'react';
-import type { FormInstance } from 'antd';
-import { Button, Card, Col, Form, Input, Row, Typography } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import Logo from '#/components/layout-components/AntD/navigation/Logo';
+import { useIntl } from 'react-intl';
 
-const { Title, Text } = Typography;
+import logo from '../../../images/icon-512.png';
+
+const { Text, Title } = Typography;
 
 interface FormData {
   password: string;
 }
 
 interface Props {
-  onSubmit: () => void;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
-  hasPassword: boolean;
-  form: FormInstance<FormData>;
 }
-const SetPassword = ({
-  onSubmit,
-  saving,
-  hasPassword,
-  form,
-}: Props): JSX.Element => {
+const SetPassword = ({ onSubmit, saving }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div className="list-view">
       <Row gutter={10} style={{ margin: 8 }}>
         <Col>
-          <Logo logoType="default" />
+          <Image alt="ShopSafe Icon" src={logo} width={50} />
         </Col>
-        <Col style={{ alignSelf: 'flex-end' }}>
+        <Col>
           <Title style={{ marginTop: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Welcome to Alert!',
@@ -38,7 +31,7 @@ const SetPassword = ({
         </Col>
       </Row>
 
-      <Card>
+      <Card style={{ minHeight: '100vh' }}>
         <Title level={3}>
           {intl.formatMessage({
             defaultMessage: 'Set Password',
@@ -50,123 +43,52 @@ const SetPassword = ({
               'Please set your password, you will use this to log into Alert in the future. It must contain upper and lower case letters, a number, and be at least 8 characters long.',
           })}
         </Text>
-        <Form onFinish={onSubmit} style={{ marginTop: 30 }} form={form}>
+        <Form onFinish={onSubmit} style={{ marginTop: 30 }}>
           <Row>
-            <Col span={8}>
+            <Col span={9}>
               <Form.Item
-                labelCol={{ span: 8 }}
-                name="current"
-                hidden={!hasPassword}
-                label={<FormattedMessage defaultMessage="Current Password" />}
-                rules={[
-                  {
-                    required: hasPassword,
-                    message: intl.formatMessage({
-                      defaultMessage: 'Please input your current password!',
-                    }),
-                  },
-                ]}
                 hasFeedback
-              >
-                <Input.Password
-                  size="large"
-                  allowClear
-                  placeholder={intl.formatMessage({
-                    defaultMessage: 'Current Password',
-                  })}
-                />
-              </Form.Item>
-              <Form.Item
-                labelCol={{ span: 8 }}
-                name="password"
                 label={intl.formatMessage({
                   defaultMessage: 'New Password',
                 })}
-                hasFeedback
+                name="password"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
-                      defaultMessage: 'Please input a new password!',
+                      defaultMessage: 'Please set a password for the account.',
                     }),
+                    required: true,
                   },
-                  ({ getFieldValue }) => ({
-                    validator(_, value: string) {
-                      // check against current password
-                      if (value === getFieldValue('current')) {
-                        return Promise.reject(
-                          new Error(
-                            intl.formatMessage({
-                              defaultMessage:
-                                'The new password must be different from the current password!',
-                            })
-                          )
-                        );
-                      }
-                      if (value.length < 8) {
-                        return Promise.reject(
-                          new Error(
-                            intl.formatMessage({
-                              defaultMessage:
-                                'Password must be at least 8 characters!',
-                            })
-                          )
-                        );
-                      }
-
-                      if (
-                        !/[A-Z]/.test(value) ||
-                        !/[a-z]/.test(value) ||
-                        !/\d/.test(value)
-                      ) {
-                        return Promise.reject(
-                          new Error(
-                            intl.formatMessage({
-                              defaultMessage:
-                                'Password must contain at least one uppercase letter, one lowercase letter, and one number!',
-                            })
-                          )
-                        );
-                      }
-
-                      if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error(
-                          intl.formatMessage({
-                            defaultMessage:
-                              'The two passwords that you entered do not match!',
-                          })
-                        )
-                      );
-                    },
-                  }),
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage:
+                        'Password must contain upper and lower case letters, a number, and be at least 8 characters long.',
+                    }),
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\dA-Za-z]{8,}$/,
+                  },
                 ]}
               >
                 <Input.Password
-                  size="large"
+                  disabled={saving}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Input Password',
                   })}
-                  disabled={saving}
-                  allowClear
+                  size="large"
                 />
               </Form.Item>
               <Form.Item
-                labelCol={{ span: 8 }}
-                name="confirm"
+                dependencies={['password']}
+                hasFeedback
                 label={intl.formatMessage({
                   defaultMessage: 'Confirm Password',
                 })}
-                dependencies={['password']}
-                hasFeedback
+                name="confirmPassword"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage: 'Please confirm your password!',
                     }),
+                    required: true,
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
@@ -185,26 +107,19 @@ const SetPassword = ({
                   }),
                 ]}
               >
-                <Input.Password
-                  size="large"
-                  allowClear
-                  disabled={saving}
-                  placeholder={intl.formatMessage({
-                    defaultMessage: 'Confirm Password',
-                  })}
-                />
+                <Input.Password disabled={saving} size="large" />
               </Form.Item>
             </Col>
           </Row>
 
           <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={20} justify="end">
+            <Row gutter={20} justify="end" style={{ marginTop: 30 }}>
               <Col>
                 <Button
                   disabled={saving}
+                  htmlType="submit"
                   loading={saving}
                   type="primary"
-                  htmlType="submit"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Set Password',

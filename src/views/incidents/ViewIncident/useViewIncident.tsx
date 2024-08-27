@@ -27,6 +27,7 @@ import type {
 } from 'types/DataType';
 
 import hasPermission from '#/utils/has-permission';
+import useCanView from '#/utils/in-scheme';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Modal, notification } from 'antd';
 import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/__generated__/add-images-to-incident.generated';
@@ -318,7 +319,11 @@ const useViewIncident = (incidentId: string): Return => {
       },
     },
   });
-
+  useCanView({
+    currentScheme: currentScheme.id || '',
+    schemes: data?.incident?.scheme.id,
+    type: 'incident',
+  });
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
       variables: {

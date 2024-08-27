@@ -102,7 +102,7 @@ const ViewOffender = (): JSX.Element => {
     toggleViewMatches,
     updateDeleteDocument,
     updateDocumentList,
-    updateImagesList,
+
     updateIncidentList,
     updateInvestigationList,
     userId,
@@ -207,7 +207,6 @@ const ViewOffender = (): JSX.Element => {
       toggleViewMatches={toggleViewMatches}
       updateDeleteDocument={updateDeleteDocument}
       updateDocumentList={updateDocumentList}
-      updateImagesList={updateImagesList}
       updateIncidentList={updateIncidentList}
       updateInvestigationList={updateInvestigationList}
       userId={userId}

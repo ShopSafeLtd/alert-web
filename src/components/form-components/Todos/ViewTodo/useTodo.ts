@@ -60,6 +60,7 @@ const useTodo = ({
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
 
   const { data: todo, loading } = useTodoQuery({
+    fetchPolicy: 'cache-and-network',
     onCompleted: () => {
       if (todo?.todo?.evidence && todo?.todo?.evidence.length > 0)
         setDocumentList(
@@ -73,7 +74,6 @@ const useTodo = ({
     },
     variables: {
       where: {
-        // id: 'cll3jomfy00013rybbduufubj',
         id: id || '',
       },
     },

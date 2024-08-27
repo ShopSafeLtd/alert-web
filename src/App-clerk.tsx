@@ -1,3 +1,4 @@
+import { TokenProvider } from '#/context/token-context';
 import { LoadScript } from '@react-google-maps/api';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
@@ -79,13 +80,15 @@ const App = (): JSX.Element => (
         googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
         libraries={['visualization']}
       >
-        <Store>
-          <ApolloProvider>
-            <RouteWrapper title={undefined}>
-              <Views />
-            </RouteWrapper>
-          </ApolloProvider>
-        </Store>
+        <TokenProvider>
+          <Store>
+            <ApolloProvider>
+              <RouteWrapper title={undefined}>
+                <Views />
+              </RouteWrapper>
+            </ApolloProvider>
+          </Store>
+        </TokenProvider>
       </LoadScript>
     </ThemeSwitcherProvider>
   </div>

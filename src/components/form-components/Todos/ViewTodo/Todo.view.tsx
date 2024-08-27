@@ -1,4 +1,5 @@
-
+import type { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
+import type { CustomQuestion } from '#/types/DataType';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
 import MapCard from '#/components/map/LocatingCard/MapCard.view';
@@ -20,11 +21,9 @@ import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import type { CustomQuestion } from '../../../../types/DataType';
 import type { FormData } from './useTodo';
 
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
-import { TodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
 
 interface Props {
   availableUsers: { id: string; name: string; timeTaken: number }[];
@@ -33,6 +32,7 @@ interface Props {
   documentUploadProps?: UploadProps;
   form: FormInstance;
   loading: boolean;
+  minimal?: boolean;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -51,6 +51,7 @@ const TodoView = ({
   documentUploadProps,
   form,
   loading,
+  minimal = false,
   onClose,
   onSubmit,
   saving,
@@ -124,8 +125,27 @@ const TodoView = ({
         </Descriptions.Item>
       </Descriptions>
       <Divider style={{ marginTop: 10 }} />
+      {todo?.todo.business?.locations[0].geoLat &&
+        todo?.todo.business?.locations[0].geoLng && (
+          <>
+            <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
+              {intl.formatMessage({ defaultMessage: 'Location' })}
+            </Typography.Text>
+            <MapCard
+              height={194}
+              viewport={{
+                latitude: todo?.todo.business?.locations[0].geoLat,
+                longitude: todo?.todo.business?.locations[0].geoLng,
+              }}
+              width="100%"
+            />
+            <Divider style={{ marginTop: 10 }} />
+          </>
+        )}
+
       <Form
         form={form}
+        hidden={minimal}
         initialValues={{ questions: [] }}
         layout="vertical"
         onFinish={onSubmit}
@@ -143,22 +163,6 @@ const TodoView = ({
         {questions && questions.length > 0 ? (
           <Divider style={{ marginTop: 10 }} />
         ) : null}
-        {todo?.todo.business?.locations[0].geoLat &&
-          todo?.todo.business?.locations[0].geoLng && (
-            <>
-              <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-                {intl.formatMessage({ defaultMessage: 'Location' })}
-              </Typography.Text>
-              <MapCard
-                height={194}
-                viewport={{
-                  latitude: todo?.todo.business?.locations[0].geoLat,
-                  longitude: todo?.todo.business?.locations[0].geoLng,
-                }}
-                width="100%"
-              />
-            </>
-          )}
         <Row>
           <Col span={24}>
             <Typography.Title level={4}>
