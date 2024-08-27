@@ -95,8 +95,8 @@ export interface FormData {
   cctv?: {
     cameraNumber: string;
     endTime: Date;
-    showFace: boolean;
-    showIncident: boolean;
+    showFace?: boolean;
+    showIncident?: boolean;
     startTime: Date;
   }[];
   cctvAvailable?: boolean;
@@ -766,8 +766,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               create: data.cctv?.map((item) => ({
                 cameraNumber: item.cameraNumber,
                 endTime: item.endTime,
-                showFace: item.showFace,
-                showIncident: item.showIncident,
+                showFace: !!item.showFace,
+                showIncident: !!item.showIncident,
                 startTime: item.startTime,
               })),
             },
