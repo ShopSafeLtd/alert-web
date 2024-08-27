@@ -134,6 +134,19 @@ const SchemeSettings = (): JSX.Element => {
                     model: PermissionModel.Settings,
                   }}
                 >
+                  <SchemeDetails />
+                </PermissionCheckWrapper>
+              }
+              path="scheme"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.Settings,
+                  }}
+                >
                   <SchemeSharing />
                 </PermissionCheckWrapper>
               }
