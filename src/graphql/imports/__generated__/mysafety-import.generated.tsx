@@ -8,7 +8,7 @@ export type MySafetyImportDataMutationVariables = Types.Exact<{
 }>;
 
 
-export type MySafetyImportDataMutation = { __typename?: 'Mutation', mySafetyImportData: { __typename?: 'SystemTask', success: boolean } };
+export type MySafetyImportDataMutation = { __typename?: 'Mutation', mySafetyImportData?: { __typename?: 'SystemTask', success: boolean } | null };
 
 
 export const MySafetyImportDataDocument = gql`

@@ -8,7 +8,7 @@ export type IncidentMapQueryVariables = Types.Exact<{
 }>;
 
 
-export type IncidentMapQuery = { __typename?: 'Query', incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null }> };
+export type IncidentMapQuery = { __typename?: 'Query', incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null, business?: { __typename?: 'Business', id: string } | null }> };
 
 
 export const IncidentMapDocument = gql`
@@ -19,6 +19,9 @@ export const IncidentMapDocument = gql`
       id
       geoLat
       geoLng
+    }
+    business {
+      id
     }
   }
 }

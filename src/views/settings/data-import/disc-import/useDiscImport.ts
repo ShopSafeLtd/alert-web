@@ -2,10 +2,6 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
-import { Form } from 'antd';
-import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
-import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
-import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import {
   Age,
   Build,
@@ -16,7 +12,11 @@ import {
   Role,
   SortOrder,
   TagType,
-} from 'graphql/types';
+} from '#/graphql/types';
+import { Form } from 'antd';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
+import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
 import update from 'immutability-helper';
 import moment from 'moment';
@@ -248,7 +248,7 @@ const useDiscImport = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       orderBy: {
-        name: SortOrder.Asc,
+        name: SortOrder.Desc,
       },
       where: {
         dataType: {
@@ -355,8 +355,10 @@ const useDiscImport = (): Return => {
       .filter((item) => item.id !== 'Member Id')
       .filter((item) => item.lastSignedIn && item.firstName && item.email);
 
+    // eslint-disable-next-line
     const activeAreas = [
       ...new Set(filteredMembers.flatMap((item) => item.areas?.split(', '))),
+      // eslint-disable-next-line
     ]
       .filter((area) => area !== '')
       .filter((area) => area !== undefined && area !== null);
@@ -686,10 +688,10 @@ const useDiscImport = (): Return => {
     const offenderData = [...knownSubjects, ...idSought];
     const newBusinessData = await Promise.all(
       businesses
-        .filter(
-          (business) =>
-            business.name && business.lastSignedIn > values.excludeUserDate
-        )
+        // .filter(
+        //   (business) =>
+        //     business.name && business.lastSignedIn > values.excludeUserDate
+        // )
         .filter(
           (value, index, self) =>
             index === self.findIndex((t) => t.name === value.name)
@@ -698,9 +700,8 @@ const useDiscImport = (): Return => {
     );
     const filteredUsers = members.filter(
       (member) =>
-        member.lastSignedIn > values.excludeUserDate &&
-        member.firstName &&
-        member.email
+        // member.lastSignedIn > values.excludeUserDate &&
+        member.firstName && member.email
     );
 
     const getUserGroups = (user: Member) => {
@@ -775,6 +776,7 @@ const useDiscImport = (): Return => {
             image.fileName?.includes(offender.id)
           ),
           name:
+            // eslint-disable-next-line sonarjs/no-nested-template-literals
             `${offender.firstName}${
               offender.lastName ? ` ${offender.lastName}` : ''
             }` || 'Unidentified Offender',
@@ -854,8 +856,10 @@ const useDiscImport = (): Return => {
               ) || null
             : null,
         ].filter((item) => item !== null) as NewOffender[];
+        // eslint-disable-next-line
         const offendersIds = [
           ...new Set(offenders.map((offender) => offender.id)),
+          // eslint-disable-next-line
         ];
         const createdBy = newUserData.find(
           (user) => user.email === incident.memberEmail
@@ -1562,6 +1566,133 @@ const useDiscImport = (): Return => {
   };
 
   const onSubmit = () => {
+    console.log({
+      businesses: newBusinesses.map((business) => ({
+        connect: business.existing
+          ? {
+              id: business.existing,
+              importId: business.id,
+            }
+          : undefined,
+        create: business.existing
+          ? undefined
+          : {
+              building: business.street || '',
+              county: business.county || '',
+              importId: business.id,
+              name: business.name,
+              postcode: business.postcode || '',
+              street: business.street || '',
+              townCity: business.townCity || '',
+            },
+      })),
+      historicIncidents: newHistoricIncidents.map((incident) => ({
+        building: '',
+        business: incident.business ? { id: incident.business } : undefined,
+        county: '',
+        crimeTypes: [
+          ...incident.crimeTypes,
+          ...incident.impactTypes,
+          ...incident.involvedTypes,
+        ].map((id) => ({ id })),
+        // TODO check
+        date: moment(incident.date).toDate(),
+        groups: incident.groups.map((id) => ({ id })),
+        importId: incident.id,
+        lostValue: incident.lostValue,
+        policeInvolved: incident.policeInvolved,
+        policeReported: incident.policeReported,
+        postcode: incident.postcode,
+        recoveredValue: incident.recoveredValue,
+        street: incident.street,
+        // TODO check
+        time: moment(incident.time).toDate(),
+        townCity: '',
+      })),
+      images: images.map((image) => ({
+        fileName: image.fileName,
+        importId: image.id,
+        mimetype: 'image/png',
+        url: image.url,
+      })),
+      incidents: newIncidents
+        .map((incident) => ({
+          building: '',
+          business: incident.business ? { id: incident.business } : undefined,
+          county: '',
+          createdBy: incident.createdBy
+            ? { id: incident.createdBy }
+            : undefined,
+          crimeTypes: [
+            ...incident.crimeTypes,
+            ...incident.impactTypes,
+            ...incident.involvedTypes,
+          ].map((id) => ({ id })),
+          // TODO check
+          date: moment(incident.date).toDate(),
+          description: incident.description,
+          groups: incident.groups.map((id) => ({ id })),
+          images: incident.images.map(({ id }) => ({ id })),
+          importId: incident.id,
+          lostValue: incident.lostValue,
+          offenders: incident.offenders.map((id) => ({ id })),
+          policeInvolved: incident.policeInvolved,
+          policeRef: incident.policeRef,
+          policeReported: incident.policeReported,
+          postcode: incident.postcode || 'Unknown',
+          recoveredValue: incident.recoveredValue,
+          street: incident.street,
+          // TODO check
+          time: moment(incident.time).toDate(),
+          townCity: incident.townCity,
+        }))
+        .slice(0, 1000),
+      offenders: newOffenders
+        .map((offender) => ({
+          age: offender.age,
+          build: offender.build,
+          comment: offender.comments,
+          dateOfBirth: offender.dateOfBirth
+            ? moment(offender.dateOfBirth).toDate()
+            : undefined,
+          gender: offender.gender,
+          groups: offender.groups.map((id) => ({ id })),
+          height: offender.height,
+          images: offender.images.map(({ id }) => ({ id })),
+          importId: offender.id,
+          name: offender.name,
+          peculiarities: offender.peculiarities,
+          postcode: offender.postcode,
+          race: offender.race,
+          street: offender.street,
+        }))
+        .reverse(),
+      scheme: {
+        id: schemeId,
+      },
+      users: newUsers.map((user) => ({
+        connect: user.existing
+          ? {
+              groups: user.groups.map((id) => ({ id })),
+              id: user.existing,
+              importId: user.id,
+              role: user.role || Role.User,
+            }
+          : undefined,
+        create: user.existing
+          ? undefined
+          : {
+              business: {
+                id: user.business as string,
+              },
+              email: user.email,
+              fullName: user.fullName,
+              groups: user.groups.map((id) => ({ id })),
+              importId: user.id,
+              role: user.role || Role.User,
+            },
+      })),
+    });
     void importData({
       variables: {
         data: {
@@ -1575,13 +1706,13 @@ const useDiscImport = (): Return => {
             create: business.existing
               ? undefined
               : {
-                  building: business.street,
-                  county: business.county,
+                  building: business.street || '',
+                  county: business.county || '',
                   importId: business.id,
                   name: business.name,
-                  postcode: business.postcode,
-                  street: business.street,
-                  townCity: business.townCity,
+                  postcode: business.postcode || '',
+                  street: business.street || '',
+                  townCity: business.townCity || '',
                 },
           })),
           historicIncidents: newHistoricIncidents.map((incident) => ({
@@ -1613,36 +1744,40 @@ const useDiscImport = (): Return => {
             mimetype: 'image/png',
             url: image.url,
           })),
-          incidents: newIncidents.map((incident) => ({
-            building: '',
-            business: incident.business ? { id: incident.business } : undefined,
-            county: '',
-            createdBy: incident.createdBy
-              ? { id: incident.createdBy }
-              : undefined,
-            crimeTypes: [
-              ...incident.crimeTypes,
-              ...incident.impactTypes,
-              ...incident.involvedTypes,
-            ].map((id) => ({ id })),
-            // TODO check
-            date: moment(incident.date).toDate(),
-            description: incident.description,
-            groups: incident.groups.map((id) => ({ id })),
-            images: incident.images.map(({ id }) => ({ id })),
-            importId: incident.id,
-            lostValue: incident.lostValue,
-            offenders: incident.offenders.map((id) => ({ id })),
-            policeInvolved: incident.policeInvolved,
-            policeRef: incident.policeRef,
-            policeReported: incident.policeReported,
-            postcode: incident.postcode || 'Unknown',
-            recoveredValue: incident.recoveredValue,
-            street: incident.street,
-            // TODO check
-            time: moment(incident.time).toDate(),
-            townCity: incident.townCity,
-          })),
+          incidents: newIncidents
+            .map((incident) => ({
+              building: '',
+              business: incident.business
+                ? { id: incident.business }
+                : undefined,
+              county: '',
+              createdBy: incident.createdBy
+                ? { id: incident.createdBy }
+                : undefined,
+              crimeTypes: [
+                ...incident.crimeTypes,
+                ...incident.impactTypes,
+                ...incident.involvedTypes,
+              ].map((id) => ({ id })),
+              // TODO check
+              date: moment(incident.date).toDate(),
+              description: incident.description,
+              groups: incident.groups.map((id) => ({ id })),
+              images: incident.images.map(({ id }) => ({ id })),
+              importId: incident.id,
+              lostValue: incident.lostValue,
+              offenders: incident.offenders.map((id) => ({ id })),
+              policeInvolved: incident.policeInvolved,
+              policeRef: incident.policeRef,
+              policeReported: incident.policeReported,
+              postcode: incident.postcode || 'Unknown',
+              recoveredValue: incident.recoveredValue,
+              street: incident.street,
+              // TODO check
+              time: moment(incident.time).toDate(),
+              townCity: incident.townCity,
+            }))
+            .slice(0, 1000),
           offenders: newOffenders
             .map((offender) => ({
               age: offender.age,

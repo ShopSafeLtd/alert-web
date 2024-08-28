@@ -1,0 +1,5 @@
+mutation SentrysysImportData($data: SentrysysImportDataInput!) {
+    sentrysysImportData(data: $data) {
+        success
+    }
+}
