@@ -21,6 +21,12 @@ const SchemeDetails = lazy(
 const OffenderWarnings = lazy(
   () => import('views/settings/tags/OffenderWarning')
 );
+const SentrysysImport = lazy(
+  () =>
+    import(
+      'views/settings/data-import/sentrysys-import/SentrysysImport.container'
+    )
+);
 const CrimeTypes = lazy(() => import('views/settings/tags/CrimeTypes'));
 const Terms = lazy(() => import('views/settings/terms/TermList'));
 const UserTerms = lazy(() => import('views/settings/terms/UserTerms'));
@@ -363,6 +369,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="crime-types/*"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.Settings,
+                  }}
+                >
+                  <SentrysysImport />
+                </PermissionCheckWrapper>
+              }
+              path="data-import/sentrysys"
             />
             <Route
               element={

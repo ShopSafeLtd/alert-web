@@ -6,5 +6,8 @@ query IncidentMap($where: IncidentWhereInput!) {
       geoLat
       geoLng
     }
+    business {
+      id
+    }
   }
 }

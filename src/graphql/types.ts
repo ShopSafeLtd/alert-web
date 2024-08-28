@@ -9877,7 +9877,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData: SystemTask;
+  mySafetyImportData?: Maybe<SystemTask>;
   recycleChecklist: Checklist;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
@@ -17026,6 +17026,7 @@ export type SharingConfig = {
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   mode: SharingMode;
+  noCondition: Scalars['Boolean'];
   schemeFrom: Scheme;
   schemeTo: Scheme;
   tagMap: Scalars['JSON'];
