@@ -1,3 +1,5 @@
+import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
+
 import {
   faClose,
   faMagnifyingGlass,
@@ -18,12 +20,13 @@ import {
   Typography,
 } from 'antd';
 import { useListBusinessesLocationsQuery } from 'graphql/businesses/queries/__generated__/list-businesses-locations.generated';
+import { SortOrder } from 'graphql/types';
 import React, { memo, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
 
-import type { NewBusiness } from '../DiscImport.types';
+import type { NewBusiness } from '../../disc-import/DiscImport.types';
 
 const { Text } = Typography;
 
@@ -42,12 +45,18 @@ const useStyles = createUseStyles(() => ({
 
 interface NewBusinessRowProps {
   business: NewBusiness;
+  groupsData: SchemeGroupsQuery | undefined;
   onDelete: (id: string) => void;
   onUpdateBusiness: (data: NewBusiness) => void;
 }
 
-const NewBusinessRow = React.memo(
-  ({ business, onDelete, onUpdateBusiness }: NewBusinessRowProps) => {
+const NewBusinessRow = memo(
+  ({
+    business,
+    groupsData,
+    onDelete,
+    onUpdateBusiness,
+  }: NewBusinessRowProps) => {
     const [form] = Form.useForm<NewBusiness>();
     const [link, setLink] = useState(false);
     const currentSchemeId = useStoreState((state) => state.scheme.id);
@@ -56,6 +65,9 @@ const NewBusinessRow = React.memo(
 
     const { data } = useListBusinessesLocationsQuery({
       variables: {
+        orderBy: {
+          name: SortOrder.Asc,
+        },
         where: {
           schemes: {
             some: {
@@ -130,15 +142,14 @@ const NewBusinessRow = React.memo(
           <Col className={classes.cell} span={3} style={{ maxWidth: 200 }}>
             <Form.Item
               name="street"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: intl.formatMessage({
-              //       defaultMessage: 'Enter a street',
-              //       id: 'M3C0JK',
-              //     }),
-              //   },
-              // ]}
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Enter a street',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -146,15 +157,14 @@ const NewBusinessRow = React.memo(
           <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
             <Form.Item
               name="townCity"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: intl.formatMessage({
-              //       defaultMessage: 'Enter a town/city',
-              //       id: '0rPJ0H',
-              //     }),
-              //   },
-              // ]}
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Enter a town/city',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -167,17 +177,41 @@ const NewBusinessRow = React.memo(
           <Col className={classes.cell} span={2} style={{ maxWidth: 250 }}>
             <Form.Item
               name="postcode"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: intl.formatMessage({
-              //       defaultMessage: 'Enter a postcode',
-              //       id: 'ysScN/',
-              //     }),
-              //   },
-              // ]}
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Enter a postcode',
+                  }),
+                  required: true,
+                },
+              ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
+            </Form.Item>
+          </Col>
+          <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Groups',
+              })}
+              name="groups"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Choose at least one group',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Select
+                mode="multiple"
+                onBlur={onBlur}
+                options={groupsData?.groups?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                }))}
+              />
             </Form.Item>
           </Col>
           <Col>
@@ -249,9 +283,11 @@ const NewBusinessRow = React.memo(
     );
   }
 );
+
 NewBusinessRow.displayName = 'NewBusinessRow';
 
 interface Props {
+  groupsData: SchemeGroupsQuery | undefined;
   newBusinesses: NewBusiness[];
   onAdd: () => void;
   onDelete: (id: string) => void;
@@ -259,6 +295,7 @@ interface Props {
 }
 
 const NewBusinessTable = ({
+  groupsData,
   newBusinesses,
   onAdd,
   onDelete,
@@ -346,6 +383,7 @@ const NewBusinessTable = ({
       {activeIncidents.map((business) => (
         <NewBusinessRow
           business={business}
+          groupsData={groupsData}
           key={business.id}
           onDelete={onDelete}
           onUpdateBusiness={onUpdateBusiness}
