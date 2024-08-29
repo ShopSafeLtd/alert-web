@@ -222,15 +222,6 @@ const AddTodo = ({
                 defaultMessage: 'Businesses',
               })}
               name="businesses"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage:
-                      'Please select one business for the activity.',
-                  }),
-                  required: !businessId,
-                },
-              ]}
             >
               <BusinessesSelect
                 allowClear
