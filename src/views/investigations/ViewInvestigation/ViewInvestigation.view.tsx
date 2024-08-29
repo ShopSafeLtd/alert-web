@@ -803,7 +803,7 @@ const ViewInvestigation = ({
               type="primary"
             >
               {intl.formatMessage({
-                defaultMessage: 'Add Suggested Offedners',
+                defaultMessage: 'Add Suggested Offenders',
               })}
             </Button>
           </Col>
