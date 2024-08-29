@@ -498,6 +498,8 @@ const DiscImport = ({
         newBusinesses={newBusinesses}
         onAdd={() => {}}
         onDelete={onDeleteNewBusiness}
+        // TODO Fix
+        // @ts-expect-error type mismatch
         onUpdateBusiness={onUpdateBusiness}
       />
     )}
@@ -508,6 +510,8 @@ const DiscImport = ({
         newBusinesses={newBusinesses}
         newUsers={newUsers}
         onAdd={() => {}}
+        // TODO Fix
+        // @ts-expect-error type mismatch
         onUpdateUser={onUpdateUser}
       />
     )}
@@ -515,8 +519,12 @@ const DiscImport = ({
     {currentStep === 4 && (
       <NewOffenderTable
         groupsData={groupsData}
+        // TODO Fix
+        // @ts-expect-error type mismatch
         newOffenders={newOffenders}
         onAdd={() => {}}
+        // TODO Fix
+        // @ts-expect-error type mismatch
         onUpdateOffender={onUpdateOffender}
       />
     )}
@@ -525,10 +533,16 @@ const DiscImport = ({
       <NewIncidentTable
         groupsData={groupsData}
         newBusinesses={newBusinesses}
+        // TODO Fix
+        // @ts-expect-error type mismatch
         newIncidents={newIncidents}
+        // TODO Fix
+        // @ts-expect-error type mismatch
         newOffenders={newOffenders}
         newUsers={newUsers}
         onAdd={() => {}}
+        // TODO Fix
+        // @ts-expect-error type mismatch
         onUpdateIncident={onUpdateIncident}
         tagsData={tagData}
       />

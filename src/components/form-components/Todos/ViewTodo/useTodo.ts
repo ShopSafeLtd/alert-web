@@ -58,7 +58,7 @@ const useTodo = ({
   >([]);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
-
+  const currentUser = useStoreState((state) => state.user.id);
   const { data: todo, loading } = useTodoQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: () => {
@@ -221,6 +221,12 @@ const useTodo = ({
           },
           completed: {
             set: true,
+          },
+          completedBy: {
+            connect: { id: currentUser },
+          },
+          completedDate: {
+            set: new Date(),
           },
           documents: {
             // @ts-expect-error TODO fix this date issue Wait to check

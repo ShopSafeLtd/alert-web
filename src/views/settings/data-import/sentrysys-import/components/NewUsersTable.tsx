@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 
-import { Role } from '#/graphql/types';
 import {
   faClose,
   faTrash,
