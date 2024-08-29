@@ -1,3 +1,4 @@
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
@@ -29,7 +30,6 @@ import type { FormData } from './useEditTodo';
 
 import BusinessesSelect from '../../BusinessesSelect/BusinessesSelect.view';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
-import { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 
 interface Props {
   addQuestion: boolean;
@@ -228,15 +228,6 @@ Props): JSX.Element => {
                 defaultMessage: 'Businesses',
               })}
               name="businesses"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage:
-                      'Please select one business for the activity.',
-                  }),
-                  required: true,
-                },
-              ]}
             >
               <BusinessesSelect
                 allowClear

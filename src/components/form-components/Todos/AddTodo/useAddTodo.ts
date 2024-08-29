@@ -298,7 +298,7 @@ const useAddTodo = ({
               : undefined,
           business: businessId
             ? { connect: { id: businessId } }
-            : data.businesses
+            : data.businesses && data.businesses.length > 0
               ? { connect: { id: data.businesses[0] } }
               : undefined,
           completed: false,
