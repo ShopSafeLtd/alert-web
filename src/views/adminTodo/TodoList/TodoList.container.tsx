@@ -19,6 +19,7 @@ const AdminTodos = ({
     currentPage,
     currentPageSize,
     data,
+    editTodo,
     groupsData,
     groupsFilter,
     loading,
@@ -31,6 +32,7 @@ const AdminTodos = ({
     selectTemplate,
     selectedTemplate,
     selectedTodo,
+    setEditTodo,
     setGroupsFilter,
     setSearch,
     setSelectedTodo,
@@ -49,6 +51,7 @@ const AdminTodos = ({
       currentPage={currentPage}
       currentPageSize={currentPageSize}
       data={data}
+      editTodo={editTodo}
       groupsData={groupsData}
       groupsFilter={groupsFilter}
       loading={loading || TemplateLoading}
@@ -61,6 +64,7 @@ const AdminTodos = ({
       selectTemplate={selectTemplate}
       selectedTemplate={selectedTemplate}
       selectedTodo={selectedTodo}
+      setEditTodo={setEditTodo}
       setGroupsFilter={setGroupsFilter}
       setSearch={setSearch}
       setSelectedTodo={setSelectedTodo}

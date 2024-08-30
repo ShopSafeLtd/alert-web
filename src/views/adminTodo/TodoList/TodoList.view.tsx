@@ -5,8 +5,11 @@ import type { TableProps } from 'antd';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import type { TodoStatusInput } from 'graphql/types';
 
+import EditTodo from '#/components/form-components/Todos/EditTodo';
 import {
+  faArrowUpRightAndArrowDownLeftFromCenter,
   faCheckCircle,
+  faEdit,
   faEllipsisH,
   faPlus,
   faTrash,
@@ -40,7 +43,6 @@ import getTodoUrl from 'utils/get-to-do-url';
 import type { ListData } from '../useActivities';
 
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
-// const { Panel } = Collapse;
 
 type TemplateData = ListData;
 
@@ -62,6 +64,7 @@ interface Props {
   currentPage: number;
   currentPageSize: number;
   data: TodoListQuery | null | undefined;
+  editTodo: null | string;
   groupsData: { label: string; value: string }[];
   groupsFilter: string[];
   loading: boolean;
@@ -74,6 +77,7 @@ interface Props {
   selectTemplate: (id: null | string) => void;
   selectedTemplate: TemplateData | null;
   selectedTodo: null | string;
+  setEditTodo: (value: null | string) => void;
   setGroupsFilter: (groups: string[]) => void;
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
@@ -145,6 +149,7 @@ const AdminTodos = ({
   currentPage,
   currentPageSize,
   data,
+  editTodo,
   groupsData,
   groupsFilter,
   loading,
@@ -157,6 +162,7 @@ const AdminTodos = ({
   selectTemplate,
   selectedTemplate,
   selectedTodo,
+  setEditTodo,
   setSearch,
   setSelectedTodo,
   setStatusMode,
@@ -476,11 +482,43 @@ const AdminTodos = ({
                       </Button>
                     )}
                   </Col>
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        defaultMessage: 'View activity',
+                      })}
+                    >
+                      <Button
+                        onClick={() => setSelectedTodo(record.todo.node.id)}
+                        size="small"
+                        style={{
+                          borderBottomRightRadius: canDelete ? 0 : 10,
+                          borderLeft: 'none',
+                          borderRadius: 0,
+                          borderTopRightRadius: canDelete ? 0 : 10,
+                          paddingLeft: 10,
+                          paddingRight: 10,
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faArrowUpRightAndArrowDownLeftFromCenter}
+                        />
+                      </Button>
+                    </Tooltip>
+                  </Col>
                   {canDelete && (
                     <Col>
                       <Dropdown
                         menu={{
                           items: [
+                            {
+                              icon: <FontAwesomeIcon icon={faEdit} />,
+                              key: '0',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Edit',
+                              }),
+                              onClick: () => setEditTodo(record.key),
+                            },
                             {
                               icon: <FontAwesomeIcon icon={faTrash} />,
                               key: '1',
@@ -506,6 +544,7 @@ const AdminTodos = ({
                           size="small"
                           style={{
                             borderBottomLeftRadius: 0,
+                            borderLeft: 'none',
                             borderTopLeftRadius: 0,
                             paddingLeft: 8,
                             paddingRight: 10,
@@ -518,21 +557,7 @@ const AdminTodos = ({
                   )}
                 </Row>
               ),
-              width: 170,
-            },
-            {
-              dataIndex: 'view',
-              key: 'view',
-              render: (_, record) => (
-                <Typography.Link
-                  onClick={() => setSelectedTodo(record.todo.node.id)}
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'View',
-                  })}
-                </Typography.Link>
-              ),
-              width: 100,
+              width: 220,
             },
           ]}
           dataSource={data?.todoRelay.edges?.map((todo) => ({
@@ -601,6 +626,20 @@ const AdminTodos = ({
             onClose={() => setSelectedTodo(null)}
             updateTodo={completeTodo}
           />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={() => setEditTodo(null)}
+        open={!!editTodo}
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Activity',
+        })}
+        width={800}
+      >
+        {editTodo ? (
+          <EditTodo onClose={() => setEditTodo(null)} todoId={editTodo} />
         ) : (
           <div />
         )}

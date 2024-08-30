@@ -9877,7 +9877,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData?: Maybe<SystemTask>;
+  mySafetyImportData: SystemTask;
   recycleChecklist: Checklist;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
@@ -13171,7 +13171,6 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
-  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -18849,9 +18848,11 @@ export type TodoUpdateInput = {
   completed?: InputMaybe<NullableSetBooleanHelper>;
   completedBy?: InputMaybe<ConnectHelper>;
   completedDate?: InputMaybe<NullableSetDateHelper>;
+  description?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<UpdateDocument>>;
   dueDate?: InputMaybe<NullableSetDateHelper>;
   groups?: InputMaybe<RelationSet>;
+  name?: InputMaybe<Scalars['String']>;
   questions?: InputMaybe<TaskQuestionUpdateManyWithoutTaskNestedInput>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
   similarOffenderIds?: InputMaybe<Array<Scalars['String']>>;
