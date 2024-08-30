@@ -227,7 +227,7 @@ Props): JSX.Element => {
               label={intl.formatMessage({
                 defaultMessage: 'Businesses',
               })}
-              name="businesses"
+              name="business"
             >
               <BusinessesSelect
                 allowClear
