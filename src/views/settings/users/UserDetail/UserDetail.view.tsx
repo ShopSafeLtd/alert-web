@@ -4,7 +4,7 @@ import type { Role } from 'graphql/types';
 import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
 import type { RefObject } from 'react';
 
-import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
+// import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import LocatingModal from '#/components/map/LocatingModal';
 import { CustomTermsView } from '#/components/onboarding/Onboarding/SchemeTerms/Terms.view';
 import FormatCalendar from '#/utils/format-calendar-24h';
@@ -64,7 +64,7 @@ interface Props {
   enableConfirm: () => void;
   handlePrint: () => void;
   inviteConfirm: () => void;
-  isOwn: boolean;
+  // isOwn: boolean;
   isPrinting: boolean;
   loading: boolean;
   saving: boolean;
@@ -156,7 +156,7 @@ const userDetail = ({
   enableConfirm,
   handlePrint,
   inviteConfirm,
-  isOwn,
+  // isOwn,
   isPrinting,
   loading,
   saving,
@@ -192,17 +192,14 @@ const userDetail = ({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const EditPassword = () => {
-    if (isOwn) {
-      return <EditPasswordButton key="5" saving={saving} />;
-    }
-    return (
-      <Button disabled={saving} key="5" onClick={toggleEditPassword}>
-        <FormattedMessage defaultMessage="Edit Password" />
-      </Button>
-    );
-  };
-
+  const EditPassword = () => (
+    // if (isOwn) {
+    //   return <EditPasswordButton key="5" saving={saving} />;
+    // }
+    <Button disabled={saving} key="5" onClick={toggleEditPassword}>
+      <FormattedMessage defaultMessage="Edit Password" />
+    </Button>
+  );
   return (
     <div className="list-view">
       <PageHeader

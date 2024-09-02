@@ -1,106 +1,102 @@
-import React, { useEffect } from 'react';
-import SideNav from 'components/layout-components/AntD/navigation/SideNav';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call */
+import GroupsProvider from '#/context/groups-context';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Grid, Layout } from 'antd';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
+import SideNav from 'components/layout-components/AntD/navigation/SideNav';
+import Loading from 'components/shared-components/AntD/Loading';
+import navigationConfig from 'configs/NavigationConfig';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
 import AppViews from 'navigation/app-views/router';
-import { Grid, Layout } from 'antd';
-import navigationConfig from 'configs/NavigationConfig';
-import utils from 'utils';
+import React from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
+import { Navigate } from 'react-router-dom';
 import { NavType, useStoreState } from 'state';
+import utils from 'utils';
 
+import ScreenSizeUnsupported from '../../components/layout-components/ScreenSizeUnsuported';
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
   SIDE_NAV_WIDTH,
-} from '#/constants/ThemeConstant';
-import ScreenSizeUnsupported from '../../components/layout-components/ScreenSizeUnsuported';
-import Loading from '#/components/shared-components/AntD/Loading';
-import { useAuth } from '#/hooks';
-import { useAuth as useAuthClerk } from '@clerk/clerk-react';
-import { useLocation } from 'react-router-dom';
-import GroupsProvider from '#/context/groups-context';
+} from '../../constants/ThemeConstant';
 
 const { Content } = Layout;
 const { useBreakpoint } = Grid;
 
-const AppLayout = (): JSX.Element => {
-  const location = useLocation();
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  location: any;
+}
 
+export const AppLayout = ({ location }: Props): JSX.Element => {
+  const loggedIn = useStoreState((state) => state.auth.loggedIn);
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const navType = useStoreState((state) => state.theme.navType);
+  const { onboarded } = useStoreState((state) => state.user);
   const currentRouteInfo = utils.getRouteInfo(
     navigationConfig,
     location.pathname
   );
-  const { getCurrentUser } = useAuth();
+
+  const { isAuthenticated, isLoading } = useAuth0();
   const screens = utils.getBreakPoint(useBreakpoint());
   const isMobile = !screens.includes('lg');
   const isNavSide = navType === NavType.SIDE;
-  const { isLoaded } = useAuthClerk();
-  const { loading } = useAuth();
+  const isNavTop = navType === NavType.TOP;
 
   const getLayoutGutter = () => {
-    if (isMobile) {
+    if (isNavTop || isMobile) {
       return 0;
     }
     return navCollapsed ? SIDE_NAV_COLLAPSED_WIDTH : SIDE_NAV_WIDTH;
   };
 
-  const { onboarded, forcePasswordReset, isSet, termsExpired } = useStoreState(
-    (state) => state.user
-  );
-
   const { status } = useThemeSwitcher();
 
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
-
-  const onboardingRoute =
-    !onboarded ||
-    forcePasswordReset ||
-    termsExpired ||
-    location.pathname.includes('onboarding');
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-  if (status === 'loading') {
+  if (status === 'loading' || isLoading) {
     return <Loading cover="page" />;
   }
 
-  if (loading || !isLoaded || !isSet) return <Loading cover="content" />;
-
-  return (
+  return loggedIn || (isAuthenticated && !isLoading) ? (
     <ScreenSizeUnsupported>
       <GroupsProvider>
         <Layout>
           <Layout className="app-container">
-            {isNavSide && !isMobile && !onboardingRoute ? (
+            {isNavSide && !isMobile && onboarded ? (
               <SideNav routeInfo={currentRouteInfo} />
             ) : null}
             <Layout
               className=""
               style={{
-                paddingLeft: onboardingRoute ? 0 : getLayoutGutter(),
+                paddingLeft: location.pathname.includes('onboarding')
+                  ? 0
+                  : getLayoutGutter(),
               }}
             >
               <div
-                className={'app-content'}
+                className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
                 style={{
                   padding:
-                    location.pathname.includes('settings') || onboardingRoute
+                    location.pathname.includes('settings') ||
+                    location.pathname.includes('onboarding')
                       ? 0
                       : undefined,
                 }}
               >
+                {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
                 <Content>
                   <AppViews />
                 </Content>
               </div>
+              {/* <Footer /> */}
             </Layout>
           </Layout>
           {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
         </Layout>
       </GroupsProvider>
     </ScreenSizeUnsupported>
+  ) : (
+    <Navigate to="/auth" />
   );
 };
 

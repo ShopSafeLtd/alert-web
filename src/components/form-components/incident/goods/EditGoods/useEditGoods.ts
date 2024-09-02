@@ -1,7 +1,7 @@
-import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import type { ListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { GoodsData } from 'types/DataType';
 
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { GoodsMode } from 'graphql/types';
 import { useStoreState } from 'state';
 
@@ -32,11 +32,11 @@ const useEditGoods = ({ data, update }: Props): Return => {
   const onSubmit = (item: GoodsData) => {
     update({
       ...data,
-      goodsType: item.goodsType,
+      goodsTypeId: item.goodsTypeId,
       name:
         item.name ??
         goodsTypesData?.listGoodsTypes.goodsTypes.find(
-          ({ id }) => id === item.goodsType
+          ({ id }) => id === item.goodsTypeId
         )?.name ??
         '',
       quantity: item.quantity,
@@ -46,8 +46,7 @@ const useEditGoods = ({ data, update }: Props): Return => {
           ? (item.recoveredValue || 0) * (item.recoveredQuantity || 0)
           : item.recoveredValue || 0,
       sku: item.sku,
-      // TODO fix
-      stockItem: item.stockItem,
+      stockItemId: item.stockItemId,
       value:
         goodsMode === GoodsMode.Specific
           ? (item.value || 0) * (item.quantity || 0)

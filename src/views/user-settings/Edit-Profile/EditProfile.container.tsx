@@ -1,26 +1,29 @@
 import React from 'react';
+
 import View from './EditProfile.view';
 import useEditProfile from './useEditProfile';
 
 const EditProfile = (): JSX.Element => {
   const {
-    onSubmit,
-    onClose,
     data,
-    loading,
-    saving,
     groups,
+    loading,
+    onClose,
+    onSubmit,
+    resetConfirm,
+    saving,
     userDefaultGroups,
   } = useEditProfile();
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
       data={data}
-      loading={loading}
       groups={groups}
+      loading={loading}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      resetConfirm={resetConfirm}
+      saving={saving}
       userDefaultGroups={userDefaultGroups}
     />
   );

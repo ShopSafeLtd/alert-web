@@ -40,6 +40,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       type
     }
     scheme {
+      id
       mg11Available
       restrictIncidentAccess
     }

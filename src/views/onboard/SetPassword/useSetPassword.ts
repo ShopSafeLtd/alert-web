@@ -1,85 +1,63 @@
-import type { FormInstance } from 'antd';
-
-import { useStoreActions, useStoreState } from '#/state';
-import { useForcedPasswordSetMutation } from '#/views/onboard/SetPassword/graphql/mutations/__generated__/password-set.generated';
-import { useUser } from '@clerk/clerk-react';
-import { Form } from 'antd';
+import { useAuth0 } from '@auth0/auth0-react';
+import { notification } from 'antd';
+import { useCreateUserinAuth0Mutation } from 'graphql/auth/mutations/__generated__/create_user_in_auth0.generated';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 
-export interface FormData {
-  confirm: string;
-  current: string;
+interface FormData {
   password: string;
 }
-
+interface Props {
+  userId: string;
+}
 interface Return {
-  form: FormInstance<FormData>;
-  hasPassword: boolean;
-  onSubmit: () => void;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
 }
-interface ClerkAPIError {
-  longMessage: string;
-  message: string;
-  meta?: {
-    paramName?: string;
-  };
-}
-const useSetPassword = (): Return => {
+
+const useSetPassword = ({ userId }: Props): Return => {
+  const { loginWithRedirect } = useAuth0();
+  const intl = useIntl();
   const [saving, setSaving] = useState(false);
-  const { user } = useUser();
-  const [form] = Form.useForm<FormData>();
-  const { forcePasswordReset, hasPassword } = useStoreState(
-    (state) => state.user
-  );
-  const { setPasswordSet } = useStoreActions((actions) => actions.user);
-  const [passwordHasReset] = useForcedPasswordSetMutation();
-
-  console.log(forcePasswordReset, 'forced');
-  const onSubmit = () => {
-    setSaving(true);
-    form
-      .validateFields()
-      .then((values: { current: string; password: string }) => {
-        user
-          ?.updatePassword({
-            currentPassword: hasPassword ? values.current : undefined,
-            newPassword: values.password,
-          })
-          .then(() => {
-            void passwordHasReset();
-            setPasswordSet();
-            form.resetFields();
-            setSaving(false);
-          })
-          .catch((error: { errors: ClerkAPIError[] }) => {
-            if (error.errors[0]?.meta?.paramName === 'current_password') {
-              form.setFields([
-                {
-                  errors: ['Current password is incorrect, please try again.'],
-                  name: 'current',
-                },
-              ]);
-            } else {
-              form.setFields([
-                {
-                  errors: [error.errors[0].longMessage],
-                  name: 'password',
-                },
-              ]);
-            }
-            setSaving(false);
-          });
-
-        form.resetFields();
-      })
-      .catch((error) => {
-        console.log('Validate Failed:', error);
+  const [createUserInAuth0] = useCreateUserinAuth0Mutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'Your Password has been created!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Created!',
+        }),
+        placement: 'bottomRight',
       });
+      void loginWithRedirect();
+    },
+    onError: () => {
+      setSaving(false);
+      notification.error({
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Error!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+  });
+
+  const onSubmit = (data: FormData) => {
+    setSaving(true);
+    void createUserInAuth0({
+      variables: {
+        id: userId || '',
+        password: data.password,
+      },
+    });
   };
   return {
-    form,
-    hasPassword,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     saving,
   };

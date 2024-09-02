@@ -18,7 +18,7 @@ import {
   Typography,
 } from 'antd';
 import { useListBusinessesLocationsQuery } from 'graphql/businesses/queries/__generated__/list-businesses-locations.generated';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
@@ -130,14 +130,15 @@ const NewBusinessRow = React.memo(
           <Col className={classes.cell} span={3} style={{ maxWidth: 200 }}>
             <Form.Item
               name="street"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Enter a street',
-                  }),
-                  required: true,
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: intl.formatMessage({
+              //       defaultMessage: 'Enter a street',
+              //       id: 'M3C0JK',
+              //     }),
+              //   },
+              // ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -145,14 +146,15 @@ const NewBusinessRow = React.memo(
           <Col className={classes.cell} span={3} style={{ maxWidth: 250 }}>
             <Form.Item
               name="townCity"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Enter a town/city',
-                  }),
-                  required: true,
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: intl.formatMessage({
+              //       defaultMessage: 'Enter a town/city',
+              //       id: '0rPJ0H',
+              //     }),
+              //   },
+              // ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -165,14 +167,15 @@ const NewBusinessRow = React.memo(
           <Col className={classes.cell} span={2} style={{ maxWidth: 250 }}>
             <Form.Item
               name="postcode"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage: 'Enter a postcode',
-                  }),
-                  required: true,
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: intl.formatMessage({
+              //       defaultMessage: 'Enter a postcode',
+              //       id: 'ysScN/',
+              //     }),
+              //   },
+              // ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -246,6 +249,7 @@ const NewBusinessRow = React.memo(
     );
   }
 );
+NewBusinessRow.displayName = 'NewBusinessRow';
 
 interface Props {
   newBusinesses: NewBusiness[];
@@ -369,4 +373,4 @@ const NewBusinessTable = ({
   );
 };
 
-export default React.memo(NewBusinessTable);
+export default memo(NewBusinessTable);

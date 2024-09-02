@@ -37,6 +37,7 @@ interface Props {
 }
 
 function convertToArrayOfStrings(onChangeValue: ValueType): string[] {
+  if (!onChangeValue) return [];
   if (Array.isArray(onChangeValue)) {
     if (onChangeValue.every((item) => typeof item === 'string')) {
       return onChangeValue as string[];

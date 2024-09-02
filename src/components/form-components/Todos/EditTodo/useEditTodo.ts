@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import type { EditTodoQuery } from '#/components/form-components/Todos/EditTodo/graphql/__generated__/edit_todo.generated';
+import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
 import type { Moment } from 'moment';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
+import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
+import { useEditTodoQuery } from '#/components/form-components/Todos/EditTodo/graphql/__generated__/edit_todo.generated';
+import { useUpdateTodoDetailsMutation } from '#/components/form-components/Todos/EditTodo/graphql/__generated__/update-todo-details.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import moment from 'moment';
@@ -12,30 +18,14 @@ import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-
 import customRequest from '../../../../utils/custom-request';
-import {
-  QuestionGroupOnSchemeQuery,
-  useQuestionGroupOnSchemeQuery,
-} from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
-import {
-  EditTodoQuery,
-  useEditTodoQuery,
-} from '#/components/form-components/Todos/EditTodo/graphql/__generated__/edit_todo.generated';
-import {
-  useAddTodoUsersQuery
-} from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
-import {
-  useUpdateTodoDetailsMutation
-} from '#/components/form-components/Todos/EditTodo/graphql/__generated__/update-todo-details.generated';
-
 
 const { useForm } = Form;
 
 export interface FormData {
   [answer: string]: Moment | boolean | number | string | string[] | undefined;
   assignedUsers: string[];
-  business: string;
+  business: string[];
   completed: boolean;
   description: string;
   dueDate: Moment;
@@ -109,7 +99,7 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
     onCompleted: ({ todo }) => {
       form.setFieldsValue({
         assignedUsers: todo.assignedUsers.map(({ id }) => id),
-        business: todo.business?.id || '',
+        business: todo.business?.id ? [todo.business?.id] : [],
         completed: todo.completed || false,
         description: todo?.description || '',
         dueDate: moment(todo.dueDate, 'YYYY-MM-DD'),
@@ -302,29 +292,28 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
     }));
 
     const answerIds = todoData?.todo?.answers?.map(({ id: aId }) => aId);
-
     void updateTodo({
       variables: {
         data: {
           answers: {
-            deleteMany: answerIds
-              ? [
-                  {
-                    id: {
-                      in: answerIds || [],
+            deleteMany:
+              answerIds && answerIds.length > 0
+                ? [
+                    {
+                      id: {
+                        in: answerIds || [],
+                      },
                     },
-                  },
-                ]
-              : undefined,
+                  ]
+                : undefined,
           },
           assignedUsers: { set: data.assignedUsers.map((id) => ({ id })) },
-          business:
-            data.business && data.business !== todoData?.todo.id
-              ? { set: [{ id: data.business }] }
-              : undefined,
-          completed: {
-            set: data.completed,
-          },
+          businessId: data.business.length > 0 ? data.business[0] : undefined,
+          completed: data.completed
+            ? {
+                set: data.completed,
+              }
+            : undefined,
           description: data.description,
           documents: {
             // @ts-expect-error TODO fix this date issue Wait to check
@@ -344,7 +333,6 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
           },
           dueDate: { set: data.dueDate.toDate() },
           groups: { set: data.groups.map((id) => ({ id })) },
-
           name: data.name,
           questions: {
             create:

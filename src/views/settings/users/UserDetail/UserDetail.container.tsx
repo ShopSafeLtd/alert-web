@@ -19,7 +19,7 @@ const UserDetailContainer = (): JSX.Element => {
     enableConfirm,
     handlePrint,
     inviteConfirm,
-    isOwn,
+    // isOwn,
     isPrinting,
     loading,
     saving,
@@ -44,7 +44,7 @@ const UserDetailContainer = (): JSX.Element => {
       enableConfirm={enableConfirm}
       handlePrint={handlePrint}
       inviteConfirm={inviteConfirm}
-      isOwn={isOwn}
+      // isOwn={isOwn}
       isPrinting={isPrinting}
       loading={loading}
       saving={saving}

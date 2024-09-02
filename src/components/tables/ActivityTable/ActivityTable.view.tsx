@@ -1,91 +1,83 @@
-import React from 'react';
+import { faEye, faFlagCheckered } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Button, Col, Row, Table, Tag, Tooltip } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faFlagCheckered } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
+  saving?: boolean;
+  setCompleteTodoVisible: (value: null | string) => void;
+  setViewTodoVisible: (value: null | string) => void;
   todos:
     | {
-        id: string;
-        name?: string | null | undefined;
-        createdAt?: Date | null | undefined;
-        completedDate?: Date | null | undefined;
-        assignedUsers: { id: string; fullName: string }[];
+        assignedUsers: { fullName: string; id: string }[];
         completed?: boolean | null | undefined;
+        completedDate?: Date | null | undefined;
+        createdAt?: Date | null | undefined;
+        id: string;
+        name?: null | string | undefined;
       }[]
     | undefined;
-  saving?: boolean;
-  setViewTodoVisible: (value: string | null) => void;
-  setCompleteTodoVisible: (value: string | null) => void;
 }
 
 const ActivityTable = ({
-  todos,
   saving,
-  setViewTodoVisible,
   setCompleteTodoVisible,
+  setViewTodoVisible,
+  todos,
 }: Props): JSX.Element => {
   // const classes = useStyles();
   const intl = useIntl();
 
   return (
     <Table
-      size="small"
-      pagination={{
-        hideOnSinglePage: true,
-        pageSize: 5,
-      }}
       columns={[
         {
+          dataIndex: 'name',
+          ellipsis: true,
           key: 'name',
           title: intl.formatMessage({
             defaultMessage: 'Name',
           }),
-          dataIndex: 'name',
-          ellipsis: true,
         },
 
         {
-          key: 'createdAt',
           dataIndex: 'createdAt',
+          key: 'createdAt',
+          render: (value: Date) => FormatCalendar(new Date(value), true),
           title: intl.formatMessage({
             defaultMessage: 'Start Date',
           }),
-          render: (value: Date) => FormatCalendar(new Date(value), true),
         },
         {
-          key: 'completedDate',
           dataIndex: 'completedDate',
+          ellipsis: true,
+          key: 'completedDate',
+          // eslint-disable-next-line no-confusing-arrow
+          render: (value: Date, record) =>
+            record.completed && value
+              ? FormatCalendar(new Date(value), true)
+              : undefined,
           title: intl.formatMessage({
             defaultMessage: 'Completed Date',
           }),
-          ellipsis: true,
-          // eslint-disable-next-line no-confusing-arrow
-          render: (value: Date, record) =>
-            record.completed
-              ? FormatCalendar(new Date(value), true)
-              : undefined,
         },
         {
-          key: 'assignedUsers',
           dataIndex: 'assignedUsers',
-          title: intl.formatMessage({
-            defaultMessage: 'Assigned Users',
-          }),
           ellipsis: true,
-          render: (value: { id: string; fullName: string }[]) => (
+          key: 'assignedUsers',
+          render: (value: { fullName: string; id: string }[]) => (
             <Row gutter={4}>
               {value.map((item) => (
                 <Col key={item.id}>
                   <Tooltip title={item.fullName}>
                     <Avatar
+                      size={30}
                       style={{
                         cursor: 'pointer',
                         fontSize: 14,
                       }}
-                      size={30}
                     >
                       {item.fullName
                         .split(' ')
@@ -98,13 +90,13 @@ const ActivityTable = ({
               ))}
             </Row>
           ),
+          title: intl.formatMessage({
+            defaultMessage: 'Assigned Users',
+          }),
         },
         {
-          key: 'completed',
           dataIndex: 'completed',
-          title: intl.formatMessage({
-            defaultMessage: 'Status',
-          }),
+          key: 'completed',
           // eslint-disable-next-line no-confusing-arrow
           render: (_, record) =>
             record.completed ? (
@@ -120,11 +112,13 @@ const ActivityTable = ({
                 })}
               </Tag>
             ),
+          title: intl.formatMessage({
+            defaultMessage: 'Status',
+          }),
         },
         {
-          key: 'actions',
           dataIndex: 'completed',
-          width: 50,
+          key: 'actions',
           render: (value: boolean, item) => (
             <Tooltip
               title={
@@ -138,14 +132,14 @@ const ActivityTable = ({
               }
             >
               <Button
-                size="small"
-                type={value ? 'text' : 'ghost'}
-                disabled={saving}
                 danger={!value}
+                disabled={saving}
                 onClick={() => {
                   if (value) setViewTodoVisible(item.key);
                   if (!value) setCompleteTodoVisible(item.key);
                 }}
+                size="small"
+                type={value ? 'text' : 'ghost'}
                 // icon={<FontAwesomeIcon icon={faEye} />}
               >
                 {value ? (
@@ -156,18 +150,24 @@ const ActivityTable = ({
               </Button>
             </Tooltip>
           ),
+          width: 50,
         },
       ]}
       dataSource={
         todos?.map((todo) => ({
+          assignedUsers: todo.assignedUsers,
+          completed: todo.completed || false,
+          completedDate: todo.completedDate,
+          createdAt: todo.createdAt,
           key: todo.id,
           name: todo.name || '',
-          createdAt: todo.createdAt,
-          completedDate: todo.completedDate,
-          completed: todo.completed || false,
-          assignedUsers: todo.assignedUsers,
         })) || []
       }
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
+      size="small"
     />
   );
 };

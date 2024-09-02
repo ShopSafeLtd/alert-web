@@ -1,26 +1,25 @@
+import { LoadScript } from '@react-google-maps/api';
+import { CaptureConsole, HttpClient } from '@sentry/integrations';
+import * as Sentry from '@sentry/react';
+import { configureScope, reactRouterV6Instrumentation } from '@sentry/react';
+import LogRocket from 'logrocket';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import mixpanel from 'mixpanel-browser';
+import Views from 'navigation/router';
 import React from 'react';
+import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 import {
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
   useNavigationType,
 } from 'react-router-dom';
-import Views from 'navigation/router';
-import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
-import { LoadScript } from '@react-google-maps/api';
-import * as Sentry from '@sentry/react';
-import { configureScope, reactRouterV6Instrumentation } from '@sentry/react';
-import LogRocket from 'logrocket';
-import { CaptureConsole, HttpClient } from '@sentry/integrations';
-import mixpanel from 'mixpanel-browser';
-import ApolloProvider from './providers/ApolloProvider';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
-import { Store, ThemeConfig } from './state';
 import RouteWrapper from './navigation/utils/route-wrapper';
-import { TokenProvider } from '#/context/token-context';
+import ApolloProvider from './providers/ApolloProvider';
+import { Store, ThemeConfig } from './state';
 
 const themes = {
   dark: '/css/dark-theme.css',
@@ -30,8 +29,16 @@ const themes = {
 if (import.meta.env.PROD) {
   mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
   Sentry.init({
+    beforeSend(event) {
+      const logRocketSession = LogRocket.sessionURL;
+      if (logRocketSession !== null && event.extra) {
+        // eslint-disable-next-line no-param-reassign
+        event.extra.LogRocket = logRocketSession;
+        return event;
+      }
+      return event;
+    },
     dsn: import.meta.env.VITE_SENTRY_DSN,
-    sendDefaultPii: true,
 
     integrations: [
       new CaptureConsole(),
@@ -48,17 +55,9 @@ if (import.meta.env.PROD) {
     ],
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
+    sendDefaultPii: true,
     // Adjust for production
     tracesSampleRate: 0.4,
-    beforeSend(event) {
-      const logRocketSession = LogRocket.sessionURL;
-      if (logRocketSession !== null && event.extra) {
-        // eslint-disable-next-line no-param-reassign
-        event.extra.LogRocket = logRocketSession;
-        return event;
-      }
-      return event;
-    },
   });
   LogRocket.init('ub3rsv/alert');
 
@@ -72,23 +71,21 @@ if (import.meta.env.PROD) {
 const App = (): JSX.Element => (
   <div className="App">
     <ThemeSwitcherProvider
-      themeMap={themes}
       defaultTheme={ThemeConfig.currentTheme}
       insertionPoint="styles-insertion-point"
+      themeMap={themes}
     >
       <LoadScript
         googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
         libraries={['visualization']}
       >
-        <TokenProvider>
-          <Store>
-            <ApolloProvider>
-              <RouteWrapper title={undefined}>
-                <Views />
-              </RouteWrapper>
-            </ApolloProvider>
-          </Store>
-        </TokenProvider>
+        <Store>
+          <ApolloProvider>
+            <RouteWrapper title={undefined}>
+              <Views />
+            </RouteWrapper>
+          </ApolloProvider>
+        </Store>
       </LoadScript>
     </ThemeSwitcherProvider>
   </div>

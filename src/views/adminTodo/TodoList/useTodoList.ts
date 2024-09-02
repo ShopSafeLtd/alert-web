@@ -33,6 +33,7 @@ interface Return {
   currentPage: number;
   currentPageSize: number;
   data: TodoListQuery | null | undefined;
+  editTodo: null | string;
   groupsData: { label: string; value: string }[];
   groupsFilter: string[];
   loading: boolean;
@@ -45,6 +46,7 @@ interface Return {
   selectTemplate: (id: null | string) => void;
   selectedTemplate: ListData | null;
   selectedTodo: null | string;
+  setEditTodo: (value: null | string) => void;
   setGroupsFilter: (value: string[]) => void;
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
@@ -67,6 +69,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
 
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
+  const [editTodo, setEditTodo] = useState<null | string>(null);
   const [allUsers, setAllUsers] = useState(false);
   const [allSchemes, setAllSchemes] = useState(false);
   const [search, setSearch] = useState('');
@@ -303,6 +306,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     currentPage: page,
     currentPageSize: pageSize,
     data,
+    editTodo,
     groupsData,
     groupsFilter,
     loading: (data === null || data === undefined) && loading,
@@ -316,6 +320,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     selectTemplate,
     selectedTemplate,
     selectedTodo,
+    setEditTodo,
     setGroupsFilter,
     setSearch,
     setSelectedTodo,

@@ -1,118 +1,119 @@
+import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
+
 import React from 'react';
 
 import View from './AddExistingOffender.view';
 import useAddExistingOffender from './useAddExistingOffender';
-import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
 
 export interface OffenderData {
-  id: string;
-  updatedAt?: Date;
-  name?: string | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
+  approved?: boolean | null;
   build?: Build | null;
   dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
   groups?:
     | {
         id: string;
         name: string;
       }[]
     | undefined;
+  hair?: null | string;
+  id: string;
+  imageUid?: string[] | undefined;
   images?: {
+    fileName?: null | string;
     id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
     new?: boolean;
+    optimised?: null | string;
     position: ImagePosition;
     rotation: number;
+    type?: null | string;
+    url?: null | string;
   }[];
-  imageUid?: string[] | undefined;
+  lastActive:
+    | { dayTime?: null | string | undefined; id: string }
+    | null
+    | undefined;
+  name?: null | string;
+  peculiarities?: null | string;
+  race?: Race | null;
   tags: {
     id: string;
     name: string;
   }[];
-  lastActive:
-    | { id: string; dayTime?: string | null | undefined }
-    | null
-    | undefined;
+  updatedAt?: Date;
 }
 
 interface Props {
-  onClose: () => void;
-  update: (value: OffenderData) => void;
-  offenderIds: string[] | undefined;
   addOverride?: string;
+  offenderIds: string[] | undefined;
+  onClose: () => void;
   takeAllSchemes?: boolean;
+  update: (value: OffenderData) => void;
 }
 
 const AddExistingOffender = ({
-  onClose,
-  update,
-  offenderIds,
   addOverride,
+  offenderIds,
+  onClose,
   takeAllSchemes,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    data,
-    loading,
-    search,
-    setSearch,
-    onPaginationChange,
-    setCurrentId,
-    selectedOffender,
-    openLightbox,
-    lightBoxOpen,
     age,
     build,
+    clearFilters,
+    data,
     ethnicity,
+    hair,
+    lightBoxOpen,
+    loading,
+    onPaginationChange,
+    onSubmit,
+    openLightbox,
+    pagination,
+    peculiarities,
+    search,
+    selectedOffender,
     setAge,
     setBuild,
+    setCurrentId,
     setEthnicity,
-    setSex,
-    sex,
-    pagination,
-    hair,
-    peculiarities,
     setHair,
     setPeculiarities,
-    clearFilters,
-  } = useAddExistingOffender({ onClose, update, offenderIds, takeAllSchemes });
+    setSearch,
+    setSex,
+    sex,
+  } = useAddExistingOffender({ offenderIds, onClose, takeAllSchemes, update });
 
   return (
     <View
-      lightBoxOpen={lightBoxOpen}
-      openLightbox={openLightbox}
-      onSubmit={onSubmit}
-      data={data}
-      search={search}
-      setSearch={setSearch}
-      loading={loading}
-      onPaginationChange={onPaginationChange}
-      setCurrentId={setCurrentId}
-      selectedOffender={selectedOffender}
+      addOverride={addOverride}
       age={age}
       build={build}
+      clearFilters={clearFilters}
+      data={data}
       ethnicity={ethnicity}
+      hair={hair}
+      lightBoxOpen={lightBoxOpen}
+      loading={loading}
+      onPaginationChange={onPaginationChange}
+      onSubmit={onSubmit}
+      openLightbox={openLightbox}
+      pagination={pagination}
+      peculiarities={peculiarities}
+      search={search}
+      selectedOffender={selectedOffender}
       setAge={setAge}
       setBuild={setBuild}
+      setCurrentId={setCurrentId}
       setEthnicity={setEthnicity}
-      setSex={setSex}
-      sex={sex}
-      pagination={pagination}
-      hair={hair}
-      peculiarities={peculiarities}
       setHair={setHair}
       setPeculiarities={setPeculiarities}
-      clearFilters={clearFilters}
-      addOverride={addOverride}
+      setSearch={setSearch}
+      setSex={setSex}
+      sex={sex}
     />
   );
 };

@@ -9898,10 +9898,12 @@ export type Mutation = {
   searchExistingImages: Array<RekMatch>;
   searchFaces: SystemTask;
   sendInvite: User;
+  sentrysysImportData: SystemTask;
   setDefaultTemplate?: Maybe<ReportTemplate>;
   setPassword: User;
   setSchemeSharing: Scheme;
   shareData: SystemTask;
+  shareIncident: Incident;
   signIn: SignIn;
   signTerms: UserTerm;
   stockItemImport: SystemTask;
@@ -10628,6 +10630,11 @@ export type MutationSendInviteArgs = {
 };
 
 
+export type MutationSentrysysImportDataArgs = {
+  data: SentrysysImportDataInput;
+};
+
+
 export type MutationSetDefaultTemplateArgs = {
   data: SetDefaultTemplateInput;
 };
@@ -10645,6 +10652,11 @@ export type MutationSetSchemeSharingArgs = {
 
 export type MutationShareDataArgs = {
   data: ShareDataInput;
+};
+
+
+export type MutationShareIncidentArgs = {
+  where: UniqueId;
 };
 
 
@@ -12922,7 +12934,7 @@ export type OutcomeSummary = {
   totalCBOCount: Scalars['Int'];
   totalCBOYears: Scalars['Int'];
   totalFinesCount: Scalars['Int'];
-  totalFinesValue: Scalars['Int'];
+  totalFinesValue: Scalars['Float'];
   totalPrisonSentenceCount: Scalars['Int'];
   totalPrisonSentenceMonths: Scalars['Int'];
   totalRehabOrders: Scalars['Int'];
@@ -13159,7 +13171,6 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
-  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -16756,6 +16767,126 @@ export type SectionInput = {
   title: Scalars['String'];
 };
 
+export type SentrysysImportBusinessesInput = {
+  connect?: InputMaybe<SentrysysImportConnectBusinessInput>;
+  create?: InputMaybe<SentrysysImportCreateBusinessInput>;
+};
+
+export type SentrysysImportConnectBusinessInput = {
+  id: Scalars['String'];
+  importId: Scalars['String'];
+};
+
+export type SentrysysImportConnectUserInput = {
+  groups?: InputMaybe<Array<UniqueId>>;
+  id: Scalars['String'];
+  importId: Scalars['String'];
+  role: Role;
+};
+
+export type SentrysysImportCreateBusinessInput = {
+  building?: InputMaybe<Scalars['String']>;
+  county?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<UniqueId>>;
+  importId: Scalars['String'];
+  name: Scalars['String'];
+  postcode: Scalars['String'];
+  street: Scalars['String'];
+  townCity?: InputMaybe<Scalars['String']>;
+};
+
+export type SentrysysImportCreateUserInput = {
+  business: UniqueId;
+  email: Scalars['String'];
+  fullName: Scalars['String'];
+  groups: Array<UniqueId>;
+  importId: Scalars['String'];
+  role: Role;
+};
+
+export type SentrysysImportDataInput = {
+  businesses: Array<SentrysysImportBusinessesInput>;
+  historicIncidents: Array<SentrysysImportHistoricIncidentsInput>;
+  images: Array<SentrysysImportImagesInput>;
+  incidents: Array<SentrysysImportIncidentsInput>;
+  offenders: Array<SentrysysImportOffendersInput>;
+  scheme: UniqueId;
+  users: Array<SentrysysImportUsersInput>;
+  vehicles: Array<SentrysysImportVehiclesInput>;
+};
+
+export type SentrysysImportHistoricIncidentsInput = {
+  business?: InputMaybe<UniqueId>;
+  crimeTypes?: InputMaybe<Array<UniqueId>>;
+  date?: InputMaybe<Scalars['Date']>;
+  groups?: InputMaybe<Array<UniqueId>>;
+  importId: Scalars['String'];
+  items: Array<SentrysysImportIncidentItemInput>;
+  policeInvolved?: InputMaybe<Scalars['Boolean']>;
+  policeReported?: InputMaybe<Scalars['Boolean']>;
+  time?: InputMaybe<Scalars['Date']>;
+};
+
+export type SentrysysImportImagesInput = {
+  fileName: Scalars['String'];
+  importId: Scalars['String'];
+  mimetype: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type SentrysysImportIncidentItemInput = {
+  id: Scalars['String'];
+  lost: Scalars['Float'];
+  recovered: Scalars['Float'];
+};
+
+export type SentrysysImportIncidentsInput = {
+  business?: InputMaybe<UniqueId>;
+  createdBy?: InputMaybe<UniqueId>;
+  crimeTypes?: InputMaybe<Array<UniqueId>>;
+  date?: InputMaybe<Scalars['Date']>;
+  description?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<UniqueId>>;
+  images?: InputMaybe<Array<UniqueId>>;
+  importId: Scalars['String'];
+  items: Array<SentrysysImportIncidentItemInput>;
+  offenders?: InputMaybe<Array<UniqueId>>;
+  policeInvolved?: InputMaybe<Scalars['Boolean']>;
+  policeReported?: InputMaybe<Scalars['Boolean']>;
+  time?: InputMaybe<Scalars['Date']>;
+  vehicles?: InputMaybe<Array<UniqueId>>;
+};
+
+export type SentrysysImportOffendersInput = {
+  build?: InputMaybe<Build>;
+  createdBy?: InputMaybe<UniqueId>;
+  dateOfBirth?: InputMaybe<Scalars['Date']>;
+  gender?: InputMaybe<Gender>;
+  groups: Array<UniqueId>;
+  hair?: InputMaybe<Scalars['String']>;
+  height?: InputMaybe<Height>;
+  images: Array<UniqueId>;
+  importId: Scalars['String'];
+  name: Scalars['String'];
+  peculiarities?: InputMaybe<Scalars['String']>;
+  race?: InputMaybe<Race>;
+};
+
+export type SentrysysImportUsersInput = {
+  connect?: InputMaybe<SentrysysImportConnectUserInput>;
+  create?: InputMaybe<SentrysysImportCreateUserInput>;
+};
+
+export type SentrysysImportVehiclesInput = {
+  colour?: InputMaybe<Scalars['String']>;
+  groups: Array<UniqueId>;
+  images: Array<UniqueId>;
+  importId: Scalars['String'];
+  make?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
+  registration?: InputMaybe<Scalars['String']>;
+};
+
 export type Session = {
   __typename?: 'Session';
   actions: Array<Action>;
@@ -16894,6 +17025,7 @@ export type SharingConfig = {
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   mode: SharingMode;
+  noCondition: Scalars['Boolean'];
   schemeFrom: Scheme;
   schemeTo: Scheme;
   tagMap: Scalars['JSON'];
@@ -18716,9 +18848,11 @@ export type TodoUpdateInput = {
   completed?: InputMaybe<NullableSetBooleanHelper>;
   completedBy?: InputMaybe<ConnectHelper>;
   completedDate?: InputMaybe<NullableSetDateHelper>;
+  description?: InputMaybe<Scalars['String']>;
   documents?: InputMaybe<Array<UpdateDocument>>;
   dueDate?: InputMaybe<NullableSetDateHelper>;
   groups?: InputMaybe<RelationSet>;
+  name?: InputMaybe<Scalars['String']>;
   questions?: InputMaybe<TaskQuestionUpdateManyWithoutTaskNestedInput>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
   similarOffenderIds?: InputMaybe<Array<Scalars['String']>>;
