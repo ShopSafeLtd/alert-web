@@ -1,6 +1,6 @@
 import type { WatermarkSlideType } from '#/components/images/WatermartkSlide.view';
+import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { Theme } from 'configs/ThemeConfig';
-import type { ViewIncidentQuery } from 'graphql/incidents/queries/__generated__/view-incident.generated';
 
 import WatermarkSlide from '#/components/images/WatermartkSlide.view';
 import {
