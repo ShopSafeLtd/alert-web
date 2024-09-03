@@ -18,6 +18,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     subscribed
     totalValue
     totalRecoveredValue
+    originalDescription
     cctvRecords {
       cameraNumber
       endTime
@@ -26,12 +27,13 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       showIncident
       startTime
     }
-    answers {
+    answers(orderBy: { tagQuestion: { priority: desc } }) {
       id
       answer
       tagQuestion {
         id
         priority
+        dependentQuestions
         question {
           id
           question
