@@ -40,8 +40,8 @@ import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGrou
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import SelectIncidents from 'components/form-components/linkOptions/SelectIncidents';
 import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
-import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
-import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
+import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
+import SimpleEditOffender from 'components/form-components/offender/SimpleEditOffender';
 import MultiSelectOffenders from 'components/investigations/MultiSelectOffenders';
 import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
 import { InvestigationStatus } from 'graphql/types';

@@ -7,7 +7,6 @@ import type { CreateInvestigationMutation } from 'graphql/investigations/mutatio
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { VehicleData } from 'types/DataType';
 
-import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
 import {
   faBell,
   faBellSlash,
@@ -43,6 +42,7 @@ import AddAlias from 'components/form-components/crimeGroup/Alias';
 import AddDocument from 'components/form-components/documents/AddDocument';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
+import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
 import MapCard from 'components/map/MapCard/MapCard.view';
 import EvidenceTable from 'components/tables/EvidenceTable';
 import IncidentTable from 'components/tables/IncidentTable';

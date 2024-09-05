@@ -1,4 +1,4 @@
-import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
+import type { OffenderData } from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import type { ViewOffendersCompareQuery } from 'graphql/offenders/queries/__generated__/compare-offenders.generated';
 
 import { useMergeOffendersMutation } from 'graphql/offenders/mutations/__generated__/merge-offenders.generated';

@@ -1,74 +1,76 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
-import { Card, Drawer, Button, Col, Form, Input, Row } from 'antd';
-import { useIntl } from 'react-intl';
 import type {
   CrimeGroupCardData,
   OffenderData,
   VehicleData,
 } from 'types/DataType';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import VehicleTable from 'components/tables/VehicleTable';
-import OffenderTable from 'components/tables/OffenderTable';
-import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Drawer, Form, Input, Row } from 'antd';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import LinkOffender from 'components/form-components/offender/AddExistingOffender';
+import OffenderTable from 'components/tables/OffenderTable';
+import VehicleTable from 'components/tables/VehicleTable';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { FormData } from './useEditCrimeGroup';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: (value: FormData) => void;
-  saving?: boolean;
+  editData: CrimeGroupCardData | null | undefined;
   form: FormInstance<FormData>;
   linkOffender: boolean;
-  toggleLinkOffender: () => void;
-  offendersData: OffenderData[];
-  vehiclesData: VehicleData[];
-  updateOffendersList: (value: OffenderData) => void;
-  removeOffender: (value: string | undefined) => void;
   linkVehicle: boolean;
-  toggleLinkVehicle: () => void;
-  updateVehiclesList: (value: VehicleData) => void;
+  offendersData: OffenderData[];
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  removeOffender: (value: string | undefined) => void;
   removeVehicle: (value: string | undefined) => void;
-  editData: CrimeGroupCardData | undefined | null;
+  saving?: boolean;
+  toggleLinkOffender: () => void;
+  toggleLinkVehicle: () => void;
+  updateOffendersList: (value: OffenderData) => void;
+  updateVehiclesList: (value: VehicleData) => void;
+  vehiclesData: VehicleData[];
 }
 
 const EditCrimeGroup = ({
+  editData,
+  form,
+  linkOffender,
+  linkVehicle,
+  offendersData,
   onClose,
   onSubmit,
-  saving,
-  form,
-  offendersData,
-  vehiclesData,
-  linkVehicle,
-  linkOffender,
-  toggleLinkVehicle,
-  toggleLinkOffender,
-  updateVehiclesList,
-  updateOffendersList,
   removeOffender,
   removeVehicle,
-  editData,
+  saving,
+  toggleLinkOffender,
+  toggleLinkVehicle,
+  updateOffendersList,
+  updateVehiclesList,
+  vehiclesData,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div>
       <Form<FormData>
-        layout="vertical"
-        onFinish={onSubmit}
         form={form}
         initialValues={{
           alias: editData?.alias || '',
           offenders: editData?.offenders,
         }}
+        layout="vertical"
+        onFinish={onSubmit}
       >
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="alias"
               label={intl.formatMessage({
                 defaultMessage: 'Alias',
               })}
+              name="alias"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -77,27 +79,25 @@ const EditCrimeGroup = ({
         <Row>
           <Col span={12}>
             <Form.Item
-              name="offenders"
               label={intl.formatMessage({
                 defaultMessage: 'Select Offenders',
               })}
-              tooltip={intl.formatMessage({
-                defaultMessage: 'Select offenders for the crime group.',
-              })}
+              name="offenders"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Select at least one offender for the crime group.',
                   }),
+                  required: true,
                 },
               ]}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'Select offenders for the crime group.',
+              })}
             >
               <Button
                 danger
-                type="ghost"
-                onClick={toggleLinkOffender}
                 disabled={saving}
                 icon={
                   <FontAwesomeIcon
@@ -106,6 +106,8 @@ const EditCrimeGroup = ({
                     size="lg"
                   />
                 }
+                onClick={toggleLinkOffender}
+                type="ghost"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Select Offender',
@@ -115,18 +117,16 @@ const EditCrimeGroup = ({
           </Col>
           <Col>
             <Form.Item
-              name="offenders"
               label={intl.formatMessage({
                 defaultMessage: 'Select Vehicles',
               })}
+              name="offenders"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select vehicle for the crime group.',
               })}
             >
               <Button
                 danger
-                type="ghost"
-                onClick={toggleLinkVehicle}
                 disabled={saving}
                 icon={
                   <FontAwesomeIcon
@@ -135,6 +135,8 @@ const EditCrimeGroup = ({
                     size="lg"
                   />
                 }
+                onClick={toggleLinkVehicle}
+                type="ghost"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Select Vehicle',
@@ -145,15 +147,15 @@ const EditCrimeGroup = ({
         </Row>
         {offendersData && offendersData.length > 0 ? (
           <Card
+            bodyStyle={{ padding: 0 }}
+            style={{ marginTop: 10 }}
             title={intl.formatMessage({
               defaultMessage: 'Offenders',
             })}
-            bodyStyle={{ padding: 0 }}
-            style={{ marginTop: 10 }}
           >
             <OffenderTable
-              offenders={offendersData}
               deleteRights
+              offenders={offendersData}
               onDeleteOffender={removeOffender}
             />
           </Card>
@@ -161,23 +163,23 @@ const EditCrimeGroup = ({
 
         {vehiclesData && vehiclesData.length > 0 ? (
           <Card
+            bodyStyle={{ padding: 0, paddingLeft: 5 }}
+            headStyle={{ marginBottom: 5 }}
+            style={{ marginTop: 20 }}
             title={intl.formatMessage({
               defaultMessage: 'Vehicles',
             })}
-            headStyle={{ marginBottom: 5 }}
-            bodyStyle={{ padding: 0, paddingLeft: 5 }}
-            style={{ marginTop: 20 }}
           >
             <VehicleTable
-              vehicles={vehiclesData}
+              deleteRights
               onDeleteVehicle={removeVehicle}
               saving={saving}
-              deleteRights
+              vehicles={vehiclesData}
             />
           </Card>
         ) : null}
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -185,10 +187,10 @@ const EditCrimeGroup = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Save',
@@ -199,36 +201,36 @@ const EditCrimeGroup = ({
         </Form.Item>
       </Form>
       <Drawer
+        onClose={toggleLinkOffender}
+        open={linkOffender}
         title={intl.formatMessage({
           defaultMessage: 'Select Offenders',
         })}
-        open={linkOffender}
         width="800"
-        onClose={toggleLinkOffender}
       >
         {linkOffender ? (
           <LinkOffender
-            update={updateOffendersList}
-            onClose={toggleLinkOffender}
             offenderIds={offendersData.map(({ id }) => id)}
+            onClose={toggleLinkOffender}
+            update={updateOffendersList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={toggleLinkVehicle}
+        open={linkVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Select Vehicles',
         })}
-        open={linkVehicle}
         width="800"
-        onClose={toggleLinkVehicle}
-        bodyStyle={{ overflow: 'hidden' }}
       >
         {linkVehicle ? (
           <LinkVehicle
-            update={updateVehiclesList}
             onClose={toggleLinkVehicle}
+            update={updateVehiclesList}
             vehicleIds={vehiclesData.map(({ id }) => id)}
           />
         ) : (

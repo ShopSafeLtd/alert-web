@@ -14,7 +14,7 @@ import {
   Spin,
   Typography,
 } from 'antd';
-import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import AddExisitingOffender from 'components/form-components/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { Age, Build, Gender, Race, Role } from 'graphql/types';
 import moment from 'moment';

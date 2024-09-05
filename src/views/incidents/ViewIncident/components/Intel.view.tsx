@@ -7,12 +7,12 @@ import type {
 import UpdateBar from '#/components/MessageInput/UpdateBar';
 import IntelSection from '#/components/ViewPage/IntelSection';
 import OffenderTile from '#/components/form-components/linkOptions/SelectOffenders/OffenderTile';
-import AddExistingOffender from '#/components/form-components/offender/offender/AddExistingOffender';
 import WatermarkImage from '#/components/images/WatermarkImage.view';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import useStyles from '#/views/incidents/ViewIncident/ViewIncident.styles';
 import { Checkbox, Col, Drawer, Input, Modal, Row, notification } from 'antd';
+import AddExistingOffender from 'components/form-components/offender/AddExistingOffender';
 import { useAddImagesToIncidentMutation } from 'graphql/incidents/mutations/__generated__/add-images-to-incident.generated';
 import { useUpdateIncidentMutation } from 'graphql/incidents/mutations/__generated__/update-incident.generated';
 import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';

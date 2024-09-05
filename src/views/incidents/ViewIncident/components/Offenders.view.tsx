@@ -4,9 +4,8 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
 
-import AddExistingOffender from '#/components/form-components/offender/offender/AddExistingOffender';
-import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple/AddNewOffender.container';
-import SimpleEditOffender from '#/components/form-components/offender/offender/SimpleEditOffender/SimpleEditOffender.container';
+import AddNewOffenderSimple from '#/components/form-components/offender/AddNewOffenderSimple/AddNewOffender.container';
+import SimpleEditOffender from '#/components/form-components/offender/SimpleEditOffender/SimpleEditOffender.container';
 import OffenderTable from '#/components/tables/OffenderTable';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
@@ -24,6 +23,7 @@ import {
   Typography,
   notification,
 } from 'antd';
+import AddExistingOffender from 'components/form-components/offender/AddExistingOffender';
 import { useUpdateIncidentOffendersMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-offenders.generated';
 import update from 'immutability-helper';
 import React, { useState } from 'react';
