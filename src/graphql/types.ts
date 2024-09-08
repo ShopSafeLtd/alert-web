@@ -18844,7 +18844,7 @@ export enum TodoType {
 export type TodoUpdateInput = {
   answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<RelationSet>;
-  business?: InputMaybe<RelationSet>;
+  businessId?: InputMaybe<Scalars['String']>;
   completed?: InputMaybe<NullableSetBooleanHelper>;
   completedBy?: InputMaybe<ConnectHelper>;
   completedDate?: InputMaybe<NullableSetDateHelper>;

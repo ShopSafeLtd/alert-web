@@ -26,7 +26,7 @@ import {
 } from 'antd';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import LinkOffender from 'components/form-components/offender/AddExistingOffender';
 import UploadImage from 'components/images/UploadImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import React from 'react';

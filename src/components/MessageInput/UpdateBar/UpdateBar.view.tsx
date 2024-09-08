@@ -1,4 +1,18 @@
-import React from 'react';
+import type { FormInstance } from 'antd';
+import type {
+  RcFile,
+  UploadFile,
+  UploadProps,
+} from 'antd/lib/upload/interface';
+import type {
+  ArticleData,
+  CrimeGroupData,
+  IncidentCardData,
+  OffenderData,
+  SchemeUserData,
+  VehicleData,
+} from 'types/DataType';
+
 import {
   faCar,
   faCircleXmark,
@@ -11,7 +25,6 @@ import {
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
@@ -26,27 +39,17 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import type {
-  RcFile,
-  UploadFile,
-  UploadProps,
-} from 'antd/lib/upload/interface';
-import Picker from 'emoji-picker-react';
-import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type {
-  ArticleData,
-  CrimeGroupData,
-  IncidentCardData,
-  OffenderData,
-  SchemeUserData,
-  VehicleData,
-} from 'types/DataType';
-import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
-import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import { FormattedMessage, useIntl } from 'react-intl';
 import LinkArticle from 'components/form-components/linkOptions/LinkArticle';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import LinkOffender from 'components/form-components/offender/AddExistingOffender';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import Picker from 'emoji-picker-react';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import customRequest from '../../../utils/custom-request';
 import {
   ArticleMessageCard,
   CrimeGroupMessageCard,
@@ -54,144 +57,143 @@ import {
   OffenderMessageCard,
   VehicleMessageCard,
 } from '../MessageCard';
-import customRequest from '../../../utils/custom-request';
 import useStyles from './UpdatedBar.styles';
 
 const { Option, getMentions } = Mentions;
 const { Text } = Typography;
 
 interface Props {
-  replyTo: {
-    id: string;
-    text: string;
-    createdAt: string;
-    createdBy: string;
-  } | null;
-  setReplyTo: (
-    value: {
-      id: string;
-      text: string;
-      createdAt: string;
-      createdBy: string;
-    } | null
-  ) => void;
+  adminRights: boolean;
+  articlesData: ArticleData[];
   beforeUpdateImageUpload: (value: RcFile) => void;
-  onSubmitUpdate: () => void;
-  onUpdateImageChange: UploadProps['onChange'];
-  onUpdateImagePreview: (value: UploadFile) => void;
-  removeUpdateImage: (uid: string) => void;
-  removeUpdateIncident: (value: string | undefined) => void;
-  removeUpdateOffender: (value: string | undefined) => void;
-  removeCrimeGroup: (value: string | undefined) => void;
-  removeVehicle: (value: string | undefined) => void;
-  removeArticle: (value: string | undefined) => void;
-  schemeUsers: Map<string, SchemeUserData> | undefined;
-  setMentionedUser: (value: { id: string; value: string }[]) => void;
-  setUpdateInput: (value: string) => void;
-  showUpdatePicker: boolean;
-  toggleLinkUpdateIncident: () => void;
-  toggleLinkUpdateOffender: () => void;
-  toggleShowUpdatePicker: () => void;
-  toggleLinkVehicle: () => void;
-  toggleLinkCrimeGroup: () => void;
-  toggleLinkArticle: () => void;
-  updateFileList: UploadFile[];
-  updateForm: FormInstance<FormData>;
-  updateIncidents: IncidentCardData[];
-  updateInput: string;
-  updateIncidentList: (value: IncidentCardData) => void;
-  updateOffendersList: (value: OffenderData) => void;
-  updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: CrimeGroupData) => void;
-  updateArticleList: (value: ArticleData) => void;
+  crimeGroupsData: CrimeGroupData[];
+  handleMarkAsRead: () => void;
+  hideIncident: boolean;
+  linkArticle: boolean;
+  linkCrimeGroup: boolean;
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
-  linkCrimeGroup: boolean;
-  linkArticle: boolean;
-  updateOffenders: OffenderData[];
-  crimeGroupsData: CrimeGroupData[];
-  vehiclesData: VehicleData[];
-  articlesData: ArticleData[];
+  onSubmitUpdate: () => void;
+  onUpdateImageChange: UploadProps['onChange'];
+  onUpdateImagePreview: (value: UploadFile) => void;
+  removeArticle: (value: string | undefined) => void;
+  removeCrimeGroup: (value: string | undefined) => void;
+  removeUpdateImage: (uid: string) => void;
+  removeUpdateIncident: (value: string | undefined) => void;
+  removeUpdateOffender: (value: string | undefined) => void;
+  removeVehicle: (value: string | undefined) => void;
+  replyTo: {
+    createdAt: string;
+    createdBy: string;
+    id: string;
+    text: string;
+  } | null;
   saving: boolean;
-  adminRights: boolean;
-  handleMarkAsRead: () => void;
-  hideIncident: boolean;
+  schemeUsers: Map<string, SchemeUserData> | undefined;
+  setMentionedUser: (value: { id: string; value: string }[]) => void;
+  setReplyTo: (
+    value: {
+      createdAt: string;
+      createdBy: string;
+      id: string;
+      text: string;
+    } | null
+  ) => void;
+  setUpdateInput: (value: string) => void;
+  showUpdatePicker: boolean;
+  toggleLinkArticle: () => void;
+  toggleLinkCrimeGroup: () => void;
+  toggleLinkUpdateIncident: () => void;
+  toggleLinkUpdateOffender: () => void;
+  toggleLinkVehicle: () => void;
+  toggleShowUpdatePicker: () => void;
+  updateArticleList: (value: ArticleData) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
+  updateFileList: UploadFile[];
+  updateForm: FormInstance<FormData>;
+  updateIncidentList: (value: IncidentCardData) => void;
+  updateIncidents: IncidentCardData[];
+  updateInput: string;
+  updateOffenders: OffenderData[];
+  updateOffendersList: (value: OffenderData) => void;
+  updateVehicleList: (value: VehicleData) => void;
+  vehiclesData: VehicleData[];
 }
 
 const UpdateBar = ({
-  replyTo,
-  setReplyTo,
+  adminRights,
+  articlesData,
   beforeUpdateImageUpload,
-  onSubmitUpdate,
-  onUpdateImageChange,
-  onUpdateImagePreview,
-  removeUpdateImage,
-  removeUpdateIncident,
-  removeUpdateOffender,
-  removeCrimeGroup,
-  removeVehicle,
-  removeArticle,
-  schemeUsers,
-  setMentionedUser,
-  setUpdateInput,
-  showUpdatePicker,
-  toggleLinkUpdateIncident,
-  toggleLinkUpdateOffender,
-  toggleShowUpdatePicker,
-  toggleLinkVehicle,
-  toggleLinkCrimeGroup,
-  toggleLinkArticle,
-  updateFileList,
-  updateForm,
-  updateIncidents,
-  updateInput,
-  updateIncidentList,
-  updateOffendersList,
-  updateVehicleList,
-  updateCrimeGroupList,
-  updateArticleList,
+  crimeGroupsData,
+  handleMarkAsRead,
+  hideIncident,
+  linkArticle,
+  linkCrimeGroup,
   linkIncident,
   linkOffender,
   linkVehicle,
-  linkCrimeGroup,
-  linkArticle,
-  updateOffenders,
-  crimeGroupsData,
-  vehiclesData,
-  articlesData,
+  onSubmitUpdate,
+  onUpdateImageChange,
+  onUpdateImagePreview,
+  removeArticle,
+  removeCrimeGroup,
+  removeUpdateImage,
+  removeUpdateIncident,
+  removeUpdateOffender,
+  removeVehicle,
+  replyTo,
   saving,
-  handleMarkAsRead,
-  hideIncident,
-  adminRights,
+  schemeUsers,
+  setMentionedUser,
+  setReplyTo,
+  setUpdateInput,
+  showUpdatePicker,
+  toggleLinkArticle,
+  toggleLinkCrimeGroup,
+  toggleLinkUpdateIncident,
+  toggleLinkUpdateOffender,
+  toggleLinkVehicle,
+  toggleShowUpdatePicker,
+  updateArticleList,
+  updateCrimeGroupList,
+  updateFileList,
+  updateForm,
+  updateIncidentList,
+  updateIncidents,
+  updateInput,
+  updateOffenders,
+  updateOffendersList,
+  updateVehicleList,
+  vehiclesData,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   return (
     <>
       <Form
+        className="update-bar"
         form={updateForm}
         onFinish={onSubmitUpdate}
+        onFocus={() => {
+          handleMarkAsRead();
+        }}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
             updateForm.submit();
           }
         }}
-        className="update-bar"
-        style={{}}
         onMouseOver={() => {
           console.log('moused over');
         }}
-        onFocus={() => {
-          handleMarkAsRead();
-        }}
+        style={{}}
       >
         {replyTo && (
           <div className="reply-to">
             <Row align="middle">
               <Col className="reply-to-highlight" />
               <Col style={{ marginRight: 5 }}>
-                <Text type="secondary" ellipsis>
+                <Text ellipsis type="secondary">
                   {intl.formatMessage(
                     {
                       defaultMessage: 'Replying to: {createdBy}',
@@ -201,7 +203,7 @@ const UpdateBar = ({
                 </Text>
               </Col>
               <Col flex={1}>
-                <Text type="secondary" ellipsis>
+                <Text ellipsis type="secondary">
                   {intl.formatMessage(
                     { defaultMessage: '- {text}' },
                     { text: replyTo.text }
@@ -210,20 +212,19 @@ const UpdateBar = ({
               </Col>
               <Col>
                 <Button
+                  onClick={() => setReplyTo(null)}
                   size="small"
                   type="text"
-                  onClick={() => setReplyTo(null)}
                 >
-                  <FontAwesomeIcon size="lg" icon={faClose} />
+                  <FontAwesomeIcon icon={faClose} size="lg" />
                 </Button>
               </Col>
             </Row>
           </div>
         )}
         <Row
-          wrap={false}
-          gutter={10}
           className="update-info-container"
+          gutter={10}
           style={{
             height:
               (updateFileList && updateFileList.length > 0) ||
@@ -238,48 +239,46 @@ const UpdateBar = ({
             marginBottom: 5,
             overflowX: 'auto',
           }}
+          wrap={false}
         >
           <Col style={{ marginLeft: 10, marginRight: -8 }}>
             <Upload
-              customRequest={customRequest}
               accept=".png,.jpeg,.webp"
-              listType="picture-card"
-              fileList={updateFileList}
-              onChange={onUpdateImageChange}
-              onPreview={onUpdateImagePreview}
               beforeUpload={beforeUpdateImageUpload}
+              customRequest={customRequest}
+              fileList={updateFileList}
               // eslint-disable-next-line react/no-unstable-nested-components
               itemRender={(el, file) => (
                 <div className="update-upload-card">
                   <div>
                     <Popconfirm
-                      placement="topLeft"
-                      trigger="click"
-                      title={intl.formatMessage({
-                        defaultMessage: 'Remove the image?',
-                      })}
-                      onConfirm={() => removeUpdateImage(file.uid)}
-                      okText={intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
                       })}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                      })}
+                      onConfirm={() => removeUpdateImage(file.uid)}
                       overlayInnerStyle={{ padding: 10 }}
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the image?',
+                      })}
+                      trigger="click"
                     >
                       <Button
-                        size="small"
-                        style={{
-                          position: 'absolute',
-                          top: -5,
-                          right: -5,
-                          zIndex: 100,
-                        }}
-                        shape="circle"
-                        type="text"
                         icon={
                           <FontAwesomeIcon icon={faCircleXmark} size="lg" />
                         }
+                        shape="circle"
+                        size="small"
+                        style={{
+                          position: 'absolute',
+                          right: -5,
+                          top: -5,
+                          zIndex: 100,
+                        }}
+                        type="text"
                       />
                     </Popconfirm>
                   </div>
@@ -288,6 +287,9 @@ const UpdateBar = ({
                   </div>
                 </div>
               )}
+              listType="picture-card"
+              onChange={onUpdateImageChange}
+              onPreview={onUpdateImagePreview}
             />
           </Col>
 
@@ -312,9 +314,9 @@ const UpdateBar = ({
           {vehiclesData?.map((vehicle) => (
             <Col key={vehicle.id}>
               <VehicleMessageCard
-                vehicle={vehicle}
                 removeVehicle={removeVehicle}
                 saving={saving}
+                vehicle={vehicle}
               />
             </Col>
           ))}
@@ -342,8 +344,6 @@ const UpdateBar = ({
           <Col flex={1} style={{ height: '40px' }}>
             <Mentions
               autoFocus
-              style={{ height: 40 }}
-              value={updateInput}
               onChange={(value) => {
                 setUpdateInput(value);
                 const mentions = getMentions(value);
@@ -358,18 +358,20 @@ const UpdateBar = ({
                 );
               }}
               prefix="@"
+              style={{ height: 40 }}
+              value={updateInput}
             >
               {schemeUsers &&
                 [...schemeUsers.values()]?.map(
-                  ({ id, fullName, businessesName }) => (
+                  ({ businessesName, fullName, id }) => (
                     <Option key={id} value={fullName}>
                       {intl.formatMessage(
                         {
                           defaultMessage: '{fullName} ({businessName})',
                         },
                         {
-                          fullName,
                           businessName: businessesName,
+                          fullName,
                         }
                       )}
                     </Option>
@@ -380,49 +382,49 @@ const UpdateBar = ({
 
           <Col style={{ height: '40px' }}>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button htmlType="submit" type="primary">
                 <FormattedMessage defaultMessage="Send" />
               </Button>
             </Form.Item>
           </Col>
         </Row>
         <Row
-          wrap={false}
           gutter={5}
           style={{ height: '45px', margin: '0 10px', overflow: 'auto' }}
+          wrap={false}
         >
           <Col>
             <Popover
-              placement="topLeft"
-              trigger="click"
-              open={showUpdatePicker}
-              overlayStyle={{ width: '50%' }}
               content={
                 <Picker
-                  pickerStyle={{ width: '100%' }}
                   onEmojiClick={(_e, emojiObject) => {
                     setUpdateInput(updateInput + emojiObject.emoji);
                     toggleShowUpdatePicker();
                   }}
+                  pickerStyle={{ width: '100%' }}
                 />
               }
+              open={showUpdatePicker}
+              overlayStyle={{ width: '50%' }}
+              placement="topLeft"
+              trigger="click"
             >
               <Button
                 onClick={toggleShowUpdatePicker}
-                style={{ width: '40px', padding: 0 }}
+                style={{ padding: 0, width: '40px' }}
               >
-                <FontAwesomeIcon size="lg" icon={faSmile} />
+                <FontAwesomeIcon icon={faSmile} size="lg" />
               </Button>
             </Popover>
           </Col>
 
           <Col>
             <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
               accept=".png,.jpeg,.webp"
+              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              beforeUpload={beforeUpdateImageUpload}
               fileList={updateFileList}
               onChange={onUpdateImageChange}
-              beforeUpload={beforeUpdateImageUpload}
               showUploadList={false}
             >
               <Button
@@ -446,16 +448,6 @@ const UpdateBar = ({
                   <Menu
                     items={[
                       {
-                        label: intl.formatMessage({
-                          defaultMessage: 'Link Incidents',
-                        }),
-                        key: '1',
-                        icon: (
-                          <FontAwesomeIcon
-                            icon={faExclamationCircle}
-                            className={classes.icon}
-                          />
-                        ),
                         disabled:
                           saving ||
                           (updateFileList && updateFileList.length > 0) ||
@@ -464,19 +456,19 @@ const UpdateBar = ({
                           (articlesData && articlesData.length > 0) ||
                           (crimeGroupsData && crimeGroupsData.length > 0) ||
                           (articlesData && articlesData.length > 0),
+                        icon: (
+                          <FontAwesomeIcon
+                            className={classes.icon}
+                            icon={faExclamationCircle}
+                          />
+                        ),
+                        key: '1',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Link Incidents',
+                        }),
                         onClick: () => toggleLinkUpdateIncident(),
                       },
                       {
-                        label: intl.formatMessage({
-                          defaultMessage: 'Link Offenders',
-                        }),
-                        key: '2',
-                        icon: (
-                          <FontAwesomeIcon
-                            icon={faUsers}
-                            className={classes.icon}
-                          />
-                        ),
                         disabled:
                           saving ||
                           (updateIncidents && updateIncidents.length > 0) ||
@@ -484,20 +476,20 @@ const UpdateBar = ({
                           (vehiclesData && vehiclesData.length > 0) ||
                           (crimeGroupsData && crimeGroupsData.length > 0) ||
                           (articlesData && articlesData.length > 0),
+                        icon: (
+                          <FontAwesomeIcon
+                            className={classes.icon}
+                            icon={faUsers}
+                          />
+                        ),
+                        key: '2',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Link Offenders',
+                        }),
                         onClick: () => toggleLinkUpdateOffender(),
                       },
 
                       {
-                        label: intl.formatMessage({
-                          defaultMessage: 'Link Vehicles',
-                        }),
-                        key: '3',
-                        icon: (
-                          <FontAwesomeIcon
-                            icon={faCar}
-                            className={classes.icon}
-                          />
-                        ),
                         disabled:
                           saving ||
                           (updateFileList && updateFileList.length > 0) ||
@@ -505,20 +497,19 @@ const UpdateBar = ({
                           (updateIncidents && updateIncidents.length > 0) ||
                           (crimeGroupsData && crimeGroupsData.length > 0) ||
                           (articlesData && articlesData.length > 0),
+                        icon: (
+                          <FontAwesomeIcon
+                            className={classes.icon}
+                            icon={faCar}
+                          />
+                        ),
+                        key: '3',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Link Vehicles',
+                        }),
                         onClick: () => toggleLinkVehicle(),
                       },
                       {
-                        label: intl.formatMessage({
-                          defaultMessage: 'Link Crime Groups',
-                        }),
-                        key: '4',
-                        icon: (
-                          <FontAwesomeIcon
-                            icon={faPeopleGroup}
-                            className={classes.icon}
-                          />
-                        ),
-
                         disabled:
                           saving ||
                           (updateFileList && updateFileList.length > 0) ||
@@ -526,26 +517,37 @@ const UpdateBar = ({
                           (vehiclesData && vehiclesData.length > 0) ||
                           (articlesData && articlesData.length > 0) ||
                           (updateIncidents && updateIncidents.length > 0),
+                        icon: (
+                          <FontAwesomeIcon
+                            className={classes.icon}
+                            icon={faPeopleGroup}
+                          />
+                        ),
+                        key: '4',
+
+                        label: intl.formatMessage({
+                          defaultMessage: 'Link Crime Groups',
+                        }),
                         onClick: () => toggleLinkCrimeGroup(),
                       },
 
                       {
-                        label: intl.formatMessage({
-                          defaultMessage: 'Link Bulletins',
-                        }),
-                        key: '5',
-                        icon: (
-                          <FontAwesomeIcon
-                            icon={faNewspaper}
-                            className={classes.icon}
-                          />
-                        ),
                         disabled:
                           saving ||
                           (updateFileList && updateFileList.length > 0) ||
                           (updateOffenders && updateOffenders.length > 0) ||
                           (vehiclesData && vehiclesData.length > 0) ||
                           (updateIncidents && updateIncidents.length > 0),
+                        icon: (
+                          <FontAwesomeIcon
+                            className={classes.icon}
+                            icon={faNewspaper}
+                          />
+                        ),
+                        key: '5',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Link Bulletins',
+                        }),
                         onClick: () => toggleLinkArticle(),
                       },
                     ].filter((item) => !(item.key === '1' && hideIncident))}
@@ -562,72 +564,72 @@ const UpdateBar = ({
       </Form>
 
       <Drawer
+        onClose={toggleLinkUpdateOffender}
+        open={linkOffender}
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
         })}
-        open={linkOffender}
         width="800"
-        onClose={toggleLinkUpdateOffender}
       >
         {linkOffender ? (
           <LinkOffender
-            update={updateOffendersList}
-            onClose={toggleLinkUpdateOffender}
             offenderIds={updateOffenders.map(({ id }) => id)}
+            onClose={toggleLinkUpdateOffender}
+            update={updateOffendersList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleLinkUpdateIncident}
+        open={linkIncident}
         title={intl.formatMessage({
           defaultMessage: 'Link Incidents',
         })}
-        open={linkIncident}
         width="1000"
-        onClose={toggleLinkUpdateIncident}
       >
         {linkIncident ? (
           <LinkIncident
-            update={updateIncidentList}
-            onClose={toggleLinkUpdateIncident}
             incidentIds={updateIncidents?.map(({ id }) => id)}
+            onClose={toggleLinkUpdateIncident}
+            update={updateIncidentList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleLinkCrimeGroup}
+        open={linkCrimeGroup}
         title={intl.formatMessage({
           defaultMessage: 'Link CrimeGroups',
         })}
-        open={linkCrimeGroup}
         width="800"
-        onClose={toggleLinkCrimeGroup}
       >
         {linkCrimeGroup ? (
           <LinkCrimeGroup
-            update={updateCrimeGroupList}
-            onClose={toggleLinkCrimeGroup}
             crimeGroupIds={crimeGroupsData?.map(({ id }) => id)}
+            onClose={toggleLinkCrimeGroup}
+            update={updateCrimeGroupList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={toggleLinkVehicle}
+        open={linkVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Link Vehicles',
         })}
-        open={linkVehicle}
         width="800"
-        onClose={toggleLinkVehicle}
-        bodyStyle={{ overflow: 'hidden' }}
       >
         {linkVehicle ? (
           <LinkVehicle
-            update={updateVehicleList}
             onClose={toggleLinkVehicle}
+            update={updateVehicleList}
             vehicleIds={vehiclesData?.map(({ id }) => id)}
           />
         ) : (
@@ -635,18 +637,18 @@ const UpdateBar = ({
         )}
       </Drawer>
       <Drawer
+        onClose={toggleLinkArticle}
+        open={linkArticle}
         title={intl.formatMessage({
           defaultMessage: 'Link Bulletins',
         })}
-        open={linkArticle}
         width="1000"
-        onClose={toggleLinkArticle}
       >
         {linkArticle ? (
           <LinkArticle
-            update={updateArticleList}
-            onClose={toggleLinkArticle}
             articleIds={articlesData?.map(({ id }) => id)}
+            onClose={toggleLinkArticle}
+            update={updateArticleList}
           />
         ) : (
           <div />

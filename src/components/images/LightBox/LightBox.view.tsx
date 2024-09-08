@@ -1,8 +1,6 @@
 import type { CarouselRef } from 'antd/lib/carousel';
 import type { Theme } from 'configs/ThemeConfig';
 
-// import AddNewOffender from '#/components/form-components/offender/offender/AddNewOffender';
-import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
 import {
   faAngleLeft,
   faAngleRight,
@@ -10,7 +8,9 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Carousel, Col, Drawer, Row } from 'antd';
-import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import AddExistingOffender from 'components/form-components/offender/AddExistingOffender';
+// import AddNewOffender from '#/components/form-components/offender/offender/AddNewOffender';
+import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
 // import AddNewOffender from 'components/form-components/offender/offender/AddNewOffender';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
 import React, { useEffect, useRef, useState } from 'react';

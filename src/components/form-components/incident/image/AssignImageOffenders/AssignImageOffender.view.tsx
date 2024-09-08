@@ -1,31 +1,32 @@
-import React from 'react';
+import type { UploadFile } from 'antd/lib/upload/interface';
+import type { OffenderData } from 'types/DataType';
+
 import {
-  Typography,
-  Row,
-  Col,
   Button,
-  Drawer,
   Checkbox,
+  Col,
+  Drawer,
   Modal,
+  Row,
   Skeleton,
+  Typography,
 } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import { Role } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type { UploadFile } from 'antd/lib/upload/interface';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl';
-import type { OffenderData } from 'types/DataType';
-import { useStoreState } from 'state';
-import { Role } from 'graphql/types';
 
-import AddExistingOffender from '../../../offender/offender/AddExistingOffender';
-import AddOffender from '../../../offender/offender/AddNewOffender';
+import AddExistingOffender from '../../../offender/AddExistingOffender';
+import AddOffender from '../../../offender/AddNewOffender';
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 // interface OffenderData {
 //   id: string;
@@ -65,36 +66,36 @@ const { Title, Paragraph, Text } = Typography;
 interface Image extends UploadFile {
   offenders?: {
     id: string;
-    name?: string | undefined | null;
+    name?: null | string | undefined;
   }[];
 }
 
 interface Props {
-  image: Image | undefined;
-  offendersData: OffenderData[];
-  toggleAddOffender: () => void;
-  toggleAddExistingOffender: () => void;
   addExistingOffender: boolean;
   addOffender: boolean;
+  image: Image | undefined;
+  offendersData: OffenderData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
-  toggleOffender: (id: string) => void;
-  selected: string[];
   onCancel: () => void;
   onSubmit: () => void;
+  selected: string[];
+  toggleAddExistingOffender: () => void;
+  toggleAddOffender: () => void;
+  toggleOffender: (id: string) => void;
 }
 
 const AssignImageOffender = ({
-  image,
-  offendersData,
-  toggleAddExistingOffender,
-  toggleAddOffender,
   addExistingOffender,
   addOffender,
+  image,
+  offendersData,
   onAddOffender,
-  selected,
-  toggleOffender,
   onCancel,
   onSubmit,
+  selected,
+  toggleAddExistingOffender,
+  toggleAddOffender,
+  toggleOffender,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
@@ -103,28 +104,28 @@ const AssignImageOffender = ({
     role !== Role.User;
   return (
     <Modal
+      bodyStyle={{ padding: 0 }}
+      cancelText={intl.formatMessage({
+        defaultMessage: 'No Offenders',
+      })}
+      okText={intl.formatMessage({
+        defaultMessage: 'Assign Offenders',
+      })}
+      onCancel={onCancel}
+      onOk={onSubmit}
       open={image !== undefined}
       title={intl.formatMessage({
         defaultMessage: 'Are there offenders in your image?',
       })}
-      bodyStyle={{ padding: 0 }}
-      okText={intl.formatMessage({
-        defaultMessage: 'Assign Offenders',
-      })}
-      cancelText={intl.formatMessage({
-        defaultMessage: 'No Offenders',
-      })}
       width={900}
       zIndex={1000}
-      onCancel={onCancel}
-      onOk={onSubmit}
     >
       <div className="incident-form-assign">
         <div className="incident-form-assign-image">
           <WatermarkImage url={image?.url} />
         </div>
         <div className="incident-form-assign-offenders">
-          <Title level={4} className="offender-title">
+          <Title className="offender-title" level={4}>
             {offendersData && offendersData.length > 0
               ? intl.formatMessage({
                   defaultMessage: 'Select Offenders',
@@ -196,8 +197,8 @@ const AssignImageOffender = ({
                 </Col>
                 <Col className="incident-form-assign-offender-check">
                   <Checkbox
-                    onChange={() => toggleOffender(offender.id)}
                     checked={selected.includes(offender.id)}
+                    onChange={() => toggleOffender(offender.id)}
                   />
                 </Col>
               </Row>
@@ -230,8 +231,8 @@ const AssignImageOffender = ({
         </div>
 
         <Drawer
-          open={addOffender}
           onClose={toggleAddOffender}
+          open={addOffender}
           title={intl.formatMessage({
             defaultMessage: 'Add New Offender',
           })}
@@ -247,8 +248,8 @@ const AssignImageOffender = ({
         </Drawer>
 
         <Drawer
-          open={addExistingOffender}
           onClose={toggleAddExistingOffender}
+          open={addExistingOffender}
           title={intl.formatMessage({
             defaultMessage: 'Add Existing Offenders',
           })}
@@ -257,8 +258,8 @@ const AssignImageOffender = ({
         >
           {addExistingOffender && (
             <AddExistingOffender
-              onClose={toggleAddExistingOffender}
               offenderIds={offendersData.map(({ id }) => id)}
+              onClose={toggleAddExistingOffender}
               update={(data) => onAddOffender(data, true)}
             />
           )}

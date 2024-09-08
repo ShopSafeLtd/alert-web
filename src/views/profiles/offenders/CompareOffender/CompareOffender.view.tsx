@@ -1,4 +1,4 @@
-import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
+import type { OffenderData } from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import type { ViewOffenderCompareQuery } from 'graphql/offenders/queries/__generated__/compare-offender.generated';
 import type { Layout } from 'react-grid-layout';
 
@@ -21,7 +21,7 @@ import {
   Row,
   Typography,
 } from 'antd';
-import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import AddExisitingOffender from 'components/form-components/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { Age, Build, Gender, Race, Role } from 'graphql/types';
 import moment from 'moment';

@@ -2,7 +2,7 @@ import type { EditOffenderQuery } from '#/components/form-components/offender/Ed
 import type { OffenderSettingsType } from '#/types/DataType';
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import OffenderFormDetails from '#/components/form-components/offender/offender/OffenderForm/OffenderFormDetails.view';
+import OffenderFormDetails from '#/components/form-components/offender/OffenderForm/OffenderFormDetails.view';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import moment from 'moment';
 import React from 'react';
