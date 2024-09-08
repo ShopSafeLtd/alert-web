@@ -1,4 +1,5 @@
-import React from 'react';
+import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
+import { UploadOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import {
   Avatar,
@@ -16,55 +17,53 @@ import {
   Typography,
   Upload,
 } from 'antd';
-
-import { UploadOutlined } from '@ant-design/icons';
-import { useIntl } from 'react-intl';
-import type { ViewProps } from './types/CreateArticle';
-import AddExistingOffender from '../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
-import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
-import type { FormData } from './hooks/useCreateEditArticle';
-import { useStoreState } from '../../../state';
-import Loading from '../../../components/shared-components/AntD/Loading';
 import { ArticlePriority } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
+import type { FormData } from './hooks/useCreateEditArticle';
+import type { ViewProps } from './types/CreateArticle';
+
+import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
+import Loading from '../../../components/shared-components/AntD/Loading';
+import { useStoreState } from '../../../state';
 
 const CreateEditArticleView = ({
-  // log,
-  editorRef,
-  exampleImageUploadHandler,
+  categories,
+  categoriesChange,
   // preview,
   // previewText,
   // setPreviewImage,
   // setPreviewText,
   // previewImage,
-  // imgSrcs,
-  groups,
-  onGroupsChange,
-  categories,
-  categoriesChange,
+  data,
+  documentUploadProps,
+  drawer,
+  // log,
+  editorRef,
+  exampleImageUploadHandler,
+  fileList,
   filePickerCallback,
   form,
-  onSubmit,
-  data,
-  loading,
-  selectedCategories,
-  documentUploadProps,
-  fileList,
-  drawer,
-  insertOffender,
-  insertIncident,
-  incidents,
-  offenders,
-  removeOffender,
-  removeIncident,
-  selectedSchemes,
+  // imgSrcs,
+  groups,
   id,
+  incidents,
   initData,
+  insertIncident,
+  insertOffender,
+  loading,
+  offenders,
+  onGroupsChange,
+  onSubmit,
+  removeIncident,
+  removeOffender,
+  selectedCategories,
+  selectedSchemes,
 }: ViewProps) => {
   const intl = useIntl();
   const noSchemes = selectedSchemes;
   const forms = {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    null: <></>,
     addIncident:
       !noSchemes || (noSchemes && noSchemes?.length <= 1) ? (
         <LinkIncident
@@ -85,11 +84,11 @@ const CreateEditArticleView = ({
     addOffender:
       !noSchemes || (noSchemes && noSchemes?.length <= 1) ? (
         <AddExistingOffender
-          update={insertOffender}
           offenderIds={
             offenders ? offenders.map((offender) => offender.id) : []
           }
           onClose={() => drawer.close()}
+          update={insertOffender}
         />
       ) : (
         <div>
@@ -99,6 +98,8 @@ const CreateEditArticleView = ({
           })}
         </div>
       ),
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    null: <></>,
   };
   // const previewButtons = () => (
   //   <>
@@ -128,19 +129,19 @@ const CreateEditArticleView = ({
         />
         {loading && (
           <Card
-            style={{
-              height: '100%',
-              width: '98%',
-              position: 'absolute',
-              zIndex: 1000,
-            }}
             bodyStyle={{
+              alignItems: 'center',
+              display: 'flex',
+              height: '100vh',
+              justifyContent: 'center',
               margin: 0,
               padding: 0,
-              display: 'flex',
-              justifyContent: 'center',
-              height: '100vh',
-              alignItems: 'center',
+            }}
+            style={{
+              height: '100%',
+              position: 'absolute',
+              width: '98%',
+              zIndex: 1000,
             }}
           >
             <Loading />
@@ -149,33 +150,33 @@ const CreateEditArticleView = ({
         <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
           <Form<FormData>
             form={form}
-            layout="vertical"
             initialValues={
               data || {
-                title: '',
+                categories: [],
                 content: '',
                 groups: [],
-                categories: [],
                 importance: 'Normal',
                 schemes: [],
+                title: '',
                 watermarkImage: true,
               }
             }
+            layout="vertical"
             onFinish={onSubmit}
           >
             <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
               <Col span={8}>
                 <Form.Item
-                  name="title"
                   label={intl.formatMessage({
                     defaultMessage: 'Title',
                   })}
+                  name="title"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Please input title!',
                       }),
+                      required: true,
                     },
                   ]}
                 >
@@ -190,33 +191,33 @@ const CreateEditArticleView = ({
             <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
               <Col span={8}>
                 <Form.Item
-                  name="groups"
                   label={intl.formatMessage({
                     defaultMessage: 'Content Groups',
                   })}
+                  name="groups"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Please select groups!',
                       }),
+                      required: true,
                     },
                   ]}
                 >
                   <Select
+                    loading={loading}
+                    maxTagCount={2}
+                    mode="multiple"
+                    onChange={onGroupsChange}
+                    optionFilterProp="label"
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Content Groups',
                     })}
-                    mode="multiple"
                     size="small"
-                    maxTagCount={2}
                     style={{ minWidth: 200 }}
-                    loading={loading}
-                    onChange={onGroupsChange}
-                    optionFilterProp="label"
                   >
                     {groups.map((group) => (
-                      <Select.Option value={group.value} label={group.label}>
+                      <Select.Option label={group.label} value={group.value}>
                         {group.label}
                       </Select.Option>
                     ))}
@@ -225,16 +226,16 @@ const CreateEditArticleView = ({
               </Col>
               <Col span={6}>
                 <Form.Item
-                  name="importance"
                   label={intl.formatMessage({
                     defaultMessage: 'Importance',
                   })}
+                  name="importance"
                   rules={[
                     {
-                      required: true,
                       message: intl.formatMessage({
                         defaultMessage: 'Please select importance!',
                       }),
+                      required: true,
                     },
                   ]}
                 >
@@ -253,36 +254,36 @@ const CreateEditArticleView = ({
               </Col>
               <Col span={8}>
                 <Form.Item
-                  name="category"
                   label={intl.formatMessage({
                     defaultMessage: 'Category',
                   })}
+                  name="category"
                 >
                   <Select
+                    labelInValue
+                    loading={loading}
+                    maxTagCount={2}
+                    mode="tags"
+                    onChange={categoriesChange}
+                    optionFilterProp="value"
+                    options={categories}
                     // select mutliple, category, can create new
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Category',
                     })}
-                    mode="tags"
                     size="small"
-                    maxTagCount={2}
                     style={{ minWidth: 200 }}
-                    loading={loading}
-                    onChange={categoriesChange}
-                    options={categories}
-                    optionFilterProp="value"
-                    labelInValue
                     value={selectedCategories}
                   />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
-                  name="watermarkImage"
-                  valuePropName="checked"
                   label={intl.formatMessage({
                     defaultMessage: 'Watermark Preview',
                   })}
+                  name="watermarkImage"
+                  valuePropName="checked"
                 >
                   <Checkbox />
                 </Form.Item>
@@ -290,74 +291,18 @@ const CreateEditArticleView = ({
             </Row>
             <div style={{ margin: 25 }}>
               <Editor
-                onInit={(evt, editor) => {
-                  // eslint-disable-next-line no-param-reassign
-                  editorRef.current = editor;
-                }}
-                tinymceScriptSrc="/tinymce/tinymce.min.js"
-                initialValue={initData}
                 init={{
-                  skin: theme ? 'oxide-dark' : undefined,
-                  content_css: theme ? 'dark' : undefined,
-                  setup: (editor) => {
-                    editor.ui.registry.addMenuButton('insertMenuButton', {
-                      text: 'Insert',
-                      fetch(callback) {
-                        const items = [
-                          {
-                            type: 'menuitem',
-                            text: intl.formatMessage({
-                              defaultMessage: 'Add Incident',
-                            }),
-                            onAction() {
-                              drawer.open({
-                                defaultTitle: intl.formatMessage({
-                                  defaultMessage: 'Add Incident',
-                                }),
-                                id: 'addIncident',
-                              });
-                            },
-                          },
-                          {
-                            type: 'menuitem',
-                            text: intl.formatMessage({
-                              defaultMessage: 'Add Offender',
-                            }),
-                            onAction() {
-                              drawer.open({
-                                defaultTitle: intl.formatMessage({
-                                  defaultMessage: 'Add Offender',
-                                }),
-                                id: 'addOffender',
-                              });
-                            },
-                          },
-                          {
-                            type: 'menuitem',
-                            text: intl.formatMessage({
-                              defaultMessage: 'Add Document Link',
-                            }),
-                            onAction() {
-                              filePickerCallback(
-                                (file, { title }) => {
-                                  editor.insertContent(
-                                    `<a href="${file}" target="_blank" rel="noopener noreferrer">${title}</a>`
-                                  );
-                                },
-                                'document',
-                                { filetype: 'file' }
-                              );
-                            },
-                          },
-                        ];
-
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore ts error from tinymce, nested menus !== string
-                        callback(items);
-                      },
-                    });
-                  },
                   branding: false,
+                  content_css: theme ? 'dark' : undefined,
+                  content_style:
+                    'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  contextmenu: false,
+                  default_link_target: '_blank',
+                  elementpath: false,
+                  file_picker_callback: filePickerCallback,
+                  file_picker_types: 'file, image, media',
+                  images_upload_handler: exampleImageUploadHandler,
+                  menubar: 'file edit view insert format tools table',
                   min_height: 500,
                   plugins: [
                     'preview',
@@ -386,29 +331,85 @@ const CreateEditArticleView = ({
                     'emoticons',
                     'autoresize',
                   ],
-                  elementpath: false,
-                  contextmenu: false,
-                  menubar: 'file edit view insert format tools table',
+                  promotion: false,
+                  setup: (editor) => {
+                    editor.ui.registry.addMenuButton('insertMenuButton', {
+                      fetch(callback) {
+                        const items = [
+                          {
+                            onAction() {
+                              drawer.open({
+                                defaultTitle: intl.formatMessage({
+                                  defaultMessage: 'Add Incident',
+                                }),
+                                id: 'addIncident',
+                              });
+                            },
+                            text: intl.formatMessage({
+                              defaultMessage: 'Add Incident',
+                            }),
+                            type: 'menuitem',
+                          },
+                          {
+                            onAction() {
+                              drawer.open({
+                                defaultTitle: intl.formatMessage({
+                                  defaultMessage: 'Add Offender',
+                                }),
+                                id: 'addOffender',
+                              });
+                            },
+                            text: intl.formatMessage({
+                              defaultMessage: 'Add Offender',
+                            }),
+                            type: 'menuitem',
+                          },
+                          {
+                            onAction() {
+                              filePickerCallback(
+                                (file, { title }) => {
+                                  editor.insertContent(
+                                    `<a href="${file}" target="_blank" rel="noopener noreferrer">${title}</a>`
+                                  );
+                                },
+                                'document',
+                                { filetype: 'file' }
+                              );
+                            },
+                            text: intl.formatMessage({
+                              defaultMessage: 'Add Document Link',
+                            }),
+                            type: 'menuitem',
+                          },
+                        ];
+
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore ts error from tinymce, nested menus !== string
+                        callback(items);
+                      },
+                      text: 'Insert',
+                    });
+                  },
+                  skin: theme ? 'oxide-dark' : undefined,
                   toolbar:
                     ' insertMenuButton | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks forecolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist |  pagebreak | charmap emoticons | preview print | image media link | ltr rtl',
                   toolbar_sticky: false,
                   toolbar_sticky_offset: 28,
-                  images_upload_handler: exampleImageUploadHandler,
-                  file_picker_types: 'file, image, media',
-                  file_picker_callback: filePickerCallback,
-                  promotion: false,
-                  default_link_target: '_blank',
-                  content_style:
-                    'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                 }}
+                initialValue={initData}
+                onInit={(evt, editor) => {
+                  // eslint-disable-next-line no-param-reassign
+                  editorRef.current = editor;
+                }}
+                tinymceScriptSrc="/tinymce/tinymce.min.js"
               />
             </div>
 
             {incidents && incidents.length > 0 && (
               <>
                 <Typography.Title
-                  style={{ marginLeft: 20, marginTop: 20 }}
                   level={4}
+                  style={{ marginLeft: 20, marginTop: 20 }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Incidents:',
@@ -416,17 +417,15 @@ const CreateEditArticleView = ({
                 </Typography.Title>
                 <Row>
                   <List
-                    itemLayout="horizontal"
                     dataSource={incidents}
-                    style={{ width: '30%', marginLeft: 20 }}
-                    split
+                    itemLayout="horizontal"
                     renderItem={(item) => (
                       <List.Item
                         actions={[
                           <Button
+                            danger
                             onClick={() => removeIncident(item.incident.id)}
                             type="ghost"
-                            danger
                           >
                             {intl.formatMessage({
                               defaultMessage: 'remove',
@@ -435,6 +434,7 @@ const CreateEditArticleView = ({
                         ]}
                       >
                         <List.Item.Meta
+                          description={item.incident.description}
                           title={intl.formatMessage(
                             {
                               defaultMessage: 'Incident: {reference}',
@@ -443,10 +443,11 @@ const CreateEditArticleView = ({
                               reference: item.incident.reference,
                             }
                           )}
-                          description={item.incident.description}
                         />
                       </List.Item>
                     )}
+                    split
+                    style={{ marginLeft: 20, width: '30%' }}
                   />
                 </Row>
               </>
@@ -454,8 +455,8 @@ const CreateEditArticleView = ({
             {offenders && offenders.length > 0 && (
               <>
                 <Typography.Title
-                  style={{ marginLeft: 20, marginTop: 20 }}
                   level={4}
+                  style={{ marginLeft: 20, marginTop: 20 }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Offenders:',
@@ -463,16 +464,15 @@ const CreateEditArticleView = ({
                 </Typography.Title>
                 <Row>
                   <List
-                    itemLayout="horizontal"
                     dataSource={offenders}
-                    style={{ width: '30%', marginLeft: 20 }}
+                    itemLayout="horizontal"
                     renderItem={(item) => (
                       <List.Item
                         actions={[
                           <Button
-                            type="ghost"
                             danger
                             onClick={() => removeOffender(item.id)}
+                            type="ghost"
                           >
                             {intl.formatMessage({
                               defaultMessage: 'remove:',
@@ -492,6 +492,7 @@ const CreateEditArticleView = ({
                         />
                       </List.Item>
                     )}
+                    style={{ marginLeft: 20, width: '30%' }}
                   />
                 </Row>
               </>
@@ -500,9 +501,9 @@ const CreateEditArticleView = ({
               <Upload
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...documentUploadProps}
+                fileList={fileList}
                 listType="picture"
                 style={{ display: 'flex' }}
-                fileList={fileList}
               >
                 <Button icon={<UploadOutlined />}>
                   {intl.formatMessage({
@@ -512,7 +513,7 @@ const CreateEditArticleView = ({
               </Upload>
             </Row>
             <Form.Item>
-              <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+              <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
                 <Col>
                   <Button onClick={() => window.history.back()}>
                     {intl.formatMessage({
@@ -522,10 +523,10 @@ const CreateEditArticleView = ({
                 </Col>
                 <Col>
                   <Button
-                    type="primary"
-                    loading={loading}
                     disabled={loading}
                     htmlType="submit"
+                    loading={loading}
+                    type="primary"
                   >
                     {id
                       ? intl.formatMessage({
@@ -542,10 +543,10 @@ const CreateEditArticleView = ({
         </Card>
       </div>
       <Drawer
+        onClose={() => drawer.close()}
+        open={drawer.visible}
         title={drawer.defaultTitle}
         width={1000}
-        open={drawer.visible}
-        onClose={() => drawer.close()}
       >
         {forms[drawer.id]}
       </Drawer>

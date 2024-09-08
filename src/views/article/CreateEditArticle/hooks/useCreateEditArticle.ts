@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument */
+import type { OffenderData } from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import type { SelectProps, UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { Editor } from 'tinymce';
@@ -15,7 +16,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
-import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import type { Props } from '../types/CreateArticle';
 
 import { useStoreState } from '../../../../state';

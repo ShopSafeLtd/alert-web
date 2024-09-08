@@ -1,0 +1,113 @@
+query ViewIncident($where: IncidentWhereUniqueInput!) {
+  incident(where: $where) {
+    id
+    subject
+    totalImages
+    description
+    dayTime
+    date
+    time
+    reference
+    ref
+    policeReported
+    policeRef
+    policeNo
+    policeInvolved
+    priority
+    customerRef
+    subscribed
+    totalValue
+    totalRecoveredValue
+    originalDescription
+    cctvRecords {
+      cameraNumber
+      endTime
+      id
+      showFace
+      showIncident
+      startTime
+    }
+    answers(orderBy: { tagQuestion: { priority: desc } }) {
+      id
+      answer
+      tagQuestion {
+        id
+        priority
+        dependentQuestions
+        question {
+          id
+          question
+        }
+      }
+      type
+    }
+    scheme {
+      id
+      mg11Available
+      restrictIncidentAccess
+    }
+    crimeTypes {
+      id
+      name
+      crimeType
+    }
+    involvedTags {
+      id
+      name
+    }
+    impactTags {
+      id
+      name
+    }
+    incidentItems {
+      ...IncidentItems
+    }
+    approved
+    business {
+      id
+      name
+    }
+
+    groups {
+      id
+      name
+    }
+    createdBy {
+      ...CreatedBy
+    }
+    images {
+      ...Images
+    }
+    crimeGroups {
+      ...CrimeGroups
+    }
+    vehicles {
+      ...Vehicles
+      images {
+        ...Images
+      }
+    }
+    todos {
+      ...Todos
+    }
+    offenders {
+      ...Offenders
+      images {
+        ...Images
+        isFace
+      }
+    }
+    evidence {
+      ...Documents
+    }
+    investigations {
+      ...Investigations
+    }
+    updates(orderBy: { createdAt: desc }) {
+      ...Updates
+    }
+    location {
+      ...Locations
+    }
+  }
+}

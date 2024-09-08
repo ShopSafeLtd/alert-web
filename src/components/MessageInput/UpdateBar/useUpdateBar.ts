@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
+import type {
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
+} from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { FormInstance } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import type { UploadFile, UploadProps } from 'antd/lib/upload/interface';
@@ -6,10 +10,6 @@ import type {
   CrimeGroupQuery,
   CrimeGroupQueryVariables,
 } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
-import type {
-  ViewIncidentQuery,
-  ViewIncidentQueryVariables,
-} from 'graphql/incidents/queries/__generated__/view-incident.generated';
 import type {
   ViewInvestigationQuery,
   ViewInvestigationQueryVariables,
@@ -33,12 +33,12 @@ import type {
 
 import { useMentionableUsersQuery } from '#/components/MessageInput/UpdateBar/graphql/queries/__generated__/users-to-mention.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { Form, message } from 'antd';
 import Upload from 'antd/lib/upload';
 import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/subscribe-to-crime-group.generated';
 import { CrimeGroupDocument } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
 import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/__generated__/subscribe-to-incident.generated';
-import { ViewIncidentDocument } from 'graphql/incidents/queries/__generated__/view-incident.generated';
 import { useSubscribeToInvestigationMutation } from 'graphql/investigations/mutations/__generated__/subscribe-to-investigation.generated';
 import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 import { useCreateUpdateOnCrimeGroupMutation } from 'graphql/mutations/__generated__/create-update-on-crime-group.generated';
