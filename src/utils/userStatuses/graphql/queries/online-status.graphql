@@ -1,0 +1,6 @@
+query UsersOnline($where: String!) {
+    usersOnline(where: $where) {
+        userId
+        online
+    }
+}
