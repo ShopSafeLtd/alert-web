@@ -19,7 +19,7 @@ export const useSignOut = (): {
     window.localStorage.setItem('logo', logo || '');
     window.localStorage.setItem('logo-dark', dLogo || '');
     window.sessionStorage.clear();
-    void signOutClerk();
+    void signOutClerk({ returnTo: 'https://app.shopsafealert.co.uk' });
   };
   return { signOut };
 };
