@@ -1,27 +1,18 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 
-import React, { useEffect, useRef } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Picker from 'emoji-picker-react';
-
 import type { FormInstance } from 'antd';
-import {
-  Button,
-  Drawer,
-  Form,
-  Mentions,
-  Upload,
-  Col,
-  Divider,
-  PageHeader,
-  Popconfirm,
-  Popover,
-  Row,
-  Skeleton,
-  Spin,
-  Tag,
-  Typography,
-} from 'antd';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { ChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
+import type { ChatMessagesQuery } from 'graphql/messages/queries/__generated__/chat-messages.generated';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+import type {
+  ArticleData,
+  CrimeGroupData,
+  IncidentCardData,
+  SchemeUserData,
+  VehicleData,
+} from 'types/DataType';
+
 import {
   faCar,
   faExclamationCircle,
@@ -31,24 +22,25 @@ import {
   faTrash,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
-import AddUserChat from 'components/form-components/userChat/ManageChatMember';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import type {
-  ArticleData,
-  CrimeGroupData,
-  IncidentCardData,
-  SchemeUserData,
-  VehicleData,
-} from 'types/DataType';
-import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
-import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Button,
+  Col,
+  Divider,
+  Drawer,
+  Form,
+  Mentions,
+  PageHeader,
+  Popconfirm,
+  Popover,
+  Row,
+  Skeleton,
+  Spin,
+  Tag,
+  Typography,
+  Upload,
+} from 'antd';
 import {
   ArticleMessageCard,
   CrimeGroupMessageCard,
@@ -56,46 +48,53 @@ import {
   OffenderMessageCard,
   VehicleMessageCard,
 } from 'components/MessageInput/MessageCard';
-import { useIntl } from 'react-intl';
 import LinkArticle from 'components/form-components/linkOptions/LinkArticle';
-import Content from '../Message/Message.view';
-import customRequest from '../../../utils/custom-request';
-import type { Age, Build, Gender, Race } from 'graphql/types';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import LinkOffender from 'components/form-components/offender/AddExistingOffender';
+import AddUserChat from 'components/form-components/userChat/ManageChatMember';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import Picker from 'emoji-picker-react';
 import { MessageItemType } from 'graphql/types';
-import { ChatMessagesQuery } from 'graphql/messages/queries/__generated__/chat-messages.generated';
-import { ChatQuery } from 'graphql/chat/queries/__generated__/chat.generated';
+import React, { useEffect, useRef } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useIntl } from 'react-intl';
+
+import customRequest from '../../../utils/custom-request';
+import Content from '../Message/Message.view';
 
 const { Option, getMentions } = Mentions;
 const { Text } = Typography;
 
 interface OffenderData {
-  id: string;
-  updatedAt?: Date;
-  name?: string | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
+  approved?: boolean | null;
   build?: Build | null;
   dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
+  dateSource?: null | string;
+  gender?: Gender | null;
   groups?:
     | {
         id: string;
         name: string;
       }[]
     | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-  }[];
+  hair?: null | string;
+  id: string;
   imageUid?: string[] | undefined;
+  images?: {
+    fileName?: null | string;
+    id: string;
+    new?: boolean;
+    optimised?: null | string;
+    type?: null | string;
+    url?: null | string;
+  }[];
+  name?: null | string;
+  peculiarities?: null | string;
+  race?: Race | null;
+  updatedAt?: Date;
 }
 
 // interface FormData {
@@ -103,123 +102,123 @@ interface OffenderData {
 // }
 
 interface Props {
-  chatId: string;
-  onSubmit: () => void;
-  data: ChatMessagesQuery | undefined;
+  adminRights: boolean;
+  articlesData: ArticleData[];
+  beforeUpload: (value: RcFile) => void;
   // loading: boolean;
   chatData: ChatQuery | undefined;
-  form: FormInstance<FormData>;
-  saving: boolean;
-  scrolledToTop: () => void;
-  userId: string | undefined;
-  messageSent: boolean;
-  deleteMessageConfirm: (value: string) => void;
-  adminRights: boolean;
-  deleteChatConfirm: () => void;
-  manageChat: boolean;
-  toggleManageChat: () => void;
-  membersData: SchemeUserData[] | undefined;
-  inputStr: string;
-  setInputStr: (value: string) => void;
-  showPicker: boolean;
-  toggleShowPicker: () => void;
-  imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
-  beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
-  offendersData: OffenderData[];
-  incidentsData: IncidentCardData[];
+  chatId: string;
   crimeGroupsData: CrimeGroupData[];
-  vehiclesData: VehicleData[];
-  articlesData: ArticleData[];
+  data: ChatMessagesQuery | undefined;
+  deleteChatConfirm: () => void;
+  deleteImageConfirm: (messageId: string, imageId: string) => void;
+  deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
+  deleteMessageConfirm: (value: string) => void;
+  deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
+  fileList: UploadFile[];
+  form: FormInstance<FormData>;
+  imgChange: UploadProps['onChange'];
+  incidentsData: IncidentCardData[];
+  inputStr: string;
+  linkArticle: boolean;
+  linkCrimeGroup: boolean;
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
-  linkCrimeGroup: boolean;
-  linkArticle: boolean;
+  manageChat: boolean;
+  membersData: SchemeUserData[] | undefined;
+  messageSent: boolean;
+  offendersData: OffenderData[];
+  onPreview: (value: UploadFile) => void;
+  onSubmit: () => void;
+  removeArticle: (value: string | undefined) => void;
+  removeCrimeGroup: (value: string | undefined) => void;
+  removeImage: (uid: string) => void;
+  removeIncident: (value: string | undefined) => void;
+  removeOffender: (value: string | undefined) => void;
+  removeVehicle: (value: string | undefined) => void;
+  restrictIncidentAccess: boolean;
+  saving: boolean;
+  scrolledToTop: () => void;
+  setInputStr: (value: string) => void;
+  // mentionedUser: { id: string; value: string }[];
+  setMentionedUser: (value: { id: string; value: string }[]) => void;
+  setMessageSent: (value: boolean) => void;
+  showPicker: boolean;
+  toggleLinkArticle: () => void;
+  toggleLinkCrimeGroup: () => void;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
   toggleLinkVehicle: () => void;
-  toggleLinkCrimeGroup: () => void;
-  toggleLinkArticle: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: IncidentCardData) => void;
-  updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: CrimeGroupData) => void;
-  updateArticleList: (value: ArticleData) => void;
-  removeOffender: (value: string | undefined) => void;
-  removeIncident: (value: string | undefined) => void;
-  removeCrimeGroup: (value: string | undefined) => void;
-  removeVehicle: (value: string | undefined) => void;
-  removeArticle: (value: string | undefined) => void;
-  removeImage: (uid: string) => void;
-  // mentionedUser: { id: string; value: string }[];
-  setMentionedUser: (value: { id: string; value: string }[]) => void;
-  deleteImageConfirm: (messageId: string, imageId: string) => void;
-  deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
-  deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
-  setMessageSent: (value: boolean) => void;
+  toggleManageChat: () => void;
+  toggleShowPicker: () => void;
   totalChats: number;
-  restrictIncidentAccess: boolean;
+  updateArticleList: (value: ArticleData) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
+  updateOffendersList: (value: OffenderData) => void;
+  updateVehicleList: (value: VehicleData) => void;
+  userId: string | undefined;
+  vehiclesData: VehicleData[];
 }
 
 const ViewMessages = ({
-  onSubmit,
-  chatData,
-  totalChats,
-  form,
-  saving,
-  scrolledToTop,
-  userId,
-  deleteMessageConfirm,
   adminRights,
-  deleteChatConfirm,
-  manageChat,
-  toggleManageChat,
-  chatId,
-  membersData,
-  inputStr,
-  setInputStr,
-  showPicker,
-  toggleShowPicker,
-  imgChange,
-  onPreview,
+  articlesData,
   beforeUpload,
-  fileList,
-  offendersData,
-  incidentsData,
+  chatData,
+  chatId,
   crimeGroupsData,
-  vehiclesData,
+  data,
+  deleteChatConfirm,
+  deleteImageConfirm,
+  deleteIncidentConfirm,
+  deleteMessageConfirm,
+  deleteOffenderConfirm,
+  fileList,
+  form,
+  imgChange,
+  incidentsData,
+  inputStr,
+  linkArticle,
+  linkCrimeGroup,
   linkIncident,
   linkOffender,
   linkVehicle,
-  linkCrimeGroup,
+  manageChat,
+  membersData,
+  messageSent,
+  offendersData,
+  onPreview,
+  onSubmit,
+  removeArticle,
+  removeCrimeGroup,
+  removeImage,
+  removeIncident,
+  removeOffender,
+  removeVehicle,
+  restrictIncidentAccess,
+  saving,
+  scrolledToTop,
+  setInputStr,
+  setMentionedUser,
+  setMessageSent,
+  showPicker,
+  toggleLinkArticle,
+  toggleLinkCrimeGroup,
   toggleLinkIncident,
   toggleLinkOffender,
   toggleLinkVehicle,
-  toggleLinkCrimeGroup,
+  toggleManageChat,
+  toggleShowPicker,
+  totalChats,
+  updateArticleList,
+  updateCrimeGroupList,
   updateIncidentList,
   updateOffendersList,
   updateVehicleList,
-  updateCrimeGroupList,
-  removeOffender,
-  removeIncident,
-  removeImage,
-  removeCrimeGroup,
-  removeVehicle,
-  setMentionedUser,
-  deleteImageConfirm,
-  deleteOffenderConfirm,
-  deleteIncidentConfirm,
-  data,
-  messageSent,
-  setMessageSent,
-  restrictIncidentAccess,
-  articlesData,
-  linkArticle,
-  toggleLinkArticle,
-  updateArticleList,
-  removeArticle,
+  userId,
+  vehiclesData,
 }: Props): JSX.Element => {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -245,47 +244,10 @@ const ViewMessages = ({
   return (
     <div className="view-message-container">
       <PageHeader
-        style={{ padding: '4px 24px 1px' }}
-        title={
-          chatData?.chat?.name || (
-            <Skeleton.Input
-              active
-              style={{
-                borderRadius: 5,
-                marginLeft: 20,
-                height: 35,
-                marginTop: 10,
-              }}
-            />
-          )
-        }
-        subTitle={
-          <Tag
-            color="red"
-            style={{ cursor: 'pointer' }}
-            onClick={toggleManageChat}
-          >
-            <FontAwesomeIcon
-              size="lg"
-              icon={faUser}
-              style={{
-                marginRight: 8,
-                color: 'rgb(222, 68, 54)',
-              }}
-            />
-            <span style={{ fontSize: '16px' }}>
-              {chatData?.chat?.totalMembers}
-            </span>
-          </Tag>
-        }
         extra={
           adminRights && [
             <Button
-              key="1"
               disabled={saving}
-              onClick={deleteChatConfirm}
-              type="text"
-              size="small"
               icon={
                 <FontAwesomeIcon
                   icon={faTrash}
@@ -293,6 +255,10 @@ const ViewMessages = ({
                   style={{ marginRight: 5 }}
                 />
               }
+              key="1"
+              onClick={deleteChatConfirm}
+              size="small"
+              type="text"
             >
               {intl.formatMessage({
                 defaultMessage: 'Delete Chat',
@@ -300,20 +266,45 @@ const ViewMessages = ({
             </Button>,
           ]
         }
+        style={{ padding: '4px 24px 1px' }}
+        subTitle={
+          <Tag
+            color="red"
+            onClick={toggleManageChat}
+            style={{ cursor: 'pointer' }}
+          >
+            <FontAwesomeIcon
+              icon={faUser}
+              size="lg"
+              style={{
+                color: 'rgb(222, 68, 54)',
+                marginRight: 8,
+              }}
+            />
+            <span style={{ fontSize: '16px' }}>
+              {chatData?.chat?.totalMembers}
+            </span>
+          </Tag>
+        }
+        title={
+          chatData?.chat?.name || (
+            <Skeleton.Input
+              active
+              style={{
+                borderRadius: 5,
+                height: 35,
+                marginLeft: 20,
+                marginTop: 10,
+              }}
+            />
+          )
+        }
       />
       <Divider style={{ margin: 0 }} />
       <InfiniteScroll
+        className="message-container"
         dataLength={data?.chatMessages.length || 0}
-        next={scrolledToTop}
-        style={{ display: 'flex', flexDirection: 'column-reverse' }}
-        inverse
         hasMore={chatsWoDate < totalChats && data?.chatMessages.length !== 0}
-        loader={
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Spin />
-          </div>
-        }
-        initialScrollY={0}
         height={
           (fileList && fileList.length > 0) ||
           (offendersData && offendersData.length > 0) ||
@@ -324,7 +315,15 @@ const ViewMessages = ({
             ? 'calc(100vh - 279px)'
             : 'calc(100vh - 169px)'
         }
-        className="message-container"
+        initialScrollY={0}
+        inverse
+        loader={
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Spin />
+          </div>
+        }
+        next={scrolledToTop}
+        style={{ display: 'flex', flexDirection: 'column-reverse' }}
       >
         <div ref={ref} />
         {data?.chatMessages?.map((item) =>
@@ -342,31 +341,28 @@ const ViewMessages = ({
             <div className="message-content" key={item.id}>
               <Row
                 justify={item.from?.id === userId ? 'end' : 'start'}
-                style={{ marginBottom: 5 }}
                 key={item.id}
+                style={{ marginBottom: 5 }}
               >
                 <Col>
                   {adminRights ? (
                     <Popover
-                      trigger="click"
-                      placement={item.from?.id === userId ? 'left' : 'right'}
-                      overlayClassName="message-popover"
                       content={
                         adminRights && (
                           <Button
-                            type="text"
                             disabled={saving}
                             icon={
                               <FontAwesomeIcon
-                                style={{ marginRight: 5 }}
                                 icon={faTrash}
                                 size="lg"
+                                style={{ marginRight: 5 }}
                               />
                             }
                             onClick={() => {
                               deleteMessageConfirm(item.id || '');
                             }}
                             size="small"
+                            type="text"
                           >
                             {intl.formatMessage({
                               defaultMessage: 'Delete Message',
@@ -374,40 +370,43 @@ const ViewMessages = ({
                           </Button>
                         )
                       }
+                      overlayClassName="message-popover"
+                      placement={item.from?.id === userId ? 'left' : 'right'}
+                      trigger="click"
                     >
                       <div>
                         <Content
-                          id={item.id}
+                          articles={item.articles}
                           content={item.content}
+                          crimeGroups={item.crimeGroups}
+                          currentUser={item.currentUser}
+                          date={item.formattedDateTime}
                           from={item.from}
+                          id={item.id}
                           images={item.images}
                           incidents={item.incidents}
                           offenders={item.offenders}
-                          vehicles={item.vehicles}
-                          articles={item.articles}
-                          crimeGroups={item.crimeGroups}
-                          showUser={item.showUser}
-                          currentUser={item.currentUser}
-                          date={item.formattedDateTime}
                           paddingTop={item.paddingTop}
+                          showUser={item.showUser}
+                          vehicles={item.vehicles}
                         />
                       </div>
                     </Popover>
                   ) : (
                     <Content
-                      id={item.id}
+                      articles={item.articles}
                       content={item.content}
+                      crimeGroups={item.crimeGroups}
+                      currentUser={item.currentUser}
+                      date={item.formattedDateTime}
                       from={item.from}
+                      id={item.id}
                       images={item.images}
                       incidents={item.incidents}
                       offenders={item.offenders}
-                      vehicles={item.vehicles}
-                      crimeGroups={item.crimeGroups}
-                      articles={item.articles}
-                      showUser={item.showUser}
-                      currentUser={item.currentUser}
-                      date={item.formattedDateTime}
                       paddingTop={item.paddingTop}
+                      showUser={item.showUser}
+                      vehicles={item.vehicles}
                     />
                   )}
                 </Col>
@@ -427,9 +426,8 @@ const ViewMessages = ({
         }}
       >
         <Row
-          wrap={false}
-          gutter={10}
           className="info-container"
+          gutter={10}
           style={{
             height:
               (fileList && fileList.length > 0) ||
@@ -444,50 +442,47 @@ const ViewMessages = ({
             marginBottom: 5,
             overflowX: 'auto',
           }}
+          wrap={false}
         >
           <Col style={{ marginLeft: 10, marginRight: -8 }}>
             <Upload
-              customRequest={customRequest}
               accept=".png,.jpeg,.webp"
-              listType="picture-card"
-              fileList={fileList}
-              onChange={imgChange}
-              onPreview={onPreview}
               beforeUpload={beforeUpload}
-              // TODO
+              customRequest={customRequest}
+              fileList={fileList}
               // eslint-disable-next-line react/no-unstable-nested-components
               itemRender={(el, file) => (
                 <div className="message-upload-card">
                   <div>
                     <Popconfirm
-                      placement="topLeft"
-                      trigger="click"
-                      title={intl.formatMessage({
-                        defaultMessage: 'Remove the image?',
-                      })}
-                      onConfirm={() => removeImage(file.uid)}
-                      okText={intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
                       cancelText={intl.formatMessage({
                         defaultMessage: 'No',
                       })}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                      })}
+                      onConfirm={() => removeImage(file.uid)}
                       overlayInnerStyle={{ padding: 10 }}
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the image?',
+                      })}
+                      trigger="click"
                     >
                       <Button
-                        size="small"
                         disabled={saving}
-                        style={{
-                          position: 'absolute',
-                          top: -5,
-                          right: -5,
-                          zIndex: 100,
-                        }}
-                        shape="circle"
-                        type="text"
                         icon={
                           <FontAwesomeIcon icon={faCircleXmark} size="lg" />
                         }
+                        shape="circle"
+                        size="small"
+                        style={{
+                          position: 'absolute',
+                          right: -5,
+                          top: -5,
+                          zIndex: 100,
+                        }}
+                        type="text"
                       />
                     </Popconfirm>
                   </div>
@@ -496,6 +491,10 @@ const ViewMessages = ({
                   </div>
                 </div>
               )}
+              listType="picture-card"
+              onChange={imgChange}
+              // TODO
+              onPreview={onPreview}
             />
           </Col>
           {offendersData?.map((offender) => (
@@ -519,9 +518,9 @@ const ViewMessages = ({
           {vehiclesData?.map((vehicle) => (
             <Col key={vehicle.id}>
               <VehicleMessageCard
-                vehicle={vehicle}
                 removeVehicle={removeVehicle}
                 saving={saving}
+                vehicle={vehicle}
               />
             </Col>
           ))}
@@ -549,11 +548,6 @@ const ViewMessages = ({
           <Col flex={1} style={{ height: '40px' }}>
             <Mentions
               autoFocus
-              style={{ height: 40 }}
-              value={inputStr}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') e.preventDefault();
-              }}
               onChange={(value) => {
                 setInputStr(value);
                 const mentions = getMentions(value);
@@ -571,9 +565,14 @@ const ViewMessages = ({
                     .filter((item) => item.value !== '')
                 );
               }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') e.preventDefault();
+              }}
               prefix="@"
+              style={{ height: 40 }}
+              value={inputStr}
             >
-              {membersData?.map(({ id, fullName, businesses }) => (
+              {membersData?.map(({ businesses, fullName, id }) => (
                 <Option key={id} value={fullName.replace(' ', '_')}>
                   {fullName} (
                   {businesses && businesses.length > 0
@@ -589,9 +588,9 @@ const ViewMessages = ({
             <Form.Item>
               <Button
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Send',
@@ -604,19 +603,19 @@ const ViewMessages = ({
         <Row gutter={5} style={{ height: '45px', margin: '0 10px 10px' }}>
           <Col>
             <Popover
-              placement="topLeft"
-              trigger="click"
-              open={showPicker}
-              overlayStyle={{ width: '50%' }}
               content={
                 <Picker
-                  pickerStyle={{ width: '100%' }}
                   onEmojiClick={(_e, emojiObject) => {
                     setInputStr(inputStr + emojiObject.emoji);
                     toggleShowPicker();
                   }}
+                  pickerStyle={{ width: '100%' }}
                 />
               }
+              open={showPicker}
+              overlayStyle={{ width: '50%' }}
+              placement="topLeft"
+              trigger="click"
             >
               <Button
                 disabled={saving}
@@ -625,11 +624,11 @@ const ViewMessages = ({
                 // icon={<FontAwesomeIcon icon={faFaceSmile} size="lg" />}
               >
                 <img
-                  style={{ marginLeft: -8 }}
-                  className="emoji-icon"
                   // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                   alt="emoji picker"
+                  className="emoji-icon"
                   src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"
+                  style={{ marginLeft: -8 }}
                 />
               </Button>
             </Popover>
@@ -637,11 +636,11 @@ const ViewMessages = ({
 
           <Col>
             <Upload
-              customRequest={customRequest}
               accept=".png,.jpeg,.webp"
+              beforeUpload={beforeUpload}
+              customRequest={customRequest}
               fileList={fileList}
               onChange={imgChange}
-              beforeUpload={beforeUpload}
               showUploadList={false}
             >
               <Button
@@ -662,7 +661,6 @@ const ViewMessages = ({
           <Col>
             <div>
               <Button
-                onClick={toggleLinkOffender}
                 disabled={
                   saving ||
                   (incidentsData && incidentsData.length > 0) ||
@@ -674,6 +672,7 @@ const ViewMessages = ({
                 icon={
                   <FontAwesomeIcon className="button-icon" icon={faUsers} />
                 }
+                onClick={toggleLinkOffender}
               >
                 {intl.formatMessage({
                   defaultMessage: 'Offender',
@@ -684,7 +683,6 @@ const ViewMessages = ({
           {!restrictIncidentAccess && (
             <Col>
               <Button
-                onClick={toggleLinkIncident}
                 disabled={
                   saving ||
                   (fileList && fileList.length > 0) ||
@@ -699,6 +697,7 @@ const ViewMessages = ({
                     icon={faExclamationCircle}
                   />
                 }
+                onClick={toggleLinkIncident}
               >
                 {intl.formatMessage({
                   defaultMessage: 'Incident',
@@ -709,7 +708,6 @@ const ViewMessages = ({
 
           <Col>
             <Button
-              onClick={toggleLinkCrimeGroup}
               disabled={
                 saving ||
                 (fileList && fileList.length > 0) ||
@@ -721,6 +719,7 @@ const ViewMessages = ({
               icon={
                 <FontAwesomeIcon className="button-icon" icon={faPeopleGroup} />
               }
+              onClick={toggleLinkCrimeGroup}
             >
               {intl.formatMessage({
                 defaultMessage: 'Crime Group',
@@ -730,7 +729,6 @@ const ViewMessages = ({
 
           <Col>
             <Button
-              onClick={toggleLinkVehicle}
               disabled={
                 saving ||
                 (fileList && fileList.length > 0) ||
@@ -740,6 +738,7 @@ const ViewMessages = ({
                 (articlesData && articlesData.length > 0)
               }
               icon={<FontAwesomeIcon className="button-icon" icon={faCar} />}
+              onClick={toggleLinkVehicle}
             >
               {intl.formatMessage({
                 defaultMessage: 'Vehicle',
@@ -748,7 +747,6 @@ const ViewMessages = ({
           </Col>
           <Col>
             <Button
-              onClick={toggleLinkArticle}
               disabled={
                 saving ||
                 (fileList && fileList.length > 0) ||
@@ -760,6 +758,7 @@ const ViewMessages = ({
               icon={
                 <FontAwesomeIcon className="button-icon" icon={faNewspaper} />
               }
+              onClick={toggleLinkArticle}
             >
               {intl.formatMessage({
                 defaultMessage: 'Bulletins',
@@ -770,87 +769,87 @@ const ViewMessages = ({
       </Form>
 
       <Drawer
+        onClose={toggleManageChat}
+        open={manageChat}
         title={intl.formatMessage({
           defaultMessage: 'Manage Chat Members',
         })}
-        open={manageChat}
         width="600"
-        onClose={toggleManageChat}
       >
         {manageChat ? (
-          <AddUserChat onClose={toggleManageChat} chatId={chatId} />
+          <AddUserChat chatId={chatId} onClose={toggleManageChat} />
         ) : (
           <div />
         )}
       </Drawer>
 
       <Drawer
+        onClose={toggleLinkOffender}
+        open={linkOffender}
         title={intl.formatMessage({
           defaultMessage: 'Link Offenders',
         })}
-        open={linkOffender}
         width="800"
-        onClose={toggleLinkOffender}
       >
         {linkOffender ? (
           <LinkOffender
-            update={updateOffendersList}
-            onClose={toggleLinkOffender}
             offenderIds={offendersData.map(({ id }) => id)}
+            onClose={toggleLinkOffender}
+            update={updateOffendersList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleLinkIncident}
+        open={linkIncident}
         title={intl.formatMessage({
           defaultMessage: 'Link Incidents',
         })}
-        open={linkIncident}
         width="1000"
-        onClose={toggleLinkIncident}
       >
         {linkIncident ? (
           <LinkIncident
-            update={updateIncidentList}
-            onClose={toggleLinkIncident}
             incidentIds={incidentsData?.map(({ id }) => id)}
+            onClose={toggleLinkIncident}
+            update={updateIncidentList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleLinkCrimeGroup}
+        open={linkCrimeGroup}
         title={intl.formatMessage({
           defaultMessage: 'Link Crime Groups',
         })}
-        open={linkCrimeGroup}
         width="800"
-        onClose={toggleLinkCrimeGroup}
       >
         {linkCrimeGroup ? (
           <LinkCrimeGroup
-            update={updateCrimeGroupList}
-            onClose={toggleLinkCrimeGroup}
             crimeGroupIds={crimeGroupsData?.map(({ id }) => id)}
+            onClose={toggleLinkCrimeGroup}
+            update={updateCrimeGroupList}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        bodyStyle={{ overflow: 'hidden' }}
+        onClose={toggleLinkVehicle}
+        open={linkVehicle}
         title={intl.formatMessage({
           defaultMessage: 'Link Vehicles',
         })}
-        open={linkVehicle}
         width="800"
-        onClose={toggleLinkVehicle}
-        bodyStyle={{ overflow: 'hidden' }}
       >
         {linkVehicle ? (
           <LinkVehicle
-            update={updateVehicleList}
             onClose={toggleLinkVehicle}
+            update={updateVehicleList}
             vehicleIds={vehiclesData?.map(({ id }) => id)}
           />
         ) : (
@@ -859,18 +858,18 @@ const ViewMessages = ({
       </Drawer>
 
       <Drawer
+        onClose={toggleLinkArticle}
+        open={linkArticle}
         title={intl.formatMessage({
           defaultMessage: 'Link Bulletins',
         })}
-        open={linkArticle}
         width="1000"
-        onClose={toggleLinkArticle}
       >
         {linkArticle ? (
           <LinkArticle
-            update={updateArticleList}
-            onClose={toggleLinkArticle}
             articleIds={articlesData?.map(({ id }) => id)}
+            onClose={toggleLinkArticle}
+            update={updateArticleList}
           />
         ) : (
           <div />

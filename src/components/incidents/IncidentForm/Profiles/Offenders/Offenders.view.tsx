@@ -9,9 +9,9 @@ import type { StateOffenderData } from './useOffenders';
 
 import CountButton from '../../../../form-components/count-buttons/CountButton.view';
 import CounterButton from '../../../../form-components/count-buttons/CounterButton.view';
-import AddExistingOffender from '../../../../form-components/offender/offender/AddExistingOffender';
-import AddNewOffenderSimple from '../../../../form-components/offender/offender/AddNewOffenderSimple';
-import SimpleEditOffender from '../../../../form-components/offender/offender/SimpleEditOffender';
+import AddExistingOffender from '../../../../form-components/offender/AddExistingOffender';
+import AddNewOffenderSimple from '../../../../form-components/offender/AddNewOffenderSimple';
+import SimpleEditOffender from '../../../../form-components/offender/SimpleEditOffender';
 import useStyles from '../Profiles.styles';
 import FacesColumn from './FacesColumn.view';
 import OffenderProfile from './OffenderProfile.view';

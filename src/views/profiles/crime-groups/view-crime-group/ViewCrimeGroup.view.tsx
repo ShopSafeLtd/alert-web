@@ -1,3 +1,4 @@
+import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/__generated__/suggested-memebrs.generated';
 import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
@@ -7,7 +8,7 @@ import type { CreateInvestigationMutation } from 'graphql/investigations/mutatio
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { VehicleData } from 'types/DataType';
 
-import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
+import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
 import {
   faBell,
   faBellSlash,
@@ -42,7 +43,7 @@ import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import AddAlias from 'components/form-components/crimeGroup/Alias';
 import AddDocument from 'components/form-components/documents/AddDocument';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
+import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
 import MapCard from 'components/map/MapCard/MapCard.view';
 import EvidenceTable from 'components/tables/EvidenceTable';
 import IncidentTable from 'components/tables/IncidentTable';
@@ -101,7 +102,7 @@ interface Props {
   ) => void;
   showIntel: boolean;
   submitNewVehicle: (value: VehicleData) => void;
-  submitOffender: (value: string[]) => void;
+  submitOffender: (value: OffenderSearchDetailsFragment[]) => void;
   submitVehicle: (value: string) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
   toggleAddAlias: () => void;
@@ -761,9 +762,10 @@ const ViewCrimeGroup = ({
         zIndex={1001}
       >
         {addExistingOffender ? (
-          <SelectedOffenders
+          <AddExistingOffender
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
+            type={'multiple'}
             update={submitOffender}
           />
         ) : (

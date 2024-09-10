@@ -84,22 +84,60 @@ const LocatingCard = ({
     latitude: 51.6,
     longitude: 0.12,
   };
-  useEffect(() => {}, []);
+
   // get current location
+  // useEffect(() => {
+  //
+  //   void navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+  //     const newStatus = result.state;
+  //     setStatus(newStatus);
+  //     result.addEventListener('change', () => {
+  //       setStatus(newStatus);
+  //     });
+  //   });
+  //   navigator.geolocation.getCurrentPosition((pos) => {
+  //     setCurrentViewport({
+  //       latitude: pos.coords.latitude,
+  //       longitude: pos.coords.longitude,
+  //     });
+  //   });
+  // }, []);
+
   useEffect(() => {
-    void navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-      const newStatus = result.state;
-      setStatus(newStatus);
-      result.addEventListener('change', () => {
-        setStatus(newStatus);
-      });
-    });
-    navigator.geolocation.getCurrentPosition((pos) => {
+    const handleGeolocationSuccess = (pos: GeolocationPosition) => {
       setCurrentViewport({
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
       });
-    });
+    };
+
+    const handlePermissionChange = (result: PermissionStatus) => {
+      const newStatus = result.state;
+      setStatus(newStatus);
+      result.addEventListener('change', () => {
+        setStatus(result.state);
+      });
+    };
+
+    const getGeolocation = () => {
+      navigator.geolocation.getCurrentPosition(handleGeolocationSuccess);
+    };
+
+    if (navigator.permissions && navigator.permissions.query) {
+      // Try using the Permissions API first
+      void navigator.permissions
+        .query({ name: 'geolocation' })
+        .then((result) => {
+          handlePermissionChange(result);
+
+          if (result.state === 'granted' || result.state === 'prompt') {
+            getGeolocation();
+          }
+        });
+    } else if (navigator.geolocation) {
+      // Fallback to using the Geolocation API directly
+      getGeolocation();
+    }
   }, []);
 
   useEffect(() => {

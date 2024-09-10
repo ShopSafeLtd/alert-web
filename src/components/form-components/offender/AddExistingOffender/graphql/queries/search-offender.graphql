@@ -1,0 +1,43 @@
+query SearchOffenders($where: SearchOffenderWhere! $order: SearchOffenderSort, $after: String, $first: Int) {
+  searchOffenders(where: $where, order: $order, after: $after, first: $first) {
+    totalCount
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        ...OffenderSearchDetails
+      }
+    }
+  }
+}
+
+fragment OffenderSearchDetails on Offender {
+  age
+  build
+  dateOfBirth
+  gender
+  hair
+  id
+  dateSource
+  updatedAt
+  images {
+    id
+    optimised
+    position
+    rotation
+  }
+  lastActive {
+    id
+    dayTime
+  }
+  name
+  peculiarities
+  race
+  reference
+  tags {
+    id
+    name
+  }
+}

@@ -1,4 +1,5 @@
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
@@ -11,6 +12,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
 import {
   faBell,
   faBellSlash,
@@ -39,9 +41,8 @@ import EditCrimeGroup from 'components/form-components/crimeGroup/EditCrimeGroup
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import SelectIncidents from 'components/form-components/linkOptions/SelectIncidents';
-import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
-import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
-import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
+import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
+import SimpleEditOffender from 'components/form-components/offender/SimpleEditOffender';
 import MultiSelectOffenders from 'components/investigations/MultiSelectOffenders';
 import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
 import { InvestigationStatus } from 'graphql/types';
@@ -82,7 +83,7 @@ interface Props {
   onAddCrimeGroup: (value: CrimeGroupCardData) => void;
   onAddExistingCrimeGroup: (value: string) => void;
   onAddExistingIncident: (value: string[]) => void;
-  onAddExistingOffender: (value: string[]) => void;
+  onAddExistingOffender: (value: OffenderSearchDetailsFragment[]) => void;
   onAddExistingOffenders: (value: string[]) => void;
   onAddExistingVehicle: (value: string) => void;
   onAddExistingVehicles: (value: string[]) => void;
@@ -456,10 +457,11 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addExistingOffender ? (
-          <SelectedOffenders
+          <AddExistingOffender
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
             takeAllSchemes={takeAllSchemes}
+            type={'multiple'}
             update={onAddExistingOffender}
           />
         ) : (
