@@ -6,7 +6,7 @@ import type {
 
 import UpdateBar from '#/components/MessageInput/UpdateBar';
 import IntelSection from '#/components/ViewPage/IntelSection';
-import OffenderTile from '#/components/form-components/linkOptions/SelectOffenders/OffenderTile';
+import OffenderTile from '#/components/form-components/offender/OffenderTile';
 import WatermarkImage from '#/components/images/WatermarkImage.view';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';

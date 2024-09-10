@@ -1,4 +1,5 @@
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { UpdateInvestigationOffendersMutation } from 'graphql/investigations/mutations/update/__generated__/update-investigation-offenders.generated';
@@ -73,7 +74,7 @@ interface Return {
   onAddCrimeGroup: (value: CrimeGroupCardData) => void;
   onAddExistingCrimeGroup: (value: string) => void;
   onAddExistingIncident: (value: string[]) => void;
-  onAddExistingOffender: (value: string[]) => void;
+  onAddExistingOffender: (value: OffenderSearchDetailsFragment[]) => void;
   onAddExistingOffenders: (value: string[]) => void;
   onAddExistingVehicle: (value: string) => void;
   onAddExistingVehicles: (value: string[]) => void;
@@ -376,7 +377,7 @@ const useViewInvestigation = (investigationId: string): Return => {
       });
     }
   };
-  const onAddExistingOffender = (values: string[]) => {
+  const onAddExistingOffender = (values: OffenderSearchDetailsFragment[]) => {
     setSaving(true);
     if (values) {
       void updateInvestigationOffenders({
@@ -390,7 +391,7 @@ const useViewInvestigation = (investigationId: string): Return => {
         update: updateAddExistingOffenderList,
         variables: {
           id: investigationId,
-          offenderIds: values,
+          offenderIds: values.map(({ id }) => id),
         },
       }).finally(() => {
         setAddExistingOffender(false);

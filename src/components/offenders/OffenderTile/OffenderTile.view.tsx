@@ -1,22 +1,33 @@
-import React from 'react';
+import { faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tooltip, Typography } from 'antd';
-import { faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
+import React from 'react';
 import { useIntl } from 'react-intl'; // Import the useIntl hook
 import WatermarkImage from 'components/images/WatermarkImage.view';
+
 import useStyles from './OffenderTile.styles';
 
 const { Paragraph } = Typography;
 
+export interface OffenderCard {
+  id: string;
+  images: {
+    optimised?: null | string | undefined;
+    optimisedPersisted?: null | string | undefined;
+  }[];
+  name?: null | string | undefined;
+  reference?: null | number;
+}
+
 interface Props {
   offender: {
     id: string;
-    reference?: number | null;
-    name?: string | null | undefined;
     images: {
-      optimised?: string | null | undefined;
-      optimisedPersisted?: string | null | undefined;
+      optimised?: null | string | undefined;
+      optimisedPersisted?: null | string | undefined;
     }[];
+    name?: null | string | undefined;
+    reference?: null | number;
   };
   onClick: () => void;
   selectedOffenderIds?: string[];
@@ -41,19 +52,19 @@ const OffenderTile = ({
       )}
     >
       <Card
-        onClick={onClick}
         bodyStyle={{
-          width: '100%',
-          height: 120,
-          position: 'relative',
-          padding: 0,
-          borderRadius: '0.625rem',
-          overflow: 'hidden',
-          display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          borderRadius: '0.625rem',
           cursor: 'pointer',
+          display: 'flex',
+          height: 120,
+          justifyContent: 'center',
+          overflow: 'hidden',
+          padding: 0,
+          position: 'relative',
+          width: '100%',
         }}
+        onClick={onClick}
       >
         <WatermarkImage
           url={
@@ -90,8 +101,8 @@ const OffenderTile = ({
           style={{
             color: 'rgb(222, 68, 54)',
             position: 'absolute',
-            top: 0,
             right: 10,
+            top: 0,
           }}
         />
       )}

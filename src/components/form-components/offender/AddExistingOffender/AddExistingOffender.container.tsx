@@ -1,81 +1,70 @@
-import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
+import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 
 import React from 'react';
 
 import View from './AddExistingOffender.view';
 import useAddExistingOffender from './useAddExistingOffender';
 
-export interface OffenderData {
-  age?: Age | null;
-  approved?: boolean | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  dateSource?: null | string;
-  gender?: Gender | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  hair?: null | string;
-  id: string;
-  imageUid?: string[] | undefined;
-  images?: {
-    fileName?: null | string;
-    id: string;
-    new?: boolean;
-    optimised?: null | string;
-    position: ImagePosition;
-    rotation: number;
-    type?: null | string;
-    url?: null | string;
-  }[];
-  lastActive:
-    | { dayTime?: null | string | undefined; id: string }
-    | null
-    | undefined;
-  name?: null | string;
-  peculiarities?: null | string;
-  race?: Race | null;
-  tags: {
-    id: string;
-    name: string;
-  }[];
-  updatedAt?: Date;
+export interface OffenderData extends OffenderSearchDetailsFragment {}
+
+// interface Props {
+//   addOverride?: string;
+//   offenderIds: string[] | undefined;
+//   onClose: () => void;
+//   takeAllSchemes?: boolean;
+//   type: 'multiple' | 'single';
+//   update: (
+//     value: OffenderSearchDetailsFragment | OffenderSearchDetailsFragment[]
+//   ) => void;
+// }
+//
+
+interface SingleProps {
+  type?: 'single'; // Make 'single' the default by making it optional
+  update: (value: OffenderSearchDetailsFragment) => void;
 }
 
-interface Props {
+interface MultipleProps {
+  type: 'multiple';
+  update: (value: OffenderSearchDetailsFragment[]) => void;
+}
+
+type Props = {
   addOverride?: string;
   offenderIds: string[] | undefined;
   onClose: () => void;
   takeAllSchemes?: boolean;
-  update: (value: OffenderData) => void;
-}
+} & (MultipleProps | SingleProps);
 
 const AddExistingOffender = ({
   addOverride,
   offenderIds,
   onClose,
   takeAllSchemes,
+  type = 'single',
   update,
 }: Props): JSX.Element => {
   const {
     age,
     build,
     clearFilters,
+    currentId,
     data,
     ethnicity,
     hair,
     lightBoxOpen,
     loading,
+    loadingMore,
     onPaginationChange,
     onSubmit,
     openLightbox,
     pagination,
     peculiarities,
     search,
+    selectOffender,
+    selectedLoading,
     selectedOffender,
+    selectedOffenders,
     setAge,
     setBuild,
     setCurrentId,
@@ -85,7 +74,20 @@ const AddExistingOffender = ({
     setSearch,
     setSex,
     sex,
-  } = useAddExistingOffender({ offenderIds, onClose, takeAllSchemes, update });
+  } = useAddExistingOffender({
+    offenderIds,
+    onClose,
+    takeAllSchemes,
+    type,
+    update:
+      type === 'single'
+        ? (update as (value: OffenderSearchDetailsFragment) => void)
+        : undefined,
+    updateMany:
+      type === 'multiple'
+        ? (update as (value: OffenderSearchDetailsFragment[]) => void)
+        : undefined,
+  });
 
   return (
     <View
@@ -93,18 +95,23 @@ const AddExistingOffender = ({
       age={age}
       build={build}
       clearFilters={clearFilters}
+      currentId={currentId}
       data={data}
       ethnicity={ethnicity}
       hair={hair}
       lightBoxOpen={lightBoxOpen}
       loading={loading}
+      loadingMore={loadingMore}
       onPaginationChange={onPaginationChange}
       onSubmit={onSubmit}
       openLightbox={openLightbox}
       pagination={pagination}
       peculiarities={peculiarities}
       search={search}
+      selectOffender={selectOffender}
+      selectedLoading={selectedLoading}
       selectedOffender={selectedOffender}
+      selectedOffenders={selectedOffenders}
       setAge={setAge}
       setBuild={setBuild}
       setCurrentId={setCurrentId}
@@ -114,6 +121,7 @@ const AddExistingOffender = ({
       setSearch={setSearch}
       setSex={setSex}
       sex={sex}
+      type={type}
     />
   );
 };

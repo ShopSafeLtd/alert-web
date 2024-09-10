@@ -171,7 +171,6 @@ const compareIncident = (): Return => {
   const addOffenders = (value: OffenderData) => {
     console.log(value);
     setOffenders([
-      // @ts-expect-error Date or null
       ...offenders,
       {
         age: value.age,
@@ -190,7 +189,6 @@ const compareIncident = (): Return => {
         peculiarities: value.peculiarities,
         race: value.race,
         tags: value.tags,
-        // @ts-expect-error Date or null
         updatedAt: value.updatedAt,
       },
     ]);
