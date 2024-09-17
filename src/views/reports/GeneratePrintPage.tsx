@@ -6,6 +6,7 @@ import React from 'react';
 interface Props {
   componentRef: React.RefObject<HTMLDivElement>;
   elements: (JSX.Element | undefined)[];
+  isPrinting: boolean;
   layout: ExtendedLayout[];
   logo?: JSX.Element;
   title?: JSX.Element;
@@ -14,6 +15,7 @@ interface Props {
 const GeneratePrintPage = ({
   componentRef,
   elements,
+  isPrinting,
   layout,
   logo,
   title,
@@ -48,7 +50,7 @@ const GeneratePrintPage = ({
   return (
     <div className="print-page" ref={componentRef}>
       <div className="print-container">
-        <div className="print-body">
+        <div className={isPrinting ? 'print-body' : 'print-body-full'}>
           <Row gutter={[10, 10]}>{result}</Row>
         </div>
       </div>
