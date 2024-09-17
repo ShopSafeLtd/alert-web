@@ -1,3 +1,4 @@
+import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type {
   SuggestedCrimeGroupMembersQuery,
@@ -86,7 +87,7 @@ interface Return {
   ) => void;
   showIntel: boolean;
   submitNewVehicle: (value: VehicleData) => void;
-  submitOffender: (value: string[]) => void;
+  submitOffender: (value: OffenderSearchDetailsFragment[]) => void;
   submitVehicle: (value: string) => void;
   // submitNewOffender: (value: OffenderData) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
@@ -275,14 +276,14 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   //     },
   //   });
   // };
-  const submitOffender = (values: string[]) => {
+  const submitOffender = (values: OffenderSearchDetailsFragment[]) => {
     setSaving(true);
     if (values) {
       void updateCrimeGroup({
         variables: {
           data: {
             offenders: {
-              connect: values.map((value) => ({ id: value })),
+              connect: values.map((value) => ({ id: value.id })),
             },
           },
           where: {

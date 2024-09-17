@@ -171,6 +171,7 @@ const PerformanceReport = ({
           <ReportToolbar
             editMode={editMode}
             handlePrint={handlePrint}
+            isPrinting={isPrinting}
             minDrawer={minDrawer}
             saveTemplate={saveTemplate}
             setEditMode={setEditMode}
@@ -364,6 +365,7 @@ const PerformanceReport = ({
               targetedBusinessData,
               targetedGoodsData,
             })}
+            isPrinting={isPrinting}
             layout={layout}
             logo={
               <>

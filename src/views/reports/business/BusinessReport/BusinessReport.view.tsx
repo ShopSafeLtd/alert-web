@@ -180,6 +180,7 @@ const BusinessReportView = ({
               <ReportToolbar
                 editMode={editMode}
                 handlePrint={handlePrint}
+                isPrinting={isPrinting}
                 minDrawer={minDrawer}
                 saveTemplate={saveTemplate}
                 setEditMode={setEditMode}
@@ -297,6 +298,7 @@ const BusinessReportView = ({
                   setMetadata,
                   targetedGoodsData,
                 })}
+                isPrinting={isPrinting}
                 layout={layout}
                 logo={
                   <>

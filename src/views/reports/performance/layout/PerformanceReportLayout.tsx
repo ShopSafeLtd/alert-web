@@ -1,5 +1,21 @@
-import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type {
+  BusinessTableData,
+  ContributionTableData,
+  CrimeGroupPerformanceTableData,
+  InvestigationsTableData,
+  OffenderTableData,
+  TargetedBusinessTableData,
+  TargetedGoodsTableData,
+} from 'components/reports/tableColumns';
+import type { PerformanceReportQuery } from 'graphql/reports/queries/__generated__/performance-report.generated';
+import type RGL from 'react-grid-layout';
+
+import BusinessCrimeTypeGraph from '#/components/reports/components/BusinessCrimeTypeGraph/BusinessCrimeTypeGraph';
+import BusinessIncidentCountGraph from '#/components/reports/components/BusinessIncidentCountGraph/BusinessIncidentCountGraph';
+import BusinessLossRecoveredGraph from '#/components/reports/components/BusinessLossRecoveredGraph/BusinessCrimeTypeGraph';
+import TargetedBusinessTable from '#/components/reports/components/TargetedBusinessTable/TargetedBusinessTable.view';
+import UserIncidentCountGraph from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph';
+import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
 import {
   faBan,
   faCalendar,
@@ -26,8 +42,9 @@ import {
   faUserPoliceTie,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import React, { useMemo } from 'react';
-import type RGL from 'react-grid-layout';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
+import CustomQuestionsCountGraph from 'components/reports/components/CustomQuestionsCountGraph/CustomQuestionsCountGraph';
 import {
   BarGraph,
   DonutGraph,
@@ -35,16 +52,6 @@ import {
   LineGraph,
   TimeHeatMap,
 } from 'components/reports/graphs';
-import { shouldPrint } from 'utils';
-import type {
-  BusinessTableData,
-  ContributionTableData,
-  CrimeGroupPerformanceTableData,
-  InvestigationsTableData,
-  OffenderTableData,
-  TargetedBusinessTableData,
-  TargetedGoodsTableData,
-} from 'components/reports/tableColumns';
 import {
   BusinessColumns,
   ContributionColumns,
@@ -53,30 +60,26 @@ import {
   OffenderColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
+import { LanguageCode } from 'graphql/types';
+import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import CustomQuestionsCountGraph from 'components/reports/components/CustomQuestionsCountGraph/CustomQuestionsCountGraph';
-import BusinessIncidentCountGraph from '#/components/reports/components/BusinessIncidentCountGraph/BusinessIncidentCountGraph';
-import UserIncidentCountGraph from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph';
-import BusinessCrimeTypeGraph from '#/components/reports/components/BusinessCrimeTypeGraph/BusinessCrimeTypeGraph';
 import { useNavigate } from 'react-router';
-import BusinessLossRecoveredGraph from '#/components/reports/components/BusinessLossRecoveredGraph/BusinessCrimeTypeGraph';
-// import UserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
-import useStyles from '../../styles/report.styles';
+import { shouldPrint } from 'utils';
+
 import type { AllowedValue, MetaData, ReportItemTypes } from '../../types';
 import type { Props as HookProps } from '../hooks/types';
-import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
-import TargetedBusinessTable from '#/components/reports/components/TargetedBusinessTable/TargetedBusinessTable.view';
-import { PerformanceReportQuery } from 'graphql/reports/queries/__generated__/performance-report.generated';
-import { LanguageCode } from 'graphql/types';
+
+// import UserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
+import useStyles from '../../styles/report.styles';
 
 interface ContributorTable {
-  key: string;
   fullName: string;
   incidentsCreated: number;
+  key: string;
+  logins: number;
+  messagesSent: number;
   offendersCreated: number;
   updatesCreated: number;
-  messagesSent: number;
-  logins: number;
 }
 
 const { Title } = Typography;
@@ -84,33 +87,33 @@ const { Title } = Typography;
 type FilterProps = Pick<
   HookProps,
   | 'dateRange'
-  | 'selectedRoles'
-  | 'selectedIndustries'
+  | 'schemeId'
   | 'selectedBrands'
   | 'selectedGroups'
-  | 'schemeId'
+  | 'selectedIndustries'
+  | 'selectedRoles'
 >;
 
 interface Props {
-  loading: boolean;
-  data: PerformanceReportQuery | undefined;
-  businessContributionTableData: BusinessTableData[] | [];
-  userContributionTableData: ContributionTableData[] | [];
-  offendersTableData: OffenderTableData[] | [];
-  crimeGroupPerformanceTableData: CrimeGroupPerformanceTableData[] | [];
-  targetedBusinessData: TargetedBusinessTableData[] | [];
-  targetedGoodsData: TargetedGoodsTableData[] | [];
-  investigationsData: InvestigationsTableData[] | [];
-  removeItem: (arg0: string) => void;
-  layout: RGL.Layout[];
-  margin: [number, number];
-  rowHeight: number;
-  editMode: boolean;
+  businessContributionTableData: [] | BusinessTableData[];
   changeSize: (arg0: string, arg1: number) => void;
-  isPrinting: boolean;
-  metadata: MetaData[];
-  setMetadata: (arg0: MetaData[]) => void;
+  crimeGroupPerformanceTableData: [] | CrimeGroupPerformanceTableData[];
+  data: PerformanceReportQuery | undefined;
+  editMode: boolean;
   filters: FilterProps;
+  investigationsData: [] | InvestigationsTableData[];
+  isPrinting: boolean;
+  layout: RGL.Layout[];
+  loading: boolean;
+  margin: [number, number];
+  metadata: MetaData[];
+  offendersTableData: [] | OffenderTableData[];
+  removeItem: (arg0: string) => void;
+  rowHeight: number;
+  setMetadata: (arg0: MetaData[]) => void;
+  targetedBusinessData: [] | TargetedBusinessTableData[];
+  targetedGoodsData: [] | TargetedGoodsTableData[];
+  userContributionTableData: [] | ContributionTableData[];
 }
 
 const generateDefaultMetaData = (
@@ -129,25 +132,25 @@ const generateDefaultMetaData = (
 };
 
 const PerformanceReportLayout = ({
-  loading,
-  data,
   businessContributionTableData,
-  userContributionTableData,
-  offendersTableData,
+  changeSize,
   crimeGroupPerformanceTableData,
+  data,
+  editMode,
+  filters,
+  investigationsData,
+  isPrinting,
+  layout,
+  loading,
+  margin,
+  metadata,
+  offendersTableData,
+  removeItem,
+  rowHeight,
+  setMetadata,
   targetedBusinessData,
   targetedGoodsData,
-  investigationsData,
-  removeItem,
-  changeSize,
-  layout,
-  margin,
-  rowHeight,
-  isPrinting,
-  editMode,
-  metadata,
-  setMetadata,
-  filters,
+  userContributionTableData,
 }: Props) => {
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
@@ -162,29 +165,29 @@ const PerformanceReportLayout = ({
   const navigate = useNavigate();
 
   interface GetComponentArgs {
-    key: AllowedValue;
     component: AllowedValue;
+    key: AllowedValue;
   }
 
-  const getComponent = ({ key, component }: GetComponentArgs) => {
+  const getComponent = ({ component, key }: GetComponentArgs) => {
     // eslint-disable-next-line sonarjs/max-switch-cases
     switch (component) {
       case 'createdSummary': {
         return (
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
-            loading={loading}
             key="createdSummary"
+            loading={loading}
+            style={{ width: '100%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('createdSummary')}
+              shape="circle"
+              size="small"
+              type="text"
             />
 
             <Row>
@@ -192,127 +195,119 @@ const PerformanceReportLayout = ({
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Created Summary',
-                    id: 'gNrgvu',
                   })}
                 </Title>
               </Col>
               <Row className="stats-row">
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Incidents Created',
-                    id: 'UOcKMI',
-                  })}
-                  value={
-                    data?.performanceReport?.createdDataCounts?.incidents || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faExclamationCircle}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Incidents Created',
+                  })}
+                  value={
+                    data?.performanceReport?.createdDataCounts?.incidents || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Offenders Created',
-                    id: 'kNP3in',
-                  })}
-                  value={
-                    data?.performanceReport?.createdDataCounts?.offenders || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faUsers}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Offenders Created',
+                  })}
+                  value={
+                    data?.performanceReport?.createdDataCounts?.offenders || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Updates Submitted',
-                    id: 'E/xqrh',
-                  })}
-                  value={
-                    data?.performanceReport?.createdDataCounts?.updates || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faPenToSquare}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Updates Submitted',
+                  })}
+                  value={
+                    data?.performanceReport?.createdDataCounts?.updates || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Messages Sent',
-                    id: 'QGQoOa',
-                  })}
-                  value={
-                    data?.performanceReport?.createdDataCounts?.messages || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faComments}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Messages Sent',
+                  })}
+                  value={
+                    data?.performanceReport?.createdDataCounts?.messages || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Vehicles Created',
-                    id: 'PX1DHW',
-                  })}
-                  value={
-                    data?.performanceReport?.createdDataCounts?.vehicles ||
-                    0 ||
-                    0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faCar}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Vehicles Created',
+                  })}
+                  value={
+                    data?.performanceReport?.createdDataCounts?.vehicles ||
+                    0 ||
+                    0
+                  }
                 />
                 <Statistic
                   className={classes.stats}
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      icon={faUsers}
+                    />
+                  }
                   title={intl.formatMessage({
                     defaultMessage: 'Bulletins Created',
-                    id: 'd5dcOZ',
                   })}
                   value={
                     data?.performanceReport?.createdDataCounts?.bulletins || 0
                   }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faUsers}
-                    />
-                  }
                 />
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Crime Groups Created',
-                    id: '4bsmSr',
-                  })}
-                  value={
-                    data?.performanceReport?.createdDataCounts?.crimeGroups || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faUsers}
                     />
+                  }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Crime Groups Created',
+                  })}
+                  value={
+                    data?.performanceReport?.createdDataCounts?.crimeGroups || 0
                   }
                 />
               </Row>
@@ -323,26 +318,25 @@ const PerformanceReportLayout = ({
       case 'incidentsSummary': {
         return (
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
-            loading={loading}
             key="incidentsSummary"
+            loading={loading}
+            style={{ width: '100%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('incidentsSummary')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Row>
               <Col span={12}>
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Incidents Summary',
-                    id: 'DGld1Y',
                   })}
                 </Title>
               </Col>
@@ -350,9 +344,14 @@ const PerformanceReportLayout = ({
                 <Col>
                   <Statistic
                     className={classes.stats}
+                    prefix={
+                      <FontAwesomeIcon
+                        className={classes.prefixIcon}
+                        icon={faCalendar}
+                      />
+                    }
                     title={intl.formatMessage({
                       defaultMessage: 'Last Incident (in range)',
-                      id: 'lI3BDd',
                     })}
                     value={
                       data?.performanceReport?.incidentSummary?.lastIncidentDate
@@ -361,21 +360,24 @@ const PerformanceReportLayout = ({
                           ).toLocaleDateString()
                         : 'unknown'
                     }
-                    prefix={
-                      <FontAwesomeIcon
-                        className={classes.prefixIcon}
-                        icon={faCalendar}
-                      />
-                    }
                   />
                 </Col>
                 <Col>
                   <Statistic
                     className={classes.stats}
+                    prefix={
+                      <FontAwesomeIcon
+                        className={classes.prefixIcon}
+                        icon={faClipboard}
+                      />
+                    }
                     title={intl.formatMessage({
                       defaultMessage: 'Top Incident Type',
-                      id: '7uH5I4',
                     })}
+                    value={
+                      data?.performanceReport?.incidentSummary
+                        ?.mostCommonCrimeType || ''
+                    }
                     valueRender={(node) => (
                       <Typography.Text
                         ellipsis
@@ -384,34 +386,23 @@ const PerformanceReportLayout = ({
                         {node}
                       </Typography.Text>
                     )}
-                    value={
-                      data?.performanceReport?.incidentSummary
-                        ?.mostCommonCrimeType || ''
-                    }
-                    prefix={
-                      <FontAwesomeIcon
-                        className={classes.prefixIcon}
-                        icon={faClipboard}
-                      />
-                    }
                   />
                 </Col>
                 <Col>
                   <Statistic
                     className={classes.stats}
-                    title={intl.formatMessage({
-                      defaultMessage: 'Crime Groups',
-                      id: 'a0aLil',
-                    })}
-                    value={
-                      data?.performanceReport?.createdDataCounts?.crimeGroups ||
-                      0
-                    }
                     prefix={
                       <FontAwesomeIcon
                         className={classes.prefixIcon}
                         icon={faUsers}
                       />
+                    }
+                    title={intl.formatMessage({
+                      defaultMessage: 'Crime Groups',
+                    })}
+                    value={
+                      data?.performanceReport?.createdDataCounts?.crimeGroups ||
+                      0
                     }
                   />
                 </Col>
@@ -423,63 +414,60 @@ const PerformanceReportLayout = ({
       case 'basicPoliceSummary': {
         return (
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
-            loading={loading}
             key="basicPoliceSummary"
+            loading={loading}
+            style={{ width: '100%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('basicPoliceSummary')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Row>
               <Col span={12}>
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Basic Police Engagement Summary',
-                    id: 'Qoktvg',
                   })}
                 </Title>
               </Col>
               <Row className="stats-row">
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Reported to Police',
-                    id: 'LhTpVN',
-                  })}
-                  value={
-                    data?.performanceReport?.policeSummary
-                      ?.totalReportedIncidents || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faUserPolice}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Reported to Police',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary
+                      ?.totalReportedIncidents || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Police Attended',
-                    id: 'ES0Nc8',
-                  })}
-                  value={
-                    data?.performanceReport?.policeSummary
-                      ?.totalAttendedIncidents || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faUserPoliceTie}
                     />
+                  }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Police Attended',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary
+                      ?.totalAttendedIncidents || 0
                   }
                 />
               </Row>
@@ -490,81 +478,77 @@ const PerformanceReportLayout = ({
       case 'policeSummary': {
         return (
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
-            loading={loading}
             key="policeSummary"
+            loading={loading}
+            style={{ width: '100%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('policeSummary')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Row>
               <Col span={12}>
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Police Engagement Summary',
-                    id: 'ue8y5S',
                   })}
                 </Title>
               </Col>
               <Row className="stats-row">
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Reported to Police',
-                    id: 'LhTpVN',
-                  })}
-                  value={
-                    data?.performanceReport?.policeSummary
-                      ?.totalReportedIncidents || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faUserPolice}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Reported to Police',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary
+                      ?.totalReportedIncidents || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Police Attended',
-                    id: 'ES0Nc8',
-                  })}
-                  value={
-                    data?.performanceReport?.policeSummary
-                      ?.totalAttendedIncidents || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faUserPoliceTie}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Police Attended',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary
+                      ?.totalAttendedIncidents || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Custody Images',
-                    id: 'eSwB1J',
-                  })}
-                  value={
-                    data?.performanceReport?.policeSummary?.totalPoliceImages ||
-                    0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faImages}
                     />
+                  }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Custody Images',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary?.totalPoliceImages ||
+                    0
                   }
                 />
               </Row>
@@ -576,78 +560,74 @@ const PerformanceReportLayout = ({
       case 'investigationSummary': {
         return (
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
-            loading={loading}
             key="investigationSummary"
+            loading={loading}
+            style={{ width: '100%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('investigationSummary')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Row>
               <Col span={12}>
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Investigation Summary',
-                    id: '6uUMrA',
                   })}
                 </Title>
               </Col>
               <Row className="stats-row">
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Currently Open',
-                    id: 'KeeTbC',
-                  })}
-                  value={
-                    data?.performanceReport?.investigationSummary.open || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faClipboard}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Currently Open',
+                  })}
+                  value={
+                    data?.performanceReport?.investigationSummary.open || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Opened',
-                    id: 'ADKsID',
-                  })}
-                  value={
-                    data?.performanceReport?.investigationSummary.opened || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faClipboardMedical}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Opened',
+                  })}
+                  value={
+                    data?.performanceReport?.investigationSummary.opened || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Closed',
-                    id: 'Fv1ZSz',
-                  })}
-                  value={
-                    data?.performanceReport?.investigationSummary.closed || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faClipboardCheck}
                     />
+                  }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Closed',
+                  })}
+                  value={
+                    data?.performanceReport?.investigationSummary.closed || 0
                   }
                 />
               </Row>
@@ -658,91 +638,91 @@ const PerformanceReportLayout = ({
       case 'outcomeSummary': {
         return (
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
-            loading={loading}
             key="outcomeSummary"
+            loading={loading}
+            style={{ width: '100%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('outcomeSummary')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Row>
               <Col span={12}>
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Outcomes Summary',
-                    id: 'hHUmrO',
                   })}
                 </Title>
               </Col>
               <Row className="stats-row">
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Verified IDs',
-                    id: '+YBMvu',
-                  })}
-                  value={
-                    data?.performanceReport?.policeSummary
-                      ?.totalVerifiedOffenders || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faUserPlus}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Verified IDs',
+                  })}
+                  value={
+                    data?.performanceReport?.policeSummary
+                      ?.totalVerifiedOffenders || 0
+                  }
                 />
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Arrests',
-                    id: 'uyYgh0',
-                  })}
-                  value={
-                    data?.performanceReport?.outcomeSummary?.totalArrests || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faHandcuffs}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Arrests',
+                  })}
+                  value={
+                    data?.performanceReport?.outcomeSummary?.totalArrests || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'CBO Count',
-                    id: 'cQmqi4',
-                  })}
-                  value={
-                    data?.performanceReport?.outcomeSummary?.totalCBOCount || 0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faBan}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'CBO Count',
+                  })}
+                  value={
+                    data?.performanceReport?.outcomeSummary?.totalCBOCount || 0
+                  }
                 />
 
                 <Statistic
                   className={classes.stats}
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      icon={faCalendarWeek}
+                    />
+                  }
                   title={intl.formatMessage({
                     defaultMessage: 'CBO Durations',
-                    id: 'E/Ctgr',
                   })}
                   value={intl.formatMessage(
                     {
-                      defaultMessage: '{value} years',
-                      id: '0tCt48',
+                      defaultMessage: '{value} months',
                     },
                     {
                       value:
@@ -750,24 +730,22 @@ const PerformanceReportLayout = ({
                           ?.totalCBOYears || 0,
                     }
                   )}
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faCalendarWeek}
-                    />
-                  }
                 />
 
                 <Statistic
                   className={classes.stats}
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      icon={faUserPolice}
+                    />
+                  }
                   title={intl.formatMessage({
                     defaultMessage: 'Prison Sentences',
-                    id: 'JBWog3',
                   })}
                   value={intl.formatMessage(
                     {
                       defaultMessage: '{value} weeks',
-                      id: '4ouuyu',
                     },
                     {
                       value:
@@ -775,62 +753,53 @@ const PerformanceReportLayout = ({
                           ?.totalPrisonSentenceMonths || 0,
                     }
                   )}
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faUserPolice}
-                    />
-                  }
                 />
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Rehabilitation Orders',
-                    id: '+KMkeb',
-                  })}
-                  value={
-                    data?.performanceReport?.outcomeSummary?.totalRehabOrders ||
-                    0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faStarOfLife}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Rehabilitation Orders',
+                  })}
+                  value={
+                    data?.performanceReport?.outcomeSummary?.totalRehabOrders ||
+                    0
+                  }
                 />
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Fines Issued',
-                    id: '/mIqOm',
-                  })}
-                  value={
-                    data?.performanceReport?.outcomeSummary?.totalFinesCount ||
-                    0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faReceipt}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Fines Issued',
+                  })}
+                  value={
+                    data?.performanceReport?.outcomeSummary?.totalFinesCount ||
+                    0
+                  }
                 />
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Fines Value',
-                    id: 'JXR8hB',
-                  })}
-                  value={
-                    data?.performanceReport?.outcomeSummary?.totalFinesValue ||
-                    0
-                  }
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faMoneyBills}
                     />
+                  }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Fines Value',
+                  })}
+                  value={
+                    data?.performanceReport?.outcomeSummary?.totalFinesValue ||
+                    0
                   }
                 />
               </Row>
@@ -841,87 +810,88 @@ const PerformanceReportLayout = ({
       case 'lossSummary': {
         return (
           <Card
-            style={{ width: '100%' }}
             bodyStyle={{ width: '100%' }}
-            loading={loading}
             key="lossSummary"
+            loading={loading}
+            style={{ width: '100%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('lossSummary')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Row>
               <Col span={12}>
                 <Title level={4}>
                   {intl.formatMessage({
                     defaultMessage: 'Loss Summary',
-                    id: 'O0DXtz',
                   })}
                 </Title>
               </Col>
               <Row className="stats-row">
                 <Statistic
                   className={classes.stats}
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      color="red"
+                      icon={faMoneyBill}
+                    />
+                  }
                   title={intl.formatMessage({
                     defaultMessage: 'Total lost value',
-                    id: 'xhO9Od',
                   })}
                   value={
                     data?.performanceReport?.lossTotals?.totalLostValue
                       ? intl.formatNumber(
                           data?.performanceReport?.lossTotals?.totalLostValue ||
                             0,
-                          { style: 'currency', currency: 'GBP' }
+                          { currency: 'GBP', style: 'currency' }
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
-                          id: 'thiOfy',
                         })
-                  }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faMoneyBill}
-                      color="red"
-                    />
                   }
                 />
                 <Statistic
                   className={classes.stats}
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      color="green"
+                      icon={faMoneyBill}
+                    />
+                  }
                   title={intl.formatMessage({
                     defaultMessage: 'Total recovered',
-                    id: '3A1IaB',
                   })}
                   value={
                     data?.performanceReport?.lossTotals?.totalRecoveredValue
                       ? intl.formatNumber(
                           data?.performanceReport?.lossTotals
                             ?.totalRecoveredValue || 0,
-                          { style: 'currency', currency: 'GBP' }
+                          { currency: 'GBP', style: 'currency' }
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
-                          id: 'thiOfy',
                         })
-                  }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faMoneyBill}
-                      color="green"
-                    />
                   }
                 />
                 <Statistic
                   className={classes.stats}
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      color="red"
+                      icon={faMoneyBill}
+                    />
+                  }
                   title={intl.formatMessage({
                     defaultMessage: 'Total Loss',
-                    id: 'LPr3Nh',
                   })}
                   value={
                     data?.performanceReport?.lossTotals?.totalRecoveredValue
@@ -930,44 +900,39 @@ const PerformanceReportLayout = ({
                             ?.totalLostValue || 0) -
                             (data?.performanceReport?.lossTotals
                               ?.totalRecoveredValue || 0),
-                          { style: 'currency', currency: 'GBP' }
+                          { currency: 'GBP', style: 'currency' }
                         )
                       : intl.formatMessage({
                           defaultMessage: '--',
-                          id: 'thiOfy',
                         })
-                  }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faMoneyBill}
-                      color="red"
-                    />
                   }
                 />
                 <Statistic
                   className={classes.stats}
-                  title={intl.formatMessage({
-                    defaultMessage: 'Average Loss Rate',
-
-                    id: 'VSxLGp',
-                  })}
-                  value={`${(
-                    (data?.performanceReport?.lossTotals?.averageSuccessRate ||
-                      0) * 100
-                  ).toFixed(2)}%`}
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faChartLineDown}
                     />
                   }
+                  title={intl.formatMessage({
+                    defaultMessage: 'Average Loss Rate',
+                  })}
+                  value={`${(
+                    (data?.performanceReport?.lossTotals?.averageSuccessRate ||
+                      0) * 100
+                  ).toFixed(2)}%`}
                 />
                 <Statistic
                   className={classes.stats}
+                  prefix={
+                    <FontAwesomeIcon
+                      className={classes.prefixIcon}
+                      icon={faMoneyBill}
+                    />
+                  }
                   title={intl.formatMessage({
                     defaultMessage: 'Average Incident Value',
-                    id: '8Q52ae',
                   })}
                   value={
                     `£${(
@@ -975,30 +940,23 @@ const PerformanceReportLayout = ({
                       0
                     ).toFixed(2)}` || ''
                   }
+                />
+                <Statistic
+                  className={classes.stats}
                   prefix={
                     <FontAwesomeIcon
                       className={classes.prefixIcon}
                       icon={faMoneyBill}
                     />
                   }
-                />
-                <Statistic
-                  className={classes.stats}
                   title={intl.formatMessage({
                     defaultMessage: 'Average Loss Value',
-                    id: 'QZKPMa',
                   })}
                   value={
                     `£${(
                       data?.performanceReport?.lossTotals
                         ?.averageLossPerIncident || 0
                     ).toFixed(2)}` || ''
-                  }
-                  prefix={
-                    <FontAwesomeIcon
-                      className={classes.prefixIcon}
-                      icon={faMoneyBill}
-                    />
                   }
                 />
               </Row>
@@ -1009,23 +967,19 @@ const PerformanceReportLayout = ({
       case 'crimeTypesDonut': {
         return (
           <Card
-            title={intl.formatMessage({
-              defaultMessage: 'Incident Types',
-              id: 'DtIroT',
-            })}
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key="crimeTypesDonut"
             loading={loading}
             style={{ height: calculateHeight('crimeTypesDonut') }}
-            bodyStyle={{ height: '90%' }}
-            key="crimeTypesDonut"
+            title={intl.formatMessage({
+              defaultMessage: 'Incident Types',
+            })}
           >
             <Button
-              type="text"
-              shape="circle"
               className="change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'crimeTypesDonut') {
@@ -1036,14 +990,14 @@ const PerformanceReportLayout = ({
 
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'crimeTypesDonut') {
@@ -1054,27 +1008,29 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('crimeTypesDonut')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             {metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
               'donut' ||
             metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
               'pie' ? (
               <DonutGraph
-                isPrinting={isPrinting}
                 data={data?.performanceReport?.crimeTypeDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Incident Types',
-                  id: '2+nubw',
                 })}
+                isPrinting={isPrinting}
                 type={
                   metadata.find((item) => item.key === 'crimeTypesDonut')
                     ?.type as 'donut' | 'pie'
@@ -1082,15 +1038,13 @@ const PerformanceReportLayout = ({
               />
             ) : (
               <BarGraph
-                isPrinting={isPrinting}
                 data={data?.performanceReport?.crimeTypeDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Incident Types',
-                  id: '2+nubw',
                 })}
+                isPrinting={isPrinting}
                 labelFormat={intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               />
             )}
@@ -1100,23 +1054,19 @@ const PerformanceReportLayout = ({
       case 'involvedTagsDonut': {
         return (
           <Card
-            title={intl.formatMessage({
-              defaultMessage: 'Involved Tags',
-              id: 'hqB+1X',
-            })}
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key="involvedTagsDonut"
             loading={loading}
             style={{ height: calculateHeight('involvedTagsDonut') }}
-            bodyStyle={{ height: '90%' }}
-            key="involvedTagsDonut"
+            title={intl.formatMessage({
+              defaultMessage: 'Involved Tags',
+            })}
           >
             <Button
-              type="text"
-              shape="circle"
               className="change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'involvedTagsDonut') {
@@ -1126,14 +1076,14 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'involvedTagsDonut') {
@@ -1144,15 +1094,18 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('involvedTagsDonut')}
+              shape="circle"
+              size="small"
+              type="text"
             />
 
             {metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
@@ -1160,12 +1113,11 @@ const PerformanceReportLayout = ({
             metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
               'pie' ? (
               <DonutGraph
-                isPrinting={isPrinting}
                 data={data?.performanceReport?.involvedTagCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Involved Tags',
-                  id: 'N26vgU',
                 })}
+                isPrinting={isPrinting}
                 type={
                   metadata.find((item) => item.key === 'involvedTagsDonut')
                     ?.type as 'donut' | 'pie'
@@ -1173,15 +1125,13 @@ const PerformanceReportLayout = ({
               />
             ) : (
               <BarGraph
-                isPrinting={isPrinting}
                 data={data?.performanceReport?.involvedTagCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Involved Tags',
-                  id: 'N26vgU',
                 })}
+                isPrinting={isPrinting}
                 labelFormat={intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               />
             )}
@@ -1191,23 +1141,19 @@ const PerformanceReportLayout = ({
       case 'goodsTypeDonut': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
+            className="no-break"
+            key="goodsTypeDonut"
+            loading={loading}
+            style={{ height: calculateHeight('goodsTypeDonut') }}
             title={intl.formatMessage({
               defaultMessage: 'Goods Type Count',
-              id: 'z1wXYP',
             })}
-            className="no-break"
-            loading={loading}
-            key="goodsTypeDonut"
-            style={{ height: calculateHeight('goodsTypeDonut') }}
-            bodyStyle={{ height: '90%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'goodsTypeDonut') {
@@ -1217,14 +1163,14 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'goodsTypeDonut') {
@@ -1235,15 +1181,18 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('goodsTypeDonut')}
+              shape="circle"
+              size="small"
+              type="text"
             />
 
             {metadata.find((item) => item.key === 'goodsTypeDonut')?.type ===
@@ -1251,12 +1200,11 @@ const PerformanceReportLayout = ({
             metadata.find((item) => item.key === 'goodsTypeDonut')?.type ===
               'pie' ? (
               <DonutGraph
-                isPrinting={isPrinting}
                 data={data?.performanceReport?.goodsTypeCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods count',
-                  id: '2t8hXG',
                 })}
+                isPrinting={isPrinting}
                 type={
                   metadata.find((item) => item.key === 'goodsTypeDonut')
                     ?.type as 'donut' | 'pie'
@@ -1264,15 +1212,13 @@ const PerformanceReportLayout = ({
               />
             ) : (
               <BarGraph
-                isPrinting={isPrinting}
                 data={data?.performanceReport?.goodsTypeCountDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods count',
-                  id: '2t8hXG',
                 })}
+                isPrinting={isPrinting}
                 labelFormat={intl.formatMessage({
                   defaultMessage: 'Incidents',
-                  id: 'mtr3R4',
                 })}
               />
             )}
@@ -1282,23 +1228,19 @@ const PerformanceReportLayout = ({
       case 'goodsValueDonut': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
+            className="no-break"
+            key="goodsValueDonut"
+            loading={loading}
+            style={{ height: calculateHeight('goodsValueDonut') }}
             title={intl.formatMessage({
               defaultMessage: 'Goods Type Value',
-              id: 'EOUt1g',
             })}
-            className="no-break"
-            loading={loading}
-            key="goodsValueDonut"
-            style={{ height: calculateHeight('goodsValueDonut') }}
-            bodyStyle={{ height: '90%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'goodsValueDonut') {
@@ -1308,14 +1250,14 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-              size="small"
               onClick={() => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === 'goodsValueDonut') {
@@ -1326,15 +1268,18 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('goodsValueDonut')}
+              shape="circle"
+              size="small"
+              type="text"
             />
 
             {metadata.find((item) => item.key === 'goodsValueDonut')?.type ===
@@ -1342,13 +1287,12 @@ const PerformanceReportLayout = ({
             metadata.find((item) => item.key === 'goodsValueDonut')?.type ===
               'pie' ? (
               <DonutGraph
-                isPrinting={isPrinting}
-                labelFormat="£"
                 data={data?.performanceReport?.goodsTypeValueDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods values',
-                  id: 'pbIqi6',
                 })}
+                isPrinting={isPrinting}
+                labelFormat="£"
                 type={
                   metadata.find((item) => item.key === 'goodsValueDonut')
                     ?.type as 'donut' | 'pie'
@@ -1356,12 +1300,11 @@ const PerformanceReportLayout = ({
               />
             ) : (
               <BarGraph
-                isPrinting={isPrinting}
                 data={data?.performanceReport?.goodsTypeValueDonut}
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No goods values',
-                  id: 'pbIqi6',
                 })}
+                isPrinting={isPrinting}
                 labelFormat="£"
               />
             )}
@@ -1371,32 +1314,30 @@ const PerformanceReportLayout = ({
       case 'incidentsDayOfWeekGraph': {
         return (
           <Card
-            className="no-break"
-            loading={loading}
-            key="incidentsDayOfWeekGraph"
-            style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
             bodyStyle={{ height: '90%' }}
+            className="no-break"
+            key="incidentsDayOfWeekGraph"
+            loading={loading}
+            style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('incidentsDayOfWeekGraph')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <LineGraph
-              isPrinting={isPrinting}
-              label={intl.formatMessage({
-                defaultMessage: 'Incidents By Day Of Week',
-                id: '0inQpb',
-              })}
               data={data?.performanceReport?.incidentDayOfWeekLine}
               dataLabel="incidents"
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
+              })}
+              isPrinting={isPrinting}
+              label={intl.formatMessage({
+                defaultMessage: 'Incidents By Day Of Week',
               })}
             />
           </Card>
@@ -1408,25 +1349,19 @@ const PerformanceReportLayout = ({
             className={`${shouldPrint(
               data?.incidentHeatPerformance?.incidents[0]?.location?.geoLat
             )} no-break`}
-            loading={loading}
             key="incidentsHeatMap"
+            loading={loading}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('incidentsHeatMap')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <HeatMapGoogle
-              isPrinting={isPrinting}
-              label={intl.formatMessage({
-                defaultMessage: 'Incidents Heatmap',
-                id: 'v7+ug4',
-              })}
-              height={calculateHeight('incidentsHeatMap', 80)}
               data={
                 data?.incidentHeatPerformance?.incidents
                   ?.filter(
@@ -1440,7 +1375,11 @@ const PerformanceReportLayout = ({
               }
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
+              })}
+              height={calculateHeight('incidentsHeatMap', 80)}
+              isPrinting={isPrinting}
+              label={intl.formatMessage({
+                defaultMessage: 'Incidents Heatmap',
               })}
             />
           </Card>
@@ -1449,43 +1388,42 @@ const PerformanceReportLayout = ({
       case 'businessContributionTable': {
         return (
           <Card
-            loading={loading}
+            bodyStyle={{ overflow: 'auto' }}
             className="no-break"
             key="businessContributionTable"
+            loading={loading}
             style={{ height: calculateHeight('businessContributionTable') }}
-            bodyStyle={{ overflow: 'auto' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('businessContributionTable')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Business Contribution',
-                id: '8hBWVk',
               })}
             </Title>
             <Table
-              size="small"
               className="no-break"
+              columns={BusinessColumns}
+              dataSource={businessContributionTableData}
               pagination={{
+                defaultPageSize: 10,
                 hideOnSinglePage: true,
                 onChange: (_, pageSize) => {
                   changeSize('businessContributionTable', pageSize);
                 },
-                total: data?.businessContribution?.total || 0,
-                defaultPageSize: 10,
                 showSizeChanger: true,
                 showTotal: (total, range) =>
                   `${range[0]}-${range[1]} of ${total}`,
+                total: data?.businessContribution?.total || 0,
               }}
-              columns={BusinessColumns}
-              dataSource={businessContributionTableData}
+              size="small"
             />
           </Card>
         );
@@ -1493,43 +1431,42 @@ const PerformanceReportLayout = ({
       case 'topContributors': {
         return (
           <Card
-            loading={loading}
-            className="no-break"
-            style={{ height: calculateHeight('topContributors') }}
             bodyStyle={{ overflow: 'auto' }}
+            className="no-break"
             key="topContributors"
+            loading={loading}
+            style={{ height: calculateHeight('topContributors') }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('topContributors')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Top Contributors',
-                id: 'r67UpQ',
               })}
             </Title>
             <Table<ContributorTable>
-              size="small"
               className="no-break"
+              columns={ContributionColumns}
+              dataSource={userContributionTableData}
               pagination={{
+                defaultPageSize: 10,
                 hideOnSinglePage: true,
                 onChange: (_, pageSize) => {
                   changeSize('topContributors', pageSize);
                 },
-                total: data?.userContributions?.total || 0,
-                defaultPageSize: 10,
                 showSizeChanger: true,
                 showTotal: (total, range) =>
                   `${range[0]}-${range[1]} of ${total}`,
+                total: data?.userContributions?.total || 0,
               }}
-              columns={ContributionColumns}
-              dataSource={userContributionTableData}
+              size="small"
             />
           </Card>
         );
@@ -1537,43 +1474,42 @@ const PerformanceReportLayout = ({
       case 'offendersTable': {
         return (
           <Card
-            loading={loading}
-            className="no-break"
-            style={{ height: calculateHeight('offendersTable') }}
             bodyStyle={{ overflow: 'auto' }}
+            className="no-break"
             key="offendersTable"
+            loading={loading}
+            style={{ height: calculateHeight('offendersTable') }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('offendersTable')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Offenders Table',
-                id: 'pSy8jU',
               })}
             </Title>
             <Table
-              size="small"
               className="no-break"
+              columns={OffenderColumns}
+              dataSource={offendersTableData}
               pagination={{
+                defaultPageSize: 10,
                 hideOnSinglePage: true,
                 onChange: (_, pageSize) => {
                   changeSize('offendersTable', pageSize);
                 },
-                total: data?.offendersPerformance?.total || 0,
-                defaultPageSize: 10,
                 showSizeChanger: true,
                 showTotal: (total, range) =>
                   `${range[0]}-${range[1]} of ${total}`,
+                total: data?.offendersPerformance?.total || 0,
               }}
-              columns={OffenderColumns}
-              dataSource={offendersTableData}
+              size="small"
             />
           </Card>
         );
@@ -1581,43 +1517,42 @@ const PerformanceReportLayout = ({
       case 'crimeGroupTable': {
         return (
           <Card
-            loading={loading}
-            className="no-break"
-            style={{ height: calculateHeight('crimeGroupTable') }}
             bodyStyle={{ overflow: 'auto' }}
+            className="no-break"
             key="crimeGroupTable"
+            loading={loading}
+            style={{ height: calculateHeight('crimeGroupTable') }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('crimeGroupTable')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Crime Group Table',
-                id: 'RBV3cF',
               })}
             </Title>
             <Table
-              size="small"
               className="no-break"
+              columns={CrimeGroupPerformanceColumns}
+              dataSource={crimeGroupPerformanceTableData}
               pagination={{
+                defaultPageSize: 10,
                 hideOnSinglePage: true,
                 onChange: (_, pageSize) => {
                   changeSize('crimeGroupTable', pageSize);
                 },
-                total: data?.crimeGroupPerformance?.total || 0,
-                defaultPageSize: 10,
                 showSizeChanger: true,
                 showTotal: (total, range) =>
                   `${range[0]}-${range[1]} of ${total}`,
+                total: data?.crimeGroupPerformance?.total || 0,
               }}
-              columns={CrimeGroupPerformanceColumns}
-              dataSource={crimeGroupPerformanceTableData}
+              size="small"
             />
           </Card>
         );
@@ -1625,25 +1560,25 @@ const PerformanceReportLayout = ({
       case 'targetedBusinessTable': {
         return (
           <Card
-            loading={loading}
-            className="no-break"
-            style={{ height: calculateHeight('targetedBusinessTable') }}
             bodyStyle={{ overflow: 'auto' }}
+            className="no-break"
             key="targetedBusinessTable"
+            loading={loading}
+            style={{ height: calculateHeight('targetedBusinessTable') }}
           >
             <TargetedBusinessTable
-              key="targetedBusinessTable"
-              editMode={editMode}
-              removeItem={() => removeItem('targetedBusinessTable')}
               changeSize={changeSize}
+              editMode={editMode}
+              key="targetedBusinessTable"
+              metadata={metadata}
+              removeItem={() => removeItem('targetedBusinessTable')}
+              setMetadata={setMetadata}
+              targetedBusinessData={targetedBusinessData}
               total={
                 data?.businessContribution?.businessContributions?.filter(
                   (business) => business.totalIncidents > 0
                 ).length ?? 0
               }
-              targetedBusinessData={targetedBusinessData}
-              metadata={metadata}
-              setMetadata={setMetadata}
             />
           </Card>
         );
@@ -1651,46 +1586,45 @@ const PerformanceReportLayout = ({
       case 'targetedGoodsTable': {
         return (
           <Card
-            loading={loading}
-            className="no-break"
-            style={{ height: calculateHeight('targetedGoodsTable') }}
             bodyStyle={{ overflow: 'auto' }}
+            className="no-break"
             key="targetedGoodsTable"
+            loading={loading}
+            style={{ height: calculateHeight('targetedGoodsTable') }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('targetedGoodsTable')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Targeted Goods',
-                id: 'dLBbg0',
               })}
             </Title>
             <Table
-              size="small"
               className="no-break"
+              columns={TargetGoodsColumns}
+              dataSource={targetedGoodsData}
               pagination={{
+                defaultPageSize: 10,
                 hideOnSinglePage: true,
                 onChange: (_, pageSize) => {
                   changeSize('targetedGoodsTable', pageSize);
                 },
+                showSizeChanger: true,
+                showTotal: (total, range) =>
+                  `${range[0]}-${range[1]} of ${total}`,
                 total:
                   data?.targetedGoods?.targetedGoods?.filter(
                     (business) => business.totalIncidents > 0
                   ).length || 0,
-                defaultPageSize: 10,
-                showSizeChanger: true,
-                showTotal: (total, range) =>
-                  `${range[0]}-${range[1]} of ${total}`,
               }}
-              columns={TargetGoodsColumns}
-              dataSource={targetedGoodsData}
+              size="small"
             />
           </Card>
         );
@@ -1698,43 +1632,42 @@ const PerformanceReportLayout = ({
       case 'investigationsTable': {
         return (
           <Card
-            loading={loading}
-            className="no-break"
-            style={{ height: calculateHeight('investigationsTable') }}
             bodyStyle={{ overflow: 'auto' }}
+            className="no-break"
             key="investigationsTable"
+            loading={loading}
+            style={{ height: calculateHeight('investigationsTable') }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('investigationsTable')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <Title level={4}>
               {intl.formatMessage({
                 defaultMessage: 'Investigations',
-                id: 'juQ8mz',
               })}
             </Title>
             <Table
-              size="small"
               className="no-break"
+              columns={InvestigationsColumns}
+              dataSource={investigationsData}
               pagination={{
+                defaultPageSize: 10,
                 hideOnSinglePage: true,
                 onChange: (_, pageSize) => {
                   changeSize('investigationsTable', pageSize);
                 },
-                total: data?.investigationPerformance?.total || 0,
-                defaultPageSize: 10,
                 showSizeChanger: true,
                 showTotal: (total, range) =>
                   `${range[0]}-${range[1]} of ${total}`,
+                total: data?.investigationPerformance?.total || 0,
               }}
-              columns={InvestigationsColumns}
-              dataSource={investigationsData}
+              size="small"
             />
           </Card>
         );
@@ -1746,15 +1679,14 @@ const PerformanceReportLayout = ({
             key="pageBreak"
             style={{
               borderBottom: '1px solid grey',
-              height: '100%',
               display: isPrinting ? 'none' : 'block',
+              height: '100%',
               zIndex: 100,
             }}
           >
             <Typography.Paragraph>
               {intl.formatMessage({
                 defaultMessage: 'Page 1',
-                id: 'hEAGzW',
               })}
             </Typography.Paragraph>
           </div>
@@ -1767,15 +1699,14 @@ const PerformanceReportLayout = ({
             key="pageBreak2"
             style={{
               borderBottom: '1px solid grey',
-              height: '100%',
               display: isPrinting ? 'none' : 'block',
+              height: '100%',
               zIndex: 100,
             }}
           >
             <Typography.Paragraph>
               {intl.formatMessage({
                 defaultMessage: 'Page 2',
-                id: 'Q3p9d3',
               })}
             </Typography.Paragraph>
           </div>
@@ -1788,13 +1719,13 @@ const PerformanceReportLayout = ({
             key="pageBreak3"
             style={{
               borderBottom: '1px solid grey',
-              height: '100%',
               display: isPrinting ? 'none' : 'block',
+              height: '100%',
               zIndex: 100,
             }}
           >
             <Typography.Paragraph>
-              {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+              {intl.formatMessage({ defaultMessage: 'Page 3' })}
             </Typography.Paragraph>
           </div>
         );
@@ -1806,13 +1737,13 @@ const PerformanceReportLayout = ({
             key="pageBreak4"
             style={{
               borderBottom: '1px solid grey',
-              height: '100%',
               display: isPrinting ? 'none' : 'block',
+              height: '100%',
               zIndex: 100,
             }}
           >
             <Typography.Paragraph>
-              {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
+              {intl.formatMessage({ defaultMessage: 'Page 4' })}
             </Typography.Paragraph>
           </div>
         );
@@ -1820,34 +1751,32 @@ const PerformanceReportLayout = ({
       case 'timeHeatMap': {
         return (
           <Card
-            className="no-break"
-            loading={loading}
-            key="timeHeatMap"
-            style={{ height: calculateHeight('timeHeatMap') }}
             bodyStyle={{ height: '90%' }}
+            className="no-break"
+            key="timeHeatMap"
+            loading={loading}
+            style={{ height: calculateHeight('timeHeatMap') }}
             title={intl.formatMessage({
               defaultMessage: 'Incidents By Time',
-              id: 'j8jFh1',
             })}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('timeHeatMap')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <TimeHeatMap
-              isPrinting={isPrinting}
-              labelFormat=""
+              bottomLabel="time"
               data={data?.performanceReport?.timeHeatMap}
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
               })}
-              bottomLabel="time"
+              isPrinting={isPrinting}
+              labelFormat=""
             />
           </Card>
         );
@@ -1855,35 +1784,32 @@ const PerformanceReportLayout = ({
       case 'priorityGraph': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
+            className="no-break"
+            key="priorityGraph"
+            loading={loading}
+            style={{ height: calculateHeight('priorityGraph') }}
             title={intl.formatMessage({
               defaultMessage: 'Priorty Graph',
-              id: '6qZYxN',
             })}
-            className="no-break"
-            loading={loading}
-            key="priorityGraph"
-            style={{ height: calculateHeight('priorityGraph') }}
-            bodyStyle={{ height: '90%' }}
           >
             <Button
-              type="text"
-              shape="circle"
               className="card-remove no-print"
               hidden={!editMode}
-              icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-              size="small"
+              icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('priorityGraph')}
+              shape="circle"
+              size="small"
+              type="text"
             />
             <BarGraph
-              isPrinting={isPrinting}
-              labelFormat={intl.formatMessage({
-                defaultMessage: 'Priority Graph',
-                id: 'vZ/a8V',
-              })}
               data={data?.performanceReport?.priorityGraph}
               emptyLabel={intl.formatMessage({
                 defaultMessage: 'No incidents',
-                id: '7UNuAl',
+              })}
+              isPrinting={isPrinting}
+              labelFormat={intl.formatMessage({
+                defaultMessage: 'Priority Graph',
               })}
             />
           </Card>
@@ -1892,28 +1818,16 @@ const PerformanceReportLayout = ({
       case 'customQuestionsCountGraph': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key={key}
             loading={loading}
             style={{ height: calculateHeight(key) }}
-            bodyStyle={{ height: '90%' }}
-            key={key}
           >
             <CustomQuestionsCountGraph
-              variables={{
-                where: {
-                  brandIds: filters.selectedBrands,
-                  questionId:
-                    metadata.find((item) => item.key === key)?.propId || '',
-                  dateRange: filters.dateRange,
-                  groupIds: filters.selectedGroups,
-                  industryIds: filters.selectedIndustries,
-                  languageCode: LanguageCode.En,
-                  roleIds: filters.selectedRoles,
-                  schemeIds: [filters.schemeId],
-                },
-              }}
               editMode={editMode}
               isPrinting={isPrinting}
+              metaData={metadata.find((item) => item.key === key)}
               updateQuestionId={(value: string) => {
                 const keyExists = metadata.find((item) => key === item.key);
                 if (keyExists) {
@@ -1929,13 +1843,25 @@ const PerformanceReportLayout = ({
                     ...metadata,
                     {
                       key,
-                      type: 'donut',
                       propId: value,
+                      type: 'donut',
                     },
                   ]);
                 }
               }}
-              metaData={metadata.find((item) => item.key === key)}
+              variables={{
+                where: {
+                  brandIds: filters.selectedBrands,
+                  dateRange: filters.dateRange,
+                  groupIds: filters.selectedGroups,
+                  industryIds: filters.selectedIndustries,
+                  languageCode: LanguageCode.En,
+                  questionId:
+                    metadata.find((item) => item.key === key)?.propId || '',
+                  roleIds: filters.selectedRoles,
+                  schemeIds: [filters.schemeId],
+                },
+              }}
             />
           </Card>
         );
@@ -1972,14 +1898,19 @@ const PerformanceReportLayout = ({
       case 'userSessionsDonut': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key={key}
             loading={loading}
             style={{ height: calculateHeight(key) }}
-            bodyStyle={{ height: '90%' }}
-            key={key}
           >
             <TotalUserSessionsGraph
+              editMode={editMode}
+              isPrinting={isPrinting}
+              onNavigate={() => navigate('/app/reports/user-engagement')}
+              removeItem={() => removeItem(key)}
               variables={{
+                take: 10,
                 where: {
                   brandIds: filters.selectedBrands,
                   dateRange: filters.dateRange,
@@ -1988,12 +1919,7 @@ const PerformanceReportLayout = ({
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },
-                take: 10,
               }}
-              editMode={editMode}
-              isPrinting={isPrinting}
-              removeItem={() => removeItem(key)}
-              onNavigate={() => navigate('/app/reports/user-engagement')}
             />
           </Card>
         );
@@ -2001,28 +1927,18 @@ const PerformanceReportLayout = ({
       case 'userIncidentCountGraph': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key={key}
             loading={loading}
             style={{ height: calculateHeight(key) }}
-            bodyStyle={{ height: '90%' }}
-            key={key}
           >
             <UserIncidentCountGraph
-              variables={{
-                where: {
-                  brandIds: filters.selectedBrands,
-                  dateRange: filters.dateRange,
-                  groupIds: filters.selectedGroups,
-                  industryIds: filters.selectedIndustries,
-                  roleIds: filters.selectedRoles,
-                  schemeIds: [filters.schemeId],
-                },
-                take: 10,
-              }}
               editMode={editMode}
               isPrinting={isPrinting}
-              removeItem={() => removeItem(key)}
               metaData={generateDefaultMetaData(key, 'bar', metadata)}
+              onNavigate={() => navigate('/app/reports/user-engagement')}
+              removeItem={() => removeItem(key)}
               setMetaData={(value: MetaData) => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === key) {
@@ -2034,7 +1950,17 @@ const PerformanceReportLayout = ({
                 }) satisfies MetaData[];
                 setMetadata(updatedMetadata);
               }}
-              onNavigate={() => navigate('/app/reports/user-engagement')}
+              variables={{
+                take: 10,
+                where: {
+                  brandIds: filters.selectedBrands,
+                  dateRange: filters.dateRange,
+                  groupIds: filters.selectedGroups,
+                  industryIds: filters.selectedIndustries,
+                  roleIds: filters.selectedRoles,
+                  schemeIds: [filters.schemeId],
+                },
+              }}
             />
           </Card>
         );
@@ -2042,14 +1968,22 @@ const PerformanceReportLayout = ({
       case 'businessIncidentCountGraph': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key={key}
             loading={loading}
             style={{ height: calculateHeight(key) }}
-            bodyStyle={{ height: '90%' }}
-            key={key}
           >
             <BusinessIncidentCountGraph
+              allMeta={metadata}
+              editMode={editMode}
+              isPrinting={isPrinting}
+              metaData={generateDefaultMetaData(key, 'donut', metadata)}
+              onNavigate={() => navigate('/app/reports/business-engagement')}
+              removeItem={() => removeItem(key)}
+              setMetaData={setMetadata}
               variables={{
+                take: 10,
                 where: {
                   brandIds: filters.selectedBrands,
                   dateRange: filters.dateRange,
@@ -2058,15 +1992,7 @@ const PerformanceReportLayout = ({
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },
-                take: 10,
               }}
-              editMode={editMode}
-              isPrinting={isPrinting}
-              removeItem={() => removeItem(key)}
-              metaData={generateDefaultMetaData(key, 'donut', metadata)}
-              setMetaData={setMetadata}
-              allMeta={metadata}
-              onNavigate={() => navigate('/app/reports/business-engagement')}
             />
           </Card>
         );
@@ -2074,14 +2000,19 @@ const PerformanceReportLayout = ({
       case 'businessCrimeTypeGraph': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key={key}
             loading={loading}
             style={{ height: calculateHeight(key) }}
-            bodyStyle={{ height: '90%' }}
-            key={key}
           >
             <BusinessCrimeTypeGraph
+              editMode={editMode}
+              isPrinting={isPrinting}
+              onNavigate={() => navigate('/app/reports/business-engagement')}
+              removeItem={() => removeItem(key)}
               variables={{
+                take: 10,
                 where: {
                   brandIds: filters.selectedBrands,
                   dateRange: filters.dateRange,
@@ -2090,12 +2021,7 @@ const PerformanceReportLayout = ({
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },
-                take: 10,
               }}
-              isPrinting={isPrinting}
-              editMode={editMode}
-              removeItem={() => removeItem(key)}
-              onNavigate={() => navigate('/app/reports/business-engagement')}
             />
           </Card>
         );
@@ -2103,14 +2029,19 @@ const PerformanceReportLayout = ({
       case 'businessLossRecoveredGraph': {
         return (
           <Card
+            bodyStyle={{ height: '90%' }}
             className="no-break"
+            key={key}
             loading={loading}
             style={{ height: calculateHeight(key) }}
-            bodyStyle={{ height: '90%' }}
-            key={key}
           >
             <BusinessLossRecoveredGraph
+              editMode={editMode}
+              isPrinting={isPrinting}
+              onNavigate={() => navigate('/app/reports/business-engagement')}
+              removeItem={() => removeItem(key)}
               variables={{
+                take: 10,
                 where: {
                   brandIds: filters.selectedBrands,
                   dateRange: filters.dateRange,
@@ -2119,12 +2050,7 @@ const PerformanceReportLayout = ({
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },
-                take: 10,
               }}
-              editMode={editMode}
-              removeItem={() => removeItem(key)}
-              onNavigate={() => navigate('/app/reports/business-engagement')}
-              isPrinting={isPrinting}
             />
           </Card>
         );
@@ -2139,8 +2065,8 @@ const PerformanceReportLayout = ({
     () =>
       layout.map((component) =>
         getComponent({
-          key: component.i as AllowedValue,
           component: component.i.split('_')[0] as AllowedValue,
+          key: component.i as AllowedValue,
         })
       ),
     [

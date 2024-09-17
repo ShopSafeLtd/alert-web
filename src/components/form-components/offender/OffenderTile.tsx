@@ -1,20 +1,21 @@
-import React from 'react';
+import type { Age, Build, Gender, Race } from 'graphql/types';
+
 import { Card, Tooltip, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import type { Age, Build, Gender, Race } from 'graphql/types';
 
 const { Paragraph } = Typography;
 
 const useStyles = createUseStyles({
+  details: {
+    overflow: 'hidden',
+    padding: 10,
+  },
   image: {
     height: 140,
     width: 140,
-  },
-  details: {
-    padding: 10,
-    overflow: 'hidden',
   },
   text: {
     marginBottom: '5px !important',
@@ -23,13 +24,13 @@ const useStyles = createUseStyles({
 
 interface Props {
   offender: {
-    id: string;
-    reference?: number | null | undefined;
-    images: { optimised?: string | null | undefined }[];
     age?: Age | null;
-    gender?: Gender | null;
-    race?: Race | null;
     build?: Build | null;
+    gender?: Gender | null;
+    id: string;
+    images: { optimised?: null | string | undefined }[];
+    race?: Race | null;
+    reference?: null | number | undefined;
   };
   onClick: () => void;
 }
@@ -52,18 +53,18 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
       )}
     >
       <Card
-        onClick={onClick}
         bodyStyle={{
-          position: 'relative',
-          padding: 0,
           borderRadius: '0.625rem',
-          overflow: 'hidden',
-          display: 'flex',
-          // alignItems: 'center',
           // justifyContent: 'center',
           cursor: 'pointer',
+          display: 'flex',
           height: 140,
+          overflow: 'hidden',
+          // alignItems: 'center',
+          padding: 0,
+          position: 'relative',
         }}
+        onClick={onClick}
       >
         {offender.images.length > 0 && (
           <div className={classes.image}>
@@ -71,13 +72,13 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
           </div>
         )}
         <div className={classes.details}>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Alert ID: {ref}' },
               { ref: offender.reference }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Sex: {gender}' },
               {
@@ -85,7 +86,7 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
               }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Age: {reg}' },
               {
@@ -93,7 +94,7 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
               }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Build: {build}' },
               {
@@ -101,7 +102,7 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => {
               }
             )}
           </Paragraph>
-          <Paragraph ellipsis className={classes.text}>
+          <Paragraph className={classes.text} ellipsis>
             {intl.formatMessage(
               { defaultMessage: 'Race: {race}' },
               {
