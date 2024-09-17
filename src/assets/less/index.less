@@ -110,16 +110,21 @@
 }
 
 .print-body {
+  width: 1100px; // A4 size. Need to keep for printing purposes. If removed will need to somehow make the graphs fit. Don't know how atm
+  break-inside: auto;
+}
+
+.print-body-full {
   width: 100%;
-  maxWidth: 1920px;
   break-inside: auto;
 }
 
 .print-container {
   display: flex;
-  width: 100%;
   justify-content: center;
   align-items: center;
+  width: 100%;
+
 }
 
 .stats-row {
@@ -219,7 +224,7 @@
   }
 
   .print-body {
-    // scale it down 10%
+   // scale it down 10%
     //transform: scale(0.9);
     //transform-origin: 0 0;
   }

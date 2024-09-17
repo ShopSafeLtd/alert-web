@@ -161,6 +161,7 @@ const CrimeGroupReportView = ({
           <ReportToolbar
             editMode={editMode}
             handlePrint={handlePrint}
+            isPrinting={isPrinting}
             minDrawer={minDrawer}
             saveTemplate={saveTemplate}
             setEditMode={setEditMode}
@@ -278,6 +279,7 @@ const CrimeGroupReportView = ({
               targetedBusinessData,
               targetedGoodsData,
             })}
+            isPrinting={isPrinting}
             layout={layout}
             logo={
               <>

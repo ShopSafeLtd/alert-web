@@ -194,6 +194,7 @@ const PerformanceReport = ({
               <ReportToolbar
                 editMode={editMode}
                 handlePrint={handlePrint}
+                isPrinting={isPrinting}
                 minDrawer={minDrawer}
                 redactOnPrint={redactOnPrint}
                 saveTemplate={saveTemplate}
@@ -263,7 +264,7 @@ const PerformanceReport = ({
               </Title>
 
               <div className="print-container">
-                <div className="print-body">
+                <div className="print-body-full">
                   <ReactGridLayout
                     autoSize
                     cols={2}
@@ -341,6 +342,7 @@ const PerformanceReport = ({
                   targetedGoodsData,
                   userContributionTableData,
                 })}
+                isPrinting={isPrinting}
                 layout={layout}
                 logo={
                   <>

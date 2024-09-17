@@ -1356,7 +1356,7 @@ const useViewOffender = (offenderId: string): Return => {
           });
         },
         variables: {
-          bans: { disconnect: [{ id: value }] },
+          bans: { delete: [{ id: value }] },
           id: offenderId,
         },
       }).finally(() => {

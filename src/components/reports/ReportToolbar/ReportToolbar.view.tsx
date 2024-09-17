@@ -1,6 +1,3 @@
-import React from 'react';
-import { Button, Col, Tooltip, Row } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEdit,
   faEraser,
@@ -10,32 +7,37 @@ import {
   faLock,
   faPlus,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Row, Tooltip } from 'antd';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface ReportToolbarProps {
   editMode: boolean;
-  setEditMode: (value: boolean) => void;
-  minDrawer: boolean;
-  setMinDrawer: (value: boolean) => void;
-  saveTemplate: (name: string, method: 'create' | 'update') => void;
-  setSaveAsDrawer: (value: boolean) => void;
-  redactOnPrint?: boolean;
-  setRedactOnPrint?: (value: boolean) => void;
   handlePrint: () => void;
+  isPrinting: boolean;
+  minDrawer: boolean;
+  redactOnPrint?: boolean;
+  saveTemplate: (name: string, method: 'create' | 'update') => void;
   saving?: boolean;
+  setEditMode: (value: boolean) => void;
+  setMinDrawer: (value: boolean) => void;
+  setRedactOnPrint?: (value: boolean) => void;
+  setSaveAsDrawer: (value: boolean) => void;
 }
 
 const ReportToolbar = ({
   editMode,
-  setEditMode,
-  minDrawer,
-  setMinDrawer,
-  saveTemplate,
-  setSaveAsDrawer,
-  setRedactOnPrint,
-  redactOnPrint,
   handlePrint,
+  isPrinting,
+  minDrawer,
+  redactOnPrint,
+  saveTemplate,
   saving = false,
+  setEditMode,
+  setMinDrawer,
+  setRedactOnPrint,
+  setSaveAsDrawer,
 }: ReportToolbarProps) => {
   const intl = useIntl();
   return (
@@ -43,16 +45,16 @@ const ReportToolbar = ({
       {!editMode && (
         <Col>
           <Button
-            style={{
-              borderTopRightRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
             onClick={() => setEditMode(!editMode)}
+            style={{
+              borderBottomRightRadius: 0,
+              borderTopRightRadius: 0,
+            }}
           >
             <FontAwesomeIcon
+              icon={faEdit}
               size="lg"
               style={{ marginRight: 5 }}
-              icon={faEdit}
             />
             <FormattedMessage defaultMessage="Edit" />
           </Button>
@@ -61,16 +63,16 @@ const ReportToolbar = ({
       {editMode && (
         <Col>
           <Button
-            style={{
-              borderTopRightRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
             onClick={() => setMinDrawer(!minDrawer)}
+            style={{
+              borderBottomRightRadius: 0,
+              borderTopRightRadius: 0,
+            }}
           >
             <FontAwesomeIcon
+              icon={faPlus}
               size="lg"
               style={{ marginRight: 5 }}
-              icon={faPlus}
             />
             <FormattedMessage defaultMessage="Add Components" />
           </Button>
@@ -86,15 +88,15 @@ const ReportToolbar = ({
             <Button
               onClick={() => setEditMode(!editMode)}
               style={{
-                borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-                borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
                 paddingLeft: 10,
                 paddingRight: 10,
               }}
             >
-              <FontAwesomeIcon size="lg" icon={faLock} />
+              <FontAwesomeIcon icon={faLock} size="lg" />
             </Button>
           </Tooltip>
         </Col>
@@ -107,19 +109,19 @@ const ReportToolbar = ({
             })}
           >
             <Button
+              disabled={saving}
+              loading={saving}
+              onClick={() => saveTemplate('', 'update')}
               style={{
-                borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-                borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
                 paddingLeft: 10,
                 paddingRight: 10,
               }}
-              onClick={() => saveTemplate('', 'update')}
-              loading={saving}
-              disabled={saving}
             >
-              <FontAwesomeIcon size="lg" icon={faFloppyDisk} />
+              <FontAwesomeIcon icon={faFloppyDisk} size="lg" />
             </Button>
           </Tooltip>
         </Col>
@@ -132,18 +134,18 @@ const ReportToolbar = ({
             })}
           >
             <Button
+              disabled={saving}
               onClick={() => setSaveAsDrawer(true)}
               style={{
-                borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-                borderTopRightRadius: editMode ? 10 : 0,
                 borderBottomRightRadius: editMode ? 10 : 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: editMode ? 10 : 0,
                 paddingLeft: 10,
                 paddingRight: 10,
               }}
-              disabled={saving}
             >
-              <FontAwesomeIcon size="lg" icon={faFloppyDiskPen} />
+              <FontAwesomeIcon icon={faFloppyDiskPen} size="lg" />
             </Button>
           </Tooltip>
         </Col>
@@ -159,15 +161,15 @@ const ReportToolbar = ({
               danger={redactOnPrint}
               onClick={() => setRedactOnPrint(!redactOnPrint)}
               style={{
-                borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-                borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
                 paddingLeft: 10,
                 paddingRight: 10,
               }}
             >
-              <FontAwesomeIcon size="lg" icon={faEraser} />
+              <FontAwesomeIcon icon={faEraser} size="lg" />
             </Button>
           </Tooltip>
         </Col>
@@ -180,18 +182,19 @@ const ReportToolbar = ({
             })}
           >
             <Button
+              loading={isPrinting}
+              onClick={handlePrint}
               style={{
-                borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
+                borderTopLeftRadius: 0,
                 paddingLeft: 15,
                 paddingRight: 15,
               }}
-              onClick={handlePrint}
             >
               <FontAwesomeIcon
-                style={{ marginRight: 8 }}
-                size="lg"
                 icon={faFileDownload}
+                size="lg"
+                style={{ marginRight: 8 }}
               />
               <FormattedMessage defaultMessage="Download" />
             </Button>

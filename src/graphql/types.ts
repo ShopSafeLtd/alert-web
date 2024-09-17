@@ -9877,7 +9877,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData: SystemTask;
+  mySafetyImportData?: Maybe<SystemTask>;
   recycleChecklist: Checklist;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
@@ -13158,6 +13158,7 @@ export type Query = {
   roles: QueryRolesConnection;
   scheme: Scheme;
   schemes: Array<Scheme>;
+  searchOffenders: QuerySearchOffendersConnection;
   sharingConfig: SharingConfig;
   sharingConfigs: Array<SharingConfig>;
   shoe: Shoe;
@@ -13171,6 +13172,7 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
+  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -13192,6 +13194,7 @@ export type Query = {
   userSchemes: Array<UserScheme>;
   userSessionsGraph: Array<RadialValueGraph>;
   users: Array<User>;
+  usersOnline: Array<UserOnline>;
   vehicle: Vehicle;
   workflow?: Maybe<Workflow>;
   workflows: Array<Workflow>;
@@ -14114,6 +14117,16 @@ export type QuerySchemesArgs = {
 };
 
 
+export type QuerySearchOffendersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SearchOffenderSort>;
+  where: SearchOffenderWhere;
+};
+
+
 export type QuerySharingConfigArgs = {
   where: SharingConfigWhereUniqueInput;
 };
@@ -14350,6 +14363,11 @@ export type QueryUsersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserWhereInput>;
+};
+
+
+export type QueryUsersOnlineArgs = {
+  where: Scalars['String'];
 };
 
 
@@ -14591,6 +14609,19 @@ export type QueryRolesConnectionEdge = {
   __typename?: 'QueryRolesConnectionEdge';
   cursor: Scalars['String'];
   node: CustomRole;
+};
+
+export type QuerySearchOffendersConnection = {
+  __typename?: 'QuerySearchOffendersConnection';
+  edges: Array<QuerySearchOffendersConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QuerySearchOffendersConnectionEdge = {
+  __typename?: 'QuerySearchOffendersConnectionEdge';
+  cursor: Scalars['String'];
+  node: Offender;
 };
 
 export type QueryShoesConnection = {
@@ -16759,6 +16790,28 @@ export type SchemeWhereUniqueInput = {
   useBusinessGroupsOnIncident?: InputMaybe<BoolFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
   workflows?: InputMaybe<WorkflowListRelationFilter>;
+};
+
+export type SearchOffenderSort = {
+  createdAt?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  reference?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type SearchOffenderWhere = {
+  age?: InputMaybe<OffenderInNotInAge>;
+  approved?: InputMaybe<Scalars['Boolean']>;
+  build?: InputMaybe<OffenderInNotInBuild>;
+  exclude?: InputMaybe<Array<Scalars['String']>>;
+  gender?: InputMaybe<OffenderInNotInGender>;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  hair?: InputMaybe<Scalars['String']>;
+  height?: InputMaybe<OffenderInNotInHeight>;
+  peculiarities?: InputMaybe<Scalars['String']>;
+  race?: InputMaybe<OffenderInNotInRace>;
+  schemes?: InputMaybe<Array<Scalars['String']>>;
+  searchTerm?: InputMaybe<Scalars['String']>;
 };
 
 export type SectionInput = {
@@ -20384,6 +20437,12 @@ export type UserNotificationWhereUniqueInput = {
   userId?: InputMaybe<StringFilter>;
 };
 
+export type UserOnline = {
+  __typename?: 'UserOnline';
+  online: Scalars['Boolean'];
+  userId: Scalars['String'];
+};
+
 export type UserOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -21737,6 +21796,31 @@ export type InvestigationRelayWhereInput = {
   schemeIds: Array<Scalars['String']>;
   search?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<InvestigationStatus>>;
+};
+
+export type OffenderInNotInAge = {
+  in?: InputMaybe<Array<Age>>;
+  notIn?: InputMaybe<Array<Age>>;
+};
+
+export type OffenderInNotInBuild = {
+  in?: InputMaybe<Array<Build>>;
+  notIn?: InputMaybe<Array<Build>>;
+};
+
+export type OffenderInNotInGender = {
+  in?: InputMaybe<Array<Gender>>;
+  notIn?: InputMaybe<Array<Gender>>;
+};
+
+export type OffenderInNotInHeight = {
+  in?: InputMaybe<Array<Height>>;
+  notIn?: InputMaybe<Array<Height>>;
+};
+
+export type OffenderInNotInRace = {
+  in?: InputMaybe<Array<Race>>;
+  notIn?: InputMaybe<Array<Race>>;
 };
 
 export type StockItemRelayOrderInput = {

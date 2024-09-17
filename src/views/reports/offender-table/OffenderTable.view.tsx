@@ -205,6 +205,7 @@ const PerformanceReport = ({
               <ReportToolbar
                 editMode={editMode}
                 handlePrint={handlePrint}
+                isPrinting={isPrinting}
                 minDrawer={minDrawer}
                 redactOnPrint={redactOnPrint}
                 saveTemplate={saveTemplate}
@@ -325,6 +326,7 @@ const PerformanceReport = ({
                   removeItem,
                   setMetadata,
                 })}
+                isPrinting={isPrinting}
                 layout={layout}
                 logo={
                   logoMetaData ? (

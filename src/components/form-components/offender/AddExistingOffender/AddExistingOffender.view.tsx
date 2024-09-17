@@ -1,11 +1,12 @@
 import type { WatermarkSlideType } from '#/components/images/WatermartkSlide.view';
-import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
 
 import WatermarkImage from '#/components/images/WatermarkImage.view';
 import WatermarkSlide from '#/components/images/WatermartkSlide.view';
 import OffenderTile from '#/components/offenders/OffenderTile';
 import OffenderTileSkeleton from '#/components/offenders/OffenderTileSkeleton';
+import Loading from '#/components/shared-components/AntD/Loading';
 import { useStoreState } from '#/state';
+import DebouncedInput from '#/utils/debounced-input';
 import {
   getOffenderAge,
   getOffenderBuild,
@@ -14,12 +15,13 @@ import {
 } from '#/utils/offender/get-offender-desc';
 import {
   Button,
+  Checkbox,
   Col,
   Descriptions,
+  Divider,
   Empty,
   Input,
   Modal,
-  Pagination,
   Row,
   Select,
   Typography,
@@ -31,6 +33,11 @@ import { Link } from 'react-router-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
+import type {
+  OffenderSearchDetailsFragment,
+  SearchOffendersQuery,
+} from './graphql/queries/__generated__/search-offender.generated';
+
 import useStyles from './AddExistingOffender.styles';
 
 const { Paragraph, Text } = Typography;
@@ -40,27 +47,26 @@ interface Props {
   age: Age[];
   build: Build[];
   clearFilters: () => void;
-  data: ListOffendersAllSchemesQuery | undefined;
+  currentId: string | undefined;
+  data: SearchOffendersQuery | undefined;
   ethnicity: Race[];
-  hair: string;
+  hair?: string;
   lightBoxOpen: {
     index: number;
     open: boolean;
   };
   loading: boolean;
+  loadingMore: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   onSubmit: (value: string | undefined) => void;
   openLightbox: (index: number) => void;
   pagination: { page: number; pageSize: number };
-  peculiarities: string;
-  search: string;
-  selectedOffender:
-    | Exclude<
-        ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        null | undefined
-      >['offenders'][0]
-    | null
-    | undefined;
+  peculiarities?: string;
+  search?: string;
+  selectOffender: (id: string) => void;
+  selectedLoading: boolean;
+  selectedOffender: OffenderSearchDetailsFragment | null | undefined;
+  selectedOffenders: OffenderSearchDetailsFragment[] | undefined;
   setAge: (value: Age[]) => void;
   setBuild: (value: Build[]) => void;
   setCurrentId: (value: string | undefined) => void;
@@ -70,6 +76,7 @@ interface Props {
   setSearch: (value: string) => void;
   setSex: (value: Gender[]) => void;
   sex: Gender[];
+  type: 'multiple' | 'single';
 }
 
 const AddExistingOffender = ({
@@ -77,18 +84,23 @@ const AddExistingOffender = ({
   age,
   build,
   clearFilters,
+  currentId,
   data,
   ethnicity,
   hair,
   lightBoxOpen,
   loading,
+  loadingMore,
   onPaginationChange,
   onSubmit,
   openLightbox,
   pagination,
   peculiarities,
   search,
+  selectOffender,
+  selectedLoading,
   selectedOffender,
+  selectedOffenders,
   setAge,
   setBuild,
   setCurrentId,
@@ -98,6 +110,7 @@ const AddExistingOffender = ({
   setSearch,
   setSex,
   sex,
+  type,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -105,11 +118,13 @@ const AddExistingOffender = ({
   const publicOffenderDOB =
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
     role !== Role.User;
+
+  const offenderNodes = data?.searchOffenders?.edges || [];
   const existingOffenders = (): JSX.Element => {
-    if (!data?.listOffendersAllSchemes && loading) {
+    if (!data?.searchOffenders && loading) {
       return (
         <Row gutter={16} wrap>
-          {Array.from({ length: data?.listOffendersAllSchemes?.total || 24 })
+          {Array.from({ length: data?.searchOffenders?.totalCount || 24 })
             .fill(0)
             .map(() => (
               <Col className="offender-item" span={4}>
@@ -120,20 +135,24 @@ const AddExistingOffender = ({
       );
     }
 
-    if (
-      data?.listOffendersAllSchemes &&
-      data.listOffendersAllSchemes.offenders.length > 0
-    ) {
+    if (offenderNodes && offenderNodes.length > 0) {
       return (
         <Row gutter={16} style={{ marginRight: 0 }} wrap>
-          {data.listOffendersAllSchemes.offenders.map((offender) => (
-            <Col className="offender-item" key={offender.id} span={4}>
-              <OffenderTile
-                offender={offender}
-                onClick={() => setCurrentId(offender.id)}
-              />
-            </Col>
-          ))}
+          {offenderNodes
+            .filter(
+              ({ node: offender }) =>
+                !selectedOffenders?.some(
+                  (selected) => selected.id === offender.id
+                )
+            )
+            .map(({ node: offender }) => (
+              <Col className="offender-item" key={offender.id} span={4}>
+                <OffenderTile
+                  offender={offender}
+                  onClick={() => setCurrentId(offender.id)}
+                />
+              </Col>
+            ))}
         </Row>
       );
     }
@@ -150,11 +169,37 @@ const AddExistingOffender = ({
       </Row>
     );
   };
+
+  const selectedOffendersCards = () => {
+    if (type === 'single' || !selectedOffenders) return null;
+    return (
+      <div className={classes.selectedOffendersContainer}>
+        <Row className={classes.selectedOffenders} gutter={16}>
+          {selectedOffenders.map((offender) => (
+            <Col className="offender-item" key={offender.id} span={4}>
+              <Checkbox
+                checked
+                className={classes.checkBox}
+                value={offender.id}
+                // style={{ bord }}
+              />
+              <OffenderTile
+                offender={offender}
+                onClick={() => setCurrentId(offender.id)}
+              />
+            </Col>
+          ))}
+        </Row>
+        <Divider />
+      </div>
+    );
+  };
+
   return (
     <div className="add-existing-offender">
       <Row wrap={false}>
         <Col className={classes.offenders} span={20}>
-          <Input
+          <DebouncedInput
             allowClear
             className={classes.searchBar}
             onChange={(event) => setSearch(event.target.value)}
@@ -163,22 +208,48 @@ const AddExistingOffender = ({
             })}
             value={search}
           />
-          <div className="add-existing-offender-row">
+          {selectedOffendersCards()}
+          <div
+            className={
+              !selectedOffenders?.length || type === 'single'
+                ? classes.offendersContainerSingle
+                : classes.offendersContainerMultiple
+            }
+          >
             {existingOffenders()}
-            <Pagination
-              current={pagination.page}
-              hideOnSinglePage
-              onChange={onPaginationChange}
-              pageSize={pagination.pageSize}
-              showSizeChanger={false}
-              size="small"
+            <div
               style={{
                 display: 'flex',
                 justifyContent: 'center',
-                width: '100%',
+                marginTop: 20,
               }}
-              total={data?.listOffendersAllSchemes?.total}
-            />
+            >
+              <Button
+                hidden={!data?.searchOffenders?.pageInfo?.hasNextPage}
+                loading={loadingMore}
+                onClick={() =>
+                  onPaginationChange(pagination.page + 1, pagination.pageSize)
+                }
+                type={'primary'}
+              >
+                {intl.formatMessage({ defaultMessage: 'Load More' })}
+              </Button>
+            </div>
+
+            {/* <Pagination */}
+            {/*   current={pagination.page} */}
+            {/*   hideOnSinglePage */}
+            {/*   onChange={onPaginationChange} */}
+            {/*   pageSize={pagination.pageSize} */}
+            {/*   showSizeChanger={false} */}
+            {/*   size="small" */}
+            {/*   style={{ */}
+            {/*     display: 'flex', */}
+            {/*     justifyContent: 'center', */}
+            {/*     width: '100%', */}
+            {/*   }} */}
+            {/*   total={data?.searchOffenders?.totalCount} */}
+            {/* /> */}
           </div>
         </Col>
         <Col className={classes.filters} span={4}>
@@ -379,106 +450,154 @@ const AddExistingOffender = ({
               </Button>
             </Col>
           </Row>
+          <Row
+            gutter={16}
+            hidden={type === 'single'}
+            justify="end"
+            style={{ marginTop: 10, paddingBottom: 30 }}
+          >
+            <Col>
+              <Button onClick={() => onSubmit(undefined)} type="primary">
+                {intl.formatMessage({
+                  defaultMessage: 'Add Offenders',
+                })}
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
 
       <Modal
         bodyStyle={{ padding: 0 }}
+        okButtonProps={{ disabled: !selectedOffender }}
         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
         okText={`${
-          addOverride || intl.formatMessage({ defaultMessage: 'Add' })
+          addOverride ||
+          (selectedOffenders &&
+          selectedOffenders.some((selected) => selected.id === currentId)
+            ? intl.formatMessage({ defaultMessage: 'Remove' })
+            : intl.formatMessage({ defaultMessage: 'Add' }))
         } Offender`}
         onCancel={() => setCurrentId(undefined)}
-        onOk={() => onSubmit(selectedOffender?.id)}
-        open={!!selectedOffender}
+        onOk={() => {
+          if (type === 'multiple') {
+            selectOffender(selectedOffender?.id || '');
+          } else {
+            onSubmit(selectedOffender?.id);
+          }
+        }}
+        open={!!currentId}
         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
         title={`${
-          addOverride || intl.formatMessage({ defaultMessage: 'Add' })
+          addOverride ||
+          (selectedOffenders &&
+          selectedOffenders.some((selected) => selected.id === currentId)
+            ? intl.formatMessage({ defaultMessage: 'Remove' })
+            : intl.formatMessage({ defaultMessage: 'Add' }))
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         } ${selectedOffender?.name}`}
         zIndex={1010}
       >
         <Row gutter={16} wrap={false}>
-          {selectedOffender && selectedOffender.images.length > 0 && (
-            <Col>
-              <div
-                style={{
-                  height: 250,
-                  width: 200,
-                }}
-              >
-                <WatermarkImage
-                  position={selectedOffender?.images[0]?.position}
-                  url={selectedOffender?.images[0]?.optimised}
-                />
-              </div>
-            </Col>
+          {currentId && !selectedLoading ? (
+            <>
+              {selectedOffender && selectedOffender.images.length > 0 && (
+                <Col>
+                  <div
+                    style={{
+                      height: 250,
+                      width: 200,
+                    }}
+                  >
+                    <WatermarkImage
+                      position={selectedOffender?.images[0]?.position}
+                      url={selectedOffender?.images[0]?.optimised}
+                    />
+                  </div>
+                </Col>
+              )}
+              <Col style={{ padding: '10px 20px' }}>
+                <Descriptions column={1} size="small">
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Age',
+                    })}
+                  >
+                    {getOffenderAge(selectedOffender?.age)}
+                  </Descriptions.Item>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Build',
+                    })}
+                  >
+                    {getOffenderBuild(selectedOffender?.build) ||
+                      intl.formatMessage({
+                        defaultMessage: 'Unknown',
+                      })}
+                  </Descriptions.Item>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Ethnicity',
+                    })}
+                  >
+                    {getOffenderRace(selectedOffender?.race)}
+                  </Descriptions.Item>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Sex',
+                    })}
+                  >
+                    {getOffenderGender(selectedOffender?.gender) ||
+                      intl.formatMessage({
+                        defaultMessage: 'Unknown',
+                      })}
+                  </Descriptions.Item>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Hair',
+                    })}
+                  >
+                    {selectedOffender?.hair ||
+                      intl.formatMessage({
+                        defaultMessage: 'Unknown',
+                      })}
+                  </Descriptions.Item>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Characteristics',
+                    })}
+                  >
+                    {selectedOffender?.peculiarities ||
+                      intl.formatMessage({
+                        defaultMessage: 'Unknown',
+                      })}
+                  </Descriptions.Item>
+                </Descriptions>
+                <Link
+                  target={'_blank'}
+                  to={`/app/offenders/view/${selectedOffender?.id || ''}`}
+                >
+                  <Button danger type="ghost">
+                    {intl.formatMessage({
+                      defaultMessage: 'View Offender',
+                    })}
+                  </Button>
+                </Link>
+              </Col>
+            </>
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: 20,
+              }}
+            >
+              <Col style={{ padding: '10px 20px' }}>
+                <Loading />
+              </Col>
+            </div>
           )}
-          <Col style={{ padding: '10px 20px' }}>
-            <Descriptions column={1} size="small">
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Age',
-                })}
-              >
-                {getOffenderAge(selectedOffender?.age)}
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Build',
-                })}
-              >
-                {getOffenderBuild(selectedOffender?.build) ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                  })}
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Ethnicity',
-                })}
-              >
-                {getOffenderRace(selectedOffender?.race)}
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Sex',
-                })}
-              >
-                {getOffenderGender(selectedOffender?.gender) ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                  })}
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Hair',
-                })}
-              >
-                {selectedOffender?.hair ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                  })}
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Characteristics',
-                })}
-              >
-                {selectedOffender?.peculiarities ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                  })}
-              </Descriptions.Item>
-            </Descriptions>
-            <Link to={`/app/offenders/view/${selectedOffender?.id || ''}`}>
-              <Button danger type="ghost">
-                {intl.formatMessage({
-                  defaultMessage: 'View Offender',
-                })}
-              </Button>
-            </Link>
-          </Col>
         </Row>
       </Modal>
 
