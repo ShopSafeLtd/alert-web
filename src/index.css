@@ -96,15 +96,18 @@
   display: block !important;
 }
 .print-body {
+  width: 1100px;
+  break-inside: auto;
+}
+.print-body-full {
   width: 100%;
-  maxwidth: 1920px;
   break-inside: auto;
 }
 .print-container {
   display: flex;
-  width: 100%;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 .stats-row {
   display: flex;
