@@ -4,6 +4,7 @@ import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/add
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
+import IncidentPoliceReporting from '#/views/incidents/AddIncident/components/IncidentPoliceReporting/IncidentPoliceReporting.view';
 import { Button, Card, Col, Drawer, Form, PageHeader, Row } from 'antd';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
@@ -19,7 +20,7 @@ import type { FormData } from './useAddIncident';
 import useStyles from './AddIncident.styles';
 import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
 import IncidentGroups from './components/IncidentGroups/IncidentGroups.container';
-import IncidentPolice from './components/IncidentPolice/IncidentPolice.view';
+// import IncidentPolice from './components/IncidentPolice/IncidentPolice.view';
 import IncidentTypes from './components/IncidentTypes/IncidentTypes.container';
 import IncidentWhere from './components/IncidentWhere/IncidentWhere.container';
 import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
@@ -158,8 +159,11 @@ const AddIncident = ({
                 </Card>
               );
             }
+            // case IncidentFormField.Police: {
+            //   return <IncidentPolice saving={saving} form={form} />;
+            // }
             case IncidentFormField.Police: {
-              return <IncidentPolice form={form} saving={saving} />;
+              return <IncidentPoliceReporting form={form} saving={saving} />;
             }
             case IncidentFormField.Details: {
               return (
