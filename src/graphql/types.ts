@@ -2480,6 +2480,14 @@ export type ChecklistSubsection = {
   updatedAt: Scalars['Date'];
 };
 
+export type ChecklistUpdateInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  description?: InputMaybe<Scalars['String']>;
+  sections?: InputMaybe<Array<SectionInput>>;
+  title?: InputMaybe<Scalars['String']>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type ChecklistWhereInput = {
   AND?: InputMaybe<Array<ChecklistWhereInput>>;
   NOT?: InputMaybe<Array<ChecklistWhereInput>>;
@@ -6569,6 +6577,7 @@ export enum ImagePosition {
 
 export enum ImageScalarFieldEnum {
   ArtcleColumnId = 'artcleColumnId',
+  BlurFaces = 'blurFaces',
   Card = 'card',
   CreatedAt = 'createdAt',
   FileNames = 'fileNames',
@@ -9877,7 +9886,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData?: Maybe<SystemTask>;
+  mySafetyImportData: SystemTask;
   recycleChecklist: Checklist;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
@@ -9926,6 +9935,7 @@ export type Mutation = {
   unsubscribeToVehicle: Vehicle;
   updateBusiness: Business;
   updateChat: Chat;
+  updateChecklist: Checklist;
   updateCrimeGroup: CrimeGroup;
   updateCrimeGroupOffender: CrimeGroup;
   updateCustomGallery: CustomGallery;
@@ -10739,6 +10749,12 @@ export type MutationUpdateBusinessArgs = {
 export type MutationUpdateChatArgs = {
   data: ChatUpdateInput;
   where: UniqueId;
+};
+
+
+export type MutationUpdateChecklistArgs = {
+  data: ChecklistUpdateInput;
+  id?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -13172,7 +13188,6 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
-  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -15873,6 +15888,7 @@ export type Scheme = {
   documents: Array<Document>;
   facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
+  facialRedaction: Scalars['Boolean'];
   feedItems: Array<FeedItem>;
   goodsMode: GoodsMode;
   groups: Array<Group>;
@@ -16406,6 +16422,7 @@ export type SchemeCreateInput = {
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   facialDetection?: InputMaybe<Scalars['Boolean']>;
   facialRecognition?: InputMaybe<Scalars['Boolean']>;
+  facialRedaction?: InputMaybe<Scalars['Boolean']>;
   goodsMode?: InputMaybe<GoodsMode>;
   imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
@@ -16477,6 +16494,7 @@ export type SchemeOrderByWithRelationInput = {
   documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
   facialDetection?: InputMaybe<SortOrder>;
   facialRecognition?: InputMaybe<SortOrder>;
+  facialRedaction?: InputMaybe<SortOrder>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   goodsMode?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
@@ -16556,6 +16574,7 @@ export enum SchemeScalarFieldEnum {
   DefaultSubscribedOffenderOnly = 'defaultSubscribedOffenderOnly',
   FacialDetection = 'facialDetection',
   FacialRecognition = 'facialRecognition',
+  FacialRedaction = 'facialRedaction',
   GoodsMode = 'goodsMode',
   Id = 'id',
   ImagesRequiredOnOffenders = 'imagesRequiredOnOffenders',
@@ -16595,6 +16614,7 @@ export type SchemeUpdateInput = {
   defaultSubscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
   facialDetection?: InputMaybe<SetBooleanHelper>;
   facialRecognition?: InputMaybe<SetBooleanHelper>;
+  facialRedaction?: InputMaybe<SetBooleanHelper>;
   goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
   imagesRequiredOnOffenders?: InputMaybe<SetBooleanHelper>;
   incidentRetention?: InputMaybe<SetIntHelper>;
@@ -16649,6 +16669,7 @@ export type SchemeWhereInput = {
   documents?: InputMaybe<DocumentListRelationFilter>;
   facialDetection?: InputMaybe<BoolFilter>;
   facialRecognition?: InputMaybe<BoolFilter>;
+  facialRedaction?: InputMaybe<BoolFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   goodsMode?: InputMaybe<EnumGoodsModeFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
@@ -16740,6 +16761,7 @@ export type SchemeWhereUniqueInput = {
   documents?: InputMaybe<DocumentListRelationFilter>;
   facialDetection?: InputMaybe<BoolFilter>;
   facialRecognition?: InputMaybe<BoolFilter>;
+  facialRedaction?: InputMaybe<BoolFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   goodsMode?: InputMaybe<EnumGoodsModeFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
@@ -19515,6 +19537,7 @@ export type UploadArticleImage = {
 };
 
 export type UploadIncidentImage = {
+  blurFaces?: InputMaybe<Array<FaceInput>>;
   file?: InputMaybe<Scalars['Upload']>;
   isFace?: InputMaybe<Scalars['Boolean']>;
   offenders?: InputMaybe<Array<ImageOffender>>;
@@ -19538,6 +19561,7 @@ export type UploadIncidentOptimisticImage = {
 };
 
 export type UploadOffenderImage = {
+  blurFaces?: InputMaybe<Array<FaceInput>>;
   file?: InputMaybe<Scalars['Upload']>;
   isFace?: InputMaybe<Scalars['Boolean']>;
   policeImage?: InputMaybe<Scalars['Boolean']>;

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
-import type { AddOffenderData } from '#/components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
-import type { AddressData, OffenderSettingsType } from '#/types/DataType';
+import type {
+  AddressData,
+  BlurFaceData,
+  OffenderSettingsType,
+} from '#/types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
@@ -18,6 +21,7 @@ import type { StateImageData } from '../../../incidents/IncidentForm/ImageSectio
 import type { ImageValue } from '../../ImageSelect/ImageSelect.view';
 
 interface OffenderImage {
+  blurFaces?: BlurFaceData[];
   id: string;
   optimised?: null | string | undefined;
   url?: null | string | undefined;
@@ -145,6 +149,16 @@ const useEditOffender = ({
     setSaving(true);
 
     const imageData = value.images.map((item) => ({
+      blurFaces:
+        item.blurFaces && item.blurFaces.length > 0
+          ? item.blurFaces.map((face) => ({
+              blur: true,
+              height: Number(face.BoundingBox.Height),
+              left: Number(face.BoundingBox.Left),
+              top: Number(face.BoundingBox.Top),
+              width: Number(face.BoundingBox.Width),
+            }))
+          : undefined,
       fileName: item.fileName,
       id: item.id || '',
       isFace: item.isFace || false,
@@ -229,6 +243,7 @@ const useEditOffender = ({
                     upload: imageData
                       ?.filter((image) => image.new)
                       .map((item) => ({
+                        blurFaces: item.blurFaces,
                         isFace: item.isFace,
                         policeImage: item.policeImage,
                         position: item.position,
@@ -298,6 +313,16 @@ const useEditOffender = ({
           (image) =>
             ({
               ...image.file,
+              blurFaces:
+                image.blurFaces && image.blurFaces.length > 0
+                  ? image.blurFaces.map((face) => ({
+                      blur: true,
+                      height: Number(face.BoundingBox.Height),
+                      left: Number(face.BoundingBox.Left),
+                      top: Number(face.BoundingBox.Top),
+                      width: Number(face.BoundingBox.Width),
+                    }))
+                  : undefined,
               fileName: image.file?.response?.[0].blobName,
               isFace: image.isFace || false,
               policeImage: false,

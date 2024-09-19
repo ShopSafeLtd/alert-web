@@ -113,6 +113,7 @@ const useAuth = (): Return => {
         defaultPublicOffenderDOB: schemeDetails?.defaultPublicOffenderDOB,
         facialDetection: schemeDetails?.facialDetection,
         facialRecognition: schemeDetails?.facialRecognition,
+        facialRedaction: schemeDetails?.facialRedaction,
         goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
         id: schemeDetails?.id,
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
@@ -162,6 +163,7 @@ const useAuth = (): Return => {
             schemeDetails.scheme.defaultPublicOffenderDOB,
           facialDetection: schemeDetails.scheme.facialDetection,
           facialRecognition: schemeDetails.scheme.facialRecognition,
+          facialRedaction: schemeDetails.scheme.facialRedaction,
           goodsMode: schemeDetails.scheme.goodsMode,
           id: schemeDetails.scheme.id,
           imagesRequiredOnOffenders:

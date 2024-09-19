@@ -1,64 +1,68 @@
-import React from 'react';
 import type { ImageCardData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './EditImageAnalyseList.view';
 import useEditImageAnalyseList from './useEditImageAnalyseList';
 
 interface Props {
+  images: ImageCardData[] | null | undefined;
   onClose: () => void;
-  update: (value: ImageCardData[]) => void;
-  images: ImageCardData[] | undefined | null;
-  title: string;
   saving: boolean;
+  title: string;
+  update: (value: ImageCardData[]) => void;
 }
 
 const EditImageAnalyseList = ({
-  onClose,
-  update,
   images,
-  title,
+  onClose,
   saving: origSaving,
+  title,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
-    imgChange,
     beforeUpload,
-    fileList,
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
     editImage,
-    primaryImage,
-    setPrimaryImage,
-    onSelectFace,
-    setUploadFaces,
-    uploadFaces,
     facialRec,
+    fileList,
+    imgChange,
+    onCloseSelectFace,
+    onEditImage,
+    onRemoveImage,
+    onSelectFace,
+    onSubmit,
+    primaryImage,
+    saving,
+    setPrimaryImage,
+    toggleEditImage,
+    uploadFaces,
+    uploading,
   } = useEditImageAnalyseList({
+    images,
     onClose,
     update,
-    images,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving || origSaving}
-      imgChange={imgChange}
       beforeUpload={beforeUpload}
-      fileList={fileList}
-      onRemoveImage={onRemoveImage}
-      onEditImage={onEditImage}
-      toggleEditImage={toggleEditImage}
       editImage={editImage}
+      facialRec={facialRec}
+      fileList={fileList}
+      imgChange={imgChange}
+      onClose={onClose}
+      onCloseSelectFace={onCloseSelectFace}
+      onEditImage={onEditImage}
+      onRemoveImage={onRemoveImage}
+      onSelectFace={onSelectFace}
+      onSubmit={onSubmit}
       primaryImage={primaryImage}
+      saving={saving || origSaving}
       setPrimaryImage={setPrimaryImage}
       title={title}
-      onSelectFace={onSelectFace}
-      setUploadFaces={setUploadFaces}
+      toggleEditImage={toggleEditImage}
       uploadFaces={uploadFaces}
-      facialRec={facialRec}
+      uploading={uploading}
     />
   );
 };

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
+import type { StateImageData } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadChangeParam } from 'antd/lib/upload';
 import type { CreateOffenderMutation } from 'graphql/offenders/mutations/__generated__/crreate-offender.generated';
 import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 import type {
@@ -19,6 +21,7 @@ import type {
   CrimeGroupData,
   CustomGalleryData,
   Image,
+  ImageFaceType,
   OffenderData,
   OffenderSettingsType,
   SelectOptions,
@@ -118,6 +121,7 @@ interface Return {
   offenderSettings: OffenderSettingsType;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
+  onCloseFaces: () => void;
   onEditImage: (value: Image) => void;
   onEditVehicle: (value: VehicleData) => void;
   // onPreview: (value: UploadFile) => void;
@@ -125,6 +129,7 @@ interface Return {
   onRemoveImage: (imageId: string) => void;
   onRemoveVehicle: (vehicleId: string) => void;
   onSearchOffender: () => void;
+  onSelectFace: (value: ImageFaceType) => void;
   onSubmit: (value: FormData) => void;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
   potentialOffenders: OffenderData[];
@@ -145,6 +150,8 @@ interface Return {
   updateExclusion: (value: BanData) => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
+  uploadFaces: ImageFaceType[];
+  uploading: boolean;
   vehiclesData: VehicleType[];
   viewPotentialOffenders: boolean;
 }
@@ -173,9 +180,12 @@ const useAddOffender = (): Return => {
     role,
   } = useStoreState((state) => state.user);
 
-  const { id: schemeId, needJustification } = useStoreState(
-    (state) => state.scheme
-  );
+  const {
+    facialRecognition: facialRec,
+    facialRedaction: facialDed,
+    id: schemeId,
+    needJustification,
+  } = useStoreState((state) => state.scheme);
   const reportOnly =
     useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
   const pagination = useStoreState((state) => state.data.offenders.pagination);
@@ -215,7 +225,9 @@ const useAddOffender = (): Return => {
     []
   );
   const [viewPotentialOffenders, setViewPotentialOffenders] = useState(false);
-
+  const [uploadFaces, setUploadFaces] = useState<ImageFaceType[]>([]);
+  const [facesUploading, setFacesUploading] = useState('');
+  const [imageUploading, setImageUploading] = useState(false);
   const onValuesChange = (changedValues: FormData) => {
     if (changedValues.idVerified !== undefined) {
       setIDVerified(changedValues.idVerified);
@@ -662,6 +674,16 @@ const useAddOffender = (): Return => {
             upload:
               imageChange && fileList.length > 0
                 ? fileList.map((item) => ({
+                    blurFaces:
+                      item.blurFaces && item.blurFaces.length > 0
+                        ? item.blurFaces.map((face) => ({
+                            blur: true,
+                            height: Number(face.BoundingBox.Height),
+                            left: Number(face.BoundingBox.Left),
+                            top: Number(face.BoundingBox.Top),
+                            width: Number(face.BoundingBox.Width),
+                          }))
+                        : undefined,
                     policeImage: item.policeImage,
                     position: item.position,
                     primary: item.uid === primaryImage,
@@ -698,8 +720,16 @@ const useAddOffender = (): Return => {
     return compressImage(file);
   };
 
-  const imgChange: UploadProps['onChange'] = (info) => {
+  const imgChange: UploadProps['onChange'] = (
+    info: UploadChangeParam<StateImageData>
+  ) => {
     if (info.file.response && info.file.status === 'done') {
+      const uploadImage = info.file.response[0];
+
+      if (facialRec && uploadImage.faces && uploadImage.faces.length > 0) {
+        setUploadFaces(uploadImage.faces);
+        if (facialDed) setFacesUploading(info.file.uid);
+      }
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
@@ -711,10 +741,42 @@ const useAddOffender = (): Return => {
         },
       ]);
       setImageChange(true);
+      setImageUploading(false);
     } else {
       setFileList(info.fileList);
       setImageChange(true);
     }
+  };
+  const onSelectFace = (face: ImageFaceType) => {
+    let newData = [
+      ...fileList,
+      {
+        ...face,
+        edited: false,
+        fileName: Math.floor(Math.random() * 1000).toString(),
+        isFace: true,
+        name: Math.floor(Math.random() * 1000).toString(),
+        new: true,
+        position: ImagePosition.CenterCenter,
+        rotation: 0,
+        type: 'image/jpeg',
+        uid: Math.floor(Math.random() * 1000).toString(),
+        url: face.imageURL,
+      },
+    ];
+
+    if (facialDed) {
+      const blurFaces = uploadFaces.filter(
+        (el) => el.imageURL !== face.imageURL
+      );
+      newData = newData.map((image) => {
+        if (image.uid === facesUploading) return { ...image, blurFaces };
+        return image;
+      });
+    }
+    setFileList(newData);
+    setFacesUploading('');
+    setUploadFaces([]);
   };
   // evidence
   const handleChange: UploadProps['onChange'] = (info) => {
@@ -880,6 +942,10 @@ const useAddOffender = (): Return => {
   const toggleViewPotentialOffenders = () => {
     setViewPotentialOffenders(!viewPotentialOffenders);
   };
+  const onCloseFaces = () => {
+    setUploadFaces([]);
+    setFacesUploading('');
+  };
 
   return {
     addCustomGallery,
@@ -939,6 +1005,7 @@ const useAddOffender = (): Return => {
     },
     onAddCrimeGroup,
     onAddVehicle,
+    onCloseFaces,
     onEditImage,
     onEditVehicle,
     onRemoveCrimeGroup,
@@ -946,6 +1013,7 @@ const useAddOffender = (): Return => {
     onRemoveImage,
     onRemoveVehicle,
     onSearchOffender,
+    onSelectFace,
     onSubmit,
     onValuesChange,
     potentialOffenders,
@@ -967,6 +1035,9 @@ const useAddOffender = (): Return => {
     updateExclusion,
     updateNewCustomGalleryData,
     updateNewOffenderTagData,
+    uploadFaces,
+    uploading:
+      imageUploading || (!!facesUploading && uploadFaces?.length === 0),
     vehiclesData,
     viewPotentialOffenders,
   };

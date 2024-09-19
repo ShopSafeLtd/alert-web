@@ -1,70 +1,73 @@
-import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
-import { Spin, Button, Col, Row, Upload } from 'antd';
-import { createUseStyles } from 'react-jss';
+import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { Age, Gender, ImagePosition } from 'graphql/types';
+
+import getFacesFromUrl from '#/utils/get-faces-from-url';
 import {
   faCheckCircle as faCheckedCircle,
   faUpload,
 } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Row, Spin, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { UploadChangeParam } from 'antd/lib/upload';
-import type { Age, Gender, ImagePosition } from 'graphql/types';
+import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
-import getFacesFromUrl from '#/utils/get-faces-from-url';
-import WatermarkImage from '../../images/WatermarkImage.view';
+
 import type {
   ImageFaceType,
   StateImageData,
 } from '../../incidents/IncidentForm/ImageSection/useImageSection';
-import {
-  getPeculiaritiesFromFace,
-  getGenderFromFace,
-  getClosestAgeRange,
-} from '../../incidents/IncidentForm/ImageSection/useImageSection';
+
 // import customRequest from '../../../utils/custom-request';
 import compressImage from '../../../utils/compress-images';
+import WatermarkImage from '../../images/WatermarkImage.view';
+import {
+  getClosestAgeRange,
+  getGenderFromFace,
+  getPeculiaritiesFromFace,
+} from '../../incidents/IncidentForm/ImageSection/useImageSection';
 import FacesSelect from '../FacesSelect/FacesSelect.view';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  image: {
-    height: 150,
-    width: 150,
-    borderRadius: 10,
-    overflow: 'hidden',
-    border: `1px solid ${theme.borderColor}`,
+  buttonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  check: {
+    background: '#FFF',
+    borderRadius: '100%',
     cursor: 'pointer',
+    height: 21,
+    position: 'absolute',
+    right: 12,
+    top: 5,
+    width: 21,
+    zIndex: 10,
   },
   container: {
     position: 'relative',
   },
-  check: {
-    position: 'absolute',
-    top: 5,
-    right: 12,
-    zIndex: 10,
-    background: '#FFF',
-    borderRadius: '100%',
-    width: 21,
-    height: 21,
+  image: {
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 10,
     cursor: 'pointer',
+    height: 150,
+    overflow: 'hidden',
+    width: 150,
   },
+  row: { marginTop: 10 },
   spin: {
     position: 'absolute',
-    top: '45%',
     right: '45%',
+    top: '45%',
     zIndex: 10,
   },
   uploadIcon: {
     marginRight: 10,
   },
-  buttonContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  row: { marginTop: 10 },
 }));
 export interface OffenderFaceData {
   age: Age;
@@ -72,17 +75,7 @@ export interface OffenderFaceData {
   peculiarities?: string;
 }
 export interface ImageData {
-  uid: string;
-  id?: string;
-  url?: string | null | undefined;
-  fileName?: string | null;
-  type?: string | null;
-  optimised?: string | null | undefined;
-  position?: ImagePosition;
-  primary?: boolean | null | undefined;
-  policeImage?: boolean | null | undefined;
-  rotation?: number;
-  totalFaces?: number;
+  blurFaces?: ImageFaceType[];
   boundingBox?: {
     height: string;
     left: string;
@@ -90,10 +83,21 @@ export interface ImageData {
     width: string;
   };
   file?: StateImageData;
+  fileName?: null | string;
+  id?: string;
+  isFace?: boolean;
   new?: boolean;
+  optimised?: null | string | undefined;
+  policeImage?: boolean | null | undefined;
+  position?: ImagePosition;
+  primary?: boolean | null | undefined;
   // faces?: ImageFaceType[];
   response?: { faces?: ImageFaceType[] }[];
-  isFace?: boolean;
+  rotation?: number;
+  totalFaces?: number;
+  type?: null | string;
+  uid: string;
+  url?: null | string | undefined;
 }
 
 // interface ImageResponse extends ImageResponseType {
@@ -102,59 +106,63 @@ export interface ImageData {
 // }
 
 export interface ImageValue {
-  id: string;
-  url?: string | null | undefined;
-  optimised?: string | null | undefined;
-  fileName?: string | null;
-  type?: string | null;
-  new?: boolean;
-  position?: ImagePosition;
-  primary?: boolean | null | undefined;
-  policeImage?: boolean | null | undefined;
-  rotation?: number;
+  blurFaces?: ImageFaceType[];
   boundingBox?: {
     height: string;
     left: string;
     top: string;
     width: string;
   };
-  file?: StateImageData;
   faces?: ImageFaceType[];
+  file?: StateImageData;
+  fileName?: null | string;
+  id: string;
+  new?: boolean;
+  optimised?: null | string | undefined;
+  policeImage?: boolean | null | undefined;
+  position?: ImagePosition;
+  primary?: boolean | null | undefined;
+  rotation?: number;
+  type?: null | string;
+  url?: null | string | undefined;
 }
 
 interface Props {
+  form: FormInstance<OffenderFaceData>;
   images: ImageData[] | undefined;
+  onChange?: (value?: ImageValue[]) => void;
+  setUploading?: (value: boolean) => void;
+  uploading?: boolean;
   // selectedImages: ImageData[] | undefined;
   value?: ImageValue[] | null;
-  onChange?: (value?: ImageValue[]) => void;
-  uploading?: boolean;
-  setUploading?: (value: boolean) => void;
-  form: FormInstance<OffenderFaceData>;
 }
 
 const ImageSelectAnalyse = ({
-  images: imagesProp,
-  value,
-  onChange,
-  uploading = false,
-  setUploading = (_arg1: boolean) => {},
   form,
+  images: imagesProp,
+  onChange,
+  setUploading = (_arg1: boolean) => {},
+  uploading = false,
+  value,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const [selected, setSelected] = useState<ImageValue[]>([]);
-  const [images, setImages] = useState<ImageData[]>([]);
-  const [uploadFaces, setUploadFaces] = useState<ImageFaceType[]>();
+  const [selected, setSelected] = useState<ImageValue[]>(value ?? []);
+  const [images, setImages] = useState<ImageData[]>(imagesProp ?? []);
+  const [uploadFaces, setUploadFaces] = useState<ImageFaceType[]>([]);
   const [facesUploading, setFacesUploading] = useState('');
+  const [imageUploading, setImageUploading] = useState(false);
+
   const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+  const facialDed = useStoreState((state) => state.scheme.facialRedaction);
 
-  useEffect(() => {
-    if (value) setSelected(value);
-  }, []);
+  // useEffect(() => {
+  //   if (value) setSelected(value);
+  // }, []);
 
-  useEffect(() => {
-    if (imagesProp) setImages(imagesProp);
-  }, [imagesProp]);
+  // useEffect(() => {
+  //   if (imagesProp) setImages(imagesProp);
+  // }, [imagesProp]);
 
   useEffect(() => {
     if (onChange) {
@@ -163,10 +171,11 @@ const ImageSelectAnalyse = ({
   }, [selected]);
 
   useEffect(() => {
-    if (uploadFaces) {
-      setFacesUploading('');
-    }
-  }, [uploadFaces]);
+    const filterImage = images.filter((image) =>
+      selected.some((selection) => selection.id === image.uid)
+    );
+    form.setFieldValue('images', filterImage);
+  }, [form, images, selected]);
 
   const onSelectFace = (face: ImageFaceType) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -176,26 +185,71 @@ const ImageSelectAnalyse = ({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const offenderPeculiarities = form.getFieldValue('peculiarities');
     const faceId = Math.floor(Math.random() * 1000).toString();
+    let newData = images;
+    if (facialDed) {
+      // const findIndex = images.findIndex(({ uid }) => uid === facesUploading);
 
-    setImages([
-      ...images,
+      const blurFaces = uploadFaces.filter(
+        (el) => el.imageURL !== face.imageURL
+      );
+      newData = images.map((image) => {
+        if (image.uid === facesUploading) return { ...image, blurFaces };
+        return image;
+      });
+
+      // setImages((prev) =>
+      //   update(prev, {
+      //     [findIndex]: {
+      //       $set: {
+      //         ...images[findIndex],
+      //         blurFaces,
+      //       },
+      //     },
+      //   })
+      // );
+      //  setImages([...images,{
+      //     fileName: Math.floor(Math.random() * 1000).toString(),
+      //     isFace: true,
+      //     new: true,
+      //     optimised: face.imageURL,
+      //     type: 'image/jpeg',
+      //     uid: faceId,
+      //     url: face.imageURL,
+      //   },])
+    }
+    newData = [
+      ...newData,
       {
-        isFace: true,
-        url: face.imageURL,
         fileName: Math.floor(Math.random() * 1000).toString(),
+        isFace: true,
+        new: true,
+        optimised: face.imageURL,
         type: 'image/jpeg',
         uid: faceId,
-        optimised: face.imageURL,
-        new: true,
+        url: face.imageURL,
       },
-    ]);
+    ];
+    setImages(newData);
+    // setImages((prev) => [
+    //   ...prev,
+    //   {
+    //     fileName: Math.floor(Math.random() * 1000).toString(),
+    //     isFace: true,
+    //     new: true,
+    //     optimised: face.imageURL,
+    //     type: 'image/jpeg',
+    //     uid: faceId,
+    //     url: face.imageURL,
+    //   },
+    // ]);
+
     setSelected([
       ...selected,
       {
-        url: face.imageURL,
         id: faceId,
-        optimised: face.imageURL,
         new: true,
+        optimised: face.imageURL,
+        url: face.imageURL,
       },
     ]);
     if (!offenderAge || offenderAge === 'UNKNOWN')
@@ -210,10 +264,12 @@ const ImageSelectAnalyse = ({
         'peculiarities',
         getPeculiaritiesFromFace(face.Beard, face.Mustache)
       );
+    setFacesUploading('');
     setUploadFaces([]);
   };
 
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
+    setImageUploading(true);
     if (
       info.file.status === 'done' &&
       info.file.response &&
@@ -229,29 +285,34 @@ const ImageSelectAnalyse = ({
       setImages([
         ...images,
         {
-          url: uploadImage.url,
-          fileName: uploadImage.blobName,
-          type: uploadImage.mimetype,
-          uid: info.file.uid,
           file: info.file,
+          fileName: uploadImage.blobName,
+          new: true,
           optimised: uploadImage.url,
           totalFaces:
             uploadImage.faces && uploadImage.faces.length > 0
               ? uploadImage.faces.length
               : 0,
+          type: uploadImage.mimetype,
+          uid: info.file.uid,
+          url: uploadImage.url,
         },
       ]);
+
       setSelected([
         {
-          url: uploadImage.url,
-          id: info.file.uid,
           file: info.file,
+          id: info.file.uid,
           optimised: uploadImage.url,
+          url: uploadImage.url,
         },
         ...selected,
       ]);
+
+      setImageUploading(false);
       setUploading(false);
     }
+
     // if (info.file.status === 'error') {
     //   setUploading(false);
     //   void message.error('Image upload failed');
@@ -264,7 +325,7 @@ const ImageSelectAnalyse = ({
     } else {
       if (facialRec && !image.isFace) {
         const imgResponse = image.response;
-        setFacesUploading(image.id || '');
+        setFacesUploading(image.uid || '');
 
         if (
           imgResponse &&
@@ -281,10 +342,10 @@ const ImageSelectAnalyse = ({
       setSelected([
         ...selected,
         {
-          url: image.url,
+          boundingBox: image.boundingBox,
           id: image.uid,
           optimised: image.url,
-          boundingBox: image.boundingBox,
+          url: image.url,
         },
       ]);
     }
@@ -293,21 +354,21 @@ const ImageSelectAnalyse = ({
   return (
     <div>
       <Upload
-        onChange={onImageChange}
         action={
           facialRec
             ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
             : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
         }
+        // customRequest={customRequest}
+        beforeUpload={async (file) => compressImage(file)}
         // listType="picture-card"
         // action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
         // action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-        // customRequest={customRequest}
-        beforeUpload={async (file) => compressImage(file)}
+        onChange={onImageChange}
         showUploadList={false}
       >
-        <Button loading={uploading} disabled={uploading}>
-          <FontAwesomeIcon icon={faUpload} className={classes.uploadIcon} />
+        <Button disabled={uploading} loading={uploading}>
+          <FontAwesomeIcon className={classes.uploadIcon} icon={faUpload} />
           {intl.formatMessage({
             defaultMessage: 'Upload Image',
           })}
@@ -316,25 +377,26 @@ const ImageSelectAnalyse = ({
       <Row className={classes.row} gutter={[16, 16]}>
         {images.map((image) => (
           <Col
-            key={image.uid}
             className={classes.container}
+            key={image.uid}
             onClick={() => toggleSelected(image)}
           >
             {selected.some(({ id }) => id === image.uid) && (
               <div className={classes.check}>
-                <FontAwesomeIcon size="xl" color="red" icon={faCheckedCircle} />
+                <FontAwesomeIcon color="red" icon={faCheckedCircle} size="xl" />
               </div>
             )}
-            {facesUploading === image.id && (
+            {(imageUploading ||
+              (facesUploading === image.uid && uploadFaces?.length === 0)) && (
               <div className={classes.spin}>
                 <Spin />
               </div>
             )}
             <div className={classes.image}>
               <WatermarkImage
-                url={image.url}
                 position={image.position}
                 rotation={image.rotation || 0}
+                url={image.url}
               />
             </div>
           </Col>
@@ -342,10 +404,13 @@ const ImageSelectAnalyse = ({
       </Row>
 
       <FacesSelect
-        submitFace={onSelectFace}
-        onClose={() => setUploadFaces([])}
-        open={!!(uploadFaces && uploadFaces.length > 0)}
         faces={uploadFaces}
+        onClose={() => {
+          setUploadFaces([]);
+          setFacesUploading('');
+        }}
+        open={!!(uploadFaces && uploadFaces.length > 0)}
+        submitFace={onSelectFace}
       />
     </div>
   );

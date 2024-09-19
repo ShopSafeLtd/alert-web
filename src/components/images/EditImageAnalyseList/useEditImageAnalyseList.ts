@@ -1,93 +1,99 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import { useEffect, useState } from 'react';
-import { message } from 'antd';
-import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import type { Image, ImageCardData, ImageFaceType } from 'types/DataType';
-import update from 'immutability-helper';
-import { useIntl } from 'react-intl';
-
-import { useStoreState } from 'state';
-import type { UploadChangeParam } from 'antd/lib/upload';
 import type { StateImageData } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { Image, ImageCardData, ImageFaceType } from 'types/DataType';
+
 import { compressImage } from '#/utils/compress-images';
+import { message } from 'antd';
 import { ImagePosition } from 'graphql/types';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 
 interface Props {
+  images: ImageCardData[] | null | undefined;
   onClose: () => void;
   update: (value: ImageCardData[]) => void;
-  images: ImageCardData[] | undefined | null;
 }
 
 export interface FormData {
-  name: string;
-  make?: string;
-  model?: string;
   colour?: string;
-  reference?: number | null;
-  totalOffenders?: number | null;
-  registration?: string;
   crimeGroup?: string[];
+  customGalleries?: Array<{ label: string; value: string } | string>;
   groups?: string[];
   incidents?: string[];
+  make?: string;
+  model?: string;
+  name: string;
   offenders?: string[];
-  customGalleries?: Array<string | { value: string; label: string }>;
+  reference?: null | number;
+  registration?: string;
+  totalOffenders?: null | number;
 }
 
 interface Return {
-  onSubmit: () => void;
-  saving: boolean;
-  imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
   editImage: Image | null;
+  facialRec: boolean;
+  fileList: Image[];
+  imgChange: UploadProps['onChange'];
+  onCloseSelectFace: () => void;
   onEditImage: (value: Image) => void;
   onRemoveImage: (imageId: string) => void;
-  toggleEditImage: (value?: Image) => void;
   onSelectFace: (value: ImageFaceType) => void;
-  setUploadFaces: (value: ImageFaceType[]) => void;
+  onSubmit: () => void;
+  primaryImage: string;
+  saving: boolean;
+  setPrimaryImage: (value: string) => void;
+  toggleEditImage: (value?: Image) => void;
   uploadFaces: ImageFaceType[];
-  facialRec: boolean;
+  uploading: boolean;
 }
 
 const useEditImageAnalyseList = ({
-  update: updateImageList,
   images,
+  update: updateImageList,
 }: Props): Return => {
   const intl = useIntl();
   const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+  const facialDed = useStoreState((state) => state.scheme.facialRedaction);
+
   const [saving, setSaving] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);
   const [imageChange, setImageChange] = useState(false);
   const [editImage, setEditImage] = useState<Image | null>(null);
   const [primaryImage, setPrimaryImage] = useState<string>('');
   const [uploadFaces, setUploadFaces] = useState<ImageFaceType[]>([]);
+  const [facesUploading, setFacesUploading] = useState('');
+  const [imageUploading, setImageUploading] = useState(false);
 
   useEffect(() => {
     if (images && images.length > 0) {
       setFileList(
         images?.map((image) => ({
-          uid: `${image.id}`,
+          edited: false,
+          isFace: image.isFace || false,
           name: `${image.id}.png`,
-          status: 'done',
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          url: `${image.optimised || image.url}`,
+          new: false,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           optimised: `${image.optimised || image.url}`,
+          policeImage: image.policeImage || false,
           position: image.position,
           primary: image.primary || false,
-          policeImage: image.policeImage || false,
-          isFace: image.isFace || false,
           rotation: image.rotation || 0,
-          edited: false,
-          new: false,
+          status: 'done',
+          uid: `${image.id}`,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          url: `${image.optimised || image.url}`,
         }))
       );
       const findPrimaryImage = images.find(({ primary }) => primary)?.id;
       if (findPrimaryImage) setPrimaryImage(findPrimaryImage);
     }
   }, [images]);
+
   const onEditImage = (value: Image) => {
     setImageChange(true);
     setEditImage(null);
@@ -109,21 +115,22 @@ const useEditImageAnalyseList = ({
         // .filter((item) => !item.optimised)
         // .filter((item) => item.new || item.edited || item.deleted)
         .map((item) => ({
-          id: item.uid || `${Math.random()}`,
-          filename: item.fileName || '',
-          mimetype: item.type || '',
-          url: item.url || '',
-          position: item.position,
-          primary: item.uid === primaryImage,
-          policeImage: item.policeImage || false,
-          isFace: item.isFace || false,
-          is: item.policeImage || false,
-          rotation: item.rotation,
+          blurFaces: item.blurFaces,
+          deleted: item.deleted,
           edited:
             (item.edited && !item.new && !item.deleted) ||
             (findPrimaryId === item.uid && findPrimaryId !== primaryImage),
+          filename: item.fileName || '',
+          id: item.uid || `${Math.random()}`,
+          is: item.policeImage || false,
+          isFace: item.isFace || false,
+          mimetype: item.type || '',
           new: item.new,
-          deleted: item.deleted,
+          policeImage: item.policeImage || false,
+          position: item.position,
+          primary: item.uid === primaryImage,
+          rotation: item.rotation,
+          url: item.url || '',
         }));
 
       updateImageList(imagesData);
@@ -147,28 +154,31 @@ const useEditImageAnalyseList = ({
   const imgChange: UploadProps['onChange'] = (
     info: UploadChangeParam<StateImageData>
   ) => {
-    // console.log('imgChange', info);
+    setImageUploading(true);
 
     if (info.file.response && info.file.status === 'done') {
       const uploadImage = info.file.response[0];
 
       if (facialRec && uploadImage.faces && uploadImage.faces.length > 0) {
         setUploadFaces(uploadImage.faces);
+        if (facialDed) setFacesUploading(info.file.uid);
       }
+
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
-          url: info.file.response[0].url,
+          edited: false,
           fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
+          new: true,
           position: ImagePosition.CenterCenter,
           rotation: 0,
-          edited: false,
-          new: true,
+          type: info.file.response[0].mimetype,
+          url: info.file.response[0].url,
         },
       ]);
       setImageChange(true);
+      setImageUploading(false);
     } else {
       setFileList(info.fileList);
       setImageChange(true);
@@ -194,46 +204,94 @@ const useEditImageAnalyseList = ({
     }
   };
   const onSelectFace = (face: ImageFaceType) => {
-    setFileList([
+    let newData = [
       ...fileList,
       {
         ...face,
-        name: Math.floor(Math.random() * 1000).toString(),
+        edited: false,
         fileName: Math.floor(Math.random() * 1000).toString(),
+        isFace: true,
+        name: Math.floor(Math.random() * 1000).toString(),
+        new: true,
+        position: ImagePosition.CenterCenter,
+        rotation: 0,
         type: 'image/jpeg',
         uid: Math.floor(Math.random() * 1000).toString(),
         url: face.imageURL,
-        isFace: true,
-        position: ImagePosition.CenterCenter,
-        rotation: 0,
-        edited: false,
-        new: true,
       },
-    ]);
+    ];
 
+    // setFileList((prevList) => [
+    //   ...prevList,
+    //   {
+    //     ...face,
+    //     edited: false,
+    //     fileName: Math.floor(Math.random() * 1000).toString(),
+    //     isFace: true,
+    //     name: Math.floor(Math.random() * 1000).toString(),
+    //     new: true,
+    //     position: ImagePosition.CenterCenter,
+    //     rotation: 0,
+    //     type: 'image/jpeg',
+    //     uid: Math.floor(Math.random() * 1000).toString(),
+    //     url: face.imageURL,
+    //   },
+    // ]);
+
+    if (facialDed) {
+      // const findIndex = fileList
+      //   .map((item) => item.uid)
+      //   .indexOf(facesUploading);
+
+      const blurFaces = uploadFaces.filter(
+        (el) => el.imageURL !== face.imageURL
+      );
+      newData = newData.map((image) => {
+        if (image.uid === facesUploading) return { ...image, blurFaces };
+        return image;
+      });
+      // setFileList((prevList) =>
+      //   update(prevList, {
+      //     [findIndex]: {
+      //       $set: {
+      //         ...fileList[findIndex],
+      //         blurFaces,
+      //       },
+      //     },
+      //   })
+      // );
+    }
+    setFileList(newData);
+    setFacesUploading('');
     setUploadFaces([]);
   };
   const toggleEditImage = (image?: Image) => {
     setEditImage(image || null);
   };
+  const onCloseSelectFace = () => {
+    setUploadFaces([]);
+    setFacesUploading('');
+  };
 
   return {
-    onSubmit,
-    saving,
-    imgChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
-    fileList: fileList.filter(({ deleted }) => !deleted),
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
     editImage,
-    primaryImage,
-    setPrimaryImage,
-    onSelectFace,
-    setUploadFaces,
-    uploadFaces,
     facialRec,
+    fileList: fileList.filter(({ deleted }) => !deleted),
+    imgChange,
+    onCloseSelectFace,
+    onEditImage,
+    onRemoveImage,
+    onSelectFace,
+    onSubmit,
+    primaryImage,
+    saving,
+    setPrimaryImage,
+    toggleEditImage,
+    uploadFaces,
+    uploading:
+      imageUploading || (!!facesUploading && uploadFaces?.length === 0),
   };
 };
 export default useEditImageAnalyseList;

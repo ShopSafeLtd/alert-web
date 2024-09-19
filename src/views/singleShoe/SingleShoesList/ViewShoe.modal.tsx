@@ -44,6 +44,9 @@ const ViewShoe = ({ data, onClose, open }: Props) => {
       onCancel={() => {
         onClose();
       }}
+      onOk={() => {
+        onClose();
+      }}
       open={open}
       title={intl.formatMessage(
         {

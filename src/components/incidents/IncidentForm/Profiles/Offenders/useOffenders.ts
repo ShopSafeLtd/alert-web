@@ -1,7 +1,7 @@
 import type { FormInstance } from 'antd';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { IdSource } from 'graphql/types';
-import type { AddressData } from 'types/DataType';
+import type { AddressData, BlurFaceData } from 'types/DataType';
 import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 
 import { Form } from 'antd';
@@ -45,6 +45,7 @@ export interface FacesOpenData {
 }
 
 interface ImageType {
+  blurFaces?: BlurFaceData[];
   boundingBox?: {
     height: string;
     left: string;
@@ -192,8 +193,6 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
   };
 
   const onUpdateOffender = (newData: AddOffenderData) => {
-    console.log('onUpdateOffender', newData);
-
     const currentData = offenders.find(({ id }) => id === newData.id);
     if (currentData)
       setOffenders(

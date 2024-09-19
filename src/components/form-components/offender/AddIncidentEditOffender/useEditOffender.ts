@@ -140,6 +140,16 @@ const useEditOffender = ({
     // });
 
     const imageData = value.images.map((item) => ({
+      blurFaces:
+        item.blurFaces && item.blurFaces.length > 0
+          ? item.blurFaces.map((face) => ({
+              blur: true,
+              height: Number(face.BoundingBox.Height),
+              left: Number(face.BoundingBox.Left),
+              top: Number(face.BoundingBox.Top),
+              width: Number(face.BoundingBox.Width),
+            }))
+          : undefined,
       // type: item.file?.response && item.file.response[0].mimetype,
       fileName: item.fileName,
       id: item.id || '',
@@ -213,6 +223,7 @@ const useEditOffender = ({
                     upload: imageData
                       ?.filter((image) => image.new)
                       .map((item) => ({
+                        blurFaces: item.blurFaces,
                         isFace: item.isFace,
                         policeImage: item.policeImage,
                         position: item.position,
@@ -270,6 +281,16 @@ const useEditOffender = ({
           (image) =>
             ({
               ...image.file,
+              blurFaces:
+                image.blurFaces && image.blurFaces.length > 0
+                  ? image.blurFaces.map((face) => ({
+                      blur: true,
+                      height: Number(face.BoundingBox.Height),
+                      left: Number(face.BoundingBox.Left),
+                      top: Number(face.BoundingBox.Top),
+                      width: Number(face.BoundingBox.Width),
+                    }))
+                  : undefined,
               fileName: image.file?.response?.[0].blobName,
               policeImage: false,
               position: ImagePosition.CenterCenter,

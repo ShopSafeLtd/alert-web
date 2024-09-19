@@ -62,7 +62,7 @@ const CompletedChecklistView = ({
     qId: string;
     url: string;
   }[] = [];
-  console.log('signature', signature);
+  console.log('signature1', signature);
 
   let total = 0;
   let maxTotal = 0;

@@ -95,7 +95,6 @@ const ActiveChecklistView = ({
   const theme = useStoreState((state) => state.theme.currentTheme);
 
   const watching = Form.useWatch('sections', form);
-  console.log('signature', data?.activeChecklist.signature);
 
   localStorage.setItem(
     'data',

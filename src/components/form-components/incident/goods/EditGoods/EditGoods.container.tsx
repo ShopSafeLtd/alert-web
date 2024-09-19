@@ -16,7 +16,6 @@ const EditGoods = ({ data, onClose, saving, update }: Props): JSX.Element => {
     data,
     update,
   });
-  console.log('EditGoods', data);
 
   return (
     <div>

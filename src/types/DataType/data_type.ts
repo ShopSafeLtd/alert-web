@@ -182,6 +182,7 @@ export interface InvestigationDetails {
 
 // image
 export interface ImageCardData {
+  blurFaces?: ImageFaceType[];
   deleted?: boolean;
   edited?: boolean;
   fileName?: null | string;
@@ -203,6 +204,7 @@ export interface ImageCardData {
 }
 
 export interface Image extends UploadFile {
+  blurFaces?: ImageFaceType[];
   deleted?: boolean;
   edited?: boolean;
   isFace?: boolean;
@@ -231,6 +233,13 @@ export interface ImageFaceType {
   Gender: 'Female' | 'Male';
   Mustache: boolean;
   imageURL: string;
+}
+export interface BlurFaceData {
+  blur: boolean;
+  height: number;
+  left: number;
+  top: number;
+  width: number;
 }
 
 export interface EditFeedImage {
