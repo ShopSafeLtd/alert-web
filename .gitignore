@@ -26,3 +26,5 @@ vite.config.js
 tsconfig.tsbuildinfo
 
 src/graphql/generated.ts
+
+.DS_Store
