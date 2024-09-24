@@ -11,7 +11,7 @@ const useCanView = ({ currentScheme, schemes, type }: SchemesInput) => {
   const navigate = useNavigate();
 
   const isAllowed = useMemo(() => {
-    if (!schemes) return false;
+    if (!schemes) return true;
 
     if (typeof schemes === 'string') {
       return schemes === currentScheme;
