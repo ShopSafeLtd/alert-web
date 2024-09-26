@@ -62,7 +62,6 @@ interface Props {
   openLightbox: (index: number) => void;
   pagination: { page: number; pageSize: number };
   peculiarities?: string;
-  search?: string;
   selectOffender: (id: string) => void;
   selectedLoading: boolean;
   selectedOffender: OffenderSearchDetailsFragment | null | undefined;
@@ -96,7 +95,6 @@ const AddExistingOffender = ({
   openLightbox,
   pagination,
   peculiarities,
-  search,
   selectOffender,
   selectedLoading,
   selectedOffender,
@@ -202,11 +200,12 @@ const AddExistingOffender = ({
           <DebouncedInput
             allowClear
             className={classes.searchBar}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value);
+            }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search Offenders...',
             })}
-            value={search}
           />
           {selectedOffendersCards()}
           <div
