@@ -60,7 +60,6 @@ const AddExistingOffender = ({
     openLightbox,
     pagination,
     peculiarities,
-    search,
     selectOffender,
     selectedLoading,
     selectedOffender,
@@ -107,7 +106,6 @@ const AddExistingOffender = ({
       openLightbox={openLightbox}
       pagination={pagination}
       peculiarities={peculiarities}
-      search={search}
       selectOffender={selectOffender}
       selectedLoading={selectedLoading}
       selectedOffender={selectedOffender}
