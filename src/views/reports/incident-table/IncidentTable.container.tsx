@@ -1,0 +1,155 @@
+import React from 'react';
+
+import View from './IncidentTable.view';
+import useOffenderTable from './hooks/useIncidentTable';
+
+const PerformanceReport = (): JSX.Element => {
+  const {
+    addLogo,
+    addLogoDrawer,
+    businessesIds,
+    changeSize,
+    componentRef,
+    // createdAt,
+    createdAtMode,
+    crimeGroupIds,
+    data,
+    dateRange,
+    dateRangeMode,
+    editMode,
+    filterCount,
+    filtersOpen,
+    goodsIds,
+    groups,
+    handlePrint,
+    incidentsTableData,
+    isPrinting,
+    layout,
+    loading,
+    logoMetaData,
+    logos,
+    metadata,
+    minDrawer,
+    offenderCount,
+    priorities,
+    redactOnPrint,
+    removeItem,
+    removeLogo,
+    reportData,
+    saveAsDrawer,
+    saveTemplate,
+    saving,
+    schemeId,
+    search,
+    selectTemplate,
+    selectedBrands,
+    selectedGroups,
+    selectedIncidentTypes,
+    selectedIndustries,
+    selectedRoles,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setBusinessesIds,
+    setCreatedAt,
+    setCrimeGroupIds,
+    setDateRange,
+    setEditMode,
+    setGoodsIds,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
+    setOffenderCount,
+    setPriorities,
+    setRedactOnPrint,
+    setSaveAsDrawer,
+    setSearch,
+    setSelectedBrands,
+    setSelectedGroups,
+    setSelectedIncidentTypes,
+    setSelectedIndustries,
+    setSelectedRoles,
+    setTotalValue,
+    setUserIds,
+    tableReportLoading,
+    templates,
+    toggleFiltersOpen,
+    totalValue,
+    userIds,
+  } = useOffenderTable();
+  return (
+    <View
+      addLogo={addLogo}
+      addLogoDrawer={addLogoDrawer}
+      businessesIds={businessesIds}
+      changeSize={changeSize}
+      componentRef={componentRef}
+      // createdAt={createdAt}
+      createdAtMode={createdAtMode}
+      crimeGroupIds={crimeGroupIds}
+      data={data}
+      dateRange={dateRange}
+      dateRangeMode={dateRangeMode}
+      editMode={editMode}
+      filterCount={filterCount}
+      filtersOpen={filtersOpen}
+      goodsIds={goodsIds}
+      groups={groups}
+      handlePrint={handlePrint}
+      incidentsTableData={incidentsTableData}
+      isPrinting={isPrinting}
+      layout={layout}
+      loading={loading}
+      logoMetaData={logoMetaData}
+      logos={logos}
+      metadata={metadata}
+      minDrawer={minDrawer}
+      offenderCount={offenderCount}
+      priorities={priorities}
+      redactOnPrint={redactOnPrint}
+      removeItem={removeItem}
+      removeLogo={removeLogo}
+      reportData={reportData}
+      saveAsDrawer={saveAsDrawer}
+      saveTemplate={saveTemplate}
+      saving={saving}
+      schemeId={schemeId}
+      search={search}
+      selectTemplate={selectTemplate}
+      selectedBrands={selectedBrands}
+      selectedGroups={selectedGroups}
+      selectedIncidentTypes={selectedIncidentTypes}
+      selectedIndustries={selectedIndustries}
+      selectedRoles={selectedRoles}
+      selectedTemplate={selectedTemplate}
+      setAddLogoDrawer={setAddLogoDrawer}
+      setBusinessesIds={setBusinessesIds}
+      setCreatedAt={setCreatedAt}
+      setCrimeGroupIds={setCrimeGroupIds}
+      setDateRange={setDateRange}
+      setEditMode={setEditMode}
+      setGoodsIds={setGoodsIds}
+      setLayout={setLayout}
+      setMetadata={setMetadata}
+      setMinDrawer={setMinDrawer}
+      setOffenderCount={setOffenderCount}
+      setPriorities={setPriorities}
+      setRedactOnPrint={setRedactOnPrint}
+      setSaveAsDrawer={setSaveAsDrawer}
+      setSearch={setSearch}
+      setSelectedBrands={setSelectedBrands}
+      setSelectedGroups={setSelectedGroups}
+      setSelectedIncidentTypes={setSelectedIncidentTypes}
+      setSelectedIndustries={setSelectedIndustries}
+      setSelectedRoles={setSelectedRoles}
+      setTotalValue={setTotalValue}
+      setUserIds={setUserIds}
+      tableReportLoading={tableReportLoading}
+      templates={templates}
+      toggleFiltersOpen={toggleFiltersOpen}
+      totalValue={totalValue}
+      userIds={userIds}
+    />
+  );
+};
+
+export default PerformanceReport;

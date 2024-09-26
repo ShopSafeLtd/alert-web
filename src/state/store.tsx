@@ -1,30 +1,32 @@
 import type { ReactNode } from 'react';
+
+import { StoreProvider, createStore, createTypedHooks } from 'easy-peasy';
 import React from 'react';
-import { createStore, createTypedHooks, StoreProvider } from 'easy-peasy';
 
 import type { AuthModel } from './auth-model';
-import authModel from './auth-model';
-import type { ThemeModel } from './theme-model';
-import themeModel from './theme-model';
-import type { UserModel } from './user-model';
-import userModel from './user-model';
-import type { SchemeModel } from './scheme-model';
-import schemeModel from './scheme-model';
-import type { DataModel } from './data-model';
-import dataModel from './data-model';
-import type { FilterModel } from './filter-model';
-import filterModel from './filter-model';
 import type { DashboardModel } from './dashboard-model';
+import type { DataModel } from './data-model';
+import type { FilterModel } from './filter-model';
+import type { SchemeModel } from './scheme-model';
+import type { ThemeModel } from './theme-model';
+import type { UserModel } from './user-model';
+
+import authModel from './auth-model';
 import dashboardModel from './dashboard-model';
+import dataModel from './data-model';
+import filterModel from './filter-model';
+import schemeModel from './scheme-model';
+import themeModel from './theme-model';
+import userModel from './user-model';
 
 interface StoreModel {
   auth: AuthModel;
-  theme: ThemeModel;
-  user: UserModel;
-  scheme: SchemeModel;
+  dashboard: DashboardModel;
   data: DataModel;
   filter: FilterModel;
-  dashboard: DashboardModel;
+  scheme: SchemeModel;
+  theme: ThemeModel;
+  user: UserModel;
 }
 
 const typedHooks = createTypedHooks<StoreModel>();
@@ -38,12 +40,12 @@ interface GlobalStoreProps {
 }
 export const storeModel: StoreModel = {
   auth: authModel,
-  theme: themeModel,
-  user: userModel,
-  scheme: schemeModel,
+  dashboard: dashboardModel,
   data: dataModel,
   filter: filterModel,
-  dashboard: dashboardModel,
+  scheme: schemeModel,
+  theme: themeModel,
+  user: userModel,
 };
 
 export const Store = ({ children }: GlobalStoreProps): JSX.Element => {

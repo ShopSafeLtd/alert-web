@@ -186,6 +186,7 @@ const OffenderFilter = ({
           </Form.Item>
         </Col>
       </Row>
+
       <Row gutter={16}>
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>

@@ -139,6 +139,7 @@ const EditGoods = ({
           </Col>
         </Row>
       )}
+
       {goodsMode === GoodsMode.Specific && (
         <Row gutter={16}>
           <Col span={12}>

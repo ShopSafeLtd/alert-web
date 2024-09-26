@@ -1,0 +1,18 @@
+query InvestigationTableReport($where: InvestigationTableWhereInput!) {
+  investigationTableReport(where: $where) {
+    total
+    investigationPerformance {
+      id
+      alertId
+      name
+      status
+      totalIncidents
+      totalOffenders
+      totalValue
+      totalRecoveredValue
+      totalSuccessRate
+      createdAt
+      closedAt
+    }
+  }
+}

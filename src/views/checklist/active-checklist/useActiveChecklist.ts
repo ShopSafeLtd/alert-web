@@ -204,10 +204,6 @@ const useActiveChecklist = (): Return => {
               }) || [],
           };
         });
-        console.log(
-          'sectionsAndSubsections',
-          JSON.stringify(sectionsAndSubsections, null, 2)
-        );
 
         form.setFieldsValue({
           additionalInfo: initData?.activeChecklist?.comments || '',

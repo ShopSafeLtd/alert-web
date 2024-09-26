@@ -1,0 +1,123 @@
+import React from 'react';
+
+import View from './ChecklistTable.view';
+import useChecklistTable from './hooks/useChecklistTable';
+
+const PerformanceReport = (): JSX.Element => {
+  const {
+    addLogo,
+    addLogoDrawer,
+    businessesIds,
+    changeSize,
+    checklistsTableData,
+    componentRef,
+    data,
+    dateRange,
+    dateRangeMode,
+    editMode,
+    filterCount,
+    filtersOpen,
+    handlePrint,
+    isPrinting,
+    layout,
+    loading,
+    logoMetaData,
+    logos,
+    metadata,
+    minDrawer,
+    percentComplete,
+    redactOnPrint,
+    removeItem,
+    removeLogo,
+    reportData,
+    saveAsDrawer,
+    saveTemplate,
+    saving,
+    schemeId,
+    score,
+    search,
+    selectTemplate,
+    selectedBrands,
+    selectedIndustries,
+    selectedRoles,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setBusinessesIds,
+    setDateRange,
+    setEditMode,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
+    setPercentComplete,
+    setRedactOnPrint,
+    setSaveAsDrawer,
+    setScore,
+    setSearch,
+    setSelectedBrands,
+    setSelectedIndustries,
+    setSelectedRoles,
+    tableReportLoading,
+    templates,
+    toggleFiltersOpen,
+  } = useChecklistTable();
+  return (
+    <View
+      addLogo={addLogo}
+      addLogoDrawer={addLogoDrawer}
+      businessesIds={businessesIds}
+      changeSize={changeSize}
+      checklistsTableData={checklistsTableData}
+      componentRef={componentRef}
+      data={data}
+      dateRange={dateRange}
+      dateRangeMode={dateRangeMode}
+      editMode={editMode}
+      filterCount={filterCount}
+      filtersOpen={filtersOpen}
+      handlePrint={handlePrint}
+      isPrinting={isPrinting}
+      layout={layout}
+      loading={loading}
+      logoMetaData={logoMetaData}
+      logos={logos}
+      metadata={metadata}
+      minDrawer={minDrawer}
+      percentComplete={percentComplete}
+      redactOnPrint={redactOnPrint}
+      removeItem={removeItem}
+      removeLogo={removeLogo}
+      reportData={reportData}
+      saveAsDrawer={saveAsDrawer}
+      saveTemplate={saveTemplate}
+      saving={saving}
+      schemeId={schemeId}
+      score={score}
+      search={search}
+      selectTemplate={selectTemplate}
+      selectedBrands={selectedBrands}
+      selectedIndustries={selectedIndustries}
+      selectedRoles={selectedRoles}
+      selectedTemplate={selectedTemplate}
+      setAddLogoDrawer={setAddLogoDrawer}
+      setBusinessesIds={setBusinessesIds}
+      setDateRange={setDateRange}
+      setEditMode={setEditMode}
+      setLayout={setLayout}
+      setMetadata={setMetadata}
+      setMinDrawer={setMinDrawer}
+      setPercentComplete={setPercentComplete}
+      setRedactOnPrint={setRedactOnPrint}
+      setSaveAsDrawer={setSaveAsDrawer}
+      setScore={setScore}
+      setSearch={setSearch}
+      setSelectedBrands={setSelectedBrands}
+      setSelectedIndustries={setSelectedIndustries}
+      setSelectedRoles={setSelectedRoles}
+      tableReportLoading={tableReportLoading}
+      templates={templates}
+      toggleFiltersOpen={toggleFiltersOpen}
+    />
+  );
+};
+
+export default PerformanceReport;

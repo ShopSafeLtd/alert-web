@@ -1,51 +1,52 @@
 import React from 'react';
+
 import View from './OffenderFilter.view';
 import useOffenderFilter from './useOffenderFilter';
 
 const OffenderFilter = (): JSX.Element => {
   const {
-    order,
-    setOrder,
-    tags,
-    tagsLoading,
+    businessData,
+    businessesLoading,
     clearFilters,
+    order,
+    publicOffenderDOB,
     setAge,
     setBuild,
+    setBusinesses,
+    setCreatedAtFilter,
     setEthnicity,
     setGroupsFilter,
     setHair,
+    setOrder,
     setPeculiarities,
     setSex,
     setWarnings,
-    businessData,
-    setBusinesses,
-    businessesLoading,
-    setCreatedAtFilter,
+    tags,
+    tagsLoading,
     variables,
-    publicOffenderDOB,
   } = useOffenderFilter();
 
   return (
     <View
-      order={order}
-      setOrder={setOrder}
-      tags={tags}
-      tagsLoading={tagsLoading}
+      businessData={businessData}
+      businessesLoading={businessesLoading}
       clearFilters={clearFilters}
+      order={order}
+      publicOffenderDOB={publicOffenderDOB}
       setAge={setAge}
       setBuild={setBuild}
+      setBusinesses={setBusinesses}
+      setCreatedAtFilter={setCreatedAtFilter}
       setEthnicity={setEthnicity}
       setGroupsFilter={setGroupsFilter}
       setHair={setHair}
+      setOrder={setOrder}
       setPeculiarities={setPeculiarities}
       setSex={setSex}
       setWarnings={setWarnings}
-      businessData={businessData}
-      setBusinesses={setBusinesses}
-      businessesLoading={businessesLoading}
-      setCreatedAtFilter={setCreatedAtFilter}
+      tags={tags}
+      tagsLoading={tagsLoading}
       variables={variables}
-      publicOffenderDOB={publicOffenderDOB}
     />
   );
 };
