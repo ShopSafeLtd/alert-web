@@ -1,32 +1,33 @@
 import React from 'react';
 import { useParams } from 'react-router';
+
 import RoleView from './Role.view';
 import { useRole } from './useRole';
 
 const ViewRoleContainer = ({ create = false }: { create?: boolean }) => {
   const { id } = useParams();
   const {
-    form,
     changed,
+    data,
+    form,
+    loading,
+    onFinish,
+    roleName,
     setChanged,
     submitting,
-    onFinish,
-    data,
-    roleName,
-    loading,
   } = useRole(id, create);
   return (
     <RoleView
-      id={id || ''}
-      create={create}
-      form={form}
       changed={changed}
+      create={create}
+      data={data}
+      form={form}
+      id={id || ''}
+      loading={loading}
+      onFinish={onFinish}
+      roleName={roleName}
       setChanged={setChanged}
       submitting={submitting}
-      onFinish={onFinish}
-      data={data}
-      roleName={roleName}
-      loading={loading}
     />
   );
 };

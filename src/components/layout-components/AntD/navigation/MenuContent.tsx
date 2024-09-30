@@ -128,7 +128,8 @@ const SideNavContent = (props: SideNavContentProps) => {
   const permissions =
     schemes
       .find((scheme) => scheme.scheme.id === schemeId)
-      ?.permissions.map(({ model }) => model) || [];
+      ?.permissions.filter((permItem) => permItem.allowedMethods.length > 0)
+      .map(({ model }) => model) || [];
 
   const { reportOnly } = useStoreState((state) => state.scheme);
 
@@ -167,6 +168,24 @@ const SideNavContent = (props: SideNavContentProps) => {
     [BadgeTypes.notification]: notifications,
     [BadgeTypes.message]: messages,
   };
+
+  console.log(permissions);
+  console.log(
+    navigationConfig
+      .filter((el) => (el.requireDemId ? dem.length > 0 : true))
+      .filter((el) =>
+        el.childPermissions
+          ? el.childPermissions.some((childPermission) =>
+              permissions.includes(childPermission)
+            )
+          : true
+      )
+      .filter((el) =>
+        el.permission
+          ? el.permission.some((i) => permissions.includes(i.model))
+          : true
+      )
+  );
 
   return (
     <div

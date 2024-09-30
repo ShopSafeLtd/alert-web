@@ -1,5 +1,5 @@
-import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import {
   Button,
   Card,
@@ -11,32 +11,34 @@ import {
   Table,
   Typography,
 } from 'antd';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import type {
   Action,
   ExportIncidentsState,
   SelectOption,
 } from './useExportIncidents';
-import DatePicker from '../../../components/util-components/DatePicker';
+
 import Page from '../../../components/shared-components/AntD/Page/Page';
+import DatePicker from '../../../components/util-components/DatePicker';
 
 interface Props {
-  loading: boolean;
-  state: ExportIncidentsState;
-  dispatch: React.Dispatch<Action>;
-  groups: SelectOption[];
-  businesses: SelectOption[];
   crimeGroups: SelectOption[];
+  dispatch: React.Dispatch<Action>;
   getZip: () => void;
+  loading: boolean;
+  selectedGroups: string[];
+  state: ExportIncidentsState;
 }
 
 const ExportIncidentsView = ({
-  dispatch,
-  loading,
-  state,
-  businesses,
-  groups,
   crimeGroups,
+  dispatch,
   getZip,
+  loading,
+  selectedGroups,
+  state,
 }: Props) => {
   const intl = useIntl();
   return (
@@ -45,15 +47,12 @@ const ExportIncidentsView = ({
         <Typography.Title level={3}>
           <FormattedMessage defaultMessage="Export Data" />
         </Typography.Title>
-        <Row style={{ marginBottom: 10 }} gutter={[10, 10]}>
+        <Row gutter={[10, 10]} style={{ marginBottom: 10 }}>
           <Col span={6}>
             <DatePicker.RangePicker
-              style={{ width: '100%', marginLeft: 10 }}
               defaultValue={[state.startDate, state.endDate]}
-              value={[state.startDate, state.endDate]}
               onChange={(value) => {
                 dispatch({
-                  type: 'UPDATE_START_DATE',
                   payload:
                     value?.[0] ||
                     new Date(
@@ -61,88 +60,89 @@ const ExportIncidentsView = ({
                         new Date().setMonth(new Date().getMonth() - 1)
                       ).setHours(0, 0, 59)
                     ),
+                  type: 'UPDATE_START_DATE',
                 });
                 dispatch({
-                  type: 'UPDATE_END_DATE',
                   payload:
                     value?.[1] || new Date(new Date().setHours(23, 59, 59)),
+                  type: 'UPDATE_END_DATE',
                 });
               }}
+              style={{ marginLeft: 10, width: '100%' }}
+              value={[state.startDate, state.endDate]}
             />
           </Col>
           <Col span={4}>
-            <Select
-              style={{ width: '100%', marginLeft: 10 }}
+            <BusinessesSelect
+              allowClear
+              maxTagCount="responsive"
+              mode="multiple"
+              onChange={(value: string[]) => {
+                dispatch({
+                  payload: value,
+                  type: 'UPDATE_BUSINESS_IDS',
+                });
+              }}
+              onClear={() => {
+                dispatch({
+                  payload: [],
+                  type: 'UPDATE_BUSINESS_IDS',
+                });
+              }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select businesses',
               })}
-              mode="multiple"
-              maxTagCount="responsive"
               showSearch
-              allowClear
-              options={businesses}
-              onClear={() => {
-                dispatch({
-                  type: 'UPDATE_BUSINESS_IDS',
-                  payload: [],
-                });
-              }}
-              onChange={(value: string[]) => {
-                dispatch({
-                  type: 'UPDATE_BUSINESS_IDS',
-                  payload: value,
-                });
-              }}
+              style={{ marginLeft: 10, width: '100%' }}
             />
           </Col>
           <Col span={4}>
-            <Select
-              style={{ width: '100%', marginLeft: 10 }}
+            <GroupsSelect
+              allowClear
+              maxTagCount="responsive"
+              mode="multiple"
+              onChange={(value: string[]) => {
+                dispatch({
+                  payload: value,
+                  type: 'UPDATE_GROUP_IDS',
+                });
+              }}
+              onClear={() => {
+                dispatch({
+                  payload: [],
+                  type: 'UPDATE_GROUP_IDS',
+                });
+              }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select groups',
               })}
-              mode="multiple"
               showSearch
-              allowClear
-              maxTagCount="responsive"
-              options={groups}
-              onClear={() => {
-                dispatch({
-                  type: 'UPDATE_GROUP_IDS',
-                  payload: [],
-                });
-              }}
-              onChange={(value: string[]) => {
-                dispatch({
-                  type: 'UPDATE_GROUP_IDS',
-                  payload: value,
-                });
-              }}
+              style={{ marginLeft: 10, width: '100%' }}
             />
           </Col>
           <Col span={4}>
             <Select
-              style={{ width: '100%', marginLeft: 10 }}
+              allowClear
+              maxTagCount="responsive"
+              mode="multiple"
+              onChange={(value: string[]) => {
+                dispatch({
+                  payload: value,
+                  type: 'UPDATE_CRIME_GROUP_IDS',
+                });
+              }}
+              onClear={() => {
+                dispatch({
+                  payload: [],
+                  type: 'UPDATE_CRIME_GROUP_IDS',
+                });
+              }}
+              options={crimeGroups}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select tags',
               })}
-              mode="multiple"
               showSearch
-              maxTagCount="responsive"
-              allowClear
-              options={crimeGroups}
-              onClear={() => {
-                dispatch({
-                  type: 'UPDATE_CRIME_GROUP_IDS',
-                  payload: [],
-                });
-              }}
-              onChange={(value: string[]) => {
-                dispatch({
-                  type: 'UPDATE_CRIME_GROUP_IDS',
-                  payload: value,
-                });
-              }}
+              style={{ marginLeft: 10, width: '100%' }}
             />
           </Col>
           <Col span={6}>
@@ -152,7 +152,11 @@ const ExportIncidentsView = ({
                 justifyContent: 'flex-end',
               }}
             >
-              <Button onClick={getZip} type="primary">
+              <Button
+                disabled={selectedGroups.length === 0}
+                onClick={getZip}
+                type="primary"
+              >
                 {intl.formatMessage({
                   defaultMessage: 'Generate Zip',
                 })}
@@ -161,17 +165,17 @@ const ExportIncidentsView = ({
             <Col flex={1}>
               {state.progress > 0 && (
                 <Progress
+                  percent={state.progress}
+                  size="small"
                   style={{
                     marginTop: 10,
                   }}
-                  size="small"
-                  percent={state.progress}
                 />
               )}
             </Col>
             <Col>
               {state.zipFile && (
-                <a href={state.zipFile} download>
+                <a download href={state.zipFile}>
                   {intl.formatMessage({
                     defaultMessage: 'Download Zip',
                   })}
@@ -180,97 +184,116 @@ const ExportIncidentsView = ({
             </Col>
           </Col>
         </Row>
-        <Row gutter={[10, 10]}>
-          <Col span={4}>
-            <Card>
-              <Statistic
-                title={intl.formatMessage({
-                  defaultMessage: 'Incidents',
-                })}
-                loading={loading}
-                value={state.data.incidentCount}
-              />
-            </Card>
-          </Col>
-          <Col span={4}>
-            <Card>
-              <Statistic
-                title={intl.formatMessage({
-                  defaultMessage: 'Offenders',
-                })}
-                loading={loading}
-                value={state.data.offenderCount}
-              />
-            </Card>
-          </Col>
-          <Col span={4}>
-            <Card>
-              <Statistic
-                title={intl.formatMessage({
-                  defaultMessage: 'Vehicles',
-                })}
-                loading={loading}
-                value={state.data.vehicleCount}
-              />
-            </Card>
-          </Col>
-          <Col span={4}>
-            <Card>
-              <Statistic
-                title={intl.formatMessage({
-                  defaultMessage: 'Incident Items',
-                })}
-                loading={loading}
-                value={state.data.incidentItemsCount}
-              />
-            </Card>
-          </Col>
-          <Col span={4}>
-            <Card>
-              <Statistic
-                title={intl.formatMessage({
-                  defaultMessage: 'Activities',
-                })}
-                loading={loading}
-                value={state.data.activityCount}
-              />
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <Card
-              title={intl.formatMessage({
-                defaultMessage: 'Incidents',
-              })}
-            >
-              <Table
-                loading={loading}
-                pagination={{
-                  hideOnSinglePage: true,
-                }}
-                dataSource={state.data.incidents}
-                columns={[
-                  {
-                    title: intl.formatMessage({
-                      defaultMessage: 'Date',
-                    }),
-                    dataIndex: 'date',
-                    key: 'date',
-                    render: (date: string) => new Date(date).toLocaleString(),
-                  },
-                  {
-                    title: intl.formatMessage({
-                      defaultMessage: 'Description',
-                    }),
-                    dataIndex: 'description',
-                    key: 'description',
-                  },
-                ]}
-              />
-            </Card>
-          </Col>
-        </Row>
+        {selectedGroups.length === 0 && (
+          <Card bodyStyle={{ padding: 30 }}>
+            <Row justify={'center'}>
+              <Col>
+                <Typography.Title level={3} style={{ textAlign: 'center' }}>
+                  <FormattedMessage defaultMessage="Please select at least one group" />
+                </Typography.Title>
+                <Typography.Text>
+                  <FormattedMessage defaultMessage="You need to select at least one group before you can export any data from Alert." />
+                </Typography.Text>
+              </Col>
+            </Row>
+          </Card>
+        )}
+        {selectedGroups.length > 0 && (
+          <>
+            <Row gutter={[10, 10]}>
+              <Col span={4}>
+                <Card>
+                  <Statistic
+                    loading={loading}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Incidents',
+                    })}
+                    value={state.data.incidentCount}
+                  />
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card>
+                  <Statistic
+                    loading={loading}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Offenders',
+                    })}
+                    value={state.data.offenderCount}
+                  />
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card>
+                  <Statistic
+                    loading={loading}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Vehicles',
+                    })}
+                    value={state.data.vehicleCount}
+                  />
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card>
+                  <Statistic
+                    loading={loading}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Incident Items',
+                    })}
+                    value={state.data.incidentItemsCount}
+                  />
+                </Card>
+              </Col>
+              <Col span={4}>
+                <Card>
+                  <Statistic
+                    loading={loading}
+                    title={intl.formatMessage({
+                      defaultMessage: 'Activities',
+                    })}
+                    value={state.data.activityCount}
+                  />
+                </Card>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={12}>
+                <Card
+                  title={intl.formatMessage({
+                    defaultMessage: 'Incidents',
+                  })}
+                >
+                  <Table
+                    columns={[
+                      {
+                        dataIndex: 'date',
+                        key: 'date',
+                        render: (date: string) =>
+                          new Date(date).toLocaleString(),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Date',
+                        }),
+                      },
+                      {
+                        dataIndex: 'description',
+                        key: 'description',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Description',
+                        }),
+                      },
+                    ]}
+                    dataSource={state.data.incidents}
+                    loading={loading}
+                    pagination={{
+                      hideOnSinglePage: true,
+                    }}
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </>
+        )}
       </Page>
     </div>
   );
