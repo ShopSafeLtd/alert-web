@@ -1774,6 +1774,7 @@ export type Business = {
   offenderSettings: OffenderSettings;
   parent?: Maybe<Business>;
   parentId?: Maybe<Scalars['String']>;
+  policeArea: Array<PoliceForce>;
   publicName: Scalars['Boolean'];
   recycled: Scalars['Boolean'];
   reference?: Maybe<Scalars['Int']>;
@@ -5367,6 +5368,49 @@ export type FaceInput = {
   width: Scalars['Float'];
 };
 
+export enum Features {
+  Activities = 'ACTIVITIES',
+  AdvancedActivities = 'ADVANCED_ACTIVITIES',
+  AdvancedDashboard = 'ADVANCED_DASHBOARD',
+  AdvancedIncidentReports = 'ADVANCED_INCIDENT_REPORTS',
+  AdvancedReports = 'ADVANCED_REPORTS',
+  AiCentre = 'AI_CENTRE',
+  AnprMatching = 'ANPR_MATCHING',
+  Articles = 'ARTICLES',
+  AuditTrail = 'AUDIT_TRAIL',
+  Bans = 'BANS',
+  Brands = 'BRANDS',
+  Businesses = 'BUSINESSES',
+  Chat = 'CHAT',
+  Checklist = 'CHECKLIST',
+  CrimeGroups = 'CRIME_GROUPS',
+  CrimeGroupMapping = 'CRIME_GROUP_MAPPING',
+  Dashboard = 'DASHBOARD',
+  DataSharing = 'DATA_SHARING',
+  Documents = 'DOCUMENTS',
+  EmergencyAlerts = 'EMERGENCY_ALERTS',
+  Evidence = 'EVIDENCE',
+  FaceDetection = 'FACE_DETECTION',
+  FaceRecognition = 'FACE_RECOGNITION',
+  Groups = 'GROUPS',
+  Incidents = 'INCIDENTS',
+  Investigations = 'INVESTIGATIONS',
+  InvestigationMapping = 'INVESTIGATION_MAPPING',
+  LinkSuggestions = 'LINK_SUGGESTIONS',
+  Offenders = 'OFFENDERS',
+  OffenderAddresses = 'OFFENDER_ADDRESSES',
+  Rebranding = 'REBRANDING',
+  Reports = 'REPORTS',
+  SingleShoe = 'SINGLE_SHOE',
+  Smartdem = 'SMARTDEM',
+  SubjectAccessRequests = 'SUBJECT_ACCESS_REQUESTS',
+  Users = 'USERS',
+  UserRoles = 'USER_ROLES',
+  Vehicles = 'VEHICLES',
+  WitnessStatements = 'WITNESS_STATEMENTS',
+  Workflows = 'WORKFLOWS'
+}
+
 export type FeedItem = {
   __typename?: 'FeedItem';
   article?: Maybe<Article>;
@@ -6569,6 +6613,7 @@ export enum ImagePosition {
 
 export enum ImageScalarFieldEnum {
   ArtcleColumnId = 'artcleColumnId',
+  BlurFaces = 'blurFaces',
   Card = 'card',
   CreatedAt = 'createdAt',
   FileNames = 'fileNames',
@@ -6917,11 +6962,22 @@ export type Incident = {
   notifications: Array<Notification>;
   offenders: Array<Offender>;
   originalDescription: Scalars['String'];
+  policeDay?: Maybe<Scalars['Boolean']>;
+  policeDistanceFromIncident?: Maybe<Scalars['String']>;
+  policeIncidentDuration?: Maybe<Scalars['String']>;
+  policeInside?: Maybe<Scalars['Boolean']>;
   policeInvolved: Scalars['Boolean'];
+  policeItemsMO?: Maybe<Scalars['String']>;
+  policeKnownBefore?: Maybe<Scalars['Boolean']>;
+  policeMG11?: Maybe<Scalars['Boolean']>;
   policeNo?: Maybe<Scalars['String']>;
+  policeObstructions?: Maybe<Scalars['String']>;
+  policeReasonRemember?: Maybe<Scalars['String']>;
   policeRef?: Maybe<Scalars['String']>;
   policeReported: Scalars['Boolean'];
   policeResponse?: Maybe<PoliceResponseTime>;
+  policeStatement?: Maybe<Scalars['String']>;
+  policeTimePassed?: Maybe<Scalars['String']>;
   priority: IncidentPriority;
   recoveredValue?: Maybe<Scalars['Float']>;
   recycleBin?: Maybe<RecycledItem>;
@@ -8680,6 +8736,11 @@ export type LatestIncident = {
   id: Scalars['String'];
 };
 
+export enum LicenceType {
+  BusinessCount = 'BUSINESS_COUNT',
+  UserCount = 'USER_COUNT'
+}
+
 export type ListActions = {
   __typename?: 'ListActions';
   actions: Array<Action>;
@@ -9877,7 +9938,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData?: Maybe<SystemTask>;
+  mySafetyImportData: SystemTask;
   recycleChecklist: Checklist;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
@@ -12989,23 +13050,37 @@ export enum PermissionMethod {
 export enum PermissionModel {
   Activities = 'ACTIVITIES',
   Articles = 'ARTICLES',
+  Brands = 'BRANDS',
   Businesses = 'BUSINESSES',
   Chat = 'CHAT',
+  ChatGroups = 'CHAT_GROUPS',
   Checklist = 'CHECKLIST',
   CrimeGroups = 'CRIME_GROUPS',
   Dashboard = 'DASHBOARD',
+  DataExport = 'DATA_EXPORT',
+  DataImport = 'DATA_IMPORT',
   Documents = 'DOCUMENTS',
   Evidence = 'EVIDENCE',
+  GeneralSettings = 'GENERAL_SETTINGS',
   Groups = 'GROUPS',
   Incidents = 'INCIDENTS',
+  IncidentOptions = 'INCIDENT_OPTIONS',
   Investigations = 'INVESTIGATIONS',
   Offenders = 'OFFENDERS',
+  OffenderGalleries = 'OFFENDER_GALLERIES',
+  OffenderWarnings = 'OFFENDER_WARNINGS',
+  RecycleBin = 'RECYCLE_BIN',
   Reports = 'REPORTS',
+  Roles = 'ROLES',
   Settings = 'SETTINGS',
+  SharingSettings = 'SHARING_SETTINGS',
   SingleShoe = 'SINGLE_SHOE',
+  StatementTemplates = 'STATEMENT_TEMPLATES',
   Tasks = 'TASKS',
+  Terms = 'TERMS',
   Users = 'USERS',
-  Vehicles = 'VEHICLES'
+  Vehicles = 'VEHICLES',
+  Workflows = 'WORKFLOWS'
 }
 
 export type Permissions = {
@@ -13013,6 +13088,10 @@ export type Permissions = {
   allowedMethods: Array<PermissionMethod>;
   model: PermissionModel;
 };
+
+export enum PoliceForce {
+  Nottinghamshire = 'NOTTINGHAMSHIRE'
+}
 
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
@@ -13172,7 +13251,6 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
-  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -15873,6 +15951,7 @@ export type Scheme = {
   documents: Array<Document>;
   facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
+  facialRedaction: Scalars['Boolean'];
   feedItems: Array<FeedItem>;
   goodsMode: GoodsMode;
   groups: Array<Group>;
@@ -15917,6 +15996,8 @@ export type Scheme = {
   restrictIncidentAccess: Scalars['Boolean'];
   roles: Array<CustomRole>;
   schemeTags: Array<Tag>;
+  sharingFrom: Array<SharingConfig>;
+  sharingTo: Array<SharingConfig>;
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
   tagOrders: Array<TagOrder>;
@@ -16406,6 +16487,7 @@ export type SchemeCreateInput = {
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   facialDetection?: InputMaybe<Scalars['Boolean']>;
   facialRecognition?: InputMaybe<Scalars['Boolean']>;
+  facialRedaction?: InputMaybe<Scalars['Boolean']>;
   goodsMode?: InputMaybe<GoodsMode>;
   imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
@@ -16477,6 +16559,7 @@ export type SchemeOrderByWithRelationInput = {
   documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
   facialDetection?: InputMaybe<SortOrder>;
   facialRecognition?: InputMaybe<SortOrder>;
+  facialRedaction?: InputMaybe<SortOrder>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   goodsMode?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
@@ -16556,6 +16639,7 @@ export enum SchemeScalarFieldEnum {
   DefaultSubscribedOffenderOnly = 'defaultSubscribedOffenderOnly',
   FacialDetection = 'facialDetection',
   FacialRecognition = 'facialRecognition',
+  FacialRedaction = 'facialRedaction',
   GoodsMode = 'goodsMode',
   Id = 'id',
   ImagesRequiredOnOffenders = 'imagesRequiredOnOffenders',
@@ -16577,6 +16661,21 @@ export enum SchemeScalarFieldEnum {
   UseBusinessGroupsOnIncident = 'useBusinessGroupsOnIncident'
 }
 
+export type SchemeTier = {
+  __typename?: 'SchemeTier';
+  adminLimit: Scalars['Int'];
+  businessLimit: Scalars['Int'];
+  hadTrial: Scalars['Boolean'];
+  id: Scalars['String'];
+  licenceType: LicenceType;
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  tier: Tier;
+  tierId: Scalars['String'];
+  trialExpiresAt?: Maybe<Scalars['Date']>;
+  userLimit: Scalars['Int'];
+};
+
 export type SchemeUpdateInput = {
   activityAssignToUser?: InputMaybe<SetBooleanHelper>;
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
@@ -16595,6 +16694,7 @@ export type SchemeUpdateInput = {
   defaultSubscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
   facialDetection?: InputMaybe<SetBooleanHelper>;
   facialRecognition?: InputMaybe<SetBooleanHelper>;
+  facialRedaction?: InputMaybe<SetBooleanHelper>;
   goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
   imagesRequiredOnOffenders?: InputMaybe<SetBooleanHelper>;
   incidentRetention?: InputMaybe<SetIntHelper>;
@@ -16649,6 +16749,7 @@ export type SchemeWhereInput = {
   documents?: InputMaybe<DocumentListRelationFilter>;
   facialDetection?: InputMaybe<BoolFilter>;
   facialRecognition?: InputMaybe<BoolFilter>;
+  facialRedaction?: InputMaybe<BoolFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   goodsMode?: InputMaybe<EnumGoodsModeFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
@@ -16740,6 +16841,7 @@ export type SchemeWhereUniqueInput = {
   documents?: InputMaybe<DocumentListRelationFilter>;
   facialDetection?: InputMaybe<BoolFilter>;
   facialRecognition?: InputMaybe<BoolFilter>;
+  facialRedaction?: InputMaybe<BoolFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   goodsMode?: InputMaybe<EnumGoodsModeFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
@@ -17750,6 +17852,7 @@ export type Tag = {
   orders: Array<TagOrder>;
   parentTag?: Maybe<Tag>;
   parentTagId?: Maybe<Scalars['String']>;
+  policeReporting: Scalars['Boolean'];
   recycleBin?: Maybe<RecycledItem>;
   recycled?: Maybe<Scalars['Boolean']>;
   scheme: Scheme;
@@ -18548,6 +18651,15 @@ export type TermsAndConditionWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
   userTerms?: InputMaybe<UserTermListRelationFilter>;
   version?: InputMaybe<IntFilter>;
+};
+
+export type Tier = {
+  __typename?: 'Tier';
+  description?: Maybe<Scalars['String']>;
+  features: Array<Features>;
+  id: Scalars['String'];
+  name: Scalars['String'];
+  schemes: Array<SchemeTier>;
 };
 
 export type TimeHeatMap = {
@@ -19515,6 +19627,7 @@ export type UploadArticleImage = {
 };
 
 export type UploadIncidentImage = {
+  blurFaces?: InputMaybe<Array<FaceInput>>;
   file?: InputMaybe<Scalars['Upload']>;
   isFace?: InputMaybe<Scalars['Boolean']>;
   offenders?: InputMaybe<Array<ImageOffender>>;
@@ -19538,6 +19651,7 @@ export type UploadIncidentOptimisticImage = {
 };
 
 export type UploadOffenderImage = {
+  blurFaces?: InputMaybe<Array<FaceInput>>;
   file?: InputMaybe<Scalars['Upload']>;
   isFace?: InputMaybe<Scalars['Boolean']>;
   policeImage?: InputMaybe<Scalars['Boolean']>;
