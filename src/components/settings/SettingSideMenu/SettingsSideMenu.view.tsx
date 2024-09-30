@@ -46,110 +46,111 @@ const SettingsSideMenu = ({
       to: '/app/scheme-settings/brands',
     },
     {
-      permissions: [PermissionModel.Settings, PermissionModel.Groups],
+      permissions: [PermissionModel.Settings, PermissionModel.Roles],
       title: intl.formatMessage({ defaultMessage: 'Roles' }),
       to: '/app/scheme-settings/roles',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.Groups],
       title: intl.formatMessage({
         defaultMessage: 'Content Groups',
       }),
       to: '/app/scheme-settings/groups',
     },
     {
-      permissions: [PermissionModel.Settings, PermissionModel.Chat],
+      permissions: [PermissionModel.Settings, PermissionModel.ChatGroups],
       title: intl.formatMessage({
         defaultMessage: 'Chat Groups',
       }),
       to: '/app/scheme-settings/chat-groups',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.GeneralSettings],
       title: intl.formatMessage({
         defaultMessage: 'General Settings',
       }),
       to: '/app/scheme-settings/scheme',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.SharingSettings],
       title: intl.formatMessage({
         defaultMessage: 'Sharing Settings',
       }),
       to: '/app/scheme-settings/scheme-sharing',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.Dashboard],
       title: intl.formatMessage({ defaultMessage: 'Dashboards' }),
       to: '/app/manage-dashboard/',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.IncidentOptions],
       title: intl.formatMessage({
         defaultMessage: 'Incident Options',
       }),
       to: '/app/scheme-settings/crime-types',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.OffenderWarnings],
       title: intl.formatMessage({
         defaultMessage: 'Offender Warnings',
       }),
       to: '/app/scheme-settings/offender-warnings',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [
+        PermissionModel.Settings,
+        PermissionModel.OffenderGalleries,
+      ],
       title: intl.formatMessage({
         defaultMessage: 'Offender Galleries',
       }),
       to: '/app/scheme-settings/custom-galleries',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.Workflows],
       title: intl.formatMessage({
         defaultMessage: 'Workflows',
       }),
       to: '/app/scheme-settings/workflow',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [
+        PermissionModel.Settings,
+        PermissionModel.StatementTemplates,
+      ],
       title: intl.formatMessage({
         defaultMessage: 'Statement Templates',
       }),
       to: '/app/scheme-settings/statement-templates',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.Terms],
       title: intl.formatMessage({
         defaultMessage: 'Terms & Conditions',
       }),
       to: '/app/scheme-settings/terms',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.DataImport],
       title: intl.formatMessage({
         defaultMessage: 'Data Import',
       }),
       to: '/app/scheme-settings/data-import',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.DataExport],
       title: intl.formatMessage({
         defaultMessage: 'Data Export',
       }),
       to: '/app/scheme-settings/data-export/export-incidents',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: [PermissionModel.Settings, PermissionModel.RecycleBin],
       title: intl.formatMessage({
         defaultMessage: 'Recycle Bin',
       }),
       to: '/app/scheme-settings/recycle-bin',
-    },
-    {
-      permissions: [PermissionModel.Settings],
-      title: intl.formatMessage({ defaultMessage: 'Dashboards' }),
-      to: '/app/manage-dashboard/',
     },
   ];
 
