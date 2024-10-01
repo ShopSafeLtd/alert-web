@@ -56,6 +56,7 @@ export const availableCheckBoxes: {
     PermissionMethod.Delete,
   ],
   DASHBOARD: [PermissionMethod.Read],
+  DASHBOARDS: [PermissionMethod.Read],
   DATA_EXPORT: [PermissionMethod.Read],
   DATA_IMPORT: [PermissionMethod.Read],
   DOCUMENTS: [

@@ -5386,6 +5386,7 @@ export enum Features {
   CrimeGroups = 'CRIME_GROUPS',
   CrimeGroupMapping = 'CRIME_GROUP_MAPPING',
   Dashboard = 'DASHBOARD',
+  Dashboards = 'DASHBOARDS',
   DataSharing = 'DATA_SHARING',
   Documents = 'DOCUMENTS',
   EmergencyAlerts = 'EMERGENCY_ALERTS',
