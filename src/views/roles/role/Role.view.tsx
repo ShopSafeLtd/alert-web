@@ -141,6 +141,9 @@ const RoleView = ({
     DASHBOARD: formatMessage({
       defaultMessage: 'Dashboard',
     }),
+    DASHBOARDS: formatMessage({
+      defaultMessage: 'Dashboard Settings',
+    }),
     DATA_EXPORT: formatMessage({
       defaultMessage: 'Data Export',
     }),
