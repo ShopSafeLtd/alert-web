@@ -19,14 +19,18 @@ interface Return {
   handlePrint: () => void;
   loading: boolean;
   search: string;
+  selectedBusinessGroups: string[];
   selectedBusinesses: string[];
+  selectedDataBrands: string[];
   selectedGroups: string[];
   selectedRoles: string[];
   setDateRange: (
     dateRange: { endDate: Date; startDate: Date } | undefined
   ) => void;
   setSearch: (value: string) => void;
+  setSelectedBusinessGroups: (groups: string[]) => void;
   setSelectedBusinesses: (value: string[]) => void;
+  setSelectedDataBrands: (groups: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
   setSelectedRoles: (value: string[]) => void;
   toggleFiltersOpen: () => void;
@@ -42,6 +46,10 @@ const useUserEngagement = (): Return => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [search, setSearch] = useState<string>('');
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [selectedBusinessGroups, setSelectedBusinessGroups] = useState<
+    string[]
+  >([]);
+  const [selectedDataBrands, setSelectedDataBrands] = useState<string[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedBusinesses, setSelectedBusinesses] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
@@ -67,6 +75,12 @@ const useUserEngagement = (): Return => {
     variables: {
       where: {
         businessesIds: selectedBusinesses ?? [],
+        dataBusinessBrandsIds:
+          selectedDataBrands.length > 0 ? selectedDataBrands : undefined,
+        dataBusinessGroupIds:
+          selectedBusinessGroups.length > 0
+            ? selectedBusinessGroups
+            : undefined,
         dateRange,
         groupIds:
           selectedGroups.length > 0
@@ -74,6 +88,7 @@ const useUserEngagement = (): Return => {
             : groups.map(({ value: id }) => id),
         rolesIds: selectedRoles ?? [],
         schemeIds: [currentScheme],
+        search,
       },
     },
   });
@@ -146,12 +161,16 @@ const useUserEngagement = (): Return => {
     handlePrint,
     loading,
     search,
+    selectedBusinessGroups,
     selectedBusinesses,
+    selectedDataBrands,
     selectedGroups,
     selectedRoles,
     setDateRange: onSetDateRange,
     setSearch,
+    setSelectedBusinessGroups,
     setSelectedBusinesses,
+    setSelectedDataBrands,
     setSelectedGroups,
     setSelectedRoles,
     toggleFiltersOpen,

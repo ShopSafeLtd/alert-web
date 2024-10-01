@@ -20410,6 +20410,8 @@ export type UserContributionWhereInput = {
   brandsIds?: InputMaybe<Array<Scalars['String']>>;
   businessesIds?: InputMaybe<Array<Scalars['String']>>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
+  dataBusinessBrandsIds?: InputMaybe<Array<Scalars['String']>>;
+  dataBusinessGroupIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   incidentTypeIds?: InputMaybe<Array<Scalars['String']>>;
