@@ -13057,7 +13057,6 @@ export enum PermissionModel {
   Checklist = 'CHECKLIST',
   CrimeGroups = 'CRIME_GROUPS',
   Dashboard = 'DASHBOARD',
-  Dashboards = 'DASHBOARDS',
   DataExport = 'DATA_EXPORT',
   DataImport = 'DATA_IMPORT',
   Documents = 'DOCUMENTS',
