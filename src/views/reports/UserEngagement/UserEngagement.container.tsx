@@ -1,45 +1,54 @@
 import React from 'react';
+
 import View from './UserEngagement.view';
 import useBusinessEngagement from './useUserEngagement';
 
 const PerformanceReport = () => {
   const {
-    data,
-    loading,
-    setDateRange,
-    dateRange,
-    setSelectedGroups,
-    selectedGroups,
-    handlePrint,
     componentRef,
+    data,
+    dateRange,
     filtersOpen,
-    toggleFiltersOpen,
-    setSelectedRoles,
-    setSelectedBusinesses,
-    selectedBusinesses,
-    selectedRoles,
+    handlePrint,
+    loading,
     search,
+    selectedBusinessGroups,
+    selectedBusinesses,
+    selectedDataBrands,
+    selectedGroups,
+    selectedRoles,
+    setDateRange,
     setSearch,
+    setSelectedBusinessGroups,
+    setSelectedBusinesses,
+    setSelectedDataBrands,
+    setSelectedGroups,
+    setSelectedRoles,
+    toggleFiltersOpen,
   } = useBusinessEngagement();
 
   return (
     <View
-      setSelectedGroups={setSelectedGroups}
-      selectedGroups={selectedGroups}
-      loading={loading}
-      data={data}
-      setDateRange={setDateRange}
-      dateRange={dateRange}
-      handlePrint={handlePrint}
       componentRef={componentRef}
+      data={data}
+      dateRange={dateRange}
       filtersOpen={filtersOpen}
-      toggleFiltersOpen={toggleFiltersOpen}
-      setSelectedRoles={setSelectedRoles}
-      setSelectedBusinesses={setSelectedBusinesses}
-      selectedBusinesses={selectedBusinesses}
-      selectedRoles={selectedRoles}
+      handlePrint={handlePrint}
+      loading={loading}
       search={search}
+      selectedBusinessGroups={selectedBusinessGroups}
+      selectedBusinesses={selectedBusinesses}
+      selectedDataBrands={selectedDataBrands}
+      selectedGroups={selectedGroups}
+      selectedRoles={selectedRoles}
+      setDateRange={setDateRange}
       setSearch={setSearch}
+      setSelectedBusinessGroups={setSelectedBusinessGroups}
+      setSelectedBusinesses={setSelectedBusinesses}
+      setSelectedDataBrands={setSelectedDataBrands}
+      setSelectedGroups={setSelectedGroups}
+      setSelectedRoles={setSelectedRoles}
+      toggleFiltersOpen={toggleFiltersOpen}
     />
   );
 };
