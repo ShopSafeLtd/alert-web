@@ -1,18 +1,19 @@
 import React from 'react';
-import useExportIncidents from './useExportIncidents';
+
 import View from './exportIncidents.view';
+import useExportIncidents from './useExportIncidents';
 
 const ExportIncidentsContainer = () => {
-  const { loading, state, dispatch, getZip } = useExportIncidents();
+  const { dispatch, getZip, loading, selectedGroups, state } =
+    useExportIncidents();
   return (
     <View
-      loading={loading}
-      state={state}
-      dispatch={dispatch}
-      businesses={state.businessOptions}
-      groups={state.groupOptions}
       crimeGroups={state.crimeGroupOptions}
+      dispatch={dispatch}
       getZip={getZip}
+      loading={loading}
+      selectedGroups={selectedGroups}
+      state={state}
     />
   );
 };
