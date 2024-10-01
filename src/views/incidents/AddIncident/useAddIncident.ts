@@ -114,7 +114,7 @@ export interface FormData {
     stockItem?: string;
     value?: number;
   }[];
-  groups: string[];
+  groups?: string[];
   hasVictims: boolean;
   images?: StateImageData[];
   involvedTags?: [];
@@ -542,7 +542,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups.map((id) => ({ id })),
+                          : data.groups?.map((id) => ({ id })) ?? [],
                     },
                     hair: offender.hair || null,
                     height: offender.height || null,
@@ -643,7 +643,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     connect:
                       groups && groups.length === 1
                         ? groups.map(({ value: id }) => ({ id }))
-                        : data.groups.map((id) => ({ id })),
+                        : data.groups?.map((id) => ({ id })) ?? [],
                   },
                   localId: vehicle.id,
                   make: vehicle.make,
@@ -660,7 +660,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups.map((id) => ({ id })),
+                          : data.groups?.map((id) => ({ id })) ?? [],
                     },
                     make: { set: vehicle.make },
                     model: { set: vehicle.model },
@@ -783,7 +783,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             groups:
               groups && groups.length === 1
                 ? groups.map(({ value: id }) => ({ id }))
-                : data.groups.map((id) => ({ id })),
+                : data.groups?.map((id) => ({ id })) ?? [],
             images: getImages(),
             investigationId: investigationId || null,
             items: data.goods
