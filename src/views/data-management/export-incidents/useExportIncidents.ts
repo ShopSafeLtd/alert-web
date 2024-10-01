@@ -1,11 +1,14 @@
 import type { Dispatch } from 'react';
 
+import { useStoreState } from '#/state';
 import { useCreateCsvZipMutation } from '#/views/data-management/export-incidents/graphql/mutations/__generated__/create-zip.generated';
 import { usePreviewIncidentExportQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/export-incidents-preview.generated';
 import { useExportFiltersQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/scheme-details.generated';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { useEffect, useReducer, useRef } from 'react';
 
-import { useStoreState } from '../../../state';
+dayjs.extend(utc);
 
 interface Return {
   dispatch: Dispatch<Action>;
@@ -201,8 +204,8 @@ const useExportIncidents = (): Return => {
         businessIds: state.businessIds,
         crimeGroupIds: state.crimeGroupIds,
         dateRange: {
-          endDate: state.endDate,
-          startDate: state.startDate,
+          endDate: dayjs.utc(state.endDate).hour(23).minute(59).toDate(),
+          startDate: dayjs.utc(state.startDate).hour(0).minute(1).toDate(),
         },
         groupIds: state.groupIds,
       },
@@ -270,8 +273,8 @@ const useExportIncidents = (): Return => {
           businessIds: state.businessIds,
           crimeGroupIds: state.crimeGroupIds,
           dateRange: {
-            endDate: state.endDate,
-            startDate: state.startDate,
+            endDate: dayjs.utc(state.endDate).hour(23).minute(59).toDate(),
+            startDate: dayjs.utc(state.startDate).hour(0).minute(1).toDate(),
           },
           groupIds: state.groupIds,
         },

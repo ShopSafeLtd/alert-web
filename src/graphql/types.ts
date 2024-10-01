@@ -13057,6 +13057,7 @@ export enum PermissionModel {
   Checklist = 'CHECKLIST',
   CrimeGroups = 'CRIME_GROUPS',
   Dashboard = 'DASHBOARD',
+  Dashboards = 'DASHBOARDS',
   DataExport = 'DATA_EXPORT',
   DataImport = 'DATA_IMPORT',
   Documents = 'DOCUMENTS',
@@ -20410,6 +20411,8 @@ export type UserContributionWhereInput = {
   brandsIds?: InputMaybe<Array<Scalars['String']>>;
   businessesIds?: InputMaybe<Array<Scalars['String']>>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
+  dataBusinessBrandsIds?: InputMaybe<Array<Scalars['String']>>;
+  dataBusinessGroupIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   incidentTypeIds?: InputMaybe<Array<Scalars['String']>>;
