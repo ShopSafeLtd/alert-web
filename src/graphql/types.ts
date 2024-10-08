@@ -13180,23 +13180,38 @@ export enum PermissionMethod {
 export enum PermissionModel {
   Activities = 'ACTIVITIES',
   Articles = 'ARTICLES',
+  Brands = 'BRANDS',
   Businesses = 'BUSINESSES',
   Chat = 'CHAT',
+  ChatGroups = 'CHAT_GROUPS',
   Checklist = 'CHECKLIST',
   CrimeGroups = 'CRIME_GROUPS',
   Dashboard = 'DASHBOARD',
+  Dashboards = 'DASHBOARDS',
+  DataExport = 'DATA_EXPORT',
+  DataImport = 'DATA_IMPORT',
   Documents = 'DOCUMENTS',
   Evidence = 'EVIDENCE',
+  GeneralSettings = 'GENERAL_SETTINGS',
   Groups = 'GROUPS',
   Incidents = 'INCIDENTS',
+  IncidentOptions = 'INCIDENT_OPTIONS',
   Investigations = 'INVESTIGATIONS',
   Offenders = 'OFFENDERS',
+  OffenderGalleries = 'OFFENDER_GALLERIES',
+  OffenderWarnings = 'OFFENDER_WARNINGS',
+  RecycleBin = 'RECYCLE_BIN',
   Reports = 'REPORTS',
+  Roles = 'ROLES',
   Settings = 'SETTINGS',
+  SharingSettings = 'SHARING_SETTINGS',
   SingleShoe = 'SINGLE_SHOE',
+  StatementTemplates = 'STATEMENT_TEMPLATES',
   Tasks = 'TASKS',
+  Terms = 'TERMS',
   Users = 'USERS',
-  Vehicles = 'VEHICLES'
+  Vehicles = 'VEHICLES',
+  Workflows = 'WORKFLOWS'
 }
 
 export type Permissions = {
@@ -16136,6 +16151,8 @@ export type Scheme = {
   restrictIncidentAccess: Scalars['Boolean'];
   roles: Array<CustomRole>;
   schemeTags: Array<Tag>;
+  sharingFrom: Array<SharingConfig>;
+  sharingTo: Array<SharingConfig>;
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
   tagOrders: Array<TagOrder>;
@@ -20553,6 +20570,8 @@ export type UserContributionWhereInput = {
   brandsIds?: InputMaybe<Array<Scalars['String']>>;
   businessesIds?: InputMaybe<Array<Scalars['String']>>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
+  dataBusinessBrandsIds?: InputMaybe<Array<Scalars['String']>>;
+  dataBusinessGroupIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   incidentTypeIds?: InputMaybe<Array<Scalars['String']>>;

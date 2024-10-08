@@ -1,16 +1,20 @@
 import type { Dispatch } from 'react';
 
+import { useStoreState } from '#/state';
 import { useCreateCsvZipMutation } from '#/views/data-management/export-incidents/graphql/mutations/__generated__/create-zip.generated';
 import { usePreviewIncidentExportQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/export-incidents-preview.generated';
 import { useExportFiltersQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/scheme-details.generated';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { useEffect, useReducer, useRef } from 'react';
 
-import { useStoreState } from '../../../state';
+dayjs.extend(utc);
 
 interface Return {
   dispatch: Dispatch<Action>;
   getZip: () => void;
   loading: boolean;
+  selectedGroups: string[];
   state: ExportIncidentsState;
 }
 
@@ -48,7 +52,6 @@ type Options = 'businessOptions' | 'crimeGroupOptions' | 'groupOptions';
 
 export interface ExportIncidentsState {
   businessIds: string[];
-  businessOptions: SelectOption[];
   crimeGroupIds: string[];
   crimeGroupOptions: SelectOption[];
   data: {
@@ -65,7 +68,6 @@ export interface ExportIncidentsState {
   };
   endDate: Date;
   groupIds: string[];
-  groupOptions: SelectOption[];
   progress: number;
   skip: number;
   startDate: Date;
@@ -78,7 +80,6 @@ const useExportIncidents = (): Return => {
 
   const initialState: ExportIncidentsState = {
     businessIds: [],
-    businessOptions: [],
     crimeGroupIds: [],
     crimeGroupOptions: [],
     data: {
@@ -91,7 +92,6 @@ const useExportIncidents = (): Return => {
     },
     endDate: new Date(),
     groupIds: [],
-    groupOptions: [],
     progress: 0,
     skip: 0,
     startDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
@@ -196,6 +196,7 @@ const useExportIncidents = (): Return => {
         });
       }
     },
+    skip: state.groupIds.length === 0,
     variables: {
       skip: state.skip,
       take: state.take,
@@ -203,8 +204,8 @@ const useExportIncidents = (): Return => {
         businessIds: state.businessIds,
         crimeGroupIds: state.crimeGroupIds,
         dateRange: {
-          endDate: state.endDate,
-          startDate: state.startDate,
+          endDate: dayjs.utc(state.endDate).hour(23).minute(59).toDate(),
+          startDate: dayjs.utc(state.startDate).hour(0).minute(1).toDate(),
         },
         groupIds: state.groupIds,
       },
@@ -215,17 +216,7 @@ const useExportIncidents = (): Return => {
     onCompleted: (filterOptions) => {
       if (filterOptions && filterOptions?.scheme) {
         // eslint-disable-next-line no-unsafe-optional-chaining
-        const { businesses, groups, schemeTags } = filterOptions?.scheme;
-
-        const groupOptions = groups.map((group) => ({
-          label: group.name,
-          value: group.id,
-        }));
-
-        const businessOptions = businesses.map((business) => ({
-          label: business.name,
-          value: business.id,
-        }));
+        const { schemeTags } = filterOptions?.scheme;
 
         const schemeTagsOptions = schemeTags.map((schemeTag) => ({
           label: schemeTag.name,
@@ -234,9 +225,9 @@ const useExportIncidents = (): Return => {
 
         dispatch({
           payload: {
-            businessOptions,
+            businessOptions: [],
             crimeGroupOptions: [...schemeTagsOptions],
-            groupOptions,
+            groupOptions: [],
           },
           type: 'SET_OPTIONS',
         });
@@ -282,8 +273,8 @@ const useExportIncidents = (): Return => {
           businessIds: state.businessIds,
           crimeGroupIds: state.crimeGroupIds,
           dateRange: {
-            endDate: state.endDate,
-            startDate: state.startDate,
+            endDate: dayjs.utc(state.endDate).hour(23).minute(59).toDate(),
+            startDate: dayjs.utc(state.startDate).hour(0).minute(1).toDate(),
           },
           groupIds: state.groupIds,
         },
@@ -336,6 +327,7 @@ const useExportIncidents = (): Return => {
     dispatch,
     getZip,
     loading: loading || filtersLoading,
+    selectedGroups: state.groupIds,
     state,
   };
 };

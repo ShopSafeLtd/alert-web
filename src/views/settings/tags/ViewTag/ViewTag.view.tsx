@@ -263,17 +263,10 @@ const ViewTag = ({
               <FormattedMessage defaultMessage="Groups" />
             </Col>
             <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Is required',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.GROUPS}
-                  disabled
-                  onChange={() => {}}
-                />
-              </Tooltip>
+              <Checkbox
+                checked={incidentFormFields.GROUPS}
+                onChange={() => toggleField(IncidentFormField.Groups)}
+              />
             </Col>
           </Row>
         </Card>

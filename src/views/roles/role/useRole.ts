@@ -36,9 +36,11 @@ export function useRole(id: string | undefined, create: boolean): Props {
   const [submitting, setSubmitting] = useState(false);
   const { id: schemeId } = useStoreState((state) => state.scheme || { id: '' });
   const [updatePermissions] = useUpsertPermissionMutation({
-    onCompleted: () => {
+    onCompleted: (res) => {
       setSubmitting(false);
       setChanged(false);
+      if (create)
+        navigate(`/app/scheme-settings/roles/${res.upsertPermission.id}`);
     },
     onError: () => {
       setSubmitting(false);
@@ -47,10 +49,6 @@ export function useRole(id: string | undefined, create: boolean): Props {
   const onFinish = (values: FormValues) => {
     setSubmitting(true);
     void updatePermissions({
-      onCompleted: (res) => {
-        if (create)
-          navigate(`/app/scheme-settings/roles/${res.upsertPermission.id}`);
-      },
       variables: {
         data: {
           name: values.name,

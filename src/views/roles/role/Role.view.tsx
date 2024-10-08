@@ -120,11 +120,17 @@ const RoleView = ({
     ARTICLES: formatMessage({
       defaultMessage: 'Bulletins',
     }),
+    BRANDS: formatMessage({
+      defaultMessage: 'Brands',
+    }),
     BUSINESSES: formatMessage({
       defaultMessage: 'Businesses',
     }),
     CHAT: formatMessage({
       defaultMessage: 'Chat',
+    }),
+    CHAT_GROUPS: formatMessage({
+      defaultMessage: 'Chat Groups',
     }),
     CHECKLIST: formatMessage({
       defaultMessage: 'Checklist',
@@ -135,14 +141,29 @@ const RoleView = ({
     DASHBOARD: formatMessage({
       defaultMessage: 'Dashboard',
     }),
+    DASHBOARDS: formatMessage({
+      defaultMessage: 'Dashboard Settings',
+    }),
+    DATA_EXPORT: formatMessage({
+      defaultMessage: 'Data Export',
+    }),
+    DATA_IMPORT: formatMessage({
+      defaultMessage: 'Data Import',
+    }),
     DOCUMENTS: formatMessage({
       defaultMessage: 'Documents',
     }),
     EVIDENCE: formatMessage({
       defaultMessage: 'Evidence',
     }),
+    GENERAL_SETTINGS: formatMessage({
+      defaultMessage: 'General Settings',
+    }),
     GROUPS: formatMessage({
       defaultMessage: 'Groups',
+    }),
+    INCIDENT_OPTIONS: formatMessage({
+      defaultMessage: 'Incident Options',
     }),
     INCIDENTS: formatMessage({
       defaultMessage: 'Incidents',
@@ -150,26 +171,50 @@ const RoleView = ({
     INVESTIGATIONS: formatMessage({
       defaultMessage: 'Investigations',
     }),
+    OFFENDER_GALLERIES: formatMessage({
+      defaultMessage: 'Offender Galleries',
+    }),
+    OFFENDER_WARNINGS: formatMessage({
+      defaultMessage: 'Offender Warnings',
+    }),
     OFFENDERS: formatMessage({
       defaultMessage: 'Offenders',
+    }),
+    RECYCLE_BIN: formatMessage({
+      defaultMessage: 'Recycle Bin',
     }),
     REPORTS: formatMessage({
       defaultMessage: 'Reports',
     }),
+    ROLES: formatMessage({
+      defaultMessage: 'Roles',
+    }),
     SETTINGS: formatMessage({
       defaultMessage: 'Settings',
+    }),
+    SHARING_SETTINGS: formatMessage({
+      defaultMessage: 'Sharing Settings',
     }),
     SINGLE_SHOE: formatMessage({
       defaultMessage: 'Single Shoe',
     }),
+    STATEMENT_TEMPLATES: formatMessage({
+      defaultMessage: 'Statement Templates',
+    }),
     TASKS: formatMessage({
       defaultMessage: 'Tasks',
+    }),
+    TERMS: formatMessage({
+      defaultMessage: 'Terms',
     }),
     USERS: formatMessage({
       defaultMessage: 'Users',
     }),
     VEHICLES: formatMessage({
       defaultMessage: 'Vehicles',
+    }),
+    WORKFLOWS: formatMessage({
+      defaultMessage: 'Workflows',
     }),
   };
 

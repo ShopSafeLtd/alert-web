@@ -1,6 +1,7 @@
 import type { UserEngagementQuery } from 'graphql/reports/queries/__generated__/list-user-engagement.generated';
 import type { RefObject } from 'react';
 
+import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
@@ -12,6 +13,7 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   Drawer,
   Form,
   Input,
@@ -21,7 +23,7 @@ import {
   Typography,
 } from 'antd';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import useStyles from './UserEngagement.styles';
 
@@ -38,14 +40,18 @@ interface Props {
   handlePrint: () => void;
   loading: boolean;
   search: string;
+  selectedBusinessGroups: string[];
   selectedBusinesses: string[];
+  selectedDataBrands: string[];
   selectedGroups: string[];
   selectedRoles: string[];
   setDateRange: (
     dateRange: { endDate: Date; startDate: Date } | undefined
   ) => void;
   setSearch: (value: string) => void;
+  setSelectedBusinessGroups: (groups: string[]) => void;
   setSelectedBusinesses: (value: string[]) => void;
+  setSelectedDataBrands: (groups: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
   setSelectedRoles: (value: string[]) => void;
   toggleFiltersOpen: () => void;
@@ -59,12 +65,16 @@ const PerformanceReport = ({
   handlePrint,
   loading,
   search,
+  selectedBusinessGroups,
   selectedBusinesses,
+  selectedDataBrands,
   selectedGroups,
   selectedRoles,
   setDateRange,
   setSearch,
+  setSelectedBusinessGroups,
   setSelectedBusinesses,
+  setSelectedDataBrands,
   setSelectedGroups,
   setSelectedRoles,
   toggleFiltersOpen,
@@ -272,6 +282,9 @@ const PerformanceReport = ({
           width={700}
         >
           <Form layout="vertical">
+            <Typography.Title level={4}>
+              <FormattedMessage defaultMessage="User Filters" />
+            </Typography.Title>
             <Form.Item
               label={intl.formatMessage({
                 defaultMessage: 'Groups',
@@ -315,6 +328,48 @@ const PerformanceReport = ({
                 }}
                 style={{ width: '100%' }}
                 value={selectedRoles}
+              />
+            </Form.Item>
+            <Divider />
+            <Typography.Title level={4}>
+              <FormattedMessage defaultMessage="Data Filters" />
+            </Typography.Title>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Incident Business Groups',
+              })}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  'Limits the data shows for each user only data from incidents which are assigned to businesses in the selected groups.',
+              })}
+            >
+              <GroupsSelect
+                maxTagCount="responsive"
+                mode="multiple"
+                onChange={(value) => {
+                  setSelectedBusinessGroups(value || []);
+                }}
+                style={{ width: '100%' }}
+                value={selectedBusinessGroups}
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Incident Business Brands',
+              })}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  'Limits the data shows for each user only data from incidents which are assigned to businesses assigned to the selected brands.',
+              })}
+            >
+              <BrandsSelect
+                maxTagCount="responsive"
+                mode="multiple"
+                onChange={(value) => {
+                  setSelectedDataBrands(value || []);
+                }}
+                style={{ width: '100%' }}
+                value={selectedDataBrands}
               />
             </Form.Item>
           </Form>
