@@ -68,6 +68,13 @@ const SettingsSideMenu = ({
     {
       permissions: [PermissionModel.GeneralSettings],
       title: intl.formatMessage({
+        defaultMessage: 'DEM',
+      }),
+      to: '/app/scheme-settings/dem',
+    },
+    {
+      permissions: [PermissionModel.Settings],
+      title: intl.formatMessage({
         defaultMessage: 'General Settings',
       }),
       to: '/app/scheme-settings/scheme',

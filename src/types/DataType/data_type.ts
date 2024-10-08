@@ -493,3 +493,17 @@ export interface OffenderSettingsType {
   name: boolean;
   peculiarities: boolean;
 }
+export interface DemDeviceData {
+  business: string;
+  createdAt?: Date | null;
+  demGroups: string[];
+  id: string;
+  name: string;
+  serialNumber?: null | string;
+}
+export interface DemGroupData {
+  demDevices: string[];
+  demId?: string;
+  id: string;
+  name: string;
+}

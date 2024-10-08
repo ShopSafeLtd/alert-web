@@ -1,0 +1,6 @@
+mutation deleteDemGroup($id: String!) {
+  deleteDemGroup(where: { id: $id }) {
+    id
+    name
+  }
+}

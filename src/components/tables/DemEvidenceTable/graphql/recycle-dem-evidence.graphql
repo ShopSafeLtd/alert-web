@@ -1,0 +1,3 @@
+mutation restoreDemEvidence($id: String!) {
+  restoreDemEvidence(where: { id: $id })
+}

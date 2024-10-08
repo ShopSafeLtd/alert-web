@@ -1,44 +1,45 @@
-import type { ListBusinessesQuery } from 'graphql/businesses/queries/__generated__/list-businesses.generated';
-
 import { Button, Col, Input, Row, Table } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
+import type { ListBusinessesSelectQuery } from './graphql/__generated__/list-businesses-select.generated';
+
 interface Props {
-  currentPage: number;
-  currentPageSize: number;
-  data: ListBusinessesQuery | undefined;
+  data: ListBusinessesSelectQuery | undefined;
   loading: boolean;
   onClose: () => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
   onSearchBusiness: (value: string) => void;
+  onSelect: (item: { key: string }) => void;
   onSubmit: () => void;
-  onTableChange: (selectedRowKeys: React.Key[]) => void;
+  pagination: { page: number; pageSize: number };
+  resetPage: () => void;
   saving: boolean;
   searchValue: string;
-  selectedValue: React.Key[] | undefined;
+  setPagination: (value: { page: number; pageSize: number }) => void;
 }
 
 const AddBusiness = ({
-  currentPage,
-  currentPageSize,
   data,
   loading,
   onClose,
-  onPaginationChange,
   onSearchBusiness,
+  onSelect,
   onSubmit,
-  onTableChange,
+  pagination,
+  resetPage,
   saving,
   searchValue,
-  selectedValue,
+  setPagination,
 }: Props) => {
   const intl = useIntl();
 
   return (
     <>
       <Input
-        onChange={(e) => onSearchBusiness(e.target.value)}
+        onChange={(e) => {
+          resetPage();
+          onSearchBusiness(e.target.value);
+        }}
         placeholder={intl.formatMessage({
           defaultMessage: 'Search for a business...',
         })}
@@ -51,6 +52,7 @@ const AddBusiness = ({
             dataIndex: 'name',
             key: 'name',
             title: intl.formatMessage({ defaultMessage: 'Name' }),
+            width: '40%',
           },
           {
             dataIndex: 'address',
@@ -61,7 +63,7 @@ const AddBusiness = ({
           },
         ]}
         dataSource={
-          data?.listBusinesses.businesses.map((business) => ({
+          data?.businessRelay.edges.map(({ node: business }) => ({
             address: business.locations[0]?.full,
             key: business.id,
             name: business.name,
@@ -69,21 +71,21 @@ const AddBusiness = ({
         }
         loading={loading}
         pagination={{
-          current: currentPage,
-          defaultPageSize: 50,
+          current: pagination.page,
           hideOnSinglePage: true,
-          onChange: onPaginationChange,
-          pageSize: currentPageSize,
-          total: data?.listBusinesses.total,
+          onChange: (page, pageSize) => {
+            setPagination({ page, pageSize });
+          },
+          pageSize: pagination.pageSize,
+          total: data?.businessRelay.totalCount,
         }}
         rowSelection={{
-          onChange: onTableChange,
-          selectedRowKeys: selectedValue,
+          onSelect,
           type: 'radio',
         }}
         size="small"
       />
-      <Row gutter={16} justify="end">
+      <Row gutter={16} justify="end" style={{ marginTop: 50 }}>
         <Col>
           <Button onClick={onClose}>
             {intl.formatMessage({ defaultMessage: 'Cancel' })}

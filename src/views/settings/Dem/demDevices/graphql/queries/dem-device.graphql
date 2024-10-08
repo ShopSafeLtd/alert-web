@@ -1,0 +1,19 @@
+query DemDevice($where: DemDeviceWhereUniqueInput!) {
+  demDevice(where: $where) {
+    ...DemDevices
+    evidence {
+      id
+      name
+      url
+      fileType
+    }
+    demGroups {
+      id
+      name
+    }
+    business {
+      id
+      name
+    }
+  }
+}

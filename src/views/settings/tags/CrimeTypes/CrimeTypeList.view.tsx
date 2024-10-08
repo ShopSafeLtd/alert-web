@@ -1,4 +1,13 @@
-import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -10,84 +19,75 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-
 import AddIncident from 'components/form-components/tags/crimeTypes/AddCrimeType';
 import EditIncident from 'components/form-components/tags/crimeTypes/EditCrimeType';
-
-import type { MutationUpdaterFn } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
-import { FormattedMessage, useIntl } from 'react-intl';
-import BuildTree from '../../../../utils/tags/tree-helper';
-import { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
-import { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { TagType } from 'graphql/types';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import BuildTree from '../../../../utils/tags/tree-helper';
 
 interface Props {
+  addImpact: boolean;
+  addIncident: boolean;
+  addInvolved: boolean;
   data: TagsQuery | undefined;
+  deleteConfirm: (value: string) => void;
+  editIncident: boolean;
+  impactData: TagsQuery | undefined;
+  impactLoading: boolean;
+  incidentId: string;
   // loading: boolean;
   involvedData: TagsQuery | undefined;
   involvedLoading: boolean;
-  impactData: TagsQuery | undefined;
-  impactLoading: boolean;
+  saving: boolean;
   search: string;
+  setIncidentId: (value: string) => void;
   setSearch: (value: string) => void;
-  addIncident: boolean;
-  addInvolved: boolean;
-  addImpact: boolean;
+  toggleAddImpact: () => void;
   toggleAddIncident: () => void;
   toggleAddInvolved: () => void;
-  toggleAddImpact: () => void;
-  updateCrimeTypeList: MutationUpdaterFn<CreateTagMutation>;
-  updateInvolvedList: MutationUpdaterFn<CreateTagMutation>;
-  updateImpactList: MutationUpdaterFn<CreateTagMutation>;
-  incidentId: string;
-  setIncidentId: (value: string) => void;
-  editIncident: boolean;
   toggleEditIncident: () => void;
-  saving: boolean;
-  deleteConfirm: (value: string) => void;
-  updateTagParent: (tagId: string, parentTagId: string | null) => void;
+  updateCrimeTypeList: MutationUpdaterFn<CreateTagMutation>;
+  updateImpactList: MutationUpdaterFn<CreateTagMutation>;
+  updateInvolvedList: MutationUpdaterFn<CreateTagMutation>;
+  updateTagParent: (tagId: string, parentTagId: null | string) => void;
 }
 
 const CrimeTypeList = ({
-                         data,
-                         // loading,
-                         search,
-                         setSearch,
-                         editIncident,
-                         toggleEditIncident,
-                         addIncident,
-                         toggleAddIncident,
-                         updateCrimeTypeList,
-                         incidentId,
-                         setIncidentId,
-                         saving,
-                         deleteConfirm,
-                         impactData,
-                         impactLoading,
-                         involvedData,
-                         involvedLoading,
-                         addImpact,
-                         addInvolved,
-                         toggleAddImpact,
-                         toggleAddInvolved,
-                         updateImpactList,
-                         updateInvolvedList,
-                         updateTagParent,
-                       }: Props): JSX.Element => {
+  addImpact,
+  addIncident,
+  addInvolved,
+  data,
+  deleteConfirm,
+  editIncident,
+  impactData,
+  impactLoading,
+  incidentId,
+  involvedData,
+  involvedLoading,
+  saving,
+  // loading,
+  search,
+  setIncidentId,
+  setSearch,
+  toggleAddImpact,
+  toggleAddIncident,
+  toggleAddInvolved,
+  toggleEditIncident,
+  updateCrimeTypeList,
+  updateImpactList,
+  updateInvolvedList,
+  updateTagParent,
+}: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div className="list-view">
       <Card>
         <Row align="middle" gutter={16} style={{ marginBottom: 10 }}>
           <Col>
-            <Typography.Title style={{ margin: 0 }} level={4}>
-              <FormattedMessage defaultMessage="Incident Types" id="DtIroT" />
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              <FormattedMessage defaultMessage="Incident Types" />
             </Typography.Title>
           </Col>
           {/* <Col span={8}> */}
@@ -105,7 +105,6 @@ const CrimeTypeList = ({
           <Col>
             <Button
               danger
-              onClick={toggleAddIncident}
               icon={
                 <FontAwesomeIcon
                   icon={faPlus}
@@ -113,11 +112,9 @@ const CrimeTypeList = ({
                   style={{ marginRight: 5 }}
                 />
               }
+              onClick={toggleAddIncident}
             >
-              <FormattedMessage
-                defaultMessage="Add Incident Type"
-                id="ZNxriH"
-              />
+              <FormattedMessage defaultMessage="Add Incident Type" />
             </Button>
           </Col>
         </Row>
@@ -215,167 +212,38 @@ const CrimeTypeList = ({
         <BuildTree
           InitData={
             data?.tags.map((tag) => ({
+              description: tag.description,
               id: tag.id,
               name: tag.name,
-              description: tag.description,
               parentId: tag.parentTag?.id || null,
             })) || []
           }
-          updateTagParent={updateTagParent}
           draggable={false}
-        />
-      </Card>
-
-      <Card>
-        <Row gutter={16} align="middle" style={{ marginBottom: 10 }}>
-          <Col>
-            <Typography.Title style={{ margin: 0 }} level={4}>
-              <FormattedMessage defaultMessage="Involved Tags" id="hqB+1X" />
-            </Typography.Title>
-          </Col>
-          <Col span={8}>
-            <Input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Search involved tags...',
-                id: '5Tbx28',
-              })}
-              allowClear
-            />
-          </Col>
-          <Col flex={1} />
-          <Col>
-            <Button
-              danger
-              onClick={toggleAddInvolved}
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              <FormattedMessage defaultMessage="Add Involved Tag" id="Hnfici" />
-            </Button>
-          </Col>
-        </Row>
-        <Table
-          size="small"
-          loading={involvedLoading}
-          pagination={{
-            hideOnSinglePage: true,
-            defaultPageSize: 20,
-            pageSize: 20,
-          }}
-          columns={[
-            {
-              key: 'name',
-              title: intl.formatMessage({
-                defaultMessage: 'Name',
-                id: 'HAlOn1',
-              }),
-              dataIndex: 'name',
-              width: 250,
-              render: (value, record) => (
-                <Typography.Link
-                  disabled={saving}
-                  onClick={() => {
-                    setIncidentId(record.key);
-                    toggleEditIncident();
-                  }}
-                >
-                  {value}
-                </Typography.Link>
-              ),
-            },
-            {
-              key: 'description',
-              title: intl.formatMessage({
-                defaultMessage: 'Description',
-                id: 'Q8Qw5B',
-              }),
-              dataIndex: 'description',
-              ellipsis: true,
-            },
-            {
-              key: 'Options',
-              title: '',
-              dataIndex: 'Options',
-              width: 100,
-              render: (_, record) => (
-                <Row gutter={8}>
-                  <Col>
-                    <Tooltip
-                      title={intl.formatMessage({
-                        defaultMessage: 'Edit Incident Type',
-                        id: 'xTR8wo',
-                      })}
-                    >
-                      <Button
-                        size="small"
-                        disabled={saving}
-                        onClick={() => {
-                          setIncidentId(record.key);
-                          toggleEditIncident();
-                        }}
-                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                      />
-                    </Tooltip>
-                  </Col>
-                  <Col>
-                    <Tooltip
-                      title={intl.formatMessage({
-                        defaultMessage: 'Remove Incident Type',
-                        id: 'FjZV7C',
-                      })}
-                    >
-                      <Button
-                        size="small"
-                        disabled={saving}
-                        onClick={() => {
-                          deleteConfirm(record.key);
-                        }}
-                        icon={<FontAwesomeIcon icon={faTrash} />}
-                      />
-                    </Tooltip>
-                  </Col>
-                </Row>
-              ),
-            },
-          ]}
-          dataSource={involvedData?.tags.map((tag) => ({
-            key: tag.id,
-            name: tag.name,
-            description: tag.description,
-          }))}
+          updateTagParent={updateTagParent}
         />
       </Card>
 
       <Card>
         <Row align="middle" gutter={16} style={{ marginBottom: 10 }}>
           <Col>
-            <Typography.Title style={{ margin: 0 }} level={4}>
-              <FormattedMessage defaultMessage="Impact Tags" id="JZVMXj" />
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              <FormattedMessage defaultMessage="Involved Tags" />
             </Typography.Title>
           </Col>
           <Col span={8}>
             <Input
-              value={search}
+              allowClear
               onChange={(event) => setSearch(event.target.value)}
               placeholder={intl.formatMessage({
-                defaultMessage: 'Search impact tags...',
-                id: 'PYBHmx',
+                defaultMessage: 'Search involved tags...',
               })}
-              allowClear
+              value={search}
             />
           </Col>
           <Col flex={1} />
           <Col>
             <Button
               danger
-              onClick={toggleAddImpact}
               icon={
                 <FontAwesomeIcon
                   icon={faPlus}
@@ -383,28 +251,17 @@ const CrimeTypeList = ({
                   style={{ marginRight: 5 }}
                 />
               }
+              onClick={toggleAddInvolved}
             >
-              <FormattedMessage defaultMessage="Add Impact Type" id="bnHbBx" />
+              <FormattedMessage defaultMessage="Add Involved Tag" />
             </Button>
           </Col>
         </Row>
         <Table
-          size="small"
-          loading={impactLoading}
-          pagination={{
-            hideOnSinglePage: true,
-            defaultPageSize: 20,
-            pageSize: 20,
-          }}
           columns={[
             {
-              key: 'name',
-              title: intl.formatMessage({
-                defaultMessage: 'Name',
-                id: 'HAlOn1',
-              }),
               dataIndex: 'name',
-              width: 250,
+              key: 'name',
               render: (value, record) => (
                 <Typography.Link
                   disabled={saving}
@@ -416,39 +273,38 @@ const CrimeTypeList = ({
                   {value}
                 </Typography.Link>
               ),
+              title: intl.formatMessage({
+                defaultMessage: 'Name',
+              }),
+              width: 250,
             },
             {
+              dataIndex: 'description',
+              ellipsis: true,
               key: 'description',
               title: intl.formatMessage({
                 defaultMessage: 'Description',
-                id: 'Q8Qw5B',
               }),
-
-              dataIndex: 'description',
-              ellipsis: true,
             },
             {
-              key: 'Options',
-              title: '',
               dataIndex: 'Options',
-              width: 100,
+              key: 'Options',
               render: (_, record) => (
                 <Row gutter={8}>
                   <Col>
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Edit Incident Type',
-                        id: 'xTR8wo',
                       })}
                     >
                       <Button
-                        size="small"
                         disabled={saving}
+                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
                         onClick={() => {
                           setIncidentId(record.key);
                           toggleEditIncident();
                         }}
-                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                        size="small"
                       />
                     </Tooltip>
                   </Col>
@@ -456,96 +312,223 @@ const CrimeTypeList = ({
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'Remove Incident Type',
-                        id: 'FjZV7C',
                       })}
                     >
                       <Button
-                        size="small"
                         disabled={saving}
+                        icon={<FontAwesomeIcon icon={faTrash} />}
                         onClick={() => {
                           deleteConfirm(record.key);
                         }}
-                        icon={<FontAwesomeIcon icon={faTrash} />}
+                        size="small"
                       />
                     </Tooltip>
                   </Col>
                 </Row>
               ),
+              title: '',
+              width: 100,
+            },
+          ]}
+          dataSource={involvedData?.tags.map((tag) => ({
+            description: tag.description,
+            key: tag.id,
+            name: tag.name,
+          }))}
+          loading={involvedLoading}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            pageSize: 20,
+          }}
+          size="small"
+        />
+      </Card>
+
+      <Card>
+        <Row align="middle" gutter={16} style={{ marginBottom: 10 }}>
+          <Col>
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              <FormattedMessage defaultMessage="Impact Tags" />
+            </Typography.Title>
+          </Col>
+          <Col span={8}>
+            <Input
+              allowClear
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Search impact tags...',
+              })}
+              value={search}
+            />
+          </Col>
+          <Col flex={1} />
+          <Col>
+            <Button
+              danger
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              onClick={toggleAddImpact}
+            >
+              <FormattedMessage defaultMessage="Add Impact Type" />
+            </Button>
+          </Col>
+        </Row>
+        <Table
+          columns={[
+            {
+              dataIndex: 'name',
+              key: 'name',
+              render: (value, record) => (
+                <Typography.Link
+                  disabled={saving}
+                  onClick={() => {
+                    setIncidentId(record.key);
+                    toggleEditIncident();
+                  }}
+                >
+                  {value}
+                </Typography.Link>
+              ),
+              title: intl.formatMessage({
+                defaultMessage: 'Name',
+              }),
+              width: 250,
+            },
+            {
+              dataIndex: 'description',
+              ellipsis: true,
+
+              key: 'description',
+              title: intl.formatMessage({
+                defaultMessage: 'Description',
+              }),
+            },
+            {
+              dataIndex: 'Options',
+              key: 'Options',
+              render: (_, record) => (
+                <Row gutter={8}>
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        defaultMessage: 'Edit Incident Type',
+                      })}
+                    >
+                      <Button
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                        onClick={() => {
+                          setIncidentId(record.key);
+                          toggleEditIncident();
+                        }}
+                        size="small"
+                      />
+                    </Tooltip>
+                  </Col>
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove Incident Type',
+                      })}
+                    >
+                      <Button
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faTrash} />}
+                        onClick={() => {
+                          deleteConfirm(record.key);
+                        }}
+                        size="small"
+                      />
+                    </Tooltip>
+                  </Col>
+                </Row>
+              ),
+              title: '',
+              width: 100,
             },
           ]}
           dataSource={impactData?.tags.map((tag) => ({
+            description: tag.description,
             key: tag.id,
             name: tag.name,
-            description: tag.description,
           }))}
+          loading={impactLoading}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            pageSize: 20,
+          }}
+          size="small"
         />
       </Card>
 
       <Drawer
+        onClose={toggleAddIncident}
+        open={addIncident}
         title={intl.formatMessage({
           defaultMessage: 'Add Incident Types',
-          id: 'aWg6Cp',
         })}
-        open={addIncident}
         width="800"
-        onClose={toggleAddIncident}
       >
         {addIncident ? (
           <AddIncident
+            onClose={toggleAddIncident}
             type={TagType.IncidentCrimeType}
             update={updateCrimeTypeList}
-            onClose={toggleAddIncident}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddInvolved}
+        open={addInvolved}
         title={intl.formatMessage({
           defaultMessage: 'Add Involved Tag',
-          id: 'Hnfici',
         })}
-        open={addInvolved}
         width="400"
-        onClose={toggleAddInvolved}
       >
         {addInvolved ? (
           <AddIncident
+            onClose={toggleAddInvolved}
             type={TagType.IncidentInvolved}
             update={updateInvolvedList}
-            onClose={toggleAddInvolved}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleAddImpact}
+        open={addImpact}
         title={intl.formatMessage({
           defaultMessage: 'Add Impact Tag',
-          id: 'sl+yfu',
         })}
-        open={addImpact}
         width="400"
-        onClose={toggleAddImpact}
       >
         {addImpact ? (
           <AddIncident
+            onClose={toggleAddImpact}
             type={TagType.IncidentImpact}
             update={updateImpactList}
-            onClose={toggleAddImpact}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleEditIncident}
+        open={editIncident}
         title={intl.formatMessage({
           defaultMessage: 'Edit Tag',
-          id: 'uJkv2X',
         })}
-        open={editIncident}
         width="400"
-        onClose={toggleEditIncident}
       >
         {editIncident && (
           <EditIncident incidentId={incidentId} onClose={toggleEditIncident} />

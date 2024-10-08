@@ -1,0 +1,7 @@
+fragment DemDevices on DemDevice {
+  id
+  demId
+  createdAt
+  serialNumber
+  name
+}

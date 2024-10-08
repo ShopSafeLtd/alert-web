@@ -1,75 +1,94 @@
 import React from 'react';
+
 import View from './ViewBusiness.view';
 import useViewBusiness from './useViewBusiness';
 
 const ViewBusiness = () => {
   const {
-    data,
-    loading,
+    actionsData,
+    addDemDevice,
+    addTodo,
+    addUserVisible,
     businessId,
+    completeTodoVisible,
+    data,
+    deleteConfirm,
+    editDeviceData,
     editVisible,
-    toggleEdit,
+    evidenceData,
+    evidenceLoading,
     inviteUserVisible,
+    linkDemVisible,
+    loading,
+    onEditAddress,
+    onRemoveBusiness,
+    saving,
+    setCompleteTodoVisible,
+    setEditDeviceData,
+    setViewTodoVisible,
+    templatesData,
+    templatesLoading,
+    toggleAddDemDevice,
+    toggleAddTodo,
+    toggleAddUser,
+    toggleEdit,
     toggleInviteUser,
+    toggleLinkDem,
+    updateAddUsersToBusiness,
+    updateDeleteDemDeviceList,
+    updateDeleteEvidenceList,
+    updateDemDeviceList,
+    updateTodo,
+    updateTodoList,
     updateUsersList,
     updateUsersListExisting,
     usersData,
     usersLoading,
-    addUserVisible,
-    toggleAddUser,
-    updateAddUsersToBusiness,
-    actionsData,
-    onRemoveBusiness,
-    toggleLinkDem,
-    linkDemVisible,
-    saving,
-    deleteConfirm,
-    addTodo,
-    toggleAddTodo,
-    templatesData,
-    templatesLoading,
-    setViewTodoVisible,
-    setCompleteTodoVisible,
-    completeTodoVisible,
     viewTodoVisible,
-    updateTodo,
-    updateTodoList,
-    onEditAddress,
   } = useViewBusiness();
 
   return (
     <View
-      linkDemVisible={linkDemVisible}
-      toggleLinkDem={toggleLinkDem}
-      data={data}
-      loading={loading}
+      actionsData={actionsData}
+      addDemDevice={addDemDevice}
+      addTodo={addTodo}
+      addUserVisible={addUserVisible}
       businessId={businessId}
+      completeTodoVisible={completeTodoVisible}
+      data={data}
+      deleteConfirm={deleteConfirm}
+      editDeviceData={editDeviceData}
       editVisible={editVisible}
-      toggleEdit={toggleEdit}
+      evidenceData={evidenceData}
+      evidenceLoading={evidenceLoading}
       inviteUserVisible={inviteUserVisible}
+      linkDemVisible={linkDemVisible}
+      loading={loading}
+      onEditAddress={onEditAddress}
+      onRemoveBusiness={onRemoveBusiness}
+      saving={saving}
+      setCompleteTodoVisible={setCompleteTodoVisible}
+      setEditDeviceData={setEditDeviceData}
+      setViewTodoVisible={setViewTodoVisible}
+      templatesData={templatesData}
+      templatesLoading={templatesLoading}
+      toggleAddDemDevice={toggleAddDemDevice}
+      toggleAddTodo={toggleAddTodo}
+      toggleAddUser={toggleAddUser}
+      toggleEdit={toggleEdit}
       toggleInviteUser={toggleInviteUser}
+      toggleLinkDem={toggleLinkDem}
+      updateAddUsersToBusiness={updateAddUsersToBusiness}
+      updateDeleteDemDeviceList={updateDeleteDemDeviceList}
+      updateDeleteEvidenceList={updateDeleteEvidenceList}
+      updateDemDeviceList={updateDemDeviceList}
+      updateTodo={updateTodo}
+      updateTodoList={updateTodoList}
       updateUsersList={updateUsersList}
       updateUsersListExisting={updateUsersListExisting}
       usersData={usersData}
       usersLoading={usersLoading}
-      addUserVisible={addUserVisible}
-      toggleAddUser={toggleAddUser}
-      updateAddUsersToBusiness={updateAddUsersToBusiness}
-      actionsData={actionsData}
-      onRemoveBusiness={onRemoveBusiness}
-      saving={saving}
-      deleteConfirm={deleteConfirm}
-      addTodo={addTodo}
-      toggleAddTodo={toggleAddTodo}
-      templatesData={templatesData}
-      templatesLoading={templatesLoading}
-      setViewTodoVisible={setViewTodoVisible}
-      setCompleteTodoVisible={setCompleteTodoVisible}
-      completeTodoVisible={completeTodoVisible}
       viewTodoVisible={viewTodoVisible}
-      updateTodo={updateTodo}
-      updateTodoList={updateTodoList}
-      onEditAddress={onEditAddress}
     />
   );
 };
