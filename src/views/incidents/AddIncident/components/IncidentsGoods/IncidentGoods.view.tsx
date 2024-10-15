@@ -217,6 +217,25 @@ const IncidentGoods = ({
                             index
                               ? ''
                               : intl.formatMessage({
+                                  defaultMessage: 'Item Description',
+                                })
+                          }
+                          name={[name, 'description']}
+                          tooltip={intl.formatMessage({
+                            defaultMessage:
+                              'Provide a more detailed description of the items taken if possible to help the police.',
+                          })}
+                        >
+                          <Input style={{ width: 300 }} />
+                        </Form.Item>
+                      </Col>
+                      <Col>
+                        <Form.Item
+                          {...restField}
+                          label={
+                            index
+                              ? ''
+                              : intl.formatMessage({
                                   defaultMessage: 'Value',
                                 })
                           }
