@@ -1,0 +1,5 @@
+mutation GenerateStatementBody($data: GenerateStatementData!) {
+    generateStatementBody(data: $data) {
+        statement
+    }
+}

@@ -4,7 +4,6 @@ import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/add
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
-import IncidentPoliceReporting from '#/views/incidents/AddIncident/components/IncidentPoliceReporting/IncidentPoliceReporting.view';
 import { Button, Card, Col, Drawer, Form, PageHeader, Row } from 'antd';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
@@ -20,7 +19,7 @@ import type { FormData } from './useAddIncident';
 import useStyles from './AddIncident.styles';
 import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
 import IncidentGroups from './components/IncidentGroups/IncidentGroups.container';
-// import IncidentPolice from './components/IncidentPolice/IncidentPolice.view';
+import IncidentPolice from './components/IncidentPolice/IncidentPolice.container';
 import IncidentTypes from './components/IncidentTypes/IncidentTypes.container';
 import IncidentWhere from './components/IncidentWhere/IncidentWhere.container';
 import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
@@ -31,6 +30,7 @@ interface Props {
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
   form: FormInstance<FormData>;
+  generatingStatement: boolean;
   goodsMode: string;
   goodsVisible: boolean;
   incidentForm: IncidentFormField[];
@@ -38,6 +38,7 @@ interface Props {
   newAddressData: LocationData | undefined;
   onSubmit: (value: FormData) => void;
   onValuesChange: (changedValues: FormData, values: FormData) => void;
+  policeReporting: boolean;
   primaryAddress:
     | Exclude<AddressesQuery['addresses'], null | undefined>[0]
     | undefined;
@@ -45,6 +46,7 @@ interface Props {
   reportOnly: boolean;
   saving: boolean;
   setBrands: (value: string[]) => void;
+  setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
   toggleAddNewAddress: () => void;
@@ -57,6 +59,7 @@ const AddIncident = ({
   customQuestions,
   dontKnowGoods,
   form,
+  generatingStatement,
   goodsMode,
   goodsVisible,
   incidentForm,
@@ -64,11 +67,13 @@ const AddIncident = ({
   newAddressData,
   onSubmit,
   onValuesChange,
+  policeReporting,
   primaryAddress,
   primaryImage,
   reportOnly,
   saving,
   setBrands,
+  setPoliceReporting,
   setPrimaryImage,
   showSiteNumber,
   toggleAddNewAddress,
@@ -101,7 +106,13 @@ const AddIncident = ({
         {incidentForm.map((field) => {
           switch (field) {
             case IncidentFormField.Types: {
-              return <IncidentTypes incidentForm={incidentForm} />;
+              return (
+                <IncidentTypes
+                  form={form}
+                  incidentForm={incidentForm}
+                  setPoliceReporting={setPoliceReporting}
+                />
+              );
             }
             case IncidentFormField.Where: {
               return (
@@ -159,17 +170,21 @@ const AddIncident = ({
                 </Card>
               );
             }
-            // case IncidentFormField.Police: {
-            //   return <IncidentPolice saving={saving} form={form} />;
-            // }
-            case IncidentFormField.Police: {
-              return <IncidentPoliceReporting form={form} saving={saving} />;
-            }
             case IncidentFormField.Details: {
               return (
                 <Card className={classes.card}>
                   <IncidentDetails saving={saving} />
                 </Card>
+              );
+            }
+            case IncidentFormField.Police: {
+              return (
+                <IncidentPolice
+                  form={form}
+                  generatingStatement={generatingStatement}
+                  policeReporting={policeReporting}
+                  saving={saving}
+                />
               );
             }
             case IncidentFormField.Groups: {

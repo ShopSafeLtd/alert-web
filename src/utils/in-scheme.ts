@@ -11,7 +11,7 @@ const useCanView = ({ currentScheme, schemes, type }: SchemesInput) => {
   const navigate = useNavigate();
 
   const isAllowed = useMemo(() => {
-    if (!schemes) return false;
+    if (!schemes) return true;
 
     if (typeof schemes === 'string') {
       return schemes === currentScheme;
@@ -20,6 +20,7 @@ const useCanView = ({ currentScheme, schemes, type }: SchemesInput) => {
   }, [currentScheme, schemes]);
 
   const redirectToEntity = useCallback(() => {
+    console.log('redirect', currentScheme, schemes, type);
     if (!schemes) return;
     if (type === 'offender') {
       navigate('/app/offenders', { replace: true });

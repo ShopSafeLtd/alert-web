@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 
 interface Props {
-  name: string;
+  name?: string;
   onChange?: (value: string) => void;
 }
 
@@ -17,7 +17,7 @@ const MG11Sign = ({ name, onChange }: Props) => {
   const [tab, setTab] = useState('draw');
   const [file, setFile] = useState<{
     file: string;
-    name: string;
+    name?: string;
   } | null>(null);
   const [sign, setSign] = useState('');
   const [selectedFont] = useState(FONT_FAMILIES[0]);
@@ -67,7 +67,7 @@ const MG11Sign = ({ name, onChange }: Props) => {
                   font={selectedFont}
                   height={100}
                   key={selectedFont}
-                  name={name}
+                  name={name || ''}
                   width={300}
                 />
               )
