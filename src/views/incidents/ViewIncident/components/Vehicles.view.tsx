@@ -1,3 +1,4 @@
+import type { FormData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
 import type { VehicleData } from '#/types/DataType';
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 
@@ -266,7 +267,7 @@ const Vehicles = ({
         setSaving(false);
       });
   };
-  const onAddVehicle = (value: VehicleData) => {
+  const onAddVehicle = (value: FormData) => {
     setSaving(true);
     if (value) {
       void createVehicle({
@@ -280,6 +281,7 @@ const Vehicles = ({
         variables: {
           data: {
             colour: value.colour || '',
+            groups: value.groupIds?.map((id) => ({ id })),
             image:
               value.images && value.images.length > 0
                 ? {
