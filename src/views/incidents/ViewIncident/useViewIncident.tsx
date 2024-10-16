@@ -58,8 +58,8 @@ const useViewIncident = (incidentId: string): Return => {
     },
   });
   useCanView({
-    currentScheme: currentScheme?.id || '',
-    schemes: data?.incident?.scheme.id,
+    currentScheme: currentScheme?.scheme.id || '',
+    schemes: data?.incident?.schemes.map(({ id }) => id),
     type: 'incident',
   });
 

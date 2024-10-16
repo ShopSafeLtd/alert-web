@@ -1,4 +1,4 @@
-mutation updateVehicleDetails($where: UniqueId!, $data: VehicleUpdateInput!) {
+mutation updateVehicleDetails($where: UniqueId!, $data: VehicleUpdateInput!, $groupsWhere: GroupWhereInput) {
   updateVehicle(where: $where, data: $data) {
     id
     make
@@ -12,7 +12,7 @@ mutation updateVehicleDetails($where: UniqueId!, $data: VehicleUpdateInput!) {
       id
       name
     }
-    groups {
+    groups(where: $groupsWhere) {
       id
       name
     }

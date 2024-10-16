@@ -2868,6 +2868,7 @@ export type CreateImageOptimistic = {
 
 export type CreateIncidentCctvRecord = {
   cameraNumber: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   endTime: Scalars['Date'];
   showFace: Scalars['Boolean'];
   showIncident: Scalars['Boolean'];
@@ -2889,6 +2890,7 @@ export type CreateIncidentData = {
   crimeGroups: CreateIncidentCrimeGroups;
   crimeTypes?: InputMaybe<Array<UniqueId>>;
   date: Scalars['Date'];
+  dayOrNight?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   documents?: InputMaybe<Array<CreateDocument>>;
   groups: Array<UniqueId>;
@@ -2897,11 +2899,35 @@ export type CreateIncidentData = {
   items?: InputMaybe<Array<CreateIncidentItemInput>>;
   location?: InputMaybe<CreateIncidentLocation>;
   offenders: CreateIncidentOffenders;
+  policeCCTVEmail?: InputMaybe<Scalars['String']>;
+  policeDay?: InputMaybe<Scalars['Boolean']>;
+  policeDistanceFromIncident?: InputMaybe<Scalars['String']>;
+  policeIncidentDuration?: InputMaybe<Scalars['String']>;
+  policeInside?: InputMaybe<Scalars['Boolean']>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
+  policeItemsLocation?: InputMaybe<Array<Scalars['String']>>;
+  policeItemsMO?: InputMaybe<Array<Scalars['String']>>;
+  policeKnownBefore?: InputMaybe<Scalars['Boolean']>;
+  policeMG11?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
+  policeObstructions?: InputMaybe<Scalars['String']>;
+  policeReasonRemember?: InputMaybe<Scalars['String']>;
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
   policeResponse?: InputMaybe<PoliceResponseTime>;
+  policeStatement?: InputMaybe<Scalars['String']>;
+  policeTimePassed?: InputMaybe<Scalars['String']>;
+  policeWillingCourt?: InputMaybe<Scalars['Boolean']>;
+  policeWitnessAddress?: InputMaybe<Scalars['String']>;
+  policeWitnessAtTime?: InputMaybe<Scalars['Boolean']>;
+  policeWitnessEmail?: InputMaybe<Scalars['String']>;
+  policeWitnessEthnicity?: InputMaybe<Scalars['String']>;
+  policeWitnessGender?: InputMaybe<Scalars['String']>;
+  policeWitnessMobileNo?: InputMaybe<Scalars['String']>;
+  policeWitnessName?: InputMaybe<Scalars['String']>;
+  policeWitnessPlaceOfBirth?: InputMaybe<Scalars['String']>;
+  policeWitnessPostcode?: InputMaybe<Scalars['String']>;
+  policeWitnessWorkNo?: InputMaybe<Scalars['String']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   scheme: Scalars['String'];
   sessionId?: InputMaybe<Scalars['String']>;
@@ -2920,6 +2946,7 @@ export type CreateIncidentImages = {
 };
 
 export type CreateIncidentItemInput = {
+  description?: InputMaybe<Scalars['String']>;
   goodsType?: InputMaybe<UniqueId>;
   name?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Int']>;
@@ -5955,6 +5982,71 @@ export enum Gender {
   Unknown = 'UNKNOWN'
 }
 
+export type GenerateStatementCctv = {
+  description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['DateTime']>;
+  start?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type GenerateStatementData = {
+  businessId?: InputMaybe<Scalars['String']>;
+  cctv: Array<GenerateStatementCctv>;
+  date: Scalars['DateTime'];
+  dayNight?: InputMaybe<Scalars['Boolean']>;
+  description: Scalars['String'];
+  distanceFromIncident?: InputMaybe<Scalars['String']>;
+  impactTags: Array<Scalars['String']>;
+  inBuilding?: InputMaybe<Scalars['Boolean']>;
+  incidentDuration?: InputMaybe<Scalars['String']>;
+  incidentType: Scalars['String'];
+  involvedTags: Array<Scalars['String']>;
+  items?: InputMaybe<Array<GenerateStatementItem>>;
+  knownSubjects?: InputMaybe<Scalars['Boolean']>;
+  obstructions?: InputMaybe<Scalars['String']>;
+  offenders: Array<GenerateStatementOffender>;
+  policeItemsLocation?: InputMaybe<Array<Scalars['String']>>;
+  policeItemsMO?: InputMaybe<Array<Scalars['String']>>;
+  reasonToRemember?: InputMaybe<Scalars['String']>;
+  timePassed?: InputMaybe<Scalars['String']>;
+  vehicles: Array<GenerateStatementVehicles>;
+  witnessedInPerson: Scalars['Boolean'];
+};
+
+export type GenerateStatementItem = {
+  description?: InputMaybe<Scalars['String']>;
+  goodsId?: InputMaybe<Scalars['String']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  recoveredQuantity?: InputMaybe<Scalars['Int']>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
+  stockItemId?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['Float']>;
+};
+
+export type GenerateStatementOffender = {
+  age?: InputMaybe<Age>;
+  alias?: InputMaybe<Array<Scalars['String']>>;
+  build?: InputMaybe<Build>;
+  characteristics?: InputMaybe<Scalars['String']>;
+  comment?: InputMaybe<Scalars['String']>;
+  ethnicity?: InputMaybe<Race>;
+  hair?: InputMaybe<Scalars['String']>;
+  height?: InputMaybe<Height>;
+  name?: InputMaybe<Scalars['String']>;
+  sex?: InputMaybe<Gender>;
+};
+
+export type GenerateStatementVehicles = {
+  colour?: InputMaybe<Scalars['String']>;
+  make?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
+  registrationPlate?: InputMaybe<Scalars['String']>;
+};
+
+export type GeneratedStatementBody = {
+  __typename?: 'GeneratedStatementBody';
+  statement: Scalars['String'];
+};
+
 export type GeoIp = {
   __typename?: 'GeoIp';
   city?: Maybe<Scalars['String']>;
@@ -7829,6 +7921,7 @@ export type IncidentTags = {
   label: Scalars['String'];
   parentId?: Maybe<Scalars['String']>;
   parents: Array<Scalars['String']>;
+  policeReporting: Scalars['Boolean'];
   questions?: Maybe<Array<IncidentQuestions>>;
   tier: Scalars['Int'];
   tooltip?: Maybe<Scalars['String']>;
@@ -10049,6 +10142,7 @@ export type Mutation = {
   exportInvestigationZip: Scalars['String'];
   forcedPasswordSet?: Maybe<Scalars['String']>;
   generateFeedItems: SystemTask;
+  generateStatementBody: GeneratedStatementBody;
   importStockItemCsv: Scalars['Boolean'];
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
@@ -10664,6 +10758,11 @@ export type MutationExportInvestigationZipArgs = {
 
 export type MutationGenerateFeedItemsArgs = {
   where: UniqueId;
+};
+
+
+export type MutationGenerateStatementBodyArgs = {
+  data: GenerateStatementData;
 };
 
 
@@ -13828,6 +13927,8 @@ export type QueryIncidentsRelayArgs = {
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
 
@@ -14731,6 +14832,7 @@ export type QueryIncidentsRelayConnection = {
   __typename?: 'QueryIncidentsRelayConnection';
   edges: Array<QueryIncidentsRelayConnectionEdge>;
   pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
 };
 
 export type QueryIncidentsRelayConnectionEdge = {
@@ -16854,6 +16956,7 @@ export type SchemeUpdateInput = {
   imagesRequiredOnOffenders?: InputMaybe<SetBooleanHelper>;
   incidentRetention?: InputMaybe<SetIntHelper>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  mg11Available?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<SetStringHelper>;
   needJustification?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;

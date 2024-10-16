@@ -2,7 +2,7 @@ import React from 'react';
 
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 import type { ImageData } from '../../ImageSelect/ImageSelect.view';
-import type { AddVehicleData } from './useAddVehicleSimple';
+import type { FormData } from './useAddVehicleSimple';
 
 import View from './AddVehicleSimple.view';
 import useAddVehicleSimple from './useAddVehicleSimple';
@@ -12,7 +12,7 @@ interface Props {
   onClose: () => void;
   onImagesUploaded?: (values: StateImageData[]) => void;
   saving?: boolean;
-  update: (value: AddVehicleData) => void;
+  update: (value: FormData) => void;
 }
 
 const AddVehicle = ({

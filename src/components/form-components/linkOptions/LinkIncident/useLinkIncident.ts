@@ -1,27 +1,18 @@
-import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
+import type { LinkIncidentIncidentsQuery } from '#/components/form-components/linkOptions/LinkIncident/__generated__/link-incident-incidents.generated';
 import type { IncidentFilters } from 'state/data-model';
 import type { IncidentCardData } from 'types/DataType';
 
+import { useLinkIncidentIncidentsQuery } from '#/components/form-components/linkOptions/LinkIncident/__generated__/link-incident-incidents.generated';
 import { useGroupsContext } from '#/context/groups-context';
 import { useListBusinessesQuery } from 'graphql/businesses/queries/__generated__/list-businesses.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
-import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
 export interface Incident {
-  incident:
-    | Exclude<
-        ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-        null | undefined
-      >['incidents'][0]
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        null | undefined
-      >['incidents'][0];
+  incident: LinkIncidentIncidentsQuery['incidentsRelay']['edges'][number]['node'];
 }
 interface Props {
   getIncident?: (value: Incident) => void;
@@ -44,13 +35,7 @@ interface Return {
   businessesLoading: boolean;
   clearFilters: () => void;
   crimeTypes: { label: string; value: string }[];
-  data:
-    | Exclude<
-        ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-        null | undefined
-      >
-    | null
-    | undefined;
+  data?: LinkIncidentIncidentsQuery;
   goods: { label: string; value: string }[];
   goodsLoading: boolean;
   groups: { label: string; value: string }[];
@@ -76,18 +61,15 @@ const useLinkIncident = ({
   getIncident,
   incidentIds,
   onClose,
-  takeAllSchemes,
   update,
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useStoreState((state) => state.scheme.id);
 
-  const {
-    filterDefaultGroups: defaultGroups,
-    role,
-    schemes: userSchemes,
-  } = useStoreState((state) => state.user);
+  const { filterDefaultGroups: defaultGroups, role } = useStoreState(
+    (state) => state.user
+  );
 
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -99,12 +81,13 @@ const useLinkIncident = ({
   const { businesses, crimeTypes, goods, groups, peculiarities, search } =
     variables;
 
-  const { data, loading } = useListIncidentsAllSchemesQuery({
+  const { data, loading } = useLinkIncidentIncidentsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       order: {
         createdAt: SortOrder.Desc,
       },
+      schemeId,
       skip: (pagination.page - 1) * pagination.pageSize,
       take: pagination.pageSize,
       where: {
@@ -196,11 +179,6 @@ const useLinkIncident = ({
                 },
               }
             : undefined,
-        schemeId: {
-          in: takeAllSchemes
-            ? userSchemes.map((el) => el.scheme.id)
-            : [schemeId],
-        },
       },
     },
   });
@@ -312,31 +290,26 @@ const useLinkIncident = ({
 
   const onSubmit = () => {
     setSaving(true);
-    const selectedData = data?.listIncidentsAllSchemes?.incidents.find(
-      ({ id }) => id === selected
+    const selectedData = data?.incidentsRelay?.edges.find(
+      ({ node: { id } }) => id === selected
     );
     if (selectedData) {
       if (update) {
         update({
-          // })),
-          dayTime: selectedData.dayTime,
-          description: selectedData.description,
-          // images: selectedData.images.map((image) => ({
-          //   ...image,
-          //   primary: !!image.primary,
-          //   policeImage: !!image.policeImage,
-          id: selectedData.id,
-          reference: selectedData.reference,
-          subject: selectedData.subject,
+          dayTime: selectedData.node.dayTime,
+          description: selectedData.node.description,
+          id: selectedData.node.id,
+          reference: selectedData.node.reference,
+          subject: selectedData.node.subject,
         });
       }
       if (getIncident) {
-        const incident = data?.listIncidentsAllSchemes?.incidents?.find(
-          (item) => item.id === selected
+        const incident = data?.incidentsRelay?.edges?.find(
+          (item) => item.node.id === selected
         );
         if (incident) {
           // TODO fix types
-          getIncident({ incident });
+          getIncident({ incident: incident.node });
         }
       }
     }
@@ -437,7 +410,7 @@ const useLinkIncident = ({
         label: tag?.name || '',
         value: tag?.id || '',
       })) || [],
-    data: data?.listIncidentsAllSchemes,
+    data,
     goods:
       goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
         label: item.name,
@@ -446,7 +419,7 @@ const useLinkIncident = ({
     goodsLoading,
     groups: groupsData,
     groupsLoading,
-    loading: data?.listIncidentsAllSchemes ? false : loading,
+    loading: data?.incidentsRelay ? false : loading,
     onPaginationChange,
     onSelect,
     onSubmit,

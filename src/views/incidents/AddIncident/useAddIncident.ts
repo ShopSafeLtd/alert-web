@@ -23,6 +23,7 @@ import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import hasPermission from '#/utils/has-permission';
+import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
@@ -94,17 +95,20 @@ export interface FormData {
   };
   cctv?: {
     cameraNumber: string;
+    description: string;
     endTime: Date;
-    showFace?: boolean;
-    showIncident?: boolean;
+    showFace: boolean;
+    showIncident: boolean;
     startTime: Date;
   }[];
   cctvAvailable?: boolean;
   date: Date;
+  dayOrNight?: boolean;
   description: string;
   documents?: { fileList: UploadFile[] };
   fellingTags?: [];
   goods?: {
+    description?: string;
     goodsType?: string;
     name?: string;
     quantity?: number;
@@ -119,12 +123,37 @@ export interface FormData {
   images?: StateImageData[];
   involvedTags?: [];
   offenders: StateOffenderData[] | null;
+  policeCCTVEmail?: string;
+  policeDay?: boolean;
+  policeDistanceFromIncident?: string;
+  policeIncidentDuration?: string;
+  policeInside?: boolean;
   policeInvolved?: boolean;
+  policeItemsLocation?: string[];
+  policeItemsMO?: string[];
+  policeKnownBefore?: boolean;
+  policeMG11: boolean;
   policeNo?: string;
+  policeObstructions?: string;
+  policeReasonRemember?: string;
   policeRef?: string;
   policeReported?: boolean;
-  policeResponse: PoliceResponseTime;
+  policeResponse?: PoliceResponseTime;
+  policeStatement?: string;
+  policeTimePassed?: string;
+  policeWillingCourt?: boolean;
+  policeWitnessAddress?: string;
+  policeWitnessAtTime?: boolean;
+  policeWitnessEmail?: string;
+  policeWitnessEthnicity?: string;
+  policeWitnessGender?: string;
+  policeWitnessMobileNo?: string;
+  policeWitnessName?: string;
+  policeWitnessPlaceOfBirth?: string;
+  policeWitnessPostcode?: string;
+  policeWitnessWorkNo?: string;
   recoveredValue?: number;
+  reportToPolice: boolean;
   subject: string;
   tags: string[];
   value?: number;
@@ -176,6 +205,7 @@ interface Return {
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
   form: FormInstance<FormData>;
+  generatingStatement: boolean;
   goodsMode: GoodsMode;
   goodsVisible: boolean;
   incidentForm: IncidentFormField[];
@@ -184,6 +214,7 @@ interface Return {
   newAddressData: LocationData | undefined;
   onSubmit: (value: FormData) => void;
   onValuesChange: (changedValues: FormData, values: FormData) => void;
+  policeReporting: boolean;
   primaryAddress:
     | Exclude<AddressesQuery['addresses'], null | undefined>[0]
     | undefined;
@@ -191,6 +222,7 @@ interface Return {
   reportOnly: boolean;
   saving: boolean;
   setBrands: (value: string[]) => void;
+  setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
   toggleAddNewAddress: () => void;
@@ -244,6 +276,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const [addNewAddress, setAddNewAddress] = useState(false);
   const [newAddressData, setNewAddressData] = useState<LocationData>();
   const [primaryImage, setPrimaryImage] = useState<string>('');
+  const [policeReporting, setPoliceReporting] = useState(false);
+  const [generatingStatement, setGeneratingStatement] = useState(false);
 
   const [isTheft] = useState(false);
   const [descriptionPristine, setDescriptionPristine] = useState(true);
@@ -257,6 +291,33 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const showSiteNumber = requireSiteNumberForUsers && role === Role.User;
 
   const [brands, setBrands] = useState<string[]>([]);
+
+  const formTags = Form.useWatch('tags', form);
+  const victimInvolved = Form.useWatch('victimInvolved', form);
+  const witnessesInvolved = Form.useWatch('witnessesInvolved', form);
+  const cctvAvailable = Form.useWatch('cctvAvailable', form);
+  const policeMG11 = Form.useWatch('policeMG11', form);
+  const dayOrNight = Form.useWatch('dayOrNight', form);
+  const description = Form.useWatch('description', form);
+  const policeDistanceFromIncident = Form.useWatch(
+    'policeDistanceFromIncident',
+    form
+  );
+  const fellingTags = Form.useWatch('fellingTags', form);
+  const policeInside = Form.useWatch('policeInside', form);
+  const policeIncidentDuration = Form.useWatch('policeIncidentDuration', form);
+  const involvedTags = Form.useWatch('involvedTags', form);
+  const goods = Form.useWatch('goods', form);
+  const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
+  const policeObstructions = Form.useWatch('policeObstructions', form);
+  const offenders = Form.useWatch('offenders', form);
+  const policeItemsLocation = Form.useWatch('policeItemsLocation', form);
+  const policeItemsMO = Form.useWatch('policeItemsMO', form);
+  const policeReasonRemember = Form.useWatch('policeReasonRemember', form);
+  const policeTimePassed = Form.useWatch('policeTimePassed', form);
+  const vehicles = Form.useWatch('vehicles', form);
+  const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
+
   useEffect(() => {
     Mixpanel.track('Start new incident form');
   }, []);
@@ -274,6 +335,101 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       setBrands(businessBrands);
     }
   }, [businesses]);
+
+  const [generateStatementBody] = useGenerateStatementBodyMutation();
+
+  const handleStatementGeneration = async () => {
+    console.log(policeReporting, policeWitnessAtTime !== undefined);
+    if (policeReporting && policeWitnessAtTime !== undefined) {
+      const formData = form.getFieldsValue();
+      setGeneratingStatement(true);
+      const statementData = await generateStatementBody({
+        variables: {
+          data: {
+            businessId: formData.business?.value,
+            cctv:
+              formData.cctv?.map((item) => ({
+                description: item.description,
+                end: item.endTime,
+                start: item.startTime,
+              })) ?? [],
+            date: formData.date,
+            dayNight: formData.dayOrNight,
+            description: formData.description,
+            distanceFromIncident: formData.policeDistanceFromIncident,
+            impactTags: formData.fellingTags ?? [],
+            inBuilding: formData.policeInside,
+            incidentDuration: formData.policeIncidentDuration,
+            incidentType: formData.tags[0],
+            involvedTags: formData.involvedTags ?? [],
+            items: formData.goods?.map((item) => ({
+              description: item.description,
+              goodsId: item.goodsType,
+              recoveredValue: item.recoveredValue,
+              value: item.value,
+            })),
+            knownSubjects: formData.policeKnownBefore,
+            obstructions: formData.policeObstructions,
+            offenders:
+              formData.offenders?.map((item) => ({
+                age: item.age,
+                build: item.build,
+                characteristics: item.peculiarities,
+                comment: item.comment,
+                ethnicity: item.race,
+                hair: item.hair,
+                height: item.height,
+                name: item.name,
+                sex: item.gender,
+              })) ?? [],
+            policeItemsLocation: formData.policeItemsLocation,
+            policeItemsMO: formData.policeItemsMO,
+            reasonToRemember: formData.policeReasonRemember,
+            timePassed: formData.policeTimePassed,
+            vehicles:
+              formData.vehicles?.map((item) => ({
+                colour: item.colour,
+                make: item.make,
+                model: item.model,
+                registrationPlate: item.registration,
+              })) ?? [],
+            witnessedInPerson: formData.policeWitnessAtTime ?? false,
+          },
+        },
+      });
+      setGeneratingStatement(false);
+
+      form.setFieldValue(
+        'policeStatement',
+        statementData.data?.generateStatementBody.statement ?? ''
+      );
+    }
+  };
+
+  useEffect(() => {
+    void handleStatementGeneration();
+  }, [
+    policeReporting,
+    policeMG11,
+    policeWitnessAtTime,
+    vehicles,
+    policeTimePassed,
+    policeReasonRemember,
+    policeItemsMO,
+    policeItemsLocation,
+    offenders,
+    policeObstructions,
+    policeKnownBefore,
+    goods,
+    involvedTags,
+    formTags,
+    policeIncidentDuration,
+    policeInside,
+    fellingTags,
+    policeDistanceFromIncident,
+    description,
+    dayOrNight,
+  ]);
 
   const navigate = useNavigate();
 
@@ -765,6 +921,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             cctvRecords: {
               create: data.cctv?.map((item) => ({
                 cameraNumber: item.cameraNumber,
+                description: item.description,
                 endTime: item.endTime,
                 showFace: !!item.showFace,
                 showIncident: !!item.showIncident,
@@ -778,6 +935,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               ...impact,
             ],
             date: data.date,
+            dayOrNight: data.dayOrNight,
             description: data.description,
             documents: getDocuments(),
             groups:
@@ -791,6 +949,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 (item) => item.goodsType !== undefined || item.sku !== undefined
               )
               .map((item) => ({
+                description: item.description,
                 goodsType: item.goodsType
                   ? {
                       id: item.goodsType,
@@ -820,11 +979,35 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                   connect: undefined,
                   create: undefined,
                 },
+            policeCCTVEmail: data.policeCCTVEmail,
+            policeDay: data.policeDay,
+            policeDistanceFromIncident: data.policeDistanceFromIncident,
+            policeIncidentDuration: data.policeIncidentDuration,
+            policeInside: data.policeInside,
             policeInvolved: data.policeInvolved,
+            policeItemsLocation: data.policeItemsLocation,
+            policeItemsMO: data.policeItemsMO,
+            policeKnownBefore: data.policeKnownBefore,
+            policeMG11: data.policeMG11,
             policeNo: data.policeNo,
+            policeObstructions: data.policeObstructions,
+            policeReasonRemember: data.policeReasonRemember,
             policeRef: data.policeRef,
             policeReported: data.policeReported,
             policeResponse: data.policeResponse,
+            policeStatement: data.policeStatement,
+            policeTimePassed: data.policeTimePassed,
+            policeWillingCourt: data.policeWillingCourt,
+            policeWitnessAddress: data.policeWitnessAddress,
+            policeWitnessAtTime: data.policeWitnessAtTime,
+            policeWitnessEmail: data.policeWitnessEmail,
+            policeWitnessEthnicity: data.policeWitnessEthnicity,
+            policeWitnessGender: data.policeWitnessGender,
+            policeWitnessMobileNo: data.policeWitnessMobileNo,
+            policeWitnessName: data.policeWitnessName,
+            policeWitnessPlaceOfBirth: data.policeWitnessGender,
+            policeWitnessPostcode: data.policeWitnessPostcode,
+            policeWitnessWorkNo: data.policeWitnessWorkNo,
             scheme: schemeId,
             sessionId,
             subject: data.subject,
@@ -1005,50 +1188,50 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       });
   };
 
-  const cctvAvailable = Form.useWatch('cctvAvailable', form);
   useEffect(() => {
     form.setFieldValue('cctv', [{ cameraNumber: '' }]);
   }, [cctvAvailable]);
 
-  const witnessesInvolved = Form.useWatch('witnessesInvolved', form);
   useEffect(() => {
     form.setFieldValue('witnessDetails', [{ name: '' }]);
   }, [witnessesInvolved]);
 
-  const victimInvolved = Form.useWatch('victimInvolved', form);
   useEffect(() => {
     form.setFieldValue('victimsDetails', [{ name: '' }]);
   }, [victimInvolved]);
 
-  const formTags = Form.useWatch('tags', form);
   useEffect(() => {
     if (formTags) {
-      const sections = [
-        ...new Set(
-          formTags
-            .map((value) =>
-              incidentTagsData?.listIncidentTags.find(
-                (item) => item.value === value
-              )
-            )
-            .flatMap((item) => item?.incidentForm)
-            .map((item) => item?.type)
-        ),
-      ];
-
-      if (sections.length > 0) {
-        setIncidentForm(sections as IncidentFormField[]);
+      if (formTags.length === 0) {
+        setIncidentForm([IncidentFormField.Types]);
       } else {
-        setIncidentForm([
-          IncidentFormField.Types,
-          IncidentFormField.Involved,
-          IncidentFormField.Where,
-          IncidentFormField.Images,
-          IncidentFormField.Offenders,
-          IncidentFormField.Police,
-          IncidentFormField.Details,
-          IncidentFormField.Groups,
-        ]);
+        const sections = [
+          ...new Set(
+            formTags
+              .map((value) =>
+                incidentTagsData?.listIncidentTags.find(
+                  (item) => item.value === value
+                )
+              )
+              .flatMap((item) => item?.incidentForm)
+              .map((item) => item?.type)
+          ),
+        ];
+
+        if (sections.length > 0) {
+          setIncidentForm(sections as IncidentFormField[]);
+        } else {
+          setIncidentForm([
+            IncidentFormField.Types,
+            IncidentFormField.Involved,
+            IncidentFormField.Where,
+            IncidentFormField.Images,
+            IncidentFormField.Offenders,
+            IncidentFormField.Police,
+            IncidentFormField.Details,
+            IncidentFormField.Groups,
+          ]);
+        }
       }
       if (formTags.length > 0) {
         const tag = incidentTagsData?.listIncidentTags.find(
@@ -1096,6 +1279,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     customQuestions,
     dontKnowGoods,
     form,
+    generatingStatement,
     goodsMode,
     goodsVisible,
     incidentForm,
@@ -1104,6 +1288,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     newAddressData,
     onSubmit,
     onValuesChange,
+    policeReporting,
     primaryAddress: addressData
       ? addressData.addresses.find((item) => item.primary)
       : undefined,
@@ -1111,6 +1296,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     reportOnly,
     saving,
     setBrands,
+    setPoliceReporting,
     setPrimaryImage,
     showSiteNumber,
     toggleAddNewAddress,
