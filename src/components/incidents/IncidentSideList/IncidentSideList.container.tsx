@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './IncidentSideList.view';
 import useIncidentSideList from './useIncidentSideList';
 
@@ -12,9 +13,9 @@ const IncidentSideList = ({ current }: Props): JSX.Element => {
 
   return (
     <View
+      current={current}
       data={data}
       loading={loading}
-      current={current}
       // onPaginationChange={onPaginationChange}
       // pagination={pagination}
       next={next}
