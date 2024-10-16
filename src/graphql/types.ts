@@ -16802,6 +16802,7 @@ export type SchemeUpdateInput = {
   imagesRequiredOnOffenders?: InputMaybe<SetBooleanHelper>;
   incidentRetention?: InputMaybe<SetIntHelper>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  mg11Available?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<SetStringHelper>;
   needJustification?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;

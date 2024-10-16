@@ -43,7 +43,6 @@ interface Return {
   CrimeGroupsLoading: boolean;
   addCustomGallery: boolean;
   adminRights: boolean;
-
   beforeUpload: (value: RcFile) => void;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;

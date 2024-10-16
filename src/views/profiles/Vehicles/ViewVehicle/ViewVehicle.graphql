@@ -1,0 +1,51 @@
+query ViewVehicle($where: VehicleWhereUniqueInput!, $groupsWhere: GroupWhereInput) {
+    vehicle(where: $where) {
+        id
+        make
+        model
+        registration
+        totalOffenders
+        totalIncidents
+        totalCrimeGroups
+        reference
+        subscribed
+        totalImages
+        customGalleries {
+            id
+            name
+        }
+
+        groups(where: $groupsWhere) {
+            id
+            name
+        }
+        images {
+            ...Images
+        }
+
+        updatedAt
+        colour
+        crimeGroup {
+            ...CrimeGroups
+        }
+        offenders {
+            ...Offenders
+            images {
+                ...Images
+                isFace
+            }
+        }
+        incidents {
+            ...Incidents
+        }
+        evidence {
+            ...Documents
+        }
+        investigations {
+            ...Investigations
+        }
+        updates(orderBy: { createdAt: desc }) {
+            ...Updates
+        }
+    }
+}
