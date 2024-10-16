@@ -20,7 +20,6 @@ const useCanView = ({ currentScheme, schemes, type }: SchemesInput) => {
   }, [currentScheme, schemes]);
 
   const redirectToEntity = useCallback(() => {
-    console.log('redirect', currentScheme, schemes, type);
     if (!schemes) return;
     if (type === 'offender') {
       navigate('/app/offenders', { replace: true });
