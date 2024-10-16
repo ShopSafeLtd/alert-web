@@ -1,4 +1,4 @@
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
+import type { IncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 
 import { Col, Row, Typography } from 'antd';
 import SideListItem from 'components/side-list/SideListItem.view';
@@ -18,13 +18,7 @@ const getPriorityBorder = (value: IncidentPriority) => {
 
 interface Props {
   current?: string;
-  data:
-    | Exclude<
-        ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-        null | undefined
-      >
-    | null
-    | undefined;
+  data: IncidentsFeedQuery['incidentsRelay'] | null | undefined;
   loading: boolean;
   next: () => void;
 }
@@ -38,9 +32,9 @@ const IncidentSideList = ({
   const classes = useStyles();
   const intl = useIntl();
 
-  const isLoading = loading && !data?.total;
+  const isLoading = loading && !data?.pageInfo;
 
-  const incidentItems = data?.incidents?.map((incident) => (
+  const incidentItems = data?.edges?.map(({ node: incident }) => (
     <Link key={incident.id} to={`/app/incidents/view/${incident.id}`}>
       <SideListItem
         current={current === incident.id}
@@ -109,8 +103,8 @@ const IncidentSideList = ({
 
   return (
     <InfiniteSideScrollList
-      dataLength={data?.incidents?.length}
-      hasMore={(data?.incidents?.length || 0) < (data?.total || 0)}
+      dataLength={data?.edges.length || 0}
+      hasMore={data?.pageInfo.hasNextPage}
       isLoading={isLoading}
       items={incidentItems}
       next={next}

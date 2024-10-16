@@ -1,15 +1,15 @@
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
+import type {
+  IncidentsFeedQuery,
+  IncidentsFeedQueryVariables,
+} from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 
-import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
+import { useIncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import { QueryMode, Role, SortOrder } from 'graphql/types';
 import { IncidentSort, useStoreState } from 'state';
 
 interface Return {
   data:
-    | Exclude<
-        ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-        null | undefined
-      >
+    | Exclude<IncidentsFeedQuery['incidentsRelay'], null | undefined>
     | null
     | undefined;
   loading: boolean;
@@ -28,82 +28,95 @@ const useIncidentSideList = (): Return => {
   const {
     businesses,
     createdAt,
+    createdBy,
     crimeTypes,
     gallery,
     goods,
     groups,
     incidentDate,
     peculiarities,
+    priority,
     search,
   } = filterVariables;
-
-  const variables = {
+  const isUser = role === Role.User;
+  const variables: IncidentsFeedQueryVariables = {
+    approved: isUser
+      ? true
+      : gallery.includes('NOT APPROVED')
+        ? false
+        : undefined,
+    first: 12,
     order: {
       date:
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
-    skip: 0,
-    take: 12,
+    schemeId,
     where: {
-      AND: [
-        {
-          OR: [
+      AND: search
+        ? [
             {
-              subject: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              referenceStr: {
-                contains: search,
-              },
-            },
-            {
-              createdBy: {
-                OR: [
-                  {
+              OR: [
+                {
+                  subject: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
+
+                {
+                  referenceStr: {
+                    contains: search,
+                  },
+                },
+                {
+                  business: {
+                    name: {
+                      contains: search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                },
+                {
+                  createdBy: {
                     fullName: {
                       contains: search,
                       mode: QueryMode.Insensitive,
                     },
                   },
-
-                  {
-                    businesses: {
-                      some: {
-                        name: {
-                          contains: search,
-                          mode: QueryMode.Insensitive,
-                        },
+                },
+                {
+                  offenders: {
+                    some: {
+                      name: {
+                        contains: search,
+                        mode: QueryMode.Insensitive,
                       },
                     },
                   },
-                ],
-              },
-            },
-          ],
-        },
-        {
-          createdBy: gallery.includes('MYDATA')
-            ? {
-                id: {
-                  equals: userId,
                 },
-              }
-            : undefined,
-        },
-      ],
-      approved:
-        role === Role.User
+                {
+                  crimeTypes: {
+                    some: {
+                      name: {
+                        contains: search,
+                        mode: QueryMode.Insensitive,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ]
+        : undefined,
+      approved: isUser
+        ? {
+            equals: true,
+          }
+        : gallery.includes('NOT APPROVED')
           ? {
-              equals: true,
+              equals: false,
             }
-          : gallery.includes('NOT APPROVED')
-            ? {
-                equals: false,
-              }
-            : undefined,
+          : undefined,
       business:
         businesses.length > 0
           ? {
@@ -118,6 +131,14 @@ const useIncidentSideList = (): Return => {
             lte: createdAt.endDate,
           }
         : undefined,
+      createdBy:
+        gallery.includes('MYDATA') || createdBy.length > 0
+          ? {
+              id: {
+                in: gallery.includes('MYDATA') ? [userId] : createdBy,
+              },
+            }
+          : undefined,
       crimeTypes:
         crimeTypes.length > 0
           ? {
@@ -162,7 +183,6 @@ const useIncidentSideList = (): Return => {
               },
             }
           : undefined,
-
       policeInvolved: gallery.includes('POLICEINVOLVED')
         ? {
             equals: true,
@@ -173,10 +193,12 @@ const useIncidentSideList = (): Return => {
             equals: true,
           }
         : undefined,
-      schemeId: {
-        equals: schemeId,
-      },
-
+      priority:
+        priority.length > 0
+          ? {
+              in: priority,
+            }
+          : undefined,
       subscribedUsers: gallery.includes('FOLLOWING')
         ? {
             some: {
@@ -188,7 +210,8 @@ const useIncidentSideList = (): Return => {
         : undefined,
     },
   };
-  const { data, fetchMore, loading } = useListIncidentsAllSchemesQuery({
+
+  const { data, fetchMore, loading } = useIncidentsFeedQuery({
     fetchPolicy: 'cache-and-network',
     skip: role === Role.User && gallery.includes('NOT APPROVED'),
     variables,
@@ -199,29 +222,25 @@ const useIncidentSideList = (): Return => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listIncidentsAllSchemes: {
-            ...fetchMoreResult.listIncidentsAllSchemes,
-            incidents: [
-              ...(prev.listIncidentsAllSchemes?.incidents || []),
-              ...(fetchMoreResult.listIncidentsAllSchemes?.incidents || []),
+          incidentsRelay: {
+            ...fetchMoreResult.incidentsRelay,
+            edges: [
+              ...(prev.incidentsRelay?.edges || []),
+              ...(fetchMoreResult.incidentsRelay?.edges || []),
             ],
-            total:
-              fetchMoreResult.listIncidentsAllSchemes?.total ||
-              prev.listIncidentsAllSchemes?.total ||
-              0,
           },
         };
       },
       variables: {
         ...variables,
-        skip: data?.listIncidentsAllSchemes?.incidents?.length || 0,
+        skip: data?.incidentsRelay?.edges?.length || 0,
       },
     });
   };
 
   return {
-    data: data?.listIncidentsAllSchemes,
-    loading: data?.listIncidentsAllSchemes ? false : loading,
+    data: data?.incidentsRelay,
+    loading: data?.incidentsRelay ? false : loading,
     next,
   };
 };
