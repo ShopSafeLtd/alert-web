@@ -1,0 +1,15 @@
+query demDevicesSelect($where: DemDeviceWhereInput) {
+  demDevices(where: $where) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

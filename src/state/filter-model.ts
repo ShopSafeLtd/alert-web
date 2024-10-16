@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
+
 import { action } from 'easy-peasy';
 import { ChecklistStatus } from 'graphql/types';
 
@@ -10,68 +11,82 @@ export interface SetFilterModel {
 export type ChecklistSortOptions = 'createdAt' | 'title';
 export type ChecklistSortOrder = 'asc' | 'desc';
 export type ActiveChecklistSortOptions =
-  | 'createdAt'
   | 'completedAt'
+  | 'createdAt'
+  | 'name'
   | 'percentComplete'
-  | 'status'
-  | 'name';
+  | 'status';
 
 export interface FilterModelValues {
+  activeStatus?: (ChecklistStatus.Completed | ChecklistStatus.InProgress)[];
   businesses: string[];
-  ownUser: boolean;
   checklistsTab: string;
-  activeStatus?: (ChecklistStatus.InProgress | ChecklistStatus.Completed)[];
+  ownUser: boolean;
 }
 export interface SetChecklistFilterModel {
+  activeStatus?: (ChecklistStatus.Completed | ChecklistStatus.InProgress)[];
   businesses?: string[];
-  ownUser?: boolean;
   checklistsTab?: string;
-  activeStatus?: (ChecklistStatus.InProgress | ChecklistStatus.Completed)[];
+  ownUser?: boolean;
 }
 
 export interface FilterModel {
-  groups: string[];
+  activeChecklistSort: {
+    field: ActiveChecklistSortOptions;
+    order: ChecklistSortOrder;
+  };
   checklistFilter: FilterModelValues;
   checklistSort: {
     field: ChecklistSortOptions;
     order: ChecklistSortOrder;
   };
-  setChecklistSort: Action<
-    FilterModel,
-    { field: ChecklistSortOptions; order: ChecklistSortOrder }
-  >;
-  activeChecklistSort: {
-    field: ActiveChecklistSortOptions;
-    order: ChecklistSortOrder;
-  };
+  clearFilter: Action<FilterModel>;
+  groups: string[];
   setActiveChecklistSort: Action<
     FilterModel,
     { field: ActiveChecklistSortOptions; order: ChecklistSortOrder }
   >;
   setChecklistFilters: Action<FilterModel, SetChecklistFilterModel>;
+  setChecklistSort: Action<
+    FilterModel,
+    { field: ChecklistSortOptions; order: ChecklistSortOrder }
+  >;
   setFilter: Action<FilterModel, SetFilterModel>;
-  clearFilter: Action<FilterModel>;
 }
 
 const filterModel: FilterModel = {
-  groups: [],
+  activeChecklistSort: {
+    field: 'createdAt',
+    order: 'desc',
+  },
   checklistFilter: {
-    checklistsTab: 'Checklists',
-    businesses: [],
-    ownUser: false,
     activeStatus: [ChecklistStatus.InProgress, ChecklistStatus.Completed],
+    businesses: [],
+    checklistsTab: 'Checklists',
+    ownUser: false,
   },
   checklistSort: {
     field: 'createdAt',
     order: 'desc',
   },
-  activeChecklistSort: {
-    field: 'createdAt',
-    order: 'desc',
-  },
-  setChecklistSort: action((state, payload) => {
-    state.checklistSort = payload;
+  clearFilter: action((state) => {
+    state.groups = [];
+    state.checklistFilter = {
+      activeStatus: [ChecklistStatus.InProgress, ChecklistStatus.Completed],
+      businesses: [],
+      checklistsTab: 'Checklists',
+      ownUser: false,
+    };
+    state.activeChecklistSort = {
+      field: 'createdAt',
+      order: 'desc',
+    };
+    state.checklistSort = {
+      field: 'createdAt',
+      order: 'desc',
+    };
   }),
+  groups: [],
   setActiveChecklistSort: action((state, payload) => {
     state.activeChecklistSort = payload;
   }),
@@ -84,26 +99,12 @@ const filterModel: FilterModel = {
       }
     }
   }),
-  setFilter: action((state, payload) => {
-    state.groups = payload.groups;
+  setChecklistSort: action((state, payload) => {
+    state.checklistSort = payload;
   }),
 
-  clearFilter: action((state) => {
-    state.groups = [];
-    state.checklistFilter = {
-      checklistsTab: 'Checklists',
-      businesses: [],
-      ownUser: false,
-      activeStatus: [ChecklistStatus.InProgress, ChecklistStatus.Completed],
-    };
-    state.activeChecklistSort = {
-      field: 'createdAt',
-      order: 'desc',
-    };
-    state.checklistSort = {
-      field: 'createdAt',
-      order: 'desc',
-    };
+  setFilter: action((state, payload) => {
+    state.groups = payload.groups;
   }),
 };
 

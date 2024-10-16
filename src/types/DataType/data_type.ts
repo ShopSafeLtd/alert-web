@@ -182,6 +182,7 @@ export interface InvestigationDetails {
 
 // image
 export interface ImageCardData {
+  blurFaces?: BlurFaceData[];
   deleted?: boolean;
   edited?: boolean;
   fileName?: null | string;
@@ -203,6 +204,7 @@ export interface ImageCardData {
 }
 
 export interface Image extends UploadFile {
+  blurFaces?: ImageFaceType[];
   deleted?: boolean;
   edited?: boolean;
   isFace?: boolean;
@@ -231,6 +233,13 @@ export interface ImageFaceType {
   Gender: 'Female' | 'Male';
   Mustache: boolean;
   imageURL: string;
+}
+export interface BlurFaceData {
+  blur: boolean;
+  height: number;
+  left: number;
+  top: number;
+  width: number;
 }
 
 export interface EditFeedImage {
@@ -483,4 +492,18 @@ export interface OffenderSettingsType {
   images: boolean;
   name: boolean;
   peculiarities: boolean;
+}
+export interface DemDeviceData {
+  business: string;
+  createdAt?: Date | null;
+  demGroups: string[];
+  id: string;
+  name: string;
+  serialNumber?: null | string;
+}
+export interface DemGroupData {
+  demDevices: string[];
+  demId?: string;
+  id: string;
+  name: string;
 }

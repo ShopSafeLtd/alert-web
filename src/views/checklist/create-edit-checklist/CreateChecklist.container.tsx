@@ -1,38 +1,40 @@
 import React from 'react';
+
 import View from './CreateChecklist.view';
 import { useCreateChecklist } from './useCreateChecklist';
 
 const CreateChecklistContainer = () => {
   const {
-    form,
-    onFinish,
-    handleAddSection,
-    handleRemoveSection,
-    handleSectionChange,
-    handleAddSubsection,
-    handleRemoveSubsection,
-    handleAddQuestion,
-    handleRemoveQuestion,
-    loading,
-    businesses,
-    users,
     brands,
+    businesses,
+    form,
+    handleAddQuestion,
+    handleAddSection,
+    handleAddSubsection,
+    handleRemoveQuestion,
+    handleRemoveSection,
+    handleRemoveSubsection,
+    handleSectionChange,
+    loading,
+    onFinish,
+    users,
   } = useCreateChecklist();
+
   return (
     <View
       brands={brands}
       businesses={businesses}
-      users={users}
-      loading={loading}
       form={form}
-      onFinish={onFinish}
-      handleAddSection={handleAddSection}
-      handleRemoveSection={handleRemoveSection}
-      handleSectionChange={handleSectionChange}
-      handleAddSubsection={handleAddSubsection}
-      handleRemoveSubsection={handleRemoveSubsection}
       handleAddQuestion={handleAddQuestion}
+      handleAddSection={handleAddSection}
+      handleAddSubsection={handleAddSubsection}
       handleRemoveQuestion={handleRemoveQuestion}
+      handleRemoveSection={handleRemoveSection}
+      handleRemoveSubsection={handleRemoveSubsection}
+      handleSectionChange={handleSectionChange}
+      loading={loading}
+      onFinish={onFinish}
+      users={users}
     />
   );
 };

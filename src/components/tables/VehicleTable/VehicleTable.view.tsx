@@ -1,17 +1,18 @@
-import React from 'react';
-import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
-import { createUseStyles } from 'react-jss';
+import type { ImagePosition } from 'graphql/types';
 import type { VehicleData } from 'types/DataType';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import {
   faEye,
   faPenToSquare,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import type { ImagePosition } from 'graphql/types';
 
 const useStyles = createUseStyles({
   row: {
@@ -19,83 +20,78 @@ const useStyles = createUseStyles({
   },
 });
 interface Props {
+  deleteRights?: boolean;
+  editRights?: boolean;
+  hasNavigation?: boolean;
+  onDeleteVehicle?: (id: string) => void;
+  saving?: boolean;
+  setEditVehicleData?: (value: VehicleData | null) => void;
   vehicles:
     | {
+        colour?: null | string;
         id: string;
-        reference?: number | null;
-        registration?: string | null;
-        make?: string | null;
-        colour?: string | null;
-        model?: string | null;
         images?:
           | {
               id: string;
-              optimised?: string | null | undefined;
+              optimised?: null | string | undefined;
               position?: ImagePosition;
               rotation?: number;
             }[]
           | null
           | undefined;
+        make?: null | string;
+        model?: null | string;
+        reference?: null | number;
+        registration?: null | string;
       }[]
     | undefined;
-  hasNavigation?: boolean;
-  saving?: boolean;
-  setEditVehicleData?: (value: VehicleData | null) => void;
-  onDeleteVehicle?: (id: string) => void;
-  editRights?: boolean;
-  deleteRights?: boolean;
 }
 //  wait to check
 const VehicleTable = ({
-  vehicles,
+  deleteRights,
+  editRights,
   hasNavigation,
+  onDeleteVehicle,
   saving,
   setEditVehicleData,
-  onDeleteVehicle,
-  editRights,
-  deleteRights,
+  vehicles,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
 
   return (
     <Table
-      size="small"
-      rowClassName={classes.row}
       columns={[
         {
-          key: 'images',
           dataIndex: 'images',
-          title: '',
+          key: 'images',
           render: (
             item: {
+              optimised?: null | string | undefined;
               position: ImagePosition | undefined;
               rotation: number | undefined;
-              optimised?: string | null | undefined;
             }[]
           ) => {
             if (item && item[0])
               return (
                 <div style={{ height: 100, width: 80 }}>
                   <WatermarkImage
-                    url={item[0]?.optimised}
-                    rotation={item[0]?.rotation}
                     position={item[0]?.position}
+                    rotation={item[0]?.rotation}
+                    url={item[0]?.optimised}
                   />
                 </div>
               );
             return null;
           },
+          title: '',
         },
         {
-          key: 'reference',
           dataIndex: 'reference',
-          title: intl.formatMessage({
-            defaultMessage: 'Alert ID',
-          }),
+          key: 'reference',
           render: (
             _,
-            record: { key: string; reference: number | null | undefined }
+            record: { key: string; reference: null | number | undefined }
           ) => {
             if (hasNavigation) {
               return (
@@ -106,42 +102,43 @@ const VehicleTable = ({
             }
             return <Typography.Text>{record.reference}</Typography.Text>;
           },
+          title: intl.formatMessage({
+            defaultMessage: 'Alert ID',
+          }),
           width: 80,
         },
         {
-          key: 'registration',
           dataIndex: 'registration',
+          key: 'registration',
           title: intl.formatMessage({
             defaultMessage: 'Registration',
           }),
         },
         {
-          key: 'make',
           dataIndex: 'make',
+          key: 'make',
           title: intl.formatMessage({
             defaultMessage: 'Make',
           }),
         },
         {
-          key: 'colour',
           dataIndex: 'colour',
+          key: 'colour',
           title: intl.formatMessage({
             defaultMessage: 'Colour',
           }),
         },
         {
-          key: 'model',
           dataIndex: 'model',
+          key: 'model',
           title: intl.formatMessage({
             defaultMessage: 'Model',
           }),
         },
         {
-          key: 'Options',
-          title: '',
           dataIndex: 'Options',
-          width: 100,
-          render: (_, record: { vehicle: VehicleData | null; key: string }) => (
+          key: 'Options',
+          render: (_, record: { key: string; vehicle: VehicleData | null }) => (
             <Row gutter={8}>
               {hasNavigation && (
                 <Col>
@@ -152,9 +149,9 @@ const VehicleTable = ({
                   >
                     <Link to={`/app/vehicles/view/${record.key}`}>
                       <Button
-                        size="small"
                         disabled={saving}
                         icon={<FontAwesomeIcon icon={faEye} />}
+                        size="small"
                       />
                     </Link>
                   </Tooltip>
@@ -168,12 +165,12 @@ const VehicleTable = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       onClick={() => {
                         setEditVehicleData(record.vehicle);
                       }}
-                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
@@ -186,25 +183,25 @@ const VehicleTable = ({
                     })}
                   >
                     <Popconfirm
-                      placement="topLeft"
-                      title={intl.formatMessage({
-                        defaultMessage: 'Remove the vehicle?',
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                      })}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
                       })}
                       onConfirm={() => {
                         onDeleteVehicle(record.key);
                       }}
-                      okText={intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
-                      cancelText={intl.formatMessage({
-                        defaultMessage: 'No',
-                      })}
                       overlayInnerStyle={{ padding: 10 }}
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the vehicle?',
+                      })}
                     >
                       <Button
-                        size="small"
                         disabled={saving}
                         icon={<FontAwesomeIcon icon={faTrash} />}
+                        size="small"
                       />
                     </Popconfirm>
                   </Tooltip>
@@ -212,17 +209,19 @@ const VehicleTable = ({
               )}
             </Row>
           ),
+          title: '',
+          width: 100,
         },
       ].filter((item) => item?.key !== 'Options' || deleteRights || editRights)}
       dataSource={
         vehicles?.map((vehicle) => ({
-          key: vehicle.id,
-          reference: vehicle.reference,
-          make: vehicle.make,
           colour: vehicle.colour,
-          model: vehicle.model,
-          registration: vehicle.registration,
           images: vehicle.images,
+          key: vehicle.id,
+          make: vehicle.make,
+          model: vehicle.model,
+          reference: vehicle.reference,
+          registration: vehicle.registration,
           vehicle,
         })) || []
       }
@@ -230,6 +229,8 @@ const VehicleTable = ({
         hideOnSinglePage: true,
         pageSize: 5,
       }}
+      rowClassName={classes.row}
+      size="small"
     />
   );
 };

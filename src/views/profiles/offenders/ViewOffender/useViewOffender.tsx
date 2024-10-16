@@ -1,3 +1,4 @@
+import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
@@ -196,6 +197,7 @@ interface Return {
   translateText: () => Promise<void>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation>;
   updateIncidentList: (value: string) => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   userId: string;
@@ -508,6 +510,10 @@ const useViewOffender = (offenderId: string): Return => {
             newImages && newImages.length > 0
               ? newImages
                   .map((item) => ({
+                    blurFaces:
+                      item.blurFaces && item.blurFaces.length > 0
+                        ? item.blurFaces
+                        : undefined,
                     policeImage: item.policeImage,
                     position: item.position,
                     primary: item.primary,
@@ -629,6 +635,42 @@ const useViewOffender = (offenderId: string): Return => {
           disconnect: [{ id: value }],
         },
       },
+    });
+  };
+  const updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createBlurFaces === null || res?.createBlurFaces === undefined)
+      return;
+
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    const findIndex = existingData.offender.images.findIndex(
+      ({ id }) => id === res.createBlurFaces.id
+    );
+    store.writeQuery<ViewOffenderQuery>({
+      data: {
+        __typename: 'Query',
+
+        offender: update<ViewOffenderQuery['offender']>(existingData.offender, {
+          images: {
+            [findIndex]: {
+              $set: {
+                ...existingData.offender.images[findIndex],
+                optimised: res.createBlurFaces.optimised,
+                url: res.createBlurFaces.url,
+              },
+            },
+          },
+        }),
+      },
+      query: ViewOffenderDocument,
+      variables,
     });
   };
   // vehicle
@@ -1947,6 +1989,7 @@ const useViewOffender = (offenderId: string): Return => {
     translateText,
     updateDeleteDocument,
     updateDocumentList,
+    updateImagesList,
     updateIncidentList,
     updateInvestigationList,
     userId,

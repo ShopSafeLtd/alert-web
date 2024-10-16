@@ -2,35 +2,27 @@ import type { ListDemEvidenceExtendedWithoutUserQuery } from '#/views/evidence/g
 
 import { faFileAudio } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  Col,
-  Descriptions,
-  Image,
-  Input,
-  Modal,
-  Row,
-  Select,
-  Table,
-} from 'antd';
+import { Col, Image, Input, Row, Select, Table } from 'antd';
 import Loading from 'components/shared-components/AntD/Loading';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import ReactPlayer from 'react-player';
 
 import useStyles from '../../profiles/crime-groups/list-crime-groups/ListCrimeGroups.styles';
-
+import ViewEvidenceModal from './ViewEvidenceModal';
 interface ViewEvidenceListProps {
   data: ListDemEvidenceExtendedWithoutUserQuery | undefined;
   demIds: { id: string; name: string }[];
   loading: boolean;
+  onDelete: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  selectedData: TableItem | undefined;
-  setSelectedData: React.Dispatch<React.SetStateAction<TableItem | undefined>>;
+  selectedData: EvidenceType | undefined;
+  setSelectedData: React.Dispatch<
+    React.SetStateAction<EvidenceType | undefined>
+  >;
   setSelectedId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export type TableItem = {
+export type EvidenceType = {
   date: Date | null | undefined;
   duration: null | string | undefined;
   importance: null | string | undefined;
@@ -48,6 +40,7 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
   data,
   demIds,
   loading,
+  onDelete,
   onPaginationChange,
   selectedData,
   setSelectedData,
@@ -84,7 +77,7 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
           />
         </Col>
       </Row>
-      <Table<TableItem>
+      <Table<EvidenceType>
         columns={[
           {
             dataIndex: 'thumbnail',
@@ -94,7 +87,7 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                 id: string;
                 url: string;
               },
-              item: TableItem
+              item: EvidenceType
             ) =>
               item.type === 'AUDIO' ? (
                 <FontAwesomeIcon
@@ -128,8 +121,8 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
             key: 'name',
             title: <FormattedMessage defaultMessage="Officer" />,
             // filters: [...new Map(officerNames.map((v) => [v.value, v])).values()],
-            // onFilter: (value: string | number | boolean, record: TableItem) => record.officer.name.includes(value as string),
-            // render: (name: string, item: TableItem) =>
+            // onFilter: (value: string | number | boolean, record: EvidenceType) => record.officer.name.includes(value as string),
+            // render: (name: string, item: EvidenceType) =>
             //   isAdmin ? (
             //     <Link to={`/app/officer/${item.companyId}/${item.officer.id}`}>
             //       {name}
@@ -157,7 +150,7 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                 .reverse()
                 .join(' - ') || 'No date',
             // sort by date
-            // sorter: (a: TableItem, b: TableItem) =>
+            // sorter: (a: EvidenceType, b: EvidenceType) =>
             //   a.date.getTime() - b.date.getTime(),
             // sortDirections: ['descend', 'ascend'] as ('descend' | 'ascend')[],
             // defaultSortOrder: 'descend' as const,
@@ -204,9 +197,7 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                         duration: '',
                         importance: '',
                         key: '',
-
                         name: 'No name provided',
-
                         playbackUrl: 'No playbackUrl provided',
                         thumbnail: {
                           id: '',
@@ -218,7 +209,7 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
             : []
         }
         loading={loading}
-        onRow={(record: TableItem) => ({
+        onRow={(record: EvidenceType) => ({
           onClick: () => {
             setSelectedData(record);
           },
@@ -234,108 +225,12 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
         rowClassName="clickable-row"
         size="small"
       />
-      <Modal
-        footer={[
-          <Button
-            key="submit"
-            loading={loading}
-            onClick={() => setSelectedData(undefined)}
-            type="ghost"
-          >
-            {intl.formatMessage({
-              defaultMessage: 'Close',
-            })}
-          </Button>,
-          <Button key="download" loading={loading} type="primary">
-            <a download href={selectedData?.playbackUrl}>
-              {intl.formatMessage({
-                defaultMessage: 'Download',
-              })}
-            </a>
-          </Button>,
-        ]}
-        onCancel={() => setSelectedData(undefined)}
-        open={!!selectedData}
-        title={intl.formatMessage({
-          defaultMessage: 'View Evidence',
-        })}
-        width="80%"
-      >
-        <div>
-          <Row gutter={16}>
-            <Col span={10}>
-              <Descriptions bordered column={1}>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Officer',
-                  })}
-                >
-                  {selectedData?.name}
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Duration',
-                  })}
-                >
-                  {selectedData?.duration}
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Importance',
-                  })}
-                >
-                  {selectedData?.importance}
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Type',
-                  })}
-                >
-                  {selectedData?.type}
-                </Descriptions.Item>
-              </Descriptions>
-            </Col>
-
-            <Col>
-              {selectedData && selectedData.type === 'IMAGE' ? (
-                <Image
-                  alt={intl.formatMessage({
-                    defaultMessage: 'evidence',
-                  })}
-                  height="100%"
-                  src={selectedData?.playbackUrl || ' '}
-                  width="100%"
-                />
-              ) : (
-                <div>
-                  {selectedData?.type === 'AUDIO' ? (
-                    <ReactPlayer
-                      config={{
-                        file: {
-                          forceVideo: true,
-                        },
-                      }}
-                      controls
-                      url={selectedData?.playbackUrl || ' '}
-                    />
-                  ) : (
-                    <ReactPlayer
-                      config={{
-                        file: {
-                          forceVideo: true,
-                        },
-                      }}
-                      controls
-                      url={selectedData?.playbackUrl || ' '}
-                      width="100%"
-                    />
-                  )}
-                </div>
-              )}
-            </Col>
-          </Row>
-        </div>
-      </Modal>
+      <ViewEvidenceModal
+        loading={loading}
+        onDelete={onDelete}
+        selectedData={selectedData}
+        setSelectedData={setSelectedData}
+      />
     </div>
   );
 };

@@ -1,65 +1,67 @@
 import React from 'react';
+
 import View from './UserList.view';
 import useUserList from './useUserList';
 
 const UserList = (): JSX.Element => {
   const {
-    data,
-    loading,
-    search,
-    setSearch,
-    groups,
-    groupsLoading,
-    selectedGroups,
-    setSelectedGroups,
     addUser,
-    toggleAddUser,
-    updateUserList,
-    updateExitingUserList,
+    clearFilters,
     currentPage,
     currentPageSize,
-    onPaginationChange,
+    data,
     editUser,
-    toggleEditUser,
-    userStatus,
-    setUserStatus,
-    userRole,
-    setUserRole,
+    groups,
+    groupsLoading,
+    loading,
+    onPaginationChange,
     order,
+    search,
+    selectedGroups,
     setOrder,
+    setSearch,
+    setSelectedGroups,
+    setUserRole,
+    setUserStatus,
     sortFilter,
+    toggleAddUser,
+    toggleEditUser,
     toggleSortFilter,
-    clearFilters,
+    updateExitingUserList,
+    updateUserList,
+    userRole,
+    userStatus,
   } = useUserList();
+  console.log(data);
 
   return (
     <View
-      data={data}
-      loading={loading}
-      search={search}
-      setSearch={setSearch}
-      groups={groups}
-      groupsLoading={groupsLoading}
-      selectedGroups={selectedGroups}
-      setSelectedGroups={setSelectedGroups}
       addUser={addUser}
-      toggleAddUser={toggleAddUser}
-      updateUserList={updateUserList}
-      updateExitingUserList={updateExitingUserList}
-      onPaginationChange={onPaginationChange}
+      clearFilters={clearFilters}
       currentPage={currentPage}
       currentPageSize={currentPageSize}
+      data={data}
       editUser={editUser}
-      toggleEditUser={toggleEditUser}
-      userStatus={userStatus}
-      setUserStatus={setUserStatus}
-      userRole={userRole}
-      setUserRole={setUserRole}
-      sortFilter={sortFilter}
-      toggleSortFilter={toggleSortFilter}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      loading={loading}
+      onPaginationChange={onPaginationChange}
       order={order}
+      search={search}
+      selectedGroups={selectedGroups}
       setOrder={setOrder}
-      clearFilters={clearFilters}
+      setSearch={setSearch}
+      setSelectedGroups={setSelectedGroups}
+      setUserRole={setUserRole}
+      setUserStatus={setUserStatus}
+      sortFilter={sortFilter}
+      toggleAddUser={toggleAddUser}
+      toggleEditUser={toggleEditUser}
+      toggleSortFilter={toggleSortFilter}
+      updateExitingUserList={updateExitingUserList}
+      updateUserList={updateUserList}
+      userRole={userRole}
+      userStatus={userStatus}
     />
   );
 };

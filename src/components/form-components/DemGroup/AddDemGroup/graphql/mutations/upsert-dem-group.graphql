@@ -1,0 +1,12 @@
+mutation UpsertDemGroup($data: UpsertDemGroup!) {
+  upsertDemGroup(data: $data) {
+    id
+    name
+    demId
+    totalDevices
+    demDevices {
+      id
+      name
+    }
+  }
+}

@@ -22,6 +22,7 @@ query schemeDetails($where: SchemeWhereUniqueInput!) {
     needJustification
     facialRecognition
     facialDetection
+    facialRedaction
     activityAssignToUser
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders

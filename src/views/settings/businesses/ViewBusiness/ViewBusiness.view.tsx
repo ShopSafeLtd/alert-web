@@ -1,4 +1,7 @@
+import type { UpsertDemDeviceMutation } from '#/components/form-components/DemDevice/AddDemDevice/graphql/mutations/__generated__/upsert-dem-device.generated';
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
+// import EvidenceTable from '#/components/tables/EvidenceTable';
+import type { RecycleDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListActionsQuery } from 'graphql/actions/queries/__generated__/list-actions.generated';
@@ -8,8 +11,13 @@ import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/c
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import type { ListBusinessUsersQuery } from 'graphql/users/queries/__generated__/list-business-users.generated';
-import type { LocationData } from 'types/DataType';
+import type { DemDeviceData, LocationData } from 'types/DataType';
 
+import AddDemDevice from '#/components/form-components/DemDevice/AddDemDevice';
+import DemDeviceTable from '#/components/tables/DemDeviceTable';
+import DemEvidenceTable from '#/components/tables/DemEvidenceTable';
+// import { ProfileUpdatedModel } from '#/types/enums/profile-update-type';
+import { GetUserStatusValues } from '#/types/enums/user_status';
 import {
   faEdit,
   faMagnifyingGlass,
@@ -50,6 +58,8 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+import type { ListDemBusinessEvidenceQuery } from './graphql/queries/__generated__/list-business-dem-evidence.generated';
+
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
 import useStyles from './ViewBusiness.styles';
 
@@ -63,29 +73,38 @@ interface UserTable {
 
 interface Props {
   actionsData: ListActionsQuery | undefined;
+  addDemDevice: boolean;
   addTodo: boolean;
   addUserVisible: boolean;
   businessId: string | undefined;
   completeTodoVisible: null | string;
   data: BusinessQuery | undefined;
   deleteConfirm: (value: string) => void;
+  editDeviceData: DemDeviceData | undefined;
   editVisible: boolean;
+  evidenceData: ListDemBusinessEvidenceQuery | undefined;
+  evidenceLoading: boolean;
   inviteUserVisible: boolean;
   linkDemVisible: boolean;
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
   onRemoveBusiness: (value: string) => void;
+  onRemoveDevice: (value: string) => void;
   saving: boolean;
   setCompleteTodoVisible: (value: null | string) => void;
+  setEditDeviceData: (value: DemDeviceData | undefined) => void;
   setViewTodoVisible: (value: null | string) => void;
   templatesData: QuestionGroupOnSchemeQuery | undefined;
   templatesLoading: boolean;
+  toggleAddDemDevice: () => void;
   toggleAddTodo: () => void;
   toggleAddUser: () => void;
   toggleEdit: () => void;
   toggleInviteUser: () => void;
   toggleLinkDem: () => void;
   updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
+  updateDeleteEvidenceList: MutationUpdaterFn<RecycleDemEvidenceMutation>;
+  updateDemDeviceList: MutationUpdaterFn<UpsertDemDeviceMutation>;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
   updateUsersList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
@@ -97,29 +116,38 @@ interface Props {
 
 const ViewBusiness = ({
   actionsData,
+  addDemDevice,
   addTodo,
   addUserVisible,
   businessId,
   completeTodoVisible,
   data,
   deleteConfirm,
+  editDeviceData,
   editVisible,
+  evidenceData,
+  evidenceLoading,
   inviteUserVisible,
   linkDemVisible,
   loading,
   onEditAddress,
   onRemoveBusiness,
+  onRemoveDevice,
   saving,
   setCompleteTodoVisible,
+  setEditDeviceData,
   setViewTodoVisible,
   templatesData,
   templatesLoading,
+  toggleAddDemDevice,
   toggleAddTodo,
   toggleAddUser,
   toggleEdit,
   toggleInviteUser,
   toggleLinkDem,
   updateAddUsersToBusiness,
+  updateDeleteEvidenceList,
+  updateDemDeviceList,
   updateTodo,
   updateTodoList,
   updateUsersList,
@@ -394,10 +422,9 @@ const ViewBusiness = ({
                     dataIndex: 'status',
                     key: 'status',
                     render: (value) => (
-                      <Typography.Text
-                        type={value === 'Enabled' ? 'success' : 'warning'}
-                      >
-                        {value}
+                      <Typography.Text>
+                        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
+                        {GetUserStatusValues[value]}
                       </Typography.Text>
                     ),
                     title: intl.formatMessage({
@@ -471,6 +498,85 @@ const ViewBusiness = ({
                 }}
                 size="small"
               />
+            </Card>
+            <Card loading={loading}>
+              <Row align="middle" className={classes.cardHeader}>
+                <Col flex={1}>
+                  <Typography.Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Dem Devices',
+                    })}
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <Button
+                    disabled={loading}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                    loading={loading}
+                    onClick={toggleAddDemDevice}
+                    size="small"
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Dem Device',
+                    })}
+                  </Button>
+                </Col>
+              </Row>
+
+              <DemDeviceTable
+                demDevices={data?.business.demDevices.map((el) => ({
+                  ...el,
+                  business: data.business.id,
+                  demGroups: el.demGroups.map(({ id }) => id),
+                }))}
+                onDelete={onRemoveDevice}
+                saving={saving || loading}
+                setEditData={setEditDeviceData}
+              />
+            </Card>
+            <Card loading={evidenceLoading}>
+              <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
+                <Col flex={1}>
+                  <Typography.Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Dem Evidence',
+                    })}
+                  </Typography.Title>
+                </Col>
+
+                {/* <Col>
+                  <Button
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                    onClick={toggleAddDocument}
+                    size="small"
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Evidence',
+                    })}
+                  </Button>
+                </Col> */}
+              </Row>
+              <DemEvidenceTable
+                demEvidence={evidenceData?.listDemBusinessEvidence}
+                saving={loading || evidenceLoading}
+                update={updateDeleteEvidenceList}
+              />
+              {/* <EvidenceTable
+                deleteRights
+                evidence={data?.business.evidences}
+                saving={loading || saving}
+                title={ProfileUpdatedModel.Business}
+              /> */}
             </Card>
             <Card>
               <Typography.Title level={4}>
@@ -699,6 +805,43 @@ const ViewBusiness = ({
             onClose={() => setViewTodoVisible(null)}
             updateQuery={updateTodo}
             updateTodo={() => {}}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* dem device */}
+      <Drawer
+        onClose={toggleAddDemDevice}
+        open={addDemDevice}
+        title={intl.formatMessage({
+          defaultMessage: 'Add Dem Device',
+        })}
+        width="600"
+      >
+        {addDemDevice ? (
+          <AddDemDevice
+            businessId={data?.business?.id}
+            onClose={toggleAddDemDevice}
+            update={updateDemDeviceList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        onClose={() => setEditDeviceData(undefined)}
+        open={!!editDeviceData}
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Dem Device',
+        })}
+        width="600"
+      >
+        {editDeviceData ? (
+          <AddDemDevice
+            businessId={data?.business?.id}
+            editData={editDeviceData}
+            onClose={() => setEditDeviceData(undefined)}
           />
         ) : (
           <div />

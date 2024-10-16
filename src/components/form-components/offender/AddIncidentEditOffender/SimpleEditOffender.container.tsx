@@ -10,7 +10,7 @@ import type { OffenderData } from './useEditOffender';
 
 import View from './SimpleEditOffender.view';
 import useEditOffender from './useEditOffender';
-
+// Check if it is deprecated
 interface Props {
   data: OffenderData;
   images?: ImageValue[];

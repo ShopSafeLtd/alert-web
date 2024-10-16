@@ -66,7 +66,14 @@ const SettingsSideMenu = ({
       to: '/app/scheme-settings/chat-groups',
     },
     {
-      permissions: [PermissionModel.GeneralSettings],
+      permissions: [PermissionModel.Settings],
+      title: intl.formatMessage({
+        defaultMessage: 'DEM',
+      }),
+      to: '/app/scheme-settings/dem',
+    },
+    {
+      permissions: [PermissionModel.Settings],
       title: intl.formatMessage({
         defaultMessage: 'General Settings',
       }),
@@ -141,7 +148,7 @@ const SettingsSideMenu = ({
       to: '/app/scheme-settings/data-export/export-incidents',
     },
     {
-      permissions: [PermissionModel.RecycleBin],
+      permissions: [PermissionModel.Settings],
       title: intl.formatMessage({
         defaultMessage: 'Recycle Bin',
       }),

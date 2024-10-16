@@ -107,6 +107,7 @@ const SchemeDetail = ({
               data?.scheme?.defaultSubscribedOffenderOnly,
             facialDetection: data?.scheme?.facialDetection,
             facialRecognition: data?.scheme?.facialRecognition,
+            facialRedaction: data?.scheme?.facialRedaction,
             goodsMode: data?.scheme?.goodsMode,
             imagesRequiredOnOffenders: data?.scheme?.imagesRequiredOnOffenders,
             incidentRetention: data?.scheme?.incidentRetention,
@@ -653,6 +654,21 @@ const SchemeDetail = ({
                   'Faces of offenders are available for recognition',
               })}
               name="facialRecognition"
+              style={{ marginBottom: 0 }}
+              valuePropName="checked"
+            >
+              <Switch
+                className="scheme-detail-switch"
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'All non-offender faces will be automatically blurred',
+              })}
+              name="facialRedaction"
               style={{ marginBottom: 0 }}
               valuePropName="checked"
             >

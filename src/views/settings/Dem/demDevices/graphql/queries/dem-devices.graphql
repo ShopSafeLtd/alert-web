@@ -1,0 +1,29 @@
+query DemDevices(
+  $skip: Int
+  $take: Int
+  $orderBy: [DemDeviceOrderByWithRelationInput!]
+  $where: DemDeviceWhereInput
+) {
+  demDevices(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        ...DemDevices
+        evidence {
+          id
+          name
+          url
+          fileType
+        }
+        demGroups {
+          id
+          name
+        }
+        business {
+          id
+          name
+        }
+      }
+    }
+  }
+}

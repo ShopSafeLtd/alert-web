@@ -1,0 +1,19 @@
+mutation UpsertDemDevice($data: UpsertDemDevice!) {
+  upsertDemDevice(data: $data) {
+    ...DemDevices
+    evidence {
+      id
+      name
+      url
+      fileType
+    }
+    demGroups {
+      id
+      name
+    }
+    business {
+      id
+      name
+    }
+  }
+}

@@ -1,38 +1,38 @@
-import React from 'react';
 import { Button, Col, Row, Select, Typography } from 'antd';
-
-import { UserSort } from 'types/enums/user_sort';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { userStatusValues } from 'types/enums/user_status';
-import useStyles from './UserFilter.styles';
 import { Role, UserStatus } from 'graphql/types';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { UserSort } from 'types/enums/user_sort';
+import { userStatusValues } from 'types/enums/user_status';
+
+import useStyles from './UserFilter.styles';
 
 interface Props {
-  order: UserSort;
-  setOrder: (value: UserSort) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   clearFilters: () => void;
+  groups: { label: string; value: string }[];
   groupsFilter: string[];
+  groupsLoading: boolean;
+  order: UserSort;
   setGroupsFilter: (value: string[]) => void;
-  userStatus: UserStatus[] | undefined;
+  setOrder: (value: UserSort) => void;
+  setUserRole: (value: Role) => void;
   setUserStatus: (value: UserStatus[]) => void;
   userRole: Role | undefined;
-  setUserRole: (value: Role) => void;
+  userStatus: UserStatus[] | undefined;
 }
 
 const UserFilter = ({
   clearFilters,
-  order,
-  setOrder,
   groups,
-  groupsLoading,
   groupsFilter,
+  groupsLoading,
+  order,
   setGroupsFilter,
-  userStatus,
+  setOrder,
+  setUserRole,
   setUserStatus,
   userRole,
-  setUserRole,
+  userStatus,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -41,7 +41,7 @@ const UserFilter = ({
     <>
       <Row justify="end">
         <Col>
-          <Button type="text" danger onClick={clearFilters}>
+          <Button danger onClick={clearFilters} type="text">
             <FormattedMessage defaultMessage="Clear Filters" />
           </Button>
         </Col>
@@ -53,12 +53,12 @@ const UserFilter = ({
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            value={order}
             onChange={setOrder}
-            size="small"
             placeholder={intl.formatMessage({
               defaultMessage: 'Sort Order',
             })}
+            size="small"
+            value={order}
           >
             <Select.Option value={UserSort.nameAsc}>
               <FormattedMessage defaultMessage="Name A-Z" />
@@ -82,18 +82,18 @@ const UserFilter = ({
             <FormattedMessage defaultMessage="Status" />
           </Typography.Paragraph>
           <Select
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Status',
-            })}
-            mode="multiple"
-            className={classes.select}
             allowClear
-            value={userStatus}
+            className={classes.select}
+            mode="multiple"
             onChange={setUserStatus}
             options={userStatusValues.map((value) => ({
               label: value.label,
               value: value.value,
             }))}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Status',
+            })}
+            value={userStatus}
           >
             <Select.Option value={UserStatus.Active}>
               <FormattedMessage defaultMessage="Active" />
@@ -120,12 +120,12 @@ const UserFilter = ({
           </Typography.Paragraph>
           <Select
             allowClear
+            className={classes.select}
+            onChange={setUserRole}
             placeholder={intl.formatMessage({
               defaultMessage: 'Role',
             })}
-            className={classes.select}
             value={userRole}
-            onChange={setUserRole}
           >
             <Select.Option value={Role.User}>
               <FormattedMessage defaultMessage="User" />
@@ -148,16 +148,16 @@ const UserFilter = ({
             <FormattedMessage defaultMessage="Groups" />
           </Typography.Paragraph>
           <Select
+            allowClear
             className={classes.select}
+            loading={groupsLoading}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setGroupsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
-            mode="multiple"
             size="small"
-            maxTagCount={2}
-            allowClear
-            loading={groupsLoading}
-            onChange={setGroupsFilter}
             value={groupsFilter}
           >
             {groups.map((group) => (

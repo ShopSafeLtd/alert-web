@@ -1,23 +1,25 @@
 /* eslint-disable no-param-reassign */
-import { useEffect, useState } from 'react';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import { Form } from 'antd';
-
-import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
-import update from 'immutability-helper';
-import { useStoreState } from 'state';
 import type { UploadChangeParam } from 'antd/lib/upload';
-import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
-import customRequest from '../../../../utils/custom-request';
+import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+
+import { Form } from 'antd';
 import {
   Age,
   Build,
   Gender,
+  Height,
   ImagePosition,
   IncidentFormField,
   Race,
-  Height,
 } from 'graphql/types';
+import update from 'immutability-helper';
+import { useEffect, useState } from 'react';
+import { useStoreState } from 'state';
+
+import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
+
+import customRequest from '../../../../utils/custom-request';
 
 export const getClosestAgeRange = (high: number, low: number) => {
   const middle = high - (high - low) / 2;
@@ -31,7 +33,7 @@ export const getClosestAgeRange = (high: number, low: number) => {
   if (middle >= 80) return Age.OverEighty;
   return Age.Unknown;
 };
-export const getGenderFromFace = (gender: 'Male' | 'Female') => {
+export const getGenderFromFace = (gender: 'Female' | 'Male') => {
   if (gender === 'Male') return Gender.Male;
   if (gender === 'Female') return Gender.Female;
   return Gender.Unknown;
@@ -43,56 +45,56 @@ export const getPeculiaritiesFromFace = (beard: boolean, mustache: boolean) => {
 };
 
 export interface ImageFaceType {
-  imageURL: string;
-  Gender: 'Male' | 'Female';
   AgeRange: {
     High: number;
     Low: number;
   };
   Beard: boolean;
-  Mustache: boolean;
   BoundingBox: {
     Height: string;
     Left: string;
     Top: string;
     Width: string;
   };
+  Gender: 'Female' | 'Male';
+  Mustache: boolean;
+  imageURL: string;
 }
 export interface ImageResponseType {
-  url?: string;
   blobName?: string;
-  mimetype?: string;
   faces?: ImageFaceType[];
+  mimetype?: string;
+  url?: string;
 }
 
 export interface StateImageData extends UploadFile<ImageResponseType[]> {
+  isFace?: boolean;
+  policeImage?: boolean;
   position?: ImagePosition;
   primary?: boolean;
-  policeImage?: boolean;
   rotation?: number;
   totalFaces?: number;
-  isFace?: boolean;
 }
 
 interface Props {
-  incidentForm: IncidentFormField[];
   form: FormInstance<FormData>;
-  value?: StateImageData[];
+  incidentForm: IncidentFormField[];
   onChange?: (data: StateImageData[]) => void;
+  value?: StateImageData[];
 }
 
 interface Return {
-  images: StateImageData[];
-  onImageChange: (info: UploadChangeParam<StateImageData>) => void;
-  editImage: StateImageData | null;
-  setEditImage: (data: StateImageData | null) => void;
-  onEditImage: (value: StateImageData) => void;
-  onRemoveImage: (uid: string) => void;
-  fileList: UploadFile[];
   documentUploadProps: UploadProps;
+  editImage: StateImageData | null;
+  fileList: UploadFile[];
+  images: StateImageData[];
+  onEditImage: (value: StateImageData) => void;
+  onImageChange: (info: UploadChangeParam<StateImageData>) => void;
+  onRemoveImage: (uid: string) => void;
+  setEditImage: (data: StateImageData | null) => void;
 }
 
-const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
+const useImageSection = ({ form, incidentForm, onChange }: Props): Return => {
   const formImages = Form.useWatch('images', form);
   const [images, setImages] = useState<StateImageData[]>([]);
   const [editImage, setEditImage] = useState<StateImageData | null>(null);
@@ -117,7 +119,6 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
     form.setFieldValue('images', images);
   }, [form, images]);
 
-  // ???
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
     let newFileList = [...info.fileList];
 
@@ -161,37 +162,37 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
           offenders: [
             ...currentOffenders,
             ...image.faces.map((face) => ({
-              id: Math.floor(Math.random() * 1000).toString(),
-              name: 'Unidentified Offender',
-              confirmedInIncident: false,
-              gender: getGenderFromFace(face.Gender),
               age: getClosestAgeRange(face.AgeRange.High, face.AgeRange.Low),
-              race: Race.Unknown,
-              height: Height.Unknown,
+              blank: true,
               build: Build.Unknown,
-              peculiarities: getPeculiaritiesFromFace(
-                face.Beard,
-                face.Mustache
-              ),
+              confirmedInIncident: false,
+              edited: false,
+              existing: false,
+              gender: getGenderFromFace(face.Gender),
+              height: Height.Unknown,
+              id: Math.floor(Math.random() * 1000).toString(),
+              imageConfirmed: true,
               images: [
                 {
-                  id: info.file.uid,
-                  optimised: face.imageURL || image.url,
-                  url: face.imageURL || image.url,
-                  new: true,
                   boundingBox: {
                     height: face.BoundingBox.Height,
                     left: face.BoundingBox.Left,
                     top: face.BoundingBox.Top,
                     width: face.BoundingBox.Width,
                   },
+                  id: info.file.uid,
+                  new: true,
+                  optimised: face.imageURL || image.url,
+                  url: face.imageURL || image.url,
                 },
               ],
+              name: 'Unidentified Offender',
               new: true,
-              existing: false,
-              edited: false,
-              blank: true,
-              imageConfirmed: true,
+              peculiarities: getPeculiaritiesFromFace(
+                face.Beard,
+                face.Mustache
+              ),
+              race: Race.Unknown,
             })),
           ],
         });
@@ -277,18 +278,18 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
   };
   const documentUploadProps: UploadProps = {
     customRequest,
-    onChange: handleChange,
     multiple: true,
+    onChange: handleChange,
   };
   return {
-    images,
-    onImageChange,
-    editImage,
-    setEditImage,
-    onEditImage,
-    onRemoveImage,
-    fileList,
     documentUploadProps,
+    editImage,
+    fileList,
+    images,
+    onEditImage,
+    onImageChange,
+    onRemoveImage,
+    setEditImage,
   };
 };
 

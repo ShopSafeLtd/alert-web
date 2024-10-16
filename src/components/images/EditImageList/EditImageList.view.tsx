@@ -1,62 +1,64 @@
-import React from 'react';
-import { Button, Col, Row } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import { useIntl } from 'react-intl';
 import type { Image } from 'types/DataType';
+
+import { Button, Col, Row } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import UploadImage from '../UploadImage.view';
 
 interface Props {
-  onClose: () => void;
-  onSubmit: () => void;
-  saving: boolean;
-  imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  primaryImage: string;
-  setPrimaryImage: (value: string) => void;
   editImage: Image | null;
+  facialDet: boolean;
+  fileList: Image[];
+  imgChange: UploadProps['onChange'];
+  onClose: () => void;
   onEditImage: (value: Image) => void;
   onRemoveImage: (imageId: string) => void;
-  toggleEditImage: (value?: Image) => void;
+  onSubmit: () => void;
+  primaryImage: string;
+  saving: boolean;
+  setPrimaryImage: (value: string) => void;
   title: string;
-  facialDet: boolean;
+  toggleEditImage: (value?: Image) => void;
 }
 
 const EditImageList = ({
-  onSubmit,
-  saving,
-  imgChange,
   beforeUpload,
-  fileList,
-  onRemoveImage,
-  onEditImage,
-  toggleEditImage,
   editImage,
-  primaryImage,
-  setPrimaryImage,
-  onClose,
-  title,
   facialDet,
+  fileList,
+  imgChange,
+  onClose,
+  onEditImage,
+  onRemoveImage,
+  onSubmit,
+  primaryImage,
+  saving,
+  setPrimaryImage,
+  title,
+  toggleEditImage,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <>
       <UploadImage
-        imgChange={imgChange}
         beforeUpload={beforeUpload}
-        fileList={fileList}
         editImage={editImage}
+        facialRec={facialDet}
+        fileList={fileList}
+        imgChange={imgChange}
         onEditImage={onEditImage}
-        toggleEditImage={toggleEditImage}
         onRemoveImage={onRemoveImage}
         primaryImage={primaryImage}
         setPrimaryImage={setPrimaryImage}
         title={title}
-        facialRec={facialDet}
+        toggleEditImage={toggleEditImage}
       />
 
-      <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+      <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
         <Col>
           <Button disabled={saving} onClick={onClose}>
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -64,11 +66,11 @@ const EditImageList = ({
         </Col>
         <Col>
           <Button
-            type="primary"
-            // htmlType="submit"
-            onClick={onSubmit}
             disabled={saving}
             loading={saving}
+            // htmlType="submit"
+            onClick={onSubmit}
+            type="primary"
           >
             {intl.formatMessage({ defaultMessage: 'Save' })}
           </Button>

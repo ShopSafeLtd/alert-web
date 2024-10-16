@@ -114,6 +114,9 @@ const useOffenderReport = (): Return => {
 
   const { data, loading } = useOffenderReportQuery({
     fetchPolicy: 'cache-and-network',
+    onCompleted: () => {
+      console.log('useOffenderReportQuery', data);
+    },
     skip: !currentScheme,
     variables: {
       targetedWhere: {

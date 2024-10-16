@@ -44,7 +44,7 @@ interface Props {
     | undefined;
   saving?: boolean;
   title: ProfileUpdatedModel;
-  update: MutationUpdaterFn<DeleteDocumentMutation>;
+  update?: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const EvidenceTable = ({
@@ -97,7 +97,6 @@ const EvidenceTable = ({
           title: intl.formatMessage({
             defaultMessage: 'Name',
           }),
-          // width: '80%',
         },
         {
           dataIndex: 'tags',
@@ -151,6 +150,7 @@ const EvidenceTable = ({
                   />
                 </Tooltip>
               </Col>
+
               {deleteRights && (
                 <Col>
                   <Tooltip

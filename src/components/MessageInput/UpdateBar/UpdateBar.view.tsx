@@ -524,7 +524,6 @@ const UpdateBar = ({
                           />
                         ),
                         key: '4',
-
                         label: intl.formatMessage({
                           defaultMessage: 'Link Crime Groups',
                         }),

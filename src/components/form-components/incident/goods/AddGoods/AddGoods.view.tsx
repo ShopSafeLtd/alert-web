@@ -130,6 +130,7 @@ const AddGoods = ({
           </Col>
         </Row>
       )}
+
       {!stockItem && goodsMode === GoodsMode.Specific && (
         <StockItemSelect
           allowClear

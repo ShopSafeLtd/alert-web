@@ -42,10 +42,29 @@ query Business(
     todos {
       ...Todos
     }
+    demDevices {
+      ...DemDevices
+      evidence {
+        id
+        name
+        url
+        fileType
+      }
+      demGroups {
+        id
+        name
+      }
+    }
     parent {
       id
       name
       fullName
+    }
+    evidences {
+      id
+      name
+      url
+      fileType
     }
     locations {
       id

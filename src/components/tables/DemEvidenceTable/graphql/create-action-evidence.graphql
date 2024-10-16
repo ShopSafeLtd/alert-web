@@ -1,0 +1,3 @@
+mutation createActionEvidence($data: CreateActionEvidence!) {
+  createActionEvidence(data: $data)
+}

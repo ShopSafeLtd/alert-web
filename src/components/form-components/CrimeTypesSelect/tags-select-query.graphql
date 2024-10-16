@@ -1,0 +1,14 @@
+query tagsSelect(
+  $where: TagWhereInput!
+  $order: TagOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+) {
+  listTags(where: $where, order: $order, take: $take, skip: $skip) {
+    tags {
+      id
+      name
+    }
+    total
+  }
+}

@@ -1,4 +1,10 @@
-import React from 'react';
+import type { DateType } from 'types/DataType';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import CrimeTypesSelect from '#/components/form-components/CrimeTypesSelect/CrimeTypesSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
+import GoodsSelect from '#/components/form-components/goodsSelect/GoodsSelect.view';
 import {
   Button,
   Col,
@@ -9,42 +15,30 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { IncidentSort, useStoreActions, useStoreState } from 'state';
-import type { DateType } from 'types/DataType';
-import { useIntl } from 'react-intl';
 import moment from 'moment';
-import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
-import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { IncidentSort, useStoreActions, useStoreState } from 'state';
+
 import useStyles from './IncidentFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
 
 interface FormData {
-  date: Date;
   createdAt: Date;
+  date: Date;
 }
 
 interface Props {
-  crimeTypes: { value: string; label: string }[];
-  tagsLoading: boolean;
-  setPeculiarities: (value: string) => void;
   clearFilters: () => void;
-
-  goods: { value: string; label: string }[];
-
-  goodsLoading: boolean;
+  setPeculiarities: (value: string) => void;
 }
 
 const IncidentFilter = ({
-  crimeTypes,
-  tagsLoading,
   clearFilters,
-  setPeculiarities,
-  goods,
 
-  goodsLoading,
+  setPeculiarities,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
@@ -62,94 +56,94 @@ const IncidentFilter = ({
 
   const setOrder = (value: IncidentSort) => {
     setIncidentsState({
+      order: value,
       pagination,
       variables,
-      order: value,
     });
   };
 
   const setGroupsFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         groups: values,
       },
-      order,
     });
   };
   const setBusinessesFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         businesses: values,
       },
-      order,
     });
   };
   const setGoodsFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         goods: values,
       },
-      order,
     });
   };
 
   const setCrimeTypesFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         crimeTypes: values,
       },
-      order,
     });
   };
   const setIncidentDateFilter = (values: DateType | undefined) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         incidentDate: values,
       },
-      order,
     });
   };
   const setCreatedAtFilter = (values: DateType | undefined) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         createdAt: values,
       },
-      order,
     });
   };
 
   const setCreatedByFilter = (values: string[]) => {
     setIncidentsState({
+      order,
       pagination,
       variables: {
         ...variables,
         createdBy: values,
       },
-      order,
     });
   };
 
   const {
+    businesses: businessesValue,
     createdAt: createdAtFilter,
-    incidentDate: incidentDateFilter,
-    peculiarities,
     createdBy,
     crimeTypes: crimeTypesValue,
-    businesses: businessesValue,
     goods: goodsValue,
     groups,
+    incidentDate: incidentDateFilter,
+    peculiarities,
     // priority,
   } = variables;
 
@@ -174,15 +168,15 @@ const IncidentFilter = ({
       <Row justify="end">
         <Col>
           <Button
-            type="text"
             danger
             onClick={() => {
               clearFilters();
               form.setFieldsValue({
-                date: [],
                 createdAt: [],
+                date: [],
               });
             }}
+            type="text"
           >
             {intl.formatMessage({
               defaultMessage: 'Clear Filters',
@@ -198,9 +192,9 @@ const IncidentFilter = ({
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            value={order}
             onChange={setOrder}
             size="small"
+            value={order}
           >
             <Select.Option value={IncidentSort.createdAtDesc}>
               {intl.formatMessage({
@@ -230,8 +224,8 @@ const IncidentFilter = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
               }}
             />
@@ -252,8 +246,8 @@ const IncidentFilter = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setIncidentDateFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
               }}
             />
@@ -304,15 +298,15 @@ const IncidentFilter = ({
           </Typography.Paragraph>
 
           <GroupsSelect
+            allowClear
             className={classes.select}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setGroupsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
             })}
-            mode="multiple"
             size="small"
-            maxTagCount={2}
-            allowClear
-            onChange={setGroupsFilter}
             value={groups}
           />
         </Col>
@@ -324,25 +318,16 @@ const IncidentFilter = ({
               defaultMessage: 'Crime Types',
             })}
           </Typography.Paragraph>
-          <Select
+          <CrimeTypesSelect
+            allowClear
             className={classes.select}
+            mode="multiple"
+            onChange={setCrimeTypesFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Crime Types',
             })}
-            mode="multiple"
-            size="small"
-            allowClear
-            maxTagCount={2}
-            onChange={setCrimeTypesFilter}
             value={crimeTypesValue}
-            loading={tagsLoading}
-          >
-            {crimeTypes.map((tag) => (
-              <Select.Option value={tag.value} key={tag.value}>
-                {tag.label}
-              </Select.Option>
-            ))}
-          </Select>
+          />
         </Col>
       </Row>
       <Typography.Paragraph className={classes.filtersTitle}>
@@ -355,25 +340,16 @@ const IncidentFilter = ({
               defaultMessage: 'Goods Involved',
             })}
           </Typography.Paragraph>
-          <Select
+          <GoodsSelect
+            allowClear
             className={classes.select}
+            mode="multiple"
+            onChange={setGoodsFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Goods Involved',
             })}
-            mode="multiple"
-            size="small"
-            allowClear
-            maxTagCount={2}
-            onChange={setGoodsFilter}
             value={goodsValue}
-            loading={goodsLoading}
-          >
-            {goods.map((good) => (
-              <Select.Option key={good.value} value={good.value}>
-                {good.label}
-              </Select.Option>
-            ))}
-          </Select>
+          />
         </Col>
       </Row>
       <Row>
@@ -384,9 +360,9 @@ const IncidentFilter = ({
             })}
           </Typography.Paragraph>
           <Input.TextArea
-            value={peculiarities}
-            onChange={(e) => setPeculiarities(e.target.value)}
             className={classes.select}
+            onChange={(e) => setPeculiarities(e.target.value)}
+            value={peculiarities}
           />
         </Col>
       </Row>
@@ -402,15 +378,15 @@ const IncidentFilter = ({
             })}
           </Typography.Paragraph>
           <BusinessesSelect
-            mode="multiple"
+            className={classes.select}
             maxTagCount="responsive"
+            mode="multiple"
             onChange={setBusinessesFilter}
-            value={businessesValue}
-            style={{ width: '100%' }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Businesses',
             })}
-            className={classes.select}
+            style={{ width: '100%' }}
+            value={businessesValue}
           />
         </Col>
       </Row>
@@ -426,14 +402,14 @@ const IncidentFilter = ({
             })}
           </Typography.Paragraph>
           <UsersSelect
-            mode="multiple"
             allowClear
+            className={classes.select}
+            mode="multiple"
+            onChange={setCreatedByFilter}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Users',
             })}
-            className={classes.select}
             value={createdBy}
-            onChange={setCreatedByFilter}
           />
         </Col>
       </Row>

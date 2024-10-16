@@ -163,6 +163,7 @@ const useReportsCentre = (): Return => {
       },
     },
   });
+  console.log('useReportsCentreQuery', data);
 
   const onDeleteReportTemplate = (id: string) => {
     void deleteReportTemplate({

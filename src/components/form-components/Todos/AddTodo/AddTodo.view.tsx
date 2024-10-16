@@ -172,7 +172,7 @@ const AddTodo = ({
                 {
                   message: intl.formatMessage({
                     defaultMessage:
-                      'Please selected at least one admin for the new to-do.',
+                      'Please selected at least one user for the activity.',
                   }),
                   required: true,
                 },
@@ -222,6 +222,15 @@ const AddTodo = ({
                 defaultMessage: 'Businesses',
               })}
               name="businesses"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Please select one business for the activity.',
+                  }),
+                  required: !businessId,
+                },
+              ]}
             >
               <BusinessesSelect
                 allowClear
@@ -404,11 +413,7 @@ const AddTodo = ({
                   danger
                   disabled={saving}
                   loading={saving}
-                  onClick={() => {
-                    void form.validateFields().then(() => {
-                      onSubmit(form.getFieldsValue());
-                    });
-                  }}
+                  onClick={() => onSubmit(form.getFieldsValue())}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Create Activity',

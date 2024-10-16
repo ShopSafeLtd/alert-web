@@ -1,0 +1,21 @@
+query listDemDeviceEvidence($where: String!, $skip: Int, $take: Int) {
+  listDemDeviceEvidence(where: $where, skip: $skip, take: $take) {
+    edges {
+      node {
+        type
+        thumbnailUrl
+        recordedAt
+        playbackUrl
+        id
+        importance
+        officerName
+        duration
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

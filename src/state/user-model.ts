@@ -1,39 +1,24 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
-import { action } from 'easy-peasy';
-import type { Translations } from './scheme-model';
 import type {
   GoodsMode,
   PermissionMethod,
   PermissionModel,
 } from 'graphql/types';
+
+import { action } from 'easy-peasy';
 import { Role } from 'graphql/types';
 
+import type { Translations } from './scheme-model';
+
 export interface SetUserPayload {
-  id: string;
-  email: string;
-  fullName: string;
-  origName: string;
-  reference: string;
-  onboarded: boolean;
-  reportToAllBusinesses: boolean;
-  forcePasswordReset: boolean;
-  hasPassword: boolean;
   businesses: {
-    name: string;
+    brands: string[];
+    demId?: null | string | undefined;
     fullName: string;
     id: string;
-    demId?: string | null | undefined;
-    brands: string[];
+    name: string;
   }[];
-  schemes: Scheme[];
-  demId: string | null | undefined;
-  // groups: {
-  //   id: string;
-  //   name: string;
-  //   scheme: {
-  //     id: string;
-  //   };
   // }[];
   defaultGroups: {
     id: string;
@@ -42,6 +27,8 @@ export interface SetUserPayload {
       id: string;
     };
   }[];
+  demId: null | string | undefined;
+  email: string;
   filterDefaultGroups: {
     id: string;
     name: string;
@@ -49,10 +36,25 @@ export interface SetUserPayload {
       id: string;
     };
   }[];
+  forcePasswordReset: boolean;
+  fullName: string;
+  hasPassword: boolean;
+  id: string;
   isSet: boolean;
-  userNotifications: number;
-  userMessages: number;
+  onboarded: boolean;
+  origName: string;
+  // groups: {
+  //   id: string;
+  //   name: string;
+  //   scheme: {
+  //     id: string;
+  //   };
+  reference: string;
+  reportToAllBusinesses: boolean;
+  schemes: Scheme[];
   termsExpired: boolean;
+  userMessages: number;
+  userNotifications: number;
 }
 
 export interface SetDemPayload {
@@ -86,86 +88,71 @@ export interface SetInvestigationAllSchemes {
 }
 
 export interface Permissions {
-  model: PermissionModel;
   allowedMethods: PermissionMethod[];
+  model: PermissionModel;
 }
 
 export interface Scheme {
   id: string;
-  role: Role;
   permissions: Permissions[];
+  role: Role;
   scheme: {
-    id: string;
-    name: string;
+    activityAssignToUser: boolean;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
-    restrictIncidentAccess: boolean;
-    reportOnly: boolean;
-    defaultPublicOffenderDOB: boolean;
-    userTodos?: number | null | undefined;
-    userNotifications?: number | null | undefined;
-    userMessages?: number | null | undefined;
-    customTranslations?: Translations[];
-    languageCount: number;
-    logo?:
-      | {
-          optimisedPersisted?: string | null | undefined;
-        }
-      | null
-      | undefined;
-    darkLogo?:
-      | {
-          optimisedPersisted?: string | null | undefined;
-        }
-      | null
-      | undefined;
-    goodsMode: GoodsMode;
-    facialRecognition: boolean;
-    facialDetection: boolean;
-    taskTimeTracking: boolean;
-    imagesRequiredOnOffenders: boolean;
     autoPopulateDescription: boolean;
-    needJustification: boolean;
-    requireSiteNumberForUsers: boolean;
-    oneSelectedIncidentTypeOnly: boolean;
     connectedToSchemes: {
       id: string;
       name: string;
     }[];
-    activityAssignToUser: boolean;
+    customTranslations?: Translations[];
+    darkLogo?:
+      | {
+          optimisedPersisted?: null | string | undefined;
+        }
+      | null
+      | undefined;
+    defaultPublicOffenderDOB: boolean;
+    facialDetection: boolean;
+    facialRecognition: boolean;
+    facialRedaction: boolean;
+    goodsMode: GoodsMode;
+    id: string;
+    imagesRequiredOnOffenders: boolean;
+    languageCount: number;
+    logo?:
+      | {
+          optimisedPersisted?: null | string | undefined;
+        }
+      | null
+      | undefined;
+    name: string;
+    needJustification: boolean;
+    oneSelectedIncidentTypeOnly: boolean;
+    reportOnly: boolean;
+    requireSiteNumberForUsers: boolean;
+    restrictIncidentAccess: boolean;
+    taskTimeTracking: boolean;
     useBusinessGroupsOnIncident: boolean;
+    userMessages?: null | number | undefined;
+    userNotifications?: null | number | undefined;
+    userTodos?: null | number | undefined;
   };
 }
 
 export interface UserModel {
-  id: string;
-  email: string;
-  fullName: string;
-  origName: string;
-  reference: string;
-  picture: string;
-  sessionId: string | null;
-  dem: { id: string; name: string }[];
   businesses: {
-    name: string;
+    brands: string[];
+    demId?: null | string | undefined;
     fullName: string;
     id: string;
-    demId?: string | null | undefined;
-    brands: string[];
+    name: string;
     // locations: {
     //   geoLng:float
     //   geoLat:float
     // }
   }[];
-  onboarded: boolean;
-  reportToAllBusinesses: boolean;
-  forcePasswordReset: boolean;
-  hasPassword: boolean;
-  schemes: Scheme[];
-  demId: string | null | undefined;
-  userTodos?: number | null | undefined;
-  userNotifications?: number | null | undefined;
-  userMessages?: number | null | undefined;
+  clearUser: Action<UserModel>;
   defaultGroups: {
     id: string;
     name: string;
@@ -173,6 +160,9 @@ export interface UserModel {
       id: string;
     };
   }[];
+  dem: { id: string; name: string }[];
+  demId: null | string | undefined;
+  email: string;
   filterDefaultGroups: {
     id: string;
     name: string;
@@ -180,52 +170,104 @@ export interface UserModel {
       id: string;
     };
   }[];
-  role: Role;
-  isSet: boolean;
+  forcePasswordReset: boolean;
+  fullName: string;
+  hasPassword: boolean;
+  id: string;
   investigationAllSchemes: boolean;
-  termsExpired: boolean;
-  setUser: Action<UserModel, SetUserPayload>;
-  setRole: Action<UserModel, SetUserRole>;
-  setFilterDefaultGroup: Action<UserModel, SetFilterDefaultGroup>;
-  setTodos: Action<UserModel, SetUserTodos>;
-  setInvestigationAllSchemes: Action<UserModel, SetInvestigationAllSchemes>;
-  setNotifications: Action<UserModel, SetUserNotifications>;
-  setMessages: Action<UserModel, SetUserMessages>;
-  clearUser: Action<UserModel>;
+  isSet: boolean;
+  onboarded: boolean;
+  origName: string;
+  picture: string;
+  reference: string;
+  reportToAllBusinesses: boolean;
+  role: Role;
+  schemes: Scheme[];
+  sessionId: null | string;
   setDem: Action<UserModel, SetDemPayload>;
-  setSession: Action<UserModel, string>;
+  setFilterDefaultGroup: Action<UserModel, SetFilterDefaultGroup>;
+  setInvestigationAllSchemes: Action<UserModel, SetInvestigationAllSchemes>;
+  setMessages: Action<UserModel, SetUserMessages>;
+  setNotifications: Action<UserModel, SetUserNotifications>;
   setPasswordSet: Action<UserModel>;
+  setRole: Action<UserModel, SetUserRole>;
+  setSession: Action<UserModel, string>;
+  setTodos: Action<UserModel, SetUserTodos>;
+  setUser: Action<UserModel, SetUserPayload>;
+  termsExpired: boolean;
+  userMessages?: null | number | undefined;
+  userNotifications?: null | number | undefined;
   userOnboarded: Action<UserModel>;
+  userTodos?: null | number | undefined;
 }
 
 const userModel: UserModel = {
-  id: '',
-  email: '',
-  fullName: '',
-  origName: '',
-  reference: '',
-  picture: '',
   businesses: [],
-  sessionId: null,
-  onboarded: false,
+  clearUser: action((state) => {
+    state.id = '';
+    state.email = '';
+    state.fullName = '';
+    state.origName = '';
+    state.picture = '';
+    state.businesses = [];
+    state.onboarded = false;
+    state.schemes = [];
+    state.role = Role.User;
+    state.isSet = false;
+    state.demId = '';
+    state.userTodos = 0;
+    state.userNotifications = 0;
+    state.investigationAllSchemes = false;
+    state.dem = [];
+    state.reportToAllBusinesses = false;
+    state.sessionId = null;
+  }),
+  defaultGroups: [],
+  dem: [],
+  demId: '',
+  email: '',
+  filterDefaultGroups: [],
+  forcePasswordReset: false,
+  fullName: '',
+  hasPassword: false,
+  id: '',
+  investigationAllSchemes: false,
   isSet: false,
+  onboarded: false,
+  origName: '',
+  picture: '',
+  reference: '',
+  reportToAllBusinesses: false,
   role: Role.User,
   schemes: [],
-  defaultGroups: [],
-  filterDefaultGroups: [],
-  reportToAllBusinesses: false,
-  forcePasswordReset: false,
-  hasPassword: false,
-  demId: '',
-  userTodos: 0,
-  userNotifications: 0,
-  userMessages: 0,
-  investigationAllSchemes: false,
-  dem: [],
-  termsExpired: false,
+  sessionId: null,
+  setDem: action((state, payload) => {
+    state.dem = payload.dem;
+  }),
+  setFilterDefaultGroup: action((state, payload) => {
+    state.filterDefaultGroups = payload.filterDefaultGroups;
+  }),
+  setInvestigationAllSchemes: action((state, payload) => {
+    state.investigationAllSchemes = payload.investigationAllSchemes;
+  }),
+  setMessages: action((state, payload) => {
+    state.userMessages = payload.userMessages;
+  }),
+  setNotifications: action((state, payload) => {
+    state.userNotifications = payload.userNotifications;
+  }),
   setPasswordSet: action((state) => {
     state.forcePasswordReset = false;
     state.hasPassword = true;
+  }),
+  setRole: action((state, payload) => {
+    state.role = payload.role;
+  }),
+  setSession: action((state, payload) => {
+    state.sessionId = payload;
+  }),
+  setTodos: action((state, payload) => {
+    state.userTodos = payload.userTodos;
   }),
   setUser: action((state, payload) => {
     state.id = payload.id;
@@ -247,53 +289,14 @@ const userModel: UserModel = {
     state.hasPassword = payload.hasPassword;
     state.termsExpired = payload.termsExpired;
   }),
-  setFilterDefaultGroup: action((state, payload) => {
-    state.filterDefaultGroups = payload.filterDefaultGroups;
-  }),
-  setRole: action((state, payload) => {
-    state.role = payload.role;
-  }),
-  setTodos: action((state, payload) => {
-    state.userTodos = payload.userTodos;
-  }),
-  setNotifications: action((state, payload) => {
-    state.userNotifications = payload.userNotifications;
-  }),
-  setMessages: action((state, payload) => {
-    state.userMessages = payload.userMessages;
-  }),
-  setInvestigationAllSchemes: action((state, payload) => {
-    state.investigationAllSchemes = payload.investigationAllSchemes;
-  }),
-  setDem: action((state, payload) => {
-    state.dem = payload.dem;
-  }),
+  termsExpired: false,
+  userMessages: 0,
+  userNotifications: 0,
   userOnboarded: action((state) => {
     state.onboarded = true;
     state.termsExpired = false;
   }),
-  clearUser: action((state) => {
-    state.id = '';
-    state.email = '';
-    state.fullName = '';
-    state.origName = '';
-    state.picture = '';
-    state.businesses = [];
-    state.onboarded = false;
-    state.schemes = [];
-    state.role = Role.User;
-    state.isSet = false;
-    state.demId = '';
-    state.userTodos = 0;
-    state.userNotifications = 0;
-    state.investigationAllSchemes = false;
-    state.dem = [];
-    state.reportToAllBusinesses = false;
-    state.sessionId = null;
-  }),
-  setSession: action((state, payload) => {
-    state.sessionId = payload;
-  }),
+  userTodos: 0,
 };
 
 export default userModel;

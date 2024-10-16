@@ -50,11 +50,8 @@ const useStyles = createUseStyles({
 
 interface Props {
   clearFilters: () => void;
-  crimeTypes: { label: string; value: string }[];
   data: IncidentsFeedQuery | undefined;
   fetchMoreScroll: () => void;
-  goods: { label: string; value: string }[];
-  goodsLoading: boolean;
   lightBoxOpen: {
     index: number;
     open: boolean;
@@ -70,11 +67,8 @@ interface Props {
   setPeculiarities: (value: string) => void;
   setSearch: (value: string) => void;
   setTableView: () => void;
-
   sortFilter: boolean;
-
   tableView: boolean;
-  tagsLoading: boolean;
   toggleSortFilter: () => void;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   variables: IncidentFilters;
@@ -82,12 +76,9 @@ interface Props {
 
 const IncidentFeed = ({
   clearFilters,
-  crimeTypes,
   data,
   fetchMoreScroll,
   // onPaginationChange,
-  goods,
-  goodsLoading,
   lightBoxOpen,
   lightboxElements,
   loading,
@@ -98,12 +89,9 @@ const IncidentFeed = ({
   setPeculiarities,
   // pagination,
   setSearch,
-
   setTableView,
   sortFilter,
-
   tableView,
-  tagsLoading,
   toggleSortFilter,
   updateIncidentList,
   variables,
@@ -477,11 +465,7 @@ const IncidentFeed = ({
       >
         <IncidentFilter
           clearFilters={clearFilters}
-          crimeTypes={crimeTypes}
-          goods={goods}
-          goodsLoading={goodsLoading}
           setPeculiarities={setPeculiarities}
-          tagsLoading={tagsLoading}
         />
       </Drawer>
       <Lightbox
