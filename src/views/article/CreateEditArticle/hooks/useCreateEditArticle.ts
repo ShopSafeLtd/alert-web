@@ -116,8 +116,11 @@ const useCreateEditArticle = (): Props => {
         result?.article?.rows[0].columns[0].incidents.map((i) => ({
           incident: {
             ...i,
+            date: new Date(),
             incidentItems: [],
             totalImages: i.images.length,
+            totalRecoveredValue: 0,
+            totalValue: 0,
           },
         })) || []
       );

@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
 export interface Incident {
-  incident: LinkIncidentIncidentsQuery['incidentsRelay']['edges'][number];
+  incident: LinkIncidentIncidentsQuery['incidentsRelay']['edges'][number]['node'];
 }
 interface Props {
   getIncident?: (value: Incident) => void;
@@ -309,7 +309,7 @@ const useLinkIncident = ({
         );
         if (incident) {
           // TODO fix types
-          getIncident({ incident });
+          getIncident({ incident: incident.node });
         }
       }
     }

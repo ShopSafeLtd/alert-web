@@ -33,11 +33,9 @@ query LinkIncidentIncidents(
                 totalRecoveredValue
                 totalValue
                 location {
-                    id
                     full
                 }
                 business {
-                    id
                     name
                 }
                 offenders {
