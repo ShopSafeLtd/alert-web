@@ -1,83 +1,85 @@
 import { useDrawerState } from 'hooks';
 import React from 'react';
+
+import type { AddIncident, AddOffender } from './hooks/Forms';
+
 import View from './CreateEditArticle.view';
 import useCreateEditArticle from './hooks/useCreateEditArticle';
-import type { AddIncident, AddOffender } from './hooks/Forms';
 
 const CreateEditArticleContainer = () => {
   const {
-    log,
+    categories,
+    categoriesChange,
+    categoriesLoading,
+    data,
+    documentUploadProps,
     editorRef,
     // eslint-disable-next-line @typescript-eslint/unbound-method
     exampleImageUploadHandler,
-    preview,
-    previewText,
-    setPreviewText,
-    previewImage,
-    setPreviewImage,
-    groups,
-    groupsLoading,
-    onGroupsChange,
-    categories,
-    categoriesLoading,
-    categoriesChange,
-    selectedCategories,
-    selectedGroups,
+    fileList,
     filePickerCallback,
     form,
-    onSubmit,
-    data,
-    loading,
-    fileList,
-    documentUploadProps,
-    insertOffender,
-    insertIncident,
-    removeOffender,
-    removeIncident,
-    offenders,
-    incidents,
-    selectedSchemes,
+    groups,
+    groupsLoading,
     id,
+    incidents,
     initData,
+    insertIncident,
+    insertOffender,
+    loading,
+    log,
+    offenders,
+    onGroupsChange,
+    onSubmit,
+    preview,
+    previewImage,
+    previewText,
+    removeIncident,
+    removeOffender,
+    selectedCategories,
+    selectedGroups,
+    selectedSchemes,
+    setPreviewImage,
+    setPreviewText,
   } = useCreateEditArticle();
 
-  const { drawer } = useDrawerState<AddOffender | AddIncident>();
+  const { drawer } = useDrawerState<AddIncident | AddOffender>();
 
   return (
     <View
-      initData={initData}
-      id={id}
-      selectedSchemes={selectedSchemes}
-      incidents={incidents}
-      removeIncident={removeIncident}
-      offenders={offenders}
-      removeOffender={removeOffender}
-      insertOffender={insertOffender}
-      documentUploadProps={documentUploadProps}
-      fileList={fileList}
-      loading={loading}
-      data={data}
-      form={form}
-      onSubmit={onSubmit}
-      filePickerCallback={filePickerCallback}
-      selectedCategories={selectedCategories}
-      selectedGroups={selectedGroups}
       categories={categories}
       categoriesChange={categoriesChange}
-      groups={groups}
       categoriesLoading={categoriesLoading}
-      groupsLoading={groupsLoading}
-      onGroupsChange={onGroupsChange}
-      log={log}
+      data={data}
+      documentUploadProps={documentUploadProps}
+      drawer={drawer}
       editorRef={editorRef}
       exampleImageUploadHandler={exampleImageUploadHandler}
-      preview={preview}
-      previewText={previewText}
-      setPreviewText={setPreviewText}
-      previewImage={previewImage}
-      setPreviewImage={setPreviewImage}
-      drawer={drawer}
+      fileList={fileList}
+      filePickerCallback={filePickerCallback}
+      form={form}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      id={id}
+      incidents={incidents}
+      initData={initData}
       insertIncident={insertIncident}
+      insertOffender={insertOffender}
+      loading={loading}
+      log={log}
+      offenders={offenders}
+      onGroupsChange={onGroupsChange}
+      onSubmit={onSubmit}
+      preview={preview}
+      previewImage={previewImage}
+      previewText={previewText}
+      removeIncident={removeIncident}
+      removeOffender={removeOffender}
+      selectedCategories={selectedCategories}
+      selectedGroups={selectedGroups}
+      selectedSchemes={selectedSchemes}
+      setPreviewImage={setPreviewImage}
+      setPreviewText={setPreviewText}
     />
   );
 };

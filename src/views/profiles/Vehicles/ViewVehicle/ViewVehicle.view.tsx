@@ -245,10 +245,9 @@ const ViewVehicle = ({
             </Col>
             {editRights && (
               <Col>
-                <Button type="ghost">
+                <Button onClick={toggleEditVehicle} type="ghost">
                   <FontAwesomeIcon
                     icon={faEdit}
-                    onClick={toggleEditVehicle}
                     size="1x"
                     style={{ marginRight: 8 }}
                   />

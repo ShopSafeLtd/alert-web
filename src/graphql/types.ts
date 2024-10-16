@@ -13778,6 +13778,8 @@ export type QueryIncidentsRelayArgs = {
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
 };
 
@@ -14676,6 +14678,7 @@ export type QueryIncidentsRelayConnection = {
   __typename?: 'QueryIncidentsRelayConnection';
   edges: Array<QueryIncidentsRelayConnectionEdge>;
   pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
 };
 
 export type QueryIncidentsRelayConnectionEdge = {
@@ -16799,6 +16802,7 @@ export type SchemeUpdateInput = {
   imagesRequiredOnOffenders?: InputMaybe<SetBooleanHelper>;
   incidentRetention?: InputMaybe<SetIntHelper>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  mg11Available?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<SetStringHelper>;
   needJustification?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;

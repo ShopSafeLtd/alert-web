@@ -306,7 +306,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const fellingTags = Form.useWatch('fellingTags', form);
   const policeInside = Form.useWatch('policeInside', form);
   const policeIncidentDuration = Form.useWatch('policeIncidentDuration', form);
-  const tags = Form.useWatch('tags', form);
   const involvedTags = Form.useWatch('involvedTags', form);
   const goods = Form.useWatch('goods', form);
   const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
@@ -423,7 +422,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     policeKnownBefore,
     goods,
     involvedTags,
-    tags,
+    formTags,
     policeIncidentDuration,
     policeInside,
     fellingTags,
@@ -1203,32 +1202,36 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   useEffect(() => {
     if (formTags) {
-      const sections = [
-        ...new Set(
-          formTags
-            .map((value) =>
-              incidentTagsData?.listIncidentTags.find(
-                (item) => item.value === value
-              )
-            )
-            .flatMap((item) => item?.incidentForm)
-            .map((item) => item?.type)
-        ),
-      ];
-
-      if (sections.length > 0) {
-        setIncidentForm(sections as IncidentFormField[]);
+      if (formTags.length === 0) {
+        setIncidentForm([IncidentFormField.Types]);
       } else {
-        setIncidentForm([
-          IncidentFormField.Types,
-          IncidentFormField.Involved,
-          IncidentFormField.Where,
-          IncidentFormField.Images,
-          IncidentFormField.Offenders,
-          IncidentFormField.Police,
-          IncidentFormField.Details,
-          IncidentFormField.Groups,
-        ]);
+        const sections = [
+          ...new Set(
+            formTags
+              .map((value) =>
+                incidentTagsData?.listIncidentTags.find(
+                  (item) => item.value === value
+                )
+              )
+              .flatMap((item) => item?.incidentForm)
+              .map((item) => item?.type)
+          ),
+        ];
+
+        if (sections.length > 0) {
+          setIncidentForm(sections as IncidentFormField[]);
+        } else {
+          setIncidentForm([
+            IncidentFormField.Types,
+            IncidentFormField.Involved,
+            IncidentFormField.Where,
+            IncidentFormField.Images,
+            IncidentFormField.Offenders,
+            IncidentFormField.Police,
+            IncidentFormField.Details,
+            IncidentFormField.Groups,
+          ]);
+        }
       }
       if (formTags.length > 0) {
         const tag = incidentTagsData?.listIncidentTags.find(

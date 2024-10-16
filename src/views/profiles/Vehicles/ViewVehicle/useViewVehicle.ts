@@ -1,3 +1,7 @@
+import type {
+  ViewVehicleQuery,
+  ViewVehicleQueryVariables,
+} from '#/views/profiles/Vehicles/ViewVehicle/__generated__/ViewVehicle.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
@@ -6,10 +10,6 @@ import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/_
 import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
 import type { VehicleUpdateInput } from 'graphql/types';
 import type {
-  VehicleQuery,
-  VehicleQueryVariables,
-} from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
-import type {
   EditFeedImage,
   ImageCardData,
   OffenderData,
@@ -17,6 +17,10 @@ import type {
 } from 'types/DataType';
 
 import hasPermission from '#/utils/has-permission';
+import {
+  ViewVehicleDocument,
+  useViewVehicleQuery,
+} from '#/views/profiles/Vehicles/ViewVehicle/__generated__/ViewVehicle.generated';
 import { Modal, notification } from 'antd';
 import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-update.generated';
 import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
@@ -27,10 +31,6 @@ import { useUnsubscribeToVehicleMutation } from 'graphql/vehicles/mutations/__ge
 import { useUpdateVehicleDetailsMutation } from 'graphql/vehicles/mutations/update/__generated__/update_vehicle_details.generated';
 import { useUpdateVehicleImagesMutation } from 'graphql/vehicles/mutations/update/__generated__/update-vehicle-images.generated';
 import { useUpdateVehicleOffendersMutation } from 'graphql/vehicles/mutations/update/__generated__/update-vehicle-offenders.generated';
-import {
-  VehicleDocument,
-  useVehicleQuery,
-} from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
 import update from 'immutability-helper';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -51,7 +51,7 @@ interface Return {
   addInvestigation: boolean;
   addOffender: boolean;
   confirmDeleteUpdate: (updateId: string) => void;
-  data: VehicleQuery | undefined;
+  data: ViewVehicleQuery | undefined;
   editImageData: EditFeedImage | null;
   editImages: boolean;
   editOffenderData: OffenderData | null;
@@ -180,13 +180,20 @@ const useViewVehicle = (vehicleId: string): Return => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
   }, [editUpdate]);
 
-  const variables = {
+  const variables: ViewVehicleQueryVariables = {
+    groupsWhere: {
+      scheme: {
+        id: {
+          equals: schemeId,
+        },
+      },
+    },
     where: {
       id: vehicleId,
     },
   };
 
-  const { data: vehicleData, loading } = useVehicleQuery({
+  const { data: vehicleData, loading } = useViewVehicleQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: (res) => {
       setLightboxElements(
@@ -333,6 +340,13 @@ const useViewVehicle = (vehicleId: string): Return => {
           },
           registration: {
             set: data.registration || '',
+          },
+        },
+        groupsWhere: {
+          scheme: {
+            id: {
+              equals: schemeId,
+            },
           },
         },
         where: {
@@ -511,13 +525,16 @@ const useViewVehicle = (vehicleId: string): Return => {
       update: (store, { data: res }) => {
         if (res?.updateVehicle === null || res?.updateVehicle === undefined)
           return;
-        const existingData = store.readQuery<VehicleQuery>({
-          query: VehicleDocument,
+        const existingData = store.readQuery<
+          ViewVehicleQuery,
+          ViewVehicleQueryVariables
+        >({
+          query: ViewVehicleDocument,
           variables,
         });
 
         if (!existingData?.vehicle) return;
-        store.writeQuery<VehicleQuery>({
+        store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
           data: {
             __typename: 'Query',
             vehicle: {
@@ -527,7 +544,7 @@ const useViewVehicle = (vehicleId: string): Return => {
               ),
             },
           },
-          query: VehicleDocument,
+          query: ViewVehicleDocument,
           variables,
         });
       },
@@ -549,8 +566,11 @@ const useViewVehicle = (vehicleId: string): Return => {
   > = (store, { data: res }) => {
     if (res?.updateOffender === null || res?.updateOffender === undefined)
       return;
-    const existingData = store.readQuery<VehicleQuery>({
-      query: VehicleDocument,
+    const existingData = store.readQuery<
+      ViewVehicleQuery,
+      ViewVehicleQueryVariables
+    >({
+      query: ViewVehicleDocument,
       variables,
     });
     if (!existingData?.vehicle) return;
@@ -558,7 +578,7 @@ const useViewVehicle = (vehicleId: string): Return => {
       .map((item) => item.id)
       .indexOf(res.updateOffender.id);
 
-    store.writeQuery<VehicleQuery>({
+    store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
       data: {
         __typename: 'Query',
         vehicle: {
@@ -570,7 +590,7 @@ const useViewVehicle = (vehicleId: string): Return => {
           }),
         },
       },
-      query: VehicleDocument,
+      query: ViewVehicleDocument,
       variables,
     });
   };
@@ -691,13 +711,16 @@ const useViewVehicle = (vehicleId: string): Return => {
   > = (store, { data: res }) => {
     if (res?.createOffender === null || res?.createOffender === undefined)
       return;
-    const existingData = store.readQuery<VehicleQuery>({
-      query: VehicleDocument,
+    const existingData = store.readQuery<
+      ViewVehicleQuery,
+      ViewVehicleQueryVariables
+    >({
+      query: ViewVehicleDocument,
       variables,
     });
 
     if (!existingData?.vehicle) return;
-    store.writeQuery<VehicleQuery>({
+    store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
       data: {
         __typename: 'Query',
         vehicle: {
@@ -705,7 +728,7 @@ const useViewVehicle = (vehicleId: string): Return => {
           offenders: [...existingData.vehicle.offenders, res.createOffender],
         },
       },
-      query: VehicleDocument,
+      query: ViewVehicleDocument,
       variables,
     });
   };
@@ -824,13 +847,16 @@ const useViewVehicle = (vehicleId: string): Return => {
           if (res?.updateVehicle === null || res?.updateVehicle === undefined)
             return;
 
-          const existingData = store.readQuery<VehicleQuery>({
-            query: VehicleDocument,
+          const existingData = store.readQuery<
+            ViewVehicleQuery,
+            ViewVehicleQueryVariables
+          >({
+            query: ViewVehicleDocument,
             variables,
           });
 
           if (!existingData?.vehicle) return;
-          store.writeQuery<VehicleQuery>({
+          store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
             data: {
               __typename: 'Query',
               vehicle: {
@@ -838,7 +864,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                 offenders: res.updateVehicle.offenders,
               },
             },
-            query: VehicleDocument,
+            query: ViewVehicleDocument,
             variables,
           });
         },
@@ -871,13 +897,16 @@ const useViewVehicle = (vehicleId: string): Return => {
         update: (store, { data: res }) => {
           if (res?.updateVehicle === null || res?.updateVehicle === undefined)
             return;
-          const existingData = store.readQuery<VehicleQuery>({
-            query: VehicleDocument,
+          const existingData = store.readQuery<
+            ViewVehicleQuery,
+            ViewVehicleQueryVariables
+          >({
+            query: ViewVehicleDocument,
             variables,
           });
 
           if (!existingData?.vehicle) return;
-          store.writeQuery<VehicleQuery>({
+          store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
             data: {
               __typename: 'Query',
               vehicle: {
@@ -887,7 +916,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                 ),
               },
             },
-            query: VehicleDocument,
+            query: ViewVehicleDocument,
             variables,
           });
         },
@@ -918,8 +947,11 @@ const useViewVehicle = (vehicleId: string): Return => {
       },
       update: (store, result) => {
         if (result.data?.deleteUpdate) {
-          const oldData = store.readQuery<VehicleQuery, VehicleQueryVariables>({
-            query: VehicleDocument,
+          const oldData = store.readQuery<
+            ViewVehicleQuery,
+            ViewVehicleQueryVariables
+          >({
+            query: ViewVehicleDocument,
             variables: {
               where: {
                 id: vehicleId,
@@ -933,7 +965,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                 (item) => item.id === result.data?.deleteUpdate?.replyToId
               );
               if (updateItem) {
-                store.writeQuery<VehicleQuery, VehicleQueryVariables>({
+                store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
                   data: {
                     vehicle: {
                       ...oldData.vehicle,
@@ -951,7 +983,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                       }),
                     },
                   },
-                  query: VehicleDocument,
+                  query: ViewVehicleDocument,
                   variables: {
                     where: {
                       id: vehicleId,
@@ -960,7 +992,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                 });
               }
             } else {
-              store.writeQuery<VehicleQuery, VehicleQueryVariables>({
+              store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
                 data: {
                   vehicle: {
                     ...oldData.vehicle,
@@ -969,7 +1001,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                     ),
                   },
                 },
-                query: VehicleDocument,
+                query: ViewVehicleDocument,
                 variables: {
                   where: {
                     id: vehicleId,
@@ -1076,13 +1108,16 @@ const useViewVehicle = (vehicleId: string): Return => {
   ) => {
     if (res?.createDocument === null || res?.createDocument === undefined)
       return;
-    const existingData = store.readQuery<VehicleQuery>({
-      query: VehicleDocument,
+    const existingData = store.readQuery<
+      ViewVehicleQuery,
+      ViewVehicleQueryVariables
+    >({
+      query: ViewVehicleDocument,
       variables,
     });
 
     if (!existingData?.vehicle) return;
-    store.writeQuery<VehicleQuery>({
+    store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
       data: {
         __typename: 'Query',
         vehicle: {
@@ -1090,7 +1125,7 @@ const useViewVehicle = (vehicleId: string): Return => {
           evidence: [...existingData.vehicle.evidence, res.createDocument],
         },
       },
-      query: VehicleDocument,
+      query: ViewVehicleDocument,
       variables,
     });
   };
@@ -1100,13 +1135,16 @@ const useViewVehicle = (vehicleId: string): Return => {
   ) => {
     if (res?.deleteDocument === null || res?.deleteDocument === undefined)
       return;
-    const existingData = store.readQuery<VehicleQuery>({
-      query: VehicleDocument,
+    const existingData = store.readQuery<
+      ViewVehicleQuery,
+      ViewVehicleQueryVariables
+    >({
+      query: ViewVehicleDocument,
       variables,
     });
 
     if (!existingData?.vehicle) return;
-    store.writeQuery<VehicleQuery>({
+    store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
       data: {
         __typename: 'Query',
         vehicle: {
@@ -1116,7 +1154,7 @@ const useViewVehicle = (vehicleId: string): Return => {
           ),
         },
       },
-      query: VehicleDocument,
+      query: ViewVehicleDocument,
       variables,
     });
   };
@@ -1129,13 +1167,16 @@ const useViewVehicle = (vehicleId: string): Return => {
       res?.createInvestigation === undefined
     )
       return;
-    const existingData = store.readQuery<VehicleQuery>({
-      query: VehicleDocument,
+    const existingData = store.readQuery<
+      ViewVehicleQuery,
+      ViewVehicleQueryVariables
+    >({
+      query: ViewVehicleDocument,
       variables,
     });
 
     if (!existingData?.vehicle) return;
-    store.writeQuery<VehicleQuery>({
+    store.writeQuery<ViewVehicleQuery, ViewVehicleQueryVariables>({
       data: {
         __typename: 'Query',
         vehicle: {
@@ -1146,7 +1187,7 @@ const useViewVehicle = (vehicleId: string): Return => {
           ],
         },
       },
-      query: VehicleDocument,
+      query: ViewVehicleDocument,
       variables,
     });
   };
