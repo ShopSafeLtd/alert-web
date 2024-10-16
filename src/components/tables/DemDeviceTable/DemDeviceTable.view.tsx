@@ -1,9 +1,9 @@
 import type { DemDeviceData } from '#/types/DataType';
-import type { DeleteDemDeviceMutation } from '#/views/settings/Dem/demDevices/graphql/mutations/__generated__/delete-dem-device.generated';
-import type { MutationUpdaterFn } from '@apollo/client';
+// import type { DeleteDemDeviceMutation } from '#/views/settings/Dem/demDevices/graphql/mutations/__generated__/delete-dem-device.generated';
+// import type { MutationUpdaterFn } from '@apollo/client';
 
-import errorNotification from '#/types/mutation_notifications/error_notification';
-import { useDeleteDemDeviceMutation } from '#/views/settings/Dem/demDevices/graphql/mutations/__generated__/delete-dem-device.generated';
+// import errorNotification from '#/types/mutation_notifications/error_notification';
+// import { useDeleteDemDeviceMutation } from '#/views/settings/Dem/demDevices/graphql/mutations/__generated__/delete-dem-device.generated';
 import {
   faEye,
   faPenToSquare,
@@ -17,7 +17,7 @@ import {
   Row,
   Table,
   Tooltip,
-  notification,
+  // notification,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -26,16 +26,17 @@ import FormatCalendar from 'utils/format-calendar-24h';
 
 interface Props {
   demDevices: DemDeviceData[] | undefined;
+  onDelete?: (value: string) => void;
   saving?: boolean;
   setEditData?: (value: DemDeviceData) => void;
-  update: MutationUpdaterFn<DeleteDemDeviceMutation>;
+  // update: MutationUpdaterFn<DeleteDemDeviceMutation>;
 }
 
 const DemDeviceTable = ({
   demDevices,
+  onDelete,
   saving: inputSaving,
   setEditData,
-  update,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const [saving, setSaving] = useState(inputSaving);
@@ -43,31 +44,31 @@ const DemDeviceTable = ({
   useEffect(() => {
     if (inputSaving) setSaving(inputSaving);
   }, [inputSaving]);
-  const [deleteDemDevice] = useDeleteDemDeviceMutation({
-    onCompleted: () => {
-      notification.success({
-        description: intl.formatMessage({
-          defaultMessage: 'The device has been Removed!',
-        }),
-        message: intl.formatMessage({
-          defaultMessage: 'Successfully Removed!',
-        }),
-        placement: 'bottomRight',
-      });
-    },
-    onError: () => {
-      errorNotification();
-    },
-    update,
-  });
-  const onDelete = (value: string) => {
-    setSaving(true);
-    void deleteDemDevice({
-      variables: {
-        id: value || '',
-      },
-    }).finally(() => setSaving(false));
-  };
+  // const [deleteDemDevice] = useDeleteDemDeviceMutation({
+  //   onCompleted: () => {
+  //     notification.success({
+  //       description: intl.formatMessage({
+  //         defaultMessage: 'The device has been Removed!',
+  //       }),
+  //       message: intl.formatMessage({
+  //         defaultMessage: 'Successfully Removed!',
+  //       }),
+  //       placement: 'bottomRight',
+  //     });
+  //   },
+  //   onError: () => {
+  //     errorNotification();
+  //   },
+  //   update,
+  // });
+  // const onDelete = (value: string) => {
+  //   setSaving(true);
+  //   void deleteDemDevice({
+  //     variables: {
+  //       id: value || '',
+  //     },
+  //   }).finally(() => setSaving(false));
+  // };
   return (
     <Table<DemDeviceData>
       columns={[

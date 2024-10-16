@@ -58,7 +58,6 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import type { DeleteDemDeviceMutation } from '../../Dem/demDevices/graphql/mutations/__generated__/delete-dem-device.generated';
 import type { ListDemBusinessEvidenceQuery } from './graphql/queries/__generated__/list-business-dem-evidence.generated';
 
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
@@ -90,6 +89,7 @@ interface Props {
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
   onRemoveBusiness: (value: string) => void;
+  onRemoveDevice: (value: string) => void;
   saving: boolean;
   setCompleteTodoVisible: (value: null | string) => void;
   setEditDeviceData: (value: DemDeviceData | undefined) => void;
@@ -103,7 +103,6 @@ interface Props {
   toggleInviteUser: () => void;
   toggleLinkDem: () => void;
   updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
-  updateDeleteDemDeviceList: MutationUpdaterFn<DeleteDemDeviceMutation>;
   updateDeleteEvidenceList: MutationUpdaterFn<RecycleDemEvidenceMutation>;
   updateDemDeviceList: MutationUpdaterFn<UpsertDemDeviceMutation>;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
@@ -133,6 +132,7 @@ const ViewBusiness = ({
   loading,
   onEditAddress,
   onRemoveBusiness,
+  onRemoveDevice,
   saving,
   setCompleteTodoVisible,
   setEditDeviceData,
@@ -146,7 +146,6 @@ const ViewBusiness = ({
   toggleInviteUser,
   toggleLinkDem,
   updateAddUsersToBusiness,
-  updateDeleteDemDeviceList,
   updateDeleteEvidenceList,
   updateDemDeviceList,
   updateTodo,
@@ -535,9 +534,9 @@ const ViewBusiness = ({
                   business: data.business.id,
                   demGroups: el.demGroups.map(({ id }) => id),
                 }))}
+                onDelete={onRemoveDevice}
                 saving={saving || loading}
                 setEditData={setEditDeviceData}
-                update={updateDeleteDemDeviceList}
               />
             </Card>
             <Card loading={evidenceLoading}>

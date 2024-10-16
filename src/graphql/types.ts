@@ -19843,6 +19843,7 @@ export type UpdateCrimeGroupDataInput = {
 export type UpdateDemDevice = {
   businessId?: InputMaybe<Scalars['String']>;
   demGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  disconnectedBusinessId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateDemGroup = {

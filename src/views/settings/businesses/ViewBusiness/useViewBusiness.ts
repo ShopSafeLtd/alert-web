@@ -45,12 +45,12 @@ import { useNavigate, useParams } from 'react-router';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-import type { DeleteDemDeviceMutation } from '../../Dem/demDevices/graphql/mutations/__generated__/delete-dem-device.generated';
 import type {
   ListDemBusinessEvidenceQuery,
   ListDemBusinessEvidenceQueryVariables,
 } from './graphql/queries/__generated__/list-business-dem-evidence.generated';
 
+import { useUpdateDemDeviceMutation } from '../../Dem/demDevices/graphql/mutations/__generated__/update-dem-device-business.generated';
 import {
   ListDemBusinessEvidenceDocument,
   useListDemBusinessEvidenceQuery,
@@ -75,6 +75,7 @@ interface Return {
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
   onRemoveBusiness: (value: string) => void;
+  onRemoveDevice: (value: string) => void;
   saving: boolean;
   setCompleteTodoVisible: (value: null | string) => void;
   setEditDeviceData: (value: DemDeviceData | undefined) => void;
@@ -88,7 +89,6 @@ interface Return {
   toggleInviteUser: () => void;
   toggleLinkDem: () => void;
   updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
-  updateDeleteDemDeviceList: MutationUpdaterFn<DeleteDemDeviceMutation>;
   updateDeleteEvidenceList: MutationUpdaterFn<RecycleDemEvidenceMutation>;
   updateDemDeviceList: MutationUpdaterFn<UpsertDemDeviceMutation>;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
@@ -219,8 +219,11 @@ const useViewBusiness = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
+        description: intl.formatMessage({
           defaultMessage: 'Location of the shop has been updated',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
         }),
         placement: 'bottomRight',
       });
@@ -545,6 +548,60 @@ const useViewBusiness = (): Return => {
   };
 
   // dem device
+  const [updateDemDevice] = useUpdateDemDeviceMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The device has been Removed!',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Removed!',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.updateDemDevice === null || res?.updateDemDevice === undefined)
+        return;
+      const existingData = store.readQuery<BusinessQuery>({
+        query: BusinessDocument,
+        variables,
+      });
+
+      if (!existingData?.business) return;
+      store.writeQuery<BusinessQuery>({
+        data: {
+          __typename: 'Query',
+          business: {
+            ...existingData.business,
+            demDevices: existingData.business.demDevices.filter(
+              (el) => el.id !== res.updateDemDevice.id
+            ),
+          },
+        },
+        query: BusinessDocument,
+        variables,
+      });
+    },
+  });
+
+  const onRemoveDevice = (value: string) => {
+    void updateDemDevice({
+      variables: {
+        data: {
+          disconnectedBusinessId: data?.business.id,
+        },
+        where: {
+          id: value,
+        },
+      },
+    });
+  };
   const updateDemDeviceList: MutationUpdaterFn<UpsertDemDeviceMutation> = (
     store,
     { data: res }
@@ -572,31 +629,31 @@ const useViewBusiness = (): Return => {
       variables,
     });
   };
-  const updateDeleteDemDeviceList: MutationUpdaterFn<
-    DeleteDemDeviceMutation
-  > = (store, { data: res }) => {
-    if (res?.deleteDemDevice === null || res?.deleteDemDevice === undefined)
-      return;
-    const existingData = store.readQuery<BusinessQuery>({
-      query: BusinessDocument,
-      variables,
-    });
+  // const updateDeleteDemDeviceList: MutationUpdaterFn<
+  //   DeleteDemDeviceMutation
+  // > = (store, { data: res }) => {
+  //   if (res?.deleteDemDevice === null || res?.deleteDemDevice === undefined)
+  //     return;
+  //   const existingData = store.readQuery<BusinessQuery>({
+  //     query: BusinessDocument,
+  //     variables,
+  //   });
 
-    if (!existingData?.business) return;
-    store.writeQuery<BusinessQuery>({
-      data: {
-        __typename: 'Query',
-        business: {
-          ...existingData.business,
-          demDevices: existingData.business.demDevices.filter(
-            (el) => el.id !== res.deleteDemDevice.id
-          ),
-        },
-      },
-      query: BusinessDocument,
-      variables,
-    });
-  };
+  //   if (!existingData?.business) return;
+  //   store.writeQuery<BusinessQuery>({
+  //     data: {
+  //       __typename: 'Query',
+  //       business: {
+  //         ...existingData.business,
+  //         demDevices: existingData.business.demDevices.filter(
+  //           (el) => el.id !== res.deleteDemDevice.id
+  //         ),
+  //       },
+  //     },
+  //     query: BusinessDocument,
+  //     variables,
+  //   });
+  // };
 
   // dem evidence
   const updateDeleteEvidenceList: MutationUpdaterFn<
@@ -883,6 +940,7 @@ const useViewBusiness = (): Return => {
     loading: !data,
     onEditAddress,
     onRemoveBusiness,
+    onRemoveDevice,
     saving,
     setCompleteTodoVisible,
     setEditDeviceData,
@@ -896,7 +954,6 @@ const useViewBusiness = (): Return => {
     toggleInviteUser,
     toggleLinkDem,
     updateAddUsersToBusiness,
-    updateDeleteDemDeviceList,
     updateDeleteEvidenceList,
     updateDemDeviceList,
     updateTodo,

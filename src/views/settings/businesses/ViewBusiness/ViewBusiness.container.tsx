@@ -22,6 +22,7 @@ const ViewBusiness = () => {
     loading,
     onEditAddress,
     onRemoveBusiness,
+    onRemoveDevice,
     saving,
     setCompleteTodoVisible,
     setEditDeviceData,
@@ -35,7 +36,6 @@ const ViewBusiness = () => {
     toggleInviteUser,
     toggleLinkDem,
     updateAddUsersToBusiness,
-    updateDeleteDemDeviceList,
     updateDeleteEvidenceList,
     updateDemDeviceList,
     updateTodo,
@@ -66,6 +66,7 @@ const ViewBusiness = () => {
       loading={loading}
       onEditAddress={onEditAddress}
       onRemoveBusiness={onRemoveBusiness}
+      onRemoveDevice={onRemoveDevice}
       saving={saving}
       setCompleteTodoVisible={setCompleteTodoVisible}
       setEditDeviceData={setEditDeviceData}
@@ -79,7 +80,6 @@ const ViewBusiness = () => {
       toggleInviteUser={toggleInviteUser}
       toggleLinkDem={toggleLinkDem}
       updateAddUsersToBusiness={updateAddUsersToBusiness}
-      updateDeleteDemDeviceList={updateDeleteDemDeviceList}
       updateDeleteEvidenceList={updateDeleteEvidenceList}
       updateDemDeviceList={updateDemDeviceList}
       updateTodo={updateTodo}
