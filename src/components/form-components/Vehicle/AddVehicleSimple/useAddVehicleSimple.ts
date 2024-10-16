@@ -20,12 +20,13 @@ export interface AddVehicleData {
 
 interface Props {
   onImagesUploaded?: (values: StateImageData[]) => void;
-  update: (value: AddVehicleData) => void;
+  update: (value: FormData) => void;
 }
 
 export interface FormData {
   colour?: string;
   groupIds: string[];
+  id: string;
   images?: ImageValue[];
   make?: string;
   model?: string;

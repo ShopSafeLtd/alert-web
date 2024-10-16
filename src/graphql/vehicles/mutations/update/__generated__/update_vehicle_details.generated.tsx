@@ -7,6 +7,7 @@ const defaultOptions = {} as const;
 export type UpdateVehicleDetailsMutationVariables = Types.Exact<{
   where: Types.UniqueId;
   data: Types.VehicleUpdateInput;
+  groupsWhere?: Types.InputMaybe<Types.GroupWhereInput>;
 }>;
 
 
@@ -14,7 +15,7 @@ export type UpdateVehicleDetailsMutation = { __typename?: 'Mutation', updateVehi
 
 
 export const UpdateVehicleDetailsDocument = gql`
-    mutation updateVehicleDetails($where: UniqueId!, $data: VehicleUpdateInput!) {
+    mutation updateVehicleDetails($where: UniqueId!, $data: VehicleUpdateInput!, $groupsWhere: GroupWhereInput) {
   updateVehicle(where: $where, data: $data) {
     id
     make
@@ -28,7 +29,7 @@ export const UpdateVehicleDetailsDocument = gql`
       id
       name
     }
-    groups {
+    groups(where: $groupsWhere) {
       id
       name
     }

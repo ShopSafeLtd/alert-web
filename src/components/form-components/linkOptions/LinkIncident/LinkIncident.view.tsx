@@ -1,4 +1,4 @@
-import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
+import type { LinkIncidentIncidentsQuery } from '#/components/form-components/linkOptions/LinkIncident/__generated__/link-incident-incidents.generated';
 import type { IncidentFilters } from 'state/data-model';
 
 import { Button, Col, Input, Row, Select, Table, Typography } from 'antd';
@@ -15,13 +15,7 @@ interface Props {
   businessesLoading: boolean;
   clearFilters: () => void;
   crimeTypes: { label: string; value: string }[];
-  data:
-    | Exclude<
-        ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-        null | undefined
-      >
-    | null
-    | undefined;
+  data?: LinkIncidentIncidentsQuery;
   goods: { label: string; value: string }[];
   goodsLoading: boolean;
   groups: { label: string; value: string }[];
@@ -81,8 +75,11 @@ const LinkIncident = ({
     peculiarities,
   } = variables;
   return (
-    <div>
-      <Row gutter={16}>
+    <div style={{ height: '100%' }}>
+      <Row
+        gutter={16}
+        style={{ height: 'calc(100% - 58px)', marginBottom: 10 }}
+      >
         <Col className={classes.list} span={19}>
           <Input
             allowClear
@@ -137,18 +134,20 @@ const LinkIncident = ({
                 }),
               },
             ]}
-            dataSource={data?.incidents.map((incident) => ({
-              date: incident.dayTime,
-              incidentId: incident.id,
-              key: incident.id,
-              location: incident.business?.name || incident.location?.full,
-              offenders: incident.offenders
-                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
-                .toString(),
-              reference: incident.reference,
-              subject: incident.subject,
-            }))}
+            dataSource={data?.incidentsRelay.edges.map(
+              ({ node: incident }) => ({
+                date: incident.dayTime,
+                incidentId: incident.id,
+                key: incident.id,
+                location: incident.business?.name || incident.location?.full,
+                offenders: incident.offenders
+                  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                  .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
+                  .toString(),
+                reference: incident.reference,
+                subject: incident.subject,
+              })
+            )}
             loading={loading}
             pagination={{
               current: pagination.page,
@@ -157,13 +156,14 @@ const LinkIncident = ({
               pageSize: pagination.pageSize,
               position: ['bottomCenter'],
               showSizeChanger: false,
-              total: data?.total,
+              total: data?.incidentsRelay.totalCount,
             }}
             rowSelection={{
               onSelect,
               type: 'radio',
             }}
             size="small"
+            style={{ marginTop: 10 }}
           />
         </Col>
         <Col className={classes.filters} span={5}>
