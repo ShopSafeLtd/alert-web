@@ -41,6 +41,9 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       }
       type
     }
+    schemes {
+      id
+    }
     scheme {
       id
       mg11Available

@@ -1,5 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import type { FormInstance } from 'antd';
+
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -8,24 +11,24 @@ import {
   Input,
   Radio,
   Row,
-  Typography,
   TimePicker,
+  Typography,
 } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import useStyles from '../../AddIncident.styles';
+
 import type { FormData } from '../../useAddIncident';
+
+import useStyles from '../../AddIncident.styles';
 
 const { Title } = Typography;
 
 interface Props {
-  saving: boolean;
   form: FormInstance<FormData>;
+  saving: boolean;
 }
 
-const IncidentCCTV = ({ saving, form }: Props) => {
+const IncidentCCTV = ({ form, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -35,7 +38,7 @@ const IncidentCCTV = ({ saving, form }: Props) => {
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'CCTV Evidence',
             })}
@@ -45,17 +48,19 @@ const IncidentCCTV = ({ saving, form }: Props) => {
       <Row gutter={50}>
         <Col>
           <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Is CCTV of the incident available?',
+            })}
             name="cctvAvailable"
+            required
             tooltip={intl.formatMessage({
               defaultMessage:
                 'Is there any cctv footage of the incident available',
             })}
-            label={intl.formatMessage({
-              defaultMessage: 'Is CCTV available?',
-            })}
-            required
           >
             <Radio.Group
+              disabled={saving}
+              optionType="button"
               options={[
                 {
                   label: intl.formatMessage({
@@ -70,153 +75,185 @@ const IncidentCCTV = ({ saving, form }: Props) => {
                   value: false,
                 },
               ]}
-              optionType="button"
-              disabled={saving}
             />
           </Form.Item>
         </Col>
+        {cctvAvailable && (
+          <Col>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Email address police can use to obtain CCTV',
+              })}
+              name="policeCCTVEmail"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please answer this question.',
+                  }),
+                  required: true,
+                },
+              ]}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  'The email address that the police can use to obtain CCTV evidence from the business, this will normally be you store address or the address for your SOC.',
+              })}
+            >
+              <Input style={{ width: 350 }} />
+            </Form.Item>
+          </Col>
+        )}
       </Row>
       {cctvAvailable && (
         <Form.List name="cctv">
           {(fields, { add, remove }) => (
             <>
-              {fields.map(({ key, name, ...restField }, i) => (
-                <Row gutter={32}>
-                  <Col key={key}>
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'cameraNumber']}
-                      rules={[{ required: true, message: 'Camera Number' }]}
-                      label={
-                        i === 0 &&
-                        intl.formatMessage({
-                          defaultMessage: 'Camera Number',
-                        })
-                      }
-                    >
-                      <Input style={{ width: 200 }} />
-                    </Form.Item>
+              <Row gutter={[16, 16]} style={{ marginBottom: 20 }} wrap>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Col xs={24} xxl={12}>
+                    <div className={classes.cctvCard}>
+                      <Row style={{ marginBottom: 10, padding: '15px 15px' }}>
+                        <Col flex={1}>
+                          <Typography.Title
+                            level={4}
+                            style={{ marginBottom: 5 }}
+                          >
+                            <FormattedMessage
+                              defaultMessage="CCTV Record {var1}"
+                              values={{ var1: key + 1 }}
+                            />
+                          </Typography.Title>
+                          <Typography.Text strong>
+                            <FormattedMessage defaultMessage="Please use the date and time of the CCTV system for start and end times." />
+                          </Typography.Text>
+                        </Col>
+                        <Col>
+                          <Button onClick={() => remove(name)}>
+                            <FontAwesomeIcon icon={faTrash} />
+                          </Button>
+                        </Col>
+                      </Row>
+                      <Row gutter={16} style={{ padding: '0 15px' }}>
+                        <Col key={key} xxl={10}>
+                          <Form.Item
+                            {...restField}
+                            label={intl.formatMessage({
+                              defaultMessage: 'Camera Number',
+                            })}
+                            name={[name, 'cameraNumber']}
+                            rules={[
+                              { message: 'Camera Number', required: true },
+                            ]}
+                          >
+                            <Input style={{ width: '100%' }} />
+                          </Form.Item>
+                        </Col>
+                        <Col xxl={6}>
+                          <Form.Item
+                            {...restField}
+                            label={intl.formatMessage({
+                              defaultMessage: 'Start Time',
+                            })}
+                            name={[name, 'startTime']}
+                            rules={[{ message: 'Start Time', required: true }]}
+                          >
+                            <TimePicker style={{ width: '100%' }} />
+                          </Form.Item>
+                        </Col>
+                        <Col xxl={6}>
+                          <Form.Item
+                            {...restField}
+                            label={intl.formatMessage({
+                              defaultMessage: 'End Time',
+                            })}
+                            name={[name, 'endTime']}
+                            rules={[{ message: 'End Time', required: true }]}
+                          >
+                            <TimePicker style={{ width: '100%' }} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={3} xxl={6}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'Shows Incident',
+                            })}
+                            name={[name, 'showIncident']}
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'Does the footage show the incident occur?',
+                            })}
+                          >
+                            <Radio.Group
+                              disabled={saving}
+                              optionType="button"
+                              options={[
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                  }),
+                                  value: true,
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'No',
+                                  }),
+                                  value: false,
+                                },
+                              ]}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={4} xxl={6}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'Shows suspects face',
+                            })}
+                            name={[name, 'showFace']}
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'Does the footage show the suspects face?',
+                            })}
+                          >
+                            <Radio.Group
+                              disabled={saving}
+                              optionType="button"
+                              options={[
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                  }),
+                                  value: true,
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'No',
+                                  }),
+                                  value: false,
+                                },
+                              ]}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xxl={24}>
+                          <Form.Item
+                            {...restField}
+                            label={intl.formatMessage({
+                              defaultMessage:
+                                'Please describe the recordings content',
+                            })}
+                            name={[name, 'description']}
+                          >
+                            <Input.TextArea />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    </div>
                   </Col>
-                  <Col span={3}>
-                    <Form.Item
-                      name={[name, 'showIncident']}
-                      tooltip={
-                        i === 0 &&
-                        intl.formatMessage({
-                          defaultMessage:
-                            'Does the footage show the incident occur?',
-                        })
-                      }
-                      label={
-                        i === 0 &&
-                        intl.formatMessage({
-                          defaultMessage: 'Shows Incident',
-                        })
-                      }
-                    >
-                      <Radio.Group
-                        options={[
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Yes',
-                            }),
-                            value: true,
-                          },
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'No',
-                            }),
-                            value: false,
-                          },
-                        ]}
-                        optionType="button"
-                        disabled={saving}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={4}>
-                    <Form.Item
-                      name={[name, 'showFace']}
-                      tooltip={
-                        i === 0 &&
-                        intl.formatMessage({
-                          defaultMessage:
-                            'Does the footage show the suspects face?',
-                        })
-                      }
-                      label={
-                        i === 0 &&
-                        intl.formatMessage({
-                          defaultMessage: 'Shows suspects face',
-                        })
-                      }
-                    >
-                      <Radio.Group
-                        options={[
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Yes',
-                            }),
-                            value: true,
-                          },
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'No',
-                            }),
-                            value: false,
-                          },
-                        ]}
-                        optionType="button"
-                        disabled={saving}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'startTime']}
-                      rules={[{ required: true, message: 'Start Time' }]}
-                      label={
-                        i === 0 &&
-                        intl.formatMessage({
-                          defaultMessage: 'Start Time',
-                        })
-                      }
-                    >
-                      <TimePicker style={{ width: 150 }} />
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'endTime']}
-                      rules={[{ required: true, message: 'End Time' }]}
-                      label={
-                        i === 0 &&
-                        intl.formatMessage({
-                          defaultMessage: 'End Time',
-                        })
-                      }
-                    >
-                      <TimePicker style={{ width: 150 }} />
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Button
-                      style={{
-                        marginTop: i === 0 ? 30 : 0,
-                      }}
-                      onClick={() => remove(name)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </Col>
-                </Row>
-              ))}
+                ))}
+              </Row>
               <Form.Item>
                 <Row justify="center">
                   <Col>
-                    <Button onClick={() => add()} block>
+                    <Button block onClick={() => add()}>
                       <FormattedMessage defaultMessage="Add CCTV Evidence" />
                     </Button>
                   </Col>
