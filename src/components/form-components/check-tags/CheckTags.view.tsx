@@ -123,29 +123,38 @@ const CheckTags = ({
     setSecondaryValue(null);
     setTertiaryValue(null);
 
-    if ((!hasChildOptions || !data.hasChildren) && onChangeProp)
+    if ((!hasChildOptions || !data.hasChildren) && onChangeProp) {
       onChangeProp(selfClick ? [] : [data.value]);
+    } else {
+      onChangeProp([]);
+    }
   };
 
   const setSecondary = (data: Option) => {
     const selfClick = data.value === secondaryValue?.value;
     setSecondaryValue(selfClick ? null : data);
     setTertiaryValue(null);
-    if (!data.hasChildren && onChangeProp && primaryValue)
+    if (!data.hasChildren && onChangeProp && primaryValue) {
       onChangeProp(selfClick ? [] : [data.value]);
+    } else {
+      onChangeProp([]);
+    }
   };
 
   const setTertiary = (data: Option) => {
     const selfClick = data.value === tertiaryValue?.value;
     setTertiaryValue(selfClick ? null : data);
-    if (onChangeProp && primaryValue && secondaryValue)
+    if (onChangeProp && primaryValue && secondaryValue) {
       onChangeProp(selfClick ? [] : [data.value]);
+    } else {
+      onChangeProp([]);
+    }
   };
 
   return loading ? (
     <CheckTagsLoading />
   ) : (
-    <>
+    <div style={{ paddingBottom: 10 }}>
       <Row gutter={noGutter ? [8, 8] : [10, 10]}>
         {options
           .filter((item) => item.tier === 0 || !hasChildOptions)
@@ -210,7 +219,7 @@ const CheckTags = ({
             )}
         </Row>
       )}
-    </>
+    </div>
   );
 };
 

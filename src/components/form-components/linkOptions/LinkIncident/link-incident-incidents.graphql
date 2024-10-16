@@ -1,0 +1,53 @@
+query LinkIncidentIncidents(
+    $order: IncidentOrderByWithRelationInput
+    $search: String
+    $first: Int
+    $after: String
+    $where: IncidentWhereInput
+    $schemeId: String!
+    $approved: Boolean
+    $skip: Int
+    $take: Int
+) {
+    incidentsRelay(
+        order: $order
+        first: $first
+        after: $after
+        search: $search
+        where: $where
+        schemeId: $schemeId
+        approved: $approved
+        skip: $skip
+        take: $take
+    ) {
+        edges {
+            node {
+                id
+                reference
+                date
+                dayTime
+                description
+                subject
+                totalImages
+                policeRef
+                totalRecoveredValue
+                totalValue
+                location {
+                    full
+                }
+                business {
+                    name
+                }
+                offenders {
+                    id
+                    name
+                }
+            }
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+        totalCount
+    }
+}

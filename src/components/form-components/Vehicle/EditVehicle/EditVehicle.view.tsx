@@ -3,6 +3,7 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import type { CustomGalleryData, Image, VehicleCardData } from 'types/DataType';
 
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Form, Input, Row, Select, Skeleton } from 'antd';
@@ -53,7 +54,6 @@ const EditVehicle = ({
   editImage,
   fileList,
   form,
-  groups,
   groupsLoading,
   imgChange,
   onClose,
@@ -162,7 +162,7 @@ const EditVehicle = ({
                     'Please select the relevant groups that you would like this vehicle to be visible to.',
                 })}
               >
-                <Select
+                <GroupsSelect
                   disabled={saving}
                   loading={groupsLoading}
                   maxTagCount={3}
@@ -170,13 +170,7 @@ const EditVehicle = ({
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Select groups...',
                   })}
-                >
-                  {groups.map((group) => (
-                    <Select.Option key={group.value} value={group.value}>
-                      {group.label}
-                    </Select.Option>
-                  ))}
-                </Select>
+                />
               </Form.Item>
             </Col>
           )}
