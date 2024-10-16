@@ -155,6 +155,7 @@ export enum ActionType {
   Reduce = 'REDUCE',
   Remove = 'REMOVE',
   ResetPassword = 'RESET_PASSWORD',
+  Restore = 'RESTORE',
   Update = 'UPDATE',
   View = 'VIEW'
 }
@@ -4189,16 +4190,6 @@ export type DemDevice = {
   schemeId: Scalars['String'];
   serialNumber?: Maybe<Scalars['String']>;
   updatedAt: Scalars['Date'];
-};
-
-
-export type DemDeviceEvidenceArgs = {
-  cursor?: InputMaybe<DocumentWhereUniqueInput>;
-  distinct?: InputMaybe<Array<DocumentScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<DocumentOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<DocumentWhereInput>;
 };
 
 export type DemDeviceListRelationFilter = {
@@ -10150,7 +10141,9 @@ export enum Model {
   Business = 'BUSINESS',
   Chat = 'CHAT',
   CrimeGroup = 'CRIME_GROUP',
+  DemDevice = 'DEM_DEVICE',
   Document = 'DOCUMENT',
+  Evidence = 'EVIDENCE',
   Group = 'GROUP',
   Image = 'IMAGE',
   Incident = 'INCIDENT',
@@ -10343,6 +10336,7 @@ export type Mutation = {
   updateCustomGallery: CustomGallery;
   updateDashboardTemplate: Dashboard;
   updateDemDevice: DemDevice;
+  updateDemGroup: DemGroup;
   updateFlow: Flow;
   updateGroup: Group;
   updateIncident: Incident;
@@ -11224,6 +11218,12 @@ export type MutationUpdateDashboardTemplateArgs = {
 
 export type MutationUpdateDemDeviceArgs = {
   data: UpdateDemDevice;
+  where: UniqueId;
+};
+
+
+export type MutationUpdateDemGroupArgs = {
+  data: UpdateDemGroup;
   where: UniqueId;
 };
 
@@ -13615,6 +13615,7 @@ export type Query = {
   listCustomGalleries: ListCustomGalleries;
   listDemBusinessEvidence: ListDemEvidenceRelay;
   listDemCompanies: ListDemCompanies;
+  listDemDeviceEvidence: ListDemEvidenceRelay;
   listDemEvidence: ListDemEvidence;
   listDemEvidenceExtendedWithoutUser: ListDemEvidenceExtended;
   listDemEvidenceRecycle: ListDemEvidenceRelay;
@@ -14294,6 +14295,13 @@ export type QueryListDemCompaniesArgs = {
 };
 
 
+export type QueryListDemDeviceEvidenceArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
+};
+
+
 export type QueryListDemEvidenceArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -14309,7 +14317,7 @@ export type QueryListDemEvidenceExtendedWithoutUserArgs = {
 
 
 export type QueryListDemEvidenceRecycleArgs = {
-  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycled: Scalars['Boolean'];
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
 };
@@ -16393,6 +16401,7 @@ export enum ReportType {
   BusinessEngagementTable = 'BUSINESS_ENGAGEMENT_TABLE',
   BusinessMap = 'BUSINESS_MAP',
   BusinessTable = 'BUSINESS_TABLE',
+  CheckListQuestionTable = 'CHECK_LIST_QUESTION_TABLE',
   CheckListTable = 'CHECK_LIST_TABLE',
   CrimeGroup = 'CRIME_GROUP',
   CrimeGroupsTable = 'CRIME_GROUPS_TABLE',
@@ -19834,6 +19843,10 @@ export type UpdateCrimeGroupDataInput = {
 export type UpdateDemDevice = {
   businessId?: InputMaybe<Scalars['String']>;
   demGroupIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
+export type UpdateDemGroup = {
+  demDeviceIds: Array<Scalars['String']>;
 };
 
 export type UpdateDocument = {

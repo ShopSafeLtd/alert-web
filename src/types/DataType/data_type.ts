@@ -182,7 +182,7 @@ export interface InvestigationDetails {
 
 // image
 export interface ImageCardData {
-  blurFaces?: ImageFaceType[];
+  blurFaces?: BlurFaceData[];
   deleted?: boolean;
   edited?: boolean;
   fileName?: null | string;

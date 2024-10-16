@@ -1,5 +1,9 @@
+import type { RecycleDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+
 import AddDemDevice from '#/components/form-components/DemDevice/AddDemDevice';
 import LinkBusiness from '#/components/form-components/businesses/LinkBusiness';
+import DemEvidenceTable from '#/components/tables/DemEvidenceTable';
 import {
   faPenToSquare,
   faShare,
@@ -23,6 +27,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import type { DemDeviceQuery } from '../graphql/queries/__generated__/dem-device.generated';
+import type { ListDemDeviceEvidenceQuery } from '../graphql/queries/__generated__/list-device-dem-evidence.generated';
 
 const { confirm } = Modal;
 
@@ -31,11 +36,14 @@ interface Props {
   data: DemDeviceQuery | undefined;
   deleteConfirm: () => void;
   editDemDevice: boolean;
+  evidenceData: ListDemDeviceEvidenceQuery | undefined;
+  evidenceLoading: boolean;
   loading: boolean;
   onAssignedBusiness: (value: string) => void;
   saving: boolean;
   toggleAssignToBusiness: () => void;
   toggleEditDemDevice: () => void;
+  updateDeleteEvidenceList: MutationUpdaterFn<RecycleDemEvidenceMutation>;
 }
 
 const DemDeviceDetail = ({
@@ -43,11 +51,14 @@ const DemDeviceDetail = ({
   data,
   deleteConfirm,
   editDemDevice,
+  evidenceData,
+  evidenceLoading,
   loading,
   onAssignedBusiness,
   saving,
   toggleAssignToBusiness,
   toggleEditDemDevice,
+  updateDeleteEvidenceList,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -181,17 +192,17 @@ const DemDeviceDetail = ({
           </Descriptions.Item>
         </Descriptions>
       </Card>
-      <Card>
+      <Card loading={loading || evidenceLoading}>
         <Typography.Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Dem Evidence',
           })}
         </Typography.Title>
-        {/* <DemEvidenceTable
-          demEvidence={evidenceData}
+        <DemEvidenceTable
+          demEvidence={evidenceData?.listDemDeviceEvidence}
           saving={loading || evidenceLoading}
           update={updateDeleteEvidenceList}
-        /> */}
+        />
       </Card>
       <Drawer
         onClose={toggleEditDemDevice}

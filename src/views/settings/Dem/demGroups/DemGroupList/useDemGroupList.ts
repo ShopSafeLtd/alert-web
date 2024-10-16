@@ -68,25 +68,7 @@ const useDemGroupList = (): Return => {
     // get existing demDemGroup list data from Apollo store
     const existingData = store.readQuery<DemGroupsQuery>({
       query: DemGroupsDocument,
-      variables: {
-        where: {
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-          scheme: { id: { equals: schemeId } },
-        },
-      },
+      variables,
     });
 
     if (existingData === null) return;

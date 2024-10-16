@@ -1,9 +1,10 @@
 import type React from 'react';
 
-import { useRestoreDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
+import { useRecycleDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { notification } from 'antd';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 
 import type {
@@ -31,6 +32,8 @@ interface Return {
 }
 
 const useViewEvidenceList = (): Return => {
+  const intl = useIntl();
+
   const demIds = useStoreState((state) => state.user.dem);
   const [selectedId, setSelectedId] = useState<string>(demIds[0].id);
   const [selectedData, setSelectedData] = useState<EvidenceType | undefined>(
@@ -57,7 +60,7 @@ const useViewEvidenceList = (): Return => {
       page,
     });
   };
-  const [restoreDemEvidence] = useRestoreDemEvidenceMutation({
+  const [recycleDemEvidence] = useRecycleDemEvidenceMutation({
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
@@ -74,11 +77,11 @@ const useViewEvidenceList = (): Return => {
     },
   });
   const onDelete = (value: string) => {
-    void restoreDemEvidence({
+    void recycleDemEvidence({
       update: (store, { data: res }) => {
         if (
-          res?.restoreDemEvidence === null ||
-          res?.restoreDemEvidence === undefined
+          res?.recycleDemEvidence === null ||
+          res?.recycleDemEvidence === undefined
         )
           return;
 

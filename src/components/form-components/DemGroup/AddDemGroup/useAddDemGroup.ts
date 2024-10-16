@@ -48,6 +48,8 @@ const useAddDemGroup = ({
   const [saving, setSaving] = useState(false);
   useEffect(() => {
     if (editData) {
+      console.log('editData', editData);
+
       form.setFieldsValue({
         demDevices: editData.demDevices,
         name: editData.name,
@@ -70,7 +72,6 @@ const useAddDemGroup = ({
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log('createDemGroup', data);
 
     void createDemGroup({
       onCompleted: () => {
@@ -114,7 +115,7 @@ const useAddDemGroup = ({
           demDeviceIds: data.demDevices,
           groupId: data.groupId,
           id: editData?.id,
-          name: data.name,
+          name: data.name || editData?.name || '',
         },
       },
     });

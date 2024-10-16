@@ -1,3 +1,4 @@
+import { ActionType } from '#/graphql/types';
 import { Button, Col, Descriptions, Image, Modal, Row } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -6,7 +7,9 @@ import ReactPlayer from 'react-player';
 import type { EvidenceType } from './EvidenceList.view';
 interface Props {
   loading?: boolean;
+  onCreateActionEvidence?: (value: { id: string; type: ActionType }) => void;
   onDelete?: (value: string) => void;
+  onRestore?: (value: string) => void;
   selectedData: EvidenceType | undefined;
   setSelectedData: React.Dispatch<
     React.SetStateAction<EvidenceType | undefined>
@@ -16,7 +19,9 @@ const { confirm } = Modal;
 
 const ViewEvidenceModal: React.FC<Props> = ({
   loading,
+  onCreateActionEvidence,
   onDelete,
+  onRestore,
   selectedData,
   setSelectedData,
 }): JSX.Element => {
@@ -36,7 +41,18 @@ const ViewEvidenceModal: React.FC<Props> = ({
           })}
         </Button>,
 
-        <Button key="download" loading={loading} type="dashed">
+        <Button
+          key="download"
+          loading={loading}
+          onClick={() => {
+            if (onCreateActionEvidence)
+              onCreateActionEvidence({
+                id: selectedData?.key || '',
+                type: ActionType.View,
+              });
+          }}
+          type="dashed"
+        >
           <a download href={selectedData?.playbackUrl}>
             {intl.formatMessage({
               defaultMessage: 'Download',
@@ -44,30 +60,67 @@ const ViewEvidenceModal: React.FC<Props> = ({
           </a>
         </Button>,
 
-        <Button
-          key="delete"
-          loading={loading}
-          onClick={() => {
-            confirm({
-              content: intl.formatMessage({
-                defaultMessage:
-                  'The evidence will be removed from the Dem and added to the recycle bin.',
-              }),
-              onOk() {
-                if (onDelete) onDelete(selectedData?.key || '');
-              },
-              title: intl.formatMessage({
-                defaultMessage: 'Do you want to delete the evidence?',
-              }),
-            });
-          }}
-          type="primary"
-        >
-          {intl.formatMessage({
-            defaultMessage: 'Delete',
-          })}
-        </Button>,
-      ].filter((el) => onDelete || el.key !== 'delete')}
+        onDelete && (
+          <Button
+            key="delete"
+            loading={loading}
+            onClick={() => {
+              confirm({
+                content: intl.formatMessage({
+                  defaultMessage:
+                    'The evidence will be removed from the Dem and added to the recycle bin.',
+                }),
+                onOk() {
+                  if (onDelete) {
+                    onDelete(selectedData?.key || '');
+                    if (onCreateActionEvidence)
+                      onCreateActionEvidence({
+                        id: selectedData?.key || '',
+                        type: ActionType.Delete,
+                      });
+                  }
+                },
+                title: intl.formatMessage({
+                  defaultMessage: 'Do you want to delete the evidence?',
+                }),
+              });
+            }}
+            type="primary"
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Delete',
+            })}
+          </Button>
+        ),
+        onRestore && (
+          <Button
+            key="restore"
+            loading={loading}
+            onClick={() => {
+              confirm({
+                content: intl.formatMessage({
+                  defaultMessage:
+                    'The evidence will be moved back to the Dem evidence list.',
+                }),
+                onOk() {
+                  if (onRestore) {
+                    onRestore(selectedData?.key || '');
+                  }
+                },
+                title: intl.formatMessage({
+                  defaultMessage: 'Do you want to restore the evidence?',
+                }),
+              });
+            }}
+            type="primary"
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Restore',
+            })}
+          </Button>
+        ),
+      ]}
+      // ].filter((el) => onDelete || el.key !== 'delete')}
       onCancel={() => setSelectedData(undefined)}
       open={!!selectedData}
       title={intl.formatMessage({

@@ -134,11 +134,11 @@ const RecycleBin = ({
     <div className="list-view">
       <Row style={{ margin: 10 }}>
         <Col>
-          <Typography.Title level={3}>
+          {/* <Typography.Title level={3}>
             {intl.formatMessage({
               defaultMessage: 'Recycle Bin',
             })}
-          </Typography.Title>
+          </Typography.Title> */}
           <Typography.Text>
             {intl.formatMessage({
               defaultMessage:

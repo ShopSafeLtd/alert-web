@@ -1,1 +1,1 @@
-export { default } from './RecycleBin.container';
+export { default } from './RecycleEvidence.container';

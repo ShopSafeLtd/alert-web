@@ -121,8 +121,8 @@ const useAddDemDevice = ({
           demGroupIds: data.demGroups,
           id: editData?.id,
           modelId: data.modelId,
-          name: data.name,
-          serialNumber: data.serialNumber,
+          name: data.name || editData?.name || '',
+          serialNumber: data.serialNumber || editData?.serialNumber || '',
         },
       },
     });

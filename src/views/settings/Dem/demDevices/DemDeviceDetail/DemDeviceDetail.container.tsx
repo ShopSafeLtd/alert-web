@@ -12,11 +12,14 @@ const DemDeviceDetail = (): JSX.Element => {
     data,
     deleteConfirm,
     editDemDevice,
+    evidenceData,
+    evidenceLoading,
     loading,
     onAssignedBusiness,
     saving,
     toggleAssignToBusiness,
     toggleEditDemDevice,
+    updateDeleteEvidenceList,
   } = useDemDeviceDetail(deviceId || '');
   return (
     <div>
@@ -25,11 +28,14 @@ const DemDeviceDetail = (): JSX.Element => {
         data={data}
         deleteConfirm={deleteConfirm}
         editDemDevice={editDemDevice}
+        evidenceData={evidenceData}
+        evidenceLoading={evidenceLoading}
         loading={loading}
         onAssignedBusiness={onAssignedBusiness}
         saving={saving}
         toggleAssignToBusiness={toggleAssignToBusiness}
         toggleEditDemDevice={toggleEditDemDevice}
+        updateDeleteEvidenceList={updateDeleteEvidenceList}
       />
     </div>
   );

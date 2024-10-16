@@ -18,6 +18,7 @@ const DemGroupList = (): JSX.Element => {
     toggleAddDemGroup,
     updateDemGroupList,
   } = useDemGroupList();
+  console.log('data', data);
 
   return (
     <View

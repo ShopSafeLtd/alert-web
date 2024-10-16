@@ -4,7 +4,7 @@ import type {
 } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
 import type { UpsertDemDeviceMutation } from '#/components/form-components/DemDevice/AddDemDevice/graphql/mutations/__generated__/upsert-dem-device.generated';
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
-import type { RestoreDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
+import type { RecycleDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListActionsQuery } from 'graphql/actions/queries/__generated__/list-actions.generated';
@@ -89,7 +89,7 @@ interface Return {
   toggleLinkDem: () => void;
   updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
   updateDeleteDemDeviceList: MutationUpdaterFn<DeleteDemDeviceMutation>;
-  updateDeleteEvidenceList: MutationUpdaterFn<RestoreDemEvidenceMutation>;
+  updateDeleteEvidenceList: MutationUpdaterFn<RecycleDemEvidenceMutation>;
   updateDemDeviceList: MutationUpdaterFn<UpsertDemDeviceMutation>;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
@@ -600,11 +600,11 @@ const useViewBusiness = (): Return => {
 
   // dem evidence
   const updateDeleteEvidenceList: MutationUpdaterFn<
-    RestoreDemEvidenceMutation
+    RecycleDemEvidenceMutation
   > = (store, { data: res }) => {
     if (
-      res?.restoreDemEvidence === null ||
-      res?.restoreDemEvidence === undefined
+      res?.recycleDemEvidence === null ||
+      res?.recycleDemEvidence === undefined
     )
       return;
 
@@ -629,7 +629,7 @@ const useViewBusiness = (): Return => {
         listDemBusinessEvidence: {
           ...existingData.listDemBusinessEvidence,
           edges: existingData.listDemBusinessEvidence.edges.filter(
-            (item) => item.node.id !== res.restoreDemEvidence
+            (item) => item.node.id !== res.recycleDemEvidence
           ),
         },
       },

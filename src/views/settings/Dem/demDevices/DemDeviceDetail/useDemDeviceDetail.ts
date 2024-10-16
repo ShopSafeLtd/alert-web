@@ -1,24 +1,39 @@
+import type { RecycleDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+
 import { notification } from 'antd';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import type { DemDeviceQuery } from '../graphql/queries/__generated__/dem-device.generated';
+import type {
+  ListDemDeviceEvidenceQuery,
+  ListDemDeviceEvidenceQueryVariables,
+} from '../graphql/queries/__generated__/list-device-dem-evidence.generated';
 
 import { useDeleteDemDeviceMutation } from '../graphql/mutations/__generated__/delete-dem-device.generated';
 import { useUpdateDemDeviceMutation } from '../graphql/mutations/__generated__/update-dem-device-business.generated';
 import { useDemDeviceQuery } from '../graphql/queries/__generated__/dem-device.generated';
+import {
+  ListDemDeviceEvidenceDocument,
+  useListDemDeviceEvidenceQuery,
+} from '../graphql/queries/__generated__/list-device-dem-evidence.generated';
 
 interface Return {
   assignToBusiness: boolean;
   data: DemDeviceQuery | undefined;
   deleteConfirm: () => void;
   editDemDevice: boolean;
+
+  evidenceData: ListDemDeviceEvidenceQuery | undefined;
+  evidenceLoading: boolean;
   loading: boolean;
   onAssignedBusiness: (value: string) => void;
   saving: boolean;
   toggleAssignToBusiness: () => void;
   toggleEditDemDevice: () => void;
+  updateDeleteEvidenceList: MutationUpdaterFn<RecycleDemEvidenceMutation>;
 }
 
 const useDemDeviceDetail = (demDeviceId: string): Return => {
@@ -35,6 +50,51 @@ const useDemDeviceDetail = (demDeviceId: string): Return => {
       },
     },
   });
+  const { data: evidenceData, loading: evidenceLoading } =
+    useListDemDeviceEvidenceQuery({
+      variables: {
+        where: demDeviceId,
+      },
+    });
+  const updateDeleteEvidenceList: MutationUpdaterFn<
+    RecycleDemEvidenceMutation
+  > = (store, { data: res }) => {
+    if (
+      res?.recycleDemEvidence === null ||
+      res?.recycleDemEvidence === undefined
+    )
+      return;
+
+    const existingData = store.readQuery<
+      ListDemDeviceEvidenceQuery,
+      ListDemDeviceEvidenceQueryVariables
+    >({
+      query: ListDemDeviceEvidenceDocument,
+      variables: {
+        where: demDeviceId,
+      },
+    });
+
+    if (!existingData?.listDemDeviceEvidence.totalCount) return;
+
+    store.writeQuery<
+      ListDemDeviceEvidenceQuery,
+      ListDemDeviceEvidenceQueryVariables
+    >({
+      data: {
+        listDemDeviceEvidence: {
+          ...existingData.listDemDeviceEvidence,
+          edges: existingData.listDemDeviceEvidence.edges.filter(
+            (item) => item.node.id !== res.recycleDemEvidence
+          ),
+        },
+      },
+      query: ListDemDeviceEvidenceDocument,
+      variables: {
+        where: demDeviceId,
+      },
+    });
+  };
   const [updateDemDevice] = useUpdateDemDeviceMutation({
     onError: () => {
       errorNotification();
@@ -103,11 +163,14 @@ const useDemDeviceDetail = (demDeviceId: string): Return => {
     data,
     deleteConfirm,
     editDemDevice,
+    evidenceData,
+    evidenceLoading,
     loading,
     onAssignedBusiness,
     saving,
     toggleAssignToBusiness,
     toggleEditDemDevice,
+    updateDeleteEvidenceList,
   };
 };
 

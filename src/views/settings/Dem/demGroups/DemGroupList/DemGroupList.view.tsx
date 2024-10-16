@@ -134,8 +134,9 @@ const DemGroupList = ({
         ]}
         dataSource={data?.demGroups.edges.map(({ node: demGroup }) => ({
           demGroup: {
-            ...demGroup,
             demDevices: demGroup.demDevices.map(({ id }) => id),
+            id: demGroup.id,
+            name: demGroup.name,
           },
           demId: demGroup.demId,
           id: demGroup.id,

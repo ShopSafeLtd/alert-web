@@ -150,6 +150,9 @@ const RoleView = ({
     DATA_IMPORT: formatMessage({
       defaultMessage: 'Data Import',
     }),
+    DEM: formatMessage({
+      defaultMessage: 'Dem',
+    }),
     DOCUMENTS: formatMessage({
       defaultMessage: 'Documents',
     }),

@@ -1,6 +1,7 @@
 import type { UpsertDemDeviceMutation } from '#/components/form-components/DemDevice/AddDemDevice/graphql/mutations/__generated__/upsert-dem-device.generated';
 import type { UpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
-import type { RestoreDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
+// import EvidenceTable from '#/components/tables/EvidenceTable';
+import type { RecycleDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListActionsQuery } from 'graphql/actions/queries/__generated__/list-actions.generated';
@@ -15,7 +16,6 @@ import type { DemDeviceData, LocationData } from 'types/DataType';
 import AddDemDevice from '#/components/form-components/DemDevice/AddDemDevice';
 import DemDeviceTable from '#/components/tables/DemDeviceTable';
 import DemEvidenceTable from '#/components/tables/DemEvidenceTable';
-// import EvidenceTable from '#/components/tables/EvidenceTable';
 // import { ProfileUpdatedModel } from '#/types/enums/profile-update-type';
 import { GetUserStatusValues } from '#/types/enums/user_status';
 import {
@@ -104,7 +104,7 @@ interface Props {
   toggleLinkDem: () => void;
   updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
   updateDeleteDemDeviceList: MutationUpdaterFn<DeleteDemDeviceMutation>;
-  updateDeleteEvidenceList: MutationUpdaterFn<RestoreDemEvidenceMutation>;
+  updateDeleteEvidenceList: MutationUpdaterFn<RecycleDemEvidenceMutation>;
   updateDemDeviceList: MutationUpdaterFn<UpsertDemDeviceMutation>;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
@@ -424,6 +424,7 @@ const ViewBusiness = ({
                     key: 'status',
                     render: (value) => (
                       <Typography.Text>
+                        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
                         {GetUserStatusValues[value]}
                       </Typography.Text>
                     ),
@@ -567,7 +568,7 @@ const ViewBusiness = ({
                 </Col> */}
               </Row>
               <DemEvidenceTable
-                demEvidence={evidenceData}
+                demEvidence={evidenceData?.listDemBusinessEvidence}
                 saving={loading || evidenceLoading}
                 update={updateDeleteEvidenceList}
               />

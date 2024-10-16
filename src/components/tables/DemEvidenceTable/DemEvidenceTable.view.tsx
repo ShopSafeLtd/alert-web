@@ -1,4 +1,5 @@
 /* eslint-disable no-confusing-arrow */
+
 import type { ListDemBusinessEvidenceQuery } from '#/views/settings/businesses/ViewBusiness/graphql/queries/__generated__/list-business-dem-evidence.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 
@@ -7,7 +8,6 @@ import LinkCrimeGroup from '#/components/form-components/linkOptions/LinkCrimeGr
 import LinkIncident from '#/components/form-components/linkOptions/LinkIncident';
 import LinkOffender from '#/components/form-components/offender/AddExistingOffender';
 import Loading from '#/components/shared-components/AntD/Loading';
-import { useRecycleDemEvidenceMutation } from '#/views/evidence/EvidenceList/graphql/__generated__/restore-dem-evidence.generated';
 import {
   faClipboard,
   faExclamationCircle,
@@ -39,11 +39,12 @@ import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-import type { RestoreDemEvidenceMutation } from './graphql/__generated__/recycle-dem-evidence.generated';
+import type { RecycleDemEvidenceMutation } from './graphql/__generated__/recycle-dem-evidence.generated';
 
 import ViewEvidenceModal from '../../../views/evidence/EvidenceList/ViewEvidenceModal';
 import { useCopyEvidenceToAlertMutation } from './graphql/__generated__/copy-evidence-to-alert.generated';
 import { useCreateActionEvidenceMutation } from './graphql/__generated__/create-action-evidence.generated';
+import { useRecycleDemEvidenceMutation } from './graphql/__generated__/recycle-dem-evidence.generated';
 const useStyles = createUseStyles({
   row: {
     // cursor: 'pointer'
@@ -57,11 +58,7 @@ interface AssignEvidenceType {
   thumbnailUrl?: null | string;
   url: string;
 }
-interface ActionEvidenceType {
-  evidenceName?: null | string;
-  id: string;
-  type: ActionType;
-}
+
 export type EvidenceData = {
   duration: null | string | undefined;
   id: string;
@@ -97,9 +94,15 @@ type EvidenceType = {
 //   };
 // }
 interface Props {
-  demEvidence: ListDemBusinessEvidenceQuery | undefined;
+  demEvidence:
+    | Exclude<
+        ListDemBusinessEvidenceQuery['listDemBusinessEvidence'],
+        null | undefined
+      >
+    | null
+    | undefined;
   saving?: boolean;
-  update: MutationUpdaterFn<RestoreDemEvidenceMutation>;
+  update: MutationUpdaterFn<RecycleDemEvidenceMutation>;
 }
 
 const DemEvidenceTable = ({
@@ -183,11 +186,11 @@ const DemEvidenceTable = ({
       setSaving(false);
     });
   };
-  const [deleteDemEvidence] = useRecycleDemEvidenceMutation({
+  const [recycleDemEvidence] = useRecycleDemEvidenceMutation({
     onCompleted: () => {
       notification.success({
         description: intl.formatMessage({
-          defaultMessage: 'The evidence has been Removed from DEM!',
+          defaultMessage: 'The evidence has been removed from DEM!',
         }),
         message: intl.formatMessage({
           defaultMessage: 'Successfully Removed!',
@@ -202,7 +205,7 @@ const DemEvidenceTable = ({
   });
   const onDelete = (value: string) => {
     setSaving(true);
-    void deleteDemEvidence({
+    void recycleDemEvidence({
       variables: {
         id: value || '',
       },
@@ -217,7 +220,7 @@ const DemEvidenceTable = ({
       console.log('createActionEvidence2', err);
     },
   });
-  const onCreateActionEvidence = (values: ActionEvidenceType) => {
+  const onCreateActionEvidence = (values: { id: string; type: ActionType }) => {
     setSaving(true);
     console.log('createActionEvidence1', values);
 
@@ -498,51 +501,52 @@ const DemEvidenceTable = ({
           },
         ]}
         dataSource={
-          demEvidence && demEvidence?.listDemBusinessEvidence.totalCount > 0
-            ? demEvidence.listDemBusinessEvidence.edges.map(
-                ({ node: evidenceList }) =>
-                  evidenceList
-                    ? {
-                        date: evidenceList.recordedAt,
-                        duration:
-                          evidenceList.type === 'VIDEO'
-                            ? evidenceList.duration
-                            : (evidenceList.type || '')
-                                .toLowerCase()
-                                .split(' ')
-                                .map(
-                                  (word) =>
-                                    word.charAt(0).toUpperCase() + word.slice(1)
-                                )
-                                .join(' '),
-                        importance: evidenceList.importance,
-                        key: evidenceList.id || '',
-                        name:
-                          evidenceList.officerName ??
-                          intl.formatMessage({
-                            defaultMessage: 'No name provided',
-                          }),
-                        playbackUrl:
-                          evidenceList.playbackUrl ?? 'No playbackUrl provided',
-                        thumbnail: {
-                          id: evidenceList.id || '',
-                          url: evidenceList.thumbnailUrl || '',
-                        },
-                        type: evidenceList.type || '',
-                      }
-                    : {
-                        date: new Date(),
-                        duration: '',
-                        importance: '',
-                        key: '',
-                        name: 'No name provided',
-                        playbackUrl: 'No playbackUrl provided',
-                        thumbnail: {
-                          id: '',
-                          url: '',
-                        },
-                        type: 'OTHER',
-                      }
+          demEvidence && demEvidence.totalCount > 0
+            ? demEvidence.edges.map(({ node: evidenceList }) =>
+                evidenceList
+                  ? {
+                      date: evidenceList.recordedAt,
+                      duration:
+                        evidenceList.type === 'VIDEO'
+                          ? evidenceList.duration
+                          : (evidenceList.type || '')
+                              .toLowerCase()
+                              .split(' ')
+                              .map(
+                                (word) =>
+                                  word.charAt(0).toUpperCase() + word.slice(1)
+                              )
+                              .join(' '),
+                      importance: evidenceList.importance,
+                      key: evidenceList.id || '',
+                      name:
+                        evidenceList.officerName ??
+                        intl.formatMessage({
+                          defaultMessage: 'No name provided',
+                        }),
+                      playbackUrl:
+                        evidenceList.playbackUrl ?? 'No playbackUrl provided',
+                      thumbnail: {
+                        id: evidenceList.id || '',
+                        url: evidenceList.thumbnailUrl || '',
+                        // url: 'https://smartdem.blob.core.windows.net/thumbnail/group1/M00/2B/A7/CgAABWb7zdiEQkEWAAAAAH3dEm8530.jpg',
+                      },
+                      type: evidenceList.type || '',
+                      // url: 'https://smartdem.blob.core.windows.net/evidence/group1/M00/2B/A6/CgAABWb7zEeETEVPAAAAAAXCtdQ218.mp4',
+                    }
+                  : {
+                      date: new Date(),
+                      duration: '',
+                      importance: '',
+                      key: '',
+                      name: 'No name provided',
+                      playbackUrl: 'No playbackUrl provided',
+                      thumbnail: {
+                        id: '',
+                        url: '',
+                      },
+                      type: 'OTHER',
+                    }
               )
             : []
         }
@@ -572,12 +576,6 @@ const DemEvidenceTable = ({
             onClose={toggleLinkOffender}
             update={(value) => {
               if (selectedAssignedItem)
-                // onAssign({
-                //   offenderId: value.id,
-                //   thumbnailUrl:
-                //     'https://smartdem.blob.core.windows.net/thumbnail/group1/M00/2B/A7/CgAABWb7zdiEQkEWAAAAAH3dEm8530.jpg',
-                //   url: 'https://smartdem.blob.core.windows.net/evidence/group1/M00/2B/A6/CgAABWb7zEeETEVPAAAAAAXCtdQ218.mp4',
-                // });
                 onAssign({
                   offenderId: value.id,
                   thumbnailUrl: selectedAssignedItem.thumbnailUrl,
@@ -628,17 +626,17 @@ const DemEvidenceTable = ({
             onClose={toggleLinkCrimeGroup}
             update={(value) => {
               if (selectedAssignedItem)
-                // onAssign({
-                //   crimeGroupId: value.id,
-                //   thumbnailUrl: selectedAssignedItem.thumbnailUrl,
-                //   url: selectedAssignedItem.url,
-                // });
                 onAssign({
                   crimeGroupId: value.id,
-                  thumbnailUrl:
-                    'https://smartdem.blob.core.windows.net/thumbnail/group1/M00/2B/A7/CgAABWb7zdiEQkEWAAAAAH3dEm8530.jpg',
-                  url: 'https://smartdem.blob.core.windows.net/evidence/group1/M00/2B/A6/CgAABWb7zEeETEVPAAAAAAXCtdQ218.mp4',
+                  thumbnailUrl: selectedAssignedItem.thumbnailUrl,
+                  url: selectedAssignedItem.url,
                 });
+              // onAssign({
+              //   crimeGroupId: value.id,
+              //   thumbnailUrl:
+              //     'https://smartdem.blob.core.windows.net/thumbnail/group1/M00/2B/A7/CgAABWb7zdiEQkEWAAAAAH3dEm8530.jpg',
+              //   url: 'https://smartdem.blob.core.windows.net/evidence/group1/M00/2B/A6/CgAABWb7zEeETEVPAAAAAAXCtdQ218.mp4',
+              // });
             }}
           />
         ) : (

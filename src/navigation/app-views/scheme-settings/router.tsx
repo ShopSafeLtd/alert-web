@@ -44,7 +44,7 @@ const SchemeTerms = lazy(() => import('views/settings/terms/SchemeTerms'));
 const CreateTermsContainer = lazy(
   () => import('views/settings/terms/CreateTerms/CreateTerms.container')
 );
-const RecycleBin = lazy(() => import('views/settings/recycled/RecycleBin'));
+const RecycleBin = lazy(() => import('views/settings/recycled/Recycle'));
 const SchemeSharing = lazy(
   () => import('views/settings/schemes/SchemeSharing')
 );
@@ -225,25 +225,7 @@ const SchemeSettings = (): JSX.Element => {
               }
               path="dem/*"
             />
-            {/* <Route
-              element={
-                <PermissionCheckWrapper
-                  permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
-                    // {
-                    //   method: PermissionMethod.Read,
-                    //   model: PermissionModel.Dem,
-                    // },
-                  ]}
-                >
-                  <DemGroupList />
-                </PermissionCheckWrapper>
-              }
-              path="dem-groups/*"
-            /> */}
+
             <Route
               element={
                 <PermissionCheckWrapper
@@ -252,10 +234,10 @@ const SchemeSettings = (): JSX.Element => {
                       method: PermissionMethod.Read,
                       model: PermissionModel.Settings,
                     },
-                    // {
-                    //   method: PermissionMethod.Read,
-                    //   model: PermissionModel.Dem,
-                    // },
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Dem,
+                    },
                   ]}
                 >
                   <ViewDemGroup />
@@ -272,10 +254,10 @@ const SchemeSettings = (): JSX.Element => {
                       method: PermissionMethod.Read,
                       model: PermissionModel.Settings,
                     },
-                    // {
-                    //   method: PermissionMethod.Read,
-                    //   model: PermissionModel.Dem,
-                    // },
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Dem,
+                    },
                   ]}
                 >
                   <ViewDemDevice />
