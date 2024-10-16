@@ -1,0 +1,9 @@
+query AddIncidentTags($where: TagWhereInput!, $orderBy: [TagOrderByWithRelationInput!]) {
+  tags(where: $where, orderBy: $orderBy) {
+    id
+    name
+    description
+    type
+
+  }
+}

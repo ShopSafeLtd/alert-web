@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router';
+
 import View from './AddIncident.view';
 import useAddIncident from './useAddIncident';
 
@@ -7,53 +8,59 @@ const AddIncident = (): JSX.Element => {
   const investigationId = useParams().investigationId || '';
 
   const {
-    form,
-    onSubmit,
-    primaryAddress,
-    saving,
-    onValuesChange,
     addNewAddress,
+    brands,
+    customQuestions,
+    dontKnowGoods,
+    form,
+    generatingStatement,
+    goodsMode,
+    goodsVisible,
+    incidentForm,
+    knowGoods,
+    newAddressData,
+    onSubmit,
+    onValuesChange,
+    policeReporting,
+    primaryAddress,
+    primaryImage,
+    reportOnly,
+    saving,
+    setBrands,
+    setPoliceReporting,
+    setPrimaryImage,
+    showSiteNumber,
     toggleAddNewAddress,
     updateNewAddressData,
-    newAddressData,
-    dontKnowGoods,
-    goodsVisible,
-    knowGoods,
-    primaryImage,
-    setPrimaryImage,
-    incidentForm,
-    customQuestions,
-    goodsMode,
-    reportOnly,
-    brands,
-    setBrands,
-    showSiteNumber,
   } = useAddIncident({ investigationId });
 
   return (
     <div>
       <View
-        brands={brands}
-        setBrands={setBrands}
-        form={form}
-        onSubmit={onSubmit}
-        primaryAddress={primaryAddress}
-        saving={saving}
-        onValuesChange={onValuesChange}
         addNewAddress={addNewAddress}
+        brands={brands}
+        customQuestions={customQuestions}
+        dontKnowGoods={dontKnowGoods}
+        form={form}
+        generatingStatement={generatingStatement}
+        goodsMode={goodsMode}
+        goodsVisible={goodsVisible}
+        incidentForm={incidentForm}
+        knowGoods={knowGoods}
+        newAddressData={newAddressData}
+        onSubmit={onSubmit}
+        onValuesChange={onValuesChange}
+        policeReporting={policeReporting}
+        primaryAddress={primaryAddress}
+        primaryImage={primaryImage}
+        reportOnly={reportOnly}
+        saving={saving}
+        setBrands={setBrands}
+        setPoliceReporting={setPoliceReporting}
+        setPrimaryImage={setPrimaryImage}
+        showSiteNumber={showSiteNumber}
         toggleAddNewAddress={toggleAddNewAddress}
         updateNewAddressData={updateNewAddressData}
-        newAddressData={newAddressData}
-        dontKnowGoods={dontKnowGoods}
-        goodsVisible={goodsVisible}
-        knowGoods={knowGoods}
-        primaryImage={primaryImage}
-        setPrimaryImage={setPrimaryImage}
-        incidentForm={incidentForm}
-        customQuestions={customQuestions}
-        goodsMode={goodsMode}
-        reportOnly={reportOnly}
-        showSiteNumber={showSiteNumber}
       />
     </div>
   );

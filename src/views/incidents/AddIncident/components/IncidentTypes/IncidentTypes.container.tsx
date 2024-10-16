@@ -1,30 +1,35 @@
+import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
+import type { FormInstance } from 'antd';
+import type { IncidentFormField } from 'graphql/types';
+
 import React from 'react';
 
 import View from './IncidentTypes.view';
 import useIncidentTypes from './useIncidentTypes';
-import type { IncidentFormField } from 'graphql/types';
 
 interface Props {
+  form: FormInstance<FormData>;
   incidentForm: IncidentFormField[];
+  setPoliceReporting: (value: boolean) => void;
 }
 
-const IncidentTypes = ({ incidentForm }: Props) => {
+const IncidentTypes = ({ form, incidentForm, setPoliceReporting }: Props) => {
   const {
     incidentTagsData,
     incidentTagsLoading,
-    tagsLoading,
-    tags,
     oneSelectedIncidentTypeOnly,
-  } = useIncidentTypes();
+    tags,
+    tagsLoading,
+  } = useIncidentTypes({ form, setPoliceReporting });
 
   return (
     <View
+      incidentForm={incidentForm}
       incidentTagsData={incidentTagsData}
       incidentTagsLoading={incidentTagsLoading}
-      tagsLoading={tagsLoading}
-      tags={tags}
-      incidentForm={incidentForm}
       oneSelectedIncidentTypeOnly={oneSelectedIncidentTypeOnly}
+      tags={tags}
+      tagsLoading={tagsLoading}
     />
   );
 };

@@ -1,11 +1,19 @@
+import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
+import type { FormInstance } from 'antd';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
 import type { TagType } from 'graphql/types';
 
-import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
-import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+import { useAddIncidentTagsQuery } from '#/views/incidents/AddIncident/components/IncidentTypes/__generated__/add-incident-incident-tags.generated';
+import { useAddIncidentIncidentTagsQuery } from '#/views/incidents/AddIncident/components/IncidentTypes/__generated__/add-incident-tags.generated';
+import { Form } from 'antd';
 import { Model } from 'graphql/types';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useStoreState } from 'state';
+
+interface Props {
+  form: FormInstance<FormData>;
+  setPoliceReporting: (value: boolean) => void;
+}
 
 interface Return {
   incidentTagsData: ListIncidentTagsQuery | undefined;
@@ -15,13 +23,15 @@ interface Return {
   tagsLoading: boolean;
 }
 
-const useIncidentTypes = (): Return => {
+const useIncidentTypes = ({ form, setPoliceReporting }: Props): Return => {
   const { id: schemeId, oneSelectedIncidentTypeOnly } = useStoreState(
     (state) => state.scheme
   );
 
+  const selectedTag = Form.useWatch('tags', form);
+
   const { data: incidentTagsData, loading: incidentTagsLoading } =
-    useListIncidentTagsQuery({
+    useAddIncidentIncidentTagsQuery({
       variables: {
         where: {
           schemeId,
@@ -29,7 +39,7 @@ const useIncidentTypes = (): Return => {
       },
     });
 
-  const { data: tagsData, loading: tagsLoading } = useTagsQuery({
+  const { data: tagsData, loading: tagsLoading } = useAddIncidentTagsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -46,6 +56,15 @@ const useIncidentTypes = (): Return => {
       },
     },
   });
+
+  useEffect(() => {
+    if (selectedTag && selectedTag[0]) {
+      const tag = incidentTagsData?.listIncidentTags.find(
+        ({ value }) => value === selectedTag[0]
+      );
+      if (tag) setPoliceReporting(tag.policeReporting);
+    }
+  }, [selectedTag]);
 
   return {
     incidentTagsData,
