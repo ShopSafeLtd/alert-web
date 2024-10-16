@@ -1,4 +1,4 @@
-import type { ImageFaceType } from '#/types/DataType';
+import type { BlurFaceData } from '#/types/DataType';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
 import type { ImagePosition } from 'graphql/types';
@@ -74,7 +74,7 @@ export interface ImageData {
 }
 
 export interface ImageValue {
-  blurFaces?: ImageFaceType[];
+  blurFaces?: BlurFaceData[];
   boundingBox?: {
     height: string;
     left: string;

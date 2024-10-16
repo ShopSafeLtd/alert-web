@@ -512,13 +512,7 @@ const useViewOffender = (offenderId: string): Return => {
                   .map((item) => ({
                     blurFaces:
                       item.blurFaces && item.blurFaces.length > 0
-                        ? item.blurFaces.map((face) => ({
-                            blur: true,
-                            height: Number(face.BoundingBox.Height),
-                            left: Number(face.BoundingBox.Left),
-                            top: Number(face.BoundingBox.Top),
-                            width: Number(face.BoundingBox.Width),
-                          }))
+                        ? item.blurFaces
                         : undefined,
                     policeImage: item.policeImage,
                     position: item.position,
