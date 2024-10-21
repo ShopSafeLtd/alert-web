@@ -11,6 +11,16 @@ import CustomStockImport from '../../../views/settings/data-import/custom-stock-
 
 const UserList = lazy(() => import('views/settings/users/UserList'));
 const ViewUser = lazy(() => import('views/settings/users/UserDetail'));
+const Dem = lazy(() => import('#/views/settings/Dem/DEM'));
+
+const ViewDemGroup = lazy(
+  () => import('#/views/settings/Dem/demGroups/DemGroupDetail')
+);
+
+const ViewDemDevice = lazy(
+  () => import('views/settings/Dem/demDevices/DemDeviceDetail')
+);
+
 const GroupList = lazy(() => import('views/settings/groups/GroupList'));
 const ViewGroup = lazy(() => import('views/settings/groups/GroupDetail'));
 const ChatGroupsList = lazy(() => import('views/settings/chats/ChatList'));
@@ -34,7 +44,7 @@ const SchemeTerms = lazy(() => import('views/settings/terms/SchemeTerms'));
 const CreateTermsContainer = lazy(
   () => import('views/settings/terms/CreateTerms/CreateTerms.container')
 );
-const RecycleBin = lazy(() => import('views/settings/recycled/RecycleBin'));
+const RecycleBin = lazy(() => import('views/settings/recycled/Recycle'));
 const SchemeSharing = lazy(
   () => import('views/settings/schemes/SchemeSharing')
 );
@@ -195,6 +205,65 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="users/view/:id"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={[
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Settings,
+                    },
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Dem,
+                    },
+                  ]}
+                >
+                  <Dem />
+                </PermissionCheckWrapper>
+              }
+              path="dem/*"
+            />
+
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={[
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Settings,
+                    },
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Dem,
+                    },
+                  ]}
+                >
+                  <ViewDemGroup />
+                </PermissionCheckWrapper>
+              }
+              path="dem/dem-groups/view/:id"
+            />
+
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={[
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Settings,
+                    },
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Dem,
+                    },
+                  ]}
+                >
+                  <ViewDemDevice />
+                </PermissionCheckWrapper>
+              }
+              path="dem/dem-devices/view/:id"
             />
             <Route
               element={

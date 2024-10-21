@@ -1,0 +1,31 @@
+query listDemBusinessEvidence(
+  $where: String!
+  $skip: Int
+  $take: Int
+  $recycled: Boolean
+) {
+  listDemBusinessEvidence(
+    where: $where
+    skip: $skip
+    take: $take
+    recycled: $recycled
+  ) {
+    edges {
+      node {
+        type
+        thumbnailUrl
+        recordedAt
+        playbackUrl
+        id
+        importance
+        officerName
+        duration
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

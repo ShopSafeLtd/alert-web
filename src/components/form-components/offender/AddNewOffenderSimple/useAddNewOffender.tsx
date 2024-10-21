@@ -145,13 +145,7 @@ const useAddNewOffender = ({
     const imageData = data.images.map((item) => ({
       blurFaces:
         item.blurFaces && item.blurFaces.length > 0
-          ? item.blurFaces.map((face) => ({
-              blur: true,
-              height: Number(face.BoundingBox.Height),
-              left: Number(face.BoundingBox.Left),
-              top: Number(face.BoundingBox.Top),
-              width: Number(face.BoundingBox.Width),
-            }))
+          ? item.blurFaces
           : undefined,
       // type: item.file?.response && item.file.response[0].mimetype,
       fileName: item.fileName,
@@ -289,13 +283,7 @@ const useAddNewOffender = ({
               ...image.file,
               blurFaces:
                 image.blurFaces && image.blurFaces.length > 0
-                  ? image.blurFaces.map((face) => ({
-                      blur: true,
-                      height: Number(face.BoundingBox.Height),
-                      left: Number(face.BoundingBox.Left),
-                      top: Number(face.BoundingBox.Top),
-                      width: Number(face.BoundingBox.Width),
-                    }))
+                  ? image.blurFaces
                   : undefined,
               fileName: image.file?.response?.[0].blobName,
               isFace: image.isFace || false,

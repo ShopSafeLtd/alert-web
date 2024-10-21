@@ -115,7 +115,13 @@ const useEditImageAnalyseList = ({
         // .filter((item) => !item.optimised)
         // .filter((item) => item.new || item.edited || item.deleted)
         .map((item) => ({
-          blurFaces: item.blurFaces,
+          blurFaces: item.blurFaces?.map(({ BoundingBox }) => ({
+            blur: true,
+            height: Number(BoundingBox.Height),
+            left: Number(BoundingBox.Left),
+            top: Number(BoundingBox.Top),
+            width: Number(BoundingBox.Width),
+          })),
           deleted: item.deleted,
           edited:
             (item.edited && !item.new && !item.deleted) ||

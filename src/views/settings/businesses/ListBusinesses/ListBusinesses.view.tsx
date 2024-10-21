@@ -43,6 +43,7 @@ interface Props {
   loading: boolean;
   onSearchChange: (value: string) => void;
   onSubmit: (value: BusinessData) => void;
+  onUpdateLinkBusiness: (value: string) => void;
   pagination: { page: number; pageSize: number };
   parentData: FilterLabels[];
   parentFilter: string[];
@@ -68,6 +69,7 @@ const ListBusinesses = ({
   loading,
   onSearchChange,
   onSubmit,
+  onUpdateLinkBusiness,
   pagination,
   parentData,
   parentFilter,
@@ -380,7 +382,13 @@ const ListBusinesses = ({
         })}
         width={600}
       >
-        {linkVisible && <LinkBusiness onClose={toggleLinkVisible} />}
+        {linkVisible && (
+          <LinkBusiness
+            onClose={toggleLinkVisible}
+            saving={saving}
+            update={onUpdateLinkBusiness}
+          />
+        )}
       </Drawer>
     </div>
   );

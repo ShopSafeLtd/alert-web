@@ -182,7 +182,7 @@ export interface InvestigationDetails {
 
 // image
 export interface ImageCardData {
-  blurFaces?: ImageFaceType[];
+  blurFaces?: BlurFaceData[];
   deleted?: boolean;
   edited?: boolean;
   fileName?: null | string;
@@ -492,4 +492,18 @@ export interface OffenderSettingsType {
   images: boolean;
   name: boolean;
   peculiarities: boolean;
+}
+export interface DemDeviceData {
+  business: string;
+  createdAt?: Date | null;
+  demGroups: string[];
+  id: string;
+  name: string;
+  serialNumber?: null | string;
+}
+export interface DemGroupData {
+  demDevices: string[];
+  demId?: string;
+  id: string;
+  name: string;
 }

@@ -224,7 +224,7 @@ const useInvestigationTable = (): Return => {
         key: investigation.name + i.toString(),
         lostValue: investigation.totalValue.toFixed(2),
         name: shouldRedact ? redactedText : investigation.name,
-        recoveredValue: investigation.totalRecoveredValue.toFixed(2),
+        recoveredValue: investigation.totalRecoveredValue?.toFixed(2) || '0',
         status: investigation.status,
         successRate: ((investigation.totalSuccessRate || 0) * 100).toFixed(2),
         totalIncidents: investigation.totalIncidents,

@@ -1,0 +1,6 @@
+mutation deleteDemDevice($id: String!) {
+  deleteDemDevice(where: { id: $id }) {
+    id
+    name
+  }
+}

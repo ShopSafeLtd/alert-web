@@ -1,57 +1,60 @@
 import React from 'react';
+
 import View from './ListBusinesses.view';
 import useListBusinesses from './useListBusinesses';
 
 const ListBusinesses = () => {
   const {
+    addVisible,
     data,
+    deleteConfirm,
+    groupData,
+    groupFilter,
+    linkVisible,
     loading,
     onSearchChange,
-    searchValue,
-    addVisible,
-    toggleAddVisible,
-    linkVisible,
-    toggleLinkVisible,
     onSubmit,
-    saving,
-    deleteConfirm,
+    onUpdateLinkBusiness,
     pagination,
-    setPagination,
-    groupData,
     parentData,
     parentFilter,
-    setParentFilter,
+    saving,
+    searchValue,
     setGroupFilter,
-    groupFilter,
-    tagFilter,
+    setPagination,
+    setParentFilter,
     setTagFilter,
+    tagFilter,
     tags,
+    toggleAddVisible,
+    toggleLinkVisible,
   } = useListBusinesses();
 
   return (
     <View
-      parentData={parentData}
-      parentFilter={parentFilter}
-      setParentFilter={setParentFilter}
+      addVisible={addVisible}
+      data={data}
+      deleteConfirm={deleteConfirm}
       groupData={groupData}
       groupFilter={groupFilter}
-      setGroupFilter={setGroupFilter}
-      tags={tags}
-      tagFilter={tagFilter}
-      setTagFilter={setTagFilter}
-      pagination={pagination}
-      setPagination={setPagination}
-      data={data}
+      linkVisible={linkVisible}
       loading={loading}
       onSearchChange={onSearchChange}
-      searchValue={searchValue}
-      addVisible={addVisible}
-      toggleAddVisible={toggleAddVisible}
-      linkVisible={linkVisible}
-      toggleLinkVisible={toggleLinkVisible}
       onSubmit={onSubmit}
+      onUpdateLinkBusiness={onUpdateLinkBusiness}
+      pagination={pagination}
+      parentData={parentData}
+      parentFilter={parentFilter}
       saving={saving}
-      deleteConfirm={deleteConfirm}
+      searchValue={searchValue}
+      setGroupFilter={setGroupFilter}
+      setPagination={setPagination}
+      setParentFilter={setParentFilter}
+      setTagFilter={setTagFilter}
+      tagFilter={tagFilter}
+      tags={tags}
+      toggleAddVisible={toggleAddVisible}
+      toggleLinkVisible={toggleLinkVisible}
     />
   );
 };

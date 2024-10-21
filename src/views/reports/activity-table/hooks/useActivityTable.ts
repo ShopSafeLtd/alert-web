@@ -70,7 +70,7 @@ const useActivityTable = (): Return => {
   const [userIds, setUserIds] = useState<string[]>([]);
   const [businessesIds, setBusinessesIds] = useState<string[]>([]);
   const [search, setSearch] = useState<string | undefined>(undefined);
-  const [status, setStatus] = useState<ActivityStatusTypes>();
+  const [status, setStatus] = useState<ActivityStatusTypes>('Open');
 
   useEffect(() => {
     if (templates.length > 0 && reportId) selectTemplate(reportId);

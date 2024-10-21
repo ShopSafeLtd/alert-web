@@ -3,32 +3,32 @@ import { UserStatus } from '#/graphql/types';
 // wait to check
 export const userStatusValues = [
   {
-    value: UserStatus.Active,
     label: 'Active',
+    value: UserStatus.Active,
   },
   {
-    value: UserStatus.Inactive,
     label: 'Inactive',
+    value: UserStatus.Inactive,
   },
 
   {
-    value: UserStatus.Invited,
     label: 'Invited',
+    value: UserStatus.Invited,
   },
   {
-    value: UserStatus.NotInvited,
     label: 'Uninvited',
+    value: UserStatus.NotInvited,
   },
   {
-    value: UserStatus.Disabled,
     label: 'Disabled',
+    value: UserStatus.Disabled,
   },
 ];
 
 export const GetUserStatusValues = {
   [UserStatus.Active]: 'Active',
+  [UserStatus.Disabled]: 'Disabled',
   [UserStatus.Inactive]: 'Inactive',
   [UserStatus.Invited]: 'Invited',
   [UserStatus.NotInvited]: 'NotInvited',
-  [UserStatus.Disabled]: 'Disabled',
 } as const;

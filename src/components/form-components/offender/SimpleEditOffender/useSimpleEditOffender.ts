@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
+import type { AddOffenderData } from '#/components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import type {
   AddressData,
   BlurFaceData,
@@ -151,13 +152,7 @@ const useEditOffender = ({
     const imageData = value.images.map((item) => ({
       blurFaces:
         item.blurFaces && item.blurFaces.length > 0
-          ? item.blurFaces.map((face) => ({
-              blur: true,
-              height: Number(face.BoundingBox.Height),
-              left: Number(face.BoundingBox.Left),
-              top: Number(face.BoundingBox.Top),
-              width: Number(face.BoundingBox.Width),
-            }))
+          ? item.blurFaces
           : undefined,
       fileName: item.fileName,
       id: item.id || '',
@@ -315,13 +310,7 @@ const useEditOffender = ({
               ...image.file,
               blurFaces:
                 image.blurFaces && image.blurFaces.length > 0
-                  ? image.blurFaces.map((face) => ({
-                      blur: true,
-                      height: Number(face.BoundingBox.Height),
-                      left: Number(face.BoundingBox.Left),
-                      top: Number(face.BoundingBox.Top),
-                      width: Number(face.BoundingBox.Width),
-                    }))
+                  ? image.blurFaces
                   : undefined,
               fileName: image.file?.response?.[0].blobName,
               isFace: image.isFace || false,

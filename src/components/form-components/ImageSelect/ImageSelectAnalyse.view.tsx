@@ -1,3 +1,4 @@
+import type { BlurFaceData } from '#/types/DataType';
 import type { FormInstance } from 'antd';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
@@ -75,7 +76,7 @@ export interface OffenderFaceData {
   peculiarities?: string;
 }
 export interface ImageData {
-  blurFaces?: ImageFaceType[];
+  blurFaces?: BlurFaceData[];
   boundingBox?: {
     height: string;
     left: string;
@@ -106,7 +107,7 @@ export interface ImageData {
 // }
 
 export interface ImageValue {
-  blurFaces?: ImageFaceType[];
+  blurFaces?: BlurFaceData[];
   boundingBox?: {
     height: string;
     left: string;
@@ -189,9 +190,16 @@ const ImageSelectAnalyse = ({
     if (facialDed) {
       // const findIndex = images.findIndex(({ uid }) => uid === facesUploading);
 
-      const blurFaces = uploadFaces.filter(
-        (el) => el.imageURL !== face.imageURL
-      );
+      const blurFaces = uploadFaces
+        .filter((el) => el.imageURL !== face.imageURL)
+        .map(({ BoundingBox }) => ({
+          blur: true,
+          height: Number(BoundingBox.Height),
+          left: Number(BoundingBox.Left),
+          top: Number(BoundingBox.Top),
+          width: Number(BoundingBox.Width),
+        }));
+
       newData = images.map((image) => {
         if (image.uid === facesUploading) return { ...image, blurFaces };
         return image;
