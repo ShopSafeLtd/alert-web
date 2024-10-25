@@ -8,7 +8,7 @@ export type RoleQueryVariables = Types.Exact<{
 }>;
 
 
-export type RoleQuery = { __typename?: 'Query', role: { __typename?: 'CustomRole', id: string, name: string, usersCount: number, type: Types.Role, permissions: Array<{ __typename?: 'Permission', allowedMethods: Array<Types.PermissionMethod>, model: Types.PermissionModel }>, users: Array<{ __typename?: 'UserScheme', user: { __typename?: 'User', fullName: string, id: string, email: string } }> } };
+export type RoleQuery = { __typename?: 'Query', role: { __typename?: 'CustomRole', id: string, name: string, usersCount: number, approvalTier: boolean, type: Types.Role, permissions: Array<{ __typename?: 'Permission', allowedMethods: Array<Types.PermissionMethod>, model: Types.PermissionModel }>, users: Array<{ __typename?: 'UserScheme', user: { __typename?: 'User', fullName: string, id: string, email: string } }> } };
 
 
 export const RoleDocument = gql`
@@ -17,6 +17,7 @@ export const RoleDocument = gql`
     id
     name
     usersCount
+    approvalTier
     permissions {
       allowedMethods
       model

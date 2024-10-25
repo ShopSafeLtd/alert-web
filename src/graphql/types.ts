@@ -148,13 +148,16 @@ export enum ActionType {
   Create = 'CREATE',
   Delete = 'DELETE',
   Disable = 'DISABLE',
+  Download = 'DOWNLOAD',
   Enable = 'ENABLE',
   Extend = 'EXTEND',
   Invite = 'INVITE',
   Reduce = 'REDUCE',
   Remove = 'REMOVE',
   ResetPassword = 'RESET_PASSWORD',
-  Update = 'UPDATE'
+  Restore = 'RESTORE',
+  Update = 'UPDATE',
+  View = 'VIEW'
 }
 
 export type ActionWhereInput = {
@@ -273,6 +276,7 @@ export type ActiveChecklist = {
   maxWeight: Scalars['Int'];
   name?: Maybe<Scalars['String']>;
   percentComplete: Scalars['Int'];
+  percentScore: Scalars['Int'];
   percentageScore: Scalars['String'];
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
@@ -432,6 +436,7 @@ export type ActiveChecklistOrderByWithRelationInput = {
   maxWeight?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
   percentComplete?: InputMaybe<SortOrder>;
+  percentScore?: InputMaybe<SortOrder>;
   signature?: InputMaybe<SortOrder>;
   status?: InputMaybe<SortOrder>;
   totalWeight?: InputMaybe<SortOrder>;
@@ -485,6 +490,7 @@ export type ActiveChecklistWhereInput = {
   id?: InputMaybe<StringFilter>;
   maxWeight?: InputMaybe<IntFilter>;
   percentComplete?: InputMaybe<IntFilter>;
+  percentScore?: InputMaybe<IntFilter>;
   signature?: InputMaybe<StringNullableFilter>;
   status?: InputMaybe<EnumChecklistStatusFilter>;
   totalWeight?: InputMaybe<IntFilter>;
@@ -508,10 +514,34 @@ export type ActiveChecklistWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
   maxWeight?: InputMaybe<IntFilter>;
   percentComplete?: InputMaybe<IntFilter>;
+  percentScore?: InputMaybe<IntFilter>;
   signature?: InputMaybe<StringNullableFilter>;
   status?: InputMaybe<EnumChecklistStatusFilter>;
   totalWeight?: InputMaybe<IntFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ActivityPerformance = {
+  __typename?: 'ActivityPerformance';
+  completed: Scalars['Boolean'];
+  dueDate: Scalars['Date'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  totalAnswers: Scalars['Int'];
+  totalAssignedUsers: Scalars['Int'];
+  totalQuestions: Scalars['Int'];
+};
+
+export type ActivityTableWhereInput = {
+  brandsIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
+  completed?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<DateRangeInput>;
+  groupIds: Array<Scalars['String']>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type AddImageIntelData = {
@@ -1762,8 +1792,10 @@ export type Business = {
   checklists: Array<Checklist>;
   children: Array<Business>;
   createdAt: Scalars['Date'];
+  demDevices: Array<DemDevice>;
   demId?: Maybe<Scalars['String']>;
   division?: Maybe<Scalars['String']>;
+  evidences: Array<Document>;
   fullName: Scalars['String'];
   goodsTypesTotals?: Maybe<Array<BusinessGoodsTotals>>;
   groups: Array<Group>;
@@ -1816,6 +1848,16 @@ export type BusinessChildrenArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
+};
+
+
+export type BusinessDemDevicesArgs = {
+  cursor?: InputMaybe<DemDeviceWhereUniqueInput>;
+  distinct?: InputMaybe<Array<DemDeviceScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<DemDeviceOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<DemDeviceWhereInput>;
 };
 
 
@@ -2415,6 +2457,19 @@ export type ChecklistOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
 };
 
+export type ChecklistPerformance = {
+  __typename?: 'ChecklistPerformance';
+  completedAt: Scalars['Date'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  percentAnswer: Scalars['Int'];
+  percentComplete: Scalars['Int'];
+  percentScore: Scalars['Int'];
+  totalAnswers: Scalars['Int'];
+  totalQuestions: Scalars['Int'];
+  totalSections: Scalars['Int'];
+};
+
 export type ChecklistQuestion = {
   __typename?: 'ChecklistQuestion';
   brandIds: Array<Scalars['String']>;
@@ -2479,6 +2534,26 @@ export type ChecklistSubsection = {
   title: Scalars['String'];
   titleTranslations: Array<Scalars['JSON']>;
   updatedAt: Scalars['Date'];
+};
+
+export type ChecklistTableWhereInput = {
+  brandsIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
+  dateRange?: InputMaybe<DateRangeInput>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  percentComplete?: InputMaybe<ScoreRangeInput>;
+  percentScore?: InputMaybe<ScoreRangeInput>;
+  schemeIds: Array<Scalars['String']>;
+  score?: InputMaybe<ScoreRangeInput>;
+  search?: InputMaybe<Scalars['String']>;
+};
+
+export type ChecklistUpdateInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  description?: InputMaybe<Scalars['String']>;
+  sections?: InputMaybe<Array<SectionInput>>;
+  title?: InputMaybe<Scalars['String']>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ChecklistWhereInput = {
@@ -2641,10 +2716,24 @@ export type ContactWhereUniqueInput = {
   user?: InputMaybe<UserWhereInput>;
 };
 
+export type CopyEvidenceInput = {
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  thumbnailUrl?: InputMaybe<Scalars['String']>;
+  url: Scalars['String'];
+};
+
 export type Count = {
   __typename?: 'Count';
   count: Array<Scalars['Int']>;
   name: Scalars['String'];
+};
+
+export type CreateActionEvidence = {
+  id: Scalars['String'];
+  type: ActionType;
 };
 
 export type CreateActiveChecklistInput = {
@@ -2805,6 +2894,11 @@ export type CreateFlowInput = {
   description?: InputMaybe<Scalars['String']>;
   investigationId: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type CreateGoodsTypeDataInput = {
+  name: Scalars['String'];
+  schemeIds: Array<Scalars['String']>;
 };
 
 export type CreateImageOptimistic = {
@@ -3875,6 +3969,7 @@ export type CustomQuestionsGraph = {
 
 export type CustomRole = {
   __typename?: 'CustomRole';
+  approvalTier: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
   dashboard: Dashboard;
   id: Scalars['ID'];
@@ -4112,6 +4207,100 @@ export type DemCompany = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type DemDevice = {
+  __typename?: 'DemDevice';
+  business: Business;
+  businessId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  demGroups: Array<DemGroup>;
+  demId: Scalars['String'];
+  evidence: Array<Document>;
+  id: Scalars['ID'];
+  modelId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  recycled: Scalars['Boolean'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  serialNumber?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type DemDeviceListRelationFilter = {
+  every?: InputMaybe<DemDeviceWhereInput>;
+  none?: InputMaybe<DemDeviceWhereInput>;
+  some?: InputMaybe<DemDeviceWhereInput>;
+};
+
+export type DemDeviceModel = {
+  __typename?: 'DemDeviceModel';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type DemDeviceOrderByWithRelationInput = {
+  business?: InputMaybe<BusinessOrderByWithRelationInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  evidence?: InputMaybe<DocumentOrderByRelationAggregateInput>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
+  schemeId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export enum DemDeviceScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  DemId = 'demId',
+  Id = 'id',
+  Name = 'name',
+  SchemeId = 'schemeId',
+  SerialNumber = 'serialNumber',
+  UpdatedAt = 'updatedAt'
+}
+
+export type DemDeviceScalarWhereWithAggregatesInput = {
+  AND?: InputMaybe<Array<DemDeviceScalarWhereWithAggregatesInput>>;
+  NOT?: InputMaybe<Array<DemDeviceScalarWhereWithAggregatesInput>>;
+  OR?: InputMaybe<Array<DemDeviceScalarWhereWithAggregatesInput>>;
+  businessId?: InputMaybe<StringWithAggregatesFilter>;
+  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+  id?: InputMaybe<StringWithAggregatesFilter>;
+  schemeId?: InputMaybe<StringWithAggregatesFilter>;
+  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+};
+
+export type DemDeviceWhereInput = {
+  AND?: InputMaybe<Array<DemDeviceWhereInput>>;
+  NOT?: InputMaybe<Array<DemDeviceWhereInput>>;
+  OR?: InputMaybe<Array<DemDeviceWhereInput>>;
+  actions?: InputMaybe<ActionListRelationFilter>;
+  business?: InputMaybe<BusinessWhereInput>;
+  businessId?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  demId?: InputMaybe<StringFilter>;
+  evidence?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringFilter>;
+  serialNumber?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type DemDeviceWhereUniqueInput = {
+  AND?: InputMaybe<Array<DemDeviceWhereInput>>;
+  NOT?: InputMaybe<Array<DemDeviceWhereInput>>;
+  OR?: InputMaybe<Array<DemDeviceWhereInput>>;
+  actions?: InputMaybe<ActionListRelationFilter>;
+  business?: InputMaybe<BusinessWhereInput>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  demId?: InputMaybe<Scalars['String']>;
+  evidence?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
 export type DemEvidence = {
   __typename?: 'DemEvidence';
   createdAt?: Maybe<Scalars['Date']>;
@@ -4132,6 +4321,82 @@ export type DemEvidenceExtended = {
   recordedAt?: Maybe<Scalars['DateTime']>;
   thumbnailUrl?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type DemEvidenceNew = {
+  __typename?: 'DemEvidenceNew';
+  duration?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  importance?: Maybe<Scalars['String']>;
+  officerName?: Maybe<Scalars['String']>;
+  playbackUrl?: Maybe<Scalars['String']>;
+  recordedAt?: Maybe<Scalars['DateTime']>;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type DemEvidenceNode = {
+  __typename?: 'DemEvidenceNode';
+  node: DemEvidenceNew;
+};
+
+export type DemGroup = {
+  __typename?: 'DemGroup';
+  createdAt: Scalars['Date'];
+  demDevices: Array<DemDevice>;
+  demId: Scalars['String'];
+  devicesTotal: Array<DemDevice>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  totalDevices: Scalars['Int'];
+  updatedAt: Scalars['Date'];
+};
+
+export type DemGroupOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
+  schemeId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type DemGroupScalarWhereWithAggregatesInput = {
+  AND?: InputMaybe<Array<DemGroupScalarWhereWithAggregatesInput>>;
+  NOT?: InputMaybe<Array<DemGroupScalarWhereWithAggregatesInput>>;
+  OR?: InputMaybe<Array<DemGroupScalarWhereWithAggregatesInput>>;
+  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+  id?: InputMaybe<StringWithAggregatesFilter>;
+  schemeId?: InputMaybe<StringWithAggregatesFilter>;
+  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
+};
+
+export type DemGroupWhereInput = {
+  AND?: InputMaybe<Array<DemGroupWhereInput>>;
+  NOT?: InputMaybe<Array<DemGroupWhereInput>>;
+  OR?: InputMaybe<Array<DemGroupWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  demDevices?: InputMaybe<DemDeviceListRelationFilter>;
+  demId?: InputMaybe<StringFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type DemGroupWhereUniqueInput = {
+  AND?: InputMaybe<Array<DemGroupWhereInput>>;
+  NOT?: InputMaybe<Array<DemGroupWhereInput>>;
+  OR?: InputMaybe<Array<DemGroupWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  demDevices?: InputMaybe<DemDeviceListRelationFilter>;
+  demId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type DemUser = {
@@ -7756,6 +8021,21 @@ export type IncidentOrderByWithRelationInput = {
   weekOfYear?: InputMaybe<SortOrder>;
 };
 
+export type IncidentPerformance = {
+  __typename?: 'IncidentPerformance';
+  alertId: Scalars['String'];
+  createdAt: Scalars['Date'];
+  date: Scalars['Date'];
+  id: Scalars['String'];
+  primaryPhoto?: Maybe<Scalars['String']>;
+  subject: Scalars['String'];
+  totalBulletins: Scalars['Float'];
+  totalLostValue: Scalars['Float'];
+  totalOffenders: Scalars['Int'];
+  totalRecoveredValue: Scalars['Float'];
+  totalSuccessRate: Scalars['Float'];
+};
+
 export enum IncidentPriority {
   High = 'HIGH',
   Low = 'LOW',
@@ -7822,6 +8102,26 @@ export type IncidentSummary = {
   lastIncidentDate?: Maybe<Scalars['Date']>;
   mostCommonCrimeType: Scalars['String'];
   totalIncidents: Scalars['Int'];
+};
+
+export type IncidentTableWhereInput = {
+  brandsIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
+  createdAt?: InputMaybe<DateRangeInput>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  dateRange?: InputMaybe<DateRangeInput>;
+  groupIds: Array<Scalars['String']>;
+  incidentItemIds?: InputMaybe<Array<Scalars['String']>>;
+  incidentTypeIds?: InputMaybe<Array<Scalars['String']>>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderCount?: InputMaybe<Scalars['Int']>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  priorities?: InputMaybe<Array<IncidentPriority>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+  totalValue?: InputMaybe<Scalars['Int']>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type IncidentTags = {
@@ -8498,6 +8798,8 @@ export type InvestigationPerformance = {
   status: InvestigationStatus;
   totalIncidents: Scalars['Int'];
   totalOffenders: Scalars['Int'];
+  totalRecoveredValue?: Maybe<Scalars['Float']>;
+  totalSuccessRate?: Maybe<Scalars['Float']>;
   totalValue: Scalars['Float'];
 };
 
@@ -8560,6 +8862,19 @@ export type InvestigationSummary = {
   closed: Scalars['Int'];
   open: Scalars['Int'];
   opened: Scalars['Int'];
+};
+
+export type InvestigationTableWhereInput = {
+  brandsIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  dateRange?: InputMaybe<DateRangeInput>;
+  groupIds: Array<Scalars['String']>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Array<InvestigationStatus>>;
+  totalValue?: InputMaybe<Scalars['Int']>;
 };
 
 export type InvestigationWhereInput = {
@@ -8840,6 +9155,12 @@ export type ListActions = {
   total: Scalars['Int'];
 };
 
+export type ListActivityPerformance = {
+  __typename?: 'ListActivityPerformance';
+  activityPerformance: Array<ActivityPerformance>;
+  total: Scalars['Int'];
+};
+
 export type ListArticles = {
   __typename?: 'ListArticles';
   articles: Array<Article>;
@@ -8855,6 +9176,12 @@ export type ListBusinessContribution = {
 export type ListBusinesses = {
   __typename?: 'ListBusinesses';
   businesses: Array<Business>;
+  total: Scalars['Int'];
+};
+
+export type ListChecklistPerformance = {
+  __typename?: 'ListChecklistPerformance';
+  checklistPerformance: Array<ChecklistPerformance>;
   total: Scalars['Int'];
 };
 
@@ -8894,6 +9221,13 @@ export type ListDemEvidenceExtended = {
   total: Scalars['Int'];
 };
 
+export type ListDemEvidenceRelay = {
+  __typename?: 'ListDemEvidenceRelay';
+  edges: Array<DemEvidenceNode>;
+  pageInfo: PageInfoRelay;
+  totalCount: Scalars['Int'];
+};
+
 export type ListDemUsers = {
   __typename?: 'ListDemUsers';
   demUsers: Array<DemUser>;
@@ -8913,6 +9247,12 @@ export type ListGoodsTypeWhere = {
 export type ListGoodsTypes = {
   __typename?: 'ListGoodsTypes';
   goodsTypes: Array<GoodsType>;
+  total: Scalars['Int'];
+};
+
+export type ListIncidentPerformance = {
+  __typename?: 'ListIncidentPerformance';
+  incidentPerformance: Array<IncidentPerformance>;
   total: Scalars['Int'];
 };
 
@@ -9900,7 +10240,9 @@ export enum Model {
   Business = 'BUSINESS',
   Chat = 'CHAT',
   CrimeGroup = 'CRIME_GROUP',
+  DemDevice = 'DEM_DEVICE',
   Document = 'DOCUMENT',
+  Evidence = 'EVIDENCE',
   Group = 'GROUP',
   Image = 'IMAGE',
   Incident = 'INCIDENT',
@@ -9931,7 +10273,9 @@ export type Mutation = {
   closeInvestigation: Investigation;
   completeChecklist: ActiveChecklist;
   copyEvidenceOnInvestigation: Document;
+  copyEvidenceToAlert: Document;
   copyOffender: Offender;
+  createActionEvidence?: Maybe<Scalars['String']>;
   createActiveChecklist: ActiveChecklist;
   createArticle: Article;
   createBlankImage: Image;
@@ -9946,6 +10290,7 @@ export type Mutation = {
   createDashboard: Dashboard;
   createDocument: Document;
   createFlow: Flow;
+  createGoodsType: GoodsType;
   createGroup: Group;
   createIncident: Incident;
   createIncidentForm: IncidentForm;
@@ -9989,7 +10334,10 @@ export type Mutation = {
   deleteCrimeGroup: CrimeGroup;
   deleteCustomGallery: CustomGallery;
   deleteDashboardTemplate?: Maybe<Dashboard>;
+  deleteDemDevice: DemDevice;
+  deleteDemGroup: DemGroup;
   deleteDocument: Document;
+  deleteEvidence: Document;
   deleteExpired: SystemTask;
   deleteFace: RekFace;
   deleteFeedItem: FeedItem;
@@ -10032,8 +10380,9 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData: SystemTask;
+  mySafetyImportData?: Maybe<SystemTask>;
   recycleChecklist: Checklist;
+  recycleDemEvidence?: Maybe<Scalars['String']>;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
   recycleOffender: Offender;
@@ -10046,6 +10395,7 @@ export type Mutation = {
   reopenInvestigation: Investigation;
   resetPassword: ResetPassword;
   restoreAllRecycledItems: SystemTask;
+  restoreDemEvidence?: Maybe<Scalars['String']>;
   restoreIncident: Incident;
   restoreItem?: Maybe<RecycledItem>;
   restoreOffender: Offender;
@@ -10081,10 +10431,13 @@ export type Mutation = {
   unsubscribeToVehicle: Vehicle;
   updateBusiness: Business;
   updateChat: Chat;
+  updateChecklist: Checklist;
   updateCrimeGroup: CrimeGroup;
   updateCrimeGroupOffender: CrimeGroup;
   updateCustomGallery: CustomGallery;
   updateDashboardTemplate: Dashboard;
+  updateDemDevice: DemDevice;
+  updateDemGroup: DemGroup;
   updateFlow: Flow;
   updateGroup: Group;
   updateIncident: Incident;
@@ -10117,6 +10470,8 @@ export type Mutation = {
   uploadImage: Image;
   uploadToImage: Image;
   upsertBrand: Brand;
+  upsertDemDevice: DemDevice;
+  upsertDemGroup: DemGroup;
   upsertIncidentForm: IncidentForm;
   upsertPermission: CustomRole;
   upsertShoe: Shoe;
@@ -10194,9 +10549,19 @@ export type MutationCopyEvidenceOnInvestigationArgs = {
 };
 
 
+export type MutationCopyEvidenceToAlertArgs = {
+  data: CopyEvidenceInput;
+};
+
+
 export type MutationCopyOffenderArgs = {
   data: CreateOffenderData;
   where: UniqueId;
+};
+
+
+export type MutationCreateActionEvidenceArgs = {
+  data: CreateActionEvidence;
 };
 
 
@@ -10270,6 +10635,11 @@ export type MutationCreateDocumentArgs = {
 
 export type MutationCreateFlowArgs = {
   data: CreateFlowInput;
+};
+
+
+export type MutationCreateGoodsTypeArgs = {
+  data: CreateGoodsTypeDataInput;
 };
 
 
@@ -10493,7 +10863,22 @@ export type MutationDeleteDashboardTemplateArgs = {
 };
 
 
+export type MutationDeleteDemDeviceArgs = {
+  where: DemDeviceWhereUniqueInput;
+};
+
+
+export type MutationDeleteDemGroupArgs = {
+  where: DemGroupWhereUniqueInput;
+};
+
+
 export type MutationDeleteDocumentArgs = {
+  where: UniqueId;
+};
+
+
+export type MutationDeleteEvidenceArgs = {
   where: UniqueId;
 };
 
@@ -10711,6 +11096,11 @@ export type MutationRecycleChecklistArgs = {
 };
 
 
+export type MutationRecycleDemEvidenceArgs = {
+  where: UniqueId;
+};
+
+
 export type MutationRecycleIncidentArgs = {
   where: UniqueId;
 };
@@ -10760,6 +11150,11 @@ export type MutationResetPasswordArgs = {
 
 export type MutationRestoreAllRecycledItemsArgs = {
   schemeId: UniqueId;
+};
+
+
+export type MutationRestoreDemEvidenceArgs = {
+  where: UniqueId;
 };
 
 
@@ -10902,6 +11297,12 @@ export type MutationUpdateChatArgs = {
 };
 
 
+export type MutationUpdateChecklistArgs = {
+  data: ChecklistUpdateInput;
+  id?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationUpdateCrimeGroupArgs = {
   data: UpdateCrimeGroupDataInput;
   where: UniqueId;
@@ -10923,6 +11324,18 @@ export type MutationUpdateCustomGalleryArgs = {
 export type MutationUpdateDashboardTemplateArgs = {
   data: DashboardTemplateUpdateInput;
   where: DashboardWhereUniqueInput;
+};
+
+
+export type MutationUpdateDemDeviceArgs = {
+  data: UpdateDemDevice;
+  where: UniqueId;
+};
+
+
+export type MutationUpdateDemGroupArgs = {
+  data: UpdateDemGroup;
+  where: UniqueId;
 };
 
 
@@ -11099,6 +11512,16 @@ export type MutationUploadToImageArgs = {
 
 export type MutationUpsertBrandArgs = {
   data: UpsertBrand;
+};
+
+
+export type MutationUpsertDemDeviceArgs = {
+  data: UpsertDemDevice;
+};
+
+
+export type MutationUpsertDemGroupArgs = {
+  data: UpsertDemGroup;
 };
 
 
@@ -13108,6 +13531,14 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type PageInfoRelay = {
+  __typename?: 'PageInfoRelay';
+  endCursor: Scalars['String'];
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor: Scalars['String'];
+};
+
 export type PerformanceReport = {
   __typename?: 'PerformanceReport';
   createdDataCounts: CreatedDataCounts;
@@ -13159,6 +13590,7 @@ export enum PermissionModel {
   Dashboards = 'DASHBOARDS',
   DataExport = 'DATA_EXPORT',
   DataImport = 'DATA_IMPORT',
+  Dem = 'DEM',
   Documents = 'DOCUMENTS',
   Evidence = 'EVIDENCE',
   GeneralSettings = 'GENERAL_SETTINGS',
@@ -13216,6 +13648,7 @@ export type Query = {
   actions: Array<Action>;
   activeChecklist: ActiveChecklist;
   activeChecklists: QueryActiveChecklistsConnection;
+  activityTableReport: ListActivityPerformance;
   address: Address;
   addresses: Array<Address>;
   article: Article;
@@ -13240,6 +13673,7 @@ export type Query = {
   chats: Array<Chat>;
   checklist: Checklist;
   checklistQuestionCounts: Array<QuestionAnswerCount>;
+  checklistTableReport: ListChecklistPerformance;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -13252,6 +13686,11 @@ export type Query = {
   customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
+  demDevice: DemDevice;
+  demDeviceModel: Array<DemDeviceModel>;
+  demDevices: QueryDemDevicesConnection;
+  demGroup: DemGroup;
+  demGroups: QueryDemGroupsConnection;
   documents: QueryDocumentsConnection;
   feedItem: FeedItem;
   feedItems: Array<FeedItem>;
@@ -13265,6 +13704,8 @@ export type Query = {
   incidentFeed: Array<Incident>;
   incidentHeatPerformance: ListIncidentsHeatPerformance;
   incidentItems: QueryIncidentItemsConnection;
+  incidentMonthGraph: Array<Graph>;
+  incidentTableReport: ListIncidentPerformance;
   incidents: Array<Incident>;
   incidentsDayOfWeek: Array<Graph>;
   incidentsRelay: QueryIncidentsRelayConnection;
@@ -13273,6 +13714,7 @@ export type Query = {
   investigation: Investigation;
   investigationPerformance: ListInvestigationPerformance;
   investigationRelay: QueryInvestigationRelayConnection;
+  investigationTableReport: ListInvestigationPerformance;
   investigations: Array<Investigation>;
   latestIncident?: Maybe<LatestIncident>;
   latestIncidents: QueryLatestIncidentsConnection;
@@ -13283,9 +13725,12 @@ export type Query = {
   listBusinesses: ListBusinesses;
   listCrimeGroups: ListCrimeGroups;
   listCustomGalleries: ListCustomGalleries;
+  listDemBusinessEvidence: ListDemEvidenceRelay;
   listDemCompanies: ListDemCompanies;
+  listDemDeviceEvidence: ListDemEvidenceRelay;
   listDemEvidence: ListDemEvidence;
   listDemEvidenceExtendedWithoutUser: ListDemEvidenceExtended;
+  listDemEvidenceRecycle: ListDemEvidenceRelay;
   listDemUsers: ListDemUsers;
   listFeedItems?: Maybe<ListFeedItems>;
   listGoodsTypes: ListGoodsTypes;
@@ -13351,6 +13796,7 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
+  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -13373,6 +13819,7 @@ export type Query = {
   userSessionsGraph: Array<RadialValueGraph>;
   users: Array<User>;
   usersOnline: Array<UserOnline>;
+  usersRelay: QueryUsersRelayConnection;
   vehicle: Vehicle;
   workflow?: Maybe<Workflow>;
   workflows: Array<Workflow>;
@@ -13408,6 +13855,11 @@ export type QueryActiveChecklistsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActiveChecklistWhereInput>;
+};
+
+
+export type QueryActivityTableReportArgs = {
+  where: ActivityTableWhereInput;
 };
 
 
@@ -13571,6 +14023,11 @@ export type QueryChecklistQuestionCountsArgs = {
 };
 
 
+export type QueryChecklistTableReportArgs = {
+  where: ChecklistTableWhereInput;
+};
+
+
 export type QueryChecklistsArgs = {
   order?: InputMaybe<ChecklistOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -13642,6 +14099,40 @@ export type QueryDashboardsArgs = {
   scheme: SchemeWhereUniqueInput;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryDemDeviceArgs = {
+  where: DemDeviceWhereUniqueInput;
+};
+
+
+export type QueryDemDevicesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DemDeviceOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<DemDeviceWhereInput>;
+};
+
+
+export type QueryDemGroupArgs = {
+  where: DemGroupWhereUniqueInput;
+};
+
+
+export type QueryDemGroupsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DemGroupOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<DemGroupWhereInput>;
 };
 
 
@@ -13752,6 +14243,16 @@ export type QueryIncidentItemsArgs = {
 };
 
 
+export type QueryIncidentMonthGraphArgs = {
+  where: BusinessIncidentsCountGraphInput;
+};
+
+
+export type QueryIncidentTableReportArgs = {
+  where: IncidentTableWhereInput;
+};
+
+
 export type QueryIncidentsArgs = {
   cursor?: InputMaybe<IncidentWhereUniqueInput>;
   distinct?: InputMaybe<Array<IncidentScalarFieldEnum>>;
@@ -13808,6 +14309,11 @@ export type QueryInvestigationRelayArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: InvestigationRelayWhereInput;
+};
+
+
+export type QueryInvestigationTableReportArgs = {
+  where: InvestigationTableWhereInput;
 };
 
 
@@ -13896,9 +14402,24 @@ export type QueryListCustomGalleriesArgs = {
 };
 
 
+export type QueryListDemBusinessEvidenceArgs = {
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
+};
+
+
 export type QueryListDemCompaniesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryListDemDeviceEvidenceArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
 };
 
 
@@ -13913,6 +14434,13 @@ export type QueryListDemEvidenceExtendedWithoutUserArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: Scalars['String'];
+};
+
+
+export type QueryListDemEvidenceRecycleArgs = {
+  recycled: Scalars['Boolean'];
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -14551,6 +15079,18 @@ export type QueryUsersOnlineArgs = {
 };
 
 
+export type QueryUsersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<UserOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: UserRelayWhereInput;
+};
+
+
 export type QueryVehicleArgs = {
   where: VehicleWhereUniqueInput;
 };
@@ -14646,6 +15186,32 @@ export type QueryDashboardsConnectionEdge = {
   __typename?: 'QueryDashboardsConnectionEdge';
   cursor: Scalars['String'];
   node: Dashboard;
+};
+
+export type QueryDemDevicesConnection = {
+  __typename?: 'QueryDemDevicesConnection';
+  edges: Array<QueryDemDevicesConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryDemDevicesConnectionEdge = {
+  __typename?: 'QueryDemDevicesConnectionEdge';
+  cursor: Scalars['String'];
+  node: DemDevice;
+};
+
+export type QueryDemGroupsConnection = {
+  __typename?: 'QueryDemGroupsConnection';
+  edges: Array<QueryDemGroupsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryDemGroupsConnectionEdge = {
+  __typename?: 'QueryDemGroupsConnectionEdge';
+  cursor: Scalars['String'];
+  node: DemGroup;
 };
 
 export type QueryDocumentsConnection = {
@@ -14855,6 +15421,19 @@ export type QueryUserGroupRelayConnectionEdge = {
   __typename?: 'QueryUserGroupRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Group;
+};
+
+export type QueryUsersRelayConnection = {
+  __typename?: 'QueryUsersRelayConnection';
+  edges: Array<QueryUsersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryUsersRelayConnectionEdge = {
+  __typename?: 'QueryUsersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: User;
 };
 
 export type Question = {
@@ -15969,6 +16548,7 @@ export enum ReportType {
   BusinessEngagementTable = 'BUSINESS_ENGAGEMENT_TABLE',
   BusinessMap = 'BUSINESS_MAP',
   BusinessTable = 'BUSINESS_TABLE',
+  CheckListQuestionTable = 'CHECK_LIST_QUESTION_TABLE',
   CheckListTable = 'CHECK_LIST_TABLE',
   CrimeGroup = 'CRIME_GROUP',
   CrimeGroupsTable = 'CRIME_GROUPS_TABLE',
@@ -16784,6 +17364,7 @@ export type SchemeUpdateInput = {
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
+  collectionIds?: InputMaybe<Array<Scalars['String']>>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   defaultBulletinEmails?: InputMaybe<SetBooleanHelper>;
   defaultBulletinPush?: InputMaybe<SetBooleanHelper>;
@@ -16996,6 +17577,11 @@ export type SchemeWhereUniqueInput = {
   useBusinessGroupsOnIncident?: InputMaybe<BoolFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
   workflows?: InputMaybe<WorkflowListRelationFilter>;
+};
+
+export type ScoreRangeInput = {
+  gteValue: Scalars['Int'];
+  lteValue: Scalars['Int'];
 };
 
 export type SearchOffenderSort = {
@@ -19403,6 +19989,16 @@ export type UpdateCrimeGroupDataInput = {
   vehicles?: InputMaybe<CreateCrimeGroupVehicles>;
 };
 
+export type UpdateDemDevice = {
+  businessId?: InputMaybe<Scalars['String']>;
+  demGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  disconnectedBusinessId?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateDemGroup = {
+  demDeviceIds: Array<Scalars['String']>;
+};
+
 export type UpdateDocument = {
   deleted?: InputMaybe<Array<UniqueId>>;
   upload?: InputMaybe<Array<CreateDocument>>;
@@ -19792,12 +20388,29 @@ export type UpsertBrand = {
   schemeId: Scalars['String'];
 };
 
+export type UpsertDemDevice = {
+  businessId?: InputMaybe<Scalars['String']>;
+  demGroupIds: Array<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  modelId?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  serialNumber: Scalars['String'];
+};
+
+export type UpsertDemGroup = {
+  demDeviceIds: Array<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
 export type UpsertIncidentFormInput = {
   formFields: Array<IncidentFormFieldsInput>;
   tagId: Scalars['String'];
 };
 
 export type UpsertRole = {
+  canApprove?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   permissions: Array<PermissionInput>;
   roleId?: InputMaybe<Scalars['String']>;
@@ -20746,6 +21359,12 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
   uploaded?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
+};
+
+export type UserRelayWhereInput = {
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 export enum UserScalarFieldEnum {

@@ -3,6 +3,7 @@ query Role($where: CustomRoleWhereUniqueInput!) {
     id
     name
     usersCount
+    approvalTier
     permissions {
       allowedMethods
       model
