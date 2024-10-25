@@ -225,7 +225,7 @@ const RoleView = ({
     <Form.Item
       label={labels[dataType]}
       labelAlign="left"
-      labelCol={{ span: 4 }}
+      labelCol={{ span: 7 }}
       name={dataType}
     >
       <Checkbox.Group
@@ -279,7 +279,7 @@ const RoleView = ({
             <Col span={18}>
               <Card loading={loading}>
                 <Row>
-                  <Col span={20}>
+                  <Col span={24}>
                     <Collapse defaultActiveKey={create ? '1' : undefined}>
                       <Collapse.Panel
                         header={formatMessage({
@@ -308,7 +308,7 @@ const RoleView = ({
                                     defaultMessage: 'Name',
                                   })}
                                   labelAlign="left"
-                                  labelCol={{ span: 4 }}
+                                  labelCol={{ span: 7 }}
                                   name="name"
                                   rules={[
                                     {
@@ -326,7 +326,7 @@ const RoleView = ({
                                     defaultMessage: 'Type',
                                   })}
                                   labelAlign="left"
-                                  labelCol={{ span: 4 }}
+                                  labelCol={{ span: 7 }}
                                   name="type"
                                   rules={[
                                     {
@@ -434,6 +434,17 @@ const RoleView = ({
                                 </Form.Item>
                               </>
                             )}
+                            <Form.Item
+                              label={formatMessage({
+                                defaultMessage: 'Can see/approve data',
+                              })}
+                              labelAlign="left"
+                              labelCol={{ span: 7 }}
+                              name="approvalAllowed"
+                              valuePropName="checked"
+                            >
+                              <Checkbox />
+                            </Form.Item>
                             {Object.values(PermissionModel)
                               .sort()
                               .map((key) => fields[key as DataType])}

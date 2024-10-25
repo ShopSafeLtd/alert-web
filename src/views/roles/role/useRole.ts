@@ -25,6 +25,7 @@ interface Props {
 }
 
 export interface FormValues extends FormData {
+  approvalAllowed: boolean;
   name: string;
   type: Role;
 }
@@ -51,9 +52,13 @@ export function useRole(id: string | undefined, create: boolean): Props {
     void updatePermissions({
       variables: {
         data: {
+          canApprove: values.approvalAllowed,
           name: values.name,
           permissions: Object.keys(values)
-            .filter((key) => key !== 'name' && key !== 'type')
+            .filter(
+              (key) =>
+                key !== 'name' && key !== 'type' && key !== 'approvalAllowed'
+            )
             .map((key) => {
               if (key === 'SETTINGS') {
                 if (values[key]?.includes(PermissionMethod.Edit)) {
@@ -91,6 +96,7 @@ export function useRole(id: string | undefined, create: boolean): Props {
         model: item?.model,
       }));
 
+      form.setFieldValue('approvalAllowed', iData?.role?.approvalTier);
       form.setFieldsValue({
         ...Object.fromEntries(
           permissions?.map((item) => [
