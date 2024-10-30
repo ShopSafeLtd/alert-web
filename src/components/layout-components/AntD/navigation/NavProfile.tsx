@@ -1,37 +1,37 @@
-import React from 'react';
-import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
-import { useStoreActions, useStoreState } from 'state';
-import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import type { Theme } from 'configs/ThemeConfig';
+import type { AvailableLanguages } from 'lang';
 
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSignOut } from '#/hooks/signOut';
 import {
   faFileContract,
   faMoon,
   faSignOut,
   faSun,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import React from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
-import { LocalStorageKeys, typedLocalStorage } from 'utils';
-import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
 import { useIntl } from 'react-intl';
-import type { AvailableLanguages } from 'lang';
-import { useSignOut } from '#/hooks/signOut';
+import { createUseStyles } from 'react-jss';
+import { Link } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'state';
+import { LocalStorageKeys, typedLocalStorage } from 'utils';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
-    borderBottom: `1px solid ${theme.borderColor}`,
-    cursor: 'pointer',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     '&:hover': {
       backgroundColor: theme.hoverBackground,
     },
-    paddingTop: 10,
-    paddingBottom: 10,
+    alignItems: 'center',
+    borderBottom: `1px solid ${theme.borderColor}`,
     borderRight: `1px solid ${theme.borderColor}`,
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingBottom: 10,
+    paddingTop: 10,
   },
 }));
 
@@ -62,11 +62,11 @@ export const NavProfile = () => {
                 <Row>
                   <Col>
                     <Avatar
+                      size={35}
                       style={{
                         backgroundColor: 'rgb(222, 68, 54)',
                         minWidth: 35,
                       }}
-                      size={35}
                     >
                       {name?.charAt(0)}
                     </Avatar>
@@ -94,13 +94,10 @@ export const NavProfile = () => {
                 </Col>
                 <Col>
                   <Switch
+                    checked={currentTheme === 'dark'}
                     checkedChildren={
                       <FontAwesomeIcon color="#F5F3CE" icon={faMoon} />
                     }
-                    unCheckedChildren={
-                      <FontAwesomeIcon color="GoldenRod" icon={faSun} />
-                    }
-                    checked={currentTheme === 'dark'}
                     onChange={(value) => {
                       switchTheme(value ? 'dark' : 'light');
                       typedLocalStorage.set(
@@ -113,106 +110,109 @@ export const NavProfile = () => {
                       );
                       switcher({ theme: value ? themes.dark : themes.light });
                     }}
+                    unCheckedChildren={
+                      <FontAwesomeIcon color="GoldenRod" icon={faSun} />
+                    }
                   />
                 </Col>
               </Row>
             ),
           },
           {
-            key: 'lang',
-            onClick: () => {},
             disabled: true,
-            style: {
-              padding: 0,
-              cursor: 'default',
-            },
+            key: 'lang',
             label: (
               <Row>
                 <Select
+                  bordered={false}
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   defaultValue={locale as AvailableLanguages}
-                  value={locale as AvailableLanguages}
-                  bordered={false}
-                  style={{ width: '100%', paddingLeft: 8 }}
                   onChange={handleChangeLang}
-                  placement="topLeft"
                   options={[
                     {
-                      value: 'en',
                       label: intl.formatMessage({
                         defaultMessage: 'English 🇬🇧',
                       }),
+                      value: 'en',
                     },
                     {
-                      value: 'fr',
                       label: intl.formatMessage({
                         defaultMessage: 'French 🇫🇷',
                       }),
+                      value: 'fr',
                     },
                     {
-                      value: 'de',
                       label: intl.formatMessage({
                         defaultMessage: 'German 🇩🇪',
                       }),
+                      value: 'de',
                     },
                     {
-                      value: 'es',
                       label: intl.formatMessage({
                         defaultMessage: 'Spanish 🇪🇸',
                       }),
+                      value: 'es',
                     },
                     {
-                      value: 'da',
                       label: intl.formatMessage({
                         defaultMessage: 'Danish 🇩🇰',
                       }),
+                      value: 'da',
                     },
                     {
-                      value: 'it',
                       label: intl.formatMessage({
                         defaultMessage: 'Italian 🇮🇹',
                       }),
+                      value: 'it',
                     },
                     {
-                      value: 'nl',
                       label: intl.formatMessage({
                         defaultMessage: 'Dutch 🇳🇱',
                       }),
+                      value: 'nl',
                     },
                     {
-                      value: 'rbe',
                       label: intl.formatMessage({
                         defaultMessage: 'Flemish 🇧🇪',
                       }),
+                      value: 'rbe',
                     },
                     {
-                      value: 'pt',
                       label: intl.formatMessage({
                         defaultMessage: 'Portuguese 🇵🇹',
                       }),
+                      value: 'pt',
                     },
                     {
-                      value: 'sv',
                       label: intl.formatMessage({
                         defaultMessage: 'Swedish 🇸🇪',
                       }),
+                      value: 'sv',
                     },
                     {
-                      value: 'pl',
                       label: intl.formatMessage({
                         defaultMessage: 'Polish 🇵🇱',
                       }),
+                      value: 'pl',
                     },
                     {
-                      value: 'fi',
                       label: intl.formatMessage({
                         defaultMessage: 'Finnish 🇫🇮',
                       }),
+                      value: 'fi',
                     },
                   ]}
+                  placement="topLeft"
+                  style={{ paddingLeft: 8, width: '100%' }}
+                  value={locale as AvailableLanguages}
                 />
               </Row>
             ),
+            onClick: () => {},
+            style: {
+              cursor: 'default',
+              padding: 0,
+            },
           },
           {
             key: '3',

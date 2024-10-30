@@ -4,6 +4,7 @@ import type {
 } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-businesses.generated';
 import type { BusinessData } from 'types/DataType';
 
+import { useLinkBusinessToSchemeMutation } from '#/graphql/businesses/mutations/__generated__/link-business-to-scheme.generated';
 import { useBusinessTagsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-business-tags.generated';
 import {
   BusinessesListDocument,
@@ -35,6 +36,7 @@ interface Return {
   loading: boolean;
   onSearchChange: (value: string) => void;
   onSubmit: (value: BusinessData) => void;
+  onUpdateLinkBusiness: (value: string) => void;
   pagination: { page: number; pageSize: number };
   parentData: FilterLabels[];
   parentFilter: string[];
@@ -97,7 +99,6 @@ const useListBusinesses = (): Return => {
 
   const { data: QueryGroups } = useListGroupsQuery({
     nextFetchPolicy: 'cache-first',
-
     variables: {
       where: {
         scheme: {
@@ -130,7 +131,6 @@ const useListBusinesses = (): Return => {
 
   const { data: QueryTags } = useBusinessTagsQuery({
     nextFetchPolicy: 'cache-first',
-
     variables: {
       orderBy: {
         name: SortOrder.Asc,
@@ -190,7 +190,54 @@ const useListBusinesses = (): Return => {
         });
     },
   });
+  const [linkBusinessToScheme] = useLinkBusinessToSchemeMutation({
+    onCompleted: () => {
+      setSaving(false);
+      toggleLinkVisible();
+    },
+    update: (store, result) => {
+      const existingData = store.readQuery<
+        BusinessesListQuery,
+        BusinessesListQueryVariables
+      >({
+        query: BusinessesListDocument,
+        variables,
+      });
 
+      if (existingData && result.data)
+        store.writeQuery<BusinessesListQuery, BusinessesListQueryVariables>({
+          data: {
+            businessRelay: {
+              ...existingData.businessRelay,
+              edges: [
+                ...existingData.businessRelay.edges,
+                { node: result.data?.linkBusinessToScheme },
+              ],
+              totalCount: (existingData?.businessRelay.totalCount || 0) + 1,
+            },
+          },
+          query: BusinessesListDocument,
+          variables,
+        });
+    },
+  });
+
+  const onUpdateLinkBusiness = (value: string) => {
+    setSaving(true);
+    void linkBusinessToScheme({
+      variables: {
+        business: {
+          id: value,
+        },
+        scheme: {
+          id: currentScheme,
+        },
+      },
+    }).finally(() => {
+      setSaving(false);
+      setLinkVisible(false);
+    });
+  };
   const [deleteBusiness] = useDeleteBusinessMutation({
     onCompleted: () => {
       setSaving(false);
@@ -355,6 +402,7 @@ const useListBusinesses = (): Return => {
     loading: !data,
     onSearchChange,
     onSubmit,
+    onUpdateLinkBusiness,
     pagination,
     parentData,
     parentFilter,

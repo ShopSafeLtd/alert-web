@@ -110,7 +110,6 @@ const useAddBusiness = ({ update }: Props): Return => {
       (id) => !newTags.map((el) => el.id).includes(id)
     );
 
-    console.log('values', values);
     update({
       groups: values.groups || [],
       id: Math.floor(Math.random() * 1000).toString(),
@@ -118,10 +117,12 @@ const useAddBusiness = ({ update }: Props): Return => {
         {
           building: values.building,
           county: values.county,
+          // eslint-disable-next-line sonarjs/no-nested-template-literals
           full: `${values.building ? `${values.building}, ` : ''}${
             values.street ? `${values.street}, ` : ''
           }${values.townCity ? `${values.townCity}, ` : ''}${
             values.county ? `${values.county}, ` : ''
+            // eslint-disable-next-line sonarjs/no-nested-template-literals
           }${values.postcode ? `${values.postcode} ` : ''}`,
           geoLat: location?.geoLat,
           geoLng: location?.geoLng,

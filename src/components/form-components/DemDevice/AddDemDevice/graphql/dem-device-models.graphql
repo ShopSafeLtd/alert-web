@@ -1,0 +1,6 @@
+query demDeviceModel {
+  demDeviceModel {
+    id
+    name
+  }
+}

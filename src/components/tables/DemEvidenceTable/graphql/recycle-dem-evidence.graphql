@@ -1,0 +1,3 @@
+mutation recycleDemEvidence($id: String!) {
+  recycleDemEvidence(where: { id: $id })
+}

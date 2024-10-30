@@ -1,48 +1,50 @@
 import React from 'react';
-import useActiveChecklist from './useActiveChecklist';
+
 import ActiveChecklistView from './ActiveChecklist.view';
+import useActiveChecklist from './useActiveChecklist';
 
 const ActiveChecklistContainer = () => {
   const {
     data,
-    loading,
-    onFinish,
+    file,
     form,
     id,
-    sections,
-    saveDraft,
+    loading,
     name,
-    file,
-    setFile,
-    setSign,
-    update,
+    onFinish,
+    saveDraft,
+    sections,
     selectedFont,
+    setFile,
     setSelectedFont,
-    sign,
+    setSign,
     setTab,
-    tab,
+    sign,
     submitting,
+    tab,
+    update,
   } = useActiveChecklist();
+
   return (
     <ActiveChecklistView
-      submitting={submitting}
+      data={data}
+      file={file}
+      form={form}
       id={id}
       loading={loading}
-      form={form}
+      name={name}
       onFinish={onFinish}
-      data={data}
       saveDraft={saveDraft}
       sections={sections}
-      name={name}
-      file={file}
-      setFile={setFile}
-      setSign={setSign}
-      update={update}
       selectedFont={selectedFont}
+      setFile={setFile}
       setSelectedFont={setSelectedFont}
-      sign={sign}
+      setSign={setSign}
       setTab={setTab}
+      sign={sign}
+      submitting={submitting}
       tab={tab}
+      update={update}
     />
   );
 };

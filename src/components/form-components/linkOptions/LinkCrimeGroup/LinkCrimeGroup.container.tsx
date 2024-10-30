@@ -1,50 +1,52 @@
-import React from 'react';
 import type { CrimeGroupData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './LinkCrimeGroup.view';
 import useLinkCrimeGroup from './useLinkCrimeGroup';
 
 interface Props {
-  onClose: () => void;
-  update?: (value: CrimeGroupData) => void;
   crimeGroupIds: string[] | undefined;
-  takeAllSchemes?: boolean;
   getCrimeGroup?: (value: { crimeGroup: CrimeGroupData }) => void;
+  onClose: () => void;
+  takeAllSchemes?: boolean;
+  update?: (value: CrimeGroupData) => void;
 }
 const LinkCrimeGroup = ({
-  onClose,
-  update,
   crimeGroupIds,
   getCrimeGroup,
+  onClose,
   takeAllSchemes,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
-    saving,
     data,
     loading,
-    search,
-    setSearch,
     onPaginationChange,
     onSelect,
+    onSubmit,
+    saving,
+    search,
+    setSearch,
   } = useLinkCrimeGroup({
-    onClose,
-    update,
     crimeGroupIds,
     getCrimeGroup,
+    onClose,
     takeAllSchemes,
+    update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      saving={saving}
       data={data}
-      search={search}
-      setSearch={setSearch}
       loading={loading}
       onClose={onClose}
       onPaginationChange={onPaginationChange}
       onSelect={onSelect}
+      onSubmit={onSubmit}
+      saving={saving}
+      search={search}
+      setSearch={setSearch}
     />
   );
 };

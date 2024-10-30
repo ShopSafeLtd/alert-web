@@ -1,5 +1,9 @@
 import RouteWrapper from '#/navigation/utils/route-wrapper';
+import ActivityTable from '#/views/reports/activity-table/ActivityTable.container';
+import ChecklistTable from '#/views/reports/checklist-table/ChecklistTable.container';
 import IncidentItemReport from '#/views/reports/incident-items/IncidentItemsReport.view';
+import IncidentTable from '#/views/reports/incident-table/IncidentTable.container';
+import InvestigationTable from '#/views/reports/investigation-table/InvestigationTable.container';
 import OffenderTable from '#/views/reports/offender-table/OffenderTable.container';
 import ReportCentre from '#/views/reports/reports-centre/ReportsCentre.container';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
@@ -212,6 +216,74 @@ const Reports = (): JSX.Element => {
           }
           path="offender-table/:reportId"
         />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <IncidentTable />
+            </PermissionCheckWrapper>
+          }
+          path="incident-table/:reportId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <InvestigationTable />
+            </PermissionCheckWrapper>
+          }
+          path="investigation-table/:reportId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <ActivityTable />
+            </PermissionCheckWrapper>
+          }
+          path="activity-table/:reportId"
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <ChecklistTable />
+            </PermissionCheckWrapper>
+          }
+          path="checklist-table/:reportId"
+        />
+        {/*
+
+
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Reports,
+              }}
+            >
+              <ChecklistQuestionTable />
+            </PermissionCheckWrapper>
+          }
+          path="checklist-question-table/:reportId"
+        /> */}
       </Routes>
     </RouteWrapper>
   );

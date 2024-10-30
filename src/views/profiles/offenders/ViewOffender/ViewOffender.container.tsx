@@ -30,14 +30,12 @@ const ViewOffender = (): JSX.Element => {
     editImageData,
     editImages,
     editOffender,
-
     editRights,
     editUpdate,
     editUpdateInput,
     editVehicleData,
     handleEditUpdate,
     hasConnectedSchemes,
-
     knowOffender,
     lightBoxOpen,
     linkIncident,
@@ -103,6 +101,7 @@ const ViewOffender = (): JSX.Element => {
     updateDeleteDocument,
     updateDocumentList,
 
+    updateImagesList,
     updateIncidentList,
     updateInvestigationList,
     userId,
@@ -207,6 +206,7 @@ const ViewOffender = (): JSX.Element => {
       toggleViewMatches={toggleViewMatches}
       updateDeleteDocument={updateDeleteDocument}
       updateDocumentList={updateDocumentList}
+      updateImagesList={updateImagesList}
       updateIncidentList={updateIncidentList}
       updateInvestigationList={updateInvestigationList}
       userId={userId}

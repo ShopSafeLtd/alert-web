@@ -14,7 +14,8 @@ interface Props {
   addOverride?: string;
   crimeGroupId?: string;
   groupsIds?: string[];
-  images?: ImageData[] | undefined;
+  images?: ImageData[];
+  imagesProp?: ImageData[] | undefined;
   incidentBusinessId?: string;
   incidentId?: string;
   investigationId?: string;

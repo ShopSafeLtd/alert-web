@@ -1,0 +1,129 @@
+import React from 'react';
+
+import View from './ActivityTable.view';
+import useActivityTable from './hooks/useActivityTable';
+
+const PerformanceReport = (): JSX.Element => {
+  const {
+    activitiesTableData,
+    addLogo,
+    addLogoDrawer,
+    businessesIds,
+    changeSize,
+    componentRef,
+    data,
+    dateRange,
+    dateRangeMode,
+    editMode,
+    filterCount,
+    filtersOpen,
+    groups,
+    handlePrint,
+    isPrinting,
+    layout,
+    loading,
+    logoMetaData,
+    logos,
+    metadata,
+    minDrawer,
+    redactOnPrint,
+    removeItem,
+    removeLogo,
+    reportData,
+    saveAsDrawer,
+    saveTemplate,
+    saving,
+    schemeId,
+    search,
+    selectTemplate,
+    selectedBrands,
+    selectedGroups,
+    selectedIndustries,
+    selectedRoles,
+    selectedTemplate,
+    setAddLogoDrawer,
+    setBusinessesIds,
+    setDateRange,
+    setEditMode,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
+    setRedactOnPrint,
+    setSaveAsDrawer,
+    setSearch,
+    setSelectedBrands,
+    setSelectedGroups,
+    setSelectedIndustries,
+    setSelectedRoles,
+    setStatus,
+    setUserIds,
+    status,
+    tableReportLoading,
+    templates,
+    toggleFiltersOpen,
+    userIds,
+  } = useActivityTable();
+  return (
+    <View
+      activitiesTableData={activitiesTableData}
+      addLogo={addLogo}
+      addLogoDrawer={addLogoDrawer}
+      businessesIds={businessesIds}
+      changeSize={changeSize}
+      componentRef={componentRef}
+      data={data}
+      dateRange={dateRange}
+      dateRangeMode={dateRangeMode}
+      editMode={editMode}
+      filterCount={filterCount}
+      filtersOpen={filtersOpen}
+      groups={groups}
+      handlePrint={handlePrint}
+      isPrinting={isPrinting}
+      layout={layout}
+      loading={loading}
+      logoMetaData={logoMetaData}
+      logos={logos}
+      metadata={metadata}
+      minDrawer={minDrawer}
+      redactOnPrint={redactOnPrint}
+      removeItem={removeItem}
+      removeLogo={removeLogo}
+      reportData={reportData}
+      saveAsDrawer={saveAsDrawer}
+      saveTemplate={saveTemplate}
+      saving={saving}
+      schemeId={schemeId}
+      search={search}
+      selectTemplate={selectTemplate}
+      selectedBrands={selectedBrands}
+      selectedGroups={selectedGroups}
+      selectedIndustries={selectedIndustries}
+      selectedRoles={selectedRoles}
+      selectedTemplate={selectedTemplate}
+      setAddLogoDrawer={setAddLogoDrawer}
+      setBusinessesIds={setBusinessesIds}
+      setDateRange={setDateRange}
+      setEditMode={setEditMode}
+      setLayout={setLayout}
+      setMetadata={setMetadata}
+      setMinDrawer={setMinDrawer}
+      setRedactOnPrint={setRedactOnPrint}
+      setSaveAsDrawer={setSaveAsDrawer}
+      setSearch={setSearch}
+      setSelectedBrands={setSelectedBrands}
+      setSelectedGroups={setSelectedGroups}
+      setSelectedIndustries={setSelectedIndustries}
+      setSelectedRoles={setSelectedRoles}
+      setStatus={setStatus}
+      setUserIds={setUserIds}
+      status={status}
+      tableReportLoading={tableReportLoading}
+      templates={templates}
+      toggleFiltersOpen={toggleFiltersOpen}
+      userIds={userIds}
+    />
+  );
+};
+
+export default PerformanceReport;

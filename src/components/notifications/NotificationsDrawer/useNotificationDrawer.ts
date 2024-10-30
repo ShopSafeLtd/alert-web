@@ -303,6 +303,7 @@ const useNotificationLists = (): Return => {
       defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
       facialDetection: scheme.facialDetection,
       facialRecognition: scheme.facialRecognition,
+      facialRedaction: scheme.facialRedaction,
       goodsMode: scheme.goodsMode,
       id: scheme.id,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,

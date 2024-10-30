@@ -1,0 +1,15 @@
+query demGroupsSelect($where: DemGroupWhereInput) {
+  demGroups(where: $where) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

@@ -8,7 +8,7 @@ export type SchemeQueryVariables = Types.Exact<{
 }>;
 
 
-export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, facialDetection: boolean, activityAssignToUser: boolean, useBusinessGroupsOnIncident: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, goodsMode: Types.GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
+export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, facialDetection: boolean, facialRedaction: boolean, activityAssignToUser: boolean, useBusinessGroupsOnIncident: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, goodsMode: Types.GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
 
 
 export const SchemeDocument = gql`
@@ -36,6 +36,7 @@ export const SchemeDocument = gql`
     needJustification
     facialRecognition
     facialDetection
+    facialRedaction
     activityAssignToUser
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders

@@ -105,6 +105,12 @@ const ReportCard = ({
     if (item.type === ReportType.CrimeGroup) return 'crime-groups';
     if (item.type === ReportType.Offender) return 'offender-profile';
     if (item.type === ReportType.OffenderTable) return 'offender-table';
+    if (item.type === ReportType.IncidentTable) return 'incident-table';
+    if (item.type === ReportType.InvestigationsTable)
+      return 'investigation-table';
+    if (item.type === ReportType.ActivityTable) return 'activity-table';
+    if (item.type === ReportType.CheckListTable) return 'checklist-table';
+
     if (item.type === ReportType.Business) return 'business';
     if (item.type === ReportType.BusinessEngagementTable)
       return 'business-engagement';

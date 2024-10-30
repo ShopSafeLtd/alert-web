@@ -1,50 +1,50 @@
 import React from 'react';
-import useListVehicles from './useListVehicles';
+
 import View from './ListVehicles.view';
+import useListVehicles from './useListVehicles';
 
 const ListVehicles = () => {
   const {
+    addInvestigation,
+    clearFilters,
+    customGalleriesData,
     data,
-    loading,
-    setSearch,
     groups,
     groupsLoading,
-    setGroupsFilter,
-    setCreatedAtFilter,
-    clearFilters,
-    sortFilter,
-    toggleSortFilter,
-    customGalleriesData,
-    onSelectCustomGalleries,
-    setGallery,
-    setOrder,
-    addInvestigation,
-    toggleAddInvestigation,
-    variables,
+    loading,
     onNavigate,
+    onSelectCustomGalleries,
+    setCreatedAtFilter,
+    setGallery,
+    setGroupsFilter,
+    setOrder,
+    setSearch,
+    sortFilter,
+    toggleAddInvestigation,
+    toggleSortFilter,
+    variables,
   } = useListVehicles();
-  console.log('customGalleriesData', customGalleriesData);
 
   return (
     <View
-      data={data}
-      loading={loading}
-      variables={variables}
-      setSearch={setSearch}
-      onNavigate={onNavigate}
-      sortFilter={sortFilter}
+      addInvestigation={addInvestigation}
       clearFilters={clearFilters}
-      toggleSortFilter={toggleSortFilter}
+      customGalleriesData={customGalleriesData}
+      data={data}
       groups={groups}
       groupsLoading={groupsLoading}
+      loading={loading}
+      onNavigate={onNavigate}
+      onSelectCustomGalleries={onSelectCustomGalleries}
+      setCreatedAtFilter={setCreatedAtFilter}
       setGallery={setGallery}
       setGroupsFilter={setGroupsFilter}
-      setCreatedAtFilter={setCreatedAtFilter}
-      customGalleriesData={customGalleriesData}
       setOrder={setOrder}
-      addInvestigation={addInvestigation}
+      setSearch={setSearch}
+      sortFilter={sortFilter}
       toggleAddInvestigation={toggleAddInvestigation}
-      onSelectCustomGalleries={onSelectCustomGalleries}
+      toggleSortFilter={toggleSortFilter}
+      variables={variables}
     />
   );
 };

@@ -24,17 +24,11 @@ const MultiFacesSelect = ({ faces, onClose, open, submitFace }: Props) => {
     const findSelected = selected.find((el) => el.imageURL === face.imageURL);
     if (findSelected) {
       if (selected.length === 1) {
-        console.log('length1');
-
         setSelected([]);
       } else {
-        console.log('findSelected');
-
         setSelected(selected.filter((el) => el.imageURL !== face.imageURL));
       }
     } else {
-      console.log('else');
-
       setSelected([...selected, face]);
     }
   };

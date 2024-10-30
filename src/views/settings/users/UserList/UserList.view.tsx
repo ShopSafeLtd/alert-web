@@ -184,7 +184,6 @@ const UserList = ({
             dataIndex: 'business',
             filters: businessFilter,
             key: 'business',
-            // @ts-ignore
             onFilter: (
               value: boolean | number | string,
               record: { businesses: { id: string; name: string }[] }
@@ -207,7 +206,6 @@ const UserList = ({
             dataIndex: 'groups',
             filters: groupFilter,
             key: 'groups',
-            // @ts-ignore
             onFilter: (
               value: boolean | number | string,
               record: { groups: { id: string; name: string }[] }

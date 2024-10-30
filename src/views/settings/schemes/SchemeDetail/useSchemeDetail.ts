@@ -33,6 +33,8 @@ export interface FormData {
   defaultSubscribedOffenderOnly: boolean;
   facialDetection: boolean;
   facialRecognition: boolean;
+  facialRedaction: boolean;
+
   goodsMode: GoodsMode;
   imagesRequiredOnOffenders: boolean;
   incidentRetention: null | number;
@@ -172,7 +174,6 @@ const useSchemeDetail = (): Return => {
           autoApproveIncidents: { set: data.autoApproveOffenders },
           autoApproveOffenders: { set: data.autoApproveIncidents },
           autoPopulateDescription: { set: data.autoPopulateDescription },
-          // @ts-ignore
           darkLogo: {
             ...(darkImageChange && darkFileList.length > 0
               ? {
@@ -206,10 +207,10 @@ const useSchemeDetail = (): Return => {
           },
           facialDetection: { set: data.facialDetection },
           facialRecognition: { set: data.facialRecognition },
+          facialRedaction: { set: data.facialRedaction },
           goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
           imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
           incidentRetention: { set: data.incidentRetention },
-          // @ts-ignore
           logo: {
             ...(imageChange && fileList.length > 0
               ? {

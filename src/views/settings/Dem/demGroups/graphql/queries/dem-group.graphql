@@ -1,0 +1,17 @@
+query DemGroup($where: DemGroupWhereUniqueInput!) {
+  demGroup(where: $where) {
+    id
+    name
+    demId
+    totalDevices
+    demDevices {
+      id
+      name
+
+      business {
+        id
+        name
+      }
+    }
+  }
+}

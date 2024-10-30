@@ -1,0 +1,14 @@
+query ActivityTableReport($where: ActivityTableWhereInput!) {
+  activityTableReport(where: $where) {
+    total
+    activityPerformance {
+      id
+      dueDate
+      name
+      totalQuestions
+      totalAnswers
+      totalAssignedUsers
+      completed
+    }
+  }
+}
