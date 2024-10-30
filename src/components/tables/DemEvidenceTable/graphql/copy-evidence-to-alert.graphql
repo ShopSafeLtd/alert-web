@@ -1,0 +1,10 @@
+mutation copyEvidenceToAlert($data: CopyEvidenceInput!) {
+  copyEvidenceToAlert(data: $data) {
+    id
+    name
+    thumbnailUrl
+    url
+    createdAt
+    updatedAt
+  }
+}

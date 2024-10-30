@@ -1,20 +1,21 @@
 export enum ProfileUpdatedType {
-  updated = 'Update',
-  deleted = 'Deleted',
   added = 'Added',
+  deleted = 'Deleted',
+  updated = 'Update',
 }
 
 export enum ProfileUpdatedModel {
-  Incident = 'incident',
-  Offender = 'offender',
-  Vehicle = 'vehicle',
-  Crime_Group = 'crime group',
-  Investigation = 'investigation',
-  Incident_Item = 'incident item',
-  Images = 'images',
-  Image = 'image',
   Address = 'address',
   Ban = 'exclusion',
+  Business = 'business',
+  Crime_Group = 'crime group',
+  Image = 'image',
+  Images = 'images',
+  Incident = 'incident',
+  Incident_Item = 'incident item',
+  Investigation = 'investigation',
+  Offender = 'offender',
+  Vehicle = 'vehicle',
 
   // BAN
   // CHAT

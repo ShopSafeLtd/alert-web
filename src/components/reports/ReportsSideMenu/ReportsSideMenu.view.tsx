@@ -41,6 +41,7 @@ const ReportsSideMenu = ({ collapsed, selectedId, setCollapsed }: Props) => {
       },
     },
   });
+  console.log('useReportsCentreQuery', data);
 
   return (
     <Sider collapsed={collapsed} collapsible trigger={null}>

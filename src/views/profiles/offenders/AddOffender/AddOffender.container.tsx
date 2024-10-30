@@ -1,125 +1,133 @@
 import React from 'react';
-import View from './AddOffender.view';
 
+import View from './AddOffender.view';
 import useAddOffender from './useAddOffender';
 
 const AddOffender = (): JSX.Element => {
   const {
-    onSubmit,
-    saving,
+    addCustomGallery,
+    addExclusion,
+    addOffenderTag,
+    adminRights,
+    ageCheck,
+    banData,
+    bansData,
+    beforeUpload,
+    crimeGroupsData,
+    customGalleries,
+    customGalleriesLoading,
+    deleteConfirm,
+    documentList,
+    documentUploadProps,
+    editExclusion,
+    editImage,
+    fileList,
+    form,
     groups,
     groupsLoading,
-    tags,
-    tagsLoading,
-    imgChange,
-    beforeUpload,
-    fileList,
-    addOffenderTag,
-    toggleAddOffenderTag,
-    updateNewOffenderTagData,
-    addExclusion,
-    toggleAddExclusion,
-    editExclusion,
-    toggleEditExclusion,
-    bansData,
-    updateExclusion,
-    banData,
-    setBanData,
-    deleteConfirm,
-    ageCheck,
-    setAgeCheck,
-    form,
-    adminRights,
-    vehiclesData,
-    crimeGroupsData,
-    listVehiclesData,
     idVerified,
-    onValuesChange,
-    editImage,
-    onEditImage,
-    toggleEditImage,
+    imgChange,
+    listVehiclesData,
+    loading,
+    needJustification,
+    offenderSettings,
     onAddCrimeGroup,
     onAddVehicle,
+    onCloseFaces,
+    onEditImage,
     onRemoveCrimeGroup,
     onRemoveImage,
     onRemoveVehicle,
-    primaryImage,
-    setPrimaryImage,
-    customGalleries,
-    customGalleriesLoading,
-    addCustomGallery,
-    toggleAddCustomGallery,
-    updateNewCustomGalleryData,
-    documentList,
-    documentUploadProps,
-    reportOnly,
-    potentialOffenders,
-    toggleViewPotentialOffenders,
     onSearchOffender,
+    onSelectFace,
+    onSubmit,
+    onValuesChange,
+    potentialOffenders,
+    primaryImage,
+    reportOnly,
+    saving,
+    setAgeCheck,
+    setBanData,
+    setPrimaryImage,
+    tags,
+    tagsLoading,
+    toggleAddCustomGallery,
+    toggleAddExclusion,
+    toggleAddOffenderTag,
+    toggleEditExclusion,
+    toggleEditImage,
+    toggleViewPotentialOffenders,
+    updateExclusion,
+    updateNewCustomGalleryData,
+    updateNewOffenderTagData,
+    uploadFaces,
+    uploading,
+    vehiclesData,
     viewPotentialOffenders,
-    needJustification,
-    offenderSettings,
-    loading,
   } = useAddOffender();
 
   return (
     <div>
       <View
+        addCustomGallery={addCustomGallery}
+        addExclusion={addExclusion}
+        addOffenderTag={addOffenderTag}
+        adminRights={adminRights}
+        ageCheck={ageCheck}
+        banData={banData}
+        bansData={bansData}
+        beforeUpload={beforeUpload}
+        crimeGroupsData={crimeGroupsData}
+        customGalleries={customGalleries}
+        customGalleriesLoading={customGalleriesLoading}
+        deleteConfirm={deleteConfirm}
+        documentList={documentList}
+        documentUploadProps={documentUploadProps}
+        editExclusion={editExclusion}
+        editImage={editImage}
+        fileList={fileList}
+        form={form}
+        groups={groups}
+        groupsLoading={groupsLoading}
+        idVerified={idVerified}
+        imgChange={imgChange}
+        listVehiclesData={listVehiclesData}
+        loading={loading}
+        needJustification={needJustification}
+        offenderSettings={offenderSettings}
         onAddCrimeGroup={onAddCrimeGroup}
         onAddVehicle={onAddVehicle}
+        onCloseFaces={onCloseFaces}
+        onEditImage={onEditImage}
         onRemoveCrimeGroup={onRemoveCrimeGroup}
         onRemoveImage={onRemoveImage}
         onRemoveVehicle={onRemoveVehicle}
-        form={form}
+        onSearchOffender={onSearchOffender}
+        onSelectFace={onSelectFace}
         onSubmit={onSubmit}
-        bansData={bansData}
+        onValuesChange={onValuesChange}
+        potentialOffenders={potentialOffenders}
+        primaryImage={primaryImage}
+        reportOnly={reportOnly}
         saving={saving}
-        groups={groups}
-        groupsLoading={groupsLoading}
+        setAgeCheck={setAgeCheck}
+        setBanData={setBanData}
+        setPrimaryImage={setPrimaryImage}
         tags={tags}
         tagsLoading={tagsLoading}
-        imgChange={imgChange}
-        beforeUpload={beforeUpload}
-        fileList={fileList}
-        addOffenderTag={addOffenderTag}
-        toggleAddOffenderTag={toggleAddOffenderTag}
-        updateNewOffenderTagData={updateNewOffenderTagData}
-        addExclusion={addExclusion}
-        toggleAddExclusion={toggleAddExclusion}
-        editExclusion={editExclusion}
-        toggleEditExclusion={toggleEditExclusion}
-        updateExclusion={updateExclusion}
-        banData={banData}
-        setBanData={setBanData}
-        deleteConfirm={deleteConfirm}
-        ageCheck={ageCheck}
-        setAgeCheck={setAgeCheck}
-        adminRights={adminRights}
-        vehiclesData={vehiclesData}
-        crimeGroupsData={crimeGroupsData}
-        listVehiclesData={listVehiclesData}
-        idVerified={idVerified}
-        onValuesChange={onValuesChange}
-        editImage={editImage}
-        onEditImage={onEditImage}
-        toggleEditImage={toggleEditImage}
-        primaryImage={primaryImage}
-        setPrimaryImage={setPrimaryImage}
-        customGalleries={customGalleries}
-        customGalleriesLoading={customGalleriesLoading}
-        addCustomGallery={addCustomGallery}
         toggleAddCustomGallery={toggleAddCustomGallery}
-        updateNewCustomGalleryData={updateNewCustomGalleryData}
-        documentList={documentList}
-        documentUploadProps={documentUploadProps}
-        reportOnly={reportOnly}
-        potentialOffenders={potentialOffenders}
-        viewPotentialOffenders={viewPotentialOffenders}
+        toggleAddExclusion={toggleAddExclusion}
+        toggleAddOffenderTag={toggleAddOffenderTag}
+        toggleEditExclusion={toggleEditExclusion}
+        toggleEditImage={toggleEditImage}
         toggleViewPotentialOffenders={toggleViewPotentialOffenders}
-        onSearchOffender={onSearchOffender}
-        needJustification={needJustification}
-        offenderSettings={offenderSettings}
-        loading={loading}
+        updateExclusion={updateExclusion}
+        updateNewCustomGalleryData={updateNewCustomGalleryData}
+        updateNewOffenderTagData={updateNewOffenderTagData}
+        uploadFaces={uploadFaces}
+        uploading={uploading}
+        vehiclesData={vehiclesData}
+        viewPotentialOffenders={viewPotentialOffenders}
       />
     </div>
   );

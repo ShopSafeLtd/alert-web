@@ -346,7 +346,7 @@ const useSingleShoesList = (): Return => {
       onCompleted: () => {
         notification.success({
           description: `The shoe status has been updated to Shipped!`,
-          message: 'Successfully Removed',
+          message: 'Successfully Updated',
           placement: 'bottomRight',
         });
       },
@@ -408,7 +408,7 @@ const useSingleShoesList = (): Return => {
       onCompleted: () => {
         notification.success({
           description: `The shoe status has been updated to Received!`,
-          message: 'Successfully Removed',
+          message: 'Successfully Updated',
           placement: 'bottomRight',
         });
       },

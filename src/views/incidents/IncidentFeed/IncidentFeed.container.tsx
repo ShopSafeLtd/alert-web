@@ -1,59 +1,50 @@
 import React from 'react';
+
 import View from './IncidentFeed.view';
 import useIncidentFeed from './useIncidentFeed';
 
 const IncidentFeed = (): JSX.Element => {
   const {
-    data,
-    loading,
-    lightboxElements,
-    openLightbox,
-    setSearch,
-    crimeTypes,
-    tagsLoading,
-    updateIncidentList,
-    lightBoxOpen,
-    onNavigate,
-    sortFilter,
-    toggleSortFilter,
     clearFilters,
+    data,
+    fetchMoreScroll,
+    lightBoxOpen,
+    lightboxElements,
+    loading,
+    onNavigate,
+    openLightbox,
+    setCompactView,
     setGallery,
     setPeculiarities,
-
-    goods,
-    goodsLoading,
-
-    fetchMoreScroll,
-    variables,
-    setCompactView,
+    setSearch,
     setTableView,
+    sortFilter,
     tableView,
+    toggleSortFilter,
+    updateIncidentList,
+    variables,
   } = useIncidentFeed();
 
   return (
     <View
+      clearFilters={clearFilters}
+      data={data}
       fetchMoreScroll={fetchMoreScroll}
       lightBoxOpen={lightBoxOpen}
-      data={data}
-      loading={loading}
       lightboxElements={lightboxElements}
-      openLightbox={openLightbox}
-      setSearch={setSearch}
-      variables={variables}
-      crimeTypes={crimeTypes}
-      tagsLoading={tagsLoading}
-      updateIncidentList={updateIncidentList}
+      loading={loading}
       onNavigate={onNavigate}
-      sortFilter={sortFilter}
-      toggleSortFilter={toggleSortFilter}
-      clearFilters={clearFilters}
-      goods={goods}
+      openLightbox={openLightbox}
+      setCompactView={setCompactView}
       setGallery={setGallery}
       setPeculiarities={setPeculiarities}
-      goodsLoading={goodsLoading}
-      setCompactView={setCompactView}
+      setSearch={setSearch}
       setTableView={setTableView}
+      sortFilter={sortFilter}
       tableView={tableView}
+      toggleSortFilter={toggleSortFilter}
+      updateIncidentList={updateIncidentList}
+      variables={variables}
     />
   );
 };

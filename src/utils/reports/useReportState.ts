@@ -61,6 +61,7 @@ interface Return {
   selectedBrands: string[];
   selectedBusiness: string[];
   selectedGroups: string[];
+  selectedIncidentTypes: string[];
   selectedIndustries: string[];
   selectedRoles: string[];
   selectedSchemes: string[];
@@ -83,6 +84,7 @@ interface Return {
   setSelectedBrands: (value: string[]) => void;
   setSelectedBusiness: (businesses: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
+  setSelectedIncidentTypes: (value: string[]) => void;
   setSelectedIndustries: (value: string[]) => void;
   setSelectedRoles: (arg: string[]) => void;
   setSelectedSchemes: (value: string[]) => void;
@@ -177,6 +179,9 @@ const useReportState = ({
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+  const [selectedIncidentTypes, setSelectedIncidentTypes] = useState<string[]>(
+    []
+  );
   const [dateRangeMode, setDateRangeMode] = useState<
     DateSelectModeType | undefined
   >(undefined);
@@ -493,7 +498,6 @@ const useReportState = ({
                   minH: item.minH ?? undefined,
                   minW: item.minW ?? undefined,
                 })) as RGL.Layout[]) || [],
-              // @ts-ignore
               metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
               name: d.updateReportTemplate.name || '',
               type: d.updateReportTemplate.type,
@@ -745,6 +749,7 @@ const useReportState = ({
     selectedBrands,
     selectedBusiness,
     selectedGroups,
+    selectedIncidentTypes,
     selectedIndustries,
     selectedRoles,
     selectedSchemes,
@@ -764,6 +769,7 @@ const useReportState = ({
     setSelectedBrands,
     setSelectedBusiness,
     setSelectedGroups,
+    setSelectedIncidentTypes,
     setSelectedIndustries,
     setSelectedRoles,
     setSelectedSchemes,

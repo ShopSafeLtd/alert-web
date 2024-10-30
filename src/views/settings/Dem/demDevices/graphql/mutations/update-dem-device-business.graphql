@@ -1,0 +1,9 @@
+mutation UpdateDemDevice($data: UpdateDemDevice!, $where: UniqueId!) {
+  updateDemDevice(data: $data, where: $where) {
+    id
+    business {
+      id
+      name
+    }
+  }
+}

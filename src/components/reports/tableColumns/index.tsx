@@ -121,7 +121,237 @@ export const ContributionColumns: ColumnsType<ContributionTableData> = [
     title: <FormattedMessage defaultMessage="Logins" />,
   },
 ];
+export interface ActivityTableData {
+  completed: boolean;
+  dueDate: string;
+  id: string;
+  name: string;
+  totalAnswers: number;
+  totalAssignedUsers: number;
+  totalQuestions: number;
+}
 
+export const ActivityColumns: ColumnsType<ActivityTableData> = [
+  {
+    dataIndex: 'name',
+    key: 'name',
+    render: (name: string) => <Link to={`/app/tasks`}>{name}</Link>,
+    sorter: (a: ActivityTableData, b: ActivityTableData) =>
+      a.name.localeCompare(b.name),
+    title: <FormattedMessage defaultMessage="Name" />,
+  },
+  {
+    dataIndex: 'completed',
+    key: 'completed',
+    render: (value: ActivityTableData) => (
+      <Typography.Text>
+        {value.completed ? (
+          <FormattedMessage defaultMessage="Completed" />
+        ) : (
+          <FormattedMessage defaultMessage="Open" />
+        )}
+      </Typography.Text>
+    ),
+    title: <FormattedMessage defaultMessage="Status" />,
+  },
+  {
+    dataIndex: 'totalAssignedUsers',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalAssignedUsers',
+    sorter: (a: ActivityTableData, b: ActivityTableData) =>
+      a.totalAssignedUsers - b.totalAssignedUsers,
+    title: <FormattedMessage defaultMessage="Assigned Users" />,
+  },
+  {
+    dataIndex: 'totalQuestions',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalQuestions',
+    sorter: (a: ActivityTableData, b: ActivityTableData) =>
+      a.totalQuestions - b.totalQuestions,
+    title: <FormattedMessage defaultMessage="Questions" />,
+  },
+  {
+    dataIndex: 'totalAnswers',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalAnswers',
+    sorter: (a: ActivityTableData, b: ActivityTableData) =>
+      a.totalAnswers - b.totalAnswers,
+    title: <FormattedMessage defaultMessage="Answers" />,
+  },
+  {
+    dataIndex: 'dueDate',
+    key: 'dueDate',
+    title: 'Due Date',
+  },
+];
+export interface ChecklistTableData {
+  completedAt: string;
+  id: string;
+  name: string;
+  percentAnswer: number;
+  percentComplete: number;
+  percentScore: number;
+  totalAnswers: number;
+  totalQuestions: number;
+  totalSections: number;
+}
+
+export const ChecklistColumns: ColumnsType<ChecklistTableData> = [
+  {
+    dataIndex: 'name',
+    key: 'name',
+    render: (name: string, item: ChecklistTableData) => (
+      <Link to={`/app/checklists/active/${item.id}`}>{name}</Link>
+    ),
+    sorter: (a: ChecklistTableData, b: ChecklistTableData) =>
+      a.name.localeCompare(b.name),
+    title: <FormattedMessage defaultMessage="Name" />,
+  },
+  {
+    dataIndex: 'percentComplete',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'percentComplete',
+    render: (value: ChecklistTableData) => (
+      <Typography.Text>{`${value.percentComplete || 0}%`}</Typography.Text>
+    ),
+    sorter: (a: ChecklistTableData, b: ChecklistTableData) =>
+      a.percentComplete - b.percentComplete,
+    title: <FormattedMessage defaultMessage="Completion (%)" />,
+  },
+  {
+    dataIndex: 'percentScore',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'percentScore',
+    render: (value: ChecklistTableData) => (
+      <Typography.Text>{`${value.percentScore || 0}%`}</Typography.Text>
+    ),
+    sorter: (a: ChecklistTableData, b: ChecklistTableData) =>
+      a.percentScore - b.percentScore,
+    title: <FormattedMessage defaultMessage="Score (%)" />,
+  },
+  {
+    dataIndex: 'percentAnswer',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'percentAnswer',
+    render: (value: ChecklistTableData) => (
+      <Typography.Text>{`${value.percentAnswer || 0}%`}</Typography.Text>
+    ),
+    sorter: (a: ChecklistTableData, b: ChecklistTableData) =>
+      a.percentAnswer - b.percentAnswer,
+    title: <FormattedMessage defaultMessage="Answered (%)" />,
+  },
+  {
+    dataIndex: 'totalSections',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalSections',
+    sorter: (a: ChecklistTableData, b: ChecklistTableData) =>
+      a.totalSections - b.totalSections,
+    title: <FormattedMessage defaultMessage="Sections" />,
+  },
+  {
+    dataIndex: 'totalQuestions',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalQuestions',
+    sorter: (a: ChecklistTableData, b: ChecklistTableData) =>
+      a.totalQuestions - b.totalQuestions,
+    title: <FormattedMessage defaultMessage="Questions" />,
+  },
+  {
+    dataIndex: 'totalAnswers',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalAnswers',
+    sorter: (a: ChecklistTableData, b: ChecklistTableData) =>
+      a.totalAnswers - b.totalAnswers,
+    title: <FormattedMessage defaultMessage="Answers" />,
+  },
+  {
+    dataIndex: 'completedAt',
+    key: 'completedAt',
+    title: 'Completed Date',
+  },
+];
+export interface IncidentTableData {
+  alertId: string;
+  date: string;
+  id: string;
+  lostValue: string;
+  recoveredValue: string;
+  subject: string;
+  successRate: string;
+  totalBulletins: number;
+  totalOffenders: number;
+}
+
+export const IncidentColumns: ColumnsType<IncidentTableData> = [
+  {
+    dataIndex: 'subject',
+    key: 'subject',
+    render: (subject: string, item: IncidentTableData) => (
+      <Link to={`/app/incidents/view/${item.id}`}>{subject}</Link>
+    ),
+    sorter: (a: IncidentTableData, b: IncidentTableData) =>
+      a.subject.localeCompare(b.subject),
+    title: <FormattedMessage defaultMessage="Subject" />,
+  },
+  {
+    dataIndex: 'totalOffenders',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalOffenders',
+    sorter: (a: IncidentTableData, b: IncidentTableData) =>
+      a.totalOffenders - b.totalOffenders,
+    title: <FormattedMessage defaultMessage="Offenders" />,
+  },
+  {
+    dataIndex: 'alertId',
+    key: 'alertId',
+    title: 'Alert ID',
+  },
+  {
+    dataIndex: 'date',
+    key: 'date',
+    title: 'Date',
+  },
+  {
+    dataIndex: 'totalBulletins',
+    key: 'totalBulletins',
+    title: 'Bulletins',
+  },
+  {
+    dataIndex: 'lostValue',
+    key: 'lostValue',
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
+    sorter: (a: IncidentTableData, b: IncidentTableData) =>
+      Number.parseInt(a.lostValue || '0', 10) -
+      Number.parseInt(b.lostValue || '0', 10),
+    title: <FormattedMessage defaultMessage="Lost value" />,
+  },
+  {
+    dataIndex: 'recoveredValue',
+    key: 'recoveredValue',
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
+    sorter: (a: IncidentTableData, b: IncidentTableData) =>
+      Number.parseInt(a.recoveredValue || '0', 10) -
+      Number.parseInt(b.recoveredValue || '0', 10),
+    title: <FormattedMessage defaultMessage="Recovered value" />,
+  },
+  {
+    dataIndex: 'successRate',
+    key: 'successRate',
+    render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
+    sorter: (a: IncidentTableData, b: IncidentTableData) =>
+      Number.parseInt(a.successRate || '0', 10) -
+      Number.parseInt(b.successRate || '0', 10),
+    title: <FormattedMessage defaultMessage="Loss Rate" />,
+  },
+];
 export interface OffenderTableData {
   alertId: string;
   fullName: string;
@@ -204,7 +434,113 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
     title: <FormattedMessage defaultMessage="Loss Rate" />,
   },
 ];
-
+export interface InvestigationTableData {
+  alertId: string;
+  // closedAt: string;
+  // createdAt: string;
+  id: string;
+  lostValue: string;
+  name: string;
+  recoveredValue: string;
+  status: InvestigationStatus;
+  successRate: string;
+  totalIncidents: number;
+  totalOffenders: number;
+}
+const getTextStatus = (value: InvestigationStatus) => {
+  if (value === InvestigationStatus.Open) return 'success';
+  if (value === InvestigationStatus.Closed) return 'danger';
+  if (value === InvestigationStatus.Paused) return 'warning';
+  return 'success';
+};
+export const InvestigationColumns: ColumnsType<InvestigationTableData> = [
+  {
+    dataIndex: 'name',
+    key: 'name',
+    render: (name: string, item: InvestigationTableData) => (
+      <Link to={`/app/investigations/view/${item.id}`}>{name}</Link>
+    ),
+    sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
+      a.name.localeCompare(b.name),
+    title: <FormattedMessage defaultMessage="Name" />,
+  },
+  {
+    dataIndex: 'status',
+    key: 'status',
+    render: (value: InvestigationTableData) => (
+      <Typography.Text type={getTextStatus(value.status)}>
+        {GetInvestigationStatusValues[value.status]}
+      </Typography.Text>
+    ),
+    title: <FormattedMessage defaultMessage="Status" />,
+  },
+  {
+    dataIndex: 'totalIncidents',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalIncidents',
+    sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
+      a.totalIncidents - b.totalIncidents,
+    title: <FormattedMessage defaultMessage="Incidents" />,
+  },
+  {
+    dataIndex: 'totalOffenders',
+    defaultSortOrder: 'descend' as SortOrder,
+    key: 'totalOffenders',
+    sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
+      a.totalOffenders - b.totalOffenders,
+    title: <FormattedMessage defaultMessage="Offenders" />,
+  },
+  {
+    dataIndex: 'alertId',
+    key: 'alertId',
+    title: 'Alert ID',
+  },
+  // {
+  //   dataIndex: 'createdAt',
+  //   key: 'createdAt',
+  //   title: 'Date Opened',
+  // },
+  // {
+  //   dataIndex: 'closedAt',
+  //   key: 'closedAt',
+  //   title: 'Date Closed',
+  // },
+  {
+    dataIndex: 'lostValue',
+    key: 'lostValue',
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
+    sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
+      Number.parseInt(a.lostValue || '0', 10) -
+      Number.parseInt(b.lostValue || '0', 10),
+    title: <FormattedMessage defaultMessage="Lost value" />,
+  },
+  {
+    dataIndex: 'recoveredValue',
+    key: 'recoveredValue',
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
+    sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
+      Number.parseInt(a.recoveredValue || '0', 10) -
+      Number.parseInt(b.recoveredValue || '0', 10),
+    title: <FormattedMessage defaultMessage="Recovered value" />,
+  },
+  {
+    dataIndex: 'successRate',
+    key: 'successRate',
+    render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
+    sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
+      Number.parseInt(a.successRate || '0', 10) -
+      Number.parseInt(b.successRate || '0', 10),
+    title: <FormattedMessage defaultMessage="Loss Rate" />,
+  },
+];
 export interface CrimeGroupPerformanceTableData {
   alertId: string;
   fullName: string;

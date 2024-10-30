@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import type { ImageFaceType } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
+
+import { faCheckCircle as faCheckedCircle } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Modal, Row } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle as faCheckedCircle } from '@fortawesome/pro-solid-svg-icons';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { ImageFaceType } from '#/components/incidents/IncidentForm/ImageSection/useImageSection';
+
 import useStyles from './FacesSelect.styles';
 
 interface Props {
+  faces: ImageFaceType[] | undefined;
+  onClose: () => void;
   open: boolean;
   submitFace: (value: ImageFaceType) => void;
-  onClose: () => void;
-  faces: ImageFaceType[] | undefined;
 }
 
-const FacesSelect = ({ open, submitFace, onClose, faces }: Props) => {
+const FacesSelect = ({ faces, onClose, open, submitFace }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const [selected, setSelected] = useState<ImageFaceType>();
@@ -27,37 +29,37 @@ const FacesSelect = ({ open, submitFace, onClose, faces }: Props) => {
 
   return (
     <Modal
-      width={600}
+      bodyStyle={{ padding: 0 }}
+      cancelText={intl.formatMessage({
+        defaultMessage: 'Skip',
+      })}
+      okText={intl.formatMessage({
+        defaultMessage: 'Save Face',
+      })}
+      onCancel={() => {
+        onClose();
+      }}
+      onOk={handleSubmit}
       open={open}
       title={intl.formatMessage({
         defaultMessage: 'Select a face that match the offender',
       })}
-      bodyStyle={{ padding: 0 }}
-      okText={intl.formatMessage({
-        defaultMessage: 'Save Face',
-      })}
-      cancelText={intl.formatMessage({
-        defaultMessage: 'Skip',
-      })}
-      onOk={handleSubmit}
-      onCancel={() => {
-        onClose();
-      }}
+      width={600}
     >
       {open && (
         <Row className={classes.row} gutter={[16, 16]}>
           {faces?.map((face) => (
             <Col
-              key={face.imageURL}
               className={classes.container}
+              key={face.imageURL}
               onClick={() => setSelected(face)}
             >
               {selected?.imageURL === face.imageURL && (
                 <div className={classes.check}>
                   <FontAwesomeIcon
-                    size="xl"
                     color="red"
                     icon={faCheckedCircle}
+                    size="xl"
                   />
                 </div>
               )}

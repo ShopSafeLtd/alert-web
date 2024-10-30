@@ -40,7 +40,7 @@ const DataManagement = lazy(() => import('./data-management/router'));
 const Evidence = lazy(() => import('./evidence/router'));
 const Checklists = lazy(() => import('./checklist/router'));
 const DashboardManagement = lazy(() => import('./dashboard-management/router'));
-
+const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
 // Define the interface for your navigation items
 interface NavItem {
   path: string;
@@ -172,6 +172,11 @@ export const AppViews = (): JSX.Element => {
           element={<DataManagement />}
           key="data-management"
           path="data-management/*"
+        />
+        <Route
+          element={<SingleShoeSystem />}
+          key="singleShoeSystem"
+          path="singleShoeSystem/*"
         />
       </Routes>
     </Suspense>

@@ -1,7 +1,7 @@
 import type * as Types from '../../../../../graphql/types.js';
 
 import { gql } from '@apollo/client';
-import { SingleShoeFragmentDoc } from '../../../../../graphql/fragments/__generated__/shoe.generated';
+import { SingleShoeFragmentDoc } from '../../../../../graphql/fragments/__generated__/singleShoe.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type ShoesQueryVariables = Types.Exact<{

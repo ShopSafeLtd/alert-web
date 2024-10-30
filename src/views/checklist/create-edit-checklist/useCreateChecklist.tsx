@@ -152,6 +152,7 @@ const getWeight = (
         passWeight: weights.find((weight) => weight.answer === 'TEXT')?.weight,
       };
     }
+    // eslint-disable-next-line sonarjs/no-duplicated-branches
     default: {
       return {
         failWeight: weights.find((weight) => weight.answer === 'FAIL')?.weight,
@@ -198,6 +199,7 @@ const createAnswerWeight = (
     case 'TEXT': {
       return [{ answer: 'TEXT', weight: passWeight }];
     }
+    // eslint-disable-next-line sonarjs/no-duplicated-branches
     default: {
       return [
         { answer: 'PASS', weight: passWeight },
@@ -317,7 +319,6 @@ export function useCreateChecklist(): Return {
                 order: question.order,
                 question: question.title,
                 type: question.type as ChecklistAnswerType,
-
                 weight: question.weighted
                   ? createAnswerWeight(
                       question.type,

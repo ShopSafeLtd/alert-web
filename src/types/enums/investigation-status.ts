@@ -1,8 +1,8 @@
 import { InvestigationStatus } from 'graphql/types';
 
 const GetInvestigationStatusValues = {
-  [InvestigationStatus.Open]: 'Open',
   [InvestigationStatus.Closed]: 'Closed',
+  [InvestigationStatus.Open]: 'Open',
   [InvestigationStatus.Paused]: 'Paused',
 } as const;
 

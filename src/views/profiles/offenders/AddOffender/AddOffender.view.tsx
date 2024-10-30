@@ -6,6 +6,7 @@ import type {
   CrimeGroupData,
   CustomGalleryData,
   Image,
+  ImageFaceType,
   OffenderData,
   OffenderSettingsType,
   TagData,
@@ -67,11 +68,13 @@ interface Props {
   offenderSettings: OffenderSettingsType;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
+  onCloseFaces: () => void;
   onEditImage: (value: Image) => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   onRemoveImage: (imageId: string) => void;
   onRemoveVehicle: (vehicleId: string) => void;
   onSearchOffender: () => void;
+  onSelectFace: (value: ImageFaceType) => void;
   onSubmit: (value: FormData) => void;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
   potentialOffenders: OffenderData[];
@@ -92,6 +95,8 @@ interface Props {
   updateExclusion: (value: BanData) => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
+  uploadFaces: ImageFaceType[];
+  uploading: boolean;
   vehiclesData: VehicleData[];
   viewPotentialOffenders: boolean;
 }
@@ -126,11 +131,13 @@ const AddOffender = ({
   offenderSettings,
   onAddCrimeGroup,
   onAddVehicle,
+  onCloseFaces,
   onEditImage,
   onRemoveCrimeGroup,
   onRemoveImage,
   onRemoveVehicle,
   onSearchOffender,
+  onSelectFace,
   onSubmit,
   onValuesChange,
   potentialOffenders,
@@ -151,6 +158,8 @@ const AddOffender = ({
   updateExclusion,
   updateNewCustomGalleryData,
   updateNewOffenderTagData,
+  uploadFaces,
+  uploading,
   vehiclesData,
   viewPotentialOffenders,
 }: Props): JSX.Element => {
@@ -358,12 +367,16 @@ const AddOffender = ({
               editImage={editImage}
               fileList={fileList}
               imgChange={imgChange}
+              onCloseFaces={onCloseFaces}
               onEditImage={onEditImage}
               onRemoveImage={onRemoveImage}
+              onSelectFace={onSelectFace}
               primaryImage={primaryImage}
               setPrimaryImage={setPrimaryImage}
               titleOrder={adminRights ? 5 : 3}
               toggleEditImage={toggleEditImage}
+              uploadFaces={uploadFaces}
+              uploading={uploading}
             />
           )}
           {groups.length > 1 && (

@@ -1,40 +1,41 @@
 import React from 'react';
+
 import View from './LinkBusiness.view';
 import useAddBusiness from './useLinkBusiness';
 
 interface Props {
   onClose: () => void;
+  saving: boolean;
+  update: (value: string) => void;
 }
 
-const AddBusiness = ({ onClose }: Props) => {
+const AddBusiness = ({ onClose, saving: origSaving, update }: Props) => {
   const {
-    onSubmit,
-    saving,
-    currentPage,
-    currentPageSize,
     data,
     loading,
-    onPaginationChange,
     onSearchBusiness,
-    selectedValue,
+    onSelect,
+    onSubmit,
+    pagination,
+    resetPage,
+    saving,
     searchValue,
-    onTableChange,
-  } = useAddBusiness({ onClose });
+    setPagination,
+  } = useAddBusiness({ onClose, update });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
-      currentPage={currentPage}
-      currentPageSize={currentPageSize}
       data={data}
       loading={loading}
-      onPaginationChange={onPaginationChange}
+      onClose={onClose}
       onSearchBusiness={onSearchBusiness}
-      onTableChange={onTableChange}
+      onSelect={onSelect}
+      onSubmit={onSubmit}
+      pagination={pagination}
+      resetPage={resetPage}
+      saving={saving || origSaving}
       searchValue={searchValue}
-      selectedValue={selectedValue}
+      setPagination={setPagination}
     />
   );
 };

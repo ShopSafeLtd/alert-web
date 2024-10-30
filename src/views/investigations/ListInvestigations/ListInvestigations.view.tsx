@@ -4,6 +4,7 @@ import type { InvestigationRelayQuery } from 'graphql/investigations/queries/__g
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { useStoreActions, useStoreState } from '#/state';
+import FormatCalendar from '#/utils/format-calendar-24h';
 import {
   Button,
   Col,
@@ -198,7 +199,9 @@ const ListInvestigations = ({
           {
             dataIndex: 'createdAt',
             key: 'createdAt',
-            render: (value: string) => moment(value).format('DD/MM/YYYY'),
+            render: (value: Date) => FormatCalendar(new Date(value), true),
+
+            // render: (value: string) => moment(value).format('DD/MM/YYYY'),
             title: <FormattedMessage defaultMessage="Date Opened" />,
           },
           {

@@ -44,7 +44,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import type { BanType, FormData } from './useEditOffender';
-
+// Check if it is deprecated
 const { Paragraph, Title } = Typography;
 
 interface AddressForm {
@@ -498,12 +498,16 @@ const EditOffender = ({
               editImage={editImage}
               fileList={fileList}
               imgChange={imgChange}
+              onCloseFaces={() => {}}
               onEditImage={onEditImage}
               onRemoveImage={onRemoveImage}
+              onSelectFace={() => {}}
               primaryImage={primaryImage}
               setPrimaryImage={setPrimaryImage}
               titleOrder={adminRights ? 5 : 2}
               toggleEditImage={toggleEditImage}
+              uploadFaces={[]}
+              uploading={false}
             />
 
             <Card>

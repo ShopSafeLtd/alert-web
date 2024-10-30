@@ -1,73 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Col, message, Row, Upload } from 'antd';
-import { createUseStyles } from 'react-jss';
+import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { ImagePosition } from 'graphql/types';
+
 import {
   faCheckCircle as faCheckedCircle,
   faUpload,
 } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Row, Upload, message } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import type { UploadChangeParam } from 'antd/lib/upload';
-import type { ImagePosition } from 'graphql/types';
-import WatermarkImage from '../../images/WatermarkImage.view';
+import { createUseStyles } from 'react-jss';
+
 import type {
   ImageFaceType,
   ImageResponseType,
   StateImageData,
 } from '../../incidents/IncidentForm/ImageSection/useImageSection';
+
 import { useStoreState } from '../../../state';
 import compressImage from '../../../utils/compress-images';
+import WatermarkImage from '../../images/WatermarkImage.view';
 import FacesSelect from '../FacesSelect/FacesSelect.view';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  image: {
-    height: 150,
-    width: 150,
-    borderRadius: 10,
-    overflow: 'hidden',
-    border: `1px solid ${theme.borderColor}`,
+  buttonContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  check: {
+    background: '#FFF',
+    borderRadius: '100%',
     cursor: 'pointer',
+    height: 21,
+    position: 'absolute',
+    right: 12,
+    top: 5,
+    width: 21,
+    zIndex: 10,
   },
   container: {
     position: 'relative',
   },
-  check: {
-    position: 'absolute',
-    top: 5,
-    right: 12,
-    zIndex: 10,
-    background: '#FFF',
-    borderRadius: '100%',
-    width: 21,
-    height: 21,
+  image: {
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 10,
     cursor: 'pointer',
+    height: 150,
+    overflow: 'hidden',
+    width: 150,
   },
+  row: { marginTop: 10 },
   uploadIcon: {
     marginRight: 10,
   },
-  buttonContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  row: { marginTop: 10 },
 }));
 interface ImageResponse extends ImageResponseType {
-  uid: string;
   file?: StateImageData;
+  uid: string;
 }
 export interface ImageData {
-  uid: string;
-  id?: string;
-  url?: string | null | undefined;
-  fileName?: string | null;
-  type?: string | null;
-  optimised?: string | null | undefined;
-  position?: ImagePosition;
-  primary?: boolean | null | undefined;
-  policeImage?: boolean | null | undefined;
-  rotation?: number;
   boundingBox?: {
     height: string;
     left: string;
@@ -75,19 +68,19 @@ export interface ImageData {
     width: string;
   };
   file?: StateImageData;
+  fileName?: null | string;
+  id?: string;
+  optimised?: null | string | undefined;
+  policeImage?: boolean | null | undefined;
+  position?: ImagePosition;
+  primary?: boolean | null | undefined;
+  rotation?: number;
+  type?: null | string;
+  uid: string;
+  url?: null | string | undefined;
 }
 
 export interface ImageValue {
-  id: string;
-  url?: string | null | undefined;
-  optimised?: string | null | undefined;
-  fileName?: string | null;
-  type?: string | null;
-  new?: boolean;
-  position?: ImagePosition;
-  primary?: boolean | null | undefined;
-  policeImage?: boolean | null | undefined;
-  rotation?: number;
   boundingBox?: {
     height: string;
     left: string;
@@ -95,23 +88,33 @@ export interface ImageValue {
     width: string;
   };
   file?: StateImageData;
+  fileName?: null | string;
+  id: string;
+  new?: boolean;
+  optimised?: null | string | undefined;
+  policeImage?: boolean | null | undefined;
+  position?: ImagePosition;
+  primary?: boolean | null | undefined;
+  rotation?: number;
+  type?: null | string;
+  url?: null | string | undefined;
 }
 
 interface Props {
   images: ImageData[] | undefined;
-  // selectedImages: ImageData[] | undefined;
-  value?: ImageValue[] | null;
   onChange?: (value?: ImageValue[]) => void;
   setUploading: (value: boolean) => void;
   uploading: boolean;
+  // selectedImages: ImageData[] | undefined;
+  value?: ImageValue[] | null;
 }
 
 const ImageSelectAnalyse = ({
   images: imagesProp,
-  value,
   onChange,
   setUploading,
   uploading,
+  value,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
@@ -146,10 +149,10 @@ const ImageSelectAnalyse = ({
       setSelected([
         ...selected,
         {
-          url: image.url,
+          boundingBox: image.boundingBox,
           id: image.uid,
           optimised: image.url,
-          boundingBox: image.boundingBox,
+          url: image.url,
         },
       ]);
     }
@@ -168,29 +171,29 @@ const ImageSelectAnalyse = ({
       if (facialRec) {
         setUploadImage({
           ...info.file.response[0],
-          uid: info.file.uid,
           file: info.file,
+          uid: info.file.uid,
         });
       }
       setImages([
         ...images,
         {
-          url: info.file.response[0].url,
+          file: info.file,
           fileName: info.file.response[0].blobName,
+          optimised: info.file.response[0].url,
           type: info.file.response[0].mimetype,
           uid: info.file.uid,
-          file: info.file,
-          optimised: info.file.response[0].url,
+          url: info.file.response[0].url,
         },
       ]);
 
       setSelected([
         ...selected,
         {
-          url: info.file.response[0].url,
-          id: info.file.uid,
           file: info.file,
+          id: info.file.uid,
           optimised: info.file.response[0].url,
+          url: info.file.response[0].url,
         },
       ]);
       setUploading(false);
@@ -206,21 +209,21 @@ const ImageSelectAnalyse = ({
     setImages([
       ...images,
       {
-        url: face.imageURL,
+        file: uploadImage?.file,
         fileName: uploadImage?.blobName,
+        optimised: face.imageURL,
         type: uploadImage?.mimetype,
         uid: `${uploadImage?.blobName || ''}`,
-        file: uploadImage?.file,
-        optimised: face.imageURL,
+        url: face.imageURL,
       },
     ]);
     setSelected([
       ...selected,
       {
-        url: face.imageURL,
-        id: `${uploadImage?.blobName || ''}`,
         file: uploadImage?.file,
+        id: `${uploadImage?.blobName || ''}`,
         optimised: face.imageURL,
+        url: face.imageURL,
       },
     ]);
     setUploadImage(undefined);
@@ -229,17 +232,17 @@ const ImageSelectAnalyse = ({
   return (
     <div>
       <Upload
-        onChange={onImageChange}
-        showUploadList={false}
         action={
           facialDetection
             ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
             : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
         }
         beforeUpload={async (file) => compressImage(file)}
+        onChange={onImageChange}
+        showUploadList={false}
       >
-        <Button loading={localUpload} disabled={localUpload}>
-          <FontAwesomeIcon icon={faUpload} className={classes.uploadIcon} />
+        <Button disabled={localUpload} loading={localUpload}>
+          <FontAwesomeIcon className={classes.uploadIcon} icon={faUpload} />
           {intl.formatMessage({
             defaultMessage: 'Upload Image',
           })}
@@ -248,30 +251,30 @@ const ImageSelectAnalyse = ({
       <Row className={classes.row} gutter={[16, 16]}>
         {images.map((image) => (
           <Col
-            key={image.uid}
             className={classes.container}
+            key={image.uid}
             onClick={() => toggleSelected(image)}
           >
             {selected.some(({ id }) => id === image.uid) && (
               <div className={classes.check}>
-                <FontAwesomeIcon size="xl" color="red" icon={faCheckedCircle} />
+                <FontAwesomeIcon color="red" icon={faCheckedCircle} size="xl" />
               </div>
             )}
             <div className={classes.image}>
               <WatermarkImage
-                url={image.url}
                 position={image.position}
                 rotation={image.rotation || 0}
+                url={image.url}
               />
             </div>
           </Col>
         ))}
       </Row>
       <FacesSelect
-        submitFace={onSelectFace}
+        faces={uploadImage?.faces}
         onClose={() => setUploadImage(undefined)}
         open={!!(uploadImage?.faces && uploadImage.faces.length > 0)}
-        faces={uploadImage?.faces}
+        submitFace={onSelectFace}
       />
     </div>
   );

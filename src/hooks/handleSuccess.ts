@@ -1,10 +1,4 @@
-import { type SetUserPayload } from '#/state';
 import type { SetSchemePayload, Translations } from '#/state/scheme-model';
-import { GoodsMode } from 'graphql/types';
-import LogRocket from 'logrocket';
-import Mixpanel from '#/utils/mixpanel';
-import * as Sentry from '@sentry/react';
-import type { ActionCreator } from 'easy-peasy';
 import type {
   SetDemPayload,
   SetFilterDefaultGroup,
@@ -12,50 +6,57 @@ import type {
   SetUserRole,
   SetUserTodos,
 } from '#/state/user-model';
+import type { ActionCreator } from 'easy-peasy';
+
+import { type SetUserPayload } from '#/state';
+import Mixpanel from '#/utils/mixpanel';
+import * as Sentry from '@sentry/react';
+import { GoodsMode } from 'graphql/types';
+import LogRocket from 'logrocket';
 
 interface HandleSuccessArgs extends SetUserPayload {
   accessToken: string;
-  defaultScheme?: string;
-  currentScheme?: string;
-  setRole: ActionCreator<SetUserRole>;
-  setTodos: ActionCreator<SetUserTodos>;
-
-  setNotifications: ActionCreator<SetUserNotifications>;
-  setFilterDefaultGroup: ActionCreator<SetFilterDefaultGroup>;
-  setScheme: ActionCreator<SetSchemePayload>;
-  setUser: ActionCreator<SetUserPayload>;
-  setDem: ActionCreator<SetDemPayload>;
   authenticated: ActionCreator<string>;
+  currentScheme?: string;
+  defaultScheme?: string;
+  setDem: ActionCreator<SetDemPayload>;
+
+  setFilterDefaultGroup: ActionCreator<SetFilterDefaultGroup>;
+  setNotifications: ActionCreator<SetUserNotifications>;
+  setRole: ActionCreator<SetUserRole>;
+  setScheme: ActionCreator<SetSchemePayload>;
+  setTodos: ActionCreator<SetUserTodos>;
+  setUser: ActionCreator<SetUserPayload>;
 }
 
 export const handleSuccess = async ({
-  id,
   accessToken,
-  fullName,
-  origName,
-  email,
+  authenticated,
   businesses,
-  onboarded,
-  schemes,
-  demId,
-  reference,
-  userNotifications,
-  userMessages,
-  defaultGroups,
-  reportToAllBusinesses,
-  defaultScheme,
-  forcePasswordReset,
-  hasPassword,
-  termsExpired,
   currentScheme,
+  defaultGroups,
+  defaultScheme,
+  demId,
+  email,
+  forcePasswordReset,
+  fullName,
+  hasPassword,
+  id,
+  onboarded,
+  origName,
+  reference,
+  reportToAllBusinesses,
+  schemes,
+  setDem,
+  setFilterDefaultGroup,
+  setNotifications,
   setRole,
   setScheme,
-  setFilterDefaultGroup,
   setTodos,
-  setNotifications,
   setUser,
-  setDem,
-  authenticated,
+  termsExpired,
+  userMessages,
+  userNotifications,
 }: // eslint-disable-next-line @typescript-eslint/require-await
 HandleSuccessArgs) => {
   // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
@@ -67,31 +68,32 @@ HandleSuccessArgs) => {
     window.localStorage.setItem('currentScheme', schemeDetails?.id || '');
     setRole({ role: defScheme?.role });
     setScheme({
-      autoPopulateDescription: schemeDetails?.autoPopulateDescription,
-      needJustification: schemeDetails?.needJustification,
-      requireSiteNumberForUsers: schemeDetails?.requireSiteNumberForUsers,
-      oneSelectedIncidentTypeOnly: schemeDetails?.oneSelectedIncidentTypeOnly,
+      activityAssignToUser: schemeDetails?.activityAssignToUser,
       autoApproveIncidents: schemeDetails?.autoApproveIncidents,
       autoApproveOffenders: schemeDetails?.autoApproveOffenders,
-      restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
-      reportOnly: schemeDetails?.reportOnly,
-      defaultPublicOffenderDOB: schemeDetails?.defaultPublicOffenderDOB,
-      id: schemeDetails?.id,
-      name: schemeDetails?.name,
-      logo: schemeDetails?.logo?.optimisedPersisted,
-      darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
-      userTodos: schemeDetails?.userTodos || 0,
-      userNotifications: schemeDetails?.userNotifications || 0,
-      translations: schemeDetails?.customTranslations as Translations[],
-      goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
-      facialRecognition: schemeDetails?.facialRecognition,
-      facialDetection: schemeDetails?.facialDetection,
-      imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
-      taskTimeTracking: schemeDetails?.taskTimeTracking,
-      languageCount: schemeDetails?.languageCount || 0,
+      autoPopulateDescription: schemeDetails?.autoPopulateDescription,
       connectedToSchemes: schemeDetails?.connectedToSchemes || [],
-      activityAssignToUser: schemeDetails?.activityAssignToUser,
+      darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
+      defaultPublicOffenderDOB: schemeDetails?.defaultPublicOffenderDOB,
+      facialDetection: schemeDetails?.facialDetection,
+      facialRecognition: schemeDetails?.facialRecognition,
+      facialRedaction: schemeDetails?.facialRedaction,
+      goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
+      id: schemeDetails?.id,
+      imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
+      languageCount: schemeDetails?.languageCount || 0,
+      logo: schemeDetails?.logo?.optimisedPersisted,
+      name: schemeDetails?.name,
+      needJustification: schemeDetails?.needJustification,
+      oneSelectedIncidentTypeOnly: schemeDetails?.oneSelectedIncidentTypeOnly,
+      reportOnly: schemeDetails?.reportOnly,
+      requireSiteNumberForUsers: schemeDetails?.requireSiteNumberForUsers,
+      restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
+      taskTimeTracking: schemeDetails?.taskTimeTracking,
+      translations: schemeDetails?.customTranslations as Translations[],
       useBusinessGroupsOnIncident: schemeDetails?.useBusinessGroupsOnIncident,
+      userNotifications: schemeDetails?.userNotifications || 0,
+      userTodos: schemeDetails?.userTodos || 0,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(
@@ -114,36 +116,37 @@ HandleSuccessArgs) => {
     if (schemeDetails) {
       setRole({ role: schemeDetails.role });
       setScheme({
-        autoPopulateDescription: schemeDetails.scheme.autoPopulateDescription,
-        needJustification: schemeDetails.scheme.needJustification,
-        requireSiteNumberForUsers:
-          schemeDetails.scheme.requireSiteNumberForUsers,
-        oneSelectedIncidentTypeOnly:
-          schemeDetails.scheme.oneSelectedIncidentTypeOnly,
+        activityAssignToUser: schemeDetails.scheme.activityAssignToUser,
         autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
         autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
-        restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,
-        reportOnly: schemeDetails.scheme.reportOnly,
-        defaultPublicOffenderDOB: schemeDetails.scheme.defaultPublicOffenderDOB,
-        id: schemeDetails.scheme.id,
-        name: schemeDetails.scheme.name,
-        logo: schemeDetails.scheme.logo?.optimisedPersisted,
+        autoPopulateDescription: schemeDetails.scheme.autoPopulateDescription,
+        connectedToSchemes: schemeDetails.scheme.connectedToSchemes || [],
         darkLogo: schemeDetails.scheme.darkLogo?.optimisedPersisted,
-        userTodos: schemeDetails.scheme.userTodos,
-        userNotifications: schemeDetails?.scheme.userNotifications,
-        translations: schemeDetails?.scheme
-          .customTranslations as Translations[],
-        goodsMode: schemeDetails.scheme.goodsMode,
-        facialRecognition: schemeDetails.scheme.facialRecognition,
+        defaultPublicOffenderDOB: schemeDetails.scheme.defaultPublicOffenderDOB,
         facialDetection: schemeDetails.scheme.facialDetection,
+        facialRecognition: schemeDetails.scheme.facialRecognition,
+        facialRedaction: schemeDetails.scheme.facialRedaction,
+        goodsMode: schemeDetails.scheme.goodsMode,
+        id: schemeDetails.scheme.id,
         imagesRequiredOnOffenders:
           schemeDetails.scheme.imagesRequiredOnOffenders,
-        taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
         languageCount: schemeDetails.scheme.languageCount || 0,
-        connectedToSchemes: schemeDetails.scheme.connectedToSchemes || [],
-        activityAssignToUser: schemeDetails.scheme.activityAssignToUser,
+        logo: schemeDetails.scheme.logo?.optimisedPersisted,
+        name: schemeDetails.scheme.name,
+        needJustification: schemeDetails.scheme.needJustification,
+        oneSelectedIncidentTypeOnly:
+          schemeDetails.scheme.oneSelectedIncidentTypeOnly,
+        reportOnly: schemeDetails.scheme.reportOnly,
+        requireSiteNumberForUsers:
+          schemeDetails.scheme.requireSiteNumberForUsers,
+        restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,
+        taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
+        translations: schemeDetails?.scheme
+          .customTranslations as Translations[],
         useBusinessGroupsOnIncident:
           schemeDetails.scheme.useBusinessGroupsOnIncident,
+        userNotifications: schemeDetails?.scheme.userNotifications,
+        userTodos: schemeDetails.scheme.userTodos,
       });
       setFilterDefaultGroup({
         filterDefaultGroups: defaultGroups.filter(
@@ -172,45 +175,45 @@ HandleSuccessArgs) => {
   // }
 
   LogRocket.identify(id, {
-    fullName,
     email,
+    fullName,
   });
 
   Mixpanel.identify(id);
   Mixpanel.people.set({
-    name: fullName || '',
     businessId: businesses[0]?.id || '',
     businessName: businesses[0]?.name || '',
+    name: fullName || '',
   });
   const filterDefaultGroups = defaultGroups.filter(
     (el) => el.scheme.id === scheme
   );
-  Sentry.setUser({ email, username: fullName, id });
+  Sentry.setUser({ email, id, username: fullName });
   setUser({
-    id,
-    email,
-    fullName,
-    origName,
     businesses,
-    onboarded,
-    schemes,
-    hasPassword,
-    forcePasswordReset,
-    isSet: true,
-    demId,
-    reference,
-    userNotifications,
-    userMessages,
     defaultGroups,
+    demId,
+    email,
     filterDefaultGroups,
+    forcePasswordReset,
+    fullName,
+    hasPassword,
+    id,
+    isSet: true,
+    onboarded,
+    origName,
+    reference,
     reportToAllBusinesses,
+    schemes,
     termsExpired,
+    userMessages,
+    userNotifications,
   });
 
   const businessToDem = (businesses
     // eslint-disable-next-line no-confusing-arrow
     .map((business) =>
-      business.demId ? { name: business.name, id: business.demId } : null
+      business.demId ? { id: business.demId, name: business.name } : null
     )
     .filter((el) => el !== null) || []) as { id: string; name: string }[];
   setDem({ dem: businessToDem });

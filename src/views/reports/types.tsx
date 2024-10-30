@@ -8,11 +8,14 @@ export interface ExtendedLayout extends RGL.Layout {
 }
 
 export type AllowedValue =
+  | 'activitiesTable'
   | 'basicPoliceSummary'
   | 'businessContributionTable'
   | 'businessCrimeTypeGraph'
   | 'businessIncidentCountGraph'
   | 'businessLossRecoveredGraph'
+  | 'checklistQuestionsTable'
+  | 'checklistsTable'
   | 'createdSummary'
   | 'crimeGroupTable'
   | 'crimeTypesByBusinessRadial'
@@ -68,8 +71,13 @@ export type MetaDataAllowedValue = 'globalFilter' | AllowedValue;
 export type MetaDataItemTypes = 'globalFilter' | ReportItemTypes;
 
 export type ReportViews =
+  | 'activity_table'
   | 'business'
+  | 'checklist_question_table'
+  | 'checklist_table'
   | 'crime_group'
+  | 'incident_table'
+  | 'investigation_table'
   | 'offender'
   | 'offender_table'
   | 'summary';

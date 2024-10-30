@@ -12,21 +12,15 @@ import {
   IncidentsFeedDocument,
   useIncidentsFeedQuery,
 } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
-import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
-import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
+import { QueryMode, Role, SortOrder } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
 
 interface Return {
   clearFilters: () => void;
-  crimeTypes: { label: string; value: string }[];
   data: IncidentsFeedQuery | undefined;
   fetchMoreScroll: () => void;
-  goods: { label: string; value: string }[];
-
-  goodsLoading: boolean;
   groups: { label: string; value: string }[];
   groupsLoading: boolean;
   isUser: boolean;
@@ -63,15 +57,12 @@ interface Return {
         }
       | undefined
   ) => void;
-
   setOrder: (value: IncidentSort) => void;
-
   setPeculiarities: (value: string) => void;
   setSearch: (value: string) => void;
   setTableView: () => void;
   sortFilter: boolean;
   tableView: boolean;
-  tagsLoading: boolean;
   toggleSortFilter: () => void;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   variables: IncidentFilters;
@@ -306,37 +297,6 @@ const useIncidentFeed = (): Return => {
   // Fetch scheme groups if scheme admin
   const { groups: groupsData, groupsLoading } = useGroupsContext();
 
-  // Fetch scheme tags
-  const { data: tagsData, loading: tagsLoading } = useTagsQuery({
-    variables: {
-      where: {
-        dataType: {
-          equals: Model.Incident,
-        },
-        schemes: {
-          some: {
-            id: {
-              in: [schemeId],
-            },
-          },
-        },
-        type: {
-          equals: TagType.IncidentCrimeType,
-        },
-      },
-    },
-  });
-
-  const { data: goodsData, loading: goodsLoading } = useListGoodsTypesQuery({
-    variables: {
-      where: {
-        schemes: {
-          id: { equals: schemeId },
-        },
-      },
-    },
-  });
-
   // On mount
   useEffect(() => {
     if (groups.length === 0)
@@ -570,19 +530,10 @@ const useIncidentFeed = (): Return => {
   return {
     clearFilters,
     // onCrimeTypesChange,
-    crimeTypes:
-      tagsData?.tags?.map((tag) => ({
-        label: tag?.name || '',
-        value: tag?.id || '',
-      })) || [],
+
     data,
     fetchMoreScroll,
-    goods:
-      goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
-        label: item.name,
-        value: item.id,
-      })) || [],
-    goodsLoading,
+
     groups: groupsData,
     groupsLoading,
     isUser,
@@ -607,7 +558,7 @@ const useIncidentFeed = (): Return => {
     setTableView,
     sortFilter,
     tableView,
-    tagsLoading,
+
     toggleSortFilter,
     updateIncidentList,
     // onGroupsChange,

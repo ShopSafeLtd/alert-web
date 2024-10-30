@@ -1,0 +1,5 @@
+mutation deleteEvidence($id: String!) {
+  deleteEvidence(where: { id: $id }) {
+    id
+  }
+}

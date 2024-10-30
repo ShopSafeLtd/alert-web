@@ -51,6 +51,7 @@ query currentUser(
         reportOnly
         facialRecognition
         facialDetection
+        facialRedaction
         activityAssignToUser
         useBusinessGroupsOnIncident
         imagesRequiredOnOffenders

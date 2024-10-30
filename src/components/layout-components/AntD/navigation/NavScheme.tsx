@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Dropdown, Input, Row, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { Theme } from 'configs/ThemeConfig';
+import type { Scheme } from 'state';
+
 import { faArrowRight } from '@fortawesome/pro-light-svg-icons';
 import { faCaretDown } from '@fortawesome/pro-solid-svg-icons';
-import { LocalStorageKeys } from 'types';
-
-import type { Scheme } from 'state';
-import { useStoreActions, useStoreState } from 'state';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Dropdown, Input, Row, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
-import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
-import { useIntl } from 'react-intl';
+import { useStoreActions, useStoreState } from 'state';
+import { LocalStorageKeys } from 'types';
 
 const { Text } = Typography;
 
 const useStyles = createUseStyles((theme: Theme) => ({
+  active: {
+    backgroundColor: theme.imageBackgroundColor,
+  },
   notificationCol: {
-    borderBottom: `1px solid ${theme.borderColor}`,
-    cursor: 'pointer',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     '&:hover': {
       backgroundColor: theme.hoverBackground,
     },
-    paddingTop: 10,
-    paddingBottom: 10,
+    alignItems: 'center',
+    borderBottom: `1px solid ${theme.borderColor}`,
     borderTop: `1px solid ${theme.borderColor}`,
-  },
-  active: {
-    backgroundColor: theme.imageBackgroundColor,
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingBottom: 10,
+    paddingTop: 10,
   },
 }));
 
@@ -77,30 +77,31 @@ export const NavScheme = () => {
       scheme.scheme.darkLogo?.optimisedPersisted || ''
     );
     setScheme({
-      languageCount: scheme.scheme.languageCount,
-      autoPopulateDescription: scheme.scheme.autoPopulateDescription,
-      needJustification: scheme.scheme.needJustification,
-      requireSiteNumberForUsers: scheme.scheme.requireSiteNumberForUsers,
-      oneSelectedIncidentTypeOnly: scheme.scheme.oneSelectedIncidentTypeOnly,
+      activityAssignToUser: scheme.scheme.activityAssignToUser,
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
-      defaultPublicOffenderDOB: scheme.scheme.defaultPublicOffenderDOB,
-      id: scheme.scheme.id,
-      name: scheme.scheme.name,
-      logo: scheme.scheme.logo?.optimisedPersisted,
-      darkLogo: scheme.scheme.darkLogo?.optimisedPersisted,
-      userTodos: scheme.scheme.userTodos,
-      userNotifications: scheme.scheme.userNotifications,
-      goodsMode: scheme.scheme.goodsMode,
-      facialRecognition: scheme.scheme.facialRecognition,
-      activityAssignToUser: scheme.scheme.activityAssignToUser,
-      useBusinessGroupsOnIncident: scheme.scheme.useBusinessGroupsOnIncident,
-      imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
-      taskTimeTracking: scheme.scheme.taskTimeTracking,
-      restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
-      reportOnly: scheme.scheme.reportOnly,
-      facialDetection: scheme.scheme.facialDetection,
+      autoPopulateDescription: scheme.scheme.autoPopulateDescription,
       connectedToSchemes: scheme.scheme.connectedToSchemes,
+      darkLogo: scheme.scheme.darkLogo?.optimisedPersisted,
+      defaultPublicOffenderDOB: scheme.scheme.defaultPublicOffenderDOB,
+      facialDetection: scheme.scheme.facialDetection,
+      facialRecognition: scheme.scheme.facialRecognition,
+      facialRedaction: scheme.scheme.facialRedaction,
+      goodsMode: scheme.scheme.goodsMode,
+      id: scheme.scheme.id,
+      imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
+      languageCount: scheme.scheme.languageCount,
+      logo: scheme.scheme.logo?.optimisedPersisted,
+      name: scheme.scheme.name,
+      needJustification: scheme.scheme.needJustification,
+      oneSelectedIncidentTypeOnly: scheme.scheme.oneSelectedIncidentTypeOnly,
+      reportOnly: scheme.scheme.reportOnly,
+      requireSiteNumberForUsers: scheme.scheme.requireSiteNumberForUsers,
+      restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
+      taskTimeTracking: scheme.scheme.taskTimeTracking,
+      useBusinessGroupsOnIncident: scheme.scheme.useBusinessGroupsOnIncident,
+      userNotifications: scheme.scheme.userNotifications,
+      userTodos: scheme.scheme.userTodos,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(
@@ -122,42 +123,61 @@ export const NavScheme = () => {
 
   return schemes.length > 1 ? (
     <Dropdown
-      open={visible || !!search}
-      onOpenChange={handleVisibleChange}
+      dropdownRender={(menu) => (
+        <div className="dropdown-content">
+          <div>
+            {menu}
+
+            {schemes.length > 5 && (
+              <Input
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Search schemes...',
+                })}
+                style={{
+                  borderBottomLeftRadius: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
+                  borderTopWidth: 2.5,
+                  borderWidth: 0,
+                  paddingBottom: 10,
+                  paddingLeft: 30,
+                  paddingTop: 10,
+                  width: '100%',
+                }}
+                value={search}
+              />
+            )}
+          </div>
+        </div>
+      )}
       menu={{
-        style: {
-          maxHeight: 400,
-          overflowY: 'auto',
-          colorScheme: currentTheme,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
-        },
         items:
           filteredSchemes.length > 0
             ? filteredSchemes.map((scheme) => ({
-                key: scheme.id,
                 className:
                   activeScheme === scheme.scheme.id
                     ? classes.active
                     : undefined,
+                key: scheme.id,
                 label: (
                   <Row
                     align="middle"
-                    style={{
-                      width: '100%',
-                      paddingRight: 10,
-                      paddingLeft: 10,
-                      paddingTop: 4,
-                      paddingBottom: 4,
-                    }}
                     onClick={() => handleSchemeChange(scheme)}
+                    style={{
+                      paddingBottom: 4,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      paddingTop: 4,
+                      width: '100%',
+                    }}
                     wrap={false}
                   >
                     <Col flex={1}>
                       <Text
-                        ellipsis
-                        style={{ maxWidth: 180, marginRight: 20 }}
                         className="text-dark"
+                        ellipsis
+                        style={{ marginRight: 20, maxWidth: 180 }}
                       >
                         {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                         {scheme.scheme.name}{' '}
@@ -189,19 +209,19 @@ export const NavScheme = () => {
                     <Row
                       align="middle"
                       style={{
-                        width: '100%',
-                        paddingRight: 10,
-                        paddingLeft: 10,
-                        paddingTop: 4,
                         paddingBottom: 4,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        paddingTop: 4,
+                        width: '100%',
                       }}
                       wrap={false}
                     >
                       <Col flex={1}>
                         <Text
-                          ellipsis
-                          style={{ maxWidth: 180, marginRight: 20 }}
                           className="text-dark"
+                          ellipsis
+                          style={{ marginRight: 20, maxWidth: 180 }}
                         >
                           {intl.formatMessage({
                             defaultMessage: 'No schemes found',
@@ -212,48 +232,29 @@ export const NavScheme = () => {
                   ),
                 },
               ],
+        style: {
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+          colorScheme: currentTheme,
+          maxHeight: 400,
+          overflowY: 'auto',
+        },
       }}
+      onOpenChange={handleVisibleChange}
+      open={visible || !!search}
       placement="topRight"
-      dropdownRender={(menu) => (
-        <div className="dropdown-content">
-          <div>
-            {menu}
-
-            {schemes.length > 5 && (
-              <Input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Search schemes...',
-                })}
-                style={{
-                  width: '100%',
-                  borderWidth: 0,
-                  borderTopWidth: 2.5,
-                  borderTopRightRadius: 0,
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  paddingLeft: 30,
-                }}
-              />
-            )}
-          </div>
-        </div>
-      )}
     >
       <div className={classes.notificationCol}>
-        <Text style={{ maxWidth: 120 }} ellipsis>
+        <Text ellipsis style={{ maxWidth: 120 }}>
           {activeSchemeName}
         </Text>
         <FontAwesomeIcon
+          icon={faCaretDown}
           style={{
             fontSize: 18,
             marginLeft: 10,
             marginTop: -2,
           }}
-          icon={faCaretDown}
         />
       </div>
     </Dropdown>

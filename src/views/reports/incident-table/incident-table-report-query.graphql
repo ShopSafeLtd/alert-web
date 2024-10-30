@@ -1,0 +1,18 @@
+query IncidentTableReport($where: IncidentTableWhereInput!) {
+  incidentTableReport(where: $where) {
+    total
+    incidentPerformance {
+      alertId
+      id
+      date
+      createdAt
+      subject
+      totalBulletins
+      totalOffenders
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      primaryPhoto
+    }
+  }
+}

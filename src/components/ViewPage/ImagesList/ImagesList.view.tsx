@@ -126,8 +126,6 @@ const ImagesList = ({
     update: updateImagesList,
   });
   const onSelectFaces = (faces: ImageFaceType[]) => {
-    console.log('faces', faces);
-
     const facesUrl = new Set(faces.map((face) => face.imageURL));
     const blurFaces = uploadFaces.filter((el) => !facesUrl.has(el.imageURL));
     if (blurFaces && uploadImage) {

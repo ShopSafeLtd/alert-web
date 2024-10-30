@@ -1,0 +1,22 @@
+query DemGroups(
+  $skip: Int
+  $take: Int
+  $orderBy: [DemGroupOrderByWithRelationInput!]
+  $where: DemGroupWhereInput
+) {
+  demGroups(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        demId
+        totalDevices
+        demDevices {
+          id
+          name
+        }
+      }
+    }
+  }
+}

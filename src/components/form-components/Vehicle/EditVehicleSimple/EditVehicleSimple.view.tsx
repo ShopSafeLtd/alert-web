@@ -1,28 +1,30 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
-import { Button, Col, Form, Input, Row, Skeleton } from 'antd';
-import type { VehicleData } from 'types/DataType';
-import { useIntl } from 'react-intl';
 import type { ImageData } from 'components/form-components/ImageSelect/ImageSelect.view';
+import type { VehicleData } from 'types/DataType';
+
+import { Button, Col, Form, Input, Row, Skeleton } from 'antd';
 import ImageSelect from 'components/form-components/ImageSelect/ImageSelect.view';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { FormData } from './useEditVehicleSimple';
 
 interface Props {
-  onClose: () => void;
-  editData: VehicleData | undefined | null;
-  onSubmit: (value: FormData) => void;
-  saving: boolean;
+  editData: VehicleData | null | undefined;
   form: FormInstance<FormData>;
   images?: ImageData[];
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
 }
 
 const EditVehicle = ({
-  onClose,
-  onSubmit,
   editData,
-  saving,
   form,
   images,
+  onClose,
+  onSubmit,
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const filteredImages = images?.filter(
@@ -35,34 +37,34 @@ const EditVehicle = ({
   return editData ? (
     <div>
       <Form<FormData>
+        form={form}
         initialValues={{
+          colour: editData.colour || '',
+          images: editData.images || null,
           make: editData.make || '',
           model: editData.model || '',
-          colour: editData.colour || '',
           registration: editData.registration || '',
-          images: editData.images || null,
         }}
         layout="vertical"
         onFinish={onSubmit}
-        form={form}
       >
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="make"
               label={intl.formatMessage({
                 defaultMessage: 'Make',
               })}
+              name="make"
             >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="model"
               label={intl.formatMessage({
                 defaultMessage: 'Model',
               })}
+              name="model"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -71,20 +73,20 @@ const EditVehicle = ({
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="colour"
               label={intl.formatMessage({
                 defaultMessage: 'Colour',
               })}
+              name="colour"
             >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="registration"
               label={intl.formatMessage({
                 defaultMessage: 'Registration',
               })}
+              name="registration"
             >
               <Input disabled={saving} />
             </Form.Item>
@@ -92,10 +94,10 @@ const EditVehicle = ({
         </Row>
 
         <Form.Item
-          name="images"
           label={intl.formatMessage({
             defaultMessage: 'Images',
           })}
+          name="images"
           tooltip={intl.formatMessage({
             defaultMessage: 'Select the images that the vehicle is in.',
           })}
@@ -103,7 +105,7 @@ const EditVehicle = ({
           <ImageSelect images={allImages} value={editData.images} />
         </Form.Item>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -111,10 +113,10 @@ const EditVehicle = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({ defaultMessage: 'Save' })}
               </Button>

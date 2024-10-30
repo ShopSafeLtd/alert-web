@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
+
 import { action } from 'easy-peasy';
 import { GoodsMode } from 'graphql/types';
 
@@ -10,126 +11,78 @@ export interface Translations {
 }
 
 export interface SetSchemePayload {
-  name: string;
+  activityAssignToUser: boolean;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
-  restrictIncidentAccess: boolean;
-  reportOnly: boolean;
-  defaultPublicOffenderDOB: boolean;
-  id: string;
-  logo?: string | null | undefined;
-  darkLogo?: string | null | undefined;
-  userTodos?: number | null | undefined;
-  userNotifications?: number | null | undefined;
-  translations?: Translations[];
-  goodsMode: GoodsMode;
-  facialRecognition: boolean;
-  facialDetection: boolean;
-  imagesRequiredOnOffenders: boolean;
-  taskTimeTracking: boolean;
-  languageCount: number;
   autoPopulateDescription: boolean;
-  needJustification: boolean;
-  requireSiteNumberForUsers: boolean;
-  oneSelectedIncidentTypeOnly: boolean;
   connectedToSchemes: {
     id: string;
     name: string;
   }[];
-  activityAssignToUser: boolean;
+  darkLogo?: null | string | undefined;
+  defaultPublicOffenderDOB: boolean;
+  facialDetection: boolean;
+  facialRecognition: boolean;
+  facialRedaction: boolean;
+  goodsMode: GoodsMode;
+  id: string;
+  imagesRequiredOnOffenders: boolean;
+  languageCount: number;
+  logo?: null | string | undefined;
+  name: string;
+  needJustification: boolean;
+  oneSelectedIncidentTypeOnly: boolean;
+  reportOnly: boolean;
+  requireSiteNumberForUsers: boolean;
+  restrictIncidentAccess: boolean;
+  taskTimeTracking: boolean;
+  translations?: Translations[];
   useBusinessGroupsOnIncident: boolean;
+  userNotifications?: null | number | undefined;
+  userTodos?: null | number | undefined;
 }
 
 export interface SchemeModel {
-  id: string;
-  name: string;
+  activityAssignToUser: boolean;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
-  restrictIncidentAccess: boolean;
-  reportOnly: boolean;
-  defaultPublicOffenderDOB: boolean;
-  setScheme: Action<SchemeModel, SetSchemePayload>;
-  clearScheme: Action<SchemeModel>;
-  logo?: string | null | undefined;
-  darkLogo?: string | null | undefined;
-  userTodos?: number | null | undefined;
-  userNotifications?: number | null | undefined;
-  translations?: Translations[];
-  goodsMode: GoodsMode;
-  facialRecognition: boolean;
-  facialDetection: boolean;
-  imagesRequiredOnOffenders: boolean;
-  taskTimeTracking: boolean;
-  languageCount: number;
   autoPopulateDescription: boolean;
-  needJustification: boolean;
-  requireSiteNumberForUsers: boolean;
-  oneSelectedIncidentTypeOnly: boolean;
+  clearScheme: Action<SchemeModel>;
   connectedToSchemes: {
     id: string;
     name: string;
   }[];
+  darkLogo?: null | string | undefined;
+  defaultPublicOffenderDOB: boolean;
+  facialDetection: boolean;
+  facialRecognition: boolean;
+  facialRedaction: boolean;
+  goodsMode: GoodsMode;
   hasConnectedSchemes: boolean;
-  activityAssignToUser: boolean;
+  id: string;
+  imagesRequiredOnOffenders: boolean;
+  languageCount: number;
+  logo?: null | string | undefined;
+  name: string;
+
+  needJustification: boolean;
+  oneSelectedIncidentTypeOnly: boolean;
+  reportOnly: boolean;
+  requireSiteNumberForUsers: boolean;
+  restrictIncidentAccess: boolean;
+  setScheme: Action<SchemeModel, SetSchemePayload>;
+  taskTimeTracking: boolean;
+  translations?: Translations[];
   useBusinessGroupsOnIncident: boolean;
+  userNotifications?: null | number | undefined;
+  userTodos?: null | number | undefined;
 }
 
 const userModel: SchemeModel = {
-  id: '',
+  activityAssignToUser: false,
   autoApproveIncidents: false,
   autoApproveOffenders: false,
-  restrictIncidentAccess: false,
-  reportOnly: false,
-  defaultPublicOffenderDOB: false,
-  name: 'Loading...',
-  logo: '',
-  darkLogo: '',
-  userTodos: 0,
-  userNotifications: 0,
-  translations: [],
-  goodsMode: GoodsMode.Generic,
-  facialRecognition: false,
-  facialDetection: false,
-  activityAssignToUser: false,
-  useBusinessGroupsOnIncident: false,
-  imagesRequiredOnOffenders: false,
-  taskTimeTracking: false,
-  languageCount: 0,
   autoPopulateDescription: true,
-  needJustification: false,
-  requireSiteNumberForUsers: false,
-  oneSelectedIncidentTypeOnly: false,
-  connectedToSchemes: [],
-  hasConnectedSchemes: false,
-  setScheme: action((state, payload) => {
-    state.id = payload.id;
-    state.autoApproveIncidents = payload.autoApproveIncidents;
-    state.autoApproveOffenders = payload.autoApproveOffenders;
-    state.restrictIncidentAccess = payload.restrictIncidentAccess;
-    state.reportOnly = payload.reportOnly;
-    state.defaultPublicOffenderDOB = payload.defaultPublicOffenderDOB;
-    state.name = payload.name;
-    state.logo = payload.logo;
-    state.darkLogo = payload.darkLogo;
-    state.userTodos = payload.userTodos;
-    state.userNotifications = payload.userNotifications;
-    state.translations = payload.translations;
-    state.goodsMode = payload.goodsMode;
-    state.facialRecognition = payload.facialRecognition;
-    state.imagesRequiredOnOffenders = payload.imagesRequiredOnOffenders;
-    state.activityAssignToUser = payload.activityAssignToUser;
-    state.useBusinessGroupsOnIncident = payload.useBusinessGroupsOnIncident;
-    state.taskTimeTracking = payload.taskTimeTracking;
-    state.languageCount = payload.languageCount;
-    state.autoPopulateDescription = payload.autoPopulateDescription;
-    state.needJustification = payload.needJustification;
-    state.requireSiteNumberForUsers = payload.requireSiteNumberForUsers;
-    state.oneSelectedIncidentTypeOnly = payload.oneSelectedIncidentTypeOnly;
-    state.facialDetection = payload.facialDetection;
-    state.connectedToSchemes = payload.connectedToSchemes;
-    state.hasConnectedSchemes =
-      payload.connectedToSchemes && payload.connectedToSchemes.length > 0;
-  }),
   clearScheme: action((state) => {
     state.id = '';
     state.autoApproveIncidents = false;
@@ -155,9 +108,64 @@ const userModel: SchemeModel = {
     state.requireSiteNumberForUsers = false;
     state.oneSelectedIncidentTypeOnly = false;
     state.facialDetection = false;
+    state.facialRedaction = false;
     state.connectedToSchemes = [];
     state.hasConnectedSchemes = false;
   }),
+  connectedToSchemes: [],
+  darkLogo: '',
+  defaultPublicOffenderDOB: false,
+  facialDetection: false,
+  facialRecognition: false,
+  facialRedaction: false,
+  goodsMode: GoodsMode.Generic,
+  hasConnectedSchemes: false,
+  id: '',
+  imagesRequiredOnOffenders: false,
+  languageCount: 0,
+
+  logo: '',
+  name: 'Loading...',
+  needJustification: false,
+  oneSelectedIncidentTypeOnly: false,
+  reportOnly: false,
+  requireSiteNumberForUsers: false,
+  restrictIncidentAccess: false,
+  setScheme: action((state, payload) => {
+    state.id = payload.id;
+    state.autoApproveIncidents = payload.autoApproveIncidents;
+    state.autoApproveOffenders = payload.autoApproveOffenders;
+    state.restrictIncidentAccess = payload.restrictIncidentAccess;
+    state.reportOnly = payload.reportOnly;
+    state.defaultPublicOffenderDOB = payload.defaultPublicOffenderDOB;
+    state.name = payload.name;
+    state.logo = payload.logo;
+    state.darkLogo = payload.darkLogo;
+    state.userTodos = payload.userTodos;
+    state.userNotifications = payload.userNotifications;
+    state.translations = payload.translations;
+    state.goodsMode = payload.goodsMode;
+    state.facialRecognition = payload.facialRecognition;
+    state.imagesRequiredOnOffenders = payload.imagesRequiredOnOffenders;
+    state.activityAssignToUser = payload.activityAssignToUser;
+    state.useBusinessGroupsOnIncident = payload.useBusinessGroupsOnIncident;
+    state.taskTimeTracking = payload.taskTimeTracking;
+    state.languageCount = payload.languageCount;
+    state.autoPopulateDescription = payload.autoPopulateDescription;
+    state.needJustification = payload.needJustification;
+    state.requireSiteNumberForUsers = payload.requireSiteNumberForUsers;
+    state.oneSelectedIncidentTypeOnly = payload.oneSelectedIncidentTypeOnly;
+    state.facialDetection = payload.facialDetection;
+    state.facialRedaction = payload.facialRedaction;
+    state.connectedToSchemes = payload.connectedToSchemes;
+    state.hasConnectedSchemes =
+      payload.connectedToSchemes && payload.connectedToSchemes.length > 0;
+  }),
+  taskTimeTracking: false,
+  translations: [],
+  useBusinessGroupsOnIncident: false,
+  userNotifications: 0,
+  userTodos: 0,
 };
 
 export default userModel;

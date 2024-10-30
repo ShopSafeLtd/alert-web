@@ -3,6 +3,7 @@ query SchemeRekognition($where: SchemeWhereUniqueInput!) {
     id
     facialRecognition
     facialDetection
+    facialRedaction
     rekCollections {
       id
       name
