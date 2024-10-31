@@ -86,6 +86,11 @@ const useIncidentMap = (): Return => {
             },
           },
         },
+        location: {
+          geoLat: {
+            not: null,
+          },
+        },
         scheme: {
           id: {
             in: selectedSchemes,
