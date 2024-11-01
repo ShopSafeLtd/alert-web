@@ -13,10 +13,9 @@ interface Props {
 
 const AddGroup = ({ onClose, update }: Props): JSX.Element => {
   const {
-    adminUsersData,
     onSubmit,
     saving,
-    selectedUsers,
+
     setSelectedUsers,
     setShowOffenderSettings,
     showOffenderSettings,
@@ -29,11 +28,9 @@ const AddGroup = ({ onClose, update }: Props): JSX.Element => {
 
   return (
     <View
-      adminUsersData={adminUsersData}
       onClose={onClose}
       onSubmit={onSubmit}
       saving={saving}
-      selectedUsers={selectedUsers}
       setSelectedUsers={setSelectedUsers}
       setShowOffenderSettings={setShowOffenderSettings}
       showOffenderSettings={showOffenderSettings}
