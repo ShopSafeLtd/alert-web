@@ -33,6 +33,15 @@ query ViewOffender(
     idVerified
     idSource
     totalImages
+    totalIncidents
+    incidents{
+      id
+      location {
+        id
+        geoLat
+        geoLng
+      }
+    }
     customGalleries {
       id
       name
@@ -89,13 +98,7 @@ query ViewOffender(
     vehicles {
       ...Vehicles
     }
-    incidents {
-      ...Incidents
-      business {
-        id
-        name
-      }
-    }
+
     evidence {
       ...Documents
     }

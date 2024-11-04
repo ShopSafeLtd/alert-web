@@ -13,6 +13,7 @@ const ViewOffender = (): JSX.Element => {
     addBan,
     addCrimeGroup,
     addDocument,
+
     addExistingVehicle,
     addImages,
     addInvestigation,
@@ -36,6 +37,10 @@ const ViewOffender = (): JSX.Element => {
     editVehicleData,
     handleEditUpdate,
     hasConnectedSchemes,
+    incidents,
+    incidentsLoading,
+    incidentsPagination,
+    incidentsPaginationDispatch,
     knowOffender,
     lightBoxOpen,
     linkIncident,
@@ -139,6 +144,10 @@ const ViewOffender = (): JSX.Element => {
       editVehicleData={editVehicleData}
       handleEditUpdate={handleEditUpdate}
       hasConnectedSchemes={hasConnectedSchemes}
+      incidents={incidents}
+      incidentsLoading={incidentsLoading}
+      incidentsPagination={incidentsPagination}
+      incidentsPaginationDispatch={incidentsPaginationDispatch}
       knowOffender={knowOffender}
       lightBoxOpen={lightBoxOpen}
       linkIncident={linkIncident}
