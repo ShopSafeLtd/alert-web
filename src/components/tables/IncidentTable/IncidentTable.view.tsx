@@ -46,20 +46,30 @@ interface Props {
         totalValue?: null | number;
       }[]
     | undefined;
+  loading?: boolean;
   onDelete?: (id: string) => void;
+  onPageChange?: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  page?: number;
   pageSize?: number;
   saving?: boolean;
   setEditData?: (id: string) => void;
+  total?: number;
 }
 
 const IncidentTable = ({
   deleteRights,
   hasNavigation,
   incidents,
+  loading,
   onDelete,
+  onPageChange,
+  onPageSizeChange,
+  page,
   pageSize,
   saving,
   setEditData,
+  total,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -67,7 +77,7 @@ const IncidentTable = ({
   const restrictIncidentAccess =
     useStoreState((state) => state.scheme.restrictIncidentAccess) &&
     role === Role.User;
-
+  console.log(page, pageSize, incidents?.length);
   return (
     <Table
       columns={[
@@ -218,11 +228,24 @@ const IncidentTable = ({
           subject: incident?.subject,
         })) || []
       }
+      loading={loading}
       pagination={{
-        defaultPageSize: 5 || pageSize,
-        hideOnSinglePage: true,
+        defaultPageSize: pageSize || 5,
+        hideOnSinglePage: !!(pageSize && pageSize < 100) ?? true,
+        onChange:
+          onPageSizeChange || onPageChange
+            ? (tablePage: number, tablePageSize: number) => {
+                if (onPageSizeChange && pageSize !== tablePageSize) {
+                  onPageSizeChange(tablePageSize);
+                }
+                if (onPageChange && page !== tablePage) {
+                  onPageChange(tablePage);
+                }
+              }
+            : undefined,
         pageSizeOptions: [5, 10, 20, 50, 100],
         showSizeChanger: true,
+        total: total || incidents?.length || 0,
       }}
       rowClassName={classes.row}
       size="small"

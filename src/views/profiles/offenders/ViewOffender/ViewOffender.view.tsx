@@ -1,5 +1,6 @@
 import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
+import type { OffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
@@ -95,7 +96,7 @@ import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import { BanType } from 'graphql/types';
 import moment from 'moment';
-import React from 'react';
+import React, { type Dispatch } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
@@ -112,7 +113,11 @@ import {
 } from 'utils/offender/get-offender-desc';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
 
-import type { ViewAssociate } from './useViewOffender';
+import type {
+  PaginationAction,
+  PaginationState,
+  ViewAssociate,
+} from './useViewOffender';
 
 import TranslateButton from '../../../../components/util-components/TranslateButton';
 import useStyles from './ViewOffender.styles';
@@ -161,6 +166,10 @@ interface Props {
   editVehicleData: VehicleData | null;
   handleEditUpdate: () => void;
   hasConnectedSchemes: boolean;
+  incidents: OffenderIncidentsQuery['offender']['incidents'] | null;
+  incidentsLoading: boolean;
+  incidentsPagination: PaginationState;
+  incidentsPaginationDispatch: Dispatch<PaginationAction>;
   knowOffender: boolean;
   lightBoxOpen: {
     index: number;
@@ -283,6 +292,10 @@ const ViewOffender = ({
   editVehicleData,
   handleEditUpdate,
   hasConnectedSchemes,
+  incidents,
+  incidentsLoading,
+  incidentsPagination,
+  incidentsPaginationDispatch,
   knowOffender,
   lightBoxOpen,
   linkIncident,
@@ -1536,18 +1549,34 @@ const ViewOffender = ({
                               defaultMessage: 'Incidents',
                             })}
                           </Title>
-                          {data?.offender?.incidents.length && !loading ? (
-                            <IncidentTable
-                              hasNavigation
-                              incidents={data?.offender?.incidents || []}
-                            />
-                          ) : (
+                          {loading ? (
                             <Empty
                               description={intl.formatMessage({
                                 defaultMessage:
                                   'No incidents for this offender',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          ) : (
+                            <IncidentTable
+                              hasNavigation
+                              incidents={incidents || []}
+                              loading={incidentsLoading}
+                              onPageChange={(page) =>
+                                incidentsPaginationDispatch({
+                                  payload: page,
+                                  type: 'changePage',
+                                })
+                              }
+                              onPageSizeChange={(pageSize) =>
+                                incidentsPaginationDispatch({
+                                  payload: pageSize,
+                                  type: 'changePageSize',
+                                })
+                              }
+                              page={incidentsPagination.currentPage}
+                              pageSize={incidentsPagination.pageSize}
+                              total={data?.offender.totalIncidents || 0}
                             />
                           )}
                         </Card>
@@ -1936,8 +1965,7 @@ const ViewOffender = ({
                     editRights={editRights}
                     loadMore={loadMore}
                     onAddToIncident={
-                      data?.offender.incidents &&
-                      data?.offender.incidents.length > 0
+                      incidents && incidents.length > 0
                         ? (value) => onAddUpdateImages(value, true)
                         : undefined
                     }
@@ -2383,7 +2411,7 @@ const ViewOffender = ({
         }}
         open={showIncidentOptions}
         title={intl.formatMessage({
-          defaultMessage: 'Select an incident to add the update images',
+          defaultMessage: 'Select an incident to add the updated images',
         })}
         width={600}
       >
@@ -2428,14 +2456,18 @@ const ViewOffender = ({
               }),
             },
           ]}
-          dataSource={data?.offender.incidents.map((incident) => ({
-            date: incident.dayTime,
-            incidentId: incident.id,
-            // location: incident.business?.name || incident.location?.full,
-            key: incident.id,
-            reference: incident.reference,
-            subject: incident.subject,
-          }))}
+          dataSource={
+            incidents
+              ? incidents.map((incident) => ({
+                  date: incident.dayTime,
+                  incidentId: incident.id,
+                  // location: incident.business?.name || incident.location?.full,
+                  key: incident.id,
+                  reference: incident.reference,
+                  subject: incident.subject,
+                }))
+              : []
+          }
           pagination={{
             defaultPageSize: 8,
             hideOnSinglePage: true,
