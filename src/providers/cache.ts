@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
+
 import { InMemoryCache } from '@apollo/client';
 
 const defaultFeedCacheMerge = (
@@ -28,21 +29,9 @@ const defaultFeedCacheMerge = (
 const { cache } = (function () {
   const cache2 = new InMemoryCache({
     typePolicies: {
-      User: {
+      Chat: {
         fields: {
-          schemes: {
-            // eslint-disable-next-line @typescript-eslint/default-param-last
-            merge(_existing = [], incoming: any[]) {
-              return [...incoming];
-            },
-          },
-          chats: {
-            // eslint-disable-next-line @typescript-eslint/default-param-last
-            merge(_existing = [], incoming: any[]) {
-              return [...incoming];
-            },
-          },
-          groups: {
+          members: {
             // eslint-disable-next-line @typescript-eslint/default-param-last
             merge(_existing = [], incoming: any[]) {
               return [...incoming];
@@ -60,18 +49,27 @@ const { cache } = (function () {
           },
         },
       },
-      Chat: {
+      Query: {
         fields: {
-          members: {
-            // eslint-disable-next-line @typescript-eslint/default-param-last
-            merge(_existing = [], incoming: any[]) {
+          chatMessages: {
+            keyArgs: ['where'],
+            merge(existing, incoming, { args, readField }) {
+              if (existing && args?.skip) {
+                const existingIds = new Set(
+                  existing.map((el: any) => readField('id', el))
+                );
+
+                return [
+                  ...existing,
+                  ...incoming.filter(
+                    (el: any) => !existingIds.has(readField('id', el))
+                  ),
+                ];
+                // return [...incoming]
+              }
               return [...incoming];
             },
           },
-        },
-      },
-      Query: {
-        fields: {
           incidentFeed: {
             keyArgs: [
               'schemeId',
@@ -82,8 +80,33 @@ const { cache } = (function () {
               'groups',
               'approved',
             ],
-            merge(existing, incoming, { readField, args }) {
+            merge(existing, incoming, { args, readField }) {
               return defaultFeedCacheMerge(existing, incoming, readField, args);
+            },
+          },
+          messages: {
+            keyArgs: ['where'],
+            merge(existing, incoming, { args, readField }) {
+              if (existing) {
+                const existingIds = new Set(
+                  existing.map((el: any) => readField('id', el))
+                );
+
+                return [
+                  ...existing,
+                  ...incoming.filter(
+                    (el: any) => !existingIds.has(readField('id', el))
+                  ),
+                ];
+                // return [...incoming]
+              }
+              return [...incoming];
+            },
+          },
+          offender: {
+            keyArgs: ['id'],
+            merge(existing, incoming) {
+              return { ...existing, ...incoming };
             },
           },
           offenderFeed: {
@@ -98,19 +121,19 @@ const { cache } = (function () {
               'sex',
               'approved',
             ],
-            merge(existing, incoming, { readField, args }) {
+            merge(existing, incoming, { args, readField }) {
               return defaultFeedCacheMerge(existing, incoming, readField, args);
             },
           },
           offenders: {
             keyArgs: ['schemeId', 'order', 'search', 'groups'],
-            merge(existing, incoming, { readField, args }) {
+            merge(existing, incoming, { args, readField }) {
               return defaultFeedCacheMerge(existing, incoming, readField, args);
             },
           },
           recycledItems: {
             keyArgs: ['schemeId'],
-            merge(existing, incoming, { readField, args }) {
+            merge(existing, incoming, { args, readField }) {
               let existingIds: any[] = [];
               let newExisting: any[] = [];
               let newItems: any[] = [];
@@ -136,41 +159,25 @@ const { cache } = (function () {
               return [...incoming];
             },
           },
-          messages: {
-            keyArgs: ['where'],
-            merge(existing, incoming, { readField, args }) {
-              if (existing) {
-                const existingIds = new Set(
-                  existing.map((el: any) => readField('id', el))
-                );
-
-                return [
-                  ...existing,
-                  ...incoming.filter(
-                    (el: any) => !existingIds.has(readField('id', el))
-                  ),
-                ];
-                // return [...incoming]
-              }
+        },
+      },
+      User: {
+        fields: {
+          chats: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
-          chatMessages: {
-            keyArgs: ['where'],
-            merge(existing, incoming, { readField, args }) {
-              if (existing && args?.skip) {
-                const existingIds = new Set(
-                  existing.map((el: any) => readField('id', el))
-                );
-
-                return [
-                  ...existing,
-                  ...incoming.filter(
-                    (el: any) => !existingIds.has(readField('id', el))
-                  ),
-                ];
-                // return [...incoming]
-              }
+          groups: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
+              return [...incoming];
+            },
+          },
+          schemes: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
@@ -183,4 +190,4 @@ const { cache } = (function () {
   };
 })();
 
-export { defaultFeedCacheMerge, cache };
+export { cache, defaultFeedCacheMerge };
