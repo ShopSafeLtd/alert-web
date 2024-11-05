@@ -233,7 +233,7 @@ const useIncidentSideList = (): Return => {
       },
       variables: {
         ...variables,
-        skip: data?.incidentsRelay?.edges?.length || 0,
+        after: data?.incidentsRelay?.pageInfo.endCursor,
       },
     });
   };
