@@ -2896,6 +2896,11 @@ export type CreateFlowInput = {
   name: Scalars['String'];
 };
 
+export type CreateGoodsTypeDataInput = {
+  name: Scalars['String'];
+  schemeIds: Array<Scalars['String']>;
+};
+
 export type CreateImageOptimistic = {
   uri: Scalars['String'];
 };
@@ -3964,6 +3969,7 @@ export type CustomQuestionsGraph = {
 
 export type CustomRole = {
   __typename?: 'CustomRole';
+  approvalTier: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
   dashboard: Dashboard;
   id: Scalars['ID'];
@@ -10284,6 +10290,7 @@ export type Mutation = {
   createDashboard: Dashboard;
   createDocument: Document;
   createFlow: Flow;
+  createGoodsType: GoodsType;
   createGroup: Group;
   createIncident: Incident;
   createIncidentForm: IncidentForm;
@@ -10373,7 +10380,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData: SystemTask;
+  mySafetyImportData?: Maybe<SystemTask>;
   recycleChecklist: Checklist;
   recycleDemEvidence?: Maybe<Scalars['String']>;
   recycleExpiredData: SystemTask;
@@ -10628,6 +10635,11 @@ export type MutationCreateDocumentArgs = {
 
 export type MutationCreateFlowArgs = {
   data: CreateFlowInput;
+};
+
+
+export type MutationCreateGoodsTypeArgs = {
+  data: CreateGoodsTypeDataInput;
 };
 
 
@@ -13692,6 +13704,7 @@ export type Query = {
   incidentFeed: Array<Incident>;
   incidentHeatPerformance: ListIncidentsHeatPerformance;
   incidentItems: QueryIncidentItemsConnection;
+  incidentMonthGraph: Array<Graph>;
   incidentTableReport: ListIncidentPerformance;
   incidents: Array<Incident>;
   incidentsDayOfWeek: Array<Graph>;
@@ -13783,6 +13796,7 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
+  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -13805,6 +13819,7 @@ export type Query = {
   userSessionsGraph: Array<RadialValueGraph>;
   users: Array<User>;
   usersOnline: Array<UserOnline>;
+  usersRelay: QueryUsersRelayConnection;
   vehicle: Vehicle;
   workflow?: Maybe<Workflow>;
   workflows: Array<Workflow>;
@@ -14225,6 +14240,11 @@ export type QueryIncidentItemsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: IncidentItemsWhereInput;
+};
+
+
+export type QueryIncidentMonthGraphArgs = {
+  where: BusinessIncidentsCountGraphInput;
 };
 
 
@@ -15059,6 +15079,18 @@ export type QueryUsersOnlineArgs = {
 };
 
 
+export type QueryUsersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<UserOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: UserRelayWhereInput;
+};
+
+
 export type QueryVehicleArgs = {
   where: VehicleWhereUniqueInput;
 };
@@ -15389,6 +15421,19 @@ export type QueryUserGroupRelayConnectionEdge = {
   __typename?: 'QueryUserGroupRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Group;
+};
+
+export type QueryUsersRelayConnection = {
+  __typename?: 'QueryUsersRelayConnection';
+  edges: Array<QueryUsersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryUsersRelayConnectionEdge = {
+  __typename?: 'QueryUsersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: User;
 };
 
 export type Question = {
@@ -17319,6 +17364,7 @@ export type SchemeUpdateInput = {
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
+  collectionIds?: InputMaybe<Array<Scalars['String']>>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   defaultBulletinEmails?: InputMaybe<SetBooleanHelper>;
   defaultBulletinPush?: InputMaybe<SetBooleanHelper>;
@@ -20364,6 +20410,7 @@ export type UpsertIncidentFormInput = {
 };
 
 export type UpsertRole = {
+  canApprove?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   permissions: Array<PermissionInput>;
   roleId?: InputMaybe<Scalars['String']>;
@@ -21312,6 +21359,12 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
   uploaded?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
+};
+
+export type UserRelayWhereInput = {
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 export enum UserScalarFieldEnum {

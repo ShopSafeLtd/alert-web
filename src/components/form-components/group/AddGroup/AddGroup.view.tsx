@@ -1,4 +1,5 @@
-import React from 'react';
+import type { SelectOptions } from 'types/DataType';
+
 import {
   Button,
   Col,
@@ -9,34 +10,33 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import type { SelectOptions } from 'types/DataType';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { FormData } from './useAddGroup';
 
 interface Props {
-  onSubmit: (value: FormData) => void;
   onClose: () => void;
-  usersData: SelectOptions[] | undefined;
-  adminUsersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
-  selectedUsers: string[] | undefined;
+
   setSelectedUsers: (value: string[]) => void;
-  showOffenderSettings: boolean;
   setShowOffenderSettings: (value: boolean) => void;
+  showOffenderSettings: boolean;
+  usersData: SelectOptions[] | undefined;
+  usersLoading: boolean;
 }
 
 const AddGroup = ({
-  onSubmit,
   onClose,
-  usersData,
-  adminUsersData,
-  usersLoading,
+  onSubmit,
   saving,
-  selectedUsers,
+
   setSelectedUsers,
-  showOffenderSettings,
   setShowOffenderSettings,
+  showOffenderSettings,
+  usersData,
+  usersLoading,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -45,16 +45,16 @@ const AddGroup = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({
               defaultMessage: 'Name',
             })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the new group.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -64,17 +64,17 @@ const AddGroup = ({
 
         <Col span={24}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a description for the new group.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -86,58 +86,58 @@ const AddGroup = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="users"
             label={intl.formatMessage({
               defaultMessage: 'Users',
             })}
+            name="users"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select at least one user for the new group.',
                 }),
+                required: true,
               },
             ]}
           >
             <Select
-              loading={usersLoading}
               disabled={saving}
-              mode="multiple"
-              maxTagCount={3}
               filterOption
-              optionFilterProp="label"
-              options={usersData}
+              loading={usersLoading}
+              maxTagCount={3}
+              mode="multiple"
               // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               onChange={(value) => setSelectedUsers(value)}
+              optionFilterProp="label"
+              options={usersData}
             />
           </Form.Item>
         </Col>
       </Row>
-      {selectedUsers && selectedUsers.length > 0 && (
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="approvers"
-              label={intl.formatMessage({
-                defaultMessage: 'Approvers',
-              })}
-            >
-              <Select
-                loading={usersLoading}
-                disabled={saving}
-                mode="multiple"
-                maxTagCount={3}
-                options={adminUsersData?.filter(({ value }) =>
-                  selectedUsers.includes(value)
-                )}
-                optionFilterProp="label"
-                optionLabelProp="label"
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-      )}
+      {/* {selectedUsers && selectedUsers.length > 0 && ( */}
+      {/*   <Row gutter={16}> */}
+      {/*     <Col span={24}> */}
+      {/*       <Form.Item */}
+      {/*         name="approvers" */}
+      {/*         label={intl.formatMessage({ */}
+      {/*           defaultMessage: 'Approvers', */}
+      {/*         })} */}
+      {/*       > */}
+      {/*         <Select */}
+      {/*           loading={usersLoading} */}
+      {/*           disabled={saving} */}
+      {/*           mode="multiple" */}
+      {/*           maxTagCount={3} */}
+      {/*           options={adminUsersData?.filter(({ value }) => */}
+      {/*             selectedUsers.includes(value) */}
+      {/*           )} */}
+      {/*           optionFilterProp="label" */}
+      {/*           optionLabelProp="label" */}
+      {/*         /> */}
+      {/*       </Form.Item> */}
+      {/*     </Col> */}
+      {/*   </Row> */}
+      {/* )} */}
 
       <Row gutter={16}>
         <Col>
@@ -152,8 +152,8 @@ const AddGroup = ({
         </Col>
         <Col flex={1}>
           <Switch
-            disabled={saving}
             checked={showOffenderSettings}
+            disabled={saving}
             onChange={() => setShowOffenderSettings(!showOffenderSettings)}
           />
         </Col>
@@ -230,12 +230,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Name',
                 })}
                 name="showName"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -249,12 +249,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Alias',
                 })}
                 name="showAlias"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -268,12 +268,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Ethnicity',
                 })}
                 name="showEthnicity"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -287,12 +287,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Gender',
                 })}
                 name="showGender"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -306,12 +306,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Build',
                 })}
                 name="showBuild"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -325,12 +325,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Height',
                 })}
                 name="showHeight"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -344,12 +344,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Hair',
                 })}
                 name="showHair"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -363,12 +363,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Age',
                 })}
                 name="showAge"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -382,12 +382,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Date Of Birth',
                 })}
                 name="showDateOfBirth"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -401,12 +401,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Date Of Birth Source',
                 })}
                 name="showDateOfBirthSource"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -420,12 +420,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Id Verified',
                 })}
                 name="showIdVerified"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -439,12 +439,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Peculiarities',
                 })}
                 name="showPeculiarities"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -458,12 +458,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Comment',
                 })}
                 name="showComment"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -477,12 +477,12 @@ const AddGroup = ({
                   defaultMessage: 'Show Images',
                 })}
                 name="showImages"
-                valuePropName="checked"
                 style={{
-                  marginBottom: 0,
                   flexDirection: 'row',
                   justifyItems: 'center',
+                  marginBottom: 0,
                 }}
+                valuePropName="checked"
               >
                 <Switch
                   disabled={saving}
@@ -494,7 +494,7 @@ const AddGroup = ({
         </>
       )}
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
@@ -504,10 +504,10 @@ const AddGroup = ({
           </Col>
           <Col>
             <Button
-              type="primary"
-              htmlType="submit"
               disabled={saving}
+              htmlType="submit"
               loading={saving}
+              type="primary"
             >
               {intl.formatMessage({
                 defaultMessage: 'Create Group',

@@ -4,12 +4,13 @@ import type { SelectOptions } from 'types/DataType';
 
 import { notification } from 'antd';
 import { useCreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
-import { Role, SortOrder } from 'graphql/types';
-import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { SortOrder } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
+
+import { useListUsersToAddQuery } from './__graphql__/queries/__generated__/list-users.generated';
 
 export interface FormData {
   approvers: string[];
@@ -56,25 +57,11 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
   const [showOffenderSettings, setShowOffenderSettings] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();
 
-  const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
+  const { data: usersData, loading: usersLoading } = useListUsersToAddQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      groupWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
       orderBy: {
         fullName: SortOrder.Asc,
-      },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
       },
       where: {
         schemes: {
@@ -154,12 +141,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
   };
 
   return {
-    adminUsersData: usersData?.users
-      .filter((user) => user.schemes[0].role === Role.SchemeAdmin)
-      .map((user) => ({
-        label: user.fullName,
-        value: user.id,
-      })),
+    adminUsersData: [],
     onSubmit,
     saving,
     selectedUsers,

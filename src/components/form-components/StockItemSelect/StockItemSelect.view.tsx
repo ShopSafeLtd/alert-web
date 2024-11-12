@@ -185,7 +185,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   const [fetchingMore, setFetchingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data, fetchMore, loading } = useStockItemSelectQuery({
+  const { data, fetchMore, loading, variables } = useStockItemSelectQuery({
     onCompleted: () => {
       setFetchingMore(false);
     },
@@ -246,7 +246,10 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     setFetchingMore(true);
 
     setSearchTerm(searchValueInput);
-    if (!data?.stockItemsRelay.pageInfo?.hasNextPage) {
+    if (
+      !data?.stockItemsRelay.pageInfo?.hasNextPage &&
+      variables?.where.search === searchValueInput
+    ) {
       setFetchingMore(false);
       return;
     }
