@@ -14,6 +14,7 @@ const OffenderFilter = (): JSX.Element => {
     setBuild,
     setBusinesses,
     setCreatedAtFilter,
+    setCrimeTypesFilter,
     setEthnicity,
     setGroupsFilter,
     setHair,
@@ -37,6 +38,7 @@ const OffenderFilter = (): JSX.Element => {
       setBuild={setBuild}
       setBusinesses={setBusinesses}
       setCreatedAtFilter={setCreatedAtFilter}
+      setCrimeTypesFilter={setCrimeTypesFilter}
       setEthnicity={setEthnicity}
       setGroupsFilter={setGroupsFilter}
       setHair={setHair}

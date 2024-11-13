@@ -1,8 +1,5 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
-import { action } from 'easy-peasy';
-
-import type { DateType } from 'types/DataType';
 import type {
   Age,
   ArticlePriority,
@@ -13,168 +10,172 @@ import type {
   Race,
   Role,
 } from 'graphql/types';
+import type { DateType } from 'types/DataType';
+
+import { action } from 'easy-peasy';
 import { IncidentPriority, SortOrder } from 'graphql/types';
 
 export enum IncidentSort {
-  createdAtDesc = 'CREATED_AT_DESC',
   createdAtAsc = 'CREATED_AT_ASC',
+  createdAtDesc = 'CREATED_AT_DESC',
 }
 
 export enum OffenderSort {
-  updatedAtDesc = 'UPDATED_AT_DESC',
-  updatedAtAsc = 'UPDATED_AT_ASC',
-  incidentValueDesc = 'INCIDENT_VALUE_DESC',
   incidentValueAsc = 'INCIDENT_VALUE_ASC',
-  noIncidentDesc = 'NO_INCIDENT_DESC',
+  incidentValueDesc = 'INCIDENT_VALUE_DESC',
   noIncidentAsc = 'NO_INCIDENT_ASC',
+  noIncidentDesc = 'NO_INCIDENT_DESC',
+  updatedAtAsc = 'UPDATED_AT_ASC',
+  updatedAtDesc = 'UPDATED_AT_DESC',
 }
 
 export interface IncidentFilters {
-  search: string;
-  crimeTypes: string[];
-  groups: string[];
-  createdBy: string[];
   businesses: string[];
-  goods: string[];
-  createdAt: DateType | undefined;
-  incidentDate: DateType | undefined;
-  gallery: string[];
-  peculiarities: string;
   compactView: boolean;
-  tableView: boolean;
+  createdAt: DateType | undefined;
+  createdBy: string[];
+  crimeTypes: string[];
+  gallery: string[];
+  goods: string[];
+  groups: string[];
+  incidentDate: DateType | undefined;
+  peculiarities: string;
   priority: IncidentPriority[];
+  search: string;
+  tableView: boolean;
 }
 
 export interface OffenderFilters {
-  search: string;
-  hair: string;
-  peculiarities: string;
-  gallery: string[];
-  customGalleries: string[];
-  businesses: string[];
-  warnings: string[];
-  groups: string[];
-  createdBy: string[];
-  ethnicity: Race[];
-  build: Build[];
   age: Age[];
-  sex: Gender[];
+  build: Build[];
+  businesses: string[];
+  compactView: boolean;
   createdAt:
     | {
-        startDate: Date;
         endDate: Date;
+        startDate: Date;
       }
     | undefined;
-  compactView: boolean;
+  createdBy: string[];
+  crimeTypes: string[];
+  customGalleries: string[];
+  ethnicity: Race[];
+  gallery: string[];
+  groups: string[];
+  hair: string;
+  peculiarities: string;
+  search: string;
+  sex: Gender[];
   tableView: boolean;
+  warnings: string[];
 }
 
 export interface FeedItemFilters {
-  order: SortOrder;
-  groups: string[];
-  search: string;
-  gallery: string[];
   createdAt:
     | {
-        startDate: Date;
         endDate: Date;
+        startDate: Date;
       }
     | undefined;
+  gallery: string[];
+  groups: string[];
+  order: SortOrder;
+  search: string;
   types: Model[];
 }
 
 export interface VehicleFilters {
-  order: SortOrder;
-  groups: string[];
-  search: string;
-  gallery: string[];
-  customGalleries: string[];
   createdAt:
     | {
-        startDate: Date;
         endDate: Date;
+        startDate: Date;
       }
     | undefined;
+  customGalleries: string[];
+  gallery: string[];
+  groups: string[];
+  order: SortOrder;
+  search: string;
 }
 
 export interface CrimeGroupFilters {
-  order: SortOrder;
-  groups: string[];
-  search: string;
-  gallery: string[];
   createdAt:
     | {
-        startDate: Date;
         endDate: Date;
+        startDate: Date;
       }
     | undefined;
+  gallery: string[];
+  groups: string[];
+  order: SortOrder;
+  search: string;
 }
 
 export interface InvestigationFilters {
-  orderBy: 'createdAtAsc' | 'createdAtDesc';
-  groups: string[];
   createdAt:
     | {
-        startDate: Date;
         endDate: Date;
+        startDate: Date;
       }
     | undefined;
+  groups: string[];
+  orderBy: 'createdAtAsc' | 'createdAtDesc';
 }
 
 export interface ArticleFilters {
-  order: SortOrder;
-  groups: string[];
   createdAt:
     | {
-        startDate: Date;
         endDate: Date;
+        startDate: Date;
       }
     | undefined;
+  gallery: string[];
+  groups: string[];
+  order: SortOrder;
   priorities: ArticlePriority[];
   search: string;
-  gallery: string[];
 }
 
 export interface UserFilters {
-  orderBy: UserSort;
   groups: string[];
-  status: UserStatus | undefined;
+  orderBy: UserSort;
   roles: Role[];
+  status: UserStatus | undefined;
 }
 
 export enum UserSort {
-  createdAtDesc = 'CREATED_AT_DESC',
   createdAtAsc = 'CREATED_AT_ASC',
-  nameDesc = 'NAME_DESC',
+  createdAtDesc = 'CREATED_AT_DESC',
   nameAsc = 'NAME_ASC',
+  nameDesc = 'NAME_DESC',
 }
 
 export enum UserStatus {
   'ACTIVE' = 'ACTIVE',
+  'ALL' = 'ALL',
   'DISABLED' = 'DISABLED',
   'INVITED' = 'INVITED',
-  'ALL' = 'ALL',
 }
 
 interface Incidents {
+  order: IncidentSort;
   pagination: {
     page: number;
     pageSize: number;
     sizeOptions: string[];
   };
   variables: IncidentFilters;
-  order: IncidentSort;
   // gallery: string[];
 }
 
 interface Offenders {
+  order: OffenderSort;
   pagination: {
     page: number;
     pageSize: number;
     sizeOptions: string[];
   };
   variables: OffenderFilters;
-  order: OffenderSort;
 }
 
 interface FeedItems {
@@ -212,153 +213,44 @@ interface Investigations {
   takeAllSchemes: boolean;
   variables: {
     groups: string[];
-    status: InvestigationStatus[];
     search: string;
+    status: InvestigationStatus[];
   };
 }
 
 export interface DataModel {
-  incidents: Incidents;
-  offenders: Offenders;
-  feedItems: FeedItems;
-  vehicles: Vehicles;
-  crimeGroups: CrimeGroups;
-  investigations: Investigations;
   articles: Articles;
+  crimeGroups: CrimeGroups;
+  feedItems: FeedItems;
+  incidents: Incidents;
+  investigations: Investigations;
+  offenders: Offenders;
   setArticles: Action<DataModel, Articles>;
-  setIncidents: Action<DataModel, Incidents>;
-  setIncidentPriority: Action<DataModel, IncidentPriority[]>;
-  setOffenders: Action<DataModel, Offenders>;
-  setFeedItems: Action<DataModel, FeedItems>;
-  setVehicles: Action<DataModel, Vehicles>;
   setCrimeGroups: Action<DataModel, CrimeGroups>;
-  setInvestigations: Action<DataModel, Investigations>;
+  setFeedItems: Action<DataModel, FeedItems>;
+  setIncidentPriority: Action<DataModel, IncidentPriority[]>;
+  setIncidents: Action<DataModel, Incidents>;
   setInvestigationGroupsFilter: Action<DataModel, string[]>;
-  setInvestigationStatusFilter: Action<DataModel, InvestigationStatus[]>;
   setInvestigationSearch: Action<DataModel, string>;
+  setInvestigationStatusFilter: Action<DataModel, InvestigationStatus[]>;
   setInvestigationTakeAllSchemes: Action<DataModel, boolean>;
+  setInvestigations: Action<DataModel, Investigations>;
+  setOffenders: Action<DataModel, Offenders>;
+  setVehicles: Action<DataModel, Vehicles>;
+  vehicles: Vehicles;
 }
 
 const dataModel: DataModel = {
-  incidents: {
-    pagination: {
-      page: 1,
-      pageSize: 12,
-      sizeOptions: ['12'],
-    },
-    variables: {
-      search: '',
-      crimeTypes: [],
-      groups: [],
-      createdBy: [],
-      businesses: [],
-      createdAt: undefined,
-      incidentDate: undefined,
-      goods: [],
-      gallery: [],
-      peculiarities: '',
-      compactView: false,
-      tableView: false,
-      priority: [
-        IncidentPriority.High,
-        IncidentPriority.Medium,
-        IncidentPriority.Normal,
-      ],
-    },
-    order: IncidentSort.createdAtDesc,
-    // gallery: []
-  },
-
-  setIncidents: action((state, payload) => {
-    state.incidents = payload;
-  }),
-  setIncidentPriority: action((state, payload) => {
-    state.incidents.variables.priority = payload;
-  }),
-
-  offenders: {
-    pagination: {
-      page: 1,
-      pageSize: 24,
-      sizeOptions: ['24'],
-    },
-    variables: {
-      search: '',
-      warnings: [],
-      groups: [],
-      createdBy: [],
-      businesses: [],
-      createdAt: undefined,
-      gallery: [],
-      customGalleries: [],
-      peculiarities: '',
-      hair: '',
-      ethnicity: [],
-      build: [],
-      age: [],
-      sex: [],
-      compactView: false,
-      tableView: false,
-    },
-    order: OffenderSort.updatedAtDesc,
-  },
-
-  setOffenders: action((state, payload) => {
-    state.offenders = payload;
-  }),
-
-  feedItems: {
-    pagination: {
-      page: 1,
-      pageSize: 10,
-      sizeOptions: ['10'],
-    },
-    variables: {
-      order: SortOrder.Desc,
-      search: '',
-      createdAt: undefined,
-      gallery: [],
-      groups: [],
-      types: [],
-    },
-  },
-
-  setFeedItems: action((state, payload) => {
-    state.feedItems = payload;
-  }),
   articles: {
     variables: {
-      order: SortOrder.Desc,
       createdAt: undefined,
+      gallery: [],
       groups: [],
+      order: SortOrder.Desc,
       priorities: [],
       search: '',
-      gallery: [],
     },
   },
-  setArticles: action((state, payload) => {
-    state.articles = payload;
-  }),
-
-  vehicles: {
-    pagination: {
-      page: 1,
-      pageSize: 20,
-      sizeOptions: ['20'],
-    },
-    variables: {
-      order: SortOrder.Desc,
-      search: '',
-      createdAt: undefined,
-      gallery: [],
-      customGalleries: [],
-      groups: [],
-    },
-  },
-
-  setVehicles: action((state, payload) => {
-    state.vehicles = payload;
-  }),
 
   crimeGroups: {
     pagination: {
@@ -367,38 +259,148 @@ const dataModel: DataModel = {
       sizeOptions: ['20'],
     },
     variables: {
-      order: SortOrder.Desc,
-      search: '',
       createdAt: undefined,
       gallery: [],
       groups: [],
+      order: SortOrder.Desc,
+      search: '',
+    },
+  },
+  feedItems: {
+    pagination: {
+      page: 1,
+      pageSize: 10,
+      sizeOptions: ['10'],
+    },
+    variables: {
+      createdAt: undefined,
+      gallery: [],
+      groups: [],
+      order: SortOrder.Desc,
+      search: '',
+      types: [],
     },
   },
 
-  setCrimeGroups: action((state, payload) => {
-    state.crimeGroups = payload;
-  }),
+  incidents: {
+    order: IncidentSort.createdAtDesc,
+    pagination: {
+      page: 1,
+      pageSize: 12,
+      sizeOptions: ['12'],
+    },
+    variables: {
+      businesses: [],
+      compactView: false,
+      createdAt: undefined,
+      createdBy: [],
+      crimeTypes: [],
+      gallery: [],
+      goods: [],
+      groups: [],
+      incidentDate: undefined,
+      peculiarities: '',
+      priority: [
+        IncidentPriority.High,
+        IncidentPriority.Medium,
+        IncidentPriority.Normal,
+      ],
+      search: '',
+      tableView: false,
+    },
+    // gallery: []
+  },
 
   investigations: {
     takeAllSchemes: false,
-    variables: { groups: [], status: [], search: '' },
+    variables: { groups: [], search: '', status: [] },
   },
 
-  setInvestigations: action((state, payload) => {
-    state.investigations = payload;
+  offenders: {
+    order: OffenderSort.updatedAtDesc,
+    pagination: {
+      page: 1,
+      pageSize: 24,
+      sizeOptions: ['24'],
+    },
+    variables: {
+      age: [],
+      build: [],
+      businesses: [],
+      compactView: false,
+      createdAt: undefined,
+      createdBy: [],
+      crimeTypes: [],
+      customGalleries: [],
+      ethnicity: [],
+      gallery: [],
+      groups: [],
+      hair: '',
+      peculiarities: '',
+      search: '',
+      sex: [],
+      tableView: false,
+      warnings: [],
+    },
+  },
+
+  setArticles: action((state, payload) => {
+    state.articles = payload;
   }),
-  setInvestigationTakeAllSchemes: action((state, payload) => {
-    state.investigations.takeAllSchemes = payload;
+  setCrimeGroups: action((state, payload) => {
+    state.crimeGroups = payload;
   }),
-  setInvestigationSearch: action((state, payload) => {
-    state.investigations.variables.search = payload || '';
+  setFeedItems: action((state, payload) => {
+    state.feedItems = payload;
   }),
+
+  setIncidentPriority: action((state, payload) => {
+    state.incidents.variables.priority = payload;
+  }),
+
+  setIncidents: action((state, payload) => {
+    state.incidents = payload;
+  }),
+
   setInvestigationGroupsFilter: action((state, payload) => {
     state.investigations.variables.groups = payload || [];
   }),
+
+  setInvestigationSearch: action((state, payload) => {
+    state.investigations.variables.search = payload || '';
+  }),
+
   setInvestigationStatusFilter: action((state, payload) => {
     state.investigations.variables.status = payload || [];
   }),
+
+  setInvestigationTakeAllSchemes: action((state, payload) => {
+    state.investigations.takeAllSchemes = payload;
+  }),
+  setInvestigations: action((state, payload) => {
+    state.investigations = payload;
+  }),
+  setOffenders: action((state, payload) => {
+    state.offenders = payload;
+  }),
+  setVehicles: action((state, payload) => {
+    state.vehicles = payload;
+  }),
+  vehicles: {
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      sizeOptions: ['20'],
+    },
+    variables: {
+      createdAt: undefined,
+      customGalleries: [],
+      gallery: [],
+      groups: [],
+      order: SortOrder.Desc,
+      search: '',
+    },
+  },
 };
 
 export default dataModel;
