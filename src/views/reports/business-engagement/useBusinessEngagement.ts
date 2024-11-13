@@ -15,6 +15,7 @@ interface Return {
   groups: SelectOptions[];
   groupsLoading: boolean;
   handlePrint: () => void;
+  isPrinting: boolean;
   loading: boolean;
   selectedGroups: string[];
   setDateRange: (
@@ -134,6 +135,7 @@ const useBusinessEngagement = (): Return => {
     groups,
     groupsLoading,
     handlePrint,
+    isPrinting,
     loading,
     selectedGroups,
     setDateRange: onSetDateRange,

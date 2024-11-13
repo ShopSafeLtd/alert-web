@@ -1,30 +1,33 @@
 import React from 'react';
+
 import View from './BusinessEngagement.view';
 import useBusinessEngagement from './useBusinessEngagement';
 
 const PerformanceReport = () => {
   const {
+    componentRef,
     data,
-    loading,
-    setDateRange,
     dateRange,
     groups,
-    setSelectedGroups,
-    selectedGroups,
     handlePrint,
-    componentRef,
+    isPrinting,
+    loading,
+    selectedGroups,
+    setDateRange,
+    setSelectedGroups,
   } = useBusinessEngagement();
   return (
     <View
-      setSelectedGroups={setSelectedGroups}
-      selectedGroups={selectedGroups}
-      loading={loading}
+      componentRef={componentRef}
       data={data}
-      setDateRange={setDateRange}
       dateRange={dateRange}
       groups={groups}
       handlePrint={handlePrint}
-      componentRef={componentRef}
+      isPrinting={isPrinting}
+      loading={loading}
+      selectedGroups={selectedGroups}
+      setDateRange={setDateRange}
+      setSelectedGroups={setSelectedGroups}
     />
   );
 };

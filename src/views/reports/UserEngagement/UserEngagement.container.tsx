@@ -10,6 +10,7 @@ const PerformanceReport = () => {
     dateRange,
     filtersOpen,
     handlePrint,
+    isPrinting,
     loading,
     search,
     selectedBusinessGroups,
@@ -34,6 +35,7 @@ const PerformanceReport = () => {
       dateRange={dateRange}
       filtersOpen={filtersOpen}
       handlePrint={handlePrint}
+      isPrinting={isPrinting}
       loading={loading}
       search={search}
       selectedBusinessGroups={selectedBusinessGroups}
