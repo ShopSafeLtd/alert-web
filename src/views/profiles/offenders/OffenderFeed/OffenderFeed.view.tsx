@@ -128,7 +128,7 @@ const OffenderFeed = ({
     },
   ];
   const menu = () => (
-    <Menu style={{ height: '85vh', overflowY: 'auto' }}>
+    <Menu style={{ overflowY: 'auto' }}>
       {customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: { id, name } }) => (
           <Menu.Item key={id}>
@@ -192,7 +192,7 @@ const OffenderFeed = ({
             />
           </Col>
 
-          <Col>
+          <Col style={{ alignItems: 'center', display: 'flex' }}>
             {/* {customGalleriesData?.listCustomGalleries.total ? (
               <Dropdown
                 overlay={galleryMenu}
