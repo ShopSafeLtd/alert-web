@@ -7,6 +7,7 @@ import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
 import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import Page from '#/components/shared-components/AntD/Page/Page';
 import { faFileDownload, faFilters } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -25,8 +26,6 @@ import {
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import useStyles from './UserEngagement.styles';
-
 const { Title } = Typography;
 
 interface Props {
@@ -38,6 +37,7 @@ interface Props {
   dateRange: { endDate: Date; startDate: Date };
   filtersOpen: boolean;
   handlePrint: () => void;
+  isPrinting: boolean;
   loading: boolean;
   search: string;
   selectedBusinessGroups: string[];
@@ -63,6 +63,7 @@ const PerformanceReport = ({
   dateRange,
   filtersOpen,
   handlePrint,
+  isPrinting,
   loading,
   search,
   selectedBusinessGroups,
@@ -79,12 +80,11 @@ const PerformanceReport = ({
   setSelectedRoles,
   toggleFiltersOpen,
 }: Props) => {
-  const classes = useStyles();
   const logo = localStorage.getItem('logo');
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
   return (
-    <Row>
+    <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
         <ReportsSideMenu
           collapsed={collapsed}
@@ -92,187 +92,203 @@ const PerformanceReport = ({
           setCollapsed={setCollapsed}
         />
       </Col>
-      <Col className={classes.page} flex={1} ref={componentRef}>
-        <div className="logo">
-          <img
-            // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-            alt="logo"
-            src={logo || ''}
-            style={{ height: '100%', width: '25 %' }}
-          />
-        </div>
-        <Title className="print-title" level={2}>
-          {intl.formatMessage(
-            {
-              defaultMessage: ' User Engagement: {startDate} - {endDate}',
-            },
-            {
-              endDate: dateRange.endDate.toLocaleDateString(),
-              startDate: dateRange.startDate.toLocaleDateString(),
-            }
-          )}
-        </Title>
-        <Row
-          className="no-print"
-          gutter={6}
-          style={{ left: 20, position: 'absolute', right: 20, top: 20 }}
-        >
-          <Col>
-            <Input
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Search for users...',
-              })}
-              style={{ width: 350 }}
-              value={search}
-            />
-          </Col>
-          <Col>
-            <DateSelect defaultRange="last30Days" onChange={setDateRange} />
-          </Col>
-          <Col>
-            <Button onClick={toggleFiltersOpen}>
-              <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
-              {intl.formatMessage({
-                defaultMessage: 'More Filters',
-              })}
-            </Button>
-          </Col>
-          <Col flex={1} />
-          <Col>
-            <Button onClick={handlePrint}>
-              <FontAwesomeIcon
-                icon={faFileDownload}
-                size="lg"
-                style={{ marginRight: 10 }}
+      <Col flex={1}>
+        <Page>
+          <div ref={componentRef}>
+            <div className="logo">
+              <img
+                // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                alt="logo"
+                src={logo || ''}
+                style={{ height: '100%', width: '25 %' }}
               />
-              {intl.formatMessage({
-                defaultMessage: 'Download',
-              })}
-            </Button>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Card loading={loading} style={{ height: '100%' }}>
-              <Title className="no-print" level={4}>
-                {intl.formatMessage({
-                  defaultMessage: 'User Contributions',
-                })}
-              </Title>
-              <Table
-                columns={[
-                  {
-                    dataIndex: 'name',
-                    key: 'name',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Name',
-                    }),
-                  },
-                  {
-                    dataIndex: 'businesses',
-                    key: 'businesses',
-                    render: (value: string[]) => {
-                      if (value.length > 2) {
-                        return (
-                          <>
-                            {value
-                              ?.slice(0, 2)
-                              .map((el) => <Tag key={el}>{el}</Tag>)}
-                            <Tag>
-                              {intl.formatMessage(
-                                {
-                                  defaultMessage: '+ {num} more',
-                                },
-                                {
-                                  num: value.length - 1,
-                                }
-                              )}
-                            </Tag>
-                          </>
-                        );
-                      }
-                      return value?.map((el) => <Tag key={el}>{el}</Tag>);
-                    },
-                    title: intl.formatMessage({
-                      defaultMessage: 'Businesses',
-                    }),
-                  },
-                  {
-                    dataIndex: 'incidentsCreated',
-                    defaultSortOrder: 'descend',
-                    key: 'incidentsCreated',
-                    sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
-                    title: intl.formatMessage({
-                      defaultMessage: 'Incidents',
-                    }),
-                  },
-                  {
-                    dataIndex: 'offendersCreated',
-                    key: 'offendersCreated',
-                    sorter: (a, b) => a.offendersCreated - b.offendersCreated,
-                    title: intl.formatMessage({
-                      defaultMessage: 'Offenders',
-                    }),
-                  },
-                  {
-                    dataIndex: 'updatesCreated',
-                    key: 'updatesCreated',
-                    sorter: (a, b) => a.updatesCreated - b.updatesCreated,
-                    title: intl.formatMessage({
-                      defaultMessage: 'Updates',
-                    }),
-                  },
-                  {
-                    dataIndex: 'messagesSent',
-                    key: 'messagesSent',
-                    sorter: (a, b) => a.messagesSent - b.messagesSent,
-                    title: intl.formatMessage({
-                      defaultMessage: 'Messages',
-                    }),
-                  },
-                  {
-                    dataIndex: 'logins',
-                    key: 'logins',
-                    sorter: (a, b) => a.logins - b.logins,
-                    title: intl.formatMessage({
-                      defaultMessage: 'Logins',
-                    }),
-                  },
-                  {
-                    dataIndex: 'lastLogin',
-                    key: 'lastLogin',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Last Login',
-                    }),
-                    // sorter: (a, b) => a.lastLogin - b.lastLogin,
-                  },
-                ]}
-                dataSource={data?.userContributions.map((user, i) => ({
-                  businesses: user.businesses,
-                  incidentsCreated: user.totalIncidents,
-                  key: user.name + i.toString(),
-                  lastLogin: user.lastLogin,
-                  logins: user.totalLogins,
-                  messagesSent: user.totalMessages,
-                  name: user.name,
-                  offendersCreated: user.totalOffenders,
-                  updatesCreated: user.totalUpdates,
-                }))}
-                pagination={{
-                  defaultPageSize: 30,
-                  hideOnSinglePage: true,
-                  showSizeChanger: true,
-                  showTotal: (total, range) =>
-                    `${range[0]}-${range[1]} of ${total}`,
-                  total: data?.total || 0,
-                }}
-                size="small"
-              />
-            </Card>
-          </Col>
-        </Row>
-
+            </div>
+            <Title className="print-title" level={2}>
+              {intl.formatMessage(
+                {
+                  defaultMessage: ' User Engagement: {startDate} - {endDate}',
+                },
+                {
+                  endDate: dateRange.endDate.toLocaleDateString(),
+                  startDate: dateRange.startDate.toLocaleDateString(),
+                }
+              )}
+            </Title>
+            <Row
+              className="no-print"
+              gutter={6}
+              style={{ left: 20, position: 'absolute', right: 20, top: 20 }}
+            >
+              <Col>
+                <Input
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Search for users...',
+                  })}
+                  style={{ width: 350 }}
+                  value={search}
+                />
+              </Col>
+              <Col>
+                <DateSelect defaultRange="last30Days" onChange={setDateRange} />
+              </Col>
+              <Col>
+                <Button onClick={toggleFiltersOpen}>
+                  <FontAwesomeIcon
+                    icon={faFilters}
+                    style={{ marginRight: 10 }}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'More Filters',
+                  })}
+                </Button>
+              </Col>
+              <Col flex={1} />
+              <Col>
+                <Button onClick={handlePrint}>
+                  <FontAwesomeIcon
+                    icon={faFileDownload}
+                    size="lg"
+                    style={{ marginRight: 10 }}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Download',
+                  })}
+                </Button>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Card loading={loading} style={{ height: '100%' }}>
+                  <Title className="no-print" level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'User Contributions',
+                    })}
+                  </Title>
+                  <Table
+                    columns={[
+                      {
+                        dataIndex: 'name',
+                        key: 'name',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Name',
+                        }),
+                      },
+                      {
+                        dataIndex: 'businesses',
+                        key: 'businesses',
+                        render: (value: string[]) => {
+                          if (isPrinting) {
+                            if (value.length > 2) {
+                              return `${value.slice(0, 2).join(', ')} + ${value.length - 1} more`;
+                            }
+                            return value.join(', ');
+                          }
+                          if (value.length > 2) {
+                            return (
+                              <>
+                                {value
+                                  ?.slice(0, 2)
+                                  .map((el) => <Tag key={el}>{el}</Tag>)}
+                                <Tag>
+                                  {intl.formatMessage(
+                                    {
+                                      defaultMessage: '+ {num} more',
+                                    },
+                                    {
+                                      num: value.length - 1,
+                                    }
+                                  )}
+                                </Tag>
+                              </>
+                            );
+                          }
+                          return value?.map((el) => <Tag key={el}>{el}</Tag>);
+                        },
+                        title: intl.formatMessage({
+                          defaultMessage: 'Businesses',
+                        }),
+                      },
+                      {
+                        dataIndex: 'incidentsCreated',
+                        defaultSortOrder: 'descend',
+                        key: 'incidentsCreated',
+                        sorter: (a, b) =>
+                          a.incidentsCreated - b.incidentsCreated,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Incidents',
+                        }),
+                      },
+                      {
+                        dataIndex: 'offendersCreated',
+                        key: 'offendersCreated',
+                        sorter: (a, b) =>
+                          a.offendersCreated - b.offendersCreated,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Offenders',
+                        }),
+                      },
+                      {
+                        dataIndex: 'updatesCreated',
+                        key: 'updatesCreated',
+                        sorter: (a, b) => a.updatesCreated - b.updatesCreated,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Updates',
+                        }),
+                      },
+                      {
+                        dataIndex: 'messagesSent',
+                        key: 'messagesSent',
+                        sorter: (a, b) => a.messagesSent - b.messagesSent,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Messages',
+                        }),
+                      },
+                      {
+                        dataIndex: 'logins',
+                        key: 'logins',
+                        sorter: (a, b) => a.logins - b.logins,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Logins',
+                        }),
+                      },
+                      {
+                        dataIndex: 'lastLogin',
+                        key: 'lastLogin',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Last Login',
+                        }),
+                        // sorter: (a, b) => a.lastLogin - b.lastLogin,
+                      },
+                    ]}
+                    dataSource={data?.userContributions.map((user, i) => ({
+                      businesses: user.businesses,
+                      incidentsCreated: user.totalIncidents,
+                      key: user.name + i.toString(),
+                      lastLogin: user.lastLogin,
+                      logins: user.totalLogins,
+                      messagesSent: user.totalMessages,
+                      name: user.name,
+                      offendersCreated: user.totalOffenders,
+                      updatesCreated: user.totalUpdates,
+                    }))}
+                    pagination={{
+                      defaultPageSize: 30,
+                      hideOnSinglePage: true,
+                      pageSize:
+                        isPrinting && data?.total ? data.total : undefined,
+                      showSizeChanger: true,
+                      showTotal: (total, range) =>
+                        `${range[0]}-${range[1]} of ${total}`,
+                      total: data?.total || 0,
+                    }}
+                    size="small"
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </div>
+        </Page>
         <Drawer
           onClose={toggleFiltersOpen}
           title={intl.formatMessage({

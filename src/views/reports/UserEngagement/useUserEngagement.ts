@@ -17,6 +17,7 @@ interface Return {
   dateRange: { endDate: Date; startDate: Date };
   filtersOpen: boolean;
   handlePrint: () => void;
+  isPrinting: boolean;
   loading: boolean;
   search: string;
   selectedBusinessGroups: string[];
@@ -132,8 +133,18 @@ const useUserEngagement = (): Return => {
         promiseResolveRef.current = resolve;
         setIsPrinting(true);
       }),
-    pageStyle:
-      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
+    pageStyle: `
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  @media print {
+    body { 
+      -webkit-print-color-adjust: exact;
+      page-break-inside: avoid;
+    }
+  }
+`,
   });
 
   const toggleFiltersOpen = () => {
@@ -159,6 +170,7 @@ const useUserEngagement = (): Return => {
     dateRange,
     filtersOpen,
     handlePrint,
+    isPrinting,
     loading,
     search,
     selectedBusinessGroups,
