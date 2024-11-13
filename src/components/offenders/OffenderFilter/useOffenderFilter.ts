@@ -18,6 +18,7 @@ interface Return {
   setBuild: (value: Build[]) => void;
   setBusinesses: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  setCrimeTypesFilter: (value: string[]) => void;
   setEthnicity: (value: Race[]) => void;
   setGroupsFilter: (value: string[]) => void;
   setHair: (value: string) => void;
@@ -193,6 +194,17 @@ const useOffenderFilter = (): Return => {
     });
   };
 
+  const setCrimeTypesFilter = (values: string[]) => {
+    setOffendersState({
+      order,
+      pagination,
+      variables: {
+        ...variables,
+        crimeTypes: values,
+      },
+    });
+  };
+
   const clearFilters = () => {
     setOffendersState({
       order: OffenderSort.updatedAtDesc,
@@ -226,6 +238,7 @@ const useOffenderFilter = (): Return => {
     setBuild,
     setBusinesses,
     setCreatedAtFilter,
+    setCrimeTypesFilter,
     setEthnicity,
     setGroupsFilter,
     setHair,

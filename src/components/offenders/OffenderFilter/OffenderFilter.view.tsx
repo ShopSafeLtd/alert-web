@@ -2,6 +2,7 @@ import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generat
 import type { OffenderFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
+import CrimeTypesSelect from '#/components/form-components/CrimeTypesSelect/CrimeTypesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import {
   Button,
@@ -38,6 +39,7 @@ interface Props {
   setBuild: (value: Build[]) => void;
   setBusinesses: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  setCrimeTypesFilter: (value: string[]) => void;
   setEthnicity: (value: Race[]) => void;
   setGroupsFilter: (value: string[]) => void;
   setHair: (value: string) => void;
@@ -61,6 +63,7 @@ const OffenderFilter = ({
   setBuild,
   setBusinesses,
   setCreatedAtFilter,
+  setCrimeTypesFilter,
   setEthnicity,
   setGroupsFilter,
   setHair,
@@ -81,6 +84,7 @@ const OffenderFilter = ({
     build,
     businesses,
     createdAt: createdAtFilter,
+    crimeTypes,
     ethnicity,
     groups: groupsFilter,
     hair,
@@ -461,6 +465,25 @@ const OffenderFilter = ({
               defaultMessage: 'Select Businesses',
             })}
             value={businesses}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            {intl.formatMessage({
+              defaultMessage: 'Crime Types',
+            })}
+          </Typography.Paragraph>
+          <CrimeTypesSelect
+            allowClear
+            className={classes.select}
+            mode="multiple"
+            onChange={setCrimeTypesFilter}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Crime Types',
+            })}
+            value={crimeTypes}
           />
         </Col>
       </Row>

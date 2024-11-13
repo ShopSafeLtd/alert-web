@@ -154,7 +154,7 @@ const CheckTags = ({
   return loading ? (
     <CheckTagsLoading />
   ) : (
-    <div style={{ paddingBottom: 10 }}>
+    <div>
       <Row gutter={noGutter ? [8, 8] : [10, 10]}>
         {options
           .filter((item) => item.tier === 0 || !hasChildOptions)
