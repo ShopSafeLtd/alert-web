@@ -12,7 +12,6 @@ import { type SetUserPayload } from '#/state';
 import Mixpanel from '#/utils/mixpanel';
 import * as Sentry from '@sentry/react';
 import { GoodsMode } from 'graphql/types';
-import LogRocket from 'logrocket';
 
 interface HandleSuccessArgs extends SetUserPayload {
   accessToken: string;
@@ -173,11 +172,6 @@ HandleSuccessArgs) => {
   //     });
   //   });
   // }
-
-  LogRocket.identify(id, {
-    email,
-    fullName,
-  });
 
   Mixpanel.identify(id);
   Mixpanel.people.set({
