@@ -1,20 +1,22 @@
 interface ImportMetaEnv {
   readonly PUBLIC_URL: string;
-  readonly VITE_APP_IMAGE_UPLOAD_ENDPOINT: string;
-  readonly VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT: string;
-  readonly VITE_GRAPHQL_WS_URL: string;
-  readonly VITE_GRAPHQL_URL: string;
-  readonly VITE_SENTRY_DSN: string;
-  readonly VITE_MAPBOX_ACCESS_TOKEN: string;
-  readonly VITE_GOOGLE_MAPS_API_KEY: string;
-  readonly VITE_MIXPANEL_TOKEN: string;
-  readonly VITE_CSV_UPLOAD_ENDPOINT: string;
-  readonly VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO: string;
-  readonly VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO: string;
   readonly VITE_APP_CHECKLIST_UPLOAD_ENDPOINT: string;
-  readonly VITE_IMAGE_UPLOAD_URL_FETCH: string;
   readonly VITE_APP_FACE_URL: string;
+  readonly VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT: string;
+  readonly VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO: string;
+  readonly VITE_APP_IMAGE_UPLOAD_ENDPOINT: string;
+  readonly VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO: string;
   readonly VITE_CLERK_PUBLISHABLE_KEY: string;
+  readonly VITE_CSV_UPLOAD_ENDPOINT: string;
+  readonly VITE_GOOGLE_MAPS_API_KEY: string;
+  readonly VITE_GRAPHQL_URL: string;
+  readonly VITE_GRAPHQL_WS_URL: string;
+  readonly VITE_IMAGE_UPLOAD_URL_FETCH: string;
+  readonly VITE_MAPBOX_ACCESS_TOKEN: string;
+  readonly VITE_MIXPANEL_TOKEN: string;
+  readonly VITE_PUBLIC_POSTHOG_HOST: string;
+  readonly VITE_PUBLIC_POSTHOG_KEY: string;
+  readonly VITE_SENTRY_DSN: string;
 }
 
 interface ImportMeta {

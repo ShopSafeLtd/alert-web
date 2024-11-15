@@ -10,7 +10,6 @@ import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { useAuth0 } from '@auth0/auth0-react';
 import * as Sentry from '@sentry/react';
 import { GoodsMode } from 'graphql/types';
-import LogRocket from 'logrocket';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useStoreActions, useStoreState } from 'state';
@@ -212,11 +211,6 @@ const useAuth = (): Return => {
     //   });
     // }
 
-    LogRocket.identify(id, {
-      email,
-      fullName,
-    });
-
     Mixpanel.identify(id);
     Mixpanel.people.set({
       businessId: businesses[0]?.id || '',
@@ -410,11 +404,6 @@ const useAuth = (): Return => {
     if (!scheme) {
       window.localStorage.setItem('currentScheme', data.schemes[0].scheme.id);
     }
-
-    LogRocket.identify(data.id, {
-      email: data.email,
-      name: data.fullName,
-    });
 
     await handleSuccess({
       accessToken: data.accessToken,
