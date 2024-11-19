@@ -8,7 +8,8 @@ import Loading from 'components/shared-components/AntD/Loading';
 import navigationConfig from 'configs/NavigationConfig';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
 import AppViews from 'navigation/app-views/router';
-import React from 'react';
+import { usePostHog } from 'posthog-js/react';
+import React, { useEffect } from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { Navigate } from 'react-router-dom';
 import { NavType, useStoreState } from 'state';
@@ -29,14 +30,29 @@ interface Props {
 }
 
 export const AppLayout = ({ location }: Props): JSX.Element => {
+  const posthog = usePostHog();
   const loggedIn = useStoreState((state) => state.auth.loggedIn);
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const navType = useStoreState((state) => state.theme.navType);
-  const { onboarded } = useStoreState((state) => state.user);
+  const { email, fullName, id, onboarded } = useStoreState(
+    (state) => state.user
+  );
+  const currentScheme = useStoreState((state) => state.scheme.id);
   const currentRouteInfo = utils.getRouteInfo(
     navigationConfig,
     location.pathname
   );
+
+  useEffect(() => {
+    if (id) {
+      // Identify sends an event, so you want may want to limit how often you call it
+      posthog?.identify(id, {
+        email,
+        fullName,
+      });
+      posthog?.group('tenant', currentScheme);
+    }
+  }, [posthog, id, email, currentScheme, fullName]);
 
   const { isAuthenticated, isLoading } = useAuth0();
   const screens = utils.getBreakPoint(useBreakpoint());

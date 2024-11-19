@@ -6,6 +6,8 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
 import type {
+  IncidentListRelationFilter,
+  IncidentWhereInput,
   InputMaybe,
   OffenderOrderByWithRelationInput,
 } from 'graphql/types';
@@ -88,6 +90,7 @@ const useOffenderFeed = (): Return => {
     businesses,
     compactView,
     createdAt,
+    crimeTypes,
     customGalleries,
     ethnicity,
     gallery,
@@ -143,6 +146,40 @@ const useOffenderFeed = (): Return => {
         };
       }
     }
+  };
+
+  const generateIncidentWhere = ():
+    | InputMaybe<IncidentListRelationFilter>
+    | undefined => {
+    const filters: IncidentWhereInput[] = [];
+
+    if (businesses.length > 0) {
+      filters.push({
+        business: {
+          id: {
+            in: businesses,
+          },
+        },
+      });
+    }
+
+    if (crimeTypes.length > 0) {
+      filters.push({
+        crimeTypes: {
+          some: {
+            id: {
+              in: crimeTypes,
+            },
+          },
+        },
+      });
+    }
+
+    if (filters.length === 0) return undefined;
+
+    return filters.length > 1
+      ? { some: { AND: filters } }
+      : { some: filters[0] };
   };
 
   const variables: ListOffendersRelayQueryVariables = {
@@ -262,18 +299,7 @@ const useOffenderFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      incidents:
-        businesses.length > 0
-          ? {
-              some: {
-                business: {
-                  id: {
-                    in: businesses,
-                  },
-                },
-              },
-            }
-          : undefined,
+      incidents: generateIncidentWhere(),
       name: gallery.includes('ID')
         ? {
             equals: 'Unidentified Offender',

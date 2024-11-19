@@ -2,8 +2,7 @@ import { TokenProvider } from '#/context/token-context';
 import { LoadScript } from '@react-google-maps/api';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
-import { configureScope, reactRouterV6Instrumentation } from '@sentry/react';
-import LogRocket from 'logrocket';
+import { reactRouterV6Instrumentation } from '@sentry/react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mixpanel from 'mixpanel-browser';
 import Views from 'navigation/router';
@@ -30,15 +29,6 @@ const themes = {
 if (import.meta.env.PROD) {
   mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
   Sentry.init({
-    beforeSend(event) {
-      const logRocketSession = LogRocket.sessionURL;
-      if (logRocketSession !== null && event.extra) {
-        // eslint-disable-next-line no-param-reassign
-        event.extra.LogRocket = logRocketSession;
-        return event;
-      }
-      return event;
-    },
     dsn: import.meta.env.VITE_SENTRY_DSN,
 
     integrations: [
@@ -59,13 +49,6 @@ if (import.meta.env.PROD) {
     sendDefaultPii: true,
     // Adjust for production
     tracesSampleRate: 0.4,
-  });
-  LogRocket.init('ub3rsv/alert');
-
-  LogRocket.getSessionURL((sessionURL) => {
-    configureScope((scope) => {
-      scope.setExtra('sessionURL', sessionURL);
-    });
   });
 }
 
