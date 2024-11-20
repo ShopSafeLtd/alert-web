@@ -29,6 +29,7 @@ const excludedNetwork = [
   'events.mapbox.com',
   'api-js.mixpanel.com',
   'shopsafealert.blob.core.windows.net',
+  'https://app.shopsafealert.co.uk/ingest/'
 ];
 
 const options: Partial<PostHogConfig> = {
