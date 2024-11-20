@@ -32,7 +32,7 @@ const excludedNetwork = [
 ];
 
 const options: Partial<PostHogConfig> = {
-  api_host: 'https://app.shopsafealert.co.uk/injest',
+  api_host: 'https://app.shopsafealert.co.uk/ingest',
   disable_surveys: true,
   session_recording: {
     maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {
