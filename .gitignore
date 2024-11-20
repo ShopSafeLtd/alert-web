@@ -28,3 +28,5 @@ tsconfig.tsbuildinfo
 src/graphql/generated.ts
 
 .DS_Store
+
+vite.config.mts.*
