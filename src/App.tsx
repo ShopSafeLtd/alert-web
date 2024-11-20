@@ -1,3 +1,5 @@
+import type { CapturedNetworkRequest, PostHogConfig } from 'posthog-js';
+
 import { LoadScript } from '@react-google-maps/api';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
@@ -5,6 +7,7 @@ import { reactRouterV6Instrumentation } from '@sentry/react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mixpanel from 'mixpanel-browser';
 import Views from 'navigation/router';
+import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import React from 'react';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
@@ -21,8 +24,27 @@ import RouteWrapper from './navigation/utils/route-wrapper';
 import ApolloProvider from './providers/ApolloProvider';
 import { Store, ThemeConfig } from './state';
 
-const options = {
-  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+const excludedNetwork = [
+  'api.mapbox.com',
+  'events.mapbox.com',
+  'api-js.mixpanel.com',
+  'shopsafealert.blob.core.windows.net',
+  'https://app.shopsafealert.co.uk/ingest/'
+];
+
+const options: Partial<PostHogConfig> = {
+  api_host: 'https://app.shopsafealert.co.uk/ingest',
+  disable_surveys: true,
+  session_recording: {
+    maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {
+      if (excludedNetwork.some((network) => request.name.includes(network))) {
+        return null;
+      }
+
+      return request;
+    },
+  },
+  ui_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
 };
 
 const themes = {
@@ -34,7 +56,6 @@ if (import.meta.env.PROD) {
   mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
-
     integrations: [
       new CaptureConsole(),
       new Sentry.BrowserTracing({
@@ -47,6 +68,11 @@ if (import.meta.env.PROD) {
         ),
       }),
       new HttpClient(),
+      new posthog.SentryIntegration(
+        posthog,
+        'nvoyy-group',
+        4_504_836_741_136_385
+      ),
     ],
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
