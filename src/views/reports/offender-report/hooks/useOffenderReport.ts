@@ -201,8 +201,8 @@ const useOffenderReport = (): Return => {
       date: moment(incident.date).format('DD/MM/YYYY'),
       key: incident.id,
       location: incident.location?.alias || '',
-      policeAttended: incident.policeReported ? 'Yes' : 'No',
-      policeReported: incident.policeInvolved ? 'Yes' : 'No',
+      policeAttended: incident.policeInvolved ? 'Yes' : 'No',
+      policeReported: incident.policeReported ? 'Yes' : 'No',
       totalOffenders: incident.totalOffenders || 0,
       value: incident.incidentItems
         ?.reduce((acc, item) => acc + (item.value || 0), 0)
