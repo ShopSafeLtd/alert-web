@@ -1,13 +1,5 @@
 query ExportFilters($where: SchemeWhereUniqueInput!) {
   scheme(where: $where) {
-    groups {
-      id
-      name
-    }
-    businesses {
-      id
-      name
-    }
     schemeTags {
       id
       name
