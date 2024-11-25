@@ -8,20 +8,12 @@ export type ExportFiltersQueryVariables = Types.Exact<{
 }>;
 
 
-export type ExportFiltersQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', groups: Array<{ __typename?: 'Group', id: string, name: string }>, businesses: Array<{ __typename?: 'Business', id: string, name: string }>, schemeTags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type ExportFiltersQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', schemeTags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 
 export const ExportFiltersDocument = gql`
     query ExportFilters($where: SchemeWhereUniqueInput!) {
   scheme(where: $where) {
-    groups {
-      id
-      name
-    }
-    businesses {
-      id
-      name
-    }
     schemeTags {
       id
       name

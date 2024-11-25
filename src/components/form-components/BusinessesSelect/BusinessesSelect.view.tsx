@@ -6,11 +6,14 @@ import type {
   SelectProps,
 } from 'antd/lib/select';
 
-import { useBusinessesSideListQuery } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import {
+  useBusinessesSideListLazyQuery,
+  useBusinessesSideListQuery,
+} from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
 import { Select, Typography } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
 import debounce from 'lodash/debounce';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 
@@ -104,10 +107,14 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   ...props
 }) => {
   const intl = useIntl();
-  const take = 1000;
+  const take = 50;
   const currentSchemeId = useStoreState((state) => state.scheme.id);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [initialValues] = useState(value ? convertToArrayOfStrings(value) : []);
+  const [selectedMissingBusinesses, setSelectedMissingBusinesses] = useState<
+    SelectProps['options']
+  >([]);
 
   const { data, fetchMore, loading } = useBusinessesSideListQuery({
     onCompleted: () => {
@@ -133,6 +140,57 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
       ...queryVars,
     },
   });
+
+  const [fetchMissing] = useBusinessesSideListLazyQuery({
+    onCompleted: (extraData) => {
+      if (extraData.businessRelay.edges.length > 0) {
+        setSelectedMissingBusinesses(
+          extraData.businessRelay.edges.map(({ node: option }) => ({
+            key: option.id,
+            label: (
+              <>
+                {option.name}
+                {option.siteNumber && `(${option.siteNumber})`}
+                {option.locations && option.locations.length > 0 ? (
+                  <Typography.Paragraph
+                    style={{ fontSize: 13, margin: 0 }}
+                    type="secondary"
+                  >
+                    {option.locations[0].full}
+                  </Typography.Paragraph>
+                ) : null}
+              </>
+            ),
+            value: option.id,
+          }))
+        );
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (initialValues.length > 0) {
+      const missing = initialValues.filter(
+        (item) =>
+          !data?.businessRelay.edges.some(({ node }) => node.id === item)
+      );
+      if (missing.length > 0) {
+        void fetchMissing({
+          variables: {
+            first: 50,
+            orderBy: {
+              name: SortOrder.Asc,
+            },
+            where: {
+              id: {
+                in: missing,
+              },
+            },
+          },
+        });
+      }
+    }
+  }, [initialValues, data]);
 
   const next = () => {
     void fetchMore({
@@ -208,7 +266,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         };
       },
       variables: {
-        first: 100,
+        first: 50,
         orderBy: { name: SortOrder.Asc },
         where: {
           name: {
@@ -295,6 +353,8 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
     })
   );
 
+  const merged = [...(selectedMissingBusinesses || []), ...options];
+
   // {/* {sortedData.map(({ node: option }) => ( */}
   // {/*   <Select.Option key={option.id} value={option.id} label={option.name}> */}
   // {/*     {option.name} */}
@@ -326,14 +386,29 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
           : null
       }
       onChange={(selected: ValueType) => {
-        if (onChange) onChange(convertToArrayOfStrings(selected));
+        const selectedStrings = convertToArrayOfStrings(selected);
+        // const newStrings = new Set(
+        //   selectedStrings.filter(
+        //     (item) =>
+        //       !selectedMissingBusinesses?.some(
+        //         (missing) => missing.value === item
+        //       )
+        //   )
+        // );
+
+        // const newOptions =
+        //   options.filter((item) => newStrings.has(item.value as string)) || [];
+        if (onChange) onChange(selectedStrings);
         if (getAddress) {
           const location = sortedData.find(({ node }) => node.id === selected);
-          console.log(selected, location);
           if (location) {
             getAddress(location.node.locations[0].full || '');
           }
         }
+        // setSelectedMissingBusinesses([
+        //   ...(selectedMissingBusinesses || []),
+        //   ...newOptions,
+        // ]);
       }}
       onClear={() => {
         if (onChange) onChange([]);
@@ -343,7 +418,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
         changeHandler(v);
       }}
       optionFilterProp="label"
-      options={options}
+      options={merged}
       placeholder={placeholder}
       size={size}
       style={style}
