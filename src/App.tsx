@@ -29,7 +29,7 @@ const excludedNetwork = [
   'events.mapbox.com',
   'api-js.mixpanel.com',
   'shopsafealert.blob.core.windows.net',
-  'https://app.shopsafealert.co.uk/ingest/'
+  'https://app.shopsafealert.co.uk/ingest/',
 ];
 
 const options: Partial<PostHogConfig> = {
@@ -56,6 +56,13 @@ if (import.meta.env.PROD) {
   mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
+    ignoreErrors: [
+      'ResizeObserver loop limit exceeded',
+      'ResizeObserver loop completed with undelivered notifications',
+      /^Failed to fetch dynamically imported module: .*/,
+      "Cannot read properties of undefined (reading 'get')",
+      /There has been an Error with loading Google Maps API script, please check that you provided correct google API key/,
+    ],
     integrations: [
       new CaptureConsole(),
       new Sentry.BrowserTracing({
