@@ -1,0 +1,82 @@
+query ViewUser(
+  $where: UserWhereUniqueInput!
+  $groupWhere: GroupWhereInput
+  $chatWhere: UserChatWhereInput
+  $schemeWhere: UserSchemeWhereInput
+  $sessionWhere: SessionWhereInput
+) {
+  user(where: $where) {
+    id
+    fullName
+    email
+    status
+    demId
+    publicName
+    reportToAllBusinesses
+    businesses {
+      id
+      name
+      fullName
+      demId
+    }
+    disabled
+    newUser
+    incidentEmail
+    incidentPush
+    bulletinEmails
+    bulletinPush
+    subscribedIncidentOnly
+    subscribedOffenderOnly
+    messagePush
+    offenderEmail
+    offenderPush
+    signedTerms {
+      id
+      signature
+      terms {
+        id
+        version
+      }
+      signedAt
+    }
+    groups(where: $groupWhere) {
+      id
+      name
+    }
+    approverGroups(where: $groupWhere) {
+      id
+      name
+    }
+    defaultGroups(where: $groupWhere) {
+      id
+      name
+    }
+    chats(where: $chatWhere) {
+      id
+      chat {
+        id
+        name
+      }
+    }
+    schemes(where: $schemeWhere) {
+      id
+      schemeId
+      role
+    }
+    totalLastYearLogin
+    totalThirtyDaysLogin
+    schemePermission {
+      id
+      name
+      type
+    }
+    sessions(take: 10, orderBy: { createdAt: desc }, where: $sessionWhere) {
+      locationLng
+      locationLat
+      createdAt
+      app
+      id
+      updatedAt
+    }
+  }
+}

@@ -10380,7 +10380,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
-  mySafetyImportData?: Maybe<SystemTask>;
+  mySafetyImportData: SystemTask;
   recycleChecklist: Checklist;
   recycleDemEvidence?: Maybe<Scalars['String']>;
   recycleExpiredData: SystemTask;
@@ -13796,7 +13796,6 @@ export type Query = {
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
   term: TermsAndCondition;
-  test: Scalars['String'];
   todo: Todo;
   todoRelay: QueryTodoRelayConnection;
   todos: Array<Todo>;
@@ -13820,6 +13819,7 @@ export type Query = {
   users: Array<User>;
   usersOnline: Array<UserOnline>;
   usersRelay: QueryUsersRelayConnection;
+  usersRelayAdmin: QueryUsersRelayAdminConnection;
   vehicle: Vehicle;
   workflow?: Maybe<Workflow>;
   workflows: Array<Workflow>;
@@ -15091,6 +15091,18 @@ export type QueryUsersRelayArgs = {
 };
 
 
+export type QueryUsersRelayAdminArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<UserOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: UserRelayAdminWhereInput;
+};
+
+
 export type QueryVehicleArgs = {
   where: VehicleWhereUniqueInput;
 };
@@ -15421,6 +15433,19 @@ export type QueryUserGroupRelayConnectionEdge = {
   __typename?: 'QueryUserGroupRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Group;
+};
+
+export type QueryUsersRelayAdminConnection = {
+  __typename?: 'QueryUsersRelayAdminConnection';
+  edges: Array<QueryUsersRelayAdminConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryUsersRelayAdminConnectionEdge = {
+  __typename?: 'QueryUsersRelayAdminConnectionEdge';
+  cursor: Scalars['String'];
+  node: User;
 };
 
 export type QueryUsersRelayConnection = {
@@ -16694,6 +16719,7 @@ export type Scheme = {
   updatesCreated: Scalars['Int'];
   uploadOffenderImagesOnMobile: Scalars['Boolean'];
   useBusinessGroupsOnIncident: Scalars['Boolean'];
+  userCount: Scalars['Int'];
   userNotifications: Scalars['Int'];
   userTodos: Scalars['Int'];
   vehicles: Array<Vehicle>;
@@ -17152,43 +17178,10 @@ export type SchemeWorkflowsArgs = {
 };
 
 export type SchemeCreateInput = {
-  activityAssignToUser?: InputMaybe<Scalars['Boolean']>;
-  approvalDueDays?: InputMaybe<Scalars['Int']>;
-  autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
-  autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
-  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
-  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
-  defaultBulletinEmails?: InputMaybe<Scalars['Boolean']>;
-  defaultBulletinPush?: InputMaybe<Scalars['Boolean']>;
-  defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
-  defaultIncidentPush?: InputMaybe<Scalars['Boolean']>;
-  defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
-  defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
-  defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
-  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
-  defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
-  defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
-  facialDetection?: InputMaybe<Scalars['Boolean']>;
-  facialRecognition?: InputMaybe<Scalars['Boolean']>;
-  facialRedaction?: InputMaybe<Scalars['Boolean']>;
-  goodsMode?: InputMaybe<GoodsMode>;
-  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
-  incidentImpact?: InputMaybe<Scalars['Boolean']>;
-  incidentPriority?: InputMaybe<Scalars['Boolean']>;
-  incidentRetention?: InputMaybe<Scalars['Int']>;
-  mentionDueDays?: InputMaybe<Scalars['Int']>;
-  mg11Available?: InputMaybe<Scalars['Boolean']>;
+  initialUserId: Scalars['String'];
   mirrorSchemeId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
-  needJustification?: InputMaybe<Scalars['Boolean']>;
-  offenderRetention?: InputMaybe<Scalars['Int']>;
-  oneSelectedIncidentTypeOnly?: InputMaybe<Scalars['Boolean']>;
-  reportOnly?: InputMaybe<Scalars['Boolean']>;
-  requireSiteNumberForUsers?: InputMaybe<Scalars['Boolean']>;
-  restrictIncidentAccess?: InputMaybe<Scalars['Boolean']>;
-  taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
-  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
-  useBusinessGroupsOnIncident?: InputMaybe<Scalars['Boolean']>;
+  preset?: InputMaybe<Scalars['String']>;
 };
 
 export type SchemeInputArg = {
@@ -17199,6 +17192,12 @@ export type SchemeListRelationFilter = {
   every?: InputMaybe<SchemeWhereInput>;
   none?: InputMaybe<SchemeWhereInput>;
   some?: InputMaybe<SchemeWhereInput>;
+};
+
+export type SchemeName = {
+  __typename?: 'SchemeName';
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type SchemeOrderByRelationAggregateInput = {
@@ -20461,6 +20460,7 @@ export type User = {
   createdUpdates: Array<Update>;
   crimeGroups: Array<CrimeGroup>;
   csvImports: Array<CsvImport>;
+  currentScheme: Array<UserScheme>;
   defaultGroups: Array<Group>;
   defaultScheme?: Maybe<Scalars['String']>;
   demId?: Maybe<Scalars['String']>;
@@ -20471,6 +20471,7 @@ export type User = {
   firstLetter: Scalars['String'];
   forcePasswordReset: Scalars['Boolean'];
   fullName: Scalars['String'];
+  fullNameAdmin: Scalars['String'];
   groups: Array<Group>;
   hasPassword: Scalars['Boolean'];
   id: Scalars['ID'];
@@ -20510,6 +20511,7 @@ export type User = {
   reference?: Maybe<Scalars['Int']>;
   reportToAllBusinesses: Scalars['Boolean'];
   schemePermission?: Maybe<CustomRole>;
+  schemeSelector?: Maybe<Array<SchemeName>>;
   schemes: Array<UserScheme>;
   sessions: Array<Session>;
   signedTerms?: Maybe<UserTerm>;
@@ -21359,6 +21361,12 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
   uploaded?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
+};
+
+export type UserRelayAdminWhereInput = {
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds?: InputMaybe<Array<Scalars['String']>>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 export type UserRelayWhereInput = {
