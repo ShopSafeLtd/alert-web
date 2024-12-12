@@ -30,3 +30,7 @@ src/graphql/generated.ts
 .DS_Store
 
 vite.config.mts.*
+
+.yarn/
+
+.yarnrc.yml
