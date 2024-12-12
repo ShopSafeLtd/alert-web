@@ -24,6 +24,7 @@ import {
   Typography,
 } from 'antd';
 import React, { useState } from 'react';
+import { CSVLink } from 'react-csv';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Title } = Typography;
@@ -83,6 +84,28 @@ const PerformanceReport = ({
   const logo = localStorage.getItem('logo');
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
+  const csvData = [
+    [
+      'Name',
+      'Businesses',
+      'Incidents',
+      'Offenders',
+      'Updates',
+      'Messages',
+      'Logins',
+      'Last Login',
+    ],
+    ...(data?.userContributions.map((user) => [
+      user.name,
+      user.businesses.join(', '),
+      user.totalIncidents,
+      user.totalOffenders,
+      user.totalUpdates,
+      user.totalMessages,
+      user.totalLogins,
+      user.lastLogin,
+    ]) || []),
+  ];
   return (
     <Row wrap={false}>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -144,6 +167,13 @@ const PerformanceReport = ({
                 </Button>
               </Col>
               <Col flex={1} />
+              <Col>
+                <CSVLink data={csvData} filename="User Engagement">
+                  <Button>
+                    <FormattedMessage defaultMessage="Download CSV" />
+                  </Button>
+                </CSVLink>
+              </Col>
               <Col>
                 <Button onClick={handlePrint}>
                   <FontAwesomeIcon
@@ -299,7 +329,7 @@ const PerformanceReport = ({
         >
           <Form layout="vertical">
             <Typography.Title level={4}>
-              <FormattedMessage defaultMessage="User Filters" />
+              {intl.formatMessage({ defaultMessage: 'User Filters' })}
             </Typography.Title>
             <Form.Item
               label={intl.formatMessage({
@@ -348,7 +378,7 @@ const PerformanceReport = ({
             </Form.Item>
             <Divider />
             <Typography.Title level={4}>
-              <FormattedMessage defaultMessage="Data Filters" />
+              {intl.formatMessage({ defaultMessage: 'Data Filters' })}
             </Typography.Title>
             <Form.Item
               label={intl.formatMessage({

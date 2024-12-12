@@ -21,8 +21,10 @@ const UserDetailContainer = (): JSX.Element => {
     inviteConfirm,
     // isOwn,
     isPrinting,
+    isSessionsModalOpen,
     loading,
     saving,
+    setIsSessionsModalOpen,
     setViewport,
     toggleDemLink,
     toggleEditPassword,
@@ -46,8 +48,10 @@ const UserDetailContainer = (): JSX.Element => {
       inviteConfirm={inviteConfirm}
       // isOwn={isOwn}
       isPrinting={isPrinting}
+      isSessionsModalOpen={isSessionsModalOpen}
       loading={loading}
       saving={saving}
+      setIsSessionsModalOpen={setIsSessionsModalOpen}
       setViewport={setViewport}
       toggleDemLink={toggleDemLink}
       toggleEditPassword={toggleEditPassword}
