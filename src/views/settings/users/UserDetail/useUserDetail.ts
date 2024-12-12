@@ -1,14 +1,14 @@
 import type { ViewportData } from '#/types/DataType';
+import type { ViewUserQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-user.generated';
 import type { Role } from 'graphql/types';
-import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
 
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
+import { useViewUserQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-user.generated';
 import { Modal, notification } from 'antd';
 import { UserStatus } from 'graphql/types';
 import { useDeleteUserFromSchemeMutation } from 'graphql/user/mutation/__generated__/delete_user_from_scheme.generated';
 import { useSendInviteMutation } from 'graphql/user/mutation/__generated__/send_invite.generated';
 import { useUpdateUserDisableMutation } from 'graphql/user/mutation/__generated__/update_user_disable.generated';
-import { useUserQuery } from 'graphql/user/queries/__generated__/user.generated';
 import { type RefObject, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ const { confirm } = Modal;
 
 interface Return {
   componentRef: RefObject<HTMLDivElement>;
-  data: UserQuery | undefined;
+  data: ViewUserQuery | undefined;
   deleteConfirm: () => void;
   demId: null | string | undefined;
   demLink: boolean;
@@ -31,8 +31,10 @@ interface Return {
   inviteConfirm: () => void;
   isOwn: boolean;
   isPrinting: boolean;
+  isSessionsModalOpen: boolean;
   loading: boolean;
   saving: boolean;
+  setIsSessionsModalOpen: (value: boolean) => void;
   setViewport: (value: ViewportData | null) => void;
   toggleDemLink: () => void;
   toggleEditPassword: () => void;
@@ -50,6 +52,7 @@ const useUserDetail = (userId: string): Return => {
   const [saving, setSaving] = useState(false);
   const [editUser, setEditUser] = useState(false);
   const [demLink, setDemLink] = useState(false);
+  const [isSessionsModalOpen, setIsSessionsModalOpen] = useState(false);
   const toggleDemLink = () => {
     setDemLink(!demLink);
   };
@@ -64,7 +67,7 @@ const useUserDetail = (userId: string): Return => {
     setEditPassword(!editPassword);
   };
 
-  const { data, loading } = useUserQuery({
+  const { data, loading } = useViewUserQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       chatWhere: {
@@ -77,6 +80,18 @@ const useUserDetail = (userId: string): Return => {
         },
       },
       groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      schemeWhere: {
+        id: {
+          equals: schemeId,
+        },
+      },
+      sessionWhere: {
         scheme: {
           id: {
             equals: schemeId,
@@ -265,8 +280,10 @@ const useUserDetail = (userId: string): Return => {
     inviteConfirm,
     isOwn,
     isPrinting,
+    isSessionsModalOpen,
     loading,
     saving,
+    setIsSessionsModalOpen,
     setViewport,
     toggleDemLink,
     toggleEditPassword,

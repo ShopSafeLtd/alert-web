@@ -1,0 +1,18 @@
+query ListSessions(
+  $where: UserWhereUniqueInput!
+  $SessionWhere: SessionWhereInput
+) {
+  user(where: $where) {
+
+    sessions(
+      orderBy: { createdAt: desc }
+      where: $SessionWhere
+    ) {
+      locationLng
+      locationLat
+      createdAt
+      app
+      id
+    }
+  }
+}
