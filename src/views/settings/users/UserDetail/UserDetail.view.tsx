@@ -1,13 +1,13 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import type { ViewportData } from '#/types/DataType';
 import type { Role } from 'graphql/types';
-import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
 import type { RefObject } from 'react';
 
 // import { EditPasswordButton } from '#/components/Password/OwnPasswordChange.view';
 import LocatingModal from '#/components/map/LocatingModal';
 import { CustomTermsView } from '#/components/onboarding/Onboarding/SchemeTerms/Terms.view';
 import FormatCalendar from '#/utils/format-calendar-24h';
+import SessionsTableModal from '#/views/settings/users/UserDetail/SessionsTable.modal';
 import { useTermQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-users-signed-terms.generated';
 import {
   faCalendarClock,
@@ -28,14 +28,12 @@ import {
   Col,
   Descriptions,
   Drawer,
-  Empty,
   Modal,
   PageHeader,
   Row,
   Statistic,
   Table,
   Tag,
-  Timeline,
   Tooltip,
   Typography,
 } from 'antd';
@@ -43,10 +41,12 @@ import EditUser from 'components/form-components/user/EditUser';
 import { AppType, UserStatus } from 'graphql/types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { RoleValues } from 'types';
 import { GetUserStatusValues } from 'types/enums/user_status';
 import formatLoginTime from 'utils/format-login-time';
+
+import type { ViewUserQuery } from './graphql/queries/__generated__/view-user.generated';
 
 import SetPassword from '../../../../components/form-components/SetPassword';
 import LinkDem from '../../../../components/form-components/user/LinkDem';
@@ -54,7 +54,7 @@ import useStyles from './UserDetail.styles';
 
 interface Props {
   componentRef: RefObject<HTMLDivElement>;
-  data: UserQuery | undefined;
+  data: ViewUserQuery | undefined;
   deleteConfirm: () => void;
   demId: null | string | undefined;
   demLink: boolean;
@@ -66,13 +66,16 @@ interface Props {
   inviteConfirm: () => void;
   // isOwn: boolean;
   isPrinting: boolean;
+  isSessionsModalOpen: boolean;
   loading: boolean;
   saving: boolean;
+  setIsSessionsModalOpen: (value: boolean) => void;
   setViewport: (value: ViewportData | null) => void;
   toggleDemLink: () => void;
   toggleEditPassword: () => void;
   toggleEditUser: () => void;
   userRole: Role | undefined;
+
   viewport: ViewportData | null;
 }
 const getTextStatus = (value: UserStatus) => {
@@ -158,8 +161,10 @@ const userDetail = ({
   inviteConfirm,
   // isOwn,
   isPrinting,
+  isSessionsModalOpen,
   loading,
   saving,
+  setIsSessionsModalOpen,
   setViewport,
   toggleDemLink,
   toggleEditPassword,
@@ -169,7 +174,7 @@ const userDetail = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const navigate = useNavigate();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const AppTypeFilter = [
     {
@@ -191,6 +196,7 @@ const userDetail = ({
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsSessionsModalOpen(false);
   };
   const EditPassword = () => (
     // if (isOwn) {
@@ -312,21 +318,21 @@ const userDetail = ({
                   })}
                 </Typography.Title>
               </Col>
-              <Col style={{ marginTop: -5 }}>
-                <Button
-                  disabled={saving}
-                  onClick={() => navigate('/app/reports/user-engagement')}
-                  // icon={
-                  //   <FontAwesomeIcon
-                  //     size="lg"
-                  //     style={{ marginRight: 5 }}
-                  //     icon={faEye}
-                  //   />
-                  // }
-                >
-                  <FormattedMessage defaultMessage="View All Logins" />
-                </Button>
-              </Col>
+              {/* <Col style={{ marginTop: -5 }}>*/}
+              {/*  <Button*/}
+              {/*    disabled={saving}*/}
+              {/*    onClick={() => navigate('/app/reports/user-engagement')}*/}
+              {/*    // icon={*/}
+              {/*    //   <FontAwesomeIcon*/}
+              {/*    //     size="lg"*/}
+              {/*    //     style={{ marginRight: 5 }}*/}
+              {/*    //     icon={faEye}*/}
+              {/*    //   />*/}
+              {/*    // }*/}
+              {/*  >*/}
+              {/*    <FormattedMessage defaultMessage="View All Logins" />*/}
+              {/*  </Button>*/}
+              {/* </Col>*/}
             </Row>
 
             <Row justify="space-between">
@@ -342,8 +348,8 @@ const userDetail = ({
                   defaultMessage: 'Last Login',
                 })}
                 value={
-                  data?.user?.lastLogin?.loginTime
-                    ? formatLoginTime(data?.user?.lastLogin?.loginTime)
+                  data?.user?.sessions[0]?.createdAt
+                    ? formatLoginTime(data?.user?.sessions[0]?.createdAt)
                     : intl.formatMessage({
                         defaultMessage: 'Unknown',
                       })
@@ -522,76 +528,29 @@ const userDetail = ({
           </Card>
         </Col>
         <Col span={8} xxl={12}>
-          {/* <Card>
-            <Typography.Title level={4}>
-              <FormattedMessage defaultMessage="Recent Activity" id="nc8QpJ" />
-            </Typography.Title>
-            <Empty
-              description={
-                <FormattedMessage defaultMessage="No Activity" id="vugtF7" />
-              }
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-            />
-          </Card> */}
-          <Card>
-            <Typography.Title level={4} style={{ marginBottom: 20 }}>
-              <FormattedMessage defaultMessage="Recent Login Activities" />
-            </Typography.Title>
-            {data?.user?.lastTenLogin && data?.user?.lastTenLogin.length > 0 ? (
-              <Timeline mode="alternate">
-                {data?.user?.lastTenLogin.map((login) => (
-                  <Timeline.Item key={login?.id}>
-                    {login?.loginTime && (
-                      <Typography.Text>
-                        {formatLoginTime(login?.loginTime)}
-                      </Typography.Text>
-                    )}
-                  </Timeline.Item>
-                ))}
-              </Timeline>
-            ) : (
-              <Empty
-                description={intl.formatMessage({
-                  defaultMessage: 'No Recent Login Activities',
-                })}
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-              />
-            )}
-
-            {/* <Table
-              size="small"
-              loading={loading}
-              pagination={{
-                hideOnSinglePage: true,
-                // total: data?.listUsers.total,
-                // showTotal: (total) => `Total Users: ${total}`,
-              }}
-              columns={[
-                {
-                  key: 'loginTime',
-                  // title: intl.formatMessage({
-                  //   defaultMessage: 'Login Time',
-                  //   id: '2o/IFP',
-                  // }),
-                  dataIndex: 'loginTime',
-                },
-              ]}
-              dataSource={data?.user?.lastTenLogin.map((login) => ({
-                key: login.id,
-                // new Date(
-                //           data?.user?.lastLogin?.loginTime
-                //         ).toLocaleDateString()
-                loginTime: formatLoginTime(login?.loginTime),
-                // loginTime: moment(login?.loginTime).format('DD/MM/YYYY hh/mm'),
-              }))}
-            /> */}
-          </Card>
           <Card loading={loading}>
-            <Typography.Title level={4} style={{ marginBottom: 10 }}>
-              {intl.formatMessage({
-                defaultMessage: 'User Sessions',
-              })}
-            </Typography.Title>
+            <Row style={{ marginBottom: 10 }}>
+              <Col>
+                <Typography.Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'User Sessions (Latest 10)',
+                  })}
+                </Typography.Title>
+              </Col>
+              <Col flex={1} />
+              {/* <Col>*/}
+              {/*  <Button*/}
+              {/*    disabled={saving}*/}
+              {/*    onClick={() => setIsSessionsModalOpen(true)}*/}
+              {/*    size={'small'}*/}
+              {/*    style={{*/}
+              {/*      marginTop: -5,*/}
+              {/*    }}*/}
+              {/*  >*/}
+              {/*    <FormattedMessage defaultMessage="View All" />*/}
+              {/*  </Button>*/}
+              {/* </Col>*/}
+            </Row>
             <Table
               // rowClassName={classes.row}
               columns={[
@@ -626,9 +585,13 @@ const userDetail = ({
                   ellipsis: true,
                   key: 'updatedAt',
                   // eslint-disable-next-line no-confusing-arrow
-                  render: (value: Date) =>
-                    FormatCalendar(new Date(value), true),
-                  title: intl.formatMessage({ defaultMessage: 'UpdatedAt' }),
+                  render: (value: Date) => (
+                    <Tooltip title={new Date(value).toLocaleString('en-GB')}>
+                      {FormatCalendar(new Date(value), true)}{' '}
+                      {new Date(value).toLocaleTimeString('en-GB')}
+                    </Tooltip>
+                  ),
+                  title: intl.formatMessage({ defaultMessage: 'At' }),
                 },
                 {
                   dataIndex: 'completed',
@@ -661,7 +624,7 @@ const userDetail = ({
                 data?.user.sessions.map((session) => ({
                   key: session.id,
                   type: session.app,
-                  updatedAt: session.updatedAt,
+                  updatedAt: session.createdAt,
                   viewport:
                     session.locationLat && session.locationLng
                       ? {
@@ -673,7 +636,7 @@ const userDetail = ({
               }
               pagination={{
                 hideOnSinglePage: true,
-                pageSize: 8,
+                pageSize: 10,
               }}
               size="small"
             />
@@ -746,6 +709,29 @@ const userDetail = ({
           name={data?.user.fullName || ''}
           signature={data?.user.signedTerms?.signature || ''}
           termsId={data?.user.signedTerms?.terms.id || ''}
+        />
+      </Modal>
+      <Modal
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Close
+          </Button>,
+        ]}
+        maskClosable
+        onCancel={handleCancel}
+        open={isSessionsModalOpen}
+        style={{ top: 20 }}
+        title={intl.formatMessage({
+          defaultMessage: 'Sessions',
+        })}
+        width={900}
+      >
+        <SessionsTableModal
+          intl={intl}
+          open={isSessionsModalOpen}
+          saving={saving}
+          setViewport={setViewport}
+          userId={data?.user.id || ''}
         />
       </Modal>
       {viewport && (
