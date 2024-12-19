@@ -229,7 +229,7 @@ const EditOffender = ({
                   ? data.offender.customGalleries.map(({ id }) => id)
                   : [],
               dateOfBirth: data?.offender?.dateOfBirth
-                ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
+                ? moment.utc(data.offender.dateOfBirth)
                 : null,
               dateSource: data?.offender?.dateSource || null,
               gender: data?.offender?.gender || null,
