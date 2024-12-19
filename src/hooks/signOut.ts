@@ -1,13 +1,10 @@
-// import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import { useStoreActions } from '#/state';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 
 export const useSignOut = (): {
   signOut: () => void;
 } => {
-  // const { signOut: signOutClerk } = useAuthClerk();
-  // TODO clerk change
-  const { logout: signOutClerk } = useAuth0();
+  const { signOut: signOutClerk } = useAuthClerk();
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
   const signOut = (): void => {
@@ -19,7 +16,7 @@ export const useSignOut = (): {
     window.localStorage.setItem('logo', logo || '');
     window.localStorage.setItem('logo-dark', dLogo || '');
     window.sessionStorage.clear();
-    void signOutClerk({ returnTo: 'https://app.shopsafealert.co.uk' });
+    void signOutClerk();
   };
   return { signOut };
 };
