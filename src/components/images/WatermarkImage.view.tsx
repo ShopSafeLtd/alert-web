@@ -1,62 +1,63 @@
+import type { Theme } from '#/configs/ThemeConfig';
+
+import { ImagePosition } from 'graphql/types';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
-import type { Theme } from '#/configs/ThemeConfig';
-import { ImagePosition } from 'graphql/types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   container: {
-    position: 'relative',
-    width: '100%',
     height: '100%',
     overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+  },
+  image: {
+    backgroundColor: theme.imageBackgroundColor,
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    color: '#fff',
+    height: '100%',
+    width: '100%',
   },
   imageContainer: {
-    position: 'relative',
     overflow: 'hidden',
+    position: 'relative',
   },
-  textOverlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    zIndex: 2,
-  },
-  textContainer: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    opacity: 0.2,
-    transform: 'rotate(-45deg)',
-    width: '100%',
-    height: '100%',
-    zIndex: 1,
+  standardImage: {
+    maxHeight: '100vh',
   },
   text: {
-    marginRight: '20%',
     fontSize: '100%',
     fontWeight: 100,
+    marginRight: '20%',
     textShadow:
       '-1px -1px 0 #212020, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
     userSelect: 'none',
   },
-  image: {
-    width: '100%',
+  textContainer: {
+    alignItems: 'center',
+    bottom: 0,
+    display: 'flex',
     height: '100%',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center center',
-    color: '#fff',
-    backgroundColor: theme.imageBackgroundColor,
+    justifyContent: 'center',
+    left: 0,
+    opacity: 0.2,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    transform: 'rotate(-45deg)',
+    width: '100%',
+    zIndex: 1,
   },
-  standardImage: {
-    maxHeight: '100vh',
+  textOverlay: {
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 2,
   },
 }));
 
@@ -93,19 +94,21 @@ const getPosition = (position?: ImagePosition): string => {
 };
 
 interface Props {
-  url?: string | null;
   image?: boolean;
   position?: ImagePosition;
   rotation?: number;
   showWatermark?: boolean;
+  style?: React.CSSProperties;
+  url?: null | string;
 }
 
 const WatermarkImage = ({
-  url,
   image,
   position,
   rotation,
   showWatermark = true,
+  style,
+  url,
 }: Props) => {
   const classes = useStyles();
   const reference = useStoreState((state) => state.user.reference);
@@ -125,10 +128,10 @@ const WatermarkImage = ({
         )}
         {image && (
           <img
-            className={classes.standardImage}
-            src={url || undefined}
             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
             alt="lightbox"
+            className={classes.standardImage}
+            src={url || undefined}
           />
         )}
       </div>
@@ -137,7 +140,7 @@ const WatermarkImage = ({
   return (
     <div className={image ? classes.imageContainer : classes.container}>
       <div className={classes.textOverlay} />
-      <div style={{ left: '-70%' }} className={classes.textContainer}>
+      <div className={classes.textContainer} style={{ left: '-70%' }}>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
@@ -150,7 +153,7 @@ const WatermarkImage = ({
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
       </div>
-      <div style={{ left: '-40%' }} className={classes.textContainer}>
+      <div className={classes.textContainer} style={{ left: '-40%' }}>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
@@ -176,7 +179,7 @@ const WatermarkImage = ({
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
       </div>
-      <div style={{ left: '40%' }} className={classes.textContainer}>
+      <div className={classes.textContainer} style={{ left: '40%' }}>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
@@ -189,7 +192,7 @@ const WatermarkImage = ({
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
       </div>
-      <div style={{ left: '70%' }} className={classes.textContainer}>
+      <div className={classes.textContainer} style={{ left: '70%' }}>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
@@ -215,10 +218,12 @@ const WatermarkImage = ({
       )}
       {image && (
         <img
-          className={classes.standardImage}
-          src={url || undefined}
           // eslint-disable-next-line formatjs/no-literal-string-in-jsx
           alt="lightbox"
+          className={classes.standardImage}
+          loading="lazy"
+          src={url || undefined}
+          style={style}
         />
       )}
     </div>
