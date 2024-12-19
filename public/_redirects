@@ -3,4 +3,8 @@
 /util-api/*      https://util-server-go.azurewebsites.net/:splat            200!
 /ingest/static/* https://eu-assets.i.posthog.com/static/:splat              200!
 /ingest/*        https://eu.i.posthog.com/:splat                            200!
-/*               /index.html                                                200
+https://app.shopsafealert.co.uk/:splat        https://app.shopsafe.io/:splat   301!
+https://app.shopsafealert.uk/:splat        https://app.shopsafe.io/:splat     301!
+https://app.shopsafealert.com/:splat        https://app.shopsafe.io/:splat    301!
+https://app.shopsafe.uk/:splat           https://app.shopsafe.io/:splat       301!
+/*         /index.html                                                200
