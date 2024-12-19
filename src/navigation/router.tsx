@@ -1,29 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+import Loading from '#/components/shared-components/AntD/Loading';
+import { useTokenContext } from '#/context/token-context';
 import { useThemeLanguage } from '#/hooks/useThemeLanguage';
+import AppLayout from '#/layouts/app-layout';
 import { GuestLayout } from '#/layouts/guest-layout';
-import { useAuth0 } from '@auth0/auth0-react';
+import Terms from '#/navigation/auth-views/components/Terms';
+import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
+import LoginView from '#/views/sign-in/Login.View';
+import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import { ConfigProvider } from 'antd';
 import theme from 'configs/ThemeConfig';
-import { useAuth } from 'hooks';
-import AppLayout from 'layouts/app-layout';
-import { AuthLayout } from 'layouts/auth-layout';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { ThemeProvider } from 'react-jss';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { useStoreState } from 'state';
-
-import Loading from '../components/loading';
-import PrimaryOnboarding from '../views/onboard/SetPassword';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
 const Views = () => {
-  const { isLoading } = useAuth0();
-  const location = useLocation();
-
   // check if current url is staging. If so, redirect to  https://app.shopsafealert.co.uk/ unless localstorage has been set with staging:true
   if (
     window?.location?.href?.includes('staging.shopsafealert') &&
@@ -38,15 +32,7 @@ const Views = () => {
   } else if (navigator?.userAgent?.toLowerCase().includes('iphone')) {
     window.location.href = 'https://apps.apple.com/gb/app/alert/id1497736226';
   }
-
-  const currentRoute = location.pathname;
-  const guestRoutes = ['/generated', '/ext/'];
-  const guestRoute = guestRoutes.some((route) => currentRoute.includes(route));
-
-  const isSet = useStoreState((state) => state.auth.isSet);
-  const userId = useStoreState((state) => state.user.id);
-
-  const { loading, rehydrateAuth } = useAuth();
+  const { token } = useTokenContext();
 
   const {
     currentAppLocale,
@@ -54,25 +40,6 @@ const Views = () => {
     theme: currentTheme,
   } = useThemeLanguage();
 
-  useEffect(() => {
-    if (!guestRoute) rehydrateAuth();
-  }, []);
-
-  if ((loading || isLoading || !isSet) && !guestRoute) {
-    return <Loading />;
-  }
-
-  if (guestRoute) {
-    return (
-      <div style={{ colorScheme: currentTheme }}>
-        <ThemeProvider theme={theme[currentTheme]}>
-          <Routes>
-            <Route element={<GuestLayout />} path="ext/*" />
-          </Routes>
-        </ThemeProvider>
-      </div>
-    );
-  }
   return (
     <div style={{ colorScheme: currentTheme }}>
       <IntlProvider
@@ -83,25 +50,38 @@ const Views = () => {
         <ErrorBoundary>
           <ThemeProvider theme={theme[currentTheme]}>
             <ConfigProvider locale={currentAppLocale.antd}>
-              {isSet ? (
-                <SentryRoutes>
-                  <Route path="/">
-                    <Route element={<Navigate to="app" />} index />
-                    <Route element={<AuthLayout />} path="auth/*" />
-                    <Route
-                      element={<AppLayout location={location} />}
-                      path="app/*"
-                    />
-                    <Route
-                      element={<PrimaryOnboarding userId={userId} />}
-                      path="onboarding/password"
-                    />
-                    <Route element={<Navigate to="app" />} path="*" />
-                  </Route>
-                </SentryRoutes>
-              ) : (
-                <Loading />
-              )}
+              <SentryRoutes>
+                <Route element={<Navigate to="app" />} path="*" />
+                <Route element={<Terms />} path="/terms/*" />
+
+                <Route
+                  element={
+                    <>
+                      <SignedOut>
+                        <Navigate to={GenerateSignInRedirect()} />
+                      </SignedOut>
+                      <SignedIn>
+                        {token ? <AppLayout /> : <Loading cover="content" />}
+                      </SignedIn>
+                    </>
+                  }
+                  path="/app/*"
+                />
+                <Route
+                  element={
+                    <>
+                      <SignedOut>
+                        <LoginView />
+                      </SignedOut>
+                      <SignedIn>
+                        <Navigate to="/app" />
+                      </SignedIn>
+                    </>
+                  }
+                  path={'/sign-in/*'}
+                />
+                <Route element={<GuestLayout />} path="/ext/*" />
+              </SentryRoutes>
             </ConfigProvider>
           </ThemeProvider>
         </ErrorBoundary>

@@ -140,6 +140,7 @@ const EditOffender = ({
   updateNewOffenderTagData,
 }: Props): JSX.Element => {
   const intl = useIntl();
+
   return (
     <div className="list-view">
       {loading ? (
@@ -153,7 +154,7 @@ const EditOffender = ({
               ageCheck: !!data?.offender?.dateOfBirth,
               build: data?.offender?.build || null,
               dateOfBirth: data?.offender?.dateOfBirth
-                ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
+                ? moment.utc(data.offender.dateOfBirth)
                 : null,
               dateSource: data?.offender?.dateSource || null,
               gender: data?.offender?.gender || null,
