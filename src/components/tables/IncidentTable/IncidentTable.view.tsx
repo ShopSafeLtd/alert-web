@@ -231,7 +231,7 @@ const IncidentTable = ({
       loading={loading}
       pagination={{
         defaultPageSize: pageSize || 5,
-        hideOnSinglePage: !!(pageSize && pageSize < 100) ?? true,
+        hideOnSinglePage: !!(pageSize && pageSize < 100) || true,
         onChange:
           onPageSizeChange || onPageChange
             ? (tablePage: number, tablePageSize: number) => {
