@@ -1,5 +1,6 @@
 import type { CapturedNetworkRequest, PostHogConfig } from 'posthog-js';
 
+import { TokenProvider } from '#/context/token-context';
 import { LoadScript } from '@react-google-maps/api';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
@@ -24,6 +25,11 @@ import RouteWrapper from './navigation/utils/route-wrapper';
 import ApolloProvider from './providers/ApolloProvider';
 import { Store, ThemeConfig } from './state';
 
+const themes = {
+  dark: '/css/dark-theme.css',
+  light: '/css/light-theme.css',
+};
+
 const excludedNetwork = [
   'api.mapbox.com',
   'events.mapbox.com',
@@ -31,7 +37,6 @@ const excludedNetwork = [
   'shopsafealert.blob.core.windows.net',
   'https://app.shopsafealert.co.uk/ingest/',
 ];
-
 const options: Partial<PostHogConfig> = {
   api_host: 'https://app.shopsafealert.co.uk/ingest',
   disable_surveys: true,
@@ -46,12 +51,6 @@ const options: Partial<PostHogConfig> = {
   },
   ui_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
 };
-
-const themes = {
-  dark: '/css/dark-theme.css',
-  light: '/css/light-theme.css',
-};
-
 if (import.meta.env.PROD) {
   mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
   Sentry.init({
@@ -85,7 +84,7 @@ if (import.meta.env.PROD) {
     // of transactions for performance monitoring.
     sendDefaultPii: true,
     // Adjust for production
-    tracesSampleRate: 0.4,
+    tracesSampleRate: 0.6,
   });
 }
 
@@ -104,13 +103,15 @@ const App = (): JSX.Element => (
           googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
           libraries={['visualization']}
         >
-          <Store>
-            <ApolloProvider>
-              <RouteWrapper title={undefined}>
-                <Views />
-              </RouteWrapper>
-            </ApolloProvider>
-          </Store>
+          <TokenProvider>
+            <Store>
+              <ApolloProvider>
+                <RouteWrapper title={undefined}>
+                  <Views />
+                </RouteWrapper>
+              </ApolloProvider>
+            </Store>
+          </TokenProvider>
         </LoadScript>
       </ThemeSwitcherProvider>
     </PostHogProvider>
