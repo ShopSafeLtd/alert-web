@@ -16,7 +16,7 @@ import { sha256 } from 'crypto-hash';
 import { createClient } from 'graphql-ws';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
-import { redirect, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
 interface Props {
@@ -38,7 +38,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
         navigate(
           currentRoute && currentRoute.includes('sign-in')
             ? '/sign-in'
-            : `/sign-in?rd=${redirect || currentRoute}`
+            : `/sign-in?rd=${currentRoute}`
         );
       }
       setToken(t);
