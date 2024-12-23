@@ -72,6 +72,8 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const [saving, setSaving] = useState(false);
 
   const { data: offenderData, loading } = useEditOffenderQuery({
+    // TODO remove and update cache - tmp fix for quick fix
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         id: offenderId,

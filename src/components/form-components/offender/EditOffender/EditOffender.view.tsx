@@ -154,7 +154,9 @@ const EditOffender = ({
               ageCheck: !!data?.offender?.dateOfBirth,
               build: data?.offender?.build || null,
               dateOfBirth: data?.offender?.dateOfBirth
-                ? moment.utc(data.offender.dateOfBirth)
+                ? moment
+                    .utc(data.offender.dateOfBirth)
+                    .set({ hour: 12, millisecond: 0, minute: 0, second: 0 })
                 : null,
               dateSource: data?.offender?.dateSource || null,
               gender: data?.offender?.gender || null,
