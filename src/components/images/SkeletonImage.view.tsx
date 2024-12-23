@@ -1,20 +1,21 @@
+import type { Theme } from 'configs/ThemeConfig';
+
+import { faImage } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
 import { useStoreState } from 'state';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage } from '@fortawesome/pro-light-svg-icons';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   noImage: {
-    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: theme.imageBackgroundColor,
+    display: 'flex',
+    justifyContent: 'center',
   },
   noImageLogo: {
-    width: 200,
     opacity: 0.8,
+    width: 200,
   },
 }));
 
@@ -29,14 +30,14 @@ const SkeletonImage = ({ height = 280 }: { height?: number }) => {
       {!darkLogo && <FontAwesomeIcon icon={faImage} size="4x" />}
       {lightLogo && darkLogo && (
         <img
+          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+          alt="logo"
           className={classes.noImageLogo}
           src={
             currentTheme === 'light'
-              ? lightLogo || 'https://app.shopsafealert.co.uk/img/dark-logo.svg'
-              : darkLogo || 'https://app.shopsafealert.co.uk/img/light-logo.svg'
+              ? lightLogo || 'https://app.shopsafe.io/img/dark-logo.svg'
+              : darkLogo || 'https://app.shopsafe.io/img/light-logo.svg'
           }
-          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-          alt="logo"
         />
       )}
     </div>

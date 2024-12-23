@@ -35,10 +35,10 @@ const excludedNetwork = [
   'events.mapbox.com',
   'api-js.mixpanel.com',
   'shopsafealert.blob.core.windows.net',
-  'https://app.shopsafealert.co.uk/ingest/',
+  'https://app.shopsafe.io/ingest/',
 ];
 const options: Partial<PostHogConfig> = {
-  api_host: 'https://app.shopsafealert.co.uk/ingest',
+  api_host: 'https://app.shopsafe.io/ingest',
   disable_surveys: true,
   session_recording: {
     maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {
