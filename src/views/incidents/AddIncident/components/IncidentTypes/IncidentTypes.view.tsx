@@ -14,6 +14,7 @@ interface Props {
   incidentForm: IncidentFormField[];
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
+  incidentTypeTooltip?: null | string;
   oneSelectedIncidentTypeOnly: boolean;
   tags: { label: string; tooltip: string; type: TagType; value: string }[];
   tagsLoading: boolean;
@@ -23,6 +24,7 @@ const IncidentTypes = ({
   incidentForm,
   incidentTagsData,
   incidentTagsLoading,
+  incidentTypeTooltip,
   oneSelectedIncidentTypeOnly,
   tags,
   tagsLoading,
@@ -65,10 +67,13 @@ const IncidentTypes = ({
             required: true,
           },
         ]}
-        tooltip={intl.formatMessage({
-          defaultMessage:
-            'Select the relevant incident type; this helps to categorise the incident',
-        })}
+        tooltip={
+          incidentTypeTooltip ||
+          intl.formatMessage({
+            defaultMessage:
+              'Select the relevant incident type; this helps to categorise the incident',
+          })
+        }
       >
         <CheckTags
           loading={incidentTagsLoading}

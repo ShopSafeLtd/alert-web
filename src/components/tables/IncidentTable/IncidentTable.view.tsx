@@ -77,7 +77,7 @@ const IncidentTable = ({
   const restrictIncidentAccess =
     useStoreState((state) => state.scheme.restrictIncidentAccess) &&
     role === Role.User;
-  console.log(page, pageSize, incidents?.length);
+
   return (
     <Table
       columns={[
@@ -142,7 +142,7 @@ const IncidentTable = ({
           dataIndex: 'Options',
           key: 'Options',
           render: (_, record: { key: string }) => (
-            <Row gutter={8}>
+            <Row className="no-print" gutter={8}>
               {hasNavigation && (
                 <Col>
                   <Tooltip

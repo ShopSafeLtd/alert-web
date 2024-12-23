@@ -1,18 +1,21 @@
 import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/__generated__/suggested-memebrs.generated';
 import type { CrimeGroupQuery } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { VehicleData } from 'types/DataType';
 
+import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import {
   faBell,
   faBellSlash,
   faEdit,
+  faFileDownload,
   faMagnifyingGlass,
   faPlus,
   faTrash,
@@ -41,7 +44,6 @@ import CrimeGroupSideList from 'components/crimeGroups/sidelist';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import AddAlias from 'components/form-components/crimeGroup/Alias';
-import AddDocument from 'components/form-components/documents/AddDocument';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import AddNewOffenderSimple from 'components/form-components/offender/AddNewOffenderSimple';
 import MapCard from 'components/map/MapCard/MapCard.view';
@@ -117,7 +119,7 @@ interface Props {
   toggleViewSuggested: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation>;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   userId: string;
   vehicleIds: string[];
@@ -178,6 +180,8 @@ const ViewCrimeGroup = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
+
   // const optionMenuItems = [
   //   {
   //     label: intl.formatMessage({ defaultMessage: 'Add Alias', id: 'KDH1mp' }),
@@ -214,7 +218,7 @@ const ViewCrimeGroup = ({
           <CrimeGroupSideList current={crimeGroupId} />
         </Col>
         <Col className={classes.detailsContent} flex={1}>
-          <Row className={classes.headerBar} gutter={8} justify="end">
+          <Row className={classes.headerBar} justify="end">
             <Col>
               <Tooltip
                 title={
@@ -232,12 +236,16 @@ const ViewCrimeGroup = ({
                   disabled={saving}
                   loading={saving}
                   onClick={toggleSubscribe}
+                  style={{
+                    borderBottomRightRadius: editRights ? 0 : 10,
+                    borderTopRightRadius: editRights ? 0 : 10,
+                    padding: '8.5px .9rem',
+                  }}
                   type="ghost"
                 >
                   <FontAwesomeIcon
                     icon={data?.crimeGroup?.subscribed ? faBellSlash : faBell}
                     size="1x"
-                    style={{ marginRight: 8 }}
                   />
                   {data?.crimeGroup?.subscribed
                     ? intl.formatMessage({
@@ -266,51 +274,86 @@ const ViewCrimeGroup = ({
             )} */}
             {editRights && (
               <Col>
-                <Button onClick={toggleAddAlias} type="ghost">
-                  <FontAwesomeIcon
-                    icon={faEdit}
-                    size="1x"
-                    style={{ marginRight: 8 }}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Edit',
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Edit crime group',
                   })}
-                </Button>
+                >
+                  <Button
+                    className={classes.toolBtn}
+                    onClick={toggleAddAlias}
+                    type="ghost"
+                  >
+                    <FontAwesomeIcon icon={faEdit} size="1x" />
+                    {intl.formatMessage({
+                      defaultMessage: 'Edit',
+                    })}
+                  </Button>
+                </Tooltip>
               </Col>
             )}
             {editRights && (
               <Col>
-                <Button
-                  onClick={() => {
-                    confirm({
-                      content: intl.formatMessage({
-                        defaultMessage: 'This action cannot be undone.',
-                      }),
-                      onOk() {
-                        onDeleteCrimeGroup();
-                      },
-                      title: intl.formatMessage({
-                        defaultMessage:
-                          'Do you want to delete the crime group?',
-                      }),
-                    });
-                  }}
-                  type="ghost"
-                >
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    size="1x"
-                    style={{ marginRight: 8 }}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Delete',
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Download crime group as PDF',
                   })}
-                </Button>
+                >
+                  <Button
+                    className={classes.toolBtn}
+                    loading={isPrinting}
+                    onClick={handlePrint}
+                  >
+                    <FontAwesomeIcon icon={faFileDownload} size="1x" />
+                    {intl.formatMessage({
+                      defaultMessage: 'Download',
+                    })}
+                  </Button>
+                </Tooltip>
+              </Col>
+            )}
+            {editRights && (
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Delete crime group',
+                  })}
+                >
+                  <Button
+                    onClick={() => {
+                      confirm({
+                        content: intl.formatMessage({
+                          defaultMessage: 'This action cannot be undone.',
+                        }),
+                        onOk() {
+                          onDeleteCrimeGroup();
+                        },
+                        title: intl.formatMessage({
+                          defaultMessage:
+                            'Do you want to delete the crime group?',
+                        }),
+                      });
+                    }}
+                    style={{
+                      borderBottomLeftRadius: 0,
+                      borderLeft: 'none',
+                      borderTopLeftRadius: 0,
+                      marginRight: 10,
+                      padding: '8.5px .9rem',
+                    }}
+                    type="ghost"
+                  >
+                    <FontAwesomeIcon icon={faTrash} size="1x" />
+                    {intl.formatMessage({
+                      defaultMessage: 'Delete',
+                    })}
+                  </Button>
+                </Tooltip>
               </Col>
             )}
           </Row>
           <div className={classes.content}>
-            <div className={classes.details}>
+            <div className={classes.details} ref={componentRef}>
               <Card loading={loading}>
                 <Title level={3}>
                   {intl.formatMessage(
@@ -851,7 +894,7 @@ const ViewCrimeGroup = ({
         zIndex={1001}
       >
         {addDocument ? (
-          <AddDocument
+          <AddDocuments
             crimeGroupId={data?.crimeGroup?.id || ''}
             onClose={toggleAddDocument}
             update={updateDocumentList}

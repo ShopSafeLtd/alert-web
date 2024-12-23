@@ -12,11 +12,14 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import {
   faBell,
   faBellSlash,
   faCheckCircle,
+  faFileDownload,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -50,7 +53,6 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 
-import AddDocument from '../../../components/form-components/documents/AddDocument';
 import AddEvidence from '../../../components/form-components/documents/AddEvidence';
 import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';
@@ -233,6 +235,7 @@ const ViewInvestigation = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
 
   return (
     <div style={{ height: '100vh' }}>
@@ -266,6 +269,24 @@ const ViewInvestigation = ({
                       }
                       size="1x"
                     />
+                  </Button>
+                </Tooltip>
+              </Col>
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Download investigation as PDF',
+                  })}
+                >
+                  <Button
+                    loading={isPrinting}
+                    onClick={handlePrint}
+                    style={{
+                      borderBottomRightRadius: 0,
+                      borderTopRightRadius: 0,
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faFileDownload} size="1x" />
                   </Button>
                 </Tooltip>
               </Col>
@@ -364,6 +385,7 @@ const ViewInvestigation = ({
             tab={<FormattedMessage defaultMessage="Details" />}
           >
             <ViewDetails
+              componentRef={componentRef}
               data={data}
               investigationId={data?.investigation?.id || ''}
               loading={loading}
@@ -649,7 +671,7 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addDocument ? (
-          <AddDocument
+          <AddDocuments
             investigationId={data?.investigation?.id || ''}
             onClose={toggleAddDocument}
           />

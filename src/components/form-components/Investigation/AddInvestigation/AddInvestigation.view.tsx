@@ -63,7 +63,8 @@ const AddInvestigation = ({
               rules={[
                 {
                   message: intl.formatMessage({
-                    defaultMessage: 'A name is required for an investigation',
+                    defaultMessage:
+                      'Please select at least one group for the investigation.',
                   }),
                   required: true,
                 },

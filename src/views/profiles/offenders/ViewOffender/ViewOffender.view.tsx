@@ -1,12 +1,12 @@
 import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
+import type { ViewOffenderQuery } from '#/graphql/offenders/queries/__generated__/view-offender.generated';
 import type { OffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { AssociatedOffendersQuery } from 'graphql/offenders/queries/__generated__/associated-offenders.generated';
-import type { ViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import type {
   BanData,
   EditFeedImage,
@@ -16,6 +16,8 @@ import type {
 } from 'types/DataType';
 
 import ShareData from '#/components/form-components/ShareData/ShareData';
+import AddDocuments from '#/components/form-components/documents/AddDocuments';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import {
   faBell,
   faBellSlash,
@@ -25,6 +27,7 @@ import {
   faComment,
   faEarth,
   faEdit,
+  faFileDownload,
   faHeadSide,
   faImage,
   faMagnifyingGlass,
@@ -73,7 +76,6 @@ import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimpl
 import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import AddDocument from 'components/form-components/documents/AddDocument';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
@@ -254,7 +256,7 @@ interface Props {
   toggleViewAssociate: (value: ViewAssociate | null) => void;
   toggleViewMatches: (offenderId: null | string) => void;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation>;
   updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation>;
   updateIncidentList: (value: string) => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
@@ -293,9 +295,9 @@ const ViewOffender = ({
   handleEditUpdate,
   hasConnectedSchemes,
   incidents,
-  incidentsLoading,
-  incidentsPagination,
-  incidentsPaginationDispatch,
+  // incidentsLoading,
+  // incidentsPagination,
+  // incidentsPaginationDispatch,
   knowOffender,
   lightBoxOpen,
   linkIncident,
@@ -373,6 +375,8 @@ const ViewOffender = ({
   const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigate();
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
+
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, margin: 0, padding: 0 }}>
       {intl.formatMessage(
@@ -595,6 +599,30 @@ const ViewOffender = ({
                             </Dropdown>
                           </Col>
                         )}
+                        {editRights && (
+                          <Col>
+                            <Tooltip
+                              title={intl.formatMessage({
+                                defaultMessage: 'Download offender as PDF',
+                              })}
+                            >
+                              <Button
+                                loading={isPrinting}
+                                onClick={handlePrint}
+                                style={{
+                                  borderLeft: 'none',
+                                  borderRadius: 0,
+                                  padding: '8.5px .9rem',
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faFileDownload}
+                                  size="1x"
+                                />
+                              </Button>
+                            </Tooltip>
+                          </Col>
+                        )}
                         {deleteRights && (
                           <Col>
                             <Tooltip
@@ -621,321 +649,318 @@ const ViewOffender = ({
                       </Row>
                     </Col>
                   </Row>
-                  <ImagesList
-                    // lightboxElements={lightboxElements}
-                    editImageData={editImageData}
-                    editRights={editRights}
-                    hasImages={
-                      !!(
-                        data?.offender?.images &&
-                        data?.offender?.images.length > 0
-                      )
-                    }
-                    imagesData={data?.offender?.images}
-                    loading={loading}
-                    // lightBoxOpen={lightBoxOpen}
-                    onDeleteImage={onDeleteImage}
-                    onEditImage={onEditImage}
-                    openLightbox={openLightbox}
-                    saving={saving}
-                    setEditImageData={setEditImageData}
-                    updateImagesList={updateImagesList}
-                  />
+                  <div ref={componentRef}>
+                    <ImagesList
+                      // lightboxElements={lightboxElements}
+                      editImageData={editImageData}
+                      editRights={editRights}
+                      hasImages={
+                        !!(
+                          data?.offender?.images &&
+                          data?.offender?.images.length > 0
+                        )
+                      }
+                      imagesData={data?.offender?.images}
+                      loading={loading}
+                      // lightBoxOpen={lightBoxOpen}
+                      onDeleteImage={onDeleteImage}
+                      onEditImage={onEditImage}
+                      openLightbox={openLightbox}
+                      saving={saving}
+                      setEditImageData={setEditImageData}
+                      updateImagesList={updateImagesList}
+                    />
 
-                  <div className={classes.details}>
-                    {loading ? (
-                      <Skeleton />
-                    ) : (
-                      <div>
-                        <Row gutter={[8, 8]}>
-                          <Col span={12}>
-                            <Card loading={loading} style={{ marginBottom: 0 }}>
-                              <Row align="middle" gutter={10}>
-                                <Col>
-                                  <Title level={3} style={{ margin: 0 }}>
-                                    {data?.offender?.name}
-                                  </Title>
-                                </Col>
-                                <Col>
-                                  <Text>
-                                    {intl.formatMessage(
-                                      {
-                                        defaultMessage: 'Alert ID: {ref}',
-                                      },
-                                      {
-                                        ref: data?.offender?.reference,
-                                      }
-                                    )}
-                                  </Text>
-                                </Col>
-                              </Row>
-
-                              <Row style={{ marginTop: 5 }}>
-                                {data?.offender?.tags.map((tag) => (
-                                  <Col key={tag.id}>
-                                    <Tag className={classes.tag} color="red">
-                                      {tag.name}
-                                    </Tag>
-                                  </Col>
-                                ))}
-                              </Row>
-
-                              <Descriptions
-                                column={1}
-                                style={{ marginTop: 10 }}
+                    <div className={classes.details}>
+                      {loading ? (
+                        <Skeleton />
+                      ) : (
+                        <div>
+                          <Row gutter={[8, 8]}>
+                            <Col xl={12} xs={24}>
+                              <Card
+                                loading={loading}
+                                style={{ marginBottom: 0 }}
                               >
-                                {data?.offender?.alias &&
-                                  data.offender.alias.length > 0 && (
-                                    <Descriptions.Item
-                                      className={classes.descItem}
-                                      label={
-                                        <span className={classes.tagLabel}>
-                                          <FontAwesomeIcon
-                                            className={classes.descIcon}
-                                            icon={faUser}
-                                          />
-                                          {intl.formatMessage({
-                                            defaultMessage: 'Alias',
-                                          })}
-                                        </span>
-                                      }
-                                    >
-                                      <Row>
-                                        {data?.offender?.alias.map((el, i) => (
-                                          // eslint-disable-next-line react/no-array-index-key
-                                          <Tag className={classes.tag} key={i}>
-                                            {el}
-                                          </Tag>
-                                        ))}
-                                      </Row>
-                                    </Descriptions.Item>
-                                  )}
-                                {data?.offender?.infoSource && (
-                                  <Descriptions.Item
-                                    className={classes.descItem}
-                                    label={
-                                      <span>
-                                        <FontAwesomeIcon
-                                          className={classes.descIcon}
-                                          icon={faMemoCircleInfo}
-                                        />
-                                        {intl.formatMessage({
-                                          defaultMessage: 'Information Source',
-                                        })}
-                                      </span>
-                                    }
-                                  >
-                                    <Typography.Text>
-                                      {data.offender.infoSource}
-                                    </Typography.Text>
-                                  </Descriptions.Item>
-                                )}
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faPassport}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Verified ID',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  {data?.offender?.idVerified ? (
-                                    <Typography.Text type="success">
+                                <Row align="middle" gutter={10}>
+                                  <Col>
+                                    <Title level={3} style={{ margin: 0 }}>
+                                      {data?.offender?.name}
+                                    </Title>
+                                  </Col>
+                                  <Col>
+                                    <Text>
                                       {intl.formatMessage(
                                         {
-                                          defaultMessage: 'Verified{source}',
+                                          defaultMessage: 'Alert ID: {ref}',
                                         },
                                         {
-                                          source: getIdSource(
-                                            data?.offender.idSource
-                                          ),
+                                          ref: data?.offender?.reference,
                                         }
                                       )}
-                                    </Typography.Text>
-                                  ) : (
-                                    <Typography.Text type="warning">
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Not Verified',
-                                      })}
-                                    </Typography.Text>
-                                  )}
-                                </Descriptions.Item>
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faClock}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Last updated',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  {FormatCalendar(
-                                    data?.offender?.updatedAt || moment()
-                                  )}
-                                </Descriptions.Item>
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span className={classes.tagLabel}>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faUser}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Created By',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  <Row>
-                                    {data?.offender?.createdBy.fullName}
-                                  </Row>
-                                </Descriptions.Item>
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span className={classes.tagLabel}>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faUsers}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Groups',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  <Row>
-                                    {data?.offender?.groups?.map((group) => (
-                                      <Tag
-                                        className={classes.tag}
-                                        key={group.id}
-                                      >
-                                        {group.name}
-                                      </Tag>
-                                    ))}
-                                  </Row>
-                                </Descriptions.Item>
+                                    </Text>
+                                  </Col>
+                                </Row>
 
-                                {data?.offender?.targetedGoods &&
-                                  data?.offender?.targetedGoods.length > 0 && (
-                                    <Descriptions.Item
-                                      className={classes.descItem}
-                                      label={
-                                        <span className={classes.tagLabel}>
-                                          <FontAwesomeIcon
-                                            className={classes.descIcon}
-                                            icon={faCartShopping}
-                                          />
-                                          {intl.formatMessage({
-                                            defaultMessage: 'Targeted Goods',
-                                          })}
-                                        </span>
-                                      }
-                                    >
-                                      <Row>
-                                        {data?.offender?.targetedGoods?.map(
-                                          (el) => (
-                                            <Tag
-                                              className={classes.tag}
-                                              key={el}
-                                            >
-                                              {el}
-                                            </Tag>
-                                          )
-                                        )}
-                                      </Row>
-                                    </Descriptions.Item>
-                                  )}
-                                {data?.offender?.knownFor &&
-                                  data?.offender?.knownFor.length > 0 && (
-                                    <Descriptions.Item
-                                      className={classes.descItem}
-                                      label={
-                                        <span className={classes.tagLabel}>
-                                          <FontAwesomeIcon
-                                            className={classes.descIcon}
-                                            icon={faSirenOn}
-                                          />
-                                          {intl.formatMessage({
-                                            defaultMessage: 'Known For',
-                                          })}
-                                        </span>
-                                      }
-                                    >
-                                      <Row>
-                                        {data?.offender?.knownFor?.map((el) => (
-                                          <Tag className={classes.tag} key={el}>
-                                            {el}
-                                          </Tag>
-                                        ))}
-                                      </Row>
-                                    </Descriptions.Item>
-                                  )}
-                                <Descriptions column={1}>
-                                  {data?.offender?.justification && (
+                                <Row style={{ marginTop: 5 }}>
+                                  {data?.offender?.tags.map((tag) => (
+                                    <Col key={tag.id}>
+                                      <Tag className={classes.tag} color="red">
+                                        {tag.name}
+                                      </Tag>
+                                    </Col>
+                                  ))}
+                                </Row>
+
+                                <Descriptions
+                                  column={1}
+                                  style={{ marginTop: 10 }}
+                                >
+                                  {data?.offender?.alias &&
+                                    data.offender.alias.length > 0 && (
+                                      <Descriptions.Item
+                                        className={classes.descItem}
+                                        label={
+                                          <span className={classes.tagLabel}>
+                                            <FontAwesomeIcon
+                                              className={classes.descIcon}
+                                              icon={faUser}
+                                            />
+                                            {intl.formatMessage({
+                                              defaultMessage: 'Alias',
+                                            })}
+                                          </span>
+                                        }
+                                      >
+                                        <Row>
+                                          {data?.offender?.alias.map(
+                                            (el, i) => (
+                                              // eslint-disable-next-line react/no-array-index-key
+                                              <Tag
+                                                className={classes.tag}
+                                                key={i}
+                                              >
+                                                {el}
+                                              </Tag>
+                                            )
+                                          )}
+                                        </Row>
+                                      </Descriptions.Item>
+                                    )}
+                                  {data?.offender?.infoSource && (
                                     <Descriptions.Item
                                       className={classes.descItem}
                                       label={
                                         <span>
                                           <FontAwesomeIcon
                                             className={classes.descIcon}
-                                            icon={faNotebook}
+                                            icon={faMemoCircleInfo}
                                           />
                                           {intl.formatMessage({
-                                            defaultMessage: 'Justification',
+                                            defaultMessage:
+                                              'Information Source',
                                           })}
                                         </span>
                                       }
                                     >
-                                      {data?.offender?.justification}
+                                      <Typography.Text>
+                                        {data.offender.infoSource}
+                                      </Typography.Text>
                                     </Descriptions.Item>
                                   )}
-                                </Descriptions>
-                              </Descriptions>
-                            </Card>
-                          </Col>
-                          <Col span={12}>
-                            <Card
-                              loading={loading}
-                              style={{ height: '100%', marginBottom: 0 }}
-                            >
-                              <Title level={4} style={{ marginBottom: 10 }}>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Physical Description',
-                                })}
-                              </Title>
-                              <Descriptions column={1}>
-                                {!data?.offender?.dateOfBirth && (
                                   <Descriptions.Item
                                     className={classes.descItem}
                                     label={
                                       <span>
                                         <FontAwesomeIcon
                                           className={classes.descIcon}
-                                          icon={faUserClock}
+                                          icon={faPassport}
                                         />
                                         {intl.formatMessage({
-                                          defaultMessage: 'Age',
+                                          defaultMessage: 'Verified ID',
                                         })}
                                       </span>
                                     }
                                   >
-                                    {getOffenderAge(data?.offender?.age)}
+                                    {data?.offender?.idVerified ? (
+                                      <Typography.Text type="success">
+                                        {intl.formatMessage(
+                                          {
+                                            defaultMessage: 'Verified{source}',
+                                          },
+                                          {
+                                            source: getIdSource(
+                                              data?.offender.idSource
+                                            ),
+                                          }
+                                        )}
+                                      </Typography.Text>
+                                    ) : (
+                                      <Typography.Text type="warning">
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Not Verified',
+                                        })}
+                                      </Typography.Text>
+                                    )}
                                   </Descriptions.Item>
-                                )}
-                                {publicOffenderDOB &&
-                                  data?.offender?.dateOfBirth && (
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
+                                      <span>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faClock}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Last updated',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    {FormatCalendar(
+                                      data?.offender?.updatedAt || moment()
+                                    )}
+                                  </Descriptions.Item>
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
+                                      <span className={classes.tagLabel}>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faUser}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Created By',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    <Row>
+                                      {data?.offender?.createdBy.fullName}
+                                    </Row>
+                                  </Descriptions.Item>
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
+                                      <span className={classes.tagLabel}>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faUsers}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Groups',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    <Row>
+                                      {data?.offender?.groups?.map((group) => (
+                                        <Tag
+                                          className={classes.tag}
+                                          key={group.id}
+                                        >
+                                          {group.name}
+                                        </Tag>
+                                      ))}
+                                    </Row>
+                                  </Descriptions.Item>
+
+                                  {data?.offender?.targetedGoods &&
+                                    data?.offender?.targetedGoods.length >
+                                      0 && (
+                                      <Descriptions.Item
+                                        className={classes.descItem}
+                                        label={
+                                          <span className={classes.tagLabel}>
+                                            <FontAwesomeIcon
+                                              className={classes.descIcon}
+                                              icon={faCartShopping}
+                                            />
+                                            {intl.formatMessage({
+                                              defaultMessage: 'Targeted Goods',
+                                            })}
+                                          </span>
+                                        }
+                                      >
+                                        <Row>
+                                          {data?.offender?.targetedGoods?.map(
+                                            (el) => (
+                                              <Tag
+                                                className={classes.tag}
+                                                key={el}
+                                              >
+                                                {el}
+                                              </Tag>
+                                            )
+                                          )}
+                                        </Row>
+                                      </Descriptions.Item>
+                                    )}
+                                  {data?.offender?.knownFor &&
+                                    data?.offender?.knownFor.length > 0 && (
+                                      <Descriptions.Item
+                                        className={classes.descItem}
+                                        label={
+                                          <span className={classes.tagLabel}>
+                                            <FontAwesomeIcon
+                                              className={classes.descIcon}
+                                              icon={faSirenOn}
+                                            />
+                                            {intl.formatMessage({
+                                              defaultMessage: 'Known For',
+                                            })}
+                                          </span>
+                                        }
+                                      >
+                                        <Row>
+                                          {data?.offender?.knownFor?.map(
+                                            (el) => (
+                                              <Tag
+                                                className={classes.tag}
+                                                key={el}
+                                              >
+                                                {el}
+                                              </Tag>
+                                            )
+                                          )}
+                                        </Row>
+                                      </Descriptions.Item>
+                                    )}
+                                  <Descriptions column={1}>
+                                    {data?.offender?.justification && (
+                                      <Descriptions.Item
+                                        className={classes.descItem}
+                                        label={
+                                          <span>
+                                            <FontAwesomeIcon
+                                              className={classes.descIcon}
+                                              icon={faNotebook}
+                                            />
+                                            {intl.formatMessage({
+                                              defaultMessage: 'Justification',
+                                            })}
+                                          </span>
+                                        }
+                                      >
+                                        {data?.offender?.justification}
+                                      </Descriptions.Item>
+                                    )}
+                                  </Descriptions>
+                                </Descriptions>
+                              </Card>
+                            </Col>
+                            <Col xl={12} xs={24}>
+                              <Card
+                                loading={loading}
+                                style={{ height: '100%', marginBottom: 0 }}
+                              >
+                                <Title level={4} style={{ marginBottom: 10 }}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Physical Description',
+                                  })}
+                                </Title>
+                                <Descriptions column={1}>
+                                  {!data?.offender?.dateOfBirth && (
                                     <Descriptions.Item
                                       className={classes.descItem}
                                       label={
@@ -945,643 +970,378 @@ const ViewOffender = ({
                                             icon={faUserClock}
                                           />
                                           {intl.formatMessage({
-                                            defaultMessage: 'Date of Birth',
+                                            defaultMessage: 'Age',
                                           })}
                                         </span>
                                       }
                                     >
-                                      {moment(
-                                        data?.offender?.dateOfBirth
-                                      ).format('DD/MM/YYYY')}
+                                      {getOffenderAge(data?.offender?.age)}
                                     </Descriptions.Item>
                                   )}
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faMarsAndVenus}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Sex',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  {getOffenderGender(data?.offender?.gender)}
-                                </Descriptions.Item>
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faUserTag}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Build',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  {getOffenderBuild(data?.offender?.build)}
-                                </Descriptions.Item>
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faHeadSide}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Height',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  {getOffenderHeight(data?.offender?.height)}
-                                </Descriptions.Item>
-                                <Descriptions.Item
-                                  className={classes.descItem}
-                                  label={
-                                    <span>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faEarth}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Ethnicity',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  {getOffenderRace(data?.offender?.race, false)}
-                                </Descriptions.Item>
-                                {data?.offender?.hair && (
+                                  {publicOffenderDOB &&
+                                    data?.offender?.dateOfBirth && (
+                                      <Descriptions.Item
+                                        className={classes.descItem}
+                                        label={
+                                          <span>
+                                            <FontAwesomeIcon
+                                              className={classes.descIcon}
+                                              icon={faUserClock}
+                                            />
+                                            {intl.formatMessage({
+                                              defaultMessage: 'Date of Birth',
+                                            })}
+                                          </span>
+                                        }
+                                      >
+                                        {moment(
+                                          data?.offender?.dateOfBirth
+                                        ).format('DD/MM/YYYY')}
+                                      </Descriptions.Item>
+                                    )}
                                   <Descriptions.Item
                                     className={classes.descItem}
                                     label={
                                       <span>
                                         <FontAwesomeIcon
                                           className={classes.descIcon}
-                                          icon={faUserHair}
+                                          icon={faMarsAndVenus}
                                         />
                                         {intl.formatMessage({
-                                          defaultMessage: 'Hair',
+                                          defaultMessage: 'Sex',
                                         })}
                                       </span>
                                     }
                                   >
-                                    {data?.offender?.hair}
+                                    {getOffenderGender(data?.offender?.gender)}
                                   </Descriptions.Item>
-                                )}
-                              </Descriptions>
-                              {data?.offender?.peculiarities && (
-                                <div style={{ marginBottom: 10 }}>
-                                  <div>
-                                    <Text>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faCircleInfo}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Characteristics:',
-                                      })}
-                                    </Text>
-                                  </div>
-                                  <TranslateButton
-                                    text={data?.offender?.peculiarities || ''}
-                                  />
-                                </div>
-                              )}
-                            </Card>
-                          </Col>
-                          {data?.offender?.comment ? (
-                            <Col span={24}>
-                              <Card>
-                                {data?.offender?.comment && (
-                                  <div>
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
+                                      <span>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faUserTag}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Build',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    {getOffenderBuild(data?.offender?.build)}
+                                  </Descriptions.Item>
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
+                                      <span>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faHeadSide}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Height',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    {getOffenderHeight(data?.offender?.height)}
+                                  </Descriptions.Item>
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
+                                      <span>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faEarth}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Ethnicity',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    {getOffenderRace(
+                                      data?.offender?.race,
+                                      false
+                                    )}
+                                  </Descriptions.Item>
+                                  {data?.offender?.hair && (
+                                    <Descriptions.Item
+                                      className={classes.descItem}
+                                      label={
+                                        <span>
+                                          <FontAwesomeIcon
+                                            className={classes.descIcon}
+                                            icon={faUserHair}
+                                          />
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Hair',
+                                          })}
+                                        </span>
+                                      }
+                                    >
+                                      {data?.offender?.hair}
+                                    </Descriptions.Item>
+                                  )}
+                                </Descriptions>
+                                {data?.offender?.peculiarities && (
+                                  <div style={{ marginBottom: 10 }}>
                                     <div>
                                       <Text>
                                         <FontAwesomeIcon
                                           className={classes.descIcon}
-                                          icon={faComment}
+                                          icon={faCircleInfo}
                                         />
                                         {intl.formatMessage({
-                                          defaultMessage: 'Comment:',
+                                          defaultMessage: 'Characteristics:',
                                         })}
                                       </Text>
                                     </div>
                                     <TranslateButton
-                                      text={data?.offender?.comment || ''}
+                                      text={data?.offender?.peculiarities || ''}
                                     />
                                   </div>
                                 )}
                               </Card>
                             </Col>
-                          ) : undefined}
-                          <Col span={24}>
-                            {data?.offender?.incidents &&
-                            data?.offender?.incidents.length > 0 ? (
-                              <MapCard
-                                height={301}
-                                markers={
-                                  data?.offender?.incidents.map((incident) => ({
-                                    geoLat: incident.location?.geoLat,
-                                    geoLng: incident.location?.geoLng,
-                                  })) || []
-                                }
-                                width="100%"
-                              />
-                            ) : (
-                              <Card
-                                loading={loading}
-                                style={{
-                                  alignItems: 'center',
-                                  display: 'flex',
-                                  height: 'calc(100% - 20px)',
-                                  justifyContent: 'center',
-                                }}
-                              >
-                                <Empty
-                                  description={intl.formatMessage({
-                                    defaultMessage: 'No incidents found',
-                                  })}
-                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                />
-                              </Card>
-                            )}
-                          </Col>
-                        </Row>
-                        <Card loading={loading}>
-                          <Row align="middle" style={{ marginBottom: 20 }}>
-                            <Col>
-                              <Title
-                                level={4}
-                                style={{ marginBottom: 0, marginRight: 20 }}
-                              >
-                                {intl.formatMessage({
-                                  defaultMessage: 'Known Associates',
-                                })}
-                              </Title>
-                            </Col>
-                            <Col>
-                              <CheckTags
-                                onChange={onAssociateFilterChange}
-                                options={[
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Linked Incidents',
-                                    }),
-                                    value: 'LINKED_INCIDENTS',
-                                  },
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Linked OCG',
-                                    }),
-                                    value: 'LINKED_OCG',
-                                  },
-                                ]}
-                                value={associateFilters as string[]}
-                              />
-                            </Col>
-                          </Row>
-                          <Row
-                            className={classes.offenderRow}
-                            gutter={[8, 8]}
-                            wrap={false}
-                          >
-                            {associatesLoading &&
-                              Array.from({ length: 12 }).map((_, index) => (
-                                // eslint-disable-next-line react/no-array-index-key
-                                <Col key={index}>
-                                  <Skeleton.Avatar
-                                    active
-                                    shape="square"
-                                    style={{
-                                      borderRadius: '0.625rem',
-                                      height: 200,
-                                      width: 150,
-                                    }}
-                                  />
-                                </Col>
-                              ))}
-                            {associatesData?.offender?.knownAssociates &&
-                              associatesData.offender.knownAssociates.length ===
-                                0 && (
-                                <Row justify="center" style={{ width: '100%' }}>
-                                  <Col>
-                                    <Empty
-                                      description={intl.formatMessage({
-                                        defaultMessage:
-                                          'No known associates found',
-                                      })}
-                                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                    />
-                                  </Col>
-                                </Row>
-                              )}
-                            {associatesData?.offender?.knownAssociates?.map(
-                              (associate) => (
-                                <Col key={associate.id}>
-                                  <Card
-                                    bodyStyle={{
-                                      alignItems: 'center',
-                                      borderRadius: '0.625rem',
-                                      cursor: 'pointer',
-                                      display: 'flex',
-                                      height: 200,
-                                      justifyContent: 'center',
-                                      overflow: 'hidden',
-                                      padding: 0,
-                                      position: 'relative',
-                                      width: 150,
-                                    }}
-                                    loading={loading}
-                                    onClick={() =>
-                                      toggleViewAssociate(associate)
-                                    }
-                                    // onClick={() => setAddRecentOffender(offender)}
-                                    style={{ border: 0 }}
-                                  >
-                                    <Row
-                                      className={classes.offenderBadge}
-                                      gutter={8}
-                                    >
-                                      <Col>
-                                        <Badge
-                                          color="basic"
-                                          count={
-                                            associate.totalAssociatedIncidents
-                                              ? intl.formatMessage(
-                                                  {
-                                                    defaultMessage:
-                                                      'Incidents: {totalAssociatedIncidents}',
-                                                  },
-                                                  {
-                                                    totalAssociatedIncidents:
-                                                      associate.totalAssociatedIncidents,
-                                                  }
-                                                )
-                                              : undefined
-                                          }
-                                        />
-                                      </Col>
-                                      <Col>
-                                        <Badge
-                                          color="basic"
-                                          count={
-                                            associate.totalAssociatedCrimeGroups
-                                              ? 'OCG'
-                                              : undefined
-                                          }
-                                        />
-                                      </Col>
-                                    </Row>
-                                    {associate.images.length > 0 && (
-                                      <WatermarkImage
-                                        position={associate.images[0]?.position}
-                                        url={associate.images[0]?.optimised}
+                            {data?.offender?.comment ? (
+                              <Col span={24}>
+                                <Card>
+                                  {data?.offender?.comment && (
+                                    <div>
+                                      <div>
+                                        <Text>
+                                          <FontAwesomeIcon
+                                            className={classes.descIcon}
+                                            icon={faComment}
+                                          />
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Comment:',
+                                          })}
+                                        </Text>
+                                      </div>
+                                      <TranslateButton
+                                        text={data?.offender?.comment || ''}
                                       />
-                                    )}
-                                    {associate.images.length === 0 && (
-                                      <FontAwesomeIcon
-                                        icon={faUser}
-                                        size="3x"
-                                        style={{ color: 'rgb(114, 132, 154)' }}
-                                      />
-                                    )}
-                                    <Paragraph
-                                      className={classes.offenderParagraph}
-                                      style={{
-                                        bottom: 9,
-                                        paddingBottom: 0,
-                                      }}
-                                    >
-                                      {intl.formatMessage(
-                                        {
-                                          defaultMessage: 'Alert Id: {ref}',
-                                        },
-                                        {
-                                          ref: associate.reference,
-                                        }
-                                      )}
-                                    </Paragraph>
-                                    <Paragraph
-                                      className={classes.offenderParagraph}
-                                      style={{
-                                        bottom: -15,
-                                        paddingTop: 0,
-                                      }}
-                                    >
-                                      {associate.name}
-                                    </Paragraph>
-                                  </Card>
-                                </Col>
-                              )
-                            )}
-                          </Row>
-                        </Card>
-                        <Card loading={loading}>
-                          <Row
-                            align="middle"
-                            gutter={8}
-                            style={{ marginBottom: 10 }}
-                          >
-                            <Col flex={1}>
-                              <Title level={4}>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Outcomes',
-                                })}
-                              </Title>
-                            </Col>
-                            {editRights && (
-                              <Col>
-                                <Button
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
-                                    />
+                                    </div>
+                                  )}
+                                </Card>
+                              </Col>
+                            ) : undefined}
+                            <Col span={24}>
+                              {data?.offender?.incidents &&
+                              data?.offender?.incidents.length > 0 ? (
+                                <MapCard
+                                  height={301}
+                                  isPrinting={isPrinting}
+                                  markers={
+                                    data?.offender?.incidents.map(
+                                      (incident) => ({
+                                        geoLat: incident.location?.geoLat,
+                                        geoLng: incident.location?.geoLng,
+                                      })
+                                    ) || []
                                   }
-                                  onClick={toggleAddBan}
-                                  size="small"
+                                  width="100%"
+                                />
+                              ) : (
+                                <Card
+                                  loading={loading}
+                                  style={{
+                                    alignItems: 'center',
+                                    display: 'flex',
+                                    height: 'calc(100% - 20px)',
+                                    justifyContent: 'center',
+                                  }}
+                                >
+                                  <Empty
+                                    description={intl.formatMessage({
+                                      defaultMessage: 'No incidents found',
+                                    })}
+                                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                  />
+                                </Card>
+                              )}
+                            </Col>
+                          </Row>
+                          <Card loading={loading}>
+                            <Row align="middle" style={{ marginBottom: 20 }}>
+                              <Col>
+                                <Title
+                                  level={4}
+                                  style={{ marginBottom: 0, marginRight: 20 }}
                                 >
                                   {intl.formatMessage({
-                                    defaultMessage: 'Add Outcome',
+                                    defaultMessage: 'Known Associates',
                                   })}
-                                </Button>
+                                </Title>
                               </Col>
-                            )}
-                          </Row>
-                          {data?.offender?.bans.length && !loading ? (
-                            <Table
-                              columns={[
-                                {
-                                  dataIndex: 'type',
-                                  ellipsis: true,
-                                  key: 'type',
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Type',
-                                  }),
-                                },
-                                {
-                                  dataIndex: 'duration',
-                                  key: 'duration',
-                                  render: (value, row) =>
-                                    [
-                                      BanType.Cbo,
-                                      BanType.CommunityBan,
-                                      BanType.Cpn,
-                                      BanType.Cpw,
-                                      BanType.Other,
-                                      BanType.PrisonSentence,
-                                      BanType.Pspo,
-                                      BanType.Wip,
-                                    ].includes(row.typeEnum as BanType) && (
-                                      <Text>{value}</Text>
-                                    ),
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Duration',
-                                  }),
-                                  width: 110,
-                                },
-                                {
-                                  dataIndex: 'status',
-                                  key: 'status',
-                                  render: (value, record) =>
-                                    [
-                                      BanType.Cbo,
-                                      BanType.CommunityBan,
-                                      BanType.Cpn,
-                                      BanType.Cpw,
-                                      BanType.Other,
-                                      BanType.Pspo,
-                                      BanType.Wip,
-                                    ].includes(record.typeEnum as BanType) && (
-                                      <div>
-                                        {calcExpired(
-                                          new Date(record.endDate)
-                                        ) ? (
-                                          <Tag color="red">
-                                            {intl.formatMessage({
-                                              defaultMessage: 'EXPIRED',
-                                            })}
-                                          </Tag>
-                                        ) : (
-                                          <Tag color="success">
-                                            {intl.formatMessage({
-                                              defaultMessage: 'ACTIVE',
-                                            })}
-                                          </Tag>
-                                        )}
-                                      </div>
-                                    ),
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Status',
-                                  }),
-                                },
-                                {
-                                  dataIndex: 'fineValue',
-                                  ellipsis: true,
-                                  key: 'fineValue',
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Fine Value',
-                                  }),
-                                },
-                                {
-                                  dataIndex: 'Options',
-                                  key: 'Options',
-                                  // width: 100,
-                                  render: (_, record) => (
-                                    <Row gutter={8}>
-                                      {editRights && (
-                                        <Col>
-                                          <Tooltip
-                                            title={intl.formatMessage({
-                                              defaultMessage: 'Edit Exclusion',
-                                            })}
-                                          >
-                                            <Button
-                                              disabled={saving}
-                                              icon={
-                                                <FontAwesomeIcon
-                                                  icon={faPenToSquare}
-                                                />
-                                              }
-                                              onClick={() => {
-                                                setEditBanData(record.ban);
-                                              }}
-                                              size="small"
-                                            />
-                                          </Tooltip>
-                                        </Col>
-                                      )}
-                                      {deleteRights && (
-                                        <Col>
-                                          <Tooltip
-                                            title={intl.formatMessage({
-                                              defaultMessage:
-                                                'Remove Exclusion',
-                                            })}
-                                          >
-                                            <Popconfirm
-                                              cancelText={intl.formatMessage({
-                                                defaultMessage: 'No',
-                                              })}
-                                              okText={intl.formatMessage({
-                                                defaultMessage: 'Yes',
-                                              })}
-                                              onConfirm={() =>
-                                                onDeleteBan(record.key)
-                                              }
-                                              overlayInnerStyle={{
-                                                padding: 10,
-                                              }}
-                                              placement="topLeft"
-                                              title={intl.formatMessage({
-                                                defaultMessage:
-                                                  'Remove the exclusion?',
-                                              })}
-                                              trigger="hover"
-                                            >
-                                              <Button
-                                                disabled={saving}
-                                                icon={
-                                                  <FontAwesomeIcon
-                                                    icon={faTrash}
-                                                  />
-                                                }
-                                                size="small"
-                                              />
-                                            </Popconfirm>
-                                          </Tooltip>
-                                        </Col>
-                                      )}
-                                    </Row>
-                                  ),
-                                  title: '',
-                                },
-                              ]}
-                              dataSource={data?.offender?.bans.map((ban) => ({
-                                activeDay: calcDuration(
-                                  new Date(ban?.startDate),
-                                  new Date(ban?.endDate)
-                                ),
-                                ban,
-                                description: ban.description,
-                                duration: [
-                                  BanType.Cbo,
-                                  BanType.PrisonSentence,
-                                  BanType.SuspendedSentence,
-                                ].includes(ban.type as BanType)
-                                  ? intl.formatMessage(
-                                      {
-                                        defaultMessage: '{months} {b}',
-                                      },
-                                      {
-                                        b:
-                                          BanType.Cbo === (ban.type as BanType)
-                                            ? 'months'
-                                            : 'weeks',
-                                        months: ban.months,
+                              <Col>
+                                <CheckTags
+                                  className="no-print"
+                                  onChange={onAssociateFilterChange}
+                                  options={[
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Linked Incidents',
+                                      }),
+                                      value: 'LINKED_INCIDENTS',
+                                    },
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Linked OCG',
+                                      }),
+                                      value: 'LINKED_OCG',
+                                    },
+                                  ]}
+                                  value={associateFilters as string[]}
+                                />
+                              </Col>
+                            </Row>
+                            <Row
+                              className={classes.offenderRow}
+                              gutter={[8, 8]}
+                              wrap={false}
+                            >
+                              {associatesLoading &&
+                                Array.from({ length: 12 }).map((_, index) => (
+                                  // eslint-disable-next-line react/no-array-index-key
+                                  <Col key={index}>
+                                    <Skeleton.Avatar
+                                      active
+                                      shape="square"
+                                      style={{
+                                        borderRadius: '0.625rem',
+                                        height: 200,
+                                        width: 150,
+                                      }}
+                                    />
+                                  </Col>
+                                ))}
+                              {associatesData?.offender?.knownAssociates &&
+                                associatesData.offender.knownAssociates
+                                  .length === 0 && (
+                                  <Row
+                                    justify="center"
+                                    style={{ width: '100%' }}
+                                  >
+                                    <Col>
+                                      <Empty
+                                        description={intl.formatMessage({
+                                          defaultMessage:
+                                            'No known associates found',
+                                        })}
+                                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                      />
+                                    </Col>
+                                  </Row>
+                                )}
+                              {associatesData?.offender?.knownAssociates?.map(
+                                (associate) => (
+                                  <Col key={associate.id}>
+                                    <Card
+                                      bodyStyle={{
+                                        alignItems: 'center',
+                                        borderRadius: '0.625rem',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        height: 200,
+                                        justifyContent: 'center',
+                                        overflow: 'hidden',
+                                        padding: 0,
+                                        position: 'relative',
+                                        width: 150,
+                                      }}
+                                      loading={loading}
+                                      onClick={() =>
+                                        toggleViewAssociate(associate)
                                       }
-                                    )
-                                  : `${FormatCalendar(
-                                      ban?.startDate,
-                                      true
-                                    )}  ->  ${FormatCalendar(
-                                      ban?.endDate,
-                                      true
-                                    )}`,
-                                endDate: ban.endDate,
-                                fineValue:
-                                  ban.fineValue === 0
-                                    ? ''
-                                    : intl.formatMessage(
-                                        {
-                                          defaultMessage: '£{value}',
-                                        },
-                                        {
-                                          value: ban.fineValue,
-                                        }
-                                      ),
-                                key: ban.id,
-                                location: ban.location,
-                                status: `${new Date(
-                                  ban?.startDate
-                                ).toDateString()}  -->  ${new Date(
-                                  ban?.endDate
-                                ).toDateString()}`,
-                                type: getBanType(ban.type),
-                                typeEnum: ban.type,
-                              }))}
-                              expandable={{
-                                expandedRowRender,
-                                rowExpandable: (record) => !!record.description,
-                              }}
-                              loading={loading}
-                              pagination={
-                                data?.offender?.bans &&
-                                data.offender.bans.length > 5
-                                  ? {
-                                      pageSize: 5,
-                                    }
-                                  : false
-                              }
-                              size="small"
-                            />
-                          ) : (
-                            <Empty
-                              description={intl.formatMessage({
-                                defaultMessage:
-                                  'No exclusions for this offender',
-                              })}
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            />
-                          )}
-                        </Card>
-                        <Card loading={loading}>
-                          <Title level={4}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Incidents',
-                            })}
-                          </Title>
-                          {loading ? (
-                            <Empty
-                              description={intl.formatMessage({
-                                defaultMessage:
-                                  'No incidents for this offender',
-                              })}
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            />
-                          ) : (
-                            <IncidentTable
-                              hasNavigation
-                              incidents={incidents || []}
-                              loading={incidentsLoading}
-                              onPageChange={(page) =>
-                                incidentsPaginationDispatch({
-                                  payload: page,
-                                  type: 'changePage',
-                                })
-                              }
-                              onPageSizeChange={(pageSize) =>
-                                incidentsPaginationDispatch({
-                                  payload: pageSize,
-                                  type: 'changePageSize',
-                                })
-                              }
-                              page={incidentsPagination.currentPage}
-                              pageSize={incidentsPagination.pageSize}
-                              total={data?.offender.totalIncidents || 0}
-                            />
-                          )}
-                        </Card>
-
-                        {editRights && (
+                                      // onClick={() => setAddRecentOffender(offender)}
+                                      style={{ border: 0 }}
+                                    >
+                                      <Row
+                                        className={classes.offenderBadge}
+                                        gutter={8}
+                                      >
+                                        <Col>
+                                          <Badge
+                                            color="basic"
+                                            count={
+                                              associate.totalAssociatedIncidents
+                                                ? intl.formatMessage(
+                                                    {
+                                                      defaultMessage:
+                                                        'Incidents: {totalAssociatedIncidents}',
+                                                    },
+                                                    {
+                                                      totalAssociatedIncidents:
+                                                        associate.totalAssociatedIncidents,
+                                                    }
+                                                  )
+                                                : undefined
+                                            }
+                                          />
+                                        </Col>
+                                        <Col>
+                                          <Badge
+                                            color="basic"
+                                            count={
+                                              associate.totalAssociatedCrimeGroups
+                                                ? 'OCG'
+                                                : undefined
+                                            }
+                                          />
+                                        </Col>
+                                      </Row>
+                                      {associate.images.length > 0 && (
+                                        <WatermarkImage
+                                          position={
+                                            associate.images[0]?.position
+                                          }
+                                          url={associate.images[0]?.optimised}
+                                        />
+                                      )}
+                                      {associate.images.length === 0 && (
+                                        <FontAwesomeIcon
+                                          icon={faUser}
+                                          size="3x"
+                                          style={{
+                                            color: 'rgb(114, 132, 154)',
+                                          }}
+                                        />
+                                      )}
+                                      <Paragraph
+                                        className={classes.offenderParagraph}
+                                        style={{
+                                          bottom: 9,
+                                          paddingBottom: 0,
+                                        }}
+                                      >
+                                        {intl.formatMessage(
+                                          {
+                                            defaultMessage: 'Alert Id: {ref}',
+                                          },
+                                          {
+                                            ref: associate.reference,
+                                          }
+                                        )}
+                                      </Paragraph>
+                                      <Paragraph
+                                        className={classes.offenderParagraph}
+                                        style={{
+                                          bottom: -15,
+                                          paddingTop: 0,
+                                        }}
+                                      >
+                                        {associate.name}
+                                      </Paragraph>
+                                    </Card>
+                                  </Col>
+                                )
+                              )}
+                            </Row>
+                          </Card>
                           <Card loading={loading}>
                             <Row
                               align="middle"
@@ -1591,57 +1351,119 @@ const ViewOffender = ({
                               <Col flex={1}>
                                 <Title level={4}>
                                   {intl.formatMessage({
-                                    defaultMessage: 'Addresses',
+                                    defaultMessage: 'Outcomes',
                                   })}
                                 </Title>
                               </Col>
                               {editRights && (
                                 <Col>
                                   <Button
+                                    className="no-print"
                                     icon={
                                       <FontAwesomeIcon
                                         icon={faPlus}
                                         style={{ marginRight: 5 }}
                                       />
                                     }
-                                    onClick={toggleAddAddress}
+                                    onClick={toggleAddBan}
                                     size="small"
                                   >
                                     {intl.formatMessage({
-                                      defaultMessage: 'Add Address',
+                                      defaultMessage: 'Add Outcome',
                                     })}
                                   </Button>
                                 </Col>
                               )}
                             </Row>
-                            {data?.offender?.addresses.length && !loading ? (
+                            {data?.offender?.bans.length && !loading ? (
                               <Table
-                                className={classes.exclusions}
                                 columns={[
                                   {
-                                    dataIndex: 'alias',
-                                    key: 'alias',
+                                    dataIndex: 'type',
+                                    ellipsis: true,
+                                    key: 'type',
                                     title: intl.formatMessage({
-                                      defaultMessage: 'Alias',
+                                      defaultMessage: 'Type',
                                     }),
                                   },
                                   {
-                                    dataIndex: 'full',
-                                    key: 'full',
+                                    dataIndex: 'duration',
+                                    key: 'duration',
+                                    // render: (value, row) =>
+                                    //   [
+                                    //     BanType.Cbo,
+                                    //     BanType.CommunityBan,
+                                    //     BanType.Cpn,
+                                    //     BanType.Cpw,
+                                    //     BanType.Other,
+                                    //     BanType.PrisonSentence,
+                                    //     BanType.Pspo,
+                                    //     BanType.Wip,
+                                    //   ].includes(row.typeEnum as BanType) && (
+                                    //     <Text>{value}</Text>
+                                    //   ),
                                     title: intl.formatMessage({
-                                      defaultMessage: 'Full Address',
+                                      defaultMessage: 'Duration',
+                                    }),
+                                    width: 110,
+                                  },
+                                  {
+                                    dataIndex: 'status',
+                                    key: 'status',
+                                    render: (value, record) =>
+                                      [
+                                        BanType.Cbo,
+                                        BanType.CommunityBan,
+                                        BanType.Cpn,
+                                        BanType.Cpw,
+                                        BanType.Other,
+                                        BanType.Pspo,
+                                        BanType.Wip,
+                                      ].includes(
+                                        record.typeEnum as BanType
+                                      ) && (
+                                        <div>
+                                          {calcExpired(
+                                            new Date(record.endDate)
+                                          ) ? (
+                                            <Tag color="red">
+                                              {intl.formatMessage({
+                                                defaultMessage: 'EXPIRED',
+                                              })}
+                                            </Tag>
+                                          ) : (
+                                            <Tag color="success">
+                                              {intl.formatMessage({
+                                                defaultMessage: 'ACTIVE',
+                                              })}
+                                            </Tag>
+                                          )}
+                                        </div>
+                                      ),
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Status',
+                                    }),
+                                  },
+                                  {
+                                    dataIndex: 'fineValue',
+                                    ellipsis: true,
+                                    key: 'fineValue',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Fine Value',
                                     }),
                                   },
                                   {
                                     dataIndex: 'Options',
-                                    key: 'options',
+                                    key: 'Options',
+                                    // width: 100,
                                     render: (_, record) => (
-                                      <Row gutter={8}>
+                                      <Row className="no-print" gutter={8}>
                                         {editRights && (
                                           <Col>
                                             <Tooltip
                                               title={intl.formatMessage({
-                                                defaultMessage: 'Edit Address',
+                                                defaultMessage:
+                                                  'Edit Exclusion',
                                               })}
                                             >
                                               <Button
@@ -1652,11 +1474,7 @@ const ViewOffender = ({
                                                   />
                                                 }
                                                 onClick={() => {
-                                                  setEditAddressData(
-                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                    // @ts-ignore
-                                                    record.address
-                                                  );
+                                                  setEditBanData(record.ban);
                                                 }}
                                                 size="small"
                                               />
@@ -1668,7 +1486,7 @@ const ViewOffender = ({
                                             <Tooltip
                                               title={intl.formatMessage({
                                                 defaultMessage:
-                                                  'Remove Address',
+                                                  'Remove Exclusion',
                                               })}
                                             >
                                               <Popconfirm
@@ -1679,7 +1497,7 @@ const ViewOffender = ({
                                                   defaultMessage: 'Yes',
                                                 })}
                                                 onConfirm={() =>
-                                                  onDeleteAddress(record.key)
+                                                  onDeleteBan(record.key)
                                                 }
                                                 overlayInnerStyle={{
                                                   padding: 10,
@@ -1687,7 +1505,7 @@ const ViewOffender = ({
                                                 placement="topLeft"
                                                 title={intl.formatMessage({
                                                   defaultMessage:
-                                                    'Remove the Address?',
+                                                    'Remove the exclusion?',
                                                 })}
                                                 trigger="hover"
                                               >
@@ -1707,23 +1525,73 @@ const ViewOffender = ({
                                       </Row>
                                     ),
                                     title: '',
-                                    width: 100,
                                   },
                                 ]}
-                                dataSource={data?.offender?.addresses.map(
-                                  (address) => ({
-                                    address,
-                                    alias: address.alias,
-                                    full: address.full,
-                                    key: address.id,
-                                  })
-                                )}
+                                dataSource={data?.offender?.bans.map((ban) => ({
+                                  activeDay: calcDuration(
+                                    new Date(ban?.startDate),
+                                    new Date(ban?.endDate)
+                                  ),
+                                  ban,
+                                  description: ban.description,
+                                  duration: ban.duration,
+                                  // duration: [
+                                  //   BanType.Cbo,
+                                  //   BanType.PrisonSentence,
+                                  //   BanType.SuspendedSentence,
+                                  // ].includes(ban.type as BanType)
+                                  //   ? intl.formatMessage(
+                                  //       {
+                                  //         defaultMessage: '{months} {b}',
+                                  //       },
+                                  //       {
+                                  //         b:
+                                  //           BanType.Cbo === (ban.type as BanType)
+                                  //             ? 'months'
+                                  //             : 'weeks',
+                                  //         months: ban.months,
+                                  //       }
+                                  //     )
+                                  //   : `${FormatCalendar(
+                                  //       ban?.startDate,
+                                  //       true
+                                  //     )}  ->  ${FormatCalendar(
+                                  //       ban?.endDate,
+                                  //       true
+                                  //     )}`,
+                                  endDate: ban.endDate,
+                                  fineValue:
+                                    ban.fineValue === 0
+                                      ? ''
+                                      : intl.formatMessage(
+                                          {
+                                            defaultMessage: '£{value}',
+                                          },
+                                          {
+                                            value: ban.fineValue,
+                                          }
+                                        ),
+                                  key: ban.id,
+                                  location: ban.location,
+                                  status: `${new Date(
+                                    ban?.startDate
+                                  ).toDateString()}  -->  ${new Date(
+                                    ban?.endDate
+                                  ).toDateString()}`,
+                                  type: getBanType(ban.type),
+                                  typeEnum: ban.type,
+                                }))}
+                                expandable={{
+                                  expandedRowRender,
+                                  rowExpandable: (record) =>
+                                    !!record.description,
+                                }}
                                 loading={loading}
                                 pagination={
-                                  data?.offender?.addresses &&
-                                  data.offender.addresses.length > 10
+                                  data?.offender?.bans &&
+                                  data.offender.bans.length > 5
                                     ? {
-                                        pageSize: 10,
+                                        pageSize: 5,
                                       }
                                     : false
                                 }
@@ -1733,179 +1601,196 @@ const ViewOffender = ({
                               <Empty
                                 description={intl.formatMessage({
                                   defaultMessage:
-                                    'No addresses for this offender',
+                                    'No exclusions for this offender',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
                             )}
                           </Card>
-                        )}
-                        <Card loading={loading}>
-                          <Row
-                            align="middle"
-                            gutter={8}
-                            style={{ marginBottom: 10 }}
-                          >
-                            <Col flex={1}>
-                              <Title level={4}>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Vehicles',
+                          <Card loading={loading}>
+                            <Title level={4}>
+                              {intl.formatMessage({
+                                defaultMessage: 'Incidents',
+                              })}
+                            </Title>
+                            {data?.offender?.incidents.length && !loading ? (
+                              <IncidentTable
+                                hasNavigation
+                                incidents={data?.offender?.incidents || []}
+                              />
+                            ) : (
+                              <Empty
+                                description={intl.formatMessage({
+                                  defaultMessage:
+                                    'No incidents for this offender',
                                 })}
-                              </Title>
-                            </Col>
-                            {editRights && (
-                              <Col>
-                                <Dropdown
-                                  overlay={
-                                    <Menu
-                                      items={[
-                                        {
-                                          icon: (
-                                            <FontAwesomeIcon
-                                              icon={faMagnifyingGlass}
-                                              style={{ marginRight: 5 }}
-                                            />
-                                          ),
-                                          key: '1',
-                                          label: intl.formatMessage({
-                                            defaultMessage:
-                                              'Add Existing Vehicles',
-                                          }),
-                                          onClick: () =>
-                                            toggleAddExistingVehicle(),
-                                        },
-                                        {
-                                          icon: (
-                                            <FontAwesomeIcon
-                                              icon={faPlus}
-                                              style={{ marginRight: 5 }}
-                                            />
-                                          ),
-                                          key: '2',
-                                          label: intl.formatMessage({
-                                            defaultMessage:
-                                              'Create New Vehicle',
-                                          }),
-                                          onClick: () => toggleAddVehicle(),
-                                        },
-                                      ]}
-                                    />
-                                  }
-                                >
-                                  <Button
-                                    icon={
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        style={{ marginRight: 5 }}
-                                      />
-                                    }
-                                    size="small"
-                                  >
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              />
+                            )}
+                          </Card>
+
+                          {editRights && (
+                            <Card loading={loading}>
+                              <Row
+                                align="middle"
+                                gutter={8}
+                                style={{ marginBottom: 10 }}
+                              >
+                                <Col flex={1}>
+                                  <Title level={4}>
                                     {intl.formatMessage({
-                                      defaultMessage: 'Add Vehicles',
+                                      defaultMessage: 'Addresses',
                                     })}
-                                  </Button>
-                                </Dropdown>
-                              </Col>
-                            )}
-                          </Row>
-
-                          {data?.offender?.vehicles?.length && !loading ? (
-                            <VehicleTable
-                              deleteRights={deleteRights}
-                              editRights={editRights}
-                              hasNavigation
-                              onDeleteVehicle={onDeleteVehicle}
-                              saving={saving}
-                              setEditVehicleData={setEditVehicleData}
-                              vehicles={data?.offender?.vehicles}
-                            />
-                          ) : (
-                            <Empty
-                              description={intl.formatMessage({
-                                defaultMessage: 'No vehicles for this offender',
-                              })}
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            />
-                          )}
-                        </Card>
-                        <Card loading={loading}>
-                          <Title level={4}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Crime Groups',
-                            })}
-                          </Title>
-                          {data?.offender?.crimeGroups.length && !loading ? (
-                            <CrimeGroupTable
-                              crimeGroups={data?.offender?.crimeGroups || []}
-                              deleteRights={deleteRights}
-                              hasNavigation
-                              onDelete={onDeleteCrimeGroup}
-                              saving={saving}
-                            />
-                          ) : (
-                            <Empty
-                              description={intl.formatMessage({
-                                defaultMessage:
-                                  'No crime groups for this offender',
-                              })}
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            />
-                          )}
-                        </Card>
-
-                        <Card loading={loading}>
-                          <Row
-                            align="middle"
-                            gutter={8}
-                            style={{ marginBottom: 10 }}
-                          >
-                            <Col flex={1}>
-                              <Title level={4}>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Evidence',
-                                })}
-                              </Title>
-                            </Col>
-                            {editRights && (
-                              <Col>
-                                <Button
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
-                                    />
+                                  </Title>
+                                </Col>
+                                {editRights && (
+                                  <Col className="no-print">
+                                    <Button
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          style={{ marginRight: 5 }}
+                                        />
+                                      }
+                                      onClick={toggleAddAddress}
+                                      size="small"
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Add Address',
+                                      })}
+                                    </Button>
+                                  </Col>
+                                )}
+                              </Row>
+                              {data?.offender?.addresses.length && !loading ? (
+                                <Table
+                                  className={classes.exclusions}
+                                  columns={[
+                                    {
+                                      dataIndex: 'alias',
+                                      key: 'alias',
+                                      title: intl.formatMessage({
+                                        defaultMessage: 'Alias',
+                                      }),
+                                    },
+                                    {
+                                      dataIndex: 'full',
+                                      key: 'full',
+                                      title: intl.formatMessage({
+                                        defaultMessage: 'Full Address',
+                                      }),
+                                    },
+                                    {
+                                      dataIndex: 'Options',
+                                      key: 'options',
+                                      render: (_, record) => (
+                                        <Row className="no-print" gutter={8}>
+                                          {editRights && (
+                                            <Col>
+                                              <Tooltip
+                                                title={intl.formatMessage({
+                                                  defaultMessage:
+                                                    'Edit Address',
+                                                })}
+                                              >
+                                                <Button
+                                                  disabled={saving}
+                                                  icon={
+                                                    <FontAwesomeIcon
+                                                      icon={faPenToSquare}
+                                                    />
+                                                  }
+                                                  onClick={() => {
+                                                    setEditAddressData(
+                                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                      // @ts-ignore
+                                                      record.address
+                                                    );
+                                                  }}
+                                                  size="small"
+                                                />
+                                              </Tooltip>
+                                            </Col>
+                                          )}
+                                          {deleteRights && (
+                                            <Col>
+                                              <Tooltip
+                                                title={intl.formatMessage({
+                                                  defaultMessage:
+                                                    'Remove Address',
+                                                })}
+                                              >
+                                                <Popconfirm
+                                                  cancelText={intl.formatMessage(
+                                                    {
+                                                      defaultMessage: 'No',
+                                                    }
+                                                  )}
+                                                  okText={intl.formatMessage({
+                                                    defaultMessage: 'Yes',
+                                                  })}
+                                                  onConfirm={() =>
+                                                    onDeleteAddress(record.key)
+                                                  }
+                                                  overlayInnerStyle={{
+                                                    padding: 10,
+                                                  }}
+                                                  placement="topLeft"
+                                                  title={intl.formatMessage({
+                                                    defaultMessage:
+                                                      'Remove the Address?',
+                                                  })}
+                                                  trigger="hover"
+                                                >
+                                                  <Button
+                                                    disabled={saving}
+                                                    icon={
+                                                      <FontAwesomeIcon
+                                                        icon={faTrash}
+                                                      />
+                                                    }
+                                                    size="small"
+                                                  />
+                                                </Popconfirm>
+                                              </Tooltip>
+                                            </Col>
+                                          )}
+                                        </Row>
+                                      ),
+                                      title: '',
+                                      width: 100,
+                                    },
+                                  ]}
+                                  dataSource={data?.offender?.addresses.map(
+                                    (address) => ({
+                                      address,
+                                      alias: address.alias,
+                                      full: address.full,
+                                      key: address.id,
+                                    })
+                                  )}
+                                  loading={loading}
+                                  pagination={
+                                    data?.offender?.addresses &&
+                                    data.offender.addresses.length > 10
+                                      ? {
+                                          pageSize: 10,
+                                        }
+                                      : false
                                   }
-                                  onClick={toggleAddDocument}
                                   size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Add Evidence',
+                                />
+                              ) : (
+                                <Empty
+                                  description={intl.formatMessage({
+                                    defaultMessage:
+                                      'No addresses for this offender',
                                   })}
-                                </Button>
-                              </Col>
-                            )}
-                          </Row>
-
-                          {data?.offender?.evidence &&
-                          data.offender.evidence.length > 0 &&
-                          !loading ? (
-                            <EvidenceTable
-                              deleteRights={deleteRights}
-                              evidence={data?.offender?.evidence}
-                              title={ProfileUpdatedModel.Offender}
-                              update={updateDeleteDocument}
-                            />
-                          ) : (
-                            <Empty
-                              description={intl.formatMessage({
-                                defaultMessage: 'No evidence for this offender',
-                              })}
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            />
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                />
+                              )}
+                            </Card>
                           )}
-                        </Card>
-                        {editRights && (
                           <Card loading={loading}>
                             <Row
                               align="middle"
@@ -1915,50 +1800,221 @@ const ViewOffender = ({
                               <Col flex={1}>
                                 <Title level={4}>
                                   {intl.formatMessage({
-                                    defaultMessage: 'Investigations',
+                                    defaultMessage: 'Vehicles',
                                   })}
                                 </Title>
                               </Col>
-
-                              <Col>
-                                <Button
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
-                                    />
-                                  }
-                                  onClick={toggleAddInvestigation}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Add Investigation',
-                                  })}
-                                </Button>
-                              </Col>
+                              {editRights && (
+                                <Col className="no-print">
+                                  <Dropdown
+                                    overlay={
+                                      <Menu
+                                        items={[
+                                          {
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                icon={faMagnifyingGlass}
+                                                style={{ marginRight: 5 }}
+                                              />
+                                            ),
+                                            key: '1',
+                                            label: intl.formatMessage({
+                                              defaultMessage:
+                                                'Add Existing Vehicles',
+                                            }),
+                                            onClick: () =>
+                                              toggleAddExistingVehicle(),
+                                          },
+                                          {
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                icon={faPlus}
+                                                style={{ marginRight: 5 }}
+                                              />
+                                            ),
+                                            key: '2',
+                                            label: intl.formatMessage({
+                                              defaultMessage:
+                                                'Create New Vehicle',
+                                            }),
+                                            onClick: () => toggleAddVehicle(),
+                                          },
+                                        ]}
+                                      />
+                                    }
+                                  >
+                                    <Button
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          style={{ marginRight: 5 }}
+                                        />
+                                      }
+                                      size="small"
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Add Vehicles',
+                                      })}
+                                    </Button>
+                                  </Dropdown>
+                                </Col>
+                              )}
                             </Row>
-                            {data?.offender?.investigations.length &&
-                            !loading ? (
-                              <InvestigationTable
-                                investigations={data?.offender?.investigations}
+
+                            {data?.offender?.vehicles?.length && !loading ? (
+                              <VehicleTable
+                                deleteRights={deleteRights}
+                                editRights={editRights}
+                                hasNavigation
+                                onDeleteVehicle={onDeleteVehicle}
+                                saving={saving}
+                                setEditVehicleData={setEditVehicleData}
+                                vehicles={data?.offender?.vehicles}
                               />
                             ) : (
                               <Empty
                                 description={intl.formatMessage({
                                   defaultMessage:
-                                    'No investigations for this offender',
+                                    'No vehicles for this offender',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
                             )}
                           </Card>
-                        )}
-                      </div>
-                    )}
+                          <Card loading={loading}>
+                            <Title level={4}>
+                              {intl.formatMessage({
+                                defaultMessage: 'Crime Groups',
+                              })}
+                            </Title>
+                            {data?.offender?.crimeGroups.length && !loading ? (
+                              <CrimeGroupTable
+                                crimeGroups={data?.offender?.crimeGroups || []}
+                                deleteRights={deleteRights}
+                                hasNavigation
+                                onDelete={onDeleteCrimeGroup}
+                                saving={saving}
+                              />
+                            ) : (
+                              <Empty
+                                description={intl.formatMessage({
+                                  defaultMessage:
+                                    'No crime groups for this offender',
+                                })}
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              />
+                            )}
+                          </Card>
+
+                          <Card loading={loading}>
+                            <Row
+                              align="middle"
+                              gutter={8}
+                              style={{ marginBottom: 10 }}
+                            >
+                              <Col flex={1}>
+                                <Title level={4}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Evidence',
+                                  })}
+                                </Title>
+                              </Col>
+                              {editRights && (
+                                <Col className="no-print">
+                                  <Button
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                    onClick={toggleAddDocument}
+                                    size="small"
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Evidence',
+                                    })}
+                                  </Button>
+                                </Col>
+                              )}
+                            </Row>
+
+                            {data?.offender?.evidence &&
+                            data.offender.evidence.length > 0 &&
+                            !loading ? (
+                              <EvidenceTable
+                                deleteRights={deleteRights}
+                                evidence={data?.offender?.evidence}
+                                title={ProfileUpdatedModel.Offender}
+                                update={updateDeleteDocument}
+                              />
+                            ) : (
+                              <Empty
+                                description={intl.formatMessage({
+                                  defaultMessage:
+                                    'No evidence for this offender',
+                                })}
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              />
+                            )}
+                          </Card>
+                          {editRights && (
+                            <Card loading={loading}>
+                              <Row
+                                align="middle"
+                                gutter={8}
+                                style={{ marginBottom: 10 }}
+                              >
+                                <Col flex={1}>
+                                  <Title level={4}>
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Investigations',
+                                    })}
+                                  </Title>
+                                </Col>
+
+                                <Col className="no-print">
+                                  <Button
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                    onClick={toggleAddInvestigation}
+                                    size="small"
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Investigation',
+                                    })}
+                                  </Button>
+                                </Col>
+                              </Row>
+                              {data?.offender?.investigations.length &&
+                              !loading ? (
+                                <InvestigationTable
+                                  investigations={
+                                    data?.offender?.investigations
+                                  }
+                                />
+                              ) : (
+                                <Empty
+                                  description={intl.formatMessage({
+                                    defaultMessage:
+                                      'No investigations for this offender',
+                                  })}
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                />
+                              )}
+                            </Card>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Col>
-              <Col span={8}>
+              <Col className="no-print" span={8}>
                 <div className={classes.updatesContainer}>
                   <IntelSection
                     confirmDeleteUpdate={confirmDeleteUpdate}
@@ -2792,7 +2848,7 @@ const ViewOffender = ({
         zIndex={1001}
       >
         {addDocument ? (
-          <AddDocument
+          <AddDocuments
             offenderId={data?.offender?.id || ''}
             onClose={toggleAddDocument}
             update={updateDocumentList}

@@ -9,8 +9,11 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import downloadImage from '#/utils/images/download-image';
 import { EyeOutlined } from '@ant-design/icons';
-import { Col, Row, Typography } from 'antd';
+import { faDownload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Row, Typography } from 'antd';
 import {
   ArticleMessageCard,
   CrimeGroupMessageList,
@@ -22,9 +25,21 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import moment from 'moment';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 
 const { Text } = Typography;
-
+const useStyles = createUseStyles({
+  button: {
+    bottom: 5,
+    color: 'fff',
+    cursor: ' pointer',
+    height: 30,
+    padding: '0px 5px',
+    position: 'absolute',
+    right: 5,
+    zIndex: 10,
+  },
+});
 interface DatedMessages {
   articles?: ArticleData[];
   content?: null | string | undefined;
@@ -108,30 +123,42 @@ const getImageMargin = (length: number, index: number) => {
 interface CollageImageProps {
   index: number;
   length: number;
+  onDownload: () => void;
   src?: null | string | undefined;
 }
 
-const CollageImage = ({ index, length, src }: CollageImageProps) => (
-  <div
-    className="update-collage-image"
-    role="button"
-    style={{
-      backgroundColor: 'grey',
-      height: getImageHeight(length, index),
-      margin: getImageMargin(length, index),
-    }}
-    tabIndex={index}
-  >
-    <WatermarkImage url={src} />
-    <div className="chat-collage-image-overlay">
-      <EyeOutlined style={{ marginRight: 5 }} />
-      <FormattedMessage defaultMessage="Preview" />
-    </div>
-    <div>
+const CollageImage = ({
+  index,
+  length,
+  onDownload,
+  src,
+}: CollageImageProps) => {
+  const classes = useStyles();
+  return (
+    <div
+      className="update-collage-image"
+      role="button"
+      style={{
+        backgroundColor: 'grey',
+        height: getImageHeight(length, index),
+        margin: getImageMargin(length, index),
+      }}
+      tabIndex={index}
+    >
+      <Button className={classes.button}>
+        <FontAwesomeIcon icon={faDownload} onClick={onDownload} size="sm" />
+      </Button>
       <WatermarkImage url={src} />
+      <div className="chat-collage-image-overlay">
+        <EyeOutlined style={{ marginRight: 5 }} />
+        <FormattedMessage defaultMessage="Preview" />
+      </div>
+      <div>
+        <WatermarkImage url={src} />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface Props extends DatedMessages {
   onOpenLightbox?: (
@@ -174,6 +201,7 @@ const UpdateContent = ({
   vehicles,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const classes = useStyles();
 
   return (
     <Row
@@ -232,6 +260,19 @@ const UpdateContent = ({
               {images.length === 1 ? (
                 images.map((image) => (
                   <Col key={image.id}>
+                    <Button className={classes.button}>
+                      <FontAwesomeIcon
+                        icon={faDownload}
+                        onClick={() =>
+                          // eslint-disable-next-line no-void
+                          void downloadImage(
+                            image.optimised || image.url || '',
+                            `${image.id}`
+                          )
+                        }
+                        size="sm"
+                      />
+                    </Button>
                     <div
                       onClick={() => {
                         if (onOpenLightbox)
@@ -258,6 +299,13 @@ const UpdateContent = ({
                       <CollageImage
                         index={index}
                         length={images.length}
+                        onDownload={() =>
+                          // eslint-disable-next-line no-void
+                          void downloadImage(
+                            image.optimised || image.url || '',
+                            `${image.id}`
+                          )
+                        }
                         src={image.optimised}
                       />
                     </Col>
@@ -269,17 +317,29 @@ const UpdateContent = ({
           {offenders &&
             offenders.length > 0 &&
             offenders.map((offender) => (
-              <OffenderMessageCard key={offender.id} offender={offender} />
+              <OffenderMessageCard
+                key={offender.id}
+                offender={offender}
+                triggerLightbox={onOpenLightbox}
+              />
             ))}
           {incidents &&
             incidents.length > 0 &&
             incidents.map((incident) => (
-              <IncidentMessageCard incident={incident} key={incident.id} />
+              <IncidentMessageCard
+                incident={incident}
+                key={incident.id}
+                triggerLightbox={onOpenLightbox}
+              />
             ))}
           {vehicles &&
             vehicles.length > 0 &&
             vehicles.map((vehicle) => (
-              <VehicleMessageCard key={vehicle.id} vehicle={vehicle} />
+              <VehicleMessageCard
+                key={vehicle.id}
+                triggerLightbox={onOpenLightbox}
+                vehicle={vehicle}
+              />
             ))}
 
           {crimeGroups && crimeGroups.length > 0 && (
@@ -288,7 +348,11 @@ const UpdateContent = ({
           {articles &&
             articles.length > 0 &&
             articles.map((article) => (
-              <ArticleMessageCard article={article} key={article.id} />
+              <ArticleMessageCard
+                article={article}
+                key={article.id}
+                triggerLightbox={onOpenLightbox}
+              />
             ))}
           {content && (
             <Row key={id}>

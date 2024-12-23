@@ -133,7 +133,7 @@ const EvidenceTable = ({
           key: 'fileUrl',
           // ),
           render: (_, record) => (
-            <Row gutter={8}>
+            <Row className="no-print" gutter={8}>
               <Col>
                 <Tooltip
                   title={intl.formatMessage({

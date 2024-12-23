@@ -3,12 +3,12 @@ import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 
 import ArticleCard from '../ArticleCard.view';
-import { ArticlePriority, ImagePosition } from 'graphql/types';
+import { ArticlePriority, CompleteStatus, ImagePosition } from 'graphql/types';
 
 describe('Detail Officer View', () => {
   const data = {
     id: 'incidentId',
-    subject: 'test subject ',
+    status: CompleteStatus.Completed,
     location: null,
     approved: null,
     date: new Date('2022-07-25T08:57:55.299Z'),
@@ -38,6 +38,7 @@ describe('Detail Officer View', () => {
     title: '',
     updatedAt: new Date('2022-07-25T08:57:55.299Z'),
     tags: [],
+    statues: CompleteStatus.Completed,
   };
   it('renders the page', () => {
     const { getByText } = render(

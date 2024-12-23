@@ -3,27 +3,38 @@ import type { MetaData } from '#/views/reports/types';
 
 import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
 import { useCustomQuestionsCountGraphQuery } from '#/components/reports/components/CustomQuestionsCountGraph/__generated__/CustomQuestionsCountGraph.generated';
-import { DonutGraph } from '#/components/reports/graphs';
-import { faCogs, faTrash } from '@fortawesome/pro-light-svg-icons';
+import Graph from '#/components/reports/graphs/graph';
+import {
+  faBarChart,
+  faCogs,
+  faPieChart,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Empty, Modal, Select, Typography } from 'antd';
+import { Button, Empty, Modal, Select } from 'antd';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 interface Props {
   editMode: boolean;
+  fullMetadata: MetaData[];
   isPrinting: boolean;
   metaData?: MetaData;
+  metaDataKey: string;
   removeItem?: () => void;
+  setMetadata: (arg0: MetaData[]) => void;
   updateQuestionId: (value: string) => void;
   variables: CustomQuestionsCountGraphQueryVariables;
 }
 
 const CustomQuestionsCountGraph = ({
   editMode,
+  fullMetadata,
   isPrinting,
   metaData,
+  metaDataKey,
   removeItem,
+  setMetadata,
   updateQuestionId,
   variables,
 }: Props) => {
@@ -41,13 +52,51 @@ const CustomQuestionsCountGraph = ({
     skip: !selectOpen,
   });
 
+  console.log(metaData);
+
   return (
     <>
-      <Typography.Title level={4} style={{ fontWeight: 700 }}>
-        {data?.customQuestionsCountGraph.title}
-      </Typography.Title>
       <Button
-        className="change-graph1 no-print"
+        className="cancelDrag change-graph2 no-print"
+        hidden={!editMode}
+        icon={<FontAwesomeIcon icon={faPieChart} size="lg" />}
+        onClick={() => {
+          const updatedMetadata = fullMetadata.map((item) => {
+            console.log(item.key, metaDataKey);
+            if (item.key === metaDataKey) {
+              if (item.type === 'donut') return { ...item, type: 'pie' };
+              return { ...item, type: 'donut' };
+            }
+            return item;
+          }) satisfies MetaData[];
+          console.log(updatedMetadata);
+          setMetadata(updatedMetadata);
+        }}
+        shape="circle"
+        size="small"
+        type="text"
+      />
+      <Button
+        className="cancelDrag change-graph3 no-print"
+        hidden={!editMode}
+        icon={<FontAwesomeIcon icon={faBarChart} size="lg" />}
+        onClick={() => {
+          const updatedMetadata = fullMetadata.map((item) => {
+            console.log(item.key, metaDataKey);
+            if (item.key === metaDataKey) {
+              return { ...item, type: 'bar' };
+            }
+            return item;
+          }) satisfies MetaData[];
+          console.log(updatedMetadata);
+          setMetadata(updatedMetadata);
+        }}
+        shape="circle"
+        size="small"
+        type="text"
+      />
+      <Button
+        className="cancelDrag change-graph1 no-print"
         hidden={!editMode}
         icon={<FontAwesomeIcon icon={faCogs} size="lg" />}
         onClick={() => {
@@ -58,7 +107,7 @@ const CustomQuestionsCountGraph = ({
         type="text"
       />
       <Button
-        className="card-remove no-print"
+        className="cancelDrag card-remove no-print"
         hidden={!editMode}
         icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
         onClick={removeItem}
@@ -67,14 +116,93 @@ const CustomQuestionsCountGraph = ({
         type="text"
       />
       {metaData?.propId ? (
-        <DonutGraph
-          data={data?.customQuestionsCountGraph.data}
-          emptyLabel={intl.formatMessage({
-            defaultMessage: 'No Data',
-          })}
-          isPrinting={isPrinting}
-          type="donut"
-        />
+        metaData.type === 'donut' || metaData.type === 'pie' ? (
+          <Graph
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Data',
+            })}
+            graphOptions={{
+              data: data?.customQuestionsCountGraph?.data.map((item) => ({
+                count: item.value,
+                type: item.label,
+              })),
+              legend: {
+                position: 'right',
+              },
+              series: [
+                {
+                  angleKey: 'count',
+                  calloutLabel: {
+                    enabled: false,
+                  },
+                  calloutLabelKey: 'type',
+                  calloutLabelName: 'type',
+                  innerRadiusRatio: 0.7,
+                  labelKey: 'count',
+                  sectorLabelKey: 'count',
+                  // @ts-expect-error graph type error
+                  type: metaData.type === 'pie' ? 'pie' : 'donut',
+                },
+              ],
+            }}
+            gridOptions={{
+              columnDefs: [
+                {
+                  field: 'type',
+                },
+                {
+                  field: 'count',
+                },
+              ],
+              rowData: data?.customQuestionsCountGraph.data.map((item) => ({
+                count: item.value,
+                type: item.label,
+              })),
+            }}
+            isPrinting={isPrinting}
+            label={data?.customQuestionsCountGraph.title ?? ''}
+            loading={!!data?.customQuestionsCountGraph?.data}
+          />
+        ) : (
+          <Graph
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Data',
+            })}
+            graphOptions={{
+              data: data?.customQuestionsCountGraph?.data.map((item) => ({
+                count: item.value,
+                type: item.label,
+              })),
+              legend: {
+                enabled: false,
+              },
+              series: [
+                {
+                  type: 'bar',
+                  xKey: 'type',
+                  yKey: 'count',
+                },
+              ],
+            }}
+            gridOptions={{
+              columnDefs: [
+                {
+                  field: 'type',
+                },
+                {
+                  field: 'count',
+                },
+              ],
+              rowData: data?.customQuestionsCountGraph.data.map((item) => ({
+                count: item.value,
+                type: item.label,
+              })),
+            }}
+            isPrinting={isPrinting}
+            label={data?.customQuestionsCountGraph.title ?? ''}
+            loading={!!data?.customQuestionsCountGraph?.data}
+          />
+        )
       ) : (
         <Empty
           description={intl.formatMessage({

@@ -1,9 +1,9 @@
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
 
-import AddDocument from '#/components/form-components/documents/AddDocument';
+import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import EvidenceTable from '#/components/tables/EvidenceTable';
 import { ProfileUpdatedModel } from '#/types/enums/profile-update-type';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
@@ -49,11 +49,11 @@ const Evidence = ({
     setAddDocument(() => !addDocument);
   };
 
-  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation> = (
     store,
     { data: res }
   ) => {
-    if (res?.createDocument === null || res?.createDocument === undefined)
+    if (res?.createDocuments === null || res?.createDocuments === undefined)
       return;
     const existingData = store.readQuery<ViewIncidentQuery>({
       query: ViewIncidentDocument,
@@ -70,7 +70,7 @@ const Evidence = ({
         __typename: 'Query',
         incident: {
           ...existingData.incident,
-          evidence: [...existingData.incident.evidence, res.createDocument],
+          evidence: [...existingData.incident.evidence, ...res.createDocuments],
         },
       },
       query: ViewIncidentDocument,
@@ -128,7 +128,7 @@ const Evidence = ({
             </Title>
           </Col>
           {editRights && (
-            <Col>
+            <Col className="no-print">
               {data?.incident?.scheme.mg11Available ? (
                 <Dropdown
                   overlay={
@@ -244,7 +244,7 @@ const Evidence = ({
         zIndex={1001}
       >
         {addDocument ? (
-          <AddDocument
+          <AddDocuments
             incidentId={data?.incident?.id || ''}
             onClose={toggleAddDocument}
             update={updateDocumentList}

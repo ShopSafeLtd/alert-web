@@ -1,4 +1,5 @@
 import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type { RefObject } from 'react';
 import type {
   CrimeGroupCardData,
   OffenderData,
@@ -11,6 +12,7 @@ import View from './ViewDetails.view';
 import useViewDetails from './useViewDetails';
 
 interface Props {
+  componentRef: RefObject<HTMLDivElement>;
   data: ViewInvestigationQuery | undefined;
   investigationId: string;
   loading: boolean;
@@ -37,6 +39,7 @@ interface Props {
 }
 
 const ViewDetails = ({
+  componentRef,
   data,
   investigationId,
   loading,
@@ -94,6 +97,7 @@ const ViewDetails = ({
 
   return (
     <View
+      componentRef={componentRef}
       confirmDeleteUpdate={confirmDeleteUpdate}
       data={data}
       editIncidentId={editIncidentId}

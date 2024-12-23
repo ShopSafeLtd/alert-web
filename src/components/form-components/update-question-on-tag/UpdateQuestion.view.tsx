@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
 import type { FormInstance } from 'antd';
+
 import {
   Button,
   Card,
@@ -15,33 +16,35 @@ import {
 } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { FormData } from './useUpdateQuestion';
-import { AnswerType } from '../../../graphql/types';
+
 import type { TagQuestion } from './UpdateQuestion.container';
+import type { FormData } from './useUpdateQuestion';
+
+import { AnswerType } from '../../../graphql/types';
 
 interface AddQuestionViewProps {
-  loading: boolean;
-  form: FormInstance<FormData>;
-  data: FormData;
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  saving: boolean;
-  tagQuestions: TagQuestion[];
   brands: {
     label: string;
     value: string;
   }[];
+  data: FormData;
+  form: FormInstance<FormData>;
+  loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  tagQuestions: TagQuestion[];
 }
 
 const UpdateQuestionView = ({
+  brands,
   data,
-  loading,
   form,
-  onSubmit,
+  loading,
   onClose,
+  onSubmit,
   saving,
   tagQuestions,
-  brands,
 }: AddQuestionViewProps) => {
   const answerType = data.type;
   const opt = data.newOptions || [];
@@ -96,8 +99,8 @@ const UpdateQuestionView = ({
     <Form<FormData>
       form={form}
       initialValues={data}
-      onFinish={onSubmit}
       layout="vertical"
+      onFinish={onSubmit}
     >
       <Card loading={loading}>
         <Form.Item
@@ -131,8 +134,8 @@ const UpdateQuestionView = ({
           })}
         >
           <Form.List
-            name="newOptions"
             initialValue={opt}
+            name="newOptions"
             rules={[
               {
                 validator: async (_, options) => {
@@ -146,7 +149,7 @@ const UpdateQuestionView = ({
                       )
                     );
                   }
-                  if (options.some((o: string | null | undefined) => !o)) {
+                  if (options.some((o: null | string | undefined) => !o)) {
                     return Promise.reject(
                       new Error(
                         intl.formatMessage({
@@ -162,7 +165,7 @@ const UpdateQuestionView = ({
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map((field) => (
-                  <Row key={field.key} gutter={10}>
+                  <Row gutter={10} key={field.key}>
                     <Col span={20}>
                       <Form.Item
                         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -183,16 +186,16 @@ const UpdateQuestionView = ({
                 ))}
                 <Form.Item>
                   <Button
-                    type="dashed"
-                    onClick={() => add()}
                     block
                     icon={
                       <i
-                        className="fa fa-plus"
                         aria-hidden="true"
+                        className="fa fa-plus"
                         style={{ color: '#1890ff' }}
                       />
                     }
+                    onClick={() => add()}
+                    type="dashed"
                   >
                     {intl.formatMessage({
                       defaultMessage: 'Add Option',
@@ -205,6 +208,17 @@ const UpdateQuestionView = ({
           </Form.List>
         </Card>
       )}
+
+      <Card loading={loading}>
+        <Form.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Question Tooltip',
+          })}
+          name="tooltip"
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Card>
 
       <Card
         loading={loading}
@@ -228,38 +242,38 @@ const UpdateQuestionView = ({
         </Form.Item>
         {dependentOn && (
           <Form.Item
+            hidden={!dependentOn}
             label={intl.formatMessage({
               defaultMessage: 'Dependent Answer',
             })}
+            name="dependentAnswer"
+            required={!!dependentOn}
             rules={[
               {
-                required: !!dependentOn,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please select an answer that this question will depend on to show in the form',
                 }),
+                required: !!dependentOn,
               },
             ]}
-            required={!!dependentOn}
-            hidden={!dependentOn}
-            name="dependentAnswer"
           >
             {generateFormItem()}
           </Form.Item>
         )}
 
         <Form.Item
+          hidden={brands?.length === 0}
           label={intl.formatMessage({
             defaultMessage: 'Dependent Brands',
           })}
           name="dependentBrands"
-          hidden={brands?.length === 0}
         >
-          <Select options={brands} mode="multiple" showSearch />
+          <Select mode="multiple" options={brands} showSearch />
         </Form.Item>
       </Card>
       <Form.Item>
-        <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
           <Col>
             <Button disabled={saving || loading} onClick={() => onClose()}>
               {intl.formatMessage({
@@ -270,9 +284,9 @@ const UpdateQuestionView = ({
           <Col>
             <Button
               disabled={saving || loading}
+              htmlType="submit"
               loading={saving || loading}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({
                 defaultMessage: 'Submit',

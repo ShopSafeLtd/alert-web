@@ -1,4 +1,5 @@
 import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type {
   SuggestedCrimeGroupMembersQuery,
@@ -8,7 +9,6 @@ import type {
   CrimeGroupQuery,
   CrimeGroupQueryVariables,
 } from 'graphql/crime-groups/queries/__generated__/view-crime-group.generated';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
@@ -103,7 +103,7 @@ interface Return {
   toggleViewSuggested: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation>;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   userId: string;
   vehicleIds: string[];
@@ -722,11 +722,11 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     });
   };
   // evidence
-  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation> = (
     store,
     { data: res }
   ) => {
-    if (res?.createDocument === null || res?.createDocument === undefined)
+    if (res?.createDocuments === null || res?.createDocuments === undefined)
       return;
     const existingData = store.readQuery<CrimeGroupQuery>({
       query: CrimeGroupDocument,
@@ -739,7 +739,10 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
         __typename: 'Query',
         crimeGroup: {
           ...existingData.crimeGroup,
-          evidence: [...existingData.crimeGroup.evidence, res.createDocument],
+          evidence: [
+            ...existingData.crimeGroup.evidence,
+            ...res.createDocuments,
+          ],
         },
       },
       query: CrimeGroupDocument,

@@ -406,13 +406,13 @@ const useWorkflowForm = (): Return => {
     return [];
   }, [templateData]);
   const users: { label: string; value: string }[] = useMemo(() => {
-    if (data?.scheme?.members) {
-      return data.scheme.members
-        .sort((a, b) => a.user.fullName.localeCompare(b.user.fullName))
-        .map(({ role, user: { fullName }, userId }) => ({
+    if (data?.scheme?.members && data?.scheme?.members.length > 0) {
+      return data.scheme.members.map(
+        ({ role, user: { fullName }, userId }) => ({
           label: `${fullName} (${role === Role.User ? 'User' : 'Admin'})`,
           value: userId,
-        }));
+        })
+      );
     }
     return [];
   }, [data]);

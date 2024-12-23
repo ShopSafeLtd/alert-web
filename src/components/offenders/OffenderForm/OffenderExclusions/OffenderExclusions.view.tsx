@@ -1,71 +1,72 @@
-import React from 'react';
-import { Button, Card, Col, Drawer, Empty, Row, Table, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { Moment } from 'moment';
+import type { BanData } from 'types/DataType';
+
 import {
   faPenToSquare,
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Drawer, Empty, Row, Table, Typography } from 'antd';
+import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
+import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
-import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
-import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
-import type { BanData } from 'types/DataType';
-import type { Moment } from 'moment';
-
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 interface BanType extends BanData {
+  deleted?: boolean;
   new?: boolean;
   updated?: boolean;
-  deleted?: boolean;
 }
 
 interface TableItem {
-  key: string;
-  description: string | null | undefined;
-  item: BanType;
-  months?: number | null;
-  startDate?: Date;
+  description: null | string | undefined;
+  duration?: null | number;
   endDate?: Date;
-  fineValue?: number | null;
+  fineValue?: null | number;
+  item: BanType;
+  key: string;
+  months?: null | number;
+  startDate?: Date;
 }
 
 interface Props {
-  titleOrder: number;
-  saving: boolean;
-  bansData: BanType[];
-  banData: BanType | null;
-  setBanData: (value: BanType) => void;
-  deleteConfirm: (value: string) => void;
   addExclusion: boolean;
-  toggleAddExclusion: () => void;
+  banData: BanType | null;
+  bansData: BanType[];
+  deleteConfirm: (value: string) => void;
   editExclusion: boolean;
-  toggleEditExclusion: () => void;
-  onUpdateExclusion: (value: BanData) => void;
-  onAddExclusion: (value: BanData) => void;
   emptyDescription?: string;
+  onAddExclusion: (value: BanData) => void;
+  onUpdateExclusion: (value: BanData) => void;
+  saving: boolean;
+  setBanData: (value: BanType) => void;
+  titleOrder: number;
+  toggleAddExclusion: () => void;
+  toggleEditExclusion: () => void;
 }
 
 const OffenderExclusions = ({
-  toggleAddExclusion,
-  bansData,
+  addExclusion,
   banData,
-  titleOrder,
+  bansData,
+  deleteConfirm,
+  editExclusion,
+  emptyDescription,
+  onAddExclusion,
+  onUpdateExclusion,
   saving,
   setBanData,
+  titleOrder,
+  toggleAddExclusion,
   toggleEditExclusion,
-  deleteConfirm,
-  addExclusion,
-  editExclusion,
-  onUpdateExclusion,
-  onAddExclusion,
-  emptyDescription,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   const expandedRowRender = (record: TableItem) => (
-    <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
+    <Text style={{ fontSize: 14, margin: 0, padding: 0 }}>
       {intl.formatMessage(
         { defaultMessage: 'Description: {description}' },
         {
@@ -82,13 +83,13 @@ const OffenderExclusions = ({
       <Card>
         <Row align="middle" style={{ marginBottom: 20 }}>
           <Col>
-            <Title style={{ marginBottom: 0 }} level={4}>
+            <Title level={4} style={{ marginBottom: 0 }}>
               {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               {`${titleOrder}.`}
             </Title>
           </Col>
           <Col>
-            <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+            <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
               {intl.formatMessage({
                 defaultMessage: 'Outcomes',
               })}
@@ -96,9 +97,9 @@ const OffenderExclusions = ({
           </Col>
           <Col style={{ marginRight: 5 }}>
             <Paragraph
+              italic
               style={{ marginBottom: 1, marginLeft: 5 }}
               type="secondary"
-              italic
             >
               {intl.formatMessage({
                 defaultMessage:
@@ -109,11 +110,11 @@ const OffenderExclusions = ({
           <Col>
             <Button
               disabled={saving}
-              onClick={toggleAddExclusion}
-              style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
               icon={
                 <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
               }
+              onClick={toggleAddExclusion}
+              style={{ color: 'red', marginLeft: 15, marginTop: -30 }}
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Outcome',
@@ -124,147 +125,155 @@ const OffenderExclusions = ({
 
         {bansData && bansData.length > 0 ? (
           <Table
-            size="small"
-            pagination={{
-              hideOnSinglePage: true,
-              defaultPageSize: 20,
-              pageSize: 20,
-            }}
-            expandable={{
-              expandedRowRender,
-              rowExpandable: (record) => !!record.description,
-            }}
             columns={[
               {
+                dataIndex: 'type',
                 key: 'type',
                 title: intl.formatMessage({
                   defaultMessage: 'Type',
                 }),
-                dataIndex: 'type',
               },
               {
+                dataIndex: 'months',
                 key: 'months',
                 title: intl.formatMessage({
                   defaultMessage: 'Duration',
                 }),
-                dataIndex: 'months',
               },
               {
+                dataIndex: 'startDate',
                 key: 'startDate',
+                // eslint-disable-next-line
+                render: (value: Moment) =>
+                  value ? value.format('DD/MM/YYYY') : undefined,
                 title: intl.formatMessage({
                   defaultMessage: 'Start Date',
                 }),
-                dataIndex: 'startDate',
+              },
+              {
+                dataIndex: 'endDate',
+                key: 'endDate',
                 // eslint-disable-next-line
                 render: (value: Moment) =>
                   value ? value.format('DD/MM/YYYY') : undefined,
-              },
-              {
-                key: 'endDate',
                 title: intl.formatMessage({
                   defaultMessage: 'End Date',
                 }),
-                dataIndex: 'endDate',
-                // eslint-disable-next-line
-                render: (value: Moment) =>
-                  value ? value.format('DD/MM/YYYY') : undefined,
               },
               {
+                dataIndex: 'duration',
+                key: 'duration',
+                title: intl.formatMessage({
+                  defaultMessage: 'Duration',
+                }),
+              },
+              {
+                dataIndex: 'fineValue',
                 key: 'fineValue',
                 title: intl.formatMessage({
                   defaultMessage: 'Fine Value',
                 }),
-                dataIndex: 'fineValue',
               },
               {
-                key: 'Edit',
-                title: intl.formatMessage({
-                  defaultMessage: 'Edit',
-                }),
-                width: 50,
                 dataIndex: 'Edit',
+                key: 'Edit',
                 render: (_, record) => (
                   <Button
                     disabled={saving}
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
                     onClick={() => {
                       setBanData(record.item);
                       toggleEditExclusion();
                     }}
-                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
                   />
                 ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Edit',
+                }),
+                width: 50,
               },
               {
-                key: 'Delete',
-                title: intl.formatMessage({
-                  defaultMessage: 'Delete',
-                }),
                 dataIndex: 'Delete',
-                width: 60,
+                key: 'Delete',
                 render: (_, record) => (
                   <Button
                     disabled={saving}
+                    icon={<FontAwesomeIcon icon={faTrash} />}
                     onClick={() => {
                       deleteConfirm(record.key || '');
                     }}
-                    icon={<FontAwesomeIcon icon={faTrash} />}
                   />
                 ),
+                title: intl.formatMessage({
+                  defaultMessage: 'Delete',
+                }),
+                width: 60,
               },
             ]}
             dataSource={bansData.map((ban) => ({
-              key: ban.id,
-              item: ban,
               description: ban.description,
-              type: ban.type,
-              months: ban.months,
+              duration: ban.duration,
               endDate: ban.endDate,
               fineValue: ban.fineValue,
+              item: ban,
+              key: ban.id,
+              months: ban.months,
               startDate: ban.startDate,
+              type: ban.type,
             }))}
+            expandable={{
+              expandedRowRender,
+              rowExpandable: (record) => !!record.description,
+            }}
+            pagination={{
+              defaultPageSize: 20,
+              hideOnSinglePage: true,
+              pageSize: 20,
+            }}
+            size="small"
           />
         ) : (
           <Row justify="center">
             <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={
                 emptyDescription ||
                 intl.formatMessage({
                   defaultMessage: 'No exclusions added yet.',
                 })
               }
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
               // style={{ marginLeft: 50 }}
             />
           </Row>
         )}
       </Card>
       <Drawer
+        onClose={toggleAddExclusion}
+        open={addExclusion}
         title={intl.formatMessage({
           defaultMessage: 'Add Exclusion',
         })}
-        open={addExclusion}
         width="400"
-        onClose={toggleAddExclusion}
       >
         {addExclusion ? (
-          <AddExclusion update={onAddExclusion} onClose={toggleAddExclusion} />
+          <AddExclusion onClose={toggleAddExclusion} update={onAddExclusion} />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={toggleEditExclusion}
+        open={editExclusion}
         title={intl.formatMessage({
           defaultMessage: 'Edit Exclusion',
         })}
-        open={editExclusion}
         width="400"
-        onClose={toggleEditExclusion}
       >
         {editExclusion ? (
           <EditExclusion
-            update={onUpdateExclusion}
-            onClose={toggleEditExclusion}
             banData={banData}
+            onClose={toggleEditExclusion}
+            update={onUpdateExclusion}
           />
         ) : (
           <div />

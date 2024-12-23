@@ -1,9 +1,9 @@
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type {
   ViewVehicleQuery,
   ViewVehicleQueryVariables,
 } from '#/views/profiles/Vehicles/ViewVehicle/__generated__/ViewVehicle.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
@@ -111,7 +111,7 @@ interface Return {
   toggleSubscribe: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation>;
   updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   userId: string;
@@ -1102,11 +1102,11 @@ const useViewVehicle = (vehicleId: string): Return => {
   };
 
   // evidence
-  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation> = (
     store,
     { data: res }
   ) => {
-    if (res?.createDocument === null || res?.createDocument === undefined)
+    if (res?.createDocuments === null || res?.createDocuments === undefined)
       return;
     const existingData = store.readQuery<
       ViewVehicleQuery,
@@ -1122,7 +1122,7 @@ const useViewVehicle = (vehicleId: string): Return => {
         __typename: 'Query',
         vehicle: {
           ...existingData.vehicle,
-          evidence: [...existingData.vehicle.evidence, res.createDocument],
+          evidence: [...existingData.vehicle.evidence, ...res.createDocuments],
         },
       },
       query: ViewVehicleDocument,

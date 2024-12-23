@@ -16,7 +16,7 @@ import { useStoreState } from 'state';
 export interface FormData {
   building: string;
   county: string;
-  groups?: string[];
+  groups: string[];
   name: string;
   parent:
     | {
@@ -111,7 +111,7 @@ const useAddBusiness = ({ update }: Props): Return => {
     );
 
     update({
-      groups: values.groups || [],
+      groups: values.groups,
       id: Math.floor(Math.random() * 1000).toString(),
       locations: [
         {

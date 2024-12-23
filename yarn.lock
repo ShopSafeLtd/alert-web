@@ -5888,6 +5888,60 @@ add-px-to-style@1.0.0:
   resolved "https://registry.npmjs.org/add-px-to-style/-/add-px-to-style-1.0.0.tgz"
   integrity sha1-0ME1RB+oAUqBN5BFMQlvZ/KPJjo=
 
+ag-charts-community@10.3.3, ag-charts-community@^10.3.0:
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/ag-charts-community/-/ag-charts-community-10.3.3.tgz#b5a4f638c1d47e9facd59816e3bd177ed84aff08"
+  integrity sha512-LUlbVS+4sX1UHqZNuE9m3LISr7D4FEO/Y88fwit1fYPTk2l1ZJG/82gFnm5bQ+iG4QgNIwRa2TWm7w2MLnyJlA==
+  dependencies:
+    ag-charts-locale "10.3.3"
+    ag-charts-types "10.3.3"
+
+ag-charts-enterprise@10.3.3:
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/ag-charts-enterprise/-/ag-charts-enterprise-10.3.3.tgz#bc65bbb17ef4ff26a1ddb71859bd1b7537450d32"
+  integrity sha512-+RZCrgcRfSHdlHVtFlxpQ7h6Om4oB851/625Ujv8cloA1l6DTaBzijza8Vp8yj9XO2U8SCKGL+s3VkNDNtBO+A==
+  dependencies:
+    ag-charts-community "10.3.3"
+
+ag-charts-locale@10.3.3:
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/ag-charts-locale/-/ag-charts-locale-10.3.3.tgz#f3612df3dd235a3d455e61fdf30ab8e3237c33c7"
+  integrity sha512-+ZAQYhkFHbdEwLYP1jZeF44X/8wwSH6SNiTykEIIk6EUuP6mm45X2YfQ0bvyekTkEJlLvFspvRQ+C6mspwLx4w==
+
+ag-charts-react@^10.3.0:
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/ag-charts-react/-/ag-charts-react-10.3.3.tgz#6b44844d91b9d0a9347b659984dabef022ca40eb"
+  integrity sha512-atsx6Bj/Kus307ls7rCTOnsBkscnOeqbqSqsVNIx3OR22OcAKbBnbgJYLMitTfLraA0BP/GAiqD9iygmHFohcg==
+
+ag-charts-types@10.3.3:
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.3.3.tgz#042c747f1247af827c29ccfdd0890d7b9adcaae9"
+  integrity sha512-8rmyquaTkwfP4Lzei/W/cbkq9wwEl8+grIo3z97mtxrMIXh9sHJK1oJipd/u08MmBZrca5Jjtn5F1+UNPu/4fQ==
+
+ag-grid-charts-enterprise@^32.3.0:
+  version "32.3.3"
+  resolved "https://registry.yarnpkg.com/ag-grid-charts-enterprise/-/ag-grid-charts-enterprise-32.3.3.tgz#e88a6528ee4badbe922f70f098ce8720af9e1ab2"
+  integrity sha512-phP8R6wx2RDWkBHSD3pFmB4wBy2koSnCZjtA0Hy+QT1ovDyaH5R0+SAckChy9lqC6RkMurDerb6QEYgFyNy3IQ==
+  dependencies:
+    ag-charts-community "10.3.3"
+    ag-charts-enterprise "10.3.3"
+    ag-grid-community "32.3.3"
+
+ag-grid-community@32.3.3:
+  version "32.3.3"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-32.3.3.tgz#d0c2c15b342b49a3bb5dddfdad9d0332b08f1505"
+  integrity sha512-KhSJ3B6mwRFA4cLjNjOZkDndJBh8o83794ZHl4Q7xP9MJf43oCN9qoZ8pyBanohgpVfLcP0scYYCr9xIlzjdiA==
+  dependencies:
+    ag-charts-types "10.3.3"
+
+ag-grid-react@^32.3.0:
+  version "32.3.3"
+  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-32.3.3.tgz#320be8fcef248fcd9d07b442263f00b2b6a815a3"
+  integrity sha512-0u6oYoSHf7P2eRgK8FtnXix+bW8hcbiGXhYhg+UpYJHNlKug+spNqjGSzX43f70AZ2QpOBLsL7Bz2FPsadv3HA==
+  dependencies:
+    ag-grid-community "32.3.3"
+    prop-types "^15.8.1"
+
 agent-base@6:
   version "6.0.2"
   resolved "https://registry.npmjs.org/agent-base/-/agent-base-6.0.2.tgz"
@@ -19470,10 +19524,10 @@ y-webrtc@^10.2.4:
   optionalDependencies:
     ws "^7.2.0"
 
-y-websocket@^1.4.5:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/y-websocket/-/y-websocket-1.4.5.tgz#8da81b466997bcc4660059f542d0a6ce62581478"
-  integrity sha512-5d9LTSy0GQKqSd/FKRo5DMBlsiTlCipbKcIgPLlno+5xHtfT8bm3uQdcbY9JvLfckojilLZWauXJu0vzDZX05w==
+y-websocket@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/y-websocket/-/y-websocket-1.5.4.tgz#d14d4033e102a5191c7e78ddcd5da005ef818336"
+  integrity sha512-Y3021uy0anOIHqAPyAZbNDoR05JuMEGjRNI8c+K9MHzVS8dWoImdJUjccljAznc8H2L7WkIXhRHZ1igWNRSgPw==
   dependencies:
     lib0 "^0.2.52"
     lodash.debounce "^4.0.8"

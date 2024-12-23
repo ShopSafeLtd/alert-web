@@ -17,6 +17,7 @@ const IncidentTypes = ({ form, incidentForm, setPoliceReporting }: Props) => {
   const {
     incidentTagsData,
     incidentTagsLoading,
+    incidentTypeTooltip,
     oneSelectedIncidentTypeOnly,
     tags,
     tagsLoading,
@@ -27,6 +28,7 @@ const IncidentTypes = ({ form, incidentForm, setPoliceReporting }: Props) => {
       incidentForm={incidentForm}
       incidentTagsData={incidentTagsData}
       incidentTagsLoading={incidentTagsLoading}
+      incidentTypeTooltip={incidentTypeTooltip}
       oneSelectedIncidentTypeOnly={oneSelectedIncidentTypeOnly}
       tags={tags}
       tagsLoading={tagsLoading}

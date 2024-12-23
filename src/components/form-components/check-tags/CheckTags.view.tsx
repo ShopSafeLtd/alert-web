@@ -20,6 +20,7 @@ interface Option {
 }
 
 interface Props {
+  className?: string;
   disabled?: boolean;
   loading?: boolean;
   mode?: Mode;
@@ -30,6 +31,7 @@ interface Props {
 }
 
 const CheckTags = ({
+  className,
   disabled = false,
   loading = false,
   mode: modeProp,
@@ -154,7 +156,7 @@ const CheckTags = ({
   return loading ? (
     <CheckTagsLoading />
   ) : (
-    <div>
+    <div className={className}>
       <Row gutter={noGutter ? [8, 8] : [10, 10]}>
         {options
           .filter((item) => item.tier === 0 || !hasChildOptions)

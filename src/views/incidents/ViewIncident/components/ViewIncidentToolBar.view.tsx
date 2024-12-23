@@ -11,6 +11,7 @@ import {
   faBell,
   faBellSlash,
   faEdit,
+  faFileDownload,
   faImage,
   faLocationDot,
   faShareNodes,
@@ -45,7 +46,9 @@ interface Props {
   deleteRights: boolean;
   editAddress: boolean;
   editRights: boolean;
+  handlePrint: () => void;
   incidentId: string;
+  isPrinting: boolean;
   onEditAddress: (value: LocationData) => void;
   saving: boolean;
   toggleEditAddress: () => void;
@@ -57,7 +60,9 @@ const ViewIncidentToolBar = ({
   deleteRights,
   editAddress,
   editRights,
+  handlePrint,
   incidentId,
+  isPrinting,
   onEditAddress,
   saving,
   toggleEditAddress,
@@ -450,7 +455,24 @@ const ViewIncidentToolBar = ({
             </Dropdown>
           </Col>
         )}
-
+        {editRights && (
+          <Col>
+            <Tooltip
+              title={intl.formatMessage({
+                defaultMessage: 'Download incident as PDF',
+              })}
+            >
+              <Button loading={isPrinting} onClick={handlePrint}>
+                <FontAwesomeIcon
+                  icon={faFileDownload}
+                  size="1x"
+                  style={{ marginRight: 8 }}
+                />
+                <FormattedMessage defaultMessage="Download" />
+              </Button>
+            </Tooltip>
+          </Col>
+        )}
         {deleteRights && (
           <Col>
             <Button onClick={() => onDelete(incidentId)} type="ghost">
