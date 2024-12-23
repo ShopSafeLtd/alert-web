@@ -2,7 +2,6 @@
 import { useTokenContext } from '#/context/token-context';
 import { cache } from '#/providers/cache';
 import { useStoreState } from '#/state';
-import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
 import { ApolloClient, ApolloProvider, split } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
@@ -36,7 +35,11 @@ const Apollo = ({ children }: Props): JSX.Element => {
     async function getSetToken() {
       const t = await getToken(true);
       if (!t && !isSignedIn) {
-        navigate(GenerateSignInRedirect());
+        navigate(
+          currentRoute && currentRoute.includes('sign-in')
+            ? '/sign-in'
+            : `/sign-in?rd=${currentRoute}`
+        );
       }
       setToken(t);
     }
