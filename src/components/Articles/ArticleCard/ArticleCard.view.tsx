@@ -1,5 +1,5 @@
+import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import type { CarouselRef } from 'antd/lib/carousel';
-import type { ListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
 
 import {
   faClock,
@@ -23,11 +23,12 @@ import {
   Menu,
   Modal,
   Row,
+  Tag,
   Typography,
 } from 'antd';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { ArticlePriority } from 'graphql/types';
+import { ArticlePriority, CompleteStatus } from 'graphql/types';
 import React, { useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -40,7 +41,9 @@ const { confirm } = Modal;
 
 interface Props {
   article:
-    | NonNullable<ListArticlesQuery['listArticles']>['articles'][0]
+    | NonNullable<
+        ListArticlesFeedQuery['listArticlesRelay']
+      >['edges'][0]['node']
     | null
     | undefined;
   deleteRights: boolean;
@@ -67,6 +70,7 @@ const ArticleCard = ({
     images,
     previewText,
     priority,
+    status,
     title,
     updatedAt,
     // tags,
@@ -191,6 +195,26 @@ const ArticleCard = ({
           size="lg"
         />
       )}
+      {status === CompleteStatus.InProgress && (
+        <Tag className={classes.status} color="processing">
+          {intl.formatMessage({
+            defaultMessage: 'In Progress',
+          })}
+        </Tag>
+      )}
+      {/* {status === CompleteStatus.InProgress ? (
+        <Tag className={classes.status} color="processing">
+          {intl.formatMessage({
+            defaultMessage: 'In Progress',
+          })}
+        </Tag>
+      ) : (
+        <Tag className={classes.status} color="error">
+          {intl.formatMessage({
+            defaultMessage: 'Completed',
+          })}
+        </Tag>
+      )} */}
       <div className={classes.content}>
         <div className={classes.details}>
           <Title

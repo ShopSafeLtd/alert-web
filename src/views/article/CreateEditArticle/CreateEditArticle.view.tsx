@@ -58,6 +58,7 @@ const CreateEditArticleView = ({
   onSubmit,
   removeIncident,
   removeOffender,
+  saveDraft,
   selectedCategories,
   selectedSchemes,
 }: ViewProps) => {
@@ -524,13 +525,25 @@ const CreateEditArticleView = ({
                 <Col>
                   <Button
                     disabled={loading}
+                    loading={loading}
+                    onClick={() => saveDraft(true)}
+                    type="primary"
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Save Draft',
+                    })}
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    disabled={loading}
                     htmlType="submit"
                     loading={loading}
                     type="primary"
                   >
                     {id
                       ? intl.formatMessage({
-                          defaultMessage: 'Save',
+                          defaultMessage: 'Publish',
                         })
                       : intl.formatMessage({
                           defaultMessage: 'Create Article',

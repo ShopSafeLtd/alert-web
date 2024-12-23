@@ -1,37 +1,40 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
-import View from './IncidentGoods.view';
-import useIncidentGoods from './useIncidentGoods';
+
+import React from 'react';
+
 import type { FormData } from '../../useAddIncident';
 
+import View from './IncidentGoods.view';
+import useIncidentGoods from './useIncidentGoods';
+
 interface Props {
-  goodsVisible: boolean;
   dontKnowGoods: () => void;
-  knowGoods: () => void;
-  goodsMode: string;
   form: FormInstance<FormData>;
+  goodsMode: string;
+  goodsVisible: boolean;
+  knowGoods: () => void;
 }
 
 const IncidentGoods = ({
+  dontKnowGoods,
+  form,
+  goodsMode,
   goodsVisible,
   knowGoods,
-  dontKnowGoods,
-  goodsMode,
-  form,
 }: Props) => {
-  const { goodsTypesData, onAddItem, division, goods } = useIncidentGoods({
+  const { division, goods, goodsTypesData, onAddItem } = useIncidentGoods({
     form,
   });
   return (
     <View
+      division={division}
+      dontKnowGoods={dontKnowGoods}
+      goods={goods}
+      goodsMode={goodsMode}
       goodsTypesData={goodsTypesData}
       goodsVisible={goodsVisible}
       knowGoods={knowGoods}
-      dontKnowGoods={dontKnowGoods}
-      goodsMode={goodsMode}
       onAddItem={onAddItem}
-      division={division}
-      goods={goods}
     />
   );
 };

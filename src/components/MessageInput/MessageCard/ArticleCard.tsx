@@ -1,4 +1,5 @@
-import React from 'react';
+import type { ArticleData } from 'types/DataType';
+
 import {
   faCircleXmark,
   faExclamationCircle,
@@ -14,11 +15,10 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { ArticleData } from 'types/DataType';
-import { useIntl } from 'react-intl';
-
-import FormatCalendar from 'utils/format-calendar-24h';
 import { ArticlePriority } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import FormatCalendar from 'utils/format-calendar-24h';
 
 const { Title } = Typography;
 
@@ -26,55 +26,62 @@ interface Props {
   article: ArticleData;
   removeArticle?: (value: string | undefined) => void;
   saving?: boolean;
+  triggerLightbox?: (elements: { src: string }[], index: number) => void;
 }
 
-const ArticleCard = ({ article, removeArticle, saving }: Props) => {
+const ArticleCard = ({
+  article,
+  removeArticle,
+  saving,
+  triggerLightbox,
+}: Props) => {
   const intl = useIntl();
   const hasImage = article.images && article.images.length > 0;
   return (
     <Card
+      bodyStyle={{
+        marginLeft: -2,
+        padding: 0,
+      }}
+      className="message-card"
+      size="small"
       style={{
         margin: removeArticle ? 0 : 5,
-        width: hasImage ? 300 : 200,
         overflow: 'hidden',
+        width: hasImage ? 300 : 200,
       }}
-      bodyStyle={{
-        padding: 0,
-        marginLeft: -2,
-      }}
-      size="small"
-      className="message-card"
     >
       <Row gutter={5} wrap={false}>
         {removeArticle && (
           <Popconfirm
-            placement="topLeft"
-            trigger="click"
-            title={intl.formatMessage({
-              defaultMessage: 'Remove the article?',
-            })}
-            onConfirm={() => removeArticle(article.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
             })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
+            onConfirm={() => removeArticle(article.id)}
             overlayInnerStyle={{ padding: 10 }}
+            placement="topLeft"
+            title={intl.formatMessage({
+              defaultMessage: 'Remove the article?',
+            })}
+            trigger="click"
           >
             <Button
-              size="small"
               disabled={saving}
-              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
-              shape="circle"
-              type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
+              shape="circle"
+              size="small"
+              style={{ position: 'absolute', right: -5, top: -5, zIndex: 100 }}
+              type="text"
             />
           </Popconfirm>
         )}
 
         <Col>
           {hasImage && (
-            <div style={{ width: 100, height: 100 }}>
+            <div style={{ height: 100, width: 100 }}>
               <WatermarkImage
+                triggerLightbox={triggerLightbox}
                 // @ts-expect-error  null
                 url={article.images[0].optimised || article.images[0].url || ''}
               />
@@ -82,17 +89,17 @@ const ArticleCard = ({ article, removeArticle, saving }: Props) => {
           )}
         </Col>
 
-        <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
+        <Col flex={1} style={{ marginLeft: 5, marginTop: 10 }}>
           <Title
-            level={4}
             ellipsis={{
               tooltip: article.title?.replace(/^\S/, (s) => s.toUpperCase()),
             }}
+            level={4}
           >
             {article.priority === ArticlePriority.High && (
               <FontAwesomeIcon
-                size="sm"
                 icon={faExclamationCircle}
+                size="sm"
                 style={{ marginRight: 5 }}
               />
             )}
@@ -111,8 +118,6 @@ const ArticleCard = ({ article, removeArticle, saving }: Props) => {
 
           <Descriptions column={1} size="small">
             <Descriptions.Item
-              // className={classes.descItem}
-              style={{ paddingBottom: 0 }}
               label={
                 <span>
                   {/* <FontAwesomeIcon className={classes.descIcon} icon={faUser} /> */}
@@ -121,6 +126,8 @@ const ArticleCard = ({ article, removeArticle, saving }: Props) => {
                   })}
                 </span>
               }
+              // className={classes.descItem}
+              style={{ paddingBottom: 0 }}
             >
               {article?.createdBy?.fullName}
             </Descriptions.Item>

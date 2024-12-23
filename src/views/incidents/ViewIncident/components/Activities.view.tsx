@@ -145,7 +145,7 @@ const Activities = ({ data, incidentId, loading, saving }: Props) => {
             </Title>
           </Col>
 
-          <Col>
+          <Col className="no-print">
             <Button
               disabled={templatesLoading}
               icon={

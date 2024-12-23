@@ -4,6 +4,7 @@ import type {
   Age,
   ArticlePriority,
   Build,
+  CompleteStatus,
   Gender,
   InvestigationStatus,
   Model,
@@ -134,6 +135,7 @@ export interface ArticleFilters {
   order: SortOrder;
   priorities: ArticlePriority[];
   search: string;
+  status: CompleteStatus[];
 }
 
 export interface UserFilters {
@@ -249,6 +251,7 @@ const dataModel: DataModel = {
       order: SortOrder.Desc,
       priorities: [],
       search: '',
+      status: [],
     },
   },
 

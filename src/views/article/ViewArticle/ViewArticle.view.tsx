@@ -1,10 +1,5 @@
-import React from 'react';
-import { Button, Card, Col, List, Row, Typography } from 'antd';
-import Lightbox from 'yet-another-react-lightbox';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import {
   faClock,
   faEdit,
@@ -12,46 +7,53 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, List, Row, Typography } from 'antd';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import React from 'react';
+import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
-import { useIntl } from 'react-intl'; // Import useIntl hook
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'; // Import useIntl hook
+import { Role } from 'graphql/types';
 import { createUseStyles } from 'react-jss';
+
 import type { ReturnProps as Props } from './types/ViewArticle';
+
 import IncidentCard from '../../../components/incidents/IncidentCard';
 import OffenderCard from '../../../components/offenders/OffenderCard';
-import { Role } from 'graphql/types';
 
-const { Title, Text } = Typography;
+const { Text, Title } = Typography;
 
 const useStyles = createUseStyles(() => ({
-  viewArticle: {
-    height: '100vh',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '15px',
-  },
   content: {
-    width: '100%',
     height: '100vh',
+    width: '100%',
   },
   detailsContainer: {
     height: '100%',
   },
+  viewArticle: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+    padding: '15px',
+    width: '100%',
+  },
 }));
 
 const ViewArticleView = ({
-  data,
-  loading,
-  openLightbox,
-  lightBoxOpen,
-  lightboxElements,
-  onDeleteArticle,
-  role,
-  editArticle,
   componentRef,
+  data,
+  editArticle,
   handlePrint,
   isPrinting,
+  lightBoxOpen,
+  lightboxElements,
+  loading,
+  onDeleteArticle,
+  openLightbox,
+  role,
 }: Props) => {
   const classes = useStyles();
 
@@ -60,14 +62,14 @@ const ViewArticleView = ({
     <>
       <div className={classes.viewArticle}>
         <Row className={classes.content}>
-          <Col span={24} className={classes.detailsContainer}>
+          <Col className={classes.detailsContainer} span={24}>
             {role === Role.SchemeAdmin && (
-              <Row style={{ padding: '10px 20px 15px' }} justify="end">
+              <Row justify="end" style={{ padding: '10px 20px 15px' }}>
                 <Col style={{ marginRight: 10 }}>
                   <Button onClick={handlePrint}>
                     <FontAwesomeIcon
-                      style={{ marginRight: 10 }}
                       icon={faPrint}
+                      style={{ marginRight: 10 }}
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Print',
@@ -77,8 +79,8 @@ const ViewArticleView = ({
                 <Col style={{ marginRight: 10 }}>
                   <Button onClick={editArticle}>
                     <FontAwesomeIcon
-                      style={{ marginRight: 10 }}
                       icon={faEdit}
+                      style={{ marginRight: 10 }}
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Edit Bulletin',
@@ -88,8 +90,8 @@ const ViewArticleView = ({
                 <Col>
                   <Button onClick={onDeleteArticle}>
                     <FontAwesomeIcon
-                      style={{ marginRight: 10 }}
                       icon={faTrash}
+                      style={{ marginRight: 10 }}
                     />
                     {intl.formatMessage({
                       defaultMessage: 'Delete Bulletin',
@@ -99,19 +101,19 @@ const ViewArticleView = ({
               </Row>
             )}
             <Card
+              loading={loading}
               style={{
                 marginLeft: 20,
                 marginRight: 20,
               }}
-              loading={loading}
             >
               <Title level={2}>{data?.article?.title}</Title>
-              <Row style={{ marginBottom: 5 }} gutter={60}>
+              <Row gutter={60} style={{ marginBottom: 5 }}>
                 <Col>
                   <FontAwesomeIcon
-                    size="sm"
                     className="feedItem-card-icon"
                     icon={faUser}
+                    size="sm"
                     style={{ marginRight: 5 }}
                   />
                   <Text
@@ -132,20 +134,7 @@ const ViewArticleView = ({
                     icon={faClock}
                     style={{ marginRight: 5 }}
                   />
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 400,
-                    }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Published:',
-                    })}
-                  </Text>
-                  <Text>
-                    {FormatCalendar(data?.article?.createdAt as Date)}
-                  </Text>
-                  {data?.article?.createdAt !== data?.article?.updatedAt && (
+                  {data?.article?.completedAt ? (
                     <>
                       <Text
                         style={{
@@ -154,7 +143,21 @@ const ViewArticleView = ({
                         }}
                       >
                         {intl.formatMessage({
-                          defaultMessage: '| Updated:',
+                          defaultMessage: 'Published:',
+                        })}
+                      </Text>
+                      <Text>{FormatCalendar(data?.article?.completedAt)}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: 400,
+                        }}
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Updated:',
                         })}
                       </Text>
                       <Text>
@@ -162,25 +165,41 @@ const ViewArticleView = ({
                       </Text>
                     </>
                   )}
+                  {data?.article?.completedAt &&
+                    data?.article?.completedAt !== data?.article?.updatedAt && (
+                      <>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: 400,
+                          }}
+                        >
+                          {intl.formatMessage({
+                            defaultMessage: '| Updated:',
+                          })}
+                        </Text>
+                        <Text>{FormatCalendar(data?.article?.updatedAt)}</Text>
+                      </>
+                    )}
                 </Col>
               </Row>
-              <Row style={{ marginBottom: 5 }} gutter={60}>
+              <Row gutter={60} style={{ marginBottom: 5 }}>
                 <Col>
                   <div
+                    // eslint-disable-next-line react/no-danger
+                    dangerouslySetInnerHTML={{
+                      __html: data?.article?.rows[0].columns[0].text || '',
+                    }}
                     ref={componentRef}
                     style={
                       isPrinting
                         ? undefined
                         : {
-                            width: '100%',
                             height: '100%',
                             marginTop: 20,
+                            width: '100%',
                           }
                     }
-                    // eslint-disable-next-line react/no-danger
-                    dangerouslySetInnerHTML={{
-                      __html: data?.article?.rows[0].columns[0].text || '',
-                    }}
                   />
                 </Col>
               </Row>
@@ -200,7 +219,7 @@ const ViewArticleView = ({
                   </Typography.Title>
                   <Row>
                     {data?.article?.rows[0].columns[0].incidents.map((el) => (
-                      <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
+                      <Col key={el?.id} lg={12} md={12} sm={24} xl={8} xxl={6}>
                         <IncidentCard
                           incident={{
                             ...el,
@@ -228,7 +247,7 @@ const ViewArticleView = ({
                   </Typography.Title>
                   <Row>
                     {data?.article?.rows[0].columns[0].offenders.map((el) => (
-                      <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
+                      <Col key={el?.id} lg={12} md={12} sm={24} xl={8} xxl={6}>
                         <OffenderCard
                           isArticle
                           offender={el}
@@ -242,45 +261,45 @@ const ViewArticleView = ({
             {data?.article?.documents &&
               data?.article?.documents.length > 0 && (
                 <List
-                  style={{
-                    marginLeft: 20,
-                    marginRight: 20,
-                  }}
-                  grid={{
-                    gutter: 16,
-                    column: 4,
-                  }}
                   dataSource={data?.article?.documents}
+                  grid={{
+                    column: 4,
+                    gutter: 16,
+                  }}
                   renderItem={(item) => (
                     <List.Item>
                       <Card>
                         <Typography.Title level={4}>
-                          <a target="_blank" href={item.url} rel="noreferrer">
+                          <a href={item.url} rel="noreferrer" target="_blank">
                             {item.name}
                           </a>
                         </Typography.Title>
                       </Card>
                     </List.Item>
                   )}
+                  style={{
+                    marginLeft: 20,
+                    marginRight: 20,
+                  }}
                 />
               )}
           </Col>
         </Row>
       </div>
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox([], 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </>
   );

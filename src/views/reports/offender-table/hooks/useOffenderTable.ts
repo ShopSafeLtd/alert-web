@@ -73,8 +73,68 @@ const useOffenderTable = (): Return => {
     undefined
   );
   const [totalValue, setTotalValue] = useState<number | undefined>(undefined);
+  const [idVerified, setIdVerified] = useState<boolean | undefined>(undefined);
   const [search, setSearch] = useState<string | undefined>(undefined);
+  const isDemo =
+    currentScheme === 'ckdhbosuv01028oiblmjgeuii' ||
+    currentScheme === 'ck6zhwkwv00019ourjkgk5bdt';
+  // new date 2 years ago at 00:00:00
+  const startDateDemo = new Date(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 2)).setHours(
+      0,
+      0,
+      59
+    )
+  );
 
+  const initDate = isDemo
+    ? startDateDemo
+    : new Date(
+        new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+          0,
+          0,
+          59
+        )
+      );
+  const [createdAtMode, setCreatedAtMode] = useState<
+    DateSelectModeType | undefined
+  >(undefined);
+
+  const [createdAt, setCreatedAtState] = useState<
+    | {
+        endDate: Date;
+        startDate: Date;
+      }
+    | undefined
+  >({
+    // today at 23:59:59
+    endDate: new Date(new Date().setHours(23, 59, 59)),
+    startDate: initDate,
+  });
+  const setCreatedAt = (
+    createdAtInput:
+      | {
+          endDate: Date;
+          startDate: Date;
+        }
+      | undefined,
+    range: DateSelectModeType | undefined
+  ): void => {
+    if (createdAtInput) {
+      setCreatedAtMode(range);
+      setCreatedAtState({
+        endDate: new Date(
+          new Date(createdAtInput.endDate).setHours(23, 59, 59)
+        ),
+        startDate: new Date(
+          new Date(createdAtInput.startDate).setHours(0, 0, 59)
+        ),
+      });
+    } else {
+      setCreatedAtMode(undefined);
+      setCreatedAtState(undefined);
+    }
+  };
   useEffect(() => {
     if (templates.length > 0 && reportId) selectTemplate(reportId);
   }, [templates, reportId]);
@@ -87,8 +147,10 @@ const useOffenderTable = (): Return => {
         {
           data: {
             businessesIds,
+            createdAtMode,
             crimeGroupIds,
             dateRangeMode,
+            idVerified,
             incidentCount,
             selectedBrands,
             selectedGroups,
@@ -109,6 +171,8 @@ const useOffenderTable = (): Return => {
     incidentCount,
     totalValue,
     dateRangeMode,
+    idVerified,
+    createdAtMode,
   ]);
 
   const { data: reportData, loading: tableReportLoading } = useTableReportQuery(
@@ -158,6 +222,11 @@ const useOffenderTable = (): Return => {
           } else {
             setIncidentCount(undefined);
           }
+          if (globalFilter.data?.idVerified) {
+            setIdVerified(globalFilter.data.idVerified as boolean);
+          } else {
+            setIdVerified(undefined);
+          }
           if (globalFilter.data?.totalValue) {
             setTotalValue(globalFilter.data.totalValue as number);
           } else {
@@ -172,6 +241,16 @@ const useOffenderTable = (): Return => {
             );
           } else {
             setDateRange(undefined, 'none');
+          }
+          if (globalFilter.data?.createdAtMode) {
+            setCreatedAt(
+              selectedModeToDate(
+                globalFilter.data.createdAtMode as DateSelectModeType
+              ),
+              globalFilter.data.createdAtMode as DateSelectModeType
+            );
+          } else {
+            setCreatedAt(undefined, 'none');
           }
         }
       },
@@ -201,8 +280,10 @@ const useOffenderTable = (): Return => {
       where: {
         brandsIds: selectedBrands,
         businessesIds,
+        createdAt,
         crimeGroupId: crimeGroupIds[0],
         groupIds: selectedGroups,
+        idVerified,
         incidentCount,
         incidentDateRange: dateRange,
         industryIds: selectedIndustries,
@@ -241,6 +322,7 @@ const useOffenderTable = (): Return => {
     businessesIds,
     changeSize,
     componentRef,
+    createdAtMode,
     crimeGroupIds,
     data,
     dateRange,
@@ -250,6 +332,7 @@ const useOffenderTable = (): Return => {
     filtersOpen,
     groups,
     handlePrint,
+    idVerified,
     incidentCount,
     isPrinting,
     layout,
@@ -276,9 +359,11 @@ const useOffenderTable = (): Return => {
     selectedTemplate,
     setAddLogoDrawer,
     setBusinessesIds,
+    setCreatedAt,
     setCrimeGroupIds,
     setDateRange,
     setEditMode,
+    setIdVerified,
     setIncidentCount,
     setLayout,
     setMetadata,

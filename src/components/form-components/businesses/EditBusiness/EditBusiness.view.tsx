@@ -170,6 +170,15 @@ const EditBusiness = ({
               defaultMessage: 'Content Groups',
             })}
             name="groups"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please select at least one group for this shop.',
+                }),
+                required: true,
+              },
+            ]}
             tooltip={intl.formatMessage({
               defaultMessage:
                 'select the content groups that are relevant to this shop.',

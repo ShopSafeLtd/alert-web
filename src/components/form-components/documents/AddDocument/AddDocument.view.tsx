@@ -1,38 +1,40 @@
-import React from 'react';
 import type { SelectProps, UploadProps } from 'antd';
-import { Button, Col, Form, Input, Row, Select, Upload } from 'antd';
+
 import { UploadOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, Row, Select, Upload } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import useStyles from './AddDocument.styles';
 
 interface OnSubmitValues {
+  categories: string[];
   name: string;
   url: string;
-  categories: string[];
 }
 
 interface Props {
-  onSubmit: (values: OnSubmitValues) => void;
-  saving: boolean;
   categories: SelectProps['options'];
-  categoriesLoading: boolean;
-  selectedCategories: { value: string }[];
   categoriesChange: (categories: { value: string }[]) => void;
-  onClose: () => void;
+  categoriesLoading: boolean;
   documentUploadProps: UploadProps;
+  onClose: () => void;
+  onSubmit: (values: OnSubmitValues) => void;
   providedId: boolean;
+  saving: boolean;
+  selectedCategories: { value: string }[];
 }
 
 const AddDocument = ({
-  onSubmit,
-  saving,
-  selectedCategories,
   categories,
   categoriesChange,
   categoriesLoading,
-  onClose,
   documentUploadProps,
+  onClose,
+  onSubmit,
   providedId,
+  saving,
+  selectedCategories,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
@@ -40,25 +42,25 @@ const AddDocument = ({
   return (
     <Form<OnSubmitValues>
       initialValues={{
+        categories: [],
         name: '',
         url: '',
-        categories: [],
       }}
       onFinish={onSubmit}
     >
       <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
         <Col span={24}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({
               defaultMessage: 'Name',
             })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please input a name!',
                 }),
+                required: true,
               },
             ]}
           >
@@ -73,24 +75,24 @@ const AddDocument = ({
       <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
         <Col span={24}>
           <Form.Item
-            name="category"
             label={intl.formatMessage({
               defaultMessage: 'Category',
             })}
+            name="category"
           >
             <Select
+              labelInValue
+              loading={categoriesLoading}
+              maxTagCount={2}
+              mode="tags"
+              onChange={categoriesChange}
+              optionFilterProp="value"
+              options={categories}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Category',
               })}
-              mode="tags"
               size="small"
-              maxTagCount={2}
               style={{ minWidth: 200 }}
-              loading={categoriesLoading}
-              onChange={categoriesChange}
-              options={categories}
-              optionFilterProp="value"
-              labelInValue
               value={selectedCategories}
             />
           </Form.Item>
@@ -101,8 +103,8 @@ const AddDocument = ({
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...documentUploadProps}
           listType="picture"
-          style={{ display: 'flex' }}
           maxCount={1}
+          style={{ display: 'flex' }}
         >
           <Button icon={<UploadOutlined />}>
             {intl.formatMessage({
@@ -112,7 +114,7 @@ const AddDocument = ({
         </Upload>
       </Row>
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
@@ -122,10 +124,10 @@ const AddDocument = ({
           </Col>
           <Col>
             <Button
-              loading={saving}
               disabled={saving}
-              type="primary"
               htmlType="submit"
+              loading={saving}
+              type="primary"
             >
               {providedId
                 ? intl.formatMessage({

@@ -1,3 +1,4 @@
+import type { RadioChangeEvent } from 'antd';
 import type { IntlShape } from 'react-intl';
 
 import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
@@ -20,6 +21,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Radio,
   Row,
 } from 'antd';
 import { margin, rowHeight } from 'components/reports/utils/utils';
@@ -112,6 +114,7 @@ const PerformanceReport = ({
   businessesIds,
   changeSize,
   componentRef,
+  createdAtMode,
   crimeGroupIds,
   data,
   dateRange,
@@ -121,6 +124,7 @@ const PerformanceReport = ({
   filtersOpen,
   groups,
   handlePrint,
+  idVerified,
   incidentCount,
   isPrinting,
   layout,
@@ -144,9 +148,11 @@ const PerformanceReport = ({
   selectedRoles,
   setAddLogoDrawer,
   setBusinessesIds,
+  setCreatedAt,
   setCrimeGroupIds,
   setDateRange,
   setEditMode,
+  setIdVerified,
   setIncidentCount,
   setLayout,
   setMetadata,
@@ -456,6 +462,16 @@ const PerformanceReport = ({
               defaultMessage: 'Report Filters',
             })}
           >
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Offenders created date range',
+              })}
+            >
+              <DateSelect
+                defaultRange={createdAtMode}
+                onChange={setCreatedAt}
+              />
+            </Form.Item>
             <Form layout="vertical">
               <Form.Item
                 label={intl.formatMessage({
@@ -564,6 +580,27 @@ const PerformanceReport = ({
                   }}
                   style={{ width: '100%' }}
                   value={selectedIndustries}
+                />
+              </Form.Item>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'ID Verified',
+                })}
+              >
+                <Radio.Group
+                  buttonStyle="solid"
+                  defaultValue={idVerified}
+                  disabled={saving}
+                  onChange={(e: RadioChangeEvent) => {
+                    console.log(`radio checked:${e.target.value}`);
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    setIdVerified(e.target.value);
+                  }}
+                  optionType="button"
+                  options={[
+                    { label: 'Yes', value: true },
+                    { label: 'No', value: false },
+                  ]}
                 />
               </Form.Item>
             </Form>

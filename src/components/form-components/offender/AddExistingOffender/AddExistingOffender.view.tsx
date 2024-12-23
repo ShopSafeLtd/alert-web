@@ -258,6 +258,59 @@ const AddExistingOffender = ({
           <div className={classes.filter}>
             <Text>
               {intl.formatMessage({
+                defaultMessage: 'Groups',
+              })}
+            </Text>
+            <Select
+              allowClear
+              className={classes.filterSelect}
+              mode="multiple"
+              onChange={setEthnicity}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Ethnicity',
+              })}
+              value={ethnicity}
+            >
+              <Select.Option value={Race.Ic1}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC1 - North European',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Ic2}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC2 - South European',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Ic3}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC3 - Black',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Ic4}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC4 - South Asian',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Ic5}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC5 - Southeast Asian',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Ic6}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC6 - North African or Arab',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Unknown}>
+                {intl.formatMessage({
+                  defaultMessage: 'Unknown',
+                })}
+              </Select.Option>
+            </Select>
+          </div>
+          <div className={classes.filter}>
+            <Text>
+              {intl.formatMessage({
                 defaultMessage: 'Ethnicity',
               })}
             </Text>

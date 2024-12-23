@@ -1,6 +1,5 @@
-import React from 'react';
+import type { TagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
 
-import { CrimeType, TagType } from 'graphql/types';
 import {
   Button,
   Col,
@@ -11,31 +10,31 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
+import { CrimeType, TagType } from 'graphql/types';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import { TagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
-
 
 const { Text } = Typography;
 
 interface FormData {
-  name: string;
-  description: string;
   crimeType: CrimeType;
+  description: string;
+  name: string;
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
   data: TagQuery | undefined;
   loading: boolean;
+  onClose: () => void;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
 }
 
 const EditCrimeType = ({
-  onSubmit,
-  onClose,
   data,
   loading,
+  onClose,
+  onSubmit,
   saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
@@ -44,9 +43,9 @@ const EditCrimeType = ({
   ) : (
     <Form
       initialValues={{
-        name: data?.tag?.name,
-        description: data?.tag?.description,
         crimeType: data?.tag?.crimeType,
+        description: data?.tag?.description,
+        name: data?.tag?.name,
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -64,14 +63,14 @@ const EditCrimeType = ({
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the crime type.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -82,28 +81,28 @@ const EditCrimeType = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
-            <Input.TextArea rows={10} disabled={saving} />
+            <Input.TextArea disabled={saving} rows={10} />
           </Form.Item>
         </Col>
         {data?.tag?.type === TagType.IncidentCrimeType && (
           <Col span={24}>
             <Form.Item
-              name="crimeType"
               label={intl.formatMessage({
                 defaultMessage: 'Crime Type Category',
               })}
+              name="crimeType"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select a category for the new crime type.',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -160,7 +159,7 @@ const EditCrimeType = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -169,9 +168,9 @@ const EditCrimeType = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>

@@ -52,6 +52,8 @@ query currentUser(
         facialRecognition
         facialDetection
         facialRedaction
+        incidentCustomQuestionRadio
+        incidentTypeTooltip
         activityAssignToUser
         useBusinessGroupsOnIncident
         imagesRequiredOnOffenders

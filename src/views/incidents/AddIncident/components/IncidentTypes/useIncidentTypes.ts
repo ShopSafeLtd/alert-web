@@ -18,15 +18,18 @@ interface Props {
 interface Return {
   incidentTagsData: ListIncidentTagsQuery | undefined;
   incidentTagsLoading: boolean;
+  incidentTypeTooltip?: null | string;
   oneSelectedIncidentTypeOnly: boolean;
   tags: { label: string; tooltip: string; type: TagType; value: string }[];
   tagsLoading: boolean;
 }
 
 const useIncidentTypes = ({ form, setPoliceReporting }: Props): Return => {
-  const { id: schemeId, oneSelectedIncidentTypeOnly } = useStoreState(
-    (state) => state.scheme
-  );
+  const {
+    id: schemeId,
+    incidentTypeTooltip,
+    oneSelectedIncidentTypeOnly,
+  } = useStoreState((state) => state.scheme);
 
   const selectedTag = Form.useWatch('tags', form);
 
@@ -69,6 +72,7 @@ const useIncidentTypes = ({ form, setPoliceReporting }: Props): Return => {
   return {
     incidentTagsData,
     incidentTagsLoading,
+    incidentTypeTooltip,
     oneSelectedIncidentTypeOnly,
     tags: useMemo(
       () =>

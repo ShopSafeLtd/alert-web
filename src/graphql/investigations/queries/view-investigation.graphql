@@ -23,6 +23,11 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         name
         id
       }
+      articles {
+        id
+        previewText
+        previewImage
+      }
     }
     groups {
       id

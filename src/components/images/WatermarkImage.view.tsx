@@ -99,6 +99,7 @@ interface Props {
   rotation?: number;
   showWatermark?: boolean;
   style?: React.CSSProperties;
+  triggerLightbox?: (elements: { src: string }[], index: number) => void;
   url?: null | string;
 }
 
@@ -108,13 +109,19 @@ const WatermarkImage = ({
   rotation,
   showWatermark = true,
   style,
+  triggerLightbox,
   url,
 }: Props) => {
   const classes = useStyles();
   const reference = useStoreState((state) => state.user.reference);
   if (!showWatermark) {
     return (
-      <div className={image ? classes.imageContainer : classes.container}>
+      <div
+        className={image ? classes.imageContainer : classes.container}
+        onClick={() => {
+          if (triggerLightbox && url) triggerLightbox([{ src: url }], 0);
+        }}
+      >
         {!image && (
           <div
             className={classes.image}
@@ -138,7 +145,12 @@ const WatermarkImage = ({
     );
   }
   return (
-    <div className={image ? classes.imageContainer : classes.container}>
+    <div
+      className={image ? classes.imageContainer : classes.container}
+      onClick={() => {
+        if (triggerLightbox && url) triggerLightbox([{ src: url }], 0);
+      }}
+    >
       <div className={classes.textOverlay} />
       <div className={classes.textContainer} style={{ left: '-70%' }}>
         <span className={classes.text}>{reference}</span>

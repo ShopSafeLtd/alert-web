@@ -1,4 +1,5 @@
-import React from 'react';
+import type { VehicleData } from 'types/DataType';
+
 import { faCircleXmark } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,64 +12,71 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { VehicleData } from 'types/DataType';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 const { Paragraph } = Typography;
 
 interface Props {
-  vehicle: VehicleData;
   removeVehicle?: (value: string | undefined) => void;
   saving?: boolean;
+  triggerLightbox?: (elements: { src: string }[], index: number) => void;
+  vehicle: VehicleData;
 }
 
-const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
+const VehicleCard = ({
+  removeVehicle,
+  saving,
+  triggerLightbox,
+  vehicle,
+}: Props) => {
   const intl = useIntl();
   const hasImage = vehicle.images && vehicle.images.length > 0;
   return (
     <Card
+      bodyStyle={{
+        marginLeft: -2,
+        padding: 0,
+      }}
+      className="message-card"
+      size="small"
       style={{
         margin: removeVehicle ? 0 : 5,
-        width: hasImage ? 280 : 200,
         overflow: 'hidden',
+        width: hasImage ? 280 : 200,
       }}
-      bodyStyle={{
-        padding: 0,
-        marginLeft: -2,
-      }}
-      size="small"
-      className="message-card"
     >
       <Row gutter={5} wrap={false}>
         {removeVehicle && (
           <Popconfirm
-            placement="topLeft"
-            trigger="click"
-            title={intl.formatMessage({
-              defaultMessage: 'Remove the vehicle?',
-            })}
-            onConfirm={() => removeVehicle(vehicle.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
             })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
+            onConfirm={() => removeVehicle(vehicle.id)}
             overlayInnerStyle={{ padding: 10 }}
+            placement="topLeft"
+            title={intl.formatMessage({
+              defaultMessage: 'Remove the vehicle?',
+            })}
+            trigger="click"
           >
             <Button
-              size="small"
               disabled={saving}
-              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
-              shape="circle"
-              type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
+              shape="circle"
+              size="small"
+              style={{ position: 'absolute', right: -5, top: -5, zIndex: 100 }}
+              type="text"
             />
           </Popconfirm>
         )}
 
         <Col>
           {hasImage && (
-            <div style={{ width: 100, height: 100 }}>
+            <div style={{ height: 100, width: 100 }}>
               <WatermarkImage
+                triggerLightbox={triggerLightbox}
                 // @ts-expect-error  null
                 url={vehicle.images[0].optimised || vehicle.images[0].url || ''}
               />
@@ -76,13 +84,13 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
           )}
         </Col>
 
-        <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
+        <Col flex={1} style={{ marginLeft: 5, marginTop: 10 }}>
           <Paragraph
-            strong
             ellipsis
+            strong
             style={{
-              marginBottom: '0.5rem',
               fontSize: 15,
+              marginBottom: '0.5rem',
             }}
           >
             {vehicle.registration ||

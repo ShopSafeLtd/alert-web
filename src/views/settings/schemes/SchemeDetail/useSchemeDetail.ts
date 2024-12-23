@@ -34,10 +34,11 @@ export interface FormData {
   facialDetection: boolean;
   facialRecognition: boolean;
   facialRedaction: boolean;
-
   goodsMode: GoodsMode;
   imagesRequiredOnOffenders: boolean;
+  incidentCustomQuestionRadio: boolean;
   incidentRetention: null | number;
+  incidentTypeTooltip?: null | string | undefined;
   logo?: { id: string; optimised: string; url: string };
   name: string;
   needJustification: boolean;
@@ -210,7 +211,15 @@ const useSchemeDetail = (): Return => {
           facialRedaction: { set: data.facialRedaction },
           goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
           imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
+          incidentCustomQuestionRadio: {
+            set: data.incidentCustomQuestionRadio,
+          },
           incidentRetention: { set: data.incidentRetention },
+          incidentTypeTooltip: data.incidentTypeTooltip
+            ? {
+                set: data.incidentTypeTooltip,
+              }
+            : undefined,
           logo: {
             ...(imageChange && fileList.length > 0
               ? {

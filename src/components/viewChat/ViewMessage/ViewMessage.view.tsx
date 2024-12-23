@@ -372,7 +372,7 @@ const ViewMessages = ({
                       }
                       overlayClassName="message-popover"
                       placement={item.from?.id === userId ? 'left' : 'right'}
-                      trigger="click"
+                      trigger={['contextMenu']}
                     >
                       <div>
                         <Content

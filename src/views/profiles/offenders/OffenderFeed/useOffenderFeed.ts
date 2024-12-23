@@ -138,7 +138,6 @@ const useOffenderFeed = (): Return => {
           orderByValue: SortOrder.Desc,
         };
       }
-
       default: {
         return {
           order: { updatedAt: SortOrder.Desc },

@@ -10,6 +10,7 @@ const PerformanceReport = (): JSX.Element => {
     businessesIds,
     changeSize,
     componentRef,
+    createdAtMode,
     crimeGroupIds,
     data,
     dateRange,
@@ -19,6 +20,7 @@ const PerformanceReport = (): JSX.Element => {
     filtersOpen,
     groups,
     handlePrint,
+    idVerified,
     incidentCount,
     isPrinting,
     layout,
@@ -45,9 +47,11 @@ const PerformanceReport = (): JSX.Element => {
     selectedTemplate,
     setAddLogoDrawer,
     setBusinessesIds,
+    setCreatedAt,
     setCrimeGroupIds,
     setDateRange,
     setEditMode,
+    setIdVerified,
     setIncidentCount,
     setLayout,
     setMetadata,
@@ -72,6 +76,7 @@ const PerformanceReport = (): JSX.Element => {
       businessesIds={businessesIds}
       changeSize={changeSize}
       componentRef={componentRef}
+      createdAtMode={createdAtMode}
       crimeGroupIds={crimeGroupIds}
       data={data}
       dateRange={dateRange}
@@ -81,6 +86,7 @@ const PerformanceReport = (): JSX.Element => {
       filtersOpen={filtersOpen}
       groups={groups}
       handlePrint={handlePrint}
+      idVerified={idVerified}
       incidentCount={incidentCount}
       isPrinting={isPrinting}
       layout={layout}
@@ -107,9 +113,11 @@ const PerformanceReport = (): JSX.Element => {
       selectedTemplate={selectedTemplate}
       setAddLogoDrawer={setAddLogoDrawer}
       setBusinessesIds={setBusinessesIds}
+      setCreatedAt={setCreatedAt}
       setCrimeGroupIds={setCrimeGroupIds}
       setDateRange={setDateRange}
       setEditMode={setEditMode}
+      setIdVerified={setIdVerified}
       setIncidentCount={setIncidentCount}
       setLayout={setLayout}
       setMetadata={setMetadata}

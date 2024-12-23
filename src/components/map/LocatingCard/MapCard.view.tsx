@@ -1,10 +1,11 @@
 import { faArrowsMaximize } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Spin, Typography } from 'antd';
+import mapboxgl from 'mapbox-gl';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import Map, { Marker } from 'react-map-gl';
+import { Map, Marker } from 'react-map-gl';
 import { useStoreState } from 'state';
 
 import LocatingModal from '../LocatingModal';
@@ -52,16 +53,18 @@ const useStyles = createUseStyles({
 
 interface Props {
   height: number | string;
+  isPrinting?: boolean;
   viewport: { latitude: number; longitude: number };
   width: number | string;
 }
 
-const MapCard = ({ height, viewport, width }: Props) => {
+const MapCard = ({ height, isPrinting, viewport, width }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const [largeOpen, setLargeOpen] = useState(false);
   const toggleLargeOpen = () => setLargeOpen(!largeOpen);
+  const isDark = currentTheme === 'dark' && !isPrinting;
 
   return (
     <Card
@@ -71,6 +74,7 @@ const MapCard = ({ height, viewport, width }: Props) => {
         padding: 0,
         position: 'relative',
       }}
+      className="no-break"
     >
       {viewport.latitude && viewport.longitude ? (
         <>
@@ -89,11 +93,13 @@ const MapCard = ({ height, viewport, width }: Props) => {
             </Text>
           </div>
           <Map
+            mapLib={mapboxgl}
             mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
             onError={() => {}}
+            preserveDrawingBuffer
             {...viewport}
             mapStyle={
-              currentTheme === 'dark'
+              isDark
                 ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
                 : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
             }

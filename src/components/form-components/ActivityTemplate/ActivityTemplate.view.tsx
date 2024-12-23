@@ -1,58 +1,61 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
-import { Button, Col, Drawer, Form, Input, InputNumber, Row } from 'antd';
-import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Drawer, Form, Input, InputNumber, Row } from 'antd';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { FormData } from './useCreateActivityTemplate';
+
 import CreateQuestionContainer from '../createQuestion/CreateQuestion.container';
 
 interface Props {
+  addQuestion: boolean;
+  form: FormInstance<FormData>;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  addQuestion: boolean;
-  setAddQuestion: (value: boolean) => void;
-  update: (id: string, question: string) => void;
   selectedIds?: string[];
-  setSelectedIds: (value: string[]) => void;
   selectedQuestions: { id: string; question: string }[];
+  setAddQuestion: (value: boolean) => void;
+  setSelectedIds: (value: string[]) => void;
   setSelectedQuestions: (value: { id: string; question: string }[]) => void;
-  form: FormInstance<FormData>;
+  update: (id: string, question: string) => void;
 }
 
 const AddTodo = ({
-  onSubmit,
-  onClose,
-  saving,
   addQuestion,
-  setAddQuestion,
-  update,
-  selectedIds,
-  setSelectedIds,
-  selectedQuestions,
-  setSelectedQuestions,
   form,
+  onClose,
+  onSubmit,
+  saving,
+  selectedIds,
+  selectedQuestions,
+  setAddQuestion,
+  setSelectedIds,
+  setSelectedQuestions,
+  update,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <>
-      <Form layout="vertical" onFinish={onSubmit} form={form}>
+      <Form form={form} layout="vertical" onFinish={onSubmit}>
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please enter a name for the created activity.',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -63,17 +66,17 @@ const AddTodo = ({
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
-              name="defaultDueDate"
               label={intl.formatMessage({
                 defaultMessage: 'Default due days',
               })}
+              name="defaultDueDate"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage:
                       'Please select a default number of days the activity should be required to be finished by.',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -84,10 +87,10 @@ const AddTodo = ({
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
-              name="description"
               label={intl.formatMessage({
                 defaultMessage: 'Description',
               })}
+              name="description"
             >
               <Input.TextArea disabled={saving} />
             </Form.Item>
@@ -96,10 +99,10 @@ const AddTodo = ({
         <Row>
           <Col span={23}>
             <Form.Item
-              name="questions"
               label={intl.formatMessage({
                 defaultMessage: 'Questions',
               })}
+              name="questions"
             >
               {selectedQuestions.map((question) => (
                 <Row>
@@ -108,7 +111,7 @@ const AddTodo = ({
                   </Col>
                   <Col>
                     <Button
-                      size="small"
+                      icon={<FontAwesomeIcon icon={faTrash} />}
                       onClick={() => {
                         setSelectedQuestions(
                           selectedQuestions.filter((q) => q.id !== question.id)
@@ -117,13 +120,13 @@ const AddTodo = ({
                           selectedIds?.filter((id) => id !== question.id) || []
                         );
                       }}
-                      icon={<FontAwesomeIcon icon={faTrash} />}
+                      size="small"
                     />
                   </Col>
                 </Row>
               ))}
             </Form.Item>
-            <Button type="dashed" onClick={() => setAddQuestion(true)}>
+            <Button onClick={() => setAddQuestion(true)} type="dashed">
               {intl.formatMessage({
                 defaultMessage: 'New Question',
               })}
@@ -132,7 +135,7 @@ const AddTodo = ({
         </Row>
 
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button disabled={saving} onClick={onClose}>
                 {intl.formatMessage({
@@ -142,10 +145,10 @@ const AddTodo = ({
             </Col>
             <Col>
               <Button
-                type="primary"
-                htmlType="submit"
                 disabled={saving}
+                htmlType="submit"
                 loading={saving}
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Save',
@@ -156,18 +159,18 @@ const AddTodo = ({
         </Form.Item>
       </Form>
       <Drawer
+        onClose={() => setAddQuestion(false)}
+        open={addQuestion}
         title={intl.formatMessage({
           defaultMessage: 'Add/Create Question',
         })}
-        open={addQuestion}
         width="800"
-        onClose={() => setAddQuestion(false)}
       >
         {addQuestion ? (
           <CreateQuestionContainer
+            ids={selectedIds}
             onClose={() => setAddQuestion(false)}
             update={update}
-            ids={selectedIds}
           />
         ) : (
           <div />

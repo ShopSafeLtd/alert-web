@@ -90,6 +90,8 @@ export const NavScheme = () => {
       goodsMode: scheme.scheme.goodsMode,
       id: scheme.scheme.id,
       imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
+      incidentCustomQuestionRadio: scheme.scheme.incidentCustomQuestionRadio,
+      incidentTypeTooltip: scheme.scheme.incidentTypeTooltip,
       languageCount: scheme.scheme.languageCount,
       logo: scheme.scheme.logo?.optimisedPersisted,
       name: scheme.scheme.name,

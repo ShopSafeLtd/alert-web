@@ -148,7 +148,7 @@ const useAddUser = ({
               email: user.email,
               fullName: user.fullName,
               publicName: user.publicName,
-              reportToAllBusinesses: user.reportToAllBusinesses,
+              reportToAllBusinesses: user.reportToAllBusinesses ?? true,
             });
           },
           title: 'This user already exists',

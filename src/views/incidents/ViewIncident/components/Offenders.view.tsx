@@ -266,7 +266,7 @@ const Offenders = ({
             </Title>
           </Col>
           {editRights && (
-            <Col>
+            <Col className="no-print">
               <Dropdown
                 overlay={
                   <Menu
