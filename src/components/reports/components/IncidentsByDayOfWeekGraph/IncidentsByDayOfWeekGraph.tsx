@@ -13,6 +13,8 @@ interface Props {
 
 const IncidentsByDayOfWeekGraph = ({ data, isPrinting, loading }: Props) => {
   const intl = useIntl();
+
+  console.log(data);
   return (
     <Graph
       emptyLabel={intl.formatMessage({
@@ -21,7 +23,7 @@ const IncidentsByDayOfWeekGraph = ({ data, isPrinting, loading }: Props) => {
       graphOptions={{
         axes: [
           {
-            keys: ['day'],
+            keys: ['data'],
             paddingInner: 0.5,
             paddingOuter: 0.2,
             position: 'bottom',
@@ -57,14 +59,14 @@ const IncidentsByDayOfWeekGraph = ({ data, isPrinting, loading }: Props) => {
             stackGroup: 'VALUE',
             // @ts-expect-error graph type error
             type: 'area',
-            xKey: 'day',
+            xKey: 'data',
             yKey: 'count',
             yName: 'Incident Count',
           },
         ],
       }}
       gridOptions={{
-        columnDefs: [{ field: 'day' }, { field: 'count' }],
+        columnDefs: [{ field: 'data' }, { field: 'count' }],
         rowData: data,
       }}
       isPrinting={isPrinting}
