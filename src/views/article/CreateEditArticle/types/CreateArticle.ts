@@ -40,7 +40,7 @@ export interface Props {
   log: () => void;
   offenders: OffenderData[];
   onGroupsChange: (groups: string[]) => void;
-  onSubmit: () => void;
+  onSubmit: (data?: FormData, draft?: boolean) => void;
   preview: () => void;
   previewImage: string;
   previewText: string;
@@ -51,6 +51,7 @@ export interface Props {
   selectedGroups: string[];
   selectedSchemes: string[];
   setPreviewImage: (arg0: string) => void;
+
   setPreviewText: (arg0: string) => void;
 }
 
