@@ -575,7 +575,7 @@ const useCreateEditArticle = (): Props => {
   const [saving, setSaving] = useState(false);
   const [editArticle] = useEditArticleMutation();
 
-  const onSubmit = async (draft?: boolean) => {
+  const onSubmit = async (_data?: FormData, draft?: boolean) => {
     setSaving(true);
     const selectedCategoryIds = selectedCategories
       .map((category) => {
@@ -694,7 +694,7 @@ const useCreateEditArticle = (): Props => {
     setSaving(false);
   };
   const saveDraft = async () => {
-    await onSubmit(true);
+    await onSubmit(undefined, true);
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {
