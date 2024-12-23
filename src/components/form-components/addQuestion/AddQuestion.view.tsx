@@ -385,6 +385,16 @@ const AddQuestionView = ({
           </Form.Item>
         </Card>
       )}
+      <Card loading={loading}>
+        <Form.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Question Tooltip',
+          })}
+          name="tooltip"
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Card>
       <Form.Item>
         <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
           <Col>

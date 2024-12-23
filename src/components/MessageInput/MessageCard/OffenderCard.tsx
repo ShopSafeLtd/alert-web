@@ -1,4 +1,5 @@
-import React from 'react';
+import type { OffenderCardData } from 'types/DataType';
+
 import { faCircleXmark } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,10 +12,10 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { OffenderCardData } from 'types/DataType';
+import moment from 'moment';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
-import moment from 'moment';
 
 const { Title } = Typography;
 
@@ -22,56 +23,79 @@ interface Props {
   offender: OffenderCardData;
   removeOffender?: (value: string | undefined) => void;
   saving?: boolean;
+  triggerLightbox?: (elements: { src: string }[], index: number) => void;
 }
 
-const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
+const OffenderCard = ({
+  offender,
+  removeOffender,
+  saving,
+  triggerLightbox,
+}: Props) => {
   const intl = useIntl();
   const hasImage = offender.images && offender.images.length > 0;
 
   return (
     <Card
+      bodyStyle={{
+        marginLeft: -2,
+        padding: 0,
+      }}
+      className="message-card"
+      size="small"
       style={{
         margin: removeOffender ? 0 : 5,
-        width: hasImage ? 300 : 200,
         overflow: 'hidden',
+        width: hasImage ? 300 : 200,
       }}
-      bodyStyle={{
-        padding: 0,
-        marginLeft: -2,
-      }}
-      size="small"
-      className="message-card"
     >
       <Row gutter={5} wrap={false}>
         {removeOffender && (
           <Popconfirm
-            placement="topLeft"
-            trigger="click"
-            title={intl.formatMessage({
-              defaultMessage: 'Remove the offender?',
-            })}
-            onConfirm={() => removeOffender(offender.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
             })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
+            onConfirm={() => removeOffender(offender.id)}
             overlayInnerStyle={{ padding: 10 }}
+            placement="topLeft"
+            title={intl.formatMessage({
+              defaultMessage: 'Remove the offender?',
+            })}
+            trigger="click"
           >
             <Button
-              size="small"
               disabled={saving}
-              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
-              shape="circle"
-              type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
+              shape="circle"
+              size="small"
+              style={{ position: 'absolute', right: -5, top: -5, zIndex: 100 }}
+              type="text"
             />
           </Popconfirm>
         )}
 
         <Col>
           {hasImage && (
-            <div style={{ width: 100, height: 100 }}>
+            <div
+              // onClick={() => {
+              //   if (triggerLightbox && offender?.images && offender?.images[0])
+              //     triggerLightbox(
+              //       [
+              //         {
+              //           src:
+              //             offender.images[0].optimised ||
+              //             offender.images[0].url ||
+              //             '',
+              //         },
+              //       ],
+              //       0
+              //     );
+              // }}
+              style={{ height: 100, width: 100 }}
+            >
               <WatermarkImage
+                triggerLightbox={triggerLightbox}
                 url={
                   // @ts-expect-error  null
                   offender.images[0].optimised || offender.images[0].url || ''
@@ -81,7 +105,7 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
           )}
         </Col>
 
-        <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
+        <Col flex={1} style={{ marginLeft: 5, marginTop: 10 }}>
           <Title level={4}> {offender.name}</Title>
           <Descriptions size="small">
             <Descriptions.Item

@@ -530,10 +530,8 @@ const useIncidentFeed = (): Return => {
   return {
     clearFilters,
     // onCrimeTypesChange,
-
     data,
     fetchMoreScroll,
-
     groups: groupsData,
     groupsLoading,
     isUser,

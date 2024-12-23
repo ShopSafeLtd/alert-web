@@ -34,6 +34,7 @@ export interface FormData {
   origOptions: string[];
   origQuestion: string;
   required: boolean;
+  tooltip?: string;
   type: AnswerType;
 }
 
@@ -140,6 +141,9 @@ const useUpdateQuestion = ({
         origOptions: formatOption(),
         origQuestion: questionData.question?.question || '',
         required,
+        tooltip:
+          questionData.question.tags.find((tag) => tag.id === tagQId)
+            ?.tooltip ?? undefined,
         type: questionData.question?.type || AnswerType.String,
       });
 
@@ -154,6 +158,9 @@ const useUpdateQuestion = ({
         origOptions: formatOption(),
         origQuestion: questionData.question?.question || '',
         required,
+        tooltip:
+          questionData.question.tags.find((tag) => tag.id === tagQId)
+            ?.tooltip ?? undefined,
         type: questionData.question?.type || AnswerType.String,
       });
     }
@@ -212,6 +219,7 @@ const useUpdateQuestion = ({
             id: tagQId,
             req: values.required,
           },
+          tooltip: values.tooltip,
         },
       },
     });

@@ -139,7 +139,7 @@ const VehicleTable = ({
           dataIndex: 'Options',
           key: 'Options',
           render: (_, record: { key: string; vehicle: VehicleData | null }) => (
-            <Row gutter={8}>
+            <Row className="no-print" gutter={8}>
               {hasNavigation && (
                 <Col>
                   <Tooltip

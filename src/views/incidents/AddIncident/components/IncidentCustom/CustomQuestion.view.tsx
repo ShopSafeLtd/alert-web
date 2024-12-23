@@ -74,12 +74,14 @@ const StringTime = ({ disabled, onChange, value }: StringInputProps) => {
 
 interface SelectInputProps extends StringInputProps {
   options: { label: string; value: string }[];
+  radioAnswer?: boolean;
 }
 
 const StringSelect = ({
   disabled,
   onChange,
   options,
+  radioAnswer,
   value,
 }: SelectInputProps) => {
   const covertToString = (data: string[]) => {
@@ -89,7 +91,7 @@ const StringSelect = ({
   return (
     <CheckTags
       disabled={disabled}
-      mode="check"
+      mode={radioAnswer ? 'radio' : 'check'}
       onChange={covertToString}
       options={options}
       value={value ? value.split(',') : []}
@@ -100,9 +102,10 @@ const StringSelect = ({
 interface Props {
   disabled: boolean;
   questions: CustomQuestion[];
+  radioAnswer?: boolean;
 }
 
-const CustomQuestions = ({ disabled, questions }: Props) => {
+const CustomQuestions = ({ disabled, questions, radioAnswer }: Props) => {
   const intl = useIntl();
 
   const getFieldType = (question: CustomQuestion, type: AnswerType) => {
@@ -175,6 +178,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                   // @ts-ignore
                   curValues[question.dependentOnQuestionId]
                 }
+                tooltip={question.tooltip}
               >
                 {({ getFieldValue }) => {
                   const currentValue = getFieldValue(
@@ -193,6 +197,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                           required: question.required,
                         },
                       ]}
+                      tooltip={question.tooltip}
                     >
                       {getFieldType(question, question.answerType)}
                     </Form.Item>
@@ -216,6 +221,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                     required: question.required,
                   },
                 ]}
+                tooltip={question.tooltip}
               >
                 <Input.TextArea
                   disabled={disabled}
@@ -236,6 +242,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                     required: question.required,
                   },
                 ]}
+                tooltip={question.tooltip}
               >
                 <StringDate disabled={disabled} />
               </Form.Item>
@@ -252,6 +259,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                     required: question.required,
                   },
                 ]}
+                tooltip={question.tooltip}
               >
                 <StringTime disabled={disabled} />
               </Form.Item>
@@ -268,6 +276,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                     required: question.required,
                   },
                 ]}
+                tooltip={question.tooltip}
               >
                 <Radio.Group
                   disabled={disabled}
@@ -301,6 +310,7 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                     required: question.required,
                   },
                 ]}
+                tooltip={question.tooltip}
               >
                 <StringInputNumber disabled={disabled} />
               </Form.Item>
@@ -317,8 +327,13 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                     required: question.required,
                   },
                 ]}
+                tooltip={question.tooltip}
               >
-                <StringSelect disabled={disabled} options={question.options} />
+                <StringSelect
+                  disabled={disabled}
+                  options={question.options}
+                  radioAnswer={radioAnswer}
+                />
               </Form.Item>
             )}
           </Col>

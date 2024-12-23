@@ -1,0 +1,5 @@
+mutation deleteOneWorkflow($id: String!) {
+  deleteOneWorkflow(where: { id: $id }) {
+    id
+  }
+}

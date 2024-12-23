@@ -2,20 +2,25 @@ import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generat
 
 import formatAnswer from '#/utils/format-answer';
 import { Button, Card, Col, Row, Table, Typography } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Title } = Typography;
 
 interface Props {
   data: ViewIncidentQuery | undefined;
+  isPrinting?: boolean;
   loading: boolean;
 }
 
-const Answers = ({ data, loading }: Props) => {
+const Answers = ({ data, isPrinting, loading }: Props) => {
   const intl = useIntl();
 
   const [pageSize, setPageSize] = useState(10);
+
+  useEffect(() => {
+    setPageSize(isPrinting ? 10_000 : pageSize === 10 ? 10_000 : 10);
+  }, [isPrinting]);
 
   const togglePageSize = () => {
     setPageSize(pageSize === 10 ? 10_000 : 10);

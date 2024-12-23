@@ -216,6 +216,7 @@ const useLinkArticle = ({ articleIds, onClose, update }: Props): Return => {
         order: SortOrder.Desc,
         priorities: [],
         search: '',
+        status: [],
       },
     });
   };

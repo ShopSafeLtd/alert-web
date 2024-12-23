@@ -1,42 +1,37 @@
-import React from 'react';
 import WatermarkImage from '#/components/images/WatermarkImage.view';
-import useActiveOffenders from '#/views/dashboard/components/ActiveOffenders/useActiveOffenders';
-import { Card, Col, Empty, Row, Skeleton, Tooltip, Typography } from 'antd';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import useStyles from '#/views/dashboard/FeedItem.styles';
-import { Link } from 'react-router-dom';
+import useActiveOffenders from '#/views/dashboard/components/ActiveOffenders/useActiveOffenders';
 import { faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card, Col, Empty, Row, Skeleton, Tooltip, Typography } from 'antd';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 const ActiveOffender = () => {
   const classes = useStyles();
 
   const {
-    intl,
-    variables: { search },
-    rowOrCol,
-    getWidth,
     getHeight,
+    getWidth,
+    intl,
+    rowOrCol,
+    variables: { search },
   } = useDashboardContext();
   const { recentOffenderData, recentOffenderLoading } = useActiveOffenders();
   const rowOrColValue = rowOrCol('activeOffender');
   const width = getWidth('activeOffender');
   const height = getHeight('activeOffender');
   return (
-    <Card
-      style={{ height: '100%', margin: 0 }}
-      bodyStyle={{
-        height: 'calc(100%)',
-      }}
-    >
+    <div style={{ height: '100%', margin: 0 }}>
       <Title
         level={4}
         style={{
           fontSize: 16,
+          marginBottom: 10,
           marginTop: -10,
-          marginBottom: 0,
         }}
       >
         {intl.formatMessage({
@@ -51,14 +46,14 @@ const ActiveOffender = () => {
             rowOrColValue === 'row'
               ? {
                   flexWrap: 'nowrap',
-                  overflowX: 'auto',
                   height: 'inherit',
+                  overflowX: 'auto',
                   overflowY: 'hidden',
                 }
               : {
-                  overflowY: 'auto',
-                  height: 'inherit',
                   alignContent: 'flex-start',
+                  height: 'inherit',
+                  overflowY: 'auto',
                 }
           }
         >
@@ -66,18 +61,18 @@ const ActiveOffender = () => {
             <Col
               // eslint-disable-next-line react/no-array-index-key
               key={index}
+              span={rowOrColValue === 'col' ? 24 / width : undefined}
               style={{
                 height: 'fit-content',
               }}
-              span={rowOrColValue === 'col' ? 24 / width : undefined}
             >
               <Skeleton.Avatar
                 active
                 shape="square"
                 style={{
-                  width: rowOrColValue === 'row' ? height - 45 : '100%',
-                  height: rowOrColValue === 'row' ? height - 35 : 140,
                   borderRadius: '0.625rem',
+                  height: rowOrColValue === 'row' ? height - 35 : 140,
+                  width: rowOrColValue === 'row' ? height - 45 : '100%',
                 }}
               />
             </Col>
@@ -90,14 +85,14 @@ const ActiveOffender = () => {
             rowOrColValue === 'row'
               ? {
                   flexWrap: 'nowrap',
-                  overflowX: 'auto',
                   height: 'inherit',
+                  overflowX: 'auto',
                   overflowY: 'hidden',
                 }
               : {
-                  overflowY: 'auto',
-                  height: 'inherit',
                   alignContent: 'flex-start',
+                  height: 'inherit',
+                  overflowY: 'auto',
                 }
           }
         >
@@ -105,63 +100,44 @@ const ActiveOffender = () => {
             recentOffenderData?.listOffenders?.offenders.map((offender) => (
               <Col
                 key={offender.id}
+                span={rowOrColValue === 'col' ? 24 / width : undefined}
                 style={{
                   height: 'fit-content',
                 }}
-                span={rowOrColValue === 'col' ? 24 / width : undefined}
               >
                 <Tooltip
                   placement="bottom"
-                  title={intl.formatMessage(
-                    {
-                      defaultMessage: 'View {offenderName} ',
-                    },
-                    { offenderName: offender.name }
-                  )}
+                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                  title={`${offender.name} (${offender.reference})`}
                 >
                   <Link to={`/app/offenders/view/${offender.id}`}>
                     <Card
-                      // onClick={() => setAddRecentOffender(offender)}
-                      style={{ border: 0 }}
                       bodyStyle={{
-                        width: rowOrColValue === 'row' ? height - 45 : '100%',
-                        height: rowOrColValue === 'row' ? height - 35 : 140,
-                        position: 'relative',
-                        padding: 0,
-                        borderRadius: '0.625rem',
-                        overflow: 'hidden',
-                        display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
+                        borderRadius: 10,
                         cursor: 'pointer',
+                        display: 'flex',
+                        height: rowOrColValue === 'row' ? height - 35 : 140,
+                        justifyContent: 'center',
+                        overflow: 'hidden',
+                        padding: 0,
+                        position: 'relative',
+                        width: rowOrColValue === 'row' ? height - 45 : '100%',
                       }}
                     >
                       {offender.feedImage && (
                         <WatermarkImage
-                          url={offender.feedImage?.low}
                           position={offender.feedImage?.position}
+                          url={offender.feedImage?.low}
                         />
                       )}
                       {!offender.feedImage && (
                         <FontAwesomeIcon
-                          style={{ color: 'rgb(114, 132, 154)' }}
                           icon={faUser}
                           size="3x"
+                          style={{ color: 'rgb(114, 132, 154)' }}
                         />
                       )}
-                      <Paragraph
-                        className={classes.offenderParagraph}
-                        style={{
-                          top: 0,
-                        }}
-                      >
-                        {intl.formatMessage(
-                          {
-                            defaultMessage: 'Alert ID: {offenderReference}',
-                          },
-                          { offenderReference: offender.reference }
-                        )}
-                      </Paragraph>
                       <Paragraph
                         className={classes.offenderParagraph}
                         style={{
@@ -178,10 +154,10 @@ const ActiveOffender = () => {
           ) : (
             <div
               style={{
-                display: 'flex',
-                width: '100%',
                 alignItems: 'center',
+                display: 'flex',
                 justifyContent: 'center',
+                width: '100%',
               }}
             >
               <Empty
@@ -200,7 +176,7 @@ const ActiveOffender = () => {
           )}
         </Row>
       )}
-    </Card>
+    </div>
   );
 };
 

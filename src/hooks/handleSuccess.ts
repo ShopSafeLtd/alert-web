@@ -80,6 +80,8 @@ HandleSuccessArgs) => {
       goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
       id: schemeDetails?.id,
       imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
+      incidentCustomQuestionRadio: schemeDetails?.incidentCustomQuestionRadio,
+      incidentTypeTooltip: schemeDetails?.incidentTypeTooltip,
       languageCount: schemeDetails?.languageCount || 0,
       logo: schemeDetails?.logo?.optimisedPersisted,
       name: schemeDetails?.name,
@@ -129,6 +131,9 @@ HandleSuccessArgs) => {
         id: schemeDetails.scheme.id,
         imagesRequiredOnOffenders:
           schemeDetails.scheme.imagesRequiredOnOffenders,
+        incidentCustomQuestionRadio:
+          schemeDetails.scheme.incidentCustomQuestionRadio,
+        incidentTypeTooltip: schemeDetails.scheme.incidentTypeTooltip,
         languageCount: schemeDetails.scheme.languageCount || 0,
         logo: schemeDetails.scheme.logo?.optimisedPersisted,
         name: schemeDetails.scheme.name,

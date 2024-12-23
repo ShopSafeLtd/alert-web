@@ -1,6 +1,7 @@
 import React from 'react';
-import useListWorkflows from './useListWorkflows';
+
 import View from './listWorkflow.view';
+import useListWorkflows from './useListWorkflows';
 
 const ListWorkflowContainer = () => {
   const { data, loading } = useListWorkflows();

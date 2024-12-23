@@ -18,6 +18,7 @@ import type { Moment } from 'moment';
 // BanData
 export interface BanData {
   description?: null | string | undefined;
+  duration?: null | number | undefined;
   endDate?: Date;
   fineValue?: null | number | undefined;
   id: string;
@@ -410,6 +411,7 @@ export interface CustomQuestion {
   questionId: string;
   required: boolean;
   tagQuestionId: string;
+  tooltip?: string;
   value: string;
 }
 

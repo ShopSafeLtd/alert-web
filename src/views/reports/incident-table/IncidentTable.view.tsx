@@ -486,7 +486,7 @@ const PerformanceReport = ({
               </Form.Item>
               <Form.Item
                 label={intl.formatMessage({
-                  defaultMessage: 'Incidents created in date range',
+                  defaultMessage: 'Incidents created date range',
                 })}
               >
                 <DateSelect

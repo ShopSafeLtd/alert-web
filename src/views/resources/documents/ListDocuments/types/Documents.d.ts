@@ -2,8 +2,11 @@ import type { ListDocumentsOnSchemeQuery } from 'graphql/documents/queries/__gen
 
 export interface Props {
   addDocument: boolean;
+  addRights: boolean;
   data: ListDocumentsOnSchemeQuery | undefined;
-  isAdmin: boolean;
+  deleteRights: boolean;
   loading: boolean;
+  onDelete: (value: string) => void;
+  saving: boolean;
   toggleAddDocument: () => void;
 }

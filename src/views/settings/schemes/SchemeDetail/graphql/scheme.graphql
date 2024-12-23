@@ -23,6 +23,8 @@ query schemeDetails($where: SchemeWhereUniqueInput!) {
     facialRecognition
     facialDetection
     facialRedaction
+    incidentCustomQuestionRadio
+    incidentTypeTooltip
     activityAssignToUser
     useBusinessGroupsOnIncident
     imagesRequiredOnOffenders

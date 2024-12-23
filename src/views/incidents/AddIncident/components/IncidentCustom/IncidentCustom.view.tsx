@@ -1,11 +1,13 @@
+import type { CustomQuestion } from 'types/DataType';
+
+import { Card, Col, Row, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { Card, Col, Row, Typography } from 'antd';
-import type { CustomQuestion } from 'types/DataType';
+
 import useStyles from '../../AddIncident.styles';
 import CustomQuestions from './CustomQuestion.view';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface Props {
   questions: CustomQuestion[];
@@ -20,7 +22,7 @@ const IncidentCustom = ({ questions, saving }: Props) => {
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Incident Data',
             })}
@@ -28,9 +30,9 @@ const IncidentCustom = ({ questions, saving }: Props) => {
         </Col>
         <Col>
           <Paragraph
+            italic
             style={{ marginBottom: 1, marginLeft: 5 }}
             type="secondary"
-            italic
           >
             {intl.formatMessage({
               defaultMessage: '- Complete all required fields.',
@@ -38,7 +40,7 @@ const IncidentCustom = ({ questions, saving }: Props) => {
           </Paragraph>
         </Col>
       </Row>
-      <CustomQuestions questions={questions} disabled={saving} />
+      <CustomQuestions disabled={saving} questions={questions} />
     </Card>
   );
 };

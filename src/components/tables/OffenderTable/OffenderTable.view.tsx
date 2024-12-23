@@ -160,7 +160,7 @@ const OffenderTable = ({
             _,
             record: { key: string; offender: OffenderData | null }
           ) => (
-            <Row gutter={8}>
+            <Row className="no-print" gutter={8}>
               {hasNavigation && (
                 <Col>
                   <Tooltip

@@ -307,6 +307,8 @@ const useNotificationLists = (): Return => {
       goodsMode: scheme.goodsMode,
       id: scheme.id,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
+      incidentCustomQuestionRadio: scheme.incidentCustomQuestionRadio,
+      incidentTypeTooltip: scheme.incidentTypeTooltip,
       languageCount: scheme.languageCount,
       logo: scheme.logo?.optimisedPersisted,
       name: scheme.name,

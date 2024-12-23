@@ -27,6 +27,8 @@ export interface SetSchemePayload {
   goodsMode: GoodsMode;
   id: string;
   imagesRequiredOnOffenders: boolean;
+  incidentCustomQuestionRadio: boolean;
+  incidentTypeTooltip?: null | string | undefined;
   languageCount: number;
   logo?: null | string | undefined;
   name: string;
@@ -61,10 +63,11 @@ export interface SchemeModel {
   hasConnectedSchemes: boolean;
   id: string;
   imagesRequiredOnOffenders: boolean;
+  incidentCustomQuestionRadio: boolean;
+  incidentTypeTooltip?: null | string | undefined;
   languageCount: number;
   logo?: null | string | undefined;
   name: string;
-
   needJustification: boolean;
   oneSelectedIncidentTypeOnly: boolean;
   reportOnly: boolean;
@@ -111,6 +114,8 @@ const userModel: SchemeModel = {
     state.facialRedaction = false;
     state.connectedToSchemes = [];
     state.hasConnectedSchemes = false;
+    state.incidentCustomQuestionRadio = false;
+    state.incidentTypeTooltip = '';
   }),
   connectedToSchemes: [],
   darkLogo: '',
@@ -122,8 +127,9 @@ const userModel: SchemeModel = {
   hasConnectedSchemes: false,
   id: '',
   imagesRequiredOnOffenders: false,
+  incidentCustomQuestionRadio: false,
+  incidentTypeTooltip: '',
   languageCount: 0,
-
   logo: '',
   name: 'Loading...',
   needJustification: false,
@@ -157,6 +163,8 @@ const userModel: SchemeModel = {
     state.oneSelectedIncidentTypeOnly = payload.oneSelectedIncidentTypeOnly;
     state.facialDetection = payload.facialDetection;
     state.facialRedaction = payload.facialRedaction;
+    state.incidentCustomQuestionRadio = payload.incidentCustomQuestionRadio;
+    state.incidentTypeTooltip = payload.incidentTypeTooltip;
     state.connectedToSchemes = payload.connectedToSchemes;
     state.hasConnectedSchemes =
       payload.connectedToSchemes && payload.connectedToSchemes.length > 0;

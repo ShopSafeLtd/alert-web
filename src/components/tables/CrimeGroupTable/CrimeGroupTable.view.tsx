@@ -1,15 +1,16 @@
-import React from 'react';
-import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
-import { createUseStyles } from 'react-jss';
-// import type { ColumnsType } from 'antd/es/table/interface';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { CrimeGroupCardData } from 'types/DataType';
+
 import {
   faEye,
   faPenToSquare,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import type { CrimeGroupCardData } from 'types/DataType';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
+import React from 'react';
+// import type { ColumnsType } from 'antd/es/table/interface';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
@@ -19,11 +20,11 @@ const useStyles = createUseStyles({
 });
 interface Props {
   crimeGroups: CrimeGroupCardData[] | undefined;
-  hasNavigation?: boolean;
-  saving?: boolean;
-  onDelete?: (id: string) => void;
-  setEditData?: (value: CrimeGroupCardData | null) => void;
   deleteRights?: boolean;
+  hasNavigation?: boolean;
+  onDelete?: (id: string) => void;
+  saving?: boolean;
+  setEditData?: (value: CrimeGroupCardData | null) => void;
 }
 
 // interface CrimeGroupsTable {
@@ -111,11 +112,11 @@ interface Props {
 
 const CrimeGroupTable = ({
   crimeGroups,
+  deleteRights,
   hasNavigation,
   onDelete,
-  setEditData,
   saving,
-  deleteRights,
+  setEditData,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -124,17 +125,13 @@ const CrimeGroupTable = ({
   return (
     // <Table<CrimeGroupsTable>
     <Table
-      size="small"
-      rowClassName={classes.row}
       columns={[
         {
-          key: 'reference',
           dataIndex: 'reference',
-          title: <FormattedMessage defaultMessage="Alert ID" />,
-          width: 100,
+          key: 'reference',
           render: (
             _,
-            record: { key: string; reference: number | null | undefined }
+            record: { key: string; reference: null | number | undefined }
           ) => {
             if (hasNavigation) {
               return (
@@ -145,33 +142,33 @@ const CrimeGroupTable = ({
             }
             return <Typography.Text>{record.reference}</Typography.Text>;
           },
+          title: <FormattedMessage defaultMessage="Alert ID" />,
+          width: 100,
         },
         {
-          key: 'alias',
           dataIndex: 'alias',
+          key: 'alias',
           title: <FormattedMessage defaultMessage="Alias" />,
         },
         {
-          key: 'totalOffenders',
           dataIndex: 'totalOffenders',
+          key: 'totalOffenders',
           title: <FormattedMessage defaultMessage="Members" />,
         },
         {
-          key: 'totalIncidents',
           dataIndex: 'totalIncidents',
+          key: 'totalIncidents',
           title: <FormattedMessage defaultMessage="Incidents" />,
         },
         {
-          key: 'totalValue',
           dataIndex: 'totalValue',
-          title: <FormattedMessage defaultMessage="Total Value" />,
+          key: 'totalValue',
           render: (value: number) => `£${value.toLocaleString() || 0}`,
+          title: <FormattedMessage defaultMessage="Total Value" />,
         },
         {
-          key: 'Options',
-          title: '',
           dataIndex: 'Options',
-          width: 100,
+          key: 'Options',
           render: (
             _,
             record: {
@@ -179,7 +176,7 @@ const CrimeGroupTable = ({
               key: string;
             }
           ) => (
-            <Row gutter={8}>
+            <Row className="no-print" gutter={8}>
               {hasNavigation && (
                 <Col>
                   <Tooltip
@@ -189,9 +186,9 @@ const CrimeGroupTable = ({
                   >
                     <Link to={`/app/crime-groups/view/${record.key}`}>
                       <Button
-                        size="small"
                         disabled={saving}
                         icon={<FontAwesomeIcon icon={faEye} />}
+                        size="small"
                       />
                     </Link>
                   </Tooltip>
@@ -205,12 +202,12 @@ const CrimeGroupTable = ({
                     })}
                   >
                     <Button
-                      size="small"
                       disabled={saving}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       onClick={() => {
                         setEditData(record.crimeGroup);
                       }}
-                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      size="small"
                     />
                   </Tooltip>
                 </Col>
@@ -223,25 +220,25 @@ const CrimeGroupTable = ({
                     })}
                   >
                     <Popconfirm
-                      placement="topLeft"
-                      title={intl.formatMessage({
-                        defaultMessage: 'Remove the crimeGroup?',
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                      })}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
                       })}
                       onConfirm={() => {
                         onDelete(record.key);
                       }}
-                      okText={intl.formatMessage({
-                        defaultMessage: 'Yes',
-                      })}
-                      cancelText={intl.formatMessage({
-                        defaultMessage: 'No',
-                      })}
                       overlayInnerStyle={{ padding: 10 }}
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the crimeGroup?',
+                      })}
                     >
                       <Button
-                        size="small"
                         disabled={saving}
                         icon={<FontAwesomeIcon icon={faTrash} />}
+                        size="small"
                       />
                     </Popconfirm>
                   </Tooltip>
@@ -249,19 +246,21 @@ const CrimeGroupTable = ({
               )}
             </Row>
           ),
+          title: '',
+          width: 100,
         },
       ].filter((item) => item?.key !== 'Options' || deleteRights)}
       dataSource={
         crimeGroups?.map((crimeGroup) => ({
-          key: crimeGroup.id,
-          reference: crimeGroup.reference,
           alias: crimeGroup.alias,
-          totalOffenders: crimeGroup.totalOffenders || 0,
-          totalIncidents: crimeGroup.totalIncidents || 0,
-          totalValue: crimeGroup.totalValue || 0,
-          saving,
-          onDelete,
           crimeGroup,
+          key: crimeGroup.id,
+          onDelete,
+          reference: crimeGroup.reference,
+          saving,
+          totalIncidents: crimeGroup.totalIncidents || 0,
+          totalOffenders: crimeGroup.totalOffenders || 0,
+          totalValue: crimeGroup.totalValue || 0,
           // totalRecoveredValue:
           //   crimeGroup.totalRecoveredValue,
           // totalTheftSuccess: crimeGroup.totalTheftSuccess,
@@ -271,6 +270,8 @@ const CrimeGroupTable = ({
         hideOnSinglePage: true,
         pageSize: 5,
       }}
+      rowClassName={classes.row}
+      size="small"
     />
   );
 };

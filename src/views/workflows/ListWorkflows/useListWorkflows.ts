@@ -63,20 +63,22 @@ const worflowTriggerToReadable = ({
 
 const useListWorkflows = (): Return => {
   const { id: currentScheme } = useStoreState((state) => state.scheme);
+
   const intl = useIntl();
-  const { data: initData, loading } = useWorkflowsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: currentScheme,
-            },
+  const variables = {
+    where: {
+      schemes: {
+        some: {
+          id: {
+            equals: currentScheme,
           },
         },
       },
     },
+  };
+  const { data: initData, loading } = useWorkflowsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables,
   });
 
   const data: WorkflowItem[] = useMemo(() => {

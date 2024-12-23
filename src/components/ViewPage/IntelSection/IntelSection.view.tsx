@@ -224,7 +224,7 @@ const IntelSection = ({
                   }
                   overlayClassName="message-popover"
                   placement={update.createdBy.id === userId ? 'left' : 'right'}
-                  trigger="click"
+                  trigger={['contextMenu']}
                 >
                   <div>
                     <UpdateContent

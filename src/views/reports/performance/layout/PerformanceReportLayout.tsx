@@ -13,9 +13,11 @@ import type RGL from 'react-grid-layout';
 import BusinessCrimeTypeGraph from '#/components/reports/components/BusinessCrimeTypeGraph/BusinessCrimeTypeGraph';
 import BusinessIncidentCountGraph from '#/components/reports/components/BusinessIncidentCountGraph/BusinessIncidentCountGraph';
 import BusinessLossRecoveredGraph from '#/components/reports/components/BusinessLossRecoveredGraph/BusinessCrimeTypeGraph';
+import IncidentsByDayOfWeekGraph from '#/components/reports/components/IncidentsByDayOfWeekGraph/IncidentsByDayOfWeekGraph';
 import TargetedBusinessTable from '#/components/reports/components/TargetedBusinessTable/TargetedBusinessTable.view';
 import UserIncidentCountGraph from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph';
 import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
+import Graph from '#/components/reports/graphs/graph';
 import {
   faBan,
   faCalendar,
@@ -47,9 +49,7 @@ import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
 import CustomQuestionsCountGraph from 'components/reports/components/CustomQuestionsCountGraph/CustomQuestionsCountGraph';
 import {
   BarGraph,
-  DonutGraph,
   HeatMapGoogle,
-  LineGraph,
   TimeHeatMap,
 } from 'components/reports/graphs';
 import {
@@ -181,7 +181,7 @@ const PerformanceReportLayout = ({
             style={{ width: '100%' }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('createdSummary')}
@@ -324,7 +324,7 @@ const PerformanceReportLayout = ({
             style={{ width: '100%' }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('incidentsSummary')}
@@ -420,7 +420,7 @@ const PerformanceReportLayout = ({
             style={{ width: '100%' }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('basicPoliceSummary')}
@@ -484,7 +484,7 @@ const PerformanceReportLayout = ({
             style={{ width: '100%' }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('policeSummary')}
@@ -566,7 +566,7 @@ const PerformanceReportLayout = ({
             style={{ width: '100%' }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('investigationSummary')}
@@ -644,7 +644,7 @@ const PerformanceReportLayout = ({
             style={{ width: '100%' }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('outcomeSummary')}
@@ -816,7 +816,7 @@ const PerformanceReportLayout = ({
             style={{ width: '100%' }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('lossSummary')}
@@ -972,12 +972,9 @@ const PerformanceReportLayout = ({
             key="crimeTypesDonut"
             loading={loading}
             style={{ height: calculateHeight('crimeTypesDonut') }}
-            title={intl.formatMessage({
-              defaultMessage: 'Incident Types',
-            })}
           >
             <Button
-              className="change-graph1 no-print"
+              className="cancelDrag change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
               onClick={() => {
@@ -995,7 +992,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="change-graph2 no-print"
+              className="cancelDrag change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
               onClick={() => {
@@ -1013,7 +1010,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('crimeTypesDonut')}
@@ -1025,27 +1022,102 @@ const PerformanceReportLayout = ({
               'donut' ||
             metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
               'pie' ? (
-              <DonutGraph
-                data={data?.performanceReport?.crimeTypeDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Incident Types',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.crimeTypeDonut.map((item) => ({
+                    count: item.value,
+                    type: item.label,
+                  })),
+                  legend: {
+                    position: 'right',
+                  },
+                  series: [
+                    {
+                      angleKey: 'count',
+                      calloutLabel: {
+                        enabled: false,
+                      },
+                      calloutLabelKey: 'type',
+                      calloutLabelName: 'type',
+                      innerRadiusRatio: 0.7,
+                      labelKey: 'count',
+                      sectorLabelKey: 'count',
+                      // @ts-expect-error graph type error
+                      type:
+                        metadata.find((item) => item.key === 'crimeTypesDonut')
+                          ?.type === 'pie'
+                          ? 'pie'
+                          : 'donut',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      field: 'count',
+                    },
+                  ],
+                  rowData: data?.performanceReport.crimeTypeDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                type={
-                  metadata.find((item) => item.key === 'crimeTypesDonut')
-                    ?.type as 'donut' | 'pie'
-                }
+                label={intl.formatMessage({
+                  defaultMessage: 'Incident Types',
+                })}
+                loading={!!data?.performanceReport?.crimeTypeDonut}
               />
             ) : (
-              <BarGraph
-                data={data?.performanceReport?.crimeTypeDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Incident Types',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.crimeTypeDonut.map((item) => ({
+                    count: item.value,
+                    type: item.label,
+                  })),
+                  legend: {
+                    enabled: false,
+                  },
+                  series: [
+                    {
+                      type: 'bar',
+                      xKey: 'type',
+                      yKey: 'count',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      field: 'count',
+                    },
+                  ],
+                  rowData: data?.performanceReport.crimeTypeDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                labelFormat={intl.formatMessage({
-                  defaultMessage: 'Incidents',
+                label={intl.formatMessage({
+                  defaultMessage: 'Incident Types',
                 })}
+                loading={!!data?.performanceReport?.crimeTypeDonut}
               />
             )}
           </Card>
@@ -1059,12 +1131,9 @@ const PerformanceReportLayout = ({
             key="involvedTagsDonut"
             loading={loading}
             style={{ height: calculateHeight('involvedTagsDonut') }}
-            title={intl.formatMessage({
-              defaultMessage: 'Involved Tags',
-            })}
           >
             <Button
-              className="change-graph1 no-print"
+              className="cancelDrag change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
               onClick={() => {
@@ -1081,7 +1150,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="change-graph2 no-print"
+              className="cancelDrag change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
               onClick={() => {
@@ -1099,7 +1168,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('involvedTagsDonut')}
@@ -1112,27 +1181,107 @@ const PerformanceReportLayout = ({
               'donut' ||
             metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
               'pie' ? (
-              <DonutGraph
-                data={data?.performanceReport?.involvedTagCountDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Involved Tags',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.involvedTagCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                  legend: {
+                    position: 'right',
+                  },
+                  series: [
+                    {
+                      angleKey: 'count',
+                      calloutLabel: {
+                        enabled: false,
+                      },
+                      calloutLabelKey: 'type',
+                      calloutLabelName: 'type',
+                      innerRadiusRatio: 0.7,
+                      labelKey: 'count',
+                      sectorLabelKey: 'count',
+                      // @ts-expect-error graph type error
+                      type:
+                        metadata.find(
+                          (item) => item.key === 'involvedTagsDonut'
+                        )?.type === 'pie'
+                          ? 'pie'
+                          : 'donut',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      field: 'count',
+                    },
+                  ],
+                  rowData: data?.performanceReport.involvedTagCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                type={
-                  metadata.find((item) => item.key === 'involvedTagsDonut')
-                    ?.type as 'donut' | 'pie'
-                }
+                label={intl.formatMessage({
+                  defaultMessage: 'Involved Tags',
+                })}
+                loading={!!data?.performanceReport?.involvedTagCountDonut}
               />
             ) : (
-              <BarGraph
-                data={data?.performanceReport?.involvedTagCountDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
                   defaultMessage: 'No Involved Tags',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.involvedTagCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                  legend: {
+                    enabled: false,
+                  },
+                  series: [
+                    {
+                      type: 'bar',
+                      xKey: 'type',
+                      yKey: 'count',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      field: 'count',
+                    },
+                  ],
+                  rowData: data?.performanceReport.involvedTagCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                labelFormat={intl.formatMessage({
-                  defaultMessage: 'Incidents',
+                label={intl.formatMessage({
+                  defaultMessage: 'Involved Tags',
                 })}
+                loading={!!data?.performanceReport?.crimeTypeDonut}
               />
             )}
           </Card>
@@ -1146,12 +1295,9 @@ const PerformanceReportLayout = ({
             key="goodsTypeDonut"
             loading={loading}
             style={{ height: calculateHeight('goodsTypeDonut') }}
-            title={intl.formatMessage({
-              defaultMessage: 'Goods Type Count',
-            })}
           >
             <Button
-              className="change-graph1 no-print"
+              className="cancelDrag change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
               onClick={() => {
@@ -1168,7 +1314,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="change-graph2 no-print"
+              className="cancelDrag change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
               onClick={() => {
@@ -1186,7 +1332,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('goodsTypeDonut')}
@@ -1199,27 +1345,106 @@ const PerformanceReportLayout = ({
               'donut' ||
             metadata.find((item) => item.key === 'goodsTypeDonut')?.type ===
               'pie' ? (
-              <DonutGraph
-                data={data?.performanceReport?.goodsTypeCountDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
-                  defaultMessage: 'No goods count',
+                  defaultMessage: 'No Goods Types',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.goodsTypeCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                  legend: {
+                    position: 'right',
+                  },
+                  series: [
+                    {
+                      angleKey: 'count',
+                      calloutLabel: {
+                        enabled: false,
+                      },
+                      calloutLabelKey: 'type',
+                      calloutLabelName: 'type',
+                      innerRadiusRatio: 0.7,
+                      labelKey: 'count',
+                      sectorLabelKey: 'count',
+                      // @ts-expect-error graph type error
+                      type:
+                        metadata.find((item) => item.key === 'goodsTypeDonut')
+                          ?.type === 'pie'
+                          ? 'pie'
+                          : 'donut',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      field: 'count',
+                    },
+                  ],
+                  rowData: data?.performanceReport.goodsTypeCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                type={
-                  metadata.find((item) => item.key === 'goodsTypeDonut')
-                    ?.type as 'donut' | 'pie'
-                }
+                label={intl.formatMessage({
+                  defaultMessage: 'Goods Type Count',
+                })}
+                loading={!!data?.performanceReport?.goodsTypeCountDonut}
               />
             ) : (
-              <BarGraph
-                data={data?.performanceReport?.goodsTypeCountDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
-                  defaultMessage: 'No goods count',
+                  defaultMessage: 'No Goods Type',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.goodsTypeCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                  legend: {
+                    enabled: false,
+                  },
+                  series: [
+                    {
+                      type: 'bar',
+                      xKey: 'type',
+                      yKey: 'count',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      field: 'count',
+                    },
+                  ],
+                  rowData: data?.performanceReport.goodsTypeCountDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                labelFormat={intl.formatMessage({
-                  defaultMessage: 'Incidents',
+                label={intl.formatMessage({
+                  defaultMessage: 'Goods Type Count',
                 })}
+                loading={!!data?.performanceReport?.goodsTypeCountDonut}
               />
             )}
           </Card>
@@ -1233,12 +1458,9 @@ const PerformanceReportLayout = ({
             key="goodsValueDonut"
             loading={loading}
             style={{ height: calculateHeight('goodsValueDonut') }}
-            title={intl.formatMessage({
-              defaultMessage: 'Goods Type Value',
-            })}
           >
             <Button
-              className="change-graph1 no-print"
+              className="cancelDrag change-graph1 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
               onClick={() => {
@@ -1255,7 +1477,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="change-graph2 no-print"
+              className="cancelDrag change-graph2 no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
               onClick={() => {
@@ -1273,7 +1495,7 @@ const PerformanceReportLayout = ({
               type="text"
             />
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('goodsValueDonut')}
@@ -1286,26 +1508,113 @@ const PerformanceReportLayout = ({
               'donut' ||
             metadata.find((item) => item.key === 'goodsValueDonut')?.type ===
               'pie' ? (
-              <DonutGraph
-                data={data?.performanceReport?.goodsTypeValueDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
-                  defaultMessage: 'No goods values',
+                  defaultMessage: 'No Goods Data',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.goodsTypeValueDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                  legend: {
+                    position: 'right',
+                  },
+                  series: [
+                    {
+                      angleKey: 'count',
+                      calloutLabel: {
+                        enabled: false,
+                      },
+                      calloutLabelKey: 'type',
+                      calloutLabelName: 'type',
+                      innerRadiusRatio: 0.7,
+                      labelKey: 'count',
+                      sectorLabel: {
+                        formatter: ({ value }: { value: number }) =>
+                          `£${value.toLocaleString()}`,
+                      },
+                      sectorLabelKey: 'count',
+                      // @ts-expect-error graph type error
+                      type:
+                        metadata.find((item) => item.key === 'goodsValueDonut')
+                          ?.type === 'pie'
+                          ? 'pie'
+                          : 'donut',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      field: 'count',
+                      valueFormatter: ({ value }: { value: number }) =>
+                        `£${value.toLocaleString()}`,
+                    },
+                  ],
+                  rowData: data?.performanceReport.goodsTypeValueDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                labelFormat="£"
-                type={
-                  metadata.find((item) => item.key === 'goodsValueDonut')
-                    ?.type as 'donut' | 'pie'
-                }
+                label={intl.formatMessage({
+                  defaultMessage: 'Goods Type Value',
+                })}
+                loading={!!data?.performanceReport?.goodsTypeValueDonut}
               />
             ) : (
-              <BarGraph
-                data={data?.performanceReport?.goodsTypeValueDonut}
+              <Graph
                 emptyLabel={intl.formatMessage({
-                  defaultMessage: 'No goods values',
+                  defaultMessage: 'No Goods Data',
                 })}
+                graphOptions={{
+                  data: data?.performanceReport?.goodsTypeValueDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                  legend: {
+                    enabled: false,
+                  },
+                  series: [
+                    {
+                      type: 'bar',
+                      xKey: 'type',
+                      yKey: 'count',
+                    },
+                  ],
+                }}
+                gridOptions={{
+                  columnDefs: [
+                    {
+                      field: 'type',
+                    },
+                    {
+                      cellRenderer: (value) => `£${value}`,
+                      field: 'count',
+                    },
+                  ],
+                  rowData: data?.performanceReport.goodsTypeValueDonut.map(
+                    (item) => ({
+                      count: item.value,
+                      type: item.label,
+                    })
+                  ),
+                }}
                 isPrinting={isPrinting}
-                labelFormat="£"
+                label={intl.formatMessage({
+                  defaultMessage: 'Goods Type Value',
+                })}
+                loading={!!data?.performanceReport?.goodsTypeValueDonut}
               />
             )}
           </Card>
@@ -1321,7 +1630,7 @@ const PerformanceReportLayout = ({
             style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('incidentsDayOfWeekGraph')}
@@ -1329,16 +1638,15 @@ const PerformanceReportLayout = ({
               size="small"
               type="text"
             />
-            <LineGraph
-              data={data?.performanceReport?.incidentDayOfWeekLine}
-              dataLabel="incidents"
-              emptyLabel={intl.formatMessage({
-                defaultMessage: 'No incidents',
-              })}
+            <IncidentsByDayOfWeekGraph
+              data={
+                data?.performanceReport.incidentDayOfWeekLine.map((item) => ({
+                  count: item.value,
+                  data: item.label,
+                })) ?? []
+              }
               isPrinting={isPrinting}
-              label={intl.formatMessage({
-                defaultMessage: 'Incidents By Day Of Week',
-              })}
+              loading={!!data?.performanceReport.incidentDayOfWeekLine}
             />
           </Card>
         );
@@ -1353,7 +1661,7 @@ const PerformanceReportLayout = ({
             loading={loading}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('incidentsHeatMap')}
@@ -1395,7 +1703,7 @@ const PerformanceReportLayout = ({
             style={{ height: calculateHeight('businessContributionTable') }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('businessContributionTable')}
@@ -1438,7 +1746,7 @@ const PerformanceReportLayout = ({
             style={{ height: calculateHeight('topContributors') }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('topContributors')}
@@ -1481,7 +1789,7 @@ const PerformanceReportLayout = ({
             style={{ height: calculateHeight('offendersTable') }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('offendersTable')}
@@ -1524,7 +1832,7 @@ const PerformanceReportLayout = ({
             style={{ height: calculateHeight('crimeGroupTable') }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('crimeGroupTable')}
@@ -1593,7 +1901,7 @@ const PerformanceReportLayout = ({
             style={{ height: calculateHeight('targetedGoodsTable') }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('targetedGoodsTable')}
@@ -1639,7 +1947,7 @@ const PerformanceReportLayout = ({
             style={{ height: calculateHeight('investigationsTable') }}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('investigationsTable')}
@@ -1761,7 +2069,7 @@ const PerformanceReportLayout = ({
             })}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('timeHeatMap')}
@@ -1794,7 +2102,7 @@ const PerformanceReportLayout = ({
             })}
           >
             <Button
-              className="card-remove no-print"
+              className="cancelDrag card-remove no-print"
               hidden={!editMode}
               icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
               onClick={() => removeItem('priorityGraph')}
@@ -1826,8 +2134,11 @@ const PerformanceReportLayout = ({
           >
             <CustomQuestionsCountGraph
               editMode={editMode}
+              fullMetadata={metadata}
               isPrinting={isPrinting}
               metaData={metadata.find((item) => item.key === key)}
+              metaDataKey={key}
+              setMetadata={setMetadata}
               updateQuestionId={(value: string) => {
                 const keyExists = metadata.find((item) => key === item.key);
                 if (keyExists) {

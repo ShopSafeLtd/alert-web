@@ -1,8 +1,10 @@
-import React from 'react';
 import { Button, Card, PageHeader, Table } from 'antd';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
+
 import type { WorkflowItem } from './types';
+
 import useCreateColumns from './types';
 
 interface Props {
@@ -15,12 +17,12 @@ const ListWorkflowView = ({ data, loading }: Props) => {
   return (
     <div>
       <PageHeader
-        title={<FormattedMessage defaultMessage="Workflow" />}
         extra={[
-          <Button type="primary" key="1" onClick={() => navigate('add')}>
+          <Button key="1" onClick={() => navigate('add')} type="primary">
             <FormattedMessage defaultMessage="Create Workflow" />
           </Button>,
         ]}
+        title={<FormattedMessage defaultMessage="Workflow" />}
       />
       <Card
         style={{

@@ -289,7 +289,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   ]);
   const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
   const showSiteNumber = requireSiteNumberForUsers && role === Role.User;
-
   const [brands, setBrands] = useState<string[]>([]);
 
   const formTags = Form.useWatch('tags', form);
@@ -698,7 +697,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })) ?? [],
+                          : (data.groups?.map((id) => ({ id })) ?? []),
                     },
                     hair: offender.hair || null,
                     height: offender.height || null,
@@ -799,7 +798,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     connect:
                       groups && groups.length === 1
                         ? groups.map(({ value: id }) => ({ id }))
-                        : data.groups?.map((id) => ({ id })) ?? [],
+                        : (data.groups?.map((id) => ({ id })) ?? []),
                   },
                   localId: vehicle.id,
                   make: vehicle.make,
@@ -816,7 +815,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })) ?? [],
+                          : (data.groups?.map((id) => ({ id })) ?? []),
                     },
                     make: { set: vehicle.make },
                     model: { set: vehicle.model },
@@ -941,7 +940,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             groups:
               groups && groups.length === 1
                 ? groups.map(({ value: id }) => ({ id }))
-                : data.groups?.map((id) => ({ id })) ?? [],
+                : (data.groups?.map((id) => ({ id })) ?? []),
             images: getImages(),
             investigationId: investigationId || null,
             items: data.goods
@@ -1152,7 +1151,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   };
 
   const dontKnowGoods = () => {
-    setGoodsVisible(true);
+    setGoodsVisible(false);
     if (goodsMode === GoodsMode.Generic) {
       form.setFieldsValue({
         goods: [
@@ -1248,6 +1247,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             questionId: question?.questionId || '',
             required: question?.required || false,
             tagQuestionId: question?.tagQuestionId || '',
+            tooltip: question.tooltip ?? undefined,
             value: '',
           }));
           if (brands.length > 0) {

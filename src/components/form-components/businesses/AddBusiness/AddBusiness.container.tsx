@@ -1,46 +1,48 @@
-import React from 'react';
 import type { BusinessData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './AddBusiness.view';
 import useAddBusiness from './useAddBusiness';
 
 interface Props {
   onClose: () => void;
-  update: (value: BusinessData) => void;
   saving: boolean;
+  update: (value: BusinessData) => void;
 }
 
-const AddBusiness = ({ onClose, update, saving }: Props) => {
+const AddBusiness = ({ onClose, saving, update }: Props) => {
   const {
-    onSubmit,
+    addTag,
     form,
+    groups,
+    groupsLoading,
     location,
+    onSubmit,
     setLocation,
     tags,
     tagsLoading,
-    addTag,
     toggleAddTag,
     updateNewTagData,
-    groups,
-    groupsLoading,
   } = useAddBusiness({
     update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
+      addTag={addTag}
       form={form}
+      groups={groups}
+      groupsLoading={groupsLoading}
       location={location}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
       setLocation={setLocation}
       tags={tags}
       tagsLoading={tagsLoading}
-      addTag={addTag}
       toggleAddTag={toggleAddTag}
       updateNewTagData={updateNewTagData}
-      groups={groups}
-      groupsLoading={groupsLoading}
     />
   );
 };

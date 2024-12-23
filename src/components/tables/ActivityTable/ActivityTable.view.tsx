@@ -121,6 +121,7 @@ const ActivityTable = ({
           key: 'actions',
           render: (value: boolean, item) => (
             <Tooltip
+              className="no-print"
               title={
                 value
                   ? intl.formatMessage({
