@@ -1,8 +1,10 @@
-import type { Role } from 'graphql/types';
+import type { Role } from '#/graphql/types';
 
-import { useAuth0 } from '@auth0/auth0-react';
+import { APP_PREFIX_PATH } from '#/configs/AppConfig';
+import navigationConfig from '#/configs/NavigationConfig';
+import { useAuth } from '#/hooks';
+import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import Loading from 'components/shared-components/AntD/Loading';
-import { useAuth } from 'hooks';
 import useManageSession from 'hooks/useManageSession';
 import React, { Suspense, lazy, useEffect, useMemo } from 'react';
 import {
@@ -16,10 +18,8 @@ import { useStoreState } from 'state';
 
 import type { NavItem as ConfigNavItem } from '../../configs/NavigationConfig';
 
-import { APP_PREFIX_PATH } from '../../configs/AppConfig';
-import navigationConfig from '../../configs/NavigationConfig';
-
 const Onboarding = lazy(() => import('./onboarding/router'));
+const PasswordReset = lazy(() => import('./password/router'));
 const Incidents = lazy(() => import('./incidents/router'));
 const Offenders = lazy(() => import('./offenders/router'));
 const Chat = lazy(() => import('./chat/router'));
@@ -41,6 +41,7 @@ const Evidence = lazy(() => import('./evidence/router'));
 const Checklists = lazy(() => import('./checklist/router'));
 const DashboardManagement = lazy(() => import('./dashboard-management/router'));
 const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
+
 // Define the interface for your navigation items
 interface NavItem {
   path: string;
@@ -87,14 +88,14 @@ const isRoleAllowedForPath = (
 };
 
 export const AppViews = (): JSX.Element => {
-  const { isLoading } = useAuth0();
-  const { getCurrentUser, loading } = useAuth();
-  const { isSet, onboarded, role } = useStoreState((state) => state.user);
-  useManageSession();
+  const { loading } = useAuth();
+  const { isLoaded } = useAuthClerk();
 
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
+  useManageSession();
+  const { forcePasswordReset, isSet, onboarded, role, termsExpired } =
+    useStoreState((state) => state.user);
+
+  const onboardingRoute = !onboarded || forcePasswordReset || termsExpired;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -111,74 +112,78 @@ export const AppViews = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (!pathname || loading || isLoading || !isSet) return;
+    if (!pathname || loading || !isLoaded || !isSet) return;
     if (!isAllowed) {
       navigate(`${APP_PREFIX_PATH}/dashboard`);
     }
   }, [pathname, role]);
 
-  if (loading || isLoading || !isSet) return <Loading cover="content" />;
   return (
     <Suspense fallback={<Loading cover="content" />}>
-      <Routes>
-        <Route
-          element={<Navigate to={onboarded ? 'dashboard' : 'onboarding'} />}
-          index
-        />
-        {!onboarded && (
+      {onboardingRoute ? (
+        <Routes>
+          <Route element={<Navigate to="onboarding" />} index path="*" />
           <Route
-            element={<Onboarding />}
+            element={forcePasswordReset ? <PasswordReset /> : <Onboarding />}
+            index
             key="onboarding"
             path="onboarding/*"
           />
-        )}
-        <Route
-          element={<DashboardManagement />}
-          key="manage-dashboard"
-          path="manage-dashboard/*"
-        />
-
-        <Route element={<FeedItems />} key="dashboard" path="dashboard/*" />
-        <Route element={<Tasks />} key="tasks" path="tasks/*" />
-        <Route element={<Incidents />} key="incidents" path="incidents/*" />
-        <Route
-          element={<CrimeGroups />}
-          key="crime-groups"
-          path="crime-groups/*"
-        />
-        <Route element={<Vehicles />} key="vehicles" path="vehicles/*" />
-        <Route element={<Offenders />} key="offenders" path="offenders/*" />
-        <Route element={<Chat />} key="chat" path="chat/*" />
-        <Route
-          element={<Notifications />}
-          key="notifications"
-          path="notifications/*"
-        />
-        <Route element={<User />} key="user" path="user-settings/*" />
-        <Route element={<Scheme />} key="scheme" path="scheme-settings/*" />
-        <Route element={<Article />} key="article" path="article/*" />
-        <Route element={<Evidence />} key="evidence" path="evidence/*" />
-        <Route element={<Checklists />} key="checklists" path="checklists/*" />
-        <Route element={<Reports />} key="reports" path="reports/*" />
-        <Route
-          element={<Investigations />}
-          key="investigations"
-          path="investigations/*"
-        />
-        <Route element={<Documents />} key="resources" path="resources/*" />
-        <Route element={<Mg11 />} key="mg11" path="mg11/*" />
-        <Route element={<FaceAi />} key="face-ai" path="face-ai/*" />
-        <Route
-          element={<DataManagement />}
-          key="data-management"
-          path="data-management/*"
-        />
-        <Route
-          element={<SingleShoeSystem />}
-          key="singleShoeSystem"
-          path="singleShoeSystem/*"
-        />
-      </Routes>
+        </Routes>
+      ) : (
+        <Routes>
+          <Route element={<Navigate to="dashboard" />} index path="*" />
+          <Route
+            element={<DashboardManagement />}
+            key="manage-dashboard"
+            path="manage-dashboard/*"
+          />
+          <Route element={<FeedItems />} key="dashboard" path="dashboard/*" />
+          <Route element={<Tasks />} key="tasks" path="tasks/*" />
+          <Route element={<Incidents />} key="incidents" path="incidents/*" />
+          <Route
+            element={<CrimeGroups />}
+            key="crime-groups"
+            path="crime-groups/*"
+          />
+          <Route element={<Vehicles />} key="vehicles" path="vehicles/*" />
+          <Route element={<Offenders />} key="offenders" path="offenders/*" />
+          <Route element={<Chat />} key="chat" path="chat/*" />
+          <Route
+            element={<Notifications />}
+            key="notifications"
+            path="notifications/*"
+          />
+          <Route element={<User />} key="user" path="user-settings/*" />
+          <Route element={<Scheme />} key="scheme" path="scheme-settings/*" />
+          <Route element={<Article />} key="article" path="article/*" />
+          <Route element={<Evidence />} key="evidence" path="evidence/*" />
+          <Route
+            element={<Checklists />}
+            key="checklists"
+            path="checklists/*"
+          />
+          <Route element={<Reports />} key="reports" path="reports/*" />
+          <Route
+            element={<Investigations />}
+            key="investigations"
+            path="investigations/*"
+          />
+          <Route element={<Documents />} key="resources" path="resources/*" />
+          <Route element={<Mg11 />} key="mg11" path="mg11/*" />
+          <Route element={<FaceAi />} key="face-ai" path="face-ai/*" />
+          <Route
+            element={<DataManagement />}
+            key="data-management"
+            path="data-management/*"
+          />
+          <Route
+            element={<SingleShoeSystem />}
+            key="singleShoeSystem"
+            path="singleShoeSystem/*"
+          />
+        </Routes>
+      )}
     </Suspense>
   );
 };

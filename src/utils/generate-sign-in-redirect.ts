@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 
-const GenerateSignInRedirect = (redirect?: string | null) => {
+const GenerateSignInRedirect = (redirect?: null | string) => {
   const location = useLocation();
   const currentRoute = location.pathname;
   return currentRoute && currentRoute.includes('sign-in')
