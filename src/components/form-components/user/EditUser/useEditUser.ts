@@ -164,6 +164,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    console.log('edit user', data.role);
 
     if (userId) {
       const disconnectGroupsId = userData?.user?.groups
@@ -379,6 +380,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                         id: foundRole.id,
                       },
                     },
+                    reportToAllBusinesses: { set: data.reportToAllBusinesses },
                     role: { set: foundRole.type },
                   },
                   where: {

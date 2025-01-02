@@ -25,6 +25,8 @@ import { useIntl } from 'react-intl';
 
 import type { FormData } from './useEditUser';
 
+import useStyles from './user.styles';
+
 const { Title } = Typography;
 
 interface Props {
@@ -71,6 +73,8 @@ const EditUser = ({
   updateNewBusinessData,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const classes = useStyles();
+
   return !data && loading ? (
     <Skeleton />
   ) : (
@@ -339,18 +343,9 @@ const EditUser = ({
               defaultMessage: 'Show user name in the system',
             })}
             name="publicName"
-            style={{
-              flexDirection: 'row',
-              justifyItems: 'center',
-              marginBottom: 0,
-            }}
             valuePropName="checked"
           >
-            <Switch
-              className="scheme-detail-switch"
-              disabled={saving}
-              style={{ marginLeft: 10, marginTop: -22 }}
-            />
+            <Switch className={classes.switch} disabled={saving} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -359,18 +354,9 @@ const EditUser = ({
               defaultMessage: 'Allow user to report to all businesses',
             })}
             name="reportToAllBusinesses"
-            style={{
-              flexDirection: 'row',
-              justifyItems: 'center',
-              marginBottom: 0,
-            }}
             valuePropName="checked"
           >
-            <Switch
-              className="scheme-detail-switch"
-              disabled={saving}
-              style={{ marginLeft: 10, marginTop: -22 }}
-            />
+            <Switch className={classes.switch} disabled={saving} />
           </Form.Item>
         </Col>
       </Row>
@@ -379,189 +365,117 @@ const EditUser = ({
           defaultMessage: 'Notification Settings:',
         })}
       </Title>
-      <Title style={{ fontSize: 16, marginBottom: 8 }}>
+      <Title style={{ fontSize: 16, marginBottom: 15 }}>
         {intl.formatMessage({
           defaultMessage: 'Incidents:',
         })}
       </Title>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed incidents:',
         })}
         name="subscribedIncidentOnly"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for incidents:',
         })}
         name="incidentPush"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage: 'Send emails for incidents:',
         })}
         name="incidentEmail"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
-      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
+      <Title style={{ fontSize: 16, marginBottom: 15, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Offenders:',
         })}
       </Title>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage:
             'Only notify users for their own and subscribed offenders:',
         })}
         name="subscribedOffenderOnly"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for offenders:',
         })}
         name="offenderPush"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage: 'Send emails for offenders:',
         })}
         name="offenderEmail"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
-      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
+      <Title style={{ fontSize: 16, marginBottom: 15, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Bulletins:',
         })}
       </Title>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for bulletins:',
         })}
         name="bulletinPush"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage: 'Send emails for bulletins:',
         })}
         name="bulletinEmails"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
-      <Title style={{ fontSize: 16, marginBottom: 8, marginTop: 10 }}>
+      <Title style={{ fontSize: 16, marginBottom: 15, marginTop: 10 }}>
         {intl.formatMessage({
           defaultMessage: 'Chat Messages:',
         })}
       </Title>
       <Form.Item
+        className={classes.switchItem}
         label={intl.formatMessage({
           defaultMessage: 'Send app notifications for new chat messages:',
         })}
         name="messagePush"
-        style={{
-          flexDirection: 'row',
-          justifyItems: 'center',
-          marginBottom: 0,
-        }}
         valuePropName="checked"
       >
-        <Switch
-          className="scheme-detail-switch"
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-        />
+        <Switch className={classes.switch} disabled={saving} />
       </Form.Item>
 
       <Form.Item>
