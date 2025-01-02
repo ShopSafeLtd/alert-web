@@ -10,9 +10,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   Date: Date;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: Date;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { [key: string]: any };
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -2770,7 +2774,7 @@ export type CreateArticleImages = {
 export type CreateArticleInput = {
   categories?: InputMaybe<Array<Scalars['String']>>;
   documents?: InputMaybe<Array<CreateDocument>>;
-  draft: Scalars['Boolean'];
+  draft?: InputMaybe<Scalars['Boolean']>;
   groups: Array<Scalars['String']>;
   htmlBody: Scalars['String'];
   image?: InputMaybe<CreateArticlePreviewImage>;
@@ -6201,6 +6205,7 @@ export type FormField = {
   id: Scalars['ID'];
   incidentForm: IncidentForm;
   position: Scalars['Int'];
+  tooltip?: Maybe<Scalars['String']>;
   type: IncidentFormField;
   updatedAt: Scalars['Date'];
 };
@@ -7738,6 +7743,7 @@ export enum IncidentFormField {
 
 export type IncidentFormFieldsInput = {
   position: Scalars['Int'];
+  tooltip?: InputMaybe<Scalars['String']>;
   type: IncidentFormField;
 };
 
@@ -21563,6 +21569,7 @@ export type UserSchemeOnUserInput = {
 
 export type UserSchemeOnUserUpdateInput = {
   permissions?: InputMaybe<ConnectHelper>;
+  reportToAllBusinesses?: InputMaybe<SetBooleanHelper>;
   role?: InputMaybe<EnumRoleFieldUpdateOperationsInput>;
 };
 
