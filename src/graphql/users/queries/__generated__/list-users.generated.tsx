@@ -12,7 +12,7 @@ export type ListUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListUsersQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id: string, fullName: string, firstLetter: string, origName: string, origFirstLetter: string, email: string, publicName: boolean, reportToAllBusinesses: boolean, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
+export type ListUsersQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id: string, fullName: string, firstLetter: string, origName: string, origFirstLetter: string, email: string, publicName: boolean, reportToAllBusinesses?: boolean | null, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
 
 
 export const ListUsersDocument = gql`

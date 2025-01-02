@@ -29,7 +29,7 @@ export interface OnSubmitValues {
   brands?: string[];
   building: string;
   county: string;
-  groups?: string[];
+  groups: string[];
   name: string;
   parent: {
     label: string;

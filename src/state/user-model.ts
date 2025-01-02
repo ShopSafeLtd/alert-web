@@ -119,6 +119,8 @@ export interface Scheme {
     goodsMode: GoodsMode;
     id: string;
     imagesRequiredOnOffenders: boolean;
+    incidentCustomQuestionRadio: boolean;
+    incidentTypeTooltip?: null | string | undefined;
     languageCount: number;
     logo?:
       | {

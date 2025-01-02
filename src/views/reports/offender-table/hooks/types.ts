@@ -17,6 +17,7 @@ export interface Props {
   businessesIds: string[];
   changeSize: (arg0: string, arg1: number) => void;
   componentRef: RefObject<HTMLDivElement>;
+  createdAtMode: DateSelectModeType | undefined;
   crimeGroupIds: string[];
   data: OffenderTableReportQuery | undefined;
   dateRange: { endDate: Date; startDate: Date } | undefined;
@@ -26,6 +27,7 @@ export interface Props {
   filtersOpen: boolean;
   groups: SelectOptions[];
   handlePrint: () => void;
+  idVerified: boolean | undefined;
   incidentCount: number | undefined;
   isPrinting: boolean;
   layout: ExtendedLayout[];
@@ -52,12 +54,17 @@ export interface Props {
   selectedTemplate: string;
   setAddLogoDrawer: (arg0: boolean) => void;
   setBusinessesIds: (value: string[]) => void;
+  setCreatedAt: (
+    dateRange: { endDate: Date; startDate: Date } | undefined,
+    mode: DateSelectModeType | undefined
+  ) => void;
   setCrimeGroupIds: (value: string[]) => void;
   setDateRange: (
     dateRange: { endDate: Date; startDate: Date } | undefined,
     mode: DateSelectModeType | undefined
   ) => void;
   setEditMode: (editMode: boolean) => void;
+  setIdVerified: (value: boolean | undefined) => void;
   setIncidentCount: (count: number | undefined) => void;
   setLayout: (layout: ExtendedLayout[]) => void;
   setMetadata: (arg0: MetaData[]) => void;

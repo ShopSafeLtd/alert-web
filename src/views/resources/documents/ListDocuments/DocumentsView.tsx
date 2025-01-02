@@ -1,4 +1,12 @@
-import React from 'react';
+import {
+  faFileArrowDown,
+  faMagnifyingGlass,
+  faPage,
+  faPlus,
+  faTrash,
+  faUpload,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -7,34 +15,39 @@ import {
   Dropdown,
   Image,
   Menu,
+  Popconfirm,
   Row,
   Skeleton,
   Table,
+  Tooltip,
 } from 'antd';
-import AddDocument from 'components/form-components/documents/AddDocument';
-
 import TabContent from 'components/TabContent';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMagnifyingGlass,
-  faPage,
-  faPlus,
-  faUpload,
-} from '@fortawesome/pro-light-svg-icons';
+import AddDocument from 'components/form-components/documents/AddDocument';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import type { Props } from './types/Documents';
 
+import type { Props } from './types/Documents';
+interface TableItem {
+  fileUrl: string;
+  key: string;
+  name: string;
+  tags: { text: string; value: string }[];
+  thumbnail: string | undefined;
+}
 const isImage = (url: string) => {
   const ext = url.split('.').pop();
   return ext === 'jpg' || ext === 'png' || ext === 'jpeg';
 };
 const DocumentsView = ({
-  data,
-  toggleAddDocument,
   addDocument,
+  addRights,
+  data,
+  deleteRights,
   loading,
-  isAdmin,
+  onDelete,
+  saving,
+  toggleAddDocument,
 }: Props) => {
   const tags = new Set(
     data?.scheme?.documents?.flatMap((document) =>
@@ -47,37 +60,37 @@ const DocumentsView = ({
   const navigate = useNavigate();
   const dropdownItems = [
     {
-      label: intl.formatMessage({
-        defaultMessage: 'Add Document',
-      }),
-      key: '5',
       icon: (
         <FontAwesomeIcon icon={faMagnifyingGlass} style={{ marginRight: 5 }} />
       ),
+      key: '5',
+      label: intl.formatMessage({
+        defaultMessage: 'Add Document',
+      }),
       // disabled: !listVehiclesData?.listVehicles.total,
       onClick: () => toggleAddDocument(),
     },
 
     {
+      icon: (
+        <FontAwesomeIcon icon={faUpload} size="1x" style={{ marginRight: 8 }} />
+      ),
+      key: '3',
       label: intl.formatMessage({
         defaultMessage: 'Upload',
       }),
-      key: '3',
-      icon: (
-        <FontAwesomeIcon size="1x" style={{ marginRight: 8 }} icon={faUpload} />
-      ),
       // disabled: !listVehiclesData?.listVehicles.total,
       onClick: () => toggleAddDocument(),
     },
   ];
   const mg11Button = {
+    icon: (
+      <FontAwesomeIcon icon={faPage} size="1x" style={{ marginRight: 8 }} />
+    ),
+    key: '1',
     label: intl.formatMessage({
       defaultMessage: 'Create MG11',
     }),
-    key: '1',
-    icon: (
-      <FontAwesomeIcon size="1x" style={{ marginRight: 8 }} icon={faPage} />
-    ),
 
     // disabled: !listVehiclesData?.listVehicles.total,
     onClick: () => navigate('/app/mg11/create/'),
@@ -93,7 +106,7 @@ const DocumentsView = ({
           }}
         >
           <Col>
-            {isAdmin && (
+            {addRights && (
               <Dropdown
                 overlay={
                   <Menu
@@ -106,11 +119,11 @@ const DocumentsView = ({
                 }
               >
                 <Button
-                  key="2"
-                  type="primary"
                   icon={
                     <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                   }
+                  key="2"
+                  type="primary"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Document',
@@ -120,90 +133,128 @@ const DocumentsView = ({
             )}
           </Col>
         </Row>
-        <Table
-          loading={loading}
+        <Table<TableItem>
           columns={[
             {
-              title: intl.formatMessage({
-                defaultMessage: 'Thumbnail',
-              }),
               dataIndex: 'thumbnail',
               key: 'thumbnail',
-              render: (thumbnail: string | null | undefined) =>
+              render: (thumbnail: null | string | undefined) =>
                 thumbnail ? (
-                  <Image src={thumbnail} width={180} alt="thumbnail" />
+                  <Image alt="thumbnail" src={thumbnail} width={180} />
                 ) : (
                   <Skeleton.Image style={{ width: 180 }} />
                 ),
+              title: intl.formatMessage({
+                defaultMessage: 'Thumbnail',
+              }),
             },
             {
+              dataIndex: 'name',
+              key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
               }),
-              dataIndex: 'name',
-              key: 'name',
             },
             {
-              title: intl.formatMessage({
-                defaultMessage: 'Tags',
-              }),
               dataIndex: 'tags',
-              key: 'tags',
               filters: tagsArray.map((tag) => ({
                 text: tag,
                 value: tag,
               })),
-              onFilter: (
-                value: string | number | boolean,
-                record: { tags: { text: string }[] }
-              ) => record.tags.some((tag) => tag.text === value),
-
+              key: 'tags',
+              onFilter: (value: boolean | number | string, record: TableItem) =>
+                record.tags.some((tag) => tag.text === value),
               render: (origTags: { text: string; value: string }[]) =>
                 origTags.map((tag) => tag.text).join(', '),
+              title: intl.formatMessage({
+                defaultMessage: 'Tags',
+              }),
             },
             // download button
             {
-              title: '',
               dataIndex: 'fileUrl',
               key: 'fileUrl',
-              render: (fileUrl: string) => (
-                <Button
-                  type="link"
-                  onClick={() => {
-                    window.open(fileUrl);
-                  }}
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'Download',
-                  })}
-                </Button>
+              render: (_, record: TableItem) => (
+                <Row gutter={8}>
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        defaultMessage: 'Download Document',
+                      })}
+                    >
+                      <Button
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faFileArrowDown} />}
+                        onClick={() => {
+                          window.open(record.fileUrl);
+                        }}
+                        size="small"
+                      />
+                    </Tooltip>
+                  </Col>
+
+                  {deleteRights && (
+                    <Col>
+                      <Tooltip
+                        title={intl.formatMessage({
+                          defaultMessage: 'Delete Document',
+                        })}
+                      >
+                        <Popconfirm
+                          cancelText={intl.formatMessage({
+                            defaultMessage: 'No',
+                          })}
+                          okText={intl.formatMessage({
+                            defaultMessage: 'Yes',
+                          })}
+                          onConfirm={() => {
+                            onDelete(record.key);
+                          }}
+                          overlayInnerStyle={{ padding: 10 }}
+                          placement="topLeft"
+                          title={intl.formatMessage({
+                            defaultMessage: 'Delete the document?',
+                          })}
+                        >
+                          <Button
+                            disabled={saving}
+                            icon={<FontAwesomeIcon icon={faTrash} />}
+                            size="small"
+                          />
+                        </Popconfirm>
+                      </Tooltip>
+                    </Col>
+                  )}
+                </Row>
               ),
+              title: '',
             },
           ]}
-          size="small"
           dataSource={
             data?.scheme?.documents?.map((document) => ({
-              key: document.id,
-              thumbnail:
-                document.thumbnailUrl ||
-                (isImage(document.url) ? document.url : undefined),
               fileUrl: document.url,
+              key: document.id,
               name: document.name,
               tags: document.tags.map((tag) => ({
                 text: tag.name,
                 value: tag.name,
               })),
+              thumbnail:
+                document.thumbnailUrl ||
+                (isImage(document.url) ? document.url : undefined),
             })) || []
           }
+          loading={loading}
+          size="small"
         />
       </Card>
       <Drawer
+        onClose={toggleAddDocument}
+        open={addDocument}
         title={intl.formatMessage({
           defaultMessage: 'Add Evidence',
         })}
-        open={addDocument}
         width="800"
-        onClose={toggleAddDocument}
         zIndex={1001}
       >
         {addDocument ? <AddDocument onClose={toggleAddDocument} /> : <div />}

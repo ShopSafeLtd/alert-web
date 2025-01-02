@@ -3,6 +3,7 @@ fragment ArticlePreview on Article {
   watermarkImage
   previewImage
   priority
+  status
   tags {
     id
     name
@@ -35,6 +36,7 @@ fragment ArticlePreview on Article {
   }
   title
   updatedAt
+  completedAt
   id
 }
 

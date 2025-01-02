@@ -4,22 +4,20 @@ import type {
 } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { DeleteArticleMutation } from 'graphql/article/mutations/__generated__/delete_article.generated';
-import type { ArticlePriority } from 'graphql/types';
 import type { ArticleFilters } from 'state/data-model';
-import type { DateType } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import hasPermission from '#/utils/has-permission';
 import {
   ListArticlesFeedDocument,
   useListArticlesFeedQuery,
 } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
-import { QueryMode, SortOrder } from 'graphql/types';
-import { useEffect, useState } from 'react';
+import { PermissionMethod, PermissionModel, QueryMode } from 'graphql/types';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
-  clearFilters: () => void;
   data:
     | Exclude<ListArticlesFeedQuery['listArticlesRelay'], null | undefined>
     | null
@@ -39,11 +37,7 @@ interface Return {
   loading: boolean;
   onNavigate: () => void;
   openLightbox: (elements: { src: string }[], index: number) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  setGallery: (values: string[]) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setOrder: (value: SortOrder) => void;
-  setPriorityFilter: (value: ArticlePriority[]) => void;
+  setGallery: (value: string[]) => void;
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
@@ -59,8 +53,14 @@ const useArticleFeed = (): Return => {
   const {
     filterDefaultGroups: defaultGroups,
     id: userId,
-    role,
+    schemes,
   } = useStoreState((state) => state.user);
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
+    [schemes, schemeId]
+  );
+  const permissions = currentScheme?.permissions;
+
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
   );
@@ -73,6 +73,7 @@ const useArticleFeed = (): Return => {
     order,
     priorities: priorityFilter,
     search,
+    status,
   } = filterVariables;
   const [sortFilter, setSortFilter] = useState(false);
 
@@ -129,6 +130,12 @@ const useArticleFeed = (): Return => {
         priorityFilter.length > 0
           ? {
               in: priorityFilter,
+            }
+          : undefined,
+      status:
+        status.length > 0
+          ? {
+              in: status,
             }
           : undefined,
     },
@@ -232,23 +239,7 @@ const useArticleFeed = (): Return => {
   const toggleSortFilter = () => {
     setSortFilter(!sortFilter);
   };
-  const setCreatedAtFilter = (values: DateType | undefined) => {
-    setFilterState({
-      variables: {
-        ...filterVariables,
-        createdAt: values,
-      },
-    });
-  };
 
-  const setOrder = (values: SortOrder) => {
-    setFilterState({
-      variables: {
-        ...filterVariables,
-        order: values,
-      },
-    });
-  };
   const setGallery = (values: string[]) => {
     setFilterState({
       variables: {
@@ -265,53 +256,26 @@ const useArticleFeed = (): Return => {
       },
     });
   };
-  const setGroupsFilter = (values: string[]) => {
-    setFilterState({
-      variables: {
-        ...filterVariables,
-        groups: values,
-      },
-    });
-  };
-  const setPriorityFilter = (values: ArticlePriority[]) => {
-    setFilterState({
-      variables: {
-        ...filterVariables,
-        priorities: values,
-      },
-    });
-  };
-  const clearFilters = () => {
-    setFilterState({
-      variables: {
-        createdAt: undefined,
-        gallery: [],
-        groups: [],
-        order: SortOrder.Desc,
-        priorities: [],
-        search: '',
-      },
-    });
-  };
+  const hasCreateRights = hasPermission({
+    permission: {
+      method: PermissionMethod.Write,
+      model: PermissionModel.Articles,
+    },
+    permissions,
+  });
   return {
-    clearFilters,
     data: data?.listArticlesRelay || null,
     fetchMoreScroll,
     filterVariables,
     groups,
     groupsLoading,
-    // TODO change to new permissions model
-    hasCreateRights: role === 'SCHEME_ADMIN' || role === 'GROUP_ADMIN',
+    hasCreateRights,
     lightBoxOpen,
     lightboxElements,
     loading: (data === null || data === undefined) && loading,
     onNavigate,
     openLightbox: triggerLightbox,
-    setCreatedAtFilter,
     setGallery,
-    setGroupsFilter,
-    setOrder,
-    setPriorityFilter,
     setSearch,
     sortFilter,
     toggleSortFilter,

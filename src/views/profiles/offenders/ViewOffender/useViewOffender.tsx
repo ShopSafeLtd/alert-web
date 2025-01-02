@@ -1,9 +1,9 @@
 import type { CreateBlurFacesMutation } from '#/components/ViewPage/ImagesList/graphql/__generated__/create_blur_faces.generated';
 import type { AddVehicleData } from '#/components/form-components/Vehicle/AddVehicleSimple/useAddVehicleSimple';
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type { OffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import type { DeleteDocumentMutation } from 'graphql/documents/mutations/__generated__/delete-document.generated';
 import type { CreateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/create-investigations.generated';
 import type { UpdateOffenderBansMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-ban.generated';
@@ -204,7 +204,7 @@ interface Return {
   toggleViewMatches: (offenderId: null | string) => void;
   translateText: () => Promise<void>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
-  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation>;
   updateImagesList: MutationUpdaterFn<CreateBlurFacesMutation>;
   updateIncidentList: (value: string) => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
@@ -1470,11 +1470,11 @@ const useViewOffender = (offenderId: string): Return => {
       });
   };
   // evidence
-  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentsMutation> = (
     store,
     { data: res }
   ) => {
-    if (res?.createDocument === null || res?.createDocument === undefined)
+    if (res?.createDocuments === null || res?.createDocuments === undefined)
       return;
     const existingData = store.readQuery<ViewOffenderQuery>({
       query: ViewOffenderDocument,
@@ -1487,7 +1487,7 @@ const useViewOffender = (offenderId: string): Return => {
         __typename: 'Query',
         offender: {
           ...existingData.offender,
-          evidence: [...existingData.offender.evidence, res.createDocument],
+          evidence: [...existingData.offender.evidence, ...res.createDocuments],
         },
       },
       query: ViewOffenderDocument,

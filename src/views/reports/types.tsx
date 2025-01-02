@@ -850,6 +850,7 @@ export type Elements = {
 export interface MetaData {
   columns?: string[];
   data?: { [i: string]: unknown };
+  graphOptions?: { [i: string]: unknown };
   key: MetaDataAllowedValue;
   propId?: string;
   type: MetaDataItemTypes;

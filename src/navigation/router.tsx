@@ -23,7 +23,7 @@ const Views = () => {
     window?.location?.href?.includes('staging.shopsafealert') &&
     !localStorage.getItem('staging')
   ) {
-    window.location.replace('https://app.shopsafealert.co.uk/');
+    window.location.replace('https://app.shopsafe.io/');
   }
 
   if (navigator?.userAgent?.toLowerCase().includes('android')) {

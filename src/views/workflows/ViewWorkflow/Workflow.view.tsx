@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React from 'react';
 import type { FormInstance } from 'antd';
+
 import {
   Button,
   Card,
@@ -17,10 +17,12 @@ import {
   Select,
   Typography,
 } from 'antd';
+import { AnswerType, IncidentPriority, Model } from 'graphql/types';
+import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
+
 import type { ListData } from '../../adminTodo/useActivities';
-import ActivityTemplateForm from '../../../components/form-components/ActivityTemplate';
 import type {
   FormData,
   LabelValue,
@@ -28,85 +30,86 @@ import type {
   Question,
   QuestionGroupData,
 } from './useWorkflowForm';
+
+import ActivityTemplateForm from '../../../components/form-components/ActivityTemplate';
 import CreateQuestionContainer from '../../../components/form-components/createQuestion/CreateQuestion.container';
 import Loading from '../../../components/shared-components/AntD/Loading';
-import { AnswerType, IncidentPriority, Model } from 'graphql/types';
 
 interface WorkflowProps {
-  form: FormInstance<FormData>;
-  onFinish: (formData: FormData) => void;
-  tagsSelected: boolean;
-  tags: { label: string; value: string }[];
-  questions: Question[];
-  taskQuestions: Question[];
-  setSelectedActivity: (q: QuestionGroupData) => void;
-  questionGroups: QuestionGroupData[];
-  users: { label: string; value: string }[];
-  valueSelected: boolean;
-  questionsSelected: boolean;
-  setSelectedQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
-  setAvailableQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
   activityTemplateForm: boolean;
-  setActivityTemplateForm: React.Dispatch<React.SetStateAction<boolean>>;
-  onClose: () => void;
-  selectedQuestions: Question[];
   availableQuestions: Question[];
-  updateTemplates: (
-    item: ListData,
-    type: 'create' | 'update' | 'delete'
-  ) => void;
-  newQuestion: boolean;
   createNewQuestion: (id: string, question: string) => void;
-  groups: LabelValue[];
-  loading: boolean;
-  setNewQuestion: React.Dispatch<React.SetStateAction<boolean>>;
-  saving: boolean;
-  lessThanSelected: boolean;
-  modelSelected: Model | null | undefined;
-  goodsTypeCheck: boolean;
-  goods: { label: string; value: string }[];
   descriptionCheck: boolean;
+  form: FormInstance<FormData>;
+  goods: { label: string; value: string }[];
+  goodsTypeCheck: boolean;
+  groups: LabelValue[];
   incidentTimeCountCheck: boolean;
-  taskOutcome: boolean;
+  lessThanSelected: boolean;
+  loading: boolean;
+  modelSelected: Model | null | undefined;
+  newQuestion: boolean;
+  onClose: () => void;
+  onFinish: (formData: FormData) => void;
+  questionGroups: QuestionGroupData[];
+  questions: Question[];
+  questionsSelected: boolean;
+  saving: boolean;
+  selectedQuestions: Question[];
   sendEmailCheck: boolean;
   sendNotificationCheck: boolean;
+  setActivityTemplateForm: React.Dispatch<React.SetStateAction<boolean>>;
+  setAvailableQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+  setNewQuestion: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedActivity: (q: QuestionGroupData) => void;
+  setSelectedQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+  tags: { label: string; value: string }[];
+  tagsSelected: boolean;
+  taskOutcome: boolean;
+  taskQuestions: Question[];
+  updateTemplates: (
+    item: ListData,
+    type: 'create' | 'delete' | 'update'
+  ) => void;
+  users: { label: string; value: string }[];
+  valueSelected: boolean;
 }
 
 const WorkflowView: React.FC<WorkflowProps> = ({
-  onFinish,
-  form,
-  tagsSelected,
-  questionGroups,
-  taskQuestions,
-  questionsSelected,
-  questions,
-  setSelectedActivity,
-  tags,
-  valueSelected,
-  users,
-  setSelectedQuestions,
-  selectedQuestions,
-  availableQuestions,
-  setAvailableQuestions,
-  setActivityTemplateForm,
   activityTemplateForm,
-  updateTemplates,
-  onClose,
-  groups,
+  availableQuestions,
   createNewQuestion,
-  newQuestion,
-  loading,
-  setNewQuestion,
-  saving,
-  modelSelected,
-  lessThanSelected,
-  goodsTypeCheck,
-  goods,
   descriptionCheck,
+  form,
+  goods,
+  goodsTypeCheck,
+  groups,
   incidentTimeCountCheck,
-  taskOutcome,
+  lessThanSelected,
+  loading,
+  modelSelected,
+  newQuestion,
+  onClose,
+  onFinish,
+  questionGroups,
+  questions,
+  questionsSelected,
+  saving,
+  selectedQuestions,
   sendEmailCheck,
   sendNotificationCheck,
+  setActivityTemplateForm,
+  setAvailableQuestions,
+  setNewQuestion,
+  setSelectedActivity,
+  setSelectedQuestions,
+  tags,
+  tagsSelected,
+  taskOutcome,
+  taskQuestions,
+  updateTemplates,
+  users,
+  valueSelected,
 }) => {
   const { id: editId } = useParams();
   const intl = useIntl();
@@ -114,9 +117,9 @@ const WorkflowView: React.FC<WorkflowProps> = ({
     return (
       <div
         style={{
-          height: '100vh',
-          display: 'flex',
           alignItems: 'center',
+          display: 'flex',
+          height: '100vh',
           justifyContent: 'center',
         }}
       >
@@ -141,18 +144,18 @@ const WorkflowView: React.FC<WorkflowProps> = ({
       />
       <div
         style={{
-          padding: 8,
-          paddingTop: 0,
+          alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          padding: 8,
+          paddingTop: 0,
         }}
       >
         <Form<FormData>
-          form={form}
-          onFinish={onFinish}
-          layout="vertical"
           disabled={saving}
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
           style={{
             width: '75%',
           }}
@@ -163,10 +166,10 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               name="name"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please enter a name',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -179,14 +182,15 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               name="option"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please select an option',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Radio.Group
+                optionType="button"
                 options={[
                   {
                     label: intl.formatMessage({
@@ -201,7 +205,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                     value: 'all',
                   },
                 ]}
-                optionType="button"
               />
             </Form.Item>
             <Form.Item
@@ -209,14 +212,15 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               name="workflowType"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Please select an option',
                   }),
+                  required: true,
                 },
               ]}
             >
               <Radio.Group
+                optionType="button"
                 options={[
                   {
                     label: intl.formatMessage({
@@ -231,7 +235,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                     value: Model.Offender,
                   },
                 ]}
-                optionType="button"
               />
             </Form.Item>
           </Card>
@@ -255,8 +258,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Typography.Title
                               level={4}
                               style={{
-                                display: 'flex',
                                 alignItems: 'center',
+                                display: 'flex',
                                 paddingTop: 8,
                               }}
                             >
@@ -279,14 +282,15 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               name="tagMethod"
                               rules={[
                                 {
-                                  required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
                                   }),
+                                  required: true,
                                 },
                               ]}
                             >
                               <Radio.Group
+                                optionType="button"
                                 options={[
                                   {
                                     label: intl.formatMessage({
@@ -301,7 +305,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                     value: 'all',
                                   },
                                 ]}
-                                optionType="button"
                               />
                             </Form.Item>
                             <Form.Item
@@ -310,8 +313,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             >
                               <Select
                                 mode="tags"
-                                options={tags}
                                 optionFilterProp="label"
+                                options={tags}
                               />
                             </Form.Item>
                           </>
@@ -329,8 +332,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Typography.Title
                               level={4}
                               style={{
-                                display: 'flex',
                                 alignItems: 'center',
+                                display: 'flex',
                                 paddingTop: 8,
                               }}
                             >
@@ -355,8 +358,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             name="valuePrice"
                           >
                             <InputNumber
-                              prefix="£"
                               min={0}
+                              prefix="£"
                               style={{ width: '100%' }}
                             />
                           </Form.Item>
@@ -366,8 +369,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Typography.Title
                               level={4}
                               style={{
-                                display: 'flex',
                                 alignItems: 'center',
+                                display: 'flex',
                                 paddingTop: 8,
                               }}
                             >
@@ -392,8 +395,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             name="lessThanPrice"
                           >
                             <InputNumber
-                              prefix="£"
                               min={0}
+                              prefix="£"
                               style={{ width: '100%' }}
                             />
                           </Form.Item>
@@ -418,8 +421,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Typography.Title
                               level={4}
                               style={{
-                                display: 'flex',
                                 alignItems: 'center',
+                                display: 'flex',
                                 paddingTop: 8,
                               }}
                             >
@@ -445,14 +448,15 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               name="goodsTypeCondition"
                               rules={[
                                 {
-                                  required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
                                   }),
+                                  required: true,
                                 },
                               ]}
                             >
                               <Radio.Group
+                                optionType="button"
                                 options={[
                                   {
                                     label: intl.formatMessage({
@@ -467,7 +471,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                     value: 'all',
                                   },
                                 ]}
-                                optionType="button"
                               />
                             </Form.Item>
                             <Form.Item
@@ -478,8 +481,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             >
                               <Select
                                 mode="tags"
-                                options={goods}
                                 optionFilterProp="label"
+                                options={goods}
                               />
                             </Form.Item>
                           </>
@@ -497,8 +500,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Typography.Title
                               level={4}
                               style={{
-                                display: 'flex',
                                 alignItems: 'center',
+                                display: 'flex',
                                 paddingTop: 8,
                               }}
                             >
@@ -524,14 +527,15 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               name="descriptionCondition"
                               rules={[
                                 {
-                                  required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
                                   }),
+                                  required: true,
                                 },
                               ]}
                             >
                               <Radio.Group
+                                optionType="button"
                                 options={[
                                   {
                                     label: intl.formatMessage({
@@ -546,7 +550,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                     value: 'all',
                                   },
                                 ]}
-                                optionType="button"
                               />
                             </Form.Item>
                             <Form.Item
@@ -556,9 +559,9 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               name="descriptionWords"
                             >
                               <Select
+                                dropdownStyle={{ display: 'none' }}
                                 mode="tags"
                                 optionFilterProp="label"
-                                dropdownStyle={{ display: 'none' }}
                               />
                             </Form.Item>
                           </>
@@ -580,8 +583,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Typography.Title
                               level={4}
                               style={{
-                                display: 'flex',
                                 alignItems: 'center',
+                                display: 'flex',
                                 paddingTop: 8,
                               }}
                             >
@@ -607,10 +610,10 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               name="questionMethod"
                               rules={[
                                 {
-                                  required: true,
                                   message: intl.formatMessage({
                                     defaultMessage: 'Please select an option',
                                   }),
+                                  required: true,
                                 },
                               ]}
                               style={{
@@ -618,6 +621,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               }}
                             >
                               <Radio.Group
+                                optionType="button"
                                 options={[
                                   {
                                     label: intl.formatMessage({
@@ -632,7 +636,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                     value: 'all',
                                   },
                                 ]}
-                                optionType="button"
                               />
                             </Form.Item>
                             <Form.Item
@@ -646,12 +649,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             >
                               <Col>
                                 <Select
-                                  placeholder={intl.formatMessage({
-                                    defaultMessage:
-                                      'Select a question from the list...',
-                                  })}
-                                  value={null}
-                                  style={{ width: '100%' }}
                                   onChange={(value) => {
                                     const question = questions.find(
                                       ({ id }) => id === value
@@ -670,10 +667,16 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   }}
                                   options={availableQuestions.map(
                                     ({ id, question }) => ({
-                                      value: id,
                                       label: question,
+                                      value: id,
                                     })
                                   )}
+                                  placeholder={intl.formatMessage({
+                                    defaultMessage:
+                                      'Select a question from the list...',
+                                  })}
+                                  style={{ width: '100%' }}
+                                  value={null}
                                 />
                               </Col>
                             </Form.Item>
@@ -686,12 +689,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             >
                               {selectedQuestions.map(
                                 ({
+                                  answer,
                                   id,
+                                  options,
+                                  overUnder,
                                   question,
                                   type,
-                                  options,
-                                  answer,
-                                  overUnder,
                                 }) => (
                                   <Row style={{ marginTop: 12 }}>
                                     <Col span={20}>
@@ -700,14 +703,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                       </Typography.Text>
                                       {type === AnswerType.Select && (
                                         <Select
-                                          value={answer}
                                           mode="multiple"
-                                          options={options.map(
-                                            ({ label, value }) => ({
-                                              value,
-                                              label,
-                                            })
-                                          )}
                                           onChange={(
                                             value: string | string[]
                                           ) => {
@@ -723,12 +719,18 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                               })
                                             );
                                           }}
+                                          options={options.map(
+                                            ({ label, value }) => ({
+                                              label,
+                                              value,
+                                            })
+                                          )}
+                                          value={answer}
                                         />
                                       )}
                                       {type === AnswerType.Boolean && (
                                         <div style={{ marginTop: 8 }}>
                                           <Radio.Group
-                                            value={answer}
                                             onChange={(e) => {
                                               setSelectedQuestions(
                                                 (prevState) =>
@@ -744,6 +746,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                                   })
                                               );
                                             }}
+                                            optionType="button"
                                             options={[
                                               {
                                                 label: intl.formatMessage({
@@ -758,20 +761,16 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                                 value: 'false',
                                               },
                                             ]}
-                                            optionType="button"
+                                            value={answer}
                                           />
                                         </div>
                                       )}
                                       {type === AnswerType.Number && (
                                         <div style={{ marginTop: 8 }}>
                                           <InputNumber
-                                            value={
-                                              Array.isArray(answer)
-                                                ? answer[0]
-                                                : answer || 0
-                                            }
+                                            min={0}
                                             onChange={(
-                                              value: string | number | null
+                                              value: null | number | string
                                             ) => {
                                               setSelectedQuestions(
                                                 (prevState) =>
@@ -790,11 +789,14 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                                   })
                                               );
                                             }}
-                                            min={0}
                                             style={{ width: '50%' }}
+                                            value={
+                                              Array.isArray(answer)
+                                                ? answer[0]
+                                                : answer || 0
+                                            }
                                           />
                                           <Radio.Group
-                                            value={overUnder}
                                             onChange={(e) => {
                                               setSelectedQuestions(
                                                 (prevState) =>
@@ -810,6 +812,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                                   })
                                               );
                                             }}
+                                            optionType="button"
                                             options={[
                                               {
                                                 label: intl.formatMessage({
@@ -824,7 +827,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                                 value: 'under',
                                               },
                                             ]}
-                                            optionType="button"
+                                            value={overUnder}
                                           />
                                         </div>
                                       )}
@@ -832,7 +835,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                         type !== AnswerType.Boolean &&
                                         type !== AnswerType.Number && (
                                           <Input
-                                            value={answer}
                                             onChange={(e) => {
                                               setSelectedQuestions(
                                                 (prevState) =>
@@ -847,15 +849,16 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                                   })
                                               );
                                             }}
+                                            value={answer}
                                           />
                                         )}
                                     </Col>
                                     <Col
-                                      span={2}
                                       offset={1}
+                                      span={2}
                                       style={{
-                                        display: 'flex',
                                         alignItems: 'center',
+                                        display: 'flex',
                                       }}
                                     >
                                       <Button
@@ -903,8 +906,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <Typography.Title
                             level={4}
                             style={{
-                              display: 'flex',
                               alignItems: 'center',
+                              display: 'flex',
                               paddingTop: 8,
                             }}
                           >
@@ -924,34 +927,34 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       {incidentTimeCountCheck && (
                         <>
                           <Form.Item
+                            initialValue={1}
                             label={
                               <FormattedMessage defaultMessage="No. of days" />
                             }
                             name="incidentTimeCountDays"
                             rules={[
                               {
-                                required: true,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please select an option',
                                 }),
+                                required: true,
                               },
                             ]}
-                            initialValue={1}
                           >
                             <InputNumber min={1} />
                           </Form.Item>
                           <Form.Item
+                            initialValue={1}
                             label={
                               <FormattedMessage defaultMessage="No. of incidents" />
                             }
-                            initialValue={1}
                             name="incidentTimeCountIncidents"
                             rules={[
                               {
-                                required: true,
                                 message: intl.formatMessage({
                                   defaultMessage: 'Please select an option',
                                 }),
+                                required: true,
                               },
                             ]}
                           >
@@ -972,8 +975,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <Typography.Title
                             level={4}
                             style={{
-                              display: 'flex',
                               alignItems: 'center',
+                              display: 'flex',
                               paddingTop: 8,
                             }}
                           >
@@ -981,8 +984,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           </Typography.Title>
                           <Typography.Paragraph
                             style={{
-                              display: 'flex',
                               alignItems: 'center',
+                              display: 'flex',
                             }}
                           >
                             <FormattedMessage
@@ -1018,8 +1021,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <Typography.Title
                           level={4}
                           style={{
-                            display: 'flex',
                             alignItems: 'center',
+                            display: 'flex',
                             paddingTop: 8,
                           }}
                         >
@@ -1027,8 +1030,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         </Typography.Title>
                         <Typography.Paragraph
                           style={{
-                            display: 'flex',
                             alignItems: 'center',
+                            display: 'flex',
                           }}
                         >
                           <FormattedMessage
@@ -1062,9 +1065,9 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   if (activity) {
                                     setSelectedActivity(activity);
                                     form.setFieldsValue({
-                                      taskName: activity.name,
                                       taskDescription: activity.description,
                                       taskDueDays: activity.defaultDueDays,
+                                      taskName: activity.name,
                                       taskQuestions: activity.questions.map(
                                         ({ id }) => id
                                       ),
@@ -1072,8 +1075,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                   }
                                 }}
                                 options={questionGroups.map(({ id, name }) => ({
-                                  value: id,
                                   label: name,
+                                  value: id,
                                 }))}
                               />
                             </Col>
@@ -1105,18 +1108,18 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <Row gutter={[8, 8]}>
                           <Col span={20}>
                             <Form.Item
-                              name="taskQuestions"
                               label={
                                 <FormattedMessage defaultMessage="Questions" />
                               }
+                              name="taskQuestions"
                             >
                               <Select
-                                mode="multiple"
                                 maxTagCount="responsive"
+                                mode="multiple"
                                 options={taskQuestions.map(
                                   ({ id, question }) => ({
-                                    value: id,
                                     label: question,
+                                    value: id,
                                   })
                                 )}
                               />
@@ -1124,13 +1127,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           </Col>
                           <Col>
                             <Form.Item
-                              name=""
                               // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                               label=" "
+                              name=""
                             >
                               <Button
-                                style={{ paddingBottom: 24 }}
                                 onClick={() => setNewQuestion(true)}
+                                style={{ paddingBottom: 24 }}
                               >
                                 <FormattedMessage defaultMessage="New Question" />
                               </Button>
@@ -1141,29 +1144,29 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <Row gutter={[8, 8]}>
                           <Col span={12}>
                             <Form.Item
-                              name="assigneeGroups"
                               label={
                                 <FormattedMessage defaultMessage="Select groups to get users from" />
                               }
+                              name="assigneeGroups"
                             >
                               <Select
                                 mode="multiple"
-                                options={groups}
                                 optionFilterProp="label"
+                                options={groups}
                               />
                             </Form.Item>
                           </Col>
                           <Col span={12}>
                             <Form.Item
-                              name="taskAssignee"
                               label={
                                 <FormattedMessage defaultMessage="Additional users to create activity for" />
                               }
+                              name="taskAssignee"
                             >
                               <Select
                                 mode="multiple"
-                                options={users}
                                 optionFilterProp="label"
+                                options={users}
                               />
                             </Form.Item>
                           </Col>
@@ -1180,8 +1183,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <Typography.Title
                           level={4}
                           style={{
-                            display: 'flex',
                             alignItems: 'center',
+                            display: 'flex',
                             paddingTop: 8,
                           }}
                         >
@@ -1189,8 +1192,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         </Typography.Title>
                         <Typography.Paragraph
                           style={{
-                            display: 'flex',
                             alignItems: 'center',
+                            display: 'flex',
                           }}
                         >
                           <FormattedMessage
@@ -1232,15 +1235,15 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <Row gutter={[8, 8]}>
                           <Col span={12}>
                             <Form.Item
-                              name="sendNotificationUsers"
                               label={
                                 <FormattedMessage defaultMessage="Additional users to send notification to. If none selected will use scheme users" />
                               }
+                              name="sendNotificationUsers"
                             >
                               <Select
                                 mode="multiple"
-                                options={users}
                                 optionFilterProp="label"
+                                options={users}
                               />
                             </Form.Item>
                           </Col>
@@ -1257,8 +1260,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <Typography.Title
                           level={4}
                           style={{
-                            display: 'flex',
                             alignItems: 'center',
+                            display: 'flex',
                             paddingTop: 8,
                           }}
                         >
@@ -1266,8 +1269,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         </Typography.Title>
                         <Typography.Paragraph
                           style={{
-                            display: 'flex',
                             alignItems: 'center',
+                            display: 'flex',
                           }}
                         >
                           <FormattedMessage
@@ -1309,15 +1312,15 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         <Row gutter={[8, 8]}>
                           <Col span={12}>
                             <Form.Item
-                              name="sendEmailUsers"
                               label={
                                 <FormattedMessage defaultMessage="Additional users to send email to" />
                               }
+                              name="sendEmailUsers"
                             >
                               <Select
                                 mode="multiple"
-                                options={users}
                                 optionFilterProp="label"
+                                options={users}
                               />
                             </Form.Item>
                           </Col>
@@ -1344,8 +1347,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <Select
                               options={Object.keys(IncidentPriority).map(
                                 (key) => ({
-                                  value: key,
                                   label: key,
+                                  value: key,
                                 })
                               )}
                             />
@@ -1356,8 +1359,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         label={
                           <FormattedMessage defaultMessage="Auto Approve incident?" />
                         }
-                        valuePropName="checked"
                         name="autoApprove"
+                        valuePropName="checked"
                       >
                         <Checkbox />
                       </Form.Item>
@@ -1368,7 +1371,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
             </>
           ) : null}
           <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+            <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
               <Col>
                 <Button disabled={saving} onClick={() => window.history.back()}>
                   {intl.formatMessage({
@@ -1377,7 +1380,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                 </Button>
               </Col>
               <Col>
-                <Button disabled={saving} type="primary" htmlType="submit">
+                <Button disabled={saving} htmlType="submit" type="primary">
                   {intl.formatMessage({
                     defaultMessage: 'Save',
                   })}
@@ -1387,37 +1390,37 @@ const WorkflowView: React.FC<WorkflowProps> = ({
           </Form.Item>
         </Form>
         <Drawer
+          onClose={() => onClose()}
+          open={activityTemplateForm}
           title={intl.formatMessage({
             defaultMessage: 'Create Activity Template',
           })}
-          open={activityTemplateForm}
           width={800}
-          onClose={() => onClose()}
         >
           {activityTemplateForm ? (
             <ActivityTemplateForm
-              update={updateTemplates}
-              onClose={() => onClose()}
-              initData={undefined}
               id={undefined}
+              initData={undefined}
+              onClose={() => onClose()}
+              update={updateTemplates}
             />
           ) : (
             <div />
           )}
         </Drawer>
         <Drawer
+          onClose={() => onClose()}
+          open={newQuestion}
           title={intl.formatMessage({
             defaultMessage: 'Add/Create Question',
           })}
-          open={newQuestion}
           width="800"
-          onClose={() => onClose()}
         >
           {newQuestion ? (
             <CreateQuestionContainer
+              ids={taskQuestions.map(({ id }) => id)}
               onClose={() => onClose()}
               update={createNewQuestion}
-              ids={taskQuestions.map(({ id }) => id)}
             />
           ) : (
             <div />

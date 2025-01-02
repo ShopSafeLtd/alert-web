@@ -39,6 +39,35 @@ import AddQuestionContainer from '../../../../components/form-components/addQues
 import UpdateQuestionContainer from '../../../../components/form-components/update-question-on-tag/UpdateQuestion.container';
 import BuildTree from '../../../../utils/tags/tree-helper';
 
+// const FromFieldsConfig = () => {
+//   const [configOpen, setConfigOpen] = useState(false);
+//
+//   const toggleConfigOpen = () => {
+//     setConfigOpen(!configOpen);
+//   };
+//
+//   return (
+//     <>
+//       <Button
+//         className="cancelDrag"
+//         onClick={toggleConfigOpen}
+//         shape="round"
+//         size="small"
+//         style={{ position: 'absolute', right: 10, top: 10 }}
+//       >
+//         <FontAwesomeIcon icon={faCogs} />
+//       </Button>
+//       <Modal onCancel={toggleConfigOpen} open={configOpen}>
+//         <Form>
+//           <Form.Item name="tooltip">
+//             <Input />
+//           </Form.Item>
+//         </Form>
+//       </Modal>
+//     </>
+//   );
+// };
+
 interface Props {
   addQuestion: boolean;
   data: ViewTagQuery | undefined;
@@ -159,6 +188,7 @@ const ViewTag = ({
           style={{ marginBottom: 0, outline: '1px solid #ccc' }}
           title={<FormattedMessage defaultMessage="CCTV" />}
         >
+          {/* <FromFieldsConfig />*/}
           <Row>
             <Col flex={1}>
               <FormattedMessage defaultMessage="CCTV" />
@@ -624,6 +654,7 @@ const ViewTag = ({
                   })}
                 >
                   <Button
+                    className="cancelDrag"
                     icon={<FontAwesomeIcon icon={faPenToSquare} />}
                     onClick={() => {
                       setSelectedQuestion(found?.qId || '');
@@ -640,6 +671,7 @@ const ViewTag = ({
                   })}
                 >
                   <Button
+                    className="cancelDrag"
                     icon={<FontAwesomeIcon icon={faTrash} />}
                     onClick={() => {
                       deleteQuestion(layout.i);
@@ -750,6 +782,7 @@ const ViewTag = ({
                 <ReactGridLayout
                   autoSize
                   cols={1}
+                  draggableCancel=".cancelDrag"
                   isBounded
                   isDraggable
                   isResizable={false}
@@ -790,6 +823,7 @@ const ViewTag = ({
               <ReactGridLayout
                 autoSize
                 cols={1}
+                draggableCancel=".cancelDrag"
                 isBounded
                 isDraggable
                 isResizable={false}

@@ -71,12 +71,58 @@ const CreateReport = ({ onClose }: Props) => {
     },
     {
       description: intl.formatMessage({
-        defaultMessage: 'Query and analyse offenders added in Alert.',
+        defaultMessage: 'Query and analyses offenders added in Alert.',
       }),
       name: intl.formatMessage({
         defaultMessage: 'Offender Table',
       }),
       value: ReportType.OffenderTable,
+    },
+    {
+      description: intl.formatMessage({
+        defaultMessage: 'Query and analyses incidents added in Alert.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'Incident Table',
+      }),
+      value: ReportType.IncidentTable,
+    },
+    {
+      description: intl.formatMessage({
+        defaultMessage: 'Query and analyses investigations added in Alert.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'Investigation Table',
+      }),
+      value: ReportType.InvestigationsTable,
+    },
+    {
+      description: intl.formatMessage({
+        defaultMessage: 'Query and analyses activities added in Alert.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'Activity Table',
+      }),
+      value: ReportType.ActivityTable,
+    },
+    {
+      description: intl.formatMessage({
+        defaultMessage: 'Query and analyses checklists added in Alert.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'Checklist Table',
+      }),
+      value: ReportType.CheckListTable,
+    },
+    {
+      description: intl.formatMessage({
+        defaultMessage:
+          'Query and analyses checklist questions added in Alert.',
+      }),
+      name: intl.formatMessage({
+        defaultMessage: 'Checklist Question Table',
+      }),
+      value: ReportType.CheckListQuestionTable,
     },
   ];
 

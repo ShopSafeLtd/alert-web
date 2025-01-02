@@ -21,6 +21,8 @@ query Article($where: ArticleWhereUniqueInput!) {
     createdAt
     updatedAt
     priority
+    completedAt
+    status
     tags {
       name
       id

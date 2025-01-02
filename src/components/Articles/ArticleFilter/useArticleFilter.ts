@@ -1,21 +1,22 @@
+import type { ArticlePriority, CompleteStatus } from 'graphql/types';
+import type { ArticleFilters } from 'state/data-model';
+import type { DateType } from 'types/DataType';
+
+import { useGroupsContext } from '#/context/groups-context';
+import { SortOrder } from 'graphql/types';
 import { useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'state';
-import type { DateType } from 'types/DataType';
-import type { ArticleFilters } from 'state/data-model';
-import { useGroupsContext } from '#/context/groups-context';
-
-import type { ArticlePriority } from 'graphql/types';
-import { SortOrder } from 'graphql/types';
 
 interface Return {
   clearFilters: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  setOrder: (value: SortOrder) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   filterVariables: ArticleFilters;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
+  setPriorityFilter: (value: ArticlePriority[]) => void;
+  setStatus: (value: CompleteStatus[]) => void;
 }
 
 const useArticleFilter = (): Return => {
@@ -80,27 +81,37 @@ const useArticleFilter = (): Return => {
       },
     });
   };
+  const setStatus = (values: CompleteStatus[]) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        status: values,
+      },
+    });
+  };
   const clearFilters = () => {
     setFilterState({
       variables: {
-        search: '',
-        gallery: [],
-        order: SortOrder.Desc,
         createdAt: undefined,
+        gallery: [],
         groups: [],
+        order: SortOrder.Desc,
         priorities: [],
+        search: '',
+        status: [],
       },
     });
   };
   return {
-    setOrder,
-    setPriorityFilter,
+    clearFilters,
+    filterVariables,
     groups,
     groupsLoading,
-    clearFilters,
-    setGroupsFilter,
     setCreatedAtFilter,
-    filterVariables,
+    setGroupsFilter,
+    setOrder,
+    setPriorityFilter,
+    setStatus,
   };
 };
 

@@ -36,6 +36,7 @@ export interface FormData {
   question: string;
   required: boolean;
   selectedId: string;
+  tooltip: string;
   type: AnswerType;
 }
 
@@ -67,6 +68,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     question: '',
     required: false,
     selectedId: '',
+    tooltip: '',
     type: AnswerType.String,
   });
   const { id: currentSchemeId } = useStoreState((state) => state.scheme);
@@ -127,6 +129,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
       question: values.question,
       required: values.required,
       tagId: id || '',
+      tooltip: values.tooltip ?? undefined,
       type: values.type,
     };
     void addQuestion({

@@ -1,8 +1,9 @@
 import type { AvailableLanguages } from '#/lang';
 
+import Loading from '#/components/loading';
 import { AvailableLanguagesConst } from '#/lang';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
-import { ClerkProvider } from '@clerk/clerk-react';
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/clerk-react';
 import {
   daDK,
   deDE,
@@ -25,7 +26,6 @@ import '~/yet-another-react-lightbox/dist/styles.css';
 
 import App from './App';
 import './index.css';
-import Auth0ProviderWithNavigate from './providers/Auth0Provider';
 import * as serviceWorker from './serviceWorker';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -118,11 +118,14 @@ const ClerkWithRouting = ({ children }: Props) => {
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Auth0ProviderWithNavigate>
-        <ClerkWithRouting>
+      <ClerkWithRouting>
+        <ClerkLoading>
+          <Loading />
+        </ClerkLoading>
+        <ClerkLoaded>
           <App />
-        </ClerkWithRouting>
-      </Auth0ProviderWithNavigate>
+        </ClerkLoaded>
+      </ClerkWithRouting>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

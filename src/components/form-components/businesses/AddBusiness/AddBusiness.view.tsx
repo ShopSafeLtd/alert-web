@@ -1,5 +1,9 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
+import type { LocationData, TagData } from 'types/DataType';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
@@ -11,64 +15,61 @@ import {
   Switch,
   Typography,
 } from 'antd';
-
-import { useIntl } from 'react-intl';
-import type { LocationData, TagData } from 'types/DataType';
-import LocatingCard from 'components/map/LocatingCard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddTag from 'components/form-components/tags/AddTag';
+import LocatingCard from 'components/map/LocatingCard';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { FormData } from './useAddBusiness';
-import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 
 interface Props {
-  onSubmit: (values: FormData) => void;
-  onClose: () => void;
-
-  saving: boolean;
-  form: FormInstance<FormData>;
-  location: LocationData | undefined;
-  setLocation: (value: LocationData) => void;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
   addTag: boolean;
+  form: FormInstance<FormData>;
+
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  location: LocationData | undefined;
+  onClose: () => void;
+  onSubmit: (values: FormData) => void;
+  saving: boolean;
+  setLocation: (value: LocationData) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
   toggleAddTag: () => void;
   updateNewTagData: (values: TagData) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
 }
 
 const AddBusiness = ({
-  onSubmit,
-  onClose,
-  saving,
-  form,
-  location,
-  setLocation,
-  tagsLoading,
-  tags,
   addTag,
-  toggleAddTag,
-  updateNewTagData,
+  form,
   groups,
   groupsLoading,
+  location,
+  onClose,
+  onSubmit,
+  saving,
+  setLocation,
+  tags,
+  tagsLoading,
+  toggleAddTag,
+  updateNewTagData,
 }: Props) => {
   const intl = useIntl();
 
   return (
     <Form<FormData>
+      form={form}
+      initialValues={{ publicName: true }}
       layout="vertical"
       onFinish={onSubmit}
-      initialValues={{ publicName: true }}
-      form={form}
     >
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({
               defaultMessage: 'Business Name',
             })}
+            name="name"
             rules={[{ required: true }]}
           >
             <Input disabled={saving} />
@@ -76,10 +77,10 @@ const AddBusiness = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="siteNumber"
             label={intl.formatMessage({
               defaultMessage: 'Site Number',
             })}
+            name="siteNumber"
           >
             <Input disabled={saving} />
           </Form.Item>
@@ -91,34 +92,34 @@ const AddBusiness = ({
           defaultMessage: 'Show business name in the system',
         })}
         name="publicName"
-        valuePropName="checked"
         style={{
-          marginBottom: 0,
           flexDirection: 'row',
           justifyItems: 'center',
+          marginBottom: 0,
         }}
+        valuePropName="checked"
       >
         <Switch
+          className="scheme-detail-switch"
           disabled={saving}
           style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
         />
       </Form.Item>
       <Row gutter={16}>
         <Col span={18}>
           <Form.Item
-            name="parent"
             label={intl.formatMessage({
               defaultMessage: 'Parent Business',
             })}
+            name="parent"
           >
             <BusinessesSelect
-              showSearch
               allowClear
               disabled={saving}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for a business...',
               })}
+              showSearch
             />
           </Form.Item>
         </Col>
@@ -126,24 +127,33 @@ const AddBusiness = ({
       <Row gutter={16}>
         <Col span={18}>
           <Form.Item
-            name="groups"
             label={intl.formatMessage({
               defaultMessage: 'Content Groups',
             })}
+            name="groups"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please select at least one group for the shop.',
+                }),
+                required: true,
+              },
+            ]}
             tooltip={intl.formatMessage({
               defaultMessage:
                 'select the content groups that are relevant to the new shop.',
             })}
           >
             <Select
-              loading={groupsLoading}
               disabled={saving}
-              mode="multiple"
+              loading={groupsLoading}
               maxTagCount={3}
+              mode="multiple"
               optionFilterProp="label"
             >
               {groups.map((el) => (
-                <Select.Option value={el.value} label={el.label} key={el.value}>
+                <Select.Option key={el.value} label={el.label} value={el.value}>
                   {el.label}
                 </Select.Option>
               ))}
@@ -153,32 +163,32 @@ const AddBusiness = ({
       </Row>
       <Row gutter={16}>
         <Col span={18}>
-          <Row gutter={16} align="middle">
+          <Row align="middle" gutter={16}>
             <Col span={18}>
               <Form.Item
-                name="tags"
                 label={intl.formatMessage({
                   defaultMessage: 'Tags',
                 })}
+                name="tags"
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'select of any tags that are relevant to the new shop or add your own.',
                 })}
               >
                 <Select
-                  loading={tagsLoading}
                   disabled={saving}
-                  mode="multiple"
+                  loading={tagsLoading}
                   maxTagCount={3}
+                  mode="multiple"
                   optionFilterProp="label"
                   // value={selectedItems}
                   // onChange={onSelectCustomGallery}
                 >
                   {tags.map((el) => (
                     <Select.Option
-                      value={el.value}
-                      label={el.label}
                       key={el.value}
+                      label={el.label}
+                      value={el.value}
                     >
                       {el.label}
                     </Select.Option>
@@ -189,11 +199,11 @@ const AddBusiness = ({
             <Col>
               <Button
                 disabled={saving}
-                style={{ color: 'red', padding: 8 }}
-                onClick={toggleAddTag}
                 icon={
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                 }
+                onClick={toggleAddTag}
+                style={{ color: 'red', padding: 8 }}
               >
                 {intl.formatMessage({
                   defaultMessage: 'Add Tag',
@@ -208,28 +218,28 @@ const AddBusiness = ({
         {intl.formatMessage({ defaultMessage: 'Location' })}
       </Typography.Text>
       <LocatingCard
-        width="100%"
         height={194}
         location={location}
         setLocation={setLocation}
+        width="100%"
       />
-      <Row style={{ marginTop: 10 }} gutter={16}>
+      <Row gutter={16} style={{ marginTop: 10 }}>
         <Col span={12}>
           <Form.Item
-            name="building"
             label={intl.formatMessage({
               defaultMessage: 'Building',
             })}
+            name="building"
           >
             <Input disabled={saving} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="street"
             label={intl.formatMessage({
               defaultMessage: 'Street',
             })}
+            name="street"
             // rules={[{ required: true }]}
           >
             <Input disabled={saving} />
@@ -239,10 +249,10 @@ const AddBusiness = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="townCity"
             label={intl.formatMessage({
               defaultMessage: 'Town/City',
             })}
+            name="townCity"
             // rules={[{ required: true }]}
           >
             <Input disabled={saving} />
@@ -250,10 +260,10 @@ const AddBusiness = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="county"
             label={intl.formatMessage({
               defaultMessage: 'County',
             })}
+            name="county"
           >
             <Input disabled={saving} />
           </Form.Item>
@@ -262,10 +272,10 @@ const AddBusiness = ({
       <Row>
         <Col span={12}>
           <Form.Item
-            name="postcode"
             label={intl.formatMessage({
               defaultMessage: 'Postcode',
             })}
+            name="postcode"
             // rules={[{ required: true }]}
           >
             <Input disabled={saving} />
@@ -281,10 +291,10 @@ const AddBusiness = ({
           </Col>
           <Col>
             <Button
-              loading={saving}
               disabled={saving}
-              type="primary"
               htmlType="submit"
+              loading={saving}
+              type="primary"
             >
               {intl.formatMessage({
                 defaultMessage: 'Create Business',
@@ -294,19 +304,19 @@ const AddBusiness = ({
         </Row>
       </Form.Item>
       <Drawer
+        onClose={toggleAddTag}
+        open={addTag}
         title={intl.formatMessage({
           defaultMessage: 'Add Business Tag',
         })}
-        open={addTag}
         width="600"
-        onClose={toggleAddTag}
       >
         <AddTag
-          update={updateNewTagData}
-          onClose={toggleAddTag}
           description={intl.formatMessage({
             defaultMessage: 'Tags are added to sort shops.',
           })}
+          onClose={toggleAddTag}
+          update={updateNewTagData}
         />
       </Drawer>
     </Form>

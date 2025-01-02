@@ -1,56 +1,58 @@
-import React from 'react';
-import useUpdateQuestion from './useUpdateQuestion';
-import View from './UpdateQuestion.view';
 import type { AnswerType } from 'graphql/types';
 
+import React from 'react';
+
+import View from './UpdateQuestion.view';
+import useUpdateQuestion from './useUpdateQuestion';
+
 export interface TagQuestion {
+  options?: string[];
+  question: string;
   questionId: string;
   tagQuestionId: string;
-  question: string;
   type: AnswerType;
-  options?: string[];
 }
 interface Props {
+  dependent?: {
+    dependentAnswer: string;
+    dependentOn: string;
+  };
   onClose: () => void;
+  questionId: string;
+  required: boolean;
+  tagQId: string;
+  tagQuestions: TagQuestion[];
   updateQuestionOnTag: (
     question: string,
     tagId: string,
     dependentOn?: {
-      tagQuestionId: string;
-      questionId: string;
       answer: string;
+      questionId: string;
+      tagQuestionId: string;
     }
   ) => void;
-  tagQId: string;
-  questionId: string;
-  required: boolean;
-  tagQuestions: TagQuestion[];
-  dependent?: {
-    dependentOn: string;
-    dependentAnswer: string;
-  };
 }
 
 /**
  for use on tags as it allows setting a dependant question within a tag
 * */
 const UpdateQuestionContainer = ({
-  onClose,
-  tagQId,
-  questionId,
-  updateQuestionOnTag,
-  required,
-  tagQuestions,
   dependent,
+  onClose,
+  questionId,
+  required,
+  tagQId,
+  tagQuestions,
+  updateQuestionOnTag,
 }: Props) => {
-  const { data, form, saving, loading, onSubmit, brands } = useUpdateQuestion({
-    onClose,
-    tagQId,
-    questionId,
-    updateQuestionOnTag,
-    required,
-    tagQuestions,
+  const { brands, data, form, loading, onSubmit, saving } = useUpdateQuestion({
     dependent,
+    onClose,
+    questionId,
+    required,
+    tagQId,
+    tagQuestions,
+    updateQuestionOnTag,
   });
   return (
     <View
@@ -58,9 +60,9 @@ const UpdateQuestionContainer = ({
       data={data}
       form={form}
       loading={loading}
+      onClose={onClose}
       onSubmit={onSubmit}
       saving={saving}
-      onClose={onClose}
       tagQuestions={tagQuestions}
     />
   );

@@ -22,6 +22,7 @@ const LoginView = () => {
 
   const route = searchParams.get('rd');
   const intl = useIntl();
+
   return (
     <RouteWrapper
       title={intl.formatMessage({

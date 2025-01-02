@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type { DocumentsQuery } from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { TableProps } from 'antd';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 
-import AddDocument from '#/components/form-components/documents/AddDocument';
+import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import {
   faFileArrowDown,
   faPlus,
@@ -48,7 +48,7 @@ interface Props {
   search: string;
   setSearch: (value: string) => void;
   toggleAddEvidence: () => void;
-  updateNewEvidenceList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateNewEvidenceList: MutationUpdaterFn<CreateDocumentsMutation>;
 }
 
 const EvidenceList = ({
@@ -128,7 +128,6 @@ const EvidenceList = ({
               dataIndex: 'tags',
               filters: tagFilter.length > 0 ? tagFilter : undefined,
               key: 'tags',
-              // @ts-ignore
               onFilter: (
                 value: boolean | number | string,
                 record: { tags: { id: string; name: string }[] }
@@ -248,7 +247,7 @@ const EvidenceList = ({
         })}
         width="600"
       >
-        <AddDocument
+        <AddDocuments
           isEvidence
           onClose={toggleAddEvidence}
           update={updateNewEvidenceList}

@@ -1,4 +1,10 @@
-import React from 'react';
+import {
+  faDownload,
+  faMagnifyingGlass,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -12,14 +18,9 @@ import {
   Table,
 } from 'antd';
 import TabContent from 'components/TabContent';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faDownload,
-  faMagnifyingGlass,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
 import type { ViewProps } from './types/Documents';
 
 const isImage = (url: string) => {
@@ -28,10 +29,10 @@ const isImage = (url: string) => {
 };
 const DocumentsView = ({
   data,
-  toggleAddDemDocument,
-  toggleAddDocument,
   demId,
   onDeleteDocument,
+  toggleAddDemDocument,
+  toggleAddDocument,
 }: ViewProps) => {
   const tags = new Set(
     data?.flatMap((document) => document.tags.map((tag) => tag.name)) || []
@@ -55,23 +56,19 @@ const DocumentsView = ({
                 <Menu
                   items={[
                     {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Add Evidence',
-                      }),
-                      key: '5',
                       icon: (
                         <FontAwesomeIcon
                           icon={faMagnifyingGlass}
                           style={{ marginRight: 5 }}
                         />
                       ),
+                      key: '5',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Add Evidence',
+                      }),
                       onClick: toggleAddDocument,
                     },
                     {
-                      label: intl.formatMessage({
-                        defaultMessage: 'Import DEM Evidence',
-                      }),
-                      key: '6',
                       disabled: !demId,
                       icon: (
                         <FontAwesomeIcon
@@ -79,6 +76,10 @@ const DocumentsView = ({
                           style={{ marginRight: 5 }}
                         />
                       ),
+                      key: '6',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Import DEM Evidence',
+                      }),
                       onClick: toggleAddDemDocument,
                     },
                   ]}
@@ -86,11 +87,11 @@ const DocumentsView = ({
               }
             >
               <Button
-                key="2"
-                type="primary"
                 icon={
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                 }
+                key="2"
+                type="primary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Documents',
@@ -102,47 +103,46 @@ const DocumentsView = ({
         <Table
           columns={[
             {
-              title: intl.formatMessage({
-                defaultMessage: 'Thumbnail',
-              }),
               dataIndex: 'thumbnail',
               key: 'thumbnail',
               // eslint-disable-next-line
               render: (thumbnail: string | null | undefined) =>
                 thumbnail ? (
-                  <Image src={thumbnail} width={180} alt="thumbnail" />
+                  <Image alt="thumbnail" src={thumbnail} width={180} />
                 ) : (
                   <Skeleton.Image style={{ width: 180 }} />
                 ),
+              title: intl.formatMessage({
+                defaultMessage: 'Thumbnail',
+              }),
             },
             {
+              dataIndex: 'name',
+              key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
               }),
-              dataIndex: 'name',
-              key: 'name',
             },
             {
-              title: intl.formatMessage({
-                defaultMessage: 'Tags',
-              }),
               dataIndex: 'tags',
-              key: 'tags',
               filters: tagsArray.map((tag) => ({
                 text: tag,
                 value: tag,
               })),
+              key: 'tags',
               onFilter: (
-                value: string | number | boolean,
+                value: boolean | number | string,
                 record: { tags: { text: string }[] }
               ) => record.tags.some((tag) => tag.text === value),
-
               render: (origTags: { text: string; value: string }[]) =>
                 origTags.map((tag) => tag.text).join(', '),
+
+              title: intl.formatMessage({
+                defaultMessage: 'Tags',
+              }),
             },
             // download button
             {
-              title: '',
               dataIndex: 'fileUrl',
               key: 'fileUrl',
               render: (fileUrl: string, item) => (
@@ -158,11 +158,11 @@ const DocumentsView = ({
                   </Col>
                   <Col>
                     <Popconfirm
+                      onConfirm={() => onDeleteDocument(item.key)}
+                      overlayInnerStyle={{ padding: 10 }}
                       title={intl.formatMessage({
                         defaultMessage: 'Are you sure?',
                       })}
-                      overlayInnerStyle={{ padding: 10 }}
-                      onConfirm={() => onDeleteDocument(item.key)}
                     >
                       <Button>
                         <FontAwesomeIcon icon={faTrash} />
@@ -171,23 +171,25 @@ const DocumentsView = ({
                   </Col>
                 </Row>
               ),
+              title: '',
             },
           ]}
-          size="small"
           dataSource={
             data?.map((document) => ({
-              key: document.id,
-              thumbnail:
-                document.thumbnailUrl ||
-                (isImage(document.url) ? document.url : undefined),
               fileUrl: document.url,
+              key: document.id,
               name: document.name,
               tags: document.tags.map((tag) => ({
                 text: tag.name,
                 value: tag.name,
               })),
+              thumbnail:
+                // document.articles[0].previewImage ||
+                document.thumbnailUrl ||
+                (isImage(document.url) ? document.url : undefined),
             })) || []
           }
+          size="small"
         />
       </Card>
     </TabContent>

@@ -1,4 +1,5 @@
-import React from 'react';
+import type { IncidentCardData } from 'types/DataType';
+
 import { faCircleXmark } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,7 +12,7 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { IncidentCardData } from 'types/DataType';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 const { Paragraph } = Typography;
@@ -20,52 +21,59 @@ interface Props {
   incident: IncidentCardData;
   removeIncident?: (value: string | undefined) => void;
   saving?: boolean;
+  triggerLightbox?: (elements: { src: string }[], index: number) => void;
 }
 
-const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
+const IncidentCard = ({
+  incident,
+  removeIncident,
+  saving,
+  triggerLightbox,
+}: Props) => {
   const intl = useIntl();
   return (
     <Card
+      bodyStyle={{
+        marginLeft: -2,
+        padding: 0,
+      }}
+      className="message-card"
+      size="small"
       style={{
         margin: removeIncident ? 0 : 5,
         overflow: 'hidden',
       }}
-      bodyStyle={{
-        padding: 0,
-        marginLeft: -2,
-      }}
-      size="small"
-      className="message-card"
     >
       <Row gutter={5} wrap={false}>
         {removeIncident && (
           <Popconfirm
-            placement="topLeft"
-            trigger="click"
-            title={intl.formatMessage({
-              defaultMessage: 'Remove the incident?',
-            })}
-            onConfirm={() => removeIncident(incident.id)}
-            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
             cancelText={intl.formatMessage({
               defaultMessage: 'No',
             })}
+            okText={intl.formatMessage({ defaultMessage: 'Yes' })}
+            onConfirm={() => removeIncident(incident.id)}
             overlayInnerStyle={{ padding: 10 }}
+            placement="topLeft"
+            title={intl.formatMessage({
+              defaultMessage: 'Remove the incident?',
+            })}
+            trigger="click"
           >
             <Button
-              size="small"
               disabled={saving}
-              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
-              shape="circle"
-              type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
+              shape="circle"
+              size="small"
+              style={{ position: 'absolute', right: -5, top: -5, zIndex: 100 }}
+              type="text"
             />
           </Popconfirm>
         )}
         <Col>
           {incident?.images && incident.images.length > 0 && (
-            <div style={{ width: 100, height: 100 }}>
+            <div style={{ height: 100, width: 100 }}>
               <WatermarkImage
+                triggerLightbox={triggerLightbox}
                 url={
                   incident.images[0].optimised || incident.images[0].url || ''
                 }
@@ -76,16 +84,16 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
         <Col
           flex={1}
           style={{
-            marginTop: 10,
             marginLeft: 5,
+            marginTop: 10,
           }}
         >
           <Paragraph
-            strong
             ellipsis
+            strong
             style={{
-              marginBottom: '0.5rem',
               fontSize: 15,
+              marginBottom: '0.5rem',
             }}
           >
             {incident.subject}
@@ -100,11 +108,11 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
             </Descriptions.Item>
           </Descriptions>
           <Paragraph
-            type="secondary"
             ellipsis
             style={{
               marginBottom: '0.5rem',
             }}
+            type="secondary"
           >
             {incident.description}
           </Paragraph>

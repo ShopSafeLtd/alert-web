@@ -2,7 +2,7 @@ import type { ArticleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
-import { ArticlePriority, SortOrder } from 'graphql/types';
+import { ArticlePriority, CompleteStatus, SortOrder } from 'graphql/types';
 // TP
 import moment from 'moment';
 import React from 'react';
@@ -26,6 +26,7 @@ interface Props {
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: SortOrder) => void;
   setPriorityFilter: (value: ArticlePriority[]) => void;
+  setStatus: (value: CompleteStatus[]) => void;
 }
 
 const ArticleFilter = ({
@@ -37,6 +38,7 @@ const ArticleFilter = ({
   setGroupsFilter,
   setOrder,
   setPriorityFilter,
+  setStatus,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
@@ -47,6 +49,7 @@ const ArticleFilter = ({
     groups: groupsFilter,
     order,
     priorities: priorityFilter,
+    status,
   } = filterVariables;
 
   return (
@@ -111,7 +114,7 @@ const ArticleFilter = ({
               defaultMessage: 'Created Between',
             })}
           </Typography.Paragraph>
-          <Form.Item name="date">
+          <Form.Item name="date" style={{ marginBottom: 0 }}>
             <RangePicker
               className={classes.select}
               onChange={(value) => {
@@ -124,6 +127,32 @@ const ArticleFilter = ({
               }}
             />
           </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={23}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            {intl.formatMessage({ defaultMessage: 'Status' })}
+          </Typography.Paragraph>
+          <Select
+            allowClear
+            className={classes.select}
+            maxTagCount={2}
+            mode="multiple"
+            onChange={setStatus}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Priority',
+            })}
+            size="small"
+            value={status}
+          >
+            <Select.Option value={CompleteStatus.Completed}>
+              {intl.formatMessage({ defaultMessage: 'Completed' })}
+            </Select.Option>
+            <Select.Option value={CompleteStatus.InProgress}>
+              {intl.formatMessage({ defaultMessage: 'InProgress' })}
+            </Select.Option>
+          </Select>
         </Col>
       </Row>
       <Row gutter={16}>

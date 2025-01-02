@@ -820,6 +820,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
 
   const imgChange: UploadProps['onChange'] = (info) => {
+    setSaving(true);
     if (info.file.response) {
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
@@ -838,6 +839,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setFileList(info.fileList);
       setImageChange(true);
     }
+    setSaving(false);
   };
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;

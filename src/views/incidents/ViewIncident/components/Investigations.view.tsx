@@ -77,7 +77,7 @@ const Investigations = ({ data, incidentId, loading }: Props) => {
             </Title>
           </Col>
 
-          <Col>
+          <Col className="no-print">
             <Button
               icon={
                 <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />

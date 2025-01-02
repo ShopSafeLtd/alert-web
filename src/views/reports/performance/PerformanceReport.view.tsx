@@ -268,6 +268,7 @@ const PerformanceReport = ({
                   <ReactGridLayout
                     autoSize
                     cols={2}
+                    draggableCancel=".cancelDrag"
                     isDraggable={editMode}
                     isResizable={editMode}
                     layout={layout}

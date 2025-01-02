@@ -40,16 +40,18 @@ export interface Props {
   log: () => void;
   offenders: OffenderData[];
   onGroupsChange: (groups: string[]) => void;
-  onSubmit: () => void;
+  onSubmit: (data?: FormData, draft?: boolean) => void;
   preview: () => void;
   previewImage: string;
   previewText: string;
   removeIncident: (id: string) => void;
   removeOffender: (id: string) => void;
+  saveDraft: (value: boolean) => void;
   selectedCategories: { value: string }[];
   selectedGroups: string[];
   selectedSchemes: string[];
   setPreviewImage: (arg0: string) => void;
+
   setPreviewText: (arg0: string) => void;
 }
 

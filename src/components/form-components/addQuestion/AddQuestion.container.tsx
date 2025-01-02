@@ -1,7 +1,9 @@
 import React from 'react';
-import useAddQuestion from './useAddQuestion';
-import View from './AddQuestion.view';
+
 import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
+
+import View from './AddQuestion.view';
+import useAddQuestion from './useAddQuestion';
 
 interface Props {
   onClose: () => void;
@@ -9,19 +11,19 @@ interface Props {
 }
 
 const AddQuestionContainer = ({ onClose, tagQuestions }: Props) => {
-  const { data, form, questionData, saving, loading, onSubmit, brands } =
+  const { brands, data, form, loading, onSubmit, questionData, saving } =
     useAddQuestion({ onClose, tagQuestions });
   return (
     <View
+      brands={brands}
       data={data}
       form={form}
-      questionData={questionData}
       loading={loading}
+      onClose={onClose}
       onSubmit={onSubmit}
+      questionData={questionData}
       saving={saving}
       tagQuestions={tagQuestions}
-      onClose={onClose}
-      brands={brands}
     />
   );
 };

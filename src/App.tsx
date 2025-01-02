@@ -5,6 +5,7 @@ import { LoadScript } from '@react-google-maps/api';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
 import { reactRouterV6Instrumentation } from '@sentry/react';
+import { LicenseManager } from 'ag-grid-charts-enterprise';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mixpanel from 'mixpanel-browser';
 import Views from 'navigation/router';
@@ -14,6 +15,8 @@ import React from 'react';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
 import {
   createRoutesFromChildren,
   matchRoutes,
@@ -25,6 +28,10 @@ import RouteWrapper from './navigation/utils/route-wrapper';
 import ApolloProvider from './providers/ApolloProvider';
 import { Store, ThemeConfig } from './state';
 
+const AG_KEY = import.meta.env.VITE_AG_KEY as string;
+
+LicenseManager.setLicenseKey(AG_KEY);
+
 const themes = {
   dark: '/css/dark-theme.css',
   light: '/css/light-theme.css',
@@ -35,10 +42,10 @@ const excludedNetwork = [
   'events.mapbox.com',
   'api-js.mixpanel.com',
   'shopsafealert.blob.core.windows.net',
-  'https://app.shopsafealert.co.uk/ingest/',
+  'https://app.shopsafe.io/ingest/',
 ];
 const options: Partial<PostHogConfig> = {
-  api_host: 'https://app.shopsafealert.co.uk/ingest',
+  api_host: 'https://app.shopsafe.io/ingest',
   disable_surveys: true,
   session_recording: {
     maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {

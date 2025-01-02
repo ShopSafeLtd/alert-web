@@ -110,7 +110,10 @@ const SchemeDetail = ({
             facialRedaction: data?.scheme?.facialRedaction,
             goodsMode: data?.scheme?.goodsMode,
             imagesRequiredOnOffenders: data?.scheme?.imagesRequiredOnOffenders,
+            incidentCustomQuestionRadio:
+              data?.scheme?.incidentCustomQuestionRadio,
             incidentRetention: data?.scheme?.incidentRetention,
+            incidentTypeTooltip: data?.scheme?.incidentTypeTooltip,
             name: data?.scheme?.name,
             needJustification: data?.scheme?.needJustification,
             offenderRetention: data?.scheme?.offenderRetention,
@@ -785,6 +788,21 @@ const SchemeDetail = ({
             </Form.Item>
             <Form.Item
               label={intl.formatMessage({
+                defaultMessage:
+                  'Only one custom question can be selected in incident form',
+              })}
+              name="incidentCustomQuestionRadio"
+              style={{ marginBottom: 0 }}
+              valuePropName="checked"
+            >
+              <Switch
+                className="scheme-detail-switch"
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
                 defaultMessage: 'Goods Mode',
               })}
               name="goodsMode"
@@ -806,6 +824,26 @@ const SchemeDetail = ({
                 </Radio.Button>
               </Radio.Group>
             </Form.Item>
+            {/* <Form.Item*/}
+            {/*  label={intl.formatMessage({*/}
+            {/*    defaultMessage: 'Tooltip Text for Incident Type',*/}
+            {/*  })}*/}
+            {/*  name="incidentTypeTooltip"*/}
+            {/*  rules={[*/}
+            {/*    {*/}
+            {/*      message: intl.formatMessage({*/}
+            {/*        defaultMessage:*/}
+            {/*          'Please enter tooltip text for incident type in the scheme.',*/}
+            {/*      }),*/}
+            {/*      required: true,*/}
+            {/*    },*/}
+            {/*  ]}*/}
+            {/* >*/}
+            {/*  <Input*/}
+            {/*    disabled={saving}*/}
+            {/*    style={{ height: '80%', marginTop: 5, width: '50%' }}*/}
+            {/*  />*/}
+            {/* </Form.Item>*/}
           </Card>
 
           <Form.Item>

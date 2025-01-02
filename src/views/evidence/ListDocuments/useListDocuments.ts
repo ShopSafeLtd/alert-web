@@ -1,9 +1,9 @@
+import type { CreateDocumentsMutation } from '#/graphql/documents/mutations/__generated__/create-documents.generated';
 import type {
   DocumentsQuery,
   DocumentsQueryVariables,
 } from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 
 import hasPermission from '#/utils/has-permission';
 import {
@@ -42,7 +42,7 @@ interface Return {
   search: string;
   setSearch: (value: string) => void;
   toggleAddEvidence: () => void;
-  updateNewEvidenceList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateNewEvidenceList: MutationUpdaterFn<CreateDocumentsMutation>;
 }
 
 const useDocumentList = (): Return => {
@@ -142,7 +142,7 @@ const useDocumentList = (): Return => {
   };
 
   // createDocument
-  const updateNewEvidenceList: MutationUpdaterFn<CreateDocumentMutation> = (
+  const updateNewEvidenceList: MutationUpdaterFn<CreateDocumentsMutation> = (
     store,
     { data: res }
   ) => {
@@ -159,14 +159,14 @@ const useDocumentList = (): Return => {
     if (existingData === null) return;
 
     let count = existingData?.documents?.totalCount || 0;
-    count += 1;
+    count += res.createDocuments.length;
+    const nodes = res.createDocuments.map((el) => ({
+      node: el,
+    }));
     store.writeQuery<DocumentsQuery, DocumentsQueryVariables>({
       data: {
         documents: {
-          edges: [
-            ...existingData.documents.edges,
-            { node: res.createDocument },
-          ],
+          edges: [...existingData.documents.edges, ...nodes],
           totalCount: count,
         },
       },

@@ -575,7 +575,7 @@ const useCreateEditArticle = (): Props => {
   const [saving, setSaving] = useState(false);
   const [editArticle] = useEditArticleMutation();
 
-  const onSubmit = async () => {
+  const onSubmit = async (_data?: FormData, draft?: boolean) => {
     setSaving(true);
     const selectedCategoryIds = selectedCategories
       .map((category) => {
@@ -612,6 +612,7 @@ const useCreateEditArticle = (): Props => {
             origFileName: file.fileName || file.name || '',
             url: file.url || '',
           })) || [],
+        draft: draft ?? false,
         groups: selectedGroups,
         htmlBody: htmlWithDefaultWidth || '',
         images: {
@@ -664,7 +665,6 @@ const useCreateEditArticle = (): Props => {
           onCompleted: (resData) => {
             if (resData && resData.editArticle) {
               setSaving(false);
-
               navigate(`/app/article/view/${resData?.editArticle.id}`);
             }
           },
@@ -692,6 +692,9 @@ const useCreateEditArticle = (): Props => {
           variables,
         }));
     setSaving(false);
+  };
+  const saveDraft = async () => {
+    await onSubmit(undefined, true);
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {
@@ -781,6 +784,8 @@ const useCreateEditArticle = (): Props => {
     previewText,
     removeIncident,
     removeOffender,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    saveDraft,
     selectedCategories,
     selectedGroups,
     selectedSchemes,

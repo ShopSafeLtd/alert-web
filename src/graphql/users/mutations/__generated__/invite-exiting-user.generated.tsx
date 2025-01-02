@@ -10,7 +10,7 @@ export type InviteExistingUserMutationVariables = Types.Exact<{
 }>;
 
 
-export type InviteExistingUserMutation = { __typename?: 'Mutation', inviteExistingUser: { __typename?: 'User', id: string, fullName: string, firstLetter: string, origName: string, origFirstLetter: string, email: string, publicName: boolean, reportToAllBusinesses: boolean, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, loginEvents: Array<{ __typename?: 'LoginEvent', loginTime: Date }> } };
+export type InviteExistingUserMutation = { __typename?: 'Mutation', inviteExistingUser: { __typename?: 'User', id: string, fullName: string, firstLetter: string, origName: string, origFirstLetter: string, email: string, publicName: boolean, reportToAllBusinesses?: boolean | null, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, loginEvents: Array<{ __typename?: 'LoginEvent', loginTime: Date }> } };
 
 
 export const InviteExistingUserDocument = gql`

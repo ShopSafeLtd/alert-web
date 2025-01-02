@@ -1,7 +1,8 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { LocationData } from 'types/DataType';
 
-import LocatingCard from '#/components/map/LocatingCard';
+import MapCard from '#/components/map/LocatingCard/MapCard.view';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import Activities from '#/views/incidents/ViewIncident/components/Activities.view';
 import Answers from '#/views/incidents/ViewIncident/components/Answers.view';
 import Approve from '#/views/incidents/ViewIncident/components/Approve.view';
@@ -61,6 +62,7 @@ const ViewIncident = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
 
   if (userRole === Role.User && data?.incident?.approved === false) {
     navigate('/app/incidents');
@@ -87,95 +89,116 @@ const ViewIncident = ({
                     deleteRights={deleteRights}
                     editAddress={editAddress}
                     editRights={editRights}
+                    handlePrint={handlePrint}
                     incidentId={incidentId}
+                    isPrinting={isPrinting}
                     onEditAddress={onEditAddress}
                     saving={saving}
                     toggleEditAddress={toggleEditAddress}
                     toggleEditImages={toggleEditImages}
                   />
-                  <Images
-                    data={data}
-                    editImages={editImages}
-                    editRights={editRights}
-                    incidentId={incidentId}
-                    loading={loading}
-                    saving={saving}
-                    setSaving={setSaving}
-                    toggleEditImages={toggleEditImages}
-                  />
-                  <div className={classes.details}>
-                    {loading ? (
-                      <Skeleton />
-                    ) : (
-                      <div className="incident-tab-content">
-                        <IncidentDetails
-                          data={data}
-                          editAddress={editAddress}
-                          editRights={editRights}
-                          loading={loading}
-                        />
-                        <Row gutter={16}>
-                          <Col xl={12} xs={24}>
-                            <LocatingCard
-                              height={194}
-                              location={data?.incident?.location}
-                              setLocation={onEditAddress}
-                              width="100%"
-                            />
-                          </Col>
-                          <Col xl={12} xs={24}>
-                            <Police data={data} loading={loading} />
-                          </Col>
-                        </Row>
-                        <Items
-                          data={data}
-                          deleteRights={deleteRights}
-                          editRights={editRights}
-                          incidentId={incidentId}
-                          loading={loading}
-                          saving={saving}
-                          setSaving={setSaving}
-                        />
-                        <Answers data={data} loading={loading} />
-                        <Offenders
-                          data={data}
-                          deleteRights={deleteRights}
-                          editRights={editRights}
-                          incidentId={incidentId}
-                          loading={loading}
-                          saving={saving}
-                          setSaving={setSaving}
-                        />
-                        <Vehicles
-                          data={data}
-                          deleteRights={deleteRights}
-                          editRights={editRights}
-                          incidentId={incidentId}
-                          loading={loading}
-                          saving={saving}
-                          setSaving={setSaving}
-                        />
-                        <CctvRecords data={data} loading={loading} />
-                        <Evidence
-                          data={data}
-                          deleteRights={deleteRights}
-                          editRights={editRights}
-                          incidentId={incidentId}
-                          loading={loading}
-                        />
-                        <Activities
-                          data={data}
-                          incidentId={incidentId}
-                          loading={loading}
-                          saving={saving}
-                        />
-                        <Investigations
-                          data={data}
-                          incidentId={incidentId}
-                          loading={loading}
-                        />
-                      </div>
-                    )}
+                  <div ref={componentRef}>
+                    <Images
+                      data={data}
+                      editImages={editImages}
+                      editRights={editRights}
+                      incidentId={incidentId}
+                      loading={loading}
+                      saving={saving}
+                      setSaving={setSaving}
+                      toggleEditImages={toggleEditImages}
+                    />
+                    <div className={classes.details}>
+                      {loading ? (
+                        <Skeleton />
+                      ) : (
+                        <div className="incident-tab-content">
+                          <IncidentDetails
+                            data={data}
+                            editAddress={editAddress}
+                            editRights={editRights}
+                            loading={loading}
+                          />
+                          <Row gutter={16}>
+                            {/* <Col xl={12} xs={24}>
+                              <LocatingCard
+                                height={194}
+                                location={data?.incident?.location}
+                                setLocation={onEditAddress}
+                                width="100%"
+                              />
+                            </Col> */}
+                            <Col xl={12} xs={24}>
+                              <MapCard
+                                height={194}
+                                isPrinting={isPrinting}
+                                viewport={{
+                                  latitude:
+                                    data?.incident?.location?.geoLat ?? 0,
+                                  longitude:
+                                    data?.incident?.location?.geoLng ?? 0,
+                                }}
+                                width="100%"
+                              />
+                            </Col>
+                            <Col xl={12} xs={24}>
+                              <Police data={data} loading={loading} />
+                            </Col>
+                          </Row>
+                          <Items
+                            data={data}
+                            deleteRights={deleteRights}
+                            editRights={editRights}
+                            incidentId={incidentId}
+                            loading={loading}
+                            saving={saving}
+                            setSaving={setSaving}
+                          />
+                          <Answers
+                            data={data}
+                            isPrinting={isPrinting}
+                            loading={loading}
+                          />
+                          <Offenders
+                            data={data}
+                            deleteRights={deleteRights}
+                            editRights={editRights}
+                            incidentId={incidentId}
+                            loading={loading}
+                            saving={saving}
+                            setSaving={setSaving}
+                          />
+                          <Vehicles
+                            data={data}
+                            deleteRights={deleteRights}
+                            editRights={editRights}
+                            incidentId={incidentId}
+                            loading={loading}
+                            saving={saving}
+                            setSaving={setSaving}
+                          />
+                          <CctvRecords data={data} loading={loading} />
+                          <Evidence
+                            data={data}
+                            deleteRights={deleteRights}
+                            editRights={editRights}
+                            incidentId={incidentId}
+                            loading={loading}
+                          />
+                          <Activities
+                            data={data}
+                            incidentId={incidentId}
+                            loading={loading}
+                            saving={saving}
+                          />
+                          <Investigations
+                            data={data}
+                            incidentId={incidentId}
+                            loading={loading}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Col>

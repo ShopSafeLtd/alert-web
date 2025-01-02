@@ -1,81 +1,82 @@
 import React from 'react';
+
 import View from './Workflow.view';
 import useWorkflowForm from './useWorkflowForm';
 
 const WorkflowFormContainer = () => {
   const {
-    onFinish,
-    form,
-    tagsSelected,
-    questionGroups,
-    taskQuestions,
-    questionsSelected,
-    questions,
-    setSelectedActivity,
-    tags,
-    valueSelected,
-    users,
-    setSelectedQuestions,
-    selectedQuestions,
-    availableQuestions,
-    setAvailableQuestions,
-    setActivityTemplateForm,
     activityTemplateForm,
-    updateTemplates,
-    onClose,
-    groups,
-    newQuestion,
+    availableQuestions,
     createNewQuestion,
-    loading,
-    setNewQuestion,
-    saving,
-    modelSelected,
-    lessThanSelected,
-    goodsTypeCheck,
-    goods,
     descriptionCheck,
+    form,
+    goods,
+    goodsTypeCheck,
+    groups,
     incidentTimeCountCheck,
-    taskOutcome,
+    lessThanSelected,
+    loading,
+    modelSelected,
+    newQuestion,
+    onClose,
+    onFinish,
+    questionGroups,
+    questions,
+    questionsSelected,
+    saving,
+    selectedQuestions,
     sendEmailCheck,
     sendNotificationCheck,
+    setActivityTemplateForm,
+    setAvailableQuestions,
+    setNewQuestion,
+    setSelectedActivity,
+    setSelectedQuestions,
+    tags,
+    tagsSelected,
+    taskOutcome,
+    taskQuestions,
+    updateTemplates,
+    users,
+    valueSelected,
   } = useWorkflowForm();
 
   return (
     <View
-      sendNotificationCheck={sendNotificationCheck}
-      sendEmailCheck={sendEmailCheck}
-      taskOutcome={taskOutcome}
-      incidentTimeCountCheck={incidentTimeCountCheck}
-      descriptionCheck={descriptionCheck}
-      goodsTypeCheck={goodsTypeCheck}
-      goods={goods}
-      lessThanSelected={lessThanSelected}
-      modelSelected={modelSelected}
-      setNewQuestion={setNewQuestion}
-      loading={loading}
-      newQuestion={newQuestion}
-      createNewQuestion={createNewQuestion}
-      groups={groups}
-      onFinish={onFinish}
-      form={form}
-      tagsSelected={tagsSelected}
-      questionGroups={questionGroups}
-      taskQuestions={taskQuestions}
-      questionsSelected={questionsSelected}
-      questions={questions}
-      setSelectedActivity={setSelectedActivity}
-      tags={tags}
-      valueSelected={valueSelected}
-      users={users}
-      setSelectedQuestions={setSelectedQuestions}
-      selectedQuestions={selectedQuestions}
-      availableQuestions={availableQuestions}
-      setAvailableQuestions={setAvailableQuestions}
-      setActivityTemplateForm={setActivityTemplateForm}
       activityTemplateForm={activityTemplateForm}
-      updateTemplates={updateTemplates}
+      availableQuestions={availableQuestions}
+      createNewQuestion={createNewQuestion}
+      descriptionCheck={descriptionCheck}
+      form={form}
+      goods={goods}
+      goodsTypeCheck={goodsTypeCheck}
+      groups={groups}
+      incidentTimeCountCheck={incidentTimeCountCheck}
+      lessThanSelected={lessThanSelected}
+      loading={loading}
+      modelSelected={modelSelected}
+      newQuestion={newQuestion}
       onClose={onClose}
+      onFinish={onFinish}
+      questionGroups={questionGroups}
+      questions={questions}
+      questionsSelected={questionsSelected}
       saving={saving}
+      selectedQuestions={selectedQuestions}
+      sendEmailCheck={sendEmailCheck}
+      sendNotificationCheck={sendNotificationCheck}
+      setActivityTemplateForm={setActivityTemplateForm}
+      setAvailableQuestions={setAvailableQuestions}
+      setNewQuestion={setNewQuestion}
+      setSelectedActivity={setSelectedActivity}
+      setSelectedQuestions={setSelectedQuestions}
+      tags={tags}
+      tagsSelected={tagsSelected}
+      taskOutcome={taskOutcome}
+      taskQuestions={taskQuestions}
+      updateTemplates={updateTemplates}
+      users={users}
+      valueSelected={valueSelected}
     />
   );
 };

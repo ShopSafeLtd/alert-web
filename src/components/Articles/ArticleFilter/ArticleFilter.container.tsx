@@ -1,29 +1,32 @@
 import React from 'react';
+
 import View from './ArticleFilter.view';
 import useArticleFilter from './useArticleFilter';
 
 const ArticleFilter = (): JSX.Element => {
   const {
     clearFilters,
-    setGroupsFilter,
-    setPriorityFilter,
-    setCreatedAtFilter,
-    setOrder,
+    filterVariables,
     groups,
     groupsLoading,
-    filterVariables,
+    setCreatedAtFilter,
+    setGroupsFilter,
+    setOrder,
+    setPriorityFilter,
+    setStatus,
   } = useArticleFilter();
 
   return (
     <View
       clearFilters={clearFilters}
-      setGroupsFilter={setGroupsFilter}
-      setPriorityFilter={setPriorityFilter}
-      setCreatedAtFilter={setCreatedAtFilter}
-      setOrder={setOrder}
+      filterVariables={filterVariables}
       groups={groups}
       groupsLoading={groupsLoading}
-      filterVariables={filterVariables}
+      setCreatedAtFilter={setCreatedAtFilter}
+      setGroupsFilter={setGroupsFilter}
+      setOrder={setOrder}
+      setPriorityFilter={setPriorityFilter}
+      setStatus={setStatus}
     />
   );
 };

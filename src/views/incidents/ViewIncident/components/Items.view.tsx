@@ -267,6 +267,7 @@ const Items = ({
           {editRights && (
             <Col>
               <Button
+                className="no-print"
                 icon={
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                 }
@@ -320,7 +321,7 @@ const Items = ({
                       dataIndex: 'Options',
                       key: 'Options',
                       render: (_, record) => (
-                        <Row gutter={8}>
+                        <Row className="no-print" gutter={8}>
                           {editRights && (
                             <Col>
                               <Tooltip

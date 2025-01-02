@@ -1,92 +1,101 @@
 import type { Theme } from 'configs/ThemeConfig';
+
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   card: {
     border: `1px solid ${theme.borderColor}`,
     borderRadius: 10,
+    height: 480,
+    margin: '5px 5px 10px 5px',
     marginBottom: 10,
     overflow: 'hidden',
-    margin: '5px 5px 10px 5px',
     paddingBottom: 10,
-    height: 480,
   },
-  image: {
-    width: '100%',
-    height: 250,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center center',
-  },
-  imageExpand: {
-    position: 'absolute',
-    right: 0,
-    top: '200px',
-    color: '#fff',
-    padding: '15px',
-    cursor: ' pointer',
-    fontSize: '1.6em',
-    transition: 'all 0.2s ease',
-    '&:hover': {
-      fontSize: '1.8em',
-    },
-  },
-  tags: {
-    position: 'absolute',
-    top: 15,
-    left: 20,
-    zIndex: 1,
-    width: '100%',
-  },
-  tag: {
-    background: 'gba(255, 255, 255, 1)',
-    borderColor: 'rgb(222, 68, 54)',
-    color: 'rgb(222, 68, 54)',
-    fontSize: '500',
-  },
-  controls: {
-    position: 'absolute',
-    top: 135,
-    left: 0,
-    right: 0,
-    zIndex: 2,
-    width: '100%',
-  },
-  control: {
-    color: '#fff',
-    padding: '15px',
-    cursor: ' pointer',
-    transition: 'all 0.2s ease',
-  },
-  menuButton: {
-    position: 'absolute',
-    top: 5,
-    right: 9,
-    zIndex: 100,
-    width: 45,
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 0,
-    borderTopLeftRadius: 0,
-  },
-
   content: {
     display: 'flex',
     flexDirection: 'column',
     // height: 220,
     margin: '10px 20px 0px',
   },
+  control: {
+    color: '#fff',
+    cursor: ' pointer',
+    padding: '15px',
+    transition: 'all 0.2s ease',
+  },
+  controls: {
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 135,
+    width: '100%',
+    zIndex: 2,
+  },
+  descIcon: {
+    marginRight: 10,
+  },
   details: { height: 150 },
+  image: {
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    height: 250,
+    width: '100%',
+  },
+  imageExpand: {
+    '&:hover': {
+      fontSize: '1.8em',
+    },
+    color: '#fff',
+    cursor: ' pointer',
+    fontSize: '1.6em',
+    padding: '15px',
+    position: 'absolute',
+    right: 0,
+    top: '200px',
+    transition: 'all 0.2s ease',
+  },
+  menuButton: {
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 8,
+    position: 'absolute',
+    right: 9,
+    top: 5,
+    width: 45,
+    zIndex: 100,
+  },
 
   skeletonImage: {
     height: '280px !important',
-    width: '100% !important',
     marginBottom: 10,
+    width: '100% !important',
+  },
+  status: {
+    fontSize: '1em',
+    height: '2em',
+    left: 10,
+    position: 'absolute',
+    top: 5,
+    transition: 'all 0.2s ease',
+  },
+
+  tag: {
+    background: 'gba(255, 255, 255, 1)',
+    borderColor: 'rgb(222, 68, 54)',
+    color: 'rgb(222, 68, 54)',
+    fontSize: '500',
   },
   tagRow: {
     overflowX: 'auto',
   },
-  descIcon: {
-    marginRight: 10,
+  tags: {
+    left: 20,
+    position: 'absolute',
+    top: 15,
+    width: '100%',
+    zIndex: 1,
   },
 }));
 
