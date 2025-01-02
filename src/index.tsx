@@ -1,8 +1,9 @@
 import type { AvailableLanguages } from '#/lang';
 
+import Loading from '#/components/loading';
 import { AvailableLanguagesConst } from '#/lang';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
-import { ClerkProvider } from '@clerk/clerk-react';
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/clerk-react';
 import {
   daDK,
   deDE,
@@ -118,7 +119,12 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ClerkWithRouting>
-        <App />
+        <ClerkLoading>
+          <Loading />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <App />
+        </ClerkLoaded>
       </ClerkWithRouting>
     </BrowserRouter>
   </React.StrictMode>,
