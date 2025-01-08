@@ -6,6 +6,8 @@ import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
 import { reactRouterV6Instrumentation } from '@sentry/react';
 import { LicenseManager } from 'ag-grid-charts-enterprise';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mixpanel from 'mixpanel-browser';
 import Views from 'navigation/router';
@@ -15,8 +17,6 @@ import React from 'react';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
 import {
   createRoutesFromChildren,
   matchRoutes,
@@ -47,6 +47,8 @@ const excludedNetwork = [
 const options: Partial<PostHogConfig> = {
   api_host: 'https://app.shopsafe.io/ingest',
   disable_surveys: true,
+  enable_recording_console_log: true,
+  secure_cookie: true,
   session_recording: {
     maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {
       if (excludedNetwork.some((network) => request.name.includes(network))) {
