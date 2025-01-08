@@ -9,7 +9,7 @@ export type CreateUserInDatabaseMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase: { __typename?: 'User', id: string, fullName: string, email?: string | null, mobileNumber?: string | null, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase: { __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, email?: string | null, mobileNumber?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, loginEvents: Array<{ __typename?: 'LoginEvent', loginTime: Date }> } };
 
 
 export const CreateUserInDatabaseDocument = gql`
@@ -17,6 +17,8 @@ export const CreateUserInDatabaseDocument = gql`
   createUserInDatabase(data: $data) {
     id
     fullName
+    status
+    publicName
     email
     mobileNumber
     businesses {
@@ -28,6 +30,9 @@ export const CreateUserInDatabaseDocument = gql`
     groups(where: $groupWhere) {
       id
       name
+    }
+    loginEvents {
+      loginTime
     }
   }
 }

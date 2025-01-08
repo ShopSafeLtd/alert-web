@@ -5,6 +5,8 @@ mutation createUserInDatabase(
   createUserInDatabase(data: $data) {
     id
     fullName
+    status
+    publicName
     email
     mobileNumber
     businesses {
@@ -16,6 +18,9 @@ mutation createUserInDatabase(
     groups(where: $groupWhere) {
       id
       name
+    }
+    loginEvents {
+      loginTime
     }
   }
 }
