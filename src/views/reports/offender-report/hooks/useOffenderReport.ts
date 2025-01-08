@@ -200,7 +200,7 @@ const useOffenderReport = (): Return => {
       crimeTypes: incident.crimeTypes?.map((t) => t.name).join(', ') || '',
       date: moment(incident.date).format('DD/MM/YYYY'),
       key: incident.id,
-      location: incident.location?.alias || '',
+      location: (incident.location?.alias || incident.business?.name) ?? '',
       policeAttended: incident.policeInvolved ? 'Yes' : 'No',
       policeReported: incident.policeReported ? 'Yes' : 'No',
       totalOffenders: incident.totalOffenders || 0,

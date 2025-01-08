@@ -21300,7 +21300,7 @@ export type UserMessage = {
 
 export type UserNew = {
   __typename?: 'UserNew';
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   hasAuth0Id: Scalars['Boolean'];
   id: Scalars['String'];
   newUser: Scalars['Boolean'];

@@ -200,6 +200,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
           [offenders.findIndex((offender) => offender.id === newData.id)]: {
             $set: {
               ...currentData,
+              address: newData.address,
               age: newData.age,
               alias: newData.alias,
               blank: false,
@@ -216,6 +217,7 @@ const useOffenders = ({ form, onChange, value }: Props): Return => {
               images: newData.images,
               infoSource: newData.infoSource,
               justification: newData.justification,
+              knowAddress: newData.knowAddress,
               knownFor: newData.knownFor,
               name: newData.name,
               peculiarities: newData.peculiarities,
