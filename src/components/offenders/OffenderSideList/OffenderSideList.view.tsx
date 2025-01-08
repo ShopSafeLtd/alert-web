@@ -46,6 +46,7 @@ const OffenderSideList = ({
               <div className={classes.image}>
                 <WatermarkImage
                   position={offender.images[0].position}
+                  rotation={offender.images[0].rotation}
                   url={offender.images[0].optimised}
                 />
               </div>

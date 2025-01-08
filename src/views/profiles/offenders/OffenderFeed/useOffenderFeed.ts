@@ -188,24 +188,31 @@ const useOffenderFeed = (): Return => {
     ...generateSorted(),
     first: compactView ? 48 : 12,
     where: {
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          alias: {
-            hasSome: [search],
-          },
-        },
-        {
-          referenceStr: {
-            contains: search,
-          },
-        },
-      ],
+      AND: search
+        ? [
+            {
+              OR: [
+                {
+                  name: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
+                {
+                  alias: {
+                    hasSome: [search],
+                  },
+                },
+                {
+                  referenceStr: {
+                    contains: search,
+                  },
+                },
+              ],
+            },
+          ]
+        : undefined,
+
       active: gallery.includes('ACTIVE')
         ? {
             equals: true,
