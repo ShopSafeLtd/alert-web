@@ -109,6 +109,15 @@ const EditGroup = ({
               defaultMessage: 'Description',
             })}
             name="description"
+            rules={[
+              {
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please select at a description for the group.',
+                }),
+                required: true,
+              },
+            ]}
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>
@@ -125,7 +134,7 @@ const EditGroup = ({
               {
                 message: intl.formatMessage({
                   defaultMessage:
-                    'Please select at least one user for the new group.',
+                    'Please select at least one user for the group.',
                 }),
                 required: true,
               },
