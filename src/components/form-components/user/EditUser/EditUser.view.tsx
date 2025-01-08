@@ -4,6 +4,7 @@ import type { UserQuery } from 'graphql/user/queries/__generated__/user.generate
 import type { BusinessData, SelectOptions } from 'types/DataType';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import validateMobileWithCountryCode from '#/utils/validate-contry-code';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -39,7 +40,6 @@ interface Props {
   groupsData: SelectOptions[] | undefined;
   groupsLoading: boolean;
   loading: boolean;
-
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -62,7 +62,6 @@ const EditUser = ({
   groupsLoading,
   loading,
   onClose,
-
   onSubmit,
   saving,
   selectedGroups,
@@ -108,6 +107,7 @@ const EditUser = ({
         incidentEmail: data?.user?.incidentEmail,
         incidentPush: data?.user?.incidentPush,
         messagePush: data?.user?.messagePush,
+        mobileNumber: data?.user?.mobileNumber,
         offenderEmail: data?.user?.offenderEmail,
         offenderPush: data?.user?.offenderPush,
         publicName: data?.user?.publicName,
@@ -151,16 +151,68 @@ const EditUser = ({
             })}
             name="email"
             rules={[
-              {
-                message: intl.formatMessage({
-                  defaultMessage:
-                    "'Please enter a email address for the user.'",
-                }),
-                required: true,
-              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  const mobile = getFieldValue('mobileNumber');
+                  if (value || mobile) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      intl.formatMessage({
+                        defaultMessage:
+                          'Please enter an email address or mobile number for the new user.',
+                      })
+                    )
+                  );
+                },
+              }),
             ]}
           >
             <Input disabled={saving} type="email" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Mobile Number',
+            })}
+            name="mobileNumber"
+            rules={[
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  const email = getFieldValue('email');
+                  if (!value && !email) {
+                    return Promise.reject(
+                      new Error(
+                        intl.formatMessage({
+                          defaultMessage:
+                            'Please enter an email address or mobile number for the new user.',
+                        })
+                      )
+                    );
+                  }
+                  if (value && !validateMobileWithCountryCode(value)) {
+                    return Promise.reject(
+                      new Error(
+                        intl.formatMessage({
+                          defaultMessage: `Invalid mobile number. Please include a valid country code such as +44.`,
+                        })
+                      )
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Make sure to format the mobile number with a country code and a space after it.',
+            })}
+          >
+            <Input disabled={saving} type="tel" />
           </Form.Item>
         </Col>
       </Row>

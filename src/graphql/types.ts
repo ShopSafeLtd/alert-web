@@ -3245,13 +3245,14 @@ export type CreateUserData = {
   businesses: BusinessCreateNestedManyWithoutUsersInput;
   chats?: InputMaybe<Array<UniqueId>>;
   defaultGroups?: InputMaybe<Array<UniqueId>>;
-  email: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
   forcePasswordReset?: InputMaybe<Scalars['Boolean']>;
   fullName: Scalars['String'];
   groups: Array<UniqueId>;
   incidentEmail?: InputMaybe<Scalars['Boolean']>;
   incidentPush?: InputMaybe<Scalars['Boolean']>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
+  mobileNumber?: InputMaybe<Scalars['String']>;
   offenderEmail?: InputMaybe<Scalars['Boolean']>;
   offenderPush?: InputMaybe<Scalars['Boolean']>;
   organisation?: InputMaybe<Scalars['String']>;
@@ -20586,7 +20587,7 @@ export type User = {
   defaultScheme?: Maybe<Scalars['String']>;
   demId?: Maybe<Scalars['String']>;
   disabled: Scalars['Boolean'];
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   expoPushTokens: Array<ExpoPushToken>;
   feedItems: Array<FeedItem>;
   firstLetter: Scalars['String'];
@@ -20613,6 +20614,7 @@ export type User = {
   messagePush: Scalars['Boolean'];
   messages: Array<Message>;
   mg11s: Array<Mg11>;
+  mobileNumber?: Maybe<Scalars['String']>;
   newSchemeNotifications: Array<Notification>;
   newUser: Scalars['Boolean'];
   notificationCount: Scalars['Int'];
@@ -21790,6 +21792,7 @@ export type UserUpdateInput = {
   incidentEmail?: InputMaybe<SetBooleanHelper>;
   incidentPush?: InputMaybe<SetBooleanHelper>;
   messagePush?: InputMaybe<SetBooleanHelper>;
+  mobileNumber?: InputMaybe<SetStringHelper>;
   newUser?: InputMaybe<SetBooleanHelper>;
   offenderEmail?: InputMaybe<SetBooleanHelper>;
   offenderPush?: InputMaybe<SetBooleanHelper>;

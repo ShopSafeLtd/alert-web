@@ -115,7 +115,7 @@ const NewUserRow = React.memo(
         if (existing)
           form.setFieldsValue({
             business: existing.businesses[0]?.id,
-            email: existing.email,
+            email: existing.email ?? '',
             fullName: existing.fullName,
             groups: existing.groups.map((item) => item.id),
             role: existing.schemes.find(
