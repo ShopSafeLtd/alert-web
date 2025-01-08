@@ -23,12 +23,13 @@ export interface FormData {
   businesses: SelectOptions[] | string[];
   chats: string[];
   defaultGroups: string[];
-  email: string;
+  email?: string;
   fullName: string;
   groups: string[];
   incidentEmail: boolean;
   incidentPush: boolean;
   messagePush: boolean;
+  mobileNumber?: string;
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
@@ -350,7 +351,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                     .map(({ id }) => ({ id })),
                 }
               : undefined,
-            email: { set: data.email },
+            email: data.email ? { set: data.email } : undefined,
             fullName: { set: data.fullName },
             groups: {
               connect: data.groups
@@ -367,6 +368,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             incidentEmail: { set: data.incidentEmail },
             incidentPush: { set: data.incidentPush },
             messagePush: { set: data.messagePush },
+            mobileNumber: data.mobileNumber
+              ? { set: data.mobileNumber }
+              : undefined,
             offenderEmail: { set: data.offenderEmail },
             offenderPush: { set: data.offenderPush },
             publicName: { set: data.publicName },

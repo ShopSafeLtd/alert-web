@@ -8,6 +8,7 @@ query User(
     id
     fullName
     email
+    mobileNumber
     status
     demId
     publicName

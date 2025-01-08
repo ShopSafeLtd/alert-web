@@ -9,6 +9,7 @@ query ViewUser(
     id
     fullName
     email
+    mobileNumber
     status
     demId
     publicName

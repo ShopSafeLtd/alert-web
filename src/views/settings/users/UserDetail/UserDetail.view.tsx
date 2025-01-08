@@ -462,6 +462,14 @@ const userDetail = ({
               >
                 {data?.user?.email}
               </Descriptions.Item>
+              {data?.user?.mobileNumber && (
+                <Descriptions.Item
+                  label={<FormattedMessage defaultMessage="Mobile Number" />}
+                  style={{ paddingBottom: 8 }}
+                >
+                  {data?.user?.mobileNumber}
+                </Descriptions.Item>
+              )}
               <Descriptions.Item
                 label={<FormattedMessage defaultMessage="Role" />}
                 style={{ paddingBottom: 8 }}
