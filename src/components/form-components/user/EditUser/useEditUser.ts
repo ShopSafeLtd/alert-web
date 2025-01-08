@@ -91,6 +91,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   });
 
   const { data: userData, loading } = useUserQuery({
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ user }) => {
       setSelectedRole(user?.schemes[0].role);
       setSelectedGroups(user?.groups.map(({ id }) => id));
@@ -165,7 +166,6 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log('edit user', data.role);
 
     if (userId) {
       const disconnectGroupsId = userData?.user?.groups
