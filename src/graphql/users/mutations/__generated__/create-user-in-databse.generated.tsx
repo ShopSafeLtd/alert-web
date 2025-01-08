@@ -9,7 +9,7 @@ export type CreateUserInDatabaseMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase: { __typename?: 'User', id: string, fullName: string, firstLetter: string, origName: string, origFirstLetter: string, email: string, publicName: boolean, reportToAllBusinesses?: boolean | null, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, loginEvents: Array<{ __typename?: 'LoginEvent', loginTime: Date }> } };
+export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase: { __typename?: 'User', id: string, fullName: string, email?: string | null, mobileNumber?: string | null, status?: Types.UserStatus | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 
 export const CreateUserInDatabaseDocument = gql`
@@ -17,12 +17,8 @@ export const CreateUserInDatabaseDocument = gql`
   createUserInDatabase(data: $data) {
     id
     fullName
-    firstLetter
-    origName
-    origFirstLetter
     email
-    publicName
-    reportToAllBusinesses
+    mobileNumber
     businesses {
       id
       name
@@ -32,13 +28,6 @@ export const CreateUserInDatabaseDocument = gql`
     groups(where: $groupWhere) {
       id
       name
-    }
-    approverGroups {
-      id
-      name
-    }
-    loginEvents {
-      loginTime
     }
   }
 }

@@ -29,12 +29,13 @@ export interface FormData {
   businesses: SelectOptions[] | string[];
   chats: string[];
   defaultGroups: string[];
-  email: string;
+  email?: string;
   fullName: string;
   groups: string[];
   incidentEmail: boolean;
   incidentPush: boolean;
   messagePush: boolean;
+  mobileNumber?: string;
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
@@ -145,7 +146,7 @@ const useAddUser = ({
                       value: id,
                     }))
                   : [],
-              email: user.email,
+              email: user.email ?? '',
               fullName: user.fullName,
               publicName: user.publicName,
               reportToAllBusinesses: user.reportToAllBusinesses ?? true,
@@ -481,6 +482,7 @@ const useAddUser = ({
             incidentEmail: data.incidentEmail,
             incidentPush: data.incidentPush,
             messagePush: data.messagePush,
+            mobileNumber: data.mobileNumber,
             offenderEmail: data.offenderEmail,
             offenderPush: data.offenderPush,
             publicName: data.publicName,
