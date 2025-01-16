@@ -97,6 +97,8 @@ if (import.meta.env.PROD) {
   });
 }
 
+export const PublicRoutes = ['/terms'];
+
 const App = (): JSX.Element => (
   <div className="App">
     <PostHogProvider

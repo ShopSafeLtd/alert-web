@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
+import { PublicRoutes } from '#/App';
 import { useTokenContext } from '#/context/token-context';
 import { cache } from '#/providers/cache';
 import { useStoreState } from '#/state';
@@ -33,8 +34,11 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const currentRoute = location.pathname;
   useEffect(() => {
     async function getSetToken() {
+      if (currentRoute && PublicRoutes.includes(currentRoute)) return;
       const t = await getToken(true);
       if (!t && !isSignedIn) {
+        if (currentRoute && PublicRoutes.includes(currentRoute)) return;
+
         navigate(
           currentRoute && currentRoute.includes('sign-in')
             ? '/sign-in'
