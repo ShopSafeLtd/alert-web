@@ -153,7 +153,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
         }
 
       if (networkError) {
-        console.log(`[Network error]: ${networkError}`);
+        console.error(`[Network error]: ${networkError}`);
         if ('statusCode' in networkError) {
           console.log(`Status code: ${networkError.statusCode}`);
         }
