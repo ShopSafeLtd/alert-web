@@ -16,6 +16,36 @@ const DebugView = () => {
   >('loading');
   const posthog = usePostHog();
   const { isSignedIn } = useAuth();
+  const [browserInfo, setBrowserInfo] = useState('');
+  const [screenSize, setScreenSize] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+
+  useEffect(() => {
+    const getBrowserInfo = () => {
+      const { userAgent } = navigator;
+
+      setBrowserInfo(userAgent);
+    };
+
+    getBrowserInfo();
+  }, []);
+
+  // Handle screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const checkApiHealth = async () => {
@@ -110,7 +140,7 @@ const DebugView = () => {
           ) : graphqlStatus === 'success' ? (
             <Badge status="success" text="Success" />
           ) : graphqlStatus === 'error' ? (
-            <Badge status="error" text="Failed - GraphQL" />
+            <Badge status="error" text="Failed" />
           ) : (
             <Badge status="warning" text="Blocked / Could Not Send Request" />
           )}
@@ -120,6 +150,10 @@ const DebugView = () => {
             status={isSignedIn ? 'success' : 'error'}
             text={isSignedIn ? 'Yes' : 'No'}
           />
+        </Descriptions.Item>
+        <Descriptions.Item label="Browser">{browserInfo}</Descriptions.Item>
+        <Descriptions.Item label="Screen Size">
+          {`${screenSize.width}px x ${screenSize.height}px`}
         </Descriptions.Item>
       </Descriptions>
     </Card>
