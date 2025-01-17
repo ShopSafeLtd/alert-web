@@ -5,6 +5,7 @@ import AppLayout from '#/layouts/app-layout';
 import { GuestLayout } from '#/layouts/guest-layout';
 import Terms from '#/navigation/auth-views/components/Terms';
 import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
+import DebugView from '#/views/Debug.view';
 import LoginView from '#/views/sign-in/Login.View';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
@@ -53,7 +54,7 @@ const Views = () => {
               <SentryRoutes>
                 <Route element={<Navigate to="app" />} path="*" />
                 <Route element={<Terms />} path="/terms/*" />
-
+                <Route element={<DebugView />} path={'/debug/*'} />
                 <Route
                   element={
                     <>
