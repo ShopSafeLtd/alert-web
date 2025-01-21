@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, useEffect, useMemo } from 'react';
+
 import { useAuth } from '@clerk/clerk-react';
 import jwtDecode from 'jwt-decode';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 
 interface TokenContextT {
-  token: string | null;
-  setToken: (token: string | null) => void;
-  getToken: (force?: boolean) => Promise<string | null>;
+  getToken: (force?: boolean) => Promise<null | string>;
+  setToken: (token: null | string) => void;
+  token: null | string;
 }
 
 interface JwtPayload {
@@ -27,17 +28,17 @@ export const useTokenContext = () => {
 export const TokenProvider: React.FC<{
   children?: ReactNode;
 }> = ({ children }) => {
-  const { getToken: getClerkToken, isSignedIn, isLoaded } = useAuth();
+  const { getToken: getClerkToken, isLoaded, isSignedIn } = useAuth();
 
-  const [token, setToken] = React.useState<string | null>(null);
-  const [expiredToken, setExpiredToken] = React.useState<string | null>(null);
-  const [expireAt, setExpireAt] = React.useState<number | null>(null);
+  const [token, setToken] = React.useState<null | string>(null);
+  const [expiredToken, setExpiredToken] = React.useState<null | string>(null);
+  const [expireAt, setExpireAt] = React.useState<null | number>(null);
 
   const getToken = (force?: boolean) =>
     getClerkToken({
       leewayInSeconds: 1800,
-      template: 'test',
       skipCache: force,
+      template: 'test',
     });
 
   useEffect(() => {
@@ -48,9 +49,19 @@ export const TokenProvider: React.FC<{
         setExpiredToken(token);
       }
     }
+    if (!token && !expireAt && isLoaded && isSignedIn) {
+      void getToken(true).then(
+        (t) => {
+          setToken(t);
+        },
+        () => {
+          setToken(null);
+        }
+      );
+    }
   }, [token, isLoaded, isSignedIn, expireAt]);
 
-  const value = useMemo(() => ({ token, setToken, getToken }), [token]);
+  const value = useMemo(() => ({ getToken, setToken, token }), [token]);
 
   // handle token expiration
   useEffect(() => {
