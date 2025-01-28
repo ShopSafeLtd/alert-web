@@ -2,7 +2,13 @@ import type { ReactNode } from 'react';
 
 import { useAuth } from '@clerk/clerk-react';
 import jwtDecode from 'jwt-decode';
-import React, { createContext, useContext, useEffect, useMemo } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 interface TokenContextT {
   getToken: (force?: boolean) => Promise<null | string>;
@@ -30,15 +36,15 @@ export const TokenProvider: React.FC<{
 }> = ({ children }) => {
   const { getToken: getClerkToken, isLoaded, isSignedIn } = useAuth();
 
-  const [token, setToken] = React.useState<null | string>(null);
-  const [expiredToken, setExpiredToken] = React.useState<null | string>(null);
-  const [expireAt, setExpireAt] = React.useState<null | number>(null);
+  const [token, setToken] = useState<null | string>(null);
+  const [expiredToken, setExpiredToken] = useState<null | string>(null);
+  const [expireAt, setExpireAt] = useState<null | number>(null);
 
   const getToken = (force?: boolean) =>
     getClerkToken({
       leewayInSeconds: 1800,
       skipCache: force,
-      template: 'test',
+      template: 'shopsafe',
     });
 
   useEffect(() => {
