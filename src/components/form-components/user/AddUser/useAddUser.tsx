@@ -93,7 +93,7 @@ const useAddUser = ({
   const schemeId = useStoreState((state) => state.scheme.id);
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [search, setSearch] = useState<null | string>(null);
+  const [_search, setSearch] = useState<null | string>(null);
   const [selectedRole, setSelectedRole] = useState<string>();
   const [selectedGroups, setSelectedGroups] = useState<string[]>();
   const [addBusinessVisible, setAddBusinessVisible] = useState(false);
@@ -114,6 +114,8 @@ const useAddUser = ({
       schemeId,
     },
   });
+
+  const email = Form.useWatch('email', form);
 
   useEffect(() => {
     if (business) {
@@ -156,10 +158,10 @@ const useAddUser = ({
         });
       }
     },
-    skip: search === null,
+    skip: !(email && email.includes('@')),
     variables: {
       where: {
-        email: search?.toLowerCase(),
+        email: email?.toLowerCase(),
       },
     },
   });
