@@ -25,10 +25,11 @@ const { Title } = Typography;
 
 interface Props {
   form: FormInstance<FormData>;
+  policeReporting: boolean;
   saving: boolean;
 }
 
-const IncidentCCTV = ({ form, saving }: Props) => {
+const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -78,7 +79,7 @@ const IncidentCCTV = ({ form, saving }: Props) => {
             />
           </Form.Item>
         </Col>
-        {cctvAvailable && (
+        {cctvAvailable && policeReporting && (
           <Col>
             <Form.Item
               label={intl.formatMessage({
@@ -90,7 +91,7 @@ const IncidentCCTV = ({ form, saving }: Props) => {
                   message: intl.formatMessage({
                     defaultMessage: 'Please answer this question.',
                   }),
-                  required: true,
+                  required: policeReporting,
                 },
               ]}
               tooltip={intl.formatMessage({
