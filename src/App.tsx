@@ -44,10 +44,29 @@ const excludedNetwork = [
   'shopsafealert.blob.core.windows.net',
   'https://app.shopsafe.io/ingest/',
 ];
+
+const hashParams = new URLSearchParams(window.location.hash.slice(1));
+const distinct_id = hashParams.get('distinct_id');
+const session_id = hashParams.get('session_id');
+
+if (distinct_id && session_id) {
+  localStorage.setItem('posthog_distinct_id', distinct_id);
+  localStorage.setItem('posthog_session_id', session_id);
+}
+
 const options: Partial<PostHogConfig> = {
   api_host: 'https://app.shopsafe.io/ingest',
+  bootstrap:
+    distinct_id && session_id
+      ? {
+          distinctID: distinct_id,
+          sessionID: session_id,
+        }
+      : undefined,
+  cross_subdomain_cookie: true,
   disable_surveys: true,
   enable_recording_console_log: true,
+  persistence: 'localStorage+cookie',
   secure_cookie: true,
   session_recording: {
     maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {
