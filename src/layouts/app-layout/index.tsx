@@ -49,6 +49,7 @@ const AppLayout = (): JSX.Element => {
   };
 
   const {
+    businesses,
     email,
     forcePasswordReset,
     fullName,
@@ -66,12 +67,26 @@ const AppLayout = (): JSX.Element => {
   }, []);
   useEffect(() => {
     if (id) {
+      const oldDistinctId = localStorage.getItem('posthog_distinct_id');
+      const sessionId = localStorage.getItem('posthog_session_id');
+
       // Identify sends an event, so you want may want to limit how often you call it
       posthog?.identify(id, {
         email,
         fullName,
+        organisation: businesses[0]?.fullName,
       });
       posthog?.group('tenant', currentScheme);
+
+      document.cookie = `shopsafe_user_id=${id}; path=/; domain=.shopsafe.io; Secure; SameSite=None`;
+
+      if (oldDistinctId) {
+        posthog.alias(oldDistinctId, id);
+      }
+
+      if (sessionId) {
+        posthog.capture('user_logged_in', { session_id: sessionId });
+      }
     }
   }, [posthog, id, email, currentScheme, fullName]);
   const onboardingRoute =
