@@ -41,8 +41,9 @@ import {
   PermissionModel,
   Role,
 } from 'graphql/types';
+import debounce from 'lodash/debounce';
 import moment from 'moment';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
@@ -341,6 +342,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     console.log(policeReporting, policeWitnessAtTime !== undefined);
     if (policeReporting && policeWitnessAtTime !== undefined) {
       const formData = form.getFieldsValue();
+      if (!formData.description) return;
       setGeneratingStatement(true);
       const statementData = await generateStatementBody({
         variables: {
@@ -405,8 +407,38 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedHandleStatementGeneration = useCallback(
+    debounce(() => {
+      void handleStatementGeneration();
+    }, 1000),
+    [
+      policeReporting,
+      policeMG11,
+      policeWitnessAtTime,
+      vehicles,
+      policeTimePassed,
+      policeReasonRemember,
+      policeItemsMO,
+      policeItemsLocation,
+      offenders,
+      policeObstructions,
+      policeKnownBefore,
+      goods,
+      involvedTags,
+      formTags,
+      policeIncidentDuration,
+      policeInside,
+      fellingTags,
+      policeDistanceFromIncident,
+      description,
+      dayOrNight,
+    ]
+  );
+
   useEffect(() => {
-    void handleStatementGeneration();
+    void debouncedHandleStatementGeneration();
+    return () => debouncedHandleStatementGeneration.cancel();
   }, [
     policeReporting,
     policeMG11,
@@ -697,7 +729,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : (data.groups?.map((id) => ({ id })) ?? []),
+                          : data.groups?.map((id) => ({ id })) ?? [],
                     },
                     hair: offender.hair || null,
                     height: offender.height || null,
@@ -798,7 +830,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     connect:
                       groups && groups.length === 1
                         ? groups.map(({ value: id }) => ({ id }))
-                        : (data.groups?.map((id) => ({ id })) ?? []),
+                        : data.groups?.map((id) => ({ id })) ?? [],
                   },
                   localId: vehicle.id,
                   make: vehicle.make,
@@ -815,7 +847,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : (data.groups?.map((id) => ({ id })) ?? []),
+                          : data.groups?.map((id) => ({ id })) ?? [],
                     },
                     make: { set: vehicle.make },
                     model: { set: vehicle.model },
@@ -940,7 +972,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             groups:
               groups && groups.length === 1
                 ? groups.map(({ value: id }) => ({ id }))
-                : (data.groups?.map((id) => ({ id })) ?? []),
+                : data.groups?.map((id) => ({ id })) ?? [],
             images: getImages(),
             investigationId: investigationId || null,
             items: data.goods

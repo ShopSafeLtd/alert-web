@@ -23,6 +23,7 @@
     "@ant-design/icons": "^4.7.0",
     "@apollo/client": "^3.7.14",
     "@auth0/auth0-react": "^1.10.2",
+    "@clerk/clerk-js": "^5.52.2",
     "@clerk/clerk-react": "^5.0.4",
     "@clerk/localizations": "^2.4.2",
     "@clerk/themes": "^2.1.6",

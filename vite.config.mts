@@ -5,8 +5,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 // import checker from 'vite-plugin-checker';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-import removeConsole from 'vite-plugin-remove-console';
-
 
 // local host launch fix
 import dns from 'node:dns';
@@ -33,7 +31,7 @@ export default defineConfig((configEnv) => {
       viteTsconfigPaths(),
       svgrPlugin(),
       // will remove console from prod builds, remove if testing is needed on live
-      removeConsole(),
+      // removeConsole(),
       // must be last
       sentryVitePlugin({
         org: 'nvoyy-group',

@@ -104,10 +104,14 @@ const ClerkWithRouting = ({ children }: Props) => {
 
   return (
     <ClerkProvider
+      clerkJSVersion={'^5.52.2'}
       localization={getLocal()}
       publishableKey={PUBLISHABLE_KEY}
       routerPush={(to) => navigate(to)}
       routerReplace={(to) => navigate(to, { replace: true })}
+      telemetry={{
+        debug: true,
+      }}
     >
       {children}
     </ClerkProvider>

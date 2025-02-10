@@ -2,8 +2,8 @@ import type { FormInstance } from 'antd';
 
 import MG11Sign from '#/components/form-components/MG11Sign/MG11Sign';
 import CheckTags from '#/components/form-components/check-tags/CheckTags.view';
+import WitnessAuthorView from '#/views/incidents/AddIncident/components/IncidentPolice/WitnessAuthor.view';
 import {
-  Avatar,
   Card,
   Col,
   Divider,
@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import { PoliceResponseTime } from 'graphql/types';
 import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import type { FormData } from '../../useAddIncident';
 
@@ -888,33 +888,21 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                       label={intl.formatMessage({
                         defaultMessage: 'Witness Author',
                       })}
-                      name="policeStatement"
+                      name="witnessAuthor"
+                      rules={[
+                        {
+                          message: intl.formatMessage({
+                            defaultMessage: 'Please update your details',
+                          }),
+                          required: true,
+                        },
+                      ]}
                     >
-                      <Card
-                        bodyStyle={{ padding: 10 }}
-                        style={{
-                          borderColor: 'lightgray',
-                          cursor: 'pointer',
-                          width: 200,
-                        }}
-                      >
-                        <Row align="middle" gutter={8}>
-                          <Col>
-                            <Avatar>
-                              <FormattedMessage defaultMessage="W" />
-                            </Avatar>
-                          </Col>
-                          <Col>
-                            <Typography.Text
-                              style={{
-                                fontSize: 16,
-                              }}
-                            >
-                              <FormattedMessage defaultMessage="Will Garrod" />
-                            </Typography.Text>
-                          </Col>
-                        </Row>
-                      </Card>
+                      <WitnessAuthorView
+                        detailsExist={() =>
+                          form.setFieldValue('witnessAuthor', true)
+                        }
+                      />
                     </Form.Item>
 
                     <Form.Item
