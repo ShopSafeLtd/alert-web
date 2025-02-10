@@ -1,0 +1,22 @@
+mutation UpsertContact($data: UpsertContactInput!) {
+    upsertContact(data: $data) {
+        id
+        address
+        dobPlace
+        formerName
+        gender
+        height
+        homeTel
+        mobileTel
+        occupation
+        postcode
+        prefContact
+        updatedAt
+        user {
+            email
+            fullName
+            id
+        }
+        workTel
+    }
+}

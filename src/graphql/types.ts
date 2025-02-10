@@ -688,6 +688,13 @@ export type AddressWhereUniqueInput = {
   userId?: InputMaybe<StringNullableFilter>;
 };
 
+export type AdminDashboardData = {
+  __typename?: 'AdminDashboardData';
+  businessCard: DataCard;
+  sessionCard: DataCard;
+  userCard: DataCard;
+};
+
 export enum Age {
   EighteenThirty = 'EIGHTEEN_THIRTY',
   FiftySixty = 'FIFTY_SIXTY',
@@ -1794,6 +1801,7 @@ export enum Build {
 export type Business = {
   __typename?: 'Business';
   actions: Array<Action>;
+  adminName: Scalars['String'];
   brands: Array<Scalars['String']>;
   brandsList: Array<Brand>;
   checklists: Array<Checklist>;
@@ -2644,12 +2652,23 @@ export type ConnectSetHelper = {
 
 export type Contact = {
   __typename?: 'Contact';
+  address?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
+  dobPlace?: Maybe<Scalars['String']>;
+  formerName?: Maybe<Scalars['String']>;
+  gender?: Maybe<Scalars['String']>;
+  height?: Maybe<Scalars['String']>;
+  homeTel?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   mg11: Array<Mg11>;
+  mobileTel?: Maybe<Scalars['String']>;
+  occupation?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  prefContact?: Maybe<Scalars['String']>;
   schemes: Array<Scheme>;
   updatedAt: Scalars['Date'];
   user?: Maybe<User>;
+  workTel?: Maybe<Scalars['String']>;
 };
 
 
@@ -3175,6 +3194,7 @@ export type CreateOffenderData = {
   race?: InputMaybe<Race>;
   scheme: Scalars['String'];
   sessionId?: InputMaybe<Scalars['String']>;
+  sourceDetails?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffenders>;
   targetedGoods?: InputMaybe<Array<Scalars['String']>>;
   vehicles?: InputMaybe<CreateOffenderVehicles>;
@@ -4194,6 +4214,16 @@ export type DashboardWhereUniqueInput = {
   name?: InputMaybe<StringNullableFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type DataCard = {
+  __typename?: 'DataCard';
+  change: Scalars['Float'];
+  graph: Scalars['JSON'];
+  graphEnd: Scalars['String'];
+  graphStart: Scalars['String'];
+  total: Scalars['Float'];
+  totalDuration: Scalars['String'];
 };
 
 export type DateRangeInput = {
@@ -5723,6 +5753,12 @@ export type ExpoPushTokenWhereInput = {
   userId?: InputMaybe<StringFilter>;
 };
 
+export type FaceDetectorComparisonInput = {
+  age?: InputMaybe<Scalars['Int']>;
+  boundingBox: Array<Scalars['Int']>;
+  gender?: InputMaybe<Scalars['String']>;
+};
+
 export type FaceInput = {
   blur: Scalars['Boolean'];
   height: Scalars['Float'];
@@ -5730,6 +5766,11 @@ export type FaceInput = {
   top: Scalars['Float'];
   width: Scalars['Float'];
 };
+
+export enum FaceSource {
+  Aws = 'AWS',
+  Custom = 'CUSTOM'
+}
 
 export enum Features {
   Activities = 'ACTIVITIES',
@@ -10554,6 +10595,7 @@ export type Mutation = {
   uploadImage: Image;
   uploadToImage: Image;
   upsertBrand: Brand;
+  upsertContact: Contact;
   upsertDemDevice: DemDevice;
   upsertDemGroup: DemGroup;
   upsertIncidentForm: IncidentForm;
@@ -11604,6 +11646,11 @@ export type MutationUpsertBrandArgs = {
 };
 
 
+export type MutationUpsertContactArgs = {
+  data: UpsertContactInput;
+};
+
+
 export type MutationUpsertDemDeviceArgs = {
   data: UpsertDemDevice;
 };
@@ -12619,6 +12666,7 @@ export type Offender = {
   schemes: Array<Scheme>;
   searchedMatches: Array<RekMatch>;
   skipNotification: Scalars['Boolean'];
+  sourceDetails?: Maybe<Scalars['String']>;
   subscribed: Scalars['Boolean'];
   subscribedUsers: Array<User>;
   tags: Array<Tag>;
@@ -12965,6 +13013,7 @@ export type OffenderCreateWithoutCrimeGroupsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   scheme: ConnectHelper;
+  sourceDetails?: InputMaybe<Scalars['String']>;
 };
 
 export type OffenderCreateWithoutIncidentsInput = {
@@ -12989,6 +13038,7 @@ export type OffenderCreateWithoutIncidentsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   scheme: ConnectHelper;
+  sourceDetails?: InputMaybe<Scalars['String']>;
 };
 
 export type OffenderLinkEdge = {
@@ -13092,6 +13142,7 @@ export type OffenderOrderByWithRelationInput = {
   schemeId?: InputMaybe<SortOrder>;
   searchedMatches?: InputMaybe<RekMatchOrderByRelationAggregateInput>;
   skipNotification?: InputMaybe<SortOrder>;
+  sourceDetails?: InputMaybe<SortOrder>;
   subscribedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
   tags?: InputMaybe<TagOrderByRelationAggregateInput>;
   targetedGoods?: InputMaybe<SortOrder>;
@@ -13214,6 +13265,7 @@ export type OffenderScalarWhereInput = {
   referenceStr?: InputMaybe<StringNullableFilter>;
   schemeId?: InputMaybe<StringFilter>;
   skipNotification?: InputMaybe<BoolFilter>;
+  sourceDetails?: InputMaybe<StringNullableFilter>;
   targetedGoods?: InputMaybe<StringNullableListFilter>;
   tempId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -13256,6 +13308,7 @@ export type OffenderScalarWhereWithAggregatesInput = {
   referenceStr?: InputMaybe<StringNullableWithAggregatesFilter>;
   schemeId?: InputMaybe<StringWithAggregatesFilter>;
   skipNotification?: InputMaybe<BoolWithAggregatesFilter>;
+  sourceDetails?: InputMaybe<StringNullableWithAggregatesFilter>;
   targetedGoods?: InputMaybe<StringNullableListFilter>;
   tempId?: InputMaybe<StringNullableWithAggregatesFilter>;
   updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
@@ -13339,6 +13392,7 @@ export type OffenderUpdateDetailsInput = {
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
+  sourceDetails?: InputMaybe<Scalars['String']>;
   tagIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
@@ -13370,6 +13424,7 @@ export type OffenderUpdateInput = {
   peculiarities?: InputMaybe<NullableSetStringHelper>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   scheme?: InputMaybe<ConnectHelper>;
+  sourceDetails?: InputMaybe<NullableSetStringHelper>;
   tags?: InputMaybe<TagUpdateManyWithoutIncidentsInput>;
   targetedGoods?: InputMaybe<OffenderUpdatealiasInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -13403,6 +13458,7 @@ export type OffenderUpdateWithoutIncidents = {
   origOffenderId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
+  sourceDetails?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   targetedGoods?: InputMaybe<Array<Scalars['String']>>;
 };
 
@@ -13470,6 +13526,7 @@ export type OffenderWhereInput = {
   schemeId?: InputMaybe<StringFilter>;
   searchedMatches?: InputMaybe<RekMatchListRelationFilter>;
   skipNotification?: InputMaybe<BoolFilter>;
+  sourceDetails?: InputMaybe<StringNullableFilter>;
   subscribedUsers?: InputMaybe<UserListRelationFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   targetedGoods?: InputMaybe<StringNullableListFilter>;
@@ -13540,6 +13597,7 @@ export type OffenderWhereUniqueInput = {
   schemeId?: InputMaybe<StringFilter>;
   searchedMatches?: InputMaybe<RekMatchListRelationFilter>;
   skipNotification?: InputMaybe<BoolFilter>;
+  sourceDetails?: InputMaybe<StringNullableFilter>;
   subscribedUsers?: InputMaybe<UserListRelationFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   targetedGoods?: InputMaybe<StringNullableListFilter>;
@@ -13750,6 +13808,7 @@ export type Query = {
   activityTableReport: ListActivityPerformance;
   address: Address;
   addresses: Array<Address>;
+  adminDashboard: AdminDashboardData;
   article: Article;
   articles: Array<Article>;
   auth0User: Auth0User;
@@ -13775,6 +13834,7 @@ export type Query = {
   checklistQuestionTableReport: ChecklistQuestionPerformance;
   checklistTableReport: ListChecklistPerformance;
   checklists: Array<Checklist>;
+  compareAwsToCustom: Scalars['Boolean'];
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
   crimeGroupPerformance: ListCrimeGroupPerformance;
@@ -13797,6 +13857,7 @@ export type Query = {
   goodsTypes: Array<GoodsType>;
   group: Group;
   groups: Array<Group>;
+  health: Scalars['Boolean'];
   image: Image;
   images: Array<Image>;
   incident: Incident;
@@ -13883,6 +13944,7 @@ export type Query = {
   scheme: Scheme;
   schemes: Array<Scheme>;
   searchOffenders: QuerySearchOffendersConnection;
+  sharingBusinesses: Array<SharingBusiness>;
   sharingConfig: SharingConfig;
   sharingConfigs: Array<SharingConfig>;
   shoe: Shoe;
@@ -13907,6 +13969,7 @@ export type Query = {
   userByEmail?: Maybe<User>;
   userChat: UserChat;
   userChats: Array<UserChat>;
+  userContact?: Maybe<Contact>;
   userContributions: ListUserContribution;
   userGroupRelay: QueryUserGroupRelayConnection;
   userIncidentCountGraph: Array<Graph>;
@@ -14138,6 +14201,13 @@ export type QueryChecklistsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: ChecklistWhereInput;
+};
+
+
+export type QueryCompareAwsToCustomArgs = {
+  awsFaces?: InputMaybe<Array<FaceDetectorComparisonInput>>;
+  awsTimeTaken: Scalars['Float'];
+  image: Scalars['String'];
 };
 
 
@@ -14937,6 +15007,14 @@ export type QuerySearchOffendersArgs = {
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<SearchOffenderSort>;
   where: SearchOffenderWhere;
+};
+
+
+export type QuerySharingBusinessesArgs = {
+  destination: Scalars['String'];
+  destinationGroups?: InputMaybe<Array<Scalars['String']>>;
+  origin: Scalars['String'];
+  originGroups?: InputMaybe<Array<Scalars['String']>>;
 };
 
 
@@ -17473,13 +17551,16 @@ export type SchemeTier = {
 
 export type SchemeUpdateInput = {
   activityAssignToUser?: InputMaybe<SetBooleanHelper>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   collectionIds?: InputMaybe<Array<Scalars['String']>>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   defaultBulletinEmails?: InputMaybe<SetBooleanHelper>;
   defaultBulletinPush?: InputMaybe<SetBooleanHelper>;
+  defaultGroups?: InputMaybe<Array<Scalars['String']>>;
   defaultIncidentEmail?: InputMaybe<SetBooleanHelper>;
   defaultIncidentPush?: InputMaybe<SetBooleanHelper>;
   defaultMessagePush?: InputMaybe<SetBooleanHelper>;
@@ -17489,6 +17570,7 @@ export type SchemeUpdateInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<SetBooleanHelper>;
   defaultSubscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
   demCompanyId?: InputMaybe<SetStringHelper>;
+  disableGalleryOnNative?: InputMaybe<Scalars['Boolean']>;
   facialDetection?: InputMaybe<SetBooleanHelper>;
   facialRecognition?: InputMaybe<SetBooleanHelper>;
   facialRedaction?: InputMaybe<SetBooleanHelper>;
@@ -17506,6 +17588,7 @@ export type SchemeUpdateInput = {
   reportOnly?: InputMaybe<SetBooleanHelper>;
   requireSiteNumberForUsers?: InputMaybe<SetBooleanHelper>;
   restrictIncidentAccess?: InputMaybe<SetBooleanHelper>;
+  taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
   useBusinessGroupsOnIncident?: InputMaybe<SetBooleanHelper>;
 };
 
@@ -17982,6 +18065,12 @@ export type ShareDataInput = {
   offender?: InputMaybe<UniqueId>;
 };
 
+export type SharingBusiness = {
+  __typename?: 'SharingBusiness';
+  label: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
+};
+
 export type SharingConfig = {
   __typename?: 'SharingConfig';
   businessMap: Scalars['JSON'];
@@ -17999,9 +18088,9 @@ export type SharingConfig = {
 
 export type SharingConfigConditionsInput = {
   anyAll: AnyAll;
-  businesses: StringArrayConditionInput;
-  groups: StringArrayConditionInput;
-  tags: StringArrayConditionInput;
+  businesses?: InputMaybe<StringArrayConditionInput>;
+  groups?: InputMaybe<StringArrayConditionInput>;
+  tags?: InputMaybe<StringArrayConditionInput>;
 };
 
 export type SharingConfigCreateInput = {
@@ -20507,6 +20596,22 @@ export type UpsertBrand = {
   description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   schemeId: Scalars['String'];
+};
+
+export type UpsertContactInput = {
+  address?: InputMaybe<Scalars['String']>;
+  dobPlace?: InputMaybe<Scalars['String']>;
+  formerName?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Scalars['String']>;
+  height?: InputMaybe<Scalars['String']>;
+  homeTel?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  mobileTel?: InputMaybe<Scalars['String']>;
+  occupation?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  prefContact?: InputMaybe<Scalars['String']>;
+  userId: Scalars['String'];
+  workTel?: InputMaybe<Scalars['String']>;
 };
 
 export type UpsertDemDevice = {
