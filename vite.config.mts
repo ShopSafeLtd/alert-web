@@ -3,8 +3,12 @@ import React from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
+// import checker from 'vite-plugin-checker';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
+
+// local host launch fix
 import dns from 'node:dns';
+
 import path from 'path';
 
 dns.setDefaultResultOrder('verbatim');
@@ -16,7 +20,6 @@ const pathResolve = (pathStr: string) => {
 export default defineConfig((configEnv) => {
   const { mode } = configEnv;
   const env = loadEnv(mode, process.cwd(), '');
-
   return {
     plugins: [
       React({
@@ -27,15 +30,17 @@ export default defineConfig((configEnv) => {
       envCompatible(),
       viteTsconfigPaths(),
       svgrPlugin(),
-      // Remove console.logs in production but keep warnings/errors
+      // will remove console from prod builds, remove if testing is needed on live
       // removeConsole(),
-      // Must be last
+      // must be last
       sentryVitePlugin({
         org: 'nvoyy-group',
         project: 'alert-web',
         disable: mode === 'development' || !env.SENTRY_AUTH_TOKEN,
+        // include: './build',
         authToken: env.SENTRY_AUTH_TOKEN,
         sourcemaps: {
+          // Specify the directory containing build artifacts
           assets: './build/**',
           ignore: '*/tinymce/**',
         },
@@ -43,27 +48,16 @@ export default defineConfig((configEnv) => {
     ],
     define: {
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
-      __BUILD_DATE__: JSON.stringify(new Date().toISOString()), // Force cache busting
     },
     build: {
       outDir: 'build',
       sourcemap: true,
-      chunkSizeWarningLimit: 1000, // Avoid chunk warning
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              const modules = ['react', 'react-dom', '@clerk/clerk-js'];
-              const chunk = modules.find((module) => id.includes(module));
-              return chunk ? `vendor-${chunk.replace('@', '')}` : 'vendor';
-            }
-          },
-        },
-      },
     },
     resolve: {
       alias: [
         { find: '@', replacement: path.resolve(__dirname, 'src') },
+        // fix less import by: @import ~
+        // https://github.com/vitejs/vite/issues/2185#issuecomment-784637827
         { find: /^~/, replacement: pathResolve('./node_modules') },
       ],
     },
@@ -78,12 +72,6 @@ export default defineConfig((configEnv) => {
       open: true,
       port: 3000,
       host: 'localhost',
-      hmr: {
-        timeout: 30000, // Extend timeout to prevent chunk loading errors
-      },
-    },
-    optimizeDeps: {
-      include: ['@clerk/clerk-js'], // Preload Clerk.js to avoid dynamic import failures
     },
   };
 });
