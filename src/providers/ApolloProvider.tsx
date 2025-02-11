@@ -34,10 +34,14 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const currentRoute = location.pathname;
   useEffect(() => {
     async function getSetToken() {
-      if (currentRoute && PublicRoutes.includes(currentRoute)) return;
+      const isPublicRoute = currentRoute
+        ? PublicRoutes.some((route) => currentRoute.startsWith(route))
+        : false;
+
+      if (currentRoute && isPublicRoute) return;
       const t = await getToken(true);
       if (!t && !isSignedIn) {
-        if (currentRoute && PublicRoutes.includes(currentRoute)) return;
+        if (currentRoute && isPublicRoute) return;
 
         navigate(
           currentRoute && currentRoute.includes('sign-in')

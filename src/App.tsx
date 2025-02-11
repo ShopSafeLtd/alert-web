@@ -96,7 +96,7 @@ if (import.meta.env.PROD) {
   });
 }
 
-export const PublicRoutes = ['/terms', '/debug'];
+export const PublicRoutes = ['/terms', '/debug', '/ext'];
 
 const App = (): JSX.Element => (
   <div className="App">
