@@ -140,6 +140,7 @@ export interface FormData {
   policeRef?: string;
   policeReported?: boolean;
   policeResponse?: PoliceResponseTime;
+  policeSign?: string;
   policeStatement?: string;
   policeTimePassed?: string;
   policeWillingCourt?: boolean;
@@ -344,6 +345,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       const formData = form.getFieldsValue();
       if (!formData.description) return;
       setGeneratingStatement(true);
+
       const statementData = await generateStatementBody({
         variables: {
           data: {
@@ -931,7 +933,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         }
         return undefined;
       };
-
       void createIncident({
         variables: {
           data: {
@@ -1026,6 +1027,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             policeRef: data.policeRef,
             policeReported: data.policeReported,
             policeResponse: data.policeResponse,
+            policeSign: data.policeSign,
             policeStatement: data.policeStatement,
             policeTimePassed: data.policeTimePassed,
             policeWillingCourt: data.policeWillingCourt,
