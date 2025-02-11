@@ -3010,6 +3010,7 @@ export type CreateIncidentData = {
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
   policeResponse?: InputMaybe<PoliceResponseTime>;
+  policeSign?: InputMaybe<Scalars['String']>;
   policeStatement?: InputMaybe<Scalars['String']>;
   policeTimePassed?: InputMaybe<Scalars['String']>;
   policeWillingCourt?: InputMaybe<Scalars['Boolean']>;
