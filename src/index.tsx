@@ -1,7 +1,9 @@
 import type { AvailableLanguages } from '#/lang';
+import type { ClerkProp } from '@clerk/clerk-react';
 
 import { AvailableLanguagesConst } from '#/lang';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
+import { Clerk } from '@clerk/clerk-js';
 import { ClerkProvider } from '@clerk/clerk-react';
 import {
   daDK,
@@ -16,7 +18,7 @@ import {
   ptPT,
   svSE,
 } from '@clerk/localizations';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 
@@ -101,9 +103,22 @@ interface Props {
 
 const ClerkWithRouting = ({ children }: Props) => {
   const navigate = useNavigate();
+  const [clerk, setClerk] = useState<ClerkProp | null>(null);
+
+  useEffect(() => {
+    const initializeClerk = async () => {
+      const clerkInstance = new Clerk(PUBLISHABLE_KEY);
+      await clerkInstance.load();
+      setClerk(clerkInstance as unknown as ClerkProp);
+    };
+
+    void initializeClerk();
+  }, []);
+  if (!clerk) return null; // Prevent rendering before Clerk is fully loaded
 
   return (
     <ClerkProvider
+      Clerk={clerk}
       clerkJSVersion={'^5.52.2'}
       localization={getLocal()}
       publishableKey={PUBLISHABLE_KEY}
