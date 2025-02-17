@@ -13,7 +13,6 @@ import Views from 'navigation/router';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import React from 'react';
-import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {
@@ -25,16 +24,11 @@ import {
 
 import RouteWrapper from './navigation/utils/route-wrapper';
 import ApolloProvider from './providers/ApolloProvider';
-import { Store, ThemeConfig } from './state';
+import { Store } from './state';
 
 const AG_KEY = import.meta.env.VITE_AG_KEY as string;
 
 LicenseManager.setLicenseKey(AG_KEY);
-
-const themes = {
-  dark: '/css/dark-theme.css',
-  light: '/css/light-theme.css',
-};
 
 const excludedNetwork = [
   'api.mapbox.com',
@@ -99,26 +93,20 @@ if (import.meta.env.PROD) {
 export const PublicRoutes = ['/terms', '/debug', '/ext'];
 
 const App = (): JSX.Element => (
-  <div className="App">
+  <div>
     <PostHogProvider
       apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
       options={options}
     >
-      <ThemeSwitcherProvider
-        defaultTheme={ThemeConfig.currentTheme}
-        insertionPoint="styles-insertion-point"
-        themeMap={themes}
-      >
-        <TokenProvider>
-          <Store>
-            <ApolloProvider>
-              <RouteWrapper title={undefined}>
-                <Views />
-              </RouteWrapper>
-            </ApolloProvider>
-          </Store>
-        </TokenProvider>
-      </ThemeSwitcherProvider>
+      <TokenProvider>
+        <Store>
+          <ApolloProvider>
+            <RouteWrapper title={undefined}>
+              <Views />
+            </RouteWrapper>
+          </ApolloProvider>
+        </Store>
+      </TokenProvider>
     </PostHogProvider>
   </div>
 );

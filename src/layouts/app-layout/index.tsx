@@ -10,7 +10,6 @@ import { Grid, Layout } from 'antd';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 import SideNav from 'components/layout-components/AntD/navigation/SideNav';
 import navigationConfig from 'configs/NavigationConfig';
-// import PageHeader from 'components/layout-components/AntD/PageHeader';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
 import React, { useEffect } from 'react';
