@@ -1,6 +1,7 @@
 import type { AvailableLanguages } from '#/lang';
 import type { ClerkProp } from '@clerk/clerk-react';
 
+import Loading from '#/components/shared-components/AntD/Loading';
 import { AvailableLanguagesConst } from '#/lang';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
 import { Clerk } from '@clerk/clerk-js';
@@ -19,6 +20,7 @@ import {
   svSE,
 } from '@clerk/localizations';
 import React, { useEffect, useState } from 'react';
+import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 
@@ -28,6 +30,11 @@ import '~/yet-another-react-lightbox/dist/styles.css';
 import App from './App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
+
+const themes = {
+  dark: '/css/dark-theme.css',
+  light: '/css/light-theme.css',
+};
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -114,8 +121,7 @@ const ClerkWithRouting = ({ children }: Props) => {
 
     void initializeClerk();
   }, []);
-  if (!clerk) return null; // Prevent rendering before Clerk is fully loaded
-
+  if (!clerk) return <Loading cover={'content'} />;
   return (
     <ClerkProvider
       Clerk={clerk}
@@ -136,9 +142,17 @@ const ClerkWithRouting = ({ children }: Props) => {
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ClerkWithRouting>
-        <App />
-      </ClerkWithRouting>
+      <div className="App">
+        <ThemeSwitcherProvider
+          defaultTheme={'dark'}
+          insertionPoint="styles-insertion-point"
+          themeMap={themes}
+        >
+          <ClerkWithRouting>
+            <App />
+          </ClerkWithRouting>
+        </ThemeSwitcherProvider>
+      </div>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
