@@ -79,9 +79,11 @@ interface IncidentReport {
   storeDetails: StoreDetails;
   vehicles: Vehicle[];
 }
+
 const useStyles = createUseStyles({
   imageUrl: {
-    wordBreak: 'break-all',
+    marginBottom: 10,
+    maxWidth: '100%',
   },
   list: {
     paddingLeft: 20,
@@ -253,9 +255,12 @@ const IncidentReportPrint = () => {
         <div className={classes.section}>
           <div className={classes.title}>Images</div>
           {incidentData.images.map((image, index) => (
-            <p className={classes.imageUrl} key={index}>
-              {image}
-            </p>
+            <img
+              alt={`Incident image ${index + 1}`}
+              className={classes.imageUrl}
+              key={index}
+              src={image}
+            />
           ))}
         </div>
       </div>
