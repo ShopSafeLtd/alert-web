@@ -87,13 +87,7 @@ const UserList = ({
   const groupFilter = [...groupIds]
     .map((id) => groupData?.find((el) => el.id === id))
     .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
-  const businessIds = new Set(
-    data?.listUsers.users?.flatMap((el) => el.businesses.map(({ id }) => id))
-  );
-  const businessData = data?.listUsers.users?.flatMap((el) => el.businesses);
-  const businessFilter = [...businessIds]
-    .map((id) => businessData?.find((el) => el.id === id))
-    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
+
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -160,9 +154,6 @@ const UserList = ({
               value: el.value,
             })),
             key: 'status',
-            // @ts-ignore
-            onFilter: (value: UserStatus, record: { status: UserStatus }) =>
-              record.status.includes(value),
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (value: UserStatus) => (
               <Typography.Text type={getTextStatus(value)}>
@@ -182,12 +173,7 @@ const UserList = ({
           },
           {
             dataIndex: 'business',
-            filters: businessFilter,
             key: 'business',
-            onFilter: (
-              value: boolean | number | string,
-              record: { businesses: { id: string; name: string }[] }
-            ) => record.businesses.some(({ id }) => id === value),
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (_, record) =>
               record.businesses.map(({ id, name }) => (
@@ -250,6 +236,19 @@ const UserList = ({
           status: user.status || UserStatus.Inactive,
         }))}
         loading={loading}
+        onChange={(pagination, filters) => {
+          if (filters) {
+            if (filters.status) setUserStatus(filters.status as UserStatus[]);
+            if (filters.groups) setSelectedGroups(filters.groups as string[]);
+          }
+
+          if (filters?.status?.length === 0 || !filters.status) {
+            setUserStatus([]);
+          }
+          if (filters?.groups?.length === 0 || !filters.groups) {
+            setSelectedGroups([]);
+          }
+        }}
         pagination={{
           current: currentPage,
           defaultPageSize: 50,
