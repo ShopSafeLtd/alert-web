@@ -148,9 +148,8 @@ const useUserList = (): Return => {
           },
         },
       },
-      status: {
-        in: userStatus,
-      },
+      status:
+        userStatus && userStatus?.length > 0 ? { in: userStatus } : undefined,
     },
   };
 

@@ -32,7 +32,6 @@ const UserList = (): JSX.Element => {
     userRole,
     userStatus,
   } = useUserList();
-  console.log(data);
 
   return (
     <View
