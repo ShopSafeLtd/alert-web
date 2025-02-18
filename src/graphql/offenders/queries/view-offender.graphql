@@ -34,7 +34,7 @@ query ViewOffender(
     idSource
     totalImages
     totalIncidents
-    incidents{
+    incidents {
       id
       business {
         id
@@ -42,6 +42,7 @@ query ViewOffender(
       }
       dayTime
       policeNo
+      policeRef
       reference
       subject
       totalRecoveredValue
