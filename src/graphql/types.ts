@@ -21400,6 +21400,7 @@ export type UserChatWhereUniqueInput = {
 export type UserContribution = {
   __typename?: 'UserContribution';
   businesses: Array<Scalars['String']>;
+  groups?: Maybe<Array<Scalars['String']>>;
   lastLogin: Scalars['String'];
   name: Scalars['String'];
   totalIncidents: Scalars['Int'];

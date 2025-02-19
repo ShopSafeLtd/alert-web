@@ -94,6 +94,7 @@ const PerformanceReport = ({
       'Messages',
       'Logins',
       'Last Login',
+      'Groups',
     ],
     ...(data?.userContributions.map((user) => [
       user.name,
@@ -104,6 +105,7 @@ const PerformanceReport = ({
       user.totalMessages,
       user.totalLogins,
       user.lastLogin,
+      user.groups?.join(', '),
     ]) || []),
   ];
   return (
