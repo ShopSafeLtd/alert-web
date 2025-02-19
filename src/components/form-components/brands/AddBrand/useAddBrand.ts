@@ -5,7 +5,6 @@ import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import type { SelectOptions } from 'types/DataType';
 
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { useUpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/upsert-brand.generated';
@@ -20,7 +19,7 @@ import { useStoreState } from 'state';
 const { useForm } = Form;
 
 export interface FormData {
-  businesses: SelectOptions[];
+  businesses: string[];
   description: string;
   name: string;
 }
@@ -103,12 +102,10 @@ const useAddBrand = ({ onClose, update }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
 
-    const businessIds = new Set(data.businesses.map(({ value }) => value));
-
     void createBrand({
       variables: {
         data: {
-          businesses: [...businessIds],
+          businesses: data.businesses,
           description: data.description,
           name: data.name,
           schemeId,
