@@ -39,7 +39,7 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
   const reportToPolice = Form.useWatch('reportToPolice', form);
   const policeWitnessName = Form.useWatch('policeWitnessName', form);
   const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
-
+  const obstructed = Form.useWatch('policeObstructions', form) === 'true';
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -347,7 +347,7 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                     <Form.Item
                       label={intl.formatMessage({
                         defaultMessage:
-                          'Was this witnessed at the time of the offence, or discovered retrospectively?',
+                          'Was this witnessed at the time of the offence, or are you viewing the incident on CCTV?',
                       })}
                       name="policeWitnessAtTime"
                       rules={[
@@ -371,7 +371,7 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                           },
                           {
                             label: intl.formatMessage({
-                              defaultMessage: 'Discovered Retrospectively',
+                              defaultMessage: 'Viewing CCTV',
                             }),
                             value: false,
                           },
@@ -380,23 +380,6 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                     </Form.Item>
                     {policeWitnessAtTime && (
                       <>
-                        <Form.Item
-                          label={intl.formatMessage({
-                            defaultMessage:
-                              'How much time passed before the incident was discovered?',
-                          })}
-                          name="policeTimePassed"
-                          rules={[
-                            {
-                              message: intl.formatMessage({
-                                defaultMessage: 'Please answer this question.',
-                              }),
-                              required: true,
-                            },
-                          ]}
-                        >
-                          <Input style={{ width: 200 }} />
-                        </Form.Item>
                         <Row gutter={16}>
                           <Col span={8}>
                             <Form.Item
@@ -435,14 +418,41 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                                 },
                               ]}
                             >
-                              <Input />
+                              <Select
+                                options={[
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'Less than 1m',
+                                    }),
+                                    value: 'Less than 1m',
+                                  },
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: '1m',
+                                    }),
+                                    value: '1m',
+                                  },
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: '2m',
+                                    }),
+                                    value: '2m',
+                                  },
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'Further than 2m',
+                                    }),
+                                    value: 'Further than 2m',
+                                  },
+                                ]}
+                              />
                             </Form.Item>
                           </Col>
                           <Col span={8}>
                             <Form.Item
                               label={intl.formatMessage({
                                 defaultMessage:
-                                  'Were there obstructions to your view of the incident?',
+                                  'Did you have a clear and unobstructed view of the incident?',
                               })}
                               name="policeObstructions"
                               rules={[
@@ -455,16 +465,78 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                                 },
                               ]}
                             >
-                              <Input />
+                              <Radio.Group
+                                disabled={saving}
+                                optionType="button"
+                                options={[
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'Yes',
+                                    }),
+                                    value: 'true',
+                                  },
+                                  {
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'No',
+                                    }),
+                                    value: 'false',
+                                  },
+                                ]}
+                              />
                             </Form.Item>
                           </Col>
-                          <Col>
+                          {!obstructed && (
+                            <Col span={8}>
+                              <Form.Item
+                                label={intl.formatMessage({
+                                  defaultMessage:
+                                    'What was obstructing your view?',
+                                })}
+                                name="policeObstructionsDetails"
+                                rules={[
+                                  {
+                                    message: intl.formatMessage({
+                                      defaultMessage:
+                                        'Please answer this question.',
+                                    }),
+                                    required: true,
+                                  },
+                                ]}
+                              >
+                                <Select
+                                  options={[
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Bad Light',
+                                      }),
+                                      value: 'Bad Light',
+                                    },
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage:
+                                          'Obscured by Other People',
+                                      }),
+                                      value: 'Obscured by Other People',
+                                    },
+                                    {
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Obscured by Shelving',
+                                      }),
+                                      value: 'Obscured by Shelving',
+                                    },
+                                  ]}
+                                />
+                              </Form.Item>
+                            </Col>
+                          )}
+
+                          <Col span={8}>
                             <Form.Item
                               label={intl.formatMessage({
                                 defaultMessage:
-                                  'Were you in a building or outside?',
+                                  'How long did you witness the event?',
                               })}
-                              name="policeInside"
+                              name="policeWitnessLength"
                               rules={[
                                 {
                                   message: intl.formatMessage({
@@ -475,60 +547,7 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                                 },
                               ]}
                             >
-                              <Radio.Group
-                                disabled={saving}
-                                optionType="button"
-                                options={[
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'In a building',
-                                    }),
-                                    value: true,
-                                  },
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Outside',
-                                    }),
-                                    value: false,
-                                  },
-                                ]}
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col>
-                            <Form.Item
-                              label={intl.formatMessage({
-                                defaultMessage: 'Was it day or night?',
-                              })}
-                              name="dayOrNight"
-                              rules={[
-                                {
-                                  message: intl.formatMessage({
-                                    defaultMessage:
-                                      'Please answer this question.',
-                                  }),
-                                  required: true,
-                                },
-                              ]}
-                            >
-                              <Radio.Group
-                                disabled={saving}
-                                optionType="button"
-                                options={[
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Day-Time',
-                                    }),
-                                    value: true,
-                                  },
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Night-Time',
-                                    }),
-                                    value: false,
-                                  },
-                                ]}
-                              />
+                              <Input />
                             </Form.Item>
                           </Col>
                           <Col>

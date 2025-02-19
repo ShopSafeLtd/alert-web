@@ -2962,9 +2962,12 @@ export type CreateImageOptimistic = {
 };
 
 export type CreateIncidentCctvRecord = {
+  aheadBehind?: InputMaybe<Scalars['String']>;
   cameraNumber: Scalars['String'];
+  correctTime?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
   endTime: Scalars['Date'];
+  incorrectBy?: InputMaybe<Scalars['Int']>;
   showFace: Scalars['Boolean'];
   showIncident: Scalars['Boolean'];
   startTime: Scalars['Date'];
@@ -3006,6 +3009,7 @@ export type CreateIncidentData = {
   policeMG11?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
   policeObstructions?: InputMaybe<Scalars['String']>;
+  policeObstructionsDetails?: InputMaybe<Scalars['String']>;
   policeReasonRemember?: InputMaybe<Scalars['String']>;
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
@@ -3019,6 +3023,7 @@ export type CreateIncidentData = {
   policeWitnessEmail?: InputMaybe<Scalars['String']>;
   policeWitnessEthnicity?: InputMaybe<Scalars['String']>;
   policeWitnessGender?: InputMaybe<Scalars['String']>;
+  policeWitnessLength?: InputMaybe<Scalars['String']>;
   policeWitnessMobileNo?: InputMaybe<Scalars['String']>;
   policeWitnessName?: InputMaybe<Scalars['String']>;
   policeWitnessPlaceOfBirth?: InputMaybe<Scalars['String']>;
@@ -6307,8 +6312,11 @@ export enum Gender {
 }
 
 export type GenerateStatementCctv = {
+  aheadBehind?: InputMaybe<Scalars['String']>;
+  correctTime?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
   end?: InputMaybe<Scalars['DateTime']>;
+  incorrectBy?: InputMaybe<Scalars['String']>;
   start?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6330,6 +6338,8 @@ export type GenerateStatementData = {
   offenders: Array<GenerateStatementOffender>;
   policeItemsLocation?: InputMaybe<Array<Scalars['String']>>;
   policeItemsMO?: InputMaybe<Array<Scalars['String']>>;
+  policeObstructionsDetails?: InputMaybe<Scalars['String']>;
+  policeWitnessLength?: InputMaybe<Scalars['String']>;
   reasonToRemember?: InputMaybe<Scalars['String']>;
   timePassed?: InputMaybe<Scalars['String']>;
   vehicles: Array<GenerateStatementVehicles>;
