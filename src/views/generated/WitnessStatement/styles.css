@@ -1,0 +1,178 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+  font: 12pt 'Tahoma';
+  color: #000000;
+}
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+.page-witness {
+  width: 21cm;
+  min-height: 29.7cm;
+  padding: 0.5cm;
+  margin: 1cm auto;
+  background: white;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.container-witness {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  height: 35px;
+}
+
+.header-text-witness {
+  color: black;
+  font-size: 8px;
+  margin-left: 60px;
+}
+.text-witness {
+  position: absolute;
+  top: 12px;
+  right: 27px;
+  color: black;
+  font-size: 8px;
+  margin-right: 10px;
+}
+
+.text-last-witness {
+  position: absolute;
+  top: 6px;
+  right: 27px;
+  color: black;
+  font-size: 8px;
+  margin-right: 10px;
+}
+
+.box-witness {
+  width: 70%;
+  height: 35px;
+  background-color: black;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+}
+
+.body-div-witness {
+  height: 23.7cm;
+  width: 85%;
+  margin: 20px auto;
+}
+
+.section-witness {
+  border: 1px solid black;
+  padding-bottom: 10px;
+}
+
+.section-full-witness {
+  border: 1px solid black;
+  padding-bottom: 10px;
+}
+
+.section-title-witness {
+  font-size: 20px;
+  text-align: center;
+  color: black;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.section-subtitle-witness {
+  font-size: 12px;
+  text-align: center;
+  color: black;
+}
+
+.fields-witness {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.field-witness {
+  width: 90%;
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.field-statement-consent-witness {
+  width: 100%;
+  font-size: 12px;
+}
+
+.field-label-witness {
+  font-size: 12px;
+  width: 48%;
+}
+.field-bottom-witness {
+  display: flex;
+  justify-content: center;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.field-signature-witness {
+  font-size: 12px;
+  width: 70%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.field-signature-bottom-witness {
+  font-size: 12px;
+  width: 48%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.field-date-witness {
+  font-size: 12px;
+  width: 20%;
+}
+
+.image-container-witness {
+  height: 50px;
+}
+
+.image-container-witness img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.image-container-witness svg {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+@media print {
+  .page-witness:last-child {
+    page-break-after: auto;
+  }
+  .page-witness {
+    margin: 0;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    page-break-after: always;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

@@ -95,16 +95,19 @@ export interface FormData {
     value: string;
   };
   cctv?: {
+    aheadBehind?: string; // new
     cameraNumber: string;
+    correctTime: boolean; // new
     description: string;
     endTime: Date;
+    incorrectBy?: number; // new
     showFace: boolean;
     showIncident: boolean;
     startTime: Date;
   }[];
   cctvAvailable?: boolean;
   date: Date;
-  dayOrNight?: boolean;
+
   description: string;
   documents?: { fileList: UploadFile[] };
   fellingTags?: [];
@@ -128,7 +131,6 @@ export interface FormData {
   policeDay?: boolean;
   policeDistanceFromIncident?: string;
   policeIncidentDuration?: string;
-  policeInside?: boolean;
   policeInvolved?: boolean;
   policeItemsLocation?: string[];
   policeItemsMO?: string[];
@@ -136,19 +138,20 @@ export interface FormData {
   policeMG11: boolean;
   policeNo?: string;
   policeObstructions?: string;
+  policeObstructionsDetails?: string; // new
   policeReasonRemember?: string;
   policeRef?: string;
   policeReported?: boolean;
   policeResponse?: PoliceResponseTime;
   policeSign?: string;
   policeStatement?: string;
-  policeTimePassed?: string;
   policeWillingCourt?: boolean;
   policeWitnessAddress?: string;
   policeWitnessAtTime?: boolean;
   policeWitnessEmail?: string;
   policeWitnessEthnicity?: string;
   policeWitnessGender?: string;
+  policeWitnessLength?: string; // new
   policeWitnessMobileNo?: string;
   policeWitnessName?: string;
   policeWitnessPlaceOfBirth?: string;
@@ -298,14 +301,14 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const witnessesInvolved = Form.useWatch('witnessesInvolved', form);
   const cctvAvailable = Form.useWatch('cctvAvailable', form);
   const policeMG11 = Form.useWatch('policeMG11', form);
-  const dayOrNight = Form.useWatch('dayOrNight', form);
+
   const description = Form.useWatch('description', form);
   const policeDistanceFromIncident = Form.useWatch(
     'policeDistanceFromIncident',
     form
   );
   const fellingTags = Form.useWatch('fellingTags', form);
-  const policeInside = Form.useWatch('policeInside', form);
+
   const policeIncidentDuration = Form.useWatch('policeIncidentDuration', form);
   const involvedTags = Form.useWatch('involvedTags', form);
   const goods = Form.useWatch('goods', form);
@@ -315,7 +318,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const policeItemsLocation = Form.useWatch('policeItemsLocation', form);
   const policeItemsMO = Form.useWatch('policeItemsMO', form);
   const policeReasonRemember = Form.useWatch('policeReasonRemember', form);
-  const policeTimePassed = Form.useWatch('policeTimePassed', form);
+  const policeObstructionsDetails = Form.useWatch(
+    'policeObstructionsDetails',
+    form
+  );
+  const policeWitnessLength = Form.useWatch('policeWitnessLength', form);
   const vehicles = Form.useWatch('vehicles', form);
   const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
 
@@ -340,7 +347,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const [generateStatementBody] = useGenerateStatementBodyMutation();
 
   const handleStatementGeneration = async () => {
-    console.log(policeReporting, policeWitnessAtTime !== undefined);
     if (policeReporting && policeWitnessAtTime !== undefined) {
       const formData = form.getFieldsValue();
       if (!formData.description) return;
@@ -352,16 +358,19 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             businessId: formData.business?.value,
             cctv:
               formData.cctv?.map((item) => ({
+                aheadBehind: item.aheadBehind,
+                correctTime: item.correctTime,
                 description: item.description,
                 end: item.endTime,
+                incorrectBy: item.incorrectBy
+                  ? item.incorrectBy.toString()
+                  : undefined,
                 start: item.startTime,
               })) ?? [],
             date: formData.date,
-            dayNight: formData.dayOrNight,
             description: formData.description,
             distanceFromIncident: formData.policeDistanceFromIncident,
             impactTags: formData.fellingTags ?? [],
-            inBuilding: formData.policeInside,
             incidentDuration: formData.policeIncidentDuration,
             incidentType: formData.tags[0],
             involvedTags: formData.involvedTags ?? [],
@@ -387,8 +396,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               })) ?? [],
             policeItemsLocation: formData.policeItemsLocation,
             policeItemsMO: formData.policeItemsMO,
+            policeObstructionsDetails: formData.policeObstructionsDetails,
+            policeWitnessLength: formData.policeWitnessLength,
             reasonToRemember: formData.policeReasonRemember,
-            timePassed: formData.policeTimePassed,
             vehicles:
               formData.vehicles?.map((item) => ({
                 colour: item.colour,
@@ -419,7 +429,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       policeMG11,
       policeWitnessAtTime,
       vehicles,
-      policeTimePassed,
+      policeObstructionsDetails,
+      policeWitnessLength,
       policeReasonRemember,
       policeItemsMO,
       policeItemsLocation,
@@ -430,11 +441,10 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       involvedTags,
       formTags,
       policeIncidentDuration,
-      policeInside,
+
       fellingTags,
       policeDistanceFromIncident,
       description,
-      dayOrNight,
     ]
   );
 
@@ -446,7 +456,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     policeMG11,
     policeWitnessAtTime,
     vehicles,
-    policeTimePassed,
+    policeObstructionsDetails,
+    policeWitnessLength,
     policeReasonRemember,
     policeItemsMO,
     policeItemsLocation,
@@ -457,11 +468,10 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     involvedTags,
     formTags,
     policeIncidentDuration,
-    policeInside,
+
     fellingTags,
     policeDistanceFromIncident,
     description,
-    dayOrNight,
   ]);
 
   const navigate = useNavigate();
@@ -952,9 +962,12 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 },
             cctvRecords: {
               create: data.cctv?.map((item) => ({
+                aheadBehind: item.aheadBehind,
                 cameraNumber: item.cameraNumber,
+                correctTime: item.correctTime,
                 description: item.description,
                 endTime: item.endTime,
+                incorrectBy: item.incorrectBy,
                 showFace: !!item.showFace,
                 showIncident: !!item.showIncident,
                 startTime: item.startTime,
@@ -967,7 +980,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               ...impact,
             ],
             date: data.date,
-            dayOrNight: data.dayOrNight,
             description: data.description,
             documents: getDocuments(),
             groups:
@@ -1015,7 +1027,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             policeDay: data.policeDay,
             policeDistanceFromIncident: data.policeDistanceFromIncident,
             policeIncidentDuration: data.policeIncidentDuration,
-            policeInside: data.policeInside,
+
             policeInvolved: data.policeInvolved,
             policeItemsLocation: data.policeItemsLocation,
             policeItemsMO: data.policeItemsMO,
@@ -1023,19 +1035,20 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             policeMG11: data.policeMG11,
             policeNo: data.policeNo,
             policeObstructions: data.policeObstructions,
+            policeObstructionsDetails: data.policeObstructionsDetails,
             policeReasonRemember: data.policeReasonRemember,
             policeRef: data.policeRef,
             policeReported: data.policeReported,
             policeResponse: data.policeResponse,
             policeSign: data.policeSign,
             policeStatement: data.policeStatement,
-            policeTimePassed: data.policeTimePassed,
             policeWillingCourt: data.policeWillingCourt,
             policeWitnessAddress: data.policeWitnessAddress,
             policeWitnessAtTime: data.policeWitnessAtTime,
             policeWitnessEmail: data.policeWitnessEmail,
             policeWitnessEthnicity: data.policeWitnessEthnicity,
             policeWitnessGender: data.policeWitnessGender,
+            policeWitnessLength: data.policeWitnessLength,
             policeWitnessMobileNo: data.policeWitnessMobileNo,
             policeWitnessName: data.policeWitnessName,
             policeWitnessPlaceOfBirth: data.policeWitnessGender,

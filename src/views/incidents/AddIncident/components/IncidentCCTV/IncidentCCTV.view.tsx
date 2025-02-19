@@ -9,8 +9,10 @@ import {
   Col,
   Form,
   Input,
+  InputNumber,
   Radio,
   Row,
+  Select,
   TimePicker,
   Typography,
 } from 'antd';
@@ -28,7 +30,21 @@ interface Props {
   policeReporting: boolean;
   saving: boolean;
 }
+interface CCTVRecord {
+  aheadBehind?: string;
+  cameraNumber: string;
+  correctTime: boolean;
+  description: string;
+  endTime: Date;
+  incorrectBy?: number;
+  showFace: boolean;
+  showIncident: boolean;
+  startTime: Date;
+}
 
+interface FormValues {
+  cctv?: CCTVRecord[];
+}
 const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -234,6 +250,144 @@ const IncidentCCTV = ({ form, policeReporting, saving }: Props) => {
                             />
                           </Form.Item>
                         </Col>
+                        <Col span={3} xxl={6}>
+                          <Form.Item
+                            label={intl.formatMessage({
+                              defaultMessage: 'Correct Time',
+                            })}
+                            name={[name, 'correctTime']}
+                            tooltip={intl.formatMessage({
+                              defaultMessage: 'Is the cctv time accurate?',
+                            })}
+                          >
+                            <Radio.Group
+                              disabled={saving}
+                              optionType="button"
+                              options={[
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                  }),
+                                  value: true,
+                                },
+                                {
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'No',
+                                  }),
+                                  value: false,
+                                },
+                              ]}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Form.Item
+                          noStyle
+                          shouldUpdate={(prevValues, currentValues) => {
+                            const prevCctv =
+                              ((prevValues as FormValues).cctv || [])[name] ||
+                              {};
+                            const currCctv =
+                              ((currentValues as FormValues).cctv || [])[
+                                name
+                              ] || {};
+                            return (
+                              prevCctv.correctTime !== currCctv.correctTime
+                            );
+                          }}
+                        >
+                          {({ getFieldValue }) => {
+                            // Type-cast getFieldValue to ensure correctTime is boolean | undefined
+                            const correctTime = getFieldValue([
+                              'cctv',
+                              name,
+                              'correctTime',
+                            ]) as boolean | undefined;
+                            // If correctTime is true or not yet set, do not render the extra fields.
+                            if (correctTime || correctTime === undefined) {
+                              return null;
+                            }
+                            return (
+                              <Col span={24}>
+                                <Row gutter={16} style={{ padding: '0 15px' }}>
+                                  <Col xxl={8}>
+                                    <Form.Item
+                                      label={intl.formatMessage({
+                                        defaultMessage: 'Ahead/Behind',
+                                      })}
+                                      name={[name, 'aheadBehind']}
+                                      rules={[
+                                        {
+                                          message: intl.formatMessage({
+                                            defaultMessage:
+                                              'Please select Ahead or Behind',
+                                          }),
+                                          required: true,
+                                        },
+                                      ]}
+                                    >
+                                      <Select>
+                                        <Select.Option value="ahead">
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Ahead',
+                                          })}
+                                        </Select.Option>
+                                        <Select.Option value="behind">
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Behind',
+                                          })}
+                                        </Select.Option>
+                                      </Select>
+                                    </Form.Item>
+                                  </Col>
+                                  <Col xxl={8}>
+                                    <Form.Item
+                                      label={intl.formatMessage({
+                                        defaultMessage:
+                                          'Incorrect By (minutes)',
+                                      })}
+                                      name={[name, 'incorrectBy']}
+                                      rules={[
+                                        {
+                                          message: intl.formatMessage({
+                                            defaultMessage:
+                                              'Please input the number of minutes',
+                                          }),
+                                          required: true,
+                                        },
+                                        {
+                                          validator: (_, value) => {
+                                            if (
+                                              value === undefined ||
+                                              value === null
+                                            ) {
+                                              return Promise.resolve();
+                                            }
+                                            return Number.isInteger(value)
+                                              ? Promise.resolve()
+                                              : Promise.reject(
+                                                  new Error(
+                                                    intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Please enter a whole number',
+                                                    })
+                                                  )
+                                                );
+                                          },
+                                        },
+                                      ]}
+                                    >
+                                      <InputNumber
+                                        min={0}
+                                        step={1}
+                                        style={{ width: '100%' }}
+                                      />
+                                    </Form.Item>
+                                  </Col>
+                                </Row>
+                              </Col>
+                            );
+                          }}
+                        </Form.Item>
                         <Col xxl={24}>
                           <Form.Item
                             {...restField}
