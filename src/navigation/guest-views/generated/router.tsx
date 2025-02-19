@@ -1,4 +1,5 @@
 import IncidentReportPrint from '#/views/generated/Incident/Incident-summary';
+import { GenWitness } from '#/views/generated/WitnessStatement';
 import React from 'react';
 import { Route, Routes } from 'react-router';
 
@@ -12,6 +13,7 @@ const Generated = (): JSX.Element => (
     <Route element={<CreateBusinessImpact />} path="bis/*" />
     <Route element={<ChecklistGenerate />} path="checklist/*" />
     <Route element={<IncidentReportPrint />} path="incident/*" />
+    <Route element={<GenWitness />} path="witnessgen/*" />
   </Routes>
 );
 

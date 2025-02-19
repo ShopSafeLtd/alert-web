@@ -49,9 +49,12 @@ interface GoodsTaken {
 }
 
 interface CCTVEvidence {
+  aheadBehind?: string; // new
   cameraNumber: string;
+  correctTime: boolean; // new
   description?: null | string;
   endTime: Date;
+  incorrectBy?: number; // new
   showFace: boolean;
   showIncident: boolean;
   startTime: Date;
@@ -231,6 +234,12 @@ const IncidentReportPrint = () => {
               </p>
               <p>
                 <strong>Show Face:</strong> {evidence.showFace ? 'Yes' : 'No'}
+              </p>
+              <p>
+                <strong>Ahead/Behind:</strong> {evidence.aheadBehind || 'N/A'}
+              </p>
+              <p>
+                <strong>Incorrect By:</strong> {evidence.incorrectBy || 'N/A'}
               </p>
             </div>
           ))}
