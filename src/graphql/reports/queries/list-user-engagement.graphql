@@ -9,6 +9,7 @@ query UserEngagement($where: UserContributionWhereInput!) {
       totalMessages
       totalLogins
       lastLogin
+      groups
     }
     total
   }
