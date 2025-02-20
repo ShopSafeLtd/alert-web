@@ -3,6 +3,7 @@ import type { ClerkProp } from '@clerk/clerk-react';
 
 import Loading from '#/components/shared-components/AntD/Loading';
 import { AvailableLanguagesConst } from '#/lang';
+import { ThemeConfig } from '#/state';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
 import { Clerk } from '@clerk/clerk-js';
 import { ClerkProvider } from '@clerk/clerk-react';
@@ -144,7 +145,7 @@ ReactDOM.render(
     <BrowserRouter>
       <div className="App">
         <ThemeSwitcherProvider
-          defaultTheme={'dark'}
+          defaultTheme={ThemeConfig.currentTheme}
           insertionPoint="styles-insertion-point"
           themeMap={themes}
         >
