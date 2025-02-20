@@ -69,7 +69,7 @@ const useBrandList = (): Return => {
               },
             },
           ]
-        : [],
+        : undefined,
 
       schemeId: {
         equals: schemeId,

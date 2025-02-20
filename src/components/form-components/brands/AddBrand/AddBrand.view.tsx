@@ -1,28 +1,28 @@
-import React from 'react';
 import type { FormInstance } from 'antd';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import { Button, Col, Form, Input, Row, Typography } from 'antd';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import DebounceSelect from '../../DebounceSelect';
+
 import type { FormData } from './useAddBrand';
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  onClose: () => void;
-  saving: boolean;
   form: FormInstance<FormData>;
+  onClose: () => void;
 
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string; location?: string }[]>;
+  onSubmit: (value: FormData) => void;
+
+  saving: boolean;
 }
 
 const AddBrand = ({
-  onSubmit,
-  onClose,
-  saving,
   form,
+  onClose,
 
-  onSearchBusiness,
+  onSubmit,
+
+  saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -33,14 +33,14 @@ const AddBrand = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a name for the brand.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -49,44 +49,40 @@ const AddBrand = ({
         </Col>
         <Col span={24}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
-            <Input.TextArea rows={10} disabled={saving} />
+            <Input.TextArea disabled={saving} rows={10} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col flex={1}>
-          <Row gutter={20} align="middle">
+          <Row align="middle" gutter={20}>
             <Col flex={1}>
               <Form.Item
-                name="businesses"
                 label={intl.formatMessage({
                   defaultMessage: 'Businesses',
                 })}
+                name="businesses"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select at least one business for the new brand.',
                     }),
+                    required: true,
                   },
                 ]}
               >
-                <DebounceSelect
-                  showSearch
-                  allowClear
+                <BusinessesSelect
+                  maxTagCount="responsive"
                   mode="multiple"
-                  maxTagCount={3}
-                  disabled={saving}
                   placeholder={intl.formatMessage({
-                    defaultMessage: 'Search for a business...',
+                    defaultMessage: 'Select Businesses',
                   })}
-                  fetchOptions={onSearchBusiness}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -96,7 +92,7 @@ const AddBrand = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -105,9 +101,9 @@ const AddBrand = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>
