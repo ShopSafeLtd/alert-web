@@ -1,10 +1,5 @@
 import type { FormInstance } from 'antd';
-import type {
-  BusinessData,
-  LocationData,
-  SelectOptions,
-  TagData,
-} from 'types/DataType';
+import type { BusinessData, LocationData, TagData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { Form } from 'antd';
@@ -18,12 +13,7 @@ export interface FormData {
   county: string;
   groups: string[];
   name: string;
-  parent:
-    | {
-        label: string;
-        value: string;
-      }
-    | string;
+  parent: string[];
   postcode: string;
   publicName: boolean;
   siteNumber: string;
@@ -36,13 +26,6 @@ interface Props {
   // onClose: () => void;
   update: (value: BusinessData) => void;
 }
-
-const stringOrOption = (inputOb: SelectOptions | string) => {
-  if (typeof inputOb === 'string') {
-    return inputOb;
-  }
-  return inputOb.value;
-};
 
 interface Return {
   addTag: boolean;
@@ -133,9 +116,10 @@ const useAddBusiness = ({ update }: Props): Return => {
       ],
       name: values.name,
       newTags: newTags || [],
-      parent: values.parent
-        ? { id: stringOrOption(values.parent), name: '' }
-        : undefined,
+      parent:
+        values.parent?.length > 0
+          ? { id: values.parent[0], name: '' }
+          : undefined,
       publicName: values.publicName,
       siteNumber: values.siteNumber,
       tags: connectTagIds || [],
