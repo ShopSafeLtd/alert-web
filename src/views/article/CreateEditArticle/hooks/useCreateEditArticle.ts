@@ -36,6 +36,21 @@ interface FormData {
 
 export type { FormData };
 
+const imageTypeFromUrl = (url: string): string => {
+  const imageTypes = [
+    'jpg',
+    'jpeg',
+    'png',
+    'gif',
+    'svg',
+    'webp',
+    'bmp',
+    'tiff',
+  ];
+  const found = imageTypes.find((type) => url.includes(type));
+  return found || 'jpg';
+};
+const generateUid = (): string => Math.random().toString(36).slice(2, 11);
 export function extractFilename(url: string): null | string {
   const match = /\/temp\/([^?]+)/.exec(url);
   return match ? match[1] : null;
@@ -336,8 +351,19 @@ const useCreateEditArticle = (): Props => {
       );
     }
   }, [categories, res]);
-
-  const log = (): { img: string; imgSrc: string[]; text: string } => {
+  // "filename": "",
+  //   "mimetype": "",
+  //   "url"
+  const generateTextImages = (): {
+    img: string;
+    imgSrc: string[];
+    newImages: {
+      filename: string;
+      mimetype: string;
+      url: string;
+    }[];
+    text: string;
+  } => {
     if (editorRef.current) {
       const html = editorRef.current.getContent();
       const parser = new DOMParser();
@@ -359,6 +385,16 @@ const useCreateEditArticle = (): Props => {
       const images = doc.body.querySelectorAll('img');
       const imageSrcs = [...images].map((image) => image.src);
 
+      const newImages = imageSrcs.filter(
+        (src) => !imageList.map((image) => image.url).includes(src)
+      );
+      const newImageList =
+        newImages.map((src) => ({
+          filename: `${generateUid()}.${imageTypeFromUrl(src)}`,
+          mimetype: `image/${imageTypeFromUrl(src)}`,
+          url: src,
+        })) || [];
+
       // remove all new lines from innerHTML
       doc.body.innerHTML = doc.body.innerHTML.replaceAll('&nbsp;', '');
 
@@ -374,17 +410,19 @@ const useCreateEditArticle = (): Props => {
       return {
         img: imageSrcs[0] || '',
         imgSrc: imageSrcs,
+        newImages: newImageList,
         text: innerText,
       };
     }
     return {
       img: '',
       imgSrc: [],
+      newImages: [],
       text: '',
     };
   };
 
-  const exampleImageUploadHandler = (
+  const imageUploadHandler = (
     blobInfo: { blob: () => Blob | string; filename: () => string | undefined },
     progress: (arg0: number) => void
   ): Promise<string> =>
@@ -489,11 +527,12 @@ const useCreateEditArticle = (): Props => {
     callback: (arg0: string, arg1: { title: string }) => void,
     value: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    meta: Record<string, any>
+    meta: Record<string, any>,
+    pdfOnly?: boolean
   ) => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*,.pdf');
+    input.setAttribute('accept', pdfOnly ? '.pdf' : 'image/*,.pdf');
     input.addEventListener('change', () => {
       if (input.files === null) return;
       const file = input.files[0];
@@ -590,11 +629,27 @@ const useCreateEditArticle = (): Props => {
       .getFieldValue('importance')
       .toString()
       .toUpperCase() as ArticlePriority;
-    const { img, imgSrc, text } = log();
+    const { img, imgSrc, newImages, text } = generateTextImages();
     // const previewImageFile = imageList?.filter(({ url }) => url === img);
-    const articleImages = imageList?.filter(({ url }) =>
-      imgSrc.includes(url || '')
-    );
+    const articleImages =
+      imageList?.filter(({ url }) => imgSrc.includes(url || '')) || [];
+
+    const imagesFormatted = [
+      ...articleImages.map((item) => ({
+        url: {
+          filename: item.fileName || item.name || '',
+          mimetype: item.type || '',
+          url: item.url || '',
+        },
+      })),
+      ...newImages.map((item) => ({
+        url: {
+          filename: item.filename,
+          mimetype: item.mimetype,
+          url: item.url,
+        },
+      })),
+    ];
 
     const htmlWithDefaultWidth = extracted(
       editorRef.current?.getContent() || ''
@@ -617,14 +672,8 @@ const useCreateEditArticle = (): Props => {
         htmlBody: htmlWithDefaultWidth || '',
         images: {
           upload:
-            articleImages && articleImages.length > 0
-              ? articleImages.map((item) => ({
-                  url: {
-                    filename: item.fileName || item.name || '',
-                    mimetype: item.type || '',
-                    url: item.url || '',
-                  },
-                }))
+            imagesFormatted && imagesFormatted.length > 0
+              ? imagesFormatted
               : undefined,
         },
         incidents:
@@ -762,19 +811,19 @@ const useCreateEditArticle = (): Props => {
 
     documentUploadProps,
     editorRef,
-    exampleImageUploadHandler,
     fileList,
     filePickerCallback,
     form,
     groups,
     groupsLoading,
     id: articleId,
+    imagesUploadHandler: imageUploadHandler,
     incidents,
     initData: initialValue,
     insertIncident,
     insertOffender,
     loading: tagsLoading || loading || saving,
-    log,
+    log: generateTextImages,
     offenders,
     onGroupsChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises

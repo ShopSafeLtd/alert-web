@@ -1,4 +1,5 @@
 import AddExistingOffender from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
+import pdfFilePickerCallback from '#/views/article/CreateEditArticle/hooks/handlePdf';
 import { UploadOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import {
@@ -41,13 +42,13 @@ const CreateEditArticleView = ({
   drawer,
   // log,
   editorRef,
-  exampleImageUploadHandler,
   fileList,
   filePickerCallback,
   form,
   // imgSrcs,
   groups,
   id,
+  imagesUploadHandler,
   incidents,
   initData,
   insertIncident,
@@ -302,7 +303,7 @@ const CreateEditArticleView = ({
                   elementpath: false,
                   file_picker_callback: filePickerCallback,
                   file_picker_types: 'file, image, media',
-                  images_upload_handler: exampleImageUploadHandler,
+                  images_upload_handler: imagesUploadHandler,
                   menubar: 'file edit view insert format tools table',
                   min_height: 500,
                   plugins: [
@@ -380,6 +381,43 @@ const CreateEditArticleView = ({
                             text: intl.formatMessage({
                               defaultMessage: 'Add Document Link',
                             }),
+                            type: 'menuitem',
+                          },
+                          //                           This works but won't on native
+                          //                 {
+                          //                   onAction() {
+                          //                     filePickerCallback(
+                          //                       (file, { title }) => {
+                          //                         editor.insertContent(
+                          //                           `
+                          //   <iframe allowtransparency="true"
+                          //           src="${file}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                          //           style="background: transparent; border: none; display: block; width: 100%; height: 700px;"
+                          //           loading="lazy"
+                          //           onload="this.height=this.contentWindow.document.body.scrollHeight;"
+                          //           title="${title}">
+                          //   </iframe>
+                          // `
+                          //                         );
+                          //                       },
+                          //                       'document',
+                          //                       { filetype: 'application/pdf' },
+                          //                       true
+                          //                     );
+                          //                   },
+                          //                   text: intl.formatMessage({
+                          //                     defaultMessage: 'Add Document Link',
+                          //                   }),
+                          //                   type: 'menuitem',
+                          //                 },
+
+                          {
+                            onAction() {
+                              pdfFilePickerCallback((htmlContent) => {
+                                editor.insertContent(htmlContent);
+                              });
+                            },
+                            text: 'Embed Pdf',
                             type: 'menuitem',
                           },
                         ];
