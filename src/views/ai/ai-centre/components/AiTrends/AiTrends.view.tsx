@@ -7,6 +7,7 @@ import { Button, Card, Col, Row, Typography } from 'antd';
 import { AiSuggestionStatus, AiSuggestionType, SortOrder } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 const AiTrends = () => {
   const currentScheme = useStoreState((state) => state.scheme.id);
@@ -55,21 +56,23 @@ const AiTrends = () => {
       </Row>
 
       {data?.aiSuggestions.edges.map((item) => (
-        <Card
-          bodyStyle={{
-            cursor: 'pointer',
-            paddingLeft: 20,
-            paddingRight: 20,
-          }}
-          key={item.node.id}
-        >
-          <Typography.Title level={4} style={{ marginBottom: 6 }}>
-            {item.node.title}
-          </Typography.Title>
-          <Typography.Text style={{ marginBottom: 0 }} type="secondary">
-            {item.node.description}
-          </Typography.Text>
-        </Card>
+        <Link to="/app/scheme-settings/businesses/view/cm7uivkzf002zitvy3y1x9ds5">
+          <Card
+            bodyStyle={{
+              cursor: 'pointer',
+              paddingLeft: 20,
+              paddingRight: 20,
+            }}
+            key={item.node.id}
+          >
+            <Typography.Title level={4} style={{ marginBottom: 6 }}>
+              {item.node.title}
+            </Typography.Title>
+            <Typography.Text style={{ marginBottom: 0 }} type="secondary">
+              {item.node.description}
+            </Typography.Text>
+          </Card>
+        </Link>
       ))}
     </>
   );
