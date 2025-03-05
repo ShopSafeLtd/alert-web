@@ -15,7 +15,7 @@ import {
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Descriptions, Row, Tag, Tooltip, Typography } from 'antd';
+import { Card, Col, Descriptions, Row, Tag, Tooltip, Typography } from 'antd';
 import { IncidentPriority } from 'graphql/types';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -81,174 +81,194 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
         )}
       </Paragraph>
 
-      <Descriptions className={classes.desc} column={1}>
-        {data?.incident.priority === IncidentPriority.Normal ? undefined : (
-          <Descriptions.Item
-            className={classes.detail}
-            label={
-              <span>
-                <FontAwesomeIcon
-                  className={classes.descIcon}
-                  icon={faExclamationCircle}
+      <Row gutter={32}>
+        <Col span={12}>
+          <Descriptions className={classes.desc} column={1}>
+            {data?.incident.priority === IncidentPriority.Normal ? undefined : (
+              <Descriptions.Item
+                className={classes.detail}
+                label={
+                  <span>
+                    <FontAwesomeIcon
+                      className={classes.descIcon}
+                      icon={faExclamationCircle}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Priority',
+                    })}
+                  </span>
+                }
+              >
+                <IncidentPriorityTag
+                  value={data?.incident?.priority || IncidentPriority.Normal}
                 />
-                {intl.formatMessage({
-                  defaultMessage: 'Priority',
-                })}
-              </span>
-            }
-          >
-            <IncidentPriorityTag
-              value={data?.incident?.priority || IncidentPriority.Normal}
-            />
-          </Descriptions.Item>
-        )}
+              </Descriptions.Item>
+            )}
 
-        <Descriptions.Item
-          className={classes.detail}
-          label={
-            <span>
-              <FontAwesomeIcon className={classes.descIcon} icon={faBuilding} />
-              {intl.formatMessage({
-                defaultMessage: 'Business',
-              })}
-            </span>
-          }
-        >
-          {editRights ? (
-            <Link
-              to={`/app/scheme-settings/businesses/view/${
-                data?.incident?.business?.id || ''
-              }`}
+            <Descriptions.Item
+              className={classes.detail}
+              label={
+                <span>
+                  <FontAwesomeIcon
+                    className={classes.descIcon}
+                    icon={faBuilding}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Business',
+                  })}
+                </span>
+              }
             >
-              {data?.incident?.business?.name}
-            </Link>
-          ) : (
-            data?.incident?.business?.name
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item
-          className={classes.detail}
-          label={
-            <span>
-              <FontAwesomeIcon className={classes.descIcon} icon={faUser} />
-              {intl.formatMessage({
-                defaultMessage: 'Created By',
-              })}
-            </span>
-          }
-        >
-          {data?.incident?.createdBy.fullName}
-        </Descriptions.Item>
-        <Descriptions.Item
-          className={classes.detail}
-          label={
-            <span>
-              <FontAwesomeIcon className={classes.descIcon} icon={faClock} />
-              {intl.formatMessage({
-                defaultMessage: 'Date & Time',
-              })}
-            </span>
-          }
-        >
-          {data?.incident?.dayTime}
-        </Descriptions.Item>
-      </Descriptions>
+              {editRights ? (
+                <Link
+                  to={`/app/scheme-settings/businesses/view/${
+                    data?.incident?.business?.id || ''
+                  }`}
+                >
+                  {data?.incident?.business?.name}
+                </Link>
+              ) : (
+                data?.incident?.business?.name
+              )}
+            </Descriptions.Item>
+            <Descriptions.Item
+              className={classes.detail}
+              label={
+                <span>
+                  <FontAwesomeIcon className={classes.descIcon} icon={faUser} />
+                  {intl.formatMessage({
+                    defaultMessage: 'Created By',
+                  })}
+                </span>
+              }
+            >
+              {data?.incident?.createdBy.fullName}
+            </Descriptions.Item>
+            <Descriptions.Item
+              className={classes.detail}
+              label={
+                <span>
+                  <FontAwesomeIcon
+                    className={classes.descIcon}
+                    icon={faClock}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Date & Time',
+                  })}
+                </span>
+              }
+            >
+              {data?.incident?.dayTime}
+            </Descriptions.Item>
+          </Descriptions>
+        </Col>
+        <Col span={12}>
+          <Descriptions className={classes.desc} column={1}>
+            <Descriptions.Item
+              className={classes.detailTag}
+              label={
+                <span className={classes.tagLabel}>
+                  <FontAwesomeIcon
+                    className={classes.descIcon}
+                    icon={faUsers}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Groups',
+                  })}
+                </span>
+              }
+            >
+              <Row>
+                {data?.incident?.groups.map((group) => (
+                  <Tag className={classes.tag} key={group.id}>
+                    {group.name}
+                  </Tag>
+                ))}
+              </Row>
+            </Descriptions.Item>
+            <Descriptions.Item
+              className={classes.detailTag}
+              label={
+                <span className={classes.tagLabel}>
+                  <FontAwesomeIcon
+                    className={classes.descIcon}
+                    icon={faSirenOn}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Incident Types',
+                  })}
+                </span>
+              }
+            >
+              <Row>
+                {data?.incident?.crimeTypes.map((tag) => (
+                  <Tag className={classes.tag} color="red" key={tag.id}>
+                    {tag.name}
+                  </Tag>
+                )) ||
+                  intl.formatMessage({
+                    defaultMessage: 'None',
+                  })}
+              </Row>
+            </Descriptions.Item>
+            {data?.incident && data.incident.involvedTags.length > 0 && (
+              <Descriptions.Item
+                className={classes.detailTag}
+                label={
+                  <span className={classes.tagLabel}>
+                    <FontAwesomeIcon
+                      className={classes.descIcon}
+                      icon={faTags}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Involved Tags',
+                    })}
+                  </span>
+                }
+              >
+                <Row>
+                  {data?.incident?.involvedTags.map((tag) => (
+                    <Tag className={classes.tag} color="red" key={tag.id}>
+                      {tag.name}
+                    </Tag>
+                  )) ||
+                    intl.formatMessage({
+                      defaultMessage: 'None',
+                    })}
+                </Row>
+              </Descriptions.Item>
+            )}
 
-      <Descriptions className={classes.desc} column={1}>
-        <Descriptions.Item
-          className={classes.detailTag}
-          label={
-            <span className={classes.tagLabel}>
-              <FontAwesomeIcon className={classes.descIcon} icon={faUsers} />
-              {intl.formatMessage({
-                defaultMessage: 'Groups',
-              })}
-            </span>
-          }
-        >
-          <Row>
-            {data?.incident?.groups.map((group) => (
-              <Tag className={classes.tag} key={group.id}>
-                {group.name}
-              </Tag>
-            ))}
-          </Row>
-        </Descriptions.Item>
-        <Descriptions.Item
-          className={classes.detailTag}
-          label={
-            <span className={classes.tagLabel}>
-              <FontAwesomeIcon className={classes.descIcon} icon={faSirenOn} />
-              {intl.formatMessage({
-                defaultMessage: 'Incident Types',
-              })}
-            </span>
-          }
-        >
-          <Row>
-            {data?.incident?.crimeTypes.map((tag) => (
-              <Tag className={classes.tag} color="red" key={tag.id}>
-                {tag.name}
-              </Tag>
-            )) ||
-              intl.formatMessage({
-                defaultMessage: 'None',
-              })}
-          </Row>
-        </Descriptions.Item>
-        {data?.incident && data.incident.involvedTags.length > 0 && (
-          <Descriptions.Item
-            className={classes.detailTag}
-            label={
-              <span className={classes.tagLabel}>
-                <FontAwesomeIcon className={classes.descIcon} icon={faTags} />
-                {intl.formatMessage({
-                  defaultMessage: 'Involved Tags',
-                })}
-              </span>
-            }
-          >
-            <Row>
-              {data?.incident?.involvedTags.map((tag) => (
-                <Tag className={classes.tag} color="red" key={tag.id}>
-                  {tag.name}
-                </Tag>
-              )) ||
-                intl.formatMessage({
-                  defaultMessage: 'None',
-                })}
-            </Row>
-          </Descriptions.Item>
-        )}
-
-        {data?.incident && data.incident.impactTags.length > 0 && (
-          <Descriptions.Item
-            className={classes.detailTag}
-            label={
-              <span className={classes.tagLabel}>
-                <FontAwesomeIcon
-                  className={classes.descIcon}
-                  icon={faUserTag}
-                />
-                {intl.formatMessage({
-                  defaultMessage: 'Impact Tags',
-                })}
-              </span>
-            }
-          >
-            <Row align="middle" justify="start">
-              {data?.incident?.impactTags.map((tag) => (
-                <Tag className={classes.tag} color="red" key={tag.id}>
-                  {tag.name}
-                </Tag>
-              )) ||
-                intl.formatMessage({
-                  defaultMessage: 'None',
-                })}
-            </Row>
-          </Descriptions.Item>
-        )}
-      </Descriptions>
+            {data?.incident && data.incident.impactTags.length > 0 && (
+              <Descriptions.Item
+                className={classes.detailTag}
+                label={
+                  <span className={classes.tagLabel}>
+                    <FontAwesomeIcon
+                      className={classes.descIcon}
+                      icon={faUserTag}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Impact Tags',
+                    })}
+                  </span>
+                }
+              >
+                <Row align="middle" justify="start">
+                  {data?.incident?.impactTags.map((tag) => (
+                    <Tag className={classes.tag} color="red" key={tag.id}>
+                      {tag.name}
+                    </Tag>
+                  )) ||
+                    intl.formatMessage({
+                      defaultMessage: 'None',
+                    })}
+                </Row>
+              </Descriptions.Item>
+            )}
+          </Descriptions>
+        </Col>
+      </Row>
     </Card>
   );
 };

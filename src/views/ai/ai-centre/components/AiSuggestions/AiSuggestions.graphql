@@ -1,0 +1,57 @@
+query AiSuggestions($first: Int, $where: AiSuggestionWhereInput!, $orderBy: [AiSuggestionsOrderBy!], $take: Int, $after: String) {
+    aiSuggestions(first: $first, where: $where, orderBy: $orderBy, take: $take, after: $after) {
+        edges {
+            node {
+                id
+                title
+                description
+                reference
+                type
+                rekMatch {
+                    id
+                    matchedFaces {
+                        id
+                        rekFace {
+                            id
+                            image {
+                                url
+                                id
+                            }
+                        }
+                    }
+                    searchedFace {
+                        id
+                        image {
+                            id
+                            url
+                        }
+                    }
+                    avgSimilarity
+                    matchedOffender {
+                        id
+                        name
+                        reference
+                    }
+                    searchedOffender {
+                        id
+                        name
+                        reference
+                    }
+                }
+                createdAt
+                metadata
+                offenders {
+                    id
+                    name
+                    images {
+                        id
+                        url
+                    }
+                }
+            }
+        }
+        pageInfo {
+            endCursor
+        }
+    }
+}

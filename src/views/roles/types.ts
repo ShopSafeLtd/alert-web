@@ -30,6 +30,12 @@ export const availableCheckBoxes: {
     PermissionMethod.Edit,
     PermissionMethod.Delete,
   ],
+  AUTOMATIONS: [
+    PermissionMethod.Read,
+    PermissionMethod.Write,
+    PermissionMethod.Edit,
+    PermissionMethod.Delete,
+  ],
   BRANDS: [PermissionMethod.Read],
   BUSINESSES: [
     PermissionMethod.Read,

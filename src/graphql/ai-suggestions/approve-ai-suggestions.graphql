@@ -1,0 +1,5 @@
+mutation ApproveAiSuggestion($where: UniqueId!) {
+    approveAiSuggestion(where: $where) {
+        id
+    }
+}

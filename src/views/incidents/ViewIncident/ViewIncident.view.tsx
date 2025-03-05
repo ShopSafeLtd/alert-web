@@ -1,9 +1,11 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { LocationData } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import MapCard from '#/components/map/LocatingCard/MapCard.view';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import Activities from '#/views/incidents/ViewIncident/components/Activities.view';
+import AiDetails from '#/views/incidents/ViewIncident/components/AiDetails.view';
 import Answers from '#/views/incidents/ViewIncident/components/Answers.view';
 import Approve from '#/views/incidents/ViewIncident/components/Approve.view';
 import CctvRecords from '#/views/incidents/ViewIncident/components/CctvRecords.view';
@@ -19,7 +21,7 @@ import Vehicles from '#/views/incidents/ViewIncident/components/Vehicles.view';
 import ViewIncidentToolBar from '#/views/incidents/ViewIncident/components/ViewIncidentToolBar.view';
 import { Col, Row, Skeleton } from 'antd';
 import IncidentSideList from 'components/incidents/IncidentSideList';
-import { Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -119,6 +121,20 @@ const ViewIncident = ({
                             editRights={editRights}
                             loading={loading}
                           />
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Automations,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <AiDetails
+                              data={data}
+                              editAddress={editAddress}
+                              editRights={editRights}
+                              loading={loading}
+                            />
+                          </PermissionCheckWrapper>
                           <Row gutter={16}>
                             {/* <Col xl={12} xs={24}>
                               <LocatingCard

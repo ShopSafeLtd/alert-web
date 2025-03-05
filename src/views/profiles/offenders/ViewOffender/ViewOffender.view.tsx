@@ -15,9 +15,11 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
+import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
 import {
   faBell,
   faBellSlash,
@@ -96,7 +98,7 @@ import EvidenceTable from 'components/tables/EvidenceTable';
 import IncidentTable from 'components/tables/IncidentTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
-import { BanType } from 'graphql/types';
+import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
 import moment from 'moment';
 import React, { type Dispatch } from 'react';
 import { useIntl } from 'react-intl';
@@ -676,7 +678,7 @@ const ViewOffender = ({
                         <Skeleton />
                       ) : (
                         <div>
-                          <Row gutter={[8, 8]}>
+                          <Row gutter={[16, 16]}>
                             <Col xl={12} xs={24}>
                               <Card
                                 loading={loading}
@@ -1105,6 +1107,18 @@ const ViewOffender = ({
                                 )}
                               </Card>
                             </Col>
+                            <PermissionCheckWrapper
+                              permission={{
+                                method: PermissionMethod.Read,
+                                model: PermissionModel.Automations,
+                              }}
+                              unauthorizedElement={<div />}
+                            >
+                              <Col xl={24} xs={24}>
+                                <AiDetailsView data={data} loading={loading} />
+                              </Col>
+                            </PermissionCheckWrapper>
+
                             {data?.offender?.comment ? (
                               <Col span={24}>
                                 <Card>
@@ -1243,6 +1257,7 @@ const ViewOffender = ({
                                     <Card
                                       bodyStyle={{
                                         alignItems: 'center',
+                                        backgroundColor: 'rgb(59, 73, 98)',
                                         borderRadius: '0.625rem',
                                         cursor: 'pointer',
                                         display: 'flex',

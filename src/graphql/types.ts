@@ -20,6 +20,54 @@ export type Scalars = {
   Upload: any;
 };
 
+export type AiSuggestion = {
+  __typename?: 'AISuggestion';
+  createdAt: Scalars['Date'];
+  crimeGroup?: Maybe<CrimeGroup>;
+  description?: Maybe<Scalars['String']>;
+  groups?: Maybe<Array<Scheme>>;
+  id: Scalars['ID'];
+  incident?: Maybe<Array<Incident>>;
+  investigation?: Maybe<Investigation>;
+  message?: Maybe<Message>;
+  metadata?: Maybe<Scalars['JSON']>;
+  offenders?: Maybe<Array<Offender>>;
+  reference?: Maybe<Scalars['Int']>;
+  rekMatch?: Maybe<RekMatch>;
+  schemes?: Maybe<Array<Scheme>>;
+  status?: Maybe<AiSuggestionStatus>;
+  title: Scalars['String'];
+  type?: Maybe<AiSuggestionType>;
+  update?: Maybe<Update>;
+};
+
+export enum AiSuggestionStatus {
+  Approved = 'APPROVED',
+  Open = 'OPEN',
+  Rejected = 'REJECTED'
+}
+
+export enum AiSuggestionType {
+  CrimeGroupNew = 'CRIME_GROUP_NEW',
+  CrimeGroupOffender = 'CRIME_GROUP_OFFENDER',
+  FaceMatch = 'FACE_MATCH',
+  IncidentPoliceReport = 'INCIDENT_POLICE_REPORT',
+  IncidentPriority = 'INCIDENT_PRIORITY',
+  InvestigationCreate = 'INVESTIGATION_CREATE',
+  InvestigationIncident = 'INVESTIGATION_INCIDENT',
+  InvestigationOffender = 'INVESTIGATION_OFFENDER',
+  InvestigationVehicle = 'INVESTIGATION_VEHICLE',
+  OffenderDuplicate = 'OFFENDER_DUPLICATE',
+  ToxicWarningIncident = 'TOXIC_WARNING_INCIDENT',
+  ToxicWarningMessage = 'TOXIC_WARNING_MESSAGE',
+  ToxicWarningOffender = 'TOXIC_WARNING_OFFENDER',
+  ToxicWarningUpdate = 'TOXIC_WARNING_UPDATE',
+  TrendBusiness = 'TREND_BUSINESS',
+  TrendGlobal = 'TREND_GLOBAL',
+  TrendHotSpot = 'TREND_HOT_SPOT',
+  TrendOffenderImpact = 'TREND_OFFENDER_IMPACT'
+}
+
 export type Action = {
   __typename?: 'Action';
   Address?: Maybe<Address>;
@@ -706,6 +754,22 @@ export enum Age {
   UnderEighteen = 'UNDER_EIGHTEEN',
   Unknown = 'UNKNOWN'
 }
+
+export type AiSuggestionWhereInput = {
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Array<AiSuggestionStatus>>;
+  type?: InputMaybe<Array<AiSuggestionType>>;
+};
+
+export type AiSuggestionWhereUniqueInput = {
+  id: Scalars['String'];
+};
+
+export type AiSuggestionsOrderBy = {
+  createdAt?: InputMaybe<SortOrder>;
+};
 
 export type Answer = {
   __typename?: 'Answer';
@@ -3725,6 +3789,13 @@ export enum CrimeType {
   Violence = 'VIOLENCE'
 }
 
+export enum CronSchedule {
+  EveryDay = 'EVERY_DAY',
+  EveryMonth = 'EVERY_MONTH',
+  EveryWeek = 'EVERY_WEEK',
+  EveryYear = 'EVERY_YEAR'
+}
+
 export type CsvImport = {
   __typename?: 'CsvImport';
   additionalInfo?: Maybe<Scalars['JSON']>;
@@ -4289,6 +4360,11 @@ export type DateTimeWithAggregatesFilter = {
   lte?: InputMaybe<Scalars['Date']>;
   not?: InputMaybe<NestedDateTimeWithAggregatesFilter>;
   notIn?: InputMaybe<Array<Scalars['Date']>>;
+};
+
+export type DeleteRole = {
+  id: Scalars['String'];
+  newId: Scalars['String'];
 };
 
 export type DemCompany = {
@@ -4857,6 +4933,20 @@ export type DocumentWhereUniqueInput = {
 
 export type EnableSchemeRekognotionInput = {
   collection?: InputMaybe<SchemeRekognotionCollectionsInput>;
+};
+
+export type EnumAiSuggestionStatusNullableFilter = {
+  equals?: InputMaybe<AiSuggestionStatus>;
+  in?: InputMaybe<Array<AiSuggestionStatus>>;
+  not?: InputMaybe<AiSuggestionStatus>;
+  notIn?: InputMaybe<Array<AiSuggestionStatus>>;
+};
+
+export type EnumAiSuggestionTypeNullableFilter = {
+  equals?: InputMaybe<AiSuggestionType>;
+  in?: InputMaybe<Array<AiSuggestionType>>;
+  not?: InputMaybe<AiSuggestionType>;
+  notIn?: InputMaybe<Array<AiSuggestionType>>;
 };
 
 export type EnumActionTypeFieldUpdateOperationsInput = {
@@ -7403,6 +7493,12 @@ export type Incident = {
   __typename?: 'Incident';
   actionableScore: Scalars['Int'];
   actions: Array<Action>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiKeyObservations?: Maybe<Array<Scalars['String']>>;
+  aiMO?: Maybe<Scalars['String']>;
+  aiMethod?: Maybe<Scalars['String']>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiSummary?: Maybe<Scalars['String']>;
   answers: Array<Answer>;
   approved?: Maybe<Scalars['Boolean']>;
   articleColumns: Array<ArticleColumn>;
@@ -10374,6 +10470,7 @@ export enum Model {
   Business = 'BUSINESS',
   Chat = 'CHAT',
   CrimeGroup = 'CRIME_GROUP',
+  Cron = 'CRON',
   DemDevice = 'DEM_DEVICE',
   Document = 'DOCUMENT',
   Evidence = 'EVIDENCE',
@@ -10402,6 +10499,7 @@ export type Mutation = {
   addQuestion: Question;
   addUploadedImageToIncident: Incident;
   addUsersToBusiness: Business;
+  approveAiSuggestion: AiSuggestion;
   approveIncident: Incident;
   approveOffender: Offender;
   closeInvestigation: Investigation;
@@ -10488,6 +10586,7 @@ export type Mutation = {
   deleteRecycleTag: Tag;
   deleteReportGroup: ReportGroup;
   deleteReportTemplate?: Maybe<ReportTemplate>;
+  deleteRole: CustomRole;
   deleteSharingConfig: SharingConfig;
   deleteShoe: Shoe;
   deleteTag: Tag;
@@ -10497,11 +10596,13 @@ export type Mutation = {
   deleteUserFromScheme?: Maybe<User>;
   deleteVehicle: Vehicle;
   discImportData: SystemTask;
+  dismissAiSuggestion: AiSuggestion;
   dismissMatch: RekMatch;
   editArticle: Article;
   enableSchemeRekognition: RekCollection;
   exportInvestigationZip: Scalars['String'];
   forcedPasswordSet?: Maybe<Scalars['String']>;
+  generateDemoData: SystemTask;
   generateFeedItems: SystemTask;
   generateStatementBody: GeneratedStatementBody;
   importStockItemCsv: Scalars['Boolean'];
@@ -10654,6 +10755,11 @@ export type MutationAddUsersToBusinessArgs = {
   data: Array<UserWhereUniqueInput>;
   schemeWhere: SchemeWhereUniqueInput;
   where: BusinessWhereUniqueInput;
+};
+
+
+export type MutationApproveAiSuggestionArgs = {
+  where: UniqueId;
 };
 
 
@@ -11090,6 +11196,11 @@ export type MutationDeleteReportTemplateArgs = {
 };
 
 
+export type MutationDeleteRoleArgs = {
+  data: DeleteRole;
+};
+
+
 export type MutationDeleteSharingConfigArgs = {
   where: UniqueId;
 };
@@ -11134,6 +11245,11 @@ export type MutationDeleteVehicleArgs = {
 
 export type MutationDiscImportDataArgs = {
   data: DiscImportDataInput;
+};
+
+
+export type MutationDismissAiSuggestionArgs = {
+  where: UniqueId;
 };
 
 
@@ -12607,6 +12723,13 @@ export type Offender = {
   active?: Maybe<Scalars['Boolean']>;
   addresses: Array<Address>;
   age?: Maybe<Age>;
+  aiImpactScore?: Maybe<Scalars['Int']>;
+  aiImprovements?: Maybe<Scalars['String']>;
+  aiKeyObservations?: Maybe<Array<Scalars['String']>>;
+  aiMO?: Maybe<Scalars['String']>;
+  aiMethods?: Maybe<Array<Scalars['String']>>;
+  aiQualityScore?: Maybe<Scalars['Int']>;
+  aiSummary?: Maybe<Scalars['String']>;
   alias: Array<Scalars['String']>;
   approved?: Maybe<Scalars['Boolean']>;
   articleColumns: Array<ArticleColumn>;
@@ -13102,6 +13225,7 @@ export type OffenderOrderByWithRelationInput = {
   active?: InputMaybe<SortOrder>;
   addresses?: InputMaybe<AddressOrderByRelationAggregateInput>;
   age?: InputMaybe<SortOrder>;
+  aiImpactScore?: InputMaybe<SortOrder>;
   alias?: InputMaybe<SortOrder>;
   approved?: InputMaybe<SortOrder>;
   articleColumns?: InputMaybe<ArticleColumnOrderByRelationAggregateInput>;
@@ -13486,6 +13610,7 @@ export type OffenderWhereInput = {
   active?: InputMaybe<BoolNullableFilter>;
   addresses?: InputMaybe<AddressListRelationFilter>;
   age?: InputMaybe<EnumAgeNullableFilter>;
+  aiImpactScore?: InputMaybe<IntNullableFilter>;
   alias?: InputMaybe<StringNullableListFilter>;
   approved?: InputMaybe<BoolNullableFilter>;
   articleColumns?: InputMaybe<ArticleColumnListRelationFilter>;
@@ -13748,6 +13873,7 @@ export enum PermissionMethod {
 export enum PermissionModel {
   Activities = 'ACTIVITIES',
   Articles = 'ARTICLES',
+  Automations = 'AUTOMATIONS',
   Brands = 'BRANDS',
   Businesses = 'BUSINESSES',
   Chat = 'CHAT',
@@ -13864,6 +13990,8 @@ export type Query = {
   address: Address;
   addresses: Array<Address>;
   adminDashboard: AdminDashboardData;
+  aiSuggestion: AiSuggestion;
+  aiSuggestions: QueryAiSuggestionsConnection;
   article: Article;
   articles: Array<Article>;
   auth0User: Auth0User;
@@ -14093,6 +14221,23 @@ export type QueryAddressesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<AddressWhereInput>;
+};
+
+
+export type QueryAiSuggestionArgs = {
+  where: AiSuggestionWhereUniqueInput;
+};
+
+
+export type QueryAiSuggestionsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<AiSuggestionsOrderBy>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: AiSuggestionWhereInput;
 };
 
 
@@ -15373,6 +15518,19 @@ export type QueryActiveChecklistsConnectionEdge = {
   node: ActiveChecklist;
 };
 
+export type QueryAiSuggestionsConnection = {
+  __typename?: 'QueryAiSuggestionsConnection';
+  edges: Array<QueryAiSuggestionsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryAiSuggestionsConnectionEdge = {
+  __typename?: 'QueryAiSuggestionsConnectionEdge';
+  cursor: Scalars['String'];
+  node: AiSuggestion;
+};
+
 export type QueryBrandsConnection = {
   __typename?: 'QueryBrandsConnection';
   edges: Array<QueryBrandsConnectionEdge>;
@@ -15831,6 +15989,11 @@ export type QuestionListRelationFilter = {
   none?: InputMaybe<QuestionWhereInput>;
   some?: InputMaybe<QuestionWhereInput>;
 };
+
+export enum QuestionMode {
+  Multiple = 'MULTIPLE',
+  Single = 'SINGLE'
+}
 
 export enum QuestionModel {
   Tag = 'TAG',
@@ -16326,7 +16489,7 @@ export type RekMatch = {
   matchedOffender: Offender;
   rekFaceId: Scalars['String'];
   searchedFace: RekFace;
-  searchedOffender: Offender;
+  searchedOffender?: Maybe<Offender>;
   updatedAt: Scalars['Date'];
 };
 
@@ -18363,6 +18526,12 @@ export type SimpleTagCreate = {
   name: Scalars['String'];
   schemes: ConnectArrayHelper;
 };
+
+export enum SmartApproveAction {
+  Delete = 'DELETE',
+  Flag = 'FLAG',
+  Ignore = 'IGNORE'
+}
 
 export enum SortOrder {
   Asc = 'asc',
@@ -22745,6 +22914,7 @@ export type WorkflowActionScalarWhereWithAggregatesInput = {
 export enum WorkflowActionType {
   AutoApprove = 'AUTO_APPROVE',
   Create = 'CREATE',
+  CreateActivity = 'CREATE_ACTIVITY',
   SendEmail = 'SEND_EMAIL',
   SendNotification = 'SEND_NOTIFICATION',
   SetPriority = 'SET_PRIORITY'
@@ -22870,6 +23040,7 @@ export enum WorkflowTrigger {
   Assigned = 'ASSIGNED',
   Completed = 'COMPLETED',
   Created = 'CREATED',
+  Cron = 'CRON',
   Updated = 'UPDATED'
 }
 

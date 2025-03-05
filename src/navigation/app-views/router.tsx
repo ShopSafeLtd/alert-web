@@ -41,6 +41,7 @@ const Evidence = lazy(() => import('./evidence/router'));
 const Checklists = lazy(() => import('./checklist/router'));
 const DashboardManagement = lazy(() => import('./dashboard-management/router'));
 const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
+const AiCentre = lazy(() => import('./suggestions/router'));
 
 // Define the interface for your navigation items
 interface NavItem {
@@ -181,6 +182,11 @@ export const AppViews = (): JSX.Element => {
             element={<SingleShoeSystem />}
             key="singleShoeSystem"
             path="singleShoeSystem/*"
+          />
+          <Route
+            element={<AiCentre />}
+            key="suggestions"
+            path="suggestions/*"
           />
         </Routes>
       )}

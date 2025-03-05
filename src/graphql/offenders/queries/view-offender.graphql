@@ -5,6 +5,13 @@ query ViewOffender(
   offender(where: $where) {
     id
     alias
+    aiImprovements
+    aiKeyObservations
+    aiMO
+    aiMethods
+    aiQualityScore
+    aiImpactScore
+    aiSummary
     createdAt
     scheme {
       mg11Available
