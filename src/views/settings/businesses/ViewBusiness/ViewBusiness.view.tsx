@@ -209,7 +209,7 @@ const ViewBusiness = ({
             </Col>
           </Row>
           <div className={classes.details}>
-            <Row>
+            <Row gutter={[16, 16]} justify="end" style={{ marginBottom: 16 }}>
               <Col span={12}>
                 <Card loading={loading}>
                   <Typography.Title level={4}>
