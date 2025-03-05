@@ -3,6 +3,7 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   faAddressCard,
+  faBolt,
   faBoot,
   faCalendarCheck,
   faCar,
@@ -94,6 +95,23 @@ const navigationConfig: NavItem[] = [
       id: 'Activities',
       defaultMessage: 'Activities',
     }),
+  },
+  {
+    key: 'suggestions',
+    path: `${APP_PREFIX_PATH}/suggestions`,
+    title: 'Automations',
+    icon: faBolt,
+    breadcrumb: true,
+    intl: defineMessage({
+      id: 'Automations',
+      defaultMessage: 'Automations',
+    }),
+    permission: [
+      {
+        model: PermissionModel.Automations,
+      },
+    ],
+    submenu: [],
   },
   {
     key: 'incidents',

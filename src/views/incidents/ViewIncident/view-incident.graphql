@@ -19,6 +19,12 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     totalValue
     totalRecoveredValue
     originalDescription
+    aiImprovements
+    aiKeyObservations
+    aiMO
+    aiMethod
+    aiQualityScore
+    aiSummary
     cctvRecords {
       cameraNumber
       endTime
