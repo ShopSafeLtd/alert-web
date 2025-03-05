@@ -1,0 +1,18 @@
+query AiOffenders($first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput) {
+    listOffendersRelay(first: $first, order: $order, scheme: $scheme, where: $where) {
+        edges {
+            node {
+                id
+                name
+                images {
+                    id
+                    url
+                }
+                tags {
+                    id
+                    name
+                }
+            }
+        }
+    }
+}

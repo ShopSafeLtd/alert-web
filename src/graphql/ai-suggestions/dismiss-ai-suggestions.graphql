@@ -1,0 +1,5 @@
+mutation DismissAiSuggestion($where: UniqueId!) {
+    dismissAiSuggestion(where: $where) {
+        id
+    }
+}

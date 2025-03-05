@@ -70,7 +70,7 @@ export default defineConfig((configEnv) => {
     },
     server: {
       open: true,
-      port: 3000,
+      port: 3004,
       host: 'localhost',
     },
   };

@@ -1,0 +1,42 @@
+query ReviewAiSuggestion($where: AiSuggestionWhereUniqueInput!) {
+    aiSuggestion(where: $where) {
+        id
+        title
+        reference
+        createdAt
+        description
+        type
+        status
+        rekMatch {
+            id
+            matchedFaces {
+                id
+                rekFace {
+                    id
+                    image {
+                        url
+                        id
+                    }
+                }
+            }
+            searchedFace {
+                id
+                image {
+                    id
+                    url
+                }
+            }
+            avgSimilarity
+            matchedOffender {
+                id
+                name
+                reference
+            }
+            searchedOffender {
+                id
+                name
+                reference
+            }
+        }
+    }
+}

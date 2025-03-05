@@ -14,13 +14,20 @@ import type {
 import type { OffenderFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
+import hasPermission from '#/utils/has-permission';
 import {
   ListOffendersRelayDocument,
   useListOffendersRelayQuery,
 } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
-import { QueryMode, Role, SortOrder } from 'graphql/types';
-import { useEffect, useState } from 'react';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  Role,
+  SortOrder,
+} from 'graphql/types';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import cacheOrLoading from 'utils/cache-or-loading';
@@ -72,8 +79,22 @@ const useOffenderFeed = (): Return => {
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
+  const { schemes } = useStoreState((state) => state.user);
+  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
+  const currentScheme = useMemo(
+    () => schemes.find((scheme) => scheme.scheme.id === currentSchemeId),
+    [schemes, currentSchemeId]
+  );
+  const permissions = currentScheme?.permissions;
 
   // local State
+  const hasAutomations = hasPermission({
+    permission: {
+      method: PermissionMethod.Read,
+      model: PermissionModel.Automations,
+    },
+    permissions,
+  });
   const [sortFilter, setSortFilter] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
@@ -140,7 +161,9 @@ const useOffenderFeed = (): Return => {
       }
       default: {
         return {
-          order: { updatedAt: SortOrder.Desc },
+          order: hasAutomations
+            ? { aiImpactScore: SortOrder.Desc }
+            : { updatedAt: SortOrder.Desc },
           orderByValue: null,
         };
       }

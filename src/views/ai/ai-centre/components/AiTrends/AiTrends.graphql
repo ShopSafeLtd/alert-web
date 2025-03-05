@@ -1,0 +1,13 @@
+query AiTrends($first: Int, $where: AiSuggestionWhereInput!, $orderBy: [AiSuggestionsOrderBy!]) {
+    aiSuggestions(first: $first, where: $where, orderBy: $orderBy) {
+        edges {
+            node {
+                id
+                title
+                description
+                type
+                createdAt
+            }
+        }
+    }
+}
