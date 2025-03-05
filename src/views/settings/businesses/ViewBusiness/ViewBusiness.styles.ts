@@ -1,44 +1,48 @@
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 
+import { createUseStyles } from 'react-jss';
+
 const useStyles = createUseStyles((theme: Theme) => ({
+  cardHeader: {
+    marginBottom: 10,
+  },
+  content: {
+    background: theme.bodyBackground,
+    borderRight: `1px solid ${theme.borderColor}`,
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+    overflow: 'auto',
+    width: '100%',
+  },
+  details: {
+    padding: '0px 15px 70px 8px',
+    position: 'relative',
+  },
+  headerBar: {
+    alignItems: 'center',
+    display: 'flex',
+    padding: '7px 0px 15px',
+    width: '100%',
+  },
+
+  headerTitle: {
+    marginBottom: '0px !important',
+  },
+
   page: {
     display: 'flex',
     // height: 'calc(100vh - 150px)',
     flexWrap: 'nowrap',
     height: '100vh',
   },
-  content: {
-    background: theme.bodyBackground,
-    overflow: 'auto',
-    borderRight: `1px solid ${theme.borderColor}`,
-    height: '100vh',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  headerBar: {
-    width: '100%',
-    padding: '7px 0px 15px',
-    display: 'flex',
-    alignItems: 'center',
-  },
-
-  details: {
-    padding: '0px 15px 70px 8px',
-    position: 'relative',
-  },
-
-  cardHeader: {
-    marginBottom: 10,
+  tag: {
+    marginBottom: 3,
   },
   updatesContainer: {
     // position: 'relative',
     height: '100%',
     overflow: 'auto',
-  },
-  tag: {
-    marginBottom: 3,
   },
 }));
 
