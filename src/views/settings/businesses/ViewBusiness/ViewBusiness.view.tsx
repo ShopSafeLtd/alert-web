@@ -19,6 +19,8 @@ import DemEvidenceTable from '#/components/tables/DemEvidenceTable';
 // import { ProfileUpdatedModel } from '#/types/enums/profile-update-type';
 import { GetUserStatusValues } from '#/types/enums/user_status';
 import {
+  faBolt,
+  faCircle,
   faEdit,
   faMagnifyingGlass,
   faPaperPlane,
@@ -207,37 +209,39 @@ const ViewBusiness = ({
             </Col>
           </Row>
           <div className={classes.details}>
-            <Card loading={loading}>
-              <Typography.Title level={4}>
-                {intl.formatMessage({
-                  defaultMessage: 'Details',
-                })}
-              </Typography.Title>
+            <Row>
+              <Col span={12}>
+                <Card loading={loading}>
+                  <Typography.Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Details',
+                    })}
+                  </Typography.Title>
 
-              <Descriptions column={1}>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Name',
-                  })}
-                  // style={{ paddingBottom: 8 }}
-                >
-                  {data?.business?.name}
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Site Number',
-                  })}
-                >
-                  {loading ? (
-                    <Skeleton.Input style={{ height: 20 }} />
-                  ) : (
-                    data?.business?.siteNumber ||
-                    intl.formatMessage({
-                      defaultMessage: 'None',
-                    })
-                  )}
-                </Descriptions.Item>
-                {/* <Descriptions.Item
+                  <Descriptions column={1}>
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Name',
+                      })}
+                      // style={{ paddingBottom: 8 }}
+                    >
+                      {data?.business?.name}
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Site Number',
+                      })}
+                    >
+                      {loading ? (
+                        <Skeleton.Input style={{ height: 20 }} />
+                      ) : (
+                        data?.business?.siteNumber ||
+                        intl.formatMessage({
+                          defaultMessage: 'None',
+                        })
+                      )}
+                    </Descriptions.Item>
+                    {/* <Descriptions.Item
                 label={intl.formatMessage({
                   defaultMessage: 'Show Name',
                   id: 'LxDnoc',
@@ -246,103 +250,154 @@ const ViewBusiness = ({
               >
                 {data?.business.}
               </Descriptions.Item> */}
-                {data?.business?.parent?.name && (
-                  <Descriptions.Item
-                    label={intl.formatMessage({
-                      defaultMessage: 'Parent',
-                    })}
-                  >
-                    <Link
-                      to={`/app/scheme-settings/businesses/view/${
-                        data?.business?.parent?.id || ''
-                      }`}
+                    {data?.business?.parent?.name && (
+                      <Descriptions.Item
+                        label={intl.formatMessage({
+                          defaultMessage: 'Parent',
+                        })}
+                      >
+                        <Link
+                          to={`/app/scheme-settings/businesses/view/${
+                            data?.business?.parent?.id || ''
+                          }`}
+                        >
+                          {loading ? (
+                            <Skeleton.Input style={{ height: 20 }} />
+                          ) : (
+                            data?.business?.parent?.name ||
+                            intl.formatMessage({
+                              defaultMessage: 'None',
+                            })
+                          )}
+                        </Link>
+                      </Descriptions.Item>
+                    )}
+
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Brands',
+                      })}
                     >
-                      {loading ? (
-                        <Skeleton.Input style={{ height: 20 }} />
-                      ) : (
-                        data?.business?.parent?.name ||
-                        intl.formatMessage({
-                          defaultMessage: 'None',
-                        })
-                      )}
-                    </Link>
-                  </Descriptions.Item>
-                )}
+                      <Row>
+                        {data?.business?.brands &&
+                        data?.business?.brands.length > 0 ? (
+                          data?.business?.brands.map((el, i) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <Tag className={classes.tag} key={i}>
+                              {el}
+                            </Tag>
+                          ))
+                        ) : (
+                          <FormattedMessage defaultMessage="No Brands" />
+                        )}
+                      </Row>
+                    </Descriptions.Item>
 
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Brands',
-                  })}
-                >
-                  <Row>
-                    {data?.business?.brands &&
-                    data?.business?.brands.length > 0 ? (
-                      data?.business?.brands.map((el, i) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <Tag className={classes.tag} key={i}>
-                          {el}
-                        </Tag>
-                      ))
-                    ) : (
-                      <FormattedMessage defaultMessage="No Brands" />
-                    )}
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Groups',
+                      })}
+                    >
+                      <Row gutter={[0, 8]}>
+                        {data?.business?.groups &&
+                        data?.business?.groups.length > 0 ? (
+                          data?.business?.groups.map(({ id, name }) => (
+                            <Col key={id}>
+                              <Tag color="blue">{name}</Tag>
+                            </Col>
+                          ))
+                        ) : (
+                          <FormattedMessage defaultMessage="No Groups" />
+                        )}
+                      </Row>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Tags',
+                      })}
+                    >
+                      <Row gutter={[0, 8]}>
+                        {data?.business?.tags &&
+                        data?.business?.tags.length > 0 ? (
+                          data?.business?.tags.map(({ id, name }) => (
+                            <Col key={id}>
+                              <Tag>{name}</Tag>
+                            </Col>
+                          ))
+                        ) : (
+                          <FormattedMessage defaultMessage="No Tag" />
+                        )}
+                      </Row>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Address',
+                      })}
+                      style={{ paddingBottom: 8 }}
+                    >
+                      {data?.business.locations.length
+                        ? data?.business.locations[0]?.full
+                        : ''}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Card>
+              </Col>
+              <Col span={12}>
+                <LocatingCard
+                  height={194}
+                  location={data?.business?.locations[0]}
+                  setLocation={onEditAddress}
+                  width="100%"
+                />
+              </Col>
+              <Col span={24}>
+                <Card loading={loading} style={{ marginBottom: 0 }}>
+                  <Row gutter={16}>
+                    <Col>
+                      <FontAwesomeIcon
+                        icon={faBolt}
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </Col>
+                    <Col>
+                      <Typography.Title
+                        className={classes.headerTitle}
+                        level={4}
+                      >
+                        <FormattedMessage defaultMessage="AI Analysis" />
+                      </Typography.Title>
+                    </Col>
                   </Row>
-                </Descriptions.Item>
 
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Groups',
-                  })}
-                >
-                  <Row gutter={[0, 8]}>
-                    {data?.business?.groups &&
-                    data?.business?.groups.length > 0 ? (
-                      data?.business?.groups.map(({ id, name }) => (
-                        <Col key={id}>
-                          <Tag color="blue">{name}</Tag>
-                        </Col>
-                      ))
-                    ) : (
-                      <FormattedMessage defaultMessage="No Groups" />
-                    )}
-                  </Row>
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Tags',
-                  })}
-                >
-                  <Row gutter={[0, 8]}>
-                    {data?.business?.tags && data?.business?.tags.length > 0 ? (
-                      data?.business?.tags.map(({ id, name }) => (
-                        <Col key={id}>
-                          <Tag>{name}</Tag>
-                        </Col>
-                      ))
-                    ) : (
-                      <FormattedMessage defaultMessage="No Tag" />
-                    )}
-                  </Row>
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Address',
-                  })}
-                  style={{ paddingBottom: 8 }}
-                >
-                  {data?.business.locations.length
-                    ? data?.business.locations[0]?.full
-                    : ''}
-                </Descriptions.Item>
-              </Descriptions>
-            </Card>
+                  <Typography.Paragraph style={{ marginTop: 10 }}>
+                    <FormattedMessage defaultMessage="ST-001 is a business experiencing a significant amount of theft, primarily through walkout thefts (grab and go) and self-checkout theft. They also have incidents of concealment and some instances of fraudulent returns and fake payments. Some repeat offenders have been identified, with some displaying aggressive behaviors." />
+                  </Typography.Paragraph>
 
-            <LocatingCard
-              height={194}
-              location={data?.business?.locations[0]}
-              setLocation={onEditAddress}
-              width="100%"
-            />
+                  {[
+                    "The business is experiencing a high volume of 'grab and go' or 'walkout theft' incidents.",
+                    'Self-checkout areas are a significant point of loss.',
+                    'A small group of individuals contribute to a disproportionate amount of theft (Ethan Reynolds, Olivia Carter).',
+                    'There are instances of verbal abuse towards staff',
+                  ].map((item) => (
+                    <Row
+                      align="middle"
+                      gutter={8}
+                      style={{ marginBottom: 12, paddingLeft: 10 }}
+                      wrap={false}
+                    >
+                      <Col>
+                        <FontAwesomeIcon icon={faCircle} size="2xs" />
+                      </Col>
+                      <Col flex={1}>
+                        <Typography.Paragraph style={{ marginBottom: 0 }}>
+                          {item}
+                        </Typography.Paragraph>
+                      </Col>
+                    </Row>
+                  ))}
+                </Card>
+              </Col>
+            </Row>
             <Card>
               <Row align="middle" className={classes.cardHeader}>
                 <Col flex={1}>

@@ -191,6 +191,7 @@ const AiSuggestionCard = ({ data, onDismissSuggestion, onReview }: Props) => {
         onReview={onReview}
         title={data.title}
       />
+      <Typography.Text type="secondary">{data.description}</Typography.Text>
     </Card>
   );
 };
