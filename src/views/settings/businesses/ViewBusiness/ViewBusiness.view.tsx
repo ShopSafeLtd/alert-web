@@ -344,7 +344,7 @@ const ViewBusiness = ({
               </Col>
               <Col span={12}>
                 <LocatingCard
-                  height={194}
+                  height={300}
                   location={data?.business?.locations[0]}
                   setLocation={onEditAddress}
                   width="100%"
