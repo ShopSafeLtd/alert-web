@@ -3,7 +3,6 @@ import type { FormInstance } from 'antd';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 
 import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
-import validateMobileWithCountryCode from '#/utils/validate-contry-code';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,6 +16,7 @@ import {
   Switch,
   Typography,
 } from 'antd';
+import PhoneInput from 'antd-phone-input';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { Role } from 'graphql/types';
 import React from 'react';
@@ -77,6 +77,11 @@ const AddUser = ({
   const intl = useIntl();
   // const [selectedGroups, setSelectedGroups] = useState<string[]>();
   const classes = useStyles();
+  // const validator = (_, { valid }) => {
+  //   // if (valid(true)) return Promise.resolve(); // strict validation
+  //   if (valid()) return Promise.resolve(); // non-strict validation
+  //   return Promise.reject('Invalid phone number');
+  // };
 
   return (
     <Form<FormData>
@@ -133,7 +138,7 @@ const AddUser = ({
                 validator(_, value) {
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   const mobile = getFieldValue('mobileNumber');
-                  if (value || mobile) {
+                  if (value || (mobile && mobile.valid())) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
@@ -159,10 +164,10 @@ const AddUser = ({
             name="mobileNumber"
             rules={[
               ({ getFieldValue }) => ({
-                validator(_, value) {
+                validator(_, { valid }) {
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   const email = getFieldValue('email');
-                  if (!value && !email) {
+                  if (!valid && !email) {
                     return Promise.reject(
                       new Error(
                         intl.formatMessage({
@@ -172,25 +177,30 @@ const AddUser = ({
                       )
                     );
                   }
-                  if (value && !validateMobileWithCountryCode(value)) {
-                    return Promise.reject(
-                      new Error(
-                        intl.formatMessage({
-                          defaultMessage: `Invalid mobile number. Please include a valid country code such as +44.`,
-                        })
-                      )
-                    );
-                  }
+                  // if (valid) {
+                  //   return Promise.reject(
+                  //     new Error(
+                  //       intl.formatMessage({
+                  //         defaultMessage: `Invalid mobile number. Please include a valid country code such as +44.`,
+                  //       })
+                  //     )
+                  //   );
+                  // }
                   return Promise.resolve();
                 },
               }),
             ]}
-            tooltip={intl.formatMessage({
-              defaultMessage:
-                'Make sure to format the mobile number with a country code and a space after it.',
-            })}
+            // tooltip={intl.formatMessage({
+            //   defaultMessage:
+            //     'Make sure to format the mobile number with a country code and a space after it.',
+            // })}
           >
-            <Input disabled={saving} readOnly={existingUser} type="tel" />
+            <PhoneInput
+              disableParentheses
+              distinct
+              preferredCountries={['gb']}
+            />
+            {/* <Input disabled={saving} readOnly={existingUser} type="tel" />*/}
           </Form.Item>
         </Col>
       </Row>
