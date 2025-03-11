@@ -13,6 +13,7 @@ import type { InviteExistingUserMutation } from 'graphql/users/mutations/__gener
 import type { ListBusinessUsersQuery } from 'graphql/users/queries/__generated__/list-business-users.generated';
 import type { DemDeviceData, LocationData } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import AddDemDevice from '#/components/form-components/DemDevice/AddDemDevice';
 import DemDeviceTable from '#/components/tables/DemDeviceTable';
 import DemEvidenceTable from '#/components/tables/DemEvidenceTable';
@@ -55,6 +56,7 @@ import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness
 import LocatingCard from 'components/map/LocatingCard';
 import ActivityTable from 'components/tables/ActivityTable';
 import IncidentTable from 'components/tables/IncidentTable';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import moment from 'moment';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -350,53 +352,61 @@ const ViewBusiness = ({
                   width="100%"
                 />
               </Col>
-              <Col span={24}>
-                <Card loading={loading} style={{ marginBottom: 0 }}>
-                  <Row gutter={16}>
-                    <Col>
-                      <FontAwesomeIcon
-                        icon={faBolt}
-                        style={{ height: 24, width: 24 }}
-                      />
-                    </Col>
-                    <Col>
-                      <Typography.Title
-                        className={classes.headerTitle}
-                        level={4}
-                      >
-                        <FormattedMessage defaultMessage="AI Analysis" />
-                      </Typography.Title>
-                    </Col>
-                  </Row>
-
-                  <Typography.Paragraph style={{ marginTop: 10 }}>
-                    <FormattedMessage defaultMessage="ST-001 is a business experiencing a significant amount of theft, primarily through walkout thefts (grab and go) and self-checkout theft. They also have incidents of concealment and some instances of fraudulent returns and fake payments. Some repeat offenders have been identified, with some displaying aggressive behaviors." />
-                  </Typography.Paragraph>
-
-                  {[
-                    "The business is experiencing a high volume of 'grab and go' or 'walkout theft' incidents.",
-                    'Self-checkout areas are a significant point of loss.',
-                    'A small group of individuals contribute to a disproportionate amount of theft (Ethan Reynolds, Olivia Carter).',
-                    'There are instances of verbal abuse towards staff',
-                  ].map((item) => (
-                    <Row
-                      align="middle"
-                      gutter={8}
-                      style={{ marginBottom: 12, paddingLeft: 10 }}
-                      wrap={false}
-                    >
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Read,
+                  model: PermissionModel.Automations,
+                }}
+                unauthorizedElement={<div />}
+              >
+                <Col span={24}>
+                  <Card loading={loading} style={{ marginBottom: 0 }}>
+                    <Row gutter={16}>
                       <Col>
-                        <FontAwesomeIcon icon={faCircle} size="2xs" />
+                        <FontAwesomeIcon
+                          icon={faBolt}
+                          style={{ height: 24, width: 24 }}
+                        />
                       </Col>
-                      <Col flex={1}>
-                        <Typography.Paragraph style={{ marginBottom: 0 }}>
-                          {item}
-                        </Typography.Paragraph>
+                      <Col>
+                        <Typography.Title
+                          className={classes.headerTitle}
+                          level={4}
+                        >
+                          <FormattedMessage defaultMessage="AI Analysis" />
+                        </Typography.Title>
                       </Col>
                     </Row>
-                  ))}
-                </Card>
-              </Col>
+
+                    <Typography.Paragraph style={{ marginTop: 10 }}>
+                      <FormattedMessage defaultMessage="ST-001 is a business experiencing a significant amount of theft, primarily through walkout thefts (grab and go) and self-checkout theft. They also have incidents of concealment and some instances of fraudulent returns and fake payments. Some repeat offenders have been identified, with some displaying aggressive behaviors." />
+                    </Typography.Paragraph>
+
+                    {[
+                      "The business is experiencing a high volume of 'grab and go' or 'walkout theft' incidents.",
+                      'Self-checkout areas are a significant point of loss.',
+                      'A small group of individuals contribute to a disproportionate amount of theft (Ethan Reynolds, Olivia Carter).',
+                      'There are instances of verbal abuse towards staff',
+                    ].map((item) => (
+                      <Row
+                        align="middle"
+                        gutter={8}
+                        style={{ marginBottom: 12, paddingLeft: 10 }}
+                        wrap={false}
+                      >
+                        <Col>
+                          <FontAwesomeIcon icon={faCircle} size="2xs" />
+                        </Col>
+                        <Col flex={1}>
+                          <Typography.Paragraph style={{ marginBottom: 0 }}>
+                            {item}
+                          </Typography.Paragraph>
+                        </Col>
+                      </Row>
+                    ))}
+                  </Card>
+                </Col>
+              </PermissionCheckWrapper>
             </Row>
             <Card>
               <Row align="middle" className={classes.cardHeader}>
