@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
+import type { PhoneNumber } from 'antd-phone-input';
 import type { CreateUserData, UserUpdateInput } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
@@ -21,6 +22,20 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 const { useForm } = Form;
+export const generatePhoneNumber = (
+  value: PhoneNumber | undefined
+): null | string => {
+  if (!value) return null;
+  const { areaCode, countryCode, phoneNumber } = value;
+
+  // Return null if any of the required values are missing.
+  if (countryCode === null || !areaCode || !phoneNumber) {
+    return null;
+  }
+
+  // Return the formatted phone number starting with a plus sign.
+  return `+${countryCode}${areaCode}${phoneNumber}`;
+};
 
 export interface FormData {
   approverGroups: string[];
@@ -35,7 +50,7 @@ export interface FormData {
   incidentEmail: boolean;
   incidentPush: boolean;
   messagePush: boolean;
-  mobileNumber?: string;
+  mobileNumber?: PhoneNumber;
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
@@ -484,7 +499,7 @@ const useAddUser = ({
             incidentEmail: data.incidentEmail,
             incidentPush: data.incidentPush,
             messagePush: data.messagePush,
-            mobileNumber: data.mobileNumber,
+            mobileNumber: generatePhoneNumber(data.mobileNumber),
             offenderEmail: data.offenderEmail,
             offenderPush: data.offenderPush,
             publicName: data.publicName,
