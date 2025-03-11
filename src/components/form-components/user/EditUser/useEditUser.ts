@@ -1,9 +1,13 @@
 import type { FormInstance } from 'antd';
+import type { PhoneNumber } from 'antd-phone-input';
 import type { UserUpdateInput } from 'graphql/types';
 import type { UserQuery } from 'graphql/user/queries/__generated__/user.generated';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 
-import { stringOrOption } from '#/components/form-components/user/AddUser/useAddUser';
+import {
+  generatePhoneNumber,
+  stringOrOption,
+} from '#/components/form-components/user/AddUser/useAddUser';
 import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/__generated__/custom-roles.generated';
 import { useGroupsContext } from '#/context/groups-context';
 import { Form, notification } from 'antd';
@@ -29,7 +33,7 @@ export interface FormData {
   incidentEmail: boolean;
   incidentPush: boolean;
   messagePush: boolean;
-  mobileNumber?: string;
+  mobileNumber?: PhoneNumber;
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
@@ -368,8 +372,8 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             incidentEmail: { set: data.incidentEmail },
             incidentPush: { set: data.incidentPush },
             messagePush: { set: data.messagePush },
-            mobileNumber: data.mobileNumber
-              ? { set: data.mobileNumber }
+            mobileNumber: generatePhoneNumber(data.mobileNumber)
+              ? { set: generatePhoneNumber(data.mobileNumber) || '' }
               : undefined,
             offenderEmail: { set: data.offenderEmail },
             offenderPush: { set: data.offenderPush },

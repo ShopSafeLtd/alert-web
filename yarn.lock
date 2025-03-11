@@ -6393,6 +6393,13 @@ antd-img-crop@^4.2.3:
   dependencies:
     react-easy-crop "^4.1.5"
 
+antd-phone-input@^0.3.13:
+  version "0.3.13"
+  resolved "https://registry.yarnpkg.com/antd-phone-input/-/antd-phone-input-0.3.13.tgz#b7859edc2c50eb3b51bca17ffcd00b3f4aa8657e"
+  integrity sha512-BLp92xV3BVfgekZOfbgjqcmeV1U+xD/+g1Zr6XCHYybBEAAgFXGkKX4rAhLgK6Ogt/BnpAyhuMvU1m/ydOwG3Q==
+  dependencies:
+    react-phone-hooks "^0.1.14"
+
 antd@^4.20.5:
   version "4.24.8"
   resolved "https://registry.yarnpkg.com/antd/-/antd-4.24.8.tgz#22f34de6857556868780dfa5fe7b374b0b71b517"
@@ -16652,6 +16659,11 @@ react-onesignal@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-onesignal/-/react-onesignal-2.0.4.tgz#d3bf7e4ff4c176b542ff4a2fa2a67a899dbb5472"
   integrity sha512-llZ4PV1+EsWWZDt0BRils6gAxaxMoYP0Z3rlNivQy4xqUaiO1/PcRaIJ6CuzCci/koDsw5IzLOXEHlV4Yn+d9Q==
+
+react-phone-hooks@^0.1.14:
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/react-phone-hooks/-/react-phone-hooks-0.1.14.tgz#b6f92a507ff6006460fce07c952928f7e280fb84"
+  integrity sha512-rIYvqD8U8fdJmGH/Poi5fPnmX+x9aNK2GZ94hmpDi7W8RjSsTIYkWCk6FLXovRXDcbT9c6kMOja06LYfEMEmBw==
 
 react-player@^2.13.0:
   version "2.13.0"
