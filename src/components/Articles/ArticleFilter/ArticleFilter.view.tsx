@@ -163,6 +163,10 @@ const ArticleFilter = ({
           <Select
             allowClear
             className={classes.select}
+            filterOption={(input, option) => {
+              const value = (option?.children ?? '') as string;
+              return value.toLowerCase().includes(input.toLowerCase());
+            }}
             loading={groupsLoading}
             maxTagCount={2}
             mode="multiple"

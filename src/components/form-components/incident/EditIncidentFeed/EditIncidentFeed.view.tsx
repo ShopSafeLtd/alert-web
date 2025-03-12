@@ -291,6 +291,10 @@ Props): JSX.Element => {
           >
             <Select
               disabled={saving}
+              filterOption={(input, option) => {
+                const value = (option?.children ?? '') as string;
+                return value.toLowerCase().includes(input.toLowerCase());
+              }}
               loading={groupsLoading}
               maxTagCount={3}
               mode="multiple"
