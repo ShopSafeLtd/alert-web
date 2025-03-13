@@ -2,7 +2,6 @@ import type { ArticlePriority, CompleteStatus } from 'graphql/types';
 import type { ArticleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
-import { useGroupsContext } from '#/context/groups-context';
 import { SortOrder } from 'graphql/types';
 import { useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'state';
@@ -10,8 +9,6 @@ import { useStoreActions, useStoreState } from 'state';
 interface Return {
   clearFilters: () => void;
   filterVariables: ArticleFilters;
-  groups: { label: string; value: string }[];
-  groupsLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: SortOrder) => void;
@@ -44,8 +41,6 @@ const useArticleFilter = (): Return => {
       });
     }
   }, []);
-
-  const { groups, groupsLoading } = useGroupsContext();
 
   const setCreatedAtFilter = (values: DateType | undefined) => {
     setFilterState({
@@ -105,8 +100,6 @@ const useArticleFilter = (): Return => {
   return {
     clearFilters,
     filterVariables,
-    groups,
-    groupsLoading,
     setCreatedAtFilter,
     setGroupsFilter,
     setOrder,

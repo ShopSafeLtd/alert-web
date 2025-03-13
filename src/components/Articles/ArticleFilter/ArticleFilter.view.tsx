@@ -1,6 +1,7 @@
 import type { ArticleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
 import { ArticlePriority, CompleteStatus, SortOrder } from 'graphql/types';
 // TP
@@ -20,8 +21,6 @@ interface FormData {
 interface Props {
   clearFilters: () => void;
   filterVariables: ArticleFilters;
-  groups: { label: string; value: string }[];
-  groupsLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: SortOrder) => void;
@@ -32,8 +31,6 @@ interface Props {
 const ArticleFilter = ({
   clearFilters,
   filterVariables,
-  groups,
-  groupsLoading,
   setCreatedAtFilter,
   setGroupsFilter,
   setOrder,
@@ -160,14 +157,9 @@ const ArticleFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({ defaultMessage: 'Groups' })}
           </Typography.Paragraph>
-          <Select
+          <GroupsSelect
             allowClear
             className={classes.select}
-            filterOption={(input, option) => {
-              const value = (option?.children ?? '') as string;
-              return value.toLowerCase().includes(input.toLowerCase());
-            }}
-            loading={groupsLoading}
             maxTagCount={2}
             mode="multiple"
             onChange={setGroupsFilter}
@@ -176,13 +168,7 @@ const ArticleFilter = ({
             })}
             size="small"
             value={groupsFilter}
-          >
-            {groups.map((group) => (
-              <Select.Option key={group.value} value={group.value}>
-                {group.label}
-              </Select.Option>
-            ))}
-          </Select>
+          />
         </Col>
       </Row>
       <Row>

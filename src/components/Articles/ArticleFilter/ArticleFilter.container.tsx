@@ -7,8 +7,6 @@ const ArticleFilter = (): JSX.Element => {
   const {
     clearFilters,
     filterVariables,
-    groups,
-    groupsLoading,
     setCreatedAtFilter,
     setGroupsFilter,
     setOrder,
@@ -20,8 +18,6 @@ const ArticleFilter = (): JSX.Element => {
     <View
       clearFilters={clearFilters}
       filterVariables={filterVariables}
-      groups={groups}
-      groupsLoading={groupsLoading}
       setCreatedAtFilter={setCreatedAtFilter}
       setGroupsFilter={setGroupsFilter}
       setOrder={setOrder}
