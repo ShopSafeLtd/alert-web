@@ -8,24 +8,30 @@ const ViewRoleContainer = ({ create = false }: { create?: boolean }) => {
   const { id } = useParams();
   const {
     changed,
+    clearAll,
     data,
     form,
     loading,
     onFinish,
+    onSettingsToggle,
     roleName,
+    setAll,
     setChanged,
     submitting,
   } = useRole(id, create);
   return (
     <RoleView
       changed={changed}
+      clearAll={clearAll}
       create={create}
       data={data}
       form={form}
       id={id || ''}
       loading={loading}
       onFinish={onFinish}
+      onSettingsToggle={onSettingsToggle}
       roleName={roleName}
+      setAll={setAll}
       setChanged={setChanged}
       submitting={submitting}
     />

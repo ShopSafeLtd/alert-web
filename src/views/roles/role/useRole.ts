@@ -1,25 +1,33 @@
 import type { RoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
 import type { FormInstance } from 'antd';
-import type { PermissionModel, Role } from 'graphql/types';
+import type { Role } from 'graphql/types';
 
 import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/__generated__/upsertPermissions.generated';
 import { useRoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
+import {
+  createPermissionEntries,
+  processModelMethods,
+} from '#/views/roles/role/processModelMethods';
 import { Form } from 'antd';
-import { PermissionMethod } from 'graphql/types';
-import { useState } from 'react';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import type { FormData } from '../types';
 
 import { useStoreState } from '../../../state';
+import { roleItems, settings } from '../types';
 
 interface Props {
   changed: boolean;
+  clearAll: () => void;
   data: RoleQuery | undefined;
   form: FormInstance<FormValues>;
   loading: boolean;
   onFinish: (values: FormValues) => void;
+  onSettingsToggle: (value: boolean) => void;
   roleName: string | undefined;
+  setAll: () => void;
   setChanged: (changed: boolean) => void;
   submitting: boolean;
 }
@@ -49,37 +57,15 @@ export function useRole(id: string | undefined, create: boolean): Props {
   });
   const onFinish = (values: FormValues) => {
     setSubmitting(true);
+
+    const result = processModelMethods(values);
+
     void updatePermissions({
       variables: {
         data: {
           canApprove: values.approvalAllowed,
           name: values.name,
-          permissions: Object.keys(values)
-            .filter(
-              (key) =>
-                key !== 'name' && key !== 'type' && key !== 'approvalAllowed'
-            )
-            .map((key) => {
-              if (key === 'SETTINGS') {
-                if (values[key]?.includes(PermissionMethod.Edit)) {
-                  return {
-                    allowedMethods: [
-                      PermissionMethod.Read,
-                      PermissionMethod.Edit,
-                    ],
-                    model: key as PermissionModel,
-                  };
-                }
-                return {
-                  allowedMethods: [],
-                  model: key as PermissionModel,
-                };
-              }
-              return {
-                allowedMethods: (values[key] as PermissionMethod[]) || [],
-                model: key as PermissionModel,
-              };
-            }),
+          permissions: result,
           roleId: id,
           schemeId,
           type: values.type,
@@ -96,13 +82,21 @@ export function useRole(id: string | undefined, create: boolean): Props {
         model: item?.model,
       }));
 
-      form.setFieldValue('approvalAllowed', iData?.role?.approvalTier);
-      form.setFieldsValue({
+      console.log({
         ...Object.fromEntries(
-          permissions?.map((item) => [
-            item?.model,
-            item?.methods?.map((method) => method),
-          ]) || []
+          permissions?.flatMap((item) =>
+            item?.methods?.map((method) => [`${item.model}:${method}`, true])
+          ) || []
+        ),
+      });
+
+      form.setFieldsValue({
+        name: iData.role.name,
+        type: iData.role.type,
+        ...Object.fromEntries(
+          permissions?.flatMap((item) =>
+            item?.methods?.map((method) => [`${item.model}:${method}`, true])
+          ) || []
         ),
       });
     },
@@ -115,13 +109,69 @@ export function useRole(id: string | undefined, create: boolean): Props {
   });
   const roleName = data?.role.name;
 
+  const clearAll = () => {
+    const permissionEntries: [string, boolean][] = [
+      [`${PermissionModel.Settings}:${PermissionMethod.Read}`, false],
+      ...createPermissionEntries(roleItems, false),
+      ...createPermissionEntries(settings[0].children, false),
+    ];
+
+    form.setFieldsValue(Object.fromEntries(permissionEntries));
+  };
+  const setAll = () => {
+    const permissionEntries: [string, boolean][] = [
+      [`${PermissionModel.Settings}:${PermissionMethod.Read}`, true],
+      ...createPermissionEntries(roleItems, true),
+      ...createPermissionEntries(settings[0].children, true),
+    ];
+
+    form.setFieldsValue(Object.fromEntries(permissionEntries));
+  };
+
+  const clearAllSettings = () => {
+    form.setFieldsValue({
+      ...Object.fromEntries(
+        settings[0].children.flatMap((item) =>
+          item.methods.map((method) => [`${item.key}:${method.key}`, false])
+        )
+      ),
+    });
+  };
+  const setAllSettings = () => {
+    form.setFieldsValue({
+      ...Object.fromEntries(
+        settings[0].children.flatMap((item) =>
+          item.methods.map((method) => [`${item.key}:${method.key}`, true])
+        )
+      ),
+    });
+  };
+
+  const settingsEnabled = Form.useWatch(
+    `${PermissionModel.Settings}:${PermissionMethod.Read}`,
+    form
+  ) as boolean;
+
+  useEffect(() => {}, [settingsEnabled]);
+
+  const onSettingsToggle = (oldValue: boolean) => {
+    if (oldValue) {
+      clearAllSettings();
+    } else {
+      setAllSettings();
+    }
+  };
+
   return {
     changed,
+    clearAll,
     data,
     form,
     loading,
     onFinish,
+    onSettingsToggle,
     roleName,
+    setAll,
     setChanged,
     submitting,
   };
