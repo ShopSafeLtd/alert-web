@@ -81,6 +81,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   const [availableRoles, setAvailableRoles] = useState<SelectOptions[]>([]);
 
   const { data: rolesData, loading: rolesLoading } = useUserRolesQuery({
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ roles }) => {
       const rolesFormatted = roles.edges.map(({ node: role }) => ({
         label: role.name,
