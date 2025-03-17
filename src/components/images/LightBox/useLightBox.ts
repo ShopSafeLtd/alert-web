@@ -1,10 +1,7 @@
 import { useIndexImageMutation } from 'graphql/rekognition/mutations/__generated__/index-image.generated';
-import { Role } from 'graphql/types';
-import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
+import { useState } from 'react';
 
 interface Return {
-  isAdmin: boolean;
   linkNewOffender: boolean;
   linkOffender: null | string;
   onReIndex: (imageId?: string) => void;
@@ -18,18 +15,11 @@ interface Return {
 }
 
 const useLightBox = (): Return => {
-  const role = useStoreState((state) => state.user.role);
-
   const [reIndexing, setReIndexing] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [showBoxes, setShowBoxes] = useState(true);
   const [linkOffender, setLinkOffender] = useState<null | string>(null);
   const [viewMatches, setViewMatches] = useState<null | string>(null);
   const [linkNewOffender, setLinkNewOffender] = useState(false);
-
-  useEffect(() => {
-    setIsAdmin(role !== Role.User);
-  }, [role]);
 
   const [indexImage] = useIndexImageMutation();
 
@@ -59,7 +49,6 @@ const useLightBox = (): Return => {
   };
 
   return {
-    isAdmin,
     linkNewOffender,
     linkOffender,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises

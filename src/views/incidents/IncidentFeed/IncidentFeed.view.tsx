@@ -31,6 +31,7 @@ import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentFilter from 'components/incidents/IncidentFilter';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
@@ -146,7 +147,12 @@ const IncidentFeed = ({
                   label: intl.formatMessage({
                     defaultMessage: 'Not Approved',
                   }),
-                  needAdminRight: true,
+                  permissions: [
+                    {
+                      method: PermissionMethod.Approve,
+                      model: PermissionModel.Incidents,
+                    },
+                  ],
                   value: 'NOT APPROVED',
                 },
               ]}

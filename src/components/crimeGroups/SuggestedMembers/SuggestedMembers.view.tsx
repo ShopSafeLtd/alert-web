@@ -2,6 +2,7 @@
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import type { SuggestedCrimeGroupMembersQuery } from 'graphql/crime-groups/queries/__generated__/suggested-memebrs.generated';
 
+import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   faCircleInfo,
   faEarth,
@@ -15,11 +16,9 @@ import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import IncidentTable from 'components/tables/IncidentTable/IncidentTable.view';
-import { Role } from 'graphql/types';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
 import { calcAge } from 'utils';
 import {
   getOffenderAge,
@@ -48,10 +47,7 @@ const SuggestedMembers = ({
 }: Props) => {
   const classes = useStyles();
 
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
     index: 0,

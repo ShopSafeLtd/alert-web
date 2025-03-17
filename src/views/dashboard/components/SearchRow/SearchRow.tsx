@@ -1,53 +1,62 @@
-import React from 'react';
-import DebouncedInput from '#/utils/debounced-input';
 import CheckTags from '#/components/form-components/check-tags/CheckTags.view';
+import DebouncedInput from '#/utils/debounced-input';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-import { Button, Card, Col, Row, Tooltip } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExclamationCircle,
   faFilter,
   faNewspaper,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Row, Tooltip } from 'antd';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const SearchRow = () => {
   const {
+    adminRights,
     intl,
     setGallery,
-    variables: { gallery },
     setSearch,
     toggleSortFilter,
-    adminRights,
+    variables: { gallery },
   } = useDashboardContext();
   return (
     <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
       <Row align="middle" gutter={12}>
         <Col span={4} xxl={6}>
           <DebouncedInput
-            size="small"
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for anything in alert...',
-            })}
             allowClear
             // value={search}
             onChange={(e) => setSearch(e.target.value)}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for anything in alert...',
+            })}
+            size="small"
           />
         </Col>
         <Col flex={1}>
           <CheckTags
             mode="check"
             noGutter
-            value={gallery}
             onChange={setGallery}
             options={[
               {
                 label: intl.formatMessage({
                   defaultMessage: 'Not Approved',
                 }),
+                permissions: [
+                  {
+                    method: PermissionMethod.Approve,
+                    model: PermissionModel.Incidents,
+                  },
+                  {
+                    method: PermissionMethod.Approve,
+                    model: PermissionModel.Offenders,
+                  },
+                ],
                 value: 'NOT APPROVED',
-                needAdminRight: true,
               },
               {
                 label: intl.formatMessage({
@@ -62,6 +71,7 @@ const SearchRow = () => {
                 value: 'MYDATA',
               },
             ]}
+            value={gallery}
           />
         </Col>
         <Col>
@@ -71,8 +81,8 @@ const SearchRow = () => {
             })}
           >
             <Button
-              onClick={toggleSortFilter}
               icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
+              onClick={toggleSortFilter}
             />
           </Tooltip>
         </Col>

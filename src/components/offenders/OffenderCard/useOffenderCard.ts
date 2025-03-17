@@ -4,14 +4,14 @@ import type { RecycleOffenderMutation } from 'graphql/offenders/mutations/__gene
 import type { ImagePosition } from 'graphql/types';
 import type { EditFeedImage } from 'types/DataType';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import { notification } from 'antd';
 import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/__generated__/recycle-offender.generated';
 import { useUpdateOffenderImagesMutation } from 'graphql/offenders/mutations/update/__generated__/update-offender-images.generated';
-import { Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
@@ -36,9 +36,15 @@ interface Return {
 }
 const useOffenderCard = ({ offender, update }: Props): Return => {
   const navigate = useNavigate();
-  const role = useStoreState((state) => state.user.role);
   const intl = useIntl();
-  const approvalRights = update ? role !== Role.User : false;
+  const approvalRights = update
+    ? hasRolePermission({
+        permission: {
+          method: PermissionMethod.Edit,
+          model: PermissionModel.Offenders,
+        },
+      })
+    : false;
   const [editOffenderFeed, setEditOffenderFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);

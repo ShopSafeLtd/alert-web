@@ -125,10 +125,10 @@ const useIncidentFeed = (): Return => {
 
   const queryVariables: IncidentsFeedQueryVariables = {
     approved: hasApprovePermission
-      ? true
-      : gallery.includes('NOT APPROVED')
+      ? gallery.includes('NOT APPROVED')
         ? false
-        : undefined,
+        : undefined
+      : true,
     first: compactView ? 48 : 12,
     order: {
       date:
@@ -193,14 +193,14 @@ const useIncidentFeed = (): Return => {
           ]
         : undefined,
       approved: hasApprovePermission
-        ? {
-            equals: true,
-          }
-        : gallery.includes('NOT APPROVED')
+        ? gallery.includes('NOT APPROVED')
           ? {
               equals: false,
             }
-          : undefined,
+          : undefined
+        : {
+            equals: true,
+          },
       business:
         businesses.length > 0
           ? {

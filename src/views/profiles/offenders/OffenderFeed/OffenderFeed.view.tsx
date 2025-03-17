@@ -34,6 +34,7 @@ import OffenderCard from 'components/offenders/OffenderCard';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
@@ -101,7 +102,9 @@ const OffenderFeed = ({
       label: intl.formatMessage({
         defaultMessage: 'Not Approved',
       }),
-      needAdminRight: true,
+      permissions: [
+        { method: PermissionMethod.Approve, model: PermissionModel.Offenders },
+      ],
       value: 'NOT APPROVED',
     },
     {

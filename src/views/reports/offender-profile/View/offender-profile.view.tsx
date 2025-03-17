@@ -1,6 +1,7 @@
 import type { OffenderProfileQuery } from 'graphql/reports/queries/__generated__/offender-profile.generated';
 
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ResponsiveBar } from '@nivo/bar';
@@ -20,7 +21,7 @@ import {
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderSideList from 'components/offenders/OffenderSideList';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import { Age, Build, Gender, Race } from 'graphql/types';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -46,10 +47,7 @@ const OffenderProfile = ({
 }: Props) => {
   const classes = useStyles();
   const theme = useStoreState((state) => state.theme.currentTheme);
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(true);
 

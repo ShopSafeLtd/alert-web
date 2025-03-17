@@ -1,6 +1,7 @@
 import type { ListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import type { CarouselRef } from 'antd/lib/carousel';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faClock,
   faEdit,
@@ -28,7 +29,12 @@ import {
 } from 'antd';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { ArticlePriority, CompleteStatus } from 'graphql/types';
+import {
+  ArticlePriority,
+  CompleteStatus,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/types';
 import React, { useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -46,8 +52,6 @@ interface Props {
       >['edges'][0]['node']
     | null
     | undefined;
-  deleteRights: boolean;
-  menuRights: boolean;
   onDelete: (id: string) => void;
   onNavigate: (id: string) => void;
   openLightbox: (elements: { src: string }[], index: number) => void;
@@ -55,8 +59,6 @@ interface Props {
 
 const ArticleCard = ({
   article,
-  deleteRights,
-  menuRights,
   onDelete,
   onNavigate,
   openLightbox,
@@ -76,39 +78,50 @@ const ArticleCard = ({
     // tags,
     watermarkImage,
   } = article || {};
+
+  const menuItems = [
+    {
+      icon: <FontAwesomeIcon icon={faEdit} />,
+      key: 0,
+      label: <FormattedMessage defaultMessage="Edit Article" />,
+      onClick: () => onNavigate(id || ''),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Articles,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faTrash} />,
+      key: 1,
+      label: <FormattedMessage defaultMessage="Delete Article" />,
+      onClick: () =>
+        confirm({
+          content: (
+            <FormattedMessage defaultMessage="Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted." />
+          ),
+          okText: <FormattedMessage defaultMessage="Delete" />,
+          onOk: () => onDelete(id || ''),
+          title: <FormattedMessage defaultMessage="Are you sure?" />,
+        }),
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Articles,
+      },
+    },
+  ].filter(
+    (item) =>
+      item &&
+      hasRolePermission({
+        permission: item.permission,
+      })
+  );
+
   return (
     <div className={classes.card}>
-      {menuRights && (
+      {menuItems.length > 0 && (
         <Dropdown
           arrow={{ pointAtCenter: true }}
-          overlay={
-            <Menu
-              items={[
-                {
-                  icon: <FontAwesomeIcon icon={faEdit} />,
-                  key: 0,
-                  label: <FormattedMessage defaultMessage="Edit Article" />,
-                  onClick: () => onNavigate(id || ''),
-                },
-                {
-                  icon: <FontAwesomeIcon icon={faTrash} />,
-                  key: 1,
-                  label: <FormattedMessage defaultMessage="Delete Article" />,
-                  onClick: () =>
-                    confirm({
-                      content: (
-                        <FormattedMessage defaultMessage="Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted." />
-                      ),
-                      okText: <FormattedMessage defaultMessage="Delete" />,
-                      onOk: () => onDelete(id || ''),
-                      title: (
-                        <FormattedMessage defaultMessage="Are you sure?" />
-                      ),
-                    }),
-                },
-              ].filter((item) => !(item.key === 1 && deleteRights))}
-            />
-          }
+          overlay={<Menu items={menuItems} />}
           placement="bottomRight"
           trigger={['click']}
         >

@@ -1,26 +1,25 @@
 import React from 'react';
-import View from './LightBox.view';
-import useLightBox from './useLightBox';
+
 import type { Image } from './LightBox.types';
 
+import View from './LightBox.view';
+import useLightBox from './useLightBox';
+
 interface Props {
-  images?: Image[];
-  open: boolean;
   close: () => void;
+  images?: Image[];
   index: number;
+  open: boolean;
 }
 
-const LightBox = ({ close, index, open, images }: Props) => {
+const LightBox = ({ close, images, index, open }: Props) => {
   const {
-    isAdmin,
-    onReIndex,
-    reIndexing,
+    linkNewOffender,
+    linkOffender,
     showBoxes,
     toggleBoxes,
-    linkOffender,
-    toggleLinkOffender,
-    linkNewOffender,
     toggleLinkNewOffender,
+    toggleLinkOffender,
     toggleViewMatches,
     viewMatches,
   } = useLightBox();
@@ -28,18 +27,15 @@ const LightBox = ({ close, index, open, images }: Props) => {
   return (
     <View
       close={close}
-      index={index}
-      open={open}
       images={images}
-      isAdmin={isAdmin}
-      onReIndex={onReIndex}
-      reIndexing={reIndexing}
+      index={index}
+      linkNewOffender={linkNewOffender}
+      linkOffender={linkOffender}
+      open={open}
       showBoxes={showBoxes}
       toggleBoxes={toggleBoxes}
-      linkOffender={linkOffender}
-      toggleLinkOffender={toggleLinkOffender}
-      linkNewOffender={linkNewOffender}
       toggleLinkNewOffender={toggleLinkNewOffender}
+      toggleLinkOffender={toggleLinkOffender}
       toggleViewMatches={toggleViewMatches}
       viewMatches={viewMatches}
     />

@@ -1,3 +1,4 @@
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEye,
   faPenToSquare,
@@ -5,7 +6,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
-import { Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
@@ -73,10 +74,14 @@ const IncidentTable = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
   const restrictIncidentAccess =
     useStoreState((state) => state.scheme.restrictIncidentAccess) &&
-    role === Role.User;
+    hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Incidents,
+      },
+    });
 
   return (
     <Table

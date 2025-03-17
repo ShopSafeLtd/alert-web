@@ -9,7 +9,6 @@ import type {
   InvestigationStatus,
   Model,
   Race,
-  Role,
 } from 'graphql/types';
 import type { DateType } from 'types/DataType';
 
@@ -136,13 +135,6 @@ export interface ArticleFilters {
   priorities: ArticlePriority[];
   search: string;
   status: CompleteStatus[];
-}
-
-export interface UserFilters {
-  groups: string[];
-  orderBy: UserSort;
-  roles: Role[];
-  status: UserStatus | undefined;
 }
 
 export enum UserSort {

@@ -1,14 +1,13 @@
+import RouteWrapper from '#/navigation/utils/route-wrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Route, Routes } from 'react-router';
+import AddIncident from 'views/incidents/AddIncident';
 import IncidentFeed from 'views/incidents/IncidentFeed';
 import ViewIncident from 'views/incidents/ViewIncident';
-import AddIncident from 'views/incidents/AddIncident';
-import EditIncident from 'views/incidents/EditIncident';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
+
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { useIntl } from 'react-intl';
-import RouteWrapper from '#/navigation/utils/route-wrapper';
-// import ReviewIncident from 'views/incidents/ReviewIncident ';
 
 const Incidents = (): JSX.Element => {
   const intl = useIntl();
@@ -19,74 +18,46 @@ const Incidents = (): JSX.Element => {
       })}
     >
       <Routes>
-        <Route index element={<IncidentFeed />} />
+        <Route element={<IncidentFeed />} index />
         <Route
-          path="view/:id"
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Incidents,
                 method: PermissionMethod.Read,
+                model: PermissionModel.Incidents,
               }}
             >
               <ViewIncident />
             </PermissionCheckWrapper>
           }
+          path="view/:id"
         />
 
         <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Write,
+                model: PermissionModel.Incidents,
+              }}
+            >
+              <AddIncident />
+            </PermissionCheckWrapper>
+          }
           path="add/:investigationId"
+        />
+        <Route
           element={
             <PermissionCheckWrapper
               permission={{
-                model: PermissionModel.Incidents,
                 method: PermissionMethod.Write,
+                model: PermissionModel.Incidents,
               }}
             >
               <AddIncident />
             </PermissionCheckWrapper>
           }
-        />
-        <Route
           path="add"
-          element={
-            <PermissionCheckWrapper
-              permission={{
-                model: PermissionModel.Incidents,
-                method: PermissionMethod.Write,
-              }}
-            >
-              <AddIncident />
-            </PermissionCheckWrapper>
-          }
-        />
-        <Route
-          path="edit/:id"
-          index
-          element={
-            <PermissionCheckWrapper
-              permission={{
-                model: PermissionModel.Incidents,
-                method: PermissionMethod.Edit,
-              }}
-            >
-              <EditIncident reviewed={false} />
-            </PermissionCheckWrapper>
-          }
-        />
-        {/* <Route path="review/:id" element={<ReviewIncident />} /> */}
-        <Route
-          path="review/:id"
-          element={
-            <PermissionCheckWrapper
-              permission={{
-                model: PermissionModel.Incidents,
-                method: PermissionMethod.Edit,
-              }}
-            >
-              <EditIncident reviewed />
-            </PermissionCheckWrapper>
-          }
         />
       </Routes>
     </RouteWrapper>

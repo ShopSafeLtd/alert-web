@@ -65,12 +65,9 @@ interface Props {
   close: () => void;
   images?: Image[];
   index: number;
-  isAdmin: boolean;
   linkNewOffender: boolean;
   linkOffender: null | string;
-  onReIndex: (imageId?: string) => void;
   open: boolean;
-  reIndexing: boolean;
   showBoxes: boolean;
   toggleBoxes: () => void;
   toggleLinkNewOffender: () => void;
@@ -83,12 +80,9 @@ const LightBox = ({
   close,
   images = [],
   index,
-  isAdmin,
   linkNewOffender,
   linkOffender,
-  onReIndex,
   open,
-  reIndexing,
   showBoxes,
   toggleBoxes,
   toggleLinkNewOffender,
@@ -184,19 +178,6 @@ const LightBox = ({
                 )}
               </Button>
             </Col>
-            {isAdmin && (
-              <Col>
-                <Button
-                  disabled={reIndexing}
-                  loading={reIndexing}
-                  onClick={() => onReIndex(currentImage?.id)}
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'Search Image',
-                  })}
-                </Button>
-              </Col>
-            )}
             <Col>
               <Button onClick={close}>
                 <FontAwesomeIcon icon={faClose} size="lg" />

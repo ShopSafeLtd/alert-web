@@ -15,7 +15,8 @@ import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'; // Import useIntl hook
-import { Role } from 'graphql/types';
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { createUseStyles } from 'react-jss';
 
 import type { ReturnProps as Props } from './types/ViewArticle';
@@ -53,7 +54,6 @@ const ViewArticleView = ({
   loading,
   onDeleteArticle,
   openLightbox,
-  role,
 }: Props) => {
   const classes = useStyles();
 
@@ -63,8 +63,14 @@ const ViewArticleView = ({
       <div className={classes.viewArticle}>
         <Row className={classes.content}>
           <Col className={classes.detailsContainer} span={24}>
-            {role === Role.SchemeAdmin && (
-              <Row justify="end" style={{ padding: '10px 20px 15px' }}>
+            <Row justify="end" style={{ padding: '10px 20px 15px' }}>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Edit,
+                  model: PermissionModel.Articles,
+                }}
+                unauthorizedElement={<div />}
+              >
                 <Col style={{ marginRight: 10 }}>
                   <Button onClick={handlePrint}>
                     <FontAwesomeIcon
@@ -76,6 +82,14 @@ const ViewArticleView = ({
                     })}
                   </Button>
                 </Col>
+              </PermissionCheckWrapper>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Edit,
+                  model: PermissionModel.Articles,
+                }}
+                unauthorizedElement={<div />}
+              >
                 <Col style={{ marginRight: 10 }}>
                   <Button onClick={editArticle}>
                     <FontAwesomeIcon
@@ -87,6 +101,14 @@ const ViewArticleView = ({
                     })}
                   </Button>
                 </Col>
+              </PermissionCheckWrapper>
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Delete,
+                  model: PermissionModel.Articles,
+                }}
+                unauthorizedElement={<div />}
+              >
                 <Col>
                   <Button onClick={onDeleteArticle}>
                     <FontAwesomeIcon
@@ -98,8 +120,8 @@ const ViewArticleView = ({
                     })}
                   </Button>
                 </Col>
-              </Row>
-            )}
+              </PermissionCheckWrapper>
+            </Row>
             <Card
               loading={loading}
               style={{

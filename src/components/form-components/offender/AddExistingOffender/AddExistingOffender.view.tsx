@@ -5,7 +5,6 @@ import WatermarkSlide from '#/components/images/WatermartkSlide.view';
 import OffenderTile from '#/components/offenders/OffenderTile';
 import OffenderTileSkeleton from '#/components/offenders/OffenderTileSkeleton';
 import Loading from '#/components/shared-components/AntD/Loading';
-import { useStoreState } from '#/state';
 import DebouncedInput from '#/utils/debounced-input';
 import {
   getOffenderAge,
@@ -13,6 +12,7 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from '#/utils/offender/get-offender-desc';
+import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   Button,
   Checkbox,
@@ -26,7 +26,7 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import { Age, Build, Gender, Race } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -112,10 +112,7 @@ const AddExistingOffender = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
 
   const offenderNodes = data?.searchOffenders?.edges || [];
   const existingOffenders = (): JSX.Element => {

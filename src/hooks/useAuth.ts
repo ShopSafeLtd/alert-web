@@ -33,7 +33,7 @@ const useAuth = (): Return => {
   const expired = useStoreActions((actions) => actions.auth.expired);
   const currentUserId = useStoreState((state) => state.user.id);
   const currentScheme = useStoreState((state) => state.scheme.id);
-  const { setDem, setFilterDefaultGroup, setNotifications, setRole, setTodos } =
+  const { setDem, setFilterDefaultGroup, setNotifications, setTodos } =
     useStoreActions((actions) => actions.user);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setUser = useStoreActions((actions) => actions.user.setUser);
@@ -137,7 +137,6 @@ const useAuth = (): Return => {
           setDem,
           setFilterDefaultGroup,
           setNotifications,
-          setRole,
           setScheme,
           setTodos,
           setUser,

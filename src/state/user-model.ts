@@ -7,7 +7,6 @@ import type {
 } from 'graphql/types';
 
 import { action } from 'easy-peasy';
-import { Role } from 'graphql/types';
 
 import type { Translations } from './scheme-model';
 
@@ -69,9 +68,6 @@ export interface SetFilterDefaultGroup {
     };
   }[];
 }
-export interface SetUserRole {
-  role: Role;
-}
 
 export interface SetUserTodos {
   userTodos: number;
@@ -95,7 +91,6 @@ export interface Permissions {
 export interface Scheme {
   id: string;
   permissions: Permissions[];
-  role: Role;
   scheme: {
     activityAssignToUser: boolean;
     autoApproveIncidents: boolean;
@@ -183,7 +178,6 @@ export interface UserModel {
   picture: string;
   reference: string;
   reportToAllBusinesses: boolean;
-  role: Role;
   schemes: Scheme[];
   sessionId: null | string;
   setDem: Action<UserModel, SetDemPayload>;
@@ -192,7 +186,6 @@ export interface UserModel {
   setMessages: Action<UserModel, SetUserMessages>;
   setNotifications: Action<UserModel, SetUserNotifications>;
   setPasswordSet: Action<UserModel>;
-  setRole: Action<UserModel, SetUserRole>;
   setSession: Action<UserModel, string>;
   setTodos: Action<UserModel, SetUserTodos>;
   setUser: Action<UserModel, SetUserPayload>;
@@ -214,7 +207,6 @@ const userModel: UserModel = {
     state.businesses = [];
     state.onboarded = false;
     state.schemes = [];
-    state.role = Role.User;
     state.isSet = false;
     state.demId = '';
     state.userTodos = 0;
@@ -240,7 +232,6 @@ const userModel: UserModel = {
   picture: '',
   reference: '',
   reportToAllBusinesses: false,
-  role: Role.User,
   schemes: [],
   sessionId: null,
   setDem: action((state, payload) => {
@@ -261,9 +252,6 @@ const userModel: UserModel = {
   setPasswordSet: action((state) => {
     state.forcePasswordReset = false;
     state.hasPassword = true;
-  }),
-  setRole: action((state, payload) => {
-    state.role = payload.role;
   }),
   setSession: action((state, payload) => {
     state.sessionId = payload;

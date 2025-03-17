@@ -1,9 +1,10 @@
-import React from 'react';
-import DebouncedInput from '#/utils/debounced-input';
 import CheckTags from '#/components/form-components/check-tags/CheckTags.view';
-import { Button, Card, Col, Row, Tooltip } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DebouncedInput from '#/utils/debounced-input';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Row, Tooltip } from 'antd';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 const SearchRow = () => {
@@ -13,11 +14,11 @@ const SearchRow = () => {
       <Row align="middle" gutter={12}>
         <Col span={4} xxl={6}>
           <DebouncedInput
-            size="small"
+            allowClear
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for anything in alert...',
             })}
-            allowClear
+            size="small"
             // value={search}
           />
         </Col>
@@ -30,8 +31,17 @@ const SearchRow = () => {
                 label: intl.formatMessage({
                   defaultMessage: 'Not Approved',
                 }),
+                permissions: [
+                  {
+                    method: PermissionMethod.Approve,
+                    model: PermissionModel.Incidents,
+                  },
+                  {
+                    method: PermissionMethod.Approve,
+                    model: PermissionModel.Offenders,
+                  },
+                ],
                 value: 'NOT APPROVED',
-                needAdminRight: true,
               },
               {
                 label: intl.formatMessage({

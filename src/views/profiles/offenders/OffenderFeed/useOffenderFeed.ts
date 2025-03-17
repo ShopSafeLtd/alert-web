@@ -100,7 +100,7 @@ const useOffenderFeed = (): Return => {
     index: 0,
     open: false,
   });
-  const hasApprovedPermission = hasRolePermission({
+  const hasApprovePermission = hasRolePermission({
     permission: {
       method: PermissionMethod.Approve,
       model: PermissionModel.Offenders,
@@ -249,15 +249,15 @@ const useOffenderFeed = (): Return => {
               in: age,
             }
           : undefined,
-      approved: hasApprovedPermission
-        ? {
-            equals: true,
-          }
-        : gallery.includes('NOT APPROVED')
+      approved: hasApprovePermission
+        ? gallery.includes('NOT APPROVED')
           ? {
               equals: false,
             }
-          : undefined,
+          : undefined
+        : {
+            equals: true,
+          },
       bans: gallery.includes('BANNED')
         ? {
             some: {
