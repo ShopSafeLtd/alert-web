@@ -21,12 +21,10 @@ interface Props {
 interface Return {
   addInvestigation: boolean;
   approvalRights: boolean;
-  deleteRights: boolean;
   editImage: boolean;
   editImageId: string;
   editOffenderFeed: boolean;
   knowOffender: boolean;
-  menuRights: boolean;
   onDelete: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
   onNavigate: (id?: string | undefined, url?: string | undefined) => void;
@@ -41,10 +39,6 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const intl = useIntl();
   const approvalRights = update ? role !== Role.User : false;
-  const menuRights = update
-    ? role !== Role.User || offender.createdByUser
-    : false;
-  const deleteRights = role !== Role.User;
   const [editOffenderFeed, setEditOffenderFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
@@ -144,12 +138,11 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
     }
   };
   const onDelete = (id: string) => {
-    if (deleteRights)
-      void recycleOffender({
-        variables: {
-          where: { id },
-        },
-      });
+    void recycleOffender({
+      variables: {
+        where: { id },
+      },
+    });
   };
   const toggleEditOffenderFeed = () => {
     setEditOffenderFeed(!editOffenderFeed);
@@ -166,12 +159,10 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   return {
     addInvestigation,
     approvalRights,
-    deleteRights,
     editImage,
     editImageId,
     editOffenderFeed,
     knowOffender,
-    menuRights,
     onDelete,
     onEditImage,
     onNavigate,

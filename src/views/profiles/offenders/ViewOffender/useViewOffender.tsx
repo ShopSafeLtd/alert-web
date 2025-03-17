@@ -27,6 +27,7 @@ import type {
 
 import { useGroupsContext } from '#/context/groups-context';
 import hasPermission from '#/utils/has-permission';
+import hasRolePermission from '#/utils/has-role-permission';
 import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -276,7 +277,6 @@ const useViewOffender = (offenderId: string): Return => {
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
-  const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -1829,43 +1829,50 @@ const useViewOffender = (offenderId: string): Return => {
     setSelectedImages([]);
   };
 
-  useEffect(() => {
-    if (
-      [
-        Role.ContentAdmin,
-        Role.GroupAdmin,
-        Role.SchemeAdmin,
-        Role.ShopsafeAdmin,
-      ].includes(role)
-    ) {
-      setOptionsMenuItems([
-        {
-          icon: <FontAwesomeIcon icon={faPeople} size="3x" />,
-          key: '0',
-          label: intl.formatMessage({
-            defaultMessage: 'Compare',
-          }),
-          onClick: () => navigate(`/app/offenders/compare/${offenderId}`),
-        },
-        {
-          icon: <FontAwesomeIcon icon={faEdit} size="3x" />,
-          key: '1',
-          label: intl.formatMessage({
-            defaultMessage: 'Edit',
-          }),
-          onClick: () => navigate(`/app/offenders/edit/${offenderId}`),
-        },
-        {
-          icon: <FontAwesomeIcon icon={faTrash} />,
-          key: '2',
-          label: intl.formatMessage({
-            defaultMessage: 'Delete',
-          }),
-          onClick: () => onDelete(offenderId),
-        },
-      ]);
-    }
-  }, [role]);
+  const optionMenuItems = [
+    {
+      icon: <FontAwesomeIcon icon={faPeople} size="3x" />,
+      key: '0',
+      label: intl.formatMessage({
+        defaultMessage: 'Compare',
+      }),
+      onClick: () => navigate(`/app/offenders/compare/${offenderId}`),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Offenders,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faEdit} size="3x" />,
+      key: '1',
+      label: intl.formatMessage({
+        defaultMessage: 'Edit',
+      }),
+      onClick: () => navigate(`/app/offenders/edit/${offenderId}`),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Offenders,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faTrash} />,
+      key: '2',
+      label: intl.formatMessage({
+        defaultMessage: 'Delete',
+      }),
+      onClick: () => onDelete(offenderId),
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Offenders,
+      },
+    },
+  ].filter(
+    (item) =>
+      item &&
+      hasRolePermission({
+        permission: item.permission,
+      })
+  );
 
   // function
   const toggleLinkIncident = () => {

@@ -166,6 +166,7 @@ export const availableCheckBoxes: {
 
 export const roleItems: {
   description: React.ReactNode;
+  disabled?: boolean;
   icon: IconDefinition;
   key: PermissionModel;
   methods: {
@@ -208,6 +209,7 @@ export const roleItems: {
     description: (
       <FormattedMessage defaultMessage="Set up rules and workflows to streamline responses to security incidents and risks." />
     ),
+    disabled: true,
     icon: faBolt,
     key: PermissionModel.Automations,
     methods: [
