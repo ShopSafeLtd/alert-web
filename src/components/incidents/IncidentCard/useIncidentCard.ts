@@ -39,6 +39,7 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   const intl = useIntl();
   // TODO change to perms
   const role = useStoreState((state) => state.user.role);
+
   const [editIncidentFeed, setEditIncidentFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
