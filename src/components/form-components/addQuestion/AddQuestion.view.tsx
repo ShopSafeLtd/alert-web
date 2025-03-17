@@ -253,7 +253,7 @@ const AddQuestionView = ({
                 label: intl.formatMessage({
                   defaultMessage: 'Select (Single)',
                 }),
-                value: AnswerType.Select,
+                value: AnswerType.SelectSingle,
               },
             ]}
           />
