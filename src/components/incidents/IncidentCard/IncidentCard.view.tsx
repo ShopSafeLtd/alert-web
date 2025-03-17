@@ -54,14 +54,11 @@ const { confirm } = Modal;
 
 interface Props {
   addInvestigation: boolean;
-  approvalRights: boolean;
   compactView: boolean;
-  deleteRights: boolean;
   editImage: boolean;
   editImageId: string;
   editIncidentFeed: boolean;
   incident: IncidentCardFragment;
-  menuRights: boolean;
   onDelete: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
   openLightbox: (elements: { src: string }[], index: number) => void;
@@ -73,7 +70,6 @@ interface Props {
 
 const IncidentCard = ({
   addInvestigation,
-  approvalRights,
   compactView,
   editImage,
   editImageId,
@@ -198,7 +194,12 @@ const IncidentCard = ({
                   </Title>
                 </Col>
               </Row>
-              {approvalRights && (
+              {hasRolePermission({
+                permission: {
+                  method: PermissionMethod.Approve,
+                  model: PermissionModel.Incidents,
+                },
+              }) && (
                 <Row justify="center">
                   <Col>
                     <Link to={`view/${incident?.id}`}>
@@ -359,7 +360,12 @@ const IncidentCard = ({
                   defaultMessage: 'This incident is awaiting approval',
                 })}
               </Title>
-              {approvalRights && (
+              {hasRolePermission({
+                permission: {
+                  method: PermissionMethod.Approve,
+                  model: PermissionModel.Incidents,
+                },
+              }) && (
                 <Link to={`view/${incident?.id}`}>
                   <Button>
                     {intl.formatMessage({

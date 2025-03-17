@@ -8,11 +8,17 @@ import type { IncidentFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   IncidentsFeedDocument,
   useIncidentsFeedQuery,
 } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
-import { QueryMode, Role, SortOrder } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  SortOrder,
+} from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
@@ -23,7 +29,6 @@ interface Return {
   fetchMoreScroll: () => void;
   groups: { label: string; value: string }[];
   groupsLoading: boolean;
-  isUser: boolean;
   lightBoxOpen: {
     index: number;
     open: boolean;
@@ -74,11 +79,9 @@ const useIncidentFeed = (): Return => {
 
   // Global State
   const { id: schemeId } = useStoreState((state) => state.scheme);
-  const {
-    filterDefaultGroups: defaultGroups,
-    id: userId,
-    role,
-  } = useStoreState((state) => state.user);
+  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
+    (state) => state.user
+  );
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
@@ -104,7 +107,12 @@ const useIncidentFeed = (): Return => {
 
   // filter initial state
   const [sortFilter, setSortFilter] = useState(false);
-  const isUser = role === Role.User;
+  const hasApprovePermission = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Approve,
+      model: PermissionModel.Incidents,
+    },
+  });
 
   // lightBox
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -116,7 +124,7 @@ const useIncidentFeed = (): Return => {
   });
 
   const queryVariables: IncidentsFeedQueryVariables = {
-    approved: isUser
+    approved: hasApprovePermission
       ? true
       : gallery.includes('NOT APPROVED')
         ? false
@@ -184,7 +192,7 @@ const useIncidentFeed = (): Return => {
             },
           ]
         : undefined,
-      approved: isUser
+      approved: hasApprovePermission
         ? {
             equals: true,
           }
@@ -534,7 +542,6 @@ const useIncidentFeed = (): Return => {
     fetchMoreScroll,
     groups: groupsData,
     groupsLoading,
-    isUser,
     lightBoxOpen,
     lightboxElements,
     loading,
