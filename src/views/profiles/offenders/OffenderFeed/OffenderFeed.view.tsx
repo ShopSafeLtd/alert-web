@@ -487,14 +487,10 @@ const OffenderFeed = ({
                   key: 'totalValue',
                   render: (value: number) => (
                     <Typography.Text ellipsis>
-                      {intl.formatMessage(
-                        {
-                          defaultMessage: '£{value}',
-                        },
-                        {
-                          value: value.toFixed(0),
-                        }
-                      )}
+                      {intl.formatNumber(value || 0, {
+                        currency: 'GBP',
+                        style: 'currency',
+                      })}
                     </Typography.Text>
                   ),
                   title: (

@@ -126,7 +126,11 @@ const IncidentTable = ({
         {
           dataIndex: 'loss',
           key: 'loss',
-          render: (value: number) => `£${value.toLocaleString()}`,
+          render: (value: number) =>
+            intl.formatNumber(value || 0, {
+              currency: 'GBP',
+              style: 'currency',
+            }),
           title: intl.formatMessage({
             defaultMessage: 'Loss',
           }),

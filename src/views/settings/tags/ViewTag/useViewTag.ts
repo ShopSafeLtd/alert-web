@@ -208,7 +208,7 @@ const useViewTag = (): Return => {
     return orderedKeys;
   }
 
-  const defaultIncidentFormFieldsTrue: IncidentFormFieldState = {
+  const providedDefaults: Partial<IncidentFormFieldState> = {
     [IncidentFormField.Cctv]: false,
     [IncidentFormField.Custom]: true,
     [IncidentFormField.Details]: true,
@@ -225,6 +225,18 @@ const useViewTag = (): Return => {
     [IncidentFormField.Where]: true,
     [IncidentFormField.Witnesses]: false,
   };
+
+  const defaultIncidentFormFieldsTrue: IncidentFormFieldState = (
+    Object.values(IncidentFormField) as IncidentFormField[]
+  )
+    // eslint-disable-next-line unicorn/no-array-reduce
+    .reduce((acc, field) => {
+      acc[field] =
+        typeof providedDefaults[field] === 'boolean'
+          ? providedDefaults[field]!
+          : false;
+      return acc;
+    }, {} as IncidentFormFieldState);
 
   const { id } = useParams();
   const intl = useIntl();

@@ -27,6 +27,7 @@ interface Props {
   noGutter?: boolean;
   onChange?: (value: string[]) => void;
   options: Option[];
+  single?: boolean;
   value?: string[];
 }
 

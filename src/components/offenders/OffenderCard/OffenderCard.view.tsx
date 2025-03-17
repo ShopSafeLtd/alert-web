@@ -359,16 +359,10 @@ const OffenderCard = ({
                         </Col>
                         <Col>
                           <Text>
-                            {intl.formatMessage(
-                              {
-                                defaultMessage: '£{total}',
-                              },
-                              {
-                                total: offender.totalValue
-                                  ? offender.totalValue.toFixed(0)
-                                  : 0,
-                              }
-                            )}
+                            {intl.formatNumber(offender.totalValue ?? 0, {
+                              currency: 'GBP',
+                              style: 'currency',
+                            })}
                           </Text>
                         </Col>
                       </Row>
@@ -756,16 +750,10 @@ const OffenderCard = ({
                         </Col>
                         <Col>
                           <Text>
-                            {intl.formatMessage(
-                              {
-                                defaultMessage: '£{total}',
-                              },
-                              {
-                                total: offender.totalValue
-                                  ? offender.totalValue.toFixed(2)
-                                  : 0,
-                              }
-                            )}
+                            {intl.formatNumber(offender.totalValue ?? 0, {
+                              currency: 'GBP',
+                              style: 'currency',
+                            })}
                           </Text>
                         </Col>
                       </Row>

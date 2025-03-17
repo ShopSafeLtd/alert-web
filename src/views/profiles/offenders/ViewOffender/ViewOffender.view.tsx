@@ -1578,14 +1578,10 @@ const ViewOffender = ({
                                   fineValue:
                                     ban.fineValue === 0
                                       ? ''
-                                      : intl.formatMessage(
-                                          {
-                                            defaultMessage: '£{value}',
-                                          },
-                                          {
-                                            value: ban.fineValue,
-                                          }
-                                        ),
+                                      : intl.formatNumber(ban.fineValue || 0, {
+                                          currency: 'GBP',
+                                          style: 'currency',
+                                        }),
                                   key: ban.id,
                                   location: ban.location,
                                   status: `${new Date(

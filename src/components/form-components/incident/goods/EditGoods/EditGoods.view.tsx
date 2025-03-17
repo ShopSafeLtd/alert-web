@@ -5,6 +5,7 @@ import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { GoodsMode } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
 const { useForm } = Form;
 
 interface Props {
@@ -104,6 +105,7 @@ const EditGoods = ({
                 disabled={saving}
                 min={0}
                 precision={2}
+                // TODO change
                 prefix="£"
                 style={{ width: '100%' }}
               />
@@ -132,6 +134,7 @@ const EditGoods = ({
                 max={value ?? undefined}
                 min={0}
                 precision={2}
+                // TODO change
                 prefix="£"
                 style={{ width: '100%' }}
               />
@@ -207,6 +210,7 @@ const EditGoods = ({
                 disabled={saving}
                 min={0}
                 precision={2}
+                // TODO change
                 prefix="£"
                 style={{ width: '100%' }}
               />
@@ -235,6 +239,7 @@ const EditGoods = ({
                 max={value ?? undefined}
                 min={0}
                 precision={2}
+                // TODO change
                 prefix="£"
                 style={{ width: '100%' }}
               />

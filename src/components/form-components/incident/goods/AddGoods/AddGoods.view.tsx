@@ -97,6 +97,7 @@ const AddGoods = ({
               <InputNumber
                 min={0}
                 precision={2}
+                // TODO change
                 prefix="£"
                 style={{ width: '100%' }}
               />
@@ -123,6 +124,7 @@ const AddGoods = ({
               <InputNumber
                 min={0}
                 precision={2}
+                // TODO change
                 prefix="£"
                 style={{ width: '100%' }}
               />

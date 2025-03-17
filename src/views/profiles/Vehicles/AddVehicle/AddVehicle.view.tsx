@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import type { FormInstance, UploadFile } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
@@ -486,7 +487,11 @@ const AddVehicle = ({
                               dataIndex: 'totalValue',
                               key: 'totalValue',
                               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                              render: (value) => `£${value || 0}`,
+                              render: (value) =>
+                                intl.formatNumber(value || 0, {
+                                  currency: 'GBP',
+                                  style: 'currency',
+                                }),
                               title: intl.formatMessage({
                                 defaultMessage: 'Lost Value',
                               }),
@@ -495,7 +500,11 @@ const AddVehicle = ({
                               dataIndex: 'totalRecoveredValue',
                               key: 'totalRecoveredValue',
                               // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                              render: (value) => `£${value || 0}`,
+                              render: (value) =>
+                                intl.formatNumber(value || 0, {
+                                  currency: 'GBP',
+                                  style: 'currency',
+                                }),
                               title: intl.formatMessage({
                                 defaultMessage: 'Recovered Value',
                               }),

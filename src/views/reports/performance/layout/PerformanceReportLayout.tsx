@@ -18,6 +18,8 @@ import TargetedBusinessTable from '#/components/reports/components/TargetedBusin
 import UserIncidentCountGraph from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph';
 import TotalUserSessionsGraph from '#/components/reports/components/UserSessionsGraph/TotalUserSessionsGraph';
 import Graph from '#/components/reports/graphs/graph';
+import ActivitiesGraphView from '#/views/reports/performance/ActivitesGraph/ActivitiesGraph';
+import ActivitySummary from '#/views/reports/performance/ActivitiesReports/summary/ActivitySummary';
 import {
   faBan,
   faCalendar,
@@ -84,7 +86,7 @@ interface ContributorTable {
 
 const { Title } = Typography;
 
-type FilterProps = Pick<
+export type FilterProps = Pick<
   HookProps,
   | 'dateRange'
   | 'schemeId'
@@ -172,6 +174,54 @@ const PerformanceReportLayout = ({
   const getComponent = ({ component, key }: GetComponentArgs) => {
     // eslint-disable-next-line sonarjs/max-switch-cases
     switch (component) {
+      case 'activityGraph': {
+        return (
+          <Card
+            bodyStyle={{ height: '90%' }}
+            className="no-break"
+            key={key}
+            loading={loading}
+            style={{ height: calculateHeight(key) }}
+          >
+            <ActivitiesGraphView
+              editMode={editMode}
+              filters={filters}
+              isPrinting={isPrinting}
+              metaData={generateDefaultMetaData(key, 'bar', metadata)}
+              onNavigate={() => navigate('/app/reports/user-engagement')}
+              removeItem={() => removeItem(key)}
+              setMetaData={(value: MetaData) => {
+                const updatedMetadata = metadata.map((item) => {
+                  if (item.key === key) {
+                    return (
+                      value || generateDefaultMetaData(key, 'bar', metadata)
+                    );
+                  }
+                  return item;
+                }) satisfies MetaData[];
+                setMetadata(updatedMetadata);
+              }}
+            />
+          </Card>
+        );
+      }
+
+      case 'activitySummary': {
+        return (
+          <Card
+            bodyStyle={{ width: '100%' }}
+            key="activitySummary"
+            loading={loading}
+            style={{ width: '100%' }}
+          >
+            <ActivitySummary
+              editMode={editMode}
+              filters={filters}
+              removeItem={removeItem}
+            />
+          </Card>
+        );
+      }
       case 'createdSummary': {
         return (
           <Card
@@ -556,7 +606,6 @@ const PerformanceReportLayout = ({
           </Card>
         );
       }
-
       case 'investigationSummary': {
         return (
           <Card
@@ -934,12 +983,14 @@ const PerformanceReportLayout = ({
                   title={intl.formatMessage({
                     defaultMessage: 'Average Incident Value',
                   })}
-                  value={
-                    `£${(
-                      data?.performanceReport?.lossTotals?.averagePerIncident ||
-                      0
-                    ).toFixed(2)}` || ''
-                  }
+                  value={intl.formatNumber(
+                    data?.performanceReport?.lossTotals?.averagePerIncident ||
+                      0,
+                    {
+                      currency: 'GBP',
+                      style: 'currency',
+                    }
+                  )}
                 />
                 <Statistic
                   className={classes.stats}
@@ -952,12 +1003,14 @@ const PerformanceReportLayout = ({
                   title={intl.formatMessage({
                     defaultMessage: 'Average Loss Value',
                   })}
-                  value={
-                    `£${(
-                      data?.performanceReport?.lossTotals
-                        ?.averageLossPerIncident || 0
-                    ).toFixed(2)}` || ''
-                  }
+                  value={intl.formatNumber(
+                    data?.performanceReport?.lossTotals
+                      ?.averageLossPerIncident || 0,
+                    {
+                      currency: 'GBP',
+                      style: 'currency',
+                    }
+                  )}
                 />
               </Row>
             </Row>
@@ -1534,7 +1587,10 @@ const PerformanceReportLayout = ({
                       labelKey: 'count',
                       sectorLabel: {
                         formatter: ({ value }: { value: number }) =>
-                          `£${value.toLocaleString()}`,
+                          intl.formatNumber(value || 0, {
+                            currency: 'GBP',
+                            style: 'currency',
+                          }),
                       },
                       sectorLabelKey: 'count',
                       // @ts-expect-error graph type error
@@ -1554,7 +1610,10 @@ const PerformanceReportLayout = ({
                     {
                       field: 'count',
                       valueFormatter: ({ value }: { value: number }) =>
-                        `£${value.toLocaleString()}`,
+                        intl.formatNumber(value || 0, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                     },
                   ],
                   rowData: data?.performanceReport.goodsTypeValueDonut.map(
@@ -1599,7 +1658,12 @@ const PerformanceReportLayout = ({
                       field: 'type',
                     },
                     {
-                      cellRenderer: (value) => `£${value}`,
+                      cellRenderer: (value) =>
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        intl.formatNumber(value || 0, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       field: 'count',
                     },
                   ],

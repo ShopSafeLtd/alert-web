@@ -1173,11 +1173,15 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               goods: 0,
               recovered:
                 goodsWithRecoveredValue.length > 0
-                  ? `£${
-                      goodsWithRecoveredValue
-                        .reduce((a, b) => (a || 0) + (b || 0))
-                        ?.toFixed(2) || 0
-                    }`
+                  ? intl.formatNumber(
+                      goodsWithRecoveredValue.reduce(
+                        (a, b) => (a || 0) + (b || 0)
+                      ) || 0,
+                      {
+                        currency: 'GBP',
+                        style: 'currency',
+                      }
+                    )
                   : '',
               tags: tags
                 .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
@@ -1185,11 +1189,13 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               time: moment(values.date).format('HH:mm'),
               totalLoss:
                 goodsWithValue.length > 0
-                  ? `£${
-                      goodsWithValue
-                        .reduce((a, b) => (a || 0) + (b || 0))
-                        ?.toFixed(2) || 0
-                    }`
+                  ? intl.formatNumber(
+                      goodsWithValue.reduce((a, b) => (a || 0) + (b || 0)) || 0,
+                      {
+                        currency: 'GBP',
+                        style: 'currency',
+                      }
+                    )
                   : '',
             }
           ) + (offenders.length > 0 ? offendersText : ''),

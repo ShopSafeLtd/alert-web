@@ -86,24 +86,32 @@ const Business = ({
                 <Col>
                   <Card>
                     <Statistic
-                      prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Total Lost Value',
                       })}
-                      value={data?.business?.valueStats?.totalLostValue || 0}
+                      value={intl.formatNumber(
+                        data?.business?.valueStats?.totalLostValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Card>
                 </Col>
                 <Col>
                   <Card>
                     <Statistic
-                      prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Total Recovered Value',
                       })}
-                      value={
-                        data?.business?.valueStats?.totalRecoveredValue || 0
-                      }
+                      value={intl.formatNumber(
+                        data?.business?.valueStats?.totalRecoveredValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Card>
                 </Col>
@@ -123,22 +131,32 @@ const Business = ({
                 <Col>
                   <Card>
                     <Statistic
-                      prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Avg Lost Value',
                       })}
-                      value={data?.business?.valueStats?.totalLostValue || 0}
+                      value={intl.formatNumber(
+                        data?.business?.valueStats?.totalLostValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Card>
                 </Col>
                 <Col>
                   <Card>
                     <Statistic
-                      prefix="£"
                       title={intl.formatMessage({
                         defaultMessage: 'Avg Recovered Value',
                       })}
-                      value={data?.business?.valueStats?.avgRecoveredValue || 0}
+                      value={intl.formatNumber(
+                        data?.business?.valueStats?.avgRecoveredValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Card>
                 </Col>
@@ -191,7 +209,11 @@ const Business = ({
                     {
                       dataIndex: 'lost',
                       key: 'lost',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Total Lost',
                       }),
@@ -199,7 +221,11 @@ const Business = ({
                     {
                       dataIndex: 'recovered',
                       key: 'recovered',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Total Recovered',
                       }),
@@ -215,7 +241,11 @@ const Business = ({
                     {
                       dataIndex: 'avgLost',
                       key: 'avgLost',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Avg Lost',
                       }),
@@ -269,7 +299,11 @@ const Business = ({
                     {
                       dataIndex: 'value',
                       key: 'value',
-                      render: (value: number) => `£${value}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Value',
                       }),
@@ -277,7 +311,11 @@ const Business = ({
                     {
                       dataIndex: 'recoveredValue',
                       key: 'recoveredValue',
-                      render: (value: number) => `£${value}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Recovered Value',
                       }),

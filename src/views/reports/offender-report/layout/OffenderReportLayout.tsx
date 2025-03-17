@@ -755,11 +755,13 @@ const OffenderReportLayout = ({
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss per Incident',
               })}
-              value={
-                `£${(
-                  data?.offenderReport?.lossTotals?.averagePerIncident || 0
-                ).toFixed(2)}` || ''
-              }
+              value={intl.formatNumber(
+                data?.offenderReport?.lossTotals?.averagePerIncident || 0,
+                {
+                  currency: 'GBP',
+                  style: 'currency',
+                }
+              )}
             />
           </Row>
         </Row>

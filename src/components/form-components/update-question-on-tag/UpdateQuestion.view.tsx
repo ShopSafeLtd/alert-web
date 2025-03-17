@@ -123,7 +123,8 @@ const UpdateQuestionView = ({
         </Form.Item>
       </Card>
 
-      {answerType === AnswerType.Select && (
+      {(answerType === AnswerType.Select ||
+        answerType === AnswerType.SelectSingle) && (
         <Card
           style={{
             maxHeight: 500,
@@ -139,7 +140,11 @@ const UpdateQuestionView = ({
             rules={[
               {
                 validator: async (_, options) => {
-                  if (answerType !== AnswerType.Select) return;
+                  if (
+                    answerType !== AnswerType.Select &&
+                    answerType !== AnswerType.SelectSingle
+                  )
+                    return;
                   if (!options || options.length < 2) {
                     return Promise.reject(
                       new Error(

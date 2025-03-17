@@ -1,9 +1,12 @@
 overwrite: true
-schema: 'http://localhost:3001/graphql'
+schema: 'http://localhost:4000/graphql'
 documents: 'src/**/*.graphql'
 config:
-  addDocBlocks: false,
-  scalars: { DateTime: 'Date', Date: 'Date', JSON: '{ [key: string]: any }' }
+  addDocBlocks: false
+  scalars:
+    DateTime: 'Date'
+    Date: 'Date'
+    JSON: '{ [key: string]: any }'
 hooks:
   afterAllFileWrite:
     - prettier --write
@@ -18,15 +21,26 @@ generates:
       baseTypesPath: graphql/types.ts
       baseTypes: types
       folder: '__generated__'
-
     plugins:
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
-      {
-        withHooks: true,
-        addDocBlocks: false,
-        useTypeImports: true,
-        scalars:
-          { DateTime: 'Date', Date: 'Date', JSON: '{ [key: string]: any }' },
-      }
+      withHooks: true
+      addDocBlocks: false
+      useTypeImports: true
+      scalars:
+        DateTime: 'Date'
+        Date: 'Date'
+        JSON: '{ [key: string]: any }'
+  __generated__/operationNames.txt:
+    plugins:
+      - './plugins/extractOperationNames.js'
+  __generated__/operationFields.txt:
+    plugins:
+      - './plugins/extractOperationFields.js'
+  __generated__/operationsJoined.json:
+    plugins:
+      - './plugins/extractOperationFieldsJson.js'
+  __generated__/operations.json:
+    plugins:
+      - './plugins/extractOperationFieldsJsonNames.js'

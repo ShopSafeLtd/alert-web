@@ -637,6 +637,7 @@ const EditIncident = ({
                             <InputNumber
                               min={0}
                               precision={2}
+                              // TODO fix this
                               prefix="£"
                               style={{ width: 150 }}
                             />
@@ -669,6 +670,7 @@ const EditIncident = ({
                             <InputNumber
                               min={0}
                               precision={2}
+                              // TODO fix this
                               prefix="£"
                               style={{ width: 150 }}
                             />

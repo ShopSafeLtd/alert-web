@@ -390,9 +390,13 @@ const ViewCrimeGroup = ({
                       title={intl.formatMessage({
                         defaultMessage: 'Total Loss',
                       })}
-                      value={`£${
-                        data?.crimeGroup?.totalValue?.toLocaleString() || 0
-                      }`}
+                      value={intl.formatNumber(
+                        data?.crimeGroup?.totalValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Col>
                   <Col>
@@ -400,10 +404,13 @@ const ViewCrimeGroup = ({
                       title={intl.formatMessage({
                         defaultMessage: 'Total Value Recovered',
                       })}
-                      value={`£${
-                        data?.crimeGroup?.totalRecoveredValue?.toLocaleString() ||
-                        0
-                      }`}
+                      value={intl.formatNumber(
+                        data?.crimeGroup?.totalRecoveredValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Col>
                   <Col>

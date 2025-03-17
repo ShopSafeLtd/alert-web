@@ -1,156 +1,177 @@
-import React, { useState, useEffect } from 'react';
+import type { MetaData } from '#/views/reports/types';
+import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
+
+import { faCog, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
-  Table,
-  Typography,
-  Tooltip,
+  Checkbox,
+  Col,
   Drawer,
   Form,
-  Checkbox,
   Row,
-  Col,
+  Table,
+  Tooltip,
+  Typography,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faTrash } from '@fortawesome/pro-light-svg-icons';
-import { FormattedMessage, useIntl } from 'react-intl';
-import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
-import type { MetaData } from '#/views/reports/types';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface TargetedBusinessTableData {
+  avgLost: string;
+  commonLost: string;
   fullName: string;
+  highestValueLost: number;
   incidentsCreated: number;
-  offendersCreated: number;
   lostValue: string;
+  offendersCreated: number;
   recoveredValue: string;
   successRate: string;
-  commonLost: string;
-  highestValueLost: number;
-  avgLost: string;
 }
 
 const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
-    key: 'fullName',
     dataIndex: 'fullName',
-    title: <FormattedMessage defaultMessage="Name" />,
+    key: 'fullName',
     render: (text: string) => (
       <Tooltip title={text}>
         <Paragraph
-          style={{ maxWidth: 300, marginBottom: 0 }}
           ellipsis={{
             rows: 1,
           }}
+          style={{ marginBottom: 0, maxWidth: 300 }}
         >
           {text}
         </Paragraph>
       </Tooltip>
     ),
+    title: <FormattedMessage defaultMessage="Name" />,
   },
   {
-    key: 'incidentsCreated',
     dataIndex: 'incidentsCreated',
-    title: <FormattedMessage defaultMessage="Incidents" />,
     defaultSortOrder: 'descend' as SortOrder,
+    key: 'incidentsCreated',
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.incidentsCreated - b.incidentsCreated,
+    title: <FormattedMessage defaultMessage="Incidents" />,
   },
   {
-    key: 'offendersCreated',
     dataIndex: 'offendersCreated',
-    title: <FormattedMessage defaultMessage="Offenders" />,
+    key: 'offendersCreated',
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.offendersCreated - b.offendersCreated,
+    title: <FormattedMessage defaultMessage="Offenders" />,
   },
   {
-    key: 'lostValue',
     dataIndex: 'lostValue',
-    title: <FormattedMessage defaultMessage="Total Loss" />,
+    key: 'lostValue',
+    render: (text: string) => (
+      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
+    ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
-    render: (text: string) => (
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
-    ),
+    title: <FormattedMessage defaultMessage="Total Loss" />,
   },
   {
-    key: 'recoveredValue',
     dataIndex: 'recoveredValue',
-    title: <FormattedMessage defaultMessage="Recovered value" />,
+    key: 'recoveredValue',
+    render: (text: string) => (
+      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
+    ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
-    render: (text: string) => (
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
-    ),
+    title: <FormattedMessage defaultMessage="Recovered value" />,
   },
   {
-    key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage defaultMessage="Recovery Rate" />,
+    key: 'successRate',
+    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+    render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
-    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-    render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
+    title: <FormattedMessage defaultMessage="Recovery Rate" />,
   },
   {
-    key: 'commonLost',
     dataIndex: 'commonLost',
-    title: <FormattedMessage defaultMessage="Top Item" />,
+    key: 'commonLost',
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.commonLost.localeCompare(b.commonLost),
+    title: <FormattedMessage defaultMessage="Top Item" />,
   },
   {
-    key: 'highestValueLost',
     dataIndex: 'highestValueLost',
-    title: <FormattedMessage defaultMessage="Highest Value" />,
+    key: 'highestValueLost',
+    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+    render: (text: number) => (
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={text || 0}
+        />
+      </Typography.Text>
+    ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.highestValueLost - b.highestValueLost,
-    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-    render: (text: number) => <Typography.Text>{`£${text}`}</Typography.Text>,
+    title: <FormattedMessage defaultMessage="Highest Value" />,
   },
   {
-    key: 'avgLost',
     dataIndex: 'avgLost',
-    title: <FormattedMessage defaultMessage="Average Loss" />,
+    key: 'avgLost',
+    render: (text: string) => (
+      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
+    ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
       Number.parseInt(b.avgLost || '0', 10),
-    render: (text: string) => (
-      // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
-    ),
+    title: <FormattedMessage defaultMessage="Average Loss" />,
   },
 ];
 
 interface Props {
-  editMode: boolean;
-  removeItem: () => void;
   changeSize: (name: string, pageSize: number) => void;
-  total: number;
-  targetedBusinessData: TargetedBusinessTableData[];
+  editMode: boolean;
   metadata: MetaData[];
+  removeItem: () => void;
   setMetadata: (arg0: MetaData[]) => void;
+  targetedBusinessData: TargetedBusinessTableData[];
+  total: number;
 }
 
 const TargetedBusinessTable = ({
-  removeItem,
-  editMode,
   changeSize,
-  total,
-  targetedBusinessData,
+  editMode,
   metadata,
+  removeItem,
   setMetadata,
+  targetedBusinessData,
+  total,
 }: Props) => {
   const intl = useIntl();
   const [columnDrawerOpen, setColumnDrawerOpen] = useState(false);
@@ -192,15 +213,15 @@ const TargetedBusinessTable = ({
 
   const onFinish = (value: TargetedBusinessTableData) => {
     const columns = [
-      { name: 'fullName', active: value.fullName },
-      { name: 'incidentsCreated', active: value.incidentsCreated },
-      { name: 'offendersCreated', active: value.offendersCreated },
-      { name: 'lostValue', active: value.lostValue },
-      { name: 'recoveredValue', active: value.recoveredValue },
-      { name: 'successRate', active: value.successRate },
-      { name: 'commonLost', active: value.commonLost },
-      { name: 'highestValueLost', active: value.highestValueLost },
-      { name: 'avgLost', active: value.avgLost },
+      { active: value.fullName, name: 'fullName' },
+      { active: value.incidentsCreated, name: 'incidentsCreated' },
+      { active: value.offendersCreated, name: 'offendersCreated' },
+      { active: value.lostValue, name: 'lostValue' },
+      { active: value.recoveredValue, name: 'recoveredValue' },
+      { active: value.successRate, name: 'successRate' },
+      { active: value.commonLost, name: 'commonLost' },
+      { active: value.highestValueLost, name: 'highestValueLost' },
+      { active: value.avgLost, name: 'avgLost' },
     ]
       .filter(({ active }) => active)
       .map(({ name }) => name);
@@ -218,22 +239,22 @@ const TargetedBusinessTable = ({
   return (
     <>
       <Button
-        type="text"
-        shape="circle"
         className="card-remove no-print"
         hidden={!editMode}
-        icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-        size="small"
+        icon={<FontAwesomeIcon color="red" icon={faTrash} size="lg" />}
         onClick={removeItem}
+        shape="circle"
+        size="small"
+        type="text"
       />
       <Button
-        type="text"
-        shape="circle"
         className="change-graph1 no-print"
         hidden={!editMode}
         icon={<FontAwesomeIcon icon={faCog} size="lg" />}
-        size="small"
         onClick={toggleColumnDrawer}
+        shape="circle"
+        size="small"
+        type="text"
       />
       <Title level={4}>
         {intl.formatMessage({
@@ -241,49 +262,49 @@ const TargetedBusinessTable = ({
         })}
       </Title>
       <Table
-        size="small"
         className="no-break"
-        pagination={{
-          hideOnSinglePage: true,
-          onChange: (_, pageSize) => {
-            changeSize('targetedBusinessTable', pageSize);
-          },
-          total,
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-        }}
         columns={TargetedBusinessColumns.filter(({ key }) =>
           metadataColumns.includes(key as string)
         )}
         dataSource={targetedBusinessData}
+        pagination={{
+          defaultPageSize: 10,
+          hideOnSinglePage: true,
+          onChange: (_, pageSize) => {
+            changeSize('targetedBusinessTable', pageSize);
+          },
+          showSizeChanger: true,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          total,
+        }}
+        size="small"
       />
 
       <Drawer
+        onClose={toggleColumnDrawer}
+        open={columnDrawerOpen}
         title={intl.formatMessage({
           defaultMessage: 'Select Table Columns',
         })}
-        open={columnDrawerOpen}
-        onClose={toggleColumnDrawer}
       >
         {columnDrawerOpen && (
           <Form<TargetedBusinessTableData>
-            onFinish={onFinish}
             initialValues={{
+              avgLost: metadataColumns.includes('avgLost'),
+              commonLost: metadataColumns.includes('commonLost'),
               fullName: metadataColumns.includes('fullName'),
+              highestValueLost: metadataColumns.includes('highestValueLost'),
               incidentsCreated: metadataColumns.includes('incidentsCreated'),
-              offendersCreated: metadataColumns.includes('offendersCreated'),
               lostValue: metadataColumns.includes('lostValue'),
+              offendersCreated: metadataColumns.includes('offendersCreated'),
               recoveredValue: metadataColumns.includes('recoveredValue'),
               successRate: metadataColumns.includes('successRate'),
-              commonLost: metadataColumns.includes('commonLost'),
-              highestValueLost: metadataColumns.includes('highestValueLost'),
-              avgLost: metadataColumns.includes('avgLost'),
             }}
+            onFinish={onFinish}
           >
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="fullName"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -291,8 +312,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="incidentsCreated"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -300,8 +321,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="offendersCreated"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -309,8 +330,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="lostValue"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -318,8 +339,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="recoveredValue"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -327,8 +348,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="successRate"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -336,8 +357,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="commonLost"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -345,8 +366,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="highestValueLost"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -354,8 +375,8 @@ const TargetedBusinessTable = ({
               </Checkbox>
             </Form.Item>
             <Form.Item
-              style={{ marginBottom: 0 }}
               name="avgLost"
+              style={{ marginBottom: 0 }}
               valuePropName="checked"
             >
               <Checkbox>
@@ -370,7 +391,7 @@ const TargetedBusinessTable = ({
                   </Button>
                 </Col>
                 <Col>
-                  <Button type="primary" htmlType="submit">
+                  <Button htmlType="submit" type="primary">
                     <FormattedMessage defaultMessage="Submit" />
                   </Button>
                 </Col>
