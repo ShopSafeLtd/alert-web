@@ -9,7 +9,7 @@ import { notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, Role } from 'graphql/types';
+import { Model } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -45,7 +45,6 @@ export interface FormData {
 }
 
 interface Return {
-  adminRights: boolean;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
   data: EditOffenderQuery | undefined;
@@ -65,8 +64,6 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const { id: schemeId, needJustification } = useStoreState(
     (state) => state.scheme
   );
-  const { role } = useStoreState((state) => state.user);
-
   const businessId = useStoreState((state) => state.user.businesses[0].id);
 
   const [saving, setSaving] = useState(false);
@@ -181,7 +178,6 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   };
 
   return {
-    adminRights: role !== Role.User,
     customGalleries:
       customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: tag }) => ({

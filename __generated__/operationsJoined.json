@@ -1,0 +1,6474 @@
+{
+  "mentionableUsers": {
+    "businessesName": {},
+    "firstLetter": {},
+    "fullName": {},
+    "id": {},
+    "oldFullName": {}
+  },
+  "createBlurFaces": {
+    "id": {},
+    "optimised": {},
+    "url": {},
+    "position": {},
+    "rotation": {},
+    "primary": {},
+    "policeImage": {}
+  },
+  "aiSuggestion": {
+    "id": {},
+    "title": {},
+    "reference": {},
+    "createdAt": {},
+    "description": {},
+    "type": {},
+    "status": {},
+    "rekMatch": {
+      "id": {},
+      "matchedFaces": {
+        "id": {},
+        "rekFace": {
+          "id": {},
+          "image": {
+            "url": {},
+            "id": {}
+          }
+        }
+      },
+      "searchedFace": {
+        "id": {},
+        "image": {
+          "id": {},
+          "url": {}
+        }
+      },
+      "avgSimilarity": {},
+      "matchedOffender": {
+        "id": {},
+        "name": {},
+        "reference": {}
+      },
+      "searchedOffender": {
+        "id": {},
+        "name": {},
+        "reference": {}
+      }
+    }
+  },
+  "businessRelay": {
+    "totalCount": {},
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "siteNumber": {},
+        "locations": {
+          "full": {},
+          "id": {}
+        },
+        "fullName": {},
+        "publicName": {},
+        "demId": {},
+        "parent": {
+          "id": {},
+          "name": {}
+        },
+        "groups": {
+          "id": {},
+          "name": {}
+        },
+        "tags": {
+          "id": {},
+          "name": {}
+        },
+        "totalUsers": {}
+      }
+    },
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "listBusinesses": {
+    "total": {},
+    "businesses": {
+      "id": {},
+      "name": {},
+      "siteNumber": {},
+      "fullName": {},
+      "publicName": {},
+      "locations": {
+        "id": {},
+        "full": {},
+        "geoLat": {},
+        "geoLng": {},
+        "building": {},
+        "street": {},
+        "townCity": {},
+        "county": {},
+        "postcode": {}
+      },
+      "division": {},
+      "demId": {},
+      "parent": {
+        "id": {},
+        "name": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      },
+      "tags": {
+        "id": {},
+        "name": {}
+      },
+      "totalUsers": {}
+    }
+  },
+  "setSchemeSharing": {
+    "id": {},
+    "name": {},
+    "connectedToSchemes": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "schemes": {
+    "id": {},
+    "name": {},
+    "crimeGroups": {
+      "id": {},
+      "alias": {},
+      "ref": {}
+    },
+    "offenders": {
+      "id": {},
+      "name": {},
+      "reference": {}
+    }
+  },
+  "crimeGroups": {
+    "edges": {
+      "node": {
+        "id": {},
+        "alias": {},
+        "reference": {}
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "listTags": {
+    "tags": {
+      "id": {},
+      "name": {},
+      "description": {},
+      "crimeType": {},
+      "type": {},
+      "parentTag": {
+        "id": {}
+      }
+    },
+    "total": {}
+  },
+  "demDeviceModel": {
+    "id": {},
+    "name": {}
+  },
+  "upsertDemDevice": {
+    "evidence": {
+      "id": {},
+      "name": {},
+      "url": {},
+      "fileType": {}
+    },
+    "demGroups": {
+      "id": {},
+      "name": {}
+    },
+    "business": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "demDevices": {
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "evidence": {
+          "id": {},
+          "name": {},
+          "url": {},
+          "fileType": {}
+        },
+        "demGroups": {
+          "id": {},
+          "name": {}
+        },
+        "business": {
+          "id": {},
+          "name": {}
+        }
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "deleteDemGroup": {
+    "id": {},
+    "name": {}
+  },
+  "upsertDemGroup": {
+    "id": {},
+    "name": {},
+    "demId": {},
+    "totalDevices": {},
+    "demDevices": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "demGroups": {
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "demId": {},
+        "totalDevices": {},
+        "demDevices": {
+          "id": {},
+          "name": {}
+        }
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "userGroupRelay": {
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "scheme": {
+          "id": {},
+          "name": {}
+        }
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "investigationRelay": {
+    "totalCount": {},
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "status": {},
+        "createdAt": {},
+        "reference": {},
+        "description": {},
+        "closedAt": {},
+        "groups": {
+          "id": {},
+          "name": {}
+        }
+      }
+    }
+  },
+  "reportGroups": {
+    "totalCount": {},
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "setPassword": {
+    "id": {}
+  },
+  "shareData": {
+    "success": {}
+  },
+  "stockItemsRelay": {
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    },
+    "edges": {
+      "node": {
+        "id": {},
+        "barcode": {},
+        "brand": {},
+        "costPriceLocal": {},
+        "costPriceStandard": {},
+        "division": {},
+        "name": {},
+        "salesPriceLocal": {},
+        "salesPriceStandard": {},
+        "sku": {}
+      }
+    }
+  },
+  "users": {
+    "id": {},
+    "fullName": {},
+    "status": {},
+    "publicName": {},
+    "loginEvents": {
+      "loginTime": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "firstLetter": {},
+    "origName": {},
+    "origFirstLetter": {},
+    "email": {},
+    "reportToAllBusinesses": {},
+    "businesses": {
+      "id": {},
+      "name": {},
+      "fullName": {}
+    },
+    "schemes": {
+      "id": {},
+      "role": {},
+      "scheme": {
+        "id": {}
+      }
+    },
+    "approverGroups": {
+      "id": {},
+      "name": {}
+    },
+    "newUser": {},
+    "disabled": {}
+  },
+  "todo": {
+    "description": {},
+    "id": {},
+    "name": {},
+    "dueDate": {},
+    "completed": {},
+    "type": {},
+    "completedDate": {},
+    "business": {
+      "id": {},
+      "locations": {
+        "geoLat": {},
+        "geoLng": {}
+      }
+    },
+    "assignedUsers": {
+      "id": {},
+      "fullName": {}
+    },
+    "timeTaken": {
+      "user": {
+        "id": {}
+      },
+      "timeTaken": {}
+    },
+    "questions": {
+      "id": {},
+      "question": {
+        "id": {},
+        "optionsFormatted": {},
+        "optionsFormFormatted": {
+          "label": {},
+          "value": {}
+        },
+        "questionFormatted": {},
+        "type": {}
+      }
+    },
+    "answers": {
+      "id": {},
+      "taskQuestion": {
+        "id": {}
+      },
+      "answer": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "evidence": {
+      "id": {},
+      "name": {},
+      "url": {},
+      "fileType": {}
+    },
+    "createdAt": {}
+  },
+  "updateTodo": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "dueDate": {},
+    "completed": {},
+    "assignedUsers": {
+      "id": {},
+      "fullName": {}
+    },
+    "business": {
+      "id": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "evidence": {
+      "id": {},
+      "name": {},
+      "url": {},
+      "fileType": {}
+    },
+    "completedDate": {},
+    "createdAt": {},
+    "type": {},
+    "similarOffenderIds": {},
+    "createdBy": {
+      "id": {},
+      "fullName": {}
+    },
+    "completedBy": {
+      "id": {},
+      "fullName": {}
+    }
+  },
+  "listUsers": {
+    "users": {
+      "id": {},
+      "fullName": {},
+      "firstLetter": {},
+      "origName": {},
+      "origFirstLetter": {},
+      "email": {},
+      "publicName": {},
+      "reportToAllBusinesses": {},
+      "businesses": {
+        "id": {},
+        "name": {},
+        "fullName": {}
+      },
+      "status": {},
+      "groups": {
+        "id": {},
+        "name": {}
+      },
+      "mobileNumber": {}
+    },
+    "total": {}
+  },
+  "addQuestion": {
+    "id": {},
+    "questionFormatted": {},
+    "type": {}
+  },
+  "availableQuestions": {
+    "id": {},
+    "questionFormatted": {},
+    "question": {},
+    "optionsFormatted": {},
+    "type": {},
+    "options": {}
+  },
+  "availableTaskQuestions": {
+    "id": {},
+    "questionFormatted": {},
+    "question": {},
+    "optionsFormatted": {},
+    "type": {},
+    "options": {}
+  },
+  "incidentsRelay": {
+    "edges": {
+      "node": {
+        "id": {},
+        "reference": {},
+        "date": {},
+        "dayTime": {},
+        "description": {},
+        "subject": {},
+        "totalImages": {},
+        "policeRef": {},
+        "totalRecoveredValue": {},
+        "totalValue": {},
+        "location": {
+          "full": {}
+        },
+        "business": {
+          "name": {}
+        },
+        "offenders": {
+          "id": {},
+          "name": {}
+        }
+      }
+    },
+    "pageInfo": {
+      "hasNextPage": {},
+      "endCursor": {}
+    },
+    "totalCount": {}
+  },
+  "listVehicles": {
+    "vehicles": {
+      "id": {},
+      "reference": {},
+      "colour": {},
+      "model": {},
+      "make": {},
+      "registration": {},
+      "images": {
+        "id": {},
+        "optimised": {},
+        "url": {},
+        "position": {},
+        "rotation": {}
+      },
+      "totalCrimeGroups": {},
+      "totalOffenders": {},
+      "totalIncidents": {},
+      "totalImages": {},
+      "incidents": {
+        "id": {},
+        "subject": {}
+      },
+      "offenders": {
+        "id": {},
+        "name": {}
+      },
+      "updatedAt": {},
+      "crimeGroup": {
+        "id": {},
+        "reference": {}
+      }
+    },
+    "total": {}
+  },
+  "searchOffenders": {
+    "totalCount": {},
+    "pageInfo": {
+      "hasNextPage": {},
+      "endCursor": {}
+    },
+    "edges": {
+      "node": {}
+    }
+  },
+  "updateOffender": {
+    "id": {},
+    "justification": {},
+    "name": {},
+    "infoSource": {},
+    "createdAt": {},
+    "updatedAt": {},
+    "age": {},
+    "build": {},
+    "height": {},
+    "dateOfBirth": {},
+    "dateSource": {},
+    "hair": {},
+    "gender": {},
+    "race": {},
+    "peculiarities": {},
+    "approved": {},
+    "active": {},
+    "idVerified": {},
+    "idSource": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {},
+      "rotation": {},
+      "primary": {},
+      "policeImage": {},
+      "isFace": {},
+      "optimisticUri": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "bans": {
+      "id": {},
+      "location": {},
+      "description": {},
+      "startDate": {},
+      "endDate": {},
+      "type": {},
+      "title": {},
+      "months": {},
+      "fineValue": {},
+      "duration": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "recycled": {},
+    "addresses": {},
+    "crimeGroups": {
+      "id": {},
+      "reference": {},
+      "alias": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalRecoveredValue": {},
+      "totalTheftSuccess": {},
+      "totalValue": {}
+    },
+    "customGalleries": {
+      "id": {},
+      "name": {}
+    },
+    "vehicles": {
+      "id": {},
+      "reference": {},
+      "colour": {},
+      "model": {},
+      "make": {},
+      "registration": {},
+      "images": {
+        "id": {},
+        "url": {},
+        "position": {},
+        "rotation": {},
+        "policeImage": {},
+        "primary": {},
+        "optimised": {}
+      }
+    }
+  },
+  "updateOffenderDetails": {
+    "age": {},
+    "alias": {},
+    "build": {},
+    "comment": {},
+    "customGalleries": {
+      "id": {},
+      "name": {}
+    },
+    "dateOfBirth": {},
+    "dateSource": {},
+    "gender": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "hair": {},
+    "height": {},
+    "idSource": {},
+    "idVerified": {},
+    "infoSource": {},
+    "justification": {},
+    "name": {},
+    "peculiarities": {},
+    "race": {},
+    "tags": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "offender": {
+    "id": {},
+    "alias": {},
+    "infoSource": {},
+    "knownFor": {},
+    "targetedGoods": {},
+    "justification": {},
+    "age": {},
+    "build": {},
+    "height": {},
+    "dateOfBirth": {},
+    "dateSource": {},
+    "hair": {},
+    "gender": {},
+    "comment": {},
+    "name": {},
+    "reference": {},
+    "race": {},
+    "peculiarities": {},
+    "approved": {},
+    "idVerified": {},
+    "idSource": {},
+    "customGalleries": {
+      "id": {},
+      "name": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "knownAssociates": {
+      "id": {},
+      "name": {},
+      "alias": {},
+      "reference": {},
+      "dateOfBirth": {},
+      "age": {},
+      "gender": {},
+      "build": {},
+      "height": {},
+      "race": {},
+      "hair": {},
+      "peculiarities": {},
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      },
+      "totalAssociatedIncidents": {},
+      "totalAssociatedCrimeGroups": {},
+      "associatedCrimeGroups": {
+        "id": {},
+        "alias": {},
+        "totalIncidents": {},
+        "reference": {},
+        "totalOffenders": {}
+      },
+      "associatedIncidents": {
+        "id": {},
+        "dayTime": {},
+        "reference": {},
+        "business": {
+          "id": {},
+          "fullName": {}
+        },
+        "location": {
+          "full": {},
+          "id": {}
+        },
+        "crimeTypes": {
+          "id": {},
+          "name": {}
+        },
+        "createdBy": {
+          "id": {},
+          "fullName": {},
+          "businesses": {
+            "id": {},
+            "name": {}
+          }
+        }
+      }
+    },
+    "updatedAt": {},
+    "images": {
+      "id": {},
+      "optimised": {},
+      "position": {},
+      "rotation": {},
+      "faces": {
+        "id": {},
+        "confidence": {},
+        "boundingHeight": {},
+        "boundingLeft": {},
+        "boundingTop": {},
+        "boundingWidth": {},
+        "offender": {
+          "id": {},
+          "name": {}
+        },
+        "rekMatchedSearches": {
+          "id": {}
+        }
+      },
+      "url": {}
+    },
+    "lastActive": {
+      "id": {},
+      "dayTime": {},
+      "date": {},
+      "crimeTypes": {
+        "id": {},
+        "name": {}
+      },
+      "createdBy": {
+        "id": {},
+        "businesses": {
+          "id": {},
+          "name": {},
+          "fullName": {}
+        }
+      },
+      "value": {},
+      "recoveredValue": {},
+      "reference": {}
+    },
+    "searchedMatches": {
+      "id": {},
+      "matchedFaces": {
+        "id": {},
+        "similarity": {},
+        "rekFace": {
+          "id": {},
+          "boundingHeight": {},
+          "boundingLeft": {},
+          "boundingTop": {},
+          "boundingWidth": {},
+          "image": {
+            "id": {},
+            "url": {},
+            "optimised": {},
+            "position": {},
+            "rotation": {},
+            "faces": {
+              "id": {},
+              "confidence": {},
+              "boundingHeight": {},
+              "boundingLeft": {},
+              "boundingTop": {},
+              "boundingWidth": {},
+              "offender": {
+                "id": {},
+                "name": {},
+                "reference": {},
+                "age": {},
+                "gender": {},
+                "race": {},
+                "build": {},
+                "height": {}
+              },
+              "rekMatchedSearches": {
+                "id": {}
+              }
+            }
+          }
+        }
+      },
+      "matchedOffender": {
+        "id": {},
+        "name": {},
+        "reference": {},
+        "age": {},
+        "build": {},
+        "height": {},
+        "gender": {},
+        "race": {},
+        "images": {
+          "id": {},
+          "position": {},
+          "rotation": {},
+          "optimised": {}
+        }
+      }
+    },
+    "aiImprovements": {},
+    "aiKeyObservations": {},
+    "aiMO": {},
+    "aiMethods": {},
+    "aiQualityScore": {},
+    "aiImpactScore": {},
+    "aiSummary": {},
+    "createdAt": {},
+    "scheme": {
+      "mg11Available": {}
+    },
+    "origOffenderId": {},
+    "subscribed": {},
+    "active": {},
+    "totalImages": {},
+    "totalIncidents": {},
+    "incidents": {
+      "id": {},
+      "business": {
+        "id": {},
+        "name": {}
+      },
+      "dayTime": {},
+      "policeNo": {},
+      "policeRef": {},
+      "reference": {},
+      "subject": {},
+      "totalRecoveredValue": {},
+      "totalValue": {},
+      "location": {
+        "id": {},
+        "full": {},
+        "geoLat": {},
+        "geoLng": {}
+      },
+      "date": {},
+      "crimeTypes": {
+        "id": {},
+        "name": {}
+      },
+      "value": {},
+      "recoveredValue": {},
+      "createdBy": {
+        "id": {},
+        "businesses": {
+          "id": {},
+          "name": {},
+          "fullName": {}
+        }
+      }
+    },
+    "addresses": {},
+    "bans": {
+      "id": {},
+      "title": {},
+      "location": {},
+      "description": {},
+      "startDate": {},
+      "endDate": {},
+      "type": {},
+      "months": {},
+      "fineValue": {},
+      "duration": {},
+      "active": {}
+    },
+    "createdBy": {},
+    "crimeGroups": {
+      "id": {},
+      "reference": {}
+    },
+    "vehicles": {
+      "id": {},
+      "make": {},
+      "model": {},
+      "registration": {},
+      "colour": {}
+    },
+    "evidence": {},
+    "investigations": {},
+    "updates": {},
+    "incidentsByHour": {
+      "name": {},
+      "count": {}
+    },
+    "incidentsByDayOfWeek": {
+      "name": {},
+      "count": {}
+    },
+    "incidentsByMonth": {
+      "name": {},
+      "count": {}
+    },
+    "incidentTotals": {
+      "month": {},
+      "data": {
+        "name": {},
+        "count": {}
+      }
+    },
+    "goodsTypesTotals": {
+      "avgLostValue": {},
+      "businessId": {},
+      "avgRecoveredValue": {},
+      "count": {},
+      "successRate": {},
+      "totalRecoveredValue": {},
+      "totalLostValue": {},
+      "goodsType": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "totalRecoveredValue": {},
+    "totalTheftSuccess": {},
+    "totalValue": {}
+  },
+  "reportTemplate": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "type": {},
+    "reportGroup": {
+      "id": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "reportGroup": {
+    "id": {},
+    "name": {},
+    "order": {},
+    "groups": {
+      "id": {}
+    }
+  },
+  "question": {
+    "id": {},
+    "questionFormatted": {},
+    "question": {},
+    "optionsFormatted": {},
+    "type": {},
+    "options": {},
+    "tags": {
+      "id": {},
+      "dependentBrands": {},
+      "tooltip": {}
+    }
+  },
+  "updateQuestionOnTag": {
+    "tag": {
+      "id": {}
+    },
+    "question": {
+      "question": {},
+      "id": {}
+    },
+    "id": {}
+  },
+  "roles": {
+    "edges": {
+      "node": {
+        "type": {},
+        "id": {},
+        "name": {},
+        "usersCount": {},
+        "approvalTier": {}
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "currentUser": {
+    "id": {},
+    "messagePush": {},
+    "offenderPush": {},
+    "subscribedIncidentOnly": {},
+    "incidentEmail": {},
+    "incidentPush": {},
+    "subscribedOffenderOnly": {},
+    "offenderEmail": {},
+    "fullName": {},
+    "origName": {},
+    "email": {},
+    "reference": {},
+    "demId": {},
+    "publicName": {},
+    "reportToAllBusinesses": {},
+    "notificationCount": {},
+    "messageCount": {},
+    "defaultScheme": {},
+    "businesses": {
+      "id": {},
+      "name": {},
+      "fullName": {},
+      "demId": {},
+      "brands": {}
+    },
+    "newUser": {},
+    "defaultGroups": {
+      "id": {},
+      "name": {},
+      "scheme": {
+        "id": {}
+      },
+      "schemeId": {}
+    },
+    "schemes": {
+      "id": {},
+      "scheme": {
+        "customTranslations": {},
+        "logo": {
+          "optimisedPersisted": {}
+        },
+        "darkLogo": {
+          "optimisedPersisted": {}
+        },
+        "userTodos": {},
+        "id": {},
+        "name": {},
+        "goodsMode": {},
+        "autoApproveIncidents": {},
+        "autoApproveOffenders": {},
+        "defaultPublicOffenderDOB": {},
+        "restrictIncidentAccess": {},
+        "reportOnly": {},
+        "facialRecognition": {},
+        "facialDetection": {},
+        "facialRedaction": {},
+        "incidentCustomQuestionRadio": {},
+        "incidentTypeTooltip": {},
+        "activityAssignToUser": {},
+        "useBusinessGroupsOnIncident": {},
+        "imagesRequiredOnOffenders": {},
+        "taskTimeTracking": {},
+        "languageCount": {},
+        "autoPopulateDescription": {},
+        "needJustification": {},
+        "requireSiteNumberForUsers": {},
+        "oneSelectedIncidentTypeOnly": {},
+        "connectedToSchemes": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "isAdmin": {},
+      "permissions": {
+        "model": {},
+        "allowedMethods": {}
+      },
+      "dashboard": {
+        "runningBanner": {},
+        "layout": {
+          "h": {},
+          "i": {},
+          "maxH": {},
+          "maxW": {},
+          "minH": {},
+          "minW": {},
+          "moved": {},
+          "static": {},
+          "w": {},
+          "x": {},
+          "y": {}
+        }
+      }
+    },
+    "bulletinEmails": {},
+    "bulletinPush": {},
+    "forcePasswordReset": {},
+    "hasPassword": {},
+    "termsExpired": {},
+    "totalSchemes": {},
+    "totalUnreadNotifications": {},
+    "expoPushTokens": {
+      "id": {},
+      "token": {}
+    },
+    "groups": {
+      "id": {},
+      "schemeId": {},
+      "name": {}
+    }
+  },
+  "businessCrimeTypeGraph": {
+    "label": {},
+    "data": {
+      "label": {},
+      "value": {}
+    }
+  },
+  "businessIncidentCountGraph": {
+    "label": {},
+    "value": {}
+  },
+  "businessLossRecoveredGraph": {
+    "label": {},
+    "data": {
+      "label": {},
+      "value": {}
+    }
+  },
+  "customQuestionsCountGraph": {
+    "data": {
+      "label": {},
+      "value": {}
+    },
+    "title": {}
+  },
+  "userSessionsGraph": {
+    "label": {},
+    "data": {
+      "label": {},
+      "value": {}
+    }
+  },
+  "userIncidentCountGraph": {
+    "label": {},
+    "value": {}
+  },
+  "totalUserSessionsGraph": {
+    "label": {},
+    "value": {}
+  },
+  "copyEvidenceToAlert": {
+    "id": {},
+    "name": {},
+    "thumbnailUrl": {},
+    "url": {},
+    "createdAt": {},
+    "updatedAt": {}
+  },
+  "createActionEvidence": {},
+  "deleteEvidence": {
+    "id": {}
+  },
+  "recycleDemEvidence": {},
+  "listActions": {
+    "total": {},
+    "actions": {
+      "id": {},
+      "description": {},
+      "dataType": {},
+      "reason": {},
+      "createdAt": {},
+      "byUser": {
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "fullName": {},
+          "id": {},
+          "name": {}
+        }
+      }
+    }
+  },
+  "approveAiSuggestion": {
+    "id": {}
+  },
+  "dismissAiSuggestion": {
+    "id": {}
+  },
+  "createArticle": {
+    "id": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "documents": {
+      "id": {},
+      "name": {},
+      "url": {}
+    },
+    "createdBy": {
+      "fullName": {}
+    },
+    "createdAt": {},
+    "priority": {},
+    "tags": {
+      "name": {}
+    },
+    "title": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {}
+    },
+    "image": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {}
+    },
+    "rows": {
+      "columns": {
+        "text": {},
+        "incidents": {},
+        "offenders": {}
+      }
+    }
+  },
+  "deleteArticle": {
+    "id": {}
+  },
+  "editArticle": {
+    "id": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "documents": {
+      "id": {},
+      "name": {},
+      "url": {}
+    },
+    "createdBy": {
+      "fullName": {}
+    },
+    "createdAt": {},
+    "priority": {},
+    "tags": {
+      "name": {}
+    },
+    "title": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {}
+    },
+    "image": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {}
+    },
+    "rows": {
+      "columns": {
+        "text": {},
+        "incidents": {
+          "id": {},
+          "subject": {},
+          "description": {},
+          "dayTime": {},
+          "reference": {},
+          "policeRef": {},
+          "crimeTypes": {
+            "id": {},
+            "name": {}
+          },
+          "approved": {},
+          "uploaded": {},
+          "location": {
+            "id": {},
+            "full": {}
+          },
+          "createdBy": {
+            "id": {},
+            "fullName": {},
+            "businesses": {
+              "fullName": {},
+              "id": {},
+              "name": {}
+            }
+          },
+          "images": {
+            "id": {},
+            "url": {},
+            "position": {},
+            "optimised": {},
+            "card": {},
+            "offenders": {
+              "id": {}
+            }
+          },
+          "groups": {
+            "id": {},
+            "name": {}
+          },
+          "offenders": {
+            "id": {},
+            "name": {}
+          }
+        },
+        "offenders": {}
+      }
+    }
+  },
+  "articles": {
+    "previewImage": {},
+    "previewText": {},
+    "priority": {},
+    "watermarkImage": {},
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {},
+      "rotation": {}
+    },
+    "image": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {}
+    },
+    "createdBy": {
+      "fullName": {},
+      "businesses": {
+        "fullName": {},
+        "id": {},
+        "name": {}
+      },
+      "id": {}
+    },
+    "title": {},
+    "updatedAt": {},
+    "id": {}
+  },
+  "listArticles": {
+    "articles": {
+      "watermarkImage": {},
+      "previewImage": {},
+      "previewText": {},
+      "priority": {},
+      "tags": {
+        "id": {},
+        "name": {}
+      },
+      "images": {
+        "id": {},
+        "url": {},
+        "optimised": {},
+        "card": {},
+        "position": {},
+        "rotation": {}
+      },
+      "image": {
+        "id": {},
+        "url": {},
+        "optimised": {},
+        "card": {}
+      },
+      "createdBy": {
+        "fullName": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        },
+        "id": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      },
+      "title": {},
+      "updatedAt": {},
+      "id": {}
+    },
+    "total": {}
+  },
+  "article": {
+    "id": {},
+    "watermarkImage": {},
+    "groups": {
+      "id": {},
+      "name": {},
+      "scheme": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "documents": {
+      "id": {},
+      "name": {},
+      "url": {}
+    },
+    "createdBy": {
+      "fullName": {}
+    },
+    "createdAt": {},
+    "updatedAt": {},
+    "priority": {},
+    "completedAt": {},
+    "status": {},
+    "tags": {
+      "name": {},
+      "id": {}
+    },
+    "schemes": {
+      "id": {},
+      "name": {}
+    },
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {},
+      "rotation": {}
+    },
+    "image": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {}
+    },
+    "title": {},
+    "rows": {
+      "columns": {
+        "text": {},
+        "incidents": {},
+        "offenders": {
+          "lastActive": {
+            "id": {},
+            "dayTime": {}
+          }
+        }
+      }
+    }
+  },
+  "createUserInAuth0": {
+    "message": {}
+  },
+  "resetPassword": {
+    "message": {}
+  },
+  "signIn": {
+    "accessToken": {},
+    "refreshToken": {}
+  },
+  "deleteBan": {
+    "id": {}
+  },
+  "ban": {
+    "id": {},
+    "active": {},
+    "location": {},
+    "startDate": {},
+    "endDate": {},
+    "description": {},
+    "createdBy": {
+      "id": {},
+      "fullName": {}
+    },
+    "createdAt": {}
+  },
+  "bans": {
+    "id": {},
+    "location": {},
+    "startDate": {},
+    "endDate": {},
+    "description": {}
+  },
+  "addUsersToBusiness": {
+    "id": {},
+    "name": {},
+    "users": {
+      "id": {},
+      "fullName": {},
+      "status": {},
+      "publicName": {},
+      "loginEvents": {
+        "loginTime": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      }
+    }
+  },
+  "createBusiness": {
+    "id": {},
+    "name": {},
+    "fullName": {},
+    "publicName": {},
+    "siteNumber": {},
+    "demId": {},
+    "parent": {
+      "id": {},
+      "name": {}
+    },
+    "locations": {
+      "id": {},
+      "full": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "totalUsers": {}
+  },
+  "deleteBusiness": {
+    "id": {}
+  },
+  "linkBusinessToScheme": {
+    "id": {},
+    "name": {},
+    "fullName": {},
+    "publicName": {},
+    "demId": {},
+    "parent": {
+      "id": {},
+      "name": {},
+      "fullName": {},
+      "publicName": {}
+    },
+    "locations": {
+      "id": {},
+      "full": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "totalUsers": {}
+  },
+  "removeUserFromBusiness": {
+    "id": {},
+    "name": {},
+    "users": {
+      "id": {},
+      "fullName": {},
+      "status": {},
+      "publicName": {},
+      "loginEvents": {
+        "loginTime": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      }
+    }
+  },
+  "updateBusiness": {
+    "id": {},
+    "locations": {
+      "id": {},
+      "building": {},
+      "street": {},
+      "townCity": {},
+      "county": {},
+      "postcode": {},
+      "geoLng": {},
+      "geoLat": {},
+      "full": {}
+    },
+    "name": {},
+    "siteNumber": {},
+    "fullName": {},
+    "publicName": {},
+    "demId": {},
+    "parent": {
+      "id": {},
+      "name": {},
+      "fullName": {},
+      "publicName": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "totalUsers": {}
+  },
+  "business": {
+    "id": {},
+    "brands": {},
+    "offenderSettings": {},
+    "name": {},
+    "siteNumber": {},
+    "incidents": {
+      "id": {},
+      "subject": {},
+      "crimeTypes": {
+        "id": {},
+        "name": {}
+      },
+      "createdAt": {},
+      "reference": {},
+      "policeRef": {},
+      "totalRecoveredValue": {},
+      "totalValue": {},
+      "date": {},
+      "createdBy": {
+        "id": {},
+        "businesses": {
+          "id": {},
+          "name": {},
+          "fullName": {}
+        }
+      },
+      "dayTime": {},
+      "location": {}
+    },
+    "locations": {
+      "id": {},
+      "full": {},
+      "geoLat": {},
+      "geoLng": {},
+      "building": {},
+      "street": {},
+      "townCity": {},
+      "county": {},
+      "postcode": {}
+    },
+    "valueStats": {
+      "avgLostValue": {},
+      "businessId": {},
+      "avgRecoveredValue": {},
+      "successRate": {},
+      "totalLostValue": {},
+      "totalRecoveredValue": {}
+    },
+    "goodsTypesTotals": {
+      "avgLostValue": {},
+      "businessId": {},
+      "avgRecoveredValue": {},
+      "count": {},
+      "successRate": {},
+      "totalRecoveredValue": {},
+      "totalLostValue": {},
+      "goodsType": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "fullName": {},
+    "publicName": {},
+    "demId": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "todos": {},
+    "demDevices": {
+      "evidence": {
+        "id": {},
+        "name": {},
+        "url": {},
+        "fileType": {}
+      },
+      "demGroups": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "parent": {
+      "id": {},
+      "name": {},
+      "fullName": {}
+    },
+    "evidences": {
+      "id": {},
+      "name": {},
+      "url": {},
+      "fileType": {}
+    }
+  },
+  "deleteChat": {
+    "id": {}
+  },
+  "updateChat": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "members": {
+      "user": {
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "fullName": {},
+          "id": {},
+          "name": {}
+        }
+      }
+    }
+  },
+  "chat": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "totalMembers": {},
+    "totalMessages": {},
+    "members": {
+      "id": {},
+      "user": {
+        "id": {},
+        "fullName": {},
+        "firstLetter": {},
+        "origFirstLetter": {},
+        "origName": {},
+        "businesses": {
+          "fullName": {},
+          "id": {},
+          "name": {}
+        }
+      }
+    }
+  },
+  "createChat": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "updatedAt": {},
+    "createdAt": {},
+    "members": {
+      "id": {},
+      "newMessages": {},
+      "mentioned": {},
+      "updatedAt": {},
+      "createdAt": {},
+      "chat": {
+        "id": {},
+        "name": {},
+        "firstLetter": {},
+        "totalMembers": {},
+        "messageCount": {},
+        "messages": {
+          "id": {},
+          "content": {},
+          "createdAt": {},
+          "from": {
+            "id": {},
+            "origName": {}
+          },
+          "images": {
+            "id": {}
+          },
+          "incidents": {
+            "id": {}
+          },
+          "offenders": {
+            "id": {}
+          },
+          "vehicles": {
+            "id": {}
+          },
+          "crimeGroups": {
+            "id": {}
+          },
+          "articles": {
+            "id": {}
+          }
+        }
+      }
+    }
+  },
+  "chats": {
+    "id": {},
+    "name": {},
+    "description": {}
+  },
+  "createCrimeGroup": {
+    "id": {},
+    "alias": {},
+    "reference": {},
+    "vehicles": {
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      }
+    },
+    "offenders": {
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {},
+        "isFace": {}
+      }
+    },
+    "totalIncidents": {},
+    "totalOffenders": {},
+    "totalRecoveredValue": {},
+    "totalTheftSuccess": {},
+    "totalValue": {},
+    "updatedAt": {}
+  },
+  "deleteCrimeGroup": {
+    "id": {}
+  },
+  "subscribeToCrimeGroup": {
+    "id": {},
+    "subscribed": {}
+  },
+  "unsubscribeToCrimeGroup": {
+    "id": {},
+    "subscribed": {}
+  },
+  "updateCrimeGroup": {
+    "id": {},
+    "alias": {},
+    "reference": {},
+    "totalIncidents": {},
+    "totalOffenders": {},
+    "totalRecoveredValue": {},
+    "totalTheftSuccess": {},
+    "totalValue": {},
+    "offenders": {
+      "id": {},
+      "name": {},
+      "reference": {},
+      "lastActive": {
+        "id": {},
+        "dayTime": {}
+      },
+      "hair": {},
+      "peculiarities": {},
+      "race": {},
+      "dateOfBirth": {},
+      "dateSource": {},
+      "build": {},
+      "height": {},
+      "age": {},
+      "gender": {},
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      },
+      "totalTheftSuccess": {},
+      "totalRecoveredValue": {},
+      "totalIncidents": {},
+      "totalValue": {}
+    },
+    "vehicles": {
+      "id": {}
+    },
+    "incidents": {
+      "id": {},
+      "subject": {},
+      "dayTime": {},
+      "createdBy": {
+        "id": {},
+        "businesses": {
+          "fullName": {},
+          "id": {},
+          "name": {}
+        }
+      },
+      "value": {},
+      "recoveredValue": {},
+      "reference": {},
+      "policeRef": {}
+    }
+  },
+  "listCrimeGroups": {
+    "crimeGroups": {
+      "id": {},
+      "reference": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalRecoveredValue": {},
+      "totalTheftSuccess": {},
+      "totalValue": {},
+      "alias": {},
+      "updatedAt": {}
+    },
+    "total": {}
+  },
+  "crimeGroup": {
+    "id": {},
+    "suggestedMembers": {
+      "id": {},
+      "name": {},
+      "alias": {},
+      "reference": {},
+      "dateOfBirth": {},
+      "age": {},
+      "gender": {},
+      "build": {},
+      "height": {},
+      "race": {},
+      "hair": {},
+      "peculiarities": {},
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      },
+      "totalAssociatedIncidents": {},
+      "associatedIncidents": {
+        "id": {},
+        "dayTime": {},
+        "reference": {},
+        "business": {
+          "id": {},
+          "fullName": {}
+        },
+        "location": {
+          "full": {},
+          "id": {}
+        },
+        "crimeTypes": {
+          "id": {},
+          "name": {}
+        },
+        "createdBy": {
+          "id": {},
+          "fullName": {},
+          "businesses": {
+            "id": {},
+            "name": {}
+          }
+        }
+      }
+    },
+    "reference": {},
+    "totalIncidents": {},
+    "totalOffenders": {},
+    "totalRecoveredValue": {},
+    "totalTheftSuccess": {},
+    "totalValue": {},
+    "subscribed": {},
+    "alias": {},
+    "groups": {
+      "id": {}
+    },
+    "incidents": {},
+    "vehicles": {
+      "images": {}
+    },
+    "offenders": {
+      "alias": {},
+      "totalIncidents": {},
+      "totalValue": {},
+      "latestIncident": {
+        "id": {},
+        "date": {}
+      },
+      "knownFor": {},
+      "targetedBusinesses": {
+        "id": {},
+        "name": {}
+      },
+      "targetedGoods": {},
+      "images": {}
+    },
+    "evidence": {},
+    "investigations": {},
+    "updates": {}
+  },
+  "createCustomGallery": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "groups": {
+      "id": {}
+    }
+  },
+  "deleteCustomGallery": {
+    "id": {}
+  },
+  "updateCustomGallery": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "groups": {
+      "id": {}
+    }
+  },
+  "customGalleriesRelay": {
+    "edges": {
+      "node": {
+        "description": {},
+        "id": {},
+        "name": {},
+        "groups": {
+          "id": {}
+        }
+      }
+    },
+    "totalCount": {}
+  },
+  "copyEvidenceOnInvestigation": {
+    "id": {},
+    "name": {},
+    "url": {},
+    "thumbnailUrl": {},
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "investigation": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "linkOrgToDem": {
+    "id": {},
+    "name": {},
+    "demId": {},
+    "parent": {
+      "id": {},
+      "name": {}
+    },
+    "locations": {
+      "id": {},
+      "full": {}
+    }
+  },
+  "linkUserToDem": {
+    "id": {},
+    "demId": {}
+  },
+  "listDemCompanies": {
+    "demCompanies": {
+      "name": {},
+      "id": {}
+    },
+    "total": {}
+  },
+  "listDemEvidence": {
+    "total": {},
+    "demEvidence": {
+      "type": {},
+      "thumbnailUrl": {},
+      "playbackUrl": {},
+      "importance": {},
+      "id": {},
+      "createdAt": {}
+    }
+  },
+  "listDemUsers": {
+    "demUsers": {
+      "name": {},
+      "id": {},
+      "email": {}
+    },
+    "total": {}
+  },
+  "createDocument": {
+    "id": {},
+    "name": {},
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "thumbnailUrl": {},
+    "url": {},
+    "createdAt": {},
+    "updatedAt": {}
+  },
+  "createDocuments": {
+    "id": {},
+    "name": {},
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "thumbnailUrl": {},
+    "url": {},
+    "createdAt": {},
+    "updatedAt": {}
+  },
+  "deleteDocument": {
+    "id": {}
+  },
+  "scheme": {
+    "mg11Available": {},
+    "documents": {
+      "id": {},
+      "name": {},
+      "tags": {
+        "name": {},
+        "id": {}
+      },
+      "url": {},
+      "thumbnailUrl": {},
+      "createdAt": {}
+    },
+    "id": {},
+    "facialRecognition": {},
+    "facialDetection": {},
+    "facialRedaction": {},
+    "rekCollections": {
+      "id": {},
+      "name": {}
+    },
+    "reportIcons": {
+      "optimisedPersisted": {}
+    },
+    "reportTemplates": {},
+    "currentTerms": {
+      "id": {},
+      "content": {}
+    },
+    "name": {},
+    "restrictIncidentAccess": {},
+    "reportOnly": {},
+    "autoApproveIncidents": {},
+    "autoApproveOffenders": {},
+    "defaultIncidentEmail": {},
+    "defaultIncidentPush": {},
+    "defaultBulletinEmails": {},
+    "defaultBulletinPush": {},
+    "defaultSubscribedIncidentOnly": {},
+    "defaultSubscribedOffenderOnly": {},
+    "defaultMessagePush": {},
+    "defaultOffenderEmail": {},
+    "defaultOffenderPush": {},
+    "defaultPublicOffenderDOB": {},
+    "incidentRetention": {},
+    "offenderRetention": {},
+    "autoPopulateDescription": {},
+    "needJustification": {},
+    "incidentCustomQuestionRadio": {},
+    "incidentTypeTooltip": {},
+    "activityAssignToUser": {},
+    "useBusinessGroupsOnIncident": {},
+    "imagesRequiredOnOffenders": {},
+    "requireSiteNumberForUsers": {},
+    "oneSelectedIncidentTypeOnly": {},
+    "goodsMode": {},
+    "darkLogo": {
+      "id": {},
+      "url": {},
+      "optimised": {}
+    },
+    "logo": {
+      "id": {},
+      "url": {},
+      "optimised": {}
+    },
+    "questionGroups": {
+      "id": {},
+      "name": {},
+      "description": {},
+      "defaultDueDate": {},
+      "questions": {
+        "questionFormatted": {},
+        "id": {},
+        "optionsFormFormatted": {
+          "label": {},
+          "value": {}
+        },
+        "type": {}
+      }
+    },
+    "schemeTags": {
+      "id": {},
+      "name": {}
+    },
+    "connectedToSchemes": {
+      "id": {},
+      "name": {}
+    },
+    "questions": {
+      "id": {},
+      "questionOn": {},
+      "optionsFormFormatted": {
+        "value": {},
+        "label": {}
+      },
+      "type": {},
+      "questionFormatted": {}
+    },
+    "members": {
+      "role": {},
+      "userId": {},
+      "user": {
+        "fullName": {}
+      }
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "deleteFeedItem": {
+    "id": {}
+  },
+  "listFeedItems": {
+    "feedItems": {
+      "type": {},
+      "ban": {
+        "title": {},
+        "type": {},
+        "location": {},
+        "feedImage": {},
+        "offender": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "article": {
+        "id": {},
+        "title": {},
+        "createdBy": {
+          "fullName": {}
+        },
+        "image": {
+          "id": {},
+          "url": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        },
+        "previewText": {},
+        "priority": {}
+      },
+      "articleId": {},
+      "createdAt": {},
+      "updatedAt": {},
+      "message": {},
+      "model": {},
+      "crimeGroupId": {},
+      "crimeGroup": {
+        "totalOffenders": {},
+        "totalIncidents": {},
+        "alias": {},
+        "id": {},
+        "reference": {},
+        "latestUpdate": {}
+      },
+      "vehicleId": {},
+      "vehicle": {
+        "totalOffenders": {},
+        "registration": {},
+        "reference": {},
+        "model": {},
+        "make": {},
+        "id": {},
+        "colour": {},
+        "feedImage": {},
+        "latestUpdate": {}
+      },
+      "investigationId": {},
+      "investigation": {
+        "id": {},
+        "name": {},
+        "reference": {},
+        "totalOffenders": {},
+        "totalIncidents": {},
+        "description": {},
+        "updatedAt": {},
+        "latestUpdate": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      },
+      "id": {},
+      "incident": {
+        "id": {},
+        "subject": {},
+        "reference": {},
+        "description": {},
+        "latestUpdate": {},
+        "approved": {},
+        "business": {
+          "id": {},
+          "name": {}
+        },
+        "feedImage": {}
+      },
+      "incidentId": {},
+      "offender": {
+        "id": {},
+        "totalIncidents": {},
+        "latestIncident": {
+          "id": {},
+          "dateAgo": {},
+          "reportedBusinessName": {}
+        },
+        "reference": {},
+        "updatedAt": {},
+        "height": {},
+        "dateOfBirth": {},
+        "dateSource": {},
+        "hair": {},
+        "name": {},
+        "peculiarities": {},
+        "race": {},
+        "approved": {},
+        "subscribed": {},
+        "uploaded": {},
+        "active": {},
+        "latestUpdate": {},
+        "feedImage": {}
+      },
+      "offenderId": {}
+    },
+    "total": {}
+  },
+  "listTodos": {
+    "uncompletedTodos": {},
+    "totalUserTodos": {},
+    "uncompletedTotal": {},
+    "todos": {
+      "description": {},
+      "id": {},
+      "name": {},
+      "dueDate": {},
+      "createdAt": {},
+      "completed": {},
+      "type": {},
+      "vehicleId": {},
+      "vehicle": {
+        "id": {},
+        "reference": {}
+      },
+      "offenderId": {},
+      "offender": {
+        "id": {},
+        "reference": {}
+      },
+      "crimeGroupId": {},
+      "crimeGroup": {
+        "id": {},
+        "reference": {}
+      },
+      "incidentId": {},
+      "incident": {
+        "id": {},
+        "reference": {}
+      },
+      "investigationId": {},
+      "investigation": {
+        "id": {},
+        "reference": {}
+      },
+      "chatId": {},
+      "completedDate": {},
+      "createdBy": {
+        "id": {},
+        "fullName": {}
+      },
+      "completedBy": {
+        "id": {},
+        "fullName": {}
+      },
+      "assignedUsers": {
+        "id": {},
+        "fullName": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "total": {}
+  },
+  "listOffenders": {
+    "offenders": {
+      "id": {},
+      "reference": {},
+      "name": {},
+      "feedImage": {},
+      "totalImages": {},
+      "createdAt": {},
+      "updatedAt": {},
+      "totalIncidents": {},
+      "age": {},
+      "build": {},
+      "height": {},
+      "dateOfBirth": {},
+      "dateSource": {},
+      "hair": {},
+      "gender": {},
+      "race": {},
+      "peculiarities": {},
+      "approved": {},
+      "active": {},
+      "lastActive": {
+        "id": {},
+        "dayTime": {}
+      },
+      "tags": {
+        "id": {},
+        "name": {}
+      },
+      "images": {
+        "id": {},
+        "optimisedPersisted": {},
+        "position": {},
+        "rotation": {},
+        "primary": {},
+        "policeImage": {},
+        "isFace": {},
+        "optimised": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      },
+      "createdBy": {
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "incidents": {
+        "id": {},
+        "reference": {},
+        "subject": {},
+        "description": {},
+        "dayTime": {},
+        "date": {},
+        "location": {
+          "id": {},
+          "full": {}
+        },
+        "createdBy": {
+          "id": {},
+          "fullName": {},
+          "businesses": {
+            "id": {},
+            "name": {}
+          }
+        }
+      },
+      "totalValue": {},
+      "latestIncident": {
+        "id": {},
+        "dayTime": {}
+      }
+    },
+    "total": {}
+  },
+  "listGoodsTypes": {
+    "total": {},
+    "goodsTypes": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "deleteGroup": {
+    "id": {}
+  },
+  "updateGroup": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "users": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "fullName": {},
+        "id": {},
+        "name": {}
+      }
+    },
+    "approver": {
+      "id": {},
+      "fullName": {}
+    },
+    "offenderSettings": {}
+  },
+  "group": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "users": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "fullName": {},
+        "id": {},
+        "name": {}
+      }
+    },
+    "approver": {
+      "id": {},
+      "fullName": {}
+    },
+    "offenderSettings": {}
+  },
+  "createGroup": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "users": {
+      "id": {},
+      "fullName": {}
+    },
+    "approver": {
+      "id": {},
+      "fullName": {}
+    },
+    "scheme": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "groups": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "scheme": {
+      "id": {},
+      "name": {}
+    },
+    "approver": {
+      "id": {},
+      "fullName": {}
+    }
+  },
+  "discImportData": {
+    "success": {}
+  },
+  "stockItemImport": {
+    "success": {}
+  },
+  "intelOneImportData": {
+    "success": {}
+  },
+  "mySafetyImportData": {
+    "success": {}
+  },
+  "addImagesToIncident": {
+    "id": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {},
+      "rotation": {}
+    }
+  },
+  "createIncident": {
+    "id": {},
+    "subject": {},
+    "description": {},
+    "dayTime": {},
+    "date": {},
+    "time": {},
+    "value": {},
+    "recoveredValue": {},
+    "policeReported": {},
+    "policeRef": {},
+    "policeInvolved": {},
+    "crimeTypes": {
+      "id": {},
+      "name": {}
+    },
+    "approved": {},
+    "location": {
+      "id": {},
+      "full": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "fullName": {},
+        "id": {},
+        "name": {}
+      }
+    },
+    "images": {
+      "id": {},
+      "optimised": {},
+      "url": {},
+      "position": {},
+      "rotation": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "vehicles": {
+      "images": {}
+    },
+    "offenders": {
+      "images": {
+        "isFace": {}
+      },
+      "tags": {
+        "id": {},
+        "name": {}
+      }
+    }
+  },
+  "recycleIncident": {
+    "id": {}
+  },
+  "subscribeToIncident": {
+    "id": {},
+    "subscribed": {}
+  },
+  "unsubscribeFromIncident": {
+    "id": {},
+    "subscribed": {}
+  },
+  "updateIncident": {
+    "id": {},
+    "subject": {},
+    "description": {},
+    "dayTime": {},
+    "date": {},
+    "time": {},
+    "value": {},
+    "recoveredValue": {},
+    "policeReported": {},
+    "policeRef": {},
+    "policeInvolved": {},
+    "subscribed": {},
+    "priority": {},
+    "customerRef": {},
+    "crimeTypes": {
+      "id": {},
+      "name": {}
+    },
+    "approved": {},
+    "location": {},
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "fullName": {},
+        "id": {},
+        "name": {}
+      }
+    },
+    "images": {
+      "id": {},
+      "optimised": {},
+      "position": {},
+      "rotation": {},
+      "url": {},
+      "card": {},
+      "primary": {},
+      "policeImage": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "offenders": {
+      "images": {
+        "isFace": {},
+        "offenders": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "tags": {
+        "id": {},
+        "name": {}
+      },
+      "recycled": {}
+    },
+    "incidentItems": {},
+    "vehicles": {
+      "id": {},
+      "reference": {},
+      "colour": {},
+      "model": {},
+      "make": {},
+      "registration": {},
+      "images": {}
+    }
+  },
+  "updateIncidentBusiness": {
+    "id": {},
+    "business": {
+      "id": {},
+      "name": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "addresses": {
+    "id": {},
+    "building": {},
+    "street": {},
+    "townCity": {},
+    "county": {},
+    "postcode": {},
+    "primary": {},
+    "full": {}
+  },
+  "incident": {
+    "id": {},
+    "subject": {},
+    "description": {},
+    "date": {},
+    "time": {},
+    "reference": {},
+    "ref": {},
+    "policeReported": {},
+    "policeRef": {},
+    "policeNo": {},
+    "policeInvolved": {},
+    "subscribed": {},
+    "totalValue": {},
+    "totalRecoveredValue": {},
+    "priority": {},
+    "customerRef": {},
+    "crimeTypes": {
+      "id": {},
+      "name": {},
+      "crimeType": {}
+    },
+    "involvedTags": {
+      "id": {},
+      "name": {}
+    },
+    "impactTags": {
+      "id": {},
+      "name": {}
+    },
+    "incidentItems": {
+      "id": {},
+      "name": {},
+      "value": {},
+      "recoveredValue": {},
+      "goodsType": {
+        "id": {}
+      }
+    },
+    "approved": {},
+    "business": {
+      "id": {},
+      "name": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "images": {
+      "id": {},
+      "optimised": {},
+      "url": {},
+      "position": {},
+      "rotation": {},
+      "primary": {},
+      "policeImage": {},
+      "offenders": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "crimeGroups": {
+      "id": {},
+      "reference": {},
+      "alias": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalRecoveredValue": {},
+      "totalTheftSuccess": {},
+      "totalValue": {}
+    },
+    "vehicles": {
+      "id": {},
+      "reference": {},
+      "colour": {},
+      "model": {},
+      "make": {},
+      "registration": {},
+      "totalCrimeGroups": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "updatedAt": {},
+      "images": {
+        "id": {},
+        "url": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      }
+    },
+    "offenders": {
+      "id": {},
+      "reference": {},
+      "createdAt": {},
+      "updatedAt": {},
+      "age": {},
+      "build": {},
+      "height": {},
+      "dateOfBirth": {},
+      "dateSource": {},
+      "gender": {},
+      "hair": {},
+      "name": {},
+      "peculiarities": {},
+      "race": {},
+      "approved": {},
+      "uploaded": {},
+      "active": {},
+      "images": {
+        "id": {},
+        "url": {},
+        "optimised": {},
+        "card": {},
+        "position": {},
+        "rotation": {},
+        "isFace": {}
+      },
+      "tags": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "updates": {
+      "id": {},
+      "text": {},
+      "type": {},
+      "createdAt": {},
+      "images": {
+        "id": {},
+        "url": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {},
+        "card": {}
+      },
+      "linkedCrimeGroups": {
+        "totalOffenders": {},
+        "totalIncidents": {},
+        "alias": {},
+        "id": {},
+        "reference": {},
+        "totalRecoveredValue": {},
+        "totalTheftSuccess": {},
+        "totalValue": {},
+        "updatedAt": {}
+      },
+      "linkedVehicles": {
+        "images": {
+          "id": {},
+          "url": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        },
+        "updatedAt": {},
+        "totalOffenders": {},
+        "registration": {},
+        "reference": {},
+        "model": {},
+        "make": {},
+        "id": {},
+        "colour": {}
+      },
+      "linkedIncidents": {
+        "id": {},
+        "subject": {},
+        "description": {},
+        "dayTime": {},
+        "images": {
+          "id": {},
+          "url": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        }
+      },
+      "linkedOffenders": {
+        "id": {},
+        "updatedAt": {},
+        "age": {},
+        "build": {},
+        "height": {},
+        "dateOfBirth": {},
+        "name": {},
+        "race": {},
+        "gender": {},
+        "images": {
+          "id": {},
+          "url": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        }
+      },
+      "createdBy": {
+        "origName": {},
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "id": {},
+          "name": {},
+          "fullName": {}
+        }
+      },
+      "replies": {
+        "id": {},
+        "text": {},
+        "type": {},
+        "createdAt": {},
+        "images": {
+          "id": {},
+          "url": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {},
+          "card": {}
+        },
+        "linkedCrimeGroups": {
+          "totalOffenders": {},
+          "totalIncidents": {},
+          "alias": {},
+          "id": {},
+          "reference": {},
+          "totalRecoveredValue": {},
+          "totalTheftSuccess": {},
+          "totalValue": {},
+          "updatedAt": {}
+        },
+        "linkedVehicles": {
+          "images": {
+            "id": {},
+            "url": {},
+            "optimised": {},
+            "position": {},
+            "rotation": {}
+          },
+          "updatedAt": {},
+          "totalOffenders": {},
+          "registration": {},
+          "reference": {},
+          "model": {},
+          "make": {},
+          "id": {},
+          "colour": {}
+        },
+        "linkedIncidents": {
+          "id": {},
+          "subject": {},
+          "description": {},
+          "dayTime": {},
+          "images": {
+            "id": {},
+            "url": {},
+            "optimised": {},
+            "position": {},
+            "rotation": {}
+          }
+        },
+        "linkedOffenders": {
+          "id": {},
+          "updatedAt": {},
+          "age": {},
+          "build": {},
+          "height": {},
+          "dateOfBirth": {},
+          "name": {},
+          "race": {},
+          "gender": {},
+          "images": {
+            "id": {},
+            "url": {},
+            "optimised": {},
+            "position": {},
+            "rotation": {}
+          }
+        },
+        "createdBy": {
+          "origName": {},
+          "id": {},
+          "fullName": {},
+          "businesses": {
+            "id": {},
+            "name": {},
+            "fullName": {}
+          }
+        }
+      }
+    },
+    "dayTime": {},
+    "location": {
+      "id": {},
+      "building": {},
+      "street": {},
+      "townCity": {},
+      "county": {},
+      "postcode": {}
+    },
+    "totalImages": {},
+    "originalDescription": {},
+    "aiImprovements": {},
+    "aiKeyObservations": {},
+    "aiMO": {},
+    "aiMethod": {},
+    "aiQualityScore": {},
+    "aiSummary": {},
+    "cctvRecords": {
+      "cameraNumber": {},
+      "endTime": {},
+      "id": {},
+      "showFace": {},
+      "showIncident": {},
+      "startTime": {}
+    },
+    "answers": {
+      "id": {},
+      "answer": {},
+      "tagQuestion": {
+        "id": {},
+        "priority": {},
+        "dependentQuestions": {},
+        "question": {
+          "id": {},
+          "question": {}
+        }
+      },
+      "type": {}
+    },
+    "schemes": {
+      "id": {}
+    },
+    "scheme": {
+      "id": {},
+      "mg11Available": {},
+      "restrictIncidentAccess": {}
+    },
+    "todos": {},
+    "evidence": {},
+    "investigations": {}
+  },
+  "incidentFeed": {
+    "id": {},
+    "subject": {},
+    "description": {},
+    "dayTime": {},
+    "reference": {},
+    "policeRef": {},
+    "crimeTypes": {
+      "id": {},
+      "name": {}
+    },
+    "approved": {},
+    "uploaded": {},
+    "business": {
+      "id": {},
+      "name": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "position": {},
+      "rotation": {},
+      "card": {},
+      "offenders": {
+        "id": {}
+      }
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "offenders": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "listIncidentsAllSchemes": {
+    "incidents": {},
+    "total": {}
+  },
+  "incidents": {
+    "dayTime": {},
+    "subject": {},
+    "id": {},
+    "location": {
+      "id": {},
+      "geoLat": {},
+      "geoLng": {}
+    },
+    "business": {
+      "id": {}
+    }
+  },
+  "listIncidents": {
+    "incidents": {
+      "id": {},
+      "subject": {},
+      "totalImages": {},
+      "description": {},
+      "dayTime": {},
+      "reference": {},
+      "policeRef": {},
+      "crimeTypes": {
+        "id": {},
+        "name": {}
+      },
+      "approved": {},
+      "business": {
+        "id": {},
+        "name": {}
+      },
+      "location": {
+        "id": {},
+        "full": {}
+      },
+      "createdBy": {
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {},
+        "primary": {},
+        "policeImage": {},
+        "low": {},
+        "url": {}
+      },
+      "groups": {
+        "id": {},
+        "name": {}
+      },
+      "incidentItems": {
+        "id": {},
+        "name": {},
+        "value": {},
+        "recoveredValue": {},
+        "sku": {},
+        "quantity": {},
+        "recoveredQuantity": {},
+        "goodsType": {
+          "id": {}
+        }
+      },
+      "offenders": {
+        "id": {},
+        "name": {}
+      },
+      "date": {}
+    },
+    "total": {}
+  },
+  "industries": {
+    "name": {},
+    "id": {}
+  },
+  "createFlow": {
+    "id": {},
+    "name": {},
+    "description": {}
+  },
+  "createInvestigation": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "status": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "deleteInvestigation": {
+    "id": {}
+  },
+  "subscribeToInvestigation": {
+    "id": {},
+    "subscribed": {}
+  },
+  "unsubscribeToInvestigation": {
+    "id": {},
+    "subscribed": {}
+  },
+  "updateFlow": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "edges": {
+      "id": {},
+      "type": {},
+      "markerEnd": {},
+      "source": {},
+      "sourceHandle": {},
+      "target": {},
+      "targetHandle": {}
+    },
+    "nodes": {
+      "id": {},
+      "type": {},
+      "data": {},
+      "height": {},
+      "width": {},
+      "style": {
+        "height": {},
+        "width": {}
+      },
+      "position": {
+        "x": {},
+        "y": {}
+      },
+      "positionAbsolute": {
+        "x": {},
+        "y": {}
+      }
+    }
+  },
+  "updateInvestigation": {
+    "id": {},
+    "description": {},
+    "name": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {}
+    },
+    "vehicles": {
+      "images": {}
+    },
+    "offenders": {
+      "images": {
+        "id": {},
+        "optimised": {},
+        "optimisedPersisted": {},
+        "position": {},
+        "rotation": {},
+        "isFace": {}
+      }
+    },
+    "incidents": {
+      "id": {},
+      "policeRef": {},
+      "dayTime": {},
+      "createdBy": {
+        "organisation": {}
+      },
+      "reference": {},
+      "subject": {},
+      "date": {},
+      "location": {
+        "id": {}
+      },
+      "value": {},
+      "recoveredValue": {},
+      "vehicles": {
+        "images": {
+          "id": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        }
+      },
+      "offenders": {
+        "images": {
+          "id": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        }
+      }
+    },
+    "crimeGroups": {
+      "id": {},
+      "alias": {},
+      "reference": {},
+      "vehicles": {
+        "id": {},
+        "reference": {},
+        "registration": {},
+        "make": {},
+        "model": {},
+        "images": {
+          "id": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        },
+        "colour": {}
+      },
+      "offenders": {
+        "id": {},
+        "name": {},
+        "alias": {},
+        "reference": {},
+        "dateOfBirth": {},
+        "age": {},
+        "gender": {},
+        "build": {},
+        "height": {},
+        "race": {},
+        "hair": {},
+        "peculiarities": {},
+        "images": {
+          "id": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        }
+      }
+    },
+    "flows": {
+      "name": {},
+      "description": {},
+      "edges": {
+        "id": {},
+        "type": {},
+        "markerEnd": {},
+        "source": {},
+        "sourceHandle": {},
+        "target": {},
+        "targetHandle": {}
+      },
+      "nodes": {
+        "id": {},
+        "type": {},
+        "data": {},
+        "height": {},
+        "width": {},
+        "position": {
+          "x": {},
+          "y": {}
+        },
+        "positionAbsolute": {
+          "x": {},
+          "y": {}
+        }
+      }
+    }
+  },
+  "investigation": {
+    "id": {},
+    "suggestedOffenders": {
+      "id": {},
+      "name": {},
+      "alias": {},
+      "reference": {},
+      "dateOfBirth": {},
+      "age": {},
+      "gender": {},
+      "build": {},
+      "height": {},
+      "race": {},
+      "hair": {},
+      "peculiarities": {},
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      },
+      "totalAssociatedIncidents": {},
+      "totalAssociatedCrimeGroups": {},
+      "associatedIncidents": {
+        "id": {},
+        "dayTime": {},
+        "reference": {},
+        "business": {
+          "id": {},
+          "fullName": {}
+        },
+        "location": {
+          "full": {},
+          "id": {}
+        },
+        "crimeTypes": {
+          "id": {},
+          "name": {}
+        },
+        "createdBy": {
+          "id": {},
+          "fullName": {},
+          "businesses": {
+            "id": {},
+            "name": {}
+          }
+        }
+      },
+      "associatedCrimeGroups": {
+        "id": {},
+        "reference": {},
+        "alias": {},
+        "totalOffenders": {},
+        "totalIncidents": {},
+        "totalValue": {}
+      }
+    },
+    "suggestedVehicles": {
+      "id": {},
+      "reference": {},
+      "registration": {},
+      "make": {},
+      "model": {},
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      },
+      "colour": {}
+    },
+    "suggestedIncidents": {
+      "id": {},
+      "subject": {},
+      "reference": {},
+      "description": {},
+      "dayTime": {},
+      "crimeTypes": {
+        "id": {},
+        "name": {}
+      },
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      },
+      "policeRef": {},
+      "location": {
+        "id": {},
+        "full": {}
+      },
+      "business": {
+        "id": {},
+        "name": {}
+      },
+      "offenders": {
+        "id": {},
+        "name": {},
+        "reference": {},
+        "age": {},
+        "gender": {},
+        "race": {},
+        "build": {},
+        "height": {},
+        "dateOfBirth": {},
+        "hair": {},
+        "peculiarities": {},
+        "alias": {},
+        "images": {
+          "id": {},
+          "position": {},
+          "rotation": {},
+          "optimised": {}
+        }
+      }
+    },
+    "description": {},
+    "name": {},
+    "status": {},
+    "totalOffenders": {},
+    "totalIncidents": {},
+    "totalValue": {},
+    "totalRecoveredValue": {},
+    "totalTheftSuccess": {},
+    "closedAt": {},
+    "createdBy": {
+      "id": {},
+      "fullName": {}
+    },
+    "documents": {
+      "id": {},
+      "name": {},
+      "url": {},
+      "thumbnailUrl": {},
+      "tags": {
+        "name": {},
+        "id": {}
+      },
+      "articles": {
+        "id": {},
+        "previewText": {},
+        "previewImage": {}
+      }
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "subscribed": {},
+    "todos": {},
+    "vehicles": {},
+    "offenders": {
+      "images": {
+        "id": {},
+        "optimised": {},
+        "optimisedPersisted": {},
+        "position": {},
+        "rotation": {},
+        "isFace": {}
+      }
+    },
+    "incidents": {
+      "business": {
+        "id": {},
+        "name": {}
+      },
+      "vehicles": {},
+      "offenders": {
+        "images": {}
+      }
+    },
+    "updates": {},
+    "crimeGroups": {
+      "vehicles": {},
+      "offenders": {
+        "images": {}
+      }
+    },
+    "flows": {
+      "updatedAt": {},
+      "name": {},
+      "id": {},
+      "description": {},
+      "edges": {
+        "id": {},
+        "type": {},
+        "markerEnd": {},
+        "source": {},
+        "sourceHandle": {},
+        "target": {},
+        "targetHandle": {}
+      },
+      "nodes": {
+        "id": {},
+        "type": {},
+        "data": {},
+        "height": {},
+        "width": {},
+        "style": {
+          "height": {},
+          "width": {}
+        },
+        "position": {
+          "x": {},
+          "y": {}
+        },
+        "positionAbsolute": {
+          "x": {},
+          "y": {}
+        }
+      }
+    }
+  },
+  "listInvestigations": {
+    "total": {},
+    "investigations": {
+      "id": {},
+      "name": {},
+      "description": {},
+      "status": {}
+    }
+  },
+  "createMessage": {
+    "id": {},
+    "content": {},
+    "createdAt": {},
+    "currentUser": {},
+    "formattedDateTime": {},
+    "from": {
+      "id": {},
+      "fullName": {},
+      "firstLetter": {},
+      "origFirstLetter": {},
+      "origName": {},
+      "businesses": {
+        "id": {},
+        "fullName": {}
+      }
+    },
+    "sent": {},
+    "showUser": {},
+    "paddingTop": {},
+    "type": {},
+    "images": {},
+    "crimeGroups": {},
+    "vehicles": {
+      "images": {}
+    },
+    "incidents": {
+      "images": {}
+    },
+    "offenders": {
+      "images": {
+        "isFace": {}
+      }
+    },
+    "articles": {
+      "images": {}
+    }
+  },
+  "deleteMessage": {
+    "id": {}
+  },
+  "chatMessages": {
+    "id": {},
+    "content": {},
+    "createdAt": {},
+    "currentUser": {},
+    "formattedDateTime": {},
+    "from": {
+      "id": {},
+      "fullName": {},
+      "origName": {},
+      "origFirstLetter": {},
+      "firstLetter": {},
+      "businesses": {
+        "id": {},
+        "fullName": {}
+      }
+    },
+    "sent": {},
+    "showUser": {},
+    "paddingTop": {},
+    "type": {},
+    "images": {},
+    "crimeGroups": {},
+    "vehicles": {
+      "images": {}
+    },
+    "incidents": {
+      "images": {}
+    },
+    "offenders": {
+      "images": {
+        "isFace": {}
+      }
+    },
+    "articles": {
+      "images": {}
+    }
+  },
+  "createMg11": {
+    "id": {}
+  },
+  "updateOneMG11": {
+    "id": {}
+  },
+  "mg11": {
+    "id": {},
+    "status": {},
+    "statement": {},
+    "address": {},
+    "postcode": {},
+    "homeTel": {},
+    "workTel": {},
+    "mobileTel": {},
+    "email": {},
+    "name": {},
+    "age": {},
+    "urn": {},
+    "occupation": {},
+    "visualRecording": {},
+    "prefContact": {},
+    "gender": {},
+    "dobPlace": {},
+    "formerName": {},
+    "incidentId": {},
+    "height": {},
+    "ethnicity": {},
+    "availability": {},
+    "likelyToAttend": {},
+    "likelyToAttendReason": {},
+    "specialMeasures": {},
+    "careNeeds": {},
+    "careNeedsDetails": {},
+    "detailsExplained": {},
+    "leafletReceived": {},
+    "medicalReleasedPolice": {},
+    "medicalReleasedDefence": {},
+    "civilProceedingsRelease": {},
+    "witnessServiceDisclose": {},
+    "witnessSignature": {},
+    "witnessSignatureDate": {},
+    "interviewerSignature": {},
+    "station": {},
+    "statementWhereWhen": {}
+  },
+  "createUpdateOnCrimeGroup": {},
+  "createUpdateOnIncident": {},
+  "createUpdateOnInvestigation": {},
+  "createUpdateOnOffender": {},
+  "createUpdateOnVehicle": {},
+  "deleteUpdate": {
+    "id": {},
+    "replyToId": {}
+  },
+  "updateUpdate": {
+    "id": {},
+    "text": {}
+  },
+  "addImagesToOffender": {
+    "id": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {},
+      "rotation": {}
+    }
+  },
+  "copyOffender": {
+    "id": {},
+    "createdAt": {},
+    "updatedAt": {},
+    "age": {},
+    "build": {},
+    "height": {},
+    "dateOfBirth": {},
+    "dateSource": {},
+    "hair": {},
+    "gender": {},
+    "name": {},
+    "race": {},
+    "peculiarities": {},
+    "approved": {},
+    "active": {},
+    "idVerified": {},
+    "idSource": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {},
+      "rotation": {},
+      "primary": {},
+      "policeImage": {},
+      "isFace": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "bans": {
+      "id": {},
+      "location": {},
+      "description": {},
+      "startDate": {},
+      "endDate": {},
+      "type": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "id": {},
+        "name": {}
+      }
+    }
+  },
+  "createOffender": {
+    "totalIncidents": {},
+    "totalValue": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "position": {},
+      "rotation": {}
+    },
+    "recycled": {},
+    "id": {},
+    "createdAt": {},
+    "updatedAt": {},
+    "age": {},
+    "build": {},
+    "height": {},
+    "dateOfBirth": {},
+    "dateSource": {},
+    "hair": {},
+    "gender": {},
+    "name": {},
+    "race": {},
+    "peculiarities": {},
+    "approved": {},
+    "active": {},
+    "idVerified": {},
+    "idSource": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "bans": {
+      "id": {},
+      "title": {},
+      "location": {},
+      "description": {},
+      "startDate": {},
+      "endDate": {},
+      "type": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "incidents": {
+      "id": {},
+      "subject": {},
+      "description": {},
+      "date": {},
+      "dayTime": {},
+      "crimeTypes": {
+        "id": {},
+        "name": {}
+      },
+      "location": {
+        "id": {},
+        "full": {}
+      },
+      "createdBy": {
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "images": {
+        "id": {},
+        "url": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {}
+      }
+    }
+  },
+  "mergeOffender": {
+    "id": {}
+  },
+  "recycleOffender": {
+    "id": {}
+  },
+  "subscribeToOffender": {
+    "id": {},
+    "subscribed": {}
+  },
+  "unsubscribeFromOffender": {
+    "id": {},
+    "subscribed": {}
+  },
+  "offenders": {
+    "id": {},
+    "updatedAt": {},
+    "age": {},
+    "build": {},
+    "height": {},
+    "dateOfBirth": {},
+    "dateSource": {},
+    "hair": {},
+    "gender": {},
+    "name": {},
+    "race": {},
+    "peculiarities": {},
+    "images": {
+      "id": {},
+      "optimised": {},
+      "position": {},
+      "rotation": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "lastActive": {
+      "id": {},
+      "dayTime": {}
+    }
+  },
+  "listOffendersAllSchemes": {
+    "offenders": {
+      "id": {},
+      "reference": {},
+      "age": {},
+      "build": {},
+      "height": {},
+      "dateOfBirth": {},
+      "hair": {},
+      "gender": {},
+      "name": {},
+      "totalIncidents": {},
+      "totalValue": {},
+      "race": {},
+      "peculiarities": {},
+      "approved": {},
+      "active": {},
+      "lastActive": {
+        "id": {},
+        "dayTime": {}
+      },
+      "tags": {
+        "id": {},
+        "name": {}
+      },
+      "images": {
+        "id": {},
+        "optimised": {},
+        "position": {},
+        "rotation": {},
+        "primary": {},
+        "policeImage": {},
+        "isFace": {},
+        "optimisedPersisted": {}
+      }
+    },
+    "total": {}
+  },
+  "offenderFeed": {
+    "id": {},
+    "createdAt": {},
+    "updatedAt": {},
+    "totalIncidents": {},
+    "reference": {},
+    "age": {},
+    "build": {},
+    "height": {},
+    "dateOfBirth": {},
+    "dateSource": {},
+    "gender": {},
+    "hair": {},
+    "name": {},
+    "peculiarities": {},
+    "race": {},
+    "approved": {},
+    "uploaded": {},
+    "active": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "card": {},
+      "position": {},
+      "rotation": {}
+    },
+    "tags": {
+      "id": {},
+      "name": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "createdBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "id": {},
+        "name": {}
+      }
+    }
+  },
+  "deleteIncident": {
+    "id": {}
+  },
+  "deleteOffender": {
+    "id": {}
+  },
+  "restoreIncident": {
+    "id": {},
+    "recycled": {}
+  },
+  "restoreOffender": {
+    "id": {},
+    "recycled": {}
+  },
+  "recycledItem": {
+    "id": {},
+    "incident": {
+      "id": {},
+      "createdBy": {
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "date": {},
+      "location": {
+        "id": {},
+        "full": {}
+      },
+      "recycled": {},
+      "subject": {}
+    },
+    "offender": {
+      "id": {},
+      "gender": {},
+      "incidents": {
+        "id": {},
+        "date": {},
+        "location": {
+          "id": {},
+          "full": {}
+        }
+      },
+      "name": {},
+      "race": {},
+      "recycled": {}
+    },
+    "scheme": {
+      "id": {}
+    },
+    "systemTask": {}
+  },
+  "recycledItems": {
+    "id": {},
+    "deletedAt": {},
+    "deletedBy": {
+      "id": {},
+      "fullName": {},
+      "businesses": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "expiresAt": {},
+    "incident": {
+      "id": {},
+      "createdBy": {
+        "id": {},
+        "fullName": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "date": {},
+      "location": {
+        "id": {},
+        "full": {}
+      },
+      "recycled": {},
+      "subject": {}
+    },
+    "offender": {
+      "id": {},
+      "gender": {},
+      "incidents": {
+        "id": {},
+        "date": {},
+        "location": {
+          "id": {},
+          "full": {}
+        }
+      },
+      "name": {},
+      "race": {},
+      "recycled": {}
+    },
+    "scheme": {
+      "id": {}
+    },
+    "systemTask": {}
+  },
+  "deleteFace": {
+    "id": {},
+    "faceId": {}
+  },
+  "dismissMatch": {
+    "id": {}
+  },
+  "indexImage": {
+    "id": {},
+    "url": {},
+    "optimised": {},
+    "position": {},
+    "rotation": {},
+    "faces": {
+      "id": {},
+      "confidence": {},
+      "boundingHeight": {},
+      "boundingLeft": {},
+      "boundingTop": {},
+      "boundingWidth": {},
+      "offender": {
+        "id": {},
+        "name": {}
+      },
+      "rekMatchedSearches": {
+        "id": {}
+      }
+    }
+  },
+  "createReportGroup": {
+    "id": {},
+    "name": {},
+    "order": {},
+    "reports": {
+      "id": {},
+      "name": {},
+      "description": {},
+      "type": {}
+    }
+  },
+  "deleteReportGroup": {
+    "id": {}
+  },
+  "updateReportGroup": {
+    "id": {},
+    "name": {},
+    "order": {},
+    "reports": {
+      "id": {},
+      "name": {},
+      "description": {},
+      "type": {}
+    }
+  },
+  "createOneBusinessImpact": {
+    "id": {},
+    "name": {}
+  },
+  "createReportTemplate": {
+    "reportGroup": {
+      "id": {}
+    }
+  },
+  "deleteReportTemplate": {
+    "id": {},
+    "reportGroup": {
+      "id": {}
+    }
+  },
+  "setDefaultTemplate": {
+    "id": {},
+    "default": {}
+  },
+  "updateReportTemplate": {
+    "description": {}
+  },
+  "businessContribution": {
+    "businessContributions": {
+      "name": {},
+      "totalUsers": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalUpdates": {},
+      "totalMessages": {},
+      "totalLogins": {},
+      "totalLostValue": {},
+      "totalRecoveredValue": {},
+      "totalSuccessRate": {},
+      "mostCommonGoodLost": {},
+      "highestTotalValueGoodLost": {},
+      "averageLossValue": {}
+    },
+    "total": {}
+  },
+  "businessImpact": {
+    "businessAddress": {},
+    "businessName": {},
+    "contactAddress": {},
+    "contactName": {},
+    "crimeNumber": {},
+    "date": {},
+    "description": {},
+    "incidentDate": {},
+    "incidentLoss": {},
+    "incidentRecovered": {},
+    "lostItems": {},
+    "policeOfficerAttending": {},
+    "referenceNumber": {},
+    "telephone": {},
+    "userAddress": {},
+    "userContact": {},
+    "userName": {}
+  },
+  "businessReport": {
+    "crimeTypeDonut": {
+      "label": {},
+      "value": {}
+    },
+    "goodsTypeLossRecovered": {
+      "data": {
+        "value": {},
+        "label": {}
+      },
+      "label": {}
+    },
+    "incidentDayOfWeekGraph": {
+      "value": {},
+      "label": {}
+    },
+    "incidentMonthGraph": {
+      "value": {},
+      "label": {}
+    },
+    "targetedGoods": {
+      "total": {},
+      "targetedGoods": {
+        "totalSuccessRate": {},
+        "totalRecoveredValue": {},
+        "totalOffenders": {},
+        "totalLostValue": {},
+        "totalIncidents": {},
+        "name": {},
+        "averageLossValue": {},
+        "alertId": {}
+      }
+    },
+    "incidentSummary": {
+      "totalIncidents": {},
+      "mostCommonCrimeType": {},
+      "lastIncidentDate": {},
+      "incidentsWherePoliceAttended": {},
+      "incidentsReportedToPolice": {}
+    },
+    "incidentTimeOfDayDonut": {
+      "value": {},
+      "label": {}
+    },
+    "incidentsTable": {
+      "total": {},
+      "incidents": {
+        "id": {},
+        "reference": {},
+        "date": {},
+        "incidentItems": {
+          "value": {},
+          "recoveredValue": {}
+        },
+        "location": {
+          "full": {},
+          "alias": {},
+          "id": {}
+        },
+        "totalOffenders": {},
+        "crimeTypes": {
+          "name": {},
+          "id": {}
+        },
+        "policeReported": {},
+        "policeInvolved": {},
+        "policeRef": {}
+      }
+    },
+    "involvedTagDonut": {
+      "value": {},
+      "label": {}
+    },
+    "lossTotals": {
+      "totalRecoveredValue": {},
+      "totalLostValue": {},
+      "totalIncidents": {},
+      "averageSuccessRate": {},
+      "averagePerIncident": {}
+    }
+  },
+  "crimeGroupReport": {
+    "crimeGroupMap": {
+      "offenderMarkers": {
+        "coords": {
+          "lng": {},
+          "lat": {}
+        },
+        "name": {}
+      },
+      "incidentsCoords": {
+        "lng": {},
+        "lat": {}
+      }
+    },
+    "crimeTypeByOffender": {
+      "label": {},
+      "data": {
+        "value": {},
+        "label": {}
+      }
+    },
+    "goodsTypeLossRecovered": {
+      "label": {},
+      "data": {
+        "value": {},
+        "label": {}
+      }
+    },
+    "incidentDayOfWeekGraph": {
+      "value": {},
+      "label": {}
+    },
+    "incidentMonthGraph": {
+      "value": {},
+      "label": {}
+    },
+    "incidentSummary": {
+      "mostCommonCrimeType": {},
+      "totalIncidents": {},
+      "lastIncidentDate": {},
+      "incidentsWherePoliceAttended": {},
+      "incidentsReportedToPolice": {}
+    },
+    "incidentTimeOfDayDonut": {
+      "value": {},
+      "label": {}
+    },
+    "incidentsTable": {
+      "incidents": {
+        "id": {},
+        "reference": {},
+        "date": {},
+        "incidentItems": {
+          "value": {},
+          "recoveredValue": {}
+        },
+        "location": {
+          "full": {},
+          "alias": {},
+          "id": {},
+          "geoLat": {},
+          "geoLng": {}
+        },
+        "totalOffenders": {},
+        "crimeTypes": {
+          "name": {},
+          "id": {}
+        },
+        "policeReported": {},
+        "policeInvolved": {},
+        "policeRef": {}
+      },
+      "total": {}
+    },
+    "lossTotals": {
+      "totalRecoveredValue": {},
+      "totalLostValue": {},
+      "totalIncidents": {},
+      "averagePerIncident": {},
+      "averageSuccessRate": {}
+    },
+    "offenderGoodsTypeValue": {
+      "label": {},
+      "data": {
+        "label": {},
+        "value": {}
+      }
+    }
+  },
+  "offendersPerformance": {
+    "total": {},
+    "offenderPerformance": {
+      "primaryPhoto": {},
+      "alertId": {},
+      "name": {},
+      "totalIncidents": {},
+      "totalLostValue": {},
+      "totalRecoveredValue": {},
+      "totalSuccessRate": {},
+      "lastIncidentDate": {},
+      "id": {},
+      "totalBulletins": {}
+    }
+  },
+  "targetedGoods": {
+    "total": {},
+    "targetedGoods": {
+      "alertId": {},
+      "name": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalLostValue": {},
+      "totalRecoveredValue": {},
+      "totalSuccessRate": {},
+      "averageLossValue": {}
+    }
+  },
+  "listUserContribution": {
+    "userContributions": {
+      "name": {},
+      "businesses": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalUpdates": {},
+      "totalMessages": {},
+      "totalLogins": {},
+      "lastLogin": {},
+      "groups": {}
+    },
+    "total": {}
+  },
+  "listLoginEvents": {
+    "loginEvents": {
+      "id": {},
+      "createdAt": {},
+      "loginTime": {},
+      "user": {
+        "id": {},
+        "fullName": {},
+        "firstLetter": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        }
+      }
+    },
+    "total": {}
+  },
+  "offenderReport": {
+    "crimeTypeBusinessRadial": {
+      "label": {},
+      "data": {
+        "value": {},
+        "label": {}
+      }
+    },
+    "crimeTypeDonut": {
+      "label": {},
+      "value": {}
+    },
+    "goodsTypeLossRecovered": {
+      "label": {},
+      "data": {
+        "label": {},
+        "value": {}
+      }
+    },
+    "incidentDayOfWeekGraph": {
+      "value": {},
+      "label": {}
+    },
+    "incidentMonthGraph": {
+      "value": {},
+      "label": {}
+    },
+    "incidentSummary": {
+      "totalIncidents": {},
+      "mostCommonCrimeType": {},
+      "lastIncidentDate": {},
+      "incidentsWherePoliceAttended": {},
+      "incidentsReportedToPolice": {}
+    },
+    "incidentTimeOfDayDonut": {
+      "value": {},
+      "label": {}
+    },
+    "incidentsTable": {
+      "total": {},
+      "incidents": {
+        "id": {},
+        "reference": {},
+        "date": {},
+        "incidentItems": {
+          "value": {},
+          "recoveredValue": {}
+        },
+        "business": {
+          "id": {},
+          "name": {}
+        },
+        "location": {
+          "full": {},
+          "alias": {},
+          "id": {},
+          "geoLat": {},
+          "geoLng": {}
+        },
+        "totalOffenders": {},
+        "crimeTypes": {
+          "name": {},
+          "id": {}
+        },
+        "policeReported": {},
+        "policeInvolved": {},
+        "policeRef": {}
+      }
+    },
+    "lossTotals": {
+      "totalRecoveredValue": {},
+      "totalLostValue": {},
+      "averagePerIncident": {},
+      "averageSuccessRate": {},
+      "totalIncidents": {}
+    },
+    "offenderSummary": {
+      "id": {},
+      "age": {},
+      "dateSource": {},
+      "peculiarities": {},
+      "dateOfBirth": {},
+      "build": {},
+      "height": {},
+      "hair": {},
+      "race": {},
+      "reference": {},
+      "gender": {},
+      "addresses": {
+        "id": {},
+        "geoLng": {},
+        "geoLat": {},
+        "full": {}
+      },
+      "name": {},
+      "images": {
+        "optimisedPersisted": {},
+        "position": {},
+        "rotation": {}
+      }
+    }
+  },
+  "performanceReport": {
+    "createdDataCounts": {
+      "crimeGroups": {},
+      "incidents": {},
+      "messages": {},
+      "offenders": {},
+      "updates": {},
+      "vehicles": {},
+      "bulletins": {}
+    },
+    "incidentSummary": {
+      "totalIncidents": {},
+      "lastIncidentDate": {},
+      "incidentsReportedToPolice": {},
+      "incidentsWherePoliceAttended": {},
+      "mostCommonCrimeType": {}
+    },
+    "outcomeSummary": {
+      "totalArrests": {},
+      "totalCBOYears": {},
+      "totalCBOCount": {},
+      "totalFinesCount": {},
+      "totalFinesValue": {},
+      "totalPrisonSentenceCount": {},
+      "totalPrisonSentenceMonths": {},
+      "totalRehabOrders": {}
+    },
+    "crimeTypeDonut": {
+      "label": {},
+      "value": {}
+    },
+    "involvedTagCountDonut": {
+      "label": {},
+      "value": {}
+    },
+    "incidentDayOfWeekLine": {
+      "label": {},
+      "value": {}
+    },
+    "lossTotals": {
+      "totalIncidents": {},
+      "totalLostValue": {},
+      "totalRecoveredValue": {},
+      "averagePerIncident": {},
+      "averageSuccessRate": {},
+      "averageLossPerIncident": {}
+    },
+    "goodsTypeCountDonut": {
+      "label": {},
+      "value": {}
+    },
+    "goodsTypeValueDonut": {
+      "label": {},
+      "value": {}
+    },
+    "policeSummary": {
+      "totalAttendedIncidents": {},
+      "totalReportedIncidents": {},
+      "totalPoliceImages": {},
+      "totalVerifiedOffenders": {}
+    },
+    "investigationSummary": {
+      "closed": {},
+      "open": {},
+      "opened": {}
+    },
+    "timeHeatMap": {
+      "id": {},
+      "data": {
+        "x": {},
+        "y": {}
+      }
+    },
+    "priorityGraph": {
+      "value": {},
+      "label": {}
+    }
+  },
+  "crimeGroupPerformance": {
+    "crimeGroupPerformance": {
+      "totalSuccessRate": {},
+      "totalRecoveredValue": {},
+      "totalOffenders": {},
+      "totalLostValue": {},
+      "totalIncidents": {},
+      "lastIncident": {},
+      "alias": {},
+      "alertId": {}
+    },
+    "total": {}
+  },
+  "userContributions": {
+    "total": {},
+    "userContributions": {
+      "name": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalUpdates": {},
+      "totalMessages": {},
+      "totalLogins": {}
+    }
+  },
+  "incidentHeatPerformance": {
+    "total": {},
+    "incidents": {
+      "id": {},
+      "location": {
+        "id": {},
+        "geoLat": {},
+        "geoLng": {}
+      }
+    }
+  },
+  "investigationPerformance": {
+    "total": {},
+    "investigationPerformance": {
+      "id": {},
+      "alertId": {},
+      "name": {},
+      "status": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalValue": {},
+      "createdAt": {},
+      "closedAt": {}
+    }
+  },
+  "tableReport": {},
+  "createTermsAndConditions": {
+    "id": {},
+    "content": {}
+  },
+  "updateScheme": {
+    "id": {},
+    "name": {},
+    "restrictIncidentAccess": {},
+    "reportOnly": {},
+    "autoApproveIncidents": {},
+    "autoApproveOffenders": {},
+    "defaultPublicOffenderDOB": {},
+    "defaultIncidentEmail": {},
+    "defaultIncidentPush": {},
+    "defaultBulletinEmails": {},
+    "defaultBulletinPush": {},
+    "defaultSubscribedIncidentOnly": {},
+    "defaultSubscribedOffenderOnly": {},
+    "defaultMessagePush": {},
+    "defaultOffenderEmail": {},
+    "defaultOffenderPush": {},
+    "autoPopulateDescription": {},
+    "needJustification": {},
+    "requireSiteNumberForUsers": {},
+    "facialRecognition": {},
+    "facialDetection": {},
+    "facialRedaction": {},
+    "incidentCustomQuestionRadio": {},
+    "incidentTypeTooltip": {},
+    "activityAssignToUser": {},
+    "useBusinessGroupsOnIncident": {},
+    "imagesRequiredOnOffenders": {},
+    "incidentRetention": {},
+    "offenderRetention": {},
+    "oneSelectedIncidentTypeOnly": {},
+    "logo": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "optimisedPersisted": {}
+    },
+    "darkLogo": {
+      "id": {},
+      "url": {},
+      "optimised": {},
+      "optimisedPersisted": {}
+    }
+  },
+  "createSession": {
+    "id": {}
+  },
+  "createOneStatementTemplate": {
+    "id": {},
+    "name": {},
+    "content": {},
+    "schemes": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "updateOneStatementTemplate": {
+    "id": {},
+    "name": {},
+    "content": {},
+    "schemes": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "statementTemplate": {
+    "id": {},
+    "name": {},
+    "content": {}
+  },
+  "statementTemplates": {
+    "id": {},
+    "name": {},
+    "content": {},
+    "schemes": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "listStockItems": {
+    "total": {},
+    "stockItems": {
+      "id": {},
+      "barcode": {},
+      "brand": {},
+      "costPriceLocal": {},
+      "costPriceStandard": {},
+      "division": {},
+      "name": {},
+      "salesPriceLocal": {},
+      "salesPriceStandard": {},
+      "sku": {}
+    }
+  },
+  "deleteTag": {
+    "id": {}
+  },
+  "recycleTag": {
+    "id": {}
+  },
+  "updateTag": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "type": {},
+    "crimeType": {}
+  },
+  "tag": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "crimeType": {},
+    "type": {},
+    "parentTag": {
+      "id": {},
+      "name": {}
+    },
+    "incidentForm": {
+      "id": {},
+      "fields": {
+        "id": {},
+        "position": {},
+        "type": {}
+      }
+    },
+    "tagQuestions": {
+      "req": {},
+      "priority": {},
+      "dependentQuestions": {},
+      "question": {
+        "questionFormatted": {},
+        "type": {},
+        "id": {},
+        "optionsFormatted": {}
+      },
+      "id": {}
+    }
+  },
+  "createTag": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "type": {},
+    "crimeType": {}
+  },
+  "listIncidentTags": {
+    "hasChildren": {},
+    "incidentForm": {
+      "position": {},
+      "type": {}
+    },
+    "label": {},
+    "parentId": {},
+    "parents": {},
+    "questions": {
+      "answerType": {},
+      "label": {},
+      "questionId": {},
+      "required": {},
+      "tagQuestionId": {},
+      "priority": {},
+      "dependentOnQuestionId": {},
+      "dependentOnAnswerValue": {},
+      "dependentOnBrandIds": {},
+      "tooltip": {},
+      "options": {
+        "label": {},
+        "value": {}
+      }
+    },
+    "tier": {},
+    "value": {},
+    "tooltip": {},
+    "policeReporting": {}
+  },
+  "tags": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "crimeType": {},
+    "type": {},
+    "parentTag": {
+      "id": {}
+    }
+  },
+  "createTodo": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "dueDate": {},
+    "completedDate": {},
+    "completed": {},
+    "createdAt": {},
+    "type": {},
+    "vehicleId": {},
+    "vehicle": {
+      "id": {},
+      "reference": {}
+    },
+    "offenderId": {},
+    "offender": {
+      "id": {},
+      "reference": {}
+    },
+    "crimeGroupId": {},
+    "crimeGroup": {
+      "id": {},
+      "reference": {}
+    },
+    "incidentId": {},
+    "incident": {
+      "id": {},
+      "reference": {}
+    },
+    "investigationId": {},
+    "investigation": {
+      "id": {},
+      "reference": {}
+    },
+    "chatId": {},
+    "assignedUsers": {
+      "id": {},
+      "fullName": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "deleteTodo": {
+    "id": {},
+    "completed": {}
+  },
+  "updateTodoMention": {
+    "description": {},
+    "dueDate": {},
+    "completedDate": {},
+    "completed": {},
+    "id": {},
+    "name": {},
+    "createdBy": {
+      "id": {},
+      "fullName": {}
+    },
+    "completedBy": {
+      "id": {},
+      "fullName": {}
+    },
+    "assignedUsers": {
+      "id": {},
+      "fullName": {}
+    }
+  },
+  "translateText": {
+    "origText": {},
+    "translatedText": {}
+  },
+  "deleteUserFromScheme": {
+    "id": {}
+  },
+  "sendInvite": {
+    "id": {},
+    "newUser": {}
+  },
+  "signTerms": {
+    "id": {}
+  },
+  "updateUser": {
+    "id": {},
+    "fullName": {},
+    "email": {},
+    "status": {},
+    "demId": {},
+    "publicName": {},
+    "reportToAllBusinesses": {},
+    "businesses": {
+      "id": {},
+      "name": {},
+      "fullName": {},
+      "demId": {}
+    },
+    "disabled": {},
+    "newUser": {},
+    "incidentEmail": {},
+    "incidentPush": {},
+    "bulletinEmails": {},
+    "bulletinPush": {},
+    "subscribedIncidentOnly": {},
+    "subscribedOffenderOnly": {},
+    "messagePush": {},
+    "offenderEmail": {},
+    "offenderPush": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "approverGroups": {
+      "id": {},
+      "name": {}
+    },
+    "defaultGroups": {
+      "id": {},
+      "name": {}
+    },
+    "chats": {
+      "id": {},
+      "chat": {
+        "id": {},
+        "name": {}
+      }
+    },
+    "schemes": {
+      "id": {},
+      "role": {}
+    }
+  },
+  "user": {
+    "id": {},
+    "fullName": {},
+    "email": {},
+    "mobileNumber": {},
+    "status": {},
+    "demId": {},
+    "publicName": {},
+    "reportToAllBusinesses": {},
+    "businesses": {
+      "id": {},
+      "name": {},
+      "fullName": {},
+      "demId": {},
+      "locations": {
+        "id": {},
+        "full": {}
+      }
+    },
+    "disabled": {},
+    "newUser": {},
+    "incidentEmail": {},
+    "incidentPush": {},
+    "bulletinEmails": {},
+    "bulletinPush": {},
+    "subscribedIncidentOnly": {},
+    "subscribedOffenderOnly": {},
+    "messagePush": {},
+    "offenderEmail": {},
+    "offenderPush": {},
+    "signedTerms": {
+      "id": {},
+      "signature": {},
+      "terms": {
+        "id": {},
+        "version": {}
+      },
+      "signedAt": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "approverGroups": {
+      "id": {},
+      "name": {}
+    },
+    "defaultGroups": {
+      "id": {},
+      "name": {}
+    },
+    "chats": {
+      "id": {},
+      "chat": {
+        "id": {},
+        "name": {},
+        "firstLetter": {},
+        "totalMembers": {},
+        "messageCount": {},
+        "messages": {
+          "id": {},
+          "content": {},
+          "createdAt": {},
+          "from": {
+            "id": {},
+            "origName": {}
+          },
+          "images": {
+            "id": {}
+          },
+          "incidents": {
+            "id": {}
+          },
+          "offenders": {
+            "id": {}
+          },
+          "vehicles": {
+            "id": {}
+          },
+          "crimeGroups": {
+            "id": {}
+          },
+          "articles": {
+            "id": {}
+          }
+        }
+      },
+      "newMessages": {},
+      "mentioned": {},
+      "updatedAt": {},
+      "createdAt": {}
+    },
+    "schemes": {
+      "id": {},
+      "schemeId": {},
+      "role": {}
+    },
+    "totalLastYearLogin": {},
+    "totalThirtyDaysLogin": {},
+    "lastTenLogin": {
+      "loginTime": {},
+      "id": {}
+    },
+    "lastLogin": {
+      "loginTime": {},
+      "id": {}
+    },
+    "schemePermission": {
+      "id": {},
+      "name": {},
+      "type": {}
+    },
+    "sessions": {
+      "locationLng": {},
+      "locationLat": {},
+      "createdAt": {},
+      "app": {},
+      "id": {},
+      "updatedAt": {}
+    },
+    "totalChats": {},
+    "totalNotifications": {},
+    "totalUnreadNotifications": {},
+    "notifications": {
+      "id": {},
+      "read": {},
+      "createdAt": {},
+      "notification": {
+        "id": {},
+        "crimeGroupId": {},
+        "createdAt": {},
+        "chatId": {},
+        "body": {},
+        "articleId": {},
+        "incidentId": {},
+        "investigationId": {},
+        "offenderId": {},
+        "schemes": {
+          "id": {},
+          "name": {}
+        },
+        "title": {},
+        "type": {},
+        "vehicleId": {},
+        "ban": {
+          "id": {},
+          "offender": {
+            "id": {}
+          }
+        },
+        "userId": {}
+      }
+    },
+    "addresses": {
+      "id": {},
+      "postcode": {},
+      "street": {},
+      "townCity": {},
+      "building": {},
+      "county": {}
+    }
+  },
+  "markAsReadMessages": {
+    "id": {},
+    "newMessages": {},
+    "mentioned": {},
+    "updatedAt": {},
+    "createdAt": {},
+    "user": {
+      "id": {},
+      "fullName": {},
+      "firstLetter": {}
+    },
+    "chat": {
+      "id": {},
+      "name": {},
+      "firstLetter": {},
+      "totalMembers": {},
+      "messages": {
+        "id": {},
+        "content": {},
+        "createdAt": {},
+        "from": {
+          "id": {},
+          "fullName": {},
+          "origFirstLetter": {},
+          "origName": {}
+        },
+        "images": {
+          "id": {},
+          "url": {},
+          "optimised": {},
+          "position": {},
+          "rotation": {}
+        },
+        "vehicles": {
+          "id": {},
+          "reference": {}
+        },
+        "crimeGroups": {
+          "id": {},
+          "reference": {}
+        },
+        "incidents": {
+          "id": {},
+          "subject": {}
+        },
+        "offenders": {
+          "id": {},
+          "name": {}
+        },
+        "articles": {
+          "id": {},
+          "title": {}
+        }
+      }
+    }
+  },
+  "updateUserNotifications": {
+    "id": {},
+    "read": {},
+    "createdAt": {},
+    "notification": {
+      "id": {},
+      "crimeGroupId": {},
+      "createdAt": {},
+      "chatId": {},
+      "body": {},
+      "articleId": {},
+      "incidentId": {},
+      "investigationId": {},
+      "offenderId": {},
+      "schemes": {
+        "id": {}
+      },
+      "title": {},
+      "type": {},
+      "vehicleId": {},
+      "ban": {
+        "id": {},
+        "offender": {
+          "id": {}
+        }
+      },
+      "userId": {}
+    }
+  },
+  "listUserNotifications": {
+    "notifications": {
+      "id": {},
+      "read": {},
+      "createdAt": {},
+      "notification": {
+        "id": {},
+        "crimeGroupId": {},
+        "createdAt": {},
+        "chatId": {},
+        "body": {},
+        "articleId": {},
+        "incidentId": {},
+        "investigationId": {},
+        "offenderId": {},
+        "schemes": {
+          "id": {}
+        },
+        "title": {},
+        "type": {},
+        "vehicleId": {},
+        "ban": {
+          "id": {},
+          "offender": {
+            "id": {}
+          }
+        },
+        "userId": {}
+      }
+    },
+    "total": {}
+  },
+  "createUserInDatabase": {
+    "id": {},
+    "fullName": {},
+    "status": {},
+    "publicName": {},
+    "email": {},
+    "mobileNumber": {},
+    "businesses": {
+      "id": {},
+      "name": {},
+      "fullName": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "loginEvents": {
+      "loginTime": {}
+    }
+  },
+  "inviteExistingUser": {
+    "id": {},
+    "fullName": {},
+    "firstLetter": {},
+    "origName": {},
+    "origFirstLetter": {},
+    "email": {},
+    "publicName": {},
+    "reportToAllBusinesses": {},
+    "businesses": {
+      "id": {},
+      "name": {},
+      "fullName": {}
+    },
+    "status": {},
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "approverGroups": {
+      "id": {},
+      "name": {}
+    },
+    "loginEvents": {
+      "loginTime": {}
+    }
+  },
+  "userNew": {
+    "id": {},
+    "email": {},
+    "newUser": {},
+    "hasAuth0Id": {}
+  },
+  "createVehicle": {
+    "id": {},
+    "reference": {},
+    "colour": {},
+    "model": {},
+    "make": {},
+    "registration": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "policeImage": {},
+      "primary": {},
+      "position": {},
+      "rotation": {},
+      "optimised": {}
+    },
+    "totalOffenders": {},
+    "totalIncidents": {},
+    "totalCrimeGroups": {},
+    "incidents": {
+      "id": {},
+      "subject": {}
+    },
+    "offenders": {
+      "id": {},
+      "name": {}
+    },
+    "updatedAt": {},
+    "crimeGroup": {
+      "id": {},
+      "reference": {}
+    },
+    "customGalleries": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "deleteVehicle": {
+    "id": {}
+  },
+  "subscribeToVehicle": {
+    "id": {},
+    "subscribed": {}
+  },
+  "unsubscribeToVehicle": {
+    "id": {},
+    "subscribed": {}
+  },
+  "updateVehicle": {
+    "id": {},
+    "reference": {},
+    "colour": {},
+    "model": {},
+    "make": {},
+    "registration": {},
+    "images": {
+      "id": {},
+      "url": {},
+      "policeImage": {},
+      "primary": {},
+      "position": {},
+      "rotation": {},
+      "optimised": {}
+    },
+    "offenders": {
+      "images": {
+        "id": {},
+        "url": {},
+        "optimised": {},
+        "card": {},
+        "position": {},
+        "rotation": {},
+        "primary": {},
+        "policeImage": {},
+        "isFace": {},
+        "offenders": {
+          "id": {},
+          "name": {}
+        }
+      },
+      "id": {},
+      "name": {}
+    },
+    "customGalleries": {
+      "id": {},
+      "name": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "updatedAt": {},
+    "incidents": {
+      "id": {},
+      "subject": {}
+    },
+    "crimeGroup": {
+      "id": {},
+      "reference": {}
+    }
+  },
+  "vehicle": {
+    "id": {},
+    "make": {},
+    "model": {},
+    "registration": {},
+    "totalOffenders": {},
+    "totalIncidents": {},
+    "totalCrimeGroups": {},
+    "reference": {},
+    "subscribed": {},
+    "totalImages": {},
+    "customGalleries": {
+      "id": {},
+      "name": {}
+    },
+    "groups": {
+      "id": {},
+      "name": {}
+    },
+    "images": {},
+    "updatedAt": {},
+    "colour": {},
+    "crimeGroup": {},
+    "offenders": {
+      "images": {
+        "isFace": {}
+      }
+    },
+    "incidents": {},
+    "evidence": {},
+    "investigations": {},
+    "updates": {}
+  },
+  "userScheme": {
+    "id": {},
+    "role": {},
+    "isAdmin": {},
+    "permissions": {
+      "model": {},
+      "allowedMethods": {}
+    },
+    "orignalPermissions": {
+      "id": {},
+      "admin": {}
+    },
+    "scheme": {
+      "id": {},
+      "name": {},
+      "defaultPublicOffenderDOB": {},
+      "restrictIncidentAccess": {},
+      "reportOnly": {},
+      "customTranslations": {},
+      "facialRecognition": {},
+      "facialRedaction": {},
+      "activityAssignToUser": {},
+      "useBusinessGroupsOnIncident": {},
+      "imagesRequiredOnOffenders": {},
+      "goodsMode": {},
+      "taskTimeTracking": {},
+      "languageCount": {},
+      "autoPopulateDescription": {},
+      "needJustification": {},
+      "requireSiteNumberForUsers": {},
+      "oneSelectedIncidentTypeOnly": {},
+      "facialDetection": {},
+      "disableGalleryOnNative": {},
+      "skipLocationToAddress": {}
+    }
+  },
+  "usersOnline": {
+    "userId": {},
+    "online": {}
+  },
+  "todoRelay": {
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "description": {},
+        "dueDate": {},
+        "completedDate": {},
+        "completed": {},
+        "createdAt": {},
+        "type": {},
+        "vehicleId": {},
+        "vehicle": {
+          "id": {},
+          "reference": {}
+        },
+        "offenderId": {},
+        "offender": {
+          "id": {},
+          "reference": {}
+        },
+        "crimeGroupId": {},
+        "crimeGroup": {
+          "id": {},
+          "reference": {}
+        },
+        "incidentId": {},
+        "incident": {
+          "id": {},
+          "reference": {}
+        },
+        "investigationId": {},
+        "investigation": {
+          "id": {},
+          "reference": {}
+        },
+        "chatId": {},
+        "assignedUsers": {
+          "id": {},
+          "fullName": {}
+        },
+        "groups": {
+          "id": {},
+          "name": {}
+        }
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {}
+    }
+  },
+  "createOneQuestionGroup": {
+    "id": {},
+    "name": {},
+    "description": {},
+    "defaultDueDate": {},
+    "questions": {
+      "questionFormatted": {},
+      "id": {}
+    }
+  },
+  "deleteOneQuestionGroup": {
+    "id": {}
+  },
+  "updateOneQuestionGroup": {
+    "id": {}
+  },
+  "listOffendersRelay": {
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "images": {
+          "id": {},
+          "url": {},
+          "optimised": {},
+          "card": {},
+          "position": {},
+          "rotation": {},
+          "isFace": {}
+        },
+        "tags": {
+          "id": {},
+          "name": {}
+        },
+        "lastActive": {
+          "id": {},
+          "dayTime": {}
+        }
+      }
+    },
+    "pageInfo": {
+      "hasNextPage": {},
+      "endCursor": {}
+    }
+  },
+  "aiSuggestions": {
+    "edges": {
+      "node": {
+        "id": {},
+        "title": {},
+        "description": {},
+        "reference": {},
+        "type": {},
+        "rekMatch": {
+          "id": {},
+          "matchedFaces": {
+            "id": {},
+            "rekFace": {
+              "id": {},
+              "image": {
+                "url": {},
+                "id": {}
+              }
+            }
+          },
+          "searchedFace": {
+            "id": {},
+            "image": {
+              "id": {},
+              "url": {}
+            }
+          },
+          "avgSimilarity": {},
+          "matchedOffender": {
+            "id": {},
+            "name": {},
+            "reference": {}
+          },
+          "searchedOffender": {
+            "id": {},
+            "name": {},
+            "reference": {}
+          }
+        },
+        "createdAt": {},
+        "metadata": {},
+        "offenders": {
+          "id": {},
+          "name": {},
+          "images": {
+            "id": {},
+            "url": {}
+          }
+        }
+      }
+    },
+    "pageInfo": {
+      "endCursor": {}
+    }
+  },
+  "listArticlesRelay": {
+    "edges": {
+      "node": {}
+    },
+    "pageInfo": {
+      "hasNextPage": {},
+      "endCursor": {}
+    }
+  },
+  "completeChecklist": {
+    "id": {},
+    "name": {},
+    "comments": {},
+    "signature": {},
+    "status": {},
+    "completedAt": {},
+    "completedBy": {
+      "origName": {}
+    },
+    "fields": {
+      "id": {},
+      "question": {},
+      "type": {},
+      "availableAnswers": {},
+      "answer": {
+        "answer": {},
+        "additionalComments": {},
+        "images": {}
+      },
+      "section": {},
+      "subsection": {},
+      "order": {}
+    },
+    "checklistSection": {
+      "sub": {},
+      "section": {},
+      "subsection": {},
+      "titleLocaled": {}
+    }
+  },
+  "createActiveChecklist": {
+    "id": {}
+  },
+  "createUpdateChecklist": {
+    "id": {}
+  },
+  "recycleChecklist": {
+    "id": {}
+  },
+  "activeChecklists": {
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {}
+    },
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "percentageScore": {},
+        "percentComplete": {},
+        "status": {},
+        "document": {
+          "id": {},
+          "url": {}
+        },
+        "updatedAt": {},
+        "business": {
+          "name": {},
+          "id": {}
+        },
+        "completedAt": {}
+      }
+    }
+  },
+  "checklists": {
+    "id": {},
+    "titleLocaled": {},
+    "descriptionLocaled": {}
+  },
+  "activeChecklist": {
+    "id": {},
+    "name": {},
+    "comments": {},
+    "signature": {},
+    "status": {},
+    "completedAt": {},
+    "percentageScore": {},
+    "percentComplete": {},
+    "completedBy": {
+      "origName": {}
+    },
+    "fields": {
+      "id": {},
+      "question": {},
+      "type": {},
+      "availableAnswers": {},
+      "dependent": {},
+      "answer": {
+        "answer": {},
+        "additionalComments": {},
+        "images": {}
+      },
+      "section": {},
+      "subsection": {},
+      "order": {}
+    },
+    "checklistSection": {
+      "sub": {},
+      "section": {},
+      "subsection": {},
+      "titleLocaled": {}
+    }
+  },
+  "checklist": {
+    "id": {},
+    "title": {},
+    "description": {},
+    "sections": {
+      "order": {},
+      "title": {},
+      "subsections": {
+        "title": {},
+        "order": {},
+        "questions": {
+          "order": {},
+          "question": {},
+          "type": {},
+          "dependent": {},
+          "brandIds": {},
+          "weight": {
+            "weight": {},
+            "answer": {}
+          }
+        }
+      }
+    },
+    "users": {
+      "id": {}
+    },
+    "business": {
+      "id": {}
+    }
+  },
+  "createDashboard": {
+    "id": {},
+    "name": {},
+    "roles": {
+      "name": {},
+      "id": {}
+    }
+  },
+  "deleteDashboardTemplate": {
+    "id": {}
+  },
+  "updateDashboardTemplate": {
+    "name": {},
+    "roles": {
+      "name": {},
+      "id": {}
+    },
+    "id": {}
+  },
+  "dashboard": {
+    "id": {},
+    "runningBanner": {},
+    "layout": {
+      "h": {},
+      "i": {},
+      "id": {},
+      "maxH": {},
+      "maxW": {},
+      "minH": {},
+      "minW": {},
+      "moved": {},
+      "static": {},
+      "w": {},
+      "x": {},
+      "y": {}
+    },
+    "name": {},
+    "roles": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "dashboards": {
+    "pageInfo": {
+      "hasNextPage": {},
+      "endCursor": {}
+    },
+    "edges": {
+      "node": {
+        "defaultAdmin": {},
+        "defaultUser": {},
+        "id": {},
+        "name": {},
+        "scheme": {
+          "id": {},
+          "name": {}
+        },
+        "roles": {
+          "id": {},
+          "name": {}
+        }
+      }
+    },
+    "totalCount": {}
+  },
+  "latestVehicles": {
+    "pageInfo": {
+      "hasNextPage": {},
+      "endCursor": {}
+    },
+    "edges": {
+      "node": {
+        "id": {},
+        "registration": {},
+        "model": {},
+        "make": {},
+        "images": {
+          "low": {}
+        }
+      }
+    }
+  },
+  "incidentsDayOfWeek": {
+    "value": {},
+    "label": {}
+  },
+  "incidentCount": {},
+  "latestIncident": {
+    "id": {},
+    "date": {}
+  },
+  "latestIncidents": {
+    "pageInfo": {
+      "hasNextPage": {},
+      "endCursor": {}
+    },
+    "edges": {
+      "node": {
+        "date": {},
+        "id": {},
+        "description": {}
+      }
+    }
+  },
+  "targetedGoodsDashboard": {
+    "value": {},
+    "label": {}
+  },
+  "incidentsTimeOfDay": {
+    "value": {},
+    "label": {}
+  },
+  "totalLoss": {},
+  "createCsvZip": {},
+  "previewIncidentExport": {
+    "activityCount": {},
+    "incidentCount": {},
+    "incidentItemsCount": {},
+    "incidents": {
+      "id": {},
+      "date": {},
+      "description": {}
+    },
+    "offenderCount": {},
+    "vehicleCount": {}
+  },
+  "documents": {
+    "totalCount": {},
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "url": {},
+        "fileType": {},
+        "tags": {
+          "id": {},
+          "name": {}
+        }
+      }
+    }
+  },
+  "listDemEvidenceExtendedWithoutUser": {
+    "demEvidence": {
+      "type": {},
+      "thumbnailUrl": {},
+      "recordedAt": {},
+      "playbackUrl": {},
+      "id": {},
+      "importance": {},
+      "officerName": {},
+      "duration": {}
+    },
+    "total": {}
+  },
+  "upsertContact": {
+    "id": {},
+    "address": {},
+    "dobPlace": {},
+    "formerName": {},
+    "gender": {},
+    "height": {},
+    "homeTel": {},
+    "mobileTel": {},
+    "occupation": {},
+    "postcode": {},
+    "prefContact": {},
+    "updatedAt": {},
+    "user": {
+      "email": {},
+      "fullName": {},
+      "id": {}
+    },
+    "workTel": {}
+  },
+  "userContact": {
+    "id": {},
+    "address": {},
+    "dobPlace": {},
+    "formerName": {},
+    "gender": {},
+    "height": {},
+    "homeTel": {},
+    "mobileTel": {},
+    "occupation": {},
+    "postcode": {},
+    "prefContact": {},
+    "updatedAt": {},
+    "user": {
+      "email": {},
+      "fullName": {},
+      "id": {}
+    },
+    "workTel": {}
+  },
+  "generateStatementBody": {
+    "statement": {}
+  },
+  "closeInvestigation": {
+    "id": {},
+    "status": {}
+  },
+  "reopenInvestigation": {
+    "id": {},
+    "status": {}
+  },
+  "forcedPasswordSet": {},
+  "activityTableReport": {
+    "total": {},
+    "activityPerformance": {
+      "id": {},
+      "dueDate": {},
+      "name": {},
+      "totalQuestions": {},
+      "totalAnswers": {},
+      "totalAssignedUsers": {},
+      "completed": {}
+    }
+  },
+  "checklistTableReport": {
+    "total": {},
+    "checklistPerformance": {
+      "id": {},
+      "completedAt": {},
+      "name": {},
+      "percentComplete": {},
+      "totalSections": {},
+      "totalQuestions": {},
+      "totalAnswers": {},
+      "percentAnswer": {},
+      "percentScore": {}
+    }
+  },
+  "incidentItems": {
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "quantity": {},
+        "recoveredQuantity": {},
+        "incident": {
+          "id": {},
+          "date": {},
+          "createdAt": {},
+          "business": {
+            "id": {},
+            "name": {},
+            "siteNumber": {}
+          }
+        },
+        "sku": {},
+        "stockItem": {
+          "goodsType": {
+            "id": {},
+            "name": {}
+          },
+          "variant": {}
+        }
+      }
+    },
+    "totalCount": {}
+  },
+  "incidentTableReport": {
+    "total": {},
+    "incidentPerformance": {
+      "alertId": {},
+      "id": {},
+      "date": {},
+      "createdAt": {},
+      "subject": {},
+      "totalBulletins": {},
+      "totalOffenders": {},
+      "totalLostValue": {},
+      "totalRecoveredValue": {},
+      "totalSuccessRate": {},
+      "primaryPhoto": {}
+    }
+  },
+  "investigationTableReport": {
+    "total": {},
+    "investigationPerformance": {
+      "id": {},
+      "alertId": {},
+      "name": {},
+      "status": {},
+      "totalIncidents": {},
+      "totalOffenders": {},
+      "totalValue": {},
+      "totalRecoveredValue": {},
+      "totalSuccessRate": {},
+      "createdAt": {},
+      "closedAt": {}
+    }
+  },
+  "offenderTableReport": {
+    "total": {},
+    "offenderPerformance": {
+      "alertId": {},
+      "id": {},
+      "lastIncidentDate": {},
+      "name": {},
+      "totalBulletins": {},
+      "totalIncidents": {},
+      "totalLostValue": {},
+      "totalRecoveredValue": {},
+      "totalSuccessRate": {},
+      "primaryPhoto": {}
+    }
+  },
+  "activityGraph": {
+    "label": {},
+    "value": {}
+  },
+  "activitySummary": {
+    "total": {},
+    "percentComplete": {},
+    "overdue": {},
+    "completed": {}
+  },
+  "reportsCentre": {
+    "id": {},
+    "name": {},
+    "order": {},
+    "reports": {
+      "id": {},
+      "name": {},
+      "description": {},
+      "type": {}
+    }
+  },
+  "upsertPermission": {
+    "id": {}
+  },
+  "role": {
+    "id": {},
+    "name": {},
+    "usersCount": {},
+    "approvalTier": {},
+    "permissions": {
+      "allowedMethods": {},
+      "model": {}
+    },
+    "type": {},
+    "users": {
+      "user": {
+        "fullName": {},
+        "id": {},
+        "email": {}
+      }
+    }
+  },
+  "deleteDemDevice": {
+    "id": {},
+    "name": {}
+  },
+  "updateDemDevice": {
+    "id": {},
+    "business": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "demDevice": {
+    "evidence": {
+      "id": {},
+      "name": {},
+      "url": {},
+      "fileType": {}
+    },
+    "demGroups": {
+      "id": {},
+      "name": {}
+    },
+    "business": {
+      "id": {},
+      "name": {}
+    }
+  },
+  "listDemDeviceEvidence": {
+    "edges": {
+      "node": {
+        "type": {},
+        "thumbnailUrl": {},
+        "recordedAt": {},
+        "playbackUrl": {},
+        "id": {},
+        "importance": {},
+        "officerName": {},
+        "duration": {}
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "demGroup": {
+    "id": {},
+    "name": {},
+    "demId": {},
+    "totalDevices": {},
+    "demDevices": {
+      "id": {},
+      "name": {},
+      "business": {
+        "id": {},
+        "name": {}
+      }
+    }
+  },
+  "deleteBrand": {
+    "id": {}
+  },
+  "upsertBrand": {
+    "id": {},
+    "name": {},
+    "businesses": {
+      "name": {},
+      "id": {}
+    },
+    "description": {}
+  },
+  "brand": {
+    "name": {},
+    "id": {},
+    "description": {},
+    "businesses": {
+      "id": {},
+      "name": {}
+    },
+    "scheme": {
+      "id": {}
+    }
+  },
+  "brands": {
+    "totalCount": {},
+    "edges": {
+      "node": {
+        "id": {},
+        "name": {},
+        "description": {},
+        "businesses": {
+          "id": {},
+          "name": {}
+        }
+      }
+    }
+  },
+  "listDemBusinessEvidence": {
+    "edges": {
+      "node": {
+        "type": {},
+        "thumbnailUrl": {},
+        "recordedAt": {},
+        "playbackUrl": {},
+        "id": {},
+        "importance": {},
+        "officerName": {},
+        "duration": {}
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "createOneCsvImport": {
+    "id": {}
+  },
+  "goodsTypes": {
+    "id": {},
+    "name": {}
+  },
+  "importStockItemCsv": {},
+  "sentrysysImportData": {
+    "success": {}
+  },
+  "restoreDemEvidence": {},
+  "listDemEvidenceRecycle": {
+    "edges": {
+      "node": {
+        "type": {},
+        "thumbnailUrl": {},
+        "recordedAt": {},
+        "playbackUrl": {},
+        "id": {},
+        "importance": {},
+        "officerName": {},
+        "duration": {}
+      }
+    },
+    "totalCount": {},
+    "pageInfo": {
+      "endCursor": {},
+      "hasNextPage": {}
+    }
+  },
+  "removeQuestionFromTag": {
+    "id": {}
+  },
+  "upsertIncidentForm": {
+    "id": {}
+  },
+  "updateTagQs": {
+    "id": {},
+    "priority": {}
+  },
+  "term": {
+    "content": {},
+    "version": {}
+  },
+  "deleteShoe": {
+    "id": {},
+    "status": {}
+  },
+  "updateShoe": {
+    "matchedInfo": {}
+  },
+  "upsertShoe": {
+    "matchedInfo": {},
+    "secondaryShoe": {
+      "id": {}
+    }
+  },
+  "shoe": {},
+  "shoes": {
+    "totalCount": {},
+    "edges": {
+      "node": {}
+    }
+  },
+  "createOneWorkflow": {
+    "id": {},
+    "name": {},
+    "trigger": {},
+    "triggerModels": {},
+    "actions": {
+      "type": {},
+      "outputModel": {},
+      "timesRun": {}
+    }
+  },
+  "deleteOneWorkflow": {
+    "id": {}
+  },
+  "updateOneWorkflow": {
+    "id": {},
+    "name": {},
+    "trigger": {},
+    "triggerModels": {},
+    "actions": {
+      "type": {},
+      "outputModel": {},
+      "timesRun": {}
+    }
+  },
+  "workflows": {
+    "id": {},
+    "name": {},
+    "trigger": {},
+    "triggerModels": {},
+    "actions": {
+      "type": {},
+      "outputModel": {},
+      "timesRun": {}
+    }
+  },
+  "workflow": {
+    "name": {},
+    "conditions": {},
+    "triggerModels": {},
+    "actions": {
+      "data": {},
+      "id": {}
+    }
+  }
+}

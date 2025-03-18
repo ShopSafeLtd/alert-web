@@ -19,6 +19,8 @@ import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
 import ReportOnlyNavigationConfig from 'configs/ReportOnlyNavigationConfig';
+import { useAtomValue } from 'jotai/index';
+import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -104,6 +106,7 @@ const getLogo = (props: GetLogoArgs) => {
 
 const SideNavContent = (props: SideNavContentProps) => {
   const classes = useStyles();
+  const isAdmin = useAtomValue(isAdminAtom);
 
   const {
     sideNavTheme,
@@ -118,12 +121,7 @@ const SideNavContent = (props: SideNavContentProps) => {
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const { id: schemeId } = useStoreState((state) => state.scheme);
-  const {
-    role: userRole,
-    id: userId,
-    dem,
-    schemes,
-  } = useStoreState((state) => state.user);
+  const { id: userId, dem, schemes } = useStoreState((state) => state.user);
 
   const permissions =
     schemes
@@ -134,7 +132,7 @@ const SideNavContent = (props: SideNavContentProps) => {
   const { reportOnly } = useStoreState((state) => state.scheme);
 
   const getNavigationConfig = () => {
-    if (userRole === 'USER' && reportOnly) {
+    if (!isAdmin && reportOnly) {
       return ReportOnlyNavigationConfig;
     }
 

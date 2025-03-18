@@ -28,6 +28,7 @@ import type {
 import { useGroupsContext } from '#/context/groups-context';
 import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -54,7 +55,6 @@ import { useTranslateLazyQuery } from 'graphql/translate/queries/__generated__/t
 import {
   PermissionMethod,
   PermissionModel,
-  Role,
   SortOrder,
   TagType,
 } from 'graphql/types';
@@ -254,15 +254,13 @@ export function usePagination(): UsePagination {
 const useViewOffender = (offenderId: string): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const {
-    defaultPublicOffenderDOB,
-    id: schemeId,
-    languageCount,
-  } = useStoreState((state) => state.scheme);
+  const { id: schemeId, languageCount } = useStoreState(
+    (state) => state.scheme
+  );
   const hasConnectedSchemes = useStoreState(
     (state) => state.scheme.hasConnectedSchemes
   );
-  const { id: userId, role, schemes } = useStoreState((state) => state.user);
+  const { id: userId, schemes } = useStoreState((state) => state.user);
   const currentScheme = useMemo(
     () => schemes.find((scheme) => scheme.scheme.id === schemeId),
     [schemes, schemeId]
@@ -365,12 +363,7 @@ const useViewOffender = (offenderId: string): Return => {
   }, [associateFilters]);
   const variables = {
     banWhere: {
-      groups:
-        role === Role.User ||
-        role === Role.ContentAdmin ||
-        role === Role.GroupAdmin
-          ? { some: { id: { in: groupsId } } }
-          : undefined,
+      groups: { some: { id: { in: groupsId } } },
     },
     where: {
       id: offenderId,
@@ -418,12 +411,9 @@ const useViewOffender = (offenderId: string): Return => {
             equals: TagType.IncidentCrimeType,
           },
         },
-        groups:
-          role === Role.SchemeAdmin
-            ? undefined
-            : groups.map((g) => ({
-                id: g.value,
-              })),
+        groups: groups.map((g) => ({
+          id: g.value,
+        })),
         linkedCrimeGroup: associateFilters.includes(LINKED_OCG),
         linkedIncidents: associateFilters.includes(LINKED_INCIDENTS),
         where: {
@@ -2030,7 +2020,7 @@ const useViewOffender = (offenderId: string): Return => {
     openLightbox,
     optionMenuItems,
     optionRowShow,
-    publicOffenderDOB: defaultPublicOffenderDOB || role !== Role.User,
+    publicOffenderDOB: publicOffenderDob(),
     replyTo,
     saving,
     scrolledToTop,

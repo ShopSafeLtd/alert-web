@@ -1,0 +1,35 @@
+query CurrentUserProvider {
+    currentUser {
+        id
+        fullName
+        email
+        reference
+        messageCount
+        newUser
+        reportToAllBusinesses
+        totalSchemes
+        schemes(take: 1) {
+            id
+        }
+        totalUnreadNotifications
+        expoPushTokens {
+            id
+            token
+        }
+        defaultGroups {
+            id
+            schemeId
+            name
+        }
+        groups {
+            id
+            schemeId
+            name
+        }
+        businesses {
+            id
+            name
+            demId
+}
+    }
+}

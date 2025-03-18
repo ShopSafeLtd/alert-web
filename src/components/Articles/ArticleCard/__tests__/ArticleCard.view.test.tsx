@@ -45,8 +45,6 @@ describe('Detail Officer View', () => {
       <MemoryRouter>
         <ArticleCard
           article={data}
-          deleteRights={false}
-          menuRights={false}
           openLightbox={jest.fn()}
           onNavigate={jest.fn()}
           onDelete={jest.fn()}

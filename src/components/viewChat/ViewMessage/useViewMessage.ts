@@ -25,6 +25,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import { useApolloClient } from '@apollo/client';
 import { Form, Modal, Upload, message, notification } from 'antd';
 import { useDeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
@@ -39,7 +40,13 @@ import {
   useChatMessagesQuery,
 } from 'graphql/messages/queries/__generated__/chat-messages.generated';
 import { MessagesSubscriptionDocument } from 'graphql/messages/subscriptions/__generated__/new_message.generated';
-import { ImagePosition, MessageItemType, Role, SortOrder } from 'graphql/types';
+import {
+  ImagePosition,
+  MessageItemType,
+  PermissionMethod,
+  PermissionModel,
+  SortOrder,
+} from 'graphql/types';
 import { UserChatsDocument } from 'graphql/userChat/queries/__generated__/user_chats.generated';
 import update from 'immutability-helper';
 import moment from 'moment';
@@ -89,7 +96,6 @@ export interface OffenderData {
 }
 
 interface Return {
-  adminRights: boolean;
   articlesData: ArticleData[];
   beforeUpload: (value: RcFile) => void;
   chatData: ChatQuery | undefined;
@@ -155,11 +161,15 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     businesses: userBusinesses,
     id: userId,
     origName: userOrigName,
-    role,
   } = useStoreState((state) => state.user);
   const restrictIncidentAccess =
     useStoreState((state) => state.scheme.restrictIncidentAccess) &&
-    role === Role.User;
+    hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Incidents,
+      },
+    });
 
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
@@ -1110,7 +1120,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
 
   return {
-    adminRights: role !== Role.User,
     articlesData,
     beforeUpload,
     chatData,

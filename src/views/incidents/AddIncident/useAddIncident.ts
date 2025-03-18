@@ -22,7 +22,9 @@ import type React from 'react';
 import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasPermission from '#/utils/has-permission';
+import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
@@ -39,8 +41,8 @@ import {
   Model,
   PermissionMethod,
   PermissionModel,
-  Role,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -205,7 +207,6 @@ interface Props {
 interface Return {
   addNewAddress: boolean;
   addressLoading: boolean;
-  adminRights: boolean;
   brands: string[];
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
@@ -238,15 +239,21 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const [form] = useForm<FormData>();
 
   const intl = useIntl();
+  const isAdmin = useAtomValue(isAdminAtom);
   const {
     businesses,
     id: userId,
-    role,
     schemes,
   } = useStoreState((state) => state.user);
 
   const reportOnly =
-    useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
+    useStoreState((state) => state.scheme.reportOnly) &&
+    !hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Incidents,
+      },
+    });
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
@@ -293,7 +300,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     // eslint-disable-next-line array-bracket-newline
   ]);
   const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
-  const showSiteNumber = requireSiteNumberForUsers && role === Role.User;
+  const showSiteNumber = requireSiteNumberForUsers && !isAdmin;
   const [brands, setBrands] = useState<string[]>([]);
 
   const formTags = Form.useWatch('tags', form);
@@ -660,7 +667,15 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         navigate(`/app/investigations/view/${investigationId}`);
       } else if (reportOnly) {
         navigate('/app/incidents/add');
-      } else if (restrictIncidentAccess && role === Role.User) {
+      } else if (
+        restrictIncidentAccess &&
+        hasRolePermission({
+          permission: {
+            method: PermissionMethod.Read,
+            model: PermissionModel.Incidents,
+          },
+        })
+      ) {
         navigate('/app/dashboard');
       } else {
         navigate('/app/incidents');
@@ -1327,7 +1342,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   return {
     addNewAddress,
     addressLoading,
-    adminRights: role !== Role.User,
     brands,
     customQuestions,
     dontKnowGoods,

@@ -6,7 +6,7 @@ import { useListBusinessesQuery } from 'graphql/businesses/queries/__generated__
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
+import { Model, QueryMode, SortOrder, TagType } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -68,11 +68,8 @@ const useSelectIncidents = ({
   const [selected, setSelected] = useState<string[]>([]);
   const schemeId = useStoreState((state) => state.scheme.id);
 
-  const {
-    filterDefaultGroups: defaultGroups,
-    role,
-    schemes: userSchemes,
-  } = useStoreState((state) => state.user);
+  const { filterDefaultGroups: defaultGroups, schemes: userSchemes } =
+    useStoreState((state) => state.user);
 
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -225,20 +222,17 @@ const useSelectIncidents = ({
               },
             },
           },
-          users:
-            role === Role.SchemeAdmin
-              ? undefined
-              : {
-                  some: {
-                    groups: {
-                      some: {
-                        id: {
-                          in: groups.map((id) => id),
-                        },
-                      },
-                    },
+          users: {
+            some: {
+              groups: {
+                some: {
+                  id: {
+                    in: groups.map((id) => id),
                   },
                 },
+              },
+            },
+          },
         },
       },
     });
