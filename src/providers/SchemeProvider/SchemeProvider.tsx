@@ -3,7 +3,7 @@ import type { CurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__ge
 import { useCurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
 import { GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
-import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 type UserSchemeState = CurrentSchemeProviderQuery['userScheme'];
 
@@ -13,6 +13,8 @@ interface Props {
   children: JSX.Element;
 }
 
+export const settingSchemeAtom = atom(true);
+export const stateIsSetAtom = atom(false);
 export const currentUserSchemeIdAtom = atom<null | string>(null);
 export const defaultCurrentUserSchemeAtom = {
   id: '',
@@ -82,14 +84,19 @@ export const useSchemeProvider = () => {
 const SchemeProvider = ({ children }: Props) => {
   const currentUserSchemeId = useAtomValue(currentUserSchemeIdAtom);
   const setCurrentUserScheme = useSetAtom(currentUserSchemeAtom);
+  const setStateIsSet = useSetAtom(stateIsSetAtom);
+  const setSettingScheme = useSetAtom(settingSchemeAtom);
 
-  const [isSet, setIsSet] = useState(false);
+  useEffect(() => {
+    console.log('scheme changed:', currentUserSchemeId);
+    setSettingScheme(true);
+  }, [currentUserSchemeId]);
 
   void useCurrentSchemeProviderQuery({
-    fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       setCurrentUserScheme(data.userScheme);
-      setIsSet(true);
+      setStateIsSet(true);
+      setSettingScheme(false);
     },
     skip: currentUserSchemeId === null,
     variables: {
@@ -99,7 +106,7 @@ const SchemeProvider = ({ children }: Props) => {
     },
   });
 
-  return isSet ? children : <div />;
+  return children;
 };
 
 export default SchemeProvider;

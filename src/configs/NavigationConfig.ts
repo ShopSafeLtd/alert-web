@@ -21,10 +21,11 @@ import {
   faPeopleGroup,
   faPlayCircle,
   faUsers,
+  IconDefinition,
 } from '@fortawesome/pro-light-svg-icons';
 
 import { defineMessage } from 'react-intl';
-import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 
 export enum BadgeTypes {
   todo = 'TODO',
@@ -36,17 +37,13 @@ export interface MenuItem {
   key: string;
   path: string;
   title: string;
-  icon?: any;
+  icon: IconDefinition;
   breadcrumb: boolean;
-  roles?: Role[];
-  // badge?: boolean;
   badge?: BadgeTypes;
-  requireDemId?: boolean;
   intl: { id: string; defaultMessage: string };
-  childPermissions?: PermissionModel[];
   permission?: {
     model: PermissionModel;
-    method?: PermissionMethod[];
+    method: PermissionMethod;
   }[];
 }
 
@@ -71,6 +68,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Dashboard,
+        method: PermissionMethod.Read,
       },
     ],
     intl: defineMessage({
@@ -89,6 +87,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Tasks,
+        method: PermissionMethod.Read,
       },
     ],
     intl: defineMessage({
@@ -109,6 +108,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Automations,
+        method: PermissionMethod.Read,
       },
     ],
     submenu: [],
@@ -127,6 +127,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Incidents,
+        method: PermissionMethod.Read,
       },
     ],
   },
@@ -140,10 +141,19 @@ const navigationConfig: NavItem[] = [
       id: 'profiles',
       defaultMessage: 'Profiles',
     }),
-    childPermissions: [
-      PermissionModel.Offenders,
-      PermissionModel.CrimeGroups,
-      PermissionModel.Vehicles,
+    permission: [
+      {
+        model: PermissionModel.Offenders,
+        method: PermissionMethod.Read,
+      },
+      {
+        method: PermissionMethod.Read,
+        model: PermissionModel.CrimeGroups,
+      },
+      {
+        model: PermissionModel.Vehicles,
+        method: PermissionMethod.Read,
+      },
     ],
     submenu: [
       {
@@ -160,6 +170,7 @@ const navigationConfig: NavItem[] = [
         permission: [
           {
             model: PermissionModel.Offenders,
+            method: PermissionMethod.Read,
           },
         ],
       },
@@ -176,6 +187,7 @@ const navigationConfig: NavItem[] = [
         }),
         permission: [
           {
+            method: PermissionMethod.Read,
             model: PermissionModel.CrimeGroups,
           },
         ],
@@ -194,6 +206,7 @@ const navigationConfig: NavItem[] = [
         permission: [
           {
             model: PermissionModel.Vehicles,
+            method: PermissionMethod.Read,
           },
         ],
       },
@@ -214,6 +227,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Chat,
+        method: PermissionMethod.Read,
       },
     ],
   },
@@ -231,6 +245,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Articles,
+        method: PermissionMethod.Read,
       },
     ],
   },
@@ -248,6 +263,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Investigations,
+        method: PermissionMethod.Read,
       },
     ],
   },
@@ -274,6 +290,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Evidence,
+        method: PermissionMethod.Read,
       },
     ],
   },
@@ -291,6 +308,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Checklist,
+        method: PermissionMethod.Read,
       },
     ],
   },
@@ -332,6 +350,7 @@ const navigationConfig: NavItem[] = [
         permission: [
           {
             model: PermissionModel.Documents,
+            method: PermissionMethod.Read,
           },
         ],
       },
@@ -350,6 +369,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Reports,
+        method: PermissionMethod.Read,
       },
     ],
     submenu: [],
@@ -367,6 +387,7 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.SingleShoe,
+        method: PermissionMethod.Read,
       },
     ],
     submenu: [],
@@ -384,23 +405,8 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Settings,
+        method: PermissionMethod.Read,
       },
-    ],
-    childPermissions: [
-      PermissionModel.Groups,
-      PermissionModel.Dashboard,
-      PermissionModel.Workflows,
-      PermissionModel.Terms,
-      PermissionModel.Roles,
-      PermissionModel.Users,
-      PermissionModel.ChatGroups,
-      PermissionModel.DataImport,
-      PermissionModel.RecycleBin,
-      PermissionModel.SharingSettings,
-      PermissionModel.OffenderWarnings,
-      PermissionModel.OffenderGalleries,
-      PermissionModel.DataExport,
-      PermissionModel.IncidentOptions,
     ],
     submenu: [],
   },
