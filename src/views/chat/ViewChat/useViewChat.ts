@@ -9,7 +9,7 @@ import {
   UserChatsDocument,
   useUserChatsQuery,
 } from '#/graphql/userChat/queries/__generated__/user_chats.generated';
-import { Role, SortOrder, TodoType } from 'graphql/types';
+import { SortOrder, TodoType } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
@@ -19,7 +19,6 @@ interface Props {
 }
 interface Return {
   addChat: boolean;
-  adminRights: boolean;
   currentId: string;
   data: UserChatsQuery | undefined;
   handleMarkAsRead: (value: string | undefined) => void;
@@ -32,7 +31,6 @@ interface Return {
 }
 
 const useViewChat = ({ chatId }: Props): Return => {
-  const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
@@ -214,7 +212,6 @@ const useViewChat = ({ chatId }: Props): Return => {
 
   return {
     addChat,
-    adminRights: role !== Role.User,
     currentId,
     data,
     handleMarkAsRead,

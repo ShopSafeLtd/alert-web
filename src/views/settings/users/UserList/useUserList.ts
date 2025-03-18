@@ -1,12 +1,12 @@
 import type { UserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { UserStatus } from 'graphql/types';
+import type { Role, UserStatus } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 
 import { useUserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
-import { QueryMode, Role, SortOrder } from 'graphql/types';
+import { QueryMode, SortOrder } from 'graphql/types';
 import { ListUsersDocument } from 'graphql/users/queries/__generated__/list-users.generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
@@ -43,7 +43,7 @@ interface Return {
 
 const useUserList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { id: userId, role } = useStoreState((state) => state.user);
+  const { id: userId } = useStoreState((state) => state.user);
   const [addUser, setAddUser] = useState(false);
   const [editUser, toggleEditUser] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState('');
@@ -77,16 +77,13 @@ const useUserList = (): Return => {
           equals: schemeId,
         },
       },
-      users:
-        role === Role.User || role === Role.GroupAdmin
-          ? {
-              some: {
-                id: {
-                  equals: userId,
-                },
-              },
-            }
-          : undefined,
+      users: {
+        some: {
+          id: {
+            equals: userId,
+          },
+        },
+      },
     },
     orderBy: getOrderBy[order],
     skip: (page - 1) * pageSize,
@@ -125,9 +122,7 @@ const useUserList = (): Return => {
                 },
               },
             }
-          : role === Role.GroupAdmin
-            ? { some: { users: { some: { id: { equals: userId } } } } }
-            : undefined,
+          : { some: { users: { some: { id: { equals: userId } } } } },
       recycled: {
         equals: false,
       },
@@ -166,16 +161,13 @@ const useUserList = (): Return => {
             equals: schemeId,
           },
         },
-        users:
-          role === Role.User || role === Role.GroupAdmin
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
+        users: {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        },
       },
     },
   });

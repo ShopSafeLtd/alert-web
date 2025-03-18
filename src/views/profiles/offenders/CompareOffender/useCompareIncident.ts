@@ -3,7 +3,7 @@ import type { ViewOffendersCompareQuery } from 'graphql/offenders/queries/__gene
 
 import { useMergeOffendersMutation } from 'graphql/offenders/mutations/__generated__/merge-offenders.generated';
 import { useViewOffendersCompareLazyQuery } from 'graphql/offenders/queries/__generated__/compare-offenders.generated';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import { Age, Build, Gender, Race } from 'graphql/types';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'state';
@@ -64,7 +64,7 @@ const compareIncident = (): Return => {
   const { id: offenderId } = useParams();
   const query = useQuery();
   const navigate = useNavigate();
-  const { id: userId, role } = useStoreState((state) => state.user);
+  const { id: userId } = useStoreState((state) => state.user);
   const [mode, setMode] = useState<'column' | 'grid'>('column');
   const [addOffender, setAddOffender] = useState(false);
   const [offenders, setOffenders] = useState<Offender[]>([]);
@@ -109,20 +109,17 @@ const compareIncident = (): Return => {
       fetchPolicy: 'cache-and-network',
       variables: {
         where: {
-          groups:
-            role === Role.ContentAdmin
-              ? undefined
-              : {
-                  some: {
-                    users: {
-                      some: {
-                        id: {
-                          equals: userId,
-                        },
-                      },
-                    },
+          groups: {
+            some: {
+              users: {
+                some: {
+                  id: {
+                    equals: userId,
                   },
                 },
+              },
+            },
+          },
           id: {
             in: ids,
           },

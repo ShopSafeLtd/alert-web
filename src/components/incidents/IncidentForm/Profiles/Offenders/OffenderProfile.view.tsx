@@ -1,5 +1,6 @@
 import type { UploadChangeParam } from 'antd/lib/upload';
 
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -14,7 +15,6 @@ import {
   Upload,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Role } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -79,10 +79,7 @@ const OffenderProfile = ({
   const facialDetection = useStoreState(
     (state) => state.scheme.facialDetection
   );
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
   return (
     <>
       <div

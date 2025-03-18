@@ -1,5 +1,5 @@
 import { useRolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
-import { Col, Divider, Row, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -54,7 +54,6 @@ const ViewRoleSidelist = ({ current }: { current?: string }): JSX.Element => {
             </Typography.Paragraph>
           </Col>
         </Row>
-        <Divider className={classes.divider} />
       </SideListItem>
     </Link>
   ));

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
 import { Button, Col, Input, Row, Table } from 'antd';
@@ -76,7 +76,11 @@ const AddExistingCrimeGroup = ({
           {
             dataIndex: 'totalValue',
             key: 'totalValue',
-            render: (value) => `£${value || 0}`,
+            render: (value) =>
+              intl.formatNumber(value || 0, {
+                currency: 'GBP',
+                style: 'currency',
+              }),
             title: intl.formatMessage({
               defaultMessage: 'Lost Value',
             }),
@@ -84,7 +88,11 @@ const AddExistingCrimeGroup = ({
           {
             dataIndex: 'totalRecoveredValue',
             key: 'totalRecoveredValue',
-            render: (value) => `£${value || 0}`,
+            render: (value) =>
+              intl.formatNumber(value || 0, {
+                currency: 'GBP',
+                style: 'currency',
+              }),
             title: intl.formatMessage({
               defaultMessage: 'Recovered Value',
             }),

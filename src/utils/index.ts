@@ -270,10 +270,7 @@ export const typedLocalStorage = {
 export default Utils;
 export { default as calcAge } from './calc-age';
 export { default as calcDuration } from './calc-duration';
-export { default as getLastOffence } from './get-last-offence';
 export * from './get-offender-property-values';
-export { default as isAuthorised } from './is-authorised';
 export { default as formatDate } from './formatDate';
-export { default as getMentionContent } from './formatDate';
 export { default as shouldPrint } from './should-print';
 export * from './generate-text';

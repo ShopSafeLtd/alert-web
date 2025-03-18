@@ -163,7 +163,11 @@ const CrimeGroupTable = ({
         {
           dataIndex: 'totalValue',
           key: 'totalValue',
-          render: (value: number) => `£${value.toLocaleString() || 0}`,
+          render: (value: number) =>
+            intl.formatNumber(value || 0, {
+              currency: 'GBP',
+              style: 'currency',
+            }),
           title: <FormattedMessage defaultMessage="Total Value" />,
         },
         {

@@ -6,7 +6,7 @@ import { Typography } from 'antd';
 import { InvestigationStatus } from 'graphql/types';
 import moment from 'moment';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 export interface BusinessTableData {
@@ -320,9 +320,13 @@ export const IncidentColumns: ColumnsType<IncidentTableData> = [
     dataIndex: 'lostValue',
     key: 'lostValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: IncidentTableData, b: IncidentTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
@@ -333,9 +337,13 @@ export const IncidentColumns: ColumnsType<IncidentTableData> = [
     dataIndex: 'recoveredValue',
     key: 'recoveredValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: IncidentTableData, b: IncidentTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
@@ -402,9 +410,13 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
     dataIndex: 'lostValue',
     key: 'lostValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
@@ -415,9 +427,13 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
     dataIndex: 'recoveredValue',
     key: 'recoveredValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
@@ -509,9 +525,13 @@ export const InvestigationColumns: ColumnsType<InvestigationTableData> = [
     dataIndex: 'lostValue',
     key: 'lostValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
@@ -522,9 +542,13 @@ export const InvestigationColumns: ColumnsType<InvestigationTableData> = [
     dataIndex: 'recoveredValue',
     key: 'recoveredValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: InvestigationTableData, b: InvestigationTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
@@ -596,9 +620,13 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
       dataIndex: 'lostValue',
       key: 'lostValue',
       render: (text: string) => (
-        <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-          0
-        )}`}</Typography.Text>
+        <Typography.Text>
+          <FormattedNumber
+            currency={'GBP'}
+            style={'currency'}
+            value={Number.parseInt(text || '0', 10)}
+          />
+        </Typography.Text>
       ),
       sorter: (
         a: CrimeGroupPerformanceTableData,
@@ -612,9 +640,13 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
       dataIndex: 'recoveredValue',
       key: 'recoveredValue',
       render: (text: string) => (
-        <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-          0
-        )}`}</Typography.Text>
+        <Typography.Text>
+          <FormattedNumber
+            currency={'GBP'}
+            style={'currency'}
+            value={Number.parseInt(text || '0', 10)}
+          />
+        </Typography.Text>
       ),
       sorter: (
         a: CrimeGroupPerformanceTableData,
@@ -675,9 +707,13 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
     dataIndex: 'lostValue',
     key: 'lostValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
@@ -688,9 +724,13 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
     dataIndex: 'recoveredValue',
     key: 'recoveredValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
@@ -716,7 +756,9 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     dataIndex: 'highestValueLost',
     key: 'highestValueLost',
-    render: (text: number) => <Typography.Text>{`£${text}`}</Typography.Text>,
+    render: (text: number) => (
+      <FormattedNumber currency={'GBP'} style={'currency'} value={text || 0} />
+    ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.highestValueLost - b.highestValueLost,
     title: <FormattedMessage defaultMessage="Highest Value Lost" />,
@@ -725,9 +767,13 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
     dataIndex: 'avgLost',
     key: 'avgLost',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
@@ -771,9 +817,13 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
     dataIndex: 'lostValue',
     key: 'lostValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
@@ -784,9 +834,13 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
     dataIndex: 'recoveredValue',
     key: 'recoveredValue',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
@@ -806,9 +860,13 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
     dataIndex: 'avgLost',
     key: 'avgLost',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
@@ -900,7 +958,14 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
     dataIndex: 'totalValue',
     key: 'totalValue',
     render: (text: number) => (
-      <Typography.Text>{`£${text.toFixed(0)}`}</Typography.Text>
+      <Typography.Text>
+        {' '}
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={text || 0}
+        />
+      </Typography.Text>
     ),
     sorter: (a: InvestigationsTableData, b: InvestigationsTableData) =>
       a.totalValue - b.totalValue,
@@ -940,9 +1005,13 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
     dataIndex: 'value',
     key: 'value',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a, b) => a.value.localeCompare(b.value),
     title: <FormattedMessage defaultMessage="Value Lost" />,
@@ -951,9 +1020,13 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
     dataIndex: 'valueRec',
     key: 'valueRec',
     render: (text: string) => (
-      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
-        0
-      )}`}</Typography.Text>
+      <Typography.Text>
+        <FormattedNumber
+          currency={'GBP'}
+          style={'currency'}
+          value={Number.parseInt(text || '0', 10)}
+        />
+      </Typography.Text>
     ),
     sorter: (a, b) => a.valueRec.localeCompare(b.valueRec),
     title: <FormattedMessage defaultMessage="Value Recovered" />,

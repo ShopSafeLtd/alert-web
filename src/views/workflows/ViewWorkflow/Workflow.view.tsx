@@ -359,6 +359,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           >
                             <InputNumber
                               min={0}
+                              // TODO fix
                               prefix="£"
                               style={{ width: '100%' }}
                             />
@@ -396,6 +397,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           >
                             <InputNumber
                               min={0}
+                              // TODO fix
                               prefix="£"
                               style={{ width: '100%' }}
                             />

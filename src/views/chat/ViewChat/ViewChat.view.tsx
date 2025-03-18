@@ -4,6 +4,7 @@ import type { DeleteChatMutation } from 'graphql/chat/mutation/__generated__/del
 import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
 import type { UserChatsQuery } from 'graphql/userChat/queries/__generated__/user_chats.generated';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { faPenToSquare, faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -20,6 +21,7 @@ import {
 } from 'antd';
 import AddChat from 'components/form-components/chat/AddChat';
 import ViewMessage from 'components/viewChat/ViewMessage';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -29,7 +31,6 @@ const { Paragraph, Text, Title } = Typography;
 
 interface Props {
   addChat: boolean;
-  adminRights: boolean;
   chatId: string;
   data: UserChatsQuery | undefined;
   handleMarkAsRead: (value: string | undefined) => void;
@@ -53,7 +54,6 @@ const getContent = (content: string) =>
 
 const ViewOffender = ({
   addChat,
-  adminRights,
   chatId,
   data,
   handleMarkAsRead,
@@ -270,7 +270,13 @@ const ViewOffender = ({
                   })}
                 </Title>
               </Col>
-              {adminRights && (
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Write,
+                  model: PermissionModel.Chat,
+                }}
+                unauthorizedElement={<div />}
+              >
                 <Col>
                   <Button
                     danger
@@ -290,7 +296,7 @@ const ViewOffender = ({
                     })}
                   </Button>
                 </Col>
-              )}
+              </PermissionCheckWrapper>
             </Row>
             {list()}
           </div>

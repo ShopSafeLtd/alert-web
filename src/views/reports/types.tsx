@@ -9,6 +9,8 @@ export interface ExtendedLayout extends RGL.Layout {
 
 export type AllowedValue =
   | 'activitiesTable'
+  | 'activityGraph'
+  | 'activitySummary'
   | 'basicPoliceSummary'
   | 'businessContributionTable'
   | 'businessCrimeTypeGraph'
@@ -108,6 +110,46 @@ export const LayoutToReadable: {
       y: 0,
     },
     readable: 'Created Summary',
+    reportItemTypes: ['summary'],
+    reportViews: ['summary'],
+  },
+  {
+    allowDuplicates: false,
+    description: (
+      <FormattedMessage defaultMessage="Graph component showing open/closed activities in Alert." />
+    ),
+    i: 'activityGraph',
+    item: {
+      h: 4,
+      i: 'activityGraph',
+      minH: 4,
+      moved: false,
+      static: false,
+      w: 2,
+      x: 0,
+      y: 0,
+    },
+    readable: 'Activity Graph',
+    reportItemTypes: ['summary'],
+    reportViews: ['summary'],
+  },
+  {
+    allowDuplicates: false,
+    description: (
+      <FormattedMessage defaultMessage="Summary component showing open/closed activities in Alert." />
+    ),
+    i: 'activitySummary',
+    item: {
+      h: 4,
+      i: 'activitySummary',
+      minH: 4,
+      moved: false,
+      static: false,
+      w: 2,
+      x: 0,
+      y: 0,
+    },
+    readable: 'Activity Summary',
     reportItemTypes: ['summary'],
     reportViews: ['summary'],
   },

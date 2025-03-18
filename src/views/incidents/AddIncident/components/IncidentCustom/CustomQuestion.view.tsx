@@ -154,6 +154,16 @@ const CustomQuestions = ({ disabled, questions, radioAnswer }: Props) => {
       case AnswerType.Select: {
         return <StringSelect disabled={disabled} options={question.options} />;
       }
+      case AnswerType.SelectSingle: {
+        return (
+          <StringSelect
+            disabled={disabled}
+            options={question.options}
+            radioAnswer
+          />
+        );
+      }
+
       default: {
         return null;
       }
@@ -315,7 +325,8 @@ const CustomQuestions = ({ disabled, questions, radioAnswer }: Props) => {
                 <StringInputNumber disabled={disabled} />
               </Form.Item>
             )}
-            {question.answerType === AnswerType.Select && (
+            {(question.answerType === AnswerType.Select ||
+              question.answerType === AnswerType.SelectSingle) && (
               <Form.Item
                 label={question.label}
                 name={question.questionId}
@@ -332,7 +343,10 @@ const CustomQuestions = ({ disabled, questions, radioAnswer }: Props) => {
                 <StringSelect
                   disabled={disabled}
                   options={question.options}
-                  radioAnswer={radioAnswer}
+                  radioAnswer={
+                    radioAnswer ||
+                    question.answerType === AnswerType.SelectSingle
+                  }
                 />
               </Form.Item>
             )}

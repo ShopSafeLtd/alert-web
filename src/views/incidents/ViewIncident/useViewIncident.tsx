@@ -2,10 +2,11 @@ import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generat
 import type { LocationData } from 'types/DataType';
 
 import hasPermission from '#/utils/has-permission';
+import hasRolePermission from '#/utils/has-role-permission';
 import useCanView from '#/utils/in-scheme';
 import { useViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-location.generated';
-import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useMemo, useState } from 'react';
 import { useStoreState } from 'state';
 import {
@@ -21,6 +22,7 @@ interface Return {
   editAddress: boolean;
   editImages: boolean;
   editRights: boolean;
+  hasApprovePermission: boolean;
   hideIncident: boolean;
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
@@ -29,11 +31,16 @@ interface Return {
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
   userId: string;
-  userRole: Role;
 }
 
 const useViewIncident = (incidentId: string): Return => {
-  const role = useStoreState((state) => state.user.role);
+  const hasApprovePermission = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Approve,
+      model: PermissionModel.Incidents,
+    },
+  });
+
   const { id: schemeId, restrictIncidentAccess } = useStoreState(
     (state) => state.scheme
   );
@@ -132,7 +139,14 @@ const useViewIncident = (incidentId: string): Return => {
     editAddress,
     editImages,
     editRights,
-    hideIncident: role === Role.User && restrictIncidentAccess,
+    hasApprovePermission,
+    hideIncident:
+      hasRolePermission({
+        permission: {
+          method: PermissionMethod.Read,
+          model: PermissionModel.Incidents,
+        },
+      }) && restrictIncidentAccess,
     loading: (data === null || data === undefined) && loading,
     onEditAddress,
     saving,
@@ -140,7 +154,6 @@ const useViewIncident = (incidentId: string): Return => {
     toggleEditAddress,
     toggleEditImages,
     userId,
-    userRole: role,
   };
 };
 

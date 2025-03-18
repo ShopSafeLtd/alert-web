@@ -11,7 +11,6 @@ import { useIntl } from 'react-intl';
 import type { FormData } from './useEditOffenderFeed';
 
 interface Props {
-  adminRights: boolean;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
   data: EditOffenderQuery | undefined;
@@ -28,7 +27,6 @@ interface Props {
 }
 
 const EditOffender = ({
-  adminRights,
   customGalleries,
   customGalleriesLoading,
   data,
@@ -103,70 +101,68 @@ const EditOffender = ({
             saving={saving}
           />
 
-          {adminRights && (
-            <Row gutter={30}>
-              <Col span={12}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Offender Warnings',
-                  })}
-                  name="tags"
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'select any warning labels that are relevant to this offender or add your own.',
-                  })}
+          <Row gutter={30}>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Offender Warnings',
+                })}
+                name="tags"
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'select any warning labels that are relevant to this offender or add your own.',
+                })}
+              >
+                <Select
+                  disabled={saving}
+                  loading={tagsLoading}
+                  maxTagCount={2}
+                  mode="multiple"
+                  optionFilterProp="label"
                 >
-                  <Select
-                    disabled={saving}
-                    loading={tagsLoading}
-                    maxTagCount={2}
-                    mode="multiple"
-                    optionFilterProp="label"
-                  >
-                    {tags.map((tag) => (
-                      <Select.Option
-                        key={tag.value}
-                        label={tag.label}
-                        value={tag.value}
-                      >
-                        {tag.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Custom Galleries',
-                  })}
-                  name="customGalleries"
-                  tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'select any custom galleries that are relevant to this offender or add your own.',
-                  })}
+                  {tags.map((tag) => (
+                    <Select.Option
+                      key={tag.value}
+                      label={tag.label}
+                      value={tag.value}
+                    >
+                      {tag.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Custom Galleries',
+                })}
+                name="customGalleries"
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'select any custom galleries that are relevant to this offender or add your own.',
+                })}
+              >
+                <Select
+                  disabled={saving}
+                  loading={customGalleriesLoading}
+                  maxTagCount={2}
+                  mode="multiple"
+                  optionFilterProp="label"
                 >
-                  <Select
-                    disabled={saving}
-                    loading={customGalleriesLoading}
-                    maxTagCount={2}
-                    mode="multiple"
-                    optionFilterProp="label"
-                  >
-                    {customGalleries.map((el) => (
-                      <Select.Option
-                        key={el.value}
-                        label={el.label}
-                        value={el.value}
-                      >
-                        {el.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+                  {customGalleries.map((el) => (
+                    <Select.Option
+                      key={el.value}
+                      label={el.label}
+                      value={el.value}
+                    >
+                      {el.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
           {groups.length > 0 && (
             <Row>
               <Col span={24}>

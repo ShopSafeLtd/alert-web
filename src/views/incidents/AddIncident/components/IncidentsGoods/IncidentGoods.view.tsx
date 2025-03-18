@@ -256,6 +256,7 @@ const IncidentGoods = ({
                           <InputNumber
                             min={0}
                             precision={2}
+                            // TODO fix
                             prefix="£"
                             style={{ width: 150 }}
                           />
@@ -289,6 +290,7 @@ const IncidentGoods = ({
                             max={goods[index]?.value ?? undefined}
                             min={0}
                             precision={2}
+                            // TODO fix
                             prefix="£"
                             style={{ width: 150 }}
                           />

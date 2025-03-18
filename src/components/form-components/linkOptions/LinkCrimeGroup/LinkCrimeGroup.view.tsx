@@ -71,7 +71,12 @@ const LinkCrimeGroup = ({
           {
             dataIndex: 'totalValue',
             key: 'totalValue',
-            render: (value) => `£${value || 0}`,
+            render: (value) =>
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+              intl.formatNumber(value || 0, {
+                currency: 'GBP',
+                style: 'currency',
+              }),
             title: intl.formatMessage({
               defaultMessage: 'Lost Value',
             }),
@@ -79,7 +84,12 @@ const LinkCrimeGroup = ({
           {
             dataIndex: 'totalRecoveredValue',
             key: 'totalRecoveredValue',
-            render: (value) => `£${value || 0}`,
+            render: (value) =>
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+              intl.formatNumber(value || 0, {
+                currency: 'GBP',
+                style: 'currency',
+              }),
             title: intl.formatMessage({
               defaultMessage: 'Recovered Value',
             }),

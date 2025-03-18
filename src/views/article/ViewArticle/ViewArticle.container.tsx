@@ -1,25 +1,25 @@
+import ArticlesSideList from '#/components/Articles/ArticleSideList';
+import { Col, Row } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Col, Row } from 'antd';
-import ArticlesSideList from '#/components/Articles/ArticleSideList';
-import useViewArticle from './hooks/useViewArticle';
+
 import View from './ViewArticle.view';
+import useViewArticle from './hooks/useViewArticle';
 
 const ViewArticleContainer = () => {
   const id = useParams().id || '';
 
   const {
-    data,
-    loading,
-    lightboxElements,
-    openLightbox,
-    lightBoxOpen,
-    onDeleteArticle,
-    role,
-    editArticle,
     componentRef,
+    data,
+    editArticle,
     handlePrint,
     isPrinting,
+    lightBoxOpen,
+    lightboxElements,
+    loading,
+    onDeleteArticle,
+    openLightbox,
   } = useViewArticle({ id });
 
   return (
@@ -31,17 +31,16 @@ const ViewArticleContainer = () => {
 
         <Col flex={1} style={{ overflowY: 'scroll' }}>
           <View
-            handlePrint={handlePrint}
-            isPrinting={isPrinting}
             componentRef={componentRef}
             data={data}
-            loading={loading}
-            lightboxElements={lightboxElements}
-            openLightbox={openLightbox}
-            lightBoxOpen={lightBoxOpen}
-            onDeleteArticle={onDeleteArticle}
-            role={role}
             editArticle={editArticle}
+            handlePrint={handlePrint}
+            isPrinting={isPrinting}
+            lightBoxOpen={lightBoxOpen}
+            lightboxElements={lightboxElements}
+            loading={loading}
+            onDeleteArticle={onDeleteArticle}
+            openLightbox={openLightbox}
           />
         </Col>
       </Row>

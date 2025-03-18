@@ -2,6 +2,7 @@
 import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
 import type { OffenderData } from 'types/DataType';
 
+import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   faEye,
   faPenToSquare,
@@ -14,7 +15,6 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
 import {
   calcAge,
   getOffenderAge,
@@ -76,9 +76,7 @@ const OffenderTable = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    editRights;
+  const publicOffenderDOB = publicOffenderDob();
 
   return (
     <Table

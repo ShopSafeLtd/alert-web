@@ -1,6 +1,7 @@
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { Button, Card, Table } from 'antd';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
-import { Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -10,7 +11,6 @@ import { useStoreState } from '../../../../state';
 
 const Terms = (): JSX.Element => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const isAdmin = useStoreState((state) => state.user.role !== Role.User);
   const { data: SchemeTerms, loading: SchemeTermsLoading } =
     useCurrentSchemeTermsQuery({
       variables: {
@@ -24,9 +24,14 @@ const Terms = (): JSX.Element => {
 
   return (
     <div className="list-view">
-      {isAdmin &&
-        SchemeTerms?.scheme &&
-        !SchemeTerms.scheme.currentTerms?.id && (
+      {SchemeTerms?.scheme && !SchemeTerms.scheme.currentTerms?.id && (
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Read,
+            model: PermissionModel.Terms,
+          }}
+          unauthorizedElement={<div />}
+        >
           <Button
             onClick={() => navigate('/app/scheme-settings/terms/scheme/create')}
             style={{ marginBottom: 10 }}
@@ -34,7 +39,8 @@ const Terms = (): JSX.Element => {
           >
             <FormattedMessage defaultMessage="Create Terms and Conditions" />
           </Button>
-        )}
+        </PermissionCheckWrapper>
+      )}
       <Card>
         <Table
           columns={[

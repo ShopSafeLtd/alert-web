@@ -580,6 +580,23 @@ export type ActivityPerformance = {
   totalQuestions: Scalars['Int'];
 };
 
+export type ActivityReportsWhere = {
+  completed?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<DateRangeInput>;
+  groupIds: Array<Scalars['String']>;
+  roles?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
+export type ActivitySummary = {
+  __typename?: 'ActivitySummary';
+  completed: Scalars['Int'];
+  overdue: Scalars['Int'];
+  percentComplete: Scalars['String'];
+  total: Scalars['Int'];
+};
+
 export type ActivityTableWhereInput = {
   brandsIds?: InputMaybe<Array<Scalars['String']>>;
   businessesIds?: InputMaybe<Array<Scalars['String']>>;
@@ -755,6 +772,55 @@ export enum Age {
   Unknown = 'UNKNOWN'
 }
 
+export enum AiImpactAssessmentCategory {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiImpactAssessmentFinancialImpact {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiImpactAssessmentSecurityResourceImpact {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiRecommendedActionsPriorityLevel {
+  Elevated = 'ELEVATED',
+  High = 'HIGH',
+  Standard = 'STANDARD'
+}
+
+export enum AiRiskAssessmentSafetyRisk {
+  High = 'HIGH',
+  Low = 'LOW',
+  Moderate = 'MODERATE'
+}
+
+export enum AiRiskAssessmentThreatLevel {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiRiskTolerance {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiSophisticationLevel {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
 export type AiSuggestionWhereInput = {
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;
@@ -873,6 +939,7 @@ export enum AnswerType {
   Date = 'DATE',
   Number = 'NUMBER',
   Select = 'SELECT',
+  SelectSingle = 'SELECT_SINGLE',
   String = 'STRING',
   Time = 'TIME'
 }
@@ -7883,6 +7950,8 @@ export enum IncidentFormField {
   Involved = 'INVOLVED',
   Offenders = 'OFFENDERS',
   Police = 'POLICE',
+  PoliceReport = 'POLICE_REPORT',
+  PoliceStatement = 'POLICE_STATEMENT',
   Types = 'TYPES',
   Vehicles = 'VEHICLES',
   Victims = 'VICTIMS',
@@ -10602,7 +10671,6 @@ export type Mutation = {
   enableSchemeRekognition: RekCollection;
   exportInvestigationZip: Scalars['String'];
   forcedPasswordSet?: Maybe<Scalars['String']>;
-  generateDemoData: SystemTask;
   generateFeedItems: SystemTask;
   generateStatementBody: GeneratedStatementBody;
   importStockItemCsv: Scalars['Boolean'];
@@ -13986,6 +14054,8 @@ export type Query = {
   actions: Array<Action>;
   activeChecklist: ActiveChecklist;
   activeChecklists: QueryActiveChecklistsConnection;
+  activityGraph: Array<Graph>;
+  activitySummary: ActivitySummary;
   activityTableReport: ListActivityPerformance;
   address: Address;
   addresses: Array<Address>;
@@ -14201,6 +14271,16 @@ export type QueryActiveChecklistsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActiveChecklistWhereInput>;
+};
+
+
+export type QueryActivityGraphArgs = {
+  where: ActivityReportsWhere;
+};
+
+
+export type QueryActivitySummaryArgs = {
+  where: ActivityReportsWhere;
 };
 
 
@@ -15990,11 +16070,6 @@ export type QuestionListRelationFilter = {
   some?: InputMaybe<QuestionWhereInput>;
 };
 
-export enum QuestionMode {
-  Multiple = 'MULTIPLE',
-  Single = 'SINGLE'
-}
-
 export enum QuestionModel {
   Tag = 'TAG',
   Task = 'TASK'
@@ -17098,6 +17173,7 @@ export type Scheme = {
   offenders: Array<Offender>;
   offendersCreated: Scalars['Int'];
   oneSelectedIncidentTypeOnly: Scalars['Boolean'];
+  policeReporting: Scalars['Boolean'];
   questionGroups: Array<QuestionGroup>;
   questions: Array<Question>;
   recycledItems: Array<RecycledItem>;
@@ -17111,6 +17187,7 @@ export type Scheme = {
   schemeTags: Array<Tag>;
   sharingFrom: Array<SharingConfig>;
   sharingTo: Array<SharingConfig>;
+  skipLocationToAddress: Scalars['Boolean'];
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
   tagOrders: Array<TagOrder>;
@@ -19916,6 +19993,8 @@ export type Todo = {
   __typename?: 'Todo';
   answers?: Maybe<Array<Answer>>;
   assignedUsers: Array<User>;
+  authorised?: Maybe<Scalars['Boolean']>;
+  authorisedUsers?: Maybe<Array<User>>;
   business?: Maybe<Business>;
   chatId?: Maybe<Scalars['String']>;
   completed?: Maybe<Scalars['Boolean']>;
@@ -20126,6 +20205,7 @@ export enum TodoType {
   OffenderApprove = 'OFFENDER_APPROVE',
   OffenderCompare = 'OFFENDER_COMPARE',
   OffenderUpdate = 'OFFENDER_UPDATE',
+  ShoeMatch = 'SHOE_MATCH',
   VehicleUpdate = 'VEHICLE_UPDATE'
 }
 

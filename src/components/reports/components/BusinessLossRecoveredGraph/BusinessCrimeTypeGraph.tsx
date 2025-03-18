@@ -176,12 +176,18 @@ const BusinessLossRecoveredGraph = ({
             {
               field: 'value',
               valueFormatter: ({ value }: { value: number }) =>
-                `£${value.toFixed(2)}`,
+                intl.formatNumber(value || 0, {
+                  currency: 'GBP',
+                  style: 'currency',
+                }),
             },
             {
               field: 'loss',
               valueFormatter: ({ value }: { value: number }) =>
-                `£${value.toFixed(2)}`,
+                intl.formatNumber(value || 0, {
+                  currency: 'GBP',
+                  style: 'currency',
+                }),
             },
           ],
           rowData: data?.businessLossRecoveredGraph.map((item) => ({

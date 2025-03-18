@@ -319,7 +319,13 @@ const Profiles = ({
                       {
                         dataIndex: 'totalValue',
                         key: 'totalValue',
-                        render: (value) => `£${value || 0}`,
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        render: (value) =>
+                          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                          intl.formatNumber(value || 0, {
+                            currency: 'GBP',
+                            style: 'currency',
+                          }),
                         title: intl.formatMessage({
                           defaultMessage: 'Lost Value',
                         }),
@@ -327,7 +333,12 @@ const Profiles = ({
                       {
                         dataIndex: 'totalRecoveredValue',
                         key: 'totalRecoveredValue',
-                        render: (value) => `£${value || 0}`,
+                        render: (value) =>
+                          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                          intl.formatNumber(value || 0, {
+                            currency: 'GBP',
+                            style: 'currency',
+                          }),
                         title: intl.formatMessage({
                           defaultMessage: 'Recovered Value',
                         }),

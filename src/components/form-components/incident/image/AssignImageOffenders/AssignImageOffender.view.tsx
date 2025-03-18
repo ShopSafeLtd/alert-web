@@ -1,6 +1,7 @@
 import type { UploadFile } from 'antd/lib/upload/interface';
 import type { OffenderData } from 'types/DataType';
 
+import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   Button,
   Checkbox,
@@ -12,10 +13,8 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Role } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import {
   getOffenderAge,
   getOffenderBuild,
@@ -98,10 +97,7 @@ const AssignImageOffender = ({
   toggleOffender,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
   return (
     <Modal
       bodyStyle={{ padding: 0 }}

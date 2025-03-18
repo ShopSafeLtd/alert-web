@@ -1,140 +1,152 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import React, { useState, useEffect, useRef } from 'react';
+import type { Theme } from 'configs/ThemeConfig';
+import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
+import type { OffenderData } from 'types/DataType';
+
+import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Skeleton, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
+import { Link } from 'react-router-dom';
 import {
   getOffenderAge,
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { FormattedMessage, useIntl } from 'react-intl';
-import type { OffenderData } from 'types/DataType';
-import type { Theme } from 'configs/ThemeConfig';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/pro-light-svg-icons';
-import type { Age, Build, Gender, ImagePosition, Race } from 'graphql/types';
-
 const useStyles = createUseStyles((theme: Theme) => ({
-  offenderCard: {
-    border: `1px solid ${theme.borderColor}`,
-    borderRadius: 10,
-    cursor: 'pointer',
-    // backgroundColor: theme.imageBackgroundColor,
-    position: 'relative',
-    width: '100%',
-    height: 120,
-  },
-  offenderOverlayContainer: {
-    position: 'fixed',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    zIndex: 1000,
-  },
-  offenderHover: {
-    // backgroundColor: theme.imageBackgroundColor,
-    backgroundColor: theme.componentBackground,
-    borderColor: theme.borderColor,
-    borderStyle: 'solid',
+  actionRow: {
+    bottom: 10,
     position: 'absolute',
-    zIndex: 10,
-    borderRadius: 10,
-    transition: 'all .3s ease',
-    filter: `drop-shadow(0px 0px 5px ${theme.borderColor})`,
-    overflow: 'hidden',
-    cursor: 'default',
-    width: 500,
+    right: 5,
   },
-  image: {
-    height: 120,
-    width: '100%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    opacity: 0.8,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-    overflow: 'hidden',
-  },
-  imageSkeleton: {
-    height: '120px !important',
-    width: '100% !important',
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-    '&.ant-skeleton-element .ant-skeleton-image': {
-      height: 120,
-      width: 120,
-      '& .ant-skeleton-image-svg': {
-        width: 35,
-      },
-    },
+  hoverFadeSection: {
+    overflow: 'none',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 2,
+    transition: 'all 1.4s ease',
   },
   hoverImage: {
-    height: 180,
-    width: '100%',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    opacity: 0.8,
-    borderTopLeftRadius: 10,
-    borderBottomRightRadius: 5,
     borderBottom: `1px solid ${theme.borderColor}`,
+    borderBottomRightRadius: 5,
     borderRight: `1px solid ${theme.borderColor}`,
+    borderTopLeftRadius: 10,
+    height: 180,
+    opacity: 0.8,
     overflow: 'hidden',
+    width: '100%',
   },
   hoverImageSkeleton: {
-    height: '100% !important',
-    width: '100% !important',
-    borderTopLeftRadius: 10,
-    borderBottomRightRadius: 5,
     '&.ant-skeleton-element .ant-skeleton-image': {
-      height: 120,
-      width: 120,
       '& .ant-skeleton-image-svg': {
         width: 35,
       },
+      height: 120,
+      width: 120,
     },
+    borderBottomRightRadius: 5,
+    borderTopLeftRadius: 10,
+    height: '100% !important',
+    width: '100% !important',
   },
   hoverSection: {
     height: '48%',
     marginBottom: 15,
   },
-  hoverFadeSection: {
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 2,
-    transition: 'all 1.4s ease',
-    overflow: 'none',
+  image: {
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    height: 120,
+    opacity: 0.8,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  imageSkeleton: {
+    '&.ant-skeleton-element .ant-skeleton-image': {
+      '& .ant-skeleton-image-svg': {
+        width: 35,
+      },
+      height: 120,
+      width: 120,
+    },
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    height: '120px !important',
+    width: '100% !important',
   },
   noWrap: { whiteSpace: 'nowrap' },
-  actionRow: {
+  offenderCard: {
+    border: `1px solid ${theme.borderColor}`,
+    borderRadius: 10,
+    cursor: 'pointer',
+    height: 120,
+    // backgroundColor: theme.imageBackgroundColor,
+    position: 'relative',
+    width: '100%',
+  },
+  offenderHover: {
+    // backgroundColor: theme.imageBackgroundColor,
+    backgroundColor: theme.componentBackground,
+    borderColor: theme.borderColor,
+    borderRadius: 10,
+    borderStyle: 'solid',
+    cursor: 'default',
+    filter: `drop-shadow(0px 0px 5px ${theme.borderColor})`,
+    overflow: 'hidden',
     position: 'absolute',
-    bottom: 10,
-    right: 5,
+    transition: 'all .3s ease',
+    width: 500,
+    zIndex: 10,
+  },
+  offenderOverlayContainer: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    bottom: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    left: 0,
+    position: 'fixed',
+    right: 0,
+    top: 0,
+    zIndex: 1000,
   },
 }));
 
 interface Offender {
-  id: string;
-  reference?: number | null;
-  name?: string | null;
   age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
+  alias?: string[];
   build?: Build | null;
   dateOfBirth?: Date | null;
-  alias?: string[];
-  totalIncidents: number;
-  totalValue: number;
+  gender?: Gender | null;
+  id: string;
+  images?:
+    | {
+        id: string;
+        optimised?: null | string | undefined;
+        position?: ImagePosition;
+        rotation?: number;
+      }[]
+    | null
+    | undefined;
+  knownFor?: string[];
+  latestIncident?: {
+    date: Date;
+    id: string;
+  } | null;
+  name?: null | string;
+  race?: Race | null;
+  reference?: null | number;
   targetedBusinesses?:
     | {
         id: string;
@@ -142,35 +154,23 @@ interface Offender {
       }[]
     | null;
   targetedGoods?: string[];
-  knownFor?: string[];
-  latestIncident?: {
-    id: string;
-    date: Date;
-  } | null;
-  images?:
-    | {
-        id: string;
-        optimised?: string | null | undefined;
-        position?: ImagePosition;
-        rotation?: number;
-      }[]
-    | null
-    | undefined;
+  totalIncidents: number;
+  totalValue: number;
 }
 
 interface Position {
-  width: number;
   height: number;
+  width: number;
   x: number;
   y: number;
 }
 
 interface Props {
-  offenders?: Offender[];
-  setEditOffenderData?: (value: OffenderData | null) => void;
-  onDeleteOffender?: (id: string) => void;
-  editRights?: boolean;
   deleteRights?: boolean;
+  editRights?: boolean;
+  offenders?: Offender[];
+  onDeleteOffender?: (id: string) => void;
+  setEditOffenderData?: (value: OffenderData | null) => void;
 }
 
 interface OffenderCardProps {
@@ -188,37 +188,37 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
     const values = ref.current?.getBoundingClientRect();
     if (values)
       onOpenOffender(offender, {
-        width: values.width,
         height: values.height,
+        width: values.width,
         x: values.x,
         y: values.y,
       });
   };
 
   return (
-    <Row ref={ref} className={classes.offenderCard} onClick={onOpen}>
-      <Row wrap={false} style={{ width: '100%' }}>
+    <Row className={classes.offenderCard} onClick={onOpen} ref={ref}>
+      <Row style={{ width: '100%' }} wrap={false}>
         <Col span={8}>
           {offender.images && offender.images?.length > 0 ? (
             <div className={classes.image}>
               <WatermarkImage
-                url={offender.images[0].optimised}
                 position={offender.images[0].position}
+                url={offender.images[0].optimised}
               />
             </div>
           ) : (
             <Skeleton.Image className={classes.imageSkeleton} />
           )}
         </Col>
-        <Col style={{ padding: 10 }} span={16}>
+        <Col span={16} style={{ padding: 10 }}>
           <Row>
             <Typography.Text>{offender.name}</Typography.Text>
           </Row>
-          <Row gutter={8} wrap={false} style={{ width: '100%', marginTop: 2 }}>
+          <Row gutter={8} style={{ marginTop: 2, width: '100%' }} wrap={false}>
             <Col>
               <Typography.Text
-                type="secondary"
                 style={{ whiteSpace: 'nowrap' }}
+                type="secondary"
               >
                 {intl.formatMessage({
                   defaultMessage: 'ID:',
@@ -230,9 +230,9 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
             {offender.alias && offender.alias.length > 0 && (
               <Col flex={1}>
                 <Typography.Text
-                  type="secondary"
                   ellipsis
                   style={{ width: '100%' }}
+                  type="secondary"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Alias:',
@@ -260,9 +260,10 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
                 {intl.formatMessage({
                   defaultMessage: 'Loss:',
                 })}
-                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                {'  £'}
-                {offender.totalValue.toLocaleString()}
+                {intl.formatNumber(offender.totalValue || 0, {
+                  currency: 'GBP',
+                  style: 'currency',
+                })}
               </Typography.Text>
             </Col>
           </Row>
@@ -291,25 +292,25 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
 };
 
 interface OffenderOverlayProps {
+  deleteRights?: boolean;
+  editRights?: boolean;
   offender: Offender | null;
-  open: boolean;
   onClose: () => void;
+  onDeleteOffender?: (id: string) => void;
+  open: boolean;
   position: Position | null;
   setEditOffenderData?: (value: OffenderData | null) => void;
-  onDeleteOffender?: (id: string) => void;
-  editRights?: boolean;
-  deleteRights?: boolean;
 }
 
 const OffenderOverlay = ({
-  offender,
-  open,
-  onClose,
-  position,
-  onDeleteOffender,
-  setEditOffenderData,
   deleteRights,
   editRights,
+  offender,
+  onClose,
+  onDeleteOffender,
+  open,
+  position,
+  setEditOffenderData,
 }: OffenderOverlayProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const classes = useStyles();
@@ -324,31 +325,31 @@ const OffenderOverlay = ({
 
       if (overlayEdge > boundingBox.width) {
         setPosition({
+          height: 0,
           width: 0,
           x: position.x - (500 - position.width),
           y: position.y,
-          height: 0,
         });
       } else {
         setPosition({
+          height: 0,
           width: 0,
           x: position.x,
           y: position.y,
-          height: 0,
         });
       }
     }
   }, [position]);
 
   return open && offender ? (
-    <div ref={ref} className={classes.offenderOverlayContainer}>
+    <div className={classes.offenderOverlayContainer} ref={ref}>
       <div
         className={classes.offenderHover}
         onMouseLeave={onClose}
         style={{
+          left: overlayPosition?.x,
           position: 'absolute',
           top: overlayPosition?.y,
-          left: overlayPosition?.x,
         }}
       >
         <Row className={classes.hoverSection} wrap={false}>
@@ -356,8 +357,8 @@ const OffenderOverlay = ({
             {offender.images && offender.images.length > 0 ? (
               <div className={classes.hoverImage}>
                 <WatermarkImage
-                  url={offender.images[0].optimised}
                   position={offender.images[0].position}
+                  url={offender.images[0].optimised}
                 />
               </div>
             ) : (
@@ -373,8 +374,8 @@ const OffenderOverlay = ({
                 <Row gutter={8} wrap={false}>
                   <Col>
                     <Typography.Text
-                      type="secondary"
                       className={classes.noWrap}
+                      type="secondary"
                     >
                       {intl.formatMessage({
                         defaultMessage: 'ID:',
@@ -393,8 +394,8 @@ const OffenderOverlay = ({
                   <Row gutter={8} wrap={false}>
                     <Col>
                       <Typography.Text
-                        type="secondary"
                         className={classes.noWrap}
+                        type="secondary"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Alias:',
@@ -412,7 +413,7 @@ const OffenderOverlay = ({
             </Row>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Gender:',
                   })}
@@ -426,7 +427,7 @@ const OffenderOverlay = ({
             </Row>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Ethnicity:',
                   })}
@@ -440,7 +441,7 @@ const OffenderOverlay = ({
             </Row>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Age:',
                   })}
@@ -455,14 +456,14 @@ const OffenderOverlay = ({
           </Col>
         </Row>
         <Row
-          gutter={16}
           className={classes.hoverFadeSection}
+          gutter={16}
           style={{ opacity: open ? 1 : 0 }}
         >
           <Col>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Incidents:',
                   })}
@@ -478,7 +479,7 @@ const OffenderOverlay = ({
           <Col>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Loss:',
                   })}
@@ -486,9 +487,10 @@ const OffenderOverlay = ({
               </Col>
               <Col>
                 <Typography.Text ellipsis>
-                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                  {'  £'}
-                  {offender.totalValue.toLocaleString()}
+                  {intl.formatNumber(offender.totalValue || 0, {
+                    currency: 'GBP',
+                    style: 'currency',
+                  })}
                 </Typography.Text>
               </Col>
             </Row>
@@ -496,7 +498,7 @@ const OffenderOverlay = ({
           <Col>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Last incident:',
                   })}
@@ -522,7 +524,7 @@ const OffenderOverlay = ({
           <Col>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Known for:',
                   })}
@@ -547,7 +549,7 @@ const OffenderOverlay = ({
           <Col>
             <Row gutter={8} wrap={false}>
               <Col>
-                <Typography.Text type="secondary" className={classes.noWrap}>
+                <Typography.Text className={classes.noWrap} type="secondary">
                   {intl.formatMessage({
                     defaultMessage: 'Businesses:',
                   })}
@@ -569,7 +571,7 @@ const OffenderOverlay = ({
         >
           <Row gutter={8} wrap={false}>
             <Col>
-              <Typography.Text type="secondary" className={classes.noWrap}>
+              <Typography.Text className={classes.noWrap} type="secondary">
                 {intl.formatMessage({
                   defaultMessage: 'Goods:',
                 })}
@@ -586,7 +588,7 @@ const OffenderOverlay = ({
             </Col>
           </Row>
         </Row>
-        <Row justify="center" style={{ marginTop: 10, marginBottom: 10 }}>
+        <Row justify="center" style={{ marginBottom: 10, marginTop: 10 }}>
           <Col>
             <Link to={`/app/offenders/view/${offender.id}`}>
               <Button size="small" type="text">
@@ -631,11 +633,11 @@ const OffenderOverlay = ({
 };
 
 const OffenderGrid = ({
-  offenders,
-  setEditOffenderData,
-  onDeleteOffender,
-  editRights,
   deleteRights,
+  editRights,
+  offenders,
+  onDeleteOffender,
+  setEditOffenderData,
 }: Props): JSX.Element => {
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -710,16 +712,16 @@ const OffenderGrid = ({
   return (
     <div>
       <OffenderOverlay
+        deleteRights={deleteRights}
+        editRights={editRights}
         offender={offender}
         onClose={onCloseOffender}
+        onDeleteOffender={onDeleteOffender}
         open={overlayOpen}
         position={position}
-        onDeleteOffender={onDeleteOffender}
         setEditOffenderData={setEditOffenderData}
-        editRights={editRights}
-        deleteRights={deleteRights}
       />
-      <Row ref={rowRef} gutter={[16, 16]}>
+      <Row gutter={[16, 16]} ref={rowRef}>
         {offendersData.map((item) => (
           <Col key={item.id} span={columns}>
             <OffenderCard offender={item} onOpenOffender={onOpenOffender} />

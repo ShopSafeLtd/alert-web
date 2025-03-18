@@ -3,7 +3,6 @@ import type {
   SetDemPayload,
   SetFilterDefaultGroup,
   SetUserNotifications,
-  SetUserRole,
   SetUserTodos,
 } from '#/state/user-model';
 import type { ActionCreator } from 'easy-peasy';
@@ -19,10 +18,8 @@ interface HandleSuccessArgs extends SetUserPayload {
   currentScheme?: string;
   defaultScheme?: string;
   setDem: ActionCreator<SetDemPayload>;
-
   setFilterDefaultGroup: ActionCreator<SetFilterDefaultGroup>;
   setNotifications: ActionCreator<SetUserNotifications>;
-  setRole: ActionCreator<SetUserRole>;
   setScheme: ActionCreator<SetSchemePayload>;
   setTodos: ActionCreator<SetUserTodos>;
   setUser: ActionCreator<SetUserPayload>;
@@ -49,7 +46,6 @@ export const handleSuccess = async ({
   setDem,
   setFilterDefaultGroup,
   setNotifications,
-  setRole,
   setScheme,
   setTodos,
   setUser,
@@ -65,7 +61,6 @@ HandleSuccessArgs) => {
       schemes[0];
     const schemeDetails = defScheme?.scheme;
     window.localStorage.setItem('currentScheme', schemeDetails?.id || '');
-    setRole({ role: defScheme?.role });
     setScheme({
       activityAssignToUser: schemeDetails?.activityAssignToUser,
       autoApproveIncidents: schemeDetails?.autoApproveIncidents,
@@ -115,7 +110,6 @@ HandleSuccessArgs) => {
     );
 
     if (schemeDetails) {
-      setRole({ role: schemeDetails.role });
       setScheme({
         activityAssignToUser: schemeDetails.scheme.activityAssignToUser,
         autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,

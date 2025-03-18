@@ -3,12 +3,14 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import type { CustomGalleryData, Image, VehicleCardData } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Drawer, Form, Input, Row, Select, Skeleton } from 'antd';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import UploadImage from 'components/images/UploadImage.view';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -18,7 +20,6 @@ interface Props {
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
   addCustomGallery: boolean;
-  adminRights: boolean;
   beforeUpload: (value: RcFile) => void;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
@@ -46,7 +47,6 @@ const EditVehicle = ({
   CrimeGroupsData,
   CrimeGroupsLoading,
   addCustomGallery,
-  adminRights,
   beforeUpload,
   customGalleries,
   customGalleriesLoading,
@@ -174,7 +174,13 @@ const EditVehicle = ({
               </Form.Item>
             </Col>
           )}
-          {adminRights && (
+          <PermissionCheckWrapper
+            permission={{
+              method: PermissionMethod.Edit,
+              model: PermissionModel.CrimeGroups,
+            }}
+            unauthorizedElement={<div />}
+          >
             <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
@@ -205,7 +211,7 @@ const EditVehicle = ({
                 />
               </Form.Item>
             </Col>
-          )}
+          </PermissionCheckWrapper>
         </Row>
 
         {showGroups && (

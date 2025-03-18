@@ -1,26 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import { Button, Card, Col, Popconfirm, Row, Tooltip, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationCircle, faTrash } from '@fortawesome/pro-light-svg-icons';
-import { useStoreState } from 'state';
-import { Role } from 'graphql/types';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import publicOffenderDob from '#/utils/public-offender-dob';
+import { faExclamationCircle, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Popconfirm, Row, Tooltip, Typography } from 'antd';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import React, { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import { useIntl } from 'react-intl';
+
 import type { Face } from './LightBox.types';
+
 import WatermarkOverlay from '../WatermarkOverlay.view';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  wrapper: {
-    marginBottom: 20,
-  },
   offender: {
     display: 'flex',
   },
@@ -28,12 +28,12 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: 10,
   },
   offenderImage: {
-    height: 110,
-    width: 120,
     backgroundColor: theme.imageBackgroundColor,
-    borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    height: 110,
     overflow: 'hidden',
+    width: 120,
   },
   offenderName: {
     fontSize: 16,
@@ -41,14 +41,17 @@ const useStyles = createUseStyles((theme: Theme) => ({
   offenderText: {
     marginBottom: '0px !important',
   },
+  wrapper: {
+    marginBottom: 20,
+  },
 }));
 
 interface Props {
   face: Face;
   faceIndex: number;
-  imageUrl?: string | null;
-  toggleLinkOffender: (faceId: string | null) => void;
-  toggleViewMatches: (offenderId: string | null) => void;
+  imageUrl?: null | string;
+  toggleLinkOffender: (faceId: null | string) => void;
+  toggleViewMatches: (offenderId: null | string) => void;
 }
 
 const LightBoxFace = ({
@@ -62,18 +65,10 @@ const LightBoxFace = ({
   const intl = useIntl();
   const classes = useStyles();
 
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
 
-  const [isAdmin, setIsAdmin] = useState(false);
   const [height, setHeight] = useState(500);
   const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    setIsAdmin(role !== Role.User);
-  }, [role]);
 
   useEffect(() => {
     const context = canvasRef.current?.getContext('2d');
@@ -129,14 +124,14 @@ const LightBoxFace = ({
         <div className={classes.offender}>
           <div className={classes.offenderImage}>
             <WatermarkOverlay>
-              <canvas ref={canvasRef} width={width} height={height} />
+              <canvas height={height} ref={canvasRef} width={width} />
             </WatermarkOverlay>
           </div>
           <div className={classes.offenderContainer}>
             <Typography.Text
+              className={classes.offenderName}
               key={face.id}
               strong
-              className={classes.offenderName}
             >
               {face.offender
                 ? face.offender?.name
@@ -149,54 +144,68 @@ const LightBoxFace = ({
                     }
                   )}
             </Typography.Text>
-            {!face.offender && isAdmin && (
-              <Row gutter={8} wrap={false}>
-                <Col>
-                  <Button
-                    onClick={() => toggleLinkOffender(face.id)}
-                    size="small"
-                    style={{ marginTop: 12 }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Link Offender',
-                    })}
-                  </Button>
-                </Col>
-                <Col>
-                  <Tooltip
-                    title={intl.formatMessage({
-                      defaultMessage: 'Delete Face',
-                    })}
-                    placement="top"
-                  >
-                    <Popconfirm
-                      overlayInnerStyle={{ padding: 10 }}
+            {!face.offender && (
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Edit,
+                  model: PermissionModel.Offenders,
+                }}
+              >
+                <Row gutter={8} wrap={false}>
+                  <Col>
+                    <Button
+                      onClick={() => toggleLinkOffender(face.id)}
+                      size="small"
+                      style={{ marginTop: 12 }}
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Link Offender',
+                      })}
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Tooltip
+                      placement="top"
                       title={intl.formatMessage({
-                        defaultMessage:
-                          '"Are you sure you want to delete this face?"',
+                        defaultMessage: 'Delete Face',
                       })}
                     >
-                      <Button size="small" style={{ marginTop: 12 }}>
-                        <FontAwesomeIcon icon={faTrash} />
-                      </Button>
-                    </Popconfirm>
-                  </Tooltip>
-                </Col>
-              </Row>
+                      <Popconfirm
+                        overlayInnerStyle={{ padding: 10 }}
+                        title={intl.formatMessage({
+                          defaultMessage:
+                            '"Are you sure you want to delete this face?"',
+                        })}
+                      >
+                        <Button size="small" style={{ marginTop: 12 }}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                      </Popconfirm>
+                    </Tooltip>
+                  </Col>
+                </Row>
+              </PermissionCheckWrapper>
             )}
-            {!face.offender && !isAdmin && (
-              <Row gutter={8} wrap={false} style={{ marginTop: 10 }}>
-                <Col>
-                  <FontAwesomeIcon size="lg" icon={faExclamationCircle} />
-                </Col>
-                <Col>
-                  <Typography.Text>
-                    {intl.formatMessage({
-                      defaultMessage: 'No Offender linked to this face',
-                    })}
-                  </Typography.Text>
-                </Col>
-              </Row>
+            {!face.offender && (
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Edit,
+                  model: PermissionModel.Offenders,
+                }}
+              >
+                <Row gutter={8} style={{ marginTop: 10 }} wrap={false}>
+                  <Col>
+                    <FontAwesomeIcon icon={faExclamationCircle} size="lg" />
+                  </Col>
+                  <Col>
+                    <Typography.Text>
+                      {intl.formatMessage({
+                        defaultMessage: 'No Offender linked to this face',
+                      })}
+                    </Typography.Text>
+                  </Col>
+                </Row>
+              </PermissionCheckWrapper>
             )}
             {face.offender && (
               <>
@@ -270,9 +279,9 @@ const LightBoxFace = ({
         {face.rekMatchedSearches.length > 0 && (
           <Col>
             <Button
-              size="small"
               danger
               onClick={() => toggleViewMatches(face.offender?.id || null)}
+              size="small"
             >
               {face.rekMatchedSearches.length > 0 &&
                 intl.formatMessage(
