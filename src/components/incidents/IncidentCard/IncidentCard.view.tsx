@@ -2,6 +2,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import type { IncidentCardFragment } from 'graphql/fragments/__generated__/incident-card.generated';
 import type { EditFeedImage } from 'types/DataType';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faClock,
   faEdit,
@@ -37,7 +38,11 @@ import AddInvestigation from 'components/form-components/Investigation/AddInvest
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { IncidentPriority } from 'graphql/types';
+import {
+  IncidentPriority,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/types';
 import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -49,14 +54,11 @@ const { confirm } = Modal;
 
 interface Props {
   addInvestigation: boolean;
-  approvalRights: boolean;
   compactView: boolean;
-  deleteRights: boolean;
   editImage: boolean;
   editImageId: string;
   editIncidentFeed: boolean;
   incident: IncidentCardFragment;
-  menuRights: boolean;
   onDelete: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
   openLightbox: (elements: { src: string }[], index: number) => void;
@@ -68,14 +70,11 @@ interface Props {
 
 const IncidentCard = ({
   addInvestigation,
-  approvalRights,
   compactView,
-  deleteRights,
   editImage,
   editImageId,
   editIncidentFeed,
   incident,
-  menuRights,
   onDelete,
   onEditImage,
   openLightbox,
@@ -95,6 +94,78 @@ const IncidentCard = ({
       return '6px solid #ffc542';
     return undefined;
   };
+
+  const menuItems = [
+    {
+      icon: <FontAwesomeIcon icon={faEdit} />,
+      key: 0,
+      label: intl.formatMessage({
+        defaultMessage: 'Edit Incident',
+      }),
+      onClick: () => toggleEditIncidentFeed(),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Incidents,
+      },
+    },
+    incident.totalImages && incident.totalImages > 0
+      ? {
+          icon: <FontAwesomeIcon icon={faImage} />,
+          key: 1,
+          label: intl.formatMessage({
+            defaultMessage: 'Edit Image',
+          }),
+          onClick: () => toggleEditImage(),
+          permission: {
+            method: PermissionMethod.Edit,
+            model: PermissionModel.Incidents,
+          },
+        }
+      : null,
+    {
+      icon: <FontAwesomeIcon icon={faTrash} />,
+      key: 2,
+      label: intl.formatMessage({
+        defaultMessage: 'Delete Incident',
+      }),
+      onClick: () =>
+        confirm({
+          content: intl.formatMessage({
+            defaultMessage:
+              'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+          }),
+          okText: intl.formatMessage({
+            defaultMessage: 'Delete',
+          }),
+          onOk: () => onDelete(incident?.id || ''),
+          title: intl.formatMessage({
+            defaultMessage: 'Are you sure?',
+          }),
+        }),
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Incidents,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faPlus} />,
+      key: 3,
+      label: intl.formatMessage({
+        defaultMessage: 'Add Investigation',
+      }),
+      onClick: () => toggleAddInvestigation(),
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Investigations,
+      },
+    },
+  ].filter(
+    (item) =>
+      item &&
+      hasRolePermission({
+        permission: item.permission,
+      })
+  );
 
   return (
     <div>
@@ -123,7 +194,12 @@ const IncidentCard = ({
                   </Title>
                 </Col>
               </Row>
-              {approvalRights && (
+              {hasRolePermission({
+                permission: {
+                  method: PermissionMethod.Approve,
+                  model: PermissionModel.Incidents,
+                },
+              }) && (
                 <Row justify="center">
                   <Col>
                     <Link to={`view/${incident?.id}`}>
@@ -205,64 +281,11 @@ const IncidentCard = ({
                       {incident?.subject}
                     </Title>
                   </Col>
-                  {menuRights && (
+                  {menuItems.length > 0 && (
                     <Col style={{ marginTop: -2 }}>
                       <Dropdown
                         arrow={{ pointAtCenter: true }}
-                        overlay={
-                          <Menu
-                            items={[
-                              {
-                                icon: <FontAwesomeIcon icon={faEdit} />,
-                                key: 0,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Edit Incident',
-                                }),
-                                onClick: () => toggleEditIncidentFeed(),
-                              },
-                              incident.totalImages && incident.totalImages > 0
-                                ? {
-                                    icon: <FontAwesomeIcon icon={faImage} />,
-                                    key: 1,
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Edit Image',
-                                    }),
-                                    onClick: () => toggleEditImage(),
-                                  }
-                                : null,
-
-                              {
-                                icon: <FontAwesomeIcon icon={faTrash} />,
-                                key: 2,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Delete Incident',
-                                }),
-                                onClick: () =>
-                                  confirm({
-                                    content: intl.formatMessage({
-                                      defaultMessage:
-                                        'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                                    }),
-                                    okText: intl.formatMessage({
-                                      defaultMessage: 'Delete',
-                                    }),
-                                    onOk: () => onDelete(incident?.id || ''),
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Are you sure?',
-                                    }),
-                                  }),
-                              },
-                              {
-                                icon: <FontAwesomeIcon icon={faPlus} />,
-                                key: 3,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Add Investigation',
-                                }),
-                                onClick: () => toggleAddInvestigation(),
-                              },
-                            ].filter((item) => item?.key !== 2 || deleteRights)}
-                          />
-                        }
+                        overlay={<Menu items={menuItems} />}
                         placement="bottomRight"
                         trigger={['click']}
                       >
@@ -337,7 +360,12 @@ const IncidentCard = ({
                   defaultMessage: 'This incident is awaiting approval',
                 })}
               </Title>
-              {approvalRights && (
+              {hasRolePermission({
+                permission: {
+                  method: PermissionMethod.Approve,
+                  model: PermissionModel.Incidents,
+                },
+              }) && (
                 <Link to={`view/${incident?.id}`}>
                   <Button>
                     {intl.formatMessage({
@@ -348,63 +376,10 @@ const IncidentCard = ({
               )}
             </div>
           )}
-          {menuRights && (
+          {menuItems.length > 0 && (
             <Dropdown
               arrow={{ pointAtCenter: true }}
-              overlay={
-                <Menu
-                  items={[
-                    {
-                      icon: <FontAwesomeIcon icon={faEdit} />,
-                      key: 0,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Edit Incident',
-                      }),
-                      onClick: () => toggleEditIncidentFeed(),
-                    },
-                    incident.totalImages && incident.totalImages > 0
-                      ? {
-                          icon: <FontAwesomeIcon icon={faImage} />,
-                          key: 1,
-                          label: intl.formatMessage({
-                            defaultMessage: 'Edit Image',
-                          }),
-                          onClick: () => toggleEditImage(),
-                        }
-                      : null,
-
-                    {
-                      icon: <FontAwesomeIcon icon={faTrash} />,
-                      key: 2,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Delete Incident',
-                      }),
-                      onClick: () =>
-                        confirm({
-                          content: intl.formatMessage({
-                            defaultMessage:
-                              'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                          }),
-                          okText: intl.formatMessage({
-                            defaultMessage: 'Delete',
-                          }),
-                          onOk: () => onDelete(incident?.id || ''),
-                          title: intl.formatMessage({
-                            defaultMessage: 'Are you sure?',
-                          }),
-                        }),
-                    },
-                    {
-                      icon: <FontAwesomeIcon icon={faPlus} />,
-                      key: 3,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Add Investigation',
-                      }),
-                      onClick: () => toggleAddInvestigation(),
-                    },
-                  ].filter((item) => item?.key !== 2 || deleteRights)}
-                />
-              }
+              overlay={<Menu items={menuItems} />}
               placement="bottomRight"
               trigger={['click']}
             >

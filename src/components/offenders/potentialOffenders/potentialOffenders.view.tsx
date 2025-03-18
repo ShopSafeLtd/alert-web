@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
-import Lightbox from 'yet-another-react-lightbox';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import type { OffenderData } from 'types/DataType';
+
+import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   faCircleInfo,
   faEarth,
@@ -14,6 +10,13 @@ import {
   faUserHair,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { calcAge } from 'utils';
 import {
   getOffenderAge,
@@ -21,31 +24,26 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import { useIntl } from 'react-intl';
-import type { OffenderData } from 'types/DataType';
-import useStyles from './potentialOffenders.style';
-import { Role } from 'graphql/types';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-const { Title, Text } = Typography;
+import useStyles from './potentialOffenders.style';
+
+const { Text, Title } = Typography;
 
 interface Props {
-  suggestedData: OffenderData[];
   onClose: () => void;
+  suggestedData: OffenderData[];
 }
 
-const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
+const PotentialOffenders = ({ onClose, suggestedData }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
-    open: false,
     index: 0,
+    open: false,
   });
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
@@ -53,7 +51,7 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
 
   const openLightbox = (
     offender: {
-      images: { id: string; optimised?: string | undefined | null }[];
+      images: { id: string; optimised?: null | string | undefined }[];
     },
     index: number
   ) => {
@@ -62,7 +60,7 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
         src: image.optimised || '',
       })) || []
     );
-    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+    setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
 
   return (
@@ -71,11 +69,11 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
         <div>
           {offender?.images && offender?.images.length > 0 && (
             <Row
+              align="middle"
+              className={classes.images}
               gutter={8}
               justify="start"
-              align="middle"
               wrap={false}
-              className={classes.images}
               // style={{
               //   height:
               //     ? undefined : 0,
@@ -98,9 +96,9 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
                 <Col key={image.id}>
                   <div className={classes.image}>
                     <WatermarkImage
-                      url={image.optimised}
-                      rotation={image.rotation}
                       position={image.position}
+                      rotation={image.rotation}
+                      url={image.optimised}
                     />
                   </div>
                 </Col>
@@ -116,7 +114,7 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
               { ref: offender.reference }
             )}
           </Text>
-          <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
+          <Descriptions style={{ marginBottom: 20, marginTop: 20 }}>
             {offender.alias && offender.alias.length > 0 ? (
               <Descriptions.Item
                 label={intl.formatMessage({
@@ -230,7 +228,7 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
 
           <Row gutter={8} justify="end">
             <Col>
-              <Link to={`/app/offenders/view/${offender.id}`} onClick={onClose}>
+              <Link onClick={onClose} to={`/app/offenders/view/${offender.id}`}>
                 <Button>
                   {intl.formatMessage({
                     defaultMessage: 'View Offender',
@@ -243,19 +241,19 @@ const PotentialOffenders = ({ suggestedData, onClose }: Props) => {
         </div>
       ))}
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox({ images: [] }, 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

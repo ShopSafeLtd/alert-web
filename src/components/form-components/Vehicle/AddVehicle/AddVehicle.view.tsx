@@ -8,6 +8,7 @@ import type {
   IncidentCardData,
 } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -29,6 +30,7 @@ import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import LinkOffender from 'components/form-components/offender/AddExistingOffender';
 import UploadImage from 'components/images/UploadImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -42,7 +44,6 @@ interface Props {
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
   addCustomGallery: boolean;
-  adminRights: boolean;
   beforeUpload: (value: RcFile) => void;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
@@ -82,7 +83,6 @@ const AddVehicle = ({
   CrimeGroupsData,
   CrimeGroupsLoading,
   addCustomGallery,
-  adminRights,
   beforeUpload,
   customGalleries,
   customGalleriesLoading,
@@ -97,7 +97,6 @@ const AddVehicle = ({
   incidentsData,
   linkIncident,
   linkOffender,
-
   offendersData,
   onClose,
   onEditImage,
@@ -207,7 +206,13 @@ const AddVehicle = ({
               </Form.Item>
             </Col>
           )}
-          {adminRights && (
+          <PermissionCheckWrapper
+            permission={{
+              method: PermissionMethod.Edit,
+              model: PermissionModel.CrimeGroups,
+            }}
+            unauthorizedElement={<div />}
+          >
             <Col span={12}>
               <Form.Item
                 label={intl.formatMessage({
@@ -238,7 +243,7 @@ const AddVehicle = ({
                 />
               </Form.Item>
             </Col>
-          )}
+          </PermissionCheckWrapper>
         </Row>
 
         {showGroups && (
@@ -314,9 +319,15 @@ const AddVehicle = ({
           toggleEditImage={toggleEditImage}
         />
 
-        {adminRights && (
-          <Row gutter={16}>
-            {!fromIncident && (
+        <Row gutter={16}>
+          {!fromIncident && (
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Edit,
+                model: PermissionModel.Incidents,
+              }}
+              unauthorizedElement={<div />}
+            >
               <Col>
                 <Button
                   disabled={saving || linkOffender}
@@ -334,9 +345,17 @@ const AddVehicle = ({
                   })}
                 </Button>
               </Col>
-            )}
+            </PermissionCheckWrapper>
+          )}
 
-            {!fromOffender && (
+          {!fromOffender && (
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Edit,
+                model: PermissionModel.Offenders,
+              }}
+              unauthorizedElement={<div />}
+            >
               <Col>
                 <div>
                   <Button
@@ -356,10 +375,9 @@ const AddVehicle = ({
                   </Button>
                 </div>
               </Col>
-            )}
-          </Row>
-        )}
-
+            </PermissionCheckWrapper>
+          )}
+        </Row>
         {incidentsData && incidentsData.length > 0 ? (
           <>
             <Divider>

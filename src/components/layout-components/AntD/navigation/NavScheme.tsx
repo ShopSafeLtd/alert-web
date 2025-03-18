@@ -1,6 +1,7 @@
 import type { Theme } from 'configs/ThemeConfig';
 import type { Scheme } from 'state';
 
+import { useSchemeProvider } from '#/providers/SchemeProvider/SchemeProvider';
 import { faArrowRight } from '@fortawesome/pro-light-svg-icons';
 import { faCaretDown } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,11 +38,14 @@ const useStyles = createUseStyles((theme: Theme) => ({
 export const NavScheme = () => {
   const classes = useStyles();
   const intl = useIntl();
+
+  const { setScheme } = useSchemeProvider();
+
   const { schemes } = useStoreState((state) => state.user);
   const { id: activeScheme } = useStoreState((state) => state.scheme);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const activeSchemeName = useStoreState((state) => state.scheme.name);
-  const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
+  const setSchemeOld = useStoreActions((actions) => actions.scheme.setScheme);
   const setTodos = useStoreActions((actions) => actions.user.setTodos);
   const setNotifications = useStoreActions(
     (actions) => actions.user.setNotifications
@@ -76,7 +80,9 @@ export const NavScheme = () => {
       'logo-dark',
       scheme.scheme.darkLogo?.optimisedPersisted || ''
     );
-    setScheme({
+
+    setScheme(scheme.id);
+    setSchemeOld({
       activityAssignToUser: scheme.scheme.activityAssignToUser,
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,

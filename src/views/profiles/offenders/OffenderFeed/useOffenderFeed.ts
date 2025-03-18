@@ -15,6 +15,7 @@ import type { OffenderFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
 import hasPermission from '#/utils/has-permission';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   ListOffendersRelayDocument,
   useListOffendersRelayQuery,
@@ -24,7 +25,6 @@ import {
   PermissionMethod,
   PermissionModel,
   QueryMode,
-  Role,
   SortOrder,
 } from 'graphql/types';
 import { useEffect, useMemo, useState } from 'react';
@@ -33,7 +33,6 @@ import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import cacheOrLoading from 'utils/cache-or-loading';
 
 interface Return {
-  adminRights: boolean;
   customGalleriesData: ListCustomGalleriesQuery | undefined;
   data: ListOffendersRelayQuery | undefined;
   fetchMoreScroll: () => void;
@@ -66,11 +65,9 @@ const useOffenderFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const {
-    filterDefaultGroups: defaultGroups,
-    id: userId,
-    role,
-  } = useStoreState((state) => state.user);
+  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
+    (state) => state.user
+  );
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.offenders.variables
@@ -103,7 +100,12 @@ const useOffenderFeed = (): Return => {
     index: 0,
     open: false,
   });
-  const isUser = role === Role.User;
+  const hasApprovePermission = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Approve,
+      model: PermissionModel.Offenders,
+    },
+  });
   const { groups: defaultGroupsOnScheme } = useGroupsContext();
   const {
     age,
@@ -247,15 +249,15 @@ const useOffenderFeed = (): Return => {
               in: age,
             }
           : undefined,
-      approved: isUser
-        ? {
-            equals: true,
-          }
-        : gallery.includes('NOT APPROVED')
+      approved: hasApprovePermission
+        ? gallery.includes('NOT APPROVED')
           ? {
               equals: false,
             }
-          : undefined,
+          : undefined
+        : {
+            equals: true,
+          },
       bans: gallery.includes('BANNED')
         ? {
             some: {
@@ -560,7 +562,6 @@ const useOffenderFeed = (): Return => {
   };
 
   return {
-    adminRights: role !== Role.User,
     customGalleriesData,
     data,
     fetchMoreScroll,

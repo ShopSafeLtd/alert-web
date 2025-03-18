@@ -1,15 +1,14 @@
 import type { Image } from 'components/images/LightBox/LightBox.types';
 import type { ViewOffenderMatchesQuery } from 'graphql/offenders/queries/__generated__/offender-macthes.generated';
 
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { Button, Card, Col, Popconfirm, Row, Skeleton, Typography } from 'antd';
 import LightBox from 'components/images/LightBox/LightBox.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Role } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
 import {
   getOffenderAge,
   getOffenderBuild,
@@ -74,10 +73,7 @@ const OffenderMatches = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
   return (
     <div className={classes.container}>
       <Row className={classes.currentOffender} gutter={16}>

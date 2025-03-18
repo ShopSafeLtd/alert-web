@@ -25,12 +25,10 @@ const OffenderCard = ({
   const {
     addInvestigation,
     approvalRights,
-    deleteRights,
     editImage,
     editImageId,
     editOffenderFeed,
     knowOffender,
-    menuRights,
     onDelete,
     onEditImage,
     onNavigate,
@@ -49,13 +47,11 @@ const OffenderCard = ({
       addInvestigation={addInvestigation}
       approvalRights={approvalRights}
       compactView={compactView || false}
-      deleteRights={deleteRights}
       editImage={editImage}
       editImageId={editImageId}
       editOffenderFeed={editOffenderFeed}
       isArticle={isArticle}
       knowOffender={knowOffender}
-      menuRights={menuRights}
       offender={offender}
       onDelete={onDelete}
       onEditImage={onEditImage}

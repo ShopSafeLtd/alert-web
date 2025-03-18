@@ -30,6 +30,8 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import { Form, Modal, message, notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
@@ -40,12 +42,14 @@ import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated'
 import {
   ImagePosition,
   Model,
+  PermissionMethod,
+  PermissionModel,
   QueryMode,
-  Role,
   SortOrder,
 } from 'graphql/types';
 import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -174,11 +178,11 @@ interface Return {
 const useAddOffender = (): Return => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
-  const {
-    businesses: userBusinesses,
-    id: userId,
-    role,
-  } = useStoreState((state) => state.user);
+  const { businesses: userBusinesses, id: userId } = useStoreState(
+    (state) => state.user
+  );
+
+  const adminRights = useAtomValue(isAdminAtom);
 
   const {
     facialRecognition: facialRec,
@@ -187,7 +191,13 @@ const useAddOffender = (): Return => {
     needJustification,
   } = useStoreState((state) => state.scheme);
   const reportOnly =
-    useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
+    useStoreState((state) => state.scheme.reportOnly) &&
+    !hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Offenders,
+      },
+    });
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const imagesRequired = useStoreState(
     (state) => state.scheme.imagesRequiredOnOffenders
@@ -267,20 +277,17 @@ const useAddOffender = (): Return => {
             id: schemeId,
           },
           where: {
-            groups:
-              role === Role.ContentAdmin
-                ? undefined
-                : {
-                    some: {
-                      users: {
-                        some: {
-                          id: {
-                            equals: userId,
-                          },
-                        },
-                      },
+            groups: {
+              some: {
+                users: {
+                  some: {
+                    id: {
+                      equals: userId,
                     },
                   },
+                },
+              },
+            },
             name: {
               equals: offenderName,
               mode: QueryMode.Insensitive,
@@ -955,8 +962,8 @@ const useAddOffender = (): Return => {
     //   ? groupData?.groups.map((group) => ({
     //       value: group.id,
     //       label: group.name,
+    adminRights,
     //     })) || []
-    adminRights: role !== Role.User,
     ageCheck,
     banData,
     bansData,

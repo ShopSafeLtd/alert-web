@@ -1,7 +1,13 @@
 import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import { useListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
-import { QueryMode, Role, SortOrder } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  SortOrder,
+} from 'graphql/types';
 import { OffenderSort, useStoreState } from 'state';
 
 interface Return {
@@ -16,12 +22,18 @@ interface Return {
 const useOffenderSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-  const role = useStoreState((state) => state.user.role);
-
   const order = useStoreState((state) => state.data.offenders.order);
   const filterVariables = useStoreState(
     (state) => state.data.offenders.variables
   );
+
+  const hasApprovePermission = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Approve,
+      model: PermissionModel.Offenders,
+    },
+  });
+
   const {
     age,
     build,
@@ -73,16 +85,15 @@ const useOffenderSideList = (): Return => {
               in: age,
             }
           : undefined,
-      approved:
-        role === Role.User
+      approved: hasApprovePermission
+        ? gallery.includes('NOT APPROVED')
           ? {
-              equals: true,
+              equals: false,
             }
-          : gallery.includes('NOT APPROVED')
-            ? {
-                equals: false,
-              }
-            : undefined,
+          : undefined
+        : {
+            equals: true,
+          },
       bans: gallery.includes('BANNED')
         ? {
             some: {
@@ -199,7 +210,7 @@ const useOffenderSideList = (): Return => {
   };
   const { data, fetchMore, loading } = useListOffendersRelayQuery({
     fetchPolicy: 'cache-and-network',
-    skip: role === Role.User && gallery.includes('NOT APPROVED'),
+    skip: !hasApprovePermission && gallery.includes('NOT APPROVED'),
     variables,
   });
 

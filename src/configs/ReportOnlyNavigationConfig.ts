@@ -20,7 +20,6 @@ const ReportOnlyNavigationConfig: NavItem[] = [
       id: 'incidents',
       defaultMessage: 'Incidents',
     }),
-    roles: [Role.User],
   },
   {
     key: 'offenders',
@@ -33,7 +32,6 @@ const ReportOnlyNavigationConfig: NavItem[] = [
       id: 'offenders',
       defaultMessage: 'Offenders',
     }),
-    roles: [Role.User],
   },
   {
     key: 'vehicles',
@@ -46,7 +44,6 @@ const ReportOnlyNavigationConfig: NavItem[] = [
     }),
     breadcrumb: true,
     submenu: [],
-    roles: [Role.User],
   },
 ];
 

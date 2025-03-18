@@ -6,6 +6,7 @@ import type {
 import type { OffenderReportQuery } from 'graphql/reports/queries/__generated__/offender-report.generated';
 import type RGL from 'react-grid-layout';
 
+import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   faCalendar,
   faChartBar,
@@ -36,11 +37,10 @@ import {
   TargetGoodsColumns,
   TargetedBusinessColumns,
 } from 'components/reports/tableColumns';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import { Age, Build, Gender, Race } from 'graphql/types';
 import moment from 'moment';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import { getAge, getBuild, getEthnicity, getSex, shouldPrint } from 'utils';
 
 import type { AllowedValue, Elements, MetaData } from '../../types';
@@ -85,10 +85,7 @@ const OffenderReportLayout = ({
   targetedGoodsData,
 }: Props) => {
   const classes = useStyles();
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
   const calculateHeight = (key: string, offset?: number) => {
     const targetElement = layout.find((element) => element.i === key);
     const targetH = targetElement ? targetElement.h : 0;

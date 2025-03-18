@@ -1,4 +1,5 @@
 import React from 'react';
+
 import View from './EditOffenderFeed.view';
 import useEditOffender from './useEditOffenderFeed';
 
@@ -9,37 +10,35 @@ interface Props {
 
 const EditOffender = ({ offenderId, onClose }: Props): JSX.Element => {
   const {
-    onSubmit,
-    data,
-    loading,
-    saving,
-    groups,
-    groupsLoading,
-    tags,
-    tagsLoading,
     customGalleries,
     customGalleriesLoading,
-    adminRights,
+    data,
+    groups,
+    groupsLoading,
+    loading,
     needJustification,
     offenderSettings,
+    onSubmit,
+    saving,
+    tags,
+    tagsLoading,
   } = useEditOffender({ offenderId, onClose });
   return (
     <div>
       <View
-        onSubmit={onSubmit}
-        data={data}
-        loading={loading}
-        saving={saving}
-        groups={groups}
-        groupsLoading={groupsLoading}
-        tags={tags}
-        tagsLoading={tagsLoading}
-        onClose={onClose}
         customGalleries={customGalleries}
         customGalleriesLoading={customGalleriesLoading}
-        adminRights={adminRights}
+        data={data}
+        groups={groups}
+        groupsLoading={groupsLoading}
+        loading={loading}
         needJustification={needJustification}
         offenderSettings={offenderSettings}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        saving={saving}
+        tags={tags}
+        tagsLoading={tagsLoading}
       />
     </div>
   );

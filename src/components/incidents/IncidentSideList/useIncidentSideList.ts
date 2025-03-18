@@ -3,8 +3,14 @@ import type {
   IncidentsFeedQueryVariables,
 } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import { useIncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
-import { QueryMode, Role, SortOrder } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  SortOrder,
+} from 'graphql/types';
 import { IncidentSort, useStoreState } from 'state';
 
 interface Return {
@@ -22,8 +28,14 @@ const useIncidentSideList = (): Return => {
     (state) => state.data.incidents.variables
   );
   const order = useStoreState((state) => state.data.incidents.order);
-  const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
+
+  const hasApprovePermission = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Approve,
+      model: PermissionModel.Incidents,
+    },
+  });
 
   const {
     businesses,
@@ -38,13 +50,12 @@ const useIncidentSideList = (): Return => {
     priority,
     search,
   } = filterVariables;
-  const isUser = role === Role.User;
   const variables: IncidentsFeedQueryVariables = {
-    approved: isUser
-      ? true
-      : gallery.includes('NOT APPROVED')
+    approved: hasApprovePermission
+      ? gallery.includes('NOT APPROVED')
         ? false
-        : undefined,
+        : undefined
+      : true,
     first: 12,
     order: {
       date:
@@ -108,15 +119,15 @@ const useIncidentSideList = (): Return => {
             },
           ]
         : undefined,
-      approved: isUser
-        ? {
-            equals: true,
-          }
-        : gallery.includes('NOT APPROVED')
+      approved: hasApprovePermission
+        ? gallery.includes('NOT APPROVED')
           ? {
               equals: false,
             }
-          : undefined,
+          : undefined
+        : {
+            equals: true,
+          },
       business:
         businesses.length > 0
           ? {
@@ -213,7 +224,7 @@ const useIncidentSideList = (): Return => {
 
   const { data, fetchMore, loading } = useIncidentsFeedQuery({
     fetchPolicy: 'cache-and-network',
-    skip: role === Role.User && gallery.includes('NOT APPROVED'),
+    skip: !hasApprovePermission && gallery.includes('NOT APPROVED'),
     variables,
   });
 

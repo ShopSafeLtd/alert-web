@@ -9,6 +9,8 @@ import type {
   IncidentCardData,
 } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEdit,
   faFileArrowUp,
@@ -43,6 +45,7 @@ import LinkOffender from 'components/form-components/offender/AddExistingOffende
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import IncidentTable from 'components/tables/IncidentTable';
 import OffenderTable from 'components/tables/OffenderTable';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -56,7 +59,6 @@ const { Paragraph, Title } = Typography;
 interface Props {
   addCrimeGroup: boolean;
   addCustomGallery: boolean;
-  adminRights: boolean;
   beforeUpload: (value: RcFile) => void;
   crimeGroupsData: CrimeGroupData[];
   customGalleries: { label: string; value: string }[];
@@ -97,7 +99,6 @@ interface Props {
 const AddVehicle = ({
   addCrimeGroup,
   addCustomGallery,
-  adminRights,
   beforeUpload,
   crimeGroupsData,
   customGalleries,
@@ -117,7 +118,6 @@ const AddVehicle = ({
   onEditImage,
   onRemoveImage,
   onSubmit,
-
   primaryImage,
   removeCrimeGroup,
   removeIncident,
@@ -149,12 +149,6 @@ const AddVehicle = ({
         {/* vehicle details */}
         <Card>
           <Row align="bottom" style={{ marginBottom: 30 }}>
-            <Col>
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-              <Title level={4} style={{ marginBottom: 0 }}>
-                1.
-              </Title>
-            </Col>
             <Col>
               <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 {intl.formatMessage({
@@ -216,7 +210,13 @@ const AddVehicle = ({
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
-            {adminRights && (
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.OffenderGalleries,
+              }}
+              unauthorizedElement={<div />}
+            >
               <Col span={12}>
                 <Row align="middle" gutter={5}>
                   <Col flex={1}>
@@ -270,7 +270,7 @@ const AddVehicle = ({
                   </Col>
                 </Row>
               </Col>
-            )}
+            </PermissionCheckWrapper>
           </Row>
           {/* {adminRights && (
             <Row gutter={50}>
@@ -330,19 +330,19 @@ const AddVehicle = ({
           )} */}
         </Card>
         {/* Profiles */}
-        {adminRights && (
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Edit,
+            model: PermissionModel.Offenders,
+          }}
+          unauthorizedElement={<div />}
+        >
           <Card>
             <Row
               align="middle"
               gutter={10}
               style={{ marginBottom: 20, width: '100%' }}
             >
-              <Col>
-                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                <Title level={4} style={{ marginBottom: 0 }}>
-                  2.
-                </Title>
-              </Col>
               <Col>
                 <Title level={4} style={{ marginBottom: 0 }}>
                   {intl.formatMessage({
@@ -423,7 +423,12 @@ const AddVehicle = ({
                           })}
                         </Divider>
                         <IncidentTable
-                          deleteRights={adminRights}
+                          deleteRights={hasRolePermission({
+                            permission: {
+                              method: PermissionMethod.Delete,
+                              model: PermissionModel.Incidents,
+                            },
+                          })}
                           hasNavigation={false}
                           incidents={incidentsData}
                           onDelete={removeIncident}
@@ -439,7 +444,12 @@ const AddVehicle = ({
                           })}
                         </Divider>
                         <OffenderTable
-                          deleteRights={adminRights}
+                          deleteRights={hasRolePermission({
+                            permission: {
+                              method: PermissionMethod.Delete,
+                              model: PermissionModel.Offenders,
+                            },
+                          })}
                           hasNavigation={false}
                           offenders={offendersData}
                           onDeleteOffender={removeOffender}
@@ -585,17 +595,11 @@ const AddVehicle = ({
               </Col>
             </Row>
           </Card>
-        )}
+        </PermissionCheckWrapper>
 
         {/* images */}
         <Card>
           <Row align="middle" style={{ marginBottom: 20 }}>
-            <Col>
-              <Title level={4} style={{ marginBottom: 0 }}>
-                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                {adminRights ? '3.' : '2.'}
-              </Title>
-            </Col>
             <Col>
               <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                 {intl.formatMessage({
@@ -816,12 +820,6 @@ const AddVehicle = ({
           <Card>
             <>
               <Row align="bottom" style={{ marginBottom: 30 }}>
-                <Col>
-                  <Title level={4} style={{ marginBottom: 0 }}>
-                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                    {adminRights ? '4.' : '3.'}
-                  </Title>
-                </Col>
                 <Col>
                   <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
                     {intl.formatMessage({

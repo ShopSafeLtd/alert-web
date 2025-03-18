@@ -21,7 +21,7 @@ import Vehicles from '#/views/incidents/ViewIncident/components/Vehicles.view';
 import ViewIncidentToolBar from '#/views/incidents/ViewIncident/components/ViewIncidentToolBar.view';
 import { Col, Row, Skeleton } from 'antd';
 import IncidentSideList from 'components/incidents/IncidentSideList';
-import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -33,6 +33,7 @@ interface Props {
   editAddress: boolean;
   editImages: boolean;
   editRights: boolean;
+  hasApprovePermission: boolean;
   hideIncident: boolean;
   incidentId: string;
   loading: boolean;
@@ -42,7 +43,6 @@ interface Props {
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
   userId: string;
-  userRole: Role;
 }
 
 const ViewIncident = ({
@@ -51,6 +51,7 @@ const ViewIncident = ({
   editAddress,
   editImages,
   editRights,
+  hasApprovePermission,
   hideIncident,
   incidentId,
   loading,
@@ -60,13 +61,12 @@ const ViewIncident = ({
   toggleEditAddress,
   toggleEditImages,
   userId,
-  userRole,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
 
-  if (userRole === Role.User && data?.incident?.approved === false) {
+  if (hasApprovePermission && data?.incident?.approved === false) {
     navigate('/app/incidents');
     return <div />;
   }
@@ -175,43 +175,86 @@ const ViewIncident = ({
                             isPrinting={isPrinting}
                             loading={loading}
                           />
-                          <Offenders
-                            data={data}
-                            deleteRights={deleteRights}
-                            editRights={editRights}
-                            incidentId={incidentId}
-                            loading={loading}
-                            saving={saving}
-                            setSaving={setSaving}
-                          />
-                          <Vehicles
-                            data={data}
-                            deleteRights={deleteRights}
-                            editRights={editRights}
-                            incidentId={incidentId}
-                            loading={loading}
-                            saving={saving}
-                            setSaving={setSaving}
-                          />
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Offenders,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Offenders
+                              data={data}
+                              deleteRights={deleteRights}
+                              editRights={editRights}
+                              incidentId={incidentId}
+                              loading={loading}
+                              saving={saving}
+                              setSaving={setSaving}
+                            />
+                          </PermissionCheckWrapper>
+
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Vehicles,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Vehicles
+                              data={data}
+                              deleteRights={deleteRights}
+                              editRights={editRights}
+                              incidentId={incidentId}
+                              loading={loading}
+                              saving={saving}
+                              setSaving={setSaving}
+                            />
+                          </PermissionCheckWrapper>
+
                           <CctvRecords data={data} loading={loading} />
-                          <Evidence
-                            data={data}
-                            deleteRights={deleteRights}
-                            editRights={editRights}
-                            incidentId={incidentId}
-                            loading={loading}
-                          />
-                          <Activities
-                            data={data}
-                            incidentId={incidentId}
-                            loading={loading}
-                            saving={saving}
-                          />
-                          <Investigations
-                            data={data}
-                            incidentId={incidentId}
-                            loading={loading}
-                          />
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Evidence,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Evidence
+                              data={data}
+                              deleteRights={deleteRights}
+                              editRights={editRights}
+                              incidentId={incidentId}
+                              loading={loading}
+                            />
+                          </PermissionCheckWrapper>
+
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Activities,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Activities
+                              data={data}
+                              incidentId={incidentId}
+                              loading={loading}
+                              saving={saving}
+                            />
+                          </PermissionCheckWrapper>
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Investigations,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Investigations
+                              data={data}
+                              incidentId={incidentId}
+                              loading={loading}
+                            />
+                          </PermissionCheckWrapper>
                         </div>
                       )}
                     </div>

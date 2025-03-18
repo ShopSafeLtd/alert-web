@@ -779,6 +779,24 @@ export enum AiImpactAssessmentCategory {
   Medium = 'MEDIUM'
 }
 
+export enum AiImpactAssessmentFinancialImpact {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiImpactAssessmentSecurityResourceImpact {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiRecommendedActionsPriorityLevel {
+  Elevated = 'ELEVATED',
+  High = 'HIGH',
+  Standard = 'STANDARD'
+}
+
 export enum AiRiskAssessmentSafetyRisk {
   High = 'HIGH',
   Low = 'LOW',
@@ -786,6 +804,18 @@ export enum AiRiskAssessmentSafetyRisk {
 }
 
 export enum AiRiskAssessmentThreatLevel {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiRiskTolerance {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiSophisticationLevel {
   High = 'HIGH',
   Low = 'LOW',
   Medium = 'MEDIUM'
@@ -19963,6 +19993,8 @@ export type Todo = {
   __typename?: 'Todo';
   answers?: Maybe<Array<Answer>>;
   assignedUsers: Array<User>;
+  authorised?: Maybe<Scalars['Boolean']>;
+  authorisedUsers?: Maybe<Array<User>>;
   business?: Maybe<Business>;
   chatId?: Maybe<Scalars['String']>;
   completed?: Maybe<Scalars['Boolean']>;

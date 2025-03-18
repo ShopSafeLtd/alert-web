@@ -7,6 +7,7 @@ import AddLocation from '#/components/form-components/addresses/AddLocation';
 import EditIncidentFeed from '#/components/form-components/incident/EditIncidentFeed';
 import { IncidentSort, useStoreState } from '#/state';
 import errorNotification from '#/types/mutation_notifications/error_notification';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faBell,
   faBellSlash,
@@ -33,7 +34,12 @@ import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/__genera
 import { useSubscribeToIncidentMutation } from 'graphql/incidents/mutations/__generated__/subscribe-to-incident.generated';
 import { useUnsubscribeFromIncidentMutation } from 'graphql/incidents/mutations/__generated__/unsubscribe-from-incident.generated';
 import { ListIncidentsAllSchemesDocument } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
-import { QueryMode, Role, SortOrder } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  QueryMode,
+  SortOrder,
+} from 'graphql/types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -72,7 +78,12 @@ const ViewIncidentToolBar = ({
   const intl = useIntl();
 
   const { id: userId } = useStoreState((state) => state.user);
-  const role = useStoreState((state) => state.user.role);
+  const hasApprovePermissions = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Approve,
+      model: PermissionModel.Incidents,
+    },
+  });
   const schemeId = useStoreState((state) => state.scheme.id);
   const hasConnectedSchemes = useStoreState(
     (state) => state.scheme.hasConnectedSchemes
@@ -153,16 +164,15 @@ const ViewIncidentToolBar = ({
             : undefined,
         },
       ],
-      approved:
-        role === Role.User
+      approved: hasApprovePermissions
+        ? gallery.includes('NOT APPROVED')
           ? {
-              equals: true,
+              equals: false,
             }
-          : gallery.includes('NOT APPROVED')
-            ? {
-                equals: false,
-              }
-            : undefined,
+          : undefined
+        : {
+            equals: true,
+          },
       business:
         businesses.length > 0
           ? {

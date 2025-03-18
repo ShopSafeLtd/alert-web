@@ -22,12 +22,9 @@ const IncidentCard = ({
 }: Props): JSX.Element => {
   const {
     addInvestigation,
-    approvalRights,
-    deleteRights,
     editImage,
     editImageId,
     editIncidentFeed,
-    menuRights,
     onDelete,
     onEditImage,
     setEditImageId,
@@ -42,14 +39,11 @@ const IncidentCard = ({
   return (
     <View
       addInvestigation={addInvestigation}
-      approvalRights={approvalRights}
       compactView={compactView || false}
-      deleteRights={deleteRights}
       editImage={editImage}
       editImageId={editImageId}
       editIncidentFeed={editIncidentFeed}
       incident={incident}
-      menuRights={menuRights}
       onDelete={onDelete}
       onEditImage={onEditImage}
       openLightbox={openLightbox}

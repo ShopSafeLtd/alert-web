@@ -4,13 +4,13 @@ import type { RecycleIncidentMutation } from 'graphql/incidents/mutations/__gene
 import type { ImagePosition } from 'graphql/types';
 import type { EditFeedImage } from 'types/DataType';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import { notification } from 'antd';
 import { useRecycleIncidentMutation } from 'graphql/incidents/mutations/__generated__/recycle-incident.generated';
 import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-images.generated';
-import { Role } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
@@ -21,11 +21,9 @@ interface Props {
 interface Return {
   addInvestigation: boolean;
   approvalRights: boolean;
-  deleteRights: boolean;
   editImage: boolean;
   editImageId: string;
   editIncidentFeed: boolean;
-  menuRights: boolean;
   // onNavigate: (id: string) => void;
   onDelete: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
@@ -37,7 +35,6 @@ interface Return {
 const useIncidentCard = ({ incident, update }: Props): Return => {
   // const navigate = useNavigate();
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
   const [editIncidentFeed, setEditIncidentFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
@@ -45,11 +42,14 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
     incident?.images[0]?.id || ''
   );
 
-  const approvalRights = update ? role !== Role.User : false;
-  const menuRights = update
-    ? role !== Role.User || incident?.createdByUser
+  const approvalRights = update
+    ? hasRolePermission({
+        permission: {
+          method: PermissionMethod.Edit,
+          model: PermissionModel.Incidents,
+        },
+      })
     : false;
-  const deleteRights = role !== Role.User;
 
   // const onNavigate = (id: string) => navigate(`/app/incidents/edit/${id}`);
   const [recycleIncident] = useRecycleIncidentMutation({
@@ -136,12 +136,11 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
     }
   };
   const onDelete = (id: string) => {
-    if (deleteRights)
-      void recycleIncident({
-        variables: {
-          where: { id },
-        },
-      });
+    void recycleIncident({
+      variables: {
+        where: { id },
+      },
+    });
   };
   const toggleEditIncidentFeed = () => {
     setEditIncidentFeed(!editIncidentFeed);
@@ -155,11 +154,9 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   return {
     addInvestigation,
     approvalRights,
-    deleteRights,
     editImage,
     editImageId,
     editIncidentFeed,
-    menuRights,
     // onNavigate,
     onDelete,
     onEditImage,

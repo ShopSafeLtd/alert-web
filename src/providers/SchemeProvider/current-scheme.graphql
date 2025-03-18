@@ -1,0 +1,38 @@
+query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
+    userScheme(where: $where) {
+        id
+        role
+        isAdmin
+        permissions {
+            model
+            allowedMethods
+        }
+        orignalPermissions {
+            id
+            admin
+        }
+        scheme {
+            activityAssignToUser
+            autoPopulateDescription
+            customTranslations
+            defaultPublicOffenderDOB
+            disableGalleryOnNative
+            facialDetection
+            facialRecognition
+            facialRedaction
+            restrictIncidentAccess
+            goodsMode
+            id
+            imagesRequiredOnOffenders
+            languageCount
+            name
+            needJustification
+            oneSelectedIncidentTypeOnly
+            reportOnly
+            taskTimeTracking
+            requireSiteNumberForUsers
+            skipLocationToAddress
+            useBusinessGroupsOnIncident
+        }
+    }
+}

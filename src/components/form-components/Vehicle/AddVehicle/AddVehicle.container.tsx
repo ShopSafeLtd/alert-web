@@ -1,99 +1,99 @@
-import React from 'react';
 import type { VehicleData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './AddVehicle.view';
 import useAddVehicle from './useAddVehicle';
 
 interface Props {
-  onClose: () => void;
-  update: (value: VehicleData) => void;
   fromIncident?: boolean | undefined;
   fromOffender?: boolean | undefined;
+  onClose: () => void;
   saving?: boolean;
   showGroups?: boolean;
+  update: (value: VehicleData) => void;
 }
 
 const AddVehicle = ({
-  onClose,
-  update,
   fromIncident,
   fromOffender,
-  showGroups,
+  onClose,
   saving,
+  showGroups,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
     CrimeGroupsData,
     CrimeGroupsLoading,
-    offendersData,
+    addCustomGallery,
+    beforeUpload,
+    customGalleries,
+    customGalleriesLoading,
+    editImage,
+    fileList,
+    form,
+    groups,
+    groupsLoading,
+    imgChange,
     incidentsData,
     linkIncident,
     linkOffender,
+    offendersData,
+    onEditImage,
+    onRemoveImage,
+    onSubmit,
+    primaryImage,
+    removeIncident,
+    removeOffender,
+    setPrimaryImage,
+    toggleAddCustomGallery,
+    toggleEditImage,
     toggleLinkIncident,
     toggleLinkOffender,
     updateIncidentList,
-    updateOffendersList,
-    removeOffender,
-    removeIncident,
-    adminRights,
-    imgChange,
-    beforeUpload,
-    fileList,
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
-    editImage,
-    primaryImage,
-    setPrimaryImage,
-    groups,
-    groupsLoading,
-    customGalleries,
-    customGalleriesLoading,
-    addCustomGallery,
-    toggleAddCustomGallery,
     updateNewCustomGalleryData,
-    form,
+    updateOffendersList,
   } = useAddVehicle({
     update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
       CrimeGroupsData={CrimeGroupsData}
       CrimeGroupsLoading={CrimeGroupsLoading}
-      saving={saving}
-      offendersData={offendersData}
+      addCustomGallery={addCustomGallery}
+      beforeUpload={beforeUpload}
+      customGalleries={customGalleries}
+      customGalleriesLoading={customGalleriesLoading}
+      editImage={editImage}
+      fileList={fileList}
+      form={form}
+      fromIncident={fromIncident}
+      fromOffender={fromOffender}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      imgChange={imgChange}
       incidentsData={incidentsData}
       linkIncident={linkIncident}
       linkOffender={linkOffender}
+      offendersData={offendersData}
+      onClose={onClose}
+      onEditImage={onEditImage}
+      onRemoveImage={onRemoveImage}
+      onSubmit={onSubmit}
+      primaryImage={primaryImage}
+      removeIncident={removeIncident}
+      removeOffender={removeOffender}
+      saving={saving}
+      setPrimaryImage={setPrimaryImage}
+      showGroups={showGroups}
+      toggleAddCustomGallery={toggleAddCustomGallery}
+      toggleEditImage={toggleEditImage}
       toggleLinkIncident={toggleLinkIncident}
       toggleLinkOffender={toggleLinkOffender}
       updateIncidentList={updateIncidentList}
-      updateOffendersList={updateOffendersList}
-      removeOffender={removeOffender}
-      removeIncident={removeIncident}
-      adminRights={adminRights}
-      imgChange={imgChange}
-      beforeUpload={beforeUpload}
-      fileList={fileList}
-      onRemoveImage={onRemoveImage}
-      editImage={editImage}
-      onEditImage={onEditImage}
-      toggleEditImage={toggleEditImage}
-      primaryImage={primaryImage}
-      setPrimaryImage={setPrimaryImage}
-      fromIncident={fromIncident}
-      fromOffender={fromOffender}
-      showGroups={showGroups}
-      groups={groups}
-      groupsLoading={groupsLoading}
-      customGalleries={customGalleries}
-      customGalleriesLoading={customGalleriesLoading}
-      addCustomGallery={addCustomGallery}
-      toggleAddCustomGallery={toggleAddCustomGallery}
       updateNewCustomGalleryData={updateNewCustomGalleryData}
-      form={form}
+      updateOffendersList={updateOffendersList}
     />
   );
 };

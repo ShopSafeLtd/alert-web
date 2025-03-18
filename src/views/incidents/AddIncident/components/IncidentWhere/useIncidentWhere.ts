@@ -4,10 +4,12 @@ import type {
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type React from 'react';
 
+import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useApolloClient } from '@apollo/client';
 import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import { QueryMode, Role } from 'graphql/types';
+import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -33,19 +35,22 @@ const useIncidentWhere = ({
 }: Props): Return => {
   const client = useApolloClient();
   const intl = useIntl();
+
+  const isAdmin = useAtomValue(isAdminAtom);
+
   const { id: schemeId } = useStoreState((state) => state.scheme);
-  const { businesses, reportToAllBusinesses, role } = useStoreState(
+  const { businesses, reportToAllBusinesses } = useStoreState(
     (state) => state.user
   );
   const [hideField, setHideField] = useState(true);
 
   useEffect(() => {
-    if (role !== Role.User || businesses.length > 1 || reportToAllBusinesses) {
+    if (isAdmin || businesses.length > 1 || reportToAllBusinesses) {
       setHideField(false);
     } else {
       setHideField(true);
     }
-  }, [role, businesses]);
+  }, [isAdmin, businesses]);
 
   // const variables =
 

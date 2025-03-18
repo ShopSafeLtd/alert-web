@@ -1,9 +1,10 @@
 import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { notification } from 'antd';
 import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
 import { useListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
-import { QueryMode, Role, SortOrder } from 'graphql/types';
+import { QueryMode, SortOrder } from 'graphql/types';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router';
@@ -42,10 +43,7 @@ interface Return {
 const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
   const params = useParams();
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
 
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
