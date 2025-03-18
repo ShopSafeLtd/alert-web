@@ -30,6 +30,7 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { Form, Modal, message, notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
@@ -48,6 +49,7 @@ import {
 } from 'graphql/types';
 import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -98,6 +100,7 @@ interface Return {
   addCustomGallery: boolean;
   addExclusion: boolean;
   addOffenderTag: boolean;
+  adminRights: boolean;
   ageCheck: boolean;
   banData: BanData | null;
   bansData: BanData[];
@@ -178,6 +181,8 @@ const useAddOffender = (): Return => {
   const { businesses: userBusinesses, id: userId } = useStoreState(
     (state) => state.user
   );
+
+  const adminRights = useAtomValue(isAdminAtom);
 
   const {
     facialRecognition: facialRec,
@@ -957,6 +962,7 @@ const useAddOffender = (): Return => {
     //   ? groupData?.groups.map((group) => ({
     //       value: group.id,
     //       label: group.name,
+    adminRights,
     //     })) || []
     ageCheck,
     banData,

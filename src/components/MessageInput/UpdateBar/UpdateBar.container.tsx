@@ -1,143 +1,142 @@
 import React from 'react';
+
 import View from './UpdateBar.view';
 import useUpdateBar from './useUpdateBar';
 
 interface Props {
+  crimeGroupId?: string;
+  incidentId?: string;
+  investigationId?: string;
+  offenderId?: string;
   replyTo: {
-    id: string;
-    text: string;
     createdAt: string;
     createdBy: string;
+    id: string;
+    text: string;
   } | null;
-  incidentId?: string;
-  offenderId?: string;
-  investigationId?: string;
-  vehicleId?: string;
-  crimeGroupId?: string;
+  setOptionRowShow?: (value: boolean) => void;
   setReplyTo: (
     value: {
-      id: string;
-      text: string;
       createdAt: string;
       createdBy: string;
+      id: string;
+      text: string;
     } | null
   ) => void;
   subscribed: boolean;
-  setOptionRowShow?: (value: boolean) => void;
+  vehicleId?: string;
 }
 
 const UpdateBar = ({
-  replyTo,
-  offenderId,
+  crimeGroupId,
   incidentId,
   investigationId,
-  vehicleId,
-  crimeGroupId,
+  offenderId,
+  replyTo,
+  setOptionRowShow,
   setReplyTo,
   subscribed,
-  setOptionRowShow,
+  vehicleId,
 }: Props) => {
   const {
+    articlesData,
     beforeUpdateImageUpload,
+    crimeGroupsData,
+    handleMarkAsRead,
+    hideIncident,
+    linkArticle,
+    linkCrimeGroup,
+    linkIncident,
+    linkOffender,
+    linkVehicle,
     onSubmitUpdate,
     onUpdateImageChange,
     onUpdateImagePreview,
+    removeArticle,
+    removeCrimeGroup,
     removeUpdateImage,
     removeUpdateIncident,
     removeUpdateOffender,
-    removeCrimeGroup,
     removeVehicle,
-    removeArticle,
+    saving,
     schemeUsers,
     setMentionedUser,
     setUpdateInput,
     showUpdatePicker,
+    toggleLinkArticle,
+    toggleLinkCrimeGroup,
     toggleLinkUpdateIncident,
     toggleLinkUpdateOffender,
-    toggleShowUpdatePicker,
     toggleLinkVehicle,
-    toggleLinkCrimeGroup,
-    toggleLinkArticle,
+    toggleShowUpdatePicker,
+    updateArticleList,
+    updateCrimeGroupList,
     updateFileList,
     updateForm,
+    updateIncidentList,
     updateIncidents,
     updateInput,
-    updateIncidentList,
+    updateOffenders,
     updateOffendersList,
     updateVehicleList,
-    updateCrimeGroupList,
-    updateArticleList,
-    linkIncident,
-    linkOffender,
-    linkVehicle,
-    linkCrimeGroup,
-    linkArticle,
-    updateOffenders,
-    crimeGroupsData,
     vehiclesData,
-    articlesData,
-    saving,
-    handleMarkAsRead,
-    hideIncident,
-    adminRights,
   } = useUpdateBar({
-    replyTo,
+    crimeGroupId,
     incidentId,
+    investigationId,
+    offenderId,
+    replyTo,
+    setOptionRowShow,
     setReplyTo,
     subscribed,
-    offenderId,
-    investigationId,
-    setOptionRowShow,
     vehicleId,
-    crimeGroupId,
   });
 
   return (
     <View
-      replyTo={replyTo}
-      setReplyTo={setReplyTo}
+      articlesData={articlesData}
       beforeUpdateImageUpload={beforeUpdateImageUpload}
-      onSubmitUpdate={onSubmitUpdate}
-      onUpdateImageChange={onUpdateImageChange}
-      onUpdateImagePreview={onUpdateImagePreview}
-      removeUpdateImage={removeUpdateImage}
-      removeUpdateIncident={removeUpdateIncident}
-      removeUpdateOffender={removeUpdateOffender}
-      removeCrimeGroup={removeCrimeGroup}
-      removeVehicle={removeVehicle}
-      removeArticle={removeArticle}
-      schemeUsers={schemeUsers}
-      setMentionedUser={setMentionedUser}
-      setUpdateInput={setUpdateInput}
-      showUpdatePicker={showUpdatePicker}
-      toggleLinkUpdateIncident={toggleLinkUpdateIncident}
-      toggleLinkUpdateOffender={toggleLinkUpdateOffender}
-      toggleShowUpdatePicker={toggleShowUpdatePicker}
-      toggleLinkVehicle={toggleLinkVehicle}
-      toggleLinkCrimeGroup={toggleLinkCrimeGroup}
-      toggleLinkArticle={toggleLinkArticle}
-      updateFileList={updateFileList}
-      updateForm={updateForm}
-      updateIncidents={updateIncidents}
-      updateInput={updateInput}
-      updateIncidentList={updateIncidentList}
-      updateOffendersList={updateOffendersList}
-      updateVehicleList={updateVehicleList}
-      updateCrimeGroupList={updateCrimeGroupList}
-      updateArticleList={updateArticleList}
+      crimeGroupsData={crimeGroupsData}
+      handleMarkAsRead={handleMarkAsRead}
+      hideIncident={hideIncident}
+      linkArticle={linkArticle}
+      linkCrimeGroup={linkCrimeGroup}
       linkIncident={linkIncident}
       linkOffender={linkOffender}
       linkVehicle={linkVehicle}
-      linkCrimeGroup={linkCrimeGroup}
-      linkArticle={linkArticle}
-      updateOffenders={updateOffenders}
-      crimeGroupsData={crimeGroupsData}
-      vehiclesData={vehiclesData}
-      articlesData={articlesData}
+      onSubmitUpdate={onSubmitUpdate}
+      onUpdateImageChange={onUpdateImageChange}
+      onUpdateImagePreview={onUpdateImagePreview}
+      removeArticle={removeArticle}
+      removeCrimeGroup={removeCrimeGroup}
+      removeUpdateImage={removeUpdateImage}
+      removeUpdateIncident={removeUpdateIncident}
+      removeUpdateOffender={removeUpdateOffender}
+      removeVehicle={removeVehicle}
+      replyTo={replyTo}
       saving={saving}
-      adminRights={adminRights}
-      handleMarkAsRead={handleMarkAsRead}
-      hideIncident={hideIncident}
+      schemeUsers={schemeUsers}
+      setMentionedUser={setMentionedUser}
+      setReplyTo={setReplyTo}
+      setUpdateInput={setUpdateInput}
+      showUpdatePicker={showUpdatePicker}
+      toggleLinkArticle={toggleLinkArticle}
+      toggleLinkCrimeGroup={toggleLinkCrimeGroup}
+      toggleLinkUpdateIncident={toggleLinkUpdateIncident}
+      toggleLinkUpdateOffender={toggleLinkUpdateOffender}
+      toggleLinkVehicle={toggleLinkVehicle}
+      toggleShowUpdatePicker={toggleShowUpdatePicker}
+      updateArticleList={updateArticleList}
+      updateCrimeGroupList={updateCrimeGroupList}
+      updateFileList={updateFileList}
+      updateForm={updateForm}
+      updateIncidentList={updateIncidentList}
+      updateIncidents={updateIncidents}
+      updateInput={updateInput}
+      updateOffenders={updateOffenders}
+      updateOffendersList={updateOffendersList}
+      updateVehicleList={updateVehicleList}
+      vehiclesData={vehiclesData}
     />
   );
 };

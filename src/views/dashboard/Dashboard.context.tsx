@@ -8,8 +8,10 @@ import type RGL from 'react-grid-layout';
 import type { IntlShape } from 'react-intl';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, {
   createContext,
   useCallback,
@@ -21,6 +23,7 @@ import React, {
 import { useIntl } from 'react-intl';
 
 interface DashboardContextT {
+  adminRights: boolean;
   children?: ReactNode;
   clearFilters: () => void;
   getHeight: (arg0: AvailableDashboardElements) => number;
@@ -89,6 +92,7 @@ export const generateHeight = () => {
 export const DashboardProvider: React.FC<{
   children?: ReactNode;
 }> = ({ children }) => {
+  const adminRights = useAtomValue(isAdminAtom);
   const schemeId = useStoreState((state) => state.scheme.id);
   const setFeedItemsState = useStoreActions(
     (actions) => actions.data.setFeedItems
@@ -239,6 +243,7 @@ export const DashboardProvider: React.FC<{
   // Value to be provided through context
   const value = useMemo(
     () => ({
+      adminRights,
       clearFilters,
       getHeight,
       getWidth,
@@ -267,6 +272,7 @@ export const DashboardProvider: React.FC<{
     }),
     [
       schemeId,
+      adminRights,
       setOrder,
       setSearch,
       sortFilter,

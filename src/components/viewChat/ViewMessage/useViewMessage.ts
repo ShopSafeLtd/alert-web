@@ -96,6 +96,7 @@ export interface OffenderData {
 }
 
 interface Return {
+  adminRights: boolean;
   articlesData: ArticleData[];
   beforeUpload: (value: RcFile) => void;
   chatData: ChatQuery | undefined;
@@ -1120,6 +1121,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
 
   return {
+    adminRights: hasRolePermission({
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Chat,
+      },
+    }),
     articlesData,
     beforeUpload,
     chatData,
