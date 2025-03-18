@@ -83,7 +83,7 @@ const AiOffenders = () => {
       <Row align="middle" style={{ marginBottom: 0, marginTop: 20 }}>
         <Col flex={1}>
           <Typography.Title level={3} style={{ marginBottom: 0 }}>
-            <FormattedMessage defaultMessage="Identfied High Impact Offenders" />
+            <FormattedMessage defaultMessage="Identified High Impact Offenders" />
           </Typography.Title>
         </Col>
         <Col>
