@@ -1,6 +1,7 @@
 import type { ListDocumentsOnSchemeQuery } from 'graphql/documents/queries/__generated__/list-documents.generated';
 
 import { useDeleteDocumentMutation } from '#/graphql/documents/mutations/__generated__/delete-document.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import hasRolePermission from '#/utils/has-role-permission';
 import { notification } from 'antd';
@@ -9,19 +10,18 @@ import {
   useListDocumentsOnSchemeQuery,
 } from 'graphql/documents/queries/__generated__/list-documents.generated';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { Props as Return } from '../types/Documents';
-
-import { useStoreState } from '../../../../../state';
 
 const useListDocuments = (): Return => {
   const intl = useIntl();
   const [addDocument, setAddDocument] = useState(false);
   const [saving, setSaving] = useState(false);
   const toggleAddDocument = () => setAddDocument(!addDocument);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const variables = {
     where: {
       id: schemeId,

@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unused-prop-types */
 import type { ReactNode } from 'react';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
-import { useStoreState } from '#/state';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -25,7 +25,7 @@ export const useGroupsContext = () => {
 };
 
 const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({

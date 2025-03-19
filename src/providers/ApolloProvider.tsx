@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
 import { PublicRoutes } from '#/App';
 import { useTokenContext } from '#/context/token-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { cache } from '#/providers/cache';
 import { useStoreState } from '#/state';
 import { ApolloClient, ApolloProvider, split } from '@apollo/client';
@@ -15,6 +16,7 @@ import * as Sentry from '@sentry/react';
 import { SentryLink } from 'apollo-link-sentry';
 import { sha256 } from 'crypto-hash';
 import { createClient } from 'graphql-ws';
+import { useAtomValue } from 'jotai/index';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
@@ -57,7 +59,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
     }
   }, [token]);
 
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const localLang = useStoreState((state) => state.theme.locale);
 
   const defaultHeaders = {

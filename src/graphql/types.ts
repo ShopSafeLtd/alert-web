@@ -944,6 +944,18 @@ export enum AiRiskAssessmentThreatLevel {
   Medium = 'MEDIUM'
 }
 
+export enum AiRiskTolerance {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiSophisticationLevel {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
 export type AiSuggestionWhereInput = {
   groupIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;

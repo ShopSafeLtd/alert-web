@@ -4,12 +4,14 @@ import type { Role, UserStatus } from 'graphql/types';
 import type { CreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import type { InviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useUserListQuery } from '#/views/settings/users/UserList/__generated__/UserList.generated';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { ListUsersDocument } from 'graphql/users/queries/__generated__/list-users.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 import { UserSort } from 'types/enums/user_sort';
 
 interface Return {
@@ -42,8 +44,8 @@ interface Return {
 }
 
 const useUserList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const { id: userId } = useStoreState((state) => state.user);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
   const [addUser, setAddUser] = useState(false);
   const [editUser, toggleEditUser] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState('');

@@ -2,10 +2,10 @@
 import type { UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface OnSubmitValues {
   url: string;
@@ -23,7 +23,7 @@ interface Return {
 }
 
 const useAddLogo = ({ onClose, onSubmit }: Props): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const currentUserId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
 

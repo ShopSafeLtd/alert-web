@@ -4,6 +4,7 @@ import type {
 } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { TagData } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Modal, notification } from 'antd';
 import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
@@ -39,7 +40,7 @@ interface Return {
 
 const useOffenderWarningList = (): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const schemeName = useStoreState((state) => state.scheme.name);
   const userId = useAtomValue(userIdAtom);
   const [offenderId, setOffenderId] = useState('');

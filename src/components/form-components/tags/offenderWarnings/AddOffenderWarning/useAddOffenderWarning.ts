@@ -1,6 +1,7 @@
 import type { Scheme } from 'state';
 import type { TagData } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useAtomValue } from 'jotai/index';
 import { useStoreState } from 'state';
@@ -22,7 +23,7 @@ interface Return {
 }
 
 const useAddOffenderWarning = ({ update }: Props): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
 
   const userSchemes = useStoreState((state) => state.user.schemes);

@@ -5,14 +5,15 @@ import type {
 } from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
 
 import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/__generated__/conenct-scheme-mutation.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   SchemeSharingDocument,
   useSchemeSharingQuery,
 } from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
 import { Modal } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 const { confirm } = Modal;
 
@@ -26,7 +27,7 @@ interface Return {
 
 const useSchemeSharing = (): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [connectOpen, setConnectOpen] = useState(false);
 
   const { data, loading } = useSchemeSharingQuery({

@@ -1,13 +1,13 @@
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   QuestionGroupOnSchemeDocument,
   useQuestionGroupOnSchemeQuery,
 } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { useApolloClient } from '@apollo/client';
+import { useAtomValue } from 'jotai/index';
 import { useMemo } from 'react';
-
-import { useStoreState } from '../../state';
 
 interface Return {
   loading: boolean;
@@ -29,7 +29,7 @@ export interface ListData {
   }[];
 }
 const useActivityTemplates = (): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const store = useApolloClient();
   const { data, loading } = useQuestionGroupOnSchemeQuery({
     variables: {

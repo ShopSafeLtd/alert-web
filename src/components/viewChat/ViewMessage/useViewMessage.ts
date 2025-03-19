@@ -25,6 +25,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useApolloClient } from '@apollo/client';
 import { Form, Modal, Upload, message, notification } from 'antd';
@@ -49,6 +50,7 @@ import {
 } from 'graphql/types';
 import { UserChatsDocument } from 'graphql/userChat/queries/__generated__/user_chats.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -172,7 +174,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       },
     });
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();

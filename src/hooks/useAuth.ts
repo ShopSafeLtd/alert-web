@@ -6,13 +6,14 @@ import type {
 import { useTokenContext } from '#/context/token-context';
 import { handleSuccess } from '#/hooks/handleSuccess';
 import { useCurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { useSession, useUser } from '@clerk/clerk-react';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreActions } from 'state';
 
 interface Return {
   expired: () => void;
@@ -34,7 +35,7 @@ const useAuth = (): Return => {
   );
   const expired = useStoreActions((actions) => actions.auth.expired);
   const currentUserId = useAtomValue(userIdAtom);
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const { setDem, setFilterDefaultGroup, setNotifications, setTodos } =
     useStoreActions((actions) => actions.user);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);

@@ -2,6 +2,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { FeedTodosQuery } from 'graphql/feedItems/queries/__generated__/feed-todos.generated';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import {
@@ -34,7 +35,7 @@ interface Return {
 
 const useAdminTodos = ({ fullSearch }: Props): Return => {
   const userId = useAtomValue(userIdAtom);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [search, setSearch] = useState('');

@@ -3,10 +3,11 @@ import GroupsSelect, {
 } from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import DateSelect from '#/components/reports/DateSelect/DateSelect.view';
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useIncidentItemsReportQuery } from '#/views/reports/incident-items/__generated__/IncidentItemsReport.generated';
 import { Button, Col, Form, Row, Table } from 'antd';
 import dayjs from 'dayjs';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -24,7 +25,7 @@ interface TableItem {
 
 const StockItems = () => {
   const intl = useIntl();
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const [dateRange, setDateRange] = useState<
     | {

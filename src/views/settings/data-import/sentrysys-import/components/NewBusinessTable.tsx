@@ -1,5 +1,6 @@
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faClose,
   faMagnifyingGlass,
@@ -21,10 +22,10 @@ import {
 } from 'antd';
 import { useListBusinessesLocationsQuery } from 'graphql/businesses/queries/__generated__/list-businesses-locations.generated';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { memo, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { useStoreState } from 'state';
 
 import type { NewBusiness } from '../../disc-import/DiscImport.types';
 
@@ -59,7 +60,7 @@ const NewBusinessRow = memo(
   }: NewBusinessRowProps) => {
     const [form] = Form.useForm<NewBusiness>();
     const [link, setLink] = useState(false);
-    const currentSchemeId = useStoreState((state) => state.scheme.id);
+    const currentSchemeId = useAtomValue(currentSchemeIdAtom);
     const intl = useIntl();
     const classes = useStyles();
 

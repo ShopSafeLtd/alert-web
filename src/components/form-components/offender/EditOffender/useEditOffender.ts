@@ -13,6 +13,7 @@ import type {
 } from 'graphql/types';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import errorNotification from '#/types/mutation_notifications/error_notification';
@@ -130,7 +131,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
 
   const pagination = useStoreState((state) => state.data.offenders.pagination);

@@ -2,6 +2,7 @@
 import type { FormInstance } from 'antd';
 import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form, notification } from 'antd';
 import { useCreateMg11Mutation } from 'graphql/mg11/mutations/__generated__/create-mg11.generated';
@@ -90,7 +91,7 @@ interface Return {
 const useCreateMg11 = (): Return => {
   const intl = useIntl();
   const [form] = useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const { id: incidentId } = useParams();
   const { fullName: interviewerName } = useStoreState((state) => state.user);

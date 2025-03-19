@@ -14,15 +14,16 @@ import {
   Role,
   SortOrder,
 } from '#/graphql/types';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useGoodsTypesQuery } from '#/views/settings/data-import/csv/data-import/graphql/queries/__generated__/goods-types.generated';
 import { Form } from 'antd';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 import { v4 as uuidv4 } from 'uuid';
 
 import type {
@@ -121,7 +122,7 @@ interface Return {
 const useSentrysysImport = (): Return => {
   const [mappingForm] = Form.useForm<GenerateData>();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);

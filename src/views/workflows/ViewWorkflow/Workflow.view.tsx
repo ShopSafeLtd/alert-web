@@ -5,7 +5,7 @@ import BusinessesSelect from '#/components/form-components/BusinessesSelect/Busi
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import UsersManySelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import DatePicker from '#/components/util-components/DatePicker';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Card,
@@ -29,6 +29,7 @@ import {
   IncidentPriority,
   Model,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
@@ -125,7 +126,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
   const typeWatch = Form.useWatch('workflowMode', form);
   const workflowTypeWatch = Form.useWatch('workflowType', form);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   if (loading)
     return (

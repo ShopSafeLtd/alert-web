@@ -1,5 +1,6 @@
 import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { QueryMode } from 'graphql/types';
 import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
@@ -16,7 +17,7 @@ interface Return {
 }
 
 const useVehicleSideList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const filterVariables = useStoreState(
     (state) => state.data.vehicles.variables

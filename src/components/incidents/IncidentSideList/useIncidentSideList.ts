@@ -3,6 +3,7 @@ import type {
   IncidentsFeedQueryVariables,
 } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useIncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
@@ -25,7 +26,7 @@ interface Return {
 }
 
 const useIncidentSideList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const filterVariables = useStoreState(
     (state) => state.data.incidents.variables
   );

@@ -1,8 +1,10 @@
 import type { FormInstance } from 'antd';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form, notification } from 'antd';
 import { useCopyOffenderMutation } from 'graphql/offenders/mutations/__generated__/copy-offender.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -34,7 +36,7 @@ interface Return {
 const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const [selectSchemeId, setSelectSchemeId] = useState<string>('');
   const [saving, setSaving] = useState(false);

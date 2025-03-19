@@ -4,11 +4,12 @@ import type {
   ListCrimeGroupsQueryVariables,
 } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useCreateCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/create-crime-group.generated';
 import { ListCrimeGroupsDocument } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 
 interface Return {
   addOffender: boolean;
@@ -22,7 +23,7 @@ interface Return {
 
 const useCreateCrimeGroup = (): Return => {
   const navigate = useNavigate();
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const [selectedOffenders, setSelectedOffenders] = useState<
     OffenderSearchDetailsFragment[]
   >([]);

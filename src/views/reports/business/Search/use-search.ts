@@ -1,12 +1,12 @@
 import type { SearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useSearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { QueryMode } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStoreState } from 'state';
 
 interface Return {
   currentSearchPage: number;
@@ -25,7 +25,7 @@ const useOffenderProfile = (): Return => {
   const [searchPage, setSearchPage] = useState(1);
   const [searchPageSize, setSearchPageSize] = useState(20);
 
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
 
   const { data: searchBusinessData, loading: searchBusinessLoading } =

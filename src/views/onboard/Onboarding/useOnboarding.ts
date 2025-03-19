@@ -1,5 +1,6 @@
 import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
@@ -39,7 +40,7 @@ interface Return {
 const useOnboarding = (): Return => {
   const intl = useIntl();
   const userId = useAtomValue(userIdAtom);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [current, setCurrent] = useState(0);
   const [accountDetail, setAccountDetail] = useState<AccountData | undefined>();
   const [termsSigned, setTermsSigned] = useState(false);

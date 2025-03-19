@@ -1,11 +1,11 @@
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface Return {
   data: ListCrimeGroupsQuery | undefined;
@@ -16,7 +16,7 @@ interface Return {
 
 const useListCrimeGroups = (): Return => {
   const userId = useAtomValue(userIdAtom);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [search, setSearch] = useState('');
 
   const { data, loading } = useListCrimeGroupsQuery({

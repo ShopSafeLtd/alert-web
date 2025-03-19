@@ -9,13 +9,14 @@ import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/c
 import AddTodo from '#/components/form-components/Todos/AddTodo';
 import ViewTodo from '#/components/form-components/Todos/ViewTodo/Todo.container';
 import ActivityTable from '#/components/tables/ActivityTable';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Drawer, Empty, Row, Typography } from 'antd';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -31,7 +32,7 @@ interface Props {
 const Activities = ({ data, incidentId, loading, saving }: Props) => {
   const intl = useIntl();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [addTodo, setAddTodo] = useState(false);
   const [completeTodoVisible, setCompleteTodoVisible] = useState<null | string>(
     null

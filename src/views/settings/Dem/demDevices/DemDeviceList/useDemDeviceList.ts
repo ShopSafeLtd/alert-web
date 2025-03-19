@@ -2,12 +2,13 @@ import type { UpsertDemDeviceMutation } from '#/components/form-components/DemDe
 import type { DemDeviceData } from '#/types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { notification } from 'antd';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 import type { DemDevicesQuery } from '../graphql/queries/__generated__/dem-devices.generated';
 
@@ -39,7 +40,7 @@ interface Return {
 const useDemDeviceList = (): Return => {
   const intl = useIntl();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [addDemDevice, setAddDemDevice] = useState(false);
   const [assignToBusiness, setAssignToBusiness] = useState('');
   const [pagination, setPagination] = useState({ page: 1, pageSize: 24 });

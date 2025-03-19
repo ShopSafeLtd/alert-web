@@ -7,6 +7,7 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
 import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
 import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
 import { Role, SortOrder } from 'graphql/types';
@@ -14,7 +15,6 @@ import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/lis
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
-import { useStoreState } from '../../../../state';
 import customRequest from '../../../../utils/custom-request';
 
 export interface FormData {
@@ -58,7 +58,7 @@ const useTodo = ({
   const [availableUsers, setAvailableUsers] = useState<
     { id: string; name: string; timeTaken: number }[]
   >([]);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
   const currentUser = useAtomValue(userIdAtom);
   const { data: todo, loading } = useTodoQuery({

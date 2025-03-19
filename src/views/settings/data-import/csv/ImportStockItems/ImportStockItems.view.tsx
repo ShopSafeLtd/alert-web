@@ -1,9 +1,10 @@
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Card, Col, Row, Table, Typography, notification } from 'antd';
 import { useStockItemImportMutation } from 'graphql/imports/__generated__/import-stock-items.generated';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import CSVReader from 'react-csv-reader';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 export type CSVData = string[][];
 
@@ -18,7 +19,7 @@ interface StockItem {
 
 const ImportStockItems = () => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
   const [saving, setSaving] = useState(false);
 

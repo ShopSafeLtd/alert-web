@@ -1,12 +1,12 @@
 import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useSearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStoreState } from 'state';
 
 interface Return {
   currentSearchPage: number;
@@ -26,7 +26,7 @@ const useOffenderProfile = (): Return => {
   const [searchPage, setSearchPage] = useState(1);
   const [searchPageSize, setSearchPageSize] = useState(20);
 
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { data: searchOffendersData, loading: searchOffenderLoading } =
     useSearchOffenderReportsQuery({

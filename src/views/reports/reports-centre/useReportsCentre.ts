@@ -3,7 +3,7 @@ import type {
   ReportsCentreQueryVariables,
 } from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
 
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ReportsCentreDocument,
   useReportsCentreQuery,
@@ -12,6 +12,7 @@ import { notification } from 'antd';
 import { useDeleteReportGroupMutation } from 'graphql/report-groups/__generated__/delete-report-group.generated';
 import { useDeleteReportTemplateMutation } from 'graphql/reports/mutations/__generated__/delete-report-template.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -34,7 +35,7 @@ interface Return {
 
 const useReportsCentre = (): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [search, setSearch] = useState('');
   const [editOpen, toggleEditOpen] = useState<null | string>(null);
   const [createOpen, setCreateOpen] = useState(false);

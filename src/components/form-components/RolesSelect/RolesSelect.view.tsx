@@ -3,9 +3,10 @@ import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 
 import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/__generated__/custom-roles.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   allowClear?: boolean;
@@ -35,7 +36,7 @@ const RolesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   value,
   ...props
 }) => {
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, loading } = useUserRolesQuery({
     variables: queryVars ?? {

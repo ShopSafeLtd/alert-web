@@ -5,6 +5,7 @@ import type {
 } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 
 import { useCreateTagMutation } from '#/graphql/tags/mutations/__generated__/create-tag.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useCopyEvidenceMutation } from 'graphql/dem/mutations/__generated__/import-evidence.generated';
 import { ViewInvestigationDocument } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
@@ -12,7 +13,6 @@ import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated'
 import { Model } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface OnSubmitValues {
   name: string;
@@ -40,7 +40,7 @@ interface Return {
 }
 
 const useAddDocument = ({ investigationId, onClose }: Props): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<

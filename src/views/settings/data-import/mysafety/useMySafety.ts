@@ -1,10 +1,11 @@
 import type { MySafetyCSVData } from '#/components/form-components/MySafetyCSV/MySafetyCSV.types';
 import type { FormInstance } from 'antd';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form, notification } from 'antd';
 import { useMySafetyImportDataMutation } from 'graphql/imports/__generated__/mysafety-import.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface FormData {
   groups: string[];
@@ -18,7 +19,7 @@ interface Return {
 }
 
 const useMySafety = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [form] = Form.useForm<FormData>();
   const [importData] = useMySafetyImportDataMutation({

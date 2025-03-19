@@ -4,6 +4,7 @@ import type { SelectProps, UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { Editor } from 'tinymce';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
 import { useCreateArticleMutation } from 'graphql/article/mutations/__generated__/create-article.generated';
@@ -62,7 +63,7 @@ const useCreateEditArticle = (): Props => {
   const { id: articleId } = useParams();
 
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const { id: userId, schemes } = useStoreState((state) => state.user);
   const [form] = useForm<FormData>();
   const [data, setData] = useState<FormData>({

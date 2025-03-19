@@ -6,7 +6,10 @@ import type {
   UserNotificationsQueryVariables,
 } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
 
-import { useSchemeProvider } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeIdAtom,
+  useSchemeProvider,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
@@ -66,7 +69,7 @@ const useNotificationLists = (): Return => {
   const userId = useAtomValue(userIdAtom);
   const defaultGroups = useStoreState((state) => state.user.defaultGroups);
   const userSchemes = useStoreState((state) => state.user.schemes);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setNotifications = useStoreActions(
     (actions) => actions.user.setNotifications

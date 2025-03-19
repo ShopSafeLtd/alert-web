@@ -16,6 +16,7 @@ import type { VehicleCreateWithoutCrimeGroupInput } from 'graphql/types';
 import type { VehicleData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -39,6 +40,7 @@ import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-
 import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
 import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -119,7 +121,7 @@ const onCompletedAddOffender = () => {
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const intl = useIntl();
   const { id: userId } = useStoreState((state) => state.user);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);

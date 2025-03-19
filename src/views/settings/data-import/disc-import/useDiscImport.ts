@@ -13,15 +13,16 @@ import {
   SortOrder,
   TagType,
 } from '#/graphql/types';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 import { v4 as uuidv4 } from 'uuid';
 
 import type {
@@ -131,7 +132,7 @@ interface Return {
 const useDiscImport = (): Return => {
   const [mappingForm] = Form.useForm<GenerateData>();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [idSought, setIdSought] = useState<IDSought[]>([]);
   const [knownSubjects, setKnownSubjects] = useState<KnownSubject[]>([]);

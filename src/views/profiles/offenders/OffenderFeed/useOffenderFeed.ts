@@ -14,6 +14,7 @@ import type {
 import type { OffenderFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   ListOffendersRelayDocument,
@@ -26,6 +27,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
@@ -63,7 +65,7 @@ const useOffenderFeed = (): Return => {
   const onNavigate = () => navigate('/app/offenders/add');
 
   // Global State
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
     (state) => state.user
   );

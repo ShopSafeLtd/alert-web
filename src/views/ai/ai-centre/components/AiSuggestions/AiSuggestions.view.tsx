@@ -5,7 +5,7 @@ import type {
 
 import AiSuggestionCard from '#/components/ai-suggestions/AiSuggestionCard.view';
 import ReviewAiSuggestion from '#/components/ai-suggestions/ReviewAiSuggestion.view';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   AiSuggestionsDocument,
   useAiSuggestionsQuery,
@@ -16,6 +16,7 @@ import { Button, Col, Drawer, Input, Row, Skeleton, Typography } from 'antd';
 import { useApproveAiSuggestionMutation } from 'graphql/ai-suggestions/__generated__/approve-ai-suggestions.generated';
 import { useDismissAiSuggestionMutation } from 'graphql/ai-suggestions/__generated__/dismiss-ai-suggestions.generated';
 import { AiSuggestionStatus, AiSuggestionType, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -38,7 +39,7 @@ const defaultFilter = [
 ];
 
 const AiSuggestions = () => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState<null | string>(null);
