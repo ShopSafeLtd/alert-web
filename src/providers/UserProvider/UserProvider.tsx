@@ -66,7 +66,6 @@ const UserProvider = ({ children }: Props) => {
   const setNewUser = useSetAtom(newUserAtom);
 
   void useCurrentUserProviderQuery({
-    fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       if (currentSchemeId === null && data.currentUser?.schemes[0]) {
         const currentScheme = localStorage.getItem(CURRENT_SCHEME);

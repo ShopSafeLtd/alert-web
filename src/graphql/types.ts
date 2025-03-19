@@ -773,12 +773,164 @@ export enum Age {
   Unknown = 'UNKNOWN'
 }
 
+export type AiBehavioralAnalysis = {
+  __typename?: 'AiBehavioralAnalysis';
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  incident?: Maybe<Incident>;
+  interventionResponse?: Maybe<Scalars['String']>;
+  learningBehavior?: Maybe<Scalars['String']>;
+  offender?: Maybe<Offender>;
+  planningEvidence?: Maybe<Scalars['String']>;
+  riskTolerance?: Maybe<AiRiskTolerance>;
+  sophisticationLevel?: Maybe<AiSophisticationLevel>;
+  stressResponse?: Maybe<Scalars['String']>;
+  tacticsUsed: Array<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type AiGeographicAnalysis = {
+  __typename?: 'AiGeographicAnalysis';
+  createdAt: Scalars['Date'];
+  geographicPattern: Scalars['String'];
+  hotspotAnalysis: Scalars['String'];
+  id: Scalars['ID'];
+  offender: Offender;
+  travelDistance: Scalars['String'];
+  updatedAt: Scalars['Date'];
+};
+
+export type AiIdentityLinkage = {
+  __typename?: 'AiIdentityLinkage';
+  createdAt: Scalars['Date'];
+  distinctiveMarkers: Array<Scalars['String']>;
+  id: Scalars['ID'];
+  identityConfidence: Scalars['Int'];
+  offender: Offender;
+  potentialMatches: Array<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type AiImpactAssessment = {
+  __typename?: 'AiImpactAssessment';
+  category?: Maybe<AiImpactAssessmentCategory>;
+  createdAt: Scalars['Date'];
+  financialImpact?: Maybe<AiImpactAssessmentFinancialImpact>;
+  id: Scalars['ID'];
+  incident?: Maybe<Incident>;
+  justification: Scalars['String'];
+  keyFactors: Array<Scalars['String']>;
+  offender?: Maybe<Offender>;
+  overallScore: Scalars['Int'];
+  securityResourceImpact?: Maybe<AiImpactAssessmentSecurityResourceImpact>;
+  updatedAt: Scalars['Date'];
+};
+
 export enum AiImpactAssessmentCategory {
   Critical = 'CRITICAL',
   High = 'HIGH',
   Low = 'LOW',
   Medium = 'MEDIUM'
 }
+
+export enum AiImpactAssessmentFinancialImpact {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiImpactAssessmentSecurityResourceImpact {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export type AiInvestigationLeads = {
+  __typename?: 'AiInvestigationLeads';
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  incident: Incident;
+  keyCCTVTimestamps: Array<Scalars['String']>;
+  suggestedActions: Array<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type AiNetworkAnalysis = {
+  __typename?: 'AiNetworkAnalysis';
+  communicationObserved: Array<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  groupDynamics: Scalars['String'];
+  id: Scalars['ID'];
+  incident?: Maybe<Incident>;
+  offenderRoles?: Maybe<Scalars['JSON']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type AiPatternRecognition = {
+  __typename?: 'AiPatternRecognition';
+  createdAt: Scalars['Date'];
+  groupBehaviorPattern: Scalars['String'];
+  id: Scalars['ID'];
+  incident: Incident;
+  knownMOMatch: Scalars['String'];
+  timePatternClassification: Scalars['String'];
+  updatedAt: Scalars['Date'];
+};
+
+export type AiPreventionInsights = {
+  __typename?: 'AiPreventionInsights';
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  incident: Incident;
+  recommendations: Array<Scalars['String']>;
+  staffingImplications: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  vulnerabilitiesExploited: Array<Scalars['String']>;
+};
+
+export type AiQualityAssessment = {
+  __typename?: 'AiQualityAssessment';
+  createdAt: Scalars['Date'];
+  dataGaps: Array<Scalars['String']>;
+  id: Scalars['ID'];
+  improvements: Array<Scalars['String']>;
+  offender: Offender;
+  qualityScore: Scalars['Int'];
+  updatedAt: Scalars['Date'];
+};
+
+export type AiRecommendedActions = {
+  __typename?: 'AiRecommendedActions';
+  createdAt: Scalars['Date'];
+  earlyWarningSignals: Array<Scalars['String']>;
+  id: Scalars['ID'];
+  offender: Offender;
+  preventionTactics: Array<Scalars['String']>;
+  priorityLevel?: Maybe<AiRecommendedActionsPriorityLevel>;
+  staffGuidance?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+export enum AiRecommendedActionsPriorityLevel {
+  Elevated = 'ELEVATED',
+  High = 'HIGH',
+  Standard = 'STANDARD'
+}
+
+export type AiRiskAssessment = {
+  __typename?: 'AiRiskAssessment';
+  confrontationResponse?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  escalationPotential?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  incident?: Maybe<Incident>;
+  offender?: Maybe<Offender>;
+  reoffendingProbability?: Maybe<Scalars['Int']>;
+  staffSafetyRisk?: Maybe<AiRiskAssessmentSafetyRisk>;
+  threatLevel?: Maybe<AiRiskAssessmentThreatLevel>;
+  updatedAt: Scalars['Date'];
+  violencePotential?: Maybe<AiRiskAssessmentThreatLevel>;
+};
 
 export enum AiRiskAssessmentSafetyRisk {
   High = 'HIGH',
@@ -806,6 +958,28 @@ export type AiSuggestionWhereUniqueInput = {
 
 export type AiSuggestionsOrderBy = {
   createdAt?: InputMaybe<SortOrder>;
+};
+
+export type AiTargetAnalysis = {
+  __typename?: 'AiTargetAnalysis';
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  offender: Offender;
+  storeVulnerabilities: Array<Scalars['String']>;
+  targetPreference: Scalars['String'];
+  updatedAt: Scalars['Date'];
+  valueRange: Scalars['String'];
+};
+
+export type AiTemporalAnalysis = {
+  __typename?: 'AiTemporalAnalysis';
+  createdAt: Scalars['Date'];
+  frequencyAnalysis: Scalars['String'];
+  id: Scalars['ID'];
+  offender: Offender;
+  patternPrediction: Scalars['String'];
+  timePatterns: Scalars['String'];
+  updatedAt: Scalars['Date'];
 };
 
 export type Answer = {
@@ -7543,11 +7717,18 @@ export type Incident = {
   __typename?: 'Incident';
   actionableScore: Scalars['Int'];
   actions: Array<Action>;
+  aiBehavioralAnalysis?: Maybe<AiBehavioralAnalysis>;
+  aiImpactAssessment?: Maybe<AiImpactAssessment>;
   aiImprovements?: Maybe<Scalars['String']>;
+  aiInvestigationLeads?: Maybe<AiInvestigationLeads>;
   aiKeyObservations?: Maybe<Array<Scalars['String']>>;
   aiMO?: Maybe<Scalars['String']>;
   aiMethod?: Maybe<Scalars['String']>;
+  aiNetworkAnalysis?: Maybe<AiNetworkAnalysis>;
+  aiPatternRecognition?: Maybe<AiPatternRecognition>;
+  aiPreventionInsights?: Maybe<AiPreventionInsights>;
   aiQualityScore?: Maybe<Scalars['Int']>;
+  aiRiskAssessment?: Maybe<AiRiskAssessment>;
   aiSummary?: Maybe<Scalars['String']>;
   answers: Array<Answer>;
   approved?: Maybe<Scalars['Boolean']>;
@@ -12778,13 +12959,22 @@ export type Offender = {
   active?: Maybe<Scalars['Boolean']>;
   addresses: Array<Address>;
   age?: Maybe<Age>;
+  aiBehavioralAnalysis?: Maybe<AiBehavioralAnalysis>;
+  aiGeographicAnalysis?: Maybe<AiGeographicAnalysis>;
+  aiIdentityLinkage?: Maybe<AiIdentityLinkage>;
+  aiImpactAssessment?: Maybe<AiImpactAssessment>;
   aiImpactScore?: Maybe<Scalars['Int']>;
   aiImprovements?: Maybe<Scalars['String']>;
   aiKeyObservations?: Maybe<Array<Scalars['String']>>;
   aiMO?: Maybe<Scalars['String']>;
   aiMethods?: Maybe<Array<Scalars['String']>>;
+  aiQualityAssessment?: Maybe<AiQualityAssessment>;
   aiQualityScore?: Maybe<Scalars['Int']>;
+  aiRecommendedActions?: Maybe<AiRecommendedActions>;
+  aiRiskAssessment?: Maybe<AiRiskAssessment>;
   aiSummary?: Maybe<Scalars['String']>;
+  aiTargetAnalysis?: Maybe<AiTargetAnalysis>;
+  aiTemporalAnalysis?: Maybe<AiTemporalAnalysis>;
   alias: Array<Scalars['String']>;
   approved?: Maybe<Scalars['Boolean']>;
   articleColumns: Array<ArticleColumn>;

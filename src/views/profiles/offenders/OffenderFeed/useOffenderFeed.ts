@@ -14,7 +14,6 @@ import type {
 import type { OffenderFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
-import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   ListOffendersRelayDocument,
@@ -27,7 +26,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import cacheOrLoading from 'utils/cache-or-loading';
@@ -76,21 +75,13 @@ const useOffenderFeed = (): Return => {
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-  const { schemes } = useStoreState((state) => state.user);
-  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === currentSchemeId),
-    [schemes, currentSchemeId]
-  );
-  const permissions = currentScheme?.permissions;
 
   // local State
-  const hasAutomations = hasPermission({
+  const hasAutomations = hasRolePermission({
     permission: {
       method: PermissionMethod.Read,
       model: PermissionModel.Automations,
     },
-    permissions,
   });
   const [sortFilter, setSortFilter] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(

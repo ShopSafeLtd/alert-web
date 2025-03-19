@@ -1,8 +1,8 @@
-import { useStoreState } from '#/state';
+import hasRolePermission from '#/utils/has-role-permission';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Typography } from 'antd';
 import Sider from 'antd/lib/layout/Sider';
-import { PermissionModel } from 'graphql/types';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -18,137 +18,187 @@ const SettingsSideMenu = ({
 }) => {
   const intl = useIntl();
   const classes = useStyles();
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
-  const schemes = useStoreState((state) => state.user.schemes);
-  const permissions =
-    schemes
-      .find((scheme) => scheme.scheme.id === currentSchemeId)
-      ?.permissions.filter((item) => item.allowedMethods.length > 0)
-      .map(({ model }) => model) || [];
 
   const settings = [
     {
-      permissions: [PermissionModel.Users],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Users,
+      },
       title: intl.formatMessage({ defaultMessage: 'Users' }),
       to: '/app/scheme-settings/users',
     },
     {
-      permissions: [PermissionModel.Businesses],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Businesses,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Businesses',
       }),
       to: '/app/scheme-settings/businesses',
     },
     {
-      permissions: [PermissionModel.Businesses],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Brands,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Brands',
       }),
       to: '/app/scheme-settings/brands',
     },
     {
-      permissions: [PermissionModel.Roles],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Roles,
+      },
       title: intl.formatMessage({ defaultMessage: 'Roles' }),
       to: '/app/scheme-settings/roles',
     },
     {
-      permissions: [PermissionModel.Groups],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Groups,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Content Groups',
       }),
       to: '/app/scheme-settings/groups',
     },
     {
-      permissions: [PermissionModel.ChatGroups],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.ChatGroups,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Chat Groups',
       }),
       to: '/app/scheme-settings/chat-groups',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Dem,
+      },
       title: intl.formatMessage({
         defaultMessage: 'DEM',
       }),
       to: '/app/scheme-settings/dem',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.GeneralSettings,
+      },
       title: intl.formatMessage({
         defaultMessage: 'General Settings',
       }),
       to: '/app/scheme-settings/scheme',
     },
     {
-      permissions: [PermissionModel.SharingSettings],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.SharingSettings,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Sharing Settings',
       }),
       to: '/app/scheme-settings/scheme-sharing',
     },
     {
-      permissions: [PermissionModel.Dashboard],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Dashboard,
+      },
       title: intl.formatMessage({ defaultMessage: 'Dashboards' }),
       to: '/app/manage-dashboard/',
     },
     {
-      permissions: [PermissionModel.IncidentOptions],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.IncidentOptions,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Incident Options',
       }),
       to: '/app/scheme-settings/crime-types',
     },
     {
-      permissions: [PermissionModel.OffenderWarnings],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.OffenderWarnings,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Offender Warnings',
       }),
       to: '/app/scheme-settings/offender-warnings',
     },
     {
-      permissions: [PermissionModel.OffenderGalleries],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.OffenderWarnings,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Offender Galleries',
       }),
       to: '/app/scheme-settings/custom-galleries',
     },
     {
-      permissions: [PermissionModel.Workflows],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Workflows,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Workflows',
       }),
       to: '/app/scheme-settings/workflow',
     },
     {
-      permissions: [PermissionModel.StatementTemplates],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.StatementTemplates,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Statement Templates',
       }),
       to: '/app/scheme-settings/statement-templates',
     },
     {
-      permissions: [PermissionModel.Terms],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Terms,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Terms & Conditions',
       }),
       to: '/app/scheme-settings/terms',
     },
     {
-      permissions: [PermissionModel.DataImport],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.DataImport,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Data Import',
       }),
       to: '/app/scheme-settings/data-import',
     },
     {
-      permissions: [PermissionModel.DataExport],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.DataExport,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Data Export',
       }),
       to: '/app/scheme-settings/data-export/export-incidents',
     },
     {
-      permissions: [PermissionModel.Settings],
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Settings,
+      },
       title: intl.formatMessage({
         defaultMessage: 'Recycle Bin',
       }),
@@ -182,10 +232,8 @@ const SettingsSideMenu = ({
           </Typography.Paragraph>
 
           {settings
-            .filter(
-              (item) =>
-                item.permissions &&
-                permissions.some((perm) => item.permissions.includes(perm))
+            .filter((item) =>
+              hasRolePermission({ permission: item.permissions })
             )
             .map((item) => (
               <Link key={item.to} to={item.to}>

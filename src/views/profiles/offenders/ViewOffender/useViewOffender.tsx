@@ -26,7 +26,6 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
-import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
@@ -61,7 +60,7 @@ import {
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
-import React, { useEffect, useMemo, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
@@ -260,12 +259,7 @@ const useViewOffender = (offenderId: string): Return => {
   const hasConnectedSchemes = useStoreState(
     (state) => state.scheme.hasConnectedSchemes
   );
-  const { id: userId, schemes } = useStoreState((state) => state.user);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const { id: userId } = useStoreState((state) => state.user);
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [paginationState, dispatch] = usePagination();
@@ -1941,12 +1935,11 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleShareOpen = () => {
     setShareOpen(!shareOpen);
   };
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.Offenders,
     },
-    permissions,
   });
 
   return {

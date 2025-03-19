@@ -7,13 +7,13 @@ import type { DeleteArticleMutation } from 'graphql/article/mutations/__generate
 import type { ArticleFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
-import hasPermission from '#/utils/has-permission';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   ListArticlesFeedDocument,
   useListArticlesFeedQuery,
 } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import { PermissionMethod, PermissionModel, QueryMode } from 'graphql/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -50,16 +50,9 @@ const useArticleFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const {
-    filterDefaultGroups: defaultGroups,
-    id: userId,
-    schemes,
-  } = useStoreState((state) => state.user);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
+  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
+    (state) => state.user
   );
-  const permissions = currentScheme?.permissions;
 
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
@@ -256,12 +249,11 @@ const useArticleFeed = (): Return => {
       },
     });
   };
-  const hasCreateRights = hasPermission({
+  const hasCreateRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Write,
       model: PermissionModel.Articles,
     },
-    permissions,
   });
   return {
     data: data?.listArticlesRelay || null,

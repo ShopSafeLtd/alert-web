@@ -1,7 +1,6 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { LocationData } from 'types/DataType';
 
-import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
 import useCanView from '#/utils/in-scheme';
 import { useViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
@@ -50,7 +49,6 @@ const useViewIncident = (incidentId: string): Return => {
     () => schemes.find((scheme) => scheme.scheme.id === schemeId),
     [schemes, schemeId]
   );
-  const permissions = currentScheme?.permissions;
 
   const [saving, setSaving] = useState(false);
   const [editAddress, setEditAddress] = useState(false);
@@ -117,20 +115,18 @@ const useViewIncident = (incidentId: string): Return => {
     setEditImages(!editImages);
   };
 
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.Incidents,
     },
-    permissions,
   });
 
-  const deleteRights = hasPermission({
+  const deleteRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Delete,
       model: PermissionModel.Incidents,
     },
-    permissions,
   });
 
   return {

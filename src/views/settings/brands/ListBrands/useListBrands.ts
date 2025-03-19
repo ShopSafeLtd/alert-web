@@ -167,7 +167,6 @@ const useBrandList = (): Return => {
     loading: (data === null || data === undefined) && loading,
     onDelete,
     saving,
-
     search,
     setBrandId,
     setSearch,

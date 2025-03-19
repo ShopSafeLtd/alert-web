@@ -30,6 +30,9 @@ query CurrentUserProvider {
             id
             name
             demId
+            schemes {
+                id
+            }
 }
     }
 }
