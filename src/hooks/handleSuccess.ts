@@ -7,6 +7,7 @@ import type {
 } from '#/state/user-model';
 import type { ActionCreator } from 'easy-peasy';
 
+import { useSchemeProvider } from '#/providers/SchemeProvider/SchemeProvider';
 import { type SetUserPayload } from '#/state';
 import Mixpanel from '#/utils/mixpanel';
 import * as Sentry from '@sentry/react';
@@ -54,6 +55,8 @@ export const handleSuccess = async ({
   userNotifications,
 }: // eslint-disable-next-line @typescript-eslint/require-await
 HandleSuccessArgs) => {
+  const { setScheme: setSchemeAtom } = useSchemeProvider();
+
   // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
   const handleNoValidScheme = () => {
     const defScheme =
@@ -61,6 +64,7 @@ HandleSuccessArgs) => {
       schemes[0];
     const schemeDetails = defScheme?.scheme;
     window.localStorage.setItem('currentScheme', schemeDetails?.id || '');
+    setSchemeAtom(schemeDetails?.id);
     setScheme({
       activityAssignToUser: schemeDetails?.activityAssignToUser,
       autoApproveIncidents: schemeDetails?.autoApproveIncidents,
@@ -110,6 +114,7 @@ HandleSuccessArgs) => {
     );
 
     if (schemeDetails) {
+      setSchemeAtom(schemeDetails?.id);
       setScheme({
         activityAssignToUser: schemeDetails.scheme.activityAssignToUser,
         autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,

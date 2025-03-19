@@ -6,6 +6,7 @@ import type {
   UserNotificationsQueryVariables,
 } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
 
+import { useSchemeProvider } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/__generated__/update_user_notification.generated';
@@ -58,6 +59,7 @@ interface Return {
 
 const useNotificationLists = (): Return => {
   const navigate = useNavigate();
+  const { setScheme: setSchemeAtom } = useSchemeProvider();
   const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const defaultGroups = useStoreState((state) => state.user.defaultGroups);
@@ -306,7 +308,7 @@ const useNotificationLists = (): Return => {
       'logo-dark',
       scheme.darkLogo?.optimisedPersisted || ''
     );
-
+    setSchemeAtom(scheme.id);
     setScheme({
       activityAssignToUser: scheme.activityAssignToUser,
       autoApproveIncidents: scheme.autoApproveIncidents,
