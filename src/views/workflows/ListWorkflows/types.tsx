@@ -159,37 +159,39 @@ const useCreateColumns = () => {
             }}
             unauthorizedElement={<div />}
           >
-            <Col>
-              <Tooltip title={<FormattedMessage defaultMessage="Edit" />}>
-              <Button
-                icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                onClick={() => {
-                  navigate(`edit/${record.key}`);
-                }}
-                size="small"
-                style={{ marginRight: 5 }}
-              />
-            </Tooltip>
-          </Col>
-          <Col>
-            <Tooltip title={<FormattedMessage defaultMessage="Delete" />}>
-              <Popconfirm
-                onConfirm={() => onDelete(record.key)}
-                overlayInnerStyle={{ padding: 10 }}
-                title={
-                  <FormattedMessage defaultMessage="Do you want to delete this workflow?" />
-                }
-              >
-                <Button
-                  icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                  onClick={() => {
-                    console.log('clicked', record);
-                    navigate(`edit/${record.key}`);
-                  }}
-                  size="small"
-                />
-              </Tooltip>
-            </Col>
+            <>
+              <Col>
+                <Tooltip title={<FormattedMessage defaultMessage="Edit" />}>
+                  <Button
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                    onClick={() => {
+                      navigate(`edit/${record.key}`);
+                    }}
+                    size="small"
+                    style={{ marginRight: 5 }}
+                  />
+                </Tooltip>
+              </Col>
+              <Col>
+                <Tooltip title={<FormattedMessage defaultMessage="Delete" />}>
+                  <Popconfirm
+                    onConfirm={() => onDelete(record.key)}
+                    overlayInnerStyle={{ padding: 10 }}
+                    title={
+                      <FormattedMessage defaultMessage="Do you want to delete this workflow?" />
+                    }
+                  >
+                    <Button
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                      onClick={() => {
+                        navigate(`edit/${record.key}`);
+                      }}
+                      size="small"
+                    />
+                  </Popconfirm>
+                </Tooltip>
+              </Col>
+            </>
           </PermissionCheckWrapper>
           <PermissionCheckWrapper
             permission={{
