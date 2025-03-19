@@ -15,6 +15,7 @@ import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated_
 import {
   Model,
   QuestionModel,
+  SortOrder,
   WorkflowActionType,
   WorkflowTrigger,
 } from 'graphql/types';
@@ -219,7 +220,7 @@ const useWorkflowForm = (): Return => {
   const { data, loading } = useWorkflowDataQuery({
     variables: {
       orderBy: {
-        question: 'asc',
+        question: SortOrder.Asc,
       },
       questionsWhere: {
         deleted: {
@@ -227,7 +228,7 @@ const useWorkflowForm = (): Return => {
         },
       },
       schemeTagsOrderBy: {
-        name: 'asc',
+        name: SortOrder.Asc,
       },
       where: {
         id: currentScheme,
