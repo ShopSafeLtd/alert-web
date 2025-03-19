@@ -2,7 +2,6 @@ import type { CurrentUserProviderQuery } from '#/providers/UserProvider/__genera
 
 import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-import React, { useState } from 'react';
 
 import {
   CURRENT_SCHEME,
@@ -66,8 +65,6 @@ const UserProvider = ({ children }: Props) => {
   const setCurrentUser = useSetAtom(currentUserAtom);
   const setNewUser = useSetAtom(newUserAtom);
 
-  const [isSet, setIsSet] = useState(false);
-
   void useCurrentUserProviderQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
@@ -82,11 +79,10 @@ const UserProvider = ({ children }: Props) => {
 
       void setCurrentUser(data.currentUser);
       void setNewUser(data.currentUser?.newUser ?? false);
-      setIsSet(true);
     },
   });
 
-  return isSet ? children : <div />;
+  return children;
 };
 
 export default UserProvider;

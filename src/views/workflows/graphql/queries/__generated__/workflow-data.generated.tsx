@@ -7,6 +7,8 @@ export type WorkflowDataQueryVariables = Types.Exact<{
   where: Types.SchemeWhereUniqueInput;
   questionsWhere?: Types.InputMaybe<Types.QuestionWhereInput>;
   schemeTagsWhere?: Types.InputMaybe<Types.TagWhereInput>;
+  orderBy?: Types.InputMaybe<Array<Types.QuestionOrderByWithRelationInput> | Types.QuestionOrderByWithRelationInput>;
+  schemeTagsOrderBy?: Types.InputMaybe<Array<Types.TagOrderByWithRelationInput> | Types.TagOrderByWithRelationInput>;
 }>;
 
 
@@ -14,9 +16,9 @@ export type WorkflowDataQuery = { __typename?: 'Query', scheme: { __typename?: '
 
 
 export const WorkflowDataDocument = gql`
-    query WorkflowData($where: SchemeWhereUniqueInput!, $questionsWhere: QuestionWhereInput, $schemeTagsWhere: TagWhereInput) {
+    query WorkflowData($where: SchemeWhereUniqueInput!, $questionsWhere: QuestionWhereInput, $schemeTagsWhere: TagWhereInput, $orderBy: [QuestionOrderByWithRelationInput!], $schemeTagsOrderBy: [TagOrderByWithRelationInput!]) {
   scheme(where: $where) {
-    questions(where: $questionsWhere) {
+    questions(where: $questionsWhere, orderBy: $orderBy) {
       id
       questionOn
       optionsFormFormatted {
@@ -26,7 +28,7 @@ export const WorkflowDataDocument = gql`
       type
       questionFormatted
     }
-    schemeTags(where: $schemeTagsWhere) {
+    schemeTags(where: $schemeTagsWhere, orderBy: $schemeTagsOrderBy) {
       id
       name
     }

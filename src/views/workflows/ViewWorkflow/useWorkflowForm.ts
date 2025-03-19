@@ -218,10 +218,16 @@ const useWorkflowForm = (): Return => {
 
   const { data, loading } = useWorkflowDataQuery({
     variables: {
+      orderBy: {
+        question: 'asc',
+      },
       questionsWhere: {
         deleted: {
           equals: false,
         },
+      },
+      schemeTagsOrderBy: {
+        name: 'asc',
       },
       where: {
         id: currentScheme,

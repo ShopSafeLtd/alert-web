@@ -1,13 +1,20 @@
 import type { RoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
 import type { FormInstance } from 'antd';
 
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
 import { roleItems, settings } from '#/views/roles/types';
-import { faCheckSquare, faSquare } from '@fortawesome/pro-light-svg-icons';
+import {
+  faCheckSquare,
+  faSquare,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { faWarning } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
   Col,
+  Drawer,
   Form,
   Input,
   PageHeader,
@@ -23,7 +30,7 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
-import type { FormValues } from './useRole';
+import type { DeleteFormValues, FormValues } from './useRole';
 
 import ViewRoleSidelist from './ViewRole.Sidelist';
 import useStyles from './ViewRole.styles';
@@ -36,12 +43,15 @@ interface Props {
   form: FormInstance<FormValues>;
   id?: string;
   loading: boolean;
+  onDelete: (values: DeleteFormValues) => void;
   onFinish: (values: FormValues) => void;
   onSettingsToggle: (value: boolean) => void;
   roleName: string | undefined;
   setAll: () => void;
   setChanged: (changed: boolean) => void;
+  showDelete: boolean;
   submitting: boolean;
+  toggleShowDelete: () => void;
 }
 
 const RoleView = ({
@@ -49,11 +59,14 @@ const RoleView = ({
   form,
   id,
   loading,
+  onDelete,
   onFinish,
   onSettingsToggle,
   roleName,
   setAll,
+  showDelete,
   submitting,
+  toggleShowDelete,
 }: Props) => {
   const navigate = useNavigate();
 
@@ -87,6 +100,7 @@ const RoleView = ({
             </Col>
             <Col>
               <Button
+                disabled={loading}
                 onClick={setAll}
                 style={{
                   borderBottomRightRadius: 0,
@@ -101,16 +115,33 @@ const RoleView = ({
                 <FormattedMessage defaultMessage="Select All" />
               </Button>
             </Col>
+            <Col>
+              <Button
+                disabled={loading}
+                onClick={clearAll}
+                style={{
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                  borderRightWidth: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
+                }}
+              >
+                <FontAwesomeIcon icon={faSquare} style={{ marginRight: 10 }} />
+                <FormattedMessage defaultMessage="Clear All" />
+              </Button>
+            </Col>
             <Col style={{ paddingRight: 20 }}>
               <Button
-                onClick={clearAll}
+                disabled={loading}
+                onClick={toggleShowDelete}
                 style={{
                   borderBottomLeftRadius: 0,
                   borderTopLeftRadius: 0,
                 }}
               >
-                <FontAwesomeIcon icon={faSquare} style={{ marginRight: 10 }} />
-                <FormattedMessage defaultMessage="Clear All" />
+                <FontAwesomeIcon icon={faTrash} style={{ marginRight: 10 }} />
+                <FormattedMessage defaultMessage="Delete Role" />
               </Button>
             </Col>
           </Row>
@@ -455,6 +486,67 @@ const RoleView = ({
           </Row>
         </Col>
       </Row>
+
+      <Drawer
+        onClose={toggleShowDelete}
+        title={formatMessage({ defaultMessage: 'Delete Role' })}
+        visible={showDelete}
+      >
+        {showDelete && (
+          <Form layout="vertical" onFinish={onDelete}>
+            <Typography.Paragraph strong>
+              <FormattedMessage defaultMessage="Are you sure you want to do this? Once done this cannot be undone, all users will be moved to the new role." />
+            </Typography.Paragraph>
+            <Form.Item
+              label={formatMessage({ defaultMessage: 'New Role' })}
+              name="newRoleId"
+              rules={[
+                {
+                  message: formatMessage({
+                    defaultMessage:
+                      'Please choose a new role for the existing users.',
+                  }),
+                  required: true,
+                },
+              ]}
+              tooltip={formatMessage({
+                defaultMessage: 'All users will be moved to this role.',
+              })}
+            >
+              <RolesSelect excludeIds={id ? [id] : []} />
+            </Form.Item>
+            <Row gutter={8}>
+              <Col flex={1} />
+              <Col>
+                <Form.Item>
+                  <Button onClick={toggleShowDelete}>
+                    {formatMessage({
+                      defaultMessage: 'Cancel',
+                    })}
+                  </Button>
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item>
+                  <Button
+                    htmlType="submit"
+                    loading={loading || submitting}
+                    type="primary"
+                  >
+                    <FontAwesomeIcon
+                      icon={faWarning}
+                      style={{ marginRight: 8 }}
+                    />
+                    {formatMessage({
+                      defaultMessage: 'Delete Role',
+                    })}
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        )}
+      </Drawer>
     </div>
   );
 };

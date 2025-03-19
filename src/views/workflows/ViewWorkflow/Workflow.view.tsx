@@ -9,7 +9,6 @@ import { useStoreState } from '#/state';
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   Divider,
   Drawer,
@@ -20,6 +19,7 @@ import {
   Radio,
   Row,
   Select,
+  Switch,
   Typography,
 } from 'antd';
 import { AnswerType, CronSchedule, Model } from 'graphql/types';
@@ -352,8 +352,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -365,9 +365,10 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Tags Check" />
                             </Typography.Title>
                           </Col>
-                          <Col span={2}>
+
+                          <Col>
                             <Form.Item name="tags" valuePropName="checked">
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -425,8 +426,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -438,12 +439,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Value Check" />
                             </Typography.Title>
                           </Col>
-                          <Col span={2}>
+
+                          <Col>
                             <Form.Item
                               name="valueCheck"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -461,8 +463,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             />
                           </Form.Item>
                         )}
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -474,12 +476,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Lower Than Check" />
                             </Typography.Title>
                           </Col>
-                          <Col span={2}>
+
+                          <Col>
                             <Form.Item
                               name="lessThanCheck"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -507,8 +510,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -520,12 +523,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Goods Check" />
                             </Typography.Title>
                           </Col>
-                          <Col span={2}>
+
+                          <Col>
                             <Form.Item
                               name="goodsTypeCheck"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -585,8 +589,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -598,12 +602,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Description" />
                             </Typography.Title>
                           </Col>
-                          <Col span={2}>
+
+                          <Col>
                             <Form.Item
                               name="descriptionCheck"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -661,8 +666,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   <Row gutter={[8, 8]} style={{ marginTop: 8 }}>
                     <Col span={24}>
                       <Card>
-                        <Row>
-                          <Col span={23}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -674,12 +679,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Questions Check" />
                             </Typography.Title>
                           </Col>
-                          <Col span={1}>
+
+                          <Col>
                             <Form.Item
                               name="questionChecked"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -932,7 +938,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                     </Col>
                                     <Col
                                       offset={1}
-                                      span={2}
                                       style={{
                                         alignItems: 'center',
                                         display: 'flex',
@@ -978,8 +983,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         height: '100%',
                       }}
                     >
-                      <Row>
-                        <Col span={22}>
+                      <Row wrap={false}>
+                        <Col flex={1}>
                           <Typography.Title
                             level={4}
                             style={{
@@ -991,12 +996,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <FormattedMessage defaultMessage="No. of Offences in X days" />
                           </Typography.Title>
                         </Col>
-                        <Col span={2}>
+
+                        <Col>
                           <Form.Item
                             name="incidentTimeCountCheck"
                             valuePropName="checked"
                           >
-                            <Checkbox />
+                            <Switch />
                           </Form.Item>
                         </Col>
                       </Row>
@@ -1046,8 +1052,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         height: '100%',
                       }}
                     >
-                      <Row>
-                        <Col span={22}>
+                      <Row wrap={false}>
+                        <Col flex={1}>
                           <Typography.Title
                             level={4}
                             style={{
@@ -1067,12 +1073,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <FormattedMessage defaultMessage="Triggers when an incident happens ?" />
                           </Typography.Paragraph>
                         </Col>
-                        <Col span={2}>
+
+                        <Col>
                           <Form.Item
                             name="incidentWhileBanCheck"
                             valuePropName="checked"
                           >
-                            <Checkbox />
+                            <Switch />
                           </Form.Item>
                         </Col>
                       </Row>
@@ -1080,172 +1087,47 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   </Col>
                 </Row>
               )}
-            </>
-          ) : null}
-          <Divider style={{ marginTop: 10 }} />
-          <Typography.Title level={3}>
-            <FormattedMessage defaultMessage="Outcomes" />
-          </Typography.Title>
-
-          <Row gutter={[8, 8]}>
-            <Col span={24}>
-              <Card>
-                <Typography.Title level={4}>
-                  <FormattedMessage defaultMessage="User Management" />
-                </Typography.Title>
-                <Typography.Text type="secondary">
-                  <FormattedMessage defaultMessage="Select users, roles, and groups to be assigned to the outcomes. Created events will use users from the selected roles/groups as well as any specific users selected" />
-                </Typography.Text>
-                <Form.Item
-                  label={<FormattedMessage defaultMessage="Specefic Users" />}
-                  name="userManagementUsers"
-                  tooltip={
-                    <FormattedMessage defaultMessage="Select users to be assigned to the outcomes" />
-                  }
-                >
-                  <UsersManySelect
-                    allowClear
-                    disabled={saving}
-                    mode={'multiple'}
-                    placeholder={intl.formatMessage({
-                      defaultMessage: 'Search for a user...',
-                    })}
-                    showSearch
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={<FormattedMessage defaultMessage="Roles" />}
-                  name="userManagementRoles"
-                >
-                  <RoleSelect multi schemeId={schemeId} />
-                </Form.Item>
-                <Form.Item
-                  label={<FormattedMessage defaultMessage="Groups" />}
-                  name="userManagementGroups"
-                >
-                  <Select
-                    mode="multiple"
-                    optionFilterProp="label"
-                    options={groups}
-                  />
-                </Form.Item>
-                {typeWatch !== 'scheduled' && (
-                  <Form.Item name="useDynamicGroups" valuePropName="checked">
-                    <Checkbox>
-                      {workflowTypeWatch === Model.Incident
-                        ? intl.formatMessage({
-                            defaultMessage: 'Use Incident groups',
-                          })
-                        : intl.formatMessage({
-                            defaultMessage: 'Use Offender groups',
-                          })}
-                    </Checkbox>
-                  </Form.Item>
-                )}
-              </Card>
-            </Col>
-
-            <Col span={24}>
-              <Card>
-                <Row>
-                  <Col span={22}>
-                    <Typography.Title
-                      level={4}
-                      style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        paddingTop: 8,
-                      }}
-                    >
-                      <FormattedMessage defaultMessage="Create Activity" />
-                    </Typography.Title>
-                    <Typography.Paragraph
-                      style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                      }}
-                    >
-                      <FormattedMessage defaultMessage="What activity to create when the above conditions are met?" />
-                    </Typography.Paragraph>
-                  </Col>
-                  <Col span={2}>
-                    <Form.Item name="taskOutcome" valuePropName="checked">
-                      <Checkbox />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                {taskOutcome && (
-                  <>
-                    <Form.Item
-                      label={
-                        <FormattedMessage defaultMessage="Select an activity template" />
-                      }
-                      name="selectedGroup"
-                    >
-                      <Row gutter={[8, 8]}>
-                        <Col span={20}>
-                          <Select
-                            onSelect={(value) => {
-                              const activity = questionGroups.find(
-                                ({ id }) => id === value
-                              );
-                              if (activity) {
-                                setSelectedActivity(activity);
-                                form.setFieldsValue({
-                                  taskDescription: activity.description,
-                                  taskDueDays: activity.defaultDueDays,
-                                  taskName: activity.name,
-                                  taskQuestions: activity.questions.map(
-                                    ({ id }) => id
-                                  ),
-                                });
-                              }
-                            }}
-                            options={questionGroups.map(({ id, name }) => ({
-                              label: name,
-                              value: id,
-                            }))}
+              <Divider style={{ marginTop: 10 }} />
+              <Typography.Title level={3}>
+                <FormattedMessage defaultMessage="Outcomes" />
+              </Typography.Title>
+              {/* Outcomes */}
+              <Row gutter={[8, 8]}>
+                <Col span={24}>
+                  <Card>
+                    <Row wrap={false}>
+                      <Col flex={1}>
+                        <Typography.Title
+                          level={4}
+                          style={{
+                            alignItems: 'center',
+                            display: 'flex',
+                            paddingTop: 8,
+                          }}
+                        >
+                          <FormattedMessage defaultMessage="Create Activity" />
+                        </Typography.Title>
+                        <Typography.Paragraph
+                          style={{
+                            alignItems: 'center',
+                            display: 'flex',
+                          }}
+                        >
+                          <FormattedMessage
+                            defaultMessage="What activity to create when the above conditions are met?
+"
                           />
-                        </Col>
-                        <Col>
-                          <Button onClick={() => setActivityTemplateForm(true)}>
-                            <FormattedMessage defaultMessage="New Template" />
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Form.Item>
-                    <Form.Item
-                      label={<FormattedMessage defaultMessage="Name" />}
-                      name="taskName"
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      label={
-                        <FormattedMessage defaultMessage="Default due days" />
-                      }
-                      name="taskDueDays"
-                    >
-                      <InputNumber min={0} />
-                    </Form.Item>
-                    <Form.Item
-                      label={<FormattedMessage defaultMessage="Business" />}
-                      name="taskBusiness"
-                    >
-                      <BusinessesSelect
-                        allowClear
-                        disabled={saving}
-                        mode={'multiple'}
-                        placeholder={intl.formatMessage({
-                          defaultMessage: 'Search for a business...',
-                        })}
-                        showSearch
-                        style={{ width: '100%' }}
-                      />
-                    </Form.Item>
-                    <Row gutter={[8, 8]}>
-                      <Col span={20}>
+                        </Typography.Paragraph>
+                      </Col>
+
+                      <Col>
+                        <Form.Item name="taskOutcome" valuePropName="checked">
+                          <Switch />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    {taskOutcome && (
+                      <>
                         <Form.Item
                           label={
                             <FormattedMessage defaultMessage="Questions" />
@@ -1282,8 +1164,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               <>
                 <Col span={24}>
                   <Card>
-                    <Row>
-                      <Col span={22}>
+                    <Row wra={false}>
+                      <Col flex={1}>
                         <Typography.Title
                           level={4}
                           style={{
@@ -1303,12 +1185,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <FormattedMessage defaultMessage="What notification to create when the above conditions are met?" />
                         </Typography.Paragraph>
                       </Col>
-                      <Col span={2}>
+
+                      <Col>
                         <Form.Item
                           name="sendNotificationCheck"
                           valuePropName="checked"
                         >
-                          <Checkbox />
+                          <Switch />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1336,8 +1219,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                 </Col>
                 <Col span={24}>
                   <Card>
-                    <Row>
-                      <Col span={22}>
+                    <Row wrap={false}>
+                      <Col flex={1}>
                         <Typography.Title
                           level={4}
                           style={{
@@ -1357,12 +1240,13 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <FormattedMessage defaultMessage="What email to create when the above conditions are met?" />
                         </Typography.Paragraph>
                       </Col>
-                      <Col span={2}>
+
+                      <Col>
                         <Form.Item
                           name="sendEmailCheck"
                           valuePropName="checked"
                         >
-                          <Checkbox />
+                          <Switch />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1388,9 +1272,47 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                     )}
                   </Card>
                 </Col>
-              </>
-            )}
-          </Row>
+                {modelSelected === Model.Incident && (
+                  <Col span={24}>
+                    <Card
+                      title={intl.formatMessage({
+                        defaultMessage: 'Update Incident',
+                      })}
+                    >
+                      <Row gutter={[8, 8]}>
+                        <Col span={10}>
+                          <Form.Item
+                            label={
+                              <FormattedMessage defaultMessage="Select an priority to set the incident to" />
+                            }
+                            name="setPriority"
+                          >
+                            <Select
+                              options={Object.keys(IncidentPriority).map(
+                                (key) => ({
+                                  label: key,
+                                  value: key,
+                                })
+                              )}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Form.Item
+                        label={
+                          <FormattedMessage defaultMessage="Auto Approve incident?" />
+                        }
+                        name="autoApprove"
+                        valuePropName="checked"
+                      >
+                        <Switch />
+                      </Form.Item>
+                    </Card>
+                  </Col>
+                )}
+              </Row>
+            </>
+          ) : null}
           <Form.Item>
             <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
               <Col>
