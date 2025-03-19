@@ -3,8 +3,10 @@ import type {
   ListCrimeGroupsQueryVariables,
 } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useStoreState } from 'state';
 
 interface Return {
@@ -18,7 +20,7 @@ interface Return {
 
 const useCrimeGroupSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
   const filterVariables = useStoreState(
     (state) => state.data.crimeGroups.variables
   );

@@ -9,10 +9,12 @@ import type { Moment } from 'moment';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
 import { useCreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -87,7 +89,7 @@ const useAddTodo = ({
   const activityAssignToUser = useStoreState(
     (state) => state.scheme.activityAssignToUser
   );
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

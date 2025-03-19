@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import type { UploadProps } from 'antd';
+import type { UploadFile } from 'antd/es/upload/interface';
+
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import type { UploadFile } from 'antd/es/upload/interface';
 
 interface OnSubmitValues {
   url: string;
@@ -14,14 +17,14 @@ interface Props {
 }
 
 interface Return {
+  documentUploadProps: UploadProps;
   onFinish: (values: OnSubmitValues) => void;
   saving: boolean;
-  documentUploadProps: UploadProps;
 }
 
 const useAddLogo = ({ onClose, onSubmit }: Props): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
-  const currentUserId = useStoreState((state) => state.user.id);
+  const currentUserId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -57,21 +60,21 @@ const useAddLogo = ({ onClose, onSubmit }: Props): Return => {
     uploadedById: currentUserId,
   });
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
-    onChange: handleChange,
-    multiple: false,
     accept: 'image/*',
+    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
     headers: {
       schemeId: currentScheme,
       type: 'logo',
       uploadedById: currentUserId,
     },
+    multiple: false,
+    onChange: handleChange,
   };
 
   return {
+    documentUploadProps,
     onFinish,
     saving,
-    documentUploadProps,
   };
 };
 

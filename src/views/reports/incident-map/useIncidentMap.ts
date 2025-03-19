@@ -5,11 +5,13 @@ import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.
 import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
 import type { Scheme } from 'state';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useBusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useIndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
 import { useIncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 
@@ -36,7 +38,7 @@ interface Return {
 }
 
 const useIncidentMap = (): Return => {
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
   const currentScheme = useStoreState((state) => state.scheme.id);
   const schemes = useStoreState((state) => state.user.schemes);
   const [selectedSchemes, setSchemes] = useState<string[]>([currentScheme]);

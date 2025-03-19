@@ -4,10 +4,12 @@ import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/cre
 import type { CrimeType } from 'graphql/types';
 import type { Scheme } from 'state';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
 import { notification } from 'antd';
 import { useCreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
 import { Model, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -44,7 +46,7 @@ const useAddCrimeType = ({
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
 
   const { data: tags } = useListSchemeTagsQuery({

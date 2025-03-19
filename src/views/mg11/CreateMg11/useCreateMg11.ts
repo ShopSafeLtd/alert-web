@@ -2,10 +2,12 @@
 import type { FormInstance } from 'antd';
 import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form, notification } from 'antd';
 import { useCreateMg11Mutation } from 'graphql/mg11/mutations/__generated__/create-mg11.generated';
 import { useListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
 import { Mg11Status } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -89,7 +91,7 @@ const useCreateMg11 = (): Return => {
   const intl = useIntl();
   const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
   const { id: incidentId } = useParams();
   const { fullName: interviewerName } = useStoreState((state) => state.user);
   const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);

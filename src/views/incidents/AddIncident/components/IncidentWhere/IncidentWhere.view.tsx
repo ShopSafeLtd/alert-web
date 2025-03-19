@@ -5,6 +5,7 @@ import {
   currentSchemeBusinessesAtom,
   isAdminAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Form, Row, Typography } from 'antd';
@@ -42,11 +43,15 @@ const IncidentWhere = ({
 }: Props) => {
   const classes = useStyles();
   const isAdmin = useAtomValue(isAdminAtom);
-  const multipleBusiness = useAtomValue(currentSchemeBusinessesAtom).length > 1;
+  const currentUser = useAtomValue(currentUserAtom);
+  const multipleBusiness = useAtomValue(currentSchemeBusinessesAtom);
 
   const intl = useIntl();
 
-  const showBusinessSection = isAdmin || multipleBusiness;
+  const showBusinessSection =
+    isAdmin ||
+    (multipleBusiness && multipleBusiness.length > 1) ||
+    currentUser?.reportToAllBusinesses;
 
   return showBusinessSection ? (
     <Card

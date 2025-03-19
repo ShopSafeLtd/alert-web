@@ -6,8 +6,10 @@ import type {
 import { useTokenContext } from '#/context/token-context';
 import { handleSuccess } from '#/hooks/handleSuccess';
 import { useCurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { useSession, useUser } from '@clerk/clerk-react';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useStoreActions, useStoreState } from 'state';
@@ -31,7 +33,7 @@ const useAuth = (): Return => {
     (actions) => actions.auth.authenticated
   );
   const expired = useStoreActions((actions) => actions.auth.expired);
-  const currentUserId = useStoreState((state) => state.user.id);
+  const currentUserId = useAtomValue(userIdAtom);
   const currentScheme = useStoreState((state) => state.scheme.id);
   const { setDem, setFilterDefaultGroup, setNotifications, setTodos } =
     useStoreActions((actions) => actions.user);

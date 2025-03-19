@@ -3,6 +3,7 @@ import type {
   IncidentsFeedQueryVariables,
 } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useIncidentsFeedQuery } from '#/views/incidents/IncidentFeed/graphql/queries/__generated__/incident-feed.generated';
 import {
@@ -11,6 +12,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { IncidentSort, useStoreState } from 'state';
 
 interface Return {
@@ -28,7 +30,7 @@ const useIncidentSideList = (): Return => {
     (state) => state.data.incidents.variables
   );
   const order = useStoreState((state) => state.data.incidents.order);
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
 
   const hasApprovePermission = hasRolePermission({
     permission: {

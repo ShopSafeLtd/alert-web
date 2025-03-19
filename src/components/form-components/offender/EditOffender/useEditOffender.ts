@@ -13,6 +13,7 @@ import type {
 } from 'graphql/types';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { Form, Modal, Upload, message, notification } from 'antd';
@@ -21,6 +22,7 @@ import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/__generat
 import { useViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -129,7 +131,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
 
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);

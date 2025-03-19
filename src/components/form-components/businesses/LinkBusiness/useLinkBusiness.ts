@@ -1,4 +1,6 @@
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { QueryMode, Role, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 
@@ -31,7 +33,7 @@ const useLinkBusiness = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [searchValue, onSearchBusiness] = useState('');
   const [selectedValue, setSelectedValue] = useState<string | undefined>();
-  const currentUserId = useStoreState((state) => state.user.id);
+  const currentUserId = useAtomValue(userIdAtom);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 12 });
   const { data, loading } = useListBusinessesSelectQuery({
     variables: {

@@ -34,7 +34,10 @@ export const defaultCurrentUserAtom = {
 };
 export const currentUserAtom = atom<CurrentUser>(defaultCurrentUserAtom);
 export const newUserAtom = atom(true);
-
+export const userIdAtom = atom(
+  (get) => get(currentUserAtom)?.id ?? '',
+  () => {}
+);
 export const currentSchemeGroups = atom(
   (get) =>
     get(currentUserAtom)?.groups.filter(

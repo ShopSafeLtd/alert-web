@@ -4,6 +4,7 @@ import type { SelectProps, UploadProps } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { Editor } from 'tinymce';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
 import { useCreateArticleMutation } from 'graphql/article/mutations/__generated__/create-article.generated';
 import { useEditArticleMutation } from 'graphql/article/mutations/__generated__/edit-article.generated';
@@ -12,6 +13,7 @@ import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/schem
 import { useCreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { ArticlePriority, Model, Role } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
@@ -72,7 +74,7 @@ const useCreateEditArticle = (): Props => {
     title: '',
     watermarkImage: true,
   });
-  const currentUserId = useStoreState((state) => state.user.id);
+  const currentUserId = useAtomValue(userIdAtom);
 
   const [selectedSchemes, setSelectedSchemes] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);

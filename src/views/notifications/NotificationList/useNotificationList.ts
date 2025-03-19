@@ -7,6 +7,7 @@ import type {
 } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
 
 import { useSchemeProvider } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/__generated__/update_user_notification.generated';
@@ -14,6 +15,7 @@ import {
   UserNotificationsDocument,
   useUserNotificationsQuery,
 } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -61,7 +63,7 @@ const useNotificationLists = (): Return => {
   const navigate = useNavigate();
   const { setScheme: setSchemeAtom } = useSchemeProvider();
   const intl = useIntl();
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
   const defaultGroups = useStoreState((state) => state.user.defaultGroups);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useStoreState((state) => state.scheme.id);

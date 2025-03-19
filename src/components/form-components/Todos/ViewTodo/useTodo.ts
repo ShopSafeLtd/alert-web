@@ -7,9 +7,11 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 
 import { useUpdateTaskMutation } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/update-todo.generated';
 import { useTodoQuery } from '#/components/form-components/Todos/ViewTodo/graphql/__generated__/view-task.generated';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
 import { Role, SortOrder } from 'graphql/types';
 import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
 import { useStoreState } from '../../../../state';
@@ -58,7 +60,7 @@ const useTodo = ({
   >([]);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
-  const currentUser = useStoreState((state) => state.user.id);
+  const currentUser = useAtomValue(userIdAtom);
   const { data: todo, loading } = useTodoQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: () => {

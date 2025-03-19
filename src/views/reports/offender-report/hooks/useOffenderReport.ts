@@ -1,11 +1,12 @@
 import type { DateSelectModeType } from '#/components/reports/DateSelect/DateSelect.view';
 import type { DateRangeInput } from 'graphql/types';
 
-import { useStoreState } from '#/state';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import arrangeTemplates from '#/utils/reports/setTemplates';
 import { useOffenderReportQuery } from 'graphql/reports/queries/__generated__/offender-report.generated';
 import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/__generated__/scheme-details.generated';
 import { ReportType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -61,7 +62,7 @@ const useOffenderReport = (): Return => {
     InitMetaData: OffenderMetaData,
     ReportType: ReportType.Offender,
   });
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
 
   useEffect(() => {
     if (templates.length > 0 && reportId) selectTemplate(reportId);

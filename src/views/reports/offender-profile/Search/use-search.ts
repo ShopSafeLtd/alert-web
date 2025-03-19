@@ -1,7 +1,9 @@
 import type { SearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useSearchOffenderReportsQuery } from '#/views/reports/offender-profile/Search/__generated__/search-offender-report.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStoreState } from 'state';
@@ -18,7 +20,7 @@ interface Return {
 
 const useOffenderProfile = (): Return => {
   const navigate = useNavigate();
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
 
   const [searchValue, setSearchValue] = useState('');
   const [searchPage, setSearchPage] = useState(1);
