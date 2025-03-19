@@ -511,6 +511,7 @@ export type ActiveChecklistSections = {
   __typename?: 'ActiveChecklistSections';
   activeChecklist: ActiveChecklist;
   activeChecklistId: Scalars['String'];
+  dependsOnWeight?: Maybe<DependWeight>;
   id: Scalars['ID'];
   maxWeight: Scalars['Int'];
   section: Scalars['Int'];
@@ -779,24 +780,6 @@ export enum AiImpactAssessmentCategory {
   Medium = 'MEDIUM'
 }
 
-export enum AiImpactAssessmentFinancialImpact {
-  High = 'HIGH',
-  Low = 'LOW',
-  Medium = 'MEDIUM'
-}
-
-export enum AiImpactAssessmentSecurityResourceImpact {
-  High = 'HIGH',
-  Low = 'LOW',
-  Medium = 'MEDIUM'
-}
-
-export enum AiRecommendedActionsPriorityLevel {
-  Elevated = 'ELEVATED',
-  High = 'HIGH',
-  Standard = 'STANDARD'
-}
-
 export enum AiRiskAssessmentSafetyRisk {
   High = 'HIGH',
   Low = 'LOW',
@@ -804,18 +787,6 @@ export enum AiRiskAssessmentSafetyRisk {
 }
 
 export enum AiRiskAssessmentThreatLevel {
-  High = 'HIGH',
-  Low = 'LOW',
-  Medium = 'MEDIUM'
-}
-
-export enum AiRiskTolerance {
-  High = 'HIGH',
-  Low = 'LOW',
-  Medium = 'MEDIUM'
-}
-
-export enum AiSophisticationLevel {
   High = 'HIGH',
   Low = 'LOW',
   Medium = 'MEDIUM'
@@ -2667,6 +2638,7 @@ export type ChecklistSection = {
   checklist: Checklist;
   checklistId: Scalars['String'];
   createdAt: Scalars['Date'];
+  dependsOnWeight?: Maybe<DependWeight>;
   id: Scalars['ID'];
   order: Scalars['Int'];
   subsections: Array<ChecklistSubsection>;
@@ -4642,6 +4614,17 @@ export type DemUser = {
 export type DependInput = {
   answer: Scalars['String'];
   question: Scalars['String'];
+};
+
+export type DependWeight = {
+  __typename?: 'DependWeight';
+  dependsOn: Scalars['String'];
+  weight: Scalars['String'];
+};
+
+export type DependWeightInput = {
+  dependsOn: Scalars['String'];
+  weight: Scalars['String'];
 };
 
 export type DeviceInfo = {
@@ -12727,6 +12710,10 @@ export type NullableEnumCrimeTypeFieldUpdateOperationsInput = {
   set?: InputMaybe<CrimeType>;
 };
 
+export type NullableEnumCronScheduleFieldUpdateOperationsInput = {
+  set?: InputMaybe<CronSchedule>;
+};
+
 export type NullableEnumFileTypeFieldUpdateOperationsInput = {
   set?: InputMaybe<FileType>;
 };
@@ -18104,6 +18091,7 @@ export type SearchOffenderWhere = {
 };
 
 export type SectionInput = {
+  dependentWeight?: InputMaybe<DependWeightInput>;
   order: Scalars['Int'];
   subsections: Array<SubsectionInput>;
   title: Scalars['String'];
@@ -19054,6 +19042,7 @@ export type Tag = {
   policeReporting: Scalars['Boolean'];
   recycleBin?: Maybe<RecycledItem>;
   recycled?: Maybe<Scalars['Boolean']>;
+  roles: Array<CustomRole>;
   scheme: Scheme;
   schemeId?: Maybe<Scalars['String']>;
   schemes: Array<Scheme>;
@@ -19182,6 +19171,7 @@ export type TagCreateInput = {
   description: Scalars['String'];
   name: Scalars['String'];
   parentTag?: InputMaybe<ConnectHelper>;
+  roles?: InputMaybe<ConnectOnlyArrayHelper>;
   scheme?: InputMaybe<ConnectHelper>;
   schemes?: InputMaybe<ConnectOnlyArrayHelper>;
   type?: InputMaybe<TagType>;
@@ -19524,6 +19514,7 @@ export type TagUpdateInput = {
   description?: InputMaybe<SetStringHelper>;
   name?: InputMaybe<SetStringHelper>;
   parentTag?: InputMaybe<ConnectIdDisconnectBool>;
+  roles?: InputMaybe<NullableConnectArrayHelper>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
 };
 
@@ -22922,6 +22913,8 @@ export type Workflow = {
   actions: Array<WorkflowAction>;
   conditions: Scalars['JSON'];
   createdAt: Scalars['Date'];
+  cronDate?: Maybe<Scalars['Date']>;
+  cronSchedule?: Maybe<CronSchedule>;
   id: Scalars['String'];
   name: Scalars['String'];
   schemes: Array<Scheme>;
@@ -23049,6 +23042,8 @@ export type WorkflowCreateInput = {
   actions?: InputMaybe<WorkflowActionCreateNestedManyWithoutWorkflowInput>;
   conditions?: InputMaybe<Scalars['JSON']>;
   createdAt?: InputMaybe<Scalars['Date']>;
+  cronDate?: InputMaybe<Scalars['Date']>;
+  cronSchedule?: InputMaybe<CronSchedule>;
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   schemes?: InputMaybe<ConnectOnlyArrayHelper>;
@@ -23127,6 +23122,8 @@ export enum WorkflowTrigger {
 export type WorkflowUpdateInput = {
   actions?: InputMaybe<WorkflowActionUpdateManyWithoutWorkflowNestedInput>;
   conditions?: InputMaybe<Scalars['JSON']>;
+  cronDate?: InputMaybe<NullableSetDateHelper>;
+  cronSchedule?: InputMaybe<NullableEnumCronScheduleFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import type { ActiveChecklist } from 'graphql/types';
 
@@ -41,6 +40,7 @@ export interface FormData {
 }
 
 export interface ActiveChecklistSection {
+  dependsOnWeight?: { dependsOn: string; weight: string } | null;
   section: number;
   sub: boolean;
   subsection?: null | number;
@@ -129,6 +129,7 @@ const useActiveChecklist = (): Return => {
           initData.activeChecklist?.checklistSection
             .filter((section) => !section.sub)
             .sort((a, b) => a.section - b.section) || [];
+
         const subsections = initData.activeChecklist?.checklistSection.filter(
           (section) => section.sub
         );
@@ -137,9 +138,11 @@ const useActiveChecklist = (): Return => {
           number,
           Map<number, ActiveChecklistQuery['activeChecklist']['fields']>
         >();
+
         // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
         for (const field of initData.activeChecklist?.fields) {
           const { section, subsection } = field;
+
           if (!questionsMap.has(section)) {
             questionsMap.set(section, new Map());
           }
@@ -148,10 +151,6 @@ const useActiveChecklist = (): Return => {
           }
           questionsMap.get(section)?.get(subsection)?.push(field);
         }
-
-        const questToArray = [...questionsMap.values()].map((value) => [
-          ...value.values(),
-        ]);
 
         const sectionsAndSubsections = sectionsData.map((section) => {
           const subsectionsForSection =
@@ -164,9 +163,9 @@ const useActiveChecklist = (): Return => {
             subsections:
               subsectionsForSection.map((subsection) => {
                 const questionsForSection =
-                  questToArray[section.section - 1][
-                    (subsection.subsection || 0) - 1
-                  ]
+                  questionsMap
+                    .get(section.section)
+                    ?.get(subsection.subsection || 1)
                     ?.sort((a, b) => a.order - b.order)
                     .filter(
                       (ques) =>
@@ -285,10 +284,31 @@ const useActiveChecklist = (): Return => {
       total: number;
     }[] = [];
 
-    // eslint-disable-next-line no-restricted-syntax
-    // eslint-disable-next-line @typescript-eslint/no-loop-func
-    // eslint-disable-next-line @typescript-eslint/no-loop-func
-    for (const section of completedData.sections)
+    for (const section of completedData.sections) {
+      // If the section has a dependency, check if the dependent section meets the threshold.
+      if (section.dependsOnWeight) {
+        const dependencyIndex = Number(section.dependsOnWeight.dependsOn);
+        const threshold = Number(section.dependsOnWeight.weight);
+        const dependentSection = completedData.sections.find(
+          (s) => s.section === dependencyIndex && s.sub === false
+        );
+        if (dependentSection) {
+          const dependentTotal = dependentSection.subsections
+            .flatMap((sub) =>
+              sub.questions.map((q) =>
+                q.answer === 'N/A'
+                  ? 0
+                  : q.weights.find((w) => w.answer === q.answer)?.weight || 0
+              )
+            )
+            .reduce((a, b) => a + b, 0);
+          if (dependentTotal < threshold) {
+            continue;
+          }
+        } else {
+          continue;
+        }
+      }
       section.subsections.flatMap((subsection) =>
         subsection.questions.flatMap((question, _, ogArray) => {
           const isDepend = question.dependent;
@@ -362,6 +382,7 @@ const useActiveChecklist = (): Return => {
           return questionFormatted;
         })
       );
+    }
 
     const questions = completedData.sections
       .flatMap((section) =>
@@ -414,6 +435,8 @@ const useActiveChecklist = (): Return => {
   const saveDraft = () => {
     saveChecklist(true);
   };
+
+  console.log(sections);
 
   return {
     data,

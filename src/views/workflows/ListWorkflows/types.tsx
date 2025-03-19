@@ -102,7 +102,6 @@ const useCreateColumns = () => {
               <Button
                 icon={<FontAwesomeIcon icon={faPenToSquare} />}
                 onClick={() => {
-                  console.log('clicked', record);
                   navigate(`edit/${record.key}`);
                 }}
                 size="small"

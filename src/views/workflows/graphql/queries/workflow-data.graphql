@@ -18,13 +18,6 @@ query WorkflowData(
       id
       name
     }
-    members {
-      role
-      userId
-      user {
-        fullName
-      }
-    }
     groups {
       id
       name

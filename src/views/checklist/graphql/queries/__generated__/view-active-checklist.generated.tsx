@@ -8,7 +8,7 @@ export type ActiveChecklistQueryVariables = Types.Exact<{
 }>;
 
 
-export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: Types.ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: Types.ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent?: { [key: string]: any } | null, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
+export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: Types.ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: Types.ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent?: { [key: string]: any } | null, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string, dependsOnWeight?: { __typename?: 'DependWeight', weight: string, dependsOn: string } | null }> } };
 
 
 export const ActiveChecklistDocument = gql`
@@ -45,6 +45,10 @@ export const ActiveChecklistDocument = gql`
       section
       subsection
       titleLocaled
+      dependsOnWeight {
+        weight
+        dependsOn
+      }
     }
   }
 }

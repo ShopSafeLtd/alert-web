@@ -4,7 +4,6 @@ import type { ChecklistAnswerType } from 'graphql/types';
 
 import { useStoreState } from '#/state';
 import { useCreateUpdateChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-update-checklist.generated';
-import { useListBusinessesChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/list-businesses.generated';
 import { useUserListChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/list-users-checklist.generated';
 import { useChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-checklist.generated';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
@@ -17,6 +16,10 @@ export interface SelectOption {
   value: string;
 }
 export interface Section {
+  dependentWeight?: {
+    dependsOn: string;
+    weight: number | string;
+  };
   description: string;
   order: number;
   subsections: Subsection[];
@@ -71,7 +74,7 @@ export interface FormData {
 
 interface Return {
   brands: SelectOption[];
-  businesses: SelectOption[];
+
   form: FormInstance<FormData>;
   handleAddQuestion: (sectionIndex: number, subSectionIndex: number) => void;
   handleAddSection: () => void;
@@ -212,10 +215,15 @@ const createAnswerWeight = (
 export function useCreateChecklist(): Return {
   const [form] = Form.useForm<FormData>();
   const [sections, setSections] = useState<Section[]>([
-    { description: '', order: 1, subsections: [], title: '' },
+    {
+      dependentWeight: undefined,
+      description: '',
+      order: 1,
+      subsections: [],
+      title: '',
+    },
   ]);
 
-  const [businesses, setBusinesses] = useState<SelectOption[]>([]);
   const [users, setUsers] = useState<SelectOption[]>([]);
   const [createUpdateChecklist] = useCreateUpdateChecklistMutation();
 
@@ -262,6 +270,7 @@ export function useCreateChecklist(): Return {
         description: data.checklist.description ?? undefined,
         // @ts-expect-error types not liking generics
         sections: data.checklist.sections.map((section) => ({
+          dependentWeight: section.dependsOnWeight,
           order: section.order,
           subsections: section.subsections.map((subsection) => ({
             order: subsection.order,
@@ -305,6 +314,15 @@ export function useCreateChecklist(): Return {
           businessIds: values.businessIds,
           description: values.description,
           sections: values.sections.map((section) => ({
+            dependentWeight: section.dependentWeight
+              ? {
+                  dependsOn: section.dependentWeight.dependsOn,
+                  weight:
+                    typeof section.dependentWeight.weight === 'number'
+                      ? section.dependentWeight.weight.toString()
+                      : section.dependentWeight.weight,
+                }
+              : undefined,
             order: section.order,
             subsections: section.subsections.map((subsection) => ({
               order: subsection.order,
@@ -543,33 +561,6 @@ export function useCreateChecklist(): Return {
     }
     setSections(newSections);
   };
-  const { loading: businessLoading } = useListBusinessesChecklistQuery({
-    onCompleted: (businessData) => {
-      if (
-        businessData &&
-        businessData.listBusinesses &&
-        businessData.listBusinesses.businesses &&
-        businessData.listBusinesses.businesses.length > 0
-      )
-        setBusinesses(
-          businessData.listBusinesses.businesses.map((business) => ({
-            label: business.name,
-            value: business.id,
-          }))
-        );
-    },
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-      },
-    },
-  });
 
   const { loading: usersLoading } = useUserListChecklistQuery({
     onCompleted: (usersData) => {
@@ -627,7 +618,7 @@ export function useCreateChecklist(): Return {
 
   return {
     brands: brandsFormatted,
-    businesses,
+
     form,
     handleAddQuestion,
     handleAddSection,
@@ -636,7 +627,7 @@ export function useCreateChecklist(): Return {
     handleRemoveSection,
     handleRemoveSubsection,
     handleSectionChange,
-    loading: loading || businessLoading || usersLoading,
+    loading: loading || usersLoading,
     onFinish,
     users,
   };

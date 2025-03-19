@@ -45,3 +45,5 @@ __generated__/operations.json
 __generated__/operationsJoined.json
 
 src/gql/
+
+document.graphql

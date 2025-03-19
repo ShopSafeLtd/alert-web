@@ -10,7 +10,7 @@ export type WorkflowDataQueryVariables = Types.Exact<{
 }>;
 
 
-export type WorkflowDataQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', questions: Array<{ __typename?: 'Question', id: string, questionOn: Types.QuestionModel, type: Types.AnswerType, questionFormatted: string, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', value: string, label: string }> | null }>, schemeTags: Array<{ __typename?: 'Tag', id: string, name: string }>, members: Array<{ __typename?: 'UserScheme', role: Types.Role, userId: string, user: { __typename?: 'User', fullName: string } }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type WorkflowDataQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', questions: Array<{ __typename?: 'Question', id: string, questionOn: Types.QuestionModel, type: Types.AnswerType, questionFormatted: string, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', value: string, label: string }> | null }>, schemeTags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 
 export const WorkflowDataDocument = gql`
@@ -29,13 +29,6 @@ export const WorkflowDataDocument = gql`
     schemeTags(where: $schemeTagsWhere) {
       id
       name
-    }
-    members {
-      role
-      userId
-      user {
-        fullName
-      }
     }
     groups {
       id
