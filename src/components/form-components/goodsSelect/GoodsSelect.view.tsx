@@ -1,7 +1,8 @@
 import { useListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   allowClear?: boolean;
@@ -15,7 +16,7 @@ interface Props {
 }
 
 export const useGoodsData = () => {
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const { data, loading } = useListGoodsTypesQuery({
     variables: {
       where: {

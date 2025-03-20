@@ -13,6 +13,7 @@ import type {
 } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 
 import { useCreateTagMutation } from '#/graphql/tags/mutations/__generated__/create-tag.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useCreateDocumentMutation } from 'graphql/documents/mutations/__generated__/create-document.generated';
 import { ListDocumentsOnSchemeDocument } from 'graphql/documents/queries/__generated__/list-documents.generated';
@@ -21,7 +22,6 @@ import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated'
 import { DocumentType, Model } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 import customRequest from '../../../../utils/custom-request';
 
@@ -61,7 +61,7 @@ const useAddDocument = ({
   update,
   vehicleId,
 }: Props): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<

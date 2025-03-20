@@ -2,11 +2,12 @@ import type { FormInstance } from 'antd';
 import type { BusinessData, LocationData, TagData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 export interface FormData {
   building: string;
@@ -42,7 +43,7 @@ interface Return {
 }
 
 const useAddBusiness = ({ update }: Props): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const [form] = Form.useForm<FormData>();
   const [location, setLocation] = useState<LocationData>();

@@ -2,6 +2,7 @@ import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 
 import { useSchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/__generated__/groups.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreState } from '#/state';
 import {
   faRectangle,
@@ -9,6 +10,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Select, Tooltip, TreeSelect } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -32,7 +34,7 @@ interface UseUserGroupsProps {
 }
 
 export const useUserGroups = ({ reportMode }: UseUserGroupsProps) => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { data, loading } = useSchemeGroupsSelectQuery({
     fetchPolicy: 'cache-first',

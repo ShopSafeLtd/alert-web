@@ -1,10 +1,12 @@
 import type { ListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { notification } from 'antd';
 import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
 import { useListOffendersQuery } from 'graphql/offenders/queries/__generated__/list-offenders.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router';
@@ -56,7 +58,7 @@ const useAddExistingOffender = ({ offenderIds, onClose }: Props): Return => {
     | null
     | undefined
   >(undefined);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const order = useStoreState((state) => state.data.offenders.order);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);

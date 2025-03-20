@@ -1,7 +1,8 @@
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { Model, SortOrder, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
-import { useStoreState } from 'state';
 
 import { useTagsSelectQuery } from './__generated__/tags-select-query.generated';
 
@@ -17,7 +18,7 @@ interface Props {
 }
 
 export const useCrimeTypesData = () => {
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, loading } = useTagsSelectQuery({
     variables: {

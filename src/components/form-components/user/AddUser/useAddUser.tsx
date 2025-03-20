@@ -9,6 +9,7 @@ import type { BusinessData, SelectOptions } from 'types/DataType';
 
 import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/__generated__/custom-roles.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form, Modal, notification } from 'antd';
 import { useSchemeChatsQuery } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
 import { useSchemeQuery } from 'graphql/scheme/queries/__generated__/scheme.generated';
@@ -16,8 +17,8 @@ import { Model, SortOrder } from 'graphql/types';
 import { useCreateUserInDatabaseMutation } from 'graphql/users/mutations/__generated__/create-user-in-databse.generated';
 import { useInviteExistingUserMutation } from 'graphql/users/mutations/__generated__/invite-exiting-user.generated';
 import { useSearchUserQuery } from 'graphql/users/queries/__generated__/search-user.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
@@ -105,7 +106,7 @@ const useAddUser = ({
   updateSearch,
 }: Props): Return => {
   const [form] = useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [_search, setSearch] = useState<null | string>(null);

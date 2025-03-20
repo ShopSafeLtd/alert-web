@@ -7,6 +7,7 @@ import type { Theme } from 'configs/ThemeConfig';
 
 import { useSetSchemeSharingMutation } from '#/components/form-components/ConnectScheme/conenct-scheme-mutation.generated';
 import { useConnectSchemesQuery } from '#/components/form-components/ConnectScheme/connect-schemes-query.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { SchemeSharingDocument } from '#/views/settings/schemes/SchemeSharing/graphql/__generated__/scheme-sharing.generated';
 import { Button, Col, Row, Skeleton, Typography } from 'antd';
@@ -15,7 +16,6 @@ import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { useStoreState } from 'state';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   name: {
@@ -37,7 +37,7 @@ interface Props {
 
 const ConnectScheme = ({ connectedScheme, onClose }: Props) => {
   const userId = useAtomValue(userIdAtom);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const classes = useStyles();
 
   const { data, loading } = useConnectSchemesQuery({
