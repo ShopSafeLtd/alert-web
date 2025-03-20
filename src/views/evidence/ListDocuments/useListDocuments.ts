@@ -5,7 +5,7 @@ import type {
 } from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 
-import hasPermission from '#/utils/has-permission';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   DocumentsDocument,
   useDocumentsQuery,
@@ -18,7 +18,7 @@ import {
   PermissionModel,
   QueryMode,
 } from 'graphql/types';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
@@ -46,15 +46,9 @@ interface Return {
 }
 
 const useDocumentList = (): Return => {
-  const { schemes } = useStoreState((state) => state.user);
   const { id: currentSchemeId, name: schemeName } = useStoreState(
     (state) => state.scheme
   );
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === currentSchemeId),
-    [schemes, currentSchemeId]
-  );
-  const permissions = currentScheme?.permissions;
 
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
@@ -179,26 +173,23 @@ const useDocumentList = (): Return => {
     setAddEvidence(!addEvidence);
   };
 
-  const deleteRights = hasPermission({
+  const deleteRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Delete,
       model: PermissionModel.Evidence,
     },
-    permissions,
   });
-  const createRights = hasPermission({
+  const createRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Write,
       model: PermissionModel.Evidence,
     },
-    permissions,
   });
-  const downloadRights = hasPermission({
+  const downloadRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Read,
       model: PermissionModel.Evidence,
     },
-    permissions,
   });
 
   const onTableChange: TableProps<TableItem>['onChange'] = (pagination) => {

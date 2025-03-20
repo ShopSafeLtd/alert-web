@@ -9,10 +9,12 @@ import {
   UserChatsDocument,
   useUserChatsQuery,
 } from '#/graphql/userChat/queries/__generated__/user_chats.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { SortOrder, TodoType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 
 interface Props {
   chatId: string;
@@ -31,8 +33,8 @@ interface Return {
 }
 
 const useViewChat = ({ chatId }: Props): Return => {
-  const userId = useStoreState((state) => state.user.id);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const userId = useAtomValue(userIdAtom);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const navigate = useNavigate();
   const [addChat, setAddChat] = useState(false);
   const [currentId, setCurrentId] = useState('');

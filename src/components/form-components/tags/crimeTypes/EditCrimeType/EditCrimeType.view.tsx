@@ -1,7 +1,7 @@
 import type { TagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
 
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Col,
@@ -13,6 +13,7 @@ import {
   Typography,
 } from 'antd';
 import { CrimeType, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -41,7 +42,7 @@ const EditCrimeType = ({
   saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   return !data && loading ? (
     <Skeleton />
   ) : (

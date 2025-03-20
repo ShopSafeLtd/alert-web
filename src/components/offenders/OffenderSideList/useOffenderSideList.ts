@@ -1,5 +1,7 @@
 import type { ListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useListOffendersRelayQuery } from '#/views/profiles/offenders/OffenderFeed/graphql/queries/__generated__/offender-feed.generated';
 import {
@@ -8,6 +10,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { OffenderSort, useStoreState } from 'state';
 
 interface Return {
@@ -20,8 +23,8 @@ interface Return {
 }
 
 const useOffenderSideList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
   const order = useStoreState((state) => state.data.offenders.order);
   const filterVariables = useStoreState(
     (state) => state.data.offenders.variables

@@ -23,6 +23,7 @@ import type {
 import type { DemDeviceData, LocationData } from 'types/DataType';
 
 import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Modal, notification } from 'antd';
 import { useListActionsQuery } from 'graphql/actions/queries/__generated__/list-actions.generated';
@@ -39,10 +40,10 @@ import {
   useListBusinessUsersQuery,
 } from 'graphql/users/queries/__generated__/list-business-users.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import type {
@@ -105,7 +106,7 @@ const useViewBusiness = (): Return => {
   const businessId = params.id || '';
   const intl = useIntl();
   const navigate = useNavigate();
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const [editVisible, setEditVisible] = useState(false);
   const [inviteUserVisible, setInviteUserVisible] = useState(false);
   const [addUserVisible, setAddUserVisible] = useState(false);

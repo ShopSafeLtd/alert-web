@@ -1,10 +1,11 @@
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { TreeSelect } from 'antd';
 import { useListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   allowClear?: boolean;
@@ -30,7 +31,7 @@ const IncidentTypesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   value,
   ...props
 }) => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, loading } = useListIncidentTagsQuery({
     variables: {

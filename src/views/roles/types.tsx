@@ -13,12 +13,12 @@ import {
   faFile,
   faHome,
   faLineChart,
+  faMessages,
   faNewspaper,
   faPeopleGroup,
   faPlayCircle,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import { faMessages } from '@fortawesome/pro-solid-svg-icons';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -631,7 +631,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Brands" />,
@@ -641,7 +641,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Chat Groups" />,
@@ -673,7 +673,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Dashboards" />,
@@ -683,7 +683,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Data Export" />,
@@ -693,7 +693,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Data Import" />,
@@ -703,7 +703,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="General Settings" />,
@@ -713,7 +713,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Incident Options" />,
@@ -723,7 +723,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Offender Galleries" />,
@@ -733,7 +733,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Offender Warnings" />,
@@ -743,7 +743,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Recycle Bin" />,
@@ -753,7 +753,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Roles" />,
@@ -763,7 +763,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Sharing Settings" />,
@@ -773,7 +773,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Statement Templates" />,
@@ -783,7 +783,7 @@ export const settings = [
         methods: [
           {
             key: PermissionMethod.Read,
-            name: <FormattedMessage defaultMessage="View" />,
+            name: <FormattedMessage defaultMessage="Manage" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Terms" />,
@@ -816,6 +816,18 @@ export const settings = [
           {
             key: PermissionMethod.Read,
             name: <FormattedMessage defaultMessage="View" />,
+          },
+          {
+            key: PermissionMethod.Write,
+            name: <FormattedMessage defaultMessage="Create" />,
+          },
+          {
+            key: PermissionMethod.Edit,
+            name: <FormattedMessage defaultMessage="Edit" />,
+          },
+          {
+            key: PermissionMethod.Delete,
+            name: <FormattedMessage defaultMessage="Delete" />,
           },
         ],
         title: <FormattedMessage defaultMessage="Workflows" />,

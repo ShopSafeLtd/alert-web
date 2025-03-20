@@ -12,6 +12,7 @@ import type { LocationData, TagData } from 'types/DataType';
 
 import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useApolloClient } from '@apollo/client';
 import { Form, notification } from 'antd';
@@ -20,9 +21,9 @@ import { useEditBusinessQuery } from 'graphql/businesses/queries/__generated__/e
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface OnSubmitValues {
@@ -71,7 +72,7 @@ interface Return {
 
 const useEditBusiness = ({ businessId, onClose }: Props): Return => {
   const client = useApolloClient();
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const intl = useIntl();
   const [form] = Form.useForm<OnSubmitValues>();
 

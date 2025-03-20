@@ -1,14 +1,14 @@
 import type React from 'react';
 import type { Editor } from 'tinymce';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useCreateTermsAndConditionsMutation } from 'graphql/scheme/mutation/__generated__/create-terms.generated';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
+import { useAtomValue } from 'jotai/index';
 import { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-
-import { useStoreState } from '../../../../state';
 
 interface Return {
   data: null | string;
@@ -20,7 +20,7 @@ interface Return {
 const useCreateTerms = (): Return => {
   const intl = useIntl();
   const editorRef = useRef<Editor | null>(null);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const navigate = useNavigate();
   const { data: SchemeTerms } = useCurrentSchemeTermsQuery({
     variables: {

@@ -4,6 +4,7 @@ import type {
 } from '#/views/settings/customGallery/graphql/queries/__generated__/list_custom_galleries.generated';
 import type { CustomGalleryData } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   CustomGalleriesDocument,
   useCustomGalleriesQuery,
@@ -13,6 +14,7 @@ import { useCreateCustomGalleryMutation } from 'graphql/customGallery/mutations/
 import { useDeleteCustomGalleryMutation } from 'graphql/customGallery/mutations/__generated__/delete_custom-gallery.generated';
 import { useUpdateCustomGalleryMutation } from 'graphql/customGallery/mutations/__generated__/update_custom-gallery.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -37,7 +39,7 @@ interface Return {
 
 const useCustomGalleries = (): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const schemeName = useStoreState((state) => state.scheme.name);
 
   const [search, setSearch] = useState('');

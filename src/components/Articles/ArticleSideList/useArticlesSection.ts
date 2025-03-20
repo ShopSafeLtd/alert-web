@@ -3,7 +3,9 @@ import type {
   ListArticlesQueryVariables,
 } from 'graphql/article/queries/__generated__/list_articles.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -19,7 +21,7 @@ interface Return {
 }
 
 const useArticlesSideList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const { filterDefaultGroups: defaultGroups } = useStoreState(
     (state) => state.user
   );

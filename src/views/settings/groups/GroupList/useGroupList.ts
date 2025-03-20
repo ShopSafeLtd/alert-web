@@ -2,13 +2,14 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   SchemeGroupsDocument,
   useSchemeGroupsQuery,
 } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface Return {
   addGroup: boolean;
@@ -21,7 +22,7 @@ interface Return {
 }
 
 const useGroupList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [addGroup, setAddGroup] = useState(false);
   const [search, setSearch] = useState('');
 

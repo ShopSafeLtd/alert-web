@@ -8,7 +8,10 @@ import type RGL from 'react-grid-layout';
 import type { IntlShape } from 'react-intl';
 
 import { useGroupsContext } from '#/context/groups-context';
-import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeIdAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -93,7 +96,7 @@ export const DashboardProvider: React.FC<{
   children?: ReactNode;
 }> = ({ children }) => {
   const adminRights = useAtomValue(isAdminAtom);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const setFeedItemsState = useStoreActions(
     (actions) => actions.data.setFeedItems
   );

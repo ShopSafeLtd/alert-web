@@ -1,9 +1,12 @@
 import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 import { useSignTermsMutation } from 'graphql/user/mutation/__generated__/sign-terms.generated';
 import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -36,8 +39,8 @@ interface Return {
 
 const useOnboarding = (): Return => {
   const intl = useIntl();
-  const userId = useStoreState((state) => state.user.id);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const userId = useAtomValue(userIdAtom);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [current, setCurrent] = useState(0);
   const [accountDetail, setAccountDetail] = useState<AccountData | undefined>();
   const [termsSigned, setTermsSigned] = useState(false);

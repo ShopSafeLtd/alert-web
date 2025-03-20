@@ -4,6 +4,7 @@ import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/__gener
 import type { AnswerType } from 'graphql/types';
 import type { Scheme } from 'state';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useRemoveQuestionFromTagMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/remove-question.generated';
 import { useUpsertIncidentFormMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-incident-form-fields.generated';
 import { useUpdateTagQsMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-question-order.generated';
@@ -16,6 +17,7 @@ import { Modal, notification } from 'antd';
 import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
 import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
 import { IncidentFormField, Model, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
@@ -241,7 +243,7 @@ const useViewTag = (): Return => {
   const { id } = useParams();
   const intl = useIntl();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const schemeName = useStoreState((state) => state.scheme.name);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const [addQuestion, setAddQuestion] = useState(false);

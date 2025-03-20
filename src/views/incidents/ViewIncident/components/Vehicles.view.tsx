@@ -6,7 +6,7 @@ import AddVehicleSimple from '#/components/form-components/Vehicle/AddVehicleSim
 import EditVehicleSimple from '#/components/form-components/Vehicle/EditVehicleSimple';
 import LinkVehicle from '#/components/form-components/linkOptions/LinkVehicle';
 import VehicleTable from '#/components/tables/VehicleTable';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -31,6 +31,7 @@ import { useUpdateIncidentVehiclesMutation } from 'graphql/incidents/mutations/u
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -56,7 +57,7 @@ const Vehicles = ({
   setSaving,
 }: Props) => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [addVehicle, setAddVehicle] = useState(false);
   const [editVehicleData, setEditVehicleData] = useState<VehicleData | null>(

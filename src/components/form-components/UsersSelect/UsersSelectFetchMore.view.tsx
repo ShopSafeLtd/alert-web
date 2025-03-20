@@ -6,12 +6,13 @@ import {
   useUsersSelectLazyQuery,
   useUsersSelectQuery,
 } from '#/components/form-components/UsersSelect/__generated__/users-select-query.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 export type ValueType =
   | LabeledValue
@@ -99,7 +100,7 @@ const UsersManySelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 }) => {
   const intl = useIntl();
   const take = 50;
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [initialValues] = useState(value ? convertToArrayOfStrings(value) : []);

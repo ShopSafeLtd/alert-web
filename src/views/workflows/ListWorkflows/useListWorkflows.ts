@@ -91,7 +91,8 @@ const useListWorkflows = (): Return => {
           (acc, action) => acc + (action?.timesRun || 0),
           0
         ),
-
+        triggerMethod: workflow.trigger,
+        triggerModel: workflow.triggerModels,
         triggeredOff: worflowTriggerToReadable({
           intl,
           trigger: workflow.trigger,

@@ -1,13 +1,14 @@
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
@@ -32,7 +33,7 @@ const useAddExistingCrimeGroup = ({
   const params = useParams();
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [selected, setSelected] = useState<string | undefined>();
   const [search, setSearch] = useState<string>('');
 

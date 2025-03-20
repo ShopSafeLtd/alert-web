@@ -5,7 +5,7 @@ import BusinessesSelect from '#/components/form-components/BusinessesSelect/Busi
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import UsersManySelect from '#/components/form-components/UsersSelect/UsersSelectFetchMore.view';
 import DatePicker from '#/components/util-components/DatePicker';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Card,
@@ -20,9 +20,16 @@ import {
   Radio,
   Row,
   Select,
+  Switch,
   Typography,
 } from 'antd';
-import { AnswerType, CronSchedule, Model } from 'graphql/types';
+import {
+  AnswerType,
+  CronSchedule,
+  IncidentPriority,
+  Model,
+} from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
@@ -119,7 +126,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
 
   const typeWatch = Form.useWatch('workflowMode', form);
   const workflowTypeWatch = Form.useWatch('workflowType', form);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   if (loading)
     return (
@@ -352,8 +359,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -367,7 +374,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           </Col>
                           <Col span={2}>
                             <Form.Item name="tags" valuePropName="checked">
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -425,8 +432,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -438,12 +445,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Value Check" />
                             </Typography.Title>
                           </Col>
-                          <Col span={2}>
+                          <Col>
                             <Form.Item
                               name="valueCheck"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -461,8 +468,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             />
                           </Form.Item>
                         )}
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -507,8 +514,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -525,7 +532,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               name="goodsTypeCheck"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -585,8 +592,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           height: '100%',
                         }}
                       >
-                        <Row>
-                          <Col span={22}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -598,12 +605,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Description" />
                             </Typography.Title>
                           </Col>
-                          <Col span={2}>
+                          <Col>
                             <Form.Item
                               name="descriptionCheck"
                               valuePropName="checked"
                             >
-                              <Checkbox />
+                              <Switch />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -661,8 +668,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                   <Row gutter={[8, 8]} style={{ marginTop: 8 }}>
                     <Col span={24}>
                       <Card>
-                        <Row>
-                          <Col span={23}>
+                        <Row wrap={false}>
+                          <Col flex={1}>
                             <Typography.Title
                               level={4}
                               style={{
@@ -674,7 +681,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               <FormattedMessage defaultMessage="Questions Check" />
                             </Typography.Title>
                           </Col>
-                          <Col span={1}>
+                          <Col>
                             <Form.Item
                               name="questionChecked"
                               valuePropName="checked"
@@ -932,7 +939,6 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                     </Col>
                                     <Col
                                       offset={1}
-                                      span={2}
                                       style={{
                                         alignItems: 'center',
                                         display: 'flex',
@@ -978,8 +984,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         height: '100%',
                       }}
                     >
-                      <Row>
-                        <Col span={22}>
+                      <Row wrap={false}>
+                        <Col flex={1}>
                           <Typography.Title
                             level={4}
                             style={{
@@ -991,7 +997,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <FormattedMessage defaultMessage="No. of Offences in X days" />
                           </Typography.Title>
                         </Col>
-                        <Col span={2}>
+                        <Col>
                           <Form.Item
                             name="incidentTimeCountCheck"
                             valuePropName="checked"
@@ -1046,8 +1052,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         height: '100%',
                       }}
                     >
-                      <Row>
-                        <Col span={22}>
+                      <Row wrap={false}>
+                        <Col flex={1}>
                           <Typography.Title
                             level={4}
                             style={{
@@ -1067,12 +1073,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                             <FormattedMessage defaultMessage="Triggers when an incident happens ?" />
                           </Typography.Paragraph>
                         </Col>
-                        <Col span={2}>
+                        <Col>
                           <Form.Item
                             name="incidentWhileBanCheck"
                             valuePropName="checked"
                           >
-                            <Checkbox />
+                            <Switch />
                           </Form.Item>
                         </Col>
                       </Row>
@@ -1090,66 +1096,75 @@ const WorkflowView: React.FC<WorkflowProps> = ({
           <Row gutter={[8, 8]}>
             <Col span={24}>
               <Card>
-                <Typography.Title level={4}>
-                  <FormattedMessage defaultMessage="User Management" />
-                </Typography.Title>
-                <Typography.Text type="secondary">
-                  <FormattedMessage defaultMessage="Select users, roles, and groups to be assigned to the outcomes. Created events will use users from the selected roles/groups as well as any specific users selected" />
-                </Typography.Text>
-                <Form.Item
-                  label={<FormattedMessage defaultMessage="Specefic Users" />}
-                  name="userManagementUsers"
-                  tooltip={
-                    <FormattedMessage defaultMessage="Select users to be assigned to the outcomes" />
-                  }
-                >
-                  <UsersManySelect
-                    allowClear
-                    disabled={saving}
-                    mode={'multiple'}
-                    placeholder={intl.formatMessage({
-                      defaultMessage: 'Search for a user...',
-                    })}
-                    showSearch
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={<FormattedMessage defaultMessage="Roles" />}
-                  name="userManagementRoles"
-                >
-                  <RoleSelect multi schemeId={schemeId} />
-                </Form.Item>
-                <Form.Item
-                  label={<FormattedMessage defaultMessage="Groups" />}
-                  name="userManagementGroups"
-                >
-                  <Select
-                    mode="multiple"
-                    optionFilterProp="label"
-                    options={groups}
-                  />
-                </Form.Item>
-                {typeWatch !== 'scheduled' && (
-                  <Form.Item name="useDynamicGroups" valuePropName="checked">
-                    <Checkbox>
-                      {workflowTypeWatch === Model.Incident
-                        ? intl.formatMessage({
-                            defaultMessage: 'Use Incident groups',
-                          })
-                        : intl.formatMessage({
-                            defaultMessage: 'Use Offender groups',
-                          })}
-                    </Checkbox>
-                  </Form.Item>
-                )}
+                <Row wrap={false}>
+                  <Col flex={1}>
+                    <Typography.Title level={4}>
+                      <FormattedMessage defaultMessage="User Management" />
+                    </Typography.Title>
+                    <Typography.Text type="secondary">
+                      <FormattedMessage defaultMessage="Select users, roles, and groups to be assigned to the outcomes. Created events will use users from the selected roles/groups as well as any specific users selected" />
+                    </Typography.Text>
+                    <Form.Item
+                      label={
+                        <FormattedMessage defaultMessage="Specefic Users" />
+                      }
+                      name="userManagementUsers"
+                      tooltip={
+                        <FormattedMessage defaultMessage="Select users to be assigned to the outcomes" />
+                      }
+                    >
+                      <UsersManySelect
+                        allowClear
+                        disabled={saving}
+                        mode={'multiple'}
+                        placeholder={intl.formatMessage({
+                          defaultMessage: 'Search for a user...',
+                        })}
+                        showSearch
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label={<FormattedMessage defaultMessage="Roles" />}
+                      name="userManagementRoles"
+                    >
+                      <RoleSelect multi schemeId={schemeId} />
+                    </Form.Item>
+                    <Form.Item
+                      label={<FormattedMessage defaultMessage="Groups" />}
+                      name="userManagementGroups"
+                    >
+                      <Select
+                        mode="multiple"
+                        optionFilterProp="label"
+                        options={groups}
+                      />
+                    </Form.Item>
+                    {typeWatch !== 'scheduled' && (
+                      <Form.Item
+                        name="useDynamicGroups"
+                        valuePropName="checked"
+                      >
+                        <Checkbox>
+                          {workflowTypeWatch === Model.Incident
+                            ? intl.formatMessage({
+                                defaultMessage: 'Use Incident groups',
+                              })
+                            : intl.formatMessage({
+                                defaultMessage: 'Use Offender groups',
+                              })}
+                        </Checkbox>
+                      </Form.Item>
+                    )}
+                  </Col>
+                </Row>
               </Card>
             </Col>
 
             <Col span={24}>
               <Card>
-                <Row>
-                  <Col span={22}>
+                <Row wrap={false}>
+                  <Col flex={1}>
                     <Typography.Title
                       level={4}
                       style={{
@@ -1169,9 +1184,9 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       <FormattedMessage defaultMessage="What activity to create when the above conditions are met?" />
                     </Typography.Paragraph>
                   </Col>
-                  <Col span={2}>
+                  <Col>
                     <Form.Item name="taskOutcome" valuePropName="checked">
-                      <Checkbox />
+                      <Switch />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -1282,8 +1297,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
               <>
                 <Col span={24}>
                   <Card>
-                    <Row>
-                      <Col span={22}>
+                    <Row wrap={false}>
+                      <Col flex={1}>
                         <Typography.Title
                           level={4}
                           style={{
@@ -1303,12 +1318,12 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           <FormattedMessage defaultMessage="What notification to create when the above conditions are met?" />
                         </Typography.Paragraph>
                       </Col>
-                      <Col span={2}>
+                      <Col>
                         <Form.Item
                           name="sendNotificationCheck"
                           valuePropName="checked"
                         >
-                          <Checkbox />
+                          <Switch />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1336,8 +1351,8 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                 </Col>
                 <Col span={24}>
                   <Card>
-                    <Row>
-                      <Col span={22}>
+                    <Row wrap={false}>
+                      <Col flex={1}>
                         <Typography.Title
                           level={4}
                           style={{
@@ -1362,7 +1377,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                           name="sendEmailCheck"
                           valuePropName="checked"
                         >
-                          <Checkbox />
+                          <Switch />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1388,9 +1403,48 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                     )}
                   </Card>
                 </Col>
+                {modelSelected === Model.Incident && (
+                  <Col span={24}>
+                    <Card
+                      title={intl.formatMessage({
+                        defaultMessage: 'Update Incident',
+                      })}
+                    >
+                      <Row gutter={[8, 8]}>
+                        <Col span={10}>
+                          <Form.Item
+                            label={
+                              <FormattedMessage defaultMessage="Select an priority to set the incident to" />
+                            }
+                            name="setPriority"
+                          >
+                            <Select
+                              options={Object.keys(IncidentPriority).map(
+                                (key) => ({
+                                  label: key,
+                                  value: key,
+                                })
+                              )}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Form.Item
+                        label={
+                          <FormattedMessage defaultMessage="Auto Approve incident?" />
+                        }
+                        name="autoApprove"
+                        valuePropName="checked"
+                      >
+                        <Switch />
+                      </Form.Item>
+                    </Card>
+                  </Col>
+                )}
               </>
             )}
           </Row>
+
           <Form.Item>
             <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
               <Col>

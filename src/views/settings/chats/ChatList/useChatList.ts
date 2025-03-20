@@ -2,13 +2,14 @@ import type { CreateChatMutation } from '#/graphql/chats/mutations/__generated__
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { SchemeChatsQuery } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   SchemeChatsDocument,
   useSchemeChatsQuery,
 } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface Return {
   addChat: boolean;
@@ -21,7 +22,7 @@ interface Return {
 }
 
 const useChatList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [addChat, setAddChat] = useState(false);
   const [search, setSearch] = useState('');
 

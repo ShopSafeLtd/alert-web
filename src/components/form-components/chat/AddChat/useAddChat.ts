@@ -3,13 +3,15 @@ import type { FormInstance } from 'antd';
 import type { CreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
 import type { ListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Form, notification } from 'antd';
 import { useCreateChatMutation } from 'graphql/chats/mutations/__generated__/create-chat.generated';
 import { SortOrder } from 'graphql/types';
 import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { useForm } = Form;
@@ -33,9 +35,9 @@ interface Return {
 
 const useAddChat = ({ onClose, update }: Props): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
 
   const [form] = useForm<FormData>();
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({

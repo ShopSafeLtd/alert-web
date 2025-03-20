@@ -1,10 +1,11 @@
 import type { ListOffendersSelectQuery } from 'graphql/offenders/queries/__generated__/list-offenders-select.generated';
 import type { Age, Build, Gender, Race } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useListOffendersSelectQuery } from 'graphql/offenders/queries/__generated__/list-offenders-select.generated';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 
 export interface Offender {
   age?: Age | null | undefined;
@@ -67,7 +68,7 @@ const useSelectExistingOffender = ({
     | null
     | undefined
   >(undefined);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [lightBoxOpen, setLightBoxOpen] = useState({
     index: 0,
     open: false,

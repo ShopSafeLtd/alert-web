@@ -102,19 +102,19 @@ const App = (): JSX.Element => (
       options={options}
     >
       <TokenProvider>
-        <Store>
-          <ApolloProvider>
-            <RouteWrapper title={undefined}>
-              <Provider>
+        <Provider>
+          <Store>
+            <ApolloProvider>
+              <RouteWrapper title={undefined}>
                 <UserProvider>
                   <SchemeProvider>
                     <Views />
                   </SchemeProvider>
                 </UserProvider>
-              </Provider>
-            </RouteWrapper>
-          </ApolloProvider>
-        </Store>
+              </RouteWrapper>
+            </ApolloProvider>
+          </Store>
+        </Provider>
       </TokenProvider>
     </PostHogProvider>
   </div>

@@ -2,11 +2,12 @@ import type { BrandsQueryVariables } from '#/views/settings/brands/graphql/queri
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { Select } from 'antd';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   allowClear?: boolean;
@@ -34,7 +35,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   value,
   ...props
 }) => {
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, loading } = useBrandsQuery({
     variables: queryVars ?? {

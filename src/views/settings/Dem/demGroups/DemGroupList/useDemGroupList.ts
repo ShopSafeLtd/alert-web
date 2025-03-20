@@ -2,9 +2,10 @@ import type { UpsertDemGroupMutation } from '#/components/form-components/DemGro
 import type { DemGroupData } from '#/types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 import type { DemGroupsQuery } from '../graphql/queries/__generated__/dem-groups.generated';
 
@@ -29,7 +30,7 @@ interface Return {
 }
 
 const useDemGroupList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [addDemGroup, setAddDemGroup] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 24 });
   const [editData, setEditData] = useState<DemGroupData | undefined>(undefined);

@@ -4,7 +4,9 @@ import type { DateType, VehicleData } from 'types/DataType';
 
 import { useListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/__generated__/list-vehicles-card.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -49,7 +51,7 @@ const useLinkVehicle = ({
   const { filterDefaultGroups: defaultGroups } = useStoreState(
     (state) => state.user
   );
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const userSchemeIds = useStoreState((state) => state.user.schemes).map(
     (el) => el.scheme.id
   );

@@ -1,9 +1,10 @@
 import { useUsersSelectQuery } from '#/components/form-components/UsersSelect/__generated__/users-select-query.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   allowClear?: boolean;
@@ -16,7 +17,7 @@ interface Props {
 }
 
 export const useUserData = () => {
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const { groups } = useGroupsContext();
   const { data, loading } = useUsersSelectQuery({
     variables: {

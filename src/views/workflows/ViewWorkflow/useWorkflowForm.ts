@@ -2,6 +2,7 @@ import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__gene
 import type { FormInstance } from 'antd';
 import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
 import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
 import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
@@ -15,13 +16,14 @@ import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated_
 import {
   Model,
   QuestionModel,
+  SortOrder,
   WorkflowActionType,
   WorkflowTrigger,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useStoreState } from 'state';
 
 import type { ListData } from '../../adminTodo/useActivities';
 
@@ -197,7 +199,7 @@ interface Return {
 const useWorkflowForm = (): Return => {
   const [form] = Form.useForm<FormData>();
 
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const { id: EditId } = useParams();
 
   const [saving, setSaving] = useState(false);
@@ -218,10 +220,16 @@ const useWorkflowForm = (): Return => {
 
   const { data, loading } = useWorkflowDataQuery({
     variables: {
+      orderBy: {
+        question: SortOrder.Asc,
+      },
       questionsWhere: {
         deleted: {
           equals: false,
         },
+      },
+      schemeTagsOrderBy: {
+        name: SortOrder.Asc,
       },
       where: {
         id: currentScheme,

@@ -14,6 +14,7 @@ const useRoles = (): Return => {
   const { id: currentScheme } = useStoreState((state) => state.scheme);
 
   const { data, fetchMore, loading } = useRolesQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       schemeId: currentScheme || '',
       take: 20,
