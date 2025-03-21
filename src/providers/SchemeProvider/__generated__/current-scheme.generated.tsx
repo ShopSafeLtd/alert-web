@@ -8,7 +8,7 @@ export type CurrentSchemeProviderQueryVariables = Types.Exact<{
 }>;
 
 
-export type CurrentSchemeProviderQuery = { __typename?: 'Query', userScheme: { __typename?: 'UserScheme', id: string, role: Types.Role, isAdmin: boolean, permissions: Array<{ __typename?: 'Permissions', model: Types.PermissionModel, allowedMethods: Array<Types.PermissionMethod> }>, orignalPermissions: { __typename?: 'CustomRole', id: string, admin: boolean }, scheme: { __typename?: 'Scheme', id: string, name: string, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, customTranslations: Array<{ [key: string]: any }>, facialRecognition: boolean, facialRedaction: boolean, activityAssignToUser: boolean, useBusinessGroupsOnIncident: boolean, imagesRequiredOnOffenders: boolean, goodsMode: Types.GoodsMode, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, facialDetection: boolean, disableGalleryOnNative: boolean, skipLocationToAddress: boolean } } };
+export type CurrentSchemeProviderQuery = { __typename?: 'Query', userScheme: { __typename?: 'UserScheme', id: string, role: Types.Role, isAdmin: boolean, permissions: Array<{ __typename?: 'Permissions', model: Types.PermissionModel, allowedMethods: Array<Types.PermissionMethod> }>, orignalPermissions: { __typename?: 'CustomRole', id: string, admin: boolean }, scheme: { __typename?: 'Scheme', activityAssignToUser: boolean, autoPopulateDescription: boolean, customTranslations: Array<{ [key: string]: any }>, defaultPublicOffenderDOB: boolean, disableGalleryOnNative: boolean, facialDetection: boolean, facialRecognition: boolean, facialRedaction: boolean, restrictIncidentAccess: boolean, goodsMode: Types.GoodsMode, id: string, imagesRequiredOnOffenders: boolean, languageCount: number, name: string, needJustification: boolean, oneSelectedIncidentTypeOnly: boolean, reportOnly: boolean, taskTimeTracking: boolean, requireSiteNumberForUsers: boolean, skipLocationToAddress: boolean, useBusinessGroupsOnIncident: boolean } } };
 
 
 export const CurrentSchemeProviderDocument = gql`
@@ -26,27 +26,27 @@ export const CurrentSchemeProviderDocument = gql`
       admin
     }
     scheme {
-      id
-      name
-      defaultPublicOffenderDOB
-      restrictIncidentAccess
-      reportOnly
+      activityAssignToUser
+      autoPopulateDescription
       customTranslations
+      defaultPublicOffenderDOB
+      disableGalleryOnNative
+      facialDetection
       facialRecognition
       facialRedaction
-      activityAssignToUser
-      useBusinessGroupsOnIncident
-      imagesRequiredOnOffenders
+      restrictIncidentAccess
       goodsMode
-      taskTimeTracking
+      id
+      imagesRequiredOnOffenders
       languageCount
-      autoPopulateDescription
+      name
       needJustification
-      requireSiteNumberForUsers
       oneSelectedIncidentTypeOnly
-      facialDetection
-      disableGalleryOnNative
+      reportOnly
+      taskTimeTracking
+      requireSiteNumberForUsers
       skipLocationToAddress
+      useBusinessGroupsOnIncident
     }
   }
 }

@@ -1,7 +1,10 @@
 import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { QueryMode } from 'graphql/types';
 import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import { useAtomValue } from 'jotai/index';
 import { useStoreState } from 'state';
 
 interface Return {
@@ -14,8 +17,8 @@ interface Return {
 }
 
 const useVehicleSideList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
   const filterVariables = useStoreState(
     (state) => state.data.vehicles.variables
   );

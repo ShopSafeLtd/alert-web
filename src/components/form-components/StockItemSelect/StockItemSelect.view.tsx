@@ -5,11 +5,12 @@ import type {
   SelectProps,
 } from 'antd/lib/select';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Row, Select, Typography } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 import { useStockItemSelectQuery } from './graphql/queries/__generated__/stockselect.generated';
 
@@ -189,7 +190,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 }) => {
   const intl = useIntl();
   const take = 30;
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 

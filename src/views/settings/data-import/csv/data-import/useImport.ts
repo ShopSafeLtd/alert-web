@@ -1,15 +1,16 @@
 import type { Dispatch } from 'react';
 import type { IFileInfo } from 'react-csv-reader';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useCreateCsvImportMutation } from '#/views/settings/data-import/csv/data-import/graphql/mutation/__generated__/create-csv.generated';
 import { useGoodsTypesQuery } from '#/views/settings/data-import/csv/data-import/graphql/queries/__generated__/goods-types.generated';
 import { notification } from 'antd';
 import { CsvType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useReducer, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-
-import { useStoreState } from '../../../../../state';
 
 export type CSVData = string[][];
 export type DataType =
@@ -101,8 +102,8 @@ const dataTypeToCsvType = (type: DataType) => {
 };
 
 const useImport = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
   const { data: goods } = useGoodsTypesQuery();
   const intl = useIntl();
   const initState: State = {

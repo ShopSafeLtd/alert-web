@@ -3,13 +3,14 @@ import type { ColumnsType } from 'antd/es/table/interface';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { Dispatch, SetStateAction } from 'react';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { customRequest } from '#/views/settings/data-import/custom-stock-import/customRequest';
 import { useImportStockItemCsvMutation } from '#/views/settings/data-import/custom-stock-import/graphql/mutations/__generated__/stock-item-import.generated';
 import { Form, notification } from 'antd';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 // import type { ColumnsType } from 'antd/es/table/interface';
 import type { HeaderToFixed, IFormData, Record } from './types';
@@ -82,7 +83,7 @@ const useImportStock = (): Return => {
   const [uploading, setUploading] = useState(false);
   const intl = useIntl();
   const [form] = useForm<IFormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [headerToFixed, setHeaderToFixed] = useState<HeaderToFixed>({
     barcode: '',
     brand: '',

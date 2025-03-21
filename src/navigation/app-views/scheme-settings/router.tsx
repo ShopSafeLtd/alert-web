@@ -121,7 +121,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <CustomStockImport />
@@ -134,7 +134,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.GeneralSettings,
                   }}
                 >
                   <SchemeDetails />
@@ -147,7 +147,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.GeneralSettings,
                   }}
                 >
                   <SchemeDetails />
@@ -160,7 +160,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.SharingSettings,
                   }}
                 >
                   <SchemeSharing />
@@ -172,10 +172,6 @@ const SchemeSettings = (): JSX.Element => {
               element={
                 <PermissionCheckWrapper
                   permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
                     {
                       method: PermissionMethod.Read,
                       model: PermissionModel.Users,
@@ -193,10 +189,6 @@ const SchemeSettings = (): JSX.Element => {
                   permission={[
                     {
                       method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
-                    {
-                      method: PermissionMethod.Read,
                       model: PermissionModel.Users,
                     },
                   ]}
@@ -210,10 +202,6 @@ const SchemeSettings = (): JSX.Element => {
               element={
                 <PermissionCheckWrapper
                   permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
                     {
                       method: PermissionMethod.Read,
                       model: PermissionModel.Dem,
@@ -232,10 +220,6 @@ const SchemeSettings = (): JSX.Element => {
                   permission={[
                     {
                       method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
-                    {
-                      method: PermissionMethod.Read,
                       model: PermissionModel.Dem,
                     },
                   ]}
@@ -250,10 +234,6 @@ const SchemeSettings = (): JSX.Element => {
               element={
                 <PermissionCheckWrapper
                   permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
                     {
                       method: PermissionMethod.Read,
                       model: PermissionModel.Dem,
@@ -271,10 +251,6 @@ const SchemeSettings = (): JSX.Element => {
                   permission={[
                     {
                       method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
-                    {
-                      method: PermissionMethod.Read,
                       model: PermissionModel.Groups,
                     },
                   ]}
@@ -288,10 +264,6 @@ const SchemeSettings = (): JSX.Element => {
               element={
                 <PermissionCheckWrapper
                   permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
                     {
                       method: PermissionMethod.Read,
                       model: PermissionModel.Groups,
@@ -308,12 +280,8 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={[
                     {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
-                    {
                       method: PermissionMethod.Write,
-                      model: PermissionModel.Chat,
+                      model: PermissionModel.ChatGroups,
                     },
                   ]}
                 >
@@ -327,7 +295,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.ChatGroups,
                   }}
                 >
                   <ViewChatGroup />
@@ -340,7 +308,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.GeneralSettings,
                   }}
                 >
                   <SchemeDetails />
@@ -353,7 +321,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Terms,
                   }}
                 >
                   <Terms />
@@ -366,7 +334,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Terms,
                   }}
                 >
                   <UserTerms />
@@ -379,7 +347,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Terms,
                   }}
                 >
                   <SchemeTerms />
@@ -392,7 +360,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Terms,
                   }}
                 >
                   <CustomSchemeTerms />
@@ -405,7 +373,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Terms,
                   }}
                 >
                   <CreateTermsContainer />
@@ -418,7 +386,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.OffenderWarnings,
                   }}
                 >
                   <OffenderWarnings />
@@ -431,7 +399,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.IncidentOptions,
                   }}
                 >
                   <CrimeTypes />
@@ -444,7 +412,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <SentrysysImport />
@@ -457,7 +425,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.IncidentOptions,
                   }}
                 >
                   <TagView />
@@ -470,7 +438,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.OffenderGalleries,
                   }}
                 >
                   <CustomGalleries />
@@ -483,7 +451,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.RecycleBin,
                   }}
                 >
                   <RecycleBin />
@@ -495,10 +463,6 @@ const SchemeSettings = (): JSX.Element => {
               element={
                 <PermissionCheckWrapper
                   permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
                     {
                       method: PermissionMethod.Read,
                       model: PermissionModel.Businesses,
@@ -515,7 +479,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Businesses,
                   }}
                 >
                   <ViewBusiness />
@@ -529,11 +493,7 @@ const SchemeSettings = (): JSX.Element => {
                   permission={[
                     {
                       method: PermissionMethod.Read,
-                      model: PermissionModel.Settings,
-                    },
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Businesses,
+                      model: PermissionModel.Brands,
                     },
                   ]}
                 >
@@ -547,7 +507,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <DiscMenu />
@@ -560,7 +520,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <DiscImport />
@@ -573,7 +533,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <MySafety />
@@ -586,7 +546,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <IntelOne />
@@ -599,7 +559,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <CSVImport />
@@ -612,7 +572,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <DataExport />
@@ -625,7 +585,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Roles,
                   }}
                 >
                   <RolesContainer />
@@ -638,8 +598,8 @@ const SchemeSettings = (): JSX.Element => {
               element={
                 <PermissionCheckWrapper
                   permission={{
-                    method: PermissionMethod.Edit,
-                    model: PermissionModel.Settings,
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.Roles,
                   }}
                 >
                   <Role create />
@@ -652,7 +612,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Roles,
                   }}
                 >
                   <Role />
@@ -665,7 +625,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.DataImport,
                   }}
                 >
                   <CSVImport />
@@ -678,7 +638,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Workflows,
                   }}
                 >
                   <Workflows />
@@ -692,7 +652,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.StatementTemplates,
                   }}
                 >
                   <ListStatements />
@@ -705,7 +665,7 @@ const SchemeSettings = (): JSX.Element => {
                 <PermissionCheckWrapper
                   permission={{
                     method: PermissionMethod.Read,
-                    model: PermissionModel.Settings,
+                    model: PermissionModel.Dashboards,
                   }}
                 >
                   <DashboardManagement />

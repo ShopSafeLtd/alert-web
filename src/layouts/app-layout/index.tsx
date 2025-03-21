@@ -5,11 +5,13 @@ import {
 } from '#/constants/ThemeConstant';
 import GroupsProvider from '#/context/groups-context';
 import { useAuth } from '#/hooks';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import { Grid, Layout } from 'antd';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 import SideNav from 'components/layout-components/AntD/navigation/SideNav';
 import navigationConfig from 'configs/NavigationConfig';
+import { useAtomValue } from 'jotai/index';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
 import React, { useEffect } from 'react';
@@ -57,7 +59,7 @@ const AppLayout = (): JSX.Element => {
     onboarded,
     termsExpired,
   } = useStoreState((state) => state.user);
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { status } = useThemeSwitcher();
 
@@ -97,7 +99,7 @@ const AppLayout = (): JSX.Element => {
   if (status === 'loading') {
     return <Loading cover="page" />;
   }
-
+  console.log(loading, isLoaded, isSet);
   if (loading || !isLoaded || !isSet) return <Loading cover="content" />;
 
   return (

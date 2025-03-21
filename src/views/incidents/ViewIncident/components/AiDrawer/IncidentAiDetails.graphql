@@ -1,0 +1,62 @@
+query IncidentAiDetails($where: IncidentWhereUniqueInput!) {
+    incident(where: $where) {
+        id
+        aiBehavioralAnalysis {
+            id
+            interventionResponse
+            learningBehavior
+            planningEvidence
+            riskTolerance
+            sophisticationLevel
+            stressResponse
+            tacticsUsed
+        }
+        aiImpactAssessment {
+            id
+            category
+            financialImpact
+            justification
+            keyFactors
+            overallScore
+            securityResourceImpact
+        }
+        aiImprovements
+        aiInvestigationLeads {
+            id
+            keyCCTVTimestamps
+            suggestedActions
+        }
+        aiKeyObservations
+        aiMO
+        aiMethod
+        aiNetworkAnalysis {
+            id
+            communicationObserved
+            groupDynamics
+            offenderRoles
+        }
+        aiPatternRecognition {
+            groupBehaviorPattern
+            knownMOMatch
+            id
+            timePatternClassification
+        }
+        aiPreventionInsights {
+            id
+            recommendations
+            staffingImplications
+            vulnerabilitiesExploited
+        }
+        aiQualityScore
+        aiRiskAssessment {
+            confrontationResponse
+            escalationPotential
+            id
+            reoffendingProbability
+            staffSafetyRisk
+            threatLevel
+            violencePotential
+        }
+        aiSummary
+    }
+}

@@ -4,8 +4,9 @@ import type { DemGroupData, SelectOptions } from '#/types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
 
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form, notification } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -44,7 +45,7 @@ const useAddDemGroup = ({
 }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   useEffect(() => {
     if (editData) {

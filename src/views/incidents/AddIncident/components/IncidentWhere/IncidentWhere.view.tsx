@@ -1,49 +1,66 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
-import React from 'react';
-import { Button, Card, Col, Form, Row, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-import DebounceSelect from 'components/form-components/DebounceSelect';
-import { useIntl } from 'react-intl';
 import type { LocationData } from 'types/DataType';
+
+import {
+  currentSchemeBusinessesAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Form, Row, Typography } from 'antd';
+import DebounceSelect from 'components/form-components/DebounceSelect';
+import { useAtomValue } from 'jotai';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import useStyles from '../../AddIncident.styles';
 
-const { Title, Paragraph, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
-  saving: boolean;
+  hideField: boolean;
+  newAddressData: LocationData | undefined;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
-  toggleAddNewAddress: () => void;
-  newAddressData: LocationData | undefined;
-  updateNewAddressData: (value: LocationData | undefined) => void;
-  hideField: boolean;
   onSelectedBusiness: (value: string) => void;
+  saving: boolean;
   showSiteNumber: boolean;
+  toggleAddNewAddress: () => void;
+  updateNewAddressData: (value: LocationData | undefined) => void;
 }
 
 const IncidentWhere = ({
-  saving,
-  toggleAddNewAddress,
-  onSearchBusiness,
-  newAddressData,
-  updateNewAddressData,
   hideField,
+  newAddressData,
+  onSearchBusiness,
   onSelectedBusiness,
+  saving,
   showSiteNumber,
+  toggleAddNewAddress,
+  updateNewAddressData,
 }: Props) => {
   const classes = useStyles();
+  const isAdmin = useAtomValue(isAdminAtom);
+  const currentUser = useAtomValue(currentUserAtom);
+  const multipleBusiness = useAtomValue(currentSchemeBusinessesAtom);
+
   const intl = useIntl();
 
-  return (
+  const showBusinessSection =
+    isAdmin ||
+    (multipleBusiness && multipleBusiness.length > 1) ||
+    currentUser?.reportToAllBusinesses;
+
+  return showBusinessSection ? (
     <Card
       className={classes.card}
       style={hideField ? { display: 'none' } : undefined}
     >
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {intl.formatMessage(
               {
                 defaultMessage: 'Where did this incident happen?',
@@ -54,9 +71,9 @@ const IncidentWhere = ({
         </Col>
         <Col>
           <Paragraph
+            italic
             style={{ marginBottom: 1, marginLeft: 5 }}
             type="secondary"
-            italic
           >
             {intl.formatMessage(
               {
@@ -70,47 +87,47 @@ const IncidentWhere = ({
       </Row>
       <Row>
         <Col span={16}>
-          <Row gutter={64} align="middle">
+          <Row align="middle" gutter={64}>
             <Col>
               <Row>
                 <Col>
                   <Form.Item
-                    name="business"
                     label={intl.formatMessage(
                       { defaultMessage: 'Business' },
                       {}
                     )}
+                    name="business"
                   >
                     <DebounceSelect
-                      showSearch
                       allowClear
                       disabled={saving}
+                      fetchOptions={onSearchBusiness}
+                      onSelect={({ value }) => {
+                        console.log(value);
+                        onSelectedBusiness(value as string);
+                      }}
                       placeholder={intl.formatMessage(
                         {
                           defaultMessage: 'Search for a business...',
                         },
                         {}
                       )}
-                      fetchOptions={onSearchBusiness}
+                      showSearch
                       style={{ width: 300 }}
-                      onSelect={({ value }) => {
-                        console.log(value);
-                        onSelectedBusiness(value as string);
-                      }}
                     />
                   </Form.Item>
                 </Col>
                 {!showSiteNumber && (
                   <Col>
                     <Button
-                      style={{ marginLeft: 5, marginTop: 30 }}
-                      onClick={toggleAddNewAddress}
                       icon={
                         <FontAwesomeIcon
                           icon={faPlus}
                           style={{ marginRight: 5 }}
                         />
                       }
+                      onClick={toggleAddNewAddress}
+                      style={{ marginLeft: 5, marginTop: 30 }}
                     >
                       {intl.formatMessage({
                         defaultMessage: 'Use An Address',
@@ -201,15 +218,17 @@ const IncidentWhere = ({
             </Col>
             <Col className={classes.clearButton}>
               <Button
-                style={{ marginLeft: 5 }}
-                onClick={() => updateNewAddressData(undefined)}
                 icon={<FontAwesomeIcon icon={faTrash} />}
+                onClick={() => updateNewAddressData(undefined)}
+                style={{ marginLeft: 5 }}
               />
             </Col>
           </Row>
         </>
       )}
     </Card>
+  ) : (
+    <div />
   );
 };
 

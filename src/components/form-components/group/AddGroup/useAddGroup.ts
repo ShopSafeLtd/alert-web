@@ -2,12 +2,13 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
 import type { SelectOptions } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useCreateGroupMutation } from 'graphql/groups/mutations/__generated__/create-group.generated';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import { useListUsersToAddQuery } from './__graphql__/queries/__generated__/list-users.generated';
@@ -52,7 +53,7 @@ interface Return {
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [showOffenderSettings, setShowOffenderSettings] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();

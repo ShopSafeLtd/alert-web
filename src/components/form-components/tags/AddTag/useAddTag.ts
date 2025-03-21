@@ -1,32 +1,35 @@
-import { useStoreState } from 'state';
 import type { TagData } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import { useAtomValue } from 'jotai/index';
+
 export interface FormData {
-  name: string;
   description: string;
+  name: string;
   schemes: string[];
 }
 
 interface Props {
-  update: (value: TagData) => void;
   data?: TagData;
+  update: (value: TagData) => void;
 }
 
 interface Return {
   onSubmit: (value: FormData) => void;
 }
 
-const useAddTag = ({ update, data }: Props): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+const useAddTag = ({ data, update }: Props): Return => {
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
 
   const onSubmit = (value: FormData) => {
     update({
+      createdById: userId,
+      description: value.description || '',
       id: data?.id || Math.floor(Math.random() * 1000).toString(),
       name: value.name,
-      description: value.description || '',
       schemes: value.schemes || [schemeId],
-      createdById: userId,
     });
   };
 

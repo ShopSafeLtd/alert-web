@@ -2,6 +2,7 @@ import type { ViewportData } from '#/types/DataType';
 import type { ViewUserQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-user.generated';
 import type { Role } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import { useViewUserQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-user.generated';
 import { Modal, notification } from 'antd';
@@ -9,6 +10,7 @@ import { UserStatus } from 'graphql/types';
 import { useDeleteUserFromSchemeMutation } from 'graphql/user/mutation/__generated__/delete_user_from_scheme.generated';
 import { useSendInviteMutation } from 'graphql/user/mutation/__generated__/send_invite.generated';
 import { useUpdateUserDisableMutation } from 'graphql/user/mutation/__generated__/update_user_disable.generated';
+import { useAtomValue } from 'jotai/index';
 import { type RefObject, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -48,7 +50,7 @@ const useUserDetail = (userId: string): Return => {
   const navigate = useNavigate();
   const { id: currentUserId } = useStoreState((state) => state.user);
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [editUser, setEditUser] = useState(false);
   const [demLink, setDemLink] = useState(false);

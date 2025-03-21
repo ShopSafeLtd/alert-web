@@ -2,11 +2,12 @@ import type { FormInstance } from 'antd';
 import type { StockItemValue } from 'components/form-components/StockItemSearch/StockItemSearch.view';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
 import { useListBusinessesDivisionQuery } from 'graphql/businesses/queries/__generated__/list-businesses-division.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 
 import type { FormData } from '../../useAddIncident';
 
@@ -31,7 +32,7 @@ const useIncidentGoods = ({
 }: {
   form: FormInstance<FormData>;
 }): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data: goodsTypesData } = useListGoodsTypesQuery({
     variables: {

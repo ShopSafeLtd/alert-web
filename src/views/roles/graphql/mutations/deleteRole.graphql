@@ -1,0 +1,5 @@
+mutation DeleteRole($data: DeleteRole!) {
+  deleteRole(data: $data) {
+    id
+  }
+}

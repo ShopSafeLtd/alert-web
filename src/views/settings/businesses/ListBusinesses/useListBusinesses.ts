@@ -5,6 +5,7 @@ import type {
 import type { BusinessData } from 'types/DataType';
 
 import { useLinkBusinessToSchemeMutation } from '#/graphql/businesses/mutations/__generated__/link-business-to-scheme.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBusinessTagsQuery } from '#/views/settings/businesses/ListBusinesses/graphql/queries/__generated__/list-business-tags.generated';
 import {
   BusinessesListDocument,
@@ -16,9 +17,9 @@ import { Modal, notification } from 'antd';
 import { useCreateBusinessMutation } from 'graphql/businesses/mutations/__generated__/create-business.generated';
 import { useDeleteBusinessMutation } from 'graphql/businesses/mutations/__generated__/delete-business.generated';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FilterLabels {
@@ -54,7 +55,7 @@ interface Return {
 
 const useListBusinesses = (): Return => {
   const intl = useIntl();
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const [searchValue, onSearchChange] = useState('');
   const [addVisible, setAddVisible] = useState(false);
   const [linkVisible, setLinkVisible] = useState(false);

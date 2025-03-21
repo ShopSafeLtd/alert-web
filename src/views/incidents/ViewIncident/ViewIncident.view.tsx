@@ -6,6 +6,7 @@ import MapCard from '#/components/map/LocatingCard/MapCard.view';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import Activities from '#/views/incidents/ViewIncident/components/Activities.view';
 import AiDetails from '#/views/incidents/ViewIncident/components/AiDetails.view';
+import IncidentAiDrawer from '#/views/incidents/ViewIncident/components/AiDrawer/AiDrawer.view';
 import Answers from '#/views/incidents/ViewIncident/components/Answers.view';
 import Approve from '#/views/incidents/ViewIncident/components/Approve.view';
 import CctvRecords from '#/views/incidents/ViewIncident/components/CctvRecords.view';
@@ -40,8 +41,10 @@ interface Props {
   onEditAddress: (value: LocationData) => void;
   saving: boolean;
   setSaving: (value: boolean) => void;
+  showAiDetails: boolean;
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
+  toggleShowAiDetails: () => void;
   userId: string;
 }
 
@@ -58,8 +61,10 @@ const ViewIncident = ({
   onEditAddress,
   saving,
   setSaving,
+  showAiDetails,
   toggleEditAddress,
   toggleEditImages,
+  toggleShowAiDetails,
   userId,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -130,9 +135,8 @@ const ViewIncident = ({
                           >
                             <AiDetails
                               data={data}
-                              editAddress={editAddress}
-                              editRights={editRights}
                               loading={loading}
+                              toggleShowAiDetails={toggleShowAiDetails}
                             />
                           </PermissionCheckWrapper>
                           <Row gutter={16}>
@@ -275,6 +279,12 @@ const ViewIncident = ({
           </div>
         </Col>
       </Row>
+
+      <IncidentAiDrawer
+        incidentId={incidentId}
+        onClose={toggleShowAiDetails}
+        visible={showAiDetails}
+      />
     </div>
   );
 };

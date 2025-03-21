@@ -23,7 +23,6 @@ import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
@@ -45,7 +44,7 @@ import {
 import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
@@ -240,11 +239,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   const intl = useIntl();
   const isAdmin = useAtomValue(isAdminAtom);
-  const {
-    businesses,
-    id: userId,
-    schemes,
-  } = useStoreState((state) => state.user);
+  const { businesses, id: userId } = useStoreState((state) => state.user);
 
   const reportOnly =
     useStoreState((state) => state.scheme.reportOnly) &&
@@ -270,18 +265,12 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const facialRecognition = useStoreState(
     (state) => state.scheme.facialRecognition
   );
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
 
-  const addOffenderRights = hasPermission({
+  const addOffenderRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Write,
       model: PermissionModel.Offenders,
     },
-    permissions,
   });
 
   const [goodsVisible, setGoodsVisible] = useState(false);

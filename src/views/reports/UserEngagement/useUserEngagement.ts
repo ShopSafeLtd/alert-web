@@ -3,10 +3,11 @@ import type { DateRangeInput } from 'graphql/types';
 import type { RefObject } from 'react';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useUserEngagementQuery } from 'graphql/reports/queries/__generated__/list-user-engagement.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { useStoreState } from 'state';
 
 interface Return {
   componentRef: RefObject<HTMLDivElement>;
@@ -43,7 +44,7 @@ export interface SelectOptions {
 }
 
 const useUserEngagement = (): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [search, setSearch] = useState<string>('');
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);

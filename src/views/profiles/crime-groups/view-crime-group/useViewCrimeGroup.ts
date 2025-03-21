@@ -16,12 +16,13 @@ import type { VehicleCreateWithoutCrimeGroupInput } from 'graphql/types';
 import type { VehicleData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
 } from '#/types/enums/profile-update-type';
 import successNotification from '#/types/mutation_notifications/success_notification';
-import hasPermission from '#/utils/has-permission';
+import hasRolePermission from '#/utils/has-role-permission';
 import { Modal, notification } from 'antd';
 import { useDeleteCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/delete_crime_group.generated';
 import { useSubscribeToCrimeGroupMutation } from 'graphql/crime-groups/mutations/__generated__/subscribe-to-crime-group.generated';
@@ -39,7 +40,8 @@ import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-
 import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
 import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
 import update from 'immutability-helper';
-import { useEffect, useMemo, useState } from 'react';
+import { useAtomValue } from 'jotai/index';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -118,13 +120,8 @@ const onCompletedAddOffender = () => {
 };
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const intl = useIntl();
-  const { id: userId, schemes } = useStoreState((state) => state.user);
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const { id: userId } = useStoreState((state) => state.user);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
@@ -816,12 +813,11 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const toggleShowIntel = () => {
     setShowIntel(!showIntel);
   };
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.CrimeGroups,
     },
-    permissions,
   });
   return {
     addAlias,

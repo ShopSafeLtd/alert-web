@@ -1,7 +1,8 @@
 import type { SchemeRekognitionQuery } from 'graphql/rekognition/queries/__generated__/scheme-rekognition.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useSchemeRekognitionQuery } from 'graphql/rekognition/queries/__generated__/scheme-rekognition.generated';
-import { useStoreState } from 'state';
+import { useAtomValue } from 'jotai/index';
 
 interface Return {
   data: SchemeRekognitionQuery | undefined;
@@ -9,7 +10,7 @@ interface Return {
 }
 
 const useDashboard = (): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { data, loading } = useSchemeRekognitionQuery({
     variables: {

@@ -9,6 +9,8 @@ import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/c
 
 import { useUserData } from '#/components/form-components/UsersSelect/UsersSelect.view';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import {
   TodoListDocument,
   useTodoListQuery,
@@ -22,6 +24,7 @@ import {
   TodoStatusInput,
   TodoUserModeInput,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
 
@@ -63,10 +66,9 @@ interface Props {
 }
 
 const useAdminTodos = ({ templateData }: Props): Return => {
-  const { id: userId } = useStoreState((state) => state.user);
   const userSchemes = useStoreState((state) => state.user.schemes);
-  const schemeId = useStoreState((state) => state.scheme.id);
-
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [editTodo, setEditTodo] = useState<null | string>(null);

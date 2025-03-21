@@ -3,9 +3,11 @@ import type { SelectOptions } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { useCurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Modal, notification } from 'antd';
 import { useResetPasswordMutation } from 'graphql/auth/mutations/__generated__/reset_password.generated';
 import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -45,7 +47,7 @@ const useEditProfile = (): Return => {
   const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
     (state) => state.user
   );
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const onClose = () => navigate('/app/incidents');
 

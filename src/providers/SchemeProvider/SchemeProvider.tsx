@@ -1,6 +1,7 @@
 import type { CurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
 
 import { useCurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
 import { useEffect } from 'react';
@@ -69,6 +70,13 @@ export const isAdminAtom = atom(
   (get) => get(currentUserSchemeAtom).orignalPermissions.admin,
   () => {}
 );
+export const currentSchemeBusinessesAtom = atom(
+  (get) =>
+    get(currentUserAtom)?.businesses.filter((business) =>
+      business.schemes.map(({ id }) => id).includes(get(currentSchemeAtom).id)
+    ),
+  () => {}
+);
 
 export const useSchemeProvider = () => {
   const setStateScheme = useSetAtom(currentUserSchemeIdAtom);
@@ -86,6 +94,9 @@ const SchemeProvider = ({ children }: Props) => {
   const setCurrentUserScheme = useSetAtom(currentUserSchemeAtom);
   const setStateIsSet = useSetAtom(stateIsSetAtom);
   const setSettingScheme = useSetAtom(settingSchemeAtom);
+  const permissions = useAtomValue(currentPermissionsAtom);
+
+  console.log(permissions);
 
   useEffect(() => {
     console.log('scheme changed:', currentUserSchemeId);

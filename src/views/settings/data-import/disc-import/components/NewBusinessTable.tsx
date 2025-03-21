@@ -1,3 +1,4 @@
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faClose,
   faMagnifyingGlass,
@@ -18,10 +19,10 @@ import {
   Typography,
 } from 'antd';
 import { useListBusinessesLocationsQuery } from 'graphql/businesses/queries/__generated__/list-businesses-locations.generated';
+import { useAtomValue } from 'jotai/index';
 import React, { memo, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { useStoreState } from 'state';
 
 import type { NewBusiness } from '../DiscImport.types';
 
@@ -50,7 +51,7 @@ const NewBusinessRow = React.memo(
   ({ business, onDelete, onUpdateBusiness }: NewBusinessRowProps) => {
     const [form] = Form.useForm<NewBusiness>();
     const [link, setLink] = useState(false);
-    const currentSchemeId = useStoreState((state) => state.scheme.id);
+    const currentSchemeId = useAtomValue(currentSchemeIdAtom);
     const intl = useIntl();
     const classes = useStyles();
 

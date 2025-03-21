@@ -5,6 +5,7 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { RcFile } from 'antd/lib/upload/interface';
 import type { GoodsMode } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
 import { useSchemeDetailsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/scheme.generated';
 import { Upload, message, notification } from 'antd';
@@ -12,9 +13,9 @@ import { useForm } from 'antd/lib/form/Form';
 import { useUpdateSchemeMutation } from 'graphql/scheme/mutation/__generated__/update_scheme.generated';
 import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
 import { Model, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 export interface FormData {
   activityAssignToUser: boolean;
@@ -81,7 +82,7 @@ const useSchemeDetail = (): Return => {
       placement: 'bottomRight',
     });
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [imageChange, setImageChange] = useState(false);
   const [darkImageChange, setDarkImageChange] = useState(false);

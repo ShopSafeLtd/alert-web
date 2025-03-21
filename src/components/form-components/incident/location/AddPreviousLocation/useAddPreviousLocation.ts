@@ -1,8 +1,9 @@
 import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface FormData {
   selectedLocation: string;
@@ -23,7 +24,7 @@ interface Return {
 
 const useAddPreviousLocation = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
-  const userId = useStoreState((state) => state.user.id);
+  const userId = useAtomValue(userIdAtom);
 
   const { data: addressData, loading } = useAddressesQuery({
     variables: {

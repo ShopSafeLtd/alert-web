@@ -4,10 +4,11 @@ import type {
 } from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
 
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { ReportsCentreDocument } from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
 import { Button, Col, Form, Input, InputNumber, Row } from 'antd';
 import { useCreateReportGroupMutation } from 'graphql/report-groups/__generated__/create-report-group.generated';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -24,7 +25,7 @@ interface Props {
 const CreateReportGroup = ({ onClose }: Props) => {
   const intl = useIntl();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
 
   const [createReport] = useCreateReportGroupMutation({

@@ -3,6 +3,9 @@ query ViewWorkflow($where: WorkflowWhereUniqueInput!) {
     name
     conditions
     triggerModels
+      cronSchedule
+      cronDate
+
     actions {
       data
       id

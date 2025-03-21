@@ -1,9 +1,10 @@
 import type { IntelOneCSVData } from '#/components/form-components/IntelOneCSV/IntelOneCSV.types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useIntelOneImportDataMutation } from 'graphql/imports/__generated__/intel-one-import.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface FormData {
   groups: string[];
@@ -16,7 +17,7 @@ interface Return {
 }
 
 const useIntelOne = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
 
   const [importData] = useIntelOneImportDataMutation({

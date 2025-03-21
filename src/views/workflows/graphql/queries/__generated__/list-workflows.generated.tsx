@@ -9,7 +9,7 @@ export type WorkflowsQueryVariables = Types.Exact<{
 }>;
 
 
-export type WorkflowsQuery = { __typename?: 'Query', workflows: Array<{ __typename?: 'Workflow', id: string, name: string, trigger: Types.WorkflowTrigger, triggerModels: Types.Model, actions: Array<{ __typename?: 'WorkflowAction', type: Types.WorkflowActionType, outputModel?: Types.Model | null, timesRun: number }> }> };
+export type WorkflowsQuery = { __typename?: 'Query', workflows: Array<{ __typename?: 'Workflow', id: string, name: string, trigger: Types.WorkflowTrigger, triggerModels: Types.Model, cronSchedule?: Types.CronSchedule | null, cronDate?: Date | null, actions: Array<{ __typename?: 'WorkflowAction', type: Types.WorkflowActionType, outputModel?: Types.Model | null, timesRun: number }> }> };
 
 
 export const WorkflowsDocument = gql`
@@ -19,6 +19,8 @@ export const WorkflowsDocument = gql`
     name
     trigger
     triggerModels
+    cronSchedule
+    cronDate
     actions {
       type
       outputModel

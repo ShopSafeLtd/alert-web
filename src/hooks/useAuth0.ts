@@ -54,7 +54,6 @@
 //   const setAuthMessage = useStoreActions(
 //     (actions) => actions.auth.setAuthMessage
 //   );
-//   const currentScheme = useStoreState((state) => state.scheme.id);
 //
 //   const setDashboard = useStoreActions(
 //     (actions) => actions.dashboard.setSchemeLayouts

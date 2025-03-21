@@ -41,7 +41,7 @@ const RolesView = ({ data, fetchPage, loading }: Props) => {
           </Button>
         </Col>
       </Row>
-      <Card>
+      <Card bodyStyle={{ overflow: 'hidden', padding: 0 }}>
         <Table<TableData>
           columns={[
             {

@@ -35,3 +35,15 @@ vite.config.mts.*
 
 .yarnrc.yml
 
+
+__generated__/operationFields.txt
+
+__generated__/operationNames.txt
+
+__generated__/operations.json
+
+__generated__/operationsJoined.json
+
+src/gql/
+
+document.graphql

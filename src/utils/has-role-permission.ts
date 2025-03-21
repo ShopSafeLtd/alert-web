@@ -1,7 +1,7 @@
 import type { PermissionMethod, PermissionModel } from 'graphql/types';
 
-import { useStoreState } from '#/state';
-import { useMemo } from 'react';
+import { currentPermissionsAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useAtomValue } from 'jotai';
 
 interface PermissionMethodModal {
   method: PermissionMethod | PermissionMethod[];
@@ -18,25 +18,12 @@ interface PermissionSchema {
   model: PermissionModel;
 }
 
-interface SchemeData {
-  permissions: PermissionSchema[];
-  scheme: {
-    id: string;
-  };
-}
-
 /**
  * @param {Permission} params - Object containing the permission you want to check
  * @returns {boolean} - Returns true if the user has the permission
  */
 const hasRolePermission = ({ permission }: Permission): boolean => {
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
-  const schemes = useStoreState((state) => state.user.schemes) as SchemeData[];
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === currentSchemeId),
-    [schemes, currentSchemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const permissions = useAtomValue(currentPermissionsAtom);
 
   if (!permissions) {
     return false;

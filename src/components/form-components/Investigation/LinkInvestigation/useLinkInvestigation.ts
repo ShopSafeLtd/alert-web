@@ -1,4 +1,6 @@
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 
@@ -29,7 +31,7 @@ interface Return {
 const useLinkInvestigation = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const groupsFilter = useStoreState(
     (state) => state.data.investigations.variables.groups

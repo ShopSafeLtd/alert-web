@@ -5,11 +5,13 @@ import type {
   InvestigationRelayQueryVariables,
 } from 'graphql/investigations/queries/__generated__/list-investigations-all-schemes.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   InvestigationRelayDocument,
   useInvestigationRelayQuery,
 } from 'graphql/investigations/queries/__generated__/list-investigations-all-schemes.generated';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -25,7 +27,7 @@ interface Return {
 }
 
 const useListInvestigations = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const setTakeAllSchemes = useStoreActions(
     (actions) => actions.data.setInvestigationTakeAllSchemes
   );

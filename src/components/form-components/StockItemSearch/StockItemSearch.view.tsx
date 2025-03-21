@@ -6,15 +6,16 @@ import type {
   ListStockItemsQueryVariables,
 } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useApolloClient } from '@apollo/client';
 import { Col, Row, Select, Spin, Typography } from 'antd';
 import { ListStockItemsDocument } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import React, { useMemo, useRef, useState } from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { useStoreState } from 'state';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   option: {
@@ -49,7 +50,7 @@ const StockItemSearch = ({
 }: DebounceSelectProps) => {
   const styles = useStyles();
   const client = useApolloClient();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<StockItemValue[]>([]);
   const fetchRef = useRef(0);

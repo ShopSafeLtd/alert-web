@@ -5,6 +5,7 @@ import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__g
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddLocation from '#/components/form-components/addresses/AddLocation';
 import EditIncidentFeed from '#/components/form-components/incident/EditIncidentFeed';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { IncidentSort, useStoreState } from '#/state';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import hasRolePermission from '#/utils/has-role-permission';
@@ -40,6 +41,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -84,7 +86,7 @@ const ViewIncidentToolBar = ({
       model: PermissionModel.Incidents,
     },
   });
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const hasConnectedSchemes = useStoreState(
     (state) => state.scheme.hasConnectedSchemes
   );

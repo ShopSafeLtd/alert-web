@@ -2,10 +2,11 @@ import type { Theme } from '#/configs/ThemeConfig';
 import type { AiOffendersQuery } from '#/views/ai/ai-centre/components/AiOffenders/__generated__/AiOffenders.generated';
 
 import WatermarkImage from '#/components/images/WatermarkImage.view';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useAiOffendersQuery } from '#/views/ai/ai-centre/components/AiOffenders/__generated__/AiOffenders.generated';
 import { Button, Col, Row, Typography } from 'antd';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { createUseStyles } from 'react-jss';
@@ -64,7 +65,7 @@ const AiOffender = ({ data }: Props) => {
 };
 
 const AiOffenders = () => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { data } = useAiOffendersQuery({
     variables: {

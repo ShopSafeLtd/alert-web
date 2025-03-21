@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faClose,
   faTrash,
@@ -22,10 +23,10 @@ import {
 } from 'antd';
 import { Role } from 'graphql/types';
 import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { useStoreState } from 'state';
 
 import type { NewBusiness, NewUser } from '../DiscImport.types';
 
@@ -61,7 +62,7 @@ const NewUserRow = React.memo(
     user,
   }: NewUserRowProps) => {
     const [form] = Form.useForm<NewUser>();
-    const currentSchemeId = useStoreState((state) => state.scheme.id);
+    const currentSchemeId = useAtomValue(currentSchemeIdAtom);
     const [link, setLink] = useState(false);
 
     const classes = useStyles();

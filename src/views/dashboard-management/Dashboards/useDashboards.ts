@@ -2,6 +2,7 @@ import type { CreateDashboardMutationVariables } from '#/views/dashboard-managem
 import type { AvailRolesQuery } from '#/views/dashboard-management/graphql/queries/__generated__/available-roles.generated';
 import type { DashboardTemplatesQuery } from '#/views/dashboard-management/graphql/queries/__generated__/dashboard-templates.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   useCreateDashboardMutation,
   useDeleteDashboardMutation,
@@ -12,9 +13,9 @@ import {
   DashboardTemplatesDocument,
   useDashboardTemplatesQuery,
 } from '#/views/dashboard-management/graphql/queries/__generated__/dashboard-templates.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStoreState } from 'state';
 
 interface Return {
   addDashboard: boolean;
@@ -43,7 +44,7 @@ interface Return {
 }
 
 const useDashboards = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [addDashboard, setAddDashboard] = useState(false);
   const [editDashboard, setEditDashboard] = useState<string | undefined>(

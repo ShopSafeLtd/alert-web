@@ -1,16 +1,16 @@
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Card, Table } from 'antd';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { useStoreState } from '../../../../state';
-
 const Terms = (): JSX.Element => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const { data: SchemeTerms, loading: SchemeTermsLoading } =
     useCurrentSchemeTermsQuery({
       variables: {

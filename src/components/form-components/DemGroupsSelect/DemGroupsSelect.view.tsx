@@ -1,9 +1,10 @@
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
@@ -39,7 +40,7 @@ const DemGroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   ...props
 }) => {
   const intl = useIntl();
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, fetchMore, loading } = useDemGroupsSelectQuery({
     variables: {

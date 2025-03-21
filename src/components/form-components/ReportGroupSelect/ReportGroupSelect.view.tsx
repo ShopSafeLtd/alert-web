@@ -3,11 +3,12 @@ import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
 
 import { useReportGroupsSelectQuery } from '#/components/form-components/ReportGroupSelect/__generated__/ReportGroup.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 interface Props {
   allowClear?: boolean;
@@ -37,7 +38,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 }) => {
   const intl = useIntl();
   const take = 20;
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, fetchMore, loading } = useReportGroupsSelectQuery({
     variables: {

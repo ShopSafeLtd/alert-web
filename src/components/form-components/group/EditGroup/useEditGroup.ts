@@ -1,14 +1,15 @@
 import type { GroupQuery } from 'graphql/group/queries/__generated__/group.generated';
 import type { SelectOptions } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useUpdateGroupMutation } from 'graphql/group/mutation/__generated__/update_group.generated';
 import { useGroupQuery } from 'graphql/group/queries/__generated__/group.generated';
 import { Role, SortOrder } from 'graphql/types';
 import { useListSchemeUsersQuery } from 'graphql/users/queries/__generated__/list-scheme-users.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
@@ -51,7 +52,7 @@ interface Return {
 
 const useEditGroup = ({ groupId, onClose }: Props): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();
   const [showOffenderSettings, setShowOffenderSettings] = useState(false);

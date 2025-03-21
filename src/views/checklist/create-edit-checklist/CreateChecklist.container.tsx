@@ -6,7 +6,7 @@ import { useCreateChecklist } from './useCreateChecklist';
 const CreateChecklistContainer = () => {
   const {
     brands,
-    businesses,
+
     form,
     handleAddQuestion,
     handleAddSection,
@@ -23,7 +23,6 @@ const CreateChecklistContainer = () => {
   return (
     <View
       brands={brands}
-      businesses={businesses}
       form={form}
       handleAddQuestion={handleAddQuestion}
       handleAddSection={handleAddSection}

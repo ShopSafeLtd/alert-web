@@ -2,10 +2,11 @@ import type { CreateInvestigationMutation } from '#/graphql/investigations/mutat
 import type { MutationUpdaterFn } from '@apollo/client';
 
 import { useCreateInvestigationMutation } from '#/graphql/investigations/mutations/__generated__/create-investigations.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface InvestigationData {
@@ -38,7 +39,7 @@ const useAddInvestigation = ({
   vehicleId,
 }: Props): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [createInvestigation] = useCreateInvestigationMutation({
     onCompleted: () => {

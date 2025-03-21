@@ -7,6 +7,8 @@ query Workflows(
     name
     trigger
     triggerModels
+      cronSchedule
+      cronDate
     actions {
       type
       outputModel

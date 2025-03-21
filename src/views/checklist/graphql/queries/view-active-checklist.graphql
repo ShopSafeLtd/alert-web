@@ -32,6 +32,10 @@ query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
       section
       subsection
       titleLocaled
+        dependsOnWeight {
+            weight
+            dependsOn
+        }
     }
   }
 }

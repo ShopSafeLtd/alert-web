@@ -1,7 +1,6 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { LocationData } from 'types/DataType';
 
-import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
 import useCanView from '#/utils/in-scheme';
 import { useViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
@@ -28,8 +27,10 @@ interface Return {
   onEditAddress: (value: LocationData) => void;
   saving: boolean;
   setSaving: (value: boolean) => void;
+  showAiDetails: boolean;
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
+  toggleShowAiDetails: () => void;
   userId: string;
 }
 
@@ -50,11 +51,11 @@ const useViewIncident = (incidentId: string): Return => {
     () => schemes.find((scheme) => scheme.scheme.id === schemeId),
     [schemes, schemeId]
   );
-  const permissions = currentScheme?.permissions;
 
   const [saving, setSaving] = useState(false);
   const [editAddress, setEditAddress] = useState(false);
   const [editImages, setEditImages] = useState(false);
+  const [showAiDetails, setShowAiDetail] = useState(false);
 
   const { data, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
@@ -117,21 +118,21 @@ const useViewIncident = (incidentId: string): Return => {
     setEditImages(!editImages);
   };
 
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.Incidents,
     },
-    permissions,
   });
 
-  const deleteRights = hasPermission({
+  const deleteRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Delete,
       model: PermissionModel.Incidents,
     },
-    permissions,
   });
+
+  const toggleShowAiDetails = () => setShowAiDetail(!showAiDetails);
 
   return {
     data,
@@ -141,7 +142,7 @@ const useViewIncident = (incidentId: string): Return => {
     editRights,
     hasApprovePermission,
     hideIncident:
-      hasRolePermission({
+      !hasRolePermission({
         permission: {
           method: PermissionMethod.Read,
           model: PermissionModel.Incidents,
@@ -151,8 +152,10 @@ const useViewIncident = (incidentId: string): Return => {
     onEditAddress,
     saving,
     setSaving,
+    showAiDetails,
     toggleEditAddress,
     toggleEditImages,
+    toggleShowAiDetails,
     userId,
   };
 };

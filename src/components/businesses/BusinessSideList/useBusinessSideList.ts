@@ -1,5 +1,6 @@
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { SortOrder } from 'graphql/types';
-import { useStoreState } from 'state';
+import { useAtomValue } from 'jotai/index';
 
 import type { BusinessesSideListQuery } from './graphql/queries/__generated__/sidelist.generated';
 
@@ -15,7 +16,7 @@ interface Return {
 }
 
 const useBusinessSideList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, fetchMore, loading } = useBusinessesSideListQuery({
     variables: {

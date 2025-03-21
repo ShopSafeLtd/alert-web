@@ -6,7 +6,7 @@ const defaultOptions = {} as const;
 export type CurrentUserProviderQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserProviderQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, email?: string | null, reference?: number | null, messageCount: number, newUser: boolean, reportToAllBusinesses?: boolean | null, totalSchemes: number, totalUnreadNotifications: number, schemes: Array<{ __typename?: 'UserScheme', id: string }>, expoPushTokens: Array<{ __typename?: 'ExpoPushToken', id: string, token: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, businesses: Array<{ __typename?: 'Business', id: string, name: string, demId?: string | null }> } | null };
+export type CurrentUserProviderQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, email?: string | null, reference?: number | null, messageCount: number, newUser: boolean, reportToAllBusinesses?: boolean | null, totalSchemes: number, totalUnreadNotifications: number, schemes: Array<{ __typename?: 'UserScheme', id: string }>, expoPushTokens: Array<{ __typename?: 'ExpoPushToken', id: string, token: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, schemeId: string, name: string }>, businesses: Array<{ __typename?: 'Business', id: string, name: string, demId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string }> }> } | null };
 
 
 export const CurrentUserProviderDocument = gql`
@@ -42,6 +42,9 @@ export const CurrentUserProviderDocument = gql`
       id
       name
       demId
+      schemes {
+        id
+      }
     }
   }
 }

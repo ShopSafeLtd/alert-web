@@ -1,5 +1,7 @@
 import type { TagQuery } from 'graphql/tag/queries/__generated__/tag.generated';
 
+import RoleSelect from '#/components/form-components/Roles/RoleSelect';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Col,
@@ -11,6 +13,7 @@ import {
   Typography,
 } from 'antd';
 import { CrimeType, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -20,6 +23,7 @@ interface FormData {
   crimeType: CrimeType;
   description: string;
   name: string;
+  roles: string[];
 }
 
 interface Props {
@@ -38,6 +42,7 @@ const EditCrimeType = ({
   saving,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   return !data && loading ? (
     <Skeleton />
   ) : (
@@ -46,6 +51,7 @@ const EditCrimeType = ({
         crimeType: data?.tag?.crimeType,
         description: data?.tag?.description,
         name: data?.tag?.name,
+        roles: data?.tag?.roles?.map((role) => role.id),
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -90,71 +96,83 @@ const EditCrimeType = ({
           </Form.Item>
         </Col>
         {data?.tag?.type === TagType.IncidentCrimeType && (
-          <Col span={24}>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Crime Type Category',
-              })}
-              name="crimeType"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage:
-                      'Please select a category for the new crime type.',
-                  }),
-                  required: true,
-                },
-              ]}
-            >
-              <Select disabled={saving}>
-                <Select.Option value={CrimeType.Burglary}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Burglary',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.CriminalDamage}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Criminal Damage',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.Drugs}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Drugs',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.FraudForgery}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Fraud & Forgery',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.Robbery}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Robbery',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.SexualOffences}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Sexual Offences',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.TheftHandling}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Theft & Handling',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.Violence}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Violence Against The Person',
-                  })}
-                </Select.Option>
-                <Select.Option value={CrimeType.Other}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Other',
-                  })}
-                </Select.Option>
-              </Select>
-            </Form.Item>
-          </Col>
+          <>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Crime Type Category',
+                })}
+                name="crimeType"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage:
+                        'Please select a category for the new crime type.',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Select disabled={saving}>
+                  <Select.Option value={CrimeType.Burglary}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Burglary',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.CriminalDamage}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Criminal Damage',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.Drugs}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Drugs',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.FraudForgery}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Fraud & Forgery',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.Robbery}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Robbery',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.SexualOffences}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Sexual Offences',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.TheftHandling}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Theft & Handling',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.Violence}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Violence Against The Person',
+                    })}
+                  </Select.Option>
+                  <Select.Option value={CrimeType.Other}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Other',
+                    })}
+                  </Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Roles',
+                })}
+                name="roles"
+              >
+                <RoleSelect multi schemeId={schemeId} />
+              </Form.Item>
+            </Col>
+          </>
         )}
       </Row>
 

@@ -16,7 +16,8 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
-import hasPermission from '#/utils/has-permission';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   ViewVehicleDocument,
   useViewVehicleQuery,
@@ -32,7 +33,8 @@ import { useUpdateVehicleDetailsMutation } from 'graphql/vehicles/mutations/upda
 import { useUpdateVehicleImagesMutation } from 'graphql/vehicles/mutations/update/__generated__/update-vehicle-images.generated';
 import { useUpdateVehicleOffendersMutation } from 'graphql/vehicles/mutations/update/__generated__/update-vehicle-offenders.generated';
 import update from 'immutability-helper';
-import { useEffect, useMemo, useState } from 'react';
+import { useAtomValue } from 'jotai/index';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import {
@@ -132,13 +134,8 @@ const onCompletedAddOffender = () => {
 };
 const useViewVehicle = (vehicleId: string): Return => {
   const intl = useIntl();
-  const { id: userId, schemes } = useStoreState((state) => state.user);
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const { id: userId } = useStoreState((state) => state.user);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [editVehicle, setEditVehicle] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -1216,12 +1213,11 @@ const useViewVehicle = (vehicleId: string): Return => {
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
   };
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.Vehicles,
     },
-    permissions,
   });
   return {
     addDocument,

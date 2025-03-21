@@ -1,47 +1,49 @@
-import React from 'react';
-import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
 import type { Scheme } from 'state';
-import { useIntl } from 'react-intl';
-import { CrimeType, TagType } from 'graphql/types';
-import { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
 
+import RoleSelect from '#/components/form-components/Roles/RoleSelect';
+import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import { CrimeType, TagType } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
 interface FormData {
-  name: string;
-  description: string;
   crimeType: CrimeType;
+  description: string;
+  name: string;
+  roles: string[];
   schemes: string[];
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
   onClose: () => void;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
-  type?: TagType;
-  userSchemes: Scheme[];
   schemeId: string;
   tags: ListSchemeTagsQuery | undefined;
+  type?: TagType;
+  userSchemes: Scheme[];
 }
 
 const AddCrimeType = ({
-  onSubmit,
   onClose,
+  onSubmit,
   saving,
-  type = TagType.IncidentCrimeType,
   schemeId,
-  userSchemes,
   tags,
+  type = TagType.IncidentCrimeType,
+  userSchemes: _,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <Form
-      layout="vertical"
-      onFinish={onSubmit}
       initialValues={{
         schemes: [schemeId],
       }}
+      layout="vertical"
+      onFinish={onSubmit}
     >
       <Row style={{ marginBottom: 30 }}>
         <Col>
@@ -56,14 +58,15 @@ const AddCrimeType = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
-                  defaultMessage: 'Please enter a name for the new incident type.',
+                  defaultMessage:
+                    'Please enter a name for the new incident type.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -73,12 +76,12 @@ const AddCrimeType = ({
 
         <Col span={24}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
-            <Input.TextArea rows={10} disabled={saving} />
+            <Input.TextArea disabled={saving} rows={10} />
           </Form.Item>
         </Col>
 
@@ -86,32 +89,32 @@ const AddCrimeType = ({
           <>
             <Col span={24}>
               <Form.Item
-                name="parentTagId"
                 label={intl.formatMessage({
                   defaultMessage: 'Parent Tag',
                 })}
+                name="parentTagId"
               >
                 <Select
                   options={tags?.listTags.tags.map((tag) => ({
-                    value: tag.id,
                     label: tag.name,
+                    value: tag.id,
                   }))}
                 />
               </Form.Item>
             </Col>
             <Col span={24}>
               <Form.Item
-                name="crimeType"
                 label={intl.formatMessage({
                   defaultMessage: 'Incident Type Category',
                 })}
+                name="crimeType"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select a category for the new incident type.',
                     }),
+                    required: true,
                   },
                 ]}
               >
@@ -119,94 +122,104 @@ const AddCrimeType = ({
                   disabled={saving}
                   options={[
                     {
-                      value: CrimeType.Burglary,
                       label: intl.formatMessage({
                         defaultMessage: 'Burglary',
                       }),
+                      value: CrimeType.Burglary,
                     },
                     {
-                      value: CrimeType.CriminalDamage,
                       label: intl.formatMessage({
                         defaultMessage: 'Criminal Damage',
                       }),
+                      value: CrimeType.CriminalDamage,
                     },
                     {
-                      value: CrimeType.Drugs,
                       label: intl.formatMessage({
                         defaultMessage: 'Drugs',
                       }),
+                      value: CrimeType.Drugs,
                     },
                     {
-                      value: CrimeType.FraudForgery,
                       label: intl.formatMessage({
                         defaultMessage: 'Fraud & Forgery',
                       }),
+                      value: CrimeType.FraudForgery,
                     },
                     {
-                      value: CrimeType.Robbery,
                       label: intl.formatMessage({
                         defaultMessage: 'Robbery',
                       }),
+                      value: CrimeType.Robbery,
                     },
                     {
-                      value: CrimeType.SexualOffences,
                       label: intl.formatMessage({
                         defaultMessage: 'Sexual Offences',
                       }),
+                      value: CrimeType.SexualOffences,
                     },
                     {
-                      value: CrimeType.TheftHandling,
                       label: intl.formatMessage({
                         defaultMessage: 'Theft & Handling',
                       }),
+                      value: CrimeType.TheftHandling,
                     },
                     {
-                      value: CrimeType.Violence,
                       label: intl.formatMessage({
                         defaultMessage: 'Violence Against The Person',
                       }),
+                      value: CrimeType.Violence,
                     },
                     {
-                      value: CrimeType.Other,
                       label: intl.formatMessage({
                         defaultMessage: 'Other',
                       }),
+                      value: CrimeType.Other,
                     },
                   ]}
                 />
               </Form.Item>
             </Col>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Roles',
+                })}
+                name="roles"
+              >
+                <RoleSelect multi schemeId={schemeId} />
+              </Form.Item>
+            </Col>
           </>
         )}
-        <Col span={24}>
-          <Form.Item
-            name="schemes"
-            label={intl.formatMessage({
-              defaultMessage: 'Schemes',
-            })}
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({
-                  defaultMessage: 'Please select at least one scheme.',
-                }),
-              },
-            ]}
-          >
-            <Select
-              disabled={saving}
-              mode="multiple"
-              options={userSchemes.map((scheme) => ({
-                value: scheme.scheme.id,
-                label: scheme.scheme.name,
-              }))}
-            />
-          </Form.Item>
-        </Col>
+        {/* <Col span={24}>*/}
+        {/*  <Form.Item*/}
+        {/*    label={intl.formatMessage({*/}
+        {/*      defaultMessage: 'Schemes',*/}
+        {/*    })}*/}
+        {/*    name="schemes"*/}
+        {/*    rules={[*/}
+        {/*      {*/}
+        {/*        message: intl.formatMessage({*/}
+        {/*          defaultMessage: 'Please select at least one scheme.',*/}
+        {/*        }),*/}
+        {/*        required: true,*/}
+        {/*      },*/}
+        {/*    ]}*/}
+        {/*  >*/}
+        {/*    <Select*/}
+        {/*      disabled={saving}*/}
+        {/*      mode="multiple"*/}
+        {/*      options={userSchemes.map((scheme) => ({*/}
+        {/*        label: scheme.scheme.name,*/}
+        {/*        value: scheme.scheme.id,*/}
+        {/*      }))}*/}
+        {/*    />*/}
+        {/*  </Form.Item>*/}
+        {/* </Col>*/}
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -214,10 +227,10 @@ const AddCrimeType = ({
           </Col>
           <Col>
             <Button
-              type="primary"
-              htmlType="submit"
               disabled={saving}
+              htmlType="submit"
               loading={saving}
+              type="primary"
             >
               {intl.formatMessage({ defaultMessage: 'Create' })}
             </Button>

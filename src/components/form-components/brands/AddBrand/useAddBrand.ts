@@ -6,15 +6,16 @@ import type {
   SearchBusinessesQueryVariables,
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { useUpsertBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/upsert-brand.generated';
 import { useApolloClient } from '@apollo/client';
 import { Form, notification } from 'antd';
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 const { useForm } = Form;
 
@@ -43,7 +44,7 @@ const useAddBrand = ({ onClose, update }: Props): Return => {
   const intl = useIntl();
 
   const [form] = useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
 
   const onSearchBusiness = async (value: string) =>
