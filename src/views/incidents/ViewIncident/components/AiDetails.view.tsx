@@ -3,7 +3,7 @@ import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generat
 import useStyles from '#/views/incidents/ViewIncident/ViewIncident.styles';
 import { faBolt, faCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Col, Descriptions, Row, Typography } from 'antd';
+import { Button, Card, Col, Descriptions, Row, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -11,12 +11,11 @@ const { Paragraph, Title } = Typography;
 
 interface Props {
   data: ViewIncidentQuery | undefined;
-  editAddress: boolean;
-  editRights: boolean;
   loading: boolean;
+  toggleShowAiDetails: () => void;
 }
 
-const IncidentDetails = ({ data, loading }: Props) => {
+const IncidentDetails = ({ data, loading, toggleShowAiDetails }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -73,6 +72,13 @@ const IncidentDetails = ({ data, loading }: Props) => {
           </Descriptions.Item>
         </Descriptions>
       )}
+      <Row justify="center">
+        <Col>
+          <Button onClick={toggleShowAiDetails}>
+            <FormattedMessage defaultMessage="Full AI Report" />
+          </Button>
+        </Col>
+      </Row>
     </Card>
   );
 };

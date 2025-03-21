@@ -18,8 +18,10 @@ const ViewIncident = (): JSX.Element => {
     onEditAddress,
     saving,
     setSaving,
+    showAiDetails,
     toggleEditAddress,
     toggleEditImages,
+    toggleShowAiDetails,
     userId,
   } = useViewIncident(incidentId);
 
@@ -37,8 +39,10 @@ const ViewIncident = (): JSX.Element => {
       onEditAddress={onEditAddress}
       saving={saving}
       setSaving={setSaving}
+      showAiDetails={showAiDetails}
       toggleEditAddress={toggleEditAddress}
       toggleEditImages={toggleEditImages}
+      toggleShowAiDetails={toggleShowAiDetails}
       userId={userId}
     />
   );
