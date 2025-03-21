@@ -56,6 +56,7 @@ const options = [
   { label: '2 years', value: 730 },
   { label: '3 years', value: 1096 },
   { label: '5 years', value: 1826 },
+  { label: '6 years', value: 2190 },
 ];
 const SchemeDetail = ({
   beforeUpload,
