@@ -27,8 +27,10 @@ interface Return {
   onEditAddress: (value: LocationData) => void;
   saving: boolean;
   setSaving: (value: boolean) => void;
+  showAiDetails: boolean;
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
+  toggleShowAiDetails: () => void;
   userId: string;
 }
 
@@ -53,6 +55,7 @@ const useViewIncident = (incidentId: string): Return => {
   const [saving, setSaving] = useState(false);
   const [editAddress, setEditAddress] = useState(false);
   const [editImages, setEditImages] = useState(false);
+  const [showAiDetails, setShowAiDetail] = useState(false);
 
   const { data, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
@@ -129,6 +132,8 @@ const useViewIncident = (incidentId: string): Return => {
     },
   });
 
+  const toggleShowAiDetails = () => setShowAiDetail(!showAiDetails);
+
   return {
     data,
     deleteRights,
@@ -137,7 +142,7 @@ const useViewIncident = (incidentId: string): Return => {
     editRights,
     hasApprovePermission,
     hideIncident:
-      hasRolePermission({
+      !hasRolePermission({
         permission: {
           method: PermissionMethod.Read,
           model: PermissionModel.Incidents,
@@ -147,8 +152,10 @@ const useViewIncident = (incidentId: string): Return => {
     onEditAddress,
     saving,
     setSaving,
+    showAiDetails,
     toggleEditAddress,
     toggleEditImages,
+    toggleShowAiDetails,
     userId,
   };
 };
