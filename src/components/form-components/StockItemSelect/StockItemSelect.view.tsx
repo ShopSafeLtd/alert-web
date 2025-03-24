@@ -55,6 +55,7 @@ const OptionLabel = ({
     name?: null | string;
     salesPriceLocal?: null | number;
     sku?: null | string;
+    variant?: null | string;
   };
 }) => (
   <>
@@ -133,6 +134,20 @@ const OptionLabel = ({
           </Col>
         </Row>
       </Col>
+      {option.variant && (
+        <Col>
+          <Row gutter={4}>
+            <Col>
+              <Typography.Text strong type="secondary">
+                <FormattedMessage defaultMessage="Variant:" />
+              </Typography.Text>
+            </Col>
+            <Col>
+              <Typography.Text>{option.variant}</Typography.Text>
+            </Col>
+          </Row>
+        </Col>
+      )}
       {option.barcode && (
         <Col>
           <Row gutter={4}>

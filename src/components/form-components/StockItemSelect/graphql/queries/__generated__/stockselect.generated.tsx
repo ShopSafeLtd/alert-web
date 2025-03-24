@@ -10,7 +10,7 @@ export type StockItemSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type StockItemSelectQuery = { __typename?: 'Query', stockItemsRelay: { __typename?: 'QueryStockItemsRelayConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'QueryStockItemsRelayConnectionEdge', node: { __typename?: 'StockItem', id: string, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null } }> } };
+export type StockItemSelectQuery = { __typename?: 'Query', stockItemsRelay: { __typename?: 'QueryStockItemsRelayConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'QueryStockItemsRelayConnectionEdge', node: { __typename?: 'StockItem', id: string, barcode?: string | null, brand?: string | null, costPriceLocal?: number | null, costPriceStandard?: number | null, division?: string | null, name?: string | null, salesPriceLocal?: number | null, salesPriceStandard?: number | null, sku?: string | null, variant?: string | null } }> } };
 
 
 export const StockItemSelectDocument = gql`
@@ -33,6 +33,7 @@ export const StockItemSelectDocument = gql`
         salesPriceLocal
         salesPriceStandard
         sku
+        variant
       }
     }
   }
