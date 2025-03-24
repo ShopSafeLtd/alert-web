@@ -30,6 +30,7 @@ const Checklists = lazy(() => import('./checklist/router'));
 const DashboardManagement = lazy(() => import('./dashboard-management/router'));
 const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
 const AiCentre = lazy(() => import('./suggestions/router'));
+const Businesses = lazy(() => import('./businesses/router'));
 
 export const AppViews = (): JSX.Element => {
   const { isLoaded } = useAuthClerk();
@@ -117,6 +118,11 @@ export const AppViews = (): JSX.Element => {
             element={<AiCentre />}
             key="suggestions"
             path="suggestions/*"
+          />
+          <Route
+            element={<Businesses />}
+            key="businesses"
+            path="businesses/*"
           />
         </Routes>
       )}
