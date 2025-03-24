@@ -146,6 +146,7 @@ export interface FormData {
   taskName: string;
   taskOutcome: boolean;
   taskQuestions: string[];
+  updateIncident: boolean;
   useDynamicGroups?: boolean;
   userManagementGroups: string[];
   userManagementRoles: string[];
@@ -189,6 +190,7 @@ interface Return {
   tagsSelected: boolean;
   taskOutcome: boolean;
   taskQuestions: Question[];
+  updateIncidentCheck: boolean;
   updateTemplates: (
     item: ListData,
     type: 'create' | 'delete' | 'update'
@@ -274,6 +276,175 @@ const useWorkflowForm = (): Return => {
   const taskOutcome = Form.useWatch('taskOutcome', form);
   const sendEmailCheck = Form.useWatch('sendEmailCheck', form);
   const sendNotificationCheck = Form.useWatch('sendNotificationCheck', form);
+  const updateIncidentCheck = Form.useWatch('updateIncident', form);
+  const workflowMode = Form.useWatch('workflowMode', form);
+  const workflowType = Form.useWatch('workflowType', form);
+
+  const userManagementActive = useMemo(
+    () => taskOutcome || sendEmailCheck || sendNotificationCheck,
+    [taskOutcome, sendEmailCheck, sendNotificationCheck]
+  );
+
+  useEffect(() => {
+    if (updateIncidentCheck === false)
+      form.setFieldsValue({
+        autoApprove: undefined,
+        setPriority: undefined,
+      });
+  }, [updateIncidentCheck]);
+
+  useEffect(() => {
+    if (sendNotificationCheck === false)
+      form.setFieldsValue({
+        sendNotificationMessage: undefined,
+        sendNotificationTitle: undefined,
+      });
+  }, [sendNotificationCheck]);
+
+  useEffect(() => {
+    if (sendEmailCheck === false)
+      form.setFieldsValue({
+        sendEmailMessage: undefined,
+        sendEmailTitle: undefined,
+      });
+  }, [sendEmailCheck]);
+
+  useEffect(() => {
+    if (taskOutcome === false)
+      form.setFieldsValue({
+        taskBusiness: undefined,
+        taskDescription: undefined,
+        taskDueDays: undefined,
+        taskName: undefined,
+        taskQuestions: undefined,
+      });
+  }, [taskOutcome]);
+
+  useEffect(() => {
+    if (userManagementActive === false)
+      form.setFieldsValue({
+        useDynamicGroups: undefined,
+        userManagementGroups: undefined,
+        userManagementRoles: undefined,
+        userManagementUsers: undefined,
+      });
+  }, [userManagementActive]);
+
+  useEffect(() => {
+    if (tagsSelected === false)
+      form.setFieldsValue({
+        tagMethod: undefined,
+        tagOptions: undefined,
+      });
+  }, [tagsSelected]);
+
+  useEffect(() => {
+    if (valueSelected === false)
+      form.setFieldsValue({
+        valuePrice: undefined,
+      });
+  }, [valueSelected]);
+
+  useEffect(() => {
+    if (lessThanSelected === false)
+      form.setFieldsValue({
+        lessThanPrice: undefined,
+      });
+  }, [lessThanSelected]);
+
+  useEffect(() => {
+    if (goodsTypeCheck === false)
+      form.setFieldsValue({
+        goodsType: undefined,
+        goodsTypeCondition: undefined,
+      });
+  }, [goodsTypeCheck]);
+
+  useEffect(() => {
+    if (descriptionCheck === false)
+      form.setFieldsValue({
+        descriptionCondition: undefined,
+        descriptionWords: undefined,
+      });
+  }, [descriptionCheck]);
+
+  useEffect(() => {
+    if (questionsSelected === false) {
+      form.setFieldsValue({
+        questionMethod: undefined,
+      });
+      setSelectedQuestions([]);
+    }
+  }, [questionsSelected]);
+
+  useEffect(() => {
+    if (incidentTimeCountCheck === false)
+      form.setFieldsValue({
+        incidentTimeCountDays: undefined,
+        incidentTimeCountIncidents: undefined,
+      });
+  }, [incidentTimeCountCheck]);
+
+  useEffect(() => {
+    if (workflowMode === 'trigger')
+      form.setFieldsValue({
+        cronDate: undefined,
+        cronStart: undefined,
+        frequency: undefined,
+      });
+    if (workflowMode === 'scheduled') {
+      form.setFieldsValue({
+        descriptionCondition: undefined,
+        descriptionWords: undefined,
+        goodsType: undefined,
+        goodsTypeCondition: undefined,
+        incidentTimeCountDays: undefined,
+        incidentTimeCountIncidents: undefined,
+        incidentWhileBanCheck: undefined,
+        lessThanPrice: undefined,
+        option: undefined,
+        questionMethod: undefined,
+        tagMethod: undefined,
+        tagOptions: undefined,
+        valuePrice: undefined,
+        workflowType: undefined,
+      });
+      setSelectedQuestions([]);
+    }
+  }, [workflowMode]);
+
+  useEffect(() => {
+    if (workflowType === Model.Incident)
+      form.setFieldsValue({
+        incidentTimeCountCheck: undefined,
+        incidentTimeCountDays: undefined,
+        incidentTimeCountIncidents: undefined,
+        incidentWhileBanCheck: undefined,
+      });
+    if (workflowType === Model.Offender) {
+      form.setFieldsValue({
+        autoApprove: undefined,
+        descriptionCheck: undefined,
+        descriptionCondition: undefined,
+        descriptionWords: undefined,
+        goodsType: undefined,
+        goodsTypeCheck: undefined,
+        goodsTypeCondition: undefined,
+        lessThanCheck: undefined,
+        lessThanPrice: undefined,
+        questionChecked: undefined,
+        questionMethod: undefined,
+        setPriority: undefined,
+        tagMethod: undefined,
+        tagOptions: undefined,
+        tags: undefined,
+        updateIncident: undefined,
+        valueCheck: undefined,
+        valuePrice: undefined,
+      });
+      setSelectedQuestions([]);
+    }
+  }, [workflowType]);
 
   const { data: editWorkflowData, loading: editWorkflowLoading } =
     useViewWorkflowQuery({
@@ -795,6 +966,7 @@ const useWorkflowForm = (): Return => {
     tagsSelected,
     taskOutcome,
     taskQuestions,
+    updateIncidentCheck,
     updateTemplates,
     valueSelected,
   };
