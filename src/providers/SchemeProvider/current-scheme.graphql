@@ -11,6 +11,22 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
             id
             admin
         }
+        dashboard {
+            runningBanner
+            layout {
+                h
+                i
+                maxH
+                maxW
+                minH
+                minW
+                moved
+                static
+                w
+                x
+                y
+            }
+        }
         scheme {
             activityAssignToUser
             autoPopulateDescription

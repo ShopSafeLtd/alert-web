@@ -113,6 +113,8 @@ export const DashboardProvider: React.FC<{
     (state) => state.dashboard
   );
 
+  console.log(initialLayout, isSet, schemeLayouts);
+
   const dashboardLayout = useMemo(
     () =>
       isSet

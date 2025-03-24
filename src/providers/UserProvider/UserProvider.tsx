@@ -1,9 +1,14 @@
 import type { CurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 
+import { useTokenContext } from '#/context/token-context';
 import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
+import { useStoreActions } from '#/state';
 import Mixpanel from '#/utils/mixpanel';
+import { useUser } from '@clerk/clerk-react';
 import * as Sentry from '@sentry/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router';
 
 import {
   CURRENT_SCHEME,
@@ -88,14 +93,31 @@ export const userSchemesAtom = atom(
 );
 
 const UserProvider = ({ children }: Props) => {
+  const hasFetched = useRef(false);
+  const navigate = useNavigate();
   const { setScheme } = useSchemeProvider();
+  const { isLoaded, isSignedIn } = useUser();
+  const { getToken } = useTokenContext();
 
   const currentSchemeId = useAtomValue(currentUserSchemeIdAtom);
   const setCurrentUser = useSetAtom(currentUserAtom);
   const setNewUser = useSetAtom(newUserAtom);
 
+  const expired = useStoreActions((actions) => actions.auth.expired);
+
   void useCurrentUserProviderQuery({
     onCompleted: (data) => {
+      if (!data.currentUser) {
+        if (!isLoaded && isSignedIn) {
+          expired();
+          void getToken();
+        } else if (!isLoaded && !isSignedIn) {
+          navigate('/sign-in');
+        }
+      }
+
+      hasFetched.current = true;
+
       if (currentSchemeId === null && data.currentUser?.schemes[0]) {
         const currentScheme = localStorage.getItem(CURRENT_SCHEME);
         if (currentScheme) {

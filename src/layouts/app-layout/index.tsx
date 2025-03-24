@@ -1,4 +1,4 @@
-import Loading from '#/components/shared-components/AntD/Loading';
+import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
   SIDE_NAV_WIDTH,
@@ -101,10 +101,9 @@ const AppLayout = (): JSX.Element => {
     location.pathname.includes('onboarding');
   // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
   if (status === 'loading') {
-    return <Loading cover="page" />;
+    return <LoadingScreen />;
   }
-  console.log(loading, !isLoaded, !isSet);
-  if (loading || !isLoaded || !isSet) return <Loading cover="content" />;
+  if (loading || !isLoaded || !isSet) return <LoadingScreen />;
 
   return (
     <ScreenSizeUnsupported>

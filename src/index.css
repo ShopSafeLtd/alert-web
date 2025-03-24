@@ -36154,3 +36154,7 @@
 a.mapboxgl-ctrl-logo {
   display: none !important;
 }
+.loading-screen .ant-skeleton {
+  height: 100%;
+  width: 100%;
+}

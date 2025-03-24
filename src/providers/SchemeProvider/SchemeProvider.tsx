@@ -1,11 +1,15 @@
 import type { CurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
 
+import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { useCurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import { useStoreActions } from '#/state';
+import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
 import { GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 type UserSchemeState = CurrentSchemeProviderQuery['userScheme'];
 
@@ -114,9 +118,13 @@ const SchemeProvider = ({ children }: Props) => {
   const setCurrentUserScheme = useSetAtom(currentUserSchemeAtom);
   const setStateIsSet = useSetAtom(stateIsSetAtom);
   const setSettingScheme = useSetAtom(settingSchemeAtom);
+  const isSettingScheme = useAtomValue(settingSchemeAtom);
+
+  const setDashboard = useStoreActions(
+    (actions) => actions.dashboard.setSchemeLayouts
+  );
 
   useEffect(() => {
-    console.log('scheme changed:', currentUserSchemeId);
     setSettingScheme(true);
   }, [currentUserSchemeId]);
 
@@ -125,6 +133,8 @@ const SchemeProvider = ({ children }: Props) => {
       setCurrentUserScheme(data.userScheme);
       setStateIsSet(true);
       setSettingScheme(false);
+
+      // set logos into local state
       window.localStorage.setItem(
         'logo',
         data.userScheme.scheme.logo?.optimisedPersisted || ''
@@ -133,6 +143,34 @@ const SchemeProvider = ({ children }: Props) => {
         'logo-dark',
         data.userScheme.scheme.darkLogo?.optimisedPersisted || ''
       );
+
+      // set dashboard into global state
+      if (data.userScheme.dashboard)
+        setDashboard({
+          [data.userScheme.scheme.id]: {
+            layout: data.userScheme.dashboard.layout
+              ? data.userScheme.dashboard.layout.map((lay) => ({
+                  ...lay,
+                  i: lay.i as AvailableDashboardElements,
+                  isBounded: true,
+                  isDraggable: false,
+                  isResizable: false,
+                  maxH: lay.maxH ?? undefined,
+                  maxW: lay.maxW ?? undefined,
+                  minH: lay.minH ?? undefined,
+                  minW: lay.minW ?? undefined,
+                  static: !!lay.static,
+                }))
+              : data.userScheme.isAdmin
+                ? defaultAdminLayout.layout
+                : defaultUserLayout.layout,
+            marquee:
+              data.userScheme.dashboard?.runningBanner ??
+              (data.userScheme.isAdmin
+                ? defaultAdminLayout.marquee
+                : defaultUserLayout.marquee),
+          },
+        });
     },
     skip: currentUserSchemeId === null,
     variables: {
@@ -142,7 +180,7 @@ const SchemeProvider = ({ children }: Props) => {
     },
   });
 
-  return children;
+  return isSettingScheme ? <LoadingScreen /> : children;
 };
 
 export default SchemeProvider;
