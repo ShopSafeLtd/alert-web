@@ -45,7 +45,6 @@ const AppLayout = (): JSX.Element => {
   const isMobile = !screens.includes('lg');
   const isNavSide = navType === NavType.SIDE;
   const { isLoaded } = useAuthClerk();
-  const { loading } = useAuth();
 
   const getLayoutGutter = () => {
     if (isMobile) {
@@ -104,8 +103,7 @@ const AppLayout = (): JSX.Element => {
   if (status === 'loading') {
     return <LoadingScreen />;
   }
-  if (loading || !isLoaded || !isSet || isSettingScheme)
-    return <LoadingScreen />;
+  if (!isLoaded || !isSet || isSettingScheme) return <LoadingScreen />;
 
   return (
     <ScreenSizeUnsupported>

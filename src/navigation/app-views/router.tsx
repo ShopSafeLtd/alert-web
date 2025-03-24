@@ -1,4 +1,3 @@
-import { useAuth } from '#/hooks';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import Loading from 'components/shared-components/AntD/Loading';
@@ -33,7 +32,6 @@ const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
 const AiCentre = lazy(() => import('./suggestions/router'));
 
 export const AppViews = (): JSX.Element => {
-  const { loading } = useAuth();
   const { isLoaded } = useAuthClerk();
 
   useManageSession();
@@ -48,7 +46,7 @@ export const AppViews = (): JSX.Element => {
   const { pathname } = location;
 
   useEffect(() => {
-    if (!pathname || loading || !isLoaded || !isSet) return;
+    if (!pathname || !isLoaded || !isSet) return;
   }, [pathname]);
 
   return (
