@@ -24,7 +24,6 @@ interface Props {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
-  onSelectedBusiness: (value: string) => void;
   saving: boolean;
   showSiteNumber: boolean;
   toggleAddNewAddress: () => void;
@@ -35,7 +34,6 @@ const IncidentWhere = ({
   hideField,
   newAddressData,
   onSearchBusiness,
-  onSelectedBusiness,
   saving,
   showSiteNumber,
   toggleAddNewAddress,
@@ -102,10 +100,6 @@ const IncidentWhere = ({
                       allowClear
                       disabled={saving}
                       fetchOptions={onSearchBusiness}
-                      onSelect={({ value }) => {
-                        console.log(value);
-                        onSelectedBusiness(value as string);
-                      }}
                       placeholder={intl.formatMessage(
                         {
                           defaultMessage: 'Search for a business...',

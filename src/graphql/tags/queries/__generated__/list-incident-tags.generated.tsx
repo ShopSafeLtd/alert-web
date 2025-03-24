@@ -8,7 +8,7 @@ export type ListIncidentTagsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ListIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, tier: number, value: string, tooltip?: string | null, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: Types.IncidentFormField }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: Types.AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, dependentOnBrandIds?: Array<string> | null, tooltip?: string | null, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
+export type ListIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, policeReporting: boolean, tier: number, value: string, tooltip?: string | null, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: Types.IncidentFormField }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: Types.AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, dependentOnBrandIds?: Array<string> | null, tooltip?: string | null, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
 
 
 export const ListIncidentTagsDocument = gql`
@@ -22,6 +22,7 @@ export const ListIncidentTagsDocument = gql`
     label
     parentId
     parents
+    policeReporting
     questions {
       answerType
       label

@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading,@typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx */
 import type { FormInstance } from 'antd';
 import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
+import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
@@ -34,6 +36,8 @@ interface Props {
   goodsMode: string;
   goodsVisible: boolean;
   incidentForm: IncidentFormField[];
+  incidentTagsData: ListIncidentTagsQuery | undefined;
+  incidentTagsLoading: boolean;
   knowGoods: () => void;
   newAddressData: LocationData | undefined;
   onSubmit: (value: FormData) => void;
@@ -49,6 +53,7 @@ interface Props {
   setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
+  tagsData: TagsQuery | undefined;
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
 }
@@ -63,6 +68,8 @@ const AddIncident = ({
   goodsMode,
   goodsVisible,
   incidentForm,
+  incidentTagsData,
+  incidentTagsLoading,
   knowGoods,
   newAddressData,
   onSubmit,
@@ -76,6 +83,7 @@ const AddIncident = ({
   setPoliceReporting,
   setPrimaryImage,
   showSiteNumber,
+  tagsData,
   toggleAddNewAddress,
   updateNewAddressData,
 }: Props): JSX.Element => {
@@ -126,7 +134,10 @@ const AddIncident = ({
                   <IncidentTypes
                     form={form}
                     incidentForm={incidentForm}
+                    incidentTagsData={incidentTagsData}
+                    incidentTagsLoading={incidentTagsLoading}
                     setPoliceReporting={setPoliceReporting}
+                    tagsData={tagsData}
                   />
                 );
               }

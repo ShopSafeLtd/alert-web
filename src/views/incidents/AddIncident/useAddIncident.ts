@@ -8,6 +8,8 @@ import type { CreateIncidentMutation } from 'graphql/incidents/mutations/__gener
 import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type {
   Age,
   Build,
@@ -26,6 +28,7 @@ import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
+import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
 import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
@@ -214,6 +217,8 @@ interface Return {
   goodsMode: GoodsMode;
   goodsVisible: boolean;
   incidentForm: IncidentFormField[];
+  incidentTagsData: ListIncidentTagsQuery | undefined;
+  incidentTagsLoading: boolean;
   isTheft: boolean;
   knowGoods: () => void;
   newAddressData: LocationData | undefined;
@@ -230,6 +235,7 @@ interface Return {
   setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
+  tagsData: TagsQuery | undefined;
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
 }
@@ -249,6 +255,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         model: PermissionModel.Incidents,
       },
     });
+
+  const formBusiness = Form.useWatch('business', form);
+
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
@@ -341,6 +350,26 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   }, [businesses]);
 
   const [generateStatementBody] = useGenerateStatementBodyMutation();
+  const [getBrands] = useBusinessBrandsLazyQuery();
+
+  useEffect(() => {
+    if (formBusiness) {
+      void getBrands({
+        onCompleted: (data) => {
+          if (data && data.business && data.business.brands.length > 0) {
+            setBrands(data.business.brands);
+          }
+        },
+        variables: {
+          where: {
+            id: formBusiness.value,
+          },
+        },
+      });
+    } else {
+      setBrands([]);
+    }
+  }, [formBusiness]);
 
   const handleStatementGeneration = async () => {
     if (policeReporting && policeWitnessAtTime !== undefined) {
@@ -527,13 +556,14 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     },
   });
 
-  const { data: incidentTagsData } = useListIncidentTagsQuery({
-    variables: {
-      where: {
-        schemeId,
+  const { data: incidentTagsData, loading: incidentTagsLoading } =
+    useListIncidentTagsQuery({
+      variables: {
+        where: {
+          schemeId,
+        },
       },
-    },
-  });
+    });
 
   // update incident list after adding a new item
   const updateIncident: MutationUpdaterFn<CreateIncidentMutation> = (
@@ -696,7 +726,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log('addIncindent', data.offenders);
 
     const allOffendersConfirmed = !data.offenders
       ?.map((offender) => offender.confirmedInIncident)
@@ -1339,6 +1368,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     goodsMode,
     goodsVisible,
     incidentForm,
+    incidentTagsData,
+    incidentTagsLoading,
     isTheft,
     knowGoods,
     newAddressData,
@@ -1355,6 +1386,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     setPoliceReporting,
     setPrimaryImage,
     showSiteNumber,
+    tagsData,
     toggleAddNewAddress,
     updateNewAddressData,
   };

@@ -17,6 +17,8 @@ const AddIncident = (): JSX.Element => {
     goodsMode,
     goodsVisible,
     incidentForm,
+    incidentTagsData,
+    incidentTagsLoading,
     knowGoods,
     newAddressData,
     onSubmit,
@@ -30,6 +32,7 @@ const AddIncident = (): JSX.Element => {
     setPoliceReporting,
     setPrimaryImage,
     showSiteNumber,
+    tagsData,
     toggleAddNewAddress,
     updateNewAddressData,
   } = useAddIncident({ investigationId });
@@ -46,6 +49,8 @@ const AddIncident = (): JSX.Element => {
         goodsMode={goodsMode}
         goodsVisible={goodsVisible}
         incidentForm={incidentForm}
+        incidentTagsData={incidentTagsData}
+        incidentTagsLoading={incidentTagsLoading}
         knowGoods={knowGoods}
         newAddressData={newAddressData}
         onSubmit={onSubmit}
@@ -59,6 +64,7 @@ const AddIncident = (): JSX.Element => {
         setPoliceReporting={setPoliceReporting}
         setPrimaryImage={setPrimaryImage}
         showSiteNumber={showSiteNumber}
+        tagsData={tagsData}
         toggleAddNewAddress={toggleAddNewAddress}
         updateNewAddressData={updateNewAddressData}
       />
