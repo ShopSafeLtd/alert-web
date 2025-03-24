@@ -28,7 +28,7 @@ import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
 
 interface Props {
   addNewAddress: boolean;
-  brands: string[];
+
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
   form: FormInstance<FormData>;
@@ -49,7 +49,7 @@ interface Props {
   primaryImage: string;
   reportOnly: boolean;
   saving: boolean;
-  setBrands: (value: string[]) => void;
+
   setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
@@ -60,7 +60,7 @@ interface Props {
 
 const AddIncident = ({
   addNewAddress,
-  brands,
+
   customQuestions,
   dontKnowGoods,
   form,
@@ -79,7 +79,7 @@ const AddIncident = ({
   primaryImage,
   reportOnly,
   saving,
-  setBrands,
+
   setPoliceReporting,
   setPrimaryImage,
   showSiteNumber,
@@ -153,10 +153,8 @@ const AddIncident = ({
               case IncidentFormField.Where: {
                 return (
                   <IncidentWhere
-                    brands={brands}
                     newAddressData={newAddressData}
                     saving={saving}
-                    setBrands={setBrands}
                     showSiteNumber={showSiteNumber}
                     toggleAddNewAddress={toggleAddNewAddress}
                     updateNewAddressData={updateNewAddressData}
