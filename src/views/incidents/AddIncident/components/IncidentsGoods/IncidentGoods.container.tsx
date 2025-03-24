@@ -29,6 +29,7 @@ const IncidentGoods = ({
     <View
       division={division}
       dontKnowGoods={dontKnowGoods}
+      form={form}
       goods={goods}
       goodsMode={goodsMode}
       goodsTypesData={goodsTypesData}
