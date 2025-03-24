@@ -1,7 +1,6 @@
 import type { CurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
 
-import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { useCurrentSchemeProviderQuery } from '#/providers/SchemeProvider/__generated__/current-scheme.generated';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions } from '#/state';
@@ -9,7 +8,7 @@ import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import { LocalStorageKeys } from '#/types';
 import { GoodsMode, Role } from 'graphql/types';
 import { atom, useAtomValue, useSetAtom } from 'jotai/index';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 type UserSchemeState = CurrentSchemeProviderQuery['userScheme'];
 
@@ -118,7 +117,6 @@ const SchemeProvider = ({ children }: Props) => {
   const setCurrentUserScheme = useSetAtom(currentUserSchemeAtom);
   const setStateIsSet = useSetAtom(stateIsSetAtom);
   const setSettingScheme = useSetAtom(settingSchemeAtom);
-  const isSettingScheme = useAtomValue(settingSchemeAtom);
 
   const setDashboard = useStoreActions(
     (actions) => actions.dashboard.setSchemeLayouts
@@ -180,7 +178,7 @@ const SchemeProvider = ({ children }: Props) => {
     },
   });
 
-  return isSettingScheme ? <LoadingScreen /> : children;
+  return children;
 };
 
 export default SchemeProvider;

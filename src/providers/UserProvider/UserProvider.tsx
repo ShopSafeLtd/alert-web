@@ -107,6 +107,7 @@ const UserProvider = ({ children }: Props) => {
 
   void useCurrentUserProviderQuery({
     onCompleted: (data) => {
+      console.log('testing');
       if (!data.currentUser) {
         if (!isLoaded && isSignedIn) {
           expired();
@@ -143,6 +144,14 @@ const UserProvider = ({ children }: Props) => {
 
       void setCurrentUser(data.currentUser);
       void setNewUser(data.currentUser?.newUser ?? false);
+    },
+    onError: () => {
+      if (!isLoaded && isSignedIn) {
+        expired();
+        void getToken();
+      } else if (!isLoaded && !isSignedIn) {
+        navigate('/sign-in');
+      }
     },
   });
 

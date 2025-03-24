@@ -38,7 +38,9 @@ const useAuth = (): Return => {
   };
 
   useEffect(() => {
-    if (token) authenticated(token);
+    if (token) {
+      authenticated(token);
+    }
   }, [token]);
 
   return {

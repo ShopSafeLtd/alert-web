@@ -8,6 +8,7 @@ import { useAuth } from '#/hooks';
 import {
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
+  settingSchemeAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
@@ -52,7 +53,7 @@ const AppLayout = (): JSX.Element => {
     }
     return navCollapsed ? SIDE_NAV_COLLAPSED_WIDTH : SIDE_NAV_WIDTH;
   };
-
+  const isSettingScheme = useAtomValue(settingSchemeAtom);
   const businesses = useAtomValue(currentSchemeBusinessesAtom);
   const currentUser = useAtomValue(currentUserAtom);
   const email = currentUser?.email ?? '';
@@ -103,7 +104,8 @@ const AppLayout = (): JSX.Element => {
   if (status === 'loading') {
     return <LoadingScreen />;
   }
-  if (loading || !isLoaded || !isSet) return <LoadingScreen />;
+  if (loading || !isLoaded || !isSet || isSettingScheme)
+    return <LoadingScreen />;
 
   return (
     <ScreenSizeUnsupported>
