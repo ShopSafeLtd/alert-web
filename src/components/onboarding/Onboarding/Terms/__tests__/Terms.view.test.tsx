@@ -11,7 +11,7 @@ describe('List Officer View', () => {
           onSubmit={jest.fn()}
           update={jest.fn()}
           saving={false}
-          onBack={jest.fn()}
+          loading={false}
         />
       </MemoryRouter>
     );
