@@ -6,7 +6,7 @@ import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generate
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
-import { Button, Card, Col, Drawer, Form, PageHeader, Row } from 'antd';
+import { Button, Card, Col, Drawer, Form, Modal, PageHeader, Row } from 'antd';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
@@ -109,6 +109,15 @@ const AddIncident = ({
         }}
         layout="vertical"
         onFinish={onSubmit}
+        onFinishFailed={() => {
+          Modal.error({
+            content: intl.formatMessage({
+              defaultMessage:
+                'Please fill in all required fields before submitting the incident. Check the form for any missing or highlighted sections and try again.',
+            }),
+            title: intl.formatMessage({ defaultMessage: 'Incomplete Fields' }),
+          });
+        }}
         onValuesChange={onValuesChange}
       >
         {incidentForm

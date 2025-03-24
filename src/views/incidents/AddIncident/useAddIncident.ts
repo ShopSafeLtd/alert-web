@@ -351,7 +351,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         },
       });
     } else {
-      const businessBrands = businesses[0].brands;
+      const businessBrands = businesses[0]?.brands;
       setBrands(businessBrands);
     }
   }, [businesses]);
@@ -1344,7 +1344,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             tooltip: question.tooltip ?? undefined,
             value: '',
           }));
-          if (brands.length > 0) {
+          if (brands && brands.length > 0) {
             const filteredQuestions = tagQuestions.filter((question) => {
               if (question.dependentOnBrandIds.length > 0) {
                 return question.dependentOnBrandIds.some((id) =>

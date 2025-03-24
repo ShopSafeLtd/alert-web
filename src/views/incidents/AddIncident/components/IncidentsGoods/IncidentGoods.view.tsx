@@ -1,5 +1,6 @@
 /* eslint-disable quotes */
 
+import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 
 import StockItemSelect, {
@@ -13,14 +14,16 @@ import {
   Col,
   Empty,
   Form,
+  type FormInstance,
   InputNumber,
+  Radio,
   Row,
   Select,
   Typography,
 } from 'antd';
 import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import useStyles from '../../AddIncident.styles';
@@ -30,6 +33,7 @@ const { Paragraph, Title } = Typography;
 interface Props {
   division: string | undefined;
   dontKnowGoods: () => void;
+  form: FormInstance<FormData>;
   goods: {
     goodsType?: string;
     name?: string;
@@ -50,6 +54,7 @@ interface Props {
 const IncidentGoods = ({
   division,
   dontKnowGoods,
+  form,
   goods,
   goodsMode,
   goodsTypesData,
@@ -59,6 +64,17 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+
+  const goodsKnown = Form.useWatch('goodsKnown', form) as string;
+
+  useEffect(() => {
+    if (goodsKnown === 'true') {
+      knowGoods();
+    } else if (goodsKnown === 'false') {
+      dontKnowGoods();
+    }
+  }, [goodsKnown]);
+
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -504,20 +520,37 @@ const IncidentGoods = ({
         </Form.List>
       ) : (
         <div style={{ paddingBottom: 20, paddingTop: 10 }}>
-          <Row gutter={16}>
+          <Row>
             <Col>
-              <Button danger onClick={knowGoods}>
-                {intl.formatMessage({
-                  defaultMessage: 'I know the goods involved',
-                })}
-              </Button>
-            </Col>
-            <Col>
-              <Button onClick={dontKnowGoods}>
-                {intl.formatMessage({
-                  defaultMessage: "I don't know the goods involved",
-                })}
-              </Button>
+              <Form.Item
+                name="goodsKnown"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please select an option',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Radio.Group
+                  optionType="button"
+                  options={[
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'I know the goods involved',
+                      }),
+                      value: 'true',
+                    },
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: "I don't know the goods involved",
+                      }),
+                      value: 'false',
+                    },
+                  ]}
+                />
+              </Form.Item>
             </Col>
           </Row>
         </div>

@@ -13,6 +13,7 @@ const ViewRoleSidelist = ({ current }: { current?: string }): JSX.Element => {
   const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, fetchMore, loading } = useRolesQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       first: 20,
       schemeId: currentSchemeId,

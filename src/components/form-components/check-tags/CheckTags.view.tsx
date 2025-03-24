@@ -1,8 +1,9 @@
 import type { PermissionMethod, PermissionModel } from 'graphql/types';
 
 import hasRolePermission from '#/utils/has-role-permission';
-import { Col, Row } from 'antd';
+import { Col, Divider, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import CheckTag from '../check-tag/CheckTag.view';
 import CheckTagsLoading from './CheckTagsLoading.view';
@@ -181,49 +182,66 @@ const CheckTags = ({
           })}
       </Row>
       {primaryValue?.hasChildren && (
-        <Row gutter={[10, 10]} style={{ marginTop: 20 }}>
-          {options
-            .filter((option) => option.parentId === primaryValue?.value)
-            .map((option) => {
-              if (
-                option.permissions &&
-                !hasRolePermission({ permission: option.permissions })
-              )
-                return <Col key={option.value} />;
+        <>
+          <Divider style={{ marginBottom: 25, marginTop: 30 }} />
+          <Typography.Paragraph style={{ fontWeight: 500 }}>
+            <FormattedMessage defaultMessage="Please select an additional type" />
+          </Typography.Paragraph>
+          <Row gutter={[10, 10]} style={{ marginTop: 14 }}>
+            {options
+              .filter((option) => option.parentId === primaryValue?.value)
+              .map((option) => {
+                if (
+                  option.permissions &&
+                  !hasRolePermission({ permission: option.permissions })
+                )
+                  return <Col key={option.value} />;
 
-              return (
-                <Col key={option.value}>
-                  <CheckTag
-                    active={secondaryValue?.value === option.value}
-                    onClick={setSecondary}
-                    option={option}
-                  />
-                </Col>
-              );
-            })}
-        </Row>
+                return (
+                  <Col key={option.value}>
+                    <CheckTag
+                      active={secondaryValue?.value === option.value}
+                      onClick={setSecondary}
+                      option={option}
+                    />
+                  </Col>
+                );
+              })}
+          </Row>
+        </>
       )}
       {secondaryValue?.hasChildren && (
-        <Row gutter={[10, 10]} style={{ marginTop: 20 }}>
-          {options
-            .filter((option) => option.parentId === secondaryValue?.value)
-            .map((option) => {
-              if (
-                option.permissions &&
-                !hasRolePermission({ permission: option.permissions })
-              )
-                return <Col key={option.value} />;
-              return (
-                <Col key={option.value}>
-                  <CheckTag
-                    active={tertiaryValue?.value === option.value}
-                    onClick={setTertiary}
-                    option={option}
-                  />
-                </Col>
-              );
-            })}
-        </Row>
+        <>
+          <Divider style={{ marginBottom: 25, marginTop: 30 }} />
+          <Typography.Paragraph
+            style={{
+              fontWeight: 500,
+              marginBottom: 0,
+            }}
+          >
+            <FormattedMessage defaultMessage="Please select an additional type" />
+          </Typography.Paragraph>
+          <Row gutter={[10, 10]} style={{ marginTop: 14 }}>
+            {options
+              .filter((option) => option.parentId === secondaryValue?.value)
+              .map((option) => {
+                if (
+                  option.permissions &&
+                  !hasRolePermission({ permission: option.permissions })
+                )
+                  return <Col key={option.value} />;
+                return (
+                  <Col key={option.value}>
+                    <CheckTag
+                      active={tertiaryValue?.value === option.value}
+                      onClick={setTertiary}
+                      option={option}
+                    />
+                  </Col>
+                );
+              })}
+          </Row>
+        </>
       )}
     </div>
   );
