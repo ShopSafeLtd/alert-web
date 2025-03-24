@@ -1,10 +1,18 @@
 import type { AvailableLanguages } from '#/lang';
+import type { Locale } from 'antd/lib/locale-provider';
+
 import AppLocale, { AvailableLanguagesConst } from '#/lang';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import type { Translations } from '#/state/scheme-model';
-import type { Locale } from 'antd/lib/locale-provider';
+
+export interface Translations {
+  [key: string]: {
+    [lang: string]: string;
+  };
+}
 
 function checkLang(l: string): l is AvailableLanguages {
   return (AvailableLanguagesConst as readonly string[]).includes(l);
@@ -17,9 +25,9 @@ interface LocaleType {
 }
 
 export const useThemeLanguage = (): {
-  theme: 'light' | 'dark';
   currentAppLocale: LocaleType;
   messages: { [key: string]: string };
+  theme: 'dark' | 'light';
 } => {
   const locale = useStoreState((state) => state.theme.locale);
   const lang =
@@ -37,9 +45,8 @@ export const useThemeLanguage = (): {
     }
   }, []);
 
-  const customTranslations = useStoreState(
-    (state) => state.scheme.translations
-  );
+  const customTranslations =
+    useAtomValue(currentSchemeAtom)?.customTranslations;
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const t = localStorage.getItem('theme');
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
@@ -93,8 +100,8 @@ export const useThemeLanguage = (): {
   }, [currentAppLocale.messages, customTranslations, locale]);
 
   return {
-    theme: currentTheme,
     currentAppLocale,
     messages,
+    theme: currentTheme,
   };
 };

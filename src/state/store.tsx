@@ -7,7 +7,6 @@ import type { AuthModel } from './auth-model';
 import type { DashboardModel } from './dashboard-model';
 import type { DataModel } from './data-model';
 import type { FilterModel } from './filter-model';
-import type { SchemeModel } from './scheme-model';
 import type { ThemeModel } from './theme-model';
 import type { UserModel } from './user-model';
 
@@ -15,7 +14,6 @@ import authModel from './auth-model';
 import dashboardModel from './dashboard-model';
 import dataModel from './data-model';
 import filterModel from './filter-model';
-import schemeModel from './scheme-model';
 import themeModel from './theme-model';
 import userModel from './user-model';
 
@@ -24,7 +22,6 @@ interface StoreModel {
   dashboard: DashboardModel;
   data: DataModel;
   filter: FilterModel;
-  scheme: SchemeModel;
   theme: ThemeModel;
   user: UserModel;
 }
@@ -32,7 +29,6 @@ interface StoreModel {
 const typedHooks = createTypedHooks<StoreModel>();
 
 export const { useStoreActions } = typedHooks;
-export const { useStoreDispatch } = typedHooks;
 export const { useStoreState } = typedHooks;
 
 interface GlobalStoreProps {
@@ -43,7 +39,6 @@ export const storeModel: StoreModel = {
   dashboard: dashboardModel,
   data: dataModel,
   filter: filterModel,
-  scheme: schemeModel,
   theme: themeModel,
   user: userModel,
 };

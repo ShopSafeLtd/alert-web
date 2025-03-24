@@ -5,9 +5,13 @@ import type { NavType } from 'state';
 
 import {
   currentPermissionsAtom,
+  currentSchemeAtom,
   isAdminAtom,
   settingSchemeAtom,
+  userNotificationsAtom,
+  userTodosAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
 import { faBell } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -126,7 +130,7 @@ const SideNavContent = ({
   const permissions = useAtomValue(currentPermissionsAtom);
   const settingScheme = useAtomValue(settingSchemeAtom);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const { reportOnly } = useStoreState((state) => state.scheme);
+  const reportOnly = useAtomValue(currentSchemeAtom)?.reportOnly ?? false;
 
   const [navigationConfig, setNavigationConfig] = useState<NavItem[]>([]);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -347,11 +351,9 @@ const MenuContent = (props: Props) => {
   const onMobileNavToggle = useStoreActions(
     (actions) => actions.theme.toggleMobileNav
   );
-  const userTodos = useStoreState((state) => state.user.userTodos);
-  const userNotifications = useStoreState(
-    (state) => state.user.userNotifications
-  );
-  const userMessages = useStoreState((state) => state.user.userMessages);
+  const userTodos = useAtomValue(userTodosAtom);
+  const userMessages = useAtomValue(currentUserAtom)?.messageCount ?? 0;
+  const userNotifications = useAtomValue(userNotificationsAtom);
   const [todoCount, setTodoCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
@@ -361,7 +363,7 @@ const MenuContent = (props: Props) => {
   }, [userTodos]);
 
   useEffect(() => {
-    setNotificationCount(userNotifications || 0);
+    setNotificationCount(userNotifications ?? 0);
   }, [userNotifications]);
 
   useEffect(() => {

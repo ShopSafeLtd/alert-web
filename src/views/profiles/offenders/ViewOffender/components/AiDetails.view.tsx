@@ -3,7 +3,7 @@ import type { ViewOffenderQuery } from 'graphql/offenders/queries/__generated__/
 import useStyles from '#/views/incidents/ViewIncident/ViewIncident.styles';
 import { faBolt, faCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Col, Descriptions, Row, Typography } from 'antd';
+import { Button, Card, Col, Descriptions, Row, Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -12,9 +12,10 @@ const { Paragraph, Title } = Typography;
 interface Props {
   data: ViewOffenderQuery | undefined;
   loading: boolean;
+  toggleAiDrawer: () => void;
 }
 
-const IncidentDetails = ({ data, loading }: Props) => {
+const IncidentDetails = ({ data, loading, toggleAiDrawer }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
@@ -62,6 +63,13 @@ const IncidentDetails = ({ data, loading }: Props) => {
           </Descriptions.Item>
         </Descriptions>
       )}
+      <Row justify="center" style={{ marginTop: 10 }}>
+        <Col>
+          <Button onClick={toggleAiDrawer}>
+            <FormattedMessage defaultMessage="View AI Report" />
+          </Button>
+        </Col>
+      </Row>
     </Card>
   );
 };

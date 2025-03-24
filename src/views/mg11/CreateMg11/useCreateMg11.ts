@@ -3,7 +3,10 @@ import type { FormInstance } from 'antd';
 import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import {
+  currentUserAtom,
+  userIdAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { Form, notification } from 'antd';
 import { useCreateMg11Mutation } from 'graphql/mg11/mutations/__generated__/create-mg11.generated';
 import { useListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
@@ -12,7 +15,6 @@ import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
@@ -94,7 +96,7 @@ const useCreateMg11 = (): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
   const { id: incidentId } = useParams();
-  const { fullName: interviewerName } = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);
   const [sign, setSign] = useState('');
   const [tab, setTab] = useState('generate');
@@ -227,7 +229,7 @@ const useCreateMg11 = (): Return => {
     file,
     form,
     interviewerFile,
-    interviewerName,
+    interviewerName: currentUser?.fullName ?? '',
     interviewerSelectedFont,
     interviewerSetFile,
     interviewerSetSelectedFont,

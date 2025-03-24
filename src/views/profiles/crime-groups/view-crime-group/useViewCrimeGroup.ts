@@ -17,6 +17,7 @@ import type { VehicleData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -43,7 +44,6 @@ import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
@@ -120,7 +120,7 @@ const onCompletedAddOffender = () => {
 };
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const intl = useIntl();
-  const { id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);

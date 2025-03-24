@@ -51,8 +51,6 @@ const PermissionCheckWrapper = ({
     return false;
   }, [permissions, permission]);
 
-  console.log('isAuthorized', isAuthorized);
-
   return isAuthorized ? children : unauthorizedElement;
 };
 

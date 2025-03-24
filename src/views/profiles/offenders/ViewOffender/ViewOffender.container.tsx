@@ -13,7 +13,6 @@ const ViewOffender = (): JSX.Element => {
     addBan,
     addCrimeGroup,
     addDocument,
-
     addExistingVehicle,
     addImages,
     addInvestigation,
@@ -84,6 +83,7 @@ const ViewOffender = (): JSX.Element => {
     setOptionRowShow,
     setReplyTo,
     shareOpen,
+    showAiDrawer,
     showIncidentOptions,
     toggleAddAddress,
     toggleAddBan,
@@ -92,6 +92,7 @@ const ViewOffender = (): JSX.Element => {
     toggleAddExistingVehicle,
     toggleAddInvestigation,
     toggleAddVehicle,
+    toggleAiDrawer,
     toggleCopyOffender,
     toggleEditImages,
     toggleEditOffender,
@@ -194,6 +195,7 @@ const ViewOffender = (): JSX.Element => {
       setOptionRowShow={setOptionRowShow}
       setReplyTo={setReplyTo}
       shareOpen={shareOpen}
+      showAiDrawer={showAiDrawer}
       showIncidentOptions={showIncidentOptions}
       toggleAddAddress={toggleAddAddress}
       toggleAddBan={toggleAddBan}
@@ -202,6 +204,7 @@ const ViewOffender = (): JSX.Element => {
       toggleAddExistingVehicle={toggleAddExistingVehicle}
       toggleAddInvestigation={toggleAddInvestigation}
       toggleAddVehicle={toggleAddVehicle}
+      toggleAiDrawer={toggleAiDrawer}
       toggleCopyOffender={toggleCopyOffender}
       toggleEditImages={toggleEditImages}
       toggleEditOffender={toggleEditOffender}

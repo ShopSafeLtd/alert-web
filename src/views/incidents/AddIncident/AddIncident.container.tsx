@@ -9,7 +9,6 @@ const AddIncident = (): JSX.Element => {
 
   const {
     addNewAddress,
-    brands,
     customQuestions,
     dontKnowGoods,
     form,
@@ -28,7 +27,6 @@ const AddIncident = (): JSX.Element => {
     primaryImage,
     reportOnly,
     saving,
-    setBrands,
     setPoliceReporting,
     setPrimaryImage,
     showSiteNumber,
@@ -41,7 +39,6 @@ const AddIncident = (): JSX.Element => {
     <div>
       <View
         addNewAddress={addNewAddress}
-        brands={brands}
         customQuestions={customQuestions}
         dontKnowGoods={dontKnowGoods}
         form={form}
@@ -60,7 +57,6 @@ const AddIncident = (): JSX.Element => {
         primaryImage={primaryImage}
         reportOnly={reportOnly}
         saving={saving}
-        setBrands={setBrands}
         setPoliceReporting={setPoliceReporting}
         setPrimaryImage={setPrimaryImage}
         showSiteNumber={showSiteNumber}

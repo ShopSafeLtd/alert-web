@@ -6,9 +6,7 @@ export const useSignOut = (): {
 } => {
   const { signOut: signOutClerk } = useAuthClerk();
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
-  const clearUser = useStoreActions((actions) => actions.user.clearUser);
   const signOut = (): void => {
-    clearUser();
     handleSignOut();
     const logo = window.localStorage.getItem('logo');
     const dLogo = window.localStorage.getItem('logo-dark');

@@ -1,3 +1,4 @@
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEye,
@@ -7,11 +8,11 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
 
 const useStyles = createUseStyles({
   row: {
@@ -75,7 +76,7 @@ const IncidentTable = ({
   const classes = useStyles();
   const intl = useIntl();
   const restrictIncidentAccess =
-    useStoreState((state) => state.scheme.restrictIncidentAccess) &&
+    useAtomValue(currentSchemeAtom)?.restrictIncidentAccess &&
     hasRolePermission({
       permission: {
         method: PermissionMethod.Read,

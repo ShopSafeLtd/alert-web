@@ -1,13 +1,15 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { LocationData } from 'types/DataType';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import useCanView from '#/utils/in-scheme';
 import { useViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-location.generated';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useMemo, useState } from 'react';
-import { useStoreState } from 'state';
+import { useAtomValue } from 'jotai/index';
+import { useState } from 'react';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -42,15 +44,10 @@ const useViewIncident = (incidentId: string): Return => {
     },
   });
 
-  const { id: schemeId, restrictIncidentAccess } = useStoreState(
-    (state) => state.scheme
-  );
-  const { id: userId, schemes } = useStoreState((state) => state.user);
-
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
+  const restrictIncidentAccess =
+    useAtomValue(currentSchemeAtom)?.restrictIncidentAccess ?? false;
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const currentScheme = useAtomValue(currentSchemeAtom);
 
   const [saving, setSaving] = useState(false);
   const [editAddress, setEditAddress] = useState(false);
@@ -66,7 +63,7 @@ const useViewIncident = (incidentId: string): Return => {
     },
   });
   useCanView({
-    currentScheme: currentScheme?.scheme.id || '',
+    currentScheme: currentScheme?.id ?? '',
     schemes: data?.incident?.schemes.map(({ id }) => id),
     type: 'incident',
   });

@@ -1,20 +1,19 @@
 import type { FormInstance } from 'antd';
+
+import { userSchemesAtom } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
+import { useCreateOneStatementTemplateMutation } from 'graphql/statementTemplates/mutations/__generated__/create-one-statement.generated';
+import { useUpdateOneStatementTemplateMutation } from 'graphql/statementTemplates/mutations/__generated__/update-one-statement.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
+
 import type { FormData } from './createEditStatement.view';
-import { useStoreState } from '../../../state';
-import {
-  useCreateOneStatementTemplateMutation
-} from 'graphql/statementTemplates/mutations/__generated__/create-one-statement.generated';
-import {
-  useUpdateOneStatementTemplateMutation
-} from 'graphql/statementTemplates/mutations/__generated__/update-one-statement.generated';
 
 interface Return {
   data: FormData;
-  saving: boolean;
   form: FormInstance<FormData>;
   onSubmit: (data: FormData) => void;
+  saving: boolean;
   schemes: {
     label: string;
     value: string;
@@ -23,15 +22,15 @@ interface Return {
 const { useForm } = Form;
 
 const useCreateEditStatement = ({
+  id,
   initData,
   onClose,
-  id,
 }: {
+  id?: string;
   initData: FormData | undefined;
   onClose: () => void;
-  id?: string;
 }): Return => {
-  const userSchemes = useStoreState((state) => state.user.schemes);
+  const userSchemes = useAtomValue(userSchemesAtom);
   const schemes = userSchemes.map((scheme) => ({
     label: scheme.scheme.name,
     value: scheme.scheme.id,
@@ -41,8 +40,8 @@ const useCreateEditStatement = ({
   const [saving, setSaving] = useState(false);
   const [data] = useState<FormData>(
     initData || {
-      name: '',
       content: '',
+      name: '',
       schemes: [],
     }
   );
@@ -55,17 +54,17 @@ const useCreateEditStatement = ({
     if (id) {
       void updateTemplate({
         variables: {
-          where: {
-            id,
-          },
           data: {
-            name: { set: submitData.name },
             content: { set: submitData.content },
+            name: { set: submitData.name },
             schemes: {
               set: submitData.schemes.map((scheme) => ({
                 id: scheme,
               })),
             },
+          },
+          where: {
+            id,
           },
         },
       });
@@ -73,8 +72,8 @@ const useCreateEditStatement = ({
       void createTemplate({
         variables: {
           data: {
-            name: submitData.name,
             content: submitData.content,
+            name: submitData.name,
             schemes: {
               connect: submitData.schemes.map((scheme) => ({
                 id: scheme,
@@ -90,9 +89,9 @@ const useCreateEditStatement = ({
 
   return {
     data,
-    saving,
     form,
     onSubmit,
+    saving,
     schemes,
   };
 };

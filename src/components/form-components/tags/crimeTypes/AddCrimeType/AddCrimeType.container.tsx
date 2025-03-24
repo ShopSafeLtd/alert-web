@@ -14,7 +14,7 @@ interface Props {
 }
 
 const AddCrimeType = ({ onClose, type, update }: Props): JSX.Element => {
-  const { onSubmit, saving, schemeId, tags, userSchemes } = useAddCrimeType({
+  const { onSubmit, saving, schemeId, tags } = useAddCrimeType({
     onClose,
     type,
     update,
@@ -28,7 +28,6 @@ const AddCrimeType = ({ onClose, type, update }: Props): JSX.Element => {
       schemeId={schemeId}
       tags={tags}
       type={type}
-      userSchemes={userSchemes}
     />
   );
 };

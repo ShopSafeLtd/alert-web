@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import Logo from '#/components/layout-components/AntD/navigation/Logo';
+import { useStoreState } from '#/state';
+import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
@@ -12,28 +15,24 @@ import {
   Typography,
   Upload,
 } from 'antd';
+import React, { useEffect, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
-import SignatureInput from '../../../SignBox';
-import FONT_FAMILIES from './utils/Fonts';
-import SigSeal from './SigSeal';
-
 import styled from 'styled-components';
-import { useStoreState } from '#/state';
+
+import SignatureInput from '../../../SignBox';
+import SigSeal from './SigSeal';
+import FONT_FAMILIES from './utils/Fonts';
 
 const { Text, Title } = Typography;
 
 interface Props {
-  onSubmit: () => void;
-  update: (value: unknown) => void;
-  saving: boolean;
-
   content: string;
-  updateBox: () => void;
   name: string;
-  onBack: () => void;
+  onSubmit: () => void;
+  saving: boolean;
+  update: (value: unknown) => void;
+  updateBox: () => void;
 }
 
 const DarkModeContent = styled.div`
@@ -57,11 +56,11 @@ const LightModeContent = styled.div`
 `;
 
 export const CustomTermsView = ({
-  terms,
   isPrinting = false,
+  terms,
 }: {
-  terms: string;
   isPrinting?: boolean;
+  terms: string;
 }) => {
   const theme = useStoreState((state) => state.theme.currentTheme);
   const darkMode = theme === 'dark' && !isPrinting;
@@ -83,13 +82,12 @@ export const CustomTermsView = ({
 };
 
 const SchemeTerms = ({
-  onSubmit,
-  update,
-  saving,
-  onBack,
   content,
-  updateBox,
   name,
+  onSubmit,
+  saving,
+  update,
+  updateBox,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);
@@ -102,29 +100,42 @@ const SchemeTerms = ({
 
   useEffect(() => {
     // /scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ behavior: 'smooth', top: 0 });
   }, []);
 
   return (
-    <div className="list-view">
+    <Card
+      style={{
+        minHeight: '90vh',
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 30,
+        width: '70vw',
+      }}
+    >
+      <Row justify="center" style={{ marginBottom: 30 }}>
+        <Col>
+          <Logo logoType="default" width={250} />
+        </Col>
+      </Row>
       <Row style={{ margin: 15 }}>
         <Col>
           <Title level={3}>
             {intl.formatMessage({
-              defaultMessage: 'Terms of Use',
+              defaultMessage: 'Before You Continue',
             })}
           </Title>
 
           <Text>
             {intl.formatMessage({
               defaultMessage:
-                'Please read through the terms and conditions and accept them to continue.',
+                'The organisation you are accessing requires you to read and accept their Terms and Conditions before using Alert. Please review the details below and confirm your acceptance to proceed.',
             })}
           </Text>
         </Col>
       </Row>
       <Card style={{ width: '98%' }}>
-        <Space direction="vertical" style={{ fontSize: 12 }} size={1}>
+        <Space direction="vertical" size={1} style={{ fontSize: 12 }}>
           <CustomTermsView terms={content} />
         </Space>
       </Card>
@@ -133,7 +144,6 @@ const SchemeTerms = ({
           <Col>
             <Form.Item
               name="agreement"
-              valuePropName="checked"
               rules={[
                 {
                   // eslint-disable-next-line no-confusing-arrow
@@ -145,6 +155,7 @@ const SchemeTerms = ({
                         ),
                 },
               ]}
+              valuePropName="checked"
             >
               <Checkbox onChange={updateBox}>
                 <Title level={4}>
@@ -194,9 +205,10 @@ const SchemeTerms = ({
               ]}
             >
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Card style={{ width: '100%', display: 'flex' }}>
+                <Card style={{ display: 'flex', width: '100%' }}>
                   <Tabs
                     activeKey={tab}
+                    destroyInactiveTabPane
                     onChange={(tabKey) => {
                       setTab(tabKey);
                       if (tabKey === 'upload' && file?.file) {
@@ -205,10 +217,10 @@ const SchemeTerms = ({
                         update(
                           ReactDOMServer.renderToString(
                             <img
-                              src={`data:application/pdf;base64,${file?.file}`}
                               // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                               alt="file"
                               height={100}
+                              src={`data:application/pdf;base64,${file?.file}`}
                               width={300}
                             />
                           )
@@ -219,10 +231,10 @@ const SchemeTerms = ({
                         update(
                           ReactDOMServer.renderToString(
                             <SigSeal
-                              key={selectedFont}
-                              name={name}
                               font={selectedFont}
                               height={100}
+                              key={selectedFont}
+                              name={name}
                               width={300}
                             />
                           )
@@ -232,56 +244,54 @@ const SchemeTerms = ({
                         update('');
                       }
                     }}
-                    type="card"
                     style={{ height: 250, width: 500 }}
-                    destroyInactiveTabPane
+                    type="card"
                   >
-                    <Tabs.TabPane tab="Generate" key="generate">
+                    <Tabs.TabPane key="generate" tab="Generate">
                       <Select
-                        style={{
-                          fontFamily: selectedFont,
-                          marginBottom: 20,
-                        }}
                         defaultValue={selectedFont}
                         onChange={(value) => {
                           setSelectedFont(value);
                           update(
                             ReactDOMServer.renderToString(
                               <SigSeal
-                                key={selectedFont}
-                                name={name}
                                 font={selectedFont}
                                 height={100}
+                                key={selectedFont}
+                                name={name}
                                 width={300}
                               />
                             )
                           );
                         }}
+                        style={{
+                          fontFamily: selectedFont,
+                          marginBottom: 20,
+                        }}
                       >
                         {FONT_FAMILIES.map((font) => (
                           <Select.Option
                             key={font}
-                            value={font}
                             style={{
                               fontFamily: font,
                             }}
+                            value={font}
                           >
                             {name}
                           </Select.Option>
                         ))}
                       </Select>
                       <SigSeal
-                        key={selectedFont}
-                        name={name}
                         font={selectedFont}
                         height={100}
+                        key={selectedFont}
+                        name={name}
                         width={300}
                       />
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Upload" key="upload">
+                    <Tabs.TabPane key="upload" tab="Upload">
                       <>
                         <Upload
-                          showUploadList={false}
                           beforeUpload={(f) => {
                             const reader = new FileReader();
                             reader.addEventListener('load', (e) => {
@@ -297,10 +307,10 @@ const SchemeTerms = ({
                                   update(
                                     ReactDOMServer.renderToString(
                                       <img
-                                        src={`data:application/pdf;base64,${base64result}`}
                                         // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                                         alt="file"
                                         height={100}
+                                        src={`data:application/pdf;base64,${base64result}`}
                                         width={300}
                                       />
                                     )
@@ -312,6 +322,7 @@ const SchemeTerms = ({
                             // Prevent upload
                             return false;
                           }}
+                          showUploadList={false}
                         >
                           <Button key="uploadButton" type="primary">
                             <FontAwesomeIcon
@@ -324,19 +335,19 @@ const SchemeTerms = ({
                           </Button>
                         </Upload>
                         {file && (
-                          <div style={{ paddingTop: 10, paddingLeft: 10 }}>
+                          <div style={{ paddingLeft: 10, paddingTop: 10 }}>
                             <img
-                              src={`data:application/pdf;base64,${file.file}`}
                               // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                               alt="file"
                               height={100}
+                              src={`data:application/pdf;base64,${file.file}`}
                               width={300}
                             />
                           </div>
                         )}
                       </>
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Draw" key="draw">
+                    <Tabs.TabPane key="draw" tab="Draw">
                       <SignatureInput
                         hidden={false}
                         onChange={(val: string) => {
@@ -352,28 +363,13 @@ const SchemeTerms = ({
           </Col>
         </Row>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button
                 disabled={saving}
-                type="primary"
-                onClick={() => {
-                  // window.history.back();
-                  onBack();
-                }}
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Back',
-                })}
-              </Button>
-            </Col>
-
-            <Col>
-              <Button
-                disabled={saving}
+                htmlType="submit"
                 loading={saving}
                 type="primary"
-                htmlType="submit"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Next',
@@ -383,7 +379,7 @@ const SchemeTerms = ({
           </Row>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   );
 };
 export default SchemeTerms;

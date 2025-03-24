@@ -1,54 +1,54 @@
-import React from 'react';
-import { Button, Form, Input, Row, Col } from 'antd';
-import { useIntl } from 'react-intl';
-import type { LocationData } from 'types/DataType';
-import LocatingCard from 'components/map/LocatingCard';
 import type { FormInstance } from 'antd';
+import type { LocationData } from 'types/DataType';
+
+import { Button, Col, Form, Input, Row } from 'antd';
+import LocatingCard from 'components/map/LocatingCard';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import type { FormData } from './useAddLocation';
 
 interface Props {
+  form: FormInstance<FormData>;
+  location: LocationData | undefined;
+  locationData?: LocationData;
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  location: LocationData | undefined;
   setLocation: (value: LocationData) => void;
-  form: FormInstance<FormData>;
-  locationData?: LocationData;
   showAlias?: boolean;
 }
 
 const AddLocation = ({
+  form,
+  location,
+  locationData,
   onClose,
   onSubmit,
   saving,
-  location,
   setLocation,
-  form,
-  locationData,
   showAlias,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
-  // const businesses = useStoreState((state) => state.user.businesses);
-
   return (
     <Form
-      layout="vertical"
-      onFinish={onSubmit}
       form={form}
       initialValues={locationData}
+      layout="vertical"
+      onFinish={onSubmit}
     >
       <Form.Item
-        name="location"
         label={intl.formatMessage({
           defaultMessage: 'Location',
         })}
+        name="location"
       >
         <LocatingCard
-          width="100%"
           height={194}
           location={location}
           setLocation={setLocation}
+          width="100%"
         />
       </Form.Item>
 
@@ -56,10 +56,10 @@ const AddLocation = ({
         {showAlias && (
           <Col span={12}>
             <Form.Item
-              name="alias"
               label={intl.formatMessage({
                 defaultMessage: 'Label',
               })}
+              name="alias"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'A friendly name for the address to identify it, such as home',
@@ -71,26 +71,26 @@ const AddLocation = ({
         )}
         <Col span={12}>
           <Form.Item
-            name="building"
             label={intl.formatMessage({
               defaultMessage: 'Building',
             })}
+            name="building"
           >
             <Input disabled={saving} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            name="street"
             label={intl.formatMessage({
               defaultMessage: 'Street',
             })}
+            name="street"
             rules={[
               {
-                required: !location,
                 message: intl.formatMessage({
                   defaultMessage: 'Please enter a street for the new location.',
                 }),
+                required: !location,
               },
             ]}
           >
@@ -100,17 +100,17 @@ const AddLocation = ({
 
         <Col span={12}>
           <Form.Item
-            name="townCity"
             label={intl.formatMessage({
               defaultMessage: 'Town/City',
             })}
+            name="townCity"
             rules={[
               {
-                required: !location,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a town/city for the new location.',
                 }),
+                required: !location,
               },
             ]}
           >
@@ -119,10 +119,10 @@ const AddLocation = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="county"
             label={intl.formatMessage({
               defaultMessage: 'County',
             })}
+            name="county"
           >
             <Input disabled={saving} />
           </Form.Item>
@@ -130,17 +130,17 @@ const AddLocation = ({
 
         <Col span={12}>
           <Form.Item
-            name="postcode"
             label={intl.formatMessage({
               defaultMessage: 'Postcode',
             })}
+            name="postcode"
             rules={[
               {
-                required: !location,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a postcode for the new location.',
                 }),
+                required: !location,
               },
             ]}
           >
@@ -150,7 +150,7 @@ const AddLocation = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -159,9 +159,9 @@ const AddLocation = ({
           <Col>
             <Button
               disabled={saving}
+              htmlType="submit"
               loading={saving}
               type="primary"
-              htmlType="submit"
             >
               {intl.formatMessage({ defaultMessage: 'Save' })}
             </Button>

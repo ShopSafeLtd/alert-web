@@ -5,6 +5,10 @@ import type {
 } from '#/views/evidence/grapqhl/queries/__generated__/documents.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   DocumentsDocument,
@@ -18,8 +22,8 @@ import {
   PermissionModel,
   QueryMode,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface TableItem {
@@ -46,9 +50,8 @@ interface Return {
 }
 
 const useDocumentList = (): Return => {
-  const { id: currentSchemeId, name: schemeName } = useStoreState(
-    (state) => state.scheme
-  );
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
+  const schemeName = useAtomValue(currentSchemeAtom)?.name;
 
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);

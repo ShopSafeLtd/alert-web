@@ -6,7 +6,7 @@ import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generate
 import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
-import { Button, Card, Col, Drawer, Form, PageHeader, Row } from 'antd';
+import { Button, Card, Col, Drawer, Form, Modal, PageHeader, Row } from 'antd';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
@@ -28,7 +28,7 @@ import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
 
 interface Props {
   addNewAddress: boolean;
-  brands: string[];
+
   customQuestions: CustomQuestion[];
   dontKnowGoods: () => void;
   form: FormInstance<FormData>;
@@ -49,7 +49,7 @@ interface Props {
   primaryImage: string;
   reportOnly: boolean;
   saving: boolean;
-  setBrands: (value: string[]) => void;
+
   setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
@@ -60,7 +60,7 @@ interface Props {
 
 const AddIncident = ({
   addNewAddress,
-  brands,
+
   customQuestions,
   dontKnowGoods,
   form,
@@ -79,7 +79,7 @@ const AddIncident = ({
   primaryImage,
   reportOnly,
   saving,
-  setBrands,
+
   setPoliceReporting,
   setPrimaryImage,
   showSiteNumber,
@@ -109,6 +109,15 @@ const AddIncident = ({
         }}
         layout="vertical"
         onFinish={onSubmit}
+        onFinishFailed={() => {
+          Modal.error({
+            content: intl.formatMessage({
+              defaultMessage:
+                'Please fill in all required fields before submitting the incident. Check the form for any missing or highlighted sections and try again.',
+            }),
+            title: intl.formatMessage({ defaultMessage: 'Incomplete Fields' }),
+          });
+        }}
         onValuesChange={onValuesChange}
       >
         {incidentForm
@@ -144,10 +153,8 @@ const AddIncident = ({
               case IncidentFormField.Where: {
                 return (
                   <IncidentWhere
-                    brands={brands}
                     newAddressData={newAddressData}
                     saving={saving}
-                    setBrands={setBrands}
                     showSiteNumber={showSiteNumber}
                     toggleAddNewAddress={toggleAddNewAddress}
                     updateNewAddressData={updateNewAddressData}

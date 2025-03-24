@@ -3,7 +3,7 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { Image, ImageFaceType } from 'types/DataType';
 
 import FacesSelect from '#/components/form-components/FacesSelect/FacesSelect.view';
-import { useStoreState } from '#/state';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faEdit,
   faFileArrowUp,
@@ -26,6 +26,7 @@ import {
 } from 'antd';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -71,7 +72,7 @@ const OffenderImage = ({
   uploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+  const facialRec = useAtomValue(currentSchemeAtom)?.facialRecognition;
 
   return (
     <>

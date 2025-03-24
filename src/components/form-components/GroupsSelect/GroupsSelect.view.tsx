@@ -3,7 +3,7 @@ import type { SelectProps } from 'antd/lib/select';
 
 import { useSchemeGroupsSelectQuery } from '#/components/form-components/GroupsSelect/graphql/queries/__generated__/groups.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { useStoreState } from '#/state';
+import { userSchemesAtom } from '#/providers/UserProvider/UserProvider';
 import {
   faRectangle,
   faRectangleHistoryCircleUser,
@@ -97,7 +97,7 @@ const GroupsSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
   ...props
 }) => {
   const intl = useIntl();
-  const userSchemes = useStoreState((state) => state.user.schemes);
+  const userSchemes = useAtomValue(userSchemesAtom);
   const { loading, selectOptions, treeData } = useUserGroups({
     reportMode,
   });

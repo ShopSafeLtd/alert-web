@@ -1,10 +1,10 @@
-import { useAuth } from '#/hooks';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import Loading from 'components/shared-components/AntD/Loading';
 import useManageSession from 'hooks/useManageSession';
+import { useAtomValue } from 'jotai/index';
 import React, { Suspense, lazy, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { useStoreState } from 'state';
 
 const Onboarding = lazy(() => import('./onboarding/router'));
 const PasswordReset = lazy(() => import('./password/router'));
@@ -32,21 +32,21 @@ const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
 const AiCentre = lazy(() => import('./suggestions/router'));
 
 export const AppViews = (): JSX.Element => {
-  const { loading } = useAuth();
   const { isLoaded } = useAuthClerk();
 
   useManageSession();
-  const { forcePasswordReset, isSet, onboarded, termsExpired } = useStoreState(
-    (state) => state.user
-  );
+  const forcePasswordReset = useAtomValue(currentUserAtom)?.forcePasswordReset;
+  const isSet = !!useAtomValue(currentUserAtom);
+  const newUser = useAtomValue(currentUserAtom)?.newUser;
+  const termsExpired = useAtomValue(currentUserAtom)?.termsExpired;
 
-  const onboardingRoute = !onboarded || forcePasswordReset || termsExpired;
+  const onboardingRoute = newUser || forcePasswordReset || termsExpired;
 
   const location = useLocation();
   const { pathname } = location;
 
   useEffect(() => {
-    if (!pathname || loading || !isLoaded || !isSet) return;
+    if (!pathname || !isLoaded || !isSet) return;
   }, [pathname]);
 
   return (

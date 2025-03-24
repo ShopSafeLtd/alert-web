@@ -3,7 +3,10 @@ import type { RecycleTagMutation } from 'graphql/tag/mutation/__generated__/recy
 import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { Modal, notification } from 'antd';
 import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
 import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
@@ -15,7 +18,6 @@ import { Model, QueryMode, TagType } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
@@ -50,7 +52,7 @@ interface Return {
 const useCrimeTypeList = (): Return => {
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const schemeName = useStoreState((state) => state.scheme.name);
+  const schemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
   const [incidentId, setIncidentId] = useState('');
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);

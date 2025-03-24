@@ -33,14 +33,18 @@ const CheckTag = ({ active, onClick, option }: Props) => {
         align="middle"
         className={classes.selectBox}
         onClick={() => onClick(option)}
-        style={{ borderColor: active ? 'red' : undefined }}
+        style={{
+          backgroundColor: active ? 'rgb(222, 68, 54)' : undefined,
+          borderColor: active ? 'rgb(222, 68, 54)' : undefined,
+          color: active ? 'white' : undefined,
+        }}
       >
         <div className={classes.overlay} />
         <FontAwesomeIcon
           className={classes.selectIcon}
           icon={active ? faCheckCircleSolid : faCheckCircle}
           size="lg"
-          style={{ color: active ? 'red' : undefined }}
+          style={{ color: active ? 'white' : undefined }}
         />
         {option.label}
       </Row>

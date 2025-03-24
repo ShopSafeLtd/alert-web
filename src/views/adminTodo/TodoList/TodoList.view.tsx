@@ -6,6 +6,7 @@ import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/c
 import type { TodoStatusInput } from 'graphql/types';
 
 import EditTodo from '#/components/form-components/Todos/EditTodo';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faArrowUpRightAndArrowDownLeftFromCenter,
   faCheckCircle,
@@ -33,10 +34,10 @@ import {
   Typography,
 } from 'antd';
 import AddTodo from 'components/form-components/Todos/AddTodo';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { useStoreState } from 'state';
 import FormatCalendar from 'utils/format-calendar-24h';
 import getTodoUrl from 'utils/get-to-do-url';
 
@@ -175,7 +176,7 @@ const AdminTodos = ({
 }: Props): JSX.Element => {
   // const classes = useStyles();
   const intl = useIntl();
-  const shouldOpen = useStoreState((state) => state.scheme.taskTimeTracking);
+  const shouldOpen = useAtomValue(currentSchemeAtom)?.taskTimeTracking;
 
   const completeTodo = (value: boolean, id?: string) => {
     if (value && id) {

@@ -8,6 +8,10 @@ import type { ArticleFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   ListArticlesFeedDocument,
@@ -52,9 +56,8 @@ const useArticleFeed = (): Return => {
 
   // Global State
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
-    (state) => state.user
-  );
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
 
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
@@ -143,7 +146,7 @@ const useArticleFeed = (): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

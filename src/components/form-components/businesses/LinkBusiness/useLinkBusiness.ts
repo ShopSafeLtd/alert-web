@@ -1,9 +1,11 @@
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import {
+  userIdAtom,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { QueryMode, Role, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 import type { ListBusinessesSelectQuery } from './graphql/__generated__/list-businesses-select.generated';
 
@@ -29,7 +31,7 @@ interface Return {
 // TODO change to business select
 const useLinkBusiness = ({ onClose, update }: Props): Return => {
   const currentScheme = useAtomValue(currentSchemeIdAtom);
-  const userSchemes = useStoreState((state) => state.user.schemes);
+  const userSchemes = useAtomValue(userSchemesAtom);
 
   const [saving, setSaving] = useState(false);
   const [searchValue, onSearchBusiness] = useState('');
@@ -54,7 +56,7 @@ const useLinkBusiness = ({ onClose, update }: Props): Return => {
               {
                 id: {
                   in: userSchemes
-                    .map((item) => item.scheme.id)
+                    .map((item) => item.schemeId)
                     .filter((item) => item !== currentScheme),
                 },
               },

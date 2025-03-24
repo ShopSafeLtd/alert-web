@@ -1,8 +1,10 @@
 import type { FormInstance } from 'antd';
 
-import { useStoreActions, useStoreState } from '#/state';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import { useStoreActions } from '#/state';
 import { useUser } from '@clerk/clerk-react';
 import { Form } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
 import { useForcedPasswordSetMutation } from './graphql/mutations/__generated__/password-set.generated';
@@ -30,9 +32,8 @@ const useSetPassword = (): Return => {
   const [saving, setSaving] = useState(false);
   const { user } = useUser();
   const [form] = Form.useForm<FormData>();
-  const { forcePasswordReset, hasPassword } = useStoreState(
-    (state) => state.user
-  );
+  const forcePasswordReset = useAtomValue(currentUserAtom)?.forcePasswordReset;
+  const hasPassword = useAtomValue(currentUserAtom)?.hasPassword ?? true;
   const { setPasswordSet } = useStoreActions((actions) => actions.user);
   const [passwordHasReset] = useForcedPasswordSetMutation();
 

@@ -1,39 +1,38 @@
-import React from 'react';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
-import type { Scheme } from 'state';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
 interface FormData {
-  name: string;
   description: string;
+  name: string;
   schemes: string[];
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
   onClose: () => void;
+  onSubmit: (value: FormData) => void;
   saving: boolean;
-  userSchemes: Scheme[];
   schemeId: string;
+  userSchemes: { scheme: { id: string; name: string } }[];
 }
 
 const AddOffenderWarning = ({
-  onSubmit,
   onClose,
+  onSubmit,
   saving,
-  userSchemes,
   schemeId,
+  userSchemes,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <Form
-      layout="vertical"
-      onFinish={onSubmit}
       initialValues={{
         schemes: [schemeId],
       }}
+      layout="vertical"
+      onFinish={onSubmit}
     >
       <Row style={{ marginBottom: 30 }}>
         <Col>
@@ -48,15 +47,15 @@ const AddOffenderWarning = ({
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            name="name"
             label={intl.formatMessage({ defaultMessage: 'Name' })}
+            name="name"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a name for the new offender warning.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -66,27 +65,27 @@ const AddOffenderWarning = ({
 
         <Col span={24}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
-            <Input.TextArea rows={10} disabled={saving} />
+            <Input.TextArea disabled={saving} rows={10} />
           </Form.Item>
         </Col>
 
         <Col span={24}>
           <Form.Item
-            name="schemes"
             label={intl.formatMessage({
               defaultMessage: 'Schemes',
             })}
+            name="schemes"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please select at least one scheme.',
                 }),
+                required: true,
               },
             ]}
           >
@@ -94,8 +93,8 @@ const AddOffenderWarning = ({
               disabled={saving}
               mode="multiple"
               options={userSchemes.map((scheme) => ({
-                value: scheme.scheme.id,
                 label: scheme.scheme.name,
+                value: scheme.scheme.id,
               }))}
             />
           </Form.Item>
@@ -103,7 +102,7 @@ const AddOffenderWarning = ({
       </Row>
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -111,10 +110,10 @@ const AddOffenderWarning = ({
           </Col>
           <Col>
             <Button
-              type="primary"
-              htmlType="submit"
               disabled={saving}
+              htmlType="submit"
               loading={saving}
+              type="primary"
             >
               {intl.formatMessage({ defaultMessage: 'Create' })}
             </Button>

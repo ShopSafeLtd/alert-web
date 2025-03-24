@@ -64,10 +64,8 @@ const OffenderFeed = ({
   // const hasImage =
   //   (!isNewImage && latestUpdate && latestUpdate.feedImage) ||
   //   ((isNewOffender || isNewImage) && feedImage);
-  // const role = useStoreState((state) => state.user.role);
 
   // const publicOffenderDOB =
-  //   useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
   //   role !== Role.User;
   return (
     <Row key={id || ''} wrap={false}>

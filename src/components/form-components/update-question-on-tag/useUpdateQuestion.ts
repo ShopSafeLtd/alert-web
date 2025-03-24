@@ -2,12 +2,13 @@ import type { FormInstance } from 'antd';
 
 import { useQuestionDetailsQuery } from '#/components/form-components/update-question-on-tag/graphql/__generated__/get-question.generated';
 import { useUpdateQuestionOnTagMutation } from '#/components/form-components/update-question-on-tag/graphql/__generated__/update-question.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { Form, notification } from 'antd';
 import { AnswerType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 import type { TagQuestion } from './UpdateQuestion.container';
 
@@ -84,7 +85,7 @@ const useUpdateQuestion = ({
     required: false,
     type: AnswerType.String,
   });
-  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const { data: questionData, loading } = useQuestionDetailsQuery({
     fetchPolicy: 'network-only',
     variables: {

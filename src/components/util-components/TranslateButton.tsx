@@ -1,9 +1,11 @@
 import type { LanguageCode } from 'graphql/types';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faLanguage } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'antd';
 import { useTranslateLazyQuery } from 'graphql/translate/queries/__generated__/translate.generated';
+import { useAtomValue } from 'jotai/index';
 import React, { memo, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -16,7 +18,7 @@ const TranslateButton = ({
   buttonStyle?: React.CSSProperties;
   text: string;
 }) => {
-  const { languageCount } = useStoreState((state) => state.scheme);
+  const languageCount = useAtomValue(currentSchemeAtom)?.languageCount ?? 1;
   const currentLanguage = useStoreState((state) => state.theme.locale);
   const [isTranslated, setIsTranslated] = useState<null | string>(null);
 
