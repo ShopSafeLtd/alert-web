@@ -1,0 +1,10 @@
+mutation agreeTerms(
+    $where: UniqueId!
+    $data: UserUpdateInput!
+) {
+    updateUser(where: $where, data: $data) {
+        id
+        newUser
+        termsSigned
+    }
+}

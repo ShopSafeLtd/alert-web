@@ -8,19 +8,6 @@ export interface SetUserPayload {
   empty: null;
 }
 
-export interface SetDemPayload {
-  dem: { id: string; name: string }[];
-}
-export interface SetFilterDefaultGroup {
-  filterDefaultGroups: {
-    id: string;
-    name: string;
-    scheme: {
-      id: string;
-    };
-  }[];
-}
-
 export interface SetUserTodos {
   userTodos: number;
 }
@@ -30,9 +17,6 @@ export interface SetUserNotifications {
 }
 export interface SetUserMessages {
   userMessages: number;
-}
-export interface SetInvestigationAllSchemes {
-  investigationAllSchemes: boolean;
 }
 
 export interface Permissions {

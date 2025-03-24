@@ -44,6 +44,7 @@ const getLogoDisplay = ({ isMobile, mobileLogo }: GetLogoDisplayArgs) => {
 interface Props {
   mobileLogo?: boolean;
   logoType?: string;
+  width?: number;
 }
 
 export const Logo = (props: Props) => {
@@ -69,7 +70,7 @@ export const Logo = (props: Props) => {
           logo: customLogo,
         })}
         alt={`${APP_NAME} logo`}
-        style={{ width: 130 }}
+        style={{ width: props.width ?? 130 }}
       />
     </div>
   );
