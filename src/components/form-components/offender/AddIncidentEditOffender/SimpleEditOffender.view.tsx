@@ -1,6 +1,6 @@
 import type { FormInstance } from 'antd';
 
-import { useStoreState } from '#/state';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ageValues,
   buildValues,
@@ -21,6 +21,7 @@ import {
   Typography,
 } from 'antd';
 import { IdSource } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -54,9 +55,8 @@ const EditOffender = ({
   uploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const imagesRequired = useStoreState(
-    (state) => state.scheme.imagesRequiredOnOffenders
-  );
+  const imagesRequired =
+    useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders;
   const filteredImages = images?.filter(
     (el) => !data?.images?.find((el2) => el2.url === el.url)
   );

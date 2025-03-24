@@ -2,12 +2,14 @@
 import type { FormInstance } from 'antd';
 import type { ChecklistAnswerType } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreState } from '#/state';
 import { useCreateUpdateChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-update-checklist.generated';
 import { useUserListChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/list-users-checklist.generated';
 import { useChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-checklist.generated';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { Form } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
@@ -227,7 +229,7 @@ export function useCreateChecklist(): Return {
   const [users, setUsers] = useState<SelectOption[]>([]);
   const [createUpdateChecklist] = useCreateUpdateChecklistMutation();
 
-  const { id: schemeId } = useStoreState((state) => state.scheme);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const { id } = useParams();
   const language = useStoreState((state) => state.theme.locale);
 
@@ -596,7 +598,7 @@ export function useCreateChecklist(): Return {
     form.setFieldsValue({ sections });
   }, [sections, form]);
 
-  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom) ?? '';
 
   const { data: BrandsData } = useBrandsQuery({
     variables: {

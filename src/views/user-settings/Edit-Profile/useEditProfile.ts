@@ -4,6 +4,10 @@ import type { SelectOptions } from 'types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
 import { useCurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { Modal, notification } from 'antd';
 import { useResetPasswordMutation } from 'graphql/auth/mutations/__generated__/reset_password.generated';
 import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
@@ -11,7 +15,6 @@ import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
@@ -44,9 +47,8 @@ interface Return {
 const useEditProfile = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
-    (state) => state.user
-  );
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const onClose = () => navigate('/app/incidents');
@@ -54,9 +56,6 @@ const useEditProfile = (): Return => {
   const { data: userData, loading } = useCurrentUserQuery({
     fetchPolicy: 'cache-and-network',
   });
-  const userDefaultGroups = userData?.currentUser?.defaultGroups.filter(
-    ({ scheme }) => scheme.id === schemeId
-  );
 
   const { groups } = useGroupsContext();
 
@@ -82,7 +81,7 @@ const useEditProfile = (): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (userId) {
-      const defaultGroupIds = userDefaultGroups?.map((item) => item.id);
+      const defaultGroupIds = defaultGroups?.map((item) => item.id);
       const connectDefaultGroups = data.defaultGroups.filter(
         (id) => !defaultGroupIds?.includes(id)
       );
@@ -168,7 +167,7 @@ const useEditProfile = (): Return => {
     onSubmit,
     resetConfirm,
     saving,
-    userDefaultGroups: (userDefaultGroups || defaultGroups).map(({ id }) => id),
+    userDefaultGroups: defaultGroups?.map(({ id }) => id),
   };
 };
 

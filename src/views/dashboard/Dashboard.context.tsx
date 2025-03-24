@@ -12,6 +12,7 @@ import {
   currentSchemeIdAtom,
   isAdminAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -102,7 +103,7 @@ export const DashboardProvider: React.FC<{
   );
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
-  const { id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const [lightBoxOpen, setLightBoxOpen] = useState({ index: 0, open: false });
   const [sortFilter, setSortFilter] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(

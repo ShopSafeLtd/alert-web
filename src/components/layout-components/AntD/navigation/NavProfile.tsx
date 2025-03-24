@@ -2,6 +2,7 @@ import type { Theme } from 'configs/ThemeConfig';
 import type { AvailableLanguages } from 'lang';
 
 import { useSignOut } from '#/hooks/signOut';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import {
   faFileContract,
   faMoon,
@@ -11,6 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { useIntl } from 'react-intl';
@@ -39,8 +41,9 @@ export const NavProfile = () => {
   const { switcher, themes } = useThemeSwitcher();
   const classes = useStyles();
   const intl = useIntl();
-  const name = useStoreState((state) => state.user.fullName);
-  const email = useStoreState((state) => state.user.email);
+  const currentUser = useAtomValue(currentUserAtom);
+  const name = currentUser?.fullName ?? '';
+  const email = currentUser?.email ?? '';
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
   const switchLocale = useStoreActions((actions) => actions.theme.changeLocale);

@@ -1,14 +1,15 @@
 import type { OffenderSettingsType } from '#/types/DataType';
 import type { FormInstance } from 'antd';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Form, Row, Skeleton } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import type { ImageData } from '../../ImageSelect/ImageSelectAnalyse.view';
 import type { FormData } from './useAddNewOffender';
 
-import { useStoreState } from '../../../../state';
 import ImageSelectAnalyse from '../../ImageSelect/ImageSelectAnalyse.view';
 import OffenderFormAddress from '../OffenderForm/OffenderFormAddress.view';
 import OffenderFormDetails from '../OffenderForm/OffenderFormDetails.view';
@@ -45,9 +46,8 @@ const AddNewOffender = ({
   uploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const imagesRequired = useStoreState(
-    (state) => state.scheme.imagesRequiredOnOffenders
-  );
+  const imagesRequired =
+    useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders;
 
   return loading ? (
     <Skeleton />

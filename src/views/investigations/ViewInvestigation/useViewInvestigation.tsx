@@ -18,6 +18,7 @@ import type {
 } from 'types/DataType';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { demIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { useCloseInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/__generated__/close-investigation.generated';
 import { useReopenInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/__generated__/reopen-investigation.generated';
@@ -151,7 +152,7 @@ const useViewInvestigation = (investigationId: string): Return => {
   const intl = useIntl();
 
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const demId = useStoreState((state) => state.user.demId);
+  const demId = useAtomValue(demIdAtom);
   const takeAllSchemes = useStoreState(
     (state) => state.data.investigations.takeAllSchemes
   );

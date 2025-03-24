@@ -1,9 +1,10 @@
 import type { Theme } from '#/configs/ThemeConfig';
 
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { ImagePosition } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { useStoreState } from 'state';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   container: {
@@ -113,7 +114,7 @@ const WatermarkImage = ({
   url,
 }: Props) => {
   const classes = useStyles();
-  const reference = useStoreState((state) => state.user.reference);
+  const reference = useAtomValue(currentUserAtom)?.reference ?? '';
   if (!showWatermark) {
     return (
       <div

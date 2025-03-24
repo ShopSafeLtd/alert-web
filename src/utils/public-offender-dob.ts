@@ -1,9 +1,10 @@
-import { useStoreState } from '#/state';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 
 const publicOffenderDob = (): boolean =>
-  useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+  useAtomValue(currentSchemeAtom)?.defaultPublicOffenderDOB ||
   hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,

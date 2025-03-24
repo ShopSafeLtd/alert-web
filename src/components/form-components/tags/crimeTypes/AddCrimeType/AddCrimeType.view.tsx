@@ -1,5 +1,4 @@
 import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/graphql/__generated__/list-tags.generated';
-import type { Scheme } from 'state';
 
 import RoleSelect from '#/components/form-components/Roles/RoleSelect';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
@@ -24,7 +23,6 @@ interface Props {
   schemeId: string;
   tags: ListSchemeTagsQuery | undefined;
   type?: TagType;
-  userSchemes: Scheme[];
 }
 
 const AddCrimeType = ({
@@ -34,7 +32,6 @@ const AddCrimeType = ({
   schemeId,
   tags,
   type = TagType.IncidentCrimeType,
-  userSchemes: _,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (

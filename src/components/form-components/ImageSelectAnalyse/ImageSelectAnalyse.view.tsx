@@ -2,12 +2,14 @@ import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
 import type { ImagePosition } from 'graphql/types';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   faCheckCircle as faCheckedCircle,
   faUpload,
 } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Upload, message } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
@@ -18,7 +20,6 @@ import type {
   StateImageData,
 } from '../../incidents/IncidentForm/ImageSection/useImageSection';
 
-import { useStoreState } from '../../../state';
 import compressImage from '../../../utils/compress-images';
 import WatermarkImage from '../../images/WatermarkImage.view';
 import FacesSelect from '../FacesSelect/FacesSelect.view';
@@ -118,10 +119,9 @@ const ImageSelectAnalyse = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const facialDetection = useStoreState(
-    (state) => state.scheme.facialDetection
-  );
-  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+  const facialDetection =
+    useAtomValue(currentSchemeAtom)?.facialDetection ?? false;
+  const facialRec = useAtomValue(currentSchemeAtom)?.facialRecognition ?? false;
 
   const [localUpload, setLocalUpload] = useState(uploading);
   const [selected, setSelected] = useState<ImageValue[]>([]);

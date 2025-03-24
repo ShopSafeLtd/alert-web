@@ -6,8 +6,10 @@ import type { FormInstance } from 'antd';
 import type { CreateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/create-simple-offender.generated';
 import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { useStoreState } from '#/state';
+import {
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { Form } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
@@ -118,8 +120,8 @@ const useAddNewOffender = ({
   const [uploading, setUploading] = useState(false);
   const [form] = Form.useForm<FormData>();
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const userBusinessId = useStoreState((state) => state.user.businesses[0].id);
-  const businessId = incidentBusinessId || userBusinessId;
+  const business = useAtomValue(currentSchemeBusinessesAtom);
+  const businessId = incidentBusinessId || business?.at(0)?.id;
   const [saving, setSaving] = useState(false);
 
   const ageCheck = Form.useWatch('ageCheck', form);

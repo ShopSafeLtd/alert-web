@@ -1,7 +1,10 @@
 import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import {
+  currentUserAtom,
+  userIdAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 import { useSignTermsMutation } from 'graphql/user/mutation/__generated__/sign-terms.generated';
@@ -10,7 +13,7 @@ import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreActions } from 'state';
 
 export interface AccountData {
   fullName: string;
@@ -47,12 +50,12 @@ const useOnboarding = (): Return => {
   const [schemeTermsSigned, setSchemeTermsSigned] = useState('');
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
-  const { fullName } = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const markTermsSigned = useStoreActions(
     (action) => action.user.userOnboarded
   );
 
-  const name = accountDetail?.fullName || fullName || '';
+  const name = accountDetail?.fullName || currentUser?.fullName || '';
   const onNext = () => {
     // if (current < 2) {
     setCurrent(current + 1);
@@ -88,10 +91,10 @@ const useOnboarding = (): Return => {
     setAccountDetail(value);
     if (
       SchemeTerms?.scheme?.currentTerms?.id &&
-      (value?.fullName || fullName)
+      (value?.fullName || currentUser?.fullName)
     ) {
       setSchemeTermsSigned(`<svg xmlns="http://www.w3.org/2000/svg" style="background:#ffffff00" height="100" width="300" viewBox="0 0 300 100" class="signature-svg" data-reactroot=""><text x="20" y="60" font-family="Caveat" font-size="30" fill="black">
-      ${value?.fullName || fullName}
+      ${value?.fullName || currentUser?.fullName}
 </text></svg>`);
     }
     onNext();

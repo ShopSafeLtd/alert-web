@@ -1,15 +1,16 @@
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useRolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
 import { Col, Row, Typography } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 import InfiniteSideScrollList from '../../../components/side-list/InfiniteSideList';
 import SideListItem from '../../../components/side-list/SideListItem.view';
-import { useStoreState } from '../../../state';
 import useStyles from './ViewRole.styles';
 
 const ViewRoleSidelist = ({ current }: { current?: string }): JSX.Element => {
-  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data, fetchMore, loading } = useRolesQuery({
     variables: {

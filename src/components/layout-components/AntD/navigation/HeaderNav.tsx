@@ -12,6 +12,8 @@ import {
 } from 'constants/ThemeConstant';
 import utils from 'utils';
 import { useStoreState, NavType } from 'state';
+import { useAtomValue } from 'jotai/index';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 
 const { Header } = Layout;
 
@@ -31,7 +33,7 @@ export const HeaderNav = (props: Props) => {
   // const { toggleCollapsedNav, toggleMobileNav  } = useStoreActions(
   //   (actions) => actions.theme
   // );
-  const { onboarded } = useStoreState((state) => state.user);
+  const onboarded = !useAtomValue(currentUserAtom)?.newUser;
 
   const onSearchClose = () => {
     setSearchActive(false);

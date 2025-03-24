@@ -4,6 +4,7 @@ import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Theme } from 'configs/ThemeConfig';
 import type { Age, Gender, ImagePosition } from 'graphql/types';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import getFacesFromUrl from '#/utils/get-faces-from-url';
 import {
   faCheckCircle as faCheckedCircle,
@@ -11,10 +12,10 @@ import {
 } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Spin, Upload } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
-import { useStoreState } from 'state';
 
 import type {
   ImageFaceType,
@@ -154,8 +155,8 @@ const ImageSelectAnalyse = ({
   const [facesUploading, setFacesUploading] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
 
-  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
-  const facialDed = useStoreState((state) => state.scheme.facialRedaction);
+  const facialRec = useAtomValue(currentSchemeAtom)?.facialRecognition;
+  const facialDed = useAtomValue(currentSchemeAtom)?.facialDetection;
 
   // useEffect(() => {
   //   if (value) setSelected(value);

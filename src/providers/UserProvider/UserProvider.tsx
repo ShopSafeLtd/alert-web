@@ -1,6 +1,8 @@
 import type { CurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
 
 import { useCurrentUserProviderQuery } from '#/providers/UserProvider/__generated__/current-user.generated';
+import Mixpanel from '#/utils/mixpanel';
+import * as Sentry from '@sentry/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 
 import {
@@ -16,19 +18,22 @@ interface Props {
   children: JSX.Element;
 }
 
-export const defaultCurrentUserAtom = {
+export const defaultCurrentUserAtom: CurrentUser = {
   businesses: [],
   defaultGroups: [],
   email: '',
   expoPushTokens: [],
+  forcePasswordReset: false,
   fullName: '',
   groups: [],
+  hasPassword: true,
   id: '',
   messageCount: 0,
   newUser: false,
   reference: 0,
   reportToAllBusinesses: false,
   schemes: [],
+  termsExpired: false,
   totalSchemes: 0,
   totalUnreadNotifications: 0,
 };
@@ -61,6 +66,27 @@ export const demIdAtom = atom(
   () => {}
 );
 
+export const demIdsAtom = atom(
+  (get) =>
+    get(currentUserAtom)
+      ?.businesses.filter((business) => Boolean(business.demId))
+      ?.map((business) => business.demId) ?? [],
+  () => {}
+);
+
+export const demOptionsAtom = atom(
+  (get) =>
+    get(currentUserAtom)
+      ?.businesses.filter((business) => Boolean(business.demId))
+      ?.map((business) => ({ id: business.demId, name: business.name })) ?? [],
+  () => {}
+);
+
+export const userSchemesAtom = atom(
+  (get) => get(currentUserAtom)?.schemes ?? [],
+  () => {}
+);
+
 const UserProvider = ({ children }: Props) => {
   const { setScheme } = useSchemeProvider();
 
@@ -77,6 +103,20 @@ const UserProvider = ({ children }: Props) => {
         } else {
           void setScheme(data.currentUser.schemes[0].id);
         }
+      }
+
+      if (data.currentUser) {
+        Mixpanel.identify(data.currentUser?.id);
+        Mixpanel.people.set({
+          businessId: data.currentUser?.businesses[0]?.id || '',
+          businessName: data.currentUser?.businesses[0]?.name || '',
+          name: data.currentUser.fullName || '',
+        });
+        Sentry.setUser({
+          email: data.currentUser?.email ?? '',
+          id: data.currentUser?.id,
+          username: data.currentUser.fullName,
+        });
       }
 
       void setCurrentUser(data.currentUser);

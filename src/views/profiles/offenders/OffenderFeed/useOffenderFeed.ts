@@ -15,6 +15,10 @@ import type { OffenderFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   ListOffendersRelayDocument,
@@ -66,9 +70,8 @@ const useOffenderFeed = (): Return => {
 
   // Global State
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
-    (state) => state.user
-  );
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.offenders.variables
@@ -370,10 +373,7 @@ const useOffenderFeed = (): Return => {
         pagination,
         variables: {
           ...filterVariables,
-          groups:
-            defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
-              ?.map(({ id }) => id) || [],
+          groups: defaultGroups?.map(({ id }) => id) || [],
         },
       });
   }, []);

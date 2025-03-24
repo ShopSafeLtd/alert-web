@@ -2,9 +2,11 @@
 import type { ExtendedLayout } from '#/views/reports/types';
 import type { ViewTagQuery } from '#/views/settings/tags/ViewTag/graphql/__generated__/view-tag.generated';
 import type { AnswerType } from 'graphql/types';
-import type { Scheme } from 'state';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { useRemoveQuestionFromTagMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/remove-question.generated';
 import { useUpsertIncidentFormMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-incident-form-fields.generated';
 import { useUpdateTagQsMutation } from '#/views/settings/tags/ViewTag/graphql/__generated__/update-question-order.generated';
@@ -21,7 +23,6 @@ import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
@@ -71,7 +72,6 @@ interface Return {
     }
   ) => void;
   updateTagParent: (tagId: string, parentTagId: null | string) => void;
-  userSchemes: Scheme[];
 }
 
 const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
@@ -244,8 +244,7 @@ const useViewTag = (): Return => {
   const intl = useIntl();
 
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const schemeName = useStoreState((state) => state.scheme.name);
-  const userSchemes = useStoreState((state) => state.user.schemes);
+  const schemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
   const [addQuestion, setAddQuestion] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editIncidentType, setEditIncidentType] = useState('');
@@ -772,7 +771,6 @@ const useViewTag = (): Return => {
     toggleField,
     updateQuestionOnTag,
     updateTagParent,
-    userSchemes,
   };
 };
 export default useViewTag;

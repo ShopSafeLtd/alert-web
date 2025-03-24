@@ -1,5 +1,6 @@
-import { useStoreState } from '#/state';
+import { demIdsAtom } from '#/providers/UserProvider/UserProvider';
 import { Tabs } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { createUseStyles } from 'react-jss';
@@ -25,7 +26,7 @@ const useStyles = createUseStyles({
 
 const Evidence = () => {
   const classes = useStyles();
-  const demIds = useStoreState((state) => state.user.dem);
+  const demIds = useAtomValue(demIdsAtom);
 
   const tabItems = useMemo(() => {
     const demTab =

@@ -4,7 +4,7 @@ import type { ImageUpdateWhereDataWithoutIncidentInput } from 'graphql/types';
 
 import ImagesList from '#/components/ViewPage/ImagesList';
 import EditImageList from '#/components/images/EditImageList';
-import { useStoreState } from '#/state';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -14,6 +14,7 @@ import successNotification from '#/types/mutation_notifications/success_notifica
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { Drawer } from 'antd';
 import { useUpdateIncidentImagesMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-images.generated';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -39,9 +40,8 @@ const Images = ({
   toggleEditImages,
 }: Props) => {
   const intl = useIntl();
-  const facialDetection = useStoreState(
-    (state) => state.scheme.facialDetection
-  );
+  const facialDetection =
+    useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
 
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []

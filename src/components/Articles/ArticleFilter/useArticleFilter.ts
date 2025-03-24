@@ -3,6 +3,7 @@ import type { ArticleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect } from 'react';
@@ -21,9 +22,7 @@ interface Return {
 const useArticleFilter = (): Return => {
   // Global State
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const { filterDefaultGroups: defaultGroups } = useStoreState(
-    (state) => state.user
-  );
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
   );
@@ -37,7 +36,7 @@ const useArticleFilter = (): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

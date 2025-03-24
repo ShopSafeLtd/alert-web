@@ -4,9 +4,13 @@ import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/l
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { TagType } from 'graphql/types';
 
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useMemo } from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   form: FormInstance<FormData>;
@@ -29,9 +33,10 @@ const useIncidentTypes = ({
   setPoliceReporting,
   tagsData,
 }: Props): Return => {
-  const { incidentTypeTooltip, oneSelectedIncidentTypeOnly } = useStoreState(
-    (state) => state.scheme
-  );
+  const incidentTypeTooltip =
+    useAtomValue(currentSchemeAtom)?.incidentTypeTooltip;
+  const oneSelectedIncidentTypeOnly =
+    useAtomValue(currentSchemeAtom)?.oneSelectedIncidentTypeOnly;
 
   const selectedTag = Form.useWatch('tags', form);
 

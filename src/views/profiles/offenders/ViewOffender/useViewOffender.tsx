@@ -26,6 +26,11 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import publicOffenderDob from '#/utils/public-offender-dob';
 import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
@@ -60,6 +65,7 @@ import {
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useReducer, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -183,6 +189,7 @@ interface Return {
     } | null
   ) => void;
   shareOpen: boolean;
+  showAiDrawer: boolean;
   showIncidentOptions: boolean;
   toggleAddAddress: () => void;
   toggleAddBan: () => void;
@@ -191,6 +198,7 @@ interface Return {
   toggleAddExistingVehicle: () => void;
   toggleAddInvestigation: () => void;
   toggleAddVehicle: () => void;
+  toggleAiDrawer: () => void;
   toggleCopyOffender: () => void;
   toggleEditImages: () => void;
   toggleEditOffender: () => void;
@@ -253,13 +261,11 @@ export function usePagination(): UsePagination {
 const useViewOffender = (offenderId: string): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const { id: schemeId, languageCount } = useStoreState(
-    (state) => state.scheme
-  );
-  const hasConnectedSchemes = useStoreState(
-    (state) => state.scheme.hasConnectedSchemes
-  );
-  const { id: userId } = useStoreState((state) => state.user);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const connectedToSchemes =
+    useAtomValue(currentSchemeAtom)?.connectedToSchemes;
+  const languageCount = useAtomValue(currentSchemeAtom)?.languageCount;
+  const currentUser = useAtomValue(currentUserAtom);
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [paginationState, dispatch] = usePagination();
@@ -269,6 +275,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
+  const [showAiDrawer, setShowAiDrawer] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -1381,7 +1388,7 @@ const useViewOffender = (offenderId: string): Return => {
               {
                 createdBy: {
                   connect: {
-                    id: userId,
+                    id: currentUser?.id ?? '',
                   },
                 },
                 description: value.description,
@@ -1942,6 +1949,8 @@ const useViewOffender = (offenderId: string): Return => {
     },
   });
 
+  const toggleAiDrawer = () => setShowAiDrawer(!showAiDrawer);
+
   return {
     addAddress,
     addBan,
@@ -1960,7 +1969,8 @@ const useViewOffender = (offenderId: string): Return => {
     data,
     deleteRights:
       editRights ||
-      (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
+      (currentUser?.id === data?.offender?.createdBy.id &&
+        !data?.offender?.approved),
     editAddressData,
     editBanData,
     editImageData,
@@ -1968,12 +1978,13 @@ const useViewOffender = (offenderId: string): Return => {
     editOffender,
     editRights:
       editRights ||
-      (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
+      (currentUser?.id === data?.offender?.createdBy.id &&
+        !data?.offender?.approved),
     editUpdate,
     editUpdateInput,
     editVehicleData,
     handleEditUpdate,
-    hasConnectedSchemes,
+    hasConnectedSchemes: connectedToSchemes && connectedToSchemes.length > 0,
     incidents:
       incidentsData?.offender.incidents ||
       previousData?.offender.incidents ||
@@ -2028,6 +2039,7 @@ const useViewOffender = (offenderId: string): Return => {
     setOptionRowShow,
     setReplyTo,
     shareOpen,
+    showAiDrawer,
     showIncidentOptions,
     toggleAddAddress,
     toggleAddBan,
@@ -2036,6 +2048,7 @@ const useViewOffender = (offenderId: string): Return => {
     toggleAddExistingVehicle,
     toggleAddInvestigation,
     toggleAddVehicle,
+    toggleAiDrawer,
     toggleCopyOffender,
     toggleEditImages,
     toggleEditOffender,
@@ -2053,7 +2066,7 @@ const useViewOffender = (offenderId: string): Return => {
     updateImagesList,
     updateIncidentList,
     updateInvestigationList,
-    userId,
+    userId: currentUser?.id ?? '',
     viewAssociate,
     viewMatches,
   };

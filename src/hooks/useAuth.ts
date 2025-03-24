@@ -4,7 +4,6 @@ import type {
 } from '#/state/dashboard-model';
 
 import { useTokenContext } from '#/context/token-context';
-import { handleSuccess } from '#/hooks/handleSuccess';
 import { useCurrentUserQuery } from '#/hooks/user/queries/__generated__/current-user.generated';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
@@ -36,10 +35,6 @@ const useAuth = (): Return => {
   const expired = useStoreActions((actions) => actions.auth.expired);
   const currentUserId = useAtomValue(userIdAtom);
   const currentScheme = useAtomValue(currentSchemeIdAtom);
-  const { setDem, setFilterDefaultGroup, setNotifications, setTodos } =
-    useStoreActions((actions) => actions.user);
-  const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
-  const setUser = useStoreActions((actions) => actions.user.setUser);
   const setDashboard = useStoreActions(
     (actions) => actions.dashboard.setSchemeLayouts
   );
@@ -47,7 +42,7 @@ const useAuth = (): Return => {
   const { loading } = useCurrentUserQuery({
     fetchPolicy: 'cache-first',
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onCompleted: async ({ currentUser }) => {
+    onCompleted: ({ currentUser }) => {
       if (!currentUser) {
         if (!isLoaded && isSignedIn) {
           expired();
@@ -113,40 +108,8 @@ const useAuth = (): Return => {
 
         setDashboard(result);
 
-        await handleSuccess({
-          accessToken: window.localStorage.getItem('access_token') || '',
-          authenticated,
-          businesses: currentUser?.businesses || [],
-          currentScheme,
-          defaultGroups: currentUser?.defaultGroups || [],
-          defaultScheme: currentUser?.defaultScheme || undefined,
-          demId: currentUser?.demId || '',
-          email: currentUser?.email || '',
-          filterDefaultGroups:
-            currentUser?.defaultGroups.filter(
-              (el) => el.scheme.id === scheme
-            ) || [],
-          forcePasswordReset: currentUser?.forcePasswordReset ?? false,
-          fullName: currentUser?.fullName || '',
-          hasPassword: currentUser?.hasPassword ?? false,
-          id: currentUser?.id || '',
-          isSet: true,
-          onboarded: !currentUser?.newUser,
-          origName: currentUser?.origName || '',
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          reference: `${currentUser?.reference}` || '',
-          reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
-          schemes: currentUser?.schemes || [],
-          setDem,
-          setFilterDefaultGroup,
-          setNotifications,
-          setScheme,
-          setTodos,
-          setUser,
-          termsExpired: currentUser?.termsExpired || false,
-          userMessages: currentUser?.messageCount || 0,
-          userNotifications: currentUser?.notificationCount || 0,
-        });
+        authenticated(window.localStorage.getItem('access_token') || '');
+
         if (currentUser?.newUser) {
           navigate('/app/onboarding');
         }

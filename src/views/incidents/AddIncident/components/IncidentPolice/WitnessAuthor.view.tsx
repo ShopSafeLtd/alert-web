@@ -1,6 +1,6 @@
 import type { UserContactQuery } from '#/views/incidents/AddIncident/components/IncidentPolice/graphql/queries/__generated__/get-contact.generated';
 
-import { useStoreState } from '#/state';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useUpsertContactMutation } from '#/views/incidents/AddIncident/components/IncidentPolice/graphql/mutations/__generated__/upsert-contact.generated';
 import {
   UserContactDocument,
@@ -20,6 +20,7 @@ import {
   Typography,
 } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -44,7 +45,9 @@ const WitnessAuthorView = ({ detailsExist }: { detailsExist: () => void }) => {
   const [creatingWitness, setCreatingWitness] = useState(false);
   const [form] = useForm<FormData>();
   const intl = useIntl();
-  const { email, fullName, id: userId } = useStoreState((state) => state.user);
+  const email = useAtomValue(currentUserAtom)?.email ?? '';
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const fullName = useAtomValue(currentUserAtom)?.fullName ?? '';
   const { data, loading } = useUserContactQuery();
   const [upsertContact] = useUpsertContactMutation({
     update: (store, result) => {

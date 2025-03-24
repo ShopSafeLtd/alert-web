@@ -1,8 +1,9 @@
 import type { ListDemEvidenceQuery } from 'graphql/dem/queries/__generated__/list-evidence.generated';
 
+import { demIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useListDemEvidenceQuery } from 'graphql/dem/queries/__generated__/list-evidence.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   onClose: () => void;
@@ -20,9 +21,7 @@ interface Return {
 const useLinkDem = ({ onClose, selectEvidence }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
-  const business = useStoreState((state) => state.user.businesses);
-  // map all the demIds from the businesses and use the first value
-  const demId = business.map((item) => item.demId)[0];
+  const demId = useAtomValue(demIdAtom);
   const { data, loading } = useListDemEvidenceQuery({
     fetchPolicy: 'cache-and-network',
     variables: {

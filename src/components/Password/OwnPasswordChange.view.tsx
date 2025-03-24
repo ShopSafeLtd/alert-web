@@ -1,12 +1,13 @@
-import { FormattedMessage, useIntl } from 'react-intl';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useUser } from '@clerk/clerk-react';
-import React, { useState } from 'react';
 import { Button, Form, Input, Modal } from 'antd';
-import { useStoreState } from '#/state';
+import { useAtomValue } from 'jotai/index';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface ClerkAPIError {
-  message: string;
   longMessage: string;
+  message: string;
   meta?: {
     paramName?: string;
   };
@@ -19,7 +20,7 @@ export const EditPasswordButton = ({ saving }: { saving?: boolean }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
-  const { hasPassword } = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const showModal = () => {
     setOpen(true);
   };
@@ -31,7 +32,9 @@ export const EditPasswordButton = ({ saving }: { saving?: boolean }) => {
       .then((values: { current: string; password: string }) => {
         user
           ?.updatePassword({
-            currentPassword: hasPassword ? values.current : undefined,
+            currentPassword: currentUser?.hasPassword
+              ? values.current
+              : undefined,
             newPassword: values.password,
           })
           .then(() => {
@@ -44,15 +47,15 @@ export const EditPasswordButton = ({ saving }: { saving?: boolean }) => {
             if (error.errors[0]?.meta?.paramName === 'current_password') {
               form.setFields([
                 {
-                  name: 'current',
                   errors: ['Current password is incorrect, please try again.'],
+                  name: 'current',
                 },
               ]);
             } else {
               form.setFields([
                 {
-                  name: 'password',
                   errors: [error.errors[0].longMessage],
+                  name: 'password',
                 },
               ]);
             }
@@ -73,43 +76,44 @@ export const EditPasswordButton = ({ saving }: { saving?: boolean }) => {
   return (
     <>
       <Modal
+        confirmLoading={confirmLoading}
+        maskClosable
+        onCancel={handleCancel}
+        onOk={handleOk}
+        open={open}
         title={intl.formatMessage({
           defaultMessage: 'Reset Password',
         })}
-        open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-        maskClosable
       >
         <Form form={form}>
           <Form.Item
+            hasFeedback
+            hidden={!currentUser?.hasPassword}
+            label={<FormattedMessage defaultMessage="Current Password" />}
             labelCol={{ span: 8 }}
             name="current"
-            hidden={!hasPassword}
-            label={<FormattedMessage defaultMessage="Current Password" />}
             rules={[
               {
-                required: hasPassword,
                 message: intl.formatMessage({
                   defaultMessage: 'Please input your current password!',
                 }),
+                required: currentUser?.hasPassword,
               },
             ]}
-            hasFeedback
           >
             <Input.Password allowClear />
           </Form.Item>
           <Form.Item
+            hasFeedback
+            label={<FormattedMessage defaultMessage="Password" />}
             labelCol={{ span: 8 }}
             name="password"
-            label={<FormattedMessage defaultMessage="Password" />}
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please input a new password!',
                 }),
+                required: true,
               },
               ({ getFieldValue }) => ({
                 validator(_, value: string) {
@@ -164,23 +168,22 @@ export const EditPasswordButton = ({ saving }: { saving?: boolean }) => {
                 },
               }),
             ]}
-            hasFeedback
           >
             <Input.Password allowClear />
           </Form.Item>
 
           <Form.Item
-            labelCol={{ span: 8 }}
-            name="confirm"
-            label={<FormattedMessage defaultMessage="Confirm Password" />}
             dependencies={['password']}
             hasFeedback
+            label={<FormattedMessage defaultMessage="Confirm Password" />}
+            labelCol={{ span: 8 }}
+            name="confirm"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage: 'Please confirm your password!',
                 }),
+                required: true,
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -203,8 +206,8 @@ export const EditPasswordButton = ({ saving }: { saving?: boolean }) => {
           </Form.Item>
         </Form>
       </Modal>
-      <Button key="1234" type="primary" onClick={showModal} disabled={saving}>
-        {hasPassword ? (
+      <Button disabled={saving} key="1234" onClick={showModal} type="primary">
+        {currentUser?.hasPassword ? (
           <FormattedMessage defaultMessage="Change Password" />
         ) : (
           <FormattedMessage defaultMessage="Set Password" />

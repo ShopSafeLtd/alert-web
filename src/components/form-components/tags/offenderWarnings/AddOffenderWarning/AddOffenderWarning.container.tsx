@@ -1,30 +1,32 @@
-import React from 'react';
 import type { TagData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './AddOffenderWarning.view';
 import useAddOffenderWarning from './useAddOffenderWarning';
 
 interface Props {
   onClose: () => void;
-  update: (value: TagData) => void;
   saving?: boolean;
+  update: (value: TagData) => void;
 }
 
 const AddOffenderWarning = ({
   onClose,
-  update,
   saving,
+  update,
 }: Props): JSX.Element => {
-  const { onSubmit, userSchemes, schemeId } = useAddOffenderWarning({
+  const { onSubmit, schemeId, userSchemes } = useAddOffenderWarning({
     update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
       onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving || false}
-      userSchemes={userSchemes}
       schemeId={schemeId}
+      userSchemes={userSchemes}
     />
   );
 };

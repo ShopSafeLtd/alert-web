@@ -3,6 +3,7 @@ import type { RolesQuery } from '#/views/roles/graphql/queries/__generated__/rol
 import type { FormInstance } from 'antd';
 import type { Role } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useDeleteRoleMutation } from '#/views/roles/graphql/mutations/__generated__/deleteRole.generated';
 import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/__generated__/upsertPermissions.generated';
 import { useRoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
@@ -13,13 +14,13 @@ import {
 } from '#/views/roles/role/processModelMethods';
 import { Form, notification } from 'antd';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
 import type { FormData } from '../types';
 
-import { useStoreState } from '../../../state';
 import { roleItems, settings } from '../types';
 
 export interface DeleteFormValues {
@@ -56,7 +57,7 @@ export function useRole(id: string | undefined, create: boolean): Props {
   const [changed, setChanged] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { id: schemeId } = useStoreState((state) => state.scheme || { id: '' });
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [deletePermission] = useDeleteRoleMutation({
     onCompleted: () => {

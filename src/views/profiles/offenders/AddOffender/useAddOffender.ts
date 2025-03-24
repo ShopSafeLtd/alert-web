@@ -30,7 +30,13 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
-import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { sessionIdAtom } from '#/hooks/useManageSession';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { Form, Modal, message, notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
@@ -178,9 +184,8 @@ interface Return {
 const useAddOffender = (): Return => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
-  const { businesses: userBusinesses, id: userId } = useStoreState(
-    (state) => state.user
-  );
+  const userBusinesses = useAtomValue(currentSchemeBusinessesAtom);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
 
   const adminRights = useAtomValue(isAdminAtom);
 
@@ -189,9 +194,14 @@ const useAddOffender = (): Return => {
     facialRedaction: facialDed,
     id: schemeId,
     needJustification,
-  } = useStoreState((state) => state.scheme);
+  } = useAtomValue(currentSchemeAtom) ?? {
+    facialRecognition: false,
+    facialRedaction: false,
+    id: '',
+    needJustification: false,
+  };
   const reportOnly =
-    useStoreState((state) => state.scheme.reportOnly) &&
+    useAtomValue(currentSchemeAtom)?.reportOnly &&
     !hasRolePermission({
       permission: {
         method: PermissionMethod.Read,
@@ -199,15 +209,14 @@ const useAddOffender = (): Return => {
       },
     });
   const pagination = useStoreState((state) => state.data.offenders.pagination);
-  const imagesRequired = useStoreState(
-    (state) => state.scheme.imagesRequiredOnOffenders
-  );
+  const imagesRequired =
+    useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders;
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-  const sessionId = useStoreState((state) => state.user.sessionId);
+  const sessionId = useAtomValue(sessionIdAtom);
 
   const [saving, setSaving] = useState(false);
   const [idVerified, setIDVerified] = useState(false);

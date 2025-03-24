@@ -24,7 +24,14 @@ import type React from 'react';
 import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
-import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { sessionIdAtom } from '#/hooks/useManageSession';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
@@ -245,10 +252,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   const intl = useIntl();
   const isAdmin = useAtomValue(isAdminAtom);
-  const { businesses, id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
 
   const reportOnly =
-    useStoreState((state) => state.scheme.reportOnly) &&
+    useAtomValue(currentSchemeAtom)?.reportOnly &&
     !hasRolePermission({
       permission: {
         method: PermissionMethod.Read,
@@ -261,19 +269,18 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
-  const sessionId = useStoreState((state) => state.user.sessionId);
-  const goodsMode = useStoreState((state) => state.scheme.goodsMode);
+  const sessionId = useAtomValue(sessionIdAtom);
+  const goodsMode = useAtomValue(currentSchemeAtom)?.goodsMode;
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
-  const {
-    id: schemeId,
-    requireSiteNumberForUsers,
-    restrictIncidentAccess,
-  } = useStoreState((state) => state.scheme);
-  const facialRecognition = useStoreState(
-    (state) => state.scheme.facialRecognition
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const requireSiteNumberForUsers =
+    useAtomValue(currentSchemeAtom)?.requireSiteNumberForUsers;
+  const restrictIncidentAccess =
+    useAtomValue(currentSchemeAtom)?.restrictIncidentAccess;
+  const facialRecognition =
+    useAtomValue(currentSchemeAtom)?.facialRecognition ?? true;
 
   const addOffenderRights = hasRolePermission({
     permission: {
@@ -1122,7 +1129,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     }
   };
 
-  const { autoPopulateDescription } = useStoreState((state) => state.scheme);
+  const autoPopulateDescription =
+    useAtomValue(currentSchemeAtom)?.autoPopulateDescription;
   const onValuesChange = (changedValues: FormData, values: FormData) => {
     if (changedValues.description) {
       setDescriptionPristine(false);

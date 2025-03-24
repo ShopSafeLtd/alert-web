@@ -4,15 +4,18 @@ import type {
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type React from 'react';
 
-import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useApolloClient } from '@apollo/client';
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { QueryMode } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
-
 // TODO use businesses select
 
 interface Props {
@@ -31,10 +34,10 @@ const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
 
   const isAdmin = useAtomValue(isAdminAtom);
 
-  const { id: schemeId } = useStoreState((state) => state.scheme);
-  const { businesses, reportToAllBusinesses } = useStoreState(
-    (state) => state.user
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
+  const reportToAllBusinesses =
+    useAtomValue(currentUserAtom)?.reportToAllBusinesses;
   const [hideField, setHideField] = useState(true);
   const onSearchBusiness = async (value: string) =>
     client

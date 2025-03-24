@@ -33,6 +33,19 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
             requireSiteNumberForUsers
             skipLocationToAddress
             useBusinessGroupsOnIncident
+            userTodos
+            needJustification
+            incidentTypeTooltip
+            connectedToSchemes {
+                id
+                name
+            }
+            logo {
+                optimisedPersisted
+            }
+            darkLogo {
+                optimisedPersisted
+            }
         }
     }
 }

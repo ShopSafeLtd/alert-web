@@ -5,7 +5,7 @@ import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/up
 
 import AddGoods from '#/components/form-components/incident/goods/AddGoods';
 import EditGoods from '#/components/form-components/incident/goods/EditGoods';
-import { useStoreState } from '#/state';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -33,6 +33,7 @@ import {
 } from 'antd';
 import { useUpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-goods.generated';
 import { GoodsMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -58,7 +59,7 @@ const Items = ({
   setSaving,
 }: Props) => {
   const intl = useIntl();
-  const goodsMode = useStoreState((state) => state.scheme.goodsMode);
+  const goodsMode = useAtomValue(currentSchemeAtom)?.goodsMode;
   const [editGoodsData, setEditGoodsData] = useState<GoodsData | null>(null);
   const [addGoods, setAddGoods] = useState(false);
 

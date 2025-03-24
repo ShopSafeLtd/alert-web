@@ -3,6 +3,10 @@ import type { ViewUserQuery } from '#/views/settings/users/UserDetail/graphql/qu
 import type { Role } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentUserAtom,
+  demIdAtom,
+} from '#/providers/UserProvider/UserProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import { useViewUserQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/view-user.generated';
 import { Modal, notification } from 'antd';
@@ -14,7 +18,6 @@ import { useAtomValue } from 'jotai/index';
 import { type RefObject, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
@@ -48,7 +51,7 @@ interface Return {
 const useUserDetail = (userId: string): Return => {
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const navigate = useNavigate();
-  const { id: currentUserId } = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
@@ -59,9 +62,8 @@ const useUserDetail = (userId: string): Return => {
     setDemLink(!demLink);
   };
   // TODO: need to change this to be based on current business
-  const business = useStoreState((state) => state.user.businesses);
-  const demId = business.map((item) => item.demId)[0];
-  const isOwn = currentUserId === userId;
+  const demId = useAtomValue(demIdAtom);
+  const isOwn = currentUser?.id === userId;
   const [editPassword, setEditPassword] = useState(false);
   const [viewport, setViewport] = useState<ViewportData | null>(null);
 

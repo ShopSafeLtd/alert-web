@@ -44,7 +44,6 @@
 //   const guestRoute = guestRoutes.some((route) => currentRoute.includes(route));
 //
 //   const isSet = useStoreState((state) => state.auth.isSet);
-//   const userId = useStoreState((state) => state.user.id);
 //
 //   const { loading, rehydrateAuth } = useAuth();
 //

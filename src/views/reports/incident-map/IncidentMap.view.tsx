@@ -4,7 +4,6 @@ import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/sch
 import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.generated';
 import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
 import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
-import type { Scheme } from 'state';
 
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
 import {
@@ -209,7 +208,7 @@ interface Props {
   onChangeGroups: (value: string[]) => void;
   onChangeIndustries: (value: string[]) => void;
   onChangeSchemes: (value: string[]) => void;
-  schemes: Scheme[];
+  schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
   selectedGroups: string[];
   selectedIndustries: string[];

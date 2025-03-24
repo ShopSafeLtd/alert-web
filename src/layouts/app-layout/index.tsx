@@ -5,7 +5,11 @@ import {
 } from '#/constants/ThemeConstant';
 import GroupsProvider from '#/context/groups-context';
 import { useAuth } from '#/hooks';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import { Grid, Layout } from 'antd';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
@@ -49,16 +53,16 @@ const AppLayout = (): JSX.Element => {
     return navCollapsed ? SIDE_NAV_COLLAPSED_WIDTH : SIDE_NAV_WIDTH;
   };
 
-  const {
-    businesses,
-    email,
-    forcePasswordReset,
-    fullName,
-    id,
-    isSet,
-    onboarded,
-    termsExpired,
-  } = useStoreState((state) => state.user);
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
+  const currentUser = useAtomValue(currentUserAtom);
+  const email = currentUser?.email ?? '';
+  const fullName = currentUser?.fullName ?? '';
+  const id = currentUser?.id ?? '';
+  const onboarded = !currentUser?.newUser ?? true;
+  const termsExpired = currentUser?.termsExpired ?? false;
+  const forcePasswordReset = currentUser?.forcePasswordReset ?? false;
+  const isSet = !!currentUser;
+
   const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { status } = useThemeSwitcher();
@@ -75,7 +79,7 @@ const AppLayout = (): JSX.Element => {
       posthog?.identify(id, {
         email,
         fullName,
-        organisation: businesses[0]?.fullName,
+        organisation: businesses?.at(0)?.name,
       });
       posthog?.group('tenant', currentScheme);
 
@@ -99,7 +103,7 @@ const AppLayout = (): JSX.Element => {
   if (status === 'loading') {
     return <Loading cover="page" />;
   }
-  console.log(loading, isLoaded, isSet);
+  console.log(loading, !isLoaded, !isSet);
   if (loading || !isLoaded || !isSet) return <Loading cover="content" />;
 
   return (

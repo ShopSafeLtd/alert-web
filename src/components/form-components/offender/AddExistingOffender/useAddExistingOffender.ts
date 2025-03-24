@@ -1,7 +1,8 @@
 import type { Age, Build, Gender, Race } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { OffenderSort, useStoreState } from '#/state';
+import { userSchemesAtom } from '#/providers/UserProvider/UserProvider';
+import { OffenderSort } from '#/state';
 import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useReducer, useState } from 'react';
@@ -225,9 +226,7 @@ const useAddExistingOffender = ({
   updateMany,
 }: Props): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const userSchemeIds = useStoreState((state) => state.user.schemes).map(
-    (el) => el.scheme.id
-  );
+  const userSchemeIds = useAtomValue(userSchemesAtom).map((el) => el.schemeId);
 
   const [saving, setSaving] = useState(false);
   const [selectedOffenders, setSelectedOffenders] = useState<

@@ -1,17 +1,18 @@
 import type { ActiveChecklistQuery } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import type { ActiveChecklist } from 'graphql/types';
 
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useCompleteChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/complete-checklist.generated';
 import {
   ActiveChecklistDocument,
   useActiveChecklistQuery,
 } from '#/views/checklist/graphql/queries/__generated__/view-active-checklist.generated';
 import { Form, type FormInstance } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import { useStoreState } from '../../../state';
 
 interface Return {
   data: ActiveChecklistQuery | undefined;
@@ -109,7 +110,7 @@ const useActiveChecklist = (): Return => {
   const { id } = useParams();
   const [form] = Form.useForm<FormData>();
   const [sections, setSections] = useState<ActiveChecklistSection[]>([]);
-  const { fullName: name } = useStoreState((state) => state.user);
+  const name = useAtomValue(currentUserAtom)?.fullName ?? '';
   const [sign, setSign] = useState(generateDefaultSign(name));
   const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);
   const [tab, setTab] = useState('generate');

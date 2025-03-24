@@ -1,5 +1,4 @@
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { useStoreState } from '#/state';
+import { currentPermissionsAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Row, Typography } from 'antd';
@@ -13,14 +12,10 @@ import useStyles from './SettingsHome.styles';
 
 const SettingsHome = () => {
   const classes = useStyles();
-  const schemes = useStoreState((state) => state.user.schemes);
-  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
-  const permissions =
-    schemes
-      .find((scheme) => scheme.scheme.id === currentSchemeId)
-      ?.permissions.filter((item) => item.allowedMethods.length > 0)
-      .map(({ model }) => model) || [];
+  const permissions = useAtomValue(currentPermissionsAtom)?.map(
+    ({ model }) => model
+  );
 
   const hasUserPerms = permissions.includes(PermissionModel.Users);
   const hasIncidentSettingsPerms = permissions.includes(

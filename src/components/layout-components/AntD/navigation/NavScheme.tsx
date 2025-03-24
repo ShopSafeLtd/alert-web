@@ -1,18 +1,22 @@
 import type { Theme } from 'configs/ThemeConfig';
-import type { Scheme } from 'state';
 
-import { useSchemeProvider } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+  useSchemeProvider,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { userSchemesAtom } from '#/providers/UserProvider/UserProvider';
 import { faArrowRight } from '@fortawesome/pro-light-svg-icons';
 import { faCaretDown } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Dropdown, Input, Row, Typography } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
-import { useStoreActions, useStoreState } from 'state';
-import { LocalStorageKeys } from 'types';
+import { useStoreState } from 'state';
 
 const { Text } = Typography;
 
@@ -41,19 +45,10 @@ export const NavScheme = () => {
 
   const { setScheme } = useSchemeProvider();
 
-  const { schemes } = useStoreState((state) => state.user);
-  const { id: activeScheme } = useStoreState((state) => state.scheme);
+  const schemes = useAtomValue(userSchemesAtom);
+  const activeScheme = useAtomValue(currentSchemeIdAtom);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const activeSchemeName = useStoreState((state) => state.scheme.name);
-  const setSchemeOld = useStoreActions((actions) => actions.scheme.setScheme);
-  const setTodos = useStoreActions((actions) => actions.user.setTodos);
-  const setNotifications = useStoreActions(
-    (actions) => actions.user.setNotifications
-  );
-  const defaultGroups = useStoreState((state) => state.user.defaultGroups);
-  const setFilterDefaultGroup = useStoreActions(
-    (state) => state.user.setFilterDefaultGroup
-  );
+  const activeSchemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
 
   const [visible, setVisible] = useState(false);
 
@@ -67,59 +62,10 @@ export const NavScheme = () => {
     navigate(location.pathname);
   }, [activeScheme]);
 
-  const handleSchemeChange = (scheme: Scheme) => {
+  const handleSchemeChange = (scheme: { id: string }) => {
     setSearch('');
-    window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
-    window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
-    window.localStorage.setItem('currentScheme', scheme.scheme.id);
-    window.localStorage.setItem(
-      'logo',
-      scheme.scheme.logo?.optimisedPersisted || ''
-    );
-    window.localStorage.setItem(
-      'logo-dark',
-      scheme.scheme.darkLogo?.optimisedPersisted || ''
-    );
 
     setScheme(scheme.id);
-    setSchemeOld({
-      activityAssignToUser: scheme.scheme.activityAssignToUser,
-      autoApproveIncidents: scheme.scheme.autoApproveIncidents,
-      autoApproveOffenders: scheme.scheme.autoApproveOffenders,
-      autoPopulateDescription: scheme.scheme.autoPopulateDescription,
-      connectedToSchemes: scheme.scheme.connectedToSchemes,
-      darkLogo: scheme.scheme.darkLogo?.optimisedPersisted,
-      defaultPublicOffenderDOB: scheme.scheme.defaultPublicOffenderDOB,
-      facialDetection: scheme.scheme.facialDetection,
-      facialRecognition: scheme.scheme.facialRecognition,
-      facialRedaction: scheme.scheme.facialRedaction,
-      goodsMode: scheme.scheme.goodsMode,
-      id: scheme.scheme.id,
-      imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
-      incidentCustomQuestionRadio: scheme.scheme.incidentCustomQuestionRadio,
-      incidentTypeTooltip: scheme.scheme.incidentTypeTooltip,
-      languageCount: scheme.scheme.languageCount,
-      logo: scheme.scheme.logo?.optimisedPersisted,
-      name: scheme.scheme.name,
-      needJustification: scheme.scheme.needJustification,
-      oneSelectedIncidentTypeOnly: scheme.scheme.oneSelectedIncidentTypeOnly,
-      reportOnly: scheme.scheme.reportOnly,
-      requireSiteNumberForUsers: scheme.scheme.requireSiteNumberForUsers,
-      restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
-      taskTimeTracking: scheme.scheme.taskTimeTracking,
-      useBusinessGroupsOnIncident: scheme.scheme.useBusinessGroupsOnIncident,
-      userNotifications: scheme.scheme.userNotifications,
-      userTodos: scheme.scheme.userTodos,
-    });
-    setFilterDefaultGroup({
-      filterDefaultGroups: defaultGroups.filter(
-        (el) => el.scheme.id === scheme.scheme.id
-      ),
-    });
-    setTodos({ userTodos: scheme.scheme.userTodos || 0 });
-    setNotifications({
-      userNotifications: scheme.scheme.userNotifications || 0,
-    });
 
     handleVisibleChange(false);
   };
@@ -164,9 +110,7 @@ export const NavScheme = () => {
           filteredSchemes.length > 0
             ? filteredSchemes.map((scheme) => ({
                 className:
-                  activeScheme === scheme.scheme.id
-                    ? classes.active
-                    : undefined,
+                  activeScheme === scheme.schemeId ? classes.active : undefined,
                 key: scheme.id,
                 label: (
                   <Row
@@ -191,7 +135,7 @@ export const NavScheme = () => {
                         {scheme.scheme.name}{' '}
                       </Text>
                     </Col>
-                    {activeScheme === scheme.scheme.id ? (
+                    {activeScheme === scheme.schemeId ? (
                       <Col>
                         <Text type="success">
                           {intl.formatMessage({

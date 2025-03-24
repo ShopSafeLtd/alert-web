@@ -2,7 +2,6 @@ import type { ListSchemeTagsQuery } from '#/views/settings/schemes/SchemeDetail/
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
 import type { CrimeType } from 'graphql/types';
-import type { Scheme } from 'state';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
@@ -13,7 +12,6 @@ import { Model, TagType } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface FormData {
@@ -36,7 +34,6 @@ interface Return {
   saving: boolean;
   schemeId: string;
   tags: ListSchemeTagsQuery | undefined;
-  userSchemes: Scheme[];
 }
 
 const useAddCrimeType = ({
@@ -46,7 +43,6 @@ const useAddCrimeType = ({
 }: Props): Return => {
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const userSchemes = useStoreState((state) => state.user.schemes);
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
 
@@ -135,7 +131,6 @@ const useAddCrimeType = ({
     saving,
     schemeId,
     tags,
-    userSchemes,
   };
 };
 export default useAddCrimeType;

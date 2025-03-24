@@ -13,8 +13,12 @@ import type { ReportType as IReportType } from 'graphql/types';
 import type RGL from 'react-grid-layout';
 
 import { tableLengthToHeight } from '#/components/reports/utils/utils';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
-import { useStoreState } from '#/state';
 import arrangeTemplates from '#/utils/reports/setTemplates';
 import { notification } from 'antd';
 import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/create-report-template.generated';
@@ -103,7 +107,8 @@ const useReportState = ({
 }: Props): Return => {
   const intl = useIntl();
   const userId = useAtomValue(userIdAtom);
-  const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
+  const logo = useAtomValue(currentSchemeAtom)?.logo?.optimisedPersisted ?? '';
   const isDemo =
     currentScheme === 'ckdhbosuv01028oiblmjgeuii' ||
     currentScheme === 'ck6zhwkwv00019ourjkgk5bdt';
@@ -155,7 +160,7 @@ const useReportState = ({
   //   },
   // ];
 
-  const businesses = useStoreState((state) => state.user.businesses);
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
   const [filtersSet, setFiltersSet] = useState(false);
   const [filtersOpen, setFilterOpen] = useState(false);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
@@ -724,7 +729,7 @@ const useReportState = ({
   return {
     addLogo,
     addLogoDrawer,
-    businesses,
+    businesses: businesses ?? [],
     changeSize,
     currentScheme,
     dateRange,
