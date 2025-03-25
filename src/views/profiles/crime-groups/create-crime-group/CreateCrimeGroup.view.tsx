@@ -13,15 +13,14 @@ import {
 } from 'antd';
 import AddExisitingOffender from 'components/form-components/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import { Age, Build, Gender, Race } from 'graphql/types';
 import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils'; // Import the useIntl hook
-
 import type { OffenderSearchDetailsFragment } from '#/components/form-components/offender/AddExistingOffender/graphql/queries/__generated__/search-offender.generated';
 
-import { useStoreState } from 'state';
+import publicOffenderDob from '#/utils/public-offender-dob';
 
 import useStyles from './CreateCrimeGroup.styles';
 
@@ -48,10 +47,7 @@ const CreateCrimeGroup = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl(); // Initialize the useIntl hook
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
   return (
     <div className={classes.page}>
       <Row align="middle" className={classes.headerRow}>

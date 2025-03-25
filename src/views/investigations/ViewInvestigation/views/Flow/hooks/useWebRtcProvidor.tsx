@@ -1,15 +1,13 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { Doc } from 'yjs';
-import { WebsocketProvider } from 'y-websocket';
 import { useParams } from 'react-router-dom';
-import type { User } from './useYjsAwareness';
-import { useStoreState } from '../../../../../../state';
+import { WebsocketProvider } from 'y-websocket';
+import { Doc } from 'yjs';
 
 export const WebRtcProviderContext = createContext<WebsocketProvider | null>(
   null
 );
 
-function useWebRtcProvider(user: User, documentId: string) {
+function useWebRtcProvider(documentId: string) {
   const ydoc = useMemo(() => new Doc({ guid: documentId }), [documentId]);
   const roomName = documentId;
 
@@ -25,9 +23,8 @@ function useWebRtcProvider(user: User, documentId: string) {
 }
 
 const WebRtcProviderContextProvider: React.FC = ({ children }) => {
-  const user = useStoreState((state) => state.user);
   const { id: documentId } = useParams();
-  const webRtcProvider = useWebRtcProvider(user, documentId || '');
+  const webRtcProvider = useWebRtcProvider(documentId || '');
 
   return (
     <WebRtcProviderContext.Provider value={webRtcProvider}>
@@ -47,4 +44,4 @@ function useWebRtcContext() {
   return webRtcProvider;
 }
 
-export { WebRtcProviderContextProvider, useWebRtcProvider, useWebRtcContext };
+export { WebRtcProviderContextProvider, useWebRtcContext, useWebRtcProvider };

@@ -30,6 +30,14 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { sessionIdAtom } from '#/hooks/useManageSession';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import { Form, Modal, message, notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
@@ -40,12 +48,14 @@ import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated'
 import {
   ImagePosition,
   Model,
+  PermissionMethod,
+  PermissionModel,
   QueryMode,
-  Role,
   SortOrder,
 } from 'graphql/types';
 import { useListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -174,30 +184,39 @@ interface Return {
 const useAddOffender = (): Return => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
-  const {
-    businesses: userBusinesses,
-    id: userId,
-    role,
-  } = useStoreState((state) => state.user);
+  const userBusinesses = useAtomValue(currentSchemeBusinessesAtom);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+
+  const adminRights = useAtomValue(isAdminAtom);
 
   const {
     facialRecognition: facialRec,
     facialRedaction: facialDed,
     id: schemeId,
     needJustification,
-  } = useStoreState((state) => state.scheme);
+  } = useAtomValue(currentSchemeAtom) ?? {
+    facialRecognition: false,
+    facialRedaction: false,
+    id: '',
+    needJustification: false,
+  };
   const reportOnly =
-    useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
+    useAtomValue(currentSchemeAtom)?.reportOnly &&
+    !hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Offenders,
+      },
+    });
   const pagination = useStoreState((state) => state.data.offenders.pagination);
-  const imagesRequired = useStoreState(
-    (state) => state.scheme.imagesRequiredOnOffenders
-  );
+  const imagesRequired =
+    useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders;
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-  const sessionId = useStoreState((state) => state.user.sessionId);
+  const sessionId = useAtomValue(sessionIdAtom);
 
   const [saving, setSaving] = useState(false);
   const [idVerified, setIDVerified] = useState(false);
@@ -243,7 +262,7 @@ const useAddOffender = (): Return => {
     fetchPolicy: 'network-only',
     variables: {
       where: {
-        id: userBusinesses[0].id,
+        id: userBusinesses[0]?.id,
       },
     },
   });
@@ -267,20 +286,17 @@ const useAddOffender = (): Return => {
             id: schemeId,
           },
           where: {
-            groups:
-              role === Role.ContentAdmin
-                ? undefined
-                : {
-                    some: {
-                      users: {
-                        some: {
-                          id: {
-                            equals: userId,
-                          },
-                        },
-                      },
+            groups: {
+              some: {
+                users: {
+                  some: {
+                    id: {
+                      equals: userId,
                     },
                   },
+                },
+              },
+            },
             name: {
               equals: offenderName,
               mode: QueryMode.Insensitive,
@@ -955,8 +971,8 @@ const useAddOffender = (): Return => {
     //   ? groupData?.groups.map((group) => ({
     //       value: group.id,
     //       label: group.name,
+    adminRights,
     //     })) || []
-    adminRights: role !== Role.User,
     ageCheck,
     banData,
     bansData,

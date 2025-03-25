@@ -4,10 +4,13 @@ import type { IncidentCardData } from 'types/DataType';
 
 import { useLinkIncidentIncidentsQuery } from '#/components/form-components/linkOptions/LinkIncident/__generated__/link-incident-incidents.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { useListBusinessesQuery } from 'graphql/businesses/queries/__generated__/list-businesses.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
+import { Model, QueryMode, SortOrder, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -65,11 +68,8 @@ const useLinkIncident = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
-  const schemeId = useStoreState((state) => state.scheme.id);
-
-  const { filterDefaultGroups: defaultGroups, role } = useStoreState(
-    (state) => state.user
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
 
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -218,20 +218,17 @@ const useLinkIncident = ({
               },
             },
           },
-          users:
-            role === Role.SchemeAdmin
-              ? undefined
-              : {
-                  some: {
-                    groups: {
-                      some: {
-                        id: {
-                          in: groups.map((id) => id),
-                        },
-                      },
-                    },
+          users: {
+            some: {
+              groups: {
+                some: {
+                  id: {
+                    in: groups.map((id) => id),
                   },
                 },
+              },
+            },
+          },
         },
       },
     });
@@ -260,7 +257,7 @@ const useLinkIncident = ({
           ...variables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

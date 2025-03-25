@@ -1,5 +1,21 @@
 /* eslint-disable react/no-unused-prop-types */
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
+import type { FeedItemFilters } from '#/state/data-model';
+import type { DateType } from '#/types/DataType';
+import type { Model } from 'graphql/types';
 import type { ReactNode } from 'react';
+import type RGL from 'react-grid-layout';
+import type { IntlShape } from 'react-intl';
+
+import { useGroupsContext } from '#/context/groups-context';
+import {
+  currentSchemeIdAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import { useStoreActions, useStoreState } from '#/state';
+import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, {
   createContext,
   useCallback,
@@ -8,59 +24,49 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useStoreActions, useStoreState } from '#/state';
-
-import type { DateType } from '#/types/DataType';
-import type { FeedItemFilters } from '#/state/data-model';
-import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
-import type RGL from 'react-grid-layout';
-import type { AvailableDashboardElements } from '#/state/dashboard-model';
-import { useGroupsContext } from '#/context/groups-context';
-import type { Model } from 'graphql/types';
-import { Role, SortOrder } from 'graphql/types';
 
 interface DashboardContextT {
-  children?: ReactNode;
-  schemeId: string;
-  setOrder: (value: SortOrder) => void;
-  setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
   adminRights: boolean;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setTypesFilter: (value: Model[]) => void;
+  children?: ReactNode;
   clearFilters: () => void;
-  setGallery: (values: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
+  getHeight: (arg0: AvailableDashboardElements) => number;
+  getWidth: (arg0: AvailableDashboardElements) => number;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
+  intl: IntlShape;
+  layout: DashboardLayout[];
+  lightBoxOpen: {
+    index: number;
+    open: boolean;
+  };
   lightboxElements: {
     src: string;
   }[];
+  marqueeString?: null | string;
   openLightbox: (elements: { src: string }[], index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
-  variables: FeedItemFilters;
-  intl: IntlShape;
+  rowOrCol: (arg0: AvailableDashboardElements) => 'col' | 'row';
   saving: boolean;
+  schemeId: string;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGallery: (values: string[]) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
   setSaving: (value: boolean) => void;
+  setSearch: (value: string) => void;
+  setTypesFilter: (value: Model[]) => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
   userId: string;
-  marqueeString?: string | null;
-  groupsLoading: boolean;
-  layout: DashboardLayout[];
-  rowOrCol: (arg0: AvailableDashboardElements) => 'row' | 'col';
-  getWidth: (arg0: AvailableDashboardElements) => number;
-  getHeight: (arg0: AvailableDashboardElements) => number;
+  variables: FeedItemFilters;
 }
 
 const DashboardContext = createContext<DashboardContextT | undefined>(
   undefined
 );
-export type DashboardLayout = RGL.Layout & {
+export type DashboardLayout = {
   i: AvailableDashboardElements;
-};
+} & RGL.Layout;
 // Create a custom hook to use the context
 export const useDashboardContext = () => {
   const context = useContext(DashboardContext);
@@ -90,19 +96,20 @@ export const generateHeight = () => {
 export const DashboardProvider: React.FC<{
   children?: ReactNode;
 }> = ({ children }) => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const adminRights = useAtomValue(isAdminAtom);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const setFeedItemsState = useStoreActions(
     (actions) => actions.data.setFeedItems
   );
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
-  const { id: userId, role } = useStoreState((state) => state.user);
-  const [lightBoxOpen, setLightBoxOpen] = useState({ open: false, index: 0 });
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const [lightBoxOpen, setLightBoxOpen] = useState({ index: 0, open: false });
   const [sortFilter, setSortFilter] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
-  const { isSet, schemeLayouts, initialLayout } = useStoreState(
+  const { initialLayout, isSet, schemeLayouts } = useStoreState(
     (state) => state.dashboard
   );
 
@@ -110,12 +117,12 @@ export const DashboardProvider: React.FC<{
     () =>
       isSet
         ? schemeLayouts[schemeId] ?? initialLayout
-        : { marquee: null, layout: [] },
+        : { layout: [], marquee: null },
     [isSet, schemeLayouts, schemeId, initialLayout]
   );
 
   const [saving, setSaving] = useState(false);
-  const [marqueeString, setMarqueeString] = useState<string | null>(
+  const [marqueeString, setMarqueeString] = useState<null | string>(
     dashboardLayout.marquee
   );
 
@@ -123,7 +130,6 @@ export const DashboardProvider: React.FC<{
     setMarqueeString(dashboardLayout?.marquee);
   }, [dashboardLayout]);
 
-  const adminRights = role !== Role.User;
   const intl = useIntl();
   // Handlers
   const setOrder = useCallback(
@@ -194,11 +200,11 @@ export const DashboardProvider: React.FC<{
     setFeedItemsState({
       pagination,
       variables: {
-        order: SortOrder.Desc,
-        search: '',
         createdAt: undefined,
         gallery: [],
         groups: [],
+        order: SortOrder.Desc,
+        search: '',
         types: [],
       },
     });
@@ -207,9 +213,9 @@ export const DashboardProvider: React.FC<{
   const openLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
     if (elements.length === 0) {
-      setLightBoxOpen({ open: false, index });
+      setLightBoxOpen({ index, open: false });
     } else {
-      setLightBoxOpen({ open: true, index });
+      setLightBoxOpen({ index, open: true });
     }
   };
 
@@ -241,38 +247,38 @@ export const DashboardProvider: React.FC<{
   // Value to be provided through context
   const value = useMemo(
     () => ({
-      schemeId,
-      setOrder,
-      setSearch,
-      groups,
       adminRights,
+      clearFilters,
+      getHeight,
+      getWidth,
+      groups,
+      groupsLoading,
+      intl,
+      layout: dashboardLayout.layout,
+      lightBoxOpen,
+      lightboxElements,
+      marqueeString,
+      openLightbox,
+      rowOrCol,
+      saving,
+      schemeId,
+      setCreatedAtFilter,
+      setGallery,
+      setGroupsFilter,
+      setOrder,
+      setSaving,
+      setSearch,
+      setTypesFilter,
       sortFilter,
       toggleSortFilter,
-      setGroupsFilter,
-      setTypesFilter,
-      clearFilters,
-      setGallery,
-      setCreatedAtFilter,
-      lightboxElements,
-      openLightbox,
-      lightBoxOpen,
-      variables,
-      intl,
-      saving,
-      setSaving,
       userId,
-      marqueeString,
-      groupsLoading,
-      layout: dashboardLayout.layout,
-      getWidth,
-      rowOrCol,
-      getHeight,
+      variables,
     }),
     [
       schemeId,
+      adminRights,
       setOrder,
       setSearch,
-      adminRights,
       sortFilter,
       toggleSortFilter,
       setGroupsFilter,

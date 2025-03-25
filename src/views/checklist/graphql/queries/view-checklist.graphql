@@ -6,6 +6,10 @@ query Checklist($where: ChecklistWhereUniqueInput!) {
     sections {
       order
       title
+        dependsOnWeight {
+            weight
+            dependsOn
+        }
       subsections {
         title
         order

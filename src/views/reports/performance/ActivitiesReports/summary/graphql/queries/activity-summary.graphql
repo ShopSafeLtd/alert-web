@@ -1,0 +1,8 @@
+query ActivitySummary($where: ActivityReportsWhere!) {
+    activitySummary(where: $where) {
+        total
+        percentComplete
+        overdue
+        completed
+    }
+}

@@ -74,12 +74,14 @@ const StringTime = ({ disabled, onChange, value }: StringInputProps) => {
 
 interface SelectInputProps extends StringInputProps {
   options: { label: string; value: string }[];
+  single?: boolean;
 }
 
 const StringSelect = ({
   disabled,
   onChange,
   options,
+  single = false,
   value,
 }: SelectInputProps) => {
   const covertToString = (data: string[]) => {
@@ -89,7 +91,7 @@ const StringSelect = ({
   return (
     <CheckTags
       disabled={disabled}
-      mode="check"
+      mode={single ? undefined : 'check'}
       onChange={covertToString}
       options={options}
       value={value ? value.split(',') : []}
@@ -149,6 +151,9 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
         return <StringInputNumber disabled={disabled} />;
       }
       case AnswerType.Select: {
+        return <StringSelect disabled={disabled} options={question.options} />;
+      }
+      case AnswerType.SelectSingle: {
         return <StringSelect disabled={disabled} options={question.options} />;
       }
       default: {
@@ -330,7 +335,8 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                 <StringInputNumber disabled={disabled} />
               </Form.Item>
             )}
-            {question.answerType === AnswerType.Select && (
+            {(question.answerType === AnswerType.Select ||
+              question.answerType === AnswerType.SelectSingle) && (
               <Form.Item
                 label={question.label}
                 name={question.questionId}
@@ -343,7 +349,11 @@ const CustomQuestions = ({ disabled, questions }: Props) => {
                   },
                 ]}
               >
-                <StringSelect disabled={disabled} options={question.options} />
+                <StringSelect
+                  disabled={disabled}
+                  options={question.options}
+                  single={question.answerType === AnswerType.SelectSingle}
+                />
               </Form.Item>
             )}
           </Col>

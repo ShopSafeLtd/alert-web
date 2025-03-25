@@ -10,12 +10,13 @@ import {
   useBusinessesSideListLazyQuery,
   useBusinessesSideListQuery,
 } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select, Typography } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 export type ValueType =
   | LabeledValue
@@ -108,7 +109,7 @@ const BusinessesSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 }) => {
   const intl = useIntl();
   const take = 50;
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [initialValues] = useState(value ? convertToArrayOfStrings(value) : []);

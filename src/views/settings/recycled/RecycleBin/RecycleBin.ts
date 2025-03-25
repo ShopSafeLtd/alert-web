@@ -5,13 +5,14 @@ import type { RestoreIncidentMutation } from 'graphql/recycled/mutations/__gener
 import type { RestoreOffenderMutation } from 'graphql/recycled/mutations/__generated__/restore-offender.generated';
 import type { RecycledItemsQuery } from 'graphql/recycled/queries/__generated__/recycled-items.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   RecycledItemsDocument,
   useRecycledItemsQuery,
 } from 'graphql/recycled/queries/__generated__/recycled-items.generated';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface Return {
   currentId: string | undefined;
@@ -35,7 +36,7 @@ interface Return {
 }
 
 const useRecycleBin = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [currentId, setCurrentId] = useState<string | undefined>('');
   const [recycledId, setRecycledId] = useState<string | undefined>('');

@@ -33,6 +33,8 @@ import type {
 
 import { useMentionableUsersQuery } from '#/components/MessageInput/UpdateBar/graphql/queries/__generated__/users-to-mention.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { Form, message } from 'antd';
 import Upload from 'antd/lib/upload';
@@ -49,18 +51,23 @@ import { useCreateUpdateOnVehicleMutation } from 'graphql/mutations/__generated_
 import { useSubscribeToOffenderMutation } from 'graphql/offenders/mutations/__generated__/subscribe-to-offender.generated';
 import { ViewOffenderDocument } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import { useUpdateTodoMentionMutation } from 'graphql/todos/mutations/__generated__/update_todo_mention.generated';
-import { Role, TodoType, UpdateIcon, UpdateType } from 'graphql/types';
+import {
+  PermissionMethod,
+  PermissionModel,
+  TodoType,
+  UpdateIcon,
+  UpdateType,
+} from 'graphql/types';
 import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/__generated__/subscribe-to-vehicle.generated';
 import { VehicleDocument } from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { getText } from 'utils/getMentions/get-mention-text';
 
 interface Return {
-  adminRights: boolean;
   articlesData: ArticleData[];
   beforeUpdateImageUpload: (value: RcFile) => void;
   crimeGroupsData: CrimeGroupData[];
@@ -141,8 +148,7 @@ const useUpdateBar = ({
 }: Props): Return => {
   const [updateForm] = Form.useForm<FormData>();
   const [formTouched, setFormTouched] = useState(false);
-  const { restrictIncidentAccess } = useStoreState((state) => state.scheme);
-  const { id: userId, role: userRole } = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const { groups } = useGroupsContext();
   const groupsId = groups.map((group) => group.value);
   const [saving, setSaving] = useState(false);
@@ -640,12 +646,7 @@ const useUpdateBar = ({
                 query: ViewOffenderDocument,
                 variables: {
                   banWhere: {
-                    groups:
-                      userRole === Role.User ||
-                      userRole === Role.ContentAdmin ||
-                      userRole === Role.GroupAdmin
-                        ? { some: { id: { in: groupsId } } }
-                        : undefined,
+                    groups: { some: { id: { in: groupsId } } },
                   },
                   where: {
                     id: offenderId,
@@ -693,12 +694,7 @@ const useUpdateBar = ({
                     query: ViewOffenderDocument,
                     variables: {
                       banWhere: {
-                        groups:
-                          userRole === Role.User ||
-                          userRole === Role.ContentAdmin ||
-                          userRole === Role.GroupAdmin
-                            ? { some: { id: { in: groupsId } } }
-                            : undefined,
+                        groups: { some: { id: { in: groupsId } } },
                       },
                       where: {
                         id: offenderId,
@@ -1081,7 +1077,7 @@ const useUpdateBar = ({
       void updateTodoMention({
         variables: {
           where: {
-            userId,
+            userId: currentUser?.id ?? '',
             ...getWhereArgs(),
           },
         },
@@ -1091,12 +1087,16 @@ const useUpdateBar = ({
   };
 
   return {
-    adminRights: userRole !== Role.User,
     articlesData,
     beforeUpdateImageUpload,
     crimeGroupsData,
     handleMarkAsRead,
-    hideIncident: userRole === Role.User && restrictIncidentAccess,
+    hideIncident: hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Incidents,
+      },
+    }),
     linkArticle,
     linkCrimeGroup,
     linkIncident,

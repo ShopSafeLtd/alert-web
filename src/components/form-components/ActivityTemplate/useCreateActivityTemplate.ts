@@ -1,11 +1,12 @@
 import type { FormInstance } from 'antd';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useCreateOneQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/__generated__/createQuestionGroup.generated';
 import { useUpdateQuestionGroupMutation } from '#/views/adminTodo/graphql/mutations/__generated__/updateQuestionGroup.generated';
 import { Form, notification } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import type { ListData } from '../../../views/adminTodo/useActivities';
@@ -59,7 +60,7 @@ const useCreateActivityTemplate = ({
 }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

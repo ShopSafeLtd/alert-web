@@ -8,6 +8,7 @@ query ListIncidentTags($where: IncidentTagsInput!) {
     label
     parentId
     parents
+    policeReporting
     questions {
       answerType
       label

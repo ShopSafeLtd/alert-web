@@ -1,35 +1,34 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import View from './ViewChat.view';
 import useViewChat from './useViewChat';
 
 const ViewChat = (): JSX.Element => {
   const chatId = useParams().id || '';
   const {
-    data,
-    saving,
-    handleMarkAsRead,
-    currentId,
     addChat,
+    currentId,
+    data,
+    handleMarkAsRead,
+    loading,
+    saving,
     toggleAddChat,
     updateAddUserChat,
     updateDeletedUserChat,
-    adminRights,
-    loading,
   } = useViewChat({ chatId });
 
   return (
     <View
-      loading={loading}
-      data={data}
-      saving={saving}
-      chatId={chatId || currentId || ''}
-      handleMarkAsRead={handleMarkAsRead}
       addChat={addChat}
+      chatId={chatId || currentId || ''}
+      data={data}
+      handleMarkAsRead={handleMarkAsRead}
+      loading={loading}
+      saving={saving}
       toggleAddChat={toggleAddChat}
       updateAddUserChat={updateAddUserChat}
       updateDeletedUserChat={updateDeletedUserChat}
-      adminRights={adminRights}
     />
   );
 };

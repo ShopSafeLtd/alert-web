@@ -1,43 +1,38 @@
+import type { LocationData } from '#/types/DataType';
+
 import React from 'react';
+
 import View from './IncidentWhere.view';
 import useIncidentWhere from './useIncidentWhere';
-import type { LocationData } from '../../../../../types/DataType';
 
 interface Props {
-  saving: boolean;
-  toggleAddNewAddress: () => void;
   newAddressData: LocationData | undefined;
-  updateNewAddressData: (value: LocationData | undefined) => void;
-  brands: string[];
-  setBrands: (value: string[]) => void;
+  saving: boolean;
   showSiteNumber: boolean;
+  toggleAddNewAddress: () => void;
+  updateNewAddressData: (value: LocationData | undefined) => void;
 }
 
 const IncidentWhere = ({
+  newAddressData,
   saving,
+  showSiteNumber,
   toggleAddNewAddress,
   updateNewAddressData,
-  newAddressData,
-  brands,
-  setBrands,
-  showSiteNumber,
 }: Props) => {
-  const { onSearchBusiness, hideField, onSelectedBusiness } = useIncidentWhere({
-    brands,
-    setBrands,
+  const { hideField, onSearchBusiness } = useIncidentWhere({
     showSiteNumber,
   });
 
   return (
     <View
-      onSelectedBusiness={onSelectedBusiness}
-      onSearchBusiness={onSearchBusiness}
+      hideField={hideField}
       newAddressData={newAddressData}
+      onSearchBusiness={onSearchBusiness}
       saving={saving}
+      showSiteNumber={showSiteNumber}
       toggleAddNewAddress={toggleAddNewAddress}
       updateNewAddressData={updateNewAddressData}
-      hideField={hideField}
-      showSiteNumber={showSiteNumber}
     />
   );
 };

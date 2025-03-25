@@ -5,7 +5,7 @@ import type {
 
 import AiSuggestionCard from '#/components/ai-suggestions/AiSuggestionCard.view';
 import ReviewAiSuggestion from '#/components/ai-suggestions/ReviewAiSuggestion.view';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   AiSuggestionsDocument,
   useAiSuggestionsQuery,
@@ -16,9 +16,9 @@ import { Button, Col, Drawer, Input, Row, Skeleton, Typography } from 'antd';
 import { useApproveAiSuggestionMutation } from 'graphql/ai-suggestions/__generated__/approve-ai-suggestions.generated';
 import { useDismissAiSuggestionMutation } from 'graphql/ai-suggestions/__generated__/dismiss-ai-suggestions.generated';
 import { AiSuggestionStatus, AiSuggestionType, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
 
 enum QueryFilters {
   CRIME_GROUPS = 'CRIME_GROUPS',
@@ -39,8 +39,7 @@ const defaultFilter = [
 ];
 
 const AiSuggestions = () => {
-  const navigate = useNavigate();
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState<null | string>(null);
@@ -353,22 +352,6 @@ const AiSuggestions = () => {
               onReview={() => setOpen(edge.node.id)}
             />
           ))}
-        <AiSuggestionCard
-          data={{
-            createdAt: new Date(),
-            description:
-              'Ethan Reynolds, a prolific shoplifter aged between 18 and 30, has repeatedly targeted stores using methods such as walkout theft, concealment, self-checkout fraud, and coordinated distraction. His behavior has escalated to include verbal abuse and threats towards staff, demonstrating a concerning adaptability in his criminal tactics. This investigation will aim to develop a comprehensive profile of Reynolds and his associates, identify patterns in his methods, and take proactive measures to mitigate future risks.',
-            id: 'fasdff',
-            reference: 897,
-            title: 'Suggested Investigation into Ethan Reynolds & Associates',
-            type: AiSuggestionType.InvestigationCreate,
-          }}
-          key="fasdff"
-          onDismissSuggestion={() => {}}
-          onReview={() =>
-            navigate('/app/investigations/view/cm7vul1bw01gps401awdn6u5a')
-          }
-        />
       </div>
 
       <Drawer

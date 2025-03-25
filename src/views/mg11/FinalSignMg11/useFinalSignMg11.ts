@@ -1,9 +1,11 @@
 import type { FormInstance } from 'antd';
 
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { Form, notification } from 'antd';
 import { useUpdateOneMg11Mutation } from 'graphql/mg11/mutations/__generated__/update-mg11.generated';
 import { useFetchMg11Query } from 'graphql/mg11/queries/__generated__/get-mg11.generated';
 import { Mg11Status } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +14,6 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import type { Mg11Data } from './FinalSignMg11.view';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import { useStoreState } from '../../../state';
 
 const { useForm } = Form;
 
@@ -37,7 +38,7 @@ interface Return {
 const useFinalSignMg11 = (): Return => {
   const intl = useIntl();
   const [form] = useForm();
-  const { fullName: userName } = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const [data, setdata] = useState<Mg11Data>({
     address: '',
     age: '',
@@ -142,7 +143,7 @@ const useFinalSignMg11 = (): Return => {
         prefContact: mg11?.prefContact || '',
         specialMeasures: mg11?.specialMeasures || false,
         statement: mg11?.statement || '',
-        statementTakerName: userName || '',
+        statementTakerName: currentUser?.fullName ?? '',
         statementWhereWhen: mg11?.statementWhereWhen || '',
         station: mg11?.station || '',
         urn: mg11?.urn || '',

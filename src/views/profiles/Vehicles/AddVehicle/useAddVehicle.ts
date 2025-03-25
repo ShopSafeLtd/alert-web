@@ -11,15 +11,24 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import { Form, message, notification } from 'antd';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
-import { ImagePosition, Role } from 'graphql/types';
+import {
+  ImagePosition,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/types';
 import { useCreateVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-vehicle.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { compressImage } from 'utils/compress-images';
 import customRequest from 'utils/custom-request';
@@ -42,7 +51,6 @@ export interface FormData {
 interface Return {
   addCrimeGroup: boolean;
   addCustomGallery: boolean;
-  adminRights: boolean;
   beforeUpload: (value: RcFile) => void;
   crimeGroupsData: CrimeGroupData[];
   customGalleries: { label: string; value: string }[];
@@ -84,8 +92,8 @@ const useAddVehicle = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
-  const { role } = useStoreState((state) => state.user);
-  const { id: schemeId, reportOnly } = useStoreState((state) => state.scheme);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const reportOnly = useAtomValue(currentSchemeAtom)?.reportOnly;
   const [saving, setSaving] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
@@ -132,7 +140,15 @@ const useAddVehicle = (): Return => {
         }),
         placement: 'bottomRight',
       });
-      if (reportOnly && role === Role.User) {
+      if (
+        reportOnly &&
+        !hasRolePermission({
+          permission: {
+            method: PermissionMethod.Read,
+            model: PermissionModel.Vehicles,
+          },
+        })
+      ) {
         navigate('/app/vehicles/add');
       } else {
         navigate('/app/vehicles');
@@ -374,7 +390,6 @@ const useAddVehicle = (): Return => {
   return {
     addCrimeGroup,
     addCustomGallery,
-    adminRights: role !== Role.User,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
     crimeGroupsData,

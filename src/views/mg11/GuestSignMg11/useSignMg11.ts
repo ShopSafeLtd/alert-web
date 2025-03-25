@@ -1,16 +1,17 @@
 import type { FormInstance } from 'antd';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form, notification } from 'antd';
 import { useUpdateOneMg11Mutation } from 'graphql/mg11/mutations/__generated__/update-mg11.generated';
 import { useFetchMg11Query } from 'graphql/mg11/queries/__generated__/get-mg11.generated';
 import { Mg11Status } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import { useStoreState } from '../../../state';
 
 const { useForm } = Form;
 
@@ -47,7 +48,7 @@ interface Return {
 
 const useSignMg11 = (): Return => {
   const intl = useIntl();
-  const scheme = useStoreState((state) => state.scheme.id);
+  const scheme = useAtomValue(currentSchemeIdAtom);
   const [form] = useForm<FormData>();
   const [data, setdata] = useState<FormData>({
     civilProceedingsRelease: '',

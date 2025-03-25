@@ -4,11 +4,12 @@ import type { IdSource } from 'graphql/types';
 import type { AddressData, BlurFaceData } from 'types/DataType';
 import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
 import { Age, Build, Gender, Height, ImagePosition, Race } from 'graphql/types';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 
 import type { StateImageData } from '../../ImageSection/useImageSection';
 import type { FacesOpenSubmitData } from './FacesColumn.view';
@@ -140,12 +141,10 @@ interface Return {
 
 const useOffenders = ({ form, onChange, value }: Props): Return => {
   const images = Form.useWatch('images', form);
-  const facialDetection = useStoreState(
-    (state) => state.scheme.facialDetection
-  );
-  const imagesRequiredOnOffenders = useStoreState(
-    (state) => state.scheme.imagesRequiredOnOffenders
-  );
+  const facialDetection =
+    useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
+  const imagesRequiredOnOffenders =
+    useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders ?? false;
 
   const [pristine, setPristine] = useState(true);
   const [offenders, setOffenders] = useState<StateOffenderData[]>([]);

@@ -11,14 +11,15 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { compressImage } from '#/utils/compress-images';
 import { Form, message } from 'antd';
 import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
-import { ImagePosition, Role } from 'graphql/types';
+import { ImagePosition } from 'graphql/types';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   update: (value: VehicleData) => void;
@@ -43,7 +44,6 @@ interface Return {
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
   addCustomGallery: boolean;
-  adminRights: boolean;
   beforeUpload: (value: RcFile) => void;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
@@ -75,8 +75,7 @@ interface Return {
 
 const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
   const [form] = Form.useForm<FormData>();
-  const { role } = useStoreState((state) => state.user);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
@@ -289,7 +288,6 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
     CrimeGroupsData,
     CrimeGroupsLoading,
     addCustomGallery,
-    adminRights: role !== Role.User,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
     customGalleries:

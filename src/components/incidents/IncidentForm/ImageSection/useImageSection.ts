@@ -3,6 +3,7 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
 import {
   Age,
@@ -14,8 +15,8 @@ import {
   Race,
 } from 'graphql/types';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 
 import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
 
@@ -98,9 +99,8 @@ const useImageSection = ({ form, incidentForm, onChange }: Props): Return => {
   const formImages = Form.useWatch('images', form);
   const [images, setImages] = useState<StateImageData[]>([]);
   const [editImage, setEditImage] = useState<StateImageData | null>(null);
-  const facialDetection = useStoreState(
-    (state) => state.scheme.facialDetection
-  );
+  const facialDetection =
+    useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   useEffect(() => {

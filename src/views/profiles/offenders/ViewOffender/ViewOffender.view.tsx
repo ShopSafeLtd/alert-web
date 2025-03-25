@@ -18,8 +18,10 @@ import type {
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddDocuments from '#/components/form-components/documents/AddDocuments';
+import IncidentTable from '#/components/tables/IncidentTable';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
+import OffenderAiDrawer from '#/views/profiles/offenders/ViewOffender/components/AiDrawer/AiDrawer.view';
 import {
   faBell,
   faBellSlash,
@@ -95,7 +97,6 @@ import OffenderSideList from 'components/offenders/OffenderSideList';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import EvidenceTable from 'components/tables/EvidenceTable';
-import IncidentTable from 'components/tables/IncidentTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
@@ -238,6 +239,7 @@ interface Props {
     } | null
   ) => void;
   shareOpen: boolean;
+  showAiDrawer: boolean;
   showIncidentOptions: boolean;
   toggleAddAddress: () => void;
   toggleAddBan: () => void;
@@ -246,6 +248,7 @@ interface Props {
   toggleAddExistingVehicle: () => void;
   toggleAddInvestigation: () => void;
   toggleAddVehicle: () => void;
+  toggleAiDrawer: () => void;
   toggleCopyOffender: () => void;
   toggleEditImages: () => void;
   toggleEditOffender: () => void;
@@ -346,6 +349,7 @@ const ViewOffender = ({
   setOptionRowShow,
   setReplyTo,
   shareOpen,
+  showAiDrawer,
   showIncidentOptions,
   toggleAddAddress,
   toggleAddBan,
@@ -354,6 +358,7 @@ const ViewOffender = ({
   toggleAddExistingVehicle,
   toggleAddInvestigation,
   toggleAddVehicle,
+  toggleAiDrawer,
   toggleCopyOffender,
   toggleEditImages,
   toggleEditOffender,
@@ -434,22 +439,31 @@ const ViewOffender = ({
                   <Row className={classes.headerBar} gutter={8} justify="end">
                     {data?.offender?.searchedMatches &&
                       data?.offender?.searchedMatches.length > 0 && (
-                        <Col>
-                          <Button
-                            danger
-                            onClick={() => toggleViewMatches(offenderId)}
-                          >
-                            {intl.formatMessage(
-                              {
-                                defaultMessage:
-                                  '{itemCount} {itemCount, plural, one {Face ID Match} other {Face ID Matches}}',
-                              },
-                              {
-                                itemCount: data.offender.searchedMatches.length,
-                              }
-                            )}
-                          </Button>
-                        </Col>
+                        <PermissionCheckWrapper
+                          permission={{
+                            method: PermissionMethod.Edit,
+                            model: PermissionModel.Offenders,
+                          }}
+                          unauthorizedElement={<div />}
+                        >
+                          <Col>
+                            <Button
+                              danger
+                              onClick={() => toggleViewMatches(offenderId)}
+                            >
+                              {intl.formatMessage(
+                                {
+                                  defaultMessage:
+                                    '{itemCount} {itemCount, plural, one {Face ID Match} other {Face ID Matches}}',
+                                },
+                                {
+                                  itemCount:
+                                    data.offender.searchedMatches.length,
+                                }
+                              )}
+                            </Button>
+                          </Col>
+                        </PermissionCheckWrapper>
                       )}
                     <Col>
                       <Row>
@@ -1115,7 +1129,11 @@ const ViewOffender = ({
                               unauthorizedElement={<div />}
                             >
                               <Col xl={24} xs={24}>
-                                <AiDetailsView data={data} loading={loading} />
+                                <AiDetailsView
+                                  data={data}
+                                  loading={loading}
+                                  toggleAiDrawer={toggleAiDrawer}
+                                />
                               </Col>
                             </PermissionCheckWrapper>
 
@@ -1578,14 +1596,10 @@ const ViewOffender = ({
                                   fineValue:
                                     ban.fineValue === 0
                                       ? ''
-                                      : intl.formatMessage(
-                                          {
-                                            defaultMessage: '£{value}',
-                                          },
-                                          {
-                                            value: ban.fineValue,
-                                          }
-                                        ),
+                                      : intl.formatNumber(ban.fineValue || 0, {
+                                          currency: 'GBP',
+                                          style: 'currency',
+                                        }),
                                   key: ban.id,
                                   location: ban.location,
                                   status: `${new Date(
@@ -1622,28 +1636,35 @@ const ViewOffender = ({
                               />
                             )}
                           </Card>
-                          <Card loading={loading}>
-                            <Title level={4}>
-                              {intl.formatMessage({
-                                defaultMessage: 'Incidents',
-                              })}
-                            </Title>
-                            {data?.offender?.incidents.length && !loading ? (
-                              <IncidentTable
-                                hasNavigation
-                                incidents={data?.offender?.incidents || []}
-                              />
-                            ) : (
-                              <Empty
-                                description={intl.formatMessage({
-                                  defaultMessage:
-                                    'No incidents for this offender',
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Incidents,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Card loading={loading}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Incidents',
                                 })}
-                                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                              />
-                            )}
-                          </Card>
-
+                              </Title>
+                              {data?.offender?.incidents.length && !loading ? (
+                                <IncidentTable
+                                  hasNavigation
+                                  incidents={data?.offender?.incidents || []}
+                                />
+                              ) : (
+                                <Empty
+                                  description={intl.formatMessage({
+                                    defaultMessage:
+                                      'No incidents for this offender',
+                                  })}
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                />
+                              )}
+                            </Card>
+                          </PermissionCheckWrapper>
                           {editRights && (
                             <Card loading={loading}>
                               <Row
@@ -1806,58 +1827,168 @@ const ViewOffender = ({
                               )}
                             </Card>
                           )}
-                          <Card loading={loading}>
-                            <Row
-                              align="middle"
-                              gutter={8}
-                              style={{ marginBottom: 10 }}
-                            >
-                              <Col flex={1}>
-                                <Title level={4}>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Vehicles',
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Vehicles,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Card loading={loading}>
+                              <Row
+                                align="middle"
+                                gutter={8}
+                                style={{ marginBottom: 10 }}
+                              >
+                                <Col flex={1}>
+                                  <Title level={4}>
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Vehicles',
+                                    })}
+                                  </Title>
+                                </Col>
+                                <PermissionCheckWrapper
+                                  permission={{
+                                    method: PermissionMethod.Write,
+                                    model: PermissionModel.Vehicles,
+                                  }}
+                                  unauthorizedElement={<div />}
+                                >
+                                  <Col className="no-print">
+                                    <Dropdown
+                                      overlay={
+                                        <Menu
+                                          items={[
+                                            {
+                                              icon: (
+                                                <FontAwesomeIcon
+                                                  icon={faMagnifyingGlass}
+                                                  style={{ marginRight: 5 }}
+                                                />
+                                              ),
+                                              key: '1',
+                                              label: intl.formatMessage({
+                                                defaultMessage:
+                                                  'Add Existing Vehicles',
+                                              }),
+                                              onClick: () =>
+                                                toggleAddExistingVehicle(),
+                                            },
+                                            {
+                                              icon: (
+                                                <FontAwesomeIcon
+                                                  icon={faPlus}
+                                                  style={{ marginRight: 5 }}
+                                                />
+                                              ),
+                                              key: '2',
+                                              label: intl.formatMessage({
+                                                defaultMessage:
+                                                  'Create New Vehicle',
+                                              }),
+                                              onClick: () => toggleAddVehicle(),
+                                            },
+                                          ]}
+                                        />
+                                      }
+                                    >
+                                      <Button
+                                        icon={
+                                          <FontAwesomeIcon
+                                            icon={faPlus}
+                                            style={{ marginRight: 5 }}
+                                          />
+                                        }
+                                        size="small"
+                                      >
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Add Vehicles',
+                                        })}
+                                      </Button>
+                                    </Dropdown>
+                                  </Col>
+                                </PermissionCheckWrapper>
+                              </Row>
+
+                              {data?.offender?.vehicles?.length && !loading ? (
+                                <VehicleTable
+                                  deleteRights={deleteRights}
+                                  editRights={editRights}
+                                  hasNavigation
+                                  onDeleteVehicle={onDeleteVehicle}
+                                  saving={saving}
+                                  setEditVehicleData={setEditVehicleData}
+                                  vehicles={data?.offender?.vehicles}
+                                />
+                              ) : (
+                                <Empty
+                                  description={intl.formatMessage({
+                                    defaultMessage:
+                                      'No vehicles for this offender',
                                   })}
-                                </Title>
-                              </Col>
-                              {editRights && (
-                                <Col className="no-print">
-                                  <Dropdown
-                                    overlay={
-                                      <Menu
-                                        items={[
-                                          {
-                                            icon: (
-                                              <FontAwesomeIcon
-                                                icon={faMagnifyingGlass}
-                                                style={{ marginRight: 5 }}
-                                              />
-                                            ),
-                                            key: '1',
-                                            label: intl.formatMessage({
-                                              defaultMessage:
-                                                'Add Existing Vehicles',
-                                            }),
-                                            onClick: () =>
-                                              toggleAddExistingVehicle(),
-                                          },
-                                          {
-                                            icon: (
-                                              <FontAwesomeIcon
-                                                icon={faPlus}
-                                                style={{ marginRight: 5 }}
-                                              />
-                                            ),
-                                            key: '2',
-                                            label: intl.formatMessage({
-                                              defaultMessage:
-                                                'Create New Vehicle',
-                                            }),
-                                            onClick: () => toggleAddVehicle(),
-                                          },
-                                        ]}
-                                      />
-                                    }
-                                  >
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                />
+                              )}
+                            </Card>
+                          </PermissionCheckWrapper>
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Offenders,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Card loading={loading}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Crime Groups',
+                                })}
+                              </Title>
+                              {data?.offender?.crimeGroups.length &&
+                              !loading ? (
+                                <CrimeGroupTable
+                                  crimeGroups={
+                                    data?.offender?.crimeGroups || []
+                                  }
+                                  deleteRights={deleteRights}
+                                  hasNavigation
+                                  onDelete={onDeleteCrimeGroup}
+                                  saving={saving}
+                                />
+                              ) : (
+                                <Empty
+                                  description={intl.formatMessage({
+                                    defaultMessage:
+                                      'No crime groups for this offender',
+                                  })}
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                />
+                              )}
+                            </Card>
+                          </PermissionCheckWrapper>
+
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Evidence,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <Card loading={loading}>
+                              <Row
+                                align="middle"
+                                gutter={8}
+                                style={{ marginBottom: 10 }}
+                              >
+                                <Col flex={1}>
+                                  <Title level={4}>
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Evidence',
+                                    })}
+                                  </Title>
+                                </Col>
+                                {editRights && (
+                                  <Col className="no-print">
                                     <Button
                                       icon={
                                         <FontAwesomeIcon
@@ -1865,115 +1996,44 @@ const ViewOffender = ({
                                           style={{ marginRight: 5 }}
                                         />
                                       }
+                                      onClick={toggleAddDocument}
                                       size="small"
                                     >
                                       {intl.formatMessage({
-                                        defaultMessage: 'Add Vehicles',
+                                        defaultMessage: 'Add Evidence',
                                       })}
                                     </Button>
-                                  </Dropdown>
-                                </Col>
-                              )}
-                            </Row>
+                                  </Col>
+                                )}
+                              </Row>
 
-                            {data?.offender?.vehicles?.length && !loading ? (
-                              <VehicleTable
-                                deleteRights={deleteRights}
-                                editRights={editRights}
-                                hasNavigation
-                                onDeleteVehicle={onDeleteVehicle}
-                                saving={saving}
-                                setEditVehicleData={setEditVehicleData}
-                                vehicles={data?.offender?.vehicles}
-                              />
-                            ) : (
-                              <Empty
-                                description={intl.formatMessage({
-                                  defaultMessage:
-                                    'No vehicles for this offender',
-                                })}
-                                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                              />
-                            )}
-                          </Card>
-                          <Card loading={loading}>
-                            <Title level={4}>
-                              {intl.formatMessage({
-                                defaultMessage: 'Crime Groups',
-                              })}
-                            </Title>
-                            {data?.offender?.crimeGroups.length && !loading ? (
-                              <CrimeGroupTable
-                                crimeGroups={data?.offender?.crimeGroups || []}
-                                deleteRights={deleteRights}
-                                hasNavigation
-                                onDelete={onDeleteCrimeGroup}
-                                saving={saving}
-                              />
-                            ) : (
-                              <Empty
-                                description={intl.formatMessage({
-                                  defaultMessage:
-                                    'No crime groups for this offender',
-                                })}
-                                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                              />
-                            )}
-                          </Card>
-
-                          <Card loading={loading}>
-                            <Row
-                              align="middle"
-                              gutter={8}
-                              style={{ marginBottom: 10 }}
-                            >
-                              <Col flex={1}>
-                                <Title level={4}>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Evidence',
+                              {data?.offender?.evidence &&
+                              data.offender.evidence.length > 0 &&
+                              !loading ? (
+                                <EvidenceTable
+                                  deleteRights={deleteRights}
+                                  evidence={data?.offender?.evidence}
+                                  title={ProfileUpdatedModel.Offender}
+                                  update={updateDeleteDocument}
+                                />
+                              ) : (
+                                <Empty
+                                  description={intl.formatMessage({
+                                    defaultMessage:
+                                      'No evidence for this offender',
                                   })}
-                                </Title>
-                              </Col>
-                              {editRights && (
-                                <Col className="no-print">
-                                  <Button
-                                    icon={
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        style={{ marginRight: 5 }}
-                                      />
-                                    }
-                                    onClick={toggleAddDocument}
-                                    size="small"
-                                  >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Add Evidence',
-                                    })}
-                                  </Button>
-                                </Col>
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                />
                               )}
-                            </Row>
-
-                            {data?.offender?.evidence &&
-                            data.offender.evidence.length > 0 &&
-                            !loading ? (
-                              <EvidenceTable
-                                deleteRights={deleteRights}
-                                evidence={data?.offender?.evidence}
-                                title={ProfileUpdatedModel.Offender}
-                                update={updateDeleteDocument}
-                              />
-                            ) : (
-                              <Empty
-                                description={intl.formatMessage({
-                                  defaultMessage:
-                                    'No evidence for this offender',
-                                })}
-                                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                              />
-                            )}
-                          </Card>
-                          {editRights && (
+                            </Card>
+                          </PermissionCheckWrapper>
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.Investigations,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
                             <Card loading={loading}>
                               <Row
                                 align="middle"
@@ -1988,22 +2048,30 @@ const ViewOffender = ({
                                   </Title>
                                 </Col>
 
-                                <Col className="no-print">
-                                  <Button
-                                    icon={
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        style={{ marginRight: 5 }}
-                                      />
-                                    }
-                                    onClick={toggleAddInvestigation}
-                                    size="small"
-                                  >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Add Investigation',
-                                    })}
-                                  </Button>
-                                </Col>
+                                <PermissionCheckWrapper
+                                  permission={{
+                                    method: PermissionMethod.Write,
+                                    model: PermissionModel.Investigations,
+                                  }}
+                                  unauthorizedElement={<div />}
+                                >
+                                  <Col className="no-print">
+                                    <Button
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          style={{ marginRight: 5 }}
+                                        />
+                                      }
+                                      onClick={toggleAddInvestigation}
+                                      size="small"
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Add Investigation',
+                                      })}
+                                    </Button>
+                                  </Col>
+                                </PermissionCheckWrapper>
                               </Row>
                               {data?.offender?.investigations.length &&
                               !loading ? (
@@ -2022,7 +2090,7 @@ const ViewOffender = ({
                                 />
                               )}
                             </Card>
-                          )}
+                          </PermissionCheckWrapper>
                         </div>
                       )}
                     </div>
@@ -2905,6 +2973,12 @@ const ViewOffender = ({
           <ShareData offenderId={offenderId} onClose={toggleShareOpen} />
         )}
       </Drawer>
+
+      <OffenderAiDrawer
+        offenderId={offenderId}
+        onClose={toggleAiDrawer}
+        visible={showAiDrawer}
+      />
     </div>
   );
 };

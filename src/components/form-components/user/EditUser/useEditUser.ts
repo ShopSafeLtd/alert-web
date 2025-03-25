@@ -10,14 +10,15 @@ import {
 } from '#/components/form-components/user/AddUser/useAddUser';
 import { useUserRolesQuery } from '#/components/form-components/user/graphql/queries/__generated__/custom-roles.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form, notification } from 'antd';
 import { useSchemeChatsQuery } from 'graphql/chats/queries/__generated__/scheme-chats.generated';
 import { Model, SortOrder } from 'graphql/types';
 import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
 import { useUserQuery } from 'graphql/user/queries/__generated__/user.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
@@ -72,7 +73,7 @@ const { useForm } = Form;
 const useEditUser = ({ onClose, userId }: Props): Return => {
   const intl = useIntl();
   const [form] = useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [selectedRole, setSelectedRole] = useState<string>();
   const [selectedGroups, setSelectedGroups] = useState<string[]>();
@@ -81,6 +82,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   const [availableRoles, setAvailableRoles] = useState<SelectOptions[]>([]);
 
   const { data: rolesData, loading: rolesLoading } = useUserRolesQuery({
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ roles }) => {
       const rolesFormatted = roles.edges.map(({ node: role }) => ({
         label: role.name,

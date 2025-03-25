@@ -1,10 +1,12 @@
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import type { CrimeGroupData } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userSchemesAtom } from '#/providers/UserProvider/UserProvider';
 import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 
 // interface CrimeGroup {
 //   crimeGroup: CrimeGroupData;
@@ -37,10 +39,8 @@ const useLinkCrimeGroup = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userSchemeIds = useStoreState((state) => state.user.schemes).map(
-    (el) => el.scheme.id
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userSchemeIds = useAtomValue(userSchemesAtom).map((el) => el.schemeId);
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 24,

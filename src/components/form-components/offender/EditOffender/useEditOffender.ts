@@ -13,6 +13,8 @@ import type {
 } from 'graphql/types';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { Form, Modal, Upload, message, notification } from 'antd';
@@ -20,7 +22,8 @@ import { useRecycleOffenderMutation } from 'graphql/offenders/mutations/__genera
 import { useUpdateOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-offender.generated';
 import { useViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, Role } from 'graphql/types';
+import { Model } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -95,7 +98,6 @@ export interface FormData {
 interface Return {
   addExclusion: boolean;
   addOffenderTag: boolean;
-  adminRights: boolean;
   ageCheck: boolean;
   banData: BanData | null;
   bansData: BanData[];
@@ -107,7 +109,6 @@ interface Return {
   form: FormInstance<FormData>;
   groups: { label: string; value: string }[];
   groupsLoading: boolean;
-
   imgChange: UploadProps['onChange'];
   loading: boolean;
   onReject: () => void;
@@ -130,10 +131,9 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
 
-  const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
@@ -480,7 +480,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   return {
     addExclusion,
     addOffenderTag,
-    adminRights: role !== Role.User,
     ageCheck,
     banData,
     bansData,

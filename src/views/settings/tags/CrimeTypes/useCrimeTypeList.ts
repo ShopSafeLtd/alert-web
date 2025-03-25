@@ -1,49 +1,58 @@
-import { useEffect, useState } from 'react';
-
-import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { RecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
+import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
+
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { Modal, notification } from 'antd';
-import errorNotification from 'types/mutation_notifications/error_notification';
-import { useIntl } from 'react-intl';
-import { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
-import { TagsDocument, TagsQuery, useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, QueryMode, TagType } from 'graphql/types';
-import { RecycleTagMutation, useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
+import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
 import { useUpdateTagMutation } from 'graphql/tag/mutation/__generated__/update_tag.generated';
+import {
+  TagsDocument,
+  useTagsQuery,
+} from 'graphql/tags/queries/__generated__/tags.generated';
+import { Model, QueryMode, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 
 interface Return {
-  data: TagsQuery | undefined;
-  loading: boolean;
-  involvedData: TagsQuery | undefined;
-  involvedLoading: boolean;
-  impactData: TagsQuery | undefined;
-  impactLoading: boolean;
-  search: string;
-  setSearch: (value: string) => void;
+  addImpact: boolean;
   addIncident: boolean;
   addInvolved: boolean;
-  addImpact: boolean;
+  data: TagsQuery | undefined;
+  deleteConfirm: (value: string) => void;
+  editIncident: boolean;
+  impactData: TagsQuery | undefined;
+  impactLoading: boolean;
+  incidentId: string;
+  involvedData: TagsQuery | undefined;
+  involvedLoading: boolean;
+  loading: boolean;
+  saving: boolean;
+  search: string;
+  setIncidentId: (value: string) => void;
+  setSearch: (value: string) => void;
+  toggleAddImpact: () => void;
   toggleAddIncident: () => void;
   toggleAddInvolved: () => void;
-  toggleAddImpact: () => void;
-  updateCrimeTypeList: MutationUpdaterFn<CreateTagMutation>;
-  updateInvolvedList: MutationUpdaterFn<CreateTagMutation>;
-  updateImpactList: MutationUpdaterFn<CreateTagMutation>;
-  incidentId: string;
-  setIncidentId: (value: string) => void;
-  editIncident: boolean;
   toggleEditIncident: () => void;
-  saving: boolean;
-  deleteConfirm: (value: string) => void;
-  updateTagParent: (tagId: string, parentTagId: string | null) => void;
+  updateCrimeTypeList: MutationUpdaterFn<CreateTagMutation>;
+  updateImpactList: MutationUpdaterFn<CreateTagMutation>;
+  updateInvolvedList: MutationUpdaterFn<CreateTagMutation>;
+  updateTagParent: (tagId: string, parentTagId: null | string) => void;
 }
 
 const useCrimeTypeList = (): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const schemeName = useStoreState((state) => state.scheme.name);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const schemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
   const [incidentId, setIncidentId] = useState('');
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
@@ -53,6 +62,9 @@ const useCrimeTypeList = (): Return => {
   const [editIncident, setEditIncident] = useState(false);
   const [crimeTypesVars, setCrimeTypesVars] = useState({
     where: {
+      dataType: {
+        equals: Model.Incident,
+      },
       schemes: {
         some: {
           id: {
@@ -62,9 +74,6 @@ const useCrimeTypeList = (): Return => {
       },
       type: {
         equals: TagType.IncidentCrimeType,
-      },
-      dataType: {
-        equals: Model.Incident,
       },
       // OR: [
       //   {
@@ -84,6 +93,23 @@ const useCrimeTypeList = (): Return => {
   });
   const [involvedTagsVars, setInvolvedTagsVars] = useState({
     where: {
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
+      dataType: {
+        equals: Model.Incident,
+      },
       schemes: {
         some: {
           id: {
@@ -94,9 +120,10 @@ const useCrimeTypeList = (): Return => {
       type: {
         equals: TagType.IncidentInvolved,
       },
-      dataType: {
-        equals: Model.Incident,
-      },
+    },
+  });
+  const [impactTagsVars, setImpactTagsVars] = useState({
+    where: {
       OR: [
         {
           name: {
@@ -111,10 +138,9 @@ const useCrimeTypeList = (): Return => {
           },
         },
       ],
-    },
-  });
-  const [impactTagsVars, setImpactTagsVars] = useState({
-    where: {
+      dataType: {
+        equals: Model.Incident,
+      },
       schemes: {
         some: {
           id: {
@@ -125,23 +151,6 @@ const useCrimeTypeList = (): Return => {
       type: {
         equals: TagType.IncidentImpact,
       },
-      dataType: {
-        equals: Model.Incident,
-      },
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          description: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
     },
   });
 
@@ -249,11 +258,11 @@ const useCrimeTypeList = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<TagsQuery>({
-      query: TagsDocument,
       data: {
-        tags: [...(<[]>existingData.tags), res.createTag],
         __typename: 'Query',
+        tags: [...(<[]>existingData.tags), res.createTag],
       },
+      query: TagsDocument,
       variables: impactTagsVars,
     });
   };
@@ -272,11 +281,11 @@ const useCrimeTypeList = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<TagsQuery>({
-      query: TagsDocument,
       data: {
-        tags: [...(<[]>existingData.tags), res.createTag],
         __typename: 'Query',
+        tags: [...(<[]>existingData.tags), res.createTag],
       },
+      query: TagsDocument,
       variables: involvedTagsVars,
     });
   };
@@ -295,11 +304,11 @@ const useCrimeTypeList = (): Return => {
     if (existingData === null) return;
 
     store.writeQuery<TagsQuery>({
-      query: TagsDocument,
       data: {
-        tags: [...(<[]>existingData.tags), res.createTag],
         __typename: 'Query',
+        tags: [...(<[]>existingData.tags), res.createTag],
       },
+      query: TagsDocument,
       variables: crimeTypesVars,
     });
   };
@@ -326,35 +335,35 @@ const useCrimeTypeList = (): Return => {
 
     if (existingData)
       store.writeQuery<TagsQuery>({
-        query: TagsDocument,
         data: {
+          __typename: 'Query',
           tags: existingData.tags?.filter(
             (tag) => tag?.id !== res?.recycleTag?.id
           ),
-          __typename: 'Query',
         },
+        query: TagsDocument,
         variables: crimeTypesVars,
       });
     if (existingInvolvedData)
       store.writeQuery<TagsQuery>({
-        query: TagsDocument,
         data: {
+          __typename: 'Query',
           tags: existingInvolvedData.tags?.filter(
             (tag) => tag?.id !== res?.recycleTag?.id
           ),
-          __typename: 'Query',
         },
+        query: TagsDocument,
         variables: involvedTagsVars,
       });
     if (existingImpactData)
       store.writeQuery<TagsQuery>({
-        query: TagsDocument,
         data: {
+          __typename: 'Query',
           tags: existingImpactData.tags?.filter(
             (tag) => tag?.id !== res?.recycleTag?.id
           ),
-          __typename: 'Query',
         },
+        query: TagsDocument,
         variables: impactTagsVars,
       });
   };
@@ -366,18 +375,16 @@ const useCrimeTypeList = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: intl.formatMessage({
-          id: 'NzVm0o',
-          defaultMessage: 'Successfully Removed',
-        }),
         description: intl.formatMessage(
           {
             defaultMessage:
               'The incident type has been removed from {schemeName}',
-            id: 'NoJPMG',
           },
           { schemeName }
         ),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Removed',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -401,19 +408,17 @@ const useCrimeTypeList = (): Return => {
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: intl.formatMessage({
-        id: '2oCaym',
-        defaultMessage: 'Are you sure?',
-      }),
       content: intl.formatMessage({
-        id: 'Zyk6ao',
         defaultMessage:
           'This will remove this incident type from this scheme, bu not any other schemes you may have added it to.',
       }),
-
       onOk() {
         openDelete(currentId);
       },
+
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+      }),
     });
   };
 
@@ -436,16 +441,13 @@ const useCrimeTypeList = (): Return => {
     return true;
   };
 
-  const updateTagParent = (tagId: string, parentTagId: string | null) => {
+  const updateTagParent = (tagId: string, parentTagId: null | string) => {
     if (parentTagId) {
       if (checkTag(tagId, parentTagId)) {
         console.log(checkTag(tagId, parentTagId));
 
         void updateTag({
           variables: {
-            where: {
-              id: tagId,
-            },
             data: {
               parentTag: {
                 connect: {
@@ -453,19 +455,22 @@ const useCrimeTypeList = (): Return => {
                 },
               },
             },
+            where: {
+              id: tagId,
+            },
           },
         });
       }
     } else {
       void updateTag({
         variables: {
-          where: {
-            id: tagId,
-          },
           data: {
             parentTag: {
               disconnect: true,
             },
+          },
+          where: {
+            id: tagId,
           },
         },
       });
@@ -473,29 +478,29 @@ const useCrimeTypeList = (): Return => {
   };
 
   return {
-    data,
-    loading,
-    search,
-    setSearch,
-    addIncident,
     addImpact,
+    addIncident,
     addInvolved,
-    toggleAddIncident,
-    toggleAddImpact,
-    toggleAddInvolved,
-    updateCrimeTypeList,
-    incidentId,
-    setIncidentId,
-    editIncident,
-    toggleEditIncident,
-    saving,
+    data,
     deleteConfirm,
-    involvedData,
-    involvedLoading,
+    editIncident,
     impactData,
     impactLoading,
-    updateInvolvedList,
+    incidentId,
+    involvedData,
+    involvedLoading,
+    loading,
+    saving,
+    search,
+    setIncidentId,
+    setSearch,
+    toggleAddImpact,
+    toggleAddIncident,
+    toggleAddInvolved,
+    toggleEditIncident,
+    updateCrimeTypeList,
     updateImpactList,
+    updateInvolvedList,
     updateTagParent,
   };
 };

@@ -1,34 +1,33 @@
-import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
+import type { TagType } from 'graphql/types';
+
+import React from 'react';
 
 import View from './AddCrimeType.view';
 import useAddCrimeType from './useAddCrimeType';
 
-import type { TagType } from 'graphql/types';
-import { CreateTagMutation } from 'graphql/tags/mutations/__generated__/create-tag.generated';
-
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateTagMutation>;
   type?: TagType;
+  update: MutationUpdaterFn<CreateTagMutation>;
 }
 
-const AddCrimeType = ({ onClose, update, type }: Props): JSX.Element => {
-  const { onSubmit, saving, schemeId, userSchemes, tags } = useAddCrimeType({
+const AddCrimeType = ({ onClose, type, update }: Props): JSX.Element => {
+  const { onSubmit, saving, schemeId, tags } = useAddCrimeType({
     onClose,
-    update,
     type,
+    update,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
       onClose={onClose}
+      onSubmit={onSubmit}
       saving={saving}
-      type={type}
       schemeId={schemeId}
-      userSchemes={userSchemes}
       tags={tags}
+      type={type}
     />
   );
 };

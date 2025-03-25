@@ -16,7 +16,6 @@ const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
   const {
     addExclusion,
     addOffenderTag,
-    adminRights,
     ageCheck,
     banData,
     bansData,
@@ -49,7 +48,6 @@ const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
       <View
         addExclusion={addExclusion}
         addOffenderTag={addOffenderTag}
-        adminRights={adminRights}
         ageCheck={ageCheck}
         banData={banData}
         bansData={bansData}

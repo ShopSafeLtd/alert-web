@@ -1,8 +1,8 @@
 import type { RolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useRolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
-
-import { useStoreState } from '../../../state';
+import { useAtomValue } from 'jotai/index';
 
 interface Return {
   data: RolesQuery | undefined;
@@ -11,9 +11,10 @@ interface Return {
 }
 
 const useRoles = (): Return => {
-  const { id: currentScheme } = useStoreState((state) => state.scheme);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { data, fetchMore, loading } = useRolesQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       schemeId: currentScheme || '',
       take: 20,

@@ -1,12 +1,15 @@
 import type { CapturedNetworkRequest, PostHogConfig } from 'posthog-js';
 
 import { TokenProvider } from '#/context/token-context';
+import SchemeProvider from '#/providers/SchemeProvider/SchemeProvider';
+import UserProvider from '#/providers/UserProvider/UserProvider';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
 import { reactRouterV6Instrumentation } from '@sentry/react';
 import { LicenseManager } from 'ag-grid-charts-enterprise';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { Provider } from 'jotai';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mixpanel from 'mixpanel-browser';
 import Views from 'navigation/router';
@@ -99,13 +102,19 @@ const App = (): JSX.Element => (
       options={options}
     >
       <TokenProvider>
-        <Store>
-          <ApolloProvider>
-            <RouteWrapper title={undefined}>
-              <Views />
-            </RouteWrapper>
-          </ApolloProvider>
-        </Store>
+        <Provider>
+          <Store>
+            <ApolloProvider>
+              <RouteWrapper title={undefined}>
+                <UserProvider>
+                  <SchemeProvider>
+                    <Views />
+                  </SchemeProvider>
+                </UserProvider>
+              </RouteWrapper>
+            </ApolloProvider>
+          </Store>
+        </Provider>
       </TokenProvider>
     </PostHogProvider>
   </div>

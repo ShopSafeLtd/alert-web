@@ -160,164 +160,159 @@ const ActiveChecklistView = ({
           <Form.List name="sections">
             {(fields) =>
               sections &&
-              fields.map(({ name }, sectionIndex) => (
-                <>
-                  <h2>{sections[sectionIndex]?.titleLocaled || ''}</h2>
-                  {/* Section Fields */}
+              fields.map(({ name }, sectionIndex) => {
+                const section = sections[sectionIndex];
+                const depends = section?.dependsOnWeight;
 
-                  <Form.List name={[name, 'subsections']}>
-                    {(subsectionsFields) => (
-                      <>
-                        {subsectionsFields.map(
-                          ({ name: subsectionName }, subsectionIndex) => (
-                            <>
-                              <h3>
-                                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                {subsectionIndex + 1}.{' '}
-                                {
-                                  sections[sectionIndex]?.subsections[
-                                    subsectionIndex
-                                  ]?.titleLocaled
-                                }
-                              </h3>
+                // Check section dependency
+                if (depends) {
+                  const dependencyIndex = Number(depends.dependsOn) - 1;
+                  const threshold = Number(depends.weight);
+                  const dependSection = form.getFieldValue([
+                    'sections',
+                    dependencyIndex,
+                  ]) as ActiveChecklistSection | undefined;
 
-                              {/* Subsection Fields */}
+                  if (!dependSection) return null;
 
-                              <Form.List name={[subsectionName, 'questions']}>
-                                {(questionFields) => (
-                                  <>
-                                    {questionFields.map(
-                                      (
-                                        { name: questionName },
-                                        questionIndex
-                                      ) => {
-                                        const depend =
-                                          sections[sectionIndex]?.subsections[
-                                            subsectionIndex
-                                          ]?.questions[questionIndex]
-                                            ?.dependent;
-                                        if (depend) {
-                                          let shouldShow = false;
-                                          if (watching.length === 0)
-                                            return null;
-                                          for (const subFields of watching)
-                                            for (const qFields of subFields.subsections)
-                                              for (const ques of qFields.questions) {
-                                                if (
-                                                  ques.ogName &&
-                                                  ques.ogName ===
-                                                    depend.question &&
-                                                  ques.answer === depend.answer
-                                                ) {
-                                                  shouldShow = true;
+                  const totalWeight = dependSection.subsections
+                    .flatMap((sub) =>
+                      sub.questions.map((q) =>
+                        q.answer === 'N/A'
+                          ? 0
+                          : q.weights.find((w) => w.answer === q.answer)
+                              ?.weight || 0
+                      )
+                    )
+                    .reduce((a, b) => a + b, 0);
+
+                  if (totalWeight < threshold) return null;
+                }
+
+                return (
+                  <div key={sectionIndex}>
+                    <h2>{section?.titleLocaled || ''}</h2>
+
+                    {/* Render Subsections */}
+                    <Form.List name={[name, 'subsections']}>
+                      {(subsectionsFields) => (
+                        <>
+                          {subsectionsFields.map(
+                            ({ name: subsectionName }, subsectionIndex) => {
+                              const subsection =
+                                sections[sectionIndex]?.subsections[
+                                  subsectionIndex
+                                ];
+
+                              return (
+                                <div key={subsectionIndex}>
+                                  <h3>
+                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                    {subsectionIndex + 1}.{' '}
+                                    {subsection?.titleLocaled}
+                                  </h3>
+
+                                  {/* Render Questions */}
+                                  <Form.List
+                                    name={[subsectionName, 'questions']}
+                                  >
+                                    {(questionFields) => (
+                                      <>
+                                        {questionFields.map(
+                                          (
+                                            { name: questionName },
+                                            questionIndex
+                                          ) => {
+                                            const question =
+                                              subsection?.questions[
+                                                questionIndex
+                                              ];
+                                            const depend = question?.dependent;
+
+                                            // Check question dependency
+                                            if (depend) {
+                                              let shouldShow = false;
+                                              if (watching.length === 0)
+                                                return null;
+
+                                              for (const subFields of watching) {
+                                                for (const qFields of subFields.subsections) {
+                                                  for (const ques of qFields.questions) {
+                                                    if (
+                                                      ques.ogName ===
+                                                        depend.question &&
+                                                      ques.answer ===
+                                                        depend.answer
+                                                    ) {
+                                                      shouldShow = true;
+                                                    }
+                                                  }
                                                 }
                                               }
 
-                                          if (!shouldShow) return null;
-                                        }
-                                        return (
-                                          <>
-                                            <h4 className={classes.sideMargin}>
-                                              {/* /!* eslint-disable-next-line formatjs/no-literal-string-in-jsx *!/ */}
-                                              {/* {indexToLetter(questionIndex)}){' '} */}
-                                              {
-                                                sections[sectionIndex]
-                                                  ?.subsections[subsectionIndex]
-                                                  ?.questions[questionIndex]
-                                                  ?.question.en
-                                              }
-                                            </h4>
-                                            {/* Question Fields */}
-                                            <Col span={13}>
-                                              <Form.Item
-                                                className={classes.sideMargin}
-                                                name={[questionName, 'answer']}
-                                                shouldUpdate
-                                              >
-                                                {sections[sectionIndex]
-                                                  ?.subsections[subsectionIndex]
-                                                  ?.questions[questionIndex]
-                                                  ?.type === 'TEXT' ? (
-                                                  <Input.TextArea
-                                                    autoSize={{ minRows: 3 }}
-                                                    placeholder={intl.formatMessage(
-                                                      {
-                                                        defaultMessage:
-                                                          'Enter your answer here...',
-                                                      }
+                                              if (!shouldShow) return null;
+                                            }
+
+                                            return (
+                                              <div key={questionIndex}>
+                                                <h4
+                                                  className={classes.sideMargin}
+                                                >
+                                                  {question?.question.en}
+                                                </h4>
+
+                                                {/* Render Answer Field */}
+                                                <Col span={13}>
+                                                  <Form.Item
+                                                    className={
+                                                      classes.sideMargin
+                                                    }
+                                                    name={[
+                                                      questionName,
+                                                      'answer',
+                                                    ]}
+                                                    shouldUpdate
+                                                  >
+                                                    {question?.type ===
+                                                    'TEXT' ? (
+                                                      <Input.TextArea
+                                                        autoSize={{
+                                                          minRows: 3,
+                                                        }}
+                                                        placeholder={intl.formatMessage(
+                                                          {
+                                                            defaultMessage:
+                                                              'Enter your answer here...',
+                                                          }
+                                                        )}
+                                                      />
+                                                    ) : (
+                                                      <Radio.Group
+                                                        buttonStyle="solid"
+                                                        optionType="button"
+                                                        options={question?.availableAnswers.map(
+                                                          (answer) => ({
+                                                            label: (
+                                                              <FormattedMessageFixed
+                                                                defaultMessage={
+                                                                  answer.answer
+                                                                }
+                                                                id={
+                                                                  answer.answer
+                                                                }
+                                                              />
+                                                            ),
+                                                            value:
+                                                              answer.answer,
+                                                          })
+                                                        )}
+                                                      />
                                                     )}
-                                                  />
-                                                ) : (
-                                                  <Radio.Group
-                                                    buttonStyle="solid"
-                                                    optionType="button"
-                                                    options={sections[
-                                                      sectionIndex
-                                                    ]?.subsections[
-                                                      subsectionIndex
-                                                    ]?.questions[
-                                                      questionIndex
-                                                    ]?.availableAnswers.map(
-                                                      (answer) => ({
-                                                        label: (
-                                                          <FormattedMessageFixed
-                                                            defaultMessage={
-                                                              answer.answer
-                                                            }
-                                                            id={answer.answer}
-                                                          />
-                                                        ),
-                                                        value: answer.answer,
-                                                      })
-                                                    )}
-                                                  />
-                                                )}
-                                              </Form.Item>
-                                            </Col>
-                                            <Form.Item
-                                              shouldUpdate={(
-                                                prevValues,
-                                                curValues
-                                              ) => {
-                                                const {
-                                                  answer: oldAnswer,
-                                                  type: oldType,
-                                                } =
-                                                  prevValues.sections[
-                                                    sectionIndex
-                                                  ].subsections[subsectionIndex]
-                                                    .questions[questionIndex];
-                                                const { answer, type } =
-                                                  curValues.sections[
-                                                    sectionIndex
-                                                  ].subsections[subsectionIndex]
-                                                    .questions[questionIndex];
+                                                  </Form.Item>
+                                                </Col>
 
-                                                if (
-                                                  oldAnswer !== answer ||
-                                                  oldType !== type
-                                                ) {
-                                                  return type !== 'TEXT';
-                                                }
-                                                return false;
-                                              }}
-                                            >
-                                              {({ getFieldValue }) => {
-                                                const type = getFieldValue([
-                                                  'sections',
-                                                  name,
-                                                  'subsections',
-                                                  subsectionName,
-                                                  'questions',
-                                                  questionName,
-                                                  'type',
-                                                ]);
-
-                                                if (type === 'TEXT') {
-                                                  return null;
-                                                }
-
-                                                return (
+                                                {/* Render Additional Info Field */}
+                                                {question?.type !== 'TEXT' && (
                                                   <Col span={12}>
                                                     <Form.Item
                                                       className={
@@ -344,52 +339,10 @@ const ActiveChecklistView = ({
                                                       />
                                                     </Form.Item>
                                                   </Col>
-                                                );
-                                              }}
-                                            </Form.Item>
-                                            <Form.Item
-                                              shouldUpdate={(
-                                                prevValues,
-                                                curValues
-                                              ) => {
-                                                const {
-                                                  answer: oldAnswer,
-                                                  type: oldType,
-                                                } =
-                                                  prevValues.sections[
-                                                    sectionIndex
-                                                  ].subsections[subsectionIndex]
-                                                    .questions[questionIndex];
-                                                const { answer, type } =
-                                                  curValues.sections[
-                                                    sectionIndex
-                                                  ].subsections[subsectionIndex]
-                                                    .questions[questionIndex];
+                                                )}
 
-                                                if (
-                                                  oldAnswer !== answer ||
-                                                  oldType !== type
-                                                ) {
-                                                  return type !== 'TEXT';
-                                                }
-                                                return false;
-                                              }}
-                                            >
-                                              {({ getFieldValue }) => {
-                                                const type = getFieldValue([
-                                                  'sections',
-                                                  name,
-                                                  'subsections',
-                                                  subsectionName,
-                                                  'questions',
-                                                  questionName,
-                                                  'type',
-                                                ]) as string;
-
-                                                if (type === 'TEXT') {
-                                                  return null;
-                                                }
-                                                return (
+                                                {/* Render Image Upload Field */}
+                                                {question?.type !== 'TEXT' && (
                                                   <Form.Item
                                                     className={
                                                       classes.sideMargin
@@ -420,24 +373,24 @@ const ActiveChecklistView = ({
                                                       </Button>
                                                     </Upload>
                                                   </Form.Item>
-                                                );
-                                              }}
-                                            </Form.Item>
-                                          </>
-                                        );
-                                      }
+                                                )}
+                                              </div>
+                                            );
+                                          }
+                                        )}
+                                      </>
                                     )}
-                                  </>
-                                )}
-                              </Form.List>
-                            </>
-                          )
-                        )}
-                      </>
-                    )}
-                  </Form.List>
-                </>
-              ))
+                                  </Form.List>
+                                </div>
+                              );
+                            }
+                          )}
+                        </>
+                      )}
+                    </Form.List>
+                  </div>
+                );
+              })
             }
           </Form.List>
         </Card>

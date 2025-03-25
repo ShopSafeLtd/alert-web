@@ -107,14 +107,10 @@ const OffenderProfile = ({
                 dataIndex: 'totalValue',
                 key: 'totalValue',
                 render: (value: number) =>
-                  intl.formatMessage(
-                    {
-                      defaultMessage: '£{value}',
-                    },
-                    {
-                      value: value.toFixed(0),
-                    }
-                  ),
+                  intl.formatNumber(value || 0, {
+                    currency: 'GBP',
+                    style: 'currency',
+                  }),
                 title: intl.formatMessage({
                   defaultMessage: 'Total Loss',
                 }),

@@ -3,9 +3,12 @@ import type { Age, Build, Gender, Race } from 'graphql/types';
 import type { OffenderFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { useSearchBusinessesQuery } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, Role, SortOrder } from 'graphql/types';
+import { Model, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
 interface Return {
@@ -33,17 +36,14 @@ interface Return {
 
 const useOffenderFilter = (): Return => {
   // Global State
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const { role } = useStoreState((state) => state.user);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
 
   // Fetch scheme tags
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({

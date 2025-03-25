@@ -1,8 +1,10 @@
 import type { Incident } from 'components/react-flow/nodes/incident-details-node';
 import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -25,7 +27,7 @@ interface Return {
 const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const order = useStoreState((state) => state.data.incidents.order);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);

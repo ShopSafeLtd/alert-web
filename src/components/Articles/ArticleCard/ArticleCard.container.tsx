@@ -14,7 +14,7 @@ interface Props {
 }
 
 const ArticleCard = ({ article, openLightbox, update }: Props): JSX.Element => {
-  const { deleteRights, menuRights, onDelete, onNavigate } = useArticleCard({
+  const { onDelete, onNavigate } = useArticleCard({
     createdById: article?.createdBy.id,
     update,
   });
@@ -22,8 +22,6 @@ const ArticleCard = ({ article, openLightbox, update }: Props): JSX.Element => {
   return (
     <View
       article={article}
-      deleteRights={deleteRights}
-      menuRights={menuRights}
       onDelete={onDelete}
       onNavigate={onNavigate}
       openLightbox={openLightbox}

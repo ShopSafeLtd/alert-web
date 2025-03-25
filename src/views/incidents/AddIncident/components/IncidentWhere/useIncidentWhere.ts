@@ -4,18 +4,21 @@ import type {
 } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
 import type React from 'react';
 
+import {
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useApolloClient } from '@apollo/client';
-import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
-import { QueryMode, Role } from 'graphql/types';
+import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 // TODO use businesses select
 
 interface Props {
-  brands: string[];
-  setBrands: (value: string[]) => void;
   showSiteNumber: boolean;
 }
 interface Return {
@@ -23,32 +26,19 @@ interface Return {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
-  onSelectedBusiness: (value: string) => void;
 }
 
-const useIncidentWhere = ({
-  brands: _,
-  setBrands,
-  showSiteNumber,
-}: Props): Return => {
+const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
   const client = useApolloClient();
   const intl = useIntl();
-  const { id: schemeId } = useStoreState((state) => state.scheme);
-  const { businesses, reportToAllBusinesses, role } = useStoreState(
-    (state) => state.user
-  );
+
+  const isAdmin = useAtomValue(isAdminAtom);
+
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
+  const reportToAllBusinesses =
+    useAtomValue(currentUserAtom)?.reportToAllBusinesses;
   const [hideField, setHideField] = useState(true);
-
-  useEffect(() => {
-    if (role !== Role.User || businesses.length > 1 || reportToAllBusinesses) {
-      setHideField(false);
-    } else {
-      setHideField(true);
-    }
-  }, [role, businesses]);
-
-  // const variables =
-
   const onSearchBusiness = async (value: string) =>
     client
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
@@ -106,26 +96,19 @@ const useIncidentWhere = ({
             ]
       );
 
-  const [getBrands] = useBusinessBrandsLazyQuery();
-
-  const onSelectedBusiness = async (value: string) => {
-    const businessData = await getBrands({
-      variables: {
-        where: {
-          id: value,
-        },
-      },
-    });
-    if (businessData.data?.business?.brands) {
-      setBrands(businessData.data?.business?.brands || []);
+  useEffect(() => {
+    if (isAdmin || businesses.length > 1 || reportToAllBusinesses) {
+      setHideField(false);
+    } else {
+      setHideField(true);
     }
-  };
+  }, [isAdmin, businesses]);
+
+  // const variables =
 
   return {
     hideField,
     onSearchBusiness,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onSelectedBusiness,
   };
 };
 

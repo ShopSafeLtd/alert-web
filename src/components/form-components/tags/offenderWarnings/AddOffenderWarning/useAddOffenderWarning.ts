@@ -1,10 +1,15 @@
-import type { Scheme } from 'state';
-import { useStoreState } from 'state';
 import type { TagData } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  userIdAtom,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
+import { useAtomValue } from 'jotai/index';
+
 interface FormData {
-  name: string;
   description: string;
+  name: string;
   schemes: string[];
 }
 
@@ -14,30 +19,30 @@ interface Props {
 
 interface Return {
   onSubmit: (value: FormData) => void;
-  userSchemes: Scheme[];
   schemeId: string;
+  userSchemes: { scheme: { id: string; name: string } }[];
 }
 
 const useAddOffenderWarning = ({ update }: Props): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(userIdAtom);
 
-  const userSchemes = useStoreState((state) => state.user.schemes);
+  const userSchemes = useAtomValue(userSchemesAtom);
 
   const onSubmit = (data: FormData) => {
     update({
+      createdById: userId,
+      description: data.description || '',
       id: Math.floor(Math.random() * 1000).toString(),
       name: data.name,
-      description: data.description || '',
       schemes: data.schemes,
-      createdById: userId,
     });
   };
 
   return {
     onSubmit,
-    userSchemes,
     schemeId,
+    userSchemes,
   };
 };
 export default useAddOffenderWarning;

@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SelectProps } from 'antd';
-import { Typography, Select, Spin, Row, Col } from 'antd';
-import React, { useMemo, useRef, useState } from 'react';
-import debounce from 'lodash/debounce';
-import { useApolloClient } from '@apollo/client';
-import { FormattedMessage } from 'react-intl';
-
-import { useStoreState } from 'state';
-import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
-import {
-  ListStockItemsDocument,
+import type {
   ListStockItemsQuery,
   ListStockItemsQueryVariables,
 } from 'graphql/stock-item/__generated__/stock-items-import.generated';
+
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useApolloClient } from '@apollo/client';
+import { Col, Row, Select, Spin, Typography } from 'antd';
+import { ListStockItemsDocument } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
+import debounce from 'lodash/debounce';
+import React, { useMemo, useRef, useState } from 'react';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   option: {
@@ -24,32 +25,32 @@ const useStyles = createUseStyles((theme: Theme) => ({
 }));
 
 export interface DebounceSelectProps
-  extends Omit<SelectProps<StockItemValue>, 'options' | 'children'> {
+  extends Omit<SelectProps<StockItemValue>, 'children' | 'options'> {
   debounceTimeout?: number;
-  onAddItem: (data: StockItemValue) => void;
   division: string | undefined;
+  onAddItem: (data: StockItemValue) => void;
 }
 
 export interface StockItemValue {
-  key: string;
+  barcode?: null | string;
+  brand?: null | string;
+  costPriceLocal?: null | number;
   id: string;
-  name?: string | null;
-  brand?: string | null;
-  sku?: string | null;
-  barcode?: string | null;
-  costPriceLocal?: number | null;
-  salesPriceLocal?: number | null;
+  key: string;
+  name?: null | string;
+  salesPriceLocal?: null | number;
+  sku?: null | string;
 }
 
 const StockItemSearch = ({
-                           debounceTimeout = 200,
-                           onAddItem,
-                           division,
-                           ...props
-                         }: DebounceSelectProps) => {
+  debounceTimeout = 200,
+  division,
+  onAddItem,
+  ...props
+}: DebounceSelectProps) => {
   const styles = useStyles();
   const client = useApolloClient();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<StockItemValue[]>([]);
   const fetchRef = useRef(0);
@@ -64,16 +65,6 @@ const StockItemSearch = ({
         variables: {
           take: 100,
           where: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-            division: division
-              ? {
-                equals: division,
-              }
-              : undefined,
             OR: [
               {
                 name: {
@@ -100,6 +91,16 @@ const StockItemSearch = ({
                 },
               },
             ],
+            division: division
+              ? {
+                  equals: division,
+                }
+              : undefined,
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
           },
         },
       })
@@ -133,14 +134,14 @@ const StockItemSearch = ({
 
   return (
     <Select<StockItemValue>
-      labelInValue
       filterOption={false}
-      onSearch={debounceFetcher}
+      labelInValue
       notFoundContent={fetching ? <Spin size="small" /> : null}
+      onSearch={debounceFetcher}
+      onSelect={onSelect}
       optionFilterProp="label"
       optionLabelProp="label"
       value={null}
-      onSelect={onSelect}
       // options={options}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
@@ -149,18 +150,15 @@ const StockItemSearch = ({
         <Select.Option
           className={styles.option}
           key={option.id}
-          value={option.id}
           label={option.name}
+          value={option.id}
         >
           <Row gutter={8}>
             <Col>
               <Row gutter={4}>
                 <Col>
-                  <Typography.Text type="secondary" strong>
-                    <FormattedMessage
-                      id="uTnplY"
-                      defaultMessage="Description:"
-                    />
+                  <Typography.Text strong type="secondary">
+                    <FormattedMessage defaultMessage="Description:" />
                   </Typography.Text>
                 </Col>
                 <Col>
@@ -172,14 +170,18 @@ const StockItemSearch = ({
               <Col>
                 <Row gutter={4}>
                   <Col>
-                    <Typography.Text type="secondary" strong>
-                      <FormattedMessage id="KFjD/N" defaultMessage="Cost:" />
+                    <Typography.Text strong type="secondary">
+                      <FormattedMessage defaultMessage="Cost:" />
                     </Typography.Text>
                   </Col>
                   <Col>
                     {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                     <Typography.Text>
-                      £{option.costPriceLocal.toFixed(2)}
+                      <FormattedNumber
+                        currency={'GBP'}
+                        style={'currency'}
+                        value={option.costPriceLocal || 0}
+                      />
                     </Typography.Text>
                   </Col>
                 </Row>
@@ -189,17 +191,18 @@ const StockItemSearch = ({
               <Col>
                 <Row gutter={4}>
                   <Col>
-                    <Typography.Text type="secondary" strong>
-                      <FormattedMessage
-                        id="Dkp1fL"
-                        defaultMessage="Retail Price:"
-                      />
+                    <Typography.Text strong type="secondary">
+                      <FormattedMessage defaultMessage="Retail Price:" />
                     </Typography.Text>
                   </Col>
                   <Col>
                     {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                     <Typography.Text>
-                      £{option.salesPriceLocal.toFixed(2)}
+                      <FormattedNumber
+                        currency={'GBP'}
+                        style={'currency'}
+                        value={option.salesPriceLocal || 0}
+                      />
                     </Typography.Text>
                   </Col>
                 </Row>
@@ -211,8 +214,8 @@ const StockItemSearch = ({
               <Col>
                 <Row gutter={4}>
                   <Col>
-                    <Typography.Text type="secondary" strong>
-                      <FormattedMessage id="204/FC" defaultMessage="Brand:" />
+                    <Typography.Text strong type="secondary">
+                      <FormattedMessage defaultMessage="Brand:" />
                     </Typography.Text>
                   </Col>
                   <Col>
@@ -224,8 +227,8 @@ const StockItemSearch = ({
             <Col>
               <Row gutter={4}>
                 <Col>
-                  <Typography.Text type="secondary" strong>
-                    <FormattedMessage id="x99+yI" defaultMessage="SKU:" />
+                  <Typography.Text strong type="secondary">
+                    <FormattedMessage defaultMessage="SKU:" />
                   </Typography.Text>
                 </Col>
                 <Col>
@@ -237,8 +240,8 @@ const StockItemSearch = ({
               <Col>
                 <Row gutter={4}>
                   <Col>
-                    <Typography.Text type="secondary" strong>
-                      <FormattedMessage id="eRnT7x" defaultMessage="Barcode:" />
+                    <Typography.Text strong type="secondary">
+                      <FormattedMessage defaultMessage="Barcode:" />
                     </Typography.Text>
                   </Col>
                   <Col>

@@ -3,16 +3,17 @@ import type {
   ListArticlesQueryVariables,
 } from 'graphql/article/queries/__generated__/list_articles.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import { Modal } from 'antd';
 import { useDeleteArticleMutation } from 'graphql/article/mutations/__generated__/delete_article.generated';
 import { ListArticlesDocument } from 'graphql/article/queries/__generated__/list_articles.generated';
 import { useArticleQuery } from 'graphql/article/queries/__generated__/view-article.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 
 import type { Props, ReturnProps } from '../types/ViewArticle';
 
@@ -21,8 +22,7 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
 
   const intl = useIntl();
   const navigation = useNavigate();
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const role = useStoreState((state) => state.user.role);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const editArticle = () => {
     navigation(`/app/article/edit/${id}`);
   };
@@ -143,7 +143,6 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     loading,
     onDeleteArticle,
     openLightbox: triggerLightbox,
-    role,
   };
 };
 

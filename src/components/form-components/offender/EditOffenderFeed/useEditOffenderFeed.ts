@@ -5,14 +5,19 @@ import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
 import { useUpdateOffenderDetailsMutation } from '#/components/form-components/offender/EditOffenderFeed/graphql/mutation/__generated__/update-offender-details.generated';
 import { useEditOffenderQuery } from '#/components/form-components/offender/EditOffenderFeed/graphql/query/__generated__/edit-offender.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { notification } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, Role } from 'graphql/types';
+import { Model } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Props {
@@ -45,7 +50,6 @@ export interface FormData {
 }
 
 interface Return {
-  adminRights: boolean;
   customGalleries: { label: string; value: string }[];
   customGalleriesLoading: boolean;
   data: EditOffenderQuery | undefined;
@@ -62,12 +66,9 @@ interface Return {
 
 const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
-  const { id: schemeId, needJustification } = useStoreState(
-    (state) => state.scheme
-  );
-  const { role } = useStoreState((state) => state.user);
-
-  const businessId = useStoreState((state) => state.user.businesses[0].id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const needJustification = useAtomValue(currentSchemeAtom)?.needJustification;
+  const businessId = useAtomValue(currentSchemeBusinessesAtom)?.at(0)?.id;
 
   const [saving, setSaving] = useState(false);
 
@@ -181,7 +182,6 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   };
 
   return {
-    adminRights: role !== Role.User,
     customGalleries:
       customGalleriesData?.customGalleriesRelay?.edges?.map(
         ({ node: tag }) => ({

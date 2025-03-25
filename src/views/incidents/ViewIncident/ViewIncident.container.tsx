@@ -12,15 +12,17 @@ const ViewIncident = (): JSX.Element => {
     editAddress,
     editImages,
     editRights,
+    hasApprovePermission,
     hideIncident,
     loading,
     onEditAddress,
     saving,
     setSaving,
+    showAiDetails,
     toggleEditAddress,
     toggleEditImages,
+    toggleShowAiDetails,
     userId,
-    userRole,
   } = useViewIncident(incidentId);
 
   return (
@@ -30,16 +32,18 @@ const ViewIncident = (): JSX.Element => {
       editAddress={editAddress}
       editImages={editImages}
       editRights={editRights}
+      hasApprovePermission={hasApprovePermission}
       hideIncident={hideIncident}
       incidentId={incidentId}
       loading={loading}
       onEditAddress={onEditAddress}
       saving={saving}
       setSaving={setSaving}
+      showAiDetails={showAiDetails}
       toggleEditAddress={toggleEditAddress}
       toggleEditImages={toggleEditImages}
+      toggleShowAiDetails={toggleShowAiDetails}
       userId={userId}
-      userRole={userRole}
     />
   );
 };

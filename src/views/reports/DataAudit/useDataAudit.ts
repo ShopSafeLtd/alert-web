@@ -1,7 +1,10 @@
 import type { ListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { useListOffendersAllSchemesQuery } from 'graphql/offenders/queries/__generated__/list-offenders-all-schemes.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
@@ -24,10 +27,8 @@ interface Return {
 }
 
 const useDataAudit = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const defaultGroups = useStoreState(
-    (state) => state.user.filterDefaultGroups
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.offenders.variables
@@ -164,10 +165,7 @@ const useDataAudit = (): Return => {
         pagination,
         variables: {
           ...filterVariables,
-          groups:
-            defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
-              ?.map(({ id }) => id) || [],
+          groups: defaultGroups?.map(({ id }) => id) || [],
         },
       });
   }, []);

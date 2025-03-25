@@ -7,13 +7,19 @@ import type { DeleteArticleMutation } from 'graphql/article/mutations/__generate
 import type { ArticleFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
-import hasPermission from '#/utils/has-permission';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   ListArticlesFeedDocument,
   useListArticlesFeedQuery,
 } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import { PermissionMethod, PermissionModel, QueryMode } from 'graphql/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useAtomValue } from 'jotai/index';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -49,17 +55,9 @@ const useArticleFeed = (): Return => {
   const onNavigate = () => navigate('/app/article/add');
 
   // Global State
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const {
-    filterDefaultGroups: defaultGroups,
-    id: userId,
-    schemes,
-  } = useStoreState((state) => state.user);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
 
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
@@ -148,7 +146,7 @@ const useArticleFeed = (): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });
@@ -256,12 +254,11 @@ const useArticleFeed = (): Return => {
       },
     });
   };
-  const hasCreateRights = hasPermission({
+  const hasCreateRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Write,
       model: PermissionModel.Articles,
     },
-    permissions,
   });
   return {
     data: data?.listArticlesRelay || null,

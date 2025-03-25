@@ -85,7 +85,36 @@ const CompletedChecklistView = ({
   // eslint-disable-next-line no-restricted-syntax
   // eslint-disable-next-line @typescript-eslint/no-loop-func,no-restricted-syntax
   // eslint-disable-next-line @typescript-eslint/no-loop-func,no-restricted-syntax
-  for (const section of checklistSections)
+  for (const section of checklistSections.filter((s) => !s.sub)) {
+    // Check if the section has a dependsOnWeight property
+    if (section.dependsOnWeight) {
+      // Find the dependent section
+      const dependentSection = checklistSections.find(
+        (s) =>
+          s.section ===
+          Number.parseInt(section.dependsOnWeight?.dependsOn || '0')
+      );
+
+      if (dependentSection) {
+        // Calculate the total weight of the dependent section
+        let dependentWeight = 0;
+        for (const subsection of dependentSection.subsections) {
+          for (const question of subsection.questions) {
+            const weight =
+              question.weights.find((w) => w.answer === question.answer)
+                ?.weight || 0;
+            dependentWeight += weight;
+          }
+        }
+
+        // If the dependent weight is less than the required weight, skip this section and its subsections
+        if (dependentWeight < Number.parseInt(section.dependsOnWeight.weight)) {
+          continue;
+        }
+      }
+    }
+
+    // Process the section and its subsections
     section.subsections.flatMap((subsection) =>
       subsection.questions.flatMap((question) => {
         const questionImages =
@@ -107,9 +136,7 @@ const CompletedChecklistView = ({
             question.weights.sort((a, b) => b.weight - a.weight)[0]?.weight ||
             0,
           na: question.answer === 'N/A',
-          question: `${indexToLetter(question.order - 1)}) ${
-            question.question.en
-          }`,
+          question: `${indexToLetter(question.order - 1)}) ${question.question.en}`,
           section: section.section,
           subsection: subsection.subsection || 0,
           type: question.type,
@@ -164,7 +191,7 @@ const CompletedChecklistView = ({
         return questionFormatted;
       })
     );
-
+  }
   const flagged = questions.filter((question) => question.flagged);
   const imagesFormatted = images.map((image, index) => ({
     name: `Photo ${index + 1}`,

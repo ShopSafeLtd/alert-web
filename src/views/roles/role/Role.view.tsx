@@ -1,267 +1,83 @@
 import type { RoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
 import type { FormInstance } from 'antd';
-import type { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
+import { roleItems, settings } from '#/views/roles/types';
+import {
+  faCheckSquare,
+  faSquare,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { faWarning } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
-  Checkbox,
   Col,
-  Collapse,
+  Drawer,
   Form,
   Input,
   PageHeader,
   Row,
   Select,
   Space,
-  Table,
+  Switch,
+  Tooltip,
   Typography,
 } from 'antd';
 import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
-import type { DataType } from '../types';
-import type { FormValues } from './useRole';
+import type { DeleteFormValues, FormValues } from './useRole';
 
-import { ViewRequired, availableCheckBoxes } from '../types';
 import ViewRoleSidelist from './ViewRole.Sidelist';
 import useStyles from './ViewRole.styles';
 
 interface Props {
   changed: boolean;
+  clearAll: () => void;
   create: boolean;
   data: RoleQuery | undefined;
   form: FormInstance<FormValues>;
   id?: string;
   loading: boolean;
+  onDelete: (values: DeleteFormValues) => void;
   onFinish: (values: FormValues) => void;
+  onSettingsToggle: (value: boolean) => void;
   roleName: string | undefined;
+  setAll: () => void;
   setChanged: (changed: boolean) => void;
+  showDelete: boolean;
   submitting: boolean;
+  toggleShowDelete: () => void;
 }
 
-type Fields = {
-  [key in DataType]: JSX.Element;
-};
-
-type Labels = {
-  [key in DataType]: string;
-};
-
-type Methods = {
-  [key in PermissionMethod]: JSX.Element;
-};
-
 const RoleView = ({
-  changed,
-  create,
-  data,
+  clearAll,
   form,
   id,
   loading,
+  onDelete,
   onFinish,
+  onSettingsToggle,
   roleName,
-  setChanged,
+  setAll,
+  showDelete,
   submitting,
+  toggleShowDelete,
 }: Props) => {
   const navigate = useNavigate();
 
   const intl = useIntl();
   const formatMessage = intl.formatMessage.bind(intl);
   const classes = useStyles();
-  const users = data?.role.users || [];
-  const CheckboxComponent: Methods = {
-    [PermissionMethod.Approve]: (
-      <Checkbox value={PermissionMethod.Approve}>
-        {formatMessage({
-          defaultMessage: 'Approve',
-        })}
-      </Checkbox>
-    ),
-    [PermissionMethod.Delete]: (
-      <Checkbox value={PermissionMethod.Delete}>
-        {formatMessage({
-          defaultMessage: 'Delete',
-        })}
-      </Checkbox>
-    ),
-    [PermissionMethod.Edit]: (
-      <Checkbox value={PermissionMethod.Edit}>
-        {formatMessage({
-          defaultMessage: 'Edit',
-        })}
-      </Checkbox>
-    ),
-    [PermissionMethod.Read]: (
-      <Checkbox value={PermissionMethod.Read}>
-        {formatMessage({
-          defaultMessage: 'View',
-        })}
-      </Checkbox>
-    ),
-    [PermissionMethod.Write]: (
-      <Checkbox value={PermissionMethod.Write}>
-        {formatMessage({
-          defaultMessage: 'Create',
-        })}
-      </Checkbox>
-    ),
-  };
 
-  const labels: Labels = {
-    ACTIVITIES: formatMessage({
-      defaultMessage: 'Activities',
-    }),
-    ARTICLES: formatMessage({
-      defaultMessage: 'Bulletins',
-    }),
-    AUTOMATIONS: formatMessage({
-      defaultMessage: 'Automations',
-    }),
-    BRANDS: formatMessage({
-      defaultMessage: 'Brands',
-    }),
-    BUSINESSES: formatMessage({
-      defaultMessage: 'Businesses',
-    }),
-    CHAT: formatMessage({
-      defaultMessage: 'Chat',
-    }),
-    CHAT_GROUPS: formatMessage({
-      defaultMessage: 'Chat Groups',
-    }),
-    CHECKLIST: formatMessage({
-      defaultMessage: 'Checklist',
-    }),
-    CRIME_GROUPS: formatMessage({
-      defaultMessage: 'Crime Groups',
-    }),
-    DASHBOARD: formatMessage({
-      defaultMessage: 'Dashboard',
-    }),
-    DASHBOARDS: formatMessage({
-      defaultMessage: 'Dashboard Settings',
-    }),
-    DATA_EXPORT: formatMessage({
-      defaultMessage: 'Data Export',
-    }),
-    DATA_IMPORT: formatMessage({
-      defaultMessage: 'Data Import',
-    }),
-    DEM: formatMessage({
-      defaultMessage: 'Dem',
-    }),
-    DOCUMENTS: formatMessage({
-      defaultMessage: 'Documents',
-    }),
-    EVIDENCE: formatMessage({
-      defaultMessage: 'Evidence',
-    }),
-    GENERAL_SETTINGS: formatMessage({
-      defaultMessage: 'General Settings',
-    }),
-    GROUPS: formatMessage({
-      defaultMessage: 'Groups',
-    }),
-    INCIDENT_OPTIONS: formatMessage({
-      defaultMessage: 'Incident Options',
-    }),
-    INCIDENTS: formatMessage({
-      defaultMessage: 'Incidents',
-    }),
-    INVESTIGATIONS: formatMessage({
-      defaultMessage: 'Investigations',
-    }),
-    OFFENDER_GALLERIES: formatMessage({
-      defaultMessage: 'Offender Galleries',
-    }),
-    OFFENDER_WARNINGS: formatMessage({
-      defaultMessage: 'Offender Warnings',
-    }),
-    OFFENDERS: formatMessage({
-      defaultMessage: 'Offenders',
-    }),
-    RECYCLE_BIN: formatMessage({
-      defaultMessage: 'Recycle Bin',
-    }),
-    REPORTS: formatMessage({
-      defaultMessage: 'Reports',
-    }),
-    ROLES: formatMessage({
-      defaultMessage: 'Roles',
-    }),
-    SETTINGS: formatMessage({
-      defaultMessage: 'Settings',
-    }),
-    SHARING_SETTINGS: formatMessage({
-      defaultMessage: 'Sharing Settings',
-    }),
-    SINGLE_SHOE: formatMessage({
-      defaultMessage: 'Single Shoe',
-    }),
-    STATEMENT_TEMPLATES: formatMessage({
-      defaultMessage: 'Statement Templates',
-    }),
-    TASKS: formatMessage({
-      defaultMessage: 'Tasks',
-    }),
-    TERMS: formatMessage({
-      defaultMessage: 'Terms',
-    }),
-    USERS: formatMessage({
-      defaultMessage: 'Users',
-    }),
-    VEHICLES: formatMessage({
-      defaultMessage: 'Vehicles',
-    }),
-    WORKFLOWS: formatMessage({
-      defaultMessage: 'Workflows',
-    }),
-  };
-
-  const createFormItem = (dataType: DataType) => {
-    if (dataType === 'AUTOMATIONS') return;
-    return (
-      <Form.Item
-        label={labels[dataType]}
-        labelAlign="left"
-        labelCol={{ span: 7 }}
-        name={dataType}
-      >
-        <Checkbox.Group
-          onChange={(value: CheckboxValueType[]) => {
-            if (ViewRequired.some((item) => value.includes(item))) {
-              form.setFieldsValue({
-                [dataType]: [
-                  ...(value as PermissionMethod[]),
-                  PermissionMethod.Read,
-                ],
-              });
-            }
-          }}
-          style={{ width: '100%' }}
-        >
-          <Row>
-            {availableCheckBoxes[dataType].map((item) => (
-              <Col key={item} span={6}>
-                {CheckboxComponent[item]}
-              </Col>
-            ))}
-          </Row>
-        </Checkbox.Group>
-      </Form.Item>
-    );
-  };
-
-  const fields: Fields = Object.keys(PermissionModel)
-    // eslint-disable-next-line unicorn/no-array-reduce
-    .reduce((acc, key) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
-      acc[PermissionModel[key]] = createFormItem(PermissionModel[key]);
-      return acc;
-    }, {} as Fields);
+  const settingsEnabled = Form.useWatch(
+    `${PermissionModel.Settings}:${PermissionMethod.Read}`,
+    form
+  ) as boolean;
 
   return (
     <div className="page-container">
@@ -270,187 +86,386 @@ const RoleView = ({
           <ViewRoleSidelist current={id} />
         </Col>
         <Col className={classes.borderLeft} flex={1}>
-          <PageHeader
-            onBack={() => navigate('/app/scheme-settings/roles')}
-            title={
-              roleName ||
-              formatMessage({
-                defaultMessage: 'Roles',
-              })
-            }
-          />
+          <Row align="middle">
+            <Col flex={1}>
+              <PageHeader
+                onBack={() => navigate('/app/scheme-settings/roles')}
+                title={
+                  roleName ||
+                  formatMessage({
+                    defaultMessage: 'Roles',
+                  })
+                }
+              />
+            </Col>
+            <Col>
+              <Button
+                disabled={loading}
+                onClick={setAll}
+                style={{
+                  borderBottomRightRadius: 0,
+                  borderRightWidth: 0,
+                  borderTopRightRadius: 0,
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCheckSquare}
+                  style={{ marginRight: 10 }}
+                />
+                <FormattedMessage defaultMessage="Select All" />
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={loading}
+                onClick={clearAll}
+                style={{
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                  borderRightWidth: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
+                }}
+              >
+                <FontAwesomeIcon icon={faSquare} style={{ marginRight: 10 }} />
+                <FormattedMessage defaultMessage="Clear All" />
+              </Button>
+            </Col>
+            <Col style={{ paddingRight: 20 }}>
+              <Button
+                disabled={loading}
+                onClick={toggleShowDelete}
+                style={{
+                  borderBottomLeftRadius: 0,
+                  borderTopLeftRadius: 0,
+                }}
+              >
+                <FontAwesomeIcon icon={faTrash} style={{ marginRight: 10 }} />
+                <FormattedMessage defaultMessage="Delete Role" />
+              </Button>
+            </Col>
+          </Row>
+
           <Row style={{ paddingLeft: 15, paddingRight: 15 }}>
             <Col span={24}>
-              <Card
-                loading={loading}
-                title={formatMessage({
-                  defaultMessage: 'Permissions',
-                })}
-              >
+              <div>
                 <Form<FormValues>
                   autoComplete="off"
                   form={form}
                   initialValues={{
                     'Dashboard.Group': [PermissionMethod.Read],
                   }}
-                  layout="horizontal"
+                  layout="vertical"
                   name="checklist_form"
                   onChange={() => {
-                    setChanged(true);
+                    console.log(true);
                   }}
                   onFinish={onFinish}
                 >
                   <>
-                    {create && (
-                      <>
-                        <Form.Item
-                          label={formatMessage({
-                            defaultMessage: 'Name',
-                          })}
-                          labelAlign="left"
-                          labelCol={{ span: 7 }}
-                          name="name"
-                          rules={[
-                            {
-                              message: formatMessage({
-                                defaultMessage: 'Name',
-                              }),
-                              required: true,
-                            },
-                          ]}
-                        >
-                          <Input />
-                        </Form.Item>
-                        <Form.Item
-                          label={formatMessage({
-                            defaultMessage: 'Type',
-                          })}
-                          labelAlign="left"
-                          labelCol={{ span: 7 }}
-                          name="type"
-                          rules={[
-                            {
-                              message: intl.formatMessage({
-                                defaultMessage:
-                                  'Please select a role for the user.',
-                              }),
-                              required: true,
-                            },
-                          ]}
-                        >
-                          <Select>
-                            <Select.Option key={Role.User} value={Role.User}>
-                              <Typography.Text>
-                                {intl.formatMessage({
-                                  defaultMessage: 'User',
-                                })}
-                              </Typography.Text>
-                              <Typography.Paragraph
-                                style={{
-                                  fontSize: 13,
-                                  margin: 0,
-                                }}
-                                type="secondary"
-                              >
-                                {intl.formatMessage({
+                    <Card>
+                      <Row gutter={16}>
+                        <Col span={12}>
+                          <Form.Item
+                            label={formatMessage({
+                              defaultMessage: 'Name',
+                            })}
+                            labelAlign="left"
+                            labelCol={{ span: 7 }}
+                            name="name"
+                            rules={[
+                              {
+                                message: formatMessage({
+                                  defaultMessage: 'Name',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                          >
+                            <Input disabled={loading} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                          <Form.Item
+                            label={formatMessage({
+                              defaultMessage: 'Type',
+                            })}
+                            labelAlign="left"
+                            labelCol={{ span: 7 }}
+                            name="type"
+                            rules={[
+                              {
+                                message: intl.formatMessage({
                                   defaultMessage:
-                                    'A basic user account that can submit data but has no admin features.',
-                                })}
-                              </Typography.Paragraph>
-                            </Select.Option>
-                            <Select.Option
-                              key={Role.ContentAdmin}
-                              value={Role.ContentAdmin}
-                            >
-                              <Typography.Text>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Content Admin',
-                                })}
-                              </Typography.Text>
-                              <Typography.Paragraph
-                                style={{
-                                  fontSize: 13,
-                                  fontWeight: 400,
-                                  margin: 0,
-                                }}
-                                type="secondary"
+                                    'Please select a role for the user.',
+                                }),
+                                required: true,
+                              },
+                            ]}
+                          >
+                            <Select disabled={loading}>
+                              <Select.Option key={Role.User} value={Role.User}>
+                                <Typography.Text>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'User',
+                                  })}
+                                </Typography.Text>
+                                <Typography.Paragraph
+                                  style={{
+                                    fontSize: 13,
+                                    margin: 0,
+                                  }}
+                                  type="secondary"
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage:
+                                      'A basic user account that can submit data but has no admin features.',
+                                  })}
+                                </Typography.Paragraph>
+                              </Select.Option>
+                              <Select.Option
+                                key={Role.ContentAdmin}
+                                value={Role.ContentAdmin}
                               >
-                                {intl.formatMessage({
-                                  defaultMessage:
-                                    'An account that allows for submitting and administering data but has no access to settings.',
-                                })}
-                              </Typography.Paragraph>
-                            </Select.Option>
-                            <Select.Option
-                              key={Role.GroupAdmin}
-                              value={Role.GroupAdmin}
-                            >
-                              <Typography.Text>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Group Admin',
-                                })}
-                              </Typography.Text>
-                              <Typography.Paragraph
-                                style={{
-                                  fontSize: 13,
-                                  fontWeight: 400,
-                                  margin: 0,
-                                }}
-                                type="secondary"
+                                <Typography.Text>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Content Admin',
+                                  })}
+                                </Typography.Text>
+                                <Typography.Paragraph
+                                  style={{
+                                    fontSize: 13,
+                                    fontWeight: 400,
+                                    margin: 0,
+                                  }}
+                                  type="secondary"
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage:
+                                      'An account that allows for submitting and administering data but has no access to settings.',
+                                  })}
+                                </Typography.Paragraph>
+                              </Select.Option>
+                              <Select.Option
+                                key={Role.GroupAdmin}
+                                value={Role.GroupAdmin}
                               >
-                                {intl.formatMessage({
-                                  defaultMessage:
-                                    'An account that allows for submitting and administering data and limited access to settings within their group.',
-                                })}
-                              </Typography.Paragraph>
-                            </Select.Option>
+                                <Typography.Text>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Group Admin',
+                                  })}
+                                </Typography.Text>
+                                <Typography.Paragraph
+                                  style={{
+                                    fontSize: 13,
+                                    fontWeight: 400,
+                                    margin: 0,
+                                  }}
+                                  type="secondary"
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage:
+                                      'An account that allows for submitting and administering data and limited access to settings within their group.',
+                                  })}
+                                </Typography.Paragraph>
+                              </Select.Option>
 
-                            <Select.Option
-                              key={Role.SchemeAdmin}
-                              value={Role.SchemeAdmin}
-                            >
-                              <Typography.Text>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Scheme Admin',
-                                })}
-                              </Typography.Text>
-                              <Typography.Paragraph
-                                style={{
-                                  fontSize: 13,
-                                  margin: 0,
-                                }}
-                                type="secondary"
+                              <Select.Option
+                                key={Role.SchemeAdmin}
+                                value={Role.SchemeAdmin}
                               >
-                                {intl.formatMessage({
-                                  defaultMessage:
-                                    'A full administrator account with access to all settings.',
-                                })}
-                              </Typography.Paragraph>
-                            </Select.Option>
-                          </Select>
-                        </Form.Item>
-                      </>
-                    )}
-                    <Form.Item
-                      label={formatMessage({
-                        defaultMessage: 'Can see/approve data',
-                      })}
-                      labelAlign="left"
-                      labelCol={{ span: 7 }}
-                      name="approvalAllowed"
-                      valuePropName="checked"
-                    >
-                      <Checkbox />
-                    </Form.Item>
-                    {Object.values(PermissionModel)
-                      .sort()
-                      .map((key) => fields[key as DataType])}
+                                <Typography.Text>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Scheme Admin',
+                                  })}
+                                </Typography.Text>
+                                <Typography.Paragraph
+                                  style={{
+                                    fontSize: 13,
+                                    margin: 0,
+                                  }}
+                                  type="secondary"
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage:
+                                      'A full administrator account with access to all settings.',
+                                  })}
+                                </Typography.Paragraph>
+                              </Select.Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={24}>
+                          <Form.Item
+                            label={formatMessage({
+                              defaultMessage: 'Can see data awaiting approval',
+                            })}
+                            labelAlign="left"
+                            labelCol={{ span: 7 }}
+                            name="approvalAllowed"
+                            valuePropName="checked"
+                          >
+                            <Switch />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    </Card>
+                    <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+                      {roleItems.map((item) => (
+                        <Col key={item.key} span={12}>
+                          <Card style={{ marginBottom: 0 }}>
+                            <Row gutter={8}>
+                              <Col>
+                                <FontAwesomeIcon icon={item.icon} size="xl" />
+                              </Col>
+                              <Col flex={1}>
+                                <Typography.Title
+                                  level={4}
+                                  style={{ marginBottom: 2 }}
+                                >
+                                  {item.title}
+                                </Typography.Title>
+                              </Col>
+                            </Row>
+                            <Typography.Paragraph>
+                              {item.description}
+                            </Typography.Paragraph>
+                            <Row gutter={32}>
+                              {item.methods.map((method) => (
+                                <Col key={method.key}>
+                                  <Tooltip
+                                    placement="bottom"
+                                    title={method.tooltip}
+                                  >
+                                    <Row align="middle" gutter={6}>
+                                      <Col>
+                                        <Form.Item
+                                          name={`${item.key}:${method.key}`}
+                                          style={{ marginBottom: 0 }}
+                                          valuePropName="checked"
+                                        >
+                                          <Switch
+                                            disabled={loading || item.disabled}
+                                            loading={loading}
+                                          />
+                                        </Form.Item>
+                                      </Col>
+                                      <Col>
+                                        <Typography.Text>
+                                          {method.name}
+                                        </Typography.Text>
+                                      </Col>
+                                    </Row>
+                                  </Tooltip>
+                                </Col>
+                              ))}
+                            </Row>
+                          </Card>
+                        </Col>
+                      ))}
+                      <Col />
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                      {settings.map((item) => (
+                        <Col key={item.key} span={24}>
+                          <Card style={{ marginBottom: 0 }}>
+                            <Row
+                              gutter={16}
+                              style={{ width: '100%' }}
+                              wrap={false}
+                            >
+                              <Col flex={1}>
+                                <Row gutter={8}>
+                                  <Col>
+                                    <FontAwesomeIcon
+                                      icon={item.icon}
+                                      size="xl"
+                                    />
+                                  </Col>
+                                  <Col flex={1}>
+                                    <Typography.Title
+                                      level={4}
+                                      style={{ marginBottom: 2 }}
+                                    >
+                                      {item.title}
+                                    </Typography.Title>
+                                  </Col>
+                                </Row>
+                                <Typography.Paragraph>
+                                  {item.description}
+                                </Typography.Paragraph>
+                              </Col>
+                              <Col>
+                                <Form.Item
+                                  name={`${PermissionModel.Settings}:${PermissionMethod.Read}`}
+                                  style={{ marginBottom: 0 }}
+                                  valuePropName="checked"
+                                >
+                                  <Switch
+                                    disabled={loading}
+                                    loading={loading}
+                                    onChange={() =>
+                                      onSettingsToggle(settingsEnabled)
+                                    }
+                                  />
+                                </Form.Item>
+                              </Col>
+                            </Row>
+
+                            {settingsEnabled && (
+                              <Row gutter={16}>
+                                {item.children?.map((child) => (
+                                  <Col
+                                    key={child.key}
+                                    span={12}
+                                    style={{ marginBottom: 4 }}
+                                  >
+                                    <Typography.Text strong>
+                                      {child.title}
+                                    </Typography.Text>
+                                    <Row gutter={16}>
+                                      {child.methods.map((method) => (
+                                        <Col
+                                          key={method.key}
+                                          style={{ marginTop: 4 }}
+                                        >
+                                          <Row align="middle" gutter={6}>
+                                            <Col>
+                                              <Form.Item
+                                                name={`${child.key}:${method.key}`}
+                                                style={{ marginBottom: 0 }}
+                                                valuePropName="checked"
+                                              >
+                                                <Switch
+                                                  disabled={loading}
+                                                  loading={loading}
+                                                />
+                                              </Form.Item>
+                                            </Col>
+                                            <Col>
+                                              <Typography.Text>
+                                                {method.name}
+                                              </Typography.Text>
+                                            </Col>
+                                          </Row>
+                                        </Col>
+                                      ))}
+                                    </Row>
+                                  </Col>
+                                ))}
+                              </Row>
+                            )}
+                          </Card>
+                        </Col>
+                      ))}
+                      <Col />
+                    </Row>
 
                     <Row>
                       <Col flex={1} />
                       <Space>
                         <Col>
-                          <Form.Item hidden={!changed}>
+                          <Form.Item>
                             <Button
                               htmlType="submit"
                               loading={loading || submitting}
@@ -466,50 +481,72 @@ const RoleView = ({
                     </Row>
                   </>
                 </Form>
-              </Card>
-              {!create && (
-                <Collapse>
-                  <Collapse.Panel
-                    header={formatMessage({
-                      defaultMessage: 'Users',
-                    })}
-                    key={1}
-                  >
-                    <Table
-                      columns={[
-                        {
-                          dataIndex: 'name',
-                          key: 'name',
-                          title: formatMessage({
-                            defaultMessage: 'Name',
-                          }),
-                        },
-                        {
-                          dataIndex: 'email',
-                          key: 'email',
-                          title: formatMessage({
-                            defaultMessage: 'Email',
-                          }),
-                        },
-                      ]}
-                      dataSource={users.map(({ user }) => ({
-                        email: user?.email,
-                        key: user?.id,
-                        name: user?.fullName,
-                      }))}
-                      pagination={{
-                        defaultPageSize: 10,
-                        hideOnSinglePage: true,
-                        total: data?.role.usersCount || 0,
-                      }}
-                    />
-                  </Collapse.Panel>
-                </Collapse>
-              )}
+              </div>
             </Col>
           </Row>
         </Col>
       </Row>
+
+      <Drawer
+        onClose={toggleShowDelete}
+        title={formatMessage({ defaultMessage: 'Delete Role' })}
+        visible={showDelete}
+      >
+        {showDelete && (
+          <Form layout="vertical" onFinish={onDelete}>
+            <Typography.Paragraph strong>
+              <FormattedMessage defaultMessage="Are you sure you want to do this? Once done this cannot be undone, all users will be moved to the new role." />
+            </Typography.Paragraph>
+            <Form.Item
+              label={formatMessage({ defaultMessage: 'New Role' })}
+              name="newRoleId"
+              rules={[
+                {
+                  message: formatMessage({
+                    defaultMessage:
+                      'Please choose a new role for the existing users.',
+                  }),
+                  required: true,
+                },
+              ]}
+              tooltip={formatMessage({
+                defaultMessage: 'All users will be moved to this role.',
+              })}
+            >
+              <RolesSelect excludeIds={id ? [id] : []} />
+            </Form.Item>
+            <Row gutter={8}>
+              <Col flex={1} />
+              <Col>
+                <Form.Item>
+                  <Button onClick={toggleShowDelete}>
+                    {formatMessage({
+                      defaultMessage: 'Cancel',
+                    })}
+                  </Button>
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item>
+                  <Button
+                    htmlType="submit"
+                    loading={loading || submitting}
+                    type="primary"
+                  >
+                    <FontAwesomeIcon
+                      icon={faWarning}
+                      style={{ marginRight: 8 }}
+                    />
+                    {formatMessage({
+                      defaultMessage: 'Delete Role',
+                    })}
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        )}
+      </Drawer>
     </div>
   );
 };

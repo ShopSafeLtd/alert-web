@@ -3,13 +3,14 @@ import type { ColumnsType } from 'antd/es/table/interface';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import type { Dispatch, SetStateAction } from 'react';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { customRequest } from '#/views/settings/data-import/custom-stock-import/customRequest';
 import { useImportStockItemCsvMutation } from '#/views/settings/data-import/custom-stock-import/graphql/mutations/__generated__/stock-item-import.generated';
 import { Form, notification } from 'antd';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 // import type { ColumnsType } from 'antd/es/table/interface';
 import type { HeaderToFixed, IFormData, Record } from './types';
@@ -59,7 +60,20 @@ interface Return {
   setUploading: (v: boolean) => void;
   uploading: boolean;
 }
-
+const escapeCSVField = (field: string): string => {
+  if (field === null) return '';
+  // Escape any double quotes
+  const escapedField = field.replaceAll('"', '""');
+  // Wrap in quotes if the field contains a comma, newline, or a double quote
+  if (
+    escapedField.includes(',') ||
+    escapedField.includes('\n') ||
+    escapedField.includes('"')
+  ) {
+    return `"${escapedField}"`;
+  }
+  return escapedField;
+};
 const useImportStock = (): Return => {
   const customFields = new Set(['goodsTypeId', 'schemeId', 'division', 'name']);
 
@@ -69,7 +83,7 @@ const useImportStock = (): Return => {
   const [uploading, setUploading] = useState(false);
   const intl = useIntl();
   const [form] = useForm<IFormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [headerToFixed, setHeaderToFixed] = useState<HeaderToFixed>({
     barcode: '',
     brand: '',
@@ -210,45 +224,53 @@ const useImportStock = (): Return => {
         goodsDataMap.set(value.name, value.id);
       }
     }
-    // Create headers string
-    const headers = `${fileHeaders.join(',')}\n`;
+
+    // Create header string with proper escaping
+    const headers = `${fileHeaders.map(escapeCSVField).join(',')}\n`;
 
     const rows = data
       .map((row) =>
-        // Map each row to CSV format
         fileHeaders
           .map((field) => {
             const dataHeader = headerToFixed[field];
-
+            let cellValue = '';
             if (!dataHeader) {
               return '';
             }
             if (customFields.has(field)) {
               switch (field) {
                 case 'name': {
-                  return renderDescription(
+                  cellValue = renderDescription(
                     row,
                     headerToFixed.description,
                     headerToFixed.itemSize,
                     headerToFixed.colour
                   );
+                  break;
                 }
                 case 'goodsTypeId': {
                   const goodsName = row[headerToFixed.goodsTypeId];
                   const goodsId = goodsDataMap.get(goodsName);
-                  return goodsId || '';
+                  cellValue = goodsId || '';
+                  break;
                 }
                 case 'schemeId': {
-                  return schemeId;
+                  cellValue = schemeId; // always the same value for all rows
+                  break;
                 }
                 case 'division': {
-                  return 'no-division';
+                  cellValue = 'no-division';
+                  break;
                 }
-                // No default
+                // No default, but you may add one if needed.
+                default: {
+                  cellValue = row[dataHeader] || '';
+                }
               }
+            } else {
+              cellValue = row[dataHeader] || '';
             }
-            // the row[field] will be a previous header.
-            return row[dataHeader] || '';
+            return escapeCSVField(cellValue);
           })
           .join(',')
       )
@@ -257,7 +279,6 @@ const useImportStock = (): Return => {
     // Combine headers and rows
     return headers + rows;
   };
-
   const uploadDataAsCsv = async () => {
     const newCsvData = new Blob([convertJSONToCSV()], {
       type: 'text/csv',

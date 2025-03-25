@@ -21,11 +21,9 @@ const IncidentCard = ({
   const {
     addInvestigation,
     approvalRights,
-    deleteRights,
     editImage,
     editImageId,
     editIncidentFeed,
-    menuRights,
     onDelete,
     onEditImage,
     setEditImageId,
@@ -41,12 +39,10 @@ const IncidentCard = ({
     <View
       addInvestigation={addInvestigation}
       approvalRights={approvalRights}
-      deleteRights={deleteRights}
       editImage={editImage}
       editImageId={editImageId}
       editIncidentFeed={editIncidentFeed}
       incident={incident}
-      menuRights={menuRights}
       onDelete={onDelete}
       onEditImage={onEditImage}
       openLightbox={openLightbox}

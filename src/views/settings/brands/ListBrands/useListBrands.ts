@@ -5,6 +5,10 @@ import type {
 } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { useDeleteBrandMutation } from '#/views/settings/brands/graphql/mutations/__generated__/delete-brand.generated';
 import {
   BrandsDocument,
@@ -12,8 +16,8 @@ import {
 } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { notification } from 'antd';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface Return {
@@ -45,8 +49,8 @@ interface Return {
 }
 
 const useBrandList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const schemeName = useStoreState((state) => state.scheme.name);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const schemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
   const [search, setSearch] = useState('');
   const [brandId, setBrandId] = useState('');
   const [saving, setSaving] = useState(false);
@@ -167,7 +171,6 @@ const useBrandList = (): Return => {
     loading: (data === null || data === undefined) && loading,
     onDelete,
     saving,
-
     search,
     setBrandId,
     setSearch,

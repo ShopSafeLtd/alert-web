@@ -25,6 +25,13 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import { useApolloClient } from '@apollo/client';
 import { Form, Modal, Upload, message, notification } from 'antd';
 import { useDeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
@@ -39,14 +46,20 @@ import {
   useChatMessagesQuery,
 } from 'graphql/messages/queries/__generated__/chat-messages.generated';
 import { MessagesSubscriptionDocument } from 'graphql/messages/subscriptions/__generated__/new_message.generated';
-import { ImagePosition, MessageItemType, Role, SortOrder } from 'graphql/types';
+import {
+  ImagePosition,
+  MessageItemType,
+  PermissionMethod,
+  PermissionModel,
+  SortOrder,
+} from 'graphql/types';
 import { UserChatsDocument } from 'graphql/userChat/queries/__generated__/user_chats.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
 
@@ -151,17 +164,19 @@ interface Return {
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
   const intl = useIntl();
-  const {
-    businesses: userBusinesses,
-    id: userId,
-    origName: userOrigName,
-    role,
-  } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const userOrigName = useAtomValue(currentUserAtom)?.fullName ?? '';
+  const userBusinesses = useAtomValue(currentSchemeBusinessesAtom);
   const restrictIncidentAccess =
-    useStoreState((state) => state.scheme.restrictIncidentAccess) &&
-    role === Role.User;
+    useAtomValue(currentSchemeAtom)?.restrictIncidentAccess &&
+    hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Incidents,
+      },
+    });
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
@@ -941,8 +956,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             from: {
               businesses: [
                 {
-                  fullName: userBusinesses[0].fullName,
-                  id: userBusinesses[0].id,
+                  fullName: userBusinesses?.at(0)?.name ?? '',
+                  id: userBusinesses?.at(0)?.id ?? '',
                 },
               ],
               firstLetter: userOrigName.slice(1)[0],
@@ -1110,7 +1125,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
 
   return {
-    adminRights: role !== Role.User,
+    adminRights: hasRolePermission({
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Chat,
+      },
+    }),
     articlesData,
     beforeUpload,
     chatData,

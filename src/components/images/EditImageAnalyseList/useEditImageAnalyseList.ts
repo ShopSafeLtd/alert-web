@@ -4,13 +4,14 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { Image, ImageCardData, ImageFaceType } from 'types/DataType';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { compressImage } from '#/utils/compress-images';
 import { message } from 'antd';
 import { ImagePosition } from 'graphql/types';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 interface Props {
   images: ImageCardData[] | null | undefined;
@@ -57,8 +58,8 @@ const useEditImageAnalyseList = ({
   update: updateImageList,
 }: Props): Return => {
   const intl = useIntl();
-  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
-  const facialDed = useStoreState((state) => state.scheme.facialRedaction);
+  const facialRec = useAtomValue(currentSchemeAtom)?.facialRecognition ?? false;
+  const facialDed = useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
 
   const [saving, setSaving] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);

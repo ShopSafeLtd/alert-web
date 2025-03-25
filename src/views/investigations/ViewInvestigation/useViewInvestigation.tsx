@@ -17,6 +17,8 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { demIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { useCloseInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/__generated__/close-investigation.generated';
 import { useReopenInvestigationMutation } from '#/views/investigations/ViewInvestigation/graphql/__generated__/reopen-investigation.generated';
@@ -38,6 +40,7 @@ import {
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
@@ -148,8 +151,8 @@ const onCompletedAddOffender = () => {
 const useViewInvestigation = (investigationId: string): Return => {
   const intl = useIntl();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const demId = useStoreState((state) => state.user.demId);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const demId = useAtomValue(demIdAtom);
   const takeAllSchemes = useStoreState(
     (state) => state.data.investigations.takeAllSchemes
   );

@@ -1,39 +1,54 @@
-import type { Permissions } from '../state/user-model';
 import type { PermissionMethod, PermissionModel } from 'graphql/types';
 
 interface PermissionMethodModal {
-  model: PermissionModel;
   method: PermissionMethod | PermissionMethod[];
+  model: PermissionModel;
+}
+
+interface Permissions {
+  allowedMethods: PermissionMethod[];
+  model: PermissionModel;
 }
 
 interface Permission {
+  permission: PermissionMethodModal | PermissionMethodModal[];
   permissions?: Permissions[];
-  permission: PermissionMethodModal;
 }
 
 /**
  * @param {Permissions[]} permissions - The permissions of the user
- * @param {PermissionMethodModal} permission - The permission you want to check
- * @returns {boolean} - Returns true if the user has the permission
- *  */
-const hasPermission = ({ permissions, permission }: Permission): boolean => {
+ * @param {PermissionMethodModal | PermissionMethodModal[]} permission - The permission(s) you want to check
+ * @returns {boolean} - Returns true if the user has any of the provided permission(s)
+ */
+const hasPermission = ({ permission, permissions }: Permission): boolean => {
   if (!permissions) {
     return false;
   }
-  const permissionModel = permissions.find(
-    (perm) => perm.model === permission.model
-  );
 
-  if (!permissionModel) {
-    return false;
+  // Function that checks a single permission object.
+  const checkPermission = (permToCheck: PermissionMethodModal): boolean => {
+    const permissionModel = permissions.find(
+      (perm) => perm.model === permToCheck.model
+    );
+    if (!permissionModel) {
+      return false;
+    }
+    const { allowedMethods } = permissionModel;
+    if (Array.isArray(permToCheck.method)) {
+      return permToCheck.method.some((method) =>
+        allowedMethods.includes(method)
+      );
+    }
+    return allowedMethods.includes(permToCheck.method);
+  };
+
+  // If permission is an array, check if any of the permission objects pass.
+  if (Array.isArray(permission)) {
+    return permission.some(checkPermission);
   }
 
-  const { allowedMethods } = permissionModel;
-
-  if (Array.isArray(permission.method)) {
-    return permission.method.some((method) => allowedMethods.includes(method));
-  }
-  return allowedMethods.includes(permission.method);
+  // Otherwise, check the single permission object.
+  return checkPermission(permission);
 };
 
 export default hasPermission;

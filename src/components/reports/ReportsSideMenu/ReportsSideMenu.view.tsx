@@ -1,9 +1,10 @@
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useReportsCentreQuery } from '#/views/reports/reports-centre/__generated__/reports-centre.generated';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Tooltip, Typography } from 'antd';
 import Sider from 'antd/lib/layout/Sider';
 import { ReportType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -32,7 +33,7 @@ interface Props {
 const ReportsSideMenu = ({ collapsed, selectedId, setCollapsed }: Props) => {
   const classes = useStyles();
 
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data } = useReportsCentreQuery({
     variables: {

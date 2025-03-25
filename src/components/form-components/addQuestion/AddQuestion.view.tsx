@@ -85,7 +85,15 @@ const AddQuestionView = ({
         <SelectPreview options={opt.filter(Boolean)} question={question} />
       );
     }
-
+    if (answerType === AnswerType.SelectSingle) {
+      return (
+        <SelectPreview
+          options={opt.filter(Boolean)}
+          question={question}
+          single
+        />
+      );
+    }
     return <div />;
   };
 
@@ -237,16 +245,23 @@ const AddQuestionView = ({
               },
               {
                 label: intl.formatMessage({
-                  defaultMessage: 'Select',
+                  defaultMessage: 'Select (Multiple)',
                 }),
                 value: AnswerType.Select,
+              },
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'Select (Single)',
+                }),
+                value: AnswerType.SelectSingle,
               },
             ]}
           />
         </Form.Item>
       </Card>
 
-      {answerType === AnswerType.Select && (
+      {(answerType === AnswerType.Select ||
+        answerType === AnswerType.SelectSingle) && (
         <Card
           hidden={!!selectedId}
           style={{
@@ -262,7 +277,12 @@ const AddQuestionView = ({
             rules={[
               {
                 validator: async (_, options) => {
-                  if (answerType !== AnswerType.Select || selectedId) return;
+                  if (
+                    (answerType !== AnswerType.Select &&
+                      answerType !== AnswerType.SelectSingle) ||
+                    selectedId
+                  )
+                    return;
                   if (!options || options.length < 2) {
                     return Promise.reject(
                       new Error(

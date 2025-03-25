@@ -1,12 +1,15 @@
+import type { PermissionMethod, PermissionModel } from 'graphql/types';
+
+import { currentPermissionsAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import { Navigate } from 'react-router-dom';
-import type { PermissionMethod, PermissionModel } from 'graphql/types';
-import { useStoreState } from '#/state';
+
 import hasPermission from '../../utils/has-permission';
 
 interface ModelMethod {
-  model: PermissionModel;
   method: PermissionMethod | PermissionMethod[];
+  model: PermissionModel;
 }
 interface Props {
   children: JSX.Element;
@@ -34,20 +37,15 @@ const PermissionCheckWrapper = ({
   permission,
   unauthorizedElement = <Navigate to="/" />,
 }: Props): JSX.Element => {
-  const { schemes } = useStoreState((state) => state.user);
-  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === currentSchemeId),
-    [schemes, currentSchemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const permissions = useAtomValue(currentPermissionsAtom);
+
   const isAuthorized = useMemo(() => {
     if (typeof permission === 'object' && !Array.isArray(permission)) {
-      return hasPermission({ permissions, permission });
+      return hasPermission({ permission, permissions });
     }
     if (Array.isArray(permission)) {
       return permission.some((perm) =>
-        hasPermission({ permissions, permission: perm })
+        hasPermission({ permission: perm, permissions })
       );
     }
     return false;

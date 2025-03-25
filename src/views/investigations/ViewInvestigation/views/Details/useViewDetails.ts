@@ -7,8 +7,8 @@ import type {
   ViewInvestigationQueryVariables,
 } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 
-import { useStoreState } from '#/state';
-import hasPermission from '#/utils/has-permission';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import { Modal } from 'antd';
 import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
 import {
@@ -20,7 +20,8 @@ import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-
 import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
 import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
 import update from 'immutability-helper';
-import { useEffect, useMemo, useState } from 'react';
+import { useAtomValue } from 'jotai/index';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
@@ -82,15 +83,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const [viewSuggestedOffenders, setViewSuggestedOffenders] = useState(false);
   const [viewSuggestedIncidents, setViewSuggestedIncidents] = useState(false);
   const [viewSuggestedVehicles, setViewSuggestedVehicles] = useState(false);
-  const { id: userId, schemes } = useStoreState((state) => state.user);
-  const { id: schemeId } = useStoreState((state) => state.scheme);
-
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
-
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const [editIncidentId, setEditIncidentId] = useState('');
 
   const [replyTo, setReplyTo] = useState<{
@@ -473,12 +466,11 @@ const useViewDetails = ({ investigationId }: Props): Return => {
       },
     });
   };
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.Investigations,
     },
-    permissions,
   });
 
   return {

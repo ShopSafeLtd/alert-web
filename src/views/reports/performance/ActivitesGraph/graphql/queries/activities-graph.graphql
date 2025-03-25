@@ -1,0 +1,6 @@
+query ActivityGraph($where: ActivityReportsWhere!) {
+    activityGraph(where: $where) {
+        label
+        value
+    }
+}

@@ -1,4 +1,4 @@
-import Loading from '#/components/shared-components/AntD/Loading';
+import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { useTokenContext } from '#/context/token-context';
 import { useThemeLanguage } from '#/hooks/useThemeLanguage';
 import AppLayout from '#/layouts/app-layout';
@@ -62,7 +62,7 @@ const Views = () => {
                         <Navigate to={GenerateSignInRedirect()} />
                       </SignedOut>
                       <SignedIn>
-                        {token ? <AppLayout /> : <Loading cover="content" />}
+                        {token ? <AppLayout /> : <LoadingScreen />}
                       </SignedIn>
                     </>
                   }

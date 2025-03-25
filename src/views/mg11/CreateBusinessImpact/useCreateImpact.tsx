@@ -1,8 +1,10 @@
 import type { FormInstance } from 'antd';
 
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
 import { useCreateOneBusinessImpactMutation } from 'graphql/reports/mutations/__generated__/create-business-impact.generated';
 import { useBusinessImpactQuery } from 'graphql/reports/queries/__generated__/business-impact-statement.generated';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,7 +13,6 @@ import type { FormData, IncidentData } from './CreateImpact.view';
 
 import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
-import { useStoreState } from '../../../state';
 
 const { useForm } = Form;
 
@@ -33,7 +34,7 @@ interface Return {
   update: (value: string) => void;
 }
 const useCreateImpact = (): Return => {
-  const name = useStoreState((state) => state.user.fullName);
+  const currentUser = useAtomValue(currentUserAtom);
   const { id: incidentId } = useParams();
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
@@ -89,7 +90,7 @@ const useCreateImpact = (): Return => {
         font={selectedFont}
         height={100}
         key={selectedFont}
-        name={name}
+        name={currentUser?.fullName ?? ''}
         width={300}
       />
     )
@@ -146,7 +147,7 @@ const useCreateImpact = (): Return => {
     file,
     form,
     incidentData,
-    name,
+    name: currentUser?.fullName ?? '',
     onSubmit,
     saving: saving || loading,
     selectedFont,

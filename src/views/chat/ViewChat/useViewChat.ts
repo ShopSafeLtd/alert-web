@@ -9,17 +9,18 @@ import {
   UserChatsDocument,
   useUserChatsQuery,
 } from '#/graphql/userChat/queries/__generated__/user_chats.generated';
-import { Role, SortOrder, TodoType } from 'graphql/types';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import { SortOrder, TodoType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 
 interface Props {
   chatId: string;
 }
 interface Return {
   addChat: boolean;
-  adminRights: boolean;
   currentId: string;
   data: UserChatsQuery | undefined;
   handleMarkAsRead: (value: string | undefined) => void;
@@ -32,9 +33,8 @@ interface Return {
 }
 
 const useViewChat = ({ chatId }: Props): Return => {
-  const role = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const userId = useAtomValue(userIdAtom);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const navigate = useNavigate();
   const [addChat, setAddChat] = useState(false);
   const [currentId, setCurrentId] = useState('');
@@ -214,7 +214,6 @@ const useViewChat = ({ chatId }: Props): Return => {
 
   return {
     addChat,
-    adminRights: role !== Role.User,
     currentId,
     data,
     handleMarkAsRead,

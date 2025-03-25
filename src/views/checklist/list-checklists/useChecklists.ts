@@ -3,10 +3,13 @@ import type { ActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__
 import type { ChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
 import type { FetchResult } from '@apollo/client';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useCreateActiveChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/create-active-checklist.generated';
 import { useRecycleChecklistMutation } from '#/views/checklist/graphql/mutations/__generated__/recycle-checklist.generated';
 import { useActiveChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-active-checklists.generated';
 import { useChecklistsQuery } from '#/views/checklist/graphql/queries/__generated__/list-checklists.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
 import type {
@@ -67,8 +70,8 @@ const useChecklists = (): Return => {
   );
   const { setActiveChecklistSort, setChecklistFilters, setChecklistSort } =
     useStoreActions((state) => state.filter);
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const { id: userId } = useStoreState((state) => state.user);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const { data, loading } = useChecklistsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {

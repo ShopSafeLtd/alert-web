@@ -2,11 +2,17 @@ import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__g
 import type { IncidentFilters } from 'state/data-model';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { useListBusinessesQuery } from 'graphql/businesses/queries/__generated__/list-businesses.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__generated__/list-incidents-all-schemes.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
-import { Model, QueryMode, Role, SortOrder, TagType } from 'graphql/types';
+import { Model, QueryMode, SortOrder, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -66,13 +72,10 @@ const useSelectIncidents = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
-  const {
-    filterDefaultGroups: defaultGroups,
-    role,
-    schemes: userSchemes,
-  } = useStoreState((state) => state.user);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userSchemes = useAtomValue(userSchemesAtom);
 
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -183,7 +186,7 @@ const useSelectIncidents = ({
             : undefined,
         schemeId: {
           in: takeAllSchemes
-            ? userSchemes.map((el) => el.scheme.id)
+            ? userSchemes.map((el) => el.schemeId)
             : [schemeId],
         },
       },
@@ -225,20 +228,17 @@ const useSelectIncidents = ({
               },
             },
           },
-          users:
-            role === Role.SchemeAdmin
-              ? undefined
-              : {
-                  some: {
-                    groups: {
-                      some: {
-                        id: {
-                          in: groups.map((id) => id),
-                        },
-                      },
-                    },
+          users: {
+            some: {
+              groups: {
+                some: {
+                  id: {
+                    in: groups.map((id) => id),
                   },
                 },
+              },
+            },
+          },
         },
       },
     });
@@ -265,10 +265,7 @@ const useSelectIncidents = ({
         },
         variables: {
           ...variables,
-          groups:
-            defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
-              ?.map(({ id }) => id) || [],
+          groups: defaultGroups?.map(({ id }) => id) || [],
         },
       });
     } else {

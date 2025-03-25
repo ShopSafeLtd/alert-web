@@ -31,7 +31,6 @@ query currentUser(
     }
     schemes(orderBy: $orderBy) {
       id
-      role
       scheme {
         customTranslations
         logo {

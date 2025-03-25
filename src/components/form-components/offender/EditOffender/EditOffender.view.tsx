@@ -4,6 +4,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { ViewOffenderQuery } from 'graphql/offenders/queries/__generated__/view-offender.generated';
 import type { BanType } from 'graphql/types';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import AddExclusion from '#/components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from '#/components/form-components/offender/exclusion/EditExclusion';
 // import type { RangePickerProps } from 'antd/es/date-picker';
@@ -37,6 +38,7 @@ import {
   Typography,
   Upload,
 } from 'antd';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -76,7 +78,6 @@ interface BanData {
 interface Props {
   addExclusion: boolean;
   addOffenderTag: boolean;
-  adminRights: boolean;
   ageCheck: boolean;
   banData: BanData | null;
   bansData: BanData[];
@@ -110,7 +111,6 @@ interface Props {
 const EditOffender = ({
   addExclusion,
   addOffenderTag,
-  adminRights,
   ageCheck,
   banData,
   bansData,
@@ -310,7 +310,13 @@ const EditOffender = ({
                     </Form.Item>
                   </Col>
 
-                  {adminRights && (
+                  <PermissionCheckWrapper
+                    permission={{
+                      method: PermissionMethod.Edit,
+                      model: PermissionModel.Offenders,
+                    }}
+                    unauthorizedElement={<div />}
+                  >
                     <Col>
                       <Button
                         disabled={saving}
@@ -328,7 +334,7 @@ const EditOffender = ({
                         })}
                       </Button>
                     </Col>
-                  )}
+                  </PermissionCheckWrapper>
                 </Row>
               </Col>
             </Row>

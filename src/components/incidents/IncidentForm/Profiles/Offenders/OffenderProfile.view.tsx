@@ -1,5 +1,7 @@
 import type { UploadChangeParam } from 'antd/lib/upload';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -14,10 +16,9 @@ import {
   Upload,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Role } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import {
   getOffenderAge,
   getOffenderBuild,
@@ -73,16 +74,11 @@ const OffenderProfile = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const imagesRequired = useStoreState(
-    (state) => state.scheme.imagesRequiredOnOffenders
-  );
-  const facialDetection = useStoreState(
-    (state) => state.scheme.facialDetection
-  );
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const imagesRequired =
+    useAtomValue(currentSchemeAtom)?.imagesRequiredOnOffenders;
+  const facialDetection =
+    useAtomValue(currentSchemeAtom)?.facialDetection ?? true;
+  const publicOffenderDOB = publicOffenderDob();
   return (
     <>
       <div

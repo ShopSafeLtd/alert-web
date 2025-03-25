@@ -2,9 +2,11 @@ query WorkflowData(
   $where: SchemeWhereUniqueInput!
   $questionsWhere: QuestionWhereInput
   $schemeTagsWhere: TagWhereInput
+  $orderBy: [QuestionOrderByWithRelationInput!]
+  $schemeTagsOrderBy: [TagOrderByWithRelationInput!]
 ) {
   scheme(where: $where) {
-    questions(where: $questionsWhere) {
+    questions(where: $questionsWhere, orderBy: $orderBy) {
       id
       questionOn
       optionsFormFormatted {
@@ -14,16 +16,9 @@ query WorkflowData(
       type
       questionFormatted
     }
-    schemeTags(where: $schemeTagsWhere) {
+    schemeTags(where: $schemeTagsWhere, orderBy: $schemeTagsOrderBy) {
       id
       name
-    }
-    members {
-      role
-      userId
-      user {
-        fullName
-      }
     }
     groups {
       id

@@ -1,27 +1,27 @@
+import ArticleFeed from '#/components/feedItems/FeedItemSection/ArticleFeed';
+import BanFeed from '#/components/feedItems/FeedItemSection/BanFeed';
+import CrimeGroupFeed from '#/components/feedItems/FeedItemSection/CrimeGroupFeed';
 import FeedItemSkeletonCard from '#/components/feedItems/FeedItemSection/FeedItemSkeletonCard';
 import IncidentFeed from '#/components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from '#/components/feedItems/FeedItemSection/OffenderFeed';
-import InvestigationFeed from '#/components/feedItems/FeedItemSection/investigationFeed';
 import VehicleFeed from '#/components/feedItems/FeedItemSection/VehicleFeed';
-import CrimeGroupFeed from '#/components/feedItems/FeedItemSection/CrimeGroupFeed';
-import ArticleFeed from '#/components/feedItems/FeedItemSection/ArticleFeed';
-import BanFeed from '#/components/feedItems/FeedItemSection/BanFeed';
-import React from 'react';
+import InvestigationFeed from '#/components/feedItems/FeedItemSection/investigationFeed';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
-import { Card, Col, Empty } from 'antd';
-import useFeedItems from '#/views/dashboard/components/FeedItems/useFeedItems';
 import DashboardInfiniteScroll from '#/views/dashboard/components/DashboardInfiniteScroll';
+import useFeedItems from '#/views/dashboard/components/FeedItems/useFeedItems';
+import { Card, Col, Empty } from 'antd';
 import { FeedItemType } from 'graphql/types';
+import React from 'react';
 
 const FeedItemCol = () => {
   const {
-    variables: { search },
     adminRights,
-    openLightbox,
     intl,
+    openLightbox,
     saving,
+    variables: { search },
   } = useDashboardContext();
-  const { loading, data, fetchMoreScroll, onDeleteFeedItem } = useFeedItems();
+  const { data, fetchMoreScroll, loading, onDeleteFeedItem } = useFeedItems();
   const total = data?.listFeedItems?.total || 0;
   const feedItems = data?.listFeedItems?.feedItems.length || 0;
   return (
@@ -45,78 +45,77 @@ const FeedItemCol = () => {
       ) : data?.listFeedItems?.total ? (
         <DashboardInfiniteScroll
           dataLength={feedItems}
-          next={() => fetchMoreScroll()}
           hasMore={feedItems < total}
           id="feed-scroll"
+          next={() => fetchMoreScroll()}
         >
           {data.listFeedItems?.feedItems.map((feedItem) => (
             <Card
-              style={{
-                width: '99%',
-                marginBottom: 20,
+              bodyStyle={{
+                borderRadius: 10,
+                margin: 0,
+                maxHeight: 130,
+                overflow: 'hidden',
+                padding: 0,
               }}
               key={feedItem?.id}
-              bodyStyle={{
-                padding: 0,
-                margin: 0,
-
-                overflow: 'hidden',
-                borderRadius: 10,
-                maxHeight: 130,
-              }}
               loading={loading}
+              style={{
+                marginBottom: 20,
+                width: '99%',
+              }}
             >
               <>
                 {/* create new incident/offender */}
                 {feedItem?.type === FeedItemType.NewIncident &&
                   feedItem.incident && (
                     <IncidentFeed
-                      feedItem={feedItem}
                       adminRights={adminRights}
-                      onDeleteFeedItem={onDeleteFeedItem}
-                      saving={saving}
-                      openLightbox={openLightbox}
+                      feedItem={feedItem}
                       isNewIncident
+                      onDeleteFeedItem={onDeleteFeedItem}
+                      openLightbox={openLightbox}
+                      saving={saving}
                     />
                   )}
                 {feedItem?.type === FeedItemType.NewOffender && (
                   <OffenderFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
-                    onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
-                    openLightbox={openLightbox}
+                    feedItem={feedItem}
                     isNewOffender
+                    onDeleteFeedItem={onDeleteFeedItem}
+                    openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.NewInvestigation && (
                   <InvestigationFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
-                    onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
-                    openLightbox={openLightbox}
+                    feedItem={feedItem}
                     isNewInvestigation
+                    onDeleteFeedItem={onDeleteFeedItem}
+                    openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.NewVehicle && (
                   <VehicleFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
-                    onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
-                    openLightbox={openLightbox}
+                    feedItem={feedItem}
                     isNewVehicle
+                    onDeleteFeedItem={onDeleteFeedItem}
+                    openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.NewCrimegroup && (
                   <CrimeGroupFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
-                    openLightbox={openLightbox}
-                    onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
+                    feedItem={feedItem}
                     isNewCrimeGroup
+                    onDeleteFeedItem={onDeleteFeedItem}
+                    openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {/* update details  */}
@@ -124,29 +123,29 @@ const FeedItemCol = () => {
                   feedItem.incident && (
                     <IncidentFeed
                       adminRights={adminRights}
-                      onDeleteFeedItem={onDeleteFeedItem}
-                      saving={saving}
                       feedItem={feedItem}
+                      onDeleteFeedItem={onDeleteFeedItem}
                       openLightbox={openLightbox}
+                      saving={saving}
                     />
                   )}
                 {feedItem?.type === FeedItemType.Offender &&
                   feedItem.incident && (
                     <OffenderFeed
-                      feedItem={feedItem}
                       adminRights={adminRights}
+                      feedItem={feedItem}
                       onDeleteFeedItem={onDeleteFeedItem}
-                      saving={saving}
                       openLightbox={openLightbox}
+                      saving={saving}
                     />
                   )}
                 {feedItem?.type === FeedItemType.Investigation && (
                   <InvestigationFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
+                    feedItem={feedItem}
                     onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
                     openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
 
@@ -155,41 +154,41 @@ const FeedItemCol = () => {
                   feedItem.incident && (
                     <IncidentFeed
                       adminRights={adminRights}
-                      onDeleteFeedItem={onDeleteFeedItem}
-                      saving={saving}
                       feedItem={feedItem}
-                      openLightbox={openLightbox}
                       isNewImage
+                      onDeleteFeedItem={onDeleteFeedItem}
+                      openLightbox={openLightbox}
+                      saving={saving}
                     />
                   )}
                 {feedItem?.type === FeedItemType.OffenderImage && (
                   <OffenderFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
-                    onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
-                    openLightbox={openLightbox}
+                    feedItem={feedItem}
                     isNewImage
+                    onDeleteFeedItem={onDeleteFeedItem}
+                    openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.InvestigationImage && (
                   <InvestigationFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
-                    onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
-                    openLightbox={openLightbox}
+                    feedItem={feedItem}
                     isNewImage
+                    onDeleteFeedItem={onDeleteFeedItem}
+                    openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.VehicleImage && (
                   <VehicleFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
-                    onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
-                    openLightbox={openLightbox}
+                    feedItem={feedItem}
                     isNewImage
+                    onDeleteFeedItem={onDeleteFeedItem}
+                    openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {/* add new intel */}
@@ -197,67 +196,67 @@ const FeedItemCol = () => {
                   feedItem.incident && (
                     <IncidentFeed
                       adminRights={adminRights}
-                      onDeleteFeedItem={onDeleteFeedItem}
-                      saving={saving}
                       feedItem={feedItem}
+                      onDeleteFeedItem={onDeleteFeedItem}
                       openLightbox={openLightbox}
+                      saving={saving}
                     />
                   )}
                 {feedItem?.type === FeedItemType.OffenderIntel && (
                   <OffenderFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
+                    feedItem={feedItem}
                     onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
                     openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.InvestigationIntel && (
                   <InvestigationFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
+                    feedItem={feedItem}
                     onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
                     openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.VehicleIntel && (
                   <VehicleFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
+                    feedItem={feedItem}
                     onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
                     openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {feedItem?.type === FeedItemType.CrimegroupIntel && (
                   <CrimeGroupFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
+                    feedItem={feedItem}
                     onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
                     openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
 
                 {/* article */}
                 {feedItem?.type === FeedItemType.NewArticle && (
                   <ArticleFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
+                    feedItem={feedItem}
                     onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
                     openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
                 {/* ban */}
                 {feedItem?.type === FeedItemType.NewBan && (
                   <BanFeed
-                    feedItem={feedItem}
                     adminRights={adminRights}
+                    feedItem={feedItem}
                     onDeleteFeedItem={onDeleteFeedItem}
-                    saving={saving}
                     openLightbox={openLightbox}
+                    saving={saving}
                   />
                 )}
               </>
@@ -267,9 +266,9 @@ const FeedItemCol = () => {
       ) : (
         <Card
           style={{
+            alignItems: 'center',
             display: 'flex',
             height: 'calc(100vh - 95px)',
-            alignItems: 'center',
             justifyContent: 'center',
           }}
         >

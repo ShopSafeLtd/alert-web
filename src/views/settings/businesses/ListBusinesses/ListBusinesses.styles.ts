@@ -1,11 +1,11 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  page: {
-    padding: 10,
-  },
   actions: {
-    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  page: {
+    padding: 15,
   },
 });
 

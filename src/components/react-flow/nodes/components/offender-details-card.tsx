@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
-import { Card, Carousel, Col, Row, Skeleton, Typography } from 'antd';
+import type { CarouselRef } from 'antd/lib/carousel';
+import type { Age, Build, Gender, Race } from 'graphql/types';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import publicOffenderDob from '#/utils/public-offender-dob';
 import {
   faClock,
   faEarth,
@@ -15,6 +15,13 @@ import {
   faAngleRight,
   faArrowsMaximize,
 } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card, Carousel, Col, Row, Skeleton, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import moment from 'moment';
+import React, { useRef } from 'react';
+import { useIntl } from 'react-intl';
+import FormatCalendar from 'utils/format-calendar-24h';
 import {
   calcAge,
   getOffenderAge,
@@ -23,19 +30,15 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 
-import moment from 'moment';
-import type { CarouselRef } from 'antd/lib/carousel';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
-import FormatCalendar from 'utils/format-calendar-24h';
-import type { Age, Build, Gender, Race } from 'graphql/types';
-import { Role } from 'graphql/types';
-
-const { Title, Text } = Typography;
+const { Text, Title } = Typography;
 
 interface Props {
   offender: {
+    age?: Age | null | undefined;
+    build?: Build | null | undefined;
+    dateOfBirth?: Date | null | undefined;
+    gender?: Gender | null | undefined;
+    id: string;
     images:
       | {
           id: string;
@@ -44,16 +47,11 @@ interface Props {
         }[]
       | null
       | undefined;
-    id: string;
-    name?: string | null | undefined;
-    totalIncidents?: number;
-    reference?: number | null | undefined;
-    updatedAt?: Date | null | undefined;
-    age?: Age | null | undefined;
-    dateOfBirth?: Date | null | undefined;
-    build?: Build | null | undefined;
-    gender?: Gender | null | undefined;
+    name?: null | string | undefined;
     race?: Race | null | undefined;
+    reference?: null | number | undefined;
+    totalIncidents?: number;
+    updatedAt?: Date | null | undefined;
   };
 }
 
@@ -61,10 +59,7 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
 
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+  const publicOffenderDOB = publicOffenderDob();
   return (
     <Card
       className="offender-card"
@@ -90,42 +85,42 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
         <Row className="offender-card-controls">
           <Col>
             <FontAwesomeIcon
-              size="lg"
               className="offender-card-control"
               icon={faAngleLeft}
               onClick={() => imagesRef.current?.prev()}
+              size="lg"
             />
           </Col>
           <Col flex={1} />
           <Col>
             <FontAwesomeIcon
-              size="lg"
               className="offender-card-control"
               icon={faAngleRight}
               onClick={() => imagesRef.current?.next()}
+              size="lg"
             />
           </Col>
         </Row>
       )}
       {offender && offender.images && offender.images.length > 0 && (
         <FontAwesomeIcon
-          size="lg"
           className="offender-card-expand"
           icon={faArrowsMaximize}
+          size="lg"
         />
       )}
       <div className="offender-card-content">
         <div className="offender-card-desc">
           <Row gutter={8}>
             <Col flex={1}>
-              <Title level={4} ellipsis style={{ marginBottom: 0 }}>
+              <Title ellipsis level={4} style={{ marginBottom: 0 }}>
                 {offender?.name}
               </Title>
             </Col>
             <Col>
               <FontAwesomeIcon
-                style={{ marginRight: 5, width: 20, fontSize: 18 }}
                 icon={faExclamationCircle}
+                style={{ fontSize: 18, marginRight: 5, width: 20 }}
               />
               <Text style={{ fontSize: 16 }} type="secondary">
                 {offender?.totalIncidents}
@@ -142,12 +137,12 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               }
             )}
           </Text>
-          <Row style={{ marginTop: 5, marginBottom: 10 }}>
+          <Row style={{ marginBottom: 10, marginTop: 5 }}>
             <Col>
               <FontAwesomeIcon
-                size="sm"
                 className="offender-card-icon"
                 icon={faClock}
+                size="sm"
               />
               <Text type="secondary">
                 {intl.formatMessage(
@@ -167,9 +162,9 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
           {publicOffenderDOB && (
             <Col>
               <FontAwesomeIcon
-                size="sm"
                 className="offender-card-icon"
                 icon={faUserClock}
+                size="sm"
               />
               <Text type="secondary">
                 {intl.formatMessage({
@@ -183,9 +178,9 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
           )}
           <Col>
             <FontAwesomeIcon
-              size="sm"
               className="offender-card-icon"
               icon={faUserTag}
+              size="sm"
             />
             <Text type="secondary">
               {intl.formatMessage({
@@ -196,9 +191,9 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
           </Col>
           <Col flex={1}>
             <FontAwesomeIcon
-              size="sm"
               className="offender-card-icon"
               icon={faMarsAndVenus}
+              size="sm"
             />
             <Text type="secondary">
               {intl.formatMessage({
@@ -211,9 +206,9 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
         <Row>
           <Col>
             <FontAwesomeIcon
-              size="sm"
               className="offender-card-icon"
               icon={faEarth}
+              size="sm"
             />
             <Text type="secondary">
               {intl.formatMessage({

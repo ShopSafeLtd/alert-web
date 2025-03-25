@@ -1,7 +1,7 @@
 import type { AvailableLanguages } from '#/lang';
 import type { ClerkProp } from '@clerk/clerk-react';
 
-import Loading from '#/components/shared-components/AntD/Loading';
+import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { AvailableLanguagesConst } from '#/lang';
 import { ThemeConfig } from '#/state';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
@@ -122,7 +122,7 @@ const ClerkWithRouting = ({ children }: Props) => {
 
     void initializeClerk();
   }, []);
-  if (!clerk) return <Loading cover={'content'} />;
+  if (!clerk) return <LoadingScreen />;
   return (
     <ClerkProvider
       Clerk={clerk}

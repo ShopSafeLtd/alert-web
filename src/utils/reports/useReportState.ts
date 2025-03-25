@@ -13,12 +13,18 @@ import type { ReportType as IReportType } from 'graphql/types';
 import type RGL from 'react-grid-layout';
 
 import { tableLengthToHeight } from '#/components/reports/utils/utils';
-import { useStoreState } from '#/state';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import arrangeTemplates from '#/utils/reports/setTemplates';
 import { notification } from 'antd';
 import { useCreateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/create-report-template.generated';
 import { useUpdateReportTemplateMutation } from 'graphql/reports/mutations/__generated__/update-report-template.generated';
 import { SchemeReportDetailsDocument } from 'graphql/reports/queries/__generated__/scheme-details.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -100,8 +106,9 @@ const useReportState = ({
   ReportType,
 }: Props): Return => {
   const intl = useIntl();
-  const userId = useStoreState((state) => state.user.id);
-  const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
+  const userId = useAtomValue(userIdAtom);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
+  const logo = useAtomValue(currentSchemeAtom)?.logo?.optimisedPersisted ?? '';
   const isDemo =
     currentScheme === 'ckdhbosuv01028oiblmjgeuii' ||
     currentScheme === 'ck6zhwkwv00019ourjkgk5bdt';
@@ -153,7 +160,7 @@ const useReportState = ({
   //   },
   // ];
 
-  const businesses = useStoreState((state) => state.user.businesses);
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
   const [filtersSet, setFiltersSet] = useState(false);
   const [filtersOpen, setFilterOpen] = useState(false);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
@@ -722,7 +729,7 @@ const useReportState = ({
   return {
     addLogo,
     addLogoDrawer,
-    businesses,
+    businesses: businesses ?? [],
     changeSize,
     currentScheme,
     dateRange,

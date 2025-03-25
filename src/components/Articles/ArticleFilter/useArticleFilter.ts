@@ -2,16 +2,16 @@ import type { ArticlePriority, CompleteStatus } from 'graphql/types';
 import type { ArticleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
-import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
   clearFilters: () => void;
   filterVariables: ArticleFilters;
-  groups: { label: string; value: string }[];
-  groupsLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   setGroupsFilter: (value: string[]) => void;
   setOrder: (value: SortOrder) => void;
@@ -21,10 +21,8 @@ interface Return {
 
 const useArticleFilter = (): Return => {
   // Global State
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const { filterDefaultGroups: defaultGroups } = useStoreState(
-    (state) => state.user
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
   );
@@ -38,14 +36,12 @@ const useArticleFilter = (): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });
     }
   }, []);
-
-  const { groups, groupsLoading } = useGroupsContext();
 
   const setCreatedAtFilter = (values: DateType | undefined) => {
     setFilterState({
@@ -105,8 +101,6 @@ const useArticleFilter = (): Return => {
   return {
     clearFilters,
     filterVariables,
-    groups,
-    groupsLoading,
     setCreatedAtFilter,
     setGroupsFilter,
     setOrder,

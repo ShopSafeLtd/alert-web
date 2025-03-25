@@ -2,6 +2,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import type { OffenderCardFragment } from 'graphql/fragments/__generated__/offender-card.generated';
 import type { EditFeedImage } from 'types/DataType';
 
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEdit,
   faEllipsisV,
@@ -42,6 +43,7 @@ import EditOffenderFeed from 'components/form-components/offender/EditOffenderFe
 import KnowOffender from 'components/form-components/offender/KnowOffender';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -56,13 +58,11 @@ interface Props {
   addInvestigation: boolean;
   approvalRights: boolean;
   compactView: boolean;
-  deleteRights: boolean;
   editImage: boolean;
   editImageId: string;
   editOffenderFeed: boolean;
   isArticle?: boolean;
   knowOffender: boolean;
-  menuRights: boolean;
   offender: OffenderCardFragment;
   onDelete: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
@@ -79,13 +79,11 @@ const OffenderCard = ({
   addInvestigation,
   approvalRights,
   compactView,
-  deleteRights,
   editImage,
   editImageId,
   editOffenderFeed,
   isArticle,
   knowOffender,
-  menuRights,
   offender,
   onDelete,
   onEditImage,
@@ -100,6 +98,92 @@ const OffenderCard = ({
   const classes = useStyles();
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
+
+  const menuItems = [
+    {
+      icon: <FontAwesomeIcon icon={faEdit} />,
+      key: 0,
+      label: intl.formatMessage({
+        defaultMessage: 'Edit Offender',
+      }),
+      onClick: () => toggleEditOffenderFeed(),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Offenders,
+      },
+    },
+    offender.totalImages && offender.totalImages > 0
+      ? {
+          icon: <FontAwesomeIcon icon={faImage} />,
+          key: 1,
+          label: intl.formatMessage({
+            defaultMessage: 'Edit Image',
+          }),
+          onClick: () => toggleEditImage(),
+          permission: {
+            method: PermissionMethod.Edit,
+            model: PermissionModel.Offenders,
+          },
+        }
+      : null,
+    {
+      icon: <FontAwesomeIcon icon={faPeople} size="lg" />,
+      key: 2,
+      label: intl.formatMessage({
+        defaultMessage: 'Compare Offender',
+      }),
+      onClick: () =>
+        onNavigate(undefined, `/app/offenders/compare/${offender?.id}`),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Offenders,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faTrash} size="lg" />,
+      key: 3,
+      label: intl.formatMessage({
+        defaultMessage: 'Delete Offender',
+      }),
+      onClick: () =>
+        confirm({
+          content: intl.formatMessage({
+            defaultMessage:
+              'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+          }),
+          okText: intl.formatMessage({
+            defaultMessage: 'Delete',
+          }),
+          onOk: () => onDelete(offender?.id || ''),
+          title: intl.formatMessage({
+            defaultMessage: 'Are you sure?',
+          }),
+        }),
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Offenders,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faPlus} />,
+      key: 4,
+      label: intl.formatMessage({
+        defaultMessage: 'Add Investigation',
+      }),
+      onClick: () => toggleAddInvestigation(),
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Investigations,
+      },
+    },
+  ].filter(
+    (item) =>
+      item &&
+      hasRolePermission({
+        permission: item.permission,
+      })
+  );
+
   return (
     <div style={{ height: '100%' }}>
       {compactView ? (
@@ -208,78 +292,10 @@ const OffenderCard = ({
                       {offender?.name}
                     </Title>
                   </Col>
-                  {menuRights && (
+                  {menuItems.length > 0 && (
                     <Dropdown
                       arrow={{ pointAtCenter: true }}
-                      overlay={
-                        <Menu
-                          items={[
-                            {
-                              icon: <FontAwesomeIcon icon={faEdit} />,
-                              key: 0,
-                              label: intl.formatMessage({
-                                defaultMessage: 'Edit Offender',
-                              }),
-                              onClick: () => toggleEditOffenderFeed(),
-                            },
-                            offender.totalImages && offender.totalImages > 0
-                              ? {
-                                  icon: <FontAwesomeIcon icon={faImage} />,
-                                  key: 1,
-                                  label: intl.formatMessage({
-                                    defaultMessage: 'Edit Image',
-                                  }),
-                                  onClick: () => toggleEditImage(),
-                                }
-                              : null,
-                            {
-                              icon: (
-                                <FontAwesomeIcon icon={faPeople} size="lg" />
-                              ),
-                              key: 2,
-                              label: intl.formatMessage({
-                                defaultMessage: 'Compare Offender',
-                              }),
-                              onClick: () =>
-                                onNavigate(
-                                  undefined,
-                                  `/app/offenders/compare/${offender?.id}`
-                                ),
-                            },
-                            {
-                              icon: (
-                                <FontAwesomeIcon icon={faTrash} size="lg" />
-                              ),
-                              key: 3,
-                              label: intl.formatMessage({
-                                defaultMessage: 'Delete Offender',
-                              }),
-                              onClick: () =>
-                                confirm({
-                                  content: intl.formatMessage({
-                                    defaultMessage:
-                                      'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                                  }),
-                                  okText: intl.formatMessage({
-                                    defaultMessage: 'Delete',
-                                  }),
-                                  onOk: () => onDelete(offender?.id || ''),
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Are you sure?',
-                                  }),
-                                }),
-                            },
-                            {
-                              icon: <FontAwesomeIcon icon={faPlus} />,
-                              key: 4,
-                              label: intl.formatMessage({
-                                defaultMessage: 'Add Investigation',
-                              }),
-                              onClick: () => toggleAddInvestigation(),
-                            },
-                          ].filter((item) => item?.key !== 3 || deleteRights)}
-                        />
-                      }
+                      overlay={<Menu items={menuItems} />}
                       placement="bottomRight"
                       trigger={['click']}
                     >
@@ -359,16 +375,10 @@ const OffenderCard = ({
                         </Col>
                         <Col>
                           <Text>
-                            {intl.formatMessage(
-                              {
-                                defaultMessage: '£{total}',
-                              },
-                              {
-                                total: offender.totalValue
-                                  ? offender.totalValue.toFixed(0)
-                                  : 0,
-                              }
-                            )}
+                            {intl.formatNumber(offender.totalValue ?? 0, {
+                              currency: 'GBP',
+                              style: 'currency',
+                            })}
                           </Text>
                         </Col>
                       </Row>
@@ -501,74 +511,10 @@ const OffenderCard = ({
               )}
             </div>
           )}
-          {menuRights && (
+          {menuItems.length > 0 && (
             <Dropdown
               arrow={{ pointAtCenter: true }}
-              overlay={
-                <Menu
-                  items={[
-                    {
-                      icon: <FontAwesomeIcon icon={faEdit} />,
-                      key: 0,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Edit Offender',
-                      }),
-                      onClick: () => toggleEditOffenderFeed(),
-                    },
-                    offender.totalImages && offender.totalImages > 0
-                      ? {
-                          icon: <FontAwesomeIcon icon={faImage} />,
-                          key: 1,
-                          label: intl.formatMessage({
-                            defaultMessage: 'Edit Image',
-                          }),
-                          onClick: () => toggleEditImage(),
-                        }
-                      : null,
-                    {
-                      icon: <FontAwesomeIcon icon={faPeople} size="lg" />,
-                      key: 2,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Compare Offender',
-                      }),
-                      onClick: () =>
-                        onNavigate(
-                          undefined,
-                          `/app/offenders/compare/${offender?.id}`
-                        ),
-                    },
-                    {
-                      icon: <FontAwesomeIcon icon={faTrash} size="lg" />,
-                      key: 3,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Delete Offender',
-                      }),
-                      onClick: () =>
-                        confirm({
-                          content: intl.formatMessage({
-                            defaultMessage:
-                              'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                          }),
-                          okText: intl.formatMessage({
-                            defaultMessage: 'Delete',
-                          }),
-                          onOk: () => onDelete(offender?.id || ''),
-                          title: intl.formatMessage({
-                            defaultMessage: 'Are you sure?',
-                          }),
-                        }),
-                    },
-                    {
-                      icon: <FontAwesomeIcon icon={faPlus} />,
-                      key: 4,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Add Investigation',
-                      }),
-                      onClick: () => toggleAddInvestigation(),
-                    },
-                  ].filter((item) => item?.key !== 3 || deleteRights)}
-                />
-              }
+              overlay={<Menu items={menuItems} />}
               placement="bottomRight"
               trigger={['click']}
             >
@@ -756,16 +702,10 @@ const OffenderCard = ({
                         </Col>
                         <Col>
                           <Text>
-                            {intl.formatMessage(
-                              {
-                                defaultMessage: '£{total}',
-                              },
-                              {
-                                total: offender.totalValue
-                                  ? offender.totalValue.toFixed(2)
-                                  : 0,
-                              }
-                            )}
+                            {intl.formatNumber(offender.totalValue ?? 0, {
+                              currency: 'GBP',
+                              style: 'currency',
+                            })}
                           </Text>
                         </Col>
                       </Row>

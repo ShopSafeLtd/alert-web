@@ -1,22 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment */
 
-import { Button, Drawer } from 'antd';
-import React, { memo, useCallback } from 'react';
+import type { Age, Build, Gender, Race } from 'graphql/types';
 import type { Node } from 'reactflow';
-import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
+
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
-import { useParams } from 'react-router-dom';
+import { Button, Drawer } from 'antd';
+import { useAtomValue } from 'jotai/index';
+import React, { memo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { useParams } from 'react-router-dom';
+import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
+
+import { useDrawerState } from '../../../hooks';
+import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
+import SelectOffenderDetails from '../form/selectOffenderDetails';
 import OffenderCard from './components/offender-details-card';
 import useStyles from './style.module';
-import { useDrawerState } from '../../../hooks';
-import { useStoreState } from '../../../state';
-import SelectOffenderDetails from '../form/selectOffenderDetails';
-import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
-import type { Age, Build, Gender, Race } from 'graphql/types';
 
 interface Offender {
+  age?: Age | null | undefined;
+  build?: Build | null | undefined;
+
+  dateOfBirth?: Date | null | undefined;
+  gender?: Gender | null | undefined;
+  id: string;
   images:
     | {
         id: string;
@@ -25,17 +34,11 @@ interface Offender {
       }[]
     | null
     | undefined;
-  id: string;
-
-  name?: string | null | undefined;
-  totalIncidents?: number;
-  reference?: number | null | undefined;
-  updatedAt?: Date | null | undefined;
-  age?: Age | null | undefined;
-  dateOfBirth?: Date | null | undefined;
-  build?: Build | null | undefined;
-  gender?: Gender | null | undefined;
+  name?: null | string | undefined;
   race?: Race | null | undefined;
+  reference?: null | number | undefined;
+  totalIncidents?: number;
+  updatedAt?: Date | null | undefined;
 }
 
 interface Props {
@@ -43,8 +46,8 @@ interface Props {
     color: string;
     offender: Offender | null | undefined;
   };
-  isConnectable: boolean;
   id: string;
+  isConnectable: boolean;
   selected: boolean;
 }
 
@@ -53,7 +56,7 @@ interface Props {
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const connectionNodeIdSelector = (state) => state.connectionNodeId;
 
-export default memo(({ data, isConnectable, selected, id }: Props) => {
+export default memo(({ data, id, isConnectable, selected }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const { id: investigationId } = useParams();
   const isTarget = connectionNodeId && connectionNodeId !== id;
@@ -62,7 +65,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const provider = useWebRtcContext();
   const nodesMap = provider.doc.getMap<Node>('nodes');
   const { drawer } = useDrawerState();
-  const { fullName } = useStoreState((state) => state.user);
+  const fullName = useAtomValue(currentUserAtom)?.fullName ?? '';
   const onSelect = useCallback((offender: Offender) => {
     const currentNode = nodesMap.get(id);
     if (!currentNode) {
@@ -74,8 +77,8 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       ...currentNode,
       data: {
         ...currentNode.data,
+        isEditing: { editing: false, user: '' },
         offender,
-        isEditing: { user: '', editing: false },
       },
     });
   }, []);
@@ -88,7 +91,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     if (!editing) {
       nodesMap.set(id, {
         ...currentNode,
-        data: { ...currentNode.data, isEditing: { user: '', editing: false } },
+        data: { ...currentNode.data, isEditing: { editing: false, user: '' } },
       });
       return;
     }
@@ -96,7 +99,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     // @ts-ignore
     nodesMap.set(id, {
       ...currentNode,
-      data: { ...currentNode.data, isEditing: { user: fullName, editing } },
+      data: { ...currentNode.data, isEditing: { editing, user: fullName } },
     });
   }, []);
   const intl = useIntl();
@@ -123,18 +126,18 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         <NodeResizer
           color="#ff0071"
           isVisible={selected}
-          minWidth={290}
-          minHeight={550}
           lineStyle={{
-            borderWidth: 2,
             borderRadius: 2,
+            borderWidth: 2,
           }}
+          minHeight={550}
+          minWidth={290}
         />
         <div className={classes.nodeContainer}>
           {data.offender && data.offender.name ? (
             <OffenderCard offender={data.offender} />
           ) : (
-            <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
+            <div style={{ height: '100%', position: 'relative', zIndex: 4 }}>
               {intl.formatMessage({
                 defaultMessage: 'Offender: Please choose an offender',
               })}
@@ -143,35 +146,35 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         </div>
         <Handle
           className="targetHandle"
-          type="source"
+          isConnectable={isConnectable}
           position={Position.Right}
           style={{ zIndex: 2 }}
-          isConnectable={isConnectable}
+          type="source"
         />
         <Handle
           className="targetHandle"
-          type="target"
+          isConnectable={isConnectable}
           position={Position.Left}
           style={targetHandleStyle}
-          isConnectable={isConnectable}
+          type="target"
         />
       </div>
       <Drawer
-        title={drawer.defaultTitle}
-        width={1000}
-        open={drawer.visible}
         onClose={() => {
           setIsEditing(false);
           drawer.close();
         }}
+        open={drawer.visible}
+        title={drawer.defaultTitle}
+        width={1000}
       >
         <SelectOffenderDetails
-          onSelect={onSelect}
+          investigationId={investigationId || ''}
           onClose={() => {
             setIsEditing(false);
             drawer.close();
           }}
-          investigationId={investigationId || ''}
+          onSelect={onSelect}
         />
       </Drawer>
     </>

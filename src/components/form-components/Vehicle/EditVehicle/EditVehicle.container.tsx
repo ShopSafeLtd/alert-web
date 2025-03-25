@@ -1,77 +1,77 @@
-import React from 'react';
 import type { VehicleCardData, VehicleData } from 'types/DataType';
+
+import React from 'react';
+
 import View from './EditVehicle.view';
 import useEditVehicle from './useEditVehicle';
 
 interface Props {
+  editData: VehicleCardData | null | undefined;
   onClose: () => void;
-  update: (value: VehicleData) => void;
-  editData: VehicleCardData | undefined | null;
   showGroups?: boolean;
+  update: (value: VehicleData) => void;
 }
 
 const EditVehicle = ({
-  onClose,
-  update,
   editData,
+  onClose,
   showGroups,
+  update,
 }: Props): JSX.Element => {
   const {
-    onSubmit,
     CrimeGroupsData,
     CrimeGroupsLoading,
-    saving,
-    adminRights,
-    imgChange,
+    addCustomGallery,
     beforeUpload,
-    fileList,
-    onRemoveImage,
-    onEditImage,
-    toggleEditImage,
-    editImage,
-    primaryImage,
-    setPrimaryImage,
-    groups,
-    groupsLoading,
     customGalleries,
     customGalleriesLoading,
-    addCustomGallery,
-    toggleAddCustomGallery,
-    updateNewCustomGalleryData,
+    editImage,
+    fileList,
     form,
+    groups,
+    groupsLoading,
+    imgChange,
+    onEditImage,
+    onRemoveImage,
+    onSubmit,
+    primaryImage,
+    saving,
+    setPrimaryImage,
+    toggleAddCustomGallery,
+    toggleEditImage,
+    updateNewCustomGalleryData,
   } = useEditVehicle({
+    editData,
     onClose,
     update,
-    editData,
   });
 
   return (
     <View
-      onSubmit={onSubmit}
-      onClose={onClose}
       CrimeGroupsData={CrimeGroupsData}
       CrimeGroupsLoading={CrimeGroupsLoading}
-      saving={saving}
-      adminRights={adminRights}
-      imgChange={imgChange}
+      addCustomGallery={addCustomGallery}
       beforeUpload={beforeUpload}
-      fileList={fileList}
-      onRemoveImage={onRemoveImage}
-      editImage={editImage}
-      onEditImage={onEditImage}
-      toggleEditImage={toggleEditImage}
-      primaryImage={primaryImage}
-      setPrimaryImage={setPrimaryImage}
-      editData={editData}
-      showGroups={showGroups}
-      groups={groups}
-      groupsLoading={groupsLoading}
       customGalleries={customGalleries}
       customGalleriesLoading={customGalleriesLoading}
-      addCustomGallery={addCustomGallery}
-      toggleAddCustomGallery={toggleAddCustomGallery}
-      updateNewCustomGalleryData={updateNewCustomGalleryData}
+      editData={editData}
+      editImage={editImage}
+      fileList={fileList}
       form={form}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      imgChange={imgChange}
+      onClose={onClose}
+      onEditImage={onEditImage}
+      onRemoveImage={onRemoveImage}
+      onSubmit={onSubmit}
+      primaryImage={primaryImage}
+      saving={saving}
+      setPrimaryImage={setPrimaryImage}
+      showGroups={showGroups}
+      toggleAddCustomGallery={toggleAddCustomGallery}
+      toggleEditImage={toggleEditImage}
+      updateNewCustomGalleryData={updateNewCustomGalleryData}
     />
   );
 };

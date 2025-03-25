@@ -1,27 +1,47 @@
 import type { RoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
+import type { RolesQuery } from '#/views/roles/graphql/queries/__generated__/roles.generated';
 import type { FormInstance } from 'antd';
-import type { PermissionModel, Role } from 'graphql/types';
+import type { Role } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useDeleteRoleMutation } from '#/views/roles/graphql/mutations/__generated__/deleteRole.generated';
 import { useUpsertPermissionMutation } from '#/views/roles/graphql/mutations/__generated__/upsertPermissions.generated';
 import { useRoleQuery } from '#/views/roles/graphql/queries/__generated__/role.generated';
-import { Form } from 'antd';
-import { PermissionMethod } from 'graphql/types';
-import { useState } from 'react';
+import { RolesDocument } from '#/views/roles/graphql/queries/__generated__/roles.generated';
+import {
+  createPermissionEntries,
+  processModelMethods,
+} from '#/views/roles/role/processModelMethods';
+import { Form, notification } from 'antd';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 
 import type { FormData } from '../types';
 
-import { useStoreState } from '../../../state';
+import { roleItems, settings } from '../types';
+
+export interface DeleteFormValues {
+  newRoleId: string;
+}
 
 interface Props {
   changed: boolean;
+  clearAll: () => void;
   data: RoleQuery | undefined;
   form: FormInstance<FormValues>;
   loading: boolean;
+  onDelete: (values: DeleteFormValues) => void;
   onFinish: (values: FormValues) => void;
+  onSettingsToggle: (value: boolean) => void;
   roleName: string | undefined;
+  setAll: () => void;
   setChanged: (changed: boolean) => void;
+  showDelete: boolean;
   submitting: boolean;
+  toggleShowDelete: () => void;
 }
 
 export interface FormValues extends FormData {
@@ -31,11 +51,55 @@ export interface FormValues extends FormData {
 }
 
 export function useRole(id: string | undefined, create: boolean): Props {
+  const intl = useIntl();
   const [form] = Form.useForm<FormValues>();
   const navigate = useNavigate();
   const [changed, setChanged] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { id: schemeId } = useStoreState((state) => state.scheme || { id: '' });
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+
+  const [deletePermission] = useDeleteRoleMutation({
+    onCompleted: () => {
+      notification.success({
+        description: intl.formatMessage({
+          defaultMessage: 'The role has been delete',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully deleted',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    update: (store, { data: res }) => {
+      if (res?.deleteRole === null || res?.deleteRole === undefined) return;
+      const existingData = store.readQuery<RolesQuery>({
+        query: RolesDocument,
+        variables: {
+          schemeId: schemeId || '',
+          take: 20,
+        },
+      });
+
+      if (!existingData?.roles) return;
+      store.writeQuery<RolesQuery>({
+        data: {
+          __typename: 'Query',
+          roles: {
+            ...existingData.roles,
+            edges: existingData.roles.edges.filter(
+              ({ node }) => node.id !== id
+            ),
+          },
+        },
+        query: RolesDocument,
+        variables: {
+          schemeId: schemeId || '',
+          take: 20,
+        },
+      });
+    },
+  });
   const [updatePermissions] = useUpsertPermissionMutation({
     onCompleted: (res) => {
       setSubmitting(false);
@@ -49,37 +113,15 @@ export function useRole(id: string | undefined, create: boolean): Props {
   });
   const onFinish = (values: FormValues) => {
     setSubmitting(true);
+
+    const result = processModelMethods(values);
+
     void updatePermissions({
       variables: {
         data: {
           canApprove: values.approvalAllowed,
           name: values.name,
-          permissions: Object.keys(values)
-            .filter(
-              (key) =>
-                key !== 'name' && key !== 'type' && key !== 'approvalAllowed'
-            )
-            .map((key) => {
-              if (key === 'SETTINGS') {
-                if (values[key]?.includes(PermissionMethod.Edit)) {
-                  return {
-                    allowedMethods: [
-                      PermissionMethod.Read,
-                      PermissionMethod.Edit,
-                    ],
-                    model: key as PermissionModel,
-                  };
-                }
-                return {
-                  allowedMethods: [],
-                  model: key as PermissionModel,
-                };
-              }
-              return {
-                allowedMethods: (values[key] as PermissionMethod[]) || [],
-                model: key as PermissionModel,
-              };
-            }),
+          permissions: result,
           roleId: id,
           schemeId,
           type: values.type,
@@ -87,6 +129,8 @@ export function useRole(id: string | undefined, create: boolean): Props {
       },
     });
   };
+
+  const toggleShowDelete = () => setShowDelete(!showDelete);
 
   const { data, loading } = useRoleQuery({
     fetchPolicy: 'cache-and-network',
@@ -96,13 +140,21 @@ export function useRole(id: string | undefined, create: boolean): Props {
         model: item?.model,
       }));
 
-      form.setFieldValue('approvalAllowed', iData?.role?.approvalTier);
-      form.setFieldsValue({
+      console.log({
         ...Object.fromEntries(
-          permissions?.map((item) => [
-            item?.model,
-            item?.methods?.map((method) => method),
-          ]) || []
+          permissions?.flatMap((item) =>
+            item?.methods?.map((method) => [`${item.model}:${method}`, true])
+          ) || []
+        ),
+      });
+
+      form.setFieldsValue({
+        name: iData.role.name,
+        type: iData.role.type,
+        ...Object.fromEntries(
+          permissions?.flatMap((item) =>
+            item?.methods?.map((method) => [`${item.model}:${method}`, true])
+          ) || []
         ),
       });
     },
@@ -115,14 +167,93 @@ export function useRole(id: string | undefined, create: boolean): Props {
   });
   const roleName = data?.role.name;
 
+  const clearAll = () => {
+    const permissionEntries: [string, boolean][] = [
+      [`${PermissionModel.Settings}:${PermissionMethod.Read}`, false],
+      ...createPermissionEntries(roleItems, false),
+      ...createPermissionEntries(settings[0].children, false),
+    ];
+
+    form.setFieldsValue(Object.fromEntries(permissionEntries));
+  };
+  const setAll = () => {
+    const permissionEntries: [string, boolean][] = [
+      [`${PermissionModel.Settings}:${PermissionMethod.Read}`, true],
+      ...createPermissionEntries(roleItems, true),
+      ...createPermissionEntries(settings[0].children, true),
+    ];
+
+    form.setFieldsValue(Object.fromEntries(permissionEntries));
+  };
+
+  const clearAllSettings = () => {
+    form.setFieldsValue({
+      ...Object.fromEntries(
+        settings[0].children.flatMap((item) =>
+          item.methods.map((method) => [`${item.key}:${method.key}`, false])
+        )
+      ),
+    });
+  };
+  const setAllSettings = () => {
+    form.setFieldsValue({
+      ...Object.fromEntries(
+        settings[0].children.flatMap((item) =>
+          item.methods.map((method) => [`${item.key}:${method.key}`, true])
+        )
+      ),
+    });
+  };
+
+  const settingsEnabled = Form.useWatch(
+    `${PermissionModel.Settings}:${PermissionMethod.Read}`,
+    form
+  ) as boolean;
+
+  useEffect(() => {}, [settingsEnabled]);
+
+  const onSettingsToggle = (oldValue: boolean) => {
+    if (oldValue) {
+      clearAllSettings();
+    } else {
+      setAllSettings();
+    }
+  };
+
+  const onDelete = (values: DeleteFormValues) => {
+    if (id) {
+      toggleShowDelete();
+      void deletePermission({
+        optimisticResponse: {
+          deleteRole: {
+            id,
+          },
+        },
+        variables: {
+          data: {
+            id,
+            newId: values.newRoleId,
+          },
+        },
+      });
+      navigate(`/app/scheme-settings/roles`);
+    }
+  };
+
   return {
     changed,
+    clearAll,
     data,
     form,
     loading,
+    onDelete,
     onFinish,
+    onSettingsToggle,
     roleName,
+    setAll,
     setChanged,
+    showDelete,
     submitting,
+    toggleShowDelete,
   };
 }

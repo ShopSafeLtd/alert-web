@@ -6,6 +6,8 @@ import type { VehicleFilters } from 'state/data-model';
 import type { DateType, VehicleData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
 import { useListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
@@ -14,6 +16,7 @@ import {
   ListVehiclesDocument,
   useListVehiclesQuery,
 } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -54,10 +57,9 @@ const useListVehicles = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
   const onNavigate = () => navigate('/app/vehicles/add');
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
-    (state) => state.user
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userId = useAtomValue(currentSchemeIdAtom);
   const pagination = useStoreState((state) => state.data.vehicles.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.vehicles.variables
@@ -171,7 +173,7 @@ const useListVehicles = (): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

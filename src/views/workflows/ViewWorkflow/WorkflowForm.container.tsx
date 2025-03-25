@@ -36,8 +36,8 @@ const WorkflowFormContainer = () => {
     tagsSelected,
     taskOutcome,
     taskQuestions,
+    updateIncidentCheck,
     updateTemplates,
-    users,
     valueSelected,
   } = useWorkflowForm();
 
@@ -74,8 +74,8 @@ const WorkflowFormContainer = () => {
       tagsSelected={tagsSelected}
       taskOutcome={taskOutcome}
       taskQuestions={taskQuestions}
+      updateIncidentCheck={updateIncidentCheck}
       updateTemplates={updateTemplates}
-      users={users}
       valueSelected={valueSelected}
     />
   );

@@ -1,25 +1,23 @@
+import type { ListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
+
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { useListStatementTemplatesQuery } from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
-import { useStoreState } from 'state';
-import {
-  ListStatementTemplatesQuery,
-  useListStatementTemplatesQuery,
-} from 'graphql/statementTemplates/queries/__generated__/list-templates.generated';
-
-
 interface Return {
+  createTemplate: boolean;
   data: ListStatementTemplatesQuery | undefined;
+  editTemplate: null | string;
   loading: boolean;
   toggleCreate: () => void;
-  toggleEdit: (t: string | null) => void;
-  createTemplate: boolean;
-  editTemplate: string | null;
+  toggleEdit: (t: null | string) => void;
 }
 
 const useListStatements = (): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const [createTemplate, setCreateTemplate] = useState(false);
-  const [editTemplate, setEditTemplate] = useState<string | null>(null);
+  const [editTemplate, setEditTemplate] = useState<null | string>(null);
 
   const { data, loading } = useListStatementTemplatesQuery({
     fetchPolicy: 'cache-and-network',
@@ -40,17 +38,17 @@ const useListStatements = (): Return => {
     setCreateTemplate(!createTemplate);
   };
 
-  const toggleEdit = (t: string | null) => {
+  const toggleEdit = (t: null | string) => {
     setEditTemplate(t);
   };
 
   return {
+    createTemplate,
     data,
+    editTemplate,
     loading,
     toggleCreate,
     toggleEdit,
-    createTemplate,
-    editTemplate,
   };
 };
 

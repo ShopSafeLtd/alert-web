@@ -8,13 +8,14 @@ import type {
 } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
 import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
 
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { compressImage } from '#/utils/compress-images';
 import { useApolloClient } from '@apollo/client';
 import { Form, message } from 'antd';
 import { SearchOffendersDocument } from 'graphql/offenders/queries/__generated__/search-offenders.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -71,7 +72,7 @@ const useAddNewOffender = ({
   const intl = useIntl();
   const client = useApolloClient();
   const [form] = Form.useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);

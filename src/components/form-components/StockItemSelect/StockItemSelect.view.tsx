@@ -5,11 +5,12 @@ import type {
   SelectProps,
 } from 'antd/lib/select';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Row, Select, Typography } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { useStoreState } from 'state';
+import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 
 import { useStockItemSelectQuery } from './graphql/queries/__generated__/stockselect.generated';
 
@@ -83,7 +84,11 @@ const OptionLabel = ({
             <Col>
               {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               <Typography.Text>
-                £{option.costPriceLocal.toFixed(2)}
+                <FormattedNumber
+                  currency={'GBP'}
+                  style={'currency'}
+                  value={option.costPriceLocal || 0}
+                />
               </Typography.Text>
             </Col>
           </Row>
@@ -100,7 +105,11 @@ const OptionLabel = ({
             <Col>
               {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               <Typography.Text>
-                £{option.salesPriceLocal.toFixed(2)}
+                <FormattedNumber
+                  currency={'GBP'}
+                  style={'currency'}
+                  value={option.salesPriceLocal || 0}
+                />
               </Typography.Text>
             </Col>
           </Row>
@@ -196,7 +205,7 @@ const StockItemSelect: React.FC<Omit<SelectProps, keyof Props> & Props> = ({
 }) => {
   const intl = useIntl();
   const take = 30;
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 

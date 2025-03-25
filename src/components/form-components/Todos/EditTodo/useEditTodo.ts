@@ -9,13 +9,18 @@ import type { CustomQuestion, SelectOptions } from 'types/DataType';
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
 import { useEditTodoQuery } from '#/components/form-components/Todos/EditTodo/graphql/__generated__/edit_todo.generated';
 import { useUpdateTodoDetailsMutation } from '#/components/form-components/Todos/EditTodo/graphql/__generated__/update-todo-details.generated';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 import customRequest from '../../../../utils/custom-request';
@@ -75,11 +80,10 @@ interface Return {
 const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const activityAssignToUser = useStoreState(
-    (state) => state.scheme.activityAssignToUser
-  );
-  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const activityAssignToUser =
+    useAtomValue(currentSchemeAtom)?.activityAssignToUser;
+  const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

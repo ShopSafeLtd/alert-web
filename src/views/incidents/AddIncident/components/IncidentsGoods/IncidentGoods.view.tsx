@@ -14,6 +14,7 @@ import {
   Empty,
   Form,
   InputNumber,
+  Radio,
   Row,
   Select,
   Typography,
@@ -21,7 +22,7 @@ import {
 import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/types';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import useStyles from '../../AddIncident.styles';
 
@@ -59,6 +60,7 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+
   return (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -73,7 +75,7 @@ const IncidentGoods = ({
                 })}
           </Title>
         </Col>
-        <Col>
+        <Col flex={1}>
           <Paragraph
             italic
             style={{ marginBottom: 1, marginLeft: 5 }}
@@ -85,6 +87,13 @@ const IncidentGoods = ({
             })}
           </Paragraph>
         </Col>
+        {goodsVisible && (
+          <Col>
+            <Button onClick={dontKnowGoods}>
+              <FormattedMessage defaultMessage="Don't know the goods" />
+            </Button>
+          </Col>
+        )}
       </Row>
       {goodsVisible ? (
         <Form.List
@@ -256,6 +265,7 @@ const IncidentGoods = ({
                           <InputNumber
                             min={0}
                             precision={2}
+                            // TODO fix
                             prefix="£"
                             style={{ width: 150 }}
                           />
@@ -289,6 +299,7 @@ const IncidentGoods = ({
                             max={goods[index]?.value ?? undefined}
                             min={0}
                             precision={2}
+                            // TODO fix
                             prefix="£"
                             style={{ width: 150 }}
                           />
@@ -502,20 +513,39 @@ const IncidentGoods = ({
         </Form.List>
       ) : (
         <div style={{ paddingBottom: 20, paddingTop: 10 }}>
-          <Row gutter={16}>
+          <Row>
             <Col>
-              <Button danger onClick={knowGoods}>
-                {intl.formatMessage({
-                  defaultMessage: 'I know the goods involved',
-                })}
-              </Button>
-            </Col>
-            <Col>
-              <Button onClick={dontKnowGoods}>
-                {intl.formatMessage({
-                  defaultMessage: "I don't know the goods involved",
-                })}
-              </Button>
+              <Form.Item
+                name="goodsKnown"
+                rules={[
+                  {
+                    message: intl.formatMessage({
+                      defaultMessage: 'Please select an option',
+                    }),
+                    required: true,
+                  },
+                ]}
+              >
+                <Radio.Group
+                  /* eslint-disable-next-line @typescript-eslint/no-unsafe-return */
+                  onChange={(event) => event.target.value && knowGoods()}
+                  optionType="button"
+                  options={[
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'I know the goods involved',
+                      }),
+                      value: true,
+                    },
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: "I don't know the goods involved",
+                      }),
+                      value: false,
+                    },
+                  ]}
+                />
+              </Form.Item>
             </Col>
           </Row>
         </div>

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call,  @typescript-eslint/no-unsafe-member-access, no-return-assign */
-import { PlusOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
+
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import { PlusOutlined } from '@ant-design/icons';
 import {
   Button,
   Card,
@@ -19,13 +21,25 @@ import {
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router';
+
 import type { FormData, Section, SelectOption } from './useCreateChecklist';
 
 interface Props {
+  brands: SelectOption[];
   form: FormInstance<FormData>;
-  onFinish: (data: FormData) => void;
+  handleAddQuestion: (sectionIndex: number, subSectionIndex: number) => void;
   handleAddSection: () => void;
+  handleAddSubsection: (index: number) => void;
+  handleRemoveQuestion: (
+    sectionIndex: number,
+    subsectionIndex: number,
+    questionIndex: number
+  ) => void;
   handleRemoveSection: (index: number) => void;
+  handleRemoveSubsection: (
+    sectionIndex: number,
+    subsectionIndex: number
+  ) => void;
   handleSectionChange: (
     changedValues: {
       sections: Section[];
@@ -34,21 +48,9 @@ interface Props {
       sections: Section[];
     }
   ) => void;
-  handleAddSubsection: (index: number) => void;
-  handleRemoveSubsection: (
-    sectionIndex: number,
-    subsectionIndex: number
-  ) => void;
-  handleAddQuestion: (sectionIndex: number, subSectionIndex: number) => void;
-  handleRemoveQuestion: (
-    sectionIndex: number,
-    subsectionIndex: number,
-    questionIndex: number
-  ) => void;
   loading: boolean;
-  businesses: SelectOption[];
+  onFinish: (data: FormData) => void;
   users: SelectOption[];
-  brands: SelectOption[];
 }
 const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
@@ -85,19 +87,18 @@ const typeToAvail = (ty: string) => {
 };
 
 const CreateChecklistView: React.FC<Props> = ({
-  form,
-  onFinish,
-  handleAddSection,
-  handleRemoveSection,
-  handleSectionChange,
-  handleAddSubsection,
-  handleRemoveSubsection,
-  handleAddQuestion,
-  handleRemoveQuestion,
-  loading,
-  businesses,
-  users,
   brands,
+  form,
+  handleAddQuestion,
+  handleAddSection,
+  handleAddSubsection,
+  handleRemoveQuestion,
+  handleRemoveSection,
+  handleRemoveSubsection,
+  handleSectionChange,
+  loading,
+  onFinish,
+  users,
 }) => {
   const intl = useIntl();
   const { id } = useParams();
@@ -118,12 +119,12 @@ const CreateChecklistView: React.FC<Props> = ({
         }
       />
       <Form
+        autoComplete="off"
         form={form}
+        layout="horizontal"
         name="checklist_form"
         onFinish={onFinish}
         onValuesChange={handleSectionChange}
-        autoComplete="off"
-        layout="horizontal"
       >
         <Card loading={loading}>
           <Row gutter={16}>
@@ -135,10 +136,10 @@ const CreateChecklistView: React.FC<Props> = ({
                 name="title"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage: 'Missing title',
                     }),
+                    required: true,
                   },
                 ]}
               >
@@ -173,14 +174,14 @@ const CreateChecklistView: React.FC<Props> = ({
                 name="userIds"
               >
                 <Select
-                  optionFilterProp="label"
-                  showSearch
-                  mode="multiple"
                   maxTagCount="responsive"
+                  mode="multiple"
+                  optionFilterProp="label"
+                  options={users}
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Users',
                   })}
-                  options={users}
+                  showSearch
                 />
               </Form.Item>
             </Col>
@@ -191,15 +192,14 @@ const CreateChecklistView: React.FC<Props> = ({
                 })}
                 name="businessIds"
               >
-                <Select
-                  optionFilterProp="label"
-                  showSearch
-                  mode="multiple"
+                <BusinessesSelect
+                  allowClear
                   maxTagCount="responsive"
+                  mode="multiple"
                   placeholder={intl.formatMessage({
                     defaultMessage: 'Businesses',
                   })}
-                  options={businesses}
+                  showSearch
                 />
               </Form.Item>
             </Col>
@@ -209,7 +209,7 @@ const CreateChecklistView: React.FC<Props> = ({
           {(fields) => (
             <>
               {fields.map(({ name }, sectionIndex) => (
-                <Card loading={loading} key={name}>
+                <Card key={name} loading={loading}>
                   <Row>
                     <Space>
                       <Form.Item
@@ -219,19 +219,19 @@ const CreateChecklistView: React.FC<Props> = ({
                         name={[name, 'order']}
                         rules={[
                           {
-                            required: true,
                             message: intl.formatMessage({
                               defaultMessage: 'Missing order',
                             }),
+                            required: true,
                           },
                         ]}
                       >
                         <InputNumber
+                          min={1}
                           placeholder={intl.formatMessage({
                             defaultMessage: 'Order',
                           })}
                           size="small"
-                          min={1}
                           style={{ width: '55px' }}
                         />
                       </Form.Item>
@@ -240,7 +240,7 @@ const CreateChecklistView: React.FC<Props> = ({
                           defaultMessage: 'Section Title',
                         })}
                         name={[name, 'title']}
-                        rules={[{ required: true, message: 'Missing title' }]}
+                        rules={[{ message: 'Missing title', required: true }]}
                       >
                         <Input
                           placeholder={intl.formatMessage({
@@ -253,8 +253,8 @@ const CreateChecklistView: React.FC<Props> = ({
                     <Col flex={1} />
                     <Form.Item>
                       <Button
-                        type="primary"
                         onClick={() => handleRemoveSection(sectionIndex)}
+                        type="primary"
                       >
                         {intl.formatMessage({
                           defaultMessage: 'Delete Section',
@@ -262,6 +262,118 @@ const CreateChecklistView: React.FC<Props> = ({
                       </Button>
                     </Form.Item>
                   </Row>
+                  <Form.Item
+                    shouldUpdate={(prevValues, currentValues) =>
+                      prevValues.sections !== currentValues.sections
+                    }
+                  >
+                    {() => {
+                      const currentDependent = form.getFieldValue([
+                        'sections',
+                        name,
+                        'dependentWeight',
+                      ]);
+                      if (sectionIndex === 0) {
+                        return null;
+                      }
+                      return (
+                        <>
+                          <Checkbox
+                            checked={!!currentDependent}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                form.setFields([
+                                  {
+                                    name: ['sections', name, 'dependentWeight'],
+                                    value: { dependsOn: '', weight: '' },
+                                  },
+                                ]);
+                              } else {
+                                form.setFields([
+                                  {
+                                    name: ['sections', name, 'dependentWeight'],
+                                    value: undefined,
+                                  },
+                                ]);
+                              }
+                            }}
+                          >
+                            {intl.formatMessage({
+                              defaultMessage: 'Enable Dependent Weight',
+                            })}
+                          </Checkbox>
+                          {currentDependent && (
+                            <div
+                              style={{
+                                display: 'flex',
+                                gap: 16,
+                                marginBottom: 16,
+                              }}
+                            >
+                              <Form.Item
+                                label={intl.formatMessage({
+                                  defaultMessage: 'Depends On',
+                                })}
+                                name={[name, 'dependentWeight', 'dependsOn']}
+                                rules={[
+                                  {
+                                    message: 'Please select a section',
+                                    required: true,
+                                  },
+                                ]}
+                              >
+                                <Select
+                                  placeholder={intl.formatMessage({
+                                    defaultMessage: 'Select section',
+                                  })}
+                                  style={{
+                                    width: 250,
+                                  }}
+                                >
+                                  {(form.getFieldValue('sections') || []).map(
+                                    (
+                                      sec: FormData['sections'][number],
+                                      idx: number
+                                    ) => {
+                                      if (idx === sectionIndex) return null;
+                                      return (
+                                        <Select.Option
+                                          key={idx}
+                                          value={(idx + 1).toString()}
+                                        >
+                                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                          {`${idx + 1} - ${sec.title}`}
+                                        </Select.Option>
+                                      );
+                                    }
+                                  )}
+                                </Select>
+                              </Form.Item>
+                              <Form.Item
+                                label={intl.formatMessage({
+                                  defaultMessage: 'Weight',
+                                })}
+                                name={[name, 'dependentWeight', 'weight']}
+                                rules={[
+                                  {
+                                    message: 'Please input a weight',
+                                    required: true,
+                                  },
+                                ]}
+                              >
+                                <InputNumber
+                                  parser={(value) =>
+                                    value ? value.toString() : ''
+                                  }
+                                  style={{ width: 120 }}
+                                />
+                              </Form.Item>
+                            </div>
+                          )}
+                        </>
+                      );
+                    }}
+                  </Form.Item>
                   <Form.List name={[name, 'subsections']}>
                     {(subsectionsFields) => (
                       <>
@@ -284,17 +396,17 @@ const CreateChecklistView: React.FC<Props> = ({
                                     name={[subsectionField.name, 'order']}
                                     rules={[
                                       {
-                                        required: true,
                                         message: 'Missing order',
+                                        required: true,
                                       },
                                     ]}
                                   >
                                     <InputNumber
+                                      min={1}
                                       placeholder={intl.formatMessage({
                                         defaultMessage: 'Subsection Order',
                                       })}
                                       size="small"
-                                      min={1}
                                       style={{ width: '55px' }}
                                     />
                                   </Form.Item>
@@ -305,8 +417,8 @@ const CreateChecklistView: React.FC<Props> = ({
                                     name={[subsectionField.name, 'title']}
                                     rules={[
                                       {
-                                        required: true,
                                         message: 'Missing title',
+                                        required: true,
                                       },
                                     ]}
                                   >
@@ -321,13 +433,13 @@ const CreateChecklistView: React.FC<Props> = ({
                                 <Col flex={1} />
                                 <Form.Item>
                                   <Button
-                                    size="small"
                                     onClick={() =>
                                       handleRemoveSubsection(
                                         sectionIndex,
                                         subsectionIndex
                                       )
                                     }
+                                    size="small"
                                   >
                                     {intl.formatMessage({
                                       defaultMessage: 'Delete Subsection',
@@ -369,12 +481,13 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   ]}
                                                   rules={[
                                                     {
-                                                      required: true,
                                                       message: 'Missing order',
+                                                      required: true,
                                                     },
                                                   ]}
                                                 >
                                                   <InputNumber
+                                                    min={1}
                                                     placeholder={intl.formatMessage(
                                                       {
                                                         defaultMessage:
@@ -382,7 +495,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       }
                                                     )}
                                                     size="small"
-                                                    min={1}
                                                     style={{ width: '55px' }}
                                                   />
                                                 </Form.Item>
@@ -396,21 +508,21 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   ]}
                                                   rules={[
                                                     {
-                                                      required: true,
                                                       message:
                                                         'Missing question',
+                                                      required: true,
                                                     },
                                                   ]}
                                                 >
                                                   <Input.TextArea
-                                                    style={{ width: 600 }}
+                                                    autoSize
                                                     placeholder={intl.formatMessage(
                                                       {
                                                         defaultMessage:
                                                           'Question',
                                                       }
                                                     )}
-                                                    autoSize
+                                                    style={{ width: 600 }}
                                                   />
                                                 </Form.Item>
                                               </Space>
@@ -418,7 +530,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                             <Col span={2}>
                                               <Form.Item>
                                                 <Button
-                                                  size="small"
                                                   onClick={() =>
                                                     handleRemoveQuestion(
                                                       sectionIndex,
@@ -426,6 +537,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       questionIndex
                                                     )
                                                   }
+                                                  size="small"
                                                 >
                                                   {intl.formatMessage({
                                                     defaultMessage:
@@ -447,13 +559,15 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   ]}
                                                   rules={[
                                                     {
-                                                      required: true,
                                                       message:
                                                         'Missing question type',
+                                                      required: true,
                                                     },
                                                   ]}
                                                 >
                                                   <Radio.Group
+                                                    buttonStyle="solid"
+                                                    optionType="button"
                                                     options={[
                                                       {
                                                         label:
@@ -512,8 +626,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                         value: 'TEXT',
                                                       },
                                                     ]}
-                                                    optionType="button"
-                                                    buttonStyle="solid"
                                                   />
                                                 </Form.Item>
                                                 <Form.Item
@@ -526,9 +638,9 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   ]}
                                                   rules={[
                                                     {
-                                                      required: true,
                                                       message:
                                                         'Missing question type',
+                                                      required: true,
                                                     },
                                                   ]}
                                                   valuePropName="checked"
@@ -606,30 +718,31 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    name={[
-                                                                      questionField.name,
-                                                                      'passWeight',
-                                                                    ]}
+                                                                    initialValue={
+                                                                      5
+                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
                                                                           'Pass Weight',
                                                                       }
                                                                     )}
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'passWeight',
+                                                                    ]}
                                                                     rules={[
                                                                       {
                                                                         required:
                                                                           true,
                                                                       },
                                                                     ]}
-                                                                    initialValue={
-                                                                      5
-                                                                    }
                                                                     style={{
                                                                       marginBottom: 0,
                                                                     }}
                                                                   >
                                                                     <InputNumber
+                                                                      min={0}
                                                                       placeholder={intl.formatMessage(
                                                                         {
                                                                           defaultMessage:
@@ -637,7 +750,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                         }
                                                                       )}
                                                                       size="small"
-                                                                      min={0}
                                                                       style={{
                                                                         width:
                                                                           '100px',
@@ -646,19 +758,19 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                   </Form.Item>
 
                                                                   <Form.Item
-                                                                    name={[
-                                                                      questionField.name,
-                                                                      'failWeight',
-                                                                    ]}
+                                                                    initialValue={
+                                                                      0
+                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
                                                                           'Fail Weight',
                                                                       }
                                                                     )}
-                                                                    initialValue={
-                                                                      0
-                                                                    }
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'failWeight',
+                                                                    ]}
                                                                     rules={[
                                                                       {
                                                                         required:
@@ -670,6 +782,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }}
                                                                   >
                                                                     <InputNumber
+                                                                      min={0}
                                                                       placeholder={intl.formatMessage(
                                                                         {
                                                                           defaultMessage:
@@ -677,7 +790,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                         }
                                                                       )}
                                                                       size="small"
-                                                                      min={0}
                                                                       style={{
                                                                         width:
                                                                           '100px',
@@ -694,19 +806,19 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    name={[
-                                                                      questionField.name,
-                                                                      'passWeight',
-                                                                    ]}
+                                                                    initialValue={
+                                                                      5
+                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
                                                                           'Yes Weight',
                                                                       }
                                                                     )}
-                                                                    initialValue={
-                                                                      5
-                                                                    }
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'passWeight',
+                                                                    ]}
                                                                     rules={[
                                                                       {
                                                                         required:
@@ -718,6 +830,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }}
                                                                   >
                                                                     <InputNumber
+                                                                      min={0}
                                                                       placeholder={intl.formatMessage(
                                                                         {
                                                                           defaultMessage:
@@ -725,7 +838,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                         }
                                                                       )}
                                                                       size="small"
-                                                                      min={0}
                                                                       style={{
                                                                         width:
                                                                           '100px',
@@ -734,19 +846,19 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                   </Form.Item>
 
                                                                   <Form.Item
-                                                                    name={[
-                                                                      questionField.name,
-                                                                      'failWeight',
-                                                                    ]}
+                                                                    initialValue={
+                                                                      0
+                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
                                                                           'No Weight',
                                                                       }
                                                                     )}
-                                                                    initialValue={
-                                                                      0
-                                                                    }
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'failWeight',
+                                                                    ]}
                                                                     rules={[
                                                                       {
                                                                         required:
@@ -758,6 +870,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }}
                                                                   >
                                                                     <InputNumber
+                                                                      min={0}
                                                                       placeholder={intl.formatMessage(
                                                                         {
                                                                           defaultMessage:
@@ -765,7 +878,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                         }
                                                                       )}
                                                                       size="small"
-                                                                      min={0}
                                                                       style={{
                                                                         width:
                                                                           '100px',
@@ -782,19 +894,19 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    name={[
-                                                                      questionField.name,
-                                                                      'passWeight',
-                                                                    ]}
+                                                                    initialValue={
+                                                                      5
+                                                                    }
                                                                     label={intl.formatMessage(
                                                                       {
                                                                         defaultMessage:
                                                                           'Good Weight',
                                                                       }
                                                                     )}
-                                                                    initialValue={
-                                                                      5
-                                                                    }
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'passWeight',
+                                                                    ]}
                                                                     rules={[
                                                                       {
                                                                         required:
@@ -806,6 +918,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }}
                                                                   >
                                                                     <InputNumber
+                                                                      min={0}
                                                                       placeholder={intl.formatMessage(
                                                                         {
                                                                           defaultMessage:
@@ -813,7 +926,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                         }
                                                                       )}
                                                                       size="small"
-                                                                      min={0}
                                                                       style={{
                                                                         width:
                                                                           '100px',
@@ -822,10 +934,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                   </Form.Item>
 
                                                                   <Form.Item
-                                                                    name={[
-                                                                      questionField.name,
-                                                                      'failWeight',
-                                                                    ]}
                                                                     initialValue={
                                                                       0
                                                                     }
@@ -835,6 +943,10 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                           'Bad Weight',
                                                                       }
                                                                     )}
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'failWeight',
+                                                                    ]}
                                                                     rules={[
                                                                       {
                                                                         required:
@@ -846,6 +958,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }}
                                                                   >
                                                                     <InputNumber
+                                                                      min={0}
                                                                       placeholder={intl.formatMessage(
                                                                         {
                                                                           defaultMessage:
@@ -853,7 +966,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                         }
                                                                       )}
                                                                       size="small"
-                                                                      min={0}
                                                                       style={{
                                                                         width:
                                                                           '100px',
@@ -869,10 +981,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               <Space>
                                                                 <Row>
                                                                   <Form.Item
-                                                                    name={[
-                                                                      questionField.name,
-                                                                      'passWeight',
-                                                                    ]}
                                                                     initialValue={
                                                                       5
                                                                     }
@@ -882,6 +990,10 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                           'Text Weight',
                                                                       }
                                                                     )}
+                                                                    name={[
+                                                                      questionField.name,
+                                                                      'passWeight',
+                                                                    ]}
                                                                     rules={[
                                                                       {
                                                                         required:
@@ -893,6 +1005,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                     }}
                                                                   >
                                                                     <InputNumber
+                                                                      min={0}
                                                                       placeholder={intl.formatMessage(
                                                                         {
                                                                           defaultMessage:
@@ -900,7 +1013,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                         }
                                                                       )}
                                                                       size="small"
-                                                                      min={0}
                                                                       style={{
                                                                         width:
                                                                           '100px',
@@ -939,11 +1051,11 @@ const CreateChecklistView: React.FC<Props> = ({
                                                 ]}
                                               >
                                                 <Select
-                                                  style={{ width: 250 }}
+                                                  allowClear
+                                                  mode="multiple"
                                                   optionFilterProp="label"
                                                   options={brands}
-                                                  mode="multiple"
-                                                  allowClear
+                                                  style={{ width: 250 }}
                                                 />
                                               </Form.Item>
                                             </Col>
@@ -1133,16 +1245,16 @@ const CreateChecklistView: React.FC<Props> = ({
                                                     <Space>
                                                       <Row>
                                                         <Form.Item
-                                                          name={[
-                                                            questionField.name,
-                                                            'dependentQuestion',
-                                                          ]}
                                                           label={intl.formatMessage(
                                                             {
                                                               defaultMessage:
                                                                 'Dependent Question',
                                                             }
                                                           )}
+                                                          name={[
+                                                            questionField.name,
+                                                            'dependentQuestion',
+                                                          ]}
                                                           rules={[
                                                             {
                                                               required: true,
@@ -1153,6 +1265,14 @@ const CreateChecklistView: React.FC<Props> = ({
                                                           }}
                                                         >
                                                           <Select
+                                                            onSelect={(value) =>
+                                                              (selectedQ =
+                                                                qs.find(
+                                                                  (qQuestion) =>
+                                                                    qQuestion?.question ===
+                                                                    value
+                                                                ))
+                                                            }
                                                             options={qs
                                                               .map((qItem) => ({
                                                                 label: `${
@@ -1167,32 +1287,24 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                 ({ label }) =>
                                                                   label !== ''
                                                               )}
-                                                            onSelect={(value) =>
-                                                              (selectedQ =
-                                                                qs.find(
-                                                                  (qQuestion) =>
-                                                                    qQuestion?.question ===
-                                                                    value
-                                                                ))
-                                                            }
                                                             style={{
-                                                              width: 250,
                                                               marginRight: 10,
+                                                              width: 250,
                                                             }}
                                                           />
                                                         </Form.Item>
 
                                                         <Form.Item
-                                                          name={[
-                                                            questionField.name,
-                                                            'dependentAnswer',
-                                                          ]}
                                                           label={intl.formatMessage(
                                                             {
                                                               defaultMessage:
                                                                 'Dependent Answer',
                                                             }
                                                           )}
+                                                          name={[
+                                                            questionField.name,
+                                                            'dependentAnswer',
+                                                          ]}
                                                           rules={[
                                                             {
                                                               required: true,
@@ -1208,8 +1320,8 @@ const CreateChecklistView: React.FC<Props> = ({
                                                                 'TEXT'
                                                             )}
                                                             style={{
-                                                              width: 250,
                                                               marginRight: 10,
+                                                              width: 250,
                                                             }}
                                                           />
                                                         </Form.Item>
@@ -1224,15 +1336,15 @@ const CreateChecklistView: React.FC<Props> = ({
                                       )
                                     )}
                                     <Button
-                                      type="dashed"
+                                      block
+                                      icon={<PlusOutlined />}
                                       onClick={() =>
                                         handleAddQuestion(
                                           sectionIndex,
                                           subsectionIndex
                                         )
                                       }
-                                      block
-                                      icon={<PlusOutlined />}
+                                      type="dashed"
                                     >
                                       {intl.formatMessage({
                                         defaultMessage: 'Add Question',
@@ -1246,10 +1358,10 @@ const CreateChecklistView: React.FC<Props> = ({
                           )
                         )}
                         <Button
-                          type="dashed"
-                          onClick={() => handleAddSubsection(sectionIndex)}
                           block
                           icon={<PlusOutlined />}
+                          onClick={() => handleAddSubsection(sectionIndex)}
+                          type="dashed"
                         >
                           {intl.formatMessage({
                             defaultMessage: 'Add Subsection',
@@ -1262,10 +1374,10 @@ const CreateChecklistView: React.FC<Props> = ({
               ))}
               <Card loading={loading}>
                 <Button
-                  type="dashed"
-                  onClick={handleAddSection}
                   block
                   icon={<PlusOutlined />}
+                  onClick={handleAddSection}
+                  type="dashed"
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Section',
@@ -1297,7 +1409,7 @@ const CreateChecklistView: React.FC<Props> = ({
             </Col>
             <Col>
               <Form.Item>
-                <Button loading={loading} type="primary" htmlType="submit">
+                <Button htmlType="submit" loading={loading} type="primary">
                   {id
                     ? intl.formatMessage({
                         defaultMessage: 'Save',

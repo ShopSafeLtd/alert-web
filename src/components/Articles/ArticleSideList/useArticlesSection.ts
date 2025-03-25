@@ -3,7 +3,10 @@ import type {
   ListArticlesQueryVariables,
 } from 'graphql/article/queries/__generated__/list_articles.generated';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { useListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -19,10 +22,8 @@ interface Return {
 }
 
 const useArticlesSideList = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const { filterDefaultGroups: defaultGroups } = useStoreState(
-    (state) => state.user
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
   );
@@ -76,7 +77,7 @@ const useArticlesSideList = (): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

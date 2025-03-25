@@ -1,22 +1,10 @@
-import type { Role } from '#/graphql/types';
-
-import { APP_PREFIX_PATH } from '#/configs/AppConfig';
-import navigationConfig from '#/configs/NavigationConfig';
-import { useAuth } from '#/hooks';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import Loading from 'components/shared-components/AntD/Loading';
 import useManageSession from 'hooks/useManageSession';
-import React, { Suspense, lazy, useEffect, useMemo } from 'react';
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
-import { useStoreState } from 'state';
-
-import type { NavItem as ConfigNavItem } from '../../configs/NavigationConfig';
+import { useAtomValue } from 'jotai/index';
+import React, { Suspense, lazy, useEffect } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 const Onboarding = lazy(() => import('./onboarding/router'));
 const PasswordReset = lazy(() => import('./password/router'));
@@ -42,82 +30,25 @@ const Checklists = lazy(() => import('./checklist/router'));
 const DashboardManagement = lazy(() => import('./dashboard-management/router'));
 const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
 const AiCentre = lazy(() => import('./suggestions/router'));
-
-// Define the interface for your navigation items
-interface NavItem {
-  path: string;
-  roles?: Role[];
-  submenu: NavItem[];
-}
-
-// Flatten the navigation items to include submenus
-const flattenNavigationItems = (
-  items: ConfigNavItem[],
-  parentRoles: Role[] = []
-): NavItem[] =>
-  // eslint-disable-next-line unicorn/no-array-reduce
-  items.reduce((acc: NavItem[], item: ConfigNavItem) => {
-    const safeParentRoles = parentRoles || [];
-    const safeRoles = item.roles || [];
-    const combinedRoles = [...new Set([...safeRoles, ...safeParentRoles])];
-    acc.push({ path: item.path, roles: combinedRoles, submenu: [] });
-
-    if (item.submenu.length > 0) {
-      acc.push(
-        ...flattenNavigationItems(
-          item.submenu as ConfigNavItem[],
-          combinedRoles
-        )
-      );
-    }
-
-    return acc;
-  }, []);
-
-// Function to check if a role is allowed for a specific path
-const isRoleAllowedForPath = (
-  role: Role,
-  path: string,
-  flattenedNavItems: NavItem[]
-): boolean => {
-  const item = flattenedNavItems.find((i) => i.path === path);
-  if (!item) {
-    return true;
-  }
-  if (!item.roles || item.roles.length === 0) return true;
-  return item ? item.roles.includes(role) : false;
-};
+const Businesses = lazy(() => import('./businesses/router'));
 
 export const AppViews = (): JSX.Element => {
-  const { loading } = useAuth();
   const { isLoaded } = useAuthClerk();
 
   useManageSession();
-  const { forcePasswordReset, isSet, onboarded, role, termsExpired } =
-    useStoreState((state) => state.user);
+  const forcePasswordReset = useAtomValue(currentUserAtom)?.forcePasswordReset;
+  const isSet = !!useAtomValue(currentUserAtom);
+  const newUser = useAtomValue(currentUserAtom)?.newUser;
+  const termsExpired = useAtomValue(currentUserAtom)?.termsExpired;
 
-  const onboardingRoute = !onboarded || forcePasswordReset || termsExpired;
+  const onboardingRoute = newUser || forcePasswordReset || termsExpired;
 
   const location = useLocation();
-  const navigate = useNavigate();
   const { pathname } = location;
 
-  const flattenedNavItems = useMemo(
-    () => flattenNavigationItems(navigationConfig),
-    []
-  );
-
-  const isAllowed = useMemo(
-    () => isRoleAllowedForPath(role, pathname, flattenedNavItems),
-    [role, pathname]
-  );
-
   useEffect(() => {
-    if (!pathname || loading || !isLoaded || !isSet) return;
-    if (!isAllowed) {
-      navigate(`${APP_PREFIX_PATH}/dashboard`);
-    }
-  }, [pathname, role]);
+    if (!pathname || !isLoaded || !isSet) return;
+  }, [pathname]);
 
   return (
     <Suspense fallback={<Loading cover="content" />}>
@@ -187,6 +118,11 @@ export const AppViews = (): JSX.Element => {
             element={<AiCentre />}
             key="suggestions"
             path="suggestions/*"
+          />
+          <Route
+            element={<Businesses />}
+            key="businesses"
+            path="businesses/*"
           />
         </Routes>
       )}

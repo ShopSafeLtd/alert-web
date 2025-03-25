@@ -676,9 +676,13 @@ const BusinessReport = ({
               })}
               value={
                 data?.businessReport?.lossTotals?.totalLostValue
-                  ? `£${data?.businessReport?.lossTotals?.totalLostValue.toFixed(
-                      2
-                    )}`
+                  ? intl.formatNumber(
+                      data?.businessReport?.lossTotals?.totalLostValue || 0,
+                      {
+                        currency: 'GBP',
+                        style: 'currency',
+                      }
+                    )
                   : intl.formatMessage({
                       defaultMessage: 'No Losses',
                     })
@@ -698,9 +702,14 @@ const BusinessReport = ({
               })}
               value={
                 data?.businessReport?.lossTotals?.totalRecoveredValue
-                  ? `£${data?.businessReport?.lossTotals?.totalRecoveredValue.toFixed(
-                      2
-                    )}`
+                  ? intl.formatNumber(
+                      data?.businessReport?.lossTotals?.totalRecoveredValue ||
+                        0,
+                      {
+                        currency: 'GBP',
+                        style: 'currency',
+                      }
+                    )
                   : intl.formatMessage({
                       defaultMessage: 'No Recoveries',
                     })
@@ -733,11 +742,13 @@ const BusinessReport = ({
               title={intl.formatMessage({
                 defaultMessage: 'Average Loss per Incident',
               })}
-              value={
-                `£${(
-                  data?.businessReport?.lossTotals?.averagePerIncident || 0
-                ).toFixed(2)}` || ''
-              }
+              value={intl.formatNumber(
+                data?.businessReport?.lossTotals?.averagePerIncident || 0,
+                {
+                  currency: 'GBP',
+                  style: 'currency',
+                }
+              )}
             />
           </Row>
         </Row>

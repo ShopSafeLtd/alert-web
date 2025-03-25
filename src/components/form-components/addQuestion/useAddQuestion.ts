@@ -3,16 +3,17 @@ import type { FormInstance } from 'antd';
 
 import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/__generated__/create-question.generated';
 import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { Form, notification } from 'antd';
 import { AnswerType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
 
-import { useStoreState } from '../../../state';
 import errorNotification from '../../../types/mutation_notifications/error_notification';
 
 interface Return {
@@ -71,7 +72,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     tooltip: '',
     type: AnswerType.String,
   });
-  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const { data: BrandsData, loading: brandsLoading } = useBrandsQuery({
     variables: {

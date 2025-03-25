@@ -42,7 +42,6 @@ import { AppType, UserStatus } from 'graphql/types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { RoleValues } from 'types';
 import { GetUserStatusValues } from 'types/enums/user_status';
 import formatLoginTime from 'utils/format-login-time';
 
@@ -169,7 +168,6 @@ const userDetail = ({
   toggleDemLink,
   toggleEditPassword,
   toggleEditUser,
-  userRole,
   viewport,
 }: Props) => {
   const intl = useIntl();
@@ -470,12 +468,6 @@ const userDetail = ({
                   {data?.user?.mobileNumber}
                 </Descriptions.Item>
               )}
-              <Descriptions.Item
-                label={<FormattedMessage defaultMessage="Role" />}
-                style={{ paddingBottom: 8 }}
-              >
-                {userRole && RoleValues[userRole]}
-              </Descriptions.Item>
               <Descriptions.Item
                 label={<FormattedMessage defaultMessage="Groups" />}
               >

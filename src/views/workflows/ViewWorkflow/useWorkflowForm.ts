@@ -1,7 +1,8 @@
 import type { WorkflowDataQuery } from '#/views/workflows/graphql/queries/__generated__/workflow-data.generated';
 import type { FormInstance } from 'antd';
-import type { AnswerType, IncidentPriority } from 'graphql/types';
+import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
 import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
 import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
@@ -15,14 +16,14 @@ import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated_
 import {
   Model,
   QuestionModel,
-  Role,
+  SortOrder,
   WorkflowActionType,
   WorkflowTrigger,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
-import { useStoreState } from 'state';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import type { ListData } from '../../adminTodo/useActivities';
 
@@ -30,23 +31,31 @@ import useActivityTemplates from '../../adminTodo/useActivities';
 
 interface WorkflowData {
   autoApprove?: boolean;
+  businesses?: string[];
   sendEmail?: {
     message: string;
     title: string;
-    users: string[];
+    users?: string[];
   };
   sendNotification?: {
     message: string;
     title: string;
-    users: string[];
+    users?: string[];
   };
   setPriority?: string;
   task?: {
-    assignTo: string[];
-    assignToGroups: string[];
+    assignTo?: string[]; // deprecated
+    assignToGroups?: string[]; // deprecated
+    businesses?: string[]; // new
     dueDays: number;
     name: string;
     questions: string[];
+  };
+  usersToGetFrom?: {
+    groups?: string[];
+    parentGroups?: boolean;
+    roles?: string[];
+    users?: string[];
   };
 }
 
@@ -96,12 +105,14 @@ export interface Question {
 }
 
 export interface FormData {
-  assigneeGroups: string[];
   autoApprove: boolean;
   autoApproveCheck: boolean;
+  cronDate?: Date;
+  cronStart?: Date;
   descriptionCheck: boolean;
   descriptionCondition: AnyAll;
   descriptionWords: string[];
+  frequency?: CronSchedule;
   goodsType: string[];
   goodsTypeCheck: boolean;
   goodsTypeCondition: AnyAll;
@@ -129,14 +140,20 @@ export interface FormData {
   tagMethod: AnyAll;
   tagOptions: string[];
   tags: boolean;
-  taskAssignee: string[];
+  taskBusiness: string[];
   taskDescription: string;
   taskDueDays: number;
   taskName: string;
   taskOutcome: boolean;
   taskQuestions: string[];
+  updateIncident: boolean;
+  useDynamicGroups?: boolean;
+  userManagementGroups: string[];
+  userManagementRoles: string[];
+  userManagementUsers: string[];
   valueCheck: boolean;
   valuePrice: number;
+  workflowMode: 'scheduled' | 'trigger';
   workflowType?: Model | null;
 }
 
@@ -173,18 +190,18 @@ interface Return {
   tagsSelected: boolean;
   taskOutcome: boolean;
   taskQuestions: Question[];
+  updateIncidentCheck: boolean;
   updateTemplates: (
     item: ListData,
     type: 'create' | 'delete' | 'update'
   ) => void;
-  users: LabelValue[];
   valueSelected: boolean;
 }
 
 const useWorkflowForm = (): Return => {
   const [form] = Form.useForm<FormData>();
 
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
   const { id: EditId } = useParams();
 
   const [saving, setSaving] = useState(false);
@@ -205,10 +222,16 @@ const useWorkflowForm = (): Return => {
 
   const { data, loading } = useWorkflowDataQuery({
     variables: {
+      orderBy: {
+        question: SortOrder.Asc,
+      },
       questionsWhere: {
         deleted: {
           equals: false,
         },
+      },
+      schemeTagsOrderBy: {
+        name: SortOrder.Asc,
       },
       where: {
         id: currentScheme,
@@ -221,7 +244,7 @@ const useWorkflowForm = (): Return => {
   const [createWorkflow] = useCreateOneWorkflowMutation({
     onCompleted: () => {
       setSaving(false);
-      window.history.back();
+      navigate('/app/scheme-settings/workflow');
     },
     onError: () => {
       notification.error({
@@ -241,7 +264,7 @@ const useWorkflowForm = (): Return => {
     templateData,
     updateTemplates,
   } = useActivityTemplates();
-
+  const navigate = useNavigate();
   const tagsSelected = Form.useWatch('tags', form);
   const valueSelected = Form.useWatch('valueCheck', form);
   const questionsSelected = Form.useWatch('questionChecked', form);
@@ -253,24 +276,217 @@ const useWorkflowForm = (): Return => {
   const taskOutcome = Form.useWatch('taskOutcome', form);
   const sendEmailCheck = Form.useWatch('sendEmailCheck', form);
   const sendNotificationCheck = Form.useWatch('sendNotificationCheck', form);
+  const updateIncidentCheck = Form.useWatch('updateIncident', form);
+  const workflowMode = Form.useWatch('workflowMode', form);
+  const workflowType = Form.useWatch('workflowType', form);
+
+  const userManagementActive = useMemo(
+    () => taskOutcome || sendEmailCheck || sendNotificationCheck,
+    [taskOutcome, sendEmailCheck, sendNotificationCheck]
+  );
+
+  useEffect(() => {
+    if (updateIncidentCheck === false)
+      form.setFieldsValue({
+        autoApprove: undefined,
+        setPriority: undefined,
+      });
+  }, [updateIncidentCheck]);
+
+  useEffect(() => {
+    if (sendNotificationCheck === false)
+      form.setFieldsValue({
+        sendNotificationMessage: undefined,
+        sendNotificationTitle: undefined,
+      });
+  }, [sendNotificationCheck]);
+
+  useEffect(() => {
+    if (sendEmailCheck === false)
+      form.setFieldsValue({
+        sendEmailMessage: undefined,
+        sendEmailTitle: undefined,
+      });
+  }, [sendEmailCheck]);
+
+  useEffect(() => {
+    if (taskOutcome === false)
+      form.setFieldsValue({
+        taskBusiness: undefined,
+        taskDescription: undefined,
+        taskDueDays: undefined,
+        taskName: undefined,
+        taskQuestions: undefined,
+      });
+  }, [taskOutcome]);
+
+  useEffect(() => {
+    if (userManagementActive === false)
+      form.setFieldsValue({
+        useDynamicGroups: undefined,
+        userManagementGroups: undefined,
+        userManagementRoles: undefined,
+        userManagementUsers: undefined,
+      });
+  }, [userManagementActive]);
+
+  useEffect(() => {
+    if (tagsSelected === false)
+      form.setFieldsValue({
+        tagMethod: undefined,
+        tagOptions: undefined,
+      });
+  }, [tagsSelected]);
+
+  useEffect(() => {
+    if (valueSelected === false)
+      form.setFieldsValue({
+        valuePrice: undefined,
+      });
+  }, [valueSelected]);
+
+  useEffect(() => {
+    if (lessThanSelected === false)
+      form.setFieldsValue({
+        lessThanPrice: undefined,
+      });
+  }, [lessThanSelected]);
+
+  useEffect(() => {
+    if (goodsTypeCheck === false)
+      form.setFieldsValue({
+        goodsType: undefined,
+        goodsTypeCondition: undefined,
+      });
+  }, [goodsTypeCheck]);
+
+  useEffect(() => {
+    if (descriptionCheck === false)
+      form.setFieldsValue({
+        descriptionCondition: undefined,
+        descriptionWords: undefined,
+      });
+  }, [descriptionCheck]);
+
+  useEffect(() => {
+    if (questionsSelected === false) {
+      form.setFieldsValue({
+        questionMethod: undefined,
+      });
+      setSelectedQuestions([]);
+    }
+  }, [questionsSelected]);
+
+  useEffect(() => {
+    if (incidentTimeCountCheck === false)
+      form.setFieldsValue({
+        incidentTimeCountDays: undefined,
+        incidentTimeCountIncidents: undefined,
+      });
+  }, [incidentTimeCountCheck]);
+
+  useEffect(() => {
+    if (workflowMode === 'trigger')
+      form.setFieldsValue({
+        cronDate: undefined,
+        cronStart: undefined,
+        frequency: undefined,
+      });
+    if (workflowMode === 'scheduled') {
+      form.setFieldsValue({
+        descriptionCondition: undefined,
+        descriptionWords: undefined,
+        goodsType: undefined,
+        goodsTypeCondition: undefined,
+        incidentTimeCountDays: undefined,
+        incidentTimeCountIncidents: undefined,
+        incidentWhileBanCheck: undefined,
+        lessThanPrice: undefined,
+        option: undefined,
+        questionMethod: undefined,
+        tagMethod: undefined,
+        tagOptions: undefined,
+        valuePrice: undefined,
+        workflowType: undefined,
+      });
+      setSelectedQuestions([]);
+    }
+  }, [workflowMode]);
+
+  useEffect(() => {
+    if (workflowType === Model.Incident)
+      form.setFieldsValue({
+        incidentTimeCountCheck: undefined,
+        incidentTimeCountDays: undefined,
+        incidentTimeCountIncidents: undefined,
+        incidentWhileBanCheck: undefined,
+      });
+    if (workflowType === Model.Offender) {
+      form.setFieldsValue({
+        autoApprove: undefined,
+        descriptionCheck: undefined,
+        descriptionCondition: undefined,
+        descriptionWords: undefined,
+        goodsType: undefined,
+        goodsTypeCheck: undefined,
+        goodsTypeCondition: undefined,
+        lessThanCheck: undefined,
+        lessThanPrice: undefined,
+        questionChecked: undefined,
+        questionMethod: undefined,
+        setPriority: undefined,
+        tagMethod: undefined,
+        tagOptions: undefined,
+        tags: undefined,
+        updateIncident: undefined,
+        valueCheck: undefined,
+        valuePrice: undefined,
+      });
+      setSelectedQuestions([]);
+    }
+  }, [workflowType]);
 
   const { data: editWorkflowData, loading: editWorkflowLoading } =
     useViewWorkflowQuery({
+      fetchPolicy: 'cache-and-network',
       onCompleted: ({ workflow }) => {
         if (workflow) {
           const action = workflow.actions[0]?.data as WorkflowData;
           const conditions = workflow.conditions as WorkflowConditions;
+
+          const oldCompatability = {
+            emailUsers: action?.sendEmail?.users || [],
+            groups: action?.task?.assignToGroups || [],
+            notificationUsers: action?.sendNotification?.users || [],
+            users: action?.task?.assignTo || [],
+          };
+
+          const newCombined = {
+            groups: [
+              ...oldCompatability.groups,
+              ...(action?.usersToGetFrom?.groups || []),
+            ],
+            users: [
+              ...oldCompatability.users,
+              ...oldCompatability.emailUsers,
+              ...oldCompatability.notificationUsers,
+              ...(action?.usersToGetFrom?.users || []),
+            ],
+          };
+
           form.setFieldsValue({
-            assigneeGroups: action?.task?.assignToGroups,
             autoApprove: action?.autoApprove,
             autoApproveCheck: action?.autoApprove !== undefined,
+            cronDate: workflow.cronDate
+              ? new Date(workflow.cronDate)
+              : undefined,
             descriptionCheck:
               conditions?.descriptionWords?.words &&
               conditions.descriptionWords.words?.length > 0,
             descriptionCondition: conditions?.descriptionWords?.anyAll,
             descriptionWords: conditions?.descriptionWords?.words || [],
+            frequency: workflow.cronSchedule || undefined,
             goodsType: conditions?.goodsType?.goods || [],
-
             goodsTypeCheck:
               conditions?.goodsType?.goods &&
               conditions.goodsType.goods?.length > 0,
@@ -316,17 +532,23 @@ const useWorkflowForm = (): Return => {
             tagMethod: conditions?.tags?.anyAll,
             tagOptions: conditions?.tags?.tags,
             tags: !!conditions?.tags?.tags,
-            taskAssignee: action?.task?.assignTo,
+            taskBusiness: action?.task?.businesses || [],
             taskDueDays: action?.task?.dueDays,
             taskName: action?.task?.name,
             taskOutcome: !!action?.task?.name,
             taskQuestions: action?.task?.questions,
+            useDynamicGroups: !!action?.usersToGetFrom?.parentGroups,
+            userManagementGroups: newCombined.groups,
+            userManagementRoles: action?.usersToGetFrom?.roles || [],
+            userManagementUsers: newCombined.users,
             valueCheck: !!conditions?.totalValue,
             valuePrice: conditions?.totalValue
               ? typeof conditions.totalValue === 'string'
                 ? Number.parseInt(conditions.totalValue, 10)
                 : 0
               : 0,
+            workflowMode:
+              workflow.triggerModels === Model.Cron ? 'scheduled' : 'trigger',
             workflowType: workflow.triggerModels,
           });
         }
@@ -405,17 +627,6 @@ const useWorkflowForm = (): Return => {
     }
     return [];
   }, [templateData]);
-  const users: { label: string; value: string }[] = useMemo(() => {
-    if (data?.scheme?.members && data?.scheme?.members.length > 0) {
-      return data.scheme.members.map(
-        ({ role, user: { fullName }, userId }) => ({
-          label: `${fullName} (${role === Role.User ? 'User' : 'Admin'})`,
-          value: userId,
-        })
-      );
-    }
-    return [];
-  }, [data]);
 
   useEffect(() => {
     setAvailableQuestions(questions);
@@ -541,7 +752,7 @@ const useWorkflowForm = (): Return => {
   const [updateWorkflow] = useUpdateOneWorkflowMutation({
     onCompleted: () => {
       setSaving(false);
-      window.history.back();
+      navigate('/app/scheme-settings/workflow');
     },
     onError: () => {
       notification.error({
@@ -579,13 +790,18 @@ const useWorkflowForm = (): Return => {
       setPriority: values.setPriority ?? undefined,
       task: values.taskName
         ? {
-            assignTo: values.taskAssignee,
-            assignToGroups: values.assigneeGroups,
+            businesses: values.taskBusiness,
             dueDays: values.taskDueDays,
             name: values.taskName,
             questions: values.taskQuestions,
           }
         : undefined,
+      usersToGetFrom: {
+        groups: values.userManagementGroups,
+        parentGroups: values.useDynamicGroups,
+        roles: values.userManagementRoles,
+        users: values.userManagementUsers,
+      },
     };
 
     const conditionsData: WorkflowConditions = {
@@ -631,7 +847,7 @@ const useWorkflowForm = (): Return => {
         : undefined,
       totalValue: valueSelected ? values.valuePrice.toString() : false,
     };
-    if (!modelSelected) {
+    if (!modelSelected && !values.frequency) {
       setSaving(false);
 
       return;
@@ -653,6 +869,16 @@ const useWorkflowForm = (): Return => {
               ],
             },
             conditions: conditionsData,
+            cronDate: values.cronDate
+              ? {
+                  set: values.cronDate,
+                }
+              : undefined,
+            cronSchedule: values.frequency
+              ? {
+                  set: values.frequency,
+                }
+              : undefined,
             name: {
               set: values.name,
             },
@@ -675,6 +901,8 @@ const useWorkflowForm = (): Return => {
               ],
             },
             conditions: conditionsData,
+            cronDate: values.cronDate,
+            cronSchedule: values.frequency,
             name: values.name,
             schemes: {
               connect: [
@@ -684,7 +912,8 @@ const useWorkflowForm = (): Return => {
               ],
             },
             trigger: WorkflowTrigger.Created,
-            triggerModels: modelSelected || Model.Incident,
+            triggerModels:
+              modelSelected || values.frequency ? Model.Cron : Model.Incident,
           },
         },
       });
@@ -737,8 +966,8 @@ const useWorkflowForm = (): Return => {
     tagsSelected,
     taskOutcome,
     taskQuestions,
+    updateIncidentCheck,
     updateTemplates,
-    users,
     valueSelected,
   };
 };

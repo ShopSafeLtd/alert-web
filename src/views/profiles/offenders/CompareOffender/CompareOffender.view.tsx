@@ -2,6 +2,8 @@ import type { OffenderData } from '#/components/form-components/offender/AddExis
 import type { ViewOffenderCompareQuery } from 'graphql/offenders/queries/__generated__/compare-offender.generated';
 import type { Layout } from 'react-grid-layout';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faColumns,
   faImages,
@@ -23,13 +25,20 @@ import {
 } from 'antd';
 import AddExisitingOffender from 'components/form-components/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { Age, Build, Gender, Race, Role } from 'graphql/types';
+import {
+  Age,
+  Build,
+  Gender,
+  PermissionMethod,
+  PermissionModel,
+  Race,
+} from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import { useIntl } from 'react-intl';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
-import { useStoreState } from 'state';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 
 import type { OffenderField, Selected } from './useCompareIncident';
@@ -143,10 +152,14 @@ const CompareIncident = ({
   const classes = useStyles();
   const [layout, setLayout] = useState<Layout[]>([]);
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
   const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
+    useAtomValue(currentSchemeAtom)?.defaultPublicOffenderDOB ||
+    hasRolePermission({
+      permission: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.Offenders,
+      },
+    });
   return (
     <div className={classes.page} ref={pageRef}>
       <Row gutter={16} justify="end" style={{ marginBottom: 10 }}>

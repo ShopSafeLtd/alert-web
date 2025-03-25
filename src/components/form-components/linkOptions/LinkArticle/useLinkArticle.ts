@@ -4,8 +4,11 @@ import type { ArticleFilters } from 'state/data-model';
 import type { ArticleData, DateType } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentSchemeDefaultGroups } from '#/providers/UserProvider/UserProvider';
 import { useListArticlesFeedQuery } from '#/views/article/ArticleFeed/graphql/queries/__generated__/list-articles-feed.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -42,10 +45,8 @@ interface Return {
 }
 
 const useLinkArticle = ({ articleIds, onClose, update }: Props): Return => {
-  const { filterDefaultGroups: defaultGroups } = useStoreState(
-    (state) => state.user
-  );
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
   );
@@ -119,7 +120,7 @@ const useLinkArticle = ({ articleIds, onClose, update }: Props): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

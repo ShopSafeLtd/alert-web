@@ -87,7 +87,12 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
             {
               dataIndex: 'totalValue',
               key: 'totalValue',
-              render: (value: number | undefined) => `£${value || 0}`,
+              render: (value: number | undefined) =>
+                intl.formatNumber(value || 0, {
+                  currency: 'GBP',
+                  style: 'currency',
+                }),
+
               title: intl.formatMessage({
                 defaultMessage: 'Lost Value',
               }),
@@ -95,7 +100,11 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
             {
               dataIndex: 'totalRecoveredValue',
               key: 'totalRecoveredValue',
-              render: (value: number | undefined) => `£${value || 0}`,
+              render: (value: number | undefined) =>
+                intl.formatNumber(value || 0, {
+                  currency: 'GBP',
+                  style: 'currency',
+                }),
               title: intl.formatMessage({
                 defaultMessage: 'Recovered Value',
               }),

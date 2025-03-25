@@ -1,13 +1,14 @@
 import type { ViewportData } from '#/types/DataType';
 import type { IntlShape } from 'react-intl';
 
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import FormatCalendar from '#/utils/format-calendar-24h';
 import { useListSessionsQuery } from '#/views/settings/users/UserDetail/graphql/queries/__generated__/sessions.generated';
 import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Table, Tag, Tooltip } from 'antd';
 import { AppType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 
 const SessionsTableModal = ({
@@ -23,7 +24,7 @@ const SessionsTableModal = ({
   setViewport: (value: ViewportData | null) => void;
   userId: string;
 }) => {
-  const currentSchemeId = useStoreState((state) => state.scheme.id);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
   const [typeFilter, setTypeFilter] = useState<AppType[]>([]);
   const { data, loading } = useListSessionsQuery({
     skip: !open,

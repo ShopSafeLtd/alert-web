@@ -1,15 +1,22 @@
-import Loading from '#/components/shared-components/AntD/Loading';
+import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
   SIDE_NAV_WIDTH,
 } from '#/constants/ThemeConstant';
 import GroupsProvider from '#/context/groups-context';
 import { useAuth } from '#/hooks';
+import {
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+  settingSchemeAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useAuth as useAuthClerk } from '@clerk/clerk-react';
 import { Grid, Layout } from 'antd';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 import SideNav from 'components/layout-components/AntD/navigation/SideNav';
 import navigationConfig from 'configs/NavigationConfig';
+import { useAtomValue } from 'jotai/index';
 import AppViews from 'navigation/app-views/router';
 import { usePostHog } from 'posthog-js/react';
 import React, { useEffect } from 'react';
@@ -38,7 +45,6 @@ const AppLayout = (): JSX.Element => {
   const isMobile = !screens.includes('lg');
   const isNavSide = navType === NavType.SIDE;
   const { isLoaded } = useAuthClerk();
-  const { loading } = useAuth();
 
   const getLayoutGutter = () => {
     if (isMobile) {
@@ -46,18 +52,18 @@ const AppLayout = (): JSX.Element => {
     }
     return navCollapsed ? SIDE_NAV_COLLAPSED_WIDTH : SIDE_NAV_WIDTH;
   };
+  const isSettingScheme = useAtomValue(settingSchemeAtom);
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
+  const currentUser = useAtomValue(currentUserAtom);
+  const email = currentUser?.email ?? '';
+  const fullName = currentUser?.fullName ?? '';
+  const id = currentUser?.id ?? '';
+  const onboarded = !currentUser?.newUser ?? true;
+  const termsExpired = currentUser?.termsExpired ?? false;
+  const forcePasswordReset = currentUser?.forcePasswordReset ?? false;
+  const isSet = !!currentUser;
 
-  const {
-    businesses,
-    email,
-    forcePasswordReset,
-    fullName,
-    id,
-    isSet,
-    onboarded,
-    termsExpired,
-  } = useStoreState((state) => state.user);
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const { status } = useThemeSwitcher();
 
@@ -73,7 +79,7 @@ const AppLayout = (): JSX.Element => {
       posthog?.identify(id, {
         email,
         fullName,
-        organisation: businesses[0]?.fullName,
+        organisation: businesses?.at(0)?.name,
       });
       posthog?.group('tenant', currentScheme);
 
@@ -95,10 +101,9 @@ const AppLayout = (): JSX.Element => {
     location.pathname.includes('onboarding');
   // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
   if (status === 'loading') {
-    return <Loading cover="page" />;
+    return <LoadingScreen />;
   }
-
-  if (loading || !isLoaded || !isSet) return <Loading cover="content" />;
+  if (!isLoaded || !isSet || isSettingScheme) return <LoadingScreen />;
 
   return (
     <ScreenSizeUnsupported>

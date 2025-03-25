@@ -2,13 +2,19 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { FeedTodosQuery } from 'graphql/feedItems/queries/__generated__/feed-todos.generated';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 
-import { useStoreActions, useStoreState } from '#/state';
+import {
+  currentSchemeIdAtom,
+  userTodosAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import { useStoreActions } from '#/state';
 import {
   FeedTodosDocument,
   useFeedTodosQuery,
 } from 'graphql/feedItems/queries/__generated__/feed-todos.generated';
 import { useUpdateTodoMutation } from 'graphql/todos/mutations/__generated__/update_todo.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
 interface Props {
@@ -31,14 +37,14 @@ interface Return {
 }
 
 const useAdminTodos = ({ fullSearch }: Props): Return => {
-  const userId = useStoreState((state) => state.user.id);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const userId = useAtomValue(userIdAtom);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [search, setSearch] = useState('');
 
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
-  const userTodos = useStoreState((state) => state.user.userTodos);
+  const userTodos = useAtomValue(userTodosAtom);
 
   const variables = {
     orderBy: {

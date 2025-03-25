@@ -2,8 +2,12 @@ import type { ListGoodsTypesQuery } from '#/graphql/goods-types/queries/__genera
 import type { GoodsData } from 'types/DataType';
 
 import { useListGoodsTypesQuery } from '#/graphql/goods-types/queries/__generated__/list-goods-types.generated';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { GoodsMode } from 'graphql/types';
-import { useStoreState } from 'state';
+import { useAtomValue } from 'jotai/index';
 
 interface Props {
   data: GoodsData;
@@ -17,8 +21,8 @@ interface Return {
 }
 
 const useEditGoods = ({ data, update }: Props): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const goodsMode = useStoreState((state) => state.scheme.goodsMode);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const goodsMode = useAtomValue(currentSchemeAtom)?.goodsMode;
   const { data: goodsTypesData } = useListGoodsTypesQuery({
     variables: {
       where: {

@@ -7,6 +7,7 @@ import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generate
 import type { IncidentPriority } from 'graphql/types';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useApolloClient } from '@apollo/client';
 import { notification } from 'antd';
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
@@ -15,9 +16,9 @@ import { useUpdateIncidentBusinessMutation } from 'graphql/incidents/mutations/u
 import { useEditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, QueryMode, TagType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 export interface FormData {
@@ -72,7 +73,7 @@ interface Return {
 const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
   const intl = useIntl();
   const client = useApolloClient();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
 
   const { data: incidentData, loading } = useEditIncidentFeedQuery({

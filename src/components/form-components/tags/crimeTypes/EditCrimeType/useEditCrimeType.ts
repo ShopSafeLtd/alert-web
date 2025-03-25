@@ -12,6 +12,7 @@ interface FormData {
   crimeType: CrimeType;
   description: string;
   name: string;
+  roles: string[];
 }
 interface Props {
   incidentId: string | undefined;
@@ -29,7 +30,7 @@ const useEditCrimeType = ({ incidentId, onClose }: Props): Return => {
   const [saving, setSaving] = useState(false);
 
   const { data: TagData, loading } = useTagQuery({
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         id: incidentId,
@@ -59,6 +60,32 @@ const useEditCrimeType = ({ incidentId, onClose }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+
+    const rolesChangedFunction = () => {
+      const roles = TagData?.tag?.roles?.map((role) => role.id) || [];
+      const hasChanged = data.roles.sort().join(',') !== roles.sort().join(',');
+      if (hasChanged) {
+        const newRoles = data.roles
+          .map((role) => ({
+            id: role,
+          }))
+          .filter((role) => !roles.includes(role.id));
+        const rolesToBeRemoved = roles
+          .filter((role) => !data.roles.includes(role))
+          .map((role) => ({
+            id: role,
+          }));
+
+        return {
+          connect: newRoles.length > 0 ? newRoles : undefined,
+          disconnect:
+            rolesToBeRemoved.length > 0 ? rolesToBeRemoved : undefined,
+        };
+      }
+    };
+
+    const rolesChanged = rolesChangedFunction();
+
     if (incidentId)
       void updateTag({
         variables: {
@@ -66,6 +93,7 @@ const useEditCrimeType = ({ incidentId, onClose }: Props): Return => {
             crimeType: data.crimeType ? { set: data.crimeType } : undefined,
             description: { set: data.description },
             name: { set: data.name },
+            roles: rolesChanged ?? undefined,
           },
           where: {
             id: incidentId,

@@ -1,8 +1,14 @@
 import type { ListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
 import type { DateType } from 'types/DataType';
 
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { useListArticlesQuery } from 'graphql/article/queries/__generated__/list_articles.generated';
 import { QueryMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -32,8 +38,9 @@ const useArticlesSection = ({
   fullGroupFilter,
   fullSearch,
 }: Props): Return => {
-  const { defaultGroups, id: userId } = useStoreState((state) => state.user);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const currentUser = useAtomValue(currentUserAtom);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const [sortFilter, setSortFilter] = useState(false);
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
@@ -86,7 +93,7 @@ const useArticlesSection = ({
       createdBy: gallery.includes('MYDATA')
         ? {
             id: {
-              equals: userId,
+              equals: currentUser?.id ?? '',
             },
           }
         : undefined,

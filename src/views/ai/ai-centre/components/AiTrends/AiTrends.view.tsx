@@ -1,16 +1,17 @@
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   type AiSuggestionsQueryVariables,
   useAiSuggestionsQuery,
 } from '#/views/ai/ai-centre/components/AiSuggestions/__generated__/AiSuggestions.generated';
 import { Button, Card, Col, Row, Typography } from 'antd';
 import { AiSuggestionStatus, AiSuggestionType, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 const AiTrends = () => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
 
   const variables: AiSuggestionsQueryVariables = {
     orderBy: [

@@ -1,13 +1,15 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import type { LocationData } from 'types/DataType';
 
-import hasPermission from '#/utils/has-permission';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import useCanView from '#/utils/in-scheme';
 import { useViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { useUpdateIncidentLocationMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-location.generated';
-import { PermissionMethod, PermissionModel, Role } from 'graphql/types';
-import { useMemo, useState } from 'react';
-import { useStoreState } from 'state';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
+import { useState } from 'react';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -21,33 +23,36 @@ interface Return {
   editAddress: boolean;
   editImages: boolean;
   editRights: boolean;
+  hasApprovePermission: boolean;
   hideIncident: boolean;
   loading: boolean;
   onEditAddress: (value: LocationData) => void;
   saving: boolean;
   setSaving: (value: boolean) => void;
+  showAiDetails: boolean;
   toggleEditAddress: () => void;
   toggleEditImages: () => void;
+  toggleShowAiDetails: () => void;
   userId: string;
-  userRole: Role;
 }
 
 const useViewIncident = (incidentId: string): Return => {
-  const role = useStoreState((state) => state.user.role);
-  const { id: schemeId, restrictIncidentAccess } = useStoreState(
-    (state) => state.scheme
-  );
-  const { id: userId, schemes } = useStoreState((state) => state.user);
+  const hasApprovePermission = hasRolePermission({
+    permission: {
+      method: PermissionMethod.Approve,
+      model: PermissionModel.Incidents,
+    },
+  });
 
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const restrictIncidentAccess =
+    useAtomValue(currentSchemeAtom)?.restrictIncidentAccess ?? false;
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const currentScheme = useAtomValue(currentSchemeAtom);
 
   const [saving, setSaving] = useState(false);
   const [editAddress, setEditAddress] = useState(false);
   const [editImages, setEditImages] = useState(false);
+  const [showAiDetails, setShowAiDetail] = useState(false);
 
   const { data, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
@@ -58,7 +63,7 @@ const useViewIncident = (incidentId: string): Return => {
     },
   });
   useCanView({
-    currentScheme: currentScheme?.scheme.id || '',
+    currentScheme: currentScheme?.id ?? '',
     schemes: data?.incident?.schemes.map(({ id }) => id),
     type: 'incident',
   });
@@ -110,21 +115,21 @@ const useViewIncident = (incidentId: string): Return => {
     setEditImages(!editImages);
   };
 
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.Incidents,
     },
-    permissions,
   });
 
-  const deleteRights = hasPermission({
+  const deleteRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Delete,
       model: PermissionModel.Incidents,
     },
-    permissions,
   });
+
+  const toggleShowAiDetails = () => setShowAiDetail(!showAiDetails);
 
   return {
     data,
@@ -132,15 +137,23 @@ const useViewIncident = (incidentId: string): Return => {
     editAddress,
     editImages,
     editRights,
-    hideIncident: role === Role.User && restrictIncidentAccess,
+    hasApprovePermission,
+    hideIncident:
+      !hasRolePermission({
+        permission: {
+          method: PermissionMethod.Read,
+          model: PermissionModel.Incidents,
+        },
+      }) && restrictIncidentAccess,
     loading: (data === null || data === undefined) && loading,
     onEditAddress,
     saving,
     setSaving,
+    showAiDetails,
     toggleEditAddress,
     toggleEditImages,
+    toggleShowAiDetails,
     userId,
-    userRole: role,
   };
 };
 

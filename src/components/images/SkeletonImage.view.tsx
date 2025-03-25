@@ -1,7 +1,9 @@
 import type { Theme } from 'configs/ThemeConfig';
 
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { faImage } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
@@ -21,8 +23,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 const SkeletonImage = ({ height = 280 }: { height?: number }) => {
   const classes = useStyles();
-  const lightLogo = useStoreState((state) => state.scheme.logo);
-  const darkLogo = useStoreState((state) => state.scheme.darkLogo);
+  const lightLogo = useAtomValue(currentSchemeAtom)?.logo?.optimisedPersisted;
+  const darkLogo =
+    useAtomValue(currentSchemeAtom)?.darkLogo?.optimisedPersisted;
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
 
   return (

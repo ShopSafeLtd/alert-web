@@ -1,43 +1,50 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Row, Tooltip } from 'antd';
+import type { PermissionMethod, PermissionModel } from 'graphql/types';
+
 import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
 import { faCheckCircle as faCheckCircleSolid } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Row, Tooltip } from 'antd';
+import React from 'react';
+
 import useStyles from './CheckTag.styles';
 
 interface Option {
-  label: string;
-  value: string;
-  tooltip?: string | null;
-  needAdminRight?: boolean;
   hasChildren?: boolean;
-  parentId?: string | null;
+  label: string;
+  parentId?: null | string;
   parents?: string[];
+  permissions?: { method: PermissionMethod; model: PermissionModel }[];
   tier?: number;
+  tooltip?: null | string;
+  value: string;
 }
 
 interface Props {
   active: boolean;
-  option: Option;
   onClick: (value: Option) => void;
+  option: Option;
 }
 
-const CheckTag = ({ active, option, onClick }: Props) => {
+const CheckTag = ({ active, onClick, option }: Props) => {
   const classes = useStyles();
   return (
     <Tooltip title={option.tooltip}>
       <Row
+        align="middle"
         className={classes.selectBox}
         onClick={() => onClick(option)}
-        style={{ borderColor: active ? 'red' : undefined }}
-        align="middle"
+        style={{
+          backgroundColor: active ? 'rgb(222, 68, 54)' : undefined,
+          borderColor: active ? 'rgb(222, 68, 54)' : undefined,
+          color: active ? 'white' : undefined,
+        }}
       >
         <div className={classes.overlay} />
         <FontAwesomeIcon
-          size="lg"
           className={classes.selectIcon}
-          style={{ color: active ? 'red' : undefined }}
           icon={active ? faCheckCircleSolid : faCheckCircle}
+          size="lg"
+          style={{ color: active ? 'white' : undefined }}
         />
         {option.label}
       </Row>

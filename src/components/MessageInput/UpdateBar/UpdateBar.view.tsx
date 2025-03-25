@@ -13,6 +13,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import {
   faCar,
   faCircleXmark,
@@ -46,6 +47,7 @@ import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkOffender from 'components/form-components/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import Picker from 'emoji-picker-react';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -63,7 +65,6 @@ const { Option, getMentions } = Mentions;
 const { Text } = Typography;
 
 interface Props {
-  adminRights: boolean;
   articlesData: ArticleData[];
   beforeUpdateImageUpload: (value: RcFile) => void;
   crimeGroupsData: CrimeGroupData[];
@@ -122,7 +123,6 @@ interface Props {
 }
 
 const UpdateBar = ({
-  adminRights,
   articlesData,
   beforeUpdateImageUpload,
   crimeGroupsData,
@@ -441,7 +441,13 @@ const UpdateBar = ({
               />
             </Upload>
           </Col>
-          {adminRights && (
+          <PermissionCheckWrapper
+            permission={{
+              method: PermissionMethod.Edit,
+              model: PermissionModel.Incidents,
+            }}
+            unauthorizedElement={<div />}
+          >
             <Col>
               <Dropdown
                 overlay={
@@ -558,7 +564,7 @@ const UpdateBar = ({
                 </Button>
               </Dropdown>
             </Col>
-          )}
+          </PermissionCheckWrapper>
         </Row>
       </Form>
 

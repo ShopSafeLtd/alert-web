@@ -26,7 +26,13 @@ import type {
 } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
-import hasPermission from '#/utils/has-permission';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
+import publicOffenderDob from '#/utils/public-offender-dob';
 import { useOffenderIncidentsQuery } from '#/views/profiles/offenders/ViewOffender/__graphql__/queries/__generated__/list-incidents.generated';
 import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -53,14 +59,14 @@ import { useTranslateLazyQuery } from 'graphql/translate/queries/__generated__/t
 import {
   PermissionMethod,
   PermissionModel,
-  Role,
   SortOrder,
   TagType,
 } from 'graphql/types';
 import { useCreateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/create-simple-vehicle.generated';
 import { useUpdateSimpleVehicleMutation } from 'graphql/vehicles/mutations/__generated__/update-simple-vehicle.generated';
 import update from 'immutability-helper';
-import React, { useEffect, useMemo, useReducer, useState } from 'react';
+import { useAtomValue } from 'jotai/index';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { useStoreState } from 'state';
@@ -183,6 +189,7 @@ interface Return {
     } | null
   ) => void;
   shareOpen: boolean;
+  showAiDrawer: boolean;
   showIncidentOptions: boolean;
   toggleAddAddress: () => void;
   toggleAddBan: () => void;
@@ -191,6 +198,7 @@ interface Return {
   toggleAddExistingVehicle: () => void;
   toggleAddInvestigation: () => void;
   toggleAddVehicle: () => void;
+  toggleAiDrawer: () => void;
   toggleCopyOffender: () => void;
   toggleEditImages: () => void;
   toggleEditOffender: () => void;
@@ -253,20 +261,11 @@ export function usePagination(): UsePagination {
 const useViewOffender = (offenderId: string): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const {
-    defaultPublicOffenderDOB,
-    id: schemeId,
-    languageCount,
-  } = useStoreState((state) => state.scheme);
-  const hasConnectedSchemes = useStoreState(
-    (state) => state.scheme.hasConnectedSchemes
-  );
-  const { id: userId, role, schemes } = useStoreState((state) => state.user);
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const connectedToSchemes =
+    useAtomValue(currentSchemeAtom)?.connectedToSchemes;
+  const languageCount = useAtomValue(currentSchemeAtom)?.languageCount;
+  const currentUser = useAtomValue(currentUserAtom);
   const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [paginationState, dispatch] = usePagination();
@@ -276,7 +275,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
-  const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
+  const [showAiDrawer, setShowAiDrawer] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -365,12 +364,7 @@ const useViewOffender = (offenderId: string): Return => {
   }, [associateFilters]);
   const variables = {
     banWhere: {
-      groups:
-        role === Role.User ||
-        role === Role.ContentAdmin ||
-        role === Role.GroupAdmin
-          ? { some: { id: { in: groupsId } } }
-          : undefined,
+      groups: { some: { id: { in: groupsId } } },
     },
     where: {
       id: offenderId,
@@ -418,12 +412,9 @@ const useViewOffender = (offenderId: string): Return => {
             equals: TagType.IncidentCrimeType,
           },
         },
-        groups:
-          role === Role.SchemeAdmin
-            ? undefined
-            : groups.map((g) => ({
-                id: g.value,
-              })),
+        groups: groups.map((g) => ({
+          id: g.value,
+        })),
         linkedCrimeGroup: associateFilters.includes(LINKED_OCG),
         linkedIncidents: associateFilters.includes(LINKED_INCIDENTS),
         where: {
@@ -1397,7 +1388,7 @@ const useViewOffender = (offenderId: string): Return => {
               {
                 createdBy: {
                   connect: {
-                    id: userId,
+                    id: currentUser?.id ?? '',
                   },
                 },
                 description: value.description,
@@ -1829,43 +1820,50 @@ const useViewOffender = (offenderId: string): Return => {
     setSelectedImages([]);
   };
 
-  useEffect(() => {
-    if (
-      [
-        Role.ContentAdmin,
-        Role.GroupAdmin,
-        Role.SchemeAdmin,
-        Role.ShopsafeAdmin,
-      ].includes(role)
-    ) {
-      setOptionsMenuItems([
-        {
-          icon: <FontAwesomeIcon icon={faPeople} size="3x" />,
-          key: '0',
-          label: intl.formatMessage({
-            defaultMessage: 'Compare',
-          }),
-          onClick: () => navigate(`/app/offenders/compare/${offenderId}`),
-        },
-        {
-          icon: <FontAwesomeIcon icon={faEdit} size="3x" />,
-          key: '1',
-          label: intl.formatMessage({
-            defaultMessage: 'Edit',
-          }),
-          onClick: () => navigate(`/app/offenders/edit/${offenderId}`),
-        },
-        {
-          icon: <FontAwesomeIcon icon={faTrash} />,
-          key: '2',
-          label: intl.formatMessage({
-            defaultMessage: 'Delete',
-          }),
-          onClick: () => onDelete(offenderId),
-        },
-      ]);
-    }
-  }, [role]);
+  const optionMenuItems = [
+    {
+      icon: <FontAwesomeIcon icon={faPeople} size="3x" />,
+      key: '0',
+      label: intl.formatMessage({
+        defaultMessage: 'Compare',
+      }),
+      onClick: () => navigate(`/app/offenders/compare/${offenderId}`),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Offenders,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faEdit} size="3x" />,
+      key: '1',
+      label: intl.formatMessage({
+        defaultMessage: 'Edit',
+      }),
+      onClick: () => navigate(`/app/offenders/edit/${offenderId}`),
+      permission: {
+        method: PermissionMethod.Edit,
+        model: PermissionModel.Offenders,
+      },
+    },
+    {
+      icon: <FontAwesomeIcon icon={faTrash} />,
+      key: '2',
+      label: intl.formatMessage({
+        defaultMessage: 'Delete',
+      }),
+      onClick: () => onDelete(offenderId),
+      permission: {
+        method: PermissionMethod.Delete,
+        model: PermissionModel.Offenders,
+      },
+    },
+  ].filter(
+    (item) =>
+      item &&
+      hasRolePermission({
+        permission: item.permission,
+      })
+  );
 
   // function
   const toggleLinkIncident = () => {
@@ -1944,13 +1942,14 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleShareOpen = () => {
     setShareOpen(!shareOpen);
   };
-  const editRights = hasPermission({
+  const editRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Edit,
       model: PermissionModel.Offenders,
     },
-    permissions,
   });
+
+  const toggleAiDrawer = () => setShowAiDrawer(!showAiDrawer);
 
   return {
     addAddress,
@@ -1970,7 +1969,8 @@ const useViewOffender = (offenderId: string): Return => {
     data,
     deleteRights:
       editRights ||
-      (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
+      (currentUser?.id === data?.offender?.createdBy.id &&
+        !data?.offender?.approved),
     editAddressData,
     editBanData,
     editImageData,
@@ -1978,12 +1978,13 @@ const useViewOffender = (offenderId: string): Return => {
     editOffender,
     editRights:
       editRights ||
-      (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
+      (currentUser?.id === data?.offender?.createdBy.id &&
+        !data?.offender?.approved),
     editUpdate,
     editUpdateInput,
     editVehicleData,
     handleEditUpdate,
-    hasConnectedSchemes,
+    hasConnectedSchemes: connectedToSchemes && connectedToSchemes.length > 0,
     incidents:
       incidentsData?.offender.incidents ||
       previousData?.offender.incidents ||
@@ -2023,7 +2024,7 @@ const useViewOffender = (offenderId: string): Return => {
     openLightbox,
     optionMenuItems,
     optionRowShow,
-    publicOffenderDOB: defaultPublicOffenderDOB || role !== Role.User,
+    publicOffenderDOB: publicOffenderDob(),
     replyTo,
     saving,
     scrolledToTop,
@@ -2038,6 +2039,7 @@ const useViewOffender = (offenderId: string): Return => {
     setOptionRowShow,
     setReplyTo,
     shareOpen,
+    showAiDrawer,
     showIncidentOptions,
     toggleAddAddress,
     toggleAddBan,
@@ -2046,6 +2048,7 @@ const useViewOffender = (offenderId: string): Return => {
     toggleAddExistingVehicle,
     toggleAddInvestigation,
     toggleAddVehicle,
+    toggleAiDrawer,
     toggleCopyOffender,
     toggleEditImages,
     toggleEditOffender,
@@ -2063,7 +2066,7 @@ const useViewOffender = (offenderId: string): Return => {
     updateImagesList,
     updateIncidentList,
     updateInvestigationList,
-    userId,
+    userId: currentUser?.id ?? '',
     viewAssociate,
     viewMatches,
   };

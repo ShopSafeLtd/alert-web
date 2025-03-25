@@ -5,7 +5,7 @@ import type { UpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/up
 
 import AddGoods from '#/components/form-components/incident/goods/AddGoods';
 import EditGoods from '#/components/form-components/incident/goods/EditGoods';
-import { useStoreState } from '#/state';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -33,8 +33,9 @@ import {
 } from 'antd';
 import { useUpdateIncidentGoodsMutation } from 'graphql/incidents/mutations/update/__generated__/update-incident-goods.generated';
 import { GoodsMode } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 const { Paragraph, Title } = Typography;
 
@@ -58,7 +59,7 @@ const Items = ({
   setSaving,
 }: Props) => {
   const intl = useIntl();
-  const goodsMode = useStoreState((state) => state.scheme.goodsMode);
+  const goodsMode = useAtomValue(currentSchemeAtom)?.goodsMode;
   const [editGoodsData, setEditGoodsData] = useState<GoodsData | null>(null);
   const [addGoods, setAddGoods] = useState(false);
 
@@ -296,7 +297,11 @@ const Items = ({
                     {
                       dataIndex: 'value',
                       key: 'value',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Value',
                       }),
@@ -304,7 +309,11 @@ const Items = ({
                     {
                       dataIndex: 'recoveredValue',
                       key: 'recoveredValue',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Recovered Value',
                       }),
@@ -312,7 +321,11 @@ const Items = ({
                     {
                       dataIndex: 'itemTotal',
                       key: 'itemTotal',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Item Total',
                       }),
@@ -415,7 +428,11 @@ const Items = ({
                     {
                       dataIndex: 'value',
                       key: 'value',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Item Value',
                       }),
@@ -437,7 +454,11 @@ const Items = ({
                     {
                       dataIndex: 'itemTotal',
                       key: 'itemTotal',
-                      render: (value: number) => `£${value.toFixed(2)}`,
+                      render: (value: number) =>
+                        intl.formatNumber(value, {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }),
                       title: intl.formatMessage({
                         defaultMessage: 'Item Total',
                       }),
@@ -491,16 +512,22 @@ const Items = ({
                     })}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={3}>
-                    <FormattedMessage defaultMessage="£" />
-                    {value.toFixed(2)}
+                    {intl.formatNumber(value, {
+                      currency: 'GBP',
+                      style: 'currency',
+                    })}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={4}>
-                    <FormattedMessage defaultMessage="£" />
-                    {totalRecoveredValue.toFixed(2)}
+                    {intl.formatNumber(totalRecoveredValue, {
+                      currency: 'GBP',
+                      style: 'currency',
+                    })}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={5}>
-                    <FormattedMessage defaultMessage="£" />
-                    {totalValue.toFixed(2)}
+                    {intl.formatNumber(totalValue, {
+                      currency: 'GBP',
+                      style: 'currency',
+                    })}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={5} />
                 </Table.Summary.Row>
@@ -518,8 +545,10 @@ const Items = ({
                     {totalRecoveredQnty}
                   </Table.Summary.Cell>
                   <Table.Summary.Cell index={5}>
-                    <FormattedMessage defaultMessage="£" />
-                    {totalValue.toFixed(2)}
+                    {intl.formatNumber(totalValue, {
+                      currency: 'GBP',
+                      style: 'currency',
+                    })}
                   </Table.Summary.Cell>
                 </Table.Summary.Row>
               );

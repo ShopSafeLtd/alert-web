@@ -1,12 +1,16 @@
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useCreateSessionMutation } from 'graphql/sessions/__generated__/create-session.generated';
 import { AppType } from 'graphql/types';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from 'state';
+
+export const sessionIdAtom = atom<null | string>(null);
 
 const useManageSession = () => {
-  const globalStateSchemeId = useStoreState((state) => state.scheme.id);
-  const globalStateUserId = useStoreState((state) => state.user.id);
-  const setSessionId = useStoreActions((actions) => actions.user.setSession);
+  const setSessionId = useSetAtom(sessionIdAtom);
+  const globalStateSchemeId = useAtomValue(currentSchemeIdAtom);
+  const globalStateUserId = useAtomValue(userIdAtom);
 
   const [pristine, setPristine] = useState(true);
   const [schemeId, setSchemeId] = useState<null | string>(null);

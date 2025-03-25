@@ -249,9 +249,13 @@ const ViewInvestigation = ({
                       title={intl.formatMessage({
                         defaultMessage: 'Total Loss',
                       })}
-                      value={`£${
-                        data?.investigation?.totalValue?.toLocaleString() || 0
-                      }`}
+                      value={intl.formatNumber(
+                        data?.investigation?.totalValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Col>
                   <Col>
@@ -259,10 +263,13 @@ const ViewInvestigation = ({
                       title={intl.formatMessage({
                         defaultMessage: 'Total Value Recovered',
                       })}
-                      value={`£${
-                        data?.investigation?.totalRecoveredValue?.toLocaleString() ||
-                        0
-                      }`}
+                      value={intl.formatNumber(
+                        data?.investigation?.totalRecoveredValue || 0,
+                        {
+                          currency: 'GBP',
+                          style: 'currency',
+                        }
+                      )}
                     />
                   </Col>
                   <Col>

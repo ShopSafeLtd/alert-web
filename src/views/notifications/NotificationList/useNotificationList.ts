@@ -6,6 +6,14 @@ import type {
   UserNotificationsQueryVariables,
 } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
 
+import {
+  currentSchemeIdAtom,
+  useSchemeProvider,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  userIdAtom,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { notification } from 'antd';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useUpdateUserNotificationsMutation } from 'graphql/userNotification/mutations/__generated__/update_user_notification.generated';
@@ -13,10 +21,11 @@ import {
   UserNotificationsDocument,
   useUserNotificationsQuery,
 } from 'graphql/userNotification/queries/__generated__/user_notifications.generated';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreActions } from 'state';
 import { LocalStorageKeys } from 'types';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
@@ -58,18 +67,13 @@ interface Return {
 
 const useNotificationLists = (): Return => {
   const navigate = useNavigate();
+  const { setScheme: setSchemeAtom } = useSchemeProvider();
   const intl = useIntl();
-  const userId = useStoreState((state) => state.user.id);
-  const defaultGroups = useStoreState((state) => state.user.defaultGroups);
-  const userSchemes = useStoreState((state) => state.user.schemes);
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
+  const userId = useAtomValue(userIdAtom);
+  const userSchemes = useAtomValue(userSchemesAtom);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
   const setNotifications = useStoreActions(
     (actions) => actions.user.setNotifications
-  );
-  const setTodos = useStoreActions((actions) => actions.user.setTodos);
-  const setFilterDefaultGroup = useStoreActions(
-    (state) => state.user.setFilterDefaultGroup
   );
   const [saving, setSaving] = useState(false);
   const [takeAllSchemes, setTakeAllSchemes] = useState(true);
@@ -106,7 +110,7 @@ const useNotificationLists = (): Return => {
               some: {
                 id: {
                   in: takeAllSchemes
-                    ? userSchemes.map((item) => item.scheme.id)
+                    ? userSchemes.map((item) => item.schemeId)
                     : [schemeId],
                 },
               },
@@ -296,55 +300,10 @@ const useNotificationLists = (): Return => {
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
     const userScheme = userSchemes.find(
-      (el) => el.scheme.id === notificationSchemeId
+      (el) => el.schemeId === notificationSchemeId
     );
     if (!userScheme) return;
-    const { scheme } = userScheme;
-    window.localStorage.setItem('currentScheme', scheme.id);
-    window.localStorage.setItem('logo', scheme.logo?.optimisedPersisted || '');
-    window.localStorage.setItem(
-      'logo-dark',
-      scheme.darkLogo?.optimisedPersisted || ''
-    );
-
-    setScheme({
-      activityAssignToUser: scheme.activityAssignToUser,
-      autoApproveIncidents: scheme.autoApproveIncidents,
-      autoApproveOffenders: scheme.autoApproveOffenders,
-      autoPopulateDescription: scheme.autoPopulateDescription,
-      connectedToSchemes: scheme.connectedToSchemes,
-      darkLogo: scheme.darkLogo?.optimisedPersisted,
-      defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
-      facialDetection: scheme.facialDetection,
-      facialRecognition: scheme.facialRecognition,
-      facialRedaction: scheme.facialRedaction,
-      goodsMode: scheme.goodsMode,
-      id: scheme.id,
-      imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
-      incidentCustomQuestionRadio: scheme.incidentCustomQuestionRadio,
-      incidentTypeTooltip: scheme.incidentTypeTooltip,
-      languageCount: scheme.languageCount,
-      logo: scheme.logo?.optimisedPersisted,
-      name: scheme.name,
-      needJustification: scheme.needJustification,
-      oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
-      reportOnly: scheme.reportOnly,
-      requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
-      restrictIncidentAccess: scheme.restrictIncidentAccess,
-      taskTimeTracking: scheme.taskTimeTracking,
-      useBusinessGroupsOnIncident: scheme.useBusinessGroupsOnIncident,
-      userNotifications: scheme.userNotifications,
-      userTodos: scheme.userTodos,
-    });
-    setFilterDefaultGroup({
-      filterDefaultGroups: defaultGroups.filter(
-        (el) => el.scheme.id === scheme.id
-      ),
-    });
-    setTodos({ userTodos: scheme.userTodos || 0 });
-    setNotifications({
-      userNotifications: scheme.userNotifications || 0,
-    });
+    setSchemeAtom(userScheme.id);
   };
   const handleMarkAsRead = (value: NotificationData) => {
     if (value) {

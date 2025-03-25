@@ -1,7 +1,8 @@
 import type { FormInstance } from 'antd';
 import type { IncidentFormField } from 'graphql/types';
 
-import hasPermission from '#/utils/has-permission';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faEdit,
   faFileArrowUp,
@@ -28,9 +29,9 @@ import {
   PermissionMethod,
   PermissionModel,
 } from 'graphql/types';
-import React, { useMemo } from 'react';
+import { useAtomValue } from 'jotai/index';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
 import type { StateImageData } from './useImageSection';
@@ -77,23 +78,14 @@ const ImageSection = ({
     onChange,
     value,
   });
-  const { facialDetection, id: schemeId } = useStoreState(
-    (state) => state.scheme
-  );
-  const { schemes } = useStoreState((state) => state.user);
+  const facialDetection =
+    useAtomValue(currentSchemeAtom)?.facialDetection ?? false;
 
-  const currentScheme = useMemo(
-    () => schemes.find((scheme) => scheme.scheme.id === schemeId),
-    [schemes, schemeId]
-  );
-  const permissions = currentScheme?.permissions;
-
-  const addOffenderRights = hasPermission({
+  const addOffenderRights = hasRolePermission({
     permission: {
       method: PermissionMethod.Write,
       model: PermissionModel.Offenders,
     },
-    permissions,
   });
 
   return (

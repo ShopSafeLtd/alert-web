@@ -4,7 +4,13 @@ import type { DateType, VehicleData } from 'types/DataType';
 
 import { useListVehiclesCardQuery } from '#/components/form-components/linkOptions/LinkVehicle/graphql/queries/__generated__/list-vehicles-card.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { QueryMode, SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 
@@ -46,13 +52,9 @@ const useLinkVehicle = ({
   update,
   vehicleIds,
 }: Props): Return => {
-  const { filterDefaultGroups: defaultGroups } = useStoreState(
-    (state) => state.user
-  );
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userSchemeIds = useStoreState((state) => state.user.schemes).map(
-    (el) => el.scheme.id
-  );
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const userSchemeIds = useAtomValue(userSchemesAtom).map((el) => el.schemeId);
   const pagination = useStoreState((state) => state.data.vehicles.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.vehicles.variables
@@ -140,7 +142,7 @@ const useLinkVehicle = ({
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

@@ -1,8 +1,9 @@
 import { Model, WorkflowTrigger } from '#/graphql/types';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useWorkflowsQuery } from '#/views/workflows/graphql/queries/__generated__/list-workflows.generated';
+import { useAtomValue } from 'jotai/index';
 import { useMemo } from 'react';
 import { type IntlShape, useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 import type { WorkflowItem } from './types';
 
@@ -62,9 +63,9 @@ const worflowTriggerToReadable = ({
 };
 
 const useListWorkflows = (): Return => {
-  const { id: currentScheme } = useStoreState((state) => state.scheme);
-
   const intl = useIntl();
+
+  const currentScheme = useAtomValue(currentSchemeIdAtom) ?? '';
   const variables = {
     where: {
       schemes: {
@@ -91,7 +92,8 @@ const useListWorkflows = (): Return => {
           (acc, action) => acc + (action?.timesRun || 0),
           0
         ),
-
+        triggerMethod: workflow.trigger,
+        triggerModel: workflow.triggerModels,
         triggeredOff: worflowTriggerToReadable({
           intl,
           trigger: workflow.trigger,

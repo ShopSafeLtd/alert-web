@@ -1,4 +1,6 @@
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import { Button, Card, PageHeader, Table } from 'antd';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -18,13 +20,24 @@ const ListWorkflowView = ({ data, loading }: Props) => {
     <div>
       <PageHeader
         extra={[
-          <Button key="1" onClick={() => navigate('add')} type="primary">
-            <FormattedMessage defaultMessage="Create Workflow" />
-          </Button>,
+          <PermissionCheckWrapper
+            permission={{
+              method: PermissionMethod.Write,
+              model: PermissionModel.Workflows,
+            }}
+            unauthorizedElement={<div />}
+          >
+            <Button key="1" onClick={() => navigate('add')} type="primary">
+              <FormattedMessage defaultMessage="Create Workflow" />
+            </Button>
+          </PermissionCheckWrapper>,
         ]}
         title={<FormattedMessage defaultMessage="Workflow" />}
       />
       <Card
+        bodyStyle={{
+          padding: 0,
+        }}
         style={{
           margin: 16,
         }}
@@ -36,6 +49,7 @@ const ListWorkflowView = ({ data, loading }: Props) => {
           pagination={{
             hideOnSinglePage: true,
           }}
+          size="small"
         />
       </Card>
     </div>
