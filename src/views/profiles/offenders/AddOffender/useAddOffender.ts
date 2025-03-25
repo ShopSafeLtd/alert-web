@@ -262,7 +262,7 @@ const useAddOffender = (): Return => {
     fetchPolicy: 'network-only',
     variables: {
       where: {
-        id: userBusinesses[0].id,
+        id: userBusinesses[0]?.id,
       },
     },
   });
