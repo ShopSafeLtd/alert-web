@@ -25,7 +25,12 @@ import type {
   VehicleData,
 } from 'types/DataType';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useApolloClient } from '@apollo/client';
 import { Form, Modal, Upload, message, notification } from 'antd';
@@ -55,7 +60,6 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
 
@@ -160,13 +164,11 @@ interface Return {
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
   const intl = useIntl();
-  const {
-    businesses: userBusinesses,
-    id: userId,
-    origName: userOrigName,
-  } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const userOrigName = useAtomValue(currentUserAtom)?.fullName ?? '';
+  const userBusinesses = useAtomValue(currentSchemeBusinessesAtom);
   const restrictIncidentAccess =
-    useStoreState((state) => state.scheme.restrictIncidentAccess) &&
+    useAtomValue(currentSchemeAtom)?.restrictIncidentAccess &&
     hasRolePermission({
       permission: {
         method: PermissionMethod.Read,
@@ -954,8 +956,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             from: {
               businesses: [
                 {
-                  fullName: userBusinesses[0].fullName,
-                  id: userBusinesses[0].id,
+                  fullName: userBusinesses?.at(0)?.name ?? '',
+                  id: userBusinesses?.at(0)?.id ?? '',
                 },
               ],
               firstLetter: userOrigName.slice(1)[0],

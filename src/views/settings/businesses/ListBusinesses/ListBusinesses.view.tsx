@@ -3,12 +3,18 @@ import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/us
 import type { BusinessData } from 'types/DataType';
 
 import DebouncedInput from '#/utils/debounced-input';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faFilter,
+  faLink,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
   Drawer,
+  Form,
   Row,
   Select,
   Table,
@@ -37,6 +43,7 @@ interface Props {
   addVisible: boolean;
   data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
+  filtersOpen: boolean;
   groupData: FilterLabels[];
   groupFilter: string[];
   linkVisible: boolean;
@@ -56,6 +63,7 @@ interface Props {
   tagFilter: string[];
   tags: FilterLabels[];
   toggleAddVisible: () => void;
+  toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
 }
 
@@ -63,6 +71,7 @@ const ListBusinesses = ({
   addVisible,
   data,
   deleteConfirm,
+  filtersOpen,
   groupData,
   groupFilter,
   linkVisible,
@@ -82,6 +91,7 @@ const ListBusinesses = ({
   tagFilter,
   tags,
   toggleAddVisible,
+  toggleFiltersOpen,
   toggleLinkVisible,
 }: Props) => {
   const classNames = useStyles();
@@ -94,10 +104,22 @@ const ListBusinesses = ({
 
   return (
     <div className={classNames.page}>
-      <Row className={classNames.actions} gutter={8}>
-        <Col span={19} />
+      <Row className={classNames.actions} justify="end">
+        <Col span={8}>
+          <DebouncedInput
+            allowClear
+            defaultValue={searchValue || ''}
+            onChange={(e) => {
+              resetPage();
+              onSearchChange(e.target.value);
+            }}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a business...',
+            })}
+          />
+        </Col>
+        <Col flex={1} />
         <Col
-          span={4}
           style={{
             alignItems: 'center',
             display: 'flex',
@@ -106,37 +128,50 @@ const ListBusinesses = ({
         >
           <Tooltip
             title={intl.formatMessage({
-              defaultMessage: 'Link Existing Business',
+              defaultMessage: 'Filter Businesses',
             })}
           >
             <Button
-              danger
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-              onClick={toggleLinkVisible}
+              icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
+              onClick={toggleFiltersOpen}
               style={{
                 borderBottomRightRadius: 0,
                 borderTopRightRadius: 0,
               }}
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Existing',
-              })}
-            </Button>
+            />
           </Tooltip>
-
+        </Col>
+        <Col
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+            marginBottom: 5,
+          }}
+        >
+          <Tooltip
+            title={intl.formatMessage({
+              defaultMessage: 'Link Existing Business From Another Scheme',
+            })}
+          >
+            <Button
+              icon={<FontAwesomeIcon icon={faLink} size="lg" />}
+              onClick={toggleLinkVisible}
+              style={{
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+              }}
+            />
+          </Tooltip>
+        </Col>
+        <Col>
           <Tooltip
             title={intl.formatMessage({
               defaultMessage: 'Add New Business',
             })}
           >
             <Button
-              danger
               icon={
                 <FontAwesomeIcon
                   icon={faPlus}
@@ -152,102 +187,10 @@ const ListBusinesses = ({
               }}
             >
               {intl.formatMessage({
-                defaultMessage: 'New',
+                defaultMessage: 'Create Business',
               })}
             </Button>
           </Tooltip>
-        </Col>
-
-        <Col span={6}>
-          <Tag color="red">
-            {intl.formatMessage({
-              defaultMessage: 'Search',
-            })}
-          </Tag>
-          <DebouncedInput
-            allowClear
-            defaultValue={searchValue || ''}
-            onChange={(e) => {
-              resetPage();
-              onSearchChange(e.target.value);
-            }}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a business...',
-            })}
-            size="small"
-          />
-        </Col>
-        <Col span={6}>
-          <Tag color="red">
-            {intl.formatMessage({
-              defaultMessage: 'Select Parent',
-            })}
-          </Tag>
-          <Select
-            allowClear
-            maxTagCount={4}
-            mode="multiple"
-            onChange={(value: string[]) => {
-              resetPage();
-
-              setParentFilter(value);
-            }}
-            optionFilterProp="label"
-            options={parentData}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Parent',
-            })}
-            style={{ width: '100%' }}
-            value={parentFilter}
-          />
-        </Col>
-        <Col span={6}>
-          <Tag color="red">
-            {intl.formatMessage({
-              defaultMessage: 'Select Group',
-            })}
-          </Tag>
-          <Select
-            allowClear
-            maxTagCount={4}
-            mode="multiple"
-            onChange={(value: string[]) => {
-              resetPage();
-
-              setGroupFilter(value);
-            }}
-            optionFilterProp="label"
-            options={groupData}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Group',
-            })}
-            style={{ width: '100%' }}
-            value={groupFilter}
-          />
-        </Col>
-        <Col span={6}>
-          <Tag color="red">
-            {intl.formatMessage({
-              defaultMessage: 'Select Tag',
-            })}
-          </Tag>
-          <Select
-            allowClear
-            maxTagCount={4}
-            mode="multiple"
-            onChange={(value: string[]) => {
-              resetPage();
-
-              setTagFilter(value);
-            }}
-            optionFilterProp="label"
-            options={tags}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Tag',
-            })}
-            style={{ width: '100%' }}
-            value={tagFilter}
-          />
         </Col>
       </Row>
       <Table<TableData>
@@ -389,6 +332,88 @@ const ListBusinesses = ({
             update={onUpdateLinkBusiness}
           />
         )}
+      </Drawer>
+
+      <Drawer
+        onClose={toggleFiltersOpen}
+        title={intl.formatMessage({ defaultMessage: 'Filter Businesses' })}
+        visible={filtersOpen}
+        width={600}
+      >
+        <Form layout="vertical">
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Parent Business',
+                })}
+              >
+                <Select
+                  allowClear
+                  maxTagCount={4}
+                  mode="multiple"
+                  onChange={(value: string[]) => {
+                    resetPage();
+                    setParentFilter(value);
+                  }}
+                  optionFilterProp="label"
+                  options={parentData}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Parent',
+                  })}
+                  style={{ width: '100%' }}
+                  value={parentFilter}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Group' })}
+              >
+                <Select
+                  allowClear
+                  maxTagCount={4}
+                  mode="multiple"
+                  onChange={(value: string[]) => {
+                    resetPage();
+
+                    setGroupFilter(value);
+                  }}
+                  optionFilterProp="label"
+                  options={groupData}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Group',
+                  })}
+                  style={{ width: '100%' }}
+                  value={groupFilter}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                label={intl.formatMessage({ defaultMessage: 'Group' })}
+              >
+                <Select
+                  allowClear
+                  maxTagCount={4}
+                  mode="multiple"
+                  onChange={(value: string[]) => {
+                    resetPage();
+
+                    setTagFilter(value);
+                  }}
+                  optionFilterProp="label"
+                  options={tags}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select Tag',
+                  })}
+                  style={{ width: '100%' }}
+                  value={tagFilter}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       </Drawer>
     </div>
   );

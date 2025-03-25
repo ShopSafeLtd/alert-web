@@ -31,6 +31,7 @@ interface Return {
   addVisible: boolean;
   data: BusinessesListQuery | undefined;
   deleteConfirm: (value: string) => void;
+  filtersOpen: boolean;
   groupData: FilterLabels[];
   groupFilter: string[];
   linkVisible: boolean;
@@ -50,6 +51,7 @@ interface Return {
   tagFilter: string[];
   tags: FilterLabels[];
   toggleAddVisible: () => void;
+  toggleFiltersOpen: () => void;
   toggleLinkVisible: () => void;
 }
 
@@ -60,6 +62,7 @@ const useListBusinesses = (): Return => {
   const [addVisible, setAddVisible] = useState(false);
   const [linkVisible, setLinkVisible] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 24 });
   const [parentFilter, setParentFilter] = useState<string[]>([]);
   const [groupFilter, setGroupFilter] = useState<string[]>([]);
@@ -393,10 +396,13 @@ const useListBusinesses = (): Return => {
     [QueryTags]
   );
 
+  const toggleFiltersOpen = () => setFiltersOpen(!filtersOpen);
+
   return {
     addVisible,
     data,
     deleteConfirm,
+    filtersOpen,
     groupData,
     groupFilter,
     linkVisible,
@@ -416,6 +422,7 @@ const useListBusinesses = (): Return => {
     tagFilter,
     tags,
     toggleAddVisible,
+    toggleFiltersOpen,
     toggleLinkVisible,
   };
 };

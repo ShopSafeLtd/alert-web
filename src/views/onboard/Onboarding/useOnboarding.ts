@@ -1,16 +1,19 @@
 import type { CurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentUserAtom,
+  userIdAtom,
+} from '#/providers/UserProvider/UserProvider';
+import { useAgreeTermsMutation } from '#/views/onboard/Onboarding/__generated__/agreeTerms.generated';
 import { notification } from 'antd';
 import { useCurrentSchemeTermsQuery } from 'graphql/scheme/queries/__generated__/current-terms.generated';
 import { useSignTermsMutation } from 'graphql/user/mutation/__generated__/sign-terms.generated';
-import { useUpdateUserMutation } from 'graphql/user/mutation/__generated__/update_user.generated';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreActions } from 'state';
 
 export interface AccountData {
   fullName: string;
@@ -23,7 +26,6 @@ export interface AccountData {
 }
 
 interface Return {
-  accountDetail: AccountData | undefined;
   current: number;
   loading: boolean;
   name: string;
@@ -32,7 +34,6 @@ interface Return {
   saving: boolean;
   schemeTerms: CurrentSchemeTermsQuery | undefined;
   setCurrent: (value: number) => void;
-  updateAccountDetail: (value: AccountData | undefined) => void;
   updateSchemeTermsSigned: (value: unknown) => void;
   updateTermsSigned: () => void;
 }
@@ -40,19 +41,19 @@ interface Return {
 const useOnboarding = (): Return => {
   const intl = useIntl();
   const userId = useAtomValue(userIdAtom);
-  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const name = useAtomValue(currentUserAtom)?.fullName ?? '';
+  const schemeId = useAtomValue(currentSchemeAtom)?.id ?? '';
   const [current, setCurrent] = useState(0);
-  const [accountDetail, setAccountDetail] = useState<AccountData | undefined>();
   const [termsSigned, setTermsSigned] = useState(false);
   const [schemeTermsSigned, setSchemeTermsSigned] = useState('');
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
-  const { fullName } = useStoreState((state) => state.user);
   const markTermsSigned = useStoreActions(
     (action) => action.user.userOnboarded
   );
 
-  const name = accountDetail?.fullName || fullName || '';
+  console.log(schemeId);
+
   const onNext = () => {
     // if (current < 2) {
     setCurrent(current + 1);
@@ -75,28 +76,16 @@ const useOnboarding = (): Return => {
 
   const [signTerms] = useSignTermsMutation();
 
-  const { data: SchemeTerms, loading: SchemeTermsLoading } =
-    useCurrentSchemeTermsQuery({
-      variables: {
-        where: {
-          id: schemeId,
-        },
+  const { data: SchemeTerms, loading } = useCurrentSchemeTermsQuery({
+    skip: !schemeId,
+    variables: {
+      where: {
+        id: schemeId,
       },
-    });
+    },
+  });
 
-  const updateAccountDetail = (value: AccountData | undefined) => {
-    setAccountDetail(value);
-    if (
-      SchemeTerms?.scheme?.currentTerms?.id &&
-      (value?.fullName || fullName)
-    ) {
-      setSchemeTermsSigned(`<svg xmlns="http://www.w3.org/2000/svg" style="background:#ffffff00" height="100" width="300" viewBox="0 0 300 100" class="signature-svg" data-reactroot=""><text x="20" y="60" font-family="Caveat" font-size="30" fill="black">
-      ${value?.fullName || fullName}
-</text></svg>`);
-    }
-    onNext();
-  };
-  const [updateUser] = useUpdateUserMutation({
+  const [agreeToTerms] = useAgreeTermsMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
@@ -131,43 +120,46 @@ const useOnboarding = (): Return => {
       setSaving(false);
     }
 
-    if (SchemeTerms?.scheme?.currentTerms?.id && current === 1) {
-      if (termsSigned) {
+    if (SchemeTerms?.scheme?.currentTerms?.id) {
+      if (current === 0) {
         onNext();
         setSaving(false);
         setTermsSigned(false);
-      }
-    } else if (
-      termsSigned &&
-      accountDetail &&
-      !SchemeTerms?.scheme?.currentTerms?.id
-    ) {
-      const oneYearAway = new Date();
-      oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
-      void updateUser({
-        variables: {
-          chatWhere: {
-            chat: {
-              scheme: {
-                id: {
-                  equals: schemeId,
+      } else if (current === 1) {
+        const oneYearAway = new Date();
+        oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
+        void signTerms({
+          onCompleted: () => {
+            void agreeToTerms({
+              variables: {
+                data: {
+                  newUser: { set: false },
+                  termsExpire: { set: oneYearAway },
+                  termsSigned: { set: true },
+                },
+                where: {
+                  id: userId,
                 },
               },
+            });
+          },
+          variables: {
+            data: {
+              signature: schemeTermsSigned,
+              termsId: SchemeTerms?.scheme?.currentTerms?.id || '',
             },
           },
+        });
+      }
+    } else {
+      const oneYearAway = new Date();
+      oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
+      void agreeToTerms({
+        variables: {
           data: {
-            fullName: { set: accountDetail?.fullName },
             newUser: { set: false },
             termsExpire: { set: oneYearAway },
             termsSigned: { set: true },
-            // status: { set: UserStatus.Active },
-          },
-          groupWhere: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
           },
           where: {
             id: userId,
@@ -175,67 +167,17 @@ const useOnboarding = (): Return => {
         },
       });
     }
-
-    if (
-      schemeTermsSigned &&
-      current === 2 &&
-      SchemeTerms?.scheme?.currentTerms?.id
-    ) {
-      const oneYearAway = new Date();
-      oneYearAway.setFullYear(oneYearAway.getFullYear() + 1);
-      void signTerms({
-        onCompleted: () => {
-          void updateUser({
-            variables: {
-              chatWhere: {
-                chat: {
-                  scheme: {
-                    id: {
-                      equals: schemeId,
-                    },
-                  },
-                },
-              },
-              data: {
-                fullName: { set: accountDetail?.fullName || '' },
-                newUser: { set: false },
-                termsExpire: { set: oneYearAway },
-                termsSigned: { set: true },
-              },
-              groupWhere: {
-                scheme: {
-                  id: {
-                    equals: schemeId,
-                  },
-                },
-              },
-              where: {
-                id: userId,
-              },
-            },
-          });
-        },
-        variables: {
-          data: {
-            signature: schemeTermsSigned,
-            termsId: SchemeTerms?.scheme?.currentTerms?.id || '',
-          },
-        },
-      });
-    }
   };
 
   return {
-    accountDetail,
     current,
-    loading: SchemeTermsLoading,
+    loading: !schemeId || loading,
     name,
     onBack,
     onSubmit,
     saving,
     schemeTerms: SchemeTerms,
     setCurrent,
-    updateAccountDetail,
     updateSchemeTermsSigned,
     updateTermsSigned,
   };

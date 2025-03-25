@@ -17,6 +17,7 @@ import type {
 } from 'types/DataType';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   ViewVehicleDocument,
@@ -36,7 +37,6 @@ import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
@@ -134,7 +134,7 @@ const onCompletedAddOffender = () => {
 };
 const useViewVehicle = (vehicleId: string): Return => {
   const intl = useIntl();
-  const { id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const [saving, setSaving] = useState(false);
   const [editVehicle, setEditVehicle] = useState(false);

@@ -8,6 +8,8 @@ import type { CreateIncidentMutation } from 'graphql/incidents/mutations/__gener
 import type { AddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
 import type { ListIncidentsQuery } from 'graphql/incidents/queries/__generated__/list-incidents.generated';
 import type { ViewInvestigationQuery } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
+import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type {
   Age,
   Build,
@@ -22,10 +24,18 @@ import type React from 'react';
 import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
-import { isAdminAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import { sessionIdAtom } from '#/hooks/useManageSession';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+  currentSchemeIdAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
+import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
 import { useAddressesQuery } from 'graphql/incidents/queries/__generated__/address.generated';
@@ -123,6 +133,7 @@ export interface FormData {
     stockItem?: string;
     value?: number;
   }[];
+  goodsKnown?: boolean;
   groups?: string[];
   hasVictims: boolean;
   images?: StateImageData[];
@@ -214,6 +225,8 @@ interface Return {
   goodsMode: GoodsMode;
   goodsVisible: boolean;
   incidentForm: IncidentFormField[];
+  incidentTagsData: ListIncidentTagsQuery | undefined;
+  incidentTagsLoading: boolean;
   isTheft: boolean;
   knowGoods: () => void;
   newAddressData: LocationData | undefined;
@@ -230,6 +243,7 @@ interface Return {
   setPoliceReporting: (value: boolean) => void;
   setPrimaryImage: (value: string) => void;
   showSiteNumber: boolean;
+  tagsData: TagsQuery | undefined;
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
 }
@@ -239,32 +253,35 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   const intl = useIntl();
   const isAdmin = useAtomValue(isAdminAtom);
-  const { businesses, id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
+  const businesses = useAtomValue(currentSchemeBusinessesAtom);
 
   const reportOnly =
-    useStoreState((state) => state.scheme.reportOnly) &&
+    useAtomValue(currentSchemeAtom)?.reportOnly &&
     !hasRolePermission({
       permission: {
         method: PermissionMethod.Read,
         model: PermissionModel.Incidents,
       },
     });
+
+  const formBusiness = Form.useWatch('business', form);
+
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
-  const sessionId = useStoreState((state) => state.user.sessionId);
-  const goodsMode = useStoreState((state) => state.scheme.goodsMode);
+  const sessionId = useAtomValue(sessionIdAtom);
+  const goodsMode = useAtomValue(currentSchemeAtom)?.goodsMode;
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
-  const {
-    id: schemeId,
-    requireSiteNumberForUsers,
-    restrictIncidentAccess,
-  } = useStoreState((state) => state.scheme);
-  const facialRecognition = useStoreState(
-    (state) => state.scheme.facialRecognition
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const requireSiteNumberForUsers =
+    useAtomValue(currentSchemeAtom)?.requireSiteNumberForUsers;
+  const restrictIncidentAccess =
+    useAtomValue(currentSchemeAtom)?.restrictIncidentAccess;
+  const facialRecognition =
+    useAtomValue(currentSchemeAtom)?.facialRecognition ?? true;
 
   const addOffenderRights = hasRolePermission({
     permission: {
@@ -335,12 +352,32 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         },
       });
     } else {
-      const businessBrands = businesses[0].brands;
+      const businessBrands = businesses[0]?.brands;
       setBrands(businessBrands);
     }
   }, [businesses]);
 
   const [generateStatementBody] = useGenerateStatementBodyMutation();
+  const [getBrands] = useBusinessBrandsLazyQuery();
+
+  useEffect(() => {
+    if (formBusiness) {
+      void getBrands({
+        onCompleted: (data) => {
+          if (data && data.business && data.business.brands.length > 0) {
+            setBrands(data.business.brands);
+          }
+        },
+        variables: {
+          where: {
+            id: formBusiness.value,
+          },
+        },
+      });
+    } else {
+      setBrands([]);
+    }
+  }, [formBusiness]);
 
   const handleStatementGeneration = async () => {
     if (policeReporting && policeWitnessAtTime !== undefined) {
@@ -527,13 +564,14 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     },
   });
 
-  const { data: incidentTagsData } = useListIncidentTagsQuery({
-    variables: {
-      where: {
-        schemeId,
+  const { data: incidentTagsData, loading: incidentTagsLoading } =
+    useListIncidentTagsQuery({
+      variables: {
+        where: {
+          schemeId,
+        },
       },
-    },
-  });
+    });
 
   // update incident list after adding a new item
   const updateIncident: MutationUpdaterFn<CreateIncidentMutation> = (
@@ -696,7 +734,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log('addIncindent', data.offenders);
 
     const allOffendersConfirmed = !data.offenders
       ?.map((offender) => offender.confirmedInIncident)
@@ -1093,7 +1130,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     }
   };
 
-  const { autoPopulateDescription } = useStoreState((state) => state.scheme);
+  const autoPopulateDescription =
+    useAtomValue(currentSchemeAtom)?.autoPopulateDescription;
   const onValuesChange = (changedValues: FormData, values: FormData) => {
     if (changedValues.description) {
       setDescriptionPristine(false);
@@ -1221,6 +1259,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             value: 0,
           },
         ],
+        goodsKnown: undefined,
       });
     }
   };
@@ -1307,7 +1346,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             tooltip: question.tooltip ?? undefined,
             value: '',
           }));
-          if (brands.length > 0) {
+          if (brands && brands.length > 0) {
             const filteredQuestions = tagQuestions.filter((question) => {
               if (question.dependentOnBrandIds.length > 0) {
                 return question.dependentOnBrandIds.some((id) =>
@@ -1339,6 +1378,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     goodsMode,
     goodsVisible,
     incidentForm,
+    incidentTagsData,
+    incidentTagsLoading,
     isTheft,
     knowGoods,
     newAddressData,
@@ -1355,6 +1396,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     setPoliceReporting,
     setPrimaryImage,
     showSiteNumber,
+    tagsData,
     toggleAddNewAddress,
     updateNewAddressData,
   };

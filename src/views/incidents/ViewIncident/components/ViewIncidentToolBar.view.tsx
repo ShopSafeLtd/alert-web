@@ -5,7 +5,11 @@ import type { ListIncidentsAllSchemesQuery } from 'graphql/incidents/queries/__g
 import ShareData from '#/components/form-components/ShareData/ShareData';
 import AddLocation from '#/components/form-components/addresses/AddLocation';
 import EditIncidentFeed from '#/components/form-components/incident/EditIncidentFeed';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { IncidentSort, useStoreState } from '#/state';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import hasRolePermission from '#/utils/has-role-permission';
@@ -79,7 +83,7 @@ const ViewIncidentToolBar = ({
   const classes = useStyles();
   const intl = useIntl();
 
-  const { id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const hasApprovePermissions = hasRolePermission({
     permission: {
       method: PermissionMethod.Approve,
@@ -87,9 +91,8 @@ const ViewIncidentToolBar = ({
     },
   });
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const hasConnectedSchemes = useStoreState(
-    (state) => state.scheme.hasConnectedSchemes
-  );
+  const connectedToSchemes =
+    useAtomValue(currentSchemeAtom)?.connectedToSchemes;
   const filterVariables = useStoreState(
     (state) => state.data.incidents.variables
   );
@@ -400,7 +403,7 @@ const ViewIncidentToolBar = ({
             </Button>
           </Tooltip>
         </Col>
-        {editRights && hasConnectedSchemes && (
+        {editRights && connectedToSchemes && connectedToSchemes.length > 0 && (
           <Col>
             <Button onClick={toggleShareOpen}>
               <FontAwesomeIcon

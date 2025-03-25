@@ -8,6 +8,11 @@ import type { IncidentFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import {
   IncidentsFeedDocument,
@@ -19,6 +24,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
@@ -78,10 +84,9 @@ const useIncidentFeed = (): Return => {
   const onNavigate = () => navigate('/app/incidents/add');
 
   // Global State
-  const { id: schemeId } = useStoreState((state) => state.scheme);
-  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
-    (state) => state.user
-  );
+  const schemeId = useAtomValue(currentSchemeIdAtom);
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
@@ -315,7 +320,7 @@ const useIncidentFeed = (): Return => {
           ...variables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

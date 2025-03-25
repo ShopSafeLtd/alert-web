@@ -1,5 +1,6 @@
 import { useUserSettingsQuery } from '#/components/onboarding/Onboarding/AccountDetail/graphql/qureries/__generated__/user-settings.generated';
-import { useStoreState } from '#/state';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import { useAtomValue } from 'jotai/index';
 
 export interface AccountData {
   fullName: string;
@@ -21,7 +22,7 @@ interface Return {
 }
 
 const useEditUser = ({ accountDetail, update }: Props): Return => {
-  const { fullName } = useStoreState((state) => state.user);
+  const fullName = useAtomValue(currentUserAtom)?.fullName ?? '';
   const onSubmit = (data: AccountData) => {
     update(data);
   };

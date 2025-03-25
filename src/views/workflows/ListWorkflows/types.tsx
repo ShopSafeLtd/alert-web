@@ -1,7 +1,7 @@
 import type { ColumnsType } from 'antd/es/table/interface';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ import {
   PermissionModel,
   WorkflowTrigger,
 } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -33,7 +34,7 @@ interface WorkflowItem {
 const useCreateColumns = () => {
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
-  const { id: currentScheme } = useStoreState((state) => state.scheme);
+  const currentScheme = useAtomValue(currentSchemeIdAtom) ?? '';
 
   const variables = {
     where: {

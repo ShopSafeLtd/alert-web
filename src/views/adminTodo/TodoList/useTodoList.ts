@@ -9,7 +9,10 @@ import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/c
 
 import { useUserData } from '#/components/form-components/UsersSelect/UsersSelect.view';
 import { useGroupsContext } from '#/context/groups-context';
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentPermissionsAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import {
   TodoListDocument,
@@ -26,7 +29,6 @@ import {
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import { useStoreState } from 'state';
 
 import type { ListData } from '../useActivities';
 
@@ -66,8 +68,8 @@ interface Props {
 }
 
 const useAdminTodos = ({ templateData }: Props): Return => {
-  const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useAtomValue(currentSchemeIdAtom);
+  const permissions = useAtomValue(currentPermissionsAtom);
   const userId = useAtomValue(userIdAtom);
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
@@ -89,11 +91,8 @@ const useAdminTodos = ({ templateData }: Props): Return => {
   const [canDelete, setCanDelete] = useState(false);
 
   useEffect(() => {
-    const currentScheme = userSchemes.find(
-      ({ scheme }) => scheme.id === schemeId
-    );
     if (
-      currentScheme?.permissions.some(
+      permissions.some(
         ({ allowedMethods, model }) =>
           model === PermissionModel.Tasks &&
           allowedMethods.includes(PermissionMethod.Delete)
@@ -101,7 +100,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     ) {
       setCanDelete(true);
     }
-  }, [userSchemes, schemeId]);
+  }, [permissions]);
 
   const selectTemplate = (id: null | string) => {
     const template = templateData.find((t) => t.id === id);

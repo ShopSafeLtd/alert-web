@@ -9,7 +9,6 @@ const AddIncident = (): JSX.Element => {
 
   const {
     addNewAddress,
-    brands,
     customQuestions,
     dontKnowGoods,
     form,
@@ -17,6 +16,8 @@ const AddIncident = (): JSX.Element => {
     goodsMode,
     goodsVisible,
     incidentForm,
+    incidentTagsData,
+    incidentTagsLoading,
     knowGoods,
     newAddressData,
     onSubmit,
@@ -26,10 +27,10 @@ const AddIncident = (): JSX.Element => {
     primaryImage,
     reportOnly,
     saving,
-    setBrands,
     setPoliceReporting,
     setPrimaryImage,
     showSiteNumber,
+    tagsData,
     toggleAddNewAddress,
     updateNewAddressData,
   } = useAddIncident({ investigationId });
@@ -38,7 +39,6 @@ const AddIncident = (): JSX.Element => {
     <div>
       <View
         addNewAddress={addNewAddress}
-        brands={brands}
         customQuestions={customQuestions}
         dontKnowGoods={dontKnowGoods}
         form={form}
@@ -46,6 +46,8 @@ const AddIncident = (): JSX.Element => {
         goodsMode={goodsMode}
         goodsVisible={goodsVisible}
         incidentForm={incidentForm}
+        incidentTagsData={incidentTagsData}
+        incidentTagsLoading={incidentTagsLoading}
         knowGoods={knowGoods}
         newAddressData={newAddressData}
         onSubmit={onSubmit}
@@ -55,10 +57,10 @@ const AddIncident = (): JSX.Element => {
         primaryImage={primaryImage}
         reportOnly={reportOnly}
         saving={saving}
-        setBrands={setBrands}
         setPoliceReporting={setPoliceReporting}
         setPrimaryImage={setPrimaryImage}
         showSiteNumber={showSiteNumber}
+        tagsData={tagsData}
         toggleAddNewAddress={toggleAddNewAddress}
         updateNewAddressData={updateNewAddressData}
       />

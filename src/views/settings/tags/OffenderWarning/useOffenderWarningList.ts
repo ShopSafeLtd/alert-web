@@ -4,7 +4,10 @@ import type {
 } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { TagData } from 'types/DataType';
 
-import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { Modal, notification } from 'antd';
 import { useRecycleTagMutation } from 'graphql/tag/mutation/__generated__/recycle-tag.generated';
@@ -17,7 +20,6 @@ import { Model, QueryMode } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
@@ -41,7 +43,7 @@ interface Return {
 const useOffenderWarningList = (): Return => {
   const intl = useIntl();
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const schemeName = useStoreState((state) => state.scheme.name);
+  const schemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
   const userId = useAtomValue(userIdAtom);
   const [offenderId, setOffenderId] = useState('');
   const [search, setSearch] = useState('');

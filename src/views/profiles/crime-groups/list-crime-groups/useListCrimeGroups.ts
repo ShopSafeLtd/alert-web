@@ -7,6 +7,10 @@ import type { DateType } from 'types/DataType';
 
 import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentSchemeDefaultGroups,
+  currentUserAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { useListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -41,9 +45,8 @@ const getSizeOptions = () => {
 };
 const useListCrimeGroups = (): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const { filterDefaultGroups: defaultGroups, id: userId } = useStoreState(
-    (state) => state.user
-  );
+  const defaultGroups = useAtomValue(currentSchemeDefaultGroups);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
 
   const pagination = useStoreState(
     (state) => state.data.crimeGroups.pagination
@@ -162,7 +165,7 @@ const useListCrimeGroups = (): Return => {
           ...filterVariables,
           groups:
             defaultGroups
-              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.filter((group) => group.schemeId === schemeId)
               ?.map(({ id }) => id) || [],
         },
       });

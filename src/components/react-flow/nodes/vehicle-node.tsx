@@ -1,21 +1,24 @@
-import { Button, Card, Col, Descriptions, Drawer } from 'antd';
-import React, { memo, useCallback } from 'react';
 import type { Node } from 'reactflow';
-import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
+
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
-import { useParams } from 'react-router-dom';
+import { Button, Card, Col, Descriptions, Drawer } from 'antd';
 import SelectVehicleNode from 'components/form-components/Investigation/AddExistingVehicleNode';
+import { useAtomValue } from 'jotai/index';
+import React, { memo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import useStyles from './style.module';
+import { useParams } from 'react-router-dom';
+import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
+
 import { useDrawerState } from '../../../hooks';
-import { useStoreState } from '../../../state';
 import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
+import useStyles from './style.module';
 
 export interface Vehicle {
-  colour?: string | null | undefined;
-  make?: string | null | undefined;
-  model?: string | null | undefined;
+  colour?: null | string | undefined;
+  make?: null | string | undefined;
+  model?: null | string | undefined;
 }
 
 interface Props {
@@ -23,15 +26,15 @@ interface Props {
     color: string;
     vehicle: Vehicle | null | undefined;
   };
-  isConnectable: boolean;
   id: string;
+  isConnectable: boolean;
   selected: boolean;
 }
 
-const connectionNodeIdSelector = (state: { connectionNodeId: string | null }) =>
+const connectionNodeIdSelector = (state: { connectionNodeId: null | string }) =>
   state.connectionNodeId;
 
-export default memo(({ data, isConnectable, selected, id }: Props) => {
+export default memo(({ data, id, isConnectable, selected }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const { id: investigationId } = useParams();
   const isTarget = connectionNodeId && connectionNodeId !== id;
@@ -41,7 +44,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const nodesMap = provider.doc.getMap<Node>('nodes');
 
   const { drawer } = useDrawerState();
-  const { fullName } = useStoreState((state) => state.user);
+  const fullName = useAtomValue(currentUserAtom)?.fullName ?? '';
   const onSelect = useCallback((vehicle: Vehicle) => {
     const currentNode = nodesMap.get(id);
     if (!currentNode) {
@@ -54,8 +57,8 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data: {
         ...currentNode.data,
+        isEditing: { editing: false, user: '' },
         vehicle,
-        isEditing: { user: '', editing: false },
       },
     });
   }, []);
@@ -69,7 +72,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       nodesMap.set(id, {
         ...currentNode,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        data: { ...currentNode.data, isEditing: { user: '', editing: false } },
+        data: { ...currentNode.data, isEditing: { editing: false, user: '' } },
       });
       return;
     }
@@ -78,7 +81,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     nodesMap.set(id, {
       ...currentNode,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      data: { ...currentNode.data, isEditing: { user: fullName, editing } },
+      data: { ...currentNode.data, isEditing: { editing, user: fullName } },
     });
   }, []);
   const intl = useIntl();
@@ -102,20 +105,20 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       <div className={classes.node}>
         <NodeResizer
           color="#ff0071"
-          isVisible={selected}
-          minWidth={100}
-          minHeight={30}
           handleStyle={{ zIndex: 5 }}
+          isVisible={selected}
           lineStyle={{
-            borderWidth: 2,
             borderRadius: 2,
+            borderWidth: 2,
           }}
+          minHeight={30}
+          minWidth={100}
         />
         <div className={classes.nodeContainer}>
           {data.vehicle ? (
             <Col>
-              <Card style={{ zIndex: 6, position: 'relative' }}>
-                <Descriptions contentStyle={{ fontSize: 16 }} column={1}>
+              <Card style={{ position: 'relative', zIndex: 6 }}>
+                <Descriptions column={1} contentStyle={{ fontSize: 16 }}>
                   {/* <Descriptions.Item label="Make">
                 {data?.vehicle?.make}
               </Descriptions.Item> */}
@@ -142,7 +145,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
               </Card>
             </Col>
           ) : (
-            <div style={{ height: '100%', zIndex: 6, position: 'relative' }}>
+            <div style={{ height: '100%', position: 'relative', zIndex: 6 }}>
               {intl.formatMessage({
                 defaultMessage: 'Vehicle: Please select a vehicle',
               })}
@@ -151,35 +154,35 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         </div>
         <Handle
           className="targetHandle"
-          type="source"
+          isConnectable={isConnectable}
           position={Position.Right}
           style={{ zIndex: 2 }}
-          isConnectable={isConnectable}
+          type="source"
         />
         <Handle
           className="targetHandle"
-          type="target"
+          isConnectable={isConnectable}
           position={Position.Left}
           style={targetHandleStyle}
-          isConnectable={isConnectable}
+          type="target"
         />
       </div>
       <Drawer
-        title={drawer.defaultTitle}
-        width={1000}
-        open={drawer.visible}
         onClose={() => {
           setIsEditing(false);
           drawer.close();
         }}
+        open={drawer.visible}
+        title={drawer.defaultTitle}
+        width={1000}
       >
         <SelectVehicleNode
-          onSubmit={onSelect}
+          investigationId={investigationId || ''}
           onClose={() => {
             setIsEditing(false);
             drawer.close();
           }}
-          investigationId={investigationId || ''}
+          onSubmit={onSelect}
         />
       </Drawer>
     </>

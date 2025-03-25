@@ -5,16 +5,17 @@ import type { NavType } from 'state';
 
 import {
   currentPermissionsAtom,
-  isAdminAtom,
   settingSchemeAtom,
+  userNotificationsAtom,
+  userTodosAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasPermission from '#/utils/has-permission';
 import { faBell } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Badge, Col, Drawer, Grid, Menu, Row, Skeleton } from 'antd';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
 import navConfig, { BadgeTypes } from 'configs/NavigationConfig';
-import ReportOnlyNavigationConfig from 'configs/ReportOnlyNavigationConfig';
 import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -122,19 +123,12 @@ const SideNavContent = ({
 }: SideNavContentProps) => {
   const classes = useStyles();
   const intl = useIntl();
-  const isAdmin = useAtomValue(isAdminAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
   const settingScheme = useAtomValue(settingSchemeAtom);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const { reportOnly } = useStoreState((state) => state.scheme);
 
-  const [navigationConfig, setNavigationConfig] = useState<NavItem[]>([]);
+  const [navigationConfig] = useState<NavItem[]>(navConfig);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isAdmin && reportOnly) setNavigationConfig(ReportOnlyNavigationConfig);
-    setNavigationConfig(navConfig);
-  }, [isAdmin, reportOnly]);
 
   const toggleNotificationOpen = () => setNotificationsOpen(!notificationsOpen);
   // ???
@@ -165,7 +159,9 @@ const SideNavContent = ({
         overflow: 'hidden',
       }}
     >
-      <Logo logoType="default" />
+      <Link to="/app/dashboard">
+        <Logo logoType="default" />
+      </Link>
       {settingScheme ? (
         <div style={{ borderRight: 0, flex: 1, padding: 10 }}>
           <Skeleton.Button
@@ -347,11 +343,9 @@ const MenuContent = (props: Props) => {
   const onMobileNavToggle = useStoreActions(
     (actions) => actions.theme.toggleMobileNav
   );
-  const userTodos = useStoreState((state) => state.user.userTodos);
-  const userNotifications = useStoreState(
-    (state) => state.user.userNotifications
-  );
-  const userMessages = useStoreState((state) => state.user.userMessages);
+  const userTodos = useAtomValue(userTodosAtom);
+  const userMessages = useAtomValue(currentUserAtom)?.messageCount ?? 0;
+  const userNotifications = useAtomValue(userNotificationsAtom);
   const [todoCount, setTodoCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
@@ -361,7 +355,7 @@ const MenuContent = (props: Props) => {
   }, [userTodos]);
 
   useEffect(() => {
-    setNotificationCount(userNotifications || 0);
+    setNotificationCount(userNotifications ?? 0);
   }, [userNotifications]);
 
   useEffect(() => {

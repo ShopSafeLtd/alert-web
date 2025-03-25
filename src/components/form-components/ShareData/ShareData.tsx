@@ -1,36 +1,36 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { useStoreState } from 'state';
+import type { Theme } from 'configs/ThemeConfig';
+
+import { useShareDataMutation } from '#/components/form-components/ShareData/__generated__/share-data-mutation.generated';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Checkbox,
   Col,
   Form,
-  notification,
   Row,
   Typography,
+  notification,
 } from 'antd';
-import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
-import { SortOrder } from 'graphql/types';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
-import {
-  useShareDataMutation
-} from '#/components/form-components/ShareData/__generated__/share-data-mutation.generated';
+import { SortOrder } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
+import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  scheme: {
-    padding: '10px 20px',
-    borderBottom: `1px solid ${theme.borderColor}`,
-  },
   name: {
-    width: '100%',
     flex: 1,
+    width: '100%',
   },
   page: {
     padding: 20,
     width: '100%',
+  },
+  scheme: {
+    borderBottom: `1px solid ${theme.borderColor}`,
+    padding: '10px 20px',
   },
 }));
 
@@ -41,23 +41,26 @@ interface FormData {
 }
 
 interface Props {
-  onClose: () => void;
   incidentId?: string;
   offenderId?: string;
+  onClose: () => void;
 }
 
-const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
+const ShareData = ({ incidentId, offenderId, onClose }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
 
-  const connectedToSchemes = useStoreState(
-    (state) => state.scheme.connectedToSchemes
-  );
+  const connectedToSchemes =
+    useAtomValue(currentSchemeAtom)?.connectedToSchemes ?? [];
 
-  const [selectedScheme, setSelectedScheme] = useState<string | null>(null);
+  const [selectedScheme, setSelectedScheme] = useState<null | string>(null);
 
   const { data } = useSchemeGroupsQuery({
+    skip: selectedScheme === null,
     variables: {
+      orderBy: {
+        name: SortOrder.Desc,
+      },
       where: {
         scheme: {
           id: {
@@ -65,22 +68,18 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
           },
         },
       },
-      orderBy: {
-        name: SortOrder.Desc,
-      },
     },
-    skip: selectedScheme === null,
   });
 
   const [shareData] = useShareDataMutation({
     onCompleted: () =>
       notification.success({
-        message: intl.formatMessage({
-          defaultMessage: 'Item Shared',
-        }),
         description: intl.formatMessage({
           defaultMessage:
             'Item has been successfully shared with the other scheme.',
+        }),
+        message: intl.formatMessage({
+          defaultMessage: 'Item Shared',
         }),
         placement: 'bottomRight',
       }),
@@ -117,7 +116,7 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
     <div>
       {selectedScheme === null &&
         connectedToSchemes.map((scheme) => (
-          <Row align="middle" key={scheme.id} className={classes.scheme}>
+          <Row align="middle" className={classes.scheme} key={scheme.id}>
             <Col flex={1}>
               <Text className={classes.name} ellipsis>
                 {scheme.name}
@@ -140,10 +139,10 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
               name="groups"
               rules={[
                 {
-                  required: true,
                   message: intl.formatMessage({
                     defaultMessage: 'Select at least one group',
                   }),
+                  required: true,
                 },
               ]}
             >
@@ -157,14 +156,14 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
               />
             </Form.Item>
             <Form.Item>
-              <Row justify="end" gutter={16}>
+              <Row gutter={16} justify="end">
                 <Col>
                   <Button onClick={onClose}>
                     <FormattedMessage defaultMessage="Close" />
                   </Button>
                 </Col>
                 <Col>
-                  <Button type="primary" htmlType="submit">
+                  <Button htmlType="submit" type="primary">
                     <FormattedMessage defaultMessage="Share" />
                   </Button>
                 </Col>

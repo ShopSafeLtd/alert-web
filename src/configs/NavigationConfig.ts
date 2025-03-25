@@ -5,6 +5,7 @@ import {
   faAddressCard,
   faBolt,
   faBoot,
+  faBuildings,
   faCalendarCheck,
   faCar,
   faChalkboard,
@@ -211,6 +212,24 @@ const navigationConfig: NavItem[] = [
         ],
       },
     ],
+  },
+  {
+    key: 'businesses',
+    path: `${APP_PREFIX_PATH}/businesses`,
+    title: 'Businesses',
+    icon: faBuildings,
+    breadcrumb: true,
+    intl: defineMessage({
+      id: 'businesses',
+      defaultMessage: 'Businesses',
+    }),
+    permission: [
+      {
+        model: PermissionModel.Businesses,
+        method: PermissionMethod.Read,
+      },
+    ],
+    submenu: [],
   },
   {
     key: 'chat',

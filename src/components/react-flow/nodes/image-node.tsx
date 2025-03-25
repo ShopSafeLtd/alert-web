@@ -1,45 +1,48 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { memo, useCallback } from 'react';
 import type { Node } from 'reactflow';
-import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
+
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
 import { Button, Drawer, Skeleton } from 'antd';
-import { useParams } from 'react-router-dom';
-import { useStoreState } from 'state';
+import { useAtomValue } from 'jotai/index';
+import React, { memo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import useStyles from './style.module';
+import { useParams } from 'react-router-dom';
+import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
+
 import { useDrawerState } from '../../../hooks';
-import SelectImageContainer from '../form/selectImage/SelectImage.container';
 import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
+import SelectImageContainer from '../form/selectImage/SelectImage.container';
+import useStyles from './style.module';
 
 interface Props {
   data: {
     imageUrl: string;
     isEditing: {
-      user: string;
       editing: boolean;
+      user: string;
     };
   };
-  isConnectable: boolean;
+  // eslint-disable-next-line react/no-unused-prop-types
+  height?: number;
   id: string;
+  isConnectable: boolean;
   selected: boolean;
   // eslint-disable-next-line react/no-unused-prop-types
   width?: number;
-  // eslint-disable-next-line react/no-unused-prop-types
-  height?: number;
 }
 
-const connectionNodeIdSelector = (state: { connectionNodeId: string | null }) =>
+const connectionNodeIdSelector = (state: { connectionNodeId: null | string }) =>
   state.connectionNodeId;
 
-export default memo(({ data, isConnectable, selected, id }: Props) => {
+export default memo(({ data, id, isConnectable, selected }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const { id: investigationId } = useParams();
   const isTarget = connectionNodeId && connectionNodeId !== id;
   const targetHandleStyle = { zIndex: isTarget ? 15 : 1 };
   const classes = useStyles();
-  const currentUser = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const provider = useWebRtcContext();
 
   const nodesMap = provider.doc.getMap<Node>('nodes');
@@ -56,7 +59,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       data: {
         ...currentNode.data,
         imageUrl: url,
-        isEditing: { user: '', editing: false },
+        isEditing: { editing: false, user: '' },
       },
     });
   }, []);
@@ -69,7 +72,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     if (!editing) {
       nodesMap.set(id, {
         ...currentNode,
-        data: { ...currentNode.data, isEditing: { user: '', editing: false } },
+        data: { ...currentNode.data, isEditing: { editing: false, user: '' } },
       });
       return;
     }
@@ -79,7 +82,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       ...currentNode,
       data: {
         ...currentNode.data,
-        isEditing: { user: currentUser.fullName, editing },
+        isEditing: { editing, user: currentUser?.fullName },
       },
     });
   }, []);
@@ -106,14 +109,14 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       <div className={classes.node}>
         <NodeResizer
           color="#ff0071"
-          isVisible={selected}
-          minWidth={100}
-          minHeight={30}
           handleStyle={{ zIndex: 5 }}
+          isVisible={selected}
           lineStyle={{
-            borderWidth: 2,
             borderRadius: 2,
+            borderWidth: 2,
           }}
+          minHeight={30}
+          minWidth={100}
         />
         <div className={classes.nodeContainer}>
           {data?.isEditing?.editing && (
@@ -130,11 +133,11 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           )}
           {data.imageUrl ? (
             <img
-              src={data.imageUrl}
               // eslint-disable-next-line formatjs/no-literal-string-in-jsx
               alt="offender"
               className={classes.image}
               loading="eager"
+              src={data.imageUrl}
             />
           ) : (
             <Skeleton.Image
@@ -145,35 +148,35 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         </div>
         <Handle
           className="targetHandle"
-          type="source"
+          isConnectable={isConnectable}
           position={Position.Right}
           style={{ zIndex: 2 }}
-          isConnectable={isConnectable}
+          type="source"
         />
         <Handle
           className="targetHandle"
-          type="target"
+          isConnectable={isConnectable}
           position={Position.Left}
           style={targetHandleStyle}
-          isConnectable={isConnectable}
+          type="target"
         />
       </div>
       <Drawer
-        title={drawer.defaultTitle}
-        width={1000}
-        open={drawer.visible}
         onClose={() => {
           setIsEditing(false);
           drawer.close();
         }}
+        open={drawer.visible}
+        title={drawer.defaultTitle}
+        width={1000}
       >
         <SelectImageContainer
-          onSelect={onSelect}
+          investigationId={investigationId || ''}
           onClose={() => {
             setIsEditing(false);
             drawer.close();
           }}
-          investigationId={investigationId || ''}
+          onSelect={onSelect}
         />
       </Drawer>
     </>

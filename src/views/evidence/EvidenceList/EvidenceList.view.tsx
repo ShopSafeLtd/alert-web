@@ -11,7 +11,7 @@ import useStyles from '../../profiles/crime-groups/list-crime-groups/ListCrimeGr
 import ViewEvidenceModal from './ViewEvidenceModal';
 interface ViewEvidenceListProps {
   data: ListDemEvidenceExtendedWithoutUserQuery | undefined;
-  demIds: { id: string; name: string }[];
+  demIds: { id: null | string | undefined; name: string }[];
   loading: boolean;
   onDelete: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -19,7 +19,9 @@ interface ViewEvidenceListProps {
   setSelectedData: React.Dispatch<
     React.SetStateAction<EvidenceType | undefined>
   >;
-  setSelectedId: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedId: React.Dispatch<
+    React.SetStateAction<null | string | undefined>
+  >;
 }
 
 export type EvidenceType = {

@@ -1,7 +1,7 @@
 import type { ViewIncidentQuery } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 
 import IncidentPriorityTag from '#/components/incidents/IncidentPriority/IncidentPriorityTag.view';
-import { useStoreState } from '#/state';
+import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import useStyles from '#/views/incidents/ViewIncident/ViewIncident.styles';
 import {
   faBuilding,
@@ -17,6 +17,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Col, Descriptions, Row, Tag, Tooltip, Typography } from 'antd';
 import { IncidentPriority } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -34,7 +35,7 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
-  const languageCount = useStoreState((state) => state.scheme.languageCount);
+  const languageCount = useAtomValue(currentSchemeAtom)?.languageCount ?? 1;
 
   const [showOriginal, setShowOriginal] = useState(false);
 

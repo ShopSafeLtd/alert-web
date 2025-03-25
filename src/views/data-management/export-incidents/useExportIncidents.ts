@@ -1,11 +1,12 @@
 import type { Dispatch } from 'react';
 
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useCreateCsvZipMutation } from '#/views/data-management/export-incidents/graphql/mutations/__generated__/create-zip.generated';
 import { usePreviewIncidentExportQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/export-incidents-preview.generated';
 import { useExportFiltersQuery } from '#/views/data-management/export-incidents/graphql/queries/__generated__/scheme-details.generated';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useReducer, useRef } from 'react';
 
 dayjs.extend(utc);
@@ -76,7 +77,7 @@ export interface ExportIncidentsState {
 }
 
 const useExportIncidents = (): Return => {
-  const { id: schemeId } = useStoreState((state) => state.scheme);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   const initialState: ExportIncidentsState = {
     businessIds: [],

@@ -10,12 +10,16 @@ import type { FormInstance } from 'antd';
 import type { UpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
 import type { Age, Build, Gender, Height, IdSource, Race } from 'graphql/types';
 
-import { useStoreState } from '#/state';
+import {
+  currentSchemeAtom,
+  currentSchemeBusinessesAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { Form } from 'antd';
 import { useBusinessOffenderSettingsQuery } from 'graphql/businesses/queries/__generated__/business-offender-settings.generated';
 import { useUpdateSimpleOffenderMutation } from 'graphql/offenders/mutations/__generated__/update-simple-offender.generated';
 import { ImagePosition } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
@@ -122,11 +126,10 @@ const useEditOffender = ({
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
   const knowAddress = Form.useWatch('knowAddress', form);
-  const userBusinessId = useStoreState((state) => state.user.businesses[0].id);
+  const userBusinessId = useAtomValue(currentSchemeBusinessesAtom)?.at(0)?.id;
   const businessId = incidentBusinessId || userBusinessId;
-  const needJustification = useStoreState(
-    (state) => state.scheme.needJustification
-  );
+  const needJustification =
+    useAtomValue(currentSchemeAtom)?.needJustification ?? false;
 
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);

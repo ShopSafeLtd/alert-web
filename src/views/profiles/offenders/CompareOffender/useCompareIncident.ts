@@ -1,12 +1,13 @@
 import type { OffenderData } from '#/components/form-components/offender/AddExistingOffender/AddExistingOffender.container';
 import type { ViewOffendersCompareQuery } from 'graphql/offenders/queries/__generated__/compare-offenders.generated';
 
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { useMergeOffendersMutation } from 'graphql/offenders/mutations/__generated__/merge-offenders.generated';
 import { useViewOffendersCompareLazyQuery } from 'graphql/offenders/queries/__generated__/compare-offenders.generated';
 import { Age, Build, Gender, Race } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useStoreState } from 'state';
 
 function useQuery() {
   const { search } = useLocation();
@@ -64,7 +65,7 @@ const compareIncident = (): Return => {
   const { id: offenderId } = useParams();
   const query = useQuery();
   const navigate = useNavigate();
-  const { id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const [mode, setMode] = useState<'column' | 'grid'>('column');
   const [addOffender, setAddOffender] = useState(false);
   const [offenders, setOffenders] = useState<Offender[]>([]);

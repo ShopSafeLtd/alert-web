@@ -1,11 +1,15 @@
 import type React from 'react';
 
 import { useRecycleDemEvidenceMutation } from '#/components/tables/DemEvidenceTable/graphql/__generated__/recycle-dem-evidence.generated';
+import {
+  demIdAtom,
+  demOptionsAtom,
+} from '#/providers/UserProvider/UserProvider';
 import errorNotification from '#/types/mutation_notifications/error_notification';
 import { notification } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 
 import type {
   ListDemEvidenceExtendedWithoutUserQuery,
@@ -20,7 +24,7 @@ import {
 
 interface Return {
   data: ListDemEvidenceExtendedWithoutUserQuery | undefined;
-  demIds: { id: string; name: string }[];
+  demIds: { id: null | string | undefined; name: string }[];
   loading: boolean;
   onDelete: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -28,14 +32,19 @@ interface Return {
   setSelectedData: React.Dispatch<
     React.SetStateAction<EvidenceType | undefined>
   >;
-  setSelectedId: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedId: React.Dispatch<
+    React.SetStateAction<null | string | undefined>
+  >;
 }
 
 const useViewEvidenceList = (): Return => {
   const intl = useIntl();
 
-  const demIds = useStoreState((state) => state.user.dem);
-  const [selectedId, setSelectedId] = useState<string>(demIds[0].id);
+  const demId = useAtomValue(demIdAtom) ?? '';
+  const demIds = useAtomValue(demOptionsAtom);
+  const [selectedId, setSelectedId] = useState<null | string | undefined>(
+    demId
+  );
   const [selectedData, setSelectedData] = useState<EvidenceType | undefined>(
     undefined
   );
@@ -46,7 +55,7 @@ const useViewEvidenceList = (): Return => {
   const variables = {
     skip: (pagination.page - 1) * pagination.pageSize,
     take: pagination.pageSize,
-    where: selectedId,
+    where: selectedId ?? '',
   };
 
   const { data, loading } = useListDemEvidenceExtendedWithoutUserQuery({

@@ -7,7 +7,7 @@ import type {
   ViewInvestigationQueryVariables,
 } from 'graphql/investigations/queries/__generated__/view-investigation.generated';
 
-import { useStoreState } from '#/state';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { Modal } from 'antd';
 import { useUpdateInvestigationMutation } from 'graphql/investigations/mutations/__generated__/update-investigation.generated';
@@ -20,6 +20,7 @@ import { useDeleteUpdateMutation } from 'graphql/mutations/__generated__/delete-
 import { useUpdateUpdateMutation } from 'graphql/mutations/__generated__/update-update.generated';
 import { PermissionMethod, PermissionModel, TagType } from 'graphql/types';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -82,7 +83,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const [viewSuggestedOffenders, setViewSuggestedOffenders] = useState(false);
   const [viewSuggestedIncidents, setViewSuggestedIncidents] = useState(false);
   const [viewSuggestedVehicles, setViewSuggestedVehicles] = useState(false);
-  const { id: userId } = useStoreState((state) => state.user);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const [editIncidentId, setEditIncidentId] = useState('');
 
   const [replyTo, setReplyTo] = useState<{

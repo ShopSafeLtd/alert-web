@@ -5,7 +5,11 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import type { Editor } from 'tinymce';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import {
+  currentUserAtom,
+  userIdAtom,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { Form } from 'antd';
 import { useCreateArticleMutation } from 'graphql/article/mutations/__generated__/create-article.generated';
 import { useEditArticleMutation } from 'graphql/article/mutations/__generated__/edit-article.generated';
@@ -21,7 +25,6 @@ import { useNavigate, useParams } from 'react-router';
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
 import type { Props } from '../types/CreateArticle';
 
-import { useStoreState } from '../../../../state';
 import extracted from '../../../../utils/add-default-to-article';
 import customRequest from '../../../../utils/custom-request';
 
@@ -64,7 +67,8 @@ const useCreateEditArticle = (): Props => {
 
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useAtomValue(currentSchemeIdAtom);
-  const { id: userId, schemes } = useStoreState((state) => state.user);
+  const schemes = useAtomValue(userSchemesAtom);
+  const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const [form] = useForm<FormData>();
   const [data, setData] = useState<FormData>({
     categories: [],
@@ -221,7 +225,7 @@ const useCreateEditArticle = (): Props => {
           AND: [
             {
               id: {
-                in: schemes?.map((scheme) => scheme?.scheme?.id || '') || [],
+                in: schemes?.map((scheme) => scheme?.schemeId || '') || [],
               },
             },
             {

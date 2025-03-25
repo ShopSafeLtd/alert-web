@@ -914,7 +914,7 @@ export type AiRecommendedActions = {
 export enum AiRecommendedActionsPriorityLevel {
   Elevated = 'ELEVATED',
   High = 'HIGH',
-  Standard = 'STANDARD'
+  Normal = 'NORMAL'
 }
 
 export type AiRiskAssessment = {

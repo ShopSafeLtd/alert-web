@@ -1,64 +1,44 @@
 import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
 import type { FormInstance } from 'antd';
 import type { ListIncidentTagsQuery } from 'graphql/tags/queries/__generated__/list-incident-tags.generated';
+import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import type { TagType } from 'graphql/types';
 
-import { useAddIncidentTagsQuery } from '#/views/incidents/AddIncident/components/IncidentTypes/__generated__/add-incident-incident-tags.generated';
-import { useAddIncidentIncidentTagsQuery } from '#/views/incidents/AddIncident/components/IncidentTypes/__generated__/add-incident-tags.generated';
+import {
+  currentSchemeAtom,
+  currentSchemeIdAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
-import { Model } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useMemo } from 'react';
-import { useStoreState } from 'state';
 
 interface Props {
   form: FormInstance<FormData>;
+  incidentTagsData: ListIncidentTagsQuery | undefined;
   setPoliceReporting: (value: boolean) => void;
+  tagsData: TagsQuery | undefined;
 }
 
 interface Return {
   incidentTagsData: ListIncidentTagsQuery | undefined;
-  incidentTagsLoading: boolean;
   incidentTypeTooltip?: null | string;
   oneSelectedIncidentTypeOnly: boolean;
   tags: { label: string; tooltip: string; type: TagType; value: string }[];
   tagsLoading: boolean;
 }
 
-const useIncidentTypes = ({ form, setPoliceReporting }: Props): Return => {
-  const {
-    id: schemeId,
-    incidentTypeTooltip,
-    oneSelectedIncidentTypeOnly,
-  } = useStoreState((state) => state.scheme);
+const useIncidentTypes = ({
+  form,
+  incidentTagsData,
+  setPoliceReporting,
+  tagsData,
+}: Props): Return => {
+  const incidentTypeTooltip =
+    useAtomValue(currentSchemeAtom)?.incidentTypeTooltip;
+  const oneSelectedIncidentTypeOnly =
+    useAtomValue(currentSchemeAtom)?.oneSelectedIncidentTypeOnly;
 
   const selectedTag = Form.useWatch('tags', form);
-
-  const { data: incidentTagsData, loading: incidentTagsLoading } =
-    useAddIncidentIncidentTagsQuery({
-      variables: {
-        where: {
-          schemeId,
-        },
-      },
-    });
-
-  const { data: tagsData, loading: tagsLoading } = useAddIncidentTagsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        dataType: {
-          equals: Model.Incident,
-        },
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-      },
-    },
-  });
 
   useEffect(() => {
     if (selectedTag && selectedTag[0]) {
@@ -71,7 +51,7 @@ const useIncidentTypes = ({ form, setPoliceReporting }: Props): Return => {
 
   return {
     incidentTagsData,
-    incidentTagsLoading,
+
     incidentTypeTooltip,
     oneSelectedIncidentTypeOnly,
     tags: useMemo(
@@ -84,7 +64,7 @@ const useIncidentTypes = ({ form, setPoliceReporting }: Props): Return => {
         })) || [],
       [tagsData]
     ),
-    tagsLoading,
+    tagsLoading: false,
   };
 };
 

@@ -171,16 +171,19 @@ const ViewBusiness = ({
         <Col className={classes.content} flex={1}>
           <Row className={classes.headerBar} gutter={8} justify="end">
             <Col>
-              <Button
-                // disabled={!!data?.business?.demId}
-                disabled
-                onClick={toggleLinkDem}
-                type="ghost"
+              <PermissionCheckWrapper
+                permission={{
+                  method: PermissionMethod.Edit,
+                  model: PermissionModel.Dem,
+                }}
+                unauthorizedElement={<div />}
               >
-                {intl.formatMessage({
-                  defaultMessage: 'Link to DEM',
-                })}
-              </Button>
+                <Button disabled onClick={toggleLinkDem} type="ghost">
+                  {intl.formatMessage({
+                    defaultMessage: 'Link to DEM',
+                  })}
+                </Button>
+              </PermissionCheckWrapper>
             </Col>
             <Col>
               <Button onClick={toggleEdit} type="ghost">
@@ -211,7 +214,7 @@ const ViewBusiness = ({
             </Col>
           </Row>
           <div className={classes.details}>
-            <Row gutter={[16, 16]} justify="end" style={{ marginBottom: 16 }}>
+            <Row gutter={[16, 16]} justify="end">
               <Col span={12}>
                 <Card loading={loading}>
                   <Typography.Title level={4}>
@@ -243,19 +246,10 @@ const ViewBusiness = ({
                         })
                       )}
                     </Descriptions.Item>
-                    {/* <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Show Name',
-                  id: 'LxDnoc',
-                })}
-                style={{ paddingBottom: 8 }}
-              >
-                {data?.business.}
-              </Descriptions.Item> */}
                     {data?.business?.parent?.name && (
                       <Descriptions.Item
                         label={intl.formatMessage({
-                          defaultMessage: 'Parent',
+                          defaultMessage: 'Parent Business',
                         })}
                       >
                         <Link
@@ -281,13 +275,13 @@ const ViewBusiness = ({
                       })}
                     >
                       <Row>
-                        {data?.business?.brands &&
-                        data?.business?.brands.length > 0 ? (
-                          data?.business?.brands.map((el, i) => (
+                        {data?.business?.brandsList &&
+                        data?.business?.brandsList.length > 0 ? (
+                          data?.business?.brandsList.map((el, i) => (
                             // eslint-disable-next-line react/no-array-index-key
-                            <Tag className={classes.tag} key={i}>
-                              {el}
-                            </Tag>
+                            <Typography.Text className={classes.tag} key={i}>
+                              {el.name}
+                            </Typography.Text>
                           ))
                         ) : (
                           <FormattedMessage defaultMessage="No Brands" />
@@ -564,57 +558,79 @@ const ViewBusiness = ({
                 size="small"
               />
             </Card>
-            <Card loading={loading}>
-              <Row align="middle" className={classes.cardHeader}>
-                <Col flex={1}>
-                  <Typography.Title level={4}>
-                    {intl.formatMessage({
-                      defaultMessage: 'Dem Devices',
-                    })}
-                  </Typography.Title>
-                </Col>
-                <Col>
-                  <Button
-                    disabled={loading}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                    loading={loading}
-                    onClick={toggleAddDemDevice}
-                    size="small"
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Dem,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <Card loading={loading}>
+                <Row align="middle" className={classes.cardHeader}>
+                  <Col flex={1}>
+                    <Typography.Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Dem Devices',
+                      })}
+                    </Typography.Title>
+                  </Col>
+                  <PermissionCheckWrapper
+                    permission={{
+                      method: PermissionMethod.Write,
+                      model: PermissionModel.Dem,
+                    }}
+                    unauthorizedElement={<div />}
                   >
-                    {intl.formatMessage({
-                      defaultMessage: 'Add Dem Device',
-                    })}
-                  </Button>
-                </Col>
-              </Row>
+                    <Col>
+                      <Button
+                        disabled={loading}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                        loading={loading}
+                        onClick={toggleAddDemDevice}
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Add Dem Device',
+                        })}
+                      </Button>
+                    </Col>
+                  </PermissionCheckWrapper>
+                </Row>
 
-              <DemDeviceTable
-                demDevices={data?.business.demDevices.map((el) => ({
-                  ...el,
-                  business: data.business.id,
-                  demGroups: el.demGroups.map(({ id }) => id),
-                }))}
-                onDelete={onRemoveDevice}
-                saving={saving || loading}
-                setEditData={setEditDeviceData}
-              />
-            </Card>
-            <Card loading={evidenceLoading}>
-              <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
-                <Col flex={1}>
-                  <Typography.Title level={4}>
-                    {intl.formatMessage({
-                      defaultMessage: 'Dem Evidence',
-                    })}
-                  </Typography.Title>
-                </Col>
+                <DemDeviceTable
+                  demDevices={data?.business.demDevices.map((el) => ({
+                    ...el,
+                    business: data.business.id,
+                    demGroups: el.demGroups.map(({ id }) => id),
+                  }))}
+                  onDelete={onRemoveDevice}
+                  saving={saving || loading}
+                  setEditData={setEditDeviceData}
+                />
+              </Card>
+            </PermissionCheckWrapper>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Dem,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <Card loading={evidenceLoading}>
+                <Row align="middle" gutter={8} style={{ marginBottom: 10 }}>
+                  <Col flex={1}>
+                    <Typography.Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Dem Evidence',
+                      })}
+                    </Typography.Title>
+                  </Col>
 
-                {/* <Col>
+                  {/* <Col>
                   <Button
                     icon={
                       <FontAwesomeIcon
@@ -630,67 +646,90 @@ const ViewBusiness = ({
                     })}
                   </Button>
                 </Col> */}
-              </Row>
-              <DemEvidenceTable
-                demEvidence={evidenceData?.listDemBusinessEvidence}
-                saving={loading || evidenceLoading}
-                update={updateDeleteEvidenceList}
-              />
-              {/* <EvidenceTable
+                </Row>
+                <DemEvidenceTable
+                  demEvidence={evidenceData?.listDemBusinessEvidence}
+                  saving={loading || evidenceLoading}
+                  update={updateDeleteEvidenceList}
+                />
+                {/* <EvidenceTable
                 deleteRights
                 evidence={data?.business.evidences}
                 saving={loading || saving}
                 title={ProfileUpdatedModel.Business}
               /> */}
-            </Card>
-            <Card>
-              <Typography.Title level={4}>
-                {intl.formatMessage({
-                  defaultMessage: 'Incidents',
-                })}
-              </Typography.Title>
-              <IncidentTable
-                hasNavigation
-                incidents={data?.business?.incidents || []}
-              />
-            </Card>
-
-            <Card loading={loading}>
-              <Row align="middle" className={classes.cardHeader}>
-                <Col flex={1}>
-                  <Typography.Title level={4}>
-                    {intl.formatMessage({
-                      defaultMessage: 'Activities',
-                    })}
-                  </Typography.Title>
-                </Col>
-                <Col>
-                  <Button
-                    disabled={templatesLoading}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                    loading={templatesLoading}
-                    onClick={toggleAddTodo}
-                    size="small"
+              </Card>
+            </PermissionCheckWrapper>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Incidents,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <Card>
+                <Typography.Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Incidents',
+                  })}
+                </Typography.Title>
+                <IncidentTable
+                  hasNavigation
+                  incidents={data?.business?.incidents || []}
+                />
+              </Card>
+            </PermissionCheckWrapper>
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.Tasks,
+              }}
+              unauthorizedElement={<div />}
+            >
+              <Card loading={loading}>
+                <Row align="middle" className={classes.cardHeader}>
+                  <Col flex={1}>
+                    <Typography.Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Activities',
+                      })}
+                    </Typography.Title>
+                  </Col>
+                  <PermissionCheckWrapper
+                    permission={{
+                      method: PermissionMethod.Write,
+                      model: PermissionModel.Tasks,
+                    }}
+                    unauthorizedElement={<div />}
                   >
-                    {intl.formatMessage({
-                      defaultMessage: 'Add Activity',
-                    })}
-                  </Button>
-                </Col>
-              </Row>
+                    <Col>
+                      <Button
+                        disabled={templatesLoading}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                        loading={templatesLoading}
+                        onClick={toggleAddTodo}
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Add Activity',
+                        })}
+                      </Button>
+                    </Col>
+                  </PermissionCheckWrapper>
+                </Row>
 
-              <ActivityTable
-                saving={saving || loading}
-                setCompleteTodoVisible={setCompleteTodoVisible}
-                setViewTodoVisible={setViewTodoVisible}
-                todos={data?.business?.todos}
-              />
-            </Card>
+                <ActivityTable
+                  saving={saving || loading}
+                  setCompleteTodoVisible={setCompleteTodoVisible}
+                  setViewTodoVisible={setViewTodoVisible}
+                  todos={data?.business?.todos}
+                />
+              </Card>
+            </PermissionCheckWrapper>
           </div>
         </Col>
         {actionsData?.listActions.actions &&

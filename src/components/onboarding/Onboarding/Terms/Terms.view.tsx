@@ -1,36 +1,60 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
+import Logo from '#/components/layout-components/AntD/navigation/Logo';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Form,
+  Row,
+  Space,
+  Typography,
+} from 'antd';
 import React, { useEffect } from 'react';
-import { Button, Card, Checkbox, Col, Form, Row, Space, Typography } from 'antd';
 // wait to check
-const { Text, Title, Paragraph } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 interface Props {
+  loading: boolean;
   onSubmit: () => void;
-  update: () => void;
   saving: boolean;
-  onBack: () => void;
+  update: () => void;
 }
 
 const SchemeTerms = ({
+  loading,
   onSubmit,
-  update,
   saving,
-  onBack,
+  update,
 }: Props): JSX.Element => {
   useEffect(() => {
     // /scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ behavior: 'smooth', top: 0 });
   }, []);
 
   return (
-    <div className="list-view">
-      <Row style={{ margin: 15 }}>
+    <Card
+      style={{
+        minHeight: '90vh',
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 30,
+        width: '70vw',
+      }}
+    >
+      <Row justify="center" style={{ marginBottom: 30 }}>
+        <Col>
+          <Logo logoType="default" width={250} />
+        </Col>
+      </Row>
+      <Row>
         <Col>
           <Title level={3}>Terms of Use</Title>
 
-          <Text>
-            Please read through our terms and conditions and accept them to
-            continue.
+          <Text style={{ fontSize: 15 }}>
+            Before you get started, please take a moment to read our Terms and
+            Conditions below. By accepting them, you will be able to access and
+            start using the application.
           </Text>
 
           {/* <Text>
@@ -40,8 +64,8 @@ const SchemeTerms = ({
         </Col>
       </Row>
       <Card style={{ width: '98%' }}>
-        <Space direction="vertical" style={{ fontSize: 12 }} size={1}>
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+        <Space direction="vertical" size={1} style={{ fontSize: 12 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             1 Background
           </Title>
           <Paragraph>
@@ -86,7 +110,7 @@ const SchemeTerms = ({
             The parties wish to record their commitments under this Agreement.
           </Paragraph>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             2 Definitions and Interpretation
           </Title>
 
@@ -136,7 +160,7 @@ const SchemeTerms = ({
             protection or crime prevention.
           </Paragraph>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             3 The Services and Data Processing
           </Title>
 
@@ -193,7 +217,7 @@ const SchemeTerms = ({
             processing activities in accordance with the GDPR Article 32 (2).
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             4 Instruction
           </Title>
 
@@ -233,7 +257,7 @@ const SchemeTerms = ({
             will not be liable for any loss or damages of any kind whatsoever.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             5 The Data Controller’s and Administrator’s Obligations
           </Title>
 
@@ -285,7 +309,7 @@ const SchemeTerms = ({
             prevented from accessing the Alert! System.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             6 The Data Processor’s Obligations
           </Title>
 
@@ -397,7 +421,7 @@ const SchemeTerms = ({
             the European Economic Area.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             7 Sub-Processors
           </Title>
 
@@ -443,7 +467,7 @@ const SchemeTerms = ({
             paragraph 2.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             8 Remuneration and Costs
           </Title>
 
@@ -480,7 +504,7 @@ const SchemeTerms = ({
             reflect the new Instruction and commercial terms thereof.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             9 Duration
           </Title>
 
@@ -490,7 +514,7 @@ const SchemeTerms = ({
             agreement.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             10 Data Protection Officer
           </Title>
 
@@ -500,7 +524,7 @@ const SchemeTerms = ({
             Regulations.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             10 Data Protection Officer
           </Title>
 
@@ -510,7 +534,7 @@ const SchemeTerms = ({
             Regulations.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             11 Termination and Liability
           </Title>
 
@@ -551,7 +575,7 @@ const SchemeTerms = ({
             responsibilities and liabilities under the GDPR.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             12 General
           </Title>
 
@@ -573,7 +597,7 @@ const SchemeTerms = ({
             jurisdiction of the English Courts.
           </Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             Appendix A
           </Title>
 
@@ -625,7 +649,7 @@ const SchemeTerms = ({
           </Text>
           <Text style={{ marginLeft: '12px' }}>- Users of Alert!</Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             Appendix B
           </Title>
 
@@ -653,7 +677,7 @@ const SchemeTerms = ({
           </Text>
           <Text style={{ marginLeft: '12px' }}>i. N/a</Text>
 
-          <Title style={{ fontSize: 14, marginTop: 20, marginBottom: 20 }}>
+          <Title style={{ fontSize: 14, marginBottom: 20, marginTop: 20 }}>
             Appendix C
           </Title>
 
@@ -675,17 +699,17 @@ const SchemeTerms = ({
           <Col>
             <Form.Item
               name="agreement"
-              valuePropName="checked"
               rules={[
                 {
                   validator: (_, value) =>
-                    (value
+                    value
                       ? Promise.resolve()
                       : Promise.reject(
                           new Error('Please agree to the terms and conditions!')
-                        )),
+                        ),
                 },
               ]}
+              valuePropName="checked"
             >
               <Checkbox onChange={update}>
                 <Title level={4}>
@@ -697,25 +721,14 @@ const SchemeTerms = ({
           </Col>
         </Row>
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Row gutter={10} justify="end" style={{ marginTop: 30 }}>
             <Col>
               <Button
-                disabled={saving}
-                type="primary"
-                onClick={() => {
-                  onBack();
-                }}
-              >
-                Back
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
+                disabled={saving || loading}
+                htmlType="submit"
+                loading={saving || loading}
                 onClick={onSubmit}
                 type="primary"
-                htmlType="submit"
               >
                 Next
               </Button>
@@ -723,7 +736,7 @@ const SchemeTerms = ({
           </Row>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   );
 };
 

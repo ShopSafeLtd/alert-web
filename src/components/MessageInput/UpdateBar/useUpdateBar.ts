@@ -33,6 +33,7 @@ import type {
 
 import { useMentionableUsersQuery } from '#/components/MessageInput/UpdateBar/graphql/queries/__generated__/users-to-mention.generated';
 import { useGroupsContext } from '#/context/groups-context';
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { ViewIncidentDocument } from '#/views/incidents/ViewIncident/__generated__/view-incident.generated';
 import { Form, message } from 'antd';
@@ -60,9 +61,9 @@ import {
 import { useSubscribeToVehicleMutation } from 'graphql/vehicles/mutations/__generated__/subscribe-to-vehicle.generated';
 import { VehicleDocument } from 'graphql/vehicles/queries/__generated__/view-vehicle.generated';
 import update from 'immutability-helper';
+import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { getText } from 'utils/getMentions/get-mention-text';
 
@@ -147,7 +148,7 @@ const useUpdateBar = ({
 }: Props): Return => {
   const [updateForm] = Form.useForm<FormData>();
   const [formTouched, setFormTouched] = useState(false);
-  const { id: userId } = useStoreState((state) => state.user);
+  const currentUser = useAtomValue(currentUserAtom);
   const { groups } = useGroupsContext();
   const groupsId = groups.map((group) => group.value);
   const [saving, setSaving] = useState(false);
@@ -1076,7 +1077,7 @@ const useUpdateBar = ({
       void updateTodoMention({
         variables: {
           where: {
-            userId,
+            userId: currentUser?.id ?? '',
             ...getWhereArgs(),
           },
         },

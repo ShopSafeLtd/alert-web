@@ -8,7 +8,7 @@ export type CurrentSchemeProviderQueryVariables = Types.Exact<{
 }>;
 
 
-export type CurrentSchemeProviderQuery = { __typename?: 'Query', userScheme: { __typename?: 'UserScheme', id: string, role: Types.Role, isAdmin: boolean, permissions: Array<{ __typename?: 'Permissions', model: Types.PermissionModel, allowedMethods: Array<Types.PermissionMethod> }>, orignalPermissions: { __typename?: 'CustomRole', id: string, admin: boolean }, scheme: { __typename?: 'Scheme', activityAssignToUser: boolean, autoPopulateDescription: boolean, customTranslations: Array<{ [key: string]: any }>, defaultPublicOffenderDOB: boolean, disableGalleryOnNative: boolean, facialDetection: boolean, facialRecognition: boolean, facialRedaction: boolean, restrictIncidentAccess: boolean, goodsMode: Types.GoodsMode, id: string, imagesRequiredOnOffenders: boolean, languageCount: number, name: string, needJustification: boolean, oneSelectedIncidentTypeOnly: boolean, reportOnly: boolean, taskTimeTracking: boolean, requireSiteNumberForUsers: boolean, skipLocationToAddress: boolean, useBusinessGroupsOnIncident: boolean } } };
+export type CurrentSchemeProviderQuery = { __typename?: 'Query', userScheme: { __typename?: 'UserScheme', id: string, role: Types.Role, isAdmin: boolean, permissions: Array<{ __typename?: 'Permissions', model: Types.PermissionModel, allowedMethods: Array<Types.PermissionMethod> }>, orignalPermissions: { __typename?: 'CustomRole', id: string, admin: boolean }, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null, scheme: { __typename?: 'Scheme', activityAssignToUser: boolean, autoPopulateDescription: boolean, customTranslations: Array<{ [key: string]: any }>, defaultPublicOffenderDOB: boolean, disableGalleryOnNative: boolean, facialDetection: boolean, facialRecognition: boolean, facialRedaction: boolean, restrictIncidentAccess: boolean, goodsMode: Types.GoodsMode, id: string, imagesRequiredOnOffenders: boolean, languageCount: number, name: string, needJustification: boolean, oneSelectedIncidentTypeOnly: boolean, reportOnly: boolean, taskTimeTracking: boolean, requireSiteNumberForUsers: boolean, skipLocationToAddress: boolean, useBusinessGroupsOnIncident: boolean, userTodos: number, incidentTypeTooltip?: string | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }>, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null } } };
 
 
 export const CurrentSchemeProviderDocument = gql`
@@ -24,6 +24,22 @@ export const CurrentSchemeProviderDocument = gql`
     orignalPermissions {
       id
       admin
+    }
+    dashboard {
+      runningBanner
+      layout {
+        h
+        i
+        maxH
+        maxW
+        minH
+        minW
+        moved
+        static
+        w
+        x
+        y
+      }
     }
     scheme {
       activityAssignToUser
@@ -47,6 +63,19 @@ export const CurrentSchemeProviderDocument = gql`
       requireSiteNumberForUsers
       skipLocationToAddress
       useBusinessGroupsOnIncident
+      userTodos
+      needJustification
+      incidentTypeTooltip
+      connectedToSchemes {
+        id
+        name
+      }
+      logo {
+        optimisedPersisted
+      }
+      darkLogo {
+        optimisedPersisted
+      }
     }
   }
 }

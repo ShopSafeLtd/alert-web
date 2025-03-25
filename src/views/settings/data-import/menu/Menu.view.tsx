@@ -1,5 +1,6 @@
-import { useStoreState } from '#/state';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Card, Col, Row, Typography } from 'antd';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -8,7 +9,7 @@ const customStockAllowed = new Set(['cltr752fn001kwdcafx5pbq29']);
 
 const ImportMenu = () => {
   const intl = useIntl();
-  const schemeId = useStoreState((s) => s.scheme.id);
+  const schemeId = useAtomValue(currentSchemeIdAtom);
 
   return (
     <div style={{ padding: 20 }}>

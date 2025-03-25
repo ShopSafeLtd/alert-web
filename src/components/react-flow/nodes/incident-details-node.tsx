@@ -1,27 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Button, Drawer } from 'antd';
-import React, { memo, useCallback } from 'react';
 import type { Node } from 'reactflow';
-import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
-import '@reactflow/node-resizer/dist/style.css';
+
+import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import { NodeResizer } from '@reactflow/node-resizer';
+import '@reactflow/node-resizer/dist/style.css';
+import { Button, Drawer } from 'antd';
+import { useAtomValue } from 'jotai/index';
+import React, { memo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import useStyles from './style.module';
+import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
+
 import { useDrawerState } from '../../../hooks';
-import { useStoreState } from '../../../state';
+import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
 import LinkIncident from '../form/SelectIncident';
 // eslint-disable-next-line import/no-cycle
 import IncidentCard from './components/incident-details-card.view';
-import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
+import useStyles from './style.module';
 
 export interface Incident {
-  description?: string | null | undefined;
-  dayTime?: string | null | undefined;
-  reference?: number | null | undefined;
-  location?: string | null | undefined;
-  offenders?: string | null | undefined;
-  type?: string | null | undefined;
-  id?: string | null | undefined;
+  dayTime?: null | string | undefined;
+  description?: null | string | undefined;
+  id?: null | string | undefined;
+  location?: null | string | undefined;
+  offenders?: null | string | undefined;
+  reference?: null | number | undefined;
+  type?: null | string | undefined;
 }
 
 interface Props {
@@ -29,15 +32,15 @@ interface Props {
     color: string;
     incident: Incident | null | undefined;
   };
-  isConnectable: boolean;
   id: string;
+  isConnectable: boolean;
   selected: boolean;
 }
 
-const connectionNodeIdSelector = (state: { connectionNodeId: string | null }) =>
+const connectionNodeIdSelector = (state: { connectionNodeId: null | string }) =>
   state.connectionNodeId;
 
-export default memo(({ data, isConnectable, selected, id }: Props) => {
+export default memo(({ data, id, isConnectable, selected }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const provider = useWebRtcContext();
   const nodesMap = provider.doc.getMap<Node>('nodes');
@@ -47,7 +50,8 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const classes = useStyles();
 
   const { drawer } = useDrawerState();
-  const { fullName } = useStoreState((state) => state.user);
+  const fullName = useAtomValue(currentUserAtom)?.fullName ?? '';
+
   const onSelect = useCallback((incident: Incident) => {
     const currentNode = nodesMap.get(id);
     if (!currentNode) {
@@ -60,7 +64,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       data: {
         ...currentNode.data,
         incident,
-        isEditing: { user: '', editing: false },
+        isEditing: { editing: false, user: '' },
       },
     });
   }, []);
@@ -73,7 +77,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     if (!editing) {
       nodesMap.set(id, {
         ...currentNode,
-        data: { ...currentNode.data, isEditing: { user: '', editing: false } },
+        data: { ...currentNode.data, isEditing: { editing: false, user: '' } },
       });
       return;
     }
@@ -81,7 +85,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     // @ts-ignore
     nodesMap.set(id, {
       ...currentNode,
-      data: { ...currentNode.data, isEditing: { user: fullName, editing } },
+      data: { ...currentNode.data, isEditing: { editing, user: fullName } },
     });
   }, []);
   const intl = useIntl();
@@ -107,20 +111,20 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       <div className={classes.node}>
         <NodeResizer
           color="#ff0071"
-          isVisible={selected}
-          minWidth={290}
-          minHeight={200}
           handleStyle={{ zIndex: 5 }}
+          isVisible={selected}
           lineStyle={{
-            borderWidth: 2,
             borderRadius: 2,
+            borderWidth: 2,
           }}
+          minHeight={200}
+          minWidth={290}
         />
         <div className={classes.nodeContainer}>
           {data.incident && data.incident.description ? (
             <IncidentCard incident={data.incident} />
           ) : (
-            <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
+            <div style={{ height: '100%', position: 'relative', zIndex: 4 }}>
               {intl.formatMessage({
                 defaultMessage: 'Select incident',
               })}
@@ -129,34 +133,34 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         </div>
         <Handle
           className="targetHandle"
-          type="source"
+          isConnectable={isConnectable}
           position={Position.Right}
           style={{ zIndex: 2 }}
-          isConnectable={isConnectable}
+          type="source"
         />
         <Handle
           className="targetHandle"
-          type="target"
+          isConnectable={isConnectable}
           position={Position.Left}
           style={targetHandleStyle}
-          isConnectable={isConnectable}
+          type="target"
         />
       </div>
       <Drawer
-        title={drawer.defaultTitle}
-        width={1000}
-        open={drawer.visible}
         onClose={() => {
           setIsEditing(false);
           drawer.close();
         }}
+        open={drawer.visible}
+        title={drawer.defaultTitle}
+        width={1000}
       >
         <LinkIncident
-          onSelect={onSelect}
           onClose={() => {
             setIsEditing(false);
             drawer.close();
           }}
+          onSelect={onSelect}
         />
       </Drawer>
     </>

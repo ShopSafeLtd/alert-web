@@ -21,6 +21,7 @@ import AddDocuments from '#/components/form-components/documents/AddDocuments';
 import IncidentTable from '#/components/tables/IncidentTable';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
+import OffenderAiDrawer from '#/views/profiles/offenders/ViewOffender/components/AiDrawer/AiDrawer.view';
 import {
   faBell,
   faBellSlash,
@@ -238,6 +239,7 @@ interface Props {
     } | null
   ) => void;
   shareOpen: boolean;
+  showAiDrawer: boolean;
   showIncidentOptions: boolean;
   toggleAddAddress: () => void;
   toggleAddBan: () => void;
@@ -246,6 +248,7 @@ interface Props {
   toggleAddExistingVehicle: () => void;
   toggleAddInvestigation: () => void;
   toggleAddVehicle: () => void;
+  toggleAiDrawer: () => void;
   toggleCopyOffender: () => void;
   toggleEditImages: () => void;
   toggleEditOffender: () => void;
@@ -346,6 +349,7 @@ const ViewOffender = ({
   setOptionRowShow,
   setReplyTo,
   shareOpen,
+  showAiDrawer,
   showIncidentOptions,
   toggleAddAddress,
   toggleAddBan,
@@ -354,6 +358,7 @@ const ViewOffender = ({
   toggleAddExistingVehicle,
   toggleAddInvestigation,
   toggleAddVehicle,
+  toggleAiDrawer,
   toggleCopyOffender,
   toggleEditImages,
   toggleEditOffender,
@@ -1124,7 +1129,11 @@ const ViewOffender = ({
                               unauthorizedElement={<div />}
                             >
                               <Col xl={24} xs={24}>
-                                <AiDetailsView data={data} loading={loading} />
+                                <AiDetailsView
+                                  data={data}
+                                  loading={loading}
+                                  toggleAiDrawer={toggleAiDrawer}
+                                />
                               </Col>
                             </PermissionCheckWrapper>
 
@@ -2964,6 +2973,12 @@ const ViewOffender = ({
           <ShareData offenderId={offenderId} onClose={toggleShareOpen} />
         )}
       </Drawer>
+
+      <OffenderAiDrawer
+        offenderId={offenderId}
+        onClose={toggleAiDrawer}
+        visible={showAiDrawer}
+      />
     </div>
   );
 };

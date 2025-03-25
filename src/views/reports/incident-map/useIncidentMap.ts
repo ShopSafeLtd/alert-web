@@ -1,4 +1,3 @@
-import type { Scheme } from '#/state';
 import type { BrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import type { BusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
@@ -6,8 +5,10 @@ import type { IndustriesQuery } from 'graphql/industry/__generated__/industries.
 import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/incident-map.generated';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import { userIdAtom } from '#/providers/UserProvider/UserProvider';
-import { useStoreState } from '#/state';
+import {
+  userIdAtom,
+  userSchemesAtom,
+} from '#/providers/UserProvider/UserProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useBusinessLocationsQuery } from 'graphql/businesses/queries/__generated__/business-locations.generated';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
@@ -31,7 +32,7 @@ interface Return {
   onChangeGroups: (value: string[]) => void;
   onChangeIndustries: (value: string[]) => void;
   onChangeSchemes: (value: string[]) => void;
-  schemes: Scheme[];
+  schemes: { scheme: { id: string; name: string } }[];
   selectedBrands: string[];
   selectedGroups: string[];
   selectedIndustries: string[];
@@ -41,7 +42,7 @@ interface Return {
 const useIncidentMap = (): Return => {
   const userId = useAtomValue(userIdAtom);
   const currentScheme = useAtomValue(currentSchemeIdAtom);
-  const schemes = useStoreState((state) => state.user.schemes);
+  const schemes = useAtomValue(userSchemesAtom);
   const [selectedSchemes, setSchemes] = useState<string[]>([currentScheme]);
   const [selectedGroups, setGroups] = useState<string[]>([]);
   const [selectedBrands, setBrands] = useState<string[]>([]);

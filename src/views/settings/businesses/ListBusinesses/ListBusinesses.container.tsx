@@ -8,6 +8,7 @@ const ListBusinesses = () => {
     addVisible,
     data,
     deleteConfirm,
+    filtersOpen,
     groupData,
     groupFilter,
     linkVisible,
@@ -27,6 +28,7 @@ const ListBusinesses = () => {
     tagFilter,
     tags,
     toggleAddVisible,
+    toggleFiltersOpen,
     toggleLinkVisible,
   } = useListBusinesses();
 
@@ -35,6 +37,7 @@ const ListBusinesses = () => {
       addVisible={addVisible}
       data={data}
       deleteConfirm={deleteConfirm}
+      filtersOpen={filtersOpen}
       groupData={groupData}
       groupFilter={groupFilter}
       linkVisible={linkVisible}
@@ -54,6 +57,7 @@ const ListBusinesses = () => {
       tagFilter={tagFilter}
       tags={tags}
       toggleAddVisible={toggleAddVisible}
+      toggleFiltersOpen={toggleFiltersOpen}
       toggleLinkVisible={toggleLinkVisible}
     />
   );
