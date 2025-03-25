@@ -10,6 +10,10 @@ query Business(
     demId
     siteNumber
     brands
+    brandsList {
+      id
+      name
+    }
     groups {
       id
       name

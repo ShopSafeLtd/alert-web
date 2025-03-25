@@ -35,6 +35,9 @@ const ListWorkflowView = ({ data, loading }: Props) => {
         title={<FormattedMessage defaultMessage="Workflow" />}
       />
       <Card
+        bodyStyle={{
+          padding: 0,
+        }}
         style={{
           margin: 16,
         }}
@@ -46,6 +49,7 @@ const ListWorkflowView = ({ data, loading }: Props) => {
           pagination={{
             hideOnSinglePage: true,
           }}
+          size="small"
         />
       </Card>
     </div>

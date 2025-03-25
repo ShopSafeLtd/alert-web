@@ -13,10 +13,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
     flexDirection: 'column',
     height: '100vh',
     overflow: 'auto',
+    padding: 15,
     width: '100%',
   },
   details: {
-    padding: '0px 15px 70px 8px',
     position: 'relative',
   },
   headerBar: {
@@ -25,20 +25,16 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: '7px 0px 15px',
     width: '100%',
   },
-
   headerTitle: {
     marginBottom: '0px !important',
   },
-
   page: {
     display: 'flex',
     // height: 'calc(100vh - 150px)',
     flexWrap: 'nowrap',
     height: '100vh',
   },
-  tag: {
-    marginBottom: 3,
-  },
+  tag: {},
   updatesContainer: {
     // position: 'relative',
     height: '100%',
