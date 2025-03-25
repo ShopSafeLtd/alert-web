@@ -1,6 +1,5 @@
 /* eslint-disable quotes */
 
-import type { FormData } from '#/views/incidents/AddIncident/useAddIncident';
 import type { ListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 
 import StockItemSelect, {
@@ -14,7 +13,6 @@ import {
   Col,
   Empty,
   Form,
-  type FormInstance,
   InputNumber,
   Radio,
   Row,
@@ -23,8 +21,8 @@ import {
 } from 'antd';
 import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/types';
-import React, { useEffect } from 'react';
-import { useIntl } from 'react-intl';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import useStyles from '../../AddIncident.styles';
 
@@ -33,7 +31,6 @@ const { Paragraph, Title } = Typography;
 interface Props {
   division: string | undefined;
   dontKnowGoods: () => void;
-  form: FormInstance<FormData>;
   goods: {
     goodsType?: string;
     name?: string;
@@ -54,7 +51,6 @@ interface Props {
 const IncidentGoods = ({
   division,
   dontKnowGoods,
-  form,
   goods,
   goodsMode,
   goodsTypesData,
@@ -64,16 +60,6 @@ const IncidentGoods = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-
-  const goodsKnown = Form.useWatch('goodsKnown', form) as string;
-
-  useEffect(() => {
-    if (goodsKnown === 'true') {
-      knowGoods();
-    } else if (goodsKnown === 'false') {
-      dontKnowGoods();
-    }
-  }, [goodsKnown]);
 
   return (
     <Card className={classes.card}>
@@ -89,7 +75,7 @@ const IncidentGoods = ({
                 })}
           </Title>
         </Col>
-        <Col>
+        <Col flex={1}>
           <Paragraph
             italic
             style={{ marginBottom: 1, marginLeft: 5 }}
@@ -101,6 +87,13 @@ const IncidentGoods = ({
             })}
           </Paragraph>
         </Col>
+        {goodsVisible && (
+          <Col>
+            <Button onClick={dontKnowGoods}>
+              <FormattedMessage defaultMessage="Don't know the goods" />
+            </Button>
+          </Col>
+        )}
       </Row>
       {goodsVisible ? (
         <Form.List
@@ -534,19 +527,21 @@ const IncidentGoods = ({
                 ]}
               >
                 <Radio.Group
+                  /* eslint-disable-next-line @typescript-eslint/no-unsafe-return */
+                  onChange={(event) => event.target.value && knowGoods()}
                   optionType="button"
                   options={[
                     {
                       label: intl.formatMessage({
                         defaultMessage: 'I know the goods involved',
                       }),
-                      value: 'true',
+                      value: true,
                     },
                     {
                       label: intl.formatMessage({
                         defaultMessage: "I don't know the goods involved",
                       }),
-                      value: 'false',
+                      value: false,
                     },
                   ]}
                 />

@@ -133,6 +133,7 @@ export interface FormData {
     stockItem?: string;
     value?: number;
   }[];
+  goodsKnown?: boolean;
   groups?: string[];
   hasVictims: boolean;
   images?: StateImageData[];
@@ -1258,6 +1259,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             value: 0,
           },
         ],
+        goodsKnown: undefined,
       });
     }
   };
