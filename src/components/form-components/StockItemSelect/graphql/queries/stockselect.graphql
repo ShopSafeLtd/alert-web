@@ -17,6 +17,7 @@ query StockItemSelect($where: stockItemRelayWhereInput!, $first: Int, $after: St
                 salesPriceLocal
                 salesPriceStandard
                 sku
+                variant
             }
         }
     }

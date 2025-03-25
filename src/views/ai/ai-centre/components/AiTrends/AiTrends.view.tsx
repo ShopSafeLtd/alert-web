@@ -46,7 +46,7 @@ const AiTrends = () => {
               marginBottom: 0,
             }}
           >
-            <FormattedMessage defaultMessage="Identfied Trends" />
+            <FormattedMessage defaultMessage="Identified Trends" />
           </Typography.Title>
         </Col>
         <Col>

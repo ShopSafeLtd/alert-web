@@ -221,6 +221,8 @@ const useViewTag = (): Return => {
     [IncidentFormField.Involved]: true,
     [IncidentFormField.Offenders]: true,
     [IncidentFormField.Police]: true,
+    [IncidentFormField.PoliceReport]: false,
+    [IncidentFormField.PoliceStatement]: false,
     [IncidentFormField.Types]: true,
     [IncidentFormField.Vehicles]: false,
     [IncidentFormField.Victims]: false,
