@@ -1,44 +1,48 @@
 /* eslint-disable unicorn/prefer-node-protocol */
-import React from 'react';
+import type { NavItem } from 'configs/NavigationConfig';
+
 import { Layout } from 'antd';
 import { SIDE_NAV_WIDTH } from 'constants/ThemeConstant';
+import React, { memo, useMemo } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { useStoreState, NavType } from 'state';
-import type { NavItem } from 'configs/NavigationConfig';
+import { NavType, useStoreState } from 'state';
+
 import MenuContent from './MenuContent';
 
 const { Sider } = Layout;
 
 interface Props {
-  routeInfo: NavItem;
   hideGroupTitle?: boolean;
   localization?: boolean;
+  routeInfo: NavItem;
 }
 
-export const SideNav = ({
-  routeInfo,
-  hideGroupTitle,
-  localization = true,
-}: Props) => {
-  const sideNavTheme = useStoreState((state) => state.theme.currentTheme);
-  const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
+const SideNav = ({ hideGroupTitle, localization = true, routeInfo }: Props) => {
+  const { currentTheme: sideNavTheme, navCollapsed } = useStoreState(
+    (state) => state.theme
+  );
+
+  const menuContent = useMemo(
+    () => (
+      <MenuContent
+        hideGroupTitle={hideGroupTitle}
+        localization={localization}
+        routeInfo={routeInfo}
+        type={NavType.SIDE}
+      />
+    ),
+    [hideGroupTitle, localization, routeInfo]
+  );
 
   return (
     <Sider
       className={`side-nav ${sideNavTheme === 'dark' ? 'side-nav-dark' : ''}`}
-      width={SIDE_NAV_WIDTH}
       collapsed={navCollapsed}
+      width={SIDE_NAV_WIDTH}
     >
-      <Scrollbars autoHide>
-        <MenuContent
-          type={NavType.SIDE}
-          routeInfo={routeInfo}
-          hideGroupTitle={hideGroupTitle}
-          localization={localization}
-        />
-      </Scrollbars>
+      <Scrollbars autoHide>{menuContent}</Scrollbars>
     </Sider>
   );
 };
 
-export default SideNav;
+export default memo(SideNav);
