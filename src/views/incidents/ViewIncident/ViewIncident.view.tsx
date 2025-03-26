@@ -71,7 +71,7 @@ const ViewIncident = ({
   const navigate = useNavigate();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
 
-  if (hasApprovePermission && data?.incident?.approved === false) {
+  if (!hasApprovePermission && data?.incident?.approved === false) {
     navigate('/app/incidents');
     return <div />;
   }
