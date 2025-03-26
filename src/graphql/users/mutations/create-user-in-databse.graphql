@@ -19,8 +19,5 @@ mutation createUserInDatabase(
       id
       name
     }
-    loginEvents {
-      loginTime
-    }
   }
 }
