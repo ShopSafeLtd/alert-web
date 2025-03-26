@@ -320,7 +320,6 @@ const useViewOffender = (offenderId: string): Return => {
     setLightBoxOpen({ index, open: !lightBoxOpen.open });
   };
   const { groups } = useGroupsContext();
-  const groupsId = groups.map((group) => group.value);
   const [loadMore, setLoadMore] = useState(false);
   const [replyTo, setReplyTo] = useState<{
     createdAt: string;
@@ -363,9 +362,6 @@ const useViewOffender = (offenderId: string): Return => {
     window.localStorage.setItem(LINKED_OCG, crimeGroups ? 'true' : 'false');
   }, [associateFilters]);
   const variables = {
-    banWhere: {
-      groups: { some: { id: { in: groupsId } } },
-    },
     where: {
       id: offenderId,
     },
