@@ -1,17 +1,17 @@
-import React, { useMemo } from 'react';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+
 import { Drawer } from 'antd';
 import FeedItemFilter from 'components/feedItems/FeedItemFilter';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import React, { useMemo } from 'react';
+import RGL, { WidthProvider } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
 import { useIntl } from 'react-intl';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import RGL, { WidthProvider } from 'react-grid-layout';
-import type { AvailableDashboardElements } from '#/state/dashboard-model';
+
 import { generateHeight, useDashboardContext } from './Dashboard.context';
-
-import 'react-grid-layout/css/styles.css';
-
 import {
   ActiveOffenders,
   AdminTodos,
@@ -31,9 +31,9 @@ import {
 const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
   new Map([
     [
-      'feedItemCol',
-      <div key="feedItemCol">
-        <FeedItemCol />
+      'activeOffender',
+      <div key="activeOffender">
+        <ActiveOffenders />
       </div>,
     ],
     [
@@ -49,27 +49,27 @@ const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
       </div>,
     ],
     [
-      'searchRow',
-      <div key="searchRow">
-        <SearchRow />
-      </div>,
-    ],
-    [
-      'activeOffender',
-      <div key="activeOffender">
-        <ActiveOffenders />
-      </div>,
-    ],
-    [
       'dayOfWeekBar',
       <div key="dayOfWeekBar">
         <DayOfWeek />
       </div>,
     ],
     [
-      'timeOfDayBar',
-      <div key="timeOfDayBar">
-        <TimeOfDay />
+      'feedItemCol',
+      <div key="feedItemCol">
+        <FeedItemCol />
+      </div>,
+    ],
+    [
+      'incidentCount',
+      <div key="incidentCount">
+        <IncidentCount />
+      </div>,
+    ],
+    [
+      'incidentValue',
+      <div key="incidentValue">
+        <IncidentValues />
       </div>,
     ],
     [
@@ -85,9 +85,9 @@ const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
       </div>,
     ],
     [
-      'incidentCount',
-      <div key="incidentCount">
-        <IncidentCount />
+      'searchRow',
+      <div key="searchRow">
+        <SearchRow />
       </div>,
     ],
     [
@@ -97,36 +97,36 @@ const DashboardComponents: Map<AvailableDashboardElements, JSX.Element> =
       </div>,
     ],
     [
-      'incidentValue',
-      <div key="incidentValue">
-        <IncidentValues />
-      </div>,
-    ],
-    [
       'targetedGoods',
       <div key="targetedGoods">
         <TargetedGoodsContainer />
+      </div>,
+    ],
+    [
+      'timeOfDayBar',
+      <div key="timeOfDayBar">
+        <TimeOfDay />
       </div>,
     ],
   ]);
 
 const FeedItem = (): JSX.Element => {
   const {
-    setOrder,
+    clearFilters,
     groups,
-    variables,
-    setTypesFilter,
+    groupsLoading,
+    layout,
+    lightBoxOpen,
+    lightboxElements,
+    marqueeString,
+    openLightbox,
+    setCreatedAtFilter,
     setGroupsFilter,
+    setOrder,
+    setTypesFilter,
     sortFilter,
     toggleSortFilter,
-    clearFilters,
-    setCreatedAtFilter,
-    lightboxElements,
-    openLightbox,
-    lightBoxOpen,
-    groupsLoading,
-    marqueeString,
-    layout,
+    variables,
   } = useDashboardContext();
 
   const intl = useIntl();
@@ -146,62 +146,62 @@ const FeedItem = (): JSX.Element => {
       className="feed-container"
       style={{
         height: '100vh',
+        overflow: 'hidden',
         padding: 15,
         paddingTop: 0,
-        overflow: 'hidden',
       }}
     >
       <Marquee />
 
       <ReactGridLayout
-        layout={layout}
+        autoSize
+        containerPadding={[0, 0]}
         isDraggable={false}
         isResizable={false}
+        layout={layout}
         margin={[8, 8]}
+        rowHeight={generateHeight()}
         style={{
           height: marqueeString ? '90%' : '98%',
           marginTop: marqueeString ? 0 : 10,
         }}
-        rowHeight={generateHeight()}
-        containerPadding={[0, 0]}
-        autoSize
         useCSSTransforms={false}
       >
         {...layoutWithComponents}
       </ReactGridLayout>
       <Drawer
+        onClose={toggleSortFilter}
+        open={sortFilter}
         title={intl.formatMessage({
           defaultMessage: 'Feed Item Filters',
         })}
-        open={sortFilter}
-        onClose={toggleSortFilter}
         width={500}
       >
         <FeedItemFilter
-          variables={variables}
-          setOrder={setOrder}
+          clearFilters={clearFilters}
           groups={groups}
           groupsLoading={groupsLoading}
-          setTypesFilter={setTypesFilter}
-          setGroupsFilter={setGroupsFilter}
-          clearFilters={clearFilters}
           setCreatedAtFilter={setCreatedAtFilter}
+          setGroupsFilter={setGroupsFilter}
+          setOrder={setOrder}
+          setTypesFilter={setTypesFilter}
+          variables={variables}
         />
       </Drawer>
       <Lightbox
-        open={lightBoxOpen.open}
         close={() => openLightbox([], 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
         }}
+        index={lightBoxOpen.index}
+        open={lightBoxOpen.open}
+        plugins={[Zoom]}
         render={{
           slide: (slide: WatermarkSlideType) => (
             <WatermarkSlide slide={slide} />
           ),
         }}
+        slides={lightboxElements}
       />
     </div>
   );

@@ -114,10 +114,7 @@ export const DashboardProvider: React.FC<{
   );
 
   const dashboardLayout = useMemo(
-    () =>
-      isSet
-        ? schemeLayouts[schemeId] ?? initialLayout
-        : { layout: [], marquee: null },
+    () => (isSet ? schemeLayouts[schemeId] ?? initialLayout : initialLayout),
     [isSet, schemeLayouts, schemeId, initialLayout]
   );
 

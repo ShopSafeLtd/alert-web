@@ -91,30 +91,32 @@ const useUserList = (): Return => {
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
-      OR: [
-        {
-          fullName: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          email: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          businesses: {
-            some: {
-              name: {
+      OR: search
+        ? [
+            {
+              fullName: {
                 contains: search,
                 mode: QueryMode.Insensitive,
               },
             },
-          },
-        },
-      ],
+            {
+              email: {
+                contains: search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              businesses: {
+                some: {
+                  name: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
+              },
+            },
+          ]
+        : undefined,
       groups:
         selectedGroups.length > 0
           ? {
