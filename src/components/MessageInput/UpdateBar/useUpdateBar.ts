@@ -201,6 +201,12 @@ const useUpdateBar = ({
     setOptionRowShow,
   ]);
 
+  useEffect(() => {
+    if (!formTouched && updateInput.includes('@')) {
+      setFormTouched(true);
+    }
+  }, [updateInput]);
+
   const { data: mentionableUsersData } = useMentionableUsersQuery({
     fetchPolicy: 'cache-first',
     skip: !formTouched,
@@ -1070,9 +1076,6 @@ const useUpdateBar = ({
   };
   const [updated, setUpdated] = useState(false);
   const handleMarkAsRead = () => {
-    if (!formTouched) {
-      setFormTouched(true);
-    }
     if (!updated) {
       void updateTodoMention({
         variables: {
