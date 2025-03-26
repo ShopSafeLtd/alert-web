@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import type { FormData } from './useTodo';
 
@@ -125,6 +125,17 @@ const TodoView = ({
         </Descriptions.Item>
       </Descriptions>
       <Divider style={{ marginTop: 10 }} />
+      <Row>
+        {todo?.todo.business ? (
+          <Typography.Text
+            style={{ fontSize: 16, fontWeight: 500, marginBottom: 10 }}
+          >
+            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+            <FormattedMessage defaultMessage="Business" /> -{' '}
+            {todo.todo.business.name}
+          </Typography.Text>
+        ) : null}
+      </Row>
       {todo?.todo.business?.locations[0].geoLat &&
         todo?.todo.business?.locations[0].geoLng && (
           <>
