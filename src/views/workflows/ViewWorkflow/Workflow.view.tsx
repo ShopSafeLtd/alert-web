@@ -89,7 +89,7 @@ interface WorkflowProps {
 
 const useStyles = createUseStyles((theme: Theme) => ({
   cardBody: {
-    backgroundColor: '#f3f3f3',
+    backgroundColor: theme.cardSubsectionBackground,
     borderTop: `1px solid ${theme.borderColor}`,
     padding: 20,
   },
@@ -264,6 +264,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       })}
                     >
                       <Radio.Group
+                        disabled={!editId}
                         onChange={(e) => {
                           if (e.target.value === 'scheduled') {
                             form.setFieldsValue({ workflowType: Model.Cron });
@@ -310,6 +311,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         })}
                       >
                         <Radio.Group
+                          disabled={!editId}
                           optionType="button"
                           options={[
                             {
