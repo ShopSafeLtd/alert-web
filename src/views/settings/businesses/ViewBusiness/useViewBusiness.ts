@@ -762,7 +762,10 @@ const useViewBusiness = (): Return => {
     store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
       data: {
         __typename: 'Query',
-        users: [...existingData.users, res.createUserInDatabase],
+        users: [
+          ...existingData.users,
+          { ...res.createUserInDatabase, loginEvents: [] },
+        ],
       },
       query: ListBusinessUsersDocument,
       variables: {
@@ -827,7 +830,10 @@ const useViewBusiness = (): Return => {
     store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
       data: {
         __typename: 'Query',
-        users: [...existingData.users, res.inviteExistingUser],
+        users: [
+          ...existingData.users,
+          { ...res.inviteExistingUser, loginEvents: [] },
+        ],
       },
       query: ListBusinessUsersDocument,
       variables: {
