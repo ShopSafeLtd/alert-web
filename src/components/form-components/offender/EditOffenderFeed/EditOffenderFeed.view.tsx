@@ -74,6 +74,7 @@ const EditOffender = ({
                   .set('minute', 0)
                   .set('second', 0)
                   .set('millisecond', 0)
+                  .toDate()
               : null,
             dateSource: data?.offender?.dateSource || null,
             gender: data?.offender?.gender || null,

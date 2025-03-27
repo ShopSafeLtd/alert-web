@@ -1,8 +1,8 @@
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
+import DatePicker from '#/components/util-components/DatePicker';
 // import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 import { useGroupsContext } from '#/context/groups-context';
 import CustomQuestions from '#/views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
@@ -10,7 +10,6 @@ import { UploadOutlined } from '@ant-design/icons';
 import {
   Button,
   Col,
-  DatePicker,
   Divider,
   Drawer,
   Form,
@@ -59,9 +58,6 @@ interface Props {
   usersLoading: boolean;
   // todoData: EditTodoQuery | undefined;
 }
-
-const disabledDate: RangePickerProps['disabledDate'] = (current) =>
-  current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
 
 const EditTodo = ({
   addQuestion,
@@ -159,11 +155,7 @@ Props): JSX.Element => {
                 },
               ]}
             >
-              <DatePicker
-                disabled={saving}
-                disabledDate={disabledDate}
-                style={{ width: '100%' }}
-              />
+              <DatePicker disabled={saving} style={{ width: '100%' }} />
             </Form.Item>
           </Col>
         </Row>

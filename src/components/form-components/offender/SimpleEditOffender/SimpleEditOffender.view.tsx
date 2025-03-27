@@ -79,7 +79,7 @@ const EditOffender = ({
             comment: data.comment || null,
             county: data.address?.county || '',
             dateOfBirth: data.dateOfBirth
-              ? dayjs(data.dateOfBirth, 'YYYY-MM-DD')
+              ? dayjs(data.dateOfBirth, 'YYYY-MM-DD').toDate()
               : null,
             dateSource: data.dateSource || null,
             gender: data.gender || null,

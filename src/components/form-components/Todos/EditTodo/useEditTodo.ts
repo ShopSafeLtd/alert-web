@@ -3,7 +3,6 @@ import type { EditTodoQuery } from '#/components/form-components/Todos/EditTodo/
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
-import type { Dayjs } from 'dayjs';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
@@ -16,7 +15,6 @@ import {
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
-import dayjs from 'dayjs';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
@@ -28,12 +26,12 @@ import customRequest from '../../../../utils/custom-request';
 const { useForm } = Form;
 
 export interface FormData {
-  [answer: string]: Dayjs | boolean | number | string | string[] | undefined;
+  [answer: string]: Date | boolean | number | string | string[] | undefined;
   assignedUsers: string[];
   business: string[];
   completed: boolean;
   description: string;
-  dueDate: Dayjs;
+  dueDate: Date;
   groups: string[];
   name: string;
   questionGroup?: string;
@@ -101,12 +99,13 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
   const { data: todoData, loading: todoLoading } = useEditTodoQuery({
     fetchPolicy: 'cache-and-network',
     onCompleted: ({ todo }) => {
+      console.log(todo.dueDate);
       form.setFieldsValue({
         assignedUsers: todo.assignedUsers.map(({ id }) => id),
         business: todo.business?.id ? [todo.business?.id] : [],
         completed: todo.completed || false,
         description: todo?.description || '',
-        dueDate: dayjs(todo.dueDate, 'YYYY-MM-DD'),
+        dueDate: todo.dueDate ? new Date(todo.dueDate) : new Date(),
         groups: todo.groups.map(({ id }) => id),
         name: todo.name || '',
       });
@@ -335,7 +334,7 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
                   }))
                 : undefined,
           },
-          dueDate: { set: data.dueDate.toDate() },
+          dueDate: { set: data.dueDate },
           groups: { set: data.groups.map((id) => ({ id })) },
           name: data.name,
           questions: {

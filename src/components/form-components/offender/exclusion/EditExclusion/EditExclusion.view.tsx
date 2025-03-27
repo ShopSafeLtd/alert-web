@@ -45,11 +45,11 @@ const EditExclusion = ({
       form={form}
       initialValues={{
         description: banData?.description || '',
-        endDate: dayjs(banData?.endDate, 'YYYY-MM-DD'),
+        endDate: dayjs(banData?.endDate, 'YYYY-MM-DD').toDate(),
         fineValue: banData?.fineValue,
         location: banData?.location,
         months: banData?.months,
-        startDate: dayjs(banData?.startDate, 'YYYY-MM-DD'),
+        startDate: dayjs(banData?.startDate, 'YYYY-MM-DD').toDate(),
         type: banData?.type || null,
       }}
       layout="vertical"
