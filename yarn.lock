@@ -20673,10 +20673,10 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-yet-another-react-lightbox@^3.21.8:
-  version "3.21.8"
-  resolved "https://registry.yarnpkg.com/yet-another-react-lightbox/-/yet-another-react-lightbox-3.21.8.tgz#7a8002b1301e961cbb98772731b064e46f723989"
-  integrity sha512-8DnjpSmWF+WjGXX+NIJx0V/naUhUYxLt6RIBJZoQ4y1GJVKwiUO2RuRvUBvYQTwAwFqwhJSvxfIhCU3VyCj9WQ==
+yet-another-react-lightbox@^2.2.7:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/yet-another-react-lightbox/-/yet-another-react-lightbox-2.6.2.tgz#3f4765eb99cc70e4c09661ea4a958d75632b1ce9"
+  integrity sha512-P03quWhfmmqvgraMPxJybiwlwtCnHeO1oCDjJoyDIU/mif0AzJQR1ZAYMCAgNdV1jrJNovDfN3LjWP5L5QzmyA==
 
 yjs@^13.5.47:
   version "13.5.47"
