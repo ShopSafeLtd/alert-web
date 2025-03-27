@@ -3,6 +3,7 @@ import type { FormInstance } from 'antd';
 import type { AnswerType, CronSchedule, IncidentPriority } from 'graphql/types';
 
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import useActivityTemplates from '#/views/adminTodo/ActivityTemplates/useActivityTemplates';
 import { useCreateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/create-workflow.generated';
 import { useUpdateOneWorkflowMutation } from '#/views/workflows/graphql/mutations/__generated__/update-workflow.generated';
 import { useViewWorkflowQuery } from '#/views/workflows/graphql/queries/__generated__/view-workflow.generated';
@@ -25,9 +26,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import type { ListData } from '../../adminTodo/useActivities';
-
-import useActivityTemplates from '../../adminTodo/useActivities';
+interface ListData {
+  defaultDueDays: number;
+  description: string;
+  id: string;
+  name: string;
+  questions: {
+    id: string;
+    question: string;
+  }[];
+}
 
 interface WorkflowData {
   autoApprove?: boolean;
@@ -261,7 +269,7 @@ const useWorkflowForm = (): Return => {
   });
   const {
     loading: templatesLoading,
-    templateData,
+    tableData,
     updateTemplates,
   } = useActivityTemplates();
   const navigate = useNavigate();
@@ -446,8 +454,8 @@ const useWorkflowForm = (): Return => {
     return [];
   }, [data]);
   const questionGroups: QuestionGroupData[] = useMemo(() => {
-    if (templateData) {
-      return templateData.map(
+    if (tableData) {
+      return tableData.map(
         ({ defaultDueDays, description, id, name, questions: qs }) => ({
           defaultDueDays,
           description,
@@ -458,7 +466,7 @@ const useWorkflowForm = (): Return => {
       );
     }
     return [];
-  }, [templateData]);
+  }, [tableData]);
 
   useEffect(() => {
     setAvailableQuestions(questions);
