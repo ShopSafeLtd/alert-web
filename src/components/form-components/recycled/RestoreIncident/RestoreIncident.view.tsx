@@ -50,7 +50,7 @@ const RestoreIncident = ({
         <Descriptions.Item
           label={intl.formatMessage({ defaultMessage: 'Date' })}
         >
-          {FormatCalendar(data?.recycledItem?.incident?.date || dayjs())}
+          {FormatCalendar(data?.recycledItem?.incident?.date || dayjs(), intl)}
         </Descriptions.Item>
         <Descriptions.Item
           label={intl.formatMessage({ defaultMessage: 'Remark' })}

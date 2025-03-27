@@ -168,7 +168,9 @@ const ViewArticleView = ({
                           defaultMessage: 'Published:',
                         })}
                       </Text>
-                      <Text>{FormatCalendar(data?.article?.completedAt)}</Text>
+                      <Text>
+                        {FormatCalendar(data?.article?.completedAt, intl)}
+                      </Text>
                     </>
                   ) : (
                     <>
@@ -183,7 +185,7 @@ const ViewArticleView = ({
                         })}
                       </Text>
                       <Text>
-                        {FormatCalendar(data?.article?.updatedAt as Date)}
+                        {FormatCalendar(data?.article?.updatedAt as Date, intl)}
                       </Text>
                     </>
                   )}
@@ -200,7 +202,9 @@ const ViewArticleView = ({
                             defaultMessage: '| Updated:',
                           })}
                         </Text>
-                        <Text>{FormatCalendar(data?.article?.updatedAt)}</Text>
+                        <Text>
+                          {FormatCalendar(data?.article?.updatedAt, intl)}
+                        </Text>
                       </>
                     )}
                 </Col>

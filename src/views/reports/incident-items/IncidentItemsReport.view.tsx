@@ -7,6 +7,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useIncidentItemsReportQuery } from '#/views/reports/incident-items/__generated__/IncidentItemsReport.generated';
 import { Button, Col, Form, Row, Table } from 'antd';
 import dayjs from 'dayjs';
+import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { CSVLink } from 'react-csv';
@@ -74,6 +75,9 @@ const StockItems = () => {
         ]);
     },
     variables: {
+      orderby: {
+        createdAt: SortOrder.Asc,
+      },
       skip,
       take,
       where: {

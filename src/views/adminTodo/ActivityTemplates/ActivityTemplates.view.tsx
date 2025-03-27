@@ -1,47 +1,49 @@
-import React from 'react';
-import { Button, Card, Col, Drawer, Row, Table, Tooltip } from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { ListData } from '#/views/adminTodo/TodoList/useTodoList';
+
 import {
   faPenToSquare,
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import type { ListData } from '../useActivities';
-import AddTodo from '../../../components/form-components/Todos/AddTodo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Drawer, Row, Table, Tooltip } from 'antd';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import ActivityTemplateForm from '../../../components/form-components/ActivityTemplate';
+import AddTodo from '../../../components/form-components/Todos/AddTodo';
 
 interface Props {
-  tableData: ListData[];
-  loading: boolean;
-  updateTemplates: (
-    item: ListData,
-    type: 'create' | 'update' | 'delete'
-  ) => void;
-  toggleAddTemplate: () => void;
-  createActivity: (id: string | null) => void;
-  toggleEdit: (id: string | null) => void;
-  deleteQuestion: (id: string) => void;
+  activityTemplateForm: boolean;
   addActivity: boolean;
+  createActivity: (id: null | string) => void;
+  deleteQuestion: (id: string) => void;
+  loading: boolean;
   onClose: () => void;
   selectedActivity: ListData | null;
-  activityTemplateForm: boolean;
+  tableData: ListData[];
+  toggleAddTemplate: () => void;
+  toggleEdit: (id: null | string) => void;
+  updateTemplates: (
+    item: ListData,
+    type: 'create' | 'delete' | 'update'
+  ) => void;
 }
 
 const questionsToReadable = (questions: string[]) => questions.join(', ');
 
 const ActivityTemplatesView = ({
-  tableData,
-  loading,
-  updateTemplates,
-  toggleAddTemplate,
-  createActivity,
-  toggleEdit,
-  deleteQuestion,
+  activityTemplateForm,
   addActivity,
+  createActivity,
+  deleteQuestion,
+  loading,
   onClose,
   selectedActivity,
-  activityTemplateForm,
+  tableData,
+  toggleAddTemplate,
+  toggleEdit,
+  updateTemplates,
 }: Props) => {
   const intl = useIntl();
   return (
@@ -50,8 +52,6 @@ const ActivityTemplatesView = ({
         <Col flex={1} />
         <Col>
           <Button
-            type="primary"
-            onClick={() => toggleAddTemplate()}
             icon={
               <FontAwesomeIcon
                 icon={faPlus}
@@ -59,6 +59,8 @@ const ActivityTemplatesView = ({
                 style={{ marginRight: 5 }}
               />
             }
+            onClick={() => toggleAddTemplate()}
+            type="primary"
           >
             {intl.formatMessage({
               defaultMessage: 'New Template',
@@ -68,35 +70,26 @@ const ActivityTemplatesView = ({
       </Row>
       <Card loading={loading}>
         <Table
-          dataSource={tableData}
-          loading={loading}
-          pagination={{
-            hideOnSinglePage: true,
-          }}
           columns={[
             {
-              key: 'name',
               dataIndex: 'name',
+              key: 'name',
               title: intl.formatMessage({
                 defaultMessage: 'Name',
               }),
             },
             {
-              key: 'description',
               dataIndex: 'description',
+              ellipsis: true,
+              key: 'description',
               title: intl.formatMessage({
                 defaultMessage: 'Description',
               }),
-              ellipsis: true,
             },
 
             {
-              key: 'dueDate',
               dataIndex: 'defaultDueDays',
-              title: intl.formatMessage({
-                defaultMessage: 'Due Date',
-              }),
-              width: 120,
+              key: 'dueDate',
               render: (value: number) => (
                 <FormattedMessage
                   defaultMessage="{v} days"
@@ -105,16 +98,15 @@ const ActivityTemplatesView = ({
                   }}
                 />
               ),
+              title: intl.formatMessage({
+                defaultMessage: 'Due Date',
+              }),
+              width: 120,
             },
             {
-              key: 'questions',
               dataIndex: 'questions',
-              title: intl.formatMessage({
-                defaultMessage: 'Questions',
-              }),
-              width: 160,
-
               ellipsis: true,
+              key: 'questions',
               render: (_, item: ListData) => (
                 <Tooltip
                   title={questionsToReadable(
@@ -124,11 +116,15 @@ const ActivityTemplatesView = ({
                   {item.questions.length}
                 </Tooltip>
               ),
+
+              title: intl.formatMessage({
+                defaultMessage: 'Questions',
+              }),
+              width: 160,
             },
             {
               dataIndex: 'actions',
               key: 'actions',
-              width: 150,
               render: (_, record) => (
                 <Row>
                   <Col>
@@ -138,12 +134,12 @@ const ActivityTemplatesView = ({
                       })}
                     >
                       <Button
-                        size="small"
+                        icon={<FontAwesomeIcon icon={faPlus} />}
                         onClick={() => {
                           createActivity(record.id || null);
                         }}
+                        size="small"
                         style={{ marginRight: 5 }}
-                        icon={<FontAwesomeIcon icon={faPlus} />}
                       />
                     </Tooltip>
                   </Col>
@@ -154,12 +150,12 @@ const ActivityTemplatesView = ({
                       })}
                     >
                       <Button
-                        size="small"
+                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
                         onClick={() => {
                           toggleEdit(record.id || null);
                         }}
+                        size="small"
                         style={{ marginRight: 5 }}
-                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
                       />
                     </Tooltip>
                   </Col>
@@ -170,52 +166,58 @@ const ActivityTemplatesView = ({
                       })}
                     >
                       <Button
-                        size="small"
-                        type="primary"
+                        icon={<FontAwesomeIcon icon={faTrash} />}
                         onClick={() => {
                           deleteQuestion(record.id);
                         }}
-                        icon={<FontAwesomeIcon icon={faTrash} />}
+                        size="small"
+                        type="primary"
                       />
                     </Tooltip>
                   </Col>
                 </Row>
               ),
+              width: 150,
             },
           ]}
+          dataSource={tableData}
+          loading={loading}
+          pagination={{
+            hideOnSinglePage: true,
+          }}
         />
       </Card>
       <Drawer
+        onClose={() => onClose()}
+        open={addActivity}
         title={intl.formatMessage({
           defaultMessage: 'Create Activity',
         })}
-        open={addActivity}
         width={800}
-        onClose={() => onClose()}
       >
         {addActivity ? (
           <AddTodo
-            onClose={() => onClose()}
             initData={selectedActivity ?? undefined}
+            onClose={() => onClose()}
           />
         ) : (
           <div />
         )}
       </Drawer>
       <Drawer
+        onClose={() => onClose()}
+        open={activityTemplateForm}
         title={intl.formatMessage({
           defaultMessage: 'Create Activity Template',
         })}
-        open={activityTemplateForm}
         width={800}
-        onClose={() => onClose()}
       >
         {activityTemplateForm ? (
           <ActivityTemplateForm
-            update={updateTemplates}
-            onClose={() => onClose()}
-            initData={selectedActivity ?? undefined}
             id={selectedActivity?.id ?? undefined}
+            initData={selectedActivity ?? undefined}
+            onClose={() => onClose()}
+            update={updateTemplates}
           />
         ) : (
           <div />

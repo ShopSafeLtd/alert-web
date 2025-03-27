@@ -191,7 +191,8 @@ const DemDeviceList = ({
           {
             dataIndex: 'createdAt',
             key: 'createdAt',
-            render: (value: Date) => FormatCalendar(new Date(value), true),
+            render: (value: Date) =>
+              FormatCalendar(new Date(value), intl, true),
             title: intl.formatMessage({
               defaultMessage: 'Created Date',
             }),

@@ -8403,6 +8403,11 @@ export type IncidentItemWhereUniqueInput = {
   value?: InputMaybe<FloatNullableFilter>;
 };
 
+export type IncidentItemsOrderByInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  incidentDate?: InputMaybe<SortOrder>;
+};
+
 export type IncidentItemsWhereInput = {
   createdAtRange?: InputMaybe<DateRangeInput>;
   groupIds?: InputMaybe<Array<Scalars['String']>>;
@@ -14124,6 +14129,7 @@ export enum PermissionMethod {
   Delete = 'DELETE',
   Edit = 'EDIT',
   Read = 'READ',
+  ReadAll = 'READ_ALL',
   Write = 'WRITE'
 }
 
@@ -14160,6 +14166,7 @@ export enum PermissionModel {
   SingleShoe = 'SINGLE_SHOE',
   StatementTemplates = 'STATEMENT_TEMPLATES',
   Tasks = 'TASKS',
+  TaskSettings = 'TASK_SETTINGS',
   Terms = 'TERMS',
   Users = 'USERS',
   UserSettings = 'USER_SETTINGS',
@@ -14882,6 +14889,7 @@ export type QueryIncidentItemsArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  orderby?: InputMaybe<IncidentItemsOrderByInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: IncidentItemsWhereInput;

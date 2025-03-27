@@ -186,7 +186,7 @@ const AdminTodos = ({
                   {todo.dueDate && (
                     <Col>
                       <Text style={{ fontSize: 14 }}>
-                        {FormatCalendar(todo.dueDate)}
+                        {FormatCalendar(todo.dueDate, intl)}
                       </Text>
                     </Col>
                   )}

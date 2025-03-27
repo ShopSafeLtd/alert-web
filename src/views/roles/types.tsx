@@ -57,6 +57,13 @@ export const roleItems: {
         ),
       },
       {
+        key: PermissionMethod.ReadAll,
+        name: <FormattedMessage defaultMessage="View All" />,
+        tooltip: (
+          <FormattedMessage defaultMessage="Allows the user to view other user's activities within their groups." />
+        ),
+      },
+      {
         key: PermissionMethod.Write,
         name: <FormattedMessage defaultMessage="Create" />,
       },
@@ -197,7 +204,7 @@ export const roleItems: {
       },
       {
         key: PermissionMethod.Delete,
-        name: <FormattedMessage defaultMessage="Read" />,
+        name: <FormattedMessage defaultMessage="Delete" />,
       },
     ],
     title: <FormattedMessage defaultMessage="Checklists" />,
@@ -506,6 +513,16 @@ export const roleItems: {
 export const settings = [
   {
     children: [
+      {
+        key: PermissionModel.TaskSettings,
+        methods: [
+          {
+            key: PermissionMethod.Read,
+            name: <FormattedMessage defaultMessage="Manage" />,
+          },
+        ],
+        title: <FormattedMessage defaultMessage="Activity Settings" />,
+      },
       {
         key: PermissionModel.Brands,
         methods: [

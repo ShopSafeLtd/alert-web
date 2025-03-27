@@ -150,7 +150,7 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
                     defaultMessage: 'Last updated: {date}',
                   },
                   {
-                    date: FormatCalendar(offender?.updatedAt || dayjs()),
+                    date: FormatCalendar(offender?.updatedAt || dayjs(), intl),
                   }
                 )}
               </Text>

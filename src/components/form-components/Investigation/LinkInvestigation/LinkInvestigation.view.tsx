@@ -97,7 +97,8 @@ const LinkInvestigation = ({
               {
                 dataIndex: 'createdAt',
                 key: 'createdAt',
-                render: (value: Date) => FormatCalendar(new Date(value), true),
+                render: (value: Date) =>
+                  FormatCalendar(new Date(value), intl, true),
                 title: <FormattedMessage defaultMessage="Date Opened" />,
               },
             ]}

@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import type { TodoListQuery } from '#/views/adminTodo/TodoList/__generated__/TodoListQuery.generated';
+import type { ListData } from '#/views/adminTodo/TodoList/useTodoList';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { TableProps } from 'antd';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import type { TodoStatusInput } from 'graphql/types';
 
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import EditTodo from '#/components/form-components/Todos/EditTodo';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faArrowUpRightAndArrowDownLeftFromCenter,
   faCheckCircle,
+  faCog,
   faEdit,
   faEllipsisH,
   faPlus,
@@ -34,14 +38,13 @@ import {
   Typography,
 } from 'antd';
 import AddTodo from 'components/form-components/Todos/AddTodo';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
 import getTodoUrl from 'utils/get-to-do-url';
-
-import type { ListData } from '../useActivities';
 
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 
@@ -169,7 +172,6 @@ const AdminTodos = ({
   setStatusMode,
   templateData,
   toggleAddTodo,
-  toggleAllSchemes,
   toggleAllUsers,
   updateTodoList,
   userData,
@@ -220,68 +222,101 @@ const AdminTodos = ({
             </Radio.Button>
           </Radio.Group>
         </Col>
-        <Col>
-          <Radio.Group defaultValue="YOUR" onChange={toggleAllUsers}>
-            <Radio.Button value="YOUR">
-              {intl.formatMessage({
-                defaultMessage: 'Your Activities',
-              })}
-            </Radio.Button>
-            <Radio.Button value="ALL">
-              {intl.formatMessage({
-                defaultMessage: 'All Activities',
-              })}
-            </Radio.Button>
-          </Radio.Group>
-        </Col>
-        <Col>
-          <Radio.Group defaultValue="CURRENT" onChange={toggleAllSchemes}>
-            <Radio.Button value="CURRENT">
-              {intl.formatMessage({
-                defaultMessage: 'Current Scheme',
-              })}
-            </Radio.Button>
-            <Radio.Button value="ALL">
-              {intl.formatMessage({
-                defaultMessage: 'All Schemes',
-              })}
-            </Radio.Button>
-          </Radio.Group>
-        </Col>
-        {templateData.length > 0 && (
-          <Col span={5}>
-            <Select
-              onSelect={(value) => selectTemplate(value)}
-              options={templateData.map((item) => ({
-                label: item.name,
-                value: item.id,
-              }))}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Create Activity from Template',
-              })}
-              style={{ width: '100%' }}
-              value={null}
-            />
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.ReadAll,
+            model: PermissionModel.Tasks,
+          }}
+          unauthorizedElement={<div />}
+        >
+          <Col>
+            <Radio.Group defaultValue="YOUR" onChange={toggleAllUsers}>
+              <Radio.Button value="YOUR">
+                {intl.formatMessage({
+                  defaultMessage: 'Your Activities',
+                })}
+              </Radio.Button>
+              <Radio.Button value="ALL">
+                {intl.formatMessage({
+                  defaultMessage: 'All',
+                })}
+              </Radio.Button>
+            </Radio.Group>
           </Col>
-        )}
-        <Col>
-          <Button
-            disabled={saving}
-            icon={
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-            onClick={toggleAddTodo}
-            type="primary"
+        </PermissionCheckWrapper>
+
+        {templateData.length > 0 && (
+          <PermissionCheckWrapper
+            permission={{
+              method: PermissionMethod.Write,
+              model: PermissionModel.Tasks,
+            }}
+            unauthorizedElement={<div />}
           >
-            {intl.formatMessage({
-              defaultMessage: 'New Activity',
-            })}
-          </Button>
-        </Col>
+            <Col span={4}>
+              <Select
+                onSelect={(value) => selectTemplate(value)}
+                options={templateData.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                }))}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Create Activity from Template',
+                })}
+                style={{ width: '100%' }}
+                value={null}
+              />
+            </Col>
+          </PermissionCheckWrapper>
+        )}
+
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Write,
+            model: PermissionModel.Tasks,
+          }}
+          unauthorizedElement={<div />}
+        >
+          <Col>
+            <Button
+              disabled={saving}
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              onClick={toggleAddTodo}
+              type="primary"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'New Activity',
+              })}
+            </Button>
+          </Col>
+        </PermissionCheckWrapper>
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Read,
+            model: PermissionModel.TaskSettings,
+          }}
+          unauthorizedElement={<div />}
+        >
+          <Col>
+            <Tooltip
+              title={intl.formatMessage({
+                defaultMessage: 'Activity & templates settings',
+              })}
+            >
+              <Link to="/app/settings/activity-settings">
+                <Button disabled={saving}>
+                  <FontAwesomeIcon icon={faCog} size="lg" />
+                </Button>
+              </Link>
+            </Tooltip>
+          </Col>
+        </PermissionCheckWrapper>
       </Row>
       <Card bodyStyle={{ padding: loading ? 20 : 0 }}>
         <Table<TableItem>
@@ -326,7 +361,7 @@ const AdminTodos = ({
             {
               dataIndex: 'createdAt',
               key: 'createdAt',
-              render: (value: Date) => FormatCalendar(value),
+              render: (value: Date) => FormatCalendar(value, intl),
               title: intl.formatMessage({
                 defaultMessage: 'Created On',
               }),
@@ -334,7 +369,7 @@ const AdminTodos = ({
             {
               dataIndex: 'dueDate',
               key: 'dueDate',
-              render: (value: Date) => FormatCalendar(value),
+              render: (value: Date) => FormatCalendar(value, intl),
               title: intl.formatMessage({
                 defaultMessage: 'Due Date',
               }),
@@ -342,7 +377,8 @@ const AdminTodos = ({
             {
               dataIndex: 'completedDate',
               key: 'completedDate',
-              render: (value?: Date) => (value ? FormatCalendar(value) : null),
+              render: (value?: Date) =>
+                value ? FormatCalendar(value, intl) : null,
               title: intl.formatMessage({
                 defaultMessage: 'Completion Date',
               }),
@@ -465,8 +501,8 @@ const AdminTodos = ({
                         }}
                         size="small"
                         style={{
-                          borderBottomRightRadius: canDelete ? 0 : 10,
-                          borderTopRightRadius: canDelete ? 0 : 10,
+                          borderBottomRightRadius: 0,
+                          borderTopRightRadius: 0,
                           padding: 2,
                           width: 110,
                         }}
@@ -493,9 +529,10 @@ const AdminTodos = ({
                         onClick={() => setSelectedTodo(record.todo.node.id)}
                         size="small"
                         style={{
+                          borderBottomLeftRadius: 0,
                           borderBottomRightRadius: canDelete ? 0 : 10,
                           borderLeft: 'none',
-                          borderRadius: 0,
+                          borderTopLeftRadius: 0,
                           borderTopRightRadius: canDelete ? 0 : 10,
                           paddingLeft: 10,
                           paddingRight: 10,
@@ -519,6 +556,10 @@ const AdminTodos = ({
                                 defaultMessage: 'Edit',
                               }),
                               onClick: () => setEditTodo(record.key),
+                              permission: {
+                                method: PermissionMethod.Edit,
+                                model: PermissionModel.Tasks,
+                              },
                             },
                             {
                               icon: <FontAwesomeIcon icon={faTrash} />,
@@ -537,8 +578,14 @@ const AdminTodos = ({
                                     defaultMessage: 'Are you sure?',
                                   }),
                                 }),
+                              permission: {
+                                method: PermissionMethod.Delete,
+                                model: PermissionModel.Tasks,
+                              },
                             },
-                          ],
+                          ].filter((item) =>
+                            hasRolePermission({ permission: item.permission })
+                          ),
                         }}
                       >
                         <Button
@@ -558,7 +605,7 @@ const AdminTodos = ({
                   )}
                 </Row>
               ),
-              width: 220,
+              width: canDelete ? 220 : 160,
             },
           ]}
           dataSource={data?.todoRelay.edges?.map((todo) => ({

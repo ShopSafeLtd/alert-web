@@ -333,7 +333,7 @@ const LinkArticle = ({
                   </span>
                 }
               >
-                {FormatCalendar(selectedArticle?.updatedAt || new Date())}
+                {FormatCalendar(selectedArticle?.updatedAt || new Date(), intl)}
               </Descriptions.Item>
             </Descriptions>
 

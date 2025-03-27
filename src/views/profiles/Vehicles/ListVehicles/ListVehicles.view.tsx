@@ -237,7 +237,7 @@ const ListVehicles = ({
           {
             dataIndex: 'updatedAt',
             key: 'updatedAt',
-            render: (value: Date | Dayjs) => FormatCalendar(value),
+            render: (value: Date | Dayjs) => FormatCalendar(value, intl),
             sorter: (a, b) =>
               new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
             title: intl.formatMessage({

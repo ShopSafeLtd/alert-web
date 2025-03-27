@@ -145,7 +145,7 @@ const ArticleCard = ({
                 </span>
               }
             >
-              {FormatCalendar(article?.updatedAt || new Date())}
+              {FormatCalendar(article?.updatedAt || new Date(), intl)}
             </Descriptions.Item>
           </Descriptions>
         </Col>
