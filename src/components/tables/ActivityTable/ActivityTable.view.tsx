@@ -45,7 +45,7 @@ const ActivityTable = ({
         {
           dataIndex: 'createdAt',
           key: 'createdAt',
-          render: (value: Date) => FormatCalendar(new Date(value), true),
+          render: (value: Date) => FormatCalendar(new Date(value), intl, true),
           title: intl.formatMessage({
             defaultMessage: 'Start Date',
           }),
@@ -57,7 +57,7 @@ const ActivityTable = ({
           // eslint-disable-next-line no-confusing-arrow
           render: (value: Date, record) =>
             record.completed && value
-              ? FormatCalendar(new Date(value), true)
+              ? FormatCalendar(new Date(value), intl, true)
               : undefined,
           title: intl.formatMessage({
             defaultMessage: 'Completed Date',

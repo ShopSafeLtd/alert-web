@@ -203,7 +203,7 @@ const IncidentFeed = ({
               </Col>
               <Col>
                 <Text style={{ fontSize: 14 }} type="secondary">
-                  {FormatCalendar(feedItem?.updatedAt || new Date())}
+                  {FormatCalendar(feedItem?.updatedAt || new Date(), intl)}
                 </Text>
               </Col>
             </Row>

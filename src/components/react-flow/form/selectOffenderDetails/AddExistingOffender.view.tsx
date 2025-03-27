@@ -182,7 +182,7 @@ const AddExistingOffender = ({
                       </span>
                     }
                   >
-                    {FormatCalendar(selectedOffender.updatedAt)}
+                    {FormatCalendar(selectedOffender.updatedAt, intl)}
                   </Descriptions.Item>
                   <Descriptions.Item
                     label={

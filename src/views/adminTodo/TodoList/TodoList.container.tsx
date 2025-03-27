@@ -1,18 +1,9 @@
 import React from 'react';
 
-import type { ListData } from '../useActivities';
-
 import View from './TodoList.view';
 import useAdminTodos from './useTodoList';
 
-interface Props {
-  loading: boolean;
-  templateData: ListData[];
-}
-const AdminTodos = ({
-  loading: TemplateLoading,
-  templateData,
-}: Props): JSX.Element => {
+const AdminTodos = (): JSX.Element => {
   const {
     addTodo,
     canDelete,
@@ -37,12 +28,13 @@ const AdminTodos = ({
     setSearch,
     setSelectedTodo,
     setStatusMode,
+    templateData,
     toggleAddTodo,
     toggleAllSchemes,
     toggleAllUsers,
     updateTodoList,
     userData,
-  } = useAdminTodos({ templateData });
+  } = useAdminTodos();
 
   return (
     <View
@@ -54,7 +46,7 @@ const AdminTodos = ({
       editTodo={editTodo}
       groupsData={groupsData}
       groupsFilter={groupsFilter}
-      loading={loading || TemplateLoading}
+      loading={loading}
       onCompletedTodo={onCompletedTodo}
       onDeleteTodo={onDeleteTodo}
       onPaginationChange={onPaginationChange}

@@ -157,6 +157,16 @@ const SettingsSideMenu = ({
     {
       permissions: {
         method: PermissionMethod.Read,
+        model: PermissionModel.TaskSettings,
+      },
+      title: intl.formatMessage({
+        defaultMessage: 'Activity Settings',
+      }),
+      to: '/app/scheme-settings/activity-settings',
+    },
+    {
+      permissions: {
+        method: PermissionMethod.Read,
         model: PermissionModel.StatementTemplates,
       },
       title: intl.formatMessage({

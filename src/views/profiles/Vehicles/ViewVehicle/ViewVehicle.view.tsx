@@ -438,7 +438,7 @@ const ViewVehicle = ({
                                 })}
                                 span={2}
                               >
-                                {FormatCalendar(data.vehicle.updatedAt)}
+                                {FormatCalendar(data.vehicle.updatedAt, intl)}
                               </Descriptions.Item>
                             )}
                           </Descriptions>

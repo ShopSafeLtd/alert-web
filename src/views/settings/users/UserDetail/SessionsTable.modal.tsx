@@ -99,7 +99,7 @@ const SessionsTableModal = ({
           render: (value: Date) => (
             <Tooltip title={new Date(value).toLocaleString('en-GB')}>
               {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-              {FormatCalendar(new Date(value), true)}{' '}
+              {FormatCalendar(new Date(value), intl, true)}{' '}
               {new Date(value).toLocaleTimeString('en-GB')}
             </Tooltip>
           ),

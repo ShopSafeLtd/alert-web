@@ -113,7 +113,7 @@ const OffenderCard = ({
                 defaultMessage: 'Last Active',
               })}
             >
-              {FormatCalendar(offender.updatedAt || dayjs())}
+              {FormatCalendar(offender.updatedAt || dayjs(), intl)}
             </Descriptions.Item>
           </Descriptions>
         </Col>

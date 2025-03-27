@@ -7,6 +7,7 @@ export type IncidentItemsReportQueryVariables = Types.Exact<{
   where: Types.IncidentItemsWhereInput;
   take?: Types.InputMaybe<Types.Scalars['Int']>;
   skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  orderby?: Types.InputMaybe<Types.IncidentItemsOrderByInput>;
 }>;
 
 
@@ -14,8 +15,8 @@ export type IncidentItemsReportQuery = { __typename?: 'Query', incidentItems: { 
 
 
 export const IncidentItemsReportDocument = gql`
-    query IncidentItemsReport($where: IncidentItemsWhereInput!, $take: Int, $skip: Int) {
-  incidentItems(where: $where, take: $take, skip: $skip) {
+    query IncidentItemsReport($where: IncidentItemsWhereInput!, $take: Int, $skip: Int, $orderby: IncidentItemsOrderByInput) {
+  incidentItems(where: $where, take: $take, skip: $skip, orderby: $orderby) {
     edges {
       node {
         id

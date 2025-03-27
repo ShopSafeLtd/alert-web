@@ -587,7 +587,7 @@ const userDetail = ({
                   // eslint-disable-next-line no-confusing-arrow
                   render: (value: Date) => (
                     <Tooltip title={new Date(value).toLocaleString('en-GB')}>
-                      {FormatCalendar(new Date(value), true)}{' '}
+                      {FormatCalendar(new Date(value), intl, true)}{' '}
                       {new Date(value).toLocaleTimeString('en-GB')}
                     </Tooltip>
                   ),

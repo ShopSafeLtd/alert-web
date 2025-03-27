@@ -155,7 +155,7 @@ const NotificationLists = ({
                 dataIndex: 'createdAt',
                 key: 'createdAt',
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                render: (value) => FormatCalendar(value),
+                render: (value) => FormatCalendar(value, intl),
                 title: intl.formatMessage({
                   defaultMessage: 'Created At',
                 }),
