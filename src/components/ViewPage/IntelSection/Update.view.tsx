@@ -23,9 +23,14 @@ import {
 } from 'components/MessageInput/MessageCard';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import dayjs from 'dayjs';
+import dayOfYear from 'dayjs/plugin/dayOfYear';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
+
+dayjs.extend(dayOfYear);
+dayjs.extend(weekOfYear);
 
 const { Text } = Typography;
 const useStyles = createUseStyles({
