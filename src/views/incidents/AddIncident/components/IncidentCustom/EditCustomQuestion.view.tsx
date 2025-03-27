@@ -1,18 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment,@typescript-eslint/no-base-to-string */
-import type { Dayjs } from 'dayjs';
 import type { CustomQuestion } from 'types/DataType';
 
+import DatePicker from '#/components/util-components/DatePicker';
 // todo check data.tostring types
-import {
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Row,
-  TimePicker,
-} from 'antd';
+import { Col, Form, Input, InputNumber, Radio, Row } from 'antd';
 import dayjs from 'dayjs';
 import { AnswerType } from 'graphql/types';
 import React from 'react';
@@ -42,7 +33,7 @@ const StringInputNumber = ({ disabled, onChange, value }: StringInputProps) => {
 };
 
 const StringDate = ({ disabled, onChange, value }: StringInputProps) => {
-  const covertToString = (data: Dayjs | null) => {
+  const covertToString = (data: Date | null) => {
     if (onChange) onChange(data ? data.toString() : '');
   };
 
@@ -52,22 +43,22 @@ const StringDate = ({ disabled, onChange, value }: StringInputProps) => {
       format="DD/MM/YYYY"
       onChange={covertToString}
       style={{ minWidth: 150 }}
-      value={value ? dayjs(value) : undefined}
+      value={value ? dayjs(value).toDate() : undefined}
     />
   );
 };
 
 const StringTime = ({ disabled, onChange, value }: StringInputProps) => {
-  const covertToString = (data: Dayjs | null) => {
+  const covertToString = (data: Date | null) => {
     if (onChange) onChange(data ? data.toString() : '');
   };
 
   return (
-    <TimePicker
+    <DatePicker.TimePicker
       disabled={disabled}
       onChange={covertToString}
       style={{ minWidth: 150 }}
-      value={value ? dayjs(value) : null}
+      value={value ? dayjs(value).toDate() : null}
     />
   );
 };
