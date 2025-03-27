@@ -10,7 +10,7 @@ import { SyncOutlined } from '@ant-design/icons';
 import { Button, Col, Drawer, Row, Table, Typography } from 'antd';
 import EditIncident from 'components/form-components/recycled/RestoreIncident';
 import EditOffender from 'components/form-components/recycled/RestoreOffender';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -99,7 +99,7 @@ const RecycleBin = ({
       ellipsis: true,
       key: 'deletedAt',
       render: (value: Date | undefined) =>
-        moment(value).format('hh:mm DD/MM/YYYY'),
+        dayjs(value).format('hh:mm DD/MM/YYYY'),
       title: 'Deleted At',
     },
     {
@@ -107,7 +107,7 @@ const RecycleBin = ({
       ellipsis: true,
       key: 'expiresAt',
       render: (value: Date | undefined) =>
-        moment(value).format('hh:mm DD/MM/YYYY'),
+        dayjs(value).format('hh:mm DD/MM/YYYY'),
       title: 'Scheduled Deletion',
     },
     {

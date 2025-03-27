@@ -3,10 +3,10 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import type { VehicleFilters } from 'state/data-model';
 import type { DateType, VehicleData } from 'types/DataType';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import {
   Button,
   Col,
-  DatePicker,
   Descriptions,
   Input,
   Modal,
@@ -17,8 +17,8 @@ import {
 import CardSkeleton from 'components/Skeleton/CardSkeleton.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import dayjs from 'dayjs';
 import { SortOrder } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import Lightbox from 'yet-another-react-lightbox';
@@ -248,8 +248,8 @@ const LinkVehicle = ({
               defaultValue={
                 createdAtFilter
                   ? [
-                      moment(createdAtFilter?.startDate),
-                      moment(createdAtFilter?.endDate),
+                      dayjs(createdAtFilter?.startDate).toDate(),
+                      dayjs(createdAtFilter?.endDate).toDate(),
                     ]
                   : undefined
               }

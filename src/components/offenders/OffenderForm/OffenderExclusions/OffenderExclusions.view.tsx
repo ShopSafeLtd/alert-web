@@ -1,4 +1,4 @@
-import type { Moment } from 'moment';
+import type { Dayjs } from 'dayjs';
 import type { BanData } from 'types/DataType';
 
 import {
@@ -144,7 +144,7 @@ const OffenderExclusions = ({
                 dataIndex: 'startDate',
                 key: 'startDate',
                 // eslint-disable-next-line
-                render: (value: Moment) =>
+                render: (value: Dayjs) =>
                   value ? value.format('DD/MM/YYYY') : undefined,
                 title: intl.formatMessage({
                   defaultMessage: 'Start Date',
@@ -154,7 +154,7 @@ const OffenderExclusions = ({
                 dataIndex: 'endDate',
                 key: 'endDate',
                 // eslint-disable-next-line
-                render: (value: Moment) =>
+                render: (value: Dayjs) =>
                   value ? value.format('DD/MM/YYYY') : undefined,
                 title: intl.formatMessage({
                   defaultMessage: 'End Date',

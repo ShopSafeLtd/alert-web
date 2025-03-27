@@ -4,8 +4,8 @@ import type { FormInstance } from 'antd';
 
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
+import dayjs from 'dayjs';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -79,7 +79,7 @@ const EditOffender = ({
             comment: data.comment || null,
             county: data.address?.county || '',
             dateOfBirth: data.dateOfBirth
-              ? moment(data.dateOfBirth, 'YYYY-MM-DD')
+              ? dayjs(data.dateOfBirth, 'YYYY-MM-DD').toDate()
               : null,
             dateSource: data.dateSource || null,
             gender: data.gender || null,

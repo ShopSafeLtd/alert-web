@@ -1,22 +1,22 @@
+import type { Dayjs } from 'dayjs';
 import type { BusinessReportQuery } from 'graphql/businesses/queries/__generated__/business-report.generated';
-import type { Moment } from 'moment';
 
+import dayjs from 'dayjs';
 import { useBusinessReportQuery } from 'graphql/businesses/queries/__generated__/business-report.generated';
-import moment from 'moment';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface Return {
   data: BusinessReportQuery | undefined;
-  dateRange: Moment[];
+  dateRange: Dayjs[];
   loading: boolean;
   selectedBusiness: string | undefined;
-  setDateRange: (values: Moment[]) => void;
+  setDateRange: (values: Dayjs[]) => void;
 }
 
 const useBusiness = (): Return => {
   const { id: selectedBusiness } = useParams();
-  const [dateRange, setDateRange] = useState([moment('01/01/2022'), moment()]);
+  const [dateRange, setDateRange] = useState([dayjs('01/01/2022'), dayjs()]);
 
   const { data } = useBusinessReportQuery({
     fetchPolicy: 'cache-and-network',

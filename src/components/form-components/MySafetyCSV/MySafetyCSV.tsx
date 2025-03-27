@@ -1,5 +1,5 @@
 import CSVReader from '#/components/CSVReader/CSVReader';
-import moment from 'moment/moment';
+import dayjs from 'dayjs';
 import React from 'react';
 
 import type { MySafetyCSVData } from './MySafetyCSV.types';
@@ -23,7 +23,7 @@ const MySafetyCSV = ({ onChange }: Props) => {
             crimeType: item[4] ? item[4].split(',') : [],
             dateCreated: new Date(item[1]),
             // TODO change to dayjs or base
-            dateOccurred: moment
+            dateOccurred: dayjs
               .utc(`${item[3]} ${item[2]}`, 'HH:mm DD-MMM-YY')
               .toDate(),
             description: item[9],
@@ -63,7 +63,7 @@ const MySafetyCSV = ({ onChange }: Props) => {
             suspectsTown: item[28],
             suspectsWeightImperial: item[42],
             suspectsWeightMetric: item[43],
-            timeOccurred: moment(item[3], 'HH:mm').toDate(),
+            timeOccurred: dayjs(item[3], 'HH:mm').toDate(),
             vehicleColour: item[20],
             vehicleColourOther: item[18],
             vehicleMake: item[19],

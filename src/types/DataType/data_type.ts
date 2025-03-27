@@ -1,5 +1,6 @@
 import type { ListIncidentsQuery } from '#/graphql/incidents/queries/__generated__/list-incidents.generated';
 import type { UploadFile } from 'antd';
+import type { Dayjs } from 'dayjs';
 import type {
   Age,
   AnswerType,
@@ -13,7 +14,6 @@ import type {
   Race,
   UpdateType,
 } from 'graphql/types';
-import type { Moment } from 'moment';
 
 // BanData
 export interface BanData {
@@ -310,7 +310,7 @@ export interface SchemeUserData {
 // updateData
 export interface DatedMessages {
   content?: null | string | undefined;
-  createdAt?: Moment;
+  createdAt?: Dayjs;
   crimeGroups?: CrimeGroupData[];
   from?: {
     businesses: { id: string; name: string }[];
@@ -457,7 +457,7 @@ export interface ArticleData {
 }
 
 export interface Update {
-  createdAt: Moment;
+  createdAt: Dayjs;
   createdBy: {
     businesses: { fullName: string; id: string; name: string }[];
     fullName: string;

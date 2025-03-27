@@ -1,9 +1,10 @@
 import type { FeedItemFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
-import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
+import DatePicker from '#/components/util-components/DatePicker';
+import { Button, Col, Form, Row, Select, Typography } from 'antd';
+import dayjs from 'dayjs';
 import { Model, SortOrder } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -51,10 +52,7 @@ const FeedItemFilter = ({
       form={form}
       initialValues={{
         createdAt: createdAtFilter
-          ? [
-              moment(createdAtFilter?.startDate),
-              moment(createdAtFilter?.endDate),
-            ]
+          ? [dayjs(createdAtFilter?.startDate), dayjs(createdAtFilter?.endDate)]
           : undefined,
       }}
     >

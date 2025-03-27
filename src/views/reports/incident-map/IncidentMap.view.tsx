@@ -6,10 +6,10 @@ import type { IncidentMapQuery } from 'graphql/reports/queries/__generated__/inc
 import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
 
 import ReportsSideMenu from '#/components/reports/ReportsSideMenu/ReportsSideMenu.view';
+import DatePicker from '#/components/util-components/DatePicker';
 import {
   Button,
   Col,
-  DatePicker,
   Drawer,
   Form,
   Row,

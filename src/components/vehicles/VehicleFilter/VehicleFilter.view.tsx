@@ -1,11 +1,14 @@
-import React from 'react';
-import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
-import type { DateType } from 'types/DataType';
-import { FormattedMessage } from 'react-intl';
 import type { VehicleFilters } from 'state/data-model';
-import moment from 'moment';
-import useStyles from './VehicleFilter.styles';
+import type { DateType } from 'types/DataType';
+
+import DatePicker from '#/components/util-components/DatePicker';
+import { Button, Col, Form, Row, Select, Typography } from 'antd';
+import dayjs from 'dayjs';
 import { SortOrder } from 'graphql/types';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import useStyles from './VehicleFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -15,44 +18,40 @@ interface FormData {
 }
 
 interface Props {
-  setOrder: (value: SortOrder) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  setGroupsFilter: (value: string[]) => void;
   clearFilters: () => void;
+  groups: { label: string; value: string }[];
+  groupsLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  setGroupsFilter: (value: string[]) => void;
+  setOrder: (value: SortOrder) => void;
   variables: VehicleFilters;
 }
 
 const VehicleFilter = ({
-  setOrder,
+  clearFilters,
   groups,
   groupsLoading,
-  setGroupsFilter,
-  clearFilters,
   setCreatedAtFilter,
+  setGroupsFilter,
+  setOrder,
   variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
-  const { groups: groupsFilter, createdAt: createdAtFilter, order } = variables;
+  const { createdAt: createdAtFilter, groups: groupsFilter, order } = variables;
 
   return (
     <Form<FormData>
       form={form}
       initialValues={{
         createdAt: createdAtFilter
-          ? [
-              moment(createdAtFilter?.startDate),
-              moment(createdAtFilter?.endDate),
-            ]
+          ? [dayjs(createdAtFilter?.startDate), dayjs(createdAtFilter?.endDate)]
           : undefined,
       }}
     >
       <Row justify="end">
         <Col>
           <Button
-            type="text"
             danger
             onClick={() => {
               clearFilters();
@@ -60,6 +59,7 @@ const VehicleFilter = ({
                 createdAt: [],
               });
             }}
+            type="text"
           >
             <FormattedMessage defaultMessage="Clear Filters" />
           </Button>
@@ -73,9 +73,9 @@ const VehicleFilter = ({
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            value={order}
             onChange={setOrder}
             size="small"
+            value={order}
           >
             <Select.Option value={SortOrder.Desc}>
               <FormattedMessage defaultMessage="Newest First" />
@@ -98,8 +98,8 @@ const VehicleFilter = ({
               onChange={(value) => {
                 if (value && value[0] && value[1])
                   setCreatedAtFilter({
-                    startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
+                    startDate: new Date(value[0].valueOf()),
                   });
               }}
             />
@@ -112,14 +112,14 @@ const VehicleFilter = ({
             <FormattedMessage defaultMessage="Groups" />
           </Typography.Paragraph>
           <Select
-            className={classes.select}
-            placeholder={<FormattedMessage defaultMessage="Groups" />}
-            mode="multiple"
-            size="small"
-            maxTagCount={2}
             allowClear
+            className={classes.select}
             loading={groupsLoading}
+            maxTagCount={2}
+            mode="multiple"
             onChange={setGroupsFilter}
+            placeholder={<FormattedMessage defaultMessage="Groups" />}
+            size="small"
             value={groupsFilter}
           >
             {groups.map((group) => (

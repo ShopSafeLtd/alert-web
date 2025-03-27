@@ -117,8 +117,6 @@
     "lodash": "^4.17.21",
     "mapbox-gl": "^2.14.1",
     "mixpanel-browser": "^2.46.0",
-    "moment": "2.29.4",
-    "moment-timezone": "0.5.35",
     "papaparse": "^5.4.1",
     "pdfjs-dist": "^4.10.38",
     "posthog-js": "^1.198.0",

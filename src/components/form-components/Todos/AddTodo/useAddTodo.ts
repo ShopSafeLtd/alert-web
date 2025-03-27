@@ -4,8 +4,8 @@ import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queri
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
+import type { Dayjs } from 'dayjs';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
-import type { Moment } from 'moment';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
@@ -16,10 +16,10 @@ import {
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
+import dayjs from 'dayjs';
 import { useCreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -29,11 +29,11 @@ import customRequest from '../../../../utils/custom-request';
 const { useForm } = Form;
 
 export interface FormData {
-  [answer: string]: Moment | number | string | string[] | undefined;
+  [answer: string]: Dayjs | number | string | string[] | undefined;
   assignedUsers: string[];
   businesses: string[];
   description: string;
-  dueDate: Moment;
+  dueDate: Dayjs;
   groups: string[];
   name: string;
   questionGroup?: string;
@@ -154,7 +154,7 @@ const useAddTodo = ({
       const dueDate = new Date();
       dueDate.setDate(dueDate.getDate() + defaultDueDate);
 
-      const formattedDate = moment(dueDate);
+      const formattedDate = dayjs(dueDate);
       setSelectedIds(templateQuestions.map((question) => question.id));
       setSelectedQuestions(
         templateQuestions.map((question) => ({

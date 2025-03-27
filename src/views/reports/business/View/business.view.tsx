@@ -1,13 +1,13 @@
+import type { Dayjs } from 'dayjs';
 import type { BusinessReportQuery } from 'graphql/businesses/queries/__generated__/business-report.generated';
-import type { Moment } from 'moment';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Card,
   Col,
-  DatePicker,
   Row,
   Spin,
   Statistic,
@@ -16,7 +16,7 @@ import {
   Typography,
 } from 'antd';
 import BusinessSideList from 'components/businesses/BusinessSideList';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 // eslint-disable-next-line import/default
 import Chart from 'react-apexcharts';
@@ -29,10 +29,10 @@ const { RangePicker } = DatePicker;
 
 interface Props {
   data: BusinessReportQuery | undefined;
-  dateRange: Moment[];
+  dateRange: Dayjs[];
   loading: boolean;
   selectedBusiness: string | undefined;
-  setDateRange: (values: Moment[]) => void;
+  setDateRange: (values: Dayjs[]) => void;
 }
 
 const Business = ({
@@ -291,7 +291,7 @@ const Business = ({
                     {
                       dataIndex: 'date',
                       key: 'date',
-                      render: (value: Date) => moment(value).format('DD/MM/YY'),
+                      render: (value: Date) => dayjs(value).format('DD/MM/YY'),
                       title: intl.formatMessage({
                         defaultMessage: 'Date',
                       }),

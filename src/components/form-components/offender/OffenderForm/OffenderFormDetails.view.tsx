@@ -1,5 +1,6 @@
 import type { OffenderSettingsType } from '#/types/DataType';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import {
   ageValues,
   buildValues,
@@ -7,7 +8,7 @@ import {
   raceValues,
 } from '#/types/enums';
 import { heightValues } from '#/types/enums/height';
-import { Col, DatePicker, Form, Input, Radio, Row, Select } from 'antd';
+import { Col, Form, Input, Radio, Row, Select } from 'antd';
 import { IdSource } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';

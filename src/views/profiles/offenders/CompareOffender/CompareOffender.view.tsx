@@ -25,6 +25,7 @@ import {
 } from 'antd';
 import AddExisitingOffender from 'components/form-components/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import dayjs from 'dayjs';
 import {
   Age,
   Build,
@@ -34,7 +35,6 @@ import {
   Race,
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import { useIntl } from 'react-intl';
@@ -391,7 +391,7 @@ const CompareIncident = ({
                       <div className={classes.text}>
                         <Text>
                           {offender?.dateOfBirth
-                            ? moment(offender?.dateOfBirth).format('DD/MM/YY')
+                            ? dayjs(offender?.dateOfBirth).format('DD/MM/YY')
                             : intl.formatMessage({
                                 defaultMessage: 'Unknown',
                               })}
@@ -528,7 +528,7 @@ const CompareIncident = ({
               <div className={classes.field}>
                 <Text>
                   {preview?.dateOfBirth
-                    ? moment(preview.dateOfBirth).format('DD/MM/YYYY')
+                    ? dayjs(preview.dateOfBirth).format('DD/MM/YYYY')
                     : intl.formatMessage({
                         defaultMessage: 'Unknown',
                       })}

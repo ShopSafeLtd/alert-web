@@ -1,8 +1,9 @@
+import DatePicker from '#/components/util-components/DatePicker';
+import { Col, Form, Input, Row, Typography } from 'antd';
 import React from 'react';
-import { Col, DatePicker, Form, Input, Row, Typography } from 'antd';
 import { useIntl } from 'react-intl';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface Props {
   saving: boolean;
@@ -14,7 +15,7 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
     <>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
-          <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
             {intl.formatMessage({
               defaultMessage: 'Incident Details',
             })}
@@ -22,9 +23,9 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
         </Col>
         <Col>
           <Paragraph
+            italic
             style={{ marginBottom: 1, marginLeft: 5 }}
             type="secondary"
-            italic
           >
             {intl.formatMessage({
               defaultMessage: '- Please complete the details for the incident.',
@@ -35,25 +36,25 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
       <Row gutter={16}>
         <Col span={6}>
           <Form.Item
-            name="date"
             label={intl.formatMessage({ defaultMessage: 'Time & Date' }, {})}
-            tooltip={intl.formatMessage(
-              {
-                defaultMessage: 'The date and time that the incident occurred.',
-              },
-              {}
-            )}
+            name="date"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage(
                   {
                     defaultMessage: 'Please select a date for the incident.',
                   },
                   {}
                 ),
+                required: true,
               },
             ]}
+            tooltip={intl.formatMessage(
+              {
+                defaultMessage: 'The date and time that the incident occurred.',
+              },
+              {}
+            )}
           >
             <DatePicker
               disabled={saving}
@@ -61,32 +62,32 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => {
                 current && current.valueOf() > Date.now()
               }
               format="HH:mm - DD/MM/YY"
-              showTime={{ showSecond: false, showNow: true }}
               placeholder={intl.formatMessage(
                 { defaultMessage: 'Set Date & Time' },
                 {}
               )}
+              showTime={{ showNow: true, showSecond: false }}
             />
           </Form.Item>
         </Col>
         <Col span={20}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
-            tooltip={intl.formatMessage({
-              defaultMessage: 'A more detailed description of the incident.',
-            })}
+            name="description"
             rules={[
               {
-                required: true,
                 message: intl.formatMessage({
                   defaultMessage:
                     'Please enter a description for the incident.',
                 }),
+                required: true,
               },
             ]}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'A more detailed description of the incident.',
+            })}
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>

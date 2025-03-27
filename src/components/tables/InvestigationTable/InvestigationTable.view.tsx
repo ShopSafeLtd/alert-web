@@ -1,11 +1,12 @@
-import React from 'react';
-import { Table, Typography } from 'antd';
-import { useIntl } from 'react-intl';
-import GetInvestigationStatusValues from 'types/enums/investigation-status';
-import { useNavigate } from 'react-router';
-import { createUseStyles } from 'react-jss';
-import moment from 'moment';
 import type { InvestigationStatus } from 'graphql/types';
+
+import { Table, Typography } from 'antd';
+import dayjs from 'dayjs';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router';
+import GetInvestigationStatusValues from 'types/enums/investigation-status';
 
 const useStyles = createUseStyles({
   row: {
@@ -15,13 +16,13 @@ const useStyles = createUseStyles({
 interface Props {
   investigations:
     | {
-        id: string;
-        name?: string | null | undefined;
-        description?: string | null | undefined;
-        status?: InvestigationStatus;
-        createdAt: Date;
-        reference?: string | null | undefined | number;
         closedAt?: Date | null;
+        createdAt: Date;
+        description?: null | string | undefined;
+        id: string;
+        name?: null | string | undefined;
+        reference?: null | number | string | undefined;
+        status?: InvestigationStatus;
       }[]
     | undefined;
 }
@@ -34,63 +35,53 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
 
   return (
     <Table
-      size="small"
-      // loading={loading}
-      rowClassName={classes.row}
-      pagination={{
-        hideOnSinglePage: true,
-        pageSize: 5,
-      }}
-      onRow={(record) => ({
-        onClick: () => navigate(`/app/investigations/view/${record.key}`),
-      })}
       columns={[
         {
+          dataIndex: 'name',
           key: 'name',
           title: intl.formatMessage({
             defaultMessage: 'Name',
           }),
-          dataIndex: 'name',
         },
         {
-          key: 'reference',
           dataIndex: 'reference',
+          key: 'reference',
           title: intl.formatMessage({
             defaultMessage: 'Alert ID',
           }),
         },
         {
-          key: 'status',
           dataIndex: 'status',
-          title: intl.formatMessage({
-            defaultMessage: 'Status',
-          }),
+          key: 'status',
           render: (value: InvestigationStatus) => (
             <Typography.Text>
               {GetInvestigationStatusValues[value]}
             </Typography.Text>
           ),
+          title: intl.formatMessage({
+            defaultMessage: 'Status',
+          }),
         },
         {
-          key: 'createdAt',
           dataIndex: 'createdAt',
+          key: 'createdAt',
+          render: (value: string) => dayjs(value).format('DD/MM/YYYY'),
           title: intl.formatMessage({
             defaultMessage: 'Date Opened',
           }),
-          render: (value: string) => moment(value).format('DD/MM/YYYY'),
         },
         {
-          key: 'closedAt',
           dataIndex: 'closedAt',
+          key: 'closedAt',
+          render: (value: string) =>
+            value ? dayjs(value).format('DD/MM/YYYY') : undefined,
           title: intl.formatMessage({
             defaultMessage: 'Date Closed',
           }),
-          render: (value: string) =>
-            value ? moment(value).format('DD/MM/YYYY') : undefined,
         },
         {
-          key: 'description',
           dataIndex: 'description',
+          key: 'description',
           title: intl.formatMessage({
             defaultMessage: 'Description',
           }),
@@ -98,14 +89,24 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
       ]}
       dataSource={
         investigations?.map((investigation) => ({
+          createdAt: investigation.createdAt,
+          description: investigation.description,
           key: investigation.id,
           name: investigation.name || '',
-          description: investigation.description,
-          status: investigation.status,
-          createdAt: investigation.createdAt,
           reference: investigation.reference,
+          status: investigation.status,
         })) || []
       }
+      onRow={(record) => ({
+        onClick: () => navigate(`/app/investigations/view/${record.key}`),
+      })}
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
+      // loading={loading}
+      rowClassName={classes.row}
+      size="small"
     />
   );
 };
