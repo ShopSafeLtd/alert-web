@@ -1,5 +1,5 @@
-query IncidentItemsReport($where: IncidentItemsWhereInput!, $take: Int, $skip: Int) {
-    incidentItems(where: $where, take: $take, skip: $skip) {
+query IncidentItemsReport($where: IncidentItemsWhereInput!, $take: Int, $skip: Int, $orderby: IncidentItemsOrderByInput) {
+    incidentItems(where: $where, take: $take, skip: $skip, orderby: $orderby) {
         edges {
             node {
                 id

@@ -1,29 +1,25 @@
-import React from 'react';
-import { Card, Col, Row, Tooltip, Typography } from 'antd';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import { useIntl } from 'react-intl';
-import { createUseStyles } from 'react-jss';
 import type { ArticleData } from 'types/DataType';
-import { ArticlePriority } from 'graphql/types';
+
 import {
   faClock,
   faExclamationCircle,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card, Col, Row, Tooltip, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import { ArticlePriority } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { createUseStyles } from 'react-jss';
 import FormatCalendar from 'utils/format-calendar-24h';
 
-const { Paragraph, Title, Text } = Typography;
+const { Paragraph, Text, Title } = Typography;
 
 const useStyles = createUseStyles({
-  image: {
-    height: 130,
-    width: 140,
-    zIndex: 10,
-  },
   content: {
-    padding: 10,
     overflow: 'hidden',
+    padding: 10,
     width: '100%',
     // display: 'flex',
     // direction: 'row',
@@ -31,6 +27,11 @@ const useStyles = createUseStyles({
   details: {
     flex: 1,
     marginBottom: '5px !important',
+  },
+  image: {
+    height: 130,
+    width: 140,
+    zIndex: 10,
   },
   text: {
     marginBottom: '5px !important',
@@ -56,16 +57,16 @@ const ArticleTile = ({ article, onClick }: Props): JSX.Element => {
       )}
     >
       <Card
-        onClick={onClick}
         bodyStyle={{
+          borderRadius: '0.625rem',
+          cursor: 'pointer',
+          display: 'flex',
+          height: 130,
+          overflow: 'hidden',
           // position: 'relative',
           padding: 0,
-          borderRadius: '0.625rem',
-          overflow: 'hidden',
-          display: 'flex',
-          cursor: 'pointer',
-          height: 130,
         }}
+        onClick={onClick}
       >
         {article.images && article.images.length > 0 && (
           <div className={classes.image}>
@@ -75,15 +76,15 @@ const ArticleTile = ({ article, onClick }: Props): JSX.Element => {
         <div className={classes.content}>
           <div className={classes.details}>
             <Title
-              level={4}
               ellipsis={{
                 tooltip: article.title?.replace(/^\S/, (s) => s.toUpperCase()),
               }}
+              level={4}
             >
               {article.priority === ArticlePriority.High && (
                 <FontAwesomeIcon
-                  size="sm"
                   icon={faExclamationCircle}
+                  size="sm"
                   style={{ marginRight: 5 }}
                 />
               )}
@@ -97,20 +98,20 @@ const ArticleTile = ({ article, onClick }: Props): JSX.Element => {
           <Row style={{ marginBottom: 5 }}>
             <Col flex={1}>
               <FontAwesomeIcon
-                size="sm"
                 icon={faUser}
+                size="sm"
                 style={{ marginRight: 5 }}
               />
               <Text>{article.createdBy?.fullName}</Text>
             </Col>
             <Col>
               <FontAwesomeIcon
-                size="sm"
                 icon={faClock}
+                size="sm"
                 style={{ marginRight: 5 }}
               />
               {/* @ts-expect-error TODO fix */}
-              <Text>{FormatCalendar(article.updatedAt)}</Text>
+              <Text>{FormatCalendar(article.updatedAt, intl)}</Text>
             </Col>
           </Row>
         </div>

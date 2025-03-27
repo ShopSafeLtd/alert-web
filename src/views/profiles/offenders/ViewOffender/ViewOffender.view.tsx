@@ -834,7 +834,8 @@ const ViewOffender = ({
                                     }
                                   >
                                     {FormatCalendar(
-                                      data?.offender?.updatedAt || dayjs()
+                                      data?.offender?.updatedAt || dayjs(),
+                                      intl
                                     )}
                                   </Descriptions.Item>
                                   <Descriptions.Item

@@ -1,3 +1,5 @@
+import type { TableProps } from 'antd';
+
 import GroupsSelect, {
   useUserGroups,
 } from '#/components/form-components/GroupsSelect/GroupsSelect.view';
@@ -7,13 +9,14 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useIncidentItemsReportQuery } from '#/views/reports/incident-items/__generated__/IncidentItemsReport.generated';
 import { Button, Col, Form, Row, Table } from 'antd';
 import dayjs from 'dayjs';
+import { SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React, { useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface TableItem {
-  date: string;
+  incidentDate: string;
   itemName: string;
   itemType: string;
   quantity: number;
@@ -42,6 +45,10 @@ const StockItems = () => {
   const [skip, setSkip] = useState(0);
   const [csv, setCsv] = useState<string[][]>([]);
   const [collapsed, setCollapsed] = useState(false);
+  const [sort, setSort] = useState<{
+    createdAt?: SortOrder;
+    incidentDate?: SortOrder;
+  }>({ createdAt: SortOrder.Desc });
 
   const { selectOptions: groups } = useUserGroups({});
 
@@ -74,6 +81,7 @@ const StockItems = () => {
         ]);
     },
     variables: {
+      orderby: sort,
       skip,
       take,
       where: {
@@ -89,6 +97,18 @@ const StockItems = () => {
     setSkip(page * pageSize - pageSize);
   };
 
+  const onTableChange: TableProps<TableItem>['onChange'] = (
+    _pagination,
+    _filters,
+    sorter
+  ) => {
+    const currentSorter = Array.isArray(sorter) ? sorter[0] : sorter;
+    setSort({
+      [currentSorter.columnKey as string]:
+        currentSorter.order === 'descend' ? SortOrder.Desc : SortOrder.Asc,
+    });
+  };
+
   return (
     <Row>
       <Col style={{ width: collapsed ? 0 : undefined }}>
@@ -98,7 +118,7 @@ const StockItems = () => {
           setCollapsed={setCollapsed}
         />
       </Col>
-      <Col flex={1} style={{ padding: 20 }}>
+      <Col flex={1} style={{ height: '100vh', overflow: 'auto', padding: 20 }}>
         <Row gutter={16} style={{ marginBottom: 15 }}>
           <Col>
             <Form.Item style={{ marginBottom: 0 }}>
@@ -135,12 +155,17 @@ const StockItems = () => {
           columns={[
             {
               dataIndex: 'createdAt',
+              defaultSortOrder: 'descend',
               key: 'createdAt',
+              sortDirections: ['descend', 'ascend'],
+              sorter: true,
               title: <FormattedMessage defaultMessage="Created Date" />,
             },
             {
-              dataIndex: 'date',
-              key: 'date',
+              dataIndex: 'incidentDate',
+              key: 'incidentDate',
+              sortDirections: ['descend', 'ascend'],
+              sorter: true,
               title: <FormattedMessage defaultMessage="Incident Date" />,
             },
             {
@@ -181,7 +206,7 @@ const StockItems = () => {
           ]}
           dataSource={data?.incidentItems.edges.map(({ node }) => ({
             createdAt: dayjs(node.incident.createdAt).format('DD/MM/YYYY'),
-            date: dayjs(node.incident.date).format('DD/MM/YYYY'),
+            incidentDate: dayjs(node.incident.date).format('DD/MM/YYYY'),
             itemName: node.name ?? '',
             itemType: node.stockItem?.goodsType?.name ?? '',
             quantity: (node.quantity ?? 0) - (node.recoveredQuantity ?? 0),
@@ -191,6 +216,7 @@ const StockItems = () => {
             variant: node.stockItem?.variant ?? '',
           }))}
           loading={loading}
+          onChange={onTableChange}
           pagination={{
             defaultPageSize: 50,
             onChange: onPageChange,

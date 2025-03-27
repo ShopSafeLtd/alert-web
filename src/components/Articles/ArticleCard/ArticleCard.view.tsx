@@ -269,7 +269,7 @@ const ArticleCard = ({
               style={{ marginRight: 5 }}
             />
             {/* @ts-expect-error TODO fix */}
-            <Text>{FormatCalendar(updatedAt)}</Text>
+            <Text>{FormatCalendar(updatedAt, intl)}</Text>
           </Col>
         </Row>
         {/* {groups && groups.length > 0 ? (

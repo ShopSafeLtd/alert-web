@@ -104,7 +104,7 @@ const LatestIncidents = ({
                   </Col>
                   <Col>
                     <Text style={{ fontSize: 14 }}>
-                      {FormatCalendar(incident.date)}
+                      {FormatCalendar(incident.date, intl)}
                     </Text>
                   </Col>
                 </Row>

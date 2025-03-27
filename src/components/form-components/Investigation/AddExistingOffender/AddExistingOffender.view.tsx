@@ -232,7 +232,7 @@ const AddExistingOffender = ({
                       </span>
                     }
                   >
-                    {FormatCalendar(selectedOffender.updatedAt)}
+                    {FormatCalendar(selectedOffender.updatedAt, intl)}
                   </Descriptions.Item>
                   {publicOffenderDOB && (
                     <Descriptions.Item

@@ -13,6 +13,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import dayjs from 'dayjs';
 import { ArticlePriority } from 'graphql/types';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
 
@@ -32,6 +33,7 @@ interface Props {
 }
 
 const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
+  const intl = useIntl();
   // const imagesRef = useRef<CarouselRef>(null);
   const { createdBy, id, images, previewText, priority, title, updatedAt } =
     article || {};
@@ -110,7 +112,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
                 size="sm"
                 style={{ marginRight: 5 }}
               />
-              <Text>{FormatCalendar(updatedAt || dayjs())}</Text>
+              <Text>{FormatCalendar(updatedAt || dayjs(), intl)}</Text>
             </Col>
           </Row>
         </div>

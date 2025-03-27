@@ -1,25 +1,24 @@
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import TodoList from 'views/adminTodo/Activities.container';
-import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from 'graphql/types';
+import ViewActivities from 'views/adminTodo/TodoList/TodoList.container';
 
-// import ReviewIncident from 'views/incidents/ReviewIncident ';
+import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 
 const Tasks = (): JSX.Element => (
   <Routes>
     <Route
-      index
       element={
         <PermissionCheckWrapper
           permission={{
-            model: PermissionModel.Tasks,
             method: PermissionMethod.Read,
+            model: PermissionModel.Tasks,
           }}
         >
-          <TodoList />
+          <ViewActivities />
         </PermissionCheckWrapper>
       }
+      index
     />
   </Routes>
 );
