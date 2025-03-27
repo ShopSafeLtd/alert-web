@@ -4,7 +4,6 @@ import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queri
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
-import type { Dayjs } from 'dayjs';
 import type { CreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
@@ -16,7 +15,6 @@ import {
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
-import dayjs from 'dayjs';
 import { useCreateTodoMutation } from 'graphql/todos/mutations/__generated__/create-todo.generated';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
@@ -29,11 +27,11 @@ import customRequest from '../../../../utils/custom-request';
 const { useForm } = Form;
 
 export interface FormData {
-  [answer: string]: Dayjs | number | string | string[] | undefined;
+  [answer: string]: Date | number | string | string[] | undefined;
   assignedUsers: string[];
   businesses: string[];
   description: string;
-  dueDate: Dayjs;
+  dueDate: Date;
   groups: string[];
   name: string;
   questionGroup?: string;
@@ -154,7 +152,6 @@ const useAddTodo = ({
       const dueDate = new Date();
       dueDate.setDate(dueDate.getDate() + defaultDueDate);
 
-      const formattedDate = dayjs(dueDate);
       setSelectedIds(templateQuestions.map((question) => question.id));
       setSelectedQuestions(
         templateQuestions.map((question) => ({
@@ -166,7 +163,7 @@ const useAddTodo = ({
 
       form.setFieldsValue({
         description: description || '',
-        dueDate: formattedDate,
+        dueDate,
         name,
       });
 
@@ -315,7 +312,7 @@ const useAddTodo = ({
               origFileName: file.fileName || '',
               url: file.url || '',
             })) || [],
-          dueDate: data.dueDate.toDate(),
+          dueDate: data.dueDate,
           groups: data.groups.map((id) => ({ id })),
           incident: incidentId ? { connect: { id: incidentId } } : undefined,
           investigation: investigationId

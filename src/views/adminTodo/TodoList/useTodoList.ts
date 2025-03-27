@@ -14,11 +14,13 @@ import {
   currentSchemeIdAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
+import hasPermission from '#/utils/has-permission';
 import {
   TodoListDocument,
   useTodoListQuery,
 } from '#/views/adminTodo/TodoList/__generated__/TodoListQuery.generated';
 import { useDeleteTodoMutation } from '#/views/adminTodo/graphql/mutations/__generated__/delete-todo.generated';
+import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { useUpdateTodoMutation } from 'graphql/todos/mutations/__generated__/update_todo.generated';
 import {
   PermissionMethod,
@@ -28,9 +30,18 @@ import {
   TodoUserModeInput,
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import type { ListData } from '../useActivities';
+export interface ListData {
+  defaultDueDays: number;
+  description: string;
+  id: string;
+  name: string;
+  questions: {
+    id: string;
+    question: string;
+  }[];
+}
 
 interface Return {
   addTodo: boolean;
@@ -56,6 +67,7 @@ interface Return {
   setSearch: (value: string) => void;
   setSelectedTodo: (id: null | string) => void;
   setStatusMode: (value: TodoStatusInput) => void;
+  templateData: ListData[];
   toggleAddTodo: () => void;
   toggleAllSchemes: () => void;
   toggleAllUsers: () => void;
@@ -63,11 +75,7 @@ interface Return {
   userData: { label: string; value: string }[];
 }
 
-interface Props {
-  templateData: ListData[];
-}
-
-const useAdminTodos = ({ templateData }: Props): Return => {
+const useAdminTodos = (): Return => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const permissions = useAtomValue(currentPermissionsAtom);
   const userId = useAtomValue(userIdAtom);
@@ -88,19 +96,32 @@ const useAdminTodos = ({ templateData }: Props): Return => {
   const [selectedTemplate, setSelectedTemplate] = useState<ListData | null>(
     null
   );
-  const [canDelete, setCanDelete] = useState(false);
 
-  useEffect(() => {
-    if (
-      permissions.some(
-        ({ allowedMethods, model }) =>
-          model === PermissionModel.Tasks &&
-          allowedMethods.includes(PermissionMethod.Delete)
-      )
-    ) {
-      setCanDelete(true);
+  const currentScheme = useAtomValue(currentSchemeIdAtom);
+
+  const { data: queryData } = useQuestionGroupOnSchemeQuery({
+    variables: {
+      where: {
+        id: currentScheme,
+      },
+    },
+  });
+
+  const templateData: ListData[] = useMemo(() => {
+    if (queryData?.scheme?.questionGroups) {
+      return queryData.scheme.questionGroups.map((qGroup) => ({
+        defaultDueDays: qGroup.defaultDueDate || 0,
+        description: qGroup.description || '',
+        id: qGroup.id,
+        name: qGroup.name,
+        questions: qGroup.questions.map(({ id, questionFormatted }) => ({
+          id,
+          question: questionFormatted || '',
+        })),
+      }));
     }
-  }, [permissions]);
+    return [];
+  }, [queryData]);
 
   const selectTemplate = (id: null | string) => {
     const template = templateData.find((t) => t.id === id);
@@ -301,6 +322,14 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     });
   };
 
+  const canDelete = hasPermission({
+    permission: [
+      { method: PermissionMethod.Edit, model: PermissionModel.Tasks },
+      { method: PermissionMethod.Delete, model: PermissionModel.Tasks },
+    ],
+    permissions,
+  });
+
   return {
     addTodo,
     canDelete,
@@ -326,6 +355,7 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     setSearch,
     setSelectedTodo,
     setStatusMode,
+    templateData,
     toggleAddTodo,
     toggleAllSchemes,
     toggleAllUsers,

@@ -183,7 +183,8 @@ const ListCrimeGroups = ({
           {
             dataIndex: 'updatedAt',
             key: 'updatedAt',
-            render: (value: Date | Dayjs) => FormatCalendar(value || dayjs()),
+            render: (value: Date | Dayjs) =>
+              FormatCalendar(value || dayjs(), intl),
             sorter: (a, b) =>
               new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
             title: intl.formatMessage({

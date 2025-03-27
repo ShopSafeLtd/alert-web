@@ -1,47 +1,35 @@
 import React from 'react';
-import useActivityTemplates from './useActivityTemplates';
-import View from './ActivityTemplates.view';
-import type { ListData } from '../useActivities';
 
-interface Props {
-  tableData: ListData[];
-  loading: boolean;
-  updateTemplates: (
-    item: ListData,
-    type: 'create' | 'update' | 'delete'
-  ) => void;
-}
-const ActivitiesTemplatesContianer = ({
-  tableData,
-  loading,
-  updateTemplates,
-}: Props) => {
+import View from './ActivityTemplates.view';
+import useActivityTemplates from './useActivityTemplates';
+
+const ActivitiesTemplatesContianer = () => {
   const {
-    toggleAddTemplate,
-    createActivity,
-    toggleEdit,
-    deleteQuestion,
+    activityTemplateForm,
     addActivity,
+    createActivity,
+    deleteQuestion,
+    loading,
     onClose,
     selectedActivity,
-    activityTemplateForm,
-  } = useActivityTemplates({
     tableData,
+    toggleAddTemplate,
+    toggleEdit,
     updateTemplates,
-  });
+  } = useActivityTemplates();
   return (
     <View
-      tableData={tableData}
-      loading={loading}
-      updateTemplates={updateTemplates}
-      toggleAddTemplate={toggleAddTemplate}
-      createActivity={createActivity}
-      toggleEdit={toggleEdit}
-      deleteQuestion={deleteQuestion}
+      activityTemplateForm={activityTemplateForm}
       addActivity={addActivity}
+      createActivity={createActivity}
+      deleteQuestion={deleteQuestion}
+      loading={loading}
       onClose={onClose}
       selectedActivity={selectedActivity}
-      activityTemplateForm={activityTemplateForm}
+      tableData={tableData}
+      toggleAddTemplate={toggleAddTemplate}
+      toggleEdit={toggleEdit}
+      updateTemplates={updateTemplates}
     />
   );
 };
