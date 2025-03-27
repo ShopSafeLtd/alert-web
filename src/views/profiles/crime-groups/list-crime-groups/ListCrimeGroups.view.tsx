@@ -1,6 +1,6 @@
+import type { Dayjs } from 'dayjs';
 import type { ListCrimeGroupsQuery } from 'graphql/crime-groups/queries/__generated__/list-crime-groups.generated';
 import type { SortOrder } from 'graphql/types';
-import type { Moment } from 'moment';
 import type { CrimeGroupFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
@@ -10,7 +10,7 @@ import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
 import CrimeGroupFilter from 'components/crimeGroups/CrimeGroupFilter';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -183,7 +183,7 @@ const ListCrimeGroups = ({
           {
             dataIndex: 'updatedAt',
             key: 'updatedAt',
-            render: (value: Date | Moment) => FormatCalendar(value || moment()),
+            render: (value: Date | Dayjs) => FormatCalendar(value || dayjs()),
             sorter: (a, b) =>
               new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
             title: intl.formatMessage({

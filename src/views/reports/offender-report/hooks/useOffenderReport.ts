@@ -3,11 +3,11 @@ import type { DateRangeInput } from 'graphql/types';
 
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import arrangeTemplates from '#/utils/reports/setTemplates';
+import dayjs from 'dayjs';
 import { useOffenderReportQuery } from 'graphql/reports/queries/__generated__/offender-report.generated';
 import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/__generated__/scheme-details.generated';
 import { ReportType } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -199,7 +199,7 @@ const useOffenderReport = (): Return => {
       alertId: incident.reference,
       crimeRef: incident.policeRef || '',
       crimeTypes: incident.crimeTypes?.map((t) => t.name).join(', ') || '',
-      date: moment(incident.date).format('DD/MM/YYYY'),
+      date: dayjs(incident.date).format('DD/MM/YYYY'),
       key: incident.id,
       location: (incident.location?.alias || incident.business?.name) ?? '',
       policeAttended: incident.policeInvolved ? 'Yes' : 'No',

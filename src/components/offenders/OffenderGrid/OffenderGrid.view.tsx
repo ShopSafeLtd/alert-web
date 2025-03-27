@@ -7,7 +7,7 @@ import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
@@ -267,24 +267,6 @@ const OffenderCard = ({ offender, onOpenOffender }: OffenderCardProps) => {
               </Typography.Text>
             </Col>
           </Row>
-          {/* <Row style={{ marginTop: 2 }}> */}
-          {/*  <Col> */}
-          {/*    <Typography.Text type="secondary"> */}
-          {/*      {intl.formatMessage({ */}
-          {/*        id: 'vE+Slq', */}
-          {/*        defaultMessage: 'Last incident:', */}
-          {/*        // eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-          {/*      })}{' '} */}
-          {/*      {offender.latestIncident */}
-          {/*        ? moment(offender.latestIncident.date).format('DD/MM/YY') */}
-          {/*        : intl.formatMessage({ */}
-          {/*            id: 'q5Op6V', */}
-          {/*            defaultMessage: 'none', */}
-          {/*            // eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-          {/*          })} */}
-          {/*    </Typography.Text> */}
-          {/*  </Col> */}
-          {/* </Row> */}
         </Col>
       </Row>
     </Row>
@@ -507,7 +489,7 @@ const OffenderOverlay = ({
               <Col>
                 <Typography.Text ellipsis>
                   {offender.latestIncident
-                    ? moment(offender.latestIncident.date).format('DD/MM/YY')
+                    ? dayjs(offender.latestIncident.date).format('DD/MM/YY')
                     : intl.formatMessage({
                         defaultMessage: 'none',
                         // eslint-disable-next-line formatjs/no-literal-string-in-jsx

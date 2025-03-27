@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment,@typescript-eslint/no-base-to-string */
-import type { Moment } from 'moment';
+import type { Dayjs } from 'dayjs';
 import type { CustomQuestion } from 'types/DataType';
 
 // todo check data.tostring types
@@ -13,8 +13,8 @@ import {
   Row,
   TimePicker,
 } from 'antd';
+import dayjs from 'dayjs';
 import { AnswerType } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -42,7 +42,7 @@ const StringInputNumber = ({ disabled, onChange, value }: StringInputProps) => {
 };
 
 const StringDate = ({ disabled, onChange, value }: StringInputProps) => {
-  const covertToString = (data: Moment | null) => {
+  const covertToString = (data: Dayjs | null) => {
     if (onChange) onChange(data ? data.toString() : '');
   };
 
@@ -52,13 +52,13 @@ const StringDate = ({ disabled, onChange, value }: StringInputProps) => {
       format="DD/MM/YYYY"
       onChange={covertToString}
       style={{ minWidth: 150 }}
-      value={value ? moment(value) : undefined}
+      value={value ? dayjs(value) : undefined}
     />
   );
 };
 
 const StringTime = ({ disabled, onChange, value }: StringInputProps) => {
-  const covertToString = (data: Moment | null) => {
+  const covertToString = (data: Dayjs | null) => {
     if (onChange) onChange(data ? data.toString() : '');
   };
 
@@ -67,7 +67,7 @@ const StringTime = ({ disabled, onChange, value }: StringInputProps) => {
       disabled={disabled}
       onChange={covertToString}
       style={{ minWidth: 150 }}
-      value={value ? moment(value) : null}
+      value={value ? dayjs(value) : null}
     />
   );
 };

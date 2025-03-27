@@ -99,8 +99,8 @@ import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import EvidenceTable from 'components/tables/EvidenceTable';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import VehicleTable from 'components/tables/VehicleTable';
+import dayjs from 'dayjs';
 import { BanType, PermissionMethod, PermissionModel } from 'graphql/types';
-import moment from 'moment';
 import React, { type Dispatch } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -834,7 +834,7 @@ const ViewOffender = ({
                                     }
                                   >
                                     {FormatCalendar(
-                                      data?.offender?.updatedAt || moment()
+                                      data?.offender?.updatedAt || dayjs()
                                     )}
                                   </Descriptions.Item>
                                   <Descriptions.Item
@@ -1010,7 +1010,7 @@ const ViewOffender = ({
                                           </span>
                                         }
                                       >
-                                        {moment(
+                                        {dayjs(
                                           data?.offender?.dateOfBirth
                                         ).format('DD/MM/YYYY')}
                                       </Descriptions.Item>
@@ -2213,7 +2213,6 @@ const ViewOffender = ({
                               <UpdateContent
                                 userId={userId}
                                 content={update.text}
-                                createdAt={moment(update.createdAt)}
                                 from={update.createdBy}
                                 id={update.id}
                                 images={update.images}
@@ -2230,7 +2229,6 @@ const ViewOffender = ({
                           <UpdateContent
                             userId={userId}
                             content={update.text}
-                            createdAt={moment(update.createdAt)}
                             from={update.createdBy}
                             id={update.id}
                             images={update.images}
@@ -2310,7 +2308,6 @@ const ViewOffender = ({
                                   <UpdateContent
                                     userId={userId}
                                     content={reply.text}
-                                    createdAt={moment(reply.createdAt)}
                                     from={reply.createdBy}
                                     id={reply.id}
                                     images={reply.images}
@@ -2327,7 +2324,6 @@ const ViewOffender = ({
                               <UpdateContent
                                 userId={userId}
                                 content={reply.text}
-                                createdAt={moment(reply.createdAt)}
                                 from={reply.createdBy}
                                 id={reply.id}
                                 images={reply.images}

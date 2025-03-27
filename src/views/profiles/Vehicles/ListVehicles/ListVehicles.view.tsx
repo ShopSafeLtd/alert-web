@@ -1,7 +1,7 @@
+import type { Dayjs } from 'dayjs';
 import type { ListCustomGalleriesQuery } from 'graphql/customGallery/queries/__generated__/list_custom_galleries.generated';
 import type { ImagePosition, SortOrder } from 'graphql/types';
 import type { ListVehiclesQuery } from 'graphql/vehicles/queries/__generated__/list-vehicles.generated';
-import type { Moment } from 'moment';
 import type { VehicleFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
@@ -237,7 +237,7 @@ const ListVehicles = ({
           {
             dataIndex: 'updatedAt',
             key: 'updatedAt',
-            render: (value: Date | Moment) => FormatCalendar(value),
+            render: (value: Date | Dayjs) => FormatCalendar(value),
             sorter: (a, b) =>
               new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
             title: intl.formatMessage({

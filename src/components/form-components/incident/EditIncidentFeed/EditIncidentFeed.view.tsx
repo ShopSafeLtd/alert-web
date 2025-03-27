@@ -50,7 +50,6 @@ Props): JSX.Element => {
   ) : (
     <Form
       initialValues={{
-        // moment(data?.date, 'YYYY-MM-DD,HH:mm:ss'),
         business: {
           label: data?.business?.name,
           value: data?.business?.id,

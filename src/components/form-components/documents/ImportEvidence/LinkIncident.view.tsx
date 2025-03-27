@@ -2,7 +2,7 @@ import type { ListDemEvidenceQuery } from 'graphql/dem/queries/__generated__/lis
 
 import { Button, Col, Row, Skeleton, Table } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -62,7 +62,7 @@ const LinkDemCompany = ({
             dataIndex: 'createdAt',
             key: 'createdAt',
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            render: (value) => moment(value).format('DD/MM/YYYY'),
+            render: (value) => dayjs(value).format('DD/MM/YYYY'),
             title: intl.formatMessage({
               defaultMessage: 'Recorded On',
             }),

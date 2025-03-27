@@ -18,7 +18,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Carousel, Col, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
@@ -150,7 +150,7 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
                     defaultMessage: 'Last updated: {date}',
                   },
                   {
-                    date: FormatCalendar(offender?.updatedAt || moment()),
+                    date: FormatCalendar(offender?.updatedAt || dayjs()),
                   }
                 )}
               </Text>

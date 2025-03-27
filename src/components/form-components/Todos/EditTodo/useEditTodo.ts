@@ -3,7 +3,7 @@ import type { EditTodoQuery } from '#/components/form-components/Todos/EditTodo/
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile } from 'antd';
 import type { UploadProps } from 'antd/es/upload/interface';
-import type { Moment } from 'moment';
+import type { Dayjs } from 'dayjs';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
 import { useAddTodoUsersQuery } from '#/components/form-components/Todos/AddTodo/graphql/__generated__/AddTodoUsers.generated';
@@ -16,9 +16,9 @@ import {
 import { userIdAtom } from '#/providers/UserProvider/UserProvider';
 import { useQuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import { Form, notification } from 'antd';
+import dayjs from 'dayjs';
 import { AnswerType, Role, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -28,12 +28,12 @@ import customRequest from '../../../../utils/custom-request';
 const { useForm } = Form;
 
 export interface FormData {
-  [answer: string]: Moment | boolean | number | string | string[] | undefined;
+  [answer: string]: Dayjs | boolean | number | string | string[] | undefined;
   assignedUsers: string[];
   business: string[];
   completed: boolean;
   description: string;
-  dueDate: Moment;
+  dueDate: Dayjs;
   groups: string[];
   name: string;
   questionGroup?: string;
@@ -106,7 +106,7 @@ const useEditTodo = ({ initData, onClose, todoId }: Props): Return => {
         business: todo.business?.id ? [todo.business?.id] : [],
         completed: todo.completed || false,
         description: todo?.description || '',
-        dueDate: moment(todo.dueDate, 'YYYY-MM-DD'),
+        dueDate: dayjs(todo.dueDate, 'YYYY-MM-DD'),
         groups: todo.groups.map(({ id }) => id),
         name: todo.name || '',
       });

@@ -17,12 +17,12 @@ import {
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useGoodsTypesQuery } from '#/views/settings/data-import/csv/data-import/graphql/queries/__generated__/goods-types.generated';
 import { Form } from 'antd';
+import dayjs from 'dayjs';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -392,7 +392,7 @@ const useSentrysysImport = (): Return => {
           alias: offender.aka?.split(','),
           build: calcBuild(offender.build),
           dateOfBirth: offender.dateOfBirth
-            ? moment(offender.dateOfBirth, 'DD/MM/YYYY HH:mm')
+            ? dayjs(offender.dateOfBirth, 'DD/MM/YYYY HH:mm')
             : undefined,
           gender: calcGender(offender.gender),
           groups: values.fallbackGroup,
@@ -498,7 +498,7 @@ const useSentrysysImport = (): Return => {
             .filter((name) => incident.incidentType?.includes(name))
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             .map((item) => values[item][0] as string),
-          date: moment(incident.incidentDate, 'DD/MM/YYYY HH:mm'),
+          date: dayjs(incident.incidentDate, 'DD/MM/YYYY HH:mm'),
           description: incident.internalDescription,
           groups: values.fallbackGroup,
           id: uuidv4(),
@@ -533,7 +533,7 @@ const useSentrysysImport = (): Return => {
           policeReported: incident.policeInvolvedAtScene === 'TRUE',
           sentrysysId: incident.incidentID,
           subject: '',
-          time: moment(incident.incidentDate, 'DD/MM/YYYY HH:mm'),
+          time: dayjs(incident.incidentDate, 'DD/MM/YYYY HH:mm'),
           vehicles: vehiclesIds,
         });
       });
@@ -552,7 +552,7 @@ const useSentrysysImport = (): Return => {
           crimeTypes: incidentTypes
             .filter((name) => incident.incidentType?.includes(name))
             .map((item) => values[item] as string),
-          date: moment(incident.incidentDate),
+          date: dayjs(incident.incidentDate),
           description: incident.internalDescription,
           groups: values.fallbackGroup,
           id: uuidv4(),
@@ -570,7 +570,7 @@ const useSentrysysImport = (): Return => {
           policeReported: incident.policeInvolvedAtScene === 'TRUE',
           sentrysysId: incident.incidentID,
           subject: '',
-          time: moment(incident.incidentDate),
+          time: dayjs(incident.incidentDate),
         });
       });
 
@@ -748,14 +748,14 @@ const useSentrysysImport = (): Return => {
               .flat()
               .map((id) => ({ id })),
             // TODO check
-            date: moment(incident.date).toDate(),
+            date: dayjs(incident.date).toDate(),
             groups: incident.groups.map((id) => ({ id })),
             importId: incident.id,
             items: incident.items,
             policeInvolved: incident.policeInvolved,
             policeReported: incident.policeReported,
             // TODO check
-            time: moment(incident.time).toDate(),
+            time: dayjs(incident.time).toDate(),
           })),
           images: images.map((image) => ({
             fileName: image.fileName,
@@ -776,7 +776,7 @@ const useSentrysysImport = (): Return => {
               .flat()
               .map((id) => ({ id })),
             // TODO check
-            date: moment(incident.date).toDate(),
+            date: dayjs(incident.date).toDate(),
             description: incident.description,
             groups: incident.groups.map((id) => ({ id })),
             images: incident.images.map(({ id }) => ({ id })),
@@ -786,13 +786,13 @@ const useSentrysysImport = (): Return => {
             policeInvolved: incident.policeInvolved,
             policeReported: incident.policeReported,
             // TODO check
-            time: moment(incident.time).toDate(),
+            time: dayjs(incident.time).toDate(),
           })),
           offenders: newOffenders
             .map((offender) => ({
               build: offender.build,
               dateOfBirth: offender.dateOfBirth
-                ? moment(offender.dateOfBirth).toDate()
+                ? dayjs(offender.dateOfBirth).toDate()
                 : undefined,
               gender: offender.gender,
               groups: offender.groups.map((id) => ({ id })),

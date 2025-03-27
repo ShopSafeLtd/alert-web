@@ -38,8 +38,8 @@ import {
   Typography,
   Upload,
 } from 'antd';
+import dayjs from 'dayjs';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -154,9 +154,12 @@ const EditOffender = ({
               ageCheck: !!data?.offender?.dateOfBirth,
               build: data?.offender?.build || null,
               dateOfBirth: data?.offender?.dateOfBirth
-                ? moment
+                ? dayjs
                     .utc(data.offender.dateOfBirth)
-                    .set({ hour: 12, millisecond: 0, minute: 0, second: 0 })
+                    .set('hour', 12)
+                    .set('minute', 0)
+                    .set('second', 0)
+                    .set('millisecond', 0)
                 : null,
               dateSource: data?.offender?.dateSource || null,
               gender: data?.offender?.gender || null,

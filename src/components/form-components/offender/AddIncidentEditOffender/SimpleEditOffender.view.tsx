@@ -20,9 +20,9 @@ import {
   Switch,
   Typography,
 } from 'antd';
+import dayjs from 'dayjs';
 import { IdSource } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -75,7 +75,7 @@ const EditOffender = ({
           build: data.build || null,
           comment: data.comment || null,
           dateOfBirth: data.dateOfBirth
-            ? moment(data.dateOfBirth, 'YYYY-MM-DD')
+            ? dayjs(data.dateOfBirth, 'YYYY-MM-DD')
             : null,
           dateSource: data.dateSource || null,
           gender: data.gender || null,

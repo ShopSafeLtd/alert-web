@@ -10,8 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Row, Typography } from 'antd';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import dayjs from 'dayjs';
 import { ArticlePriority } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
@@ -110,7 +110,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
                 size="sm"
                 style={{ marginRight: 5 }}
               />
-              <Text>{FormatCalendar(updatedAt || moment())}</Text>
+              <Text>{FormatCalendar(updatedAt || dayjs())}</Text>
             </Col>
           </Row>
         </div>

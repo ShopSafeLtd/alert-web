@@ -35,6 +35,7 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
+import dayjs from 'dayjs';
 import { useBusinessBrandsLazyQuery } from 'graphql/businesses/queries/__generated__/business-brands.generated';
 import { useListGoodsTypesQuery } from 'graphql/goods-types/queries/__generated__/list-goods-types.generated';
 import { useCreateIncidentMutation } from 'graphql/incidents/mutations/__generated__/crreate-incident.generated';
@@ -53,7 +54,6 @@ import {
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import debounce from 'lodash/debounce';
-import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -1213,7 +1213,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 'An incident of {tags} occurred at {time} on {date}. {goods, plural, =0 {} other {The goods lost in this incident total {totalLoss} of which a value of {recovered} was recovered.}}',
             },
             {
-              date: moment(values.date).format('dddd Do MMMM YYYY'),
+              date: dayjs(values.date).format('dddd Do MMMM YYYY'),
               goods: 0,
               recovered:
                 goodsWithRecoveredValue.length > 0
@@ -1230,7 +1230,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               tags: tags
                 .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
                 .toString(),
-              time: moment(values.date).format('HH:mm'),
+              time: dayjs(values.date).format('HH:mm'),
               totalLoss:
                 goodsWithValue.length > 0
                   ? intl.formatNumber(

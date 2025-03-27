@@ -2,11 +2,11 @@ import type { DateSelectModeType } from '#/components/reports/DateSelect/DateSel
 import type { DateRangeInput } from 'graphql/types';
 
 import arrangeTemplates from '#/utils/reports/setTemplates';
+import dayjs from 'dayjs';
 import { useTargetedBusinessReportQuery } from 'graphql/reports/queries/__generated__/business-report.generated';
 import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/__generated__/scheme-details.generated';
 import { useSchemeReportFiltersQuery } from 'graphql/reports/queries/__generated__/scheme-filter-query.generated';
 import { ReportType } from 'graphql/types';
-import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useReportPrint from 'utils/reportPrint/usePrintReports';
@@ -207,7 +207,7 @@ const useBusinessReport = (): Return => {
       alertId: incident.reference,
       crimeRef: incident.policeRef || '',
       crimeTypes: incident.crimeTypes?.map((t) => t.name).join(', ') || '',
-      date: moment(incident.date).format('DD/MM/YYYY'),
+      date: dayjs(incident.date).format('DD/MM/YYYY'),
       key: incident.id,
       location: incident.location?.alias || '',
       policeAttended: incident.policeReported ? 'Yes' : 'No',

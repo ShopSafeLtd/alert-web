@@ -3,8 +3,8 @@ import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
 
 import GetInvestigationStatusValues from '#/types/enums/investigation-status';
 import { Typography } from 'antd';
+import dayjs from 'dayjs';
 import { InvestigationStatus } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -924,14 +924,14 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
   {
     dataIndex: 'createdAt',
     key: 'createdAt',
-    render: (date: string) => moment(date).format('DD/MM/YYYY'),
+    render: (date: string) => dayjs(date).format('DD/MM/YYYY'),
     title: <FormattedMessage defaultMessage="Date Opened" />,
   },
   {
     dataIndex: 'closedAt',
     key: 'closedAt',
     render: (value: string) =>
-      value ? moment(value).format('DD/MM/YYYY') : undefined,
+      value ? dayjs(value).format('DD/MM/YYYY') : undefined,
     title: <FormattedMessage defaultMessage="Date Closed" />,
   },
   {

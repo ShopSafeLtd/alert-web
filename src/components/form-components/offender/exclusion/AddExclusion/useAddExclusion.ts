@@ -1,8 +1,8 @@
-import { useState } from 'react';
-
 import type { RangePickerProps } from 'antd/es/date-picker';
-import type { Moment } from 'moment';
+import type { Dayjs } from 'dayjs';
 import type { BanData } from 'types/DataType';
+
+import { useState } from 'react';
 // import { BanType } from 'graphql/generated';
 
 interface Props {
@@ -11,15 +11,15 @@ interface Props {
 }
 
 interface Return {
+  disabledDate: RangePickerProps['disabledDate'];
   onSubmit: (value: BanData) => void;
   saving: boolean;
-  setStartDate: (value: Moment | Date | null) => void;
-  disabledDate: RangePickerProps['disabledDate'];
+  setStartDate: (value: Date | Dayjs | null) => void;
 }
 
-const useAddExclusion = ({ update, onClose }: Props): Return => {
+const useAddExclusion = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
-  const [startDate, setStartDate] = useState<Moment | Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | Dayjs | null>(null);
   // eslint-disable-next-line arrow-body-style
   const disabledDate: RangePickerProps['disabledDate'] = (current) => {
     if (startDate && startDate?.valueOf() > Date.now()) {
@@ -32,24 +32,24 @@ const useAddExclusion = ({ update, onClose }: Props): Return => {
     setSaving(true);
 
     update({
-      id: Math.floor(Math.random() * 1000).toString(),
-      startDate: data.startDate,
-      endDate: data.endDate,
-      location: data.location || '',
       description: data.description || '',
-      type: data.type || null,
-      months: data.months,
+      endDate: data.endDate,
       fineValue: data.fineValue,
+      id: Math.floor(Math.random() * 1000).toString(),
+      location: data.location || '',
+      months: data.months,
+      startDate: data.startDate,
+      type: data.type || null,
     });
     onClose();
     setSaving(false);
   };
 
   return {
+    disabledDate,
     onSubmit,
     saving,
     setStartDate,
-    disabledDate,
   };
 };
 export default useAddExclusion;
