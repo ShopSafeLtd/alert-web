@@ -219,64 +219,17 @@ const RoleView = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage:
-                                      'A basic user account that can submit data but has no admin features.',
+                                      'A basic user account that can submit data but has restricted access to admin features within the app.',
                                   })}
                                 </Typography.Paragraph>
                               </Select.Option>
-                              <Select.Option
-                                key={Role.ContentAdmin}
-                                value={Role.ContentAdmin}
-                              >
-                                <Typography.Text>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Content Admin',
-                                  })}
-                                </Typography.Text>
-                                <Typography.Paragraph
-                                  style={{
-                                    fontSize: 13,
-                                    fontWeight: 400,
-                                    margin: 0,
-                                  }}
-                                  type="secondary"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage:
-                                      'An account that allows for submitting and administering data but has no access to settings.',
-                                  })}
-                                </Typography.Paragraph>
-                              </Select.Option>
-                              <Select.Option
-                                key={Role.GroupAdmin}
-                                value={Role.GroupAdmin}
-                              >
-                                <Typography.Text>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Group Admin',
-                                  })}
-                                </Typography.Text>
-                                <Typography.Paragraph
-                                  style={{
-                                    fontSize: 13,
-                                    fontWeight: 400,
-                                    margin: 0,
-                                  }}
-                                  type="secondary"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage:
-                                      'An account that allows for submitting and administering data and limited access to settings within their group.',
-                                  })}
-                                </Typography.Paragraph>
-                              </Select.Option>
-
                               <Select.Option
                                 key={Role.SchemeAdmin}
                                 value={Role.SchemeAdmin}
                               >
                                 <Typography.Text>
                                   {intl.formatMessage({
-                                    defaultMessage: 'Scheme Admin',
+                                    defaultMessage: 'Admin',
                                   })}
                                 </Typography.Text>
                                 <Typography.Paragraph
@@ -288,7 +241,7 @@ const RoleView = ({
                                 >
                                   {intl.formatMessage({
                                     defaultMessage:
-                                      'A full administrator account with access to all settings.',
+                                      'A full administrator account with access to advanced functionality.',
                                   })}
                                 </Typography.Paragraph>
                               </Select.Option>

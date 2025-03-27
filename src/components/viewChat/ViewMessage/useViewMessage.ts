@@ -34,6 +34,7 @@ import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useApolloClient } from '@apollo/client';
 import { Form, Modal, Upload, message, notification } from 'antd';
+import dayjs from 'dayjs';
 import { useDeleteChatMutation } from 'graphql/chat/mutation/__generated__/delete_chat.generated';
 import {
   ChatDocument,
@@ -56,7 +57,6 @@ import {
 import { UserChatsDocument } from 'graphql/userChat/queries/__generated__/user_chats.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -952,7 +952,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   }))
                 : [],
             currentUser: true,
-            formattedDateTime: moment().format('HH:mm'),
+            formattedDateTime: dayjs().format('HH:mm'),
             from: {
               businesses: [
                 {

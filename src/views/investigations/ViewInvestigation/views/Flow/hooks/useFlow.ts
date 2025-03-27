@@ -11,8 +11,9 @@ import type {
 } from 'reactflow';
 import type { YMap } from 'yjs/dist/src/internals';
 
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { useUpdateFlowMutation } from 'graphql/investigations/mutations/__generated__/update-flow.generated';
-import moment from 'moment/moment';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useFullScreenHandle } from 'react-full-screen';
@@ -25,6 +26,8 @@ import useDownloadImage from './useDownloadImage';
 import useGraphStateSynced from './useNodesEdgesStateSynced';
 import useObservableListener from './useObservableListener';
 import { useWebRtcContext } from './useWebRtcProvidor';
+
+dayjs.extend(relativeTime);
 
 interface Return {
   clientCount: number;
@@ -82,7 +85,7 @@ const useFlow = ({ importData, investigationId }: Props): Return => {
   const [selected, setSelected] = useState<null | string>(null);
   const [savedWhen, setSavedWhen] = useState<null | string>(
     importData?.investigation?.flows[0].updatedAt
-      ? moment(importData?.investigation?.flows[0].updatedAt).fromNow()
+      ? dayjs(importData?.investigation?.flows[0].updatedAt).fromNow()
       : null
   );
   const [updateFlow, { loading: saving }] = useUpdateFlowMutation();
@@ -118,7 +121,7 @@ const useFlow = ({ importData, investigationId }: Props): Return => {
       const date = new Date();
 
       meta.set('lastSaved', date.getTime());
-      setSavedWhen(moment(date).fromNow());
+      setSavedWhen(dayjs(date).fromNow());
 
       void updateFlow({
         variables: {
@@ -261,10 +264,10 @@ const useFlow = ({ importData, investigationId }: Props): Return => {
             importData?.investigation?.flows[0]?.updatedAt?.toString() || ''
           ).getTime()
       ) {
-        setSavedWhen(moment(new Date(lastSaved)).fromNow());
+        setSavedWhen(dayjs(new Date(lastSaved)).fromNow());
       } else {
         setSavedWhen(
-          moment(importData?.investigation?.flows[0].updatedAt).fromNow()
+          dayjs(importData?.investigation?.flows[0].updatedAt).fromNow()
         );
       }
     };

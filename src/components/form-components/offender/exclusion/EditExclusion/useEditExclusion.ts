@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import type { RangePickerProps } from 'antd/es/date-picker';
-import type { Moment } from 'moment';
+import type { Dayjs } from 'dayjs';
 import type { BanData } from 'types/DataType';
+
+import { useState } from 'react';
 
 // interface FormData {
 //   endDate: Date;
@@ -11,20 +12,20 @@ import type { BanData } from 'types/DataType';
 // }
 
 interface Props {
+  banData: BanData | null;
   onClose: () => void;
   update: (value: BanData) => void;
-  banData: BanData | null;
 }
 interface Return {
+  disabledDate: RangePickerProps['disabledDate'];
   onSubmit: (value: BanData) => void;
   saving: boolean;
-  setStartDate: (value: Moment | Date | null) => void;
-  disabledDate: RangePickerProps['disabledDate'];
+  setStartDate: (value: Date | Dayjs | null) => void;
 }
 
-const useEditBan = ({ onClose, update, banData }: Props): Return => {
+const useEditBan = ({ banData, onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
-  const [startDate, setStartDate] = useState<Moment | Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | Dayjs | null>(null);
 
   const disabledDate: RangePickerProps['disabledDate'] = (current) => {
     if (startDate && startDate?.valueOf() > Date.now()) {
@@ -36,24 +37,24 @@ const useEditBan = ({ onClose, update, banData }: Props): Return => {
     setSaving(true);
     update({
       ...banData,
-      id: banData?.id || '',
-      startDate: data.startDate,
-      endDate: data.endDate,
-      location: data.location || '',
       description: data.description || null,
-      type: data.type || null,
-      months: data.months,
+      endDate: data.endDate,
       fineValue: data.fineValue,
+      id: banData?.id || '',
+      location: data.location || '',
+      months: data.months,
+      startDate: data.startDate,
+      type: data.type || null,
     });
     onClose();
     setSaving(false);
   };
 
   return {
+    disabledDate,
     onSubmit,
     saving,
     setStartDate,
-    disabledDate,
   };
 };
 

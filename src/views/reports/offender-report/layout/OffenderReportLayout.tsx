@@ -37,8 +37,8 @@ import {
   TargetGoodsColumns,
   TargetedBusinessColumns,
 } from 'components/reports/tableColumns';
+import dayjs from 'dayjs';
 import { Age, Build, Gender, Race } from 'graphql/types';
-import moment from 'moment';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { getAge, getBuild, getEthnicity, getSex, shouldPrint } from 'utils';
@@ -851,7 +851,7 @@ const OffenderReportLayout = ({
                       defaultMessage: 'Date of Birth',
                     })}
                   >
-                    {moment(
+                    {dayjs(
                       data?.offenderReport?.offenderSummary?.dateOfBirth
                     ).format('DD/MM/YYYY')}
                   </Descriptions.Item>

@@ -21,8 +21,8 @@ import {
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderSideList from 'components/offenders/OffenderSideList';
+import dayjs from 'dayjs';
 import { Age, Build, Gender, Race } from 'graphql/types';
-import moment from 'moment';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
@@ -155,7 +155,7 @@ const OffenderProfile = ({
                               defaultMessage: 'Date of Birth',
                             })}
                           >
-                            {moment(
+                            {dayjs(
                               offenderProfileData?.offender?.dateOfBirth
                             ).format('DD/MM/YYYY')}
                           </Descriptions.Item>
@@ -245,7 +245,7 @@ const OffenderProfile = ({
                         })}
                         value={
                           offenderProfileData?.offender?.lastActive?.date
-                            ? moment(
+                            ? dayjs(
                                 offenderProfileData?.offender?.lastActive?.date
                               ).format('DD/MM/YY')
                             : intl.formatMessage({
@@ -475,7 +475,7 @@ const OffenderProfile = ({
                         dataIndex: 'date',
                         key: 'date',
                         render: (value: Date) =>
-                          moment(value).format('DD/MM/YY'),
+                          dayjs(value).format('DD/MM/YY'),
                         title: intl.formatMessage({
                           defaultMessage: 'Date',
                         }),

@@ -4,11 +4,14 @@ import type { OffenderSettingsType } from '#/types/DataType';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import OffenderFormDetails from '#/components/form-components/offender/OffenderForm/OffenderFormDetails.view';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
 import type { FormData } from './useEditOffenderFeed';
+
+dayjs.extend(utc);
 
 interface Props {
   customGalleries: { label: string; value: string }[];
@@ -65,9 +68,13 @@ const EditOffender = ({
                 ? data.offender.customGalleries.map(({ id }) => id)
                 : [],
             dateOfBirth: data?.offender?.dateOfBirth
-              ? moment
+              ? dayjs
                   .utc(data.offender.dateOfBirth)
-                  .set({ hour: 12, millisecond: 0, minute: 0, second: 0 })
+                  .set('hour', 12)
+                  .set('minute', 0)
+                  .set('second', 0)
+                  .set('millisecond', 0)
+                  .toDate()
               : null,
             dateSource: data?.offender?.dateSource || null,
             gender: data?.offender?.gender || null,

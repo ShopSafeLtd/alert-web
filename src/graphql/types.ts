@@ -14162,6 +14162,7 @@ export enum PermissionModel {
   Tasks = 'TASKS',
   Terms = 'TERMS',
   Users = 'USERS',
+  UserSettings = 'USER_SETTINGS',
   Vehicles = 'VEHICLES',
   Workflows = 'WORKFLOWS'
 }

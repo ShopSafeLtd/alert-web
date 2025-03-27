@@ -1,17 +1,5 @@
 /* eslint-disable react/require-default-props */
-import React from 'react';
-import { Col, Row, Typography } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
-import type { Moment } from 'moment';
-import moment from 'moment';
-import WatermarkImage from 'components/images/WatermarkImage.view';
-import {
-  ArticleMessageCard,
-  CrimeGroupMessageList,
-  IncidentMessageCard,
-  OffenderMessageCard,
-  VehicleMessageCard,
-} from 'components/MessageInput/MessageCard';
+import type { Dayjs } from 'dayjs';
 import type {
   ArticleData,
   CrimeGroupData,
@@ -20,32 +8,49 @@ import type {
   OffenderCardData,
   VehicleData,
 } from 'types/DataType';
-import { FormattedMessage, useIntl } from 'react-intl';
 
+import { EyeOutlined } from '@ant-design/icons';
+import { Col, Row, Typography } from 'antd';
+import {
+  ArticleMessageCard,
+  CrimeGroupMessageList,
+  IncidentMessageCard,
+  OffenderMessageCard,
+  VehicleMessageCard,
+} from 'components/MessageInput/MessageCard';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import dayjs from 'dayjs';
+import dayOfYear from 'dayjs/plugin/dayOfYear';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 const { Text } = Typography;
 
+dayjs.extend(weekOfYear);
+dayjs.extend(dayOfYear);
+
 interface DatedMessages {
-  id?: string;
-  content?: string | undefined | null;
+  articles?: ArticleData[];
+  content?: null | string | undefined;
+  createdAt?: Dayjs;
+  crimeGroups?: CrimeGroupData[];
   from?: {
+    businesses: { fullName: string; id: string; name: string }[];
     id: string;
     origName: string;
-    businesses: { id: string; name: string; fullName: string }[];
   };
+  id?: string;
   images?: ImageCardData[];
-  offenders?: OffenderCardData[];
   incidents?: IncidentCardData[];
+  offenders?: OffenderCardData[];
   vehicles?: VehicleData[];
-  crimeGroups?: CrimeGroupData[];
-  articles?: ArticleData[];
-  createdAt?: Moment;
 }
 
-const getMessageDate = (date?: Moment) => {
-  if (date?.week() === moment().week()) {
-    if (date.format('DD/MM/YY') === moment().add(-1, 'days').format('DD/MM/YY'))
+const getMessageDate = (date?: Dayjs) => {
+  if (date?.week() === dayjs().week()) {
+    if (date.format('DD/MM/YY') === dayjs().add(-1, 'days').format('DD/MM/YY'))
       return `Yesterday ${date?.format('HH:mm')}`;
-    if (date?.dayOfYear() === moment().dayOfYear()) return date.format('HH:mm');
+    if (date?.dayOfYear() === dayjs().dayOfYear()) return date.format('HH:mm');
     return date.format('dddd HH:mm');
   }
   return date?.format('DD/MM HH:mm');
@@ -105,21 +110,21 @@ const getImageMargin = (length: number, index: number) => {
 };
 
 interface CollageImageProps {
-  src?: string | undefined | null;
-  length: number;
   index: number;
+  length: number;
+  src?: null | string | undefined;
 }
 
 const CollageImage = ({ index, length, src }: CollageImageProps) => (
   <div
-    role="button"
-    tabIndex={index}
     className="update-collage-image"
+    role="button"
     style={{
       backgroundColor: 'grey',
       height: getImageHeight(length, index),
       margin: getImageMargin(length, index),
     }}
+    tabIndex={index}
   >
     <WatermarkImage url={src} />
     <div className="chat-collage-image-overlay">
@@ -133,15 +138,15 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => (
 );
 
 interface Props extends DatedMessages {
-  userId: string | undefined;
-  showUser?: boolean;
   showDate?: boolean;
+  showUser?: boolean;
+  userId: string | undefined;
 }
 const getContent = (content: string) =>
   content.split(/(@\[.*?])/).map((item) => {
     if (item.startsWith('@[')) {
       return (
-        <Text strong key={item}>
+        <Text key={item} strong>
           {item.replace('@[', '').replace(']', '')}
         </Text>
       );
@@ -150,30 +155,30 @@ const getContent = (content: string) =>
   });
 
 const UpdateContent = ({
-  from,
-  images,
-  offenders,
-  incidents,
-  vehicles,
-  crimeGroups,
   articles,
   content,
-  id,
-  userId,
-  showUser,
-  showDate,
   createdAt,
+  crimeGroups,
+  from,
+  id,
+  images,
+  incidents,
+  offenders,
+  showDate,
+  showUser,
+  userId,
+  vehicles,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <Row
+      className="update-container"
       gutter={8}
       // justify={userId === from?.id ? 'end' : 'start'}
       style={{
         marginTop: showDate ? 10 : 0,
       }}
-      className="update-container"
     >
       <Col>
         <div
@@ -186,19 +191,19 @@ const UpdateContent = ({
           {showDate && (
             <Row
               style={{
-                marginTop: 8,
+                marginBottom: 0,
                 marginLeft: 15,
                 marginRight: 10,
-                marginBottom: 0,
+                marginTop: 8,
               }}
             >
               <Col
+                flex={1}
                 style={{
                   marginRight: 20,
                 }}
-                flex={1}
               >
-                <Text ellipsis style={{ fontSize: 13 }} strong>
+                <Text ellipsis strong style={{ fontSize: 13 }}>
                   {userId === from?.id
                     ? intl.formatMessage({
                         defaultMessage: 'You',
@@ -213,7 +218,7 @@ const UpdateContent = ({
               </Col>
               <Col>
                 <Text style={{ fontSize: 13 }} type="secondary">
-                  {getMessageDate(moment(createdAt))}
+                  {getMessageDate(dayjs(createdAt))}
                 </Text>
               </Col>
             </Row>
@@ -223,7 +228,7 @@ const UpdateContent = ({
               {images.length === 1 ? (
                 images.map((image) => (
                   <Col key={image.id}>
-                    <div style={{ width: 240, height: 240 }}>
+                    <div style={{ height: 240, width: 240 }}>
                       <WatermarkImage url={image.optimised} />
                     </div>
                   </Col>
@@ -254,7 +259,7 @@ const UpdateContent = ({
           {incidents &&
             incidents.length > 0 &&
             incidents.map((incident) => (
-              <IncidentMessageCard key={incident.id} incident={incident} />
+              <IncidentMessageCard incident={incident} key={incident.id} />
             ))}
           {vehicles &&
             vehicles.length > 0 &&
@@ -268,7 +273,7 @@ const UpdateContent = ({
           {articles &&
             articles.length > 0 &&
             articles.map((article) => (
-              <ArticleMessageCard key={article.id} article={article} />
+              <ArticleMessageCard article={article} key={article.id} />
             ))}
           {content && (
             <Row key={id}>

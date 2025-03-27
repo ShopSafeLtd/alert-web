@@ -3,6 +3,7 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import { faUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,7 +11,6 @@ import {
   Button,
   Card,
   Col,
-  DatePicker,
   Drawer,
   Form,
   Input,
@@ -22,8 +22,8 @@ import {
   Typography,
   Upload,
 } from 'antd';
+import dayjs from 'dayjs';
 import { TagType } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 
 import type {
@@ -296,8 +296,8 @@ const DiscImport = ({
         <Form
           form={mappingForm}
           initialValues={{
-            excludeIncidentDate: moment().add(-1, 'year'),
-            excludeUserDate: moment().add(-3, 'month'),
+            excludeIncidentDate: dayjs().add(-1, 'year'),
+            excludeUserDate: dayjs().add(-3, 'month'),
           }}
           onFinish={onGenerateData}
         >

@@ -1,8 +1,8 @@
 import arrangeTemplates from '#/utils/reports/setTemplates';
+import dayjs from 'dayjs';
 import { useCrimeGroupReportQuery } from 'graphql/reports/queries/__generated__/crime-group-report.generated';
 import { useSchemeReportDetailsQuery } from 'graphql/reports/queries/__generated__/scheme-details.generated';
 import { ReportType } from 'graphql/types';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -216,7 +216,7 @@ const useCrimeGroupReport = (): Return => {
       alertId: incident.reference,
       crimeRef: incident.policeRef || '',
       crimeTypes: incident.crimeTypes?.map((t) => t.name).join(', ') || '',
-      date: moment(incident.date).format('DD/MM/YYYY'),
+      date: dayjs(incident.date).format('DD/MM/YYYY'),
       key: incident.id,
       location: incident.location?.alias || '',
       policeAttended: incident.policeReported ? 'Yes' : 'No',

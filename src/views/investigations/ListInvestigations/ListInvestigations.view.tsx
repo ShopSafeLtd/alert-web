@@ -15,8 +15,8 @@ import {
   Table,
   Typography,
 } from 'antd';
+import dayjs from 'dayjs';
 import { InvestigationStatus } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FormattedList } from 'react-intl/lib';
@@ -200,8 +200,6 @@ const ListInvestigations = ({
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (value: Date) => FormatCalendar(new Date(value), true),
-
-            // render: (value: string) => moment(value).format('DD/MM/YYYY'),
             title: <FormattedMessage defaultMessage="Date Opened" />,
           },
           {
@@ -209,7 +207,7 @@ const ListInvestigations = ({
             key: 'closedAt',
             // eslint-disable-next-line
             render: (value: string) =>
-              value ? moment(value).format('DD/MM/YYYY') : undefined,
+              value ? dayjs(value).format('DD/MM/YYYY') : undefined,
             title: <FormattedMessage defaultMessage="Date Closed" />,
           },
           {

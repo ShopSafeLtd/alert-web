@@ -243,6 +243,7 @@ const Offenders = ({
           <SimpleEditOffender
             data={updateOpen}
             images={images?.map((el) => ({ ...el, id: `${Math.random()}` }))}
+            incidentBusinessId={incidentBusinessId}
             onClose={() => setUpdateOpen(null)}
             onEditOffender={(values) => onUpdateOffender(values)}
             onImagesUploaded={onImagesUploadedInForm}

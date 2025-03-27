@@ -14,8 +14,8 @@ import {
   Select,
   Typography,
 } from 'antd';
+import dayjs from 'dayjs';
 import { Age, Build, Gender, Race } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { OffenderSort } from 'state';
@@ -97,10 +97,7 @@ const OffenderFilter = ({
       form={form}
       initialValues={{
         createdAt: createdAtFilter
-          ? [
-              moment(createdAtFilter?.startDate),
-              moment(createdAtFilter?.endDate),
-            ]
+          ? [dayjs(createdAtFilter?.startDate), dayjs(createdAtFilter?.endDate)]
           : undefined,
       }}
     >
