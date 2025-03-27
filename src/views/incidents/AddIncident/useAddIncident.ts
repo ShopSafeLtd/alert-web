@@ -998,9 +998,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               ? {
                   id: data.business?.value,
                 }
-              : {
-                  id: businesses[0]?.id,
-                },
+              : businesses[0]
+                ? {
+                    id: businesses[0]?.id,
+                  }
+                : undefined,
             cctvRecords: {
               create: data.cctv?.map((item) => ({
                 aheadBehind: item.aheadBehind,
