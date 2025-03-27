@@ -3,9 +3,12 @@ import type { CapturedNetworkRequest, PostHogConfig } from 'posthog-js';
 import { TokenProvider } from '#/context/token-context';
 import SchemeProvider from '#/providers/SchemeProvider/SchemeProvider';
 import UserProvider from '#/providers/UserProvider/UserProvider';
-import { CaptureConsole, HttpClient } from '@sentry/integrations';
+import {
+  captureConsoleIntegration,
+  httpClientIntegration,
+} from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
-import { reactRouterV6Instrumentation } from '@sentry/react';
+import { reactRouterV6BrowserTracingIntegration } from '@sentry/react';
 import { LicenseManager } from 'ag-grid-charts-enterprise';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -15,7 +18,7 @@ import mixpanel from 'mixpanel-browser';
 import Views from 'navigation/router';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {
@@ -50,7 +53,6 @@ const options: Partial<PostHogConfig> = {
       if (excludedNetwork.some((network) => request.name.includes(network))) {
         return null;
       }
-
       return request;
     },
   },
@@ -68,17 +70,16 @@ if (import.meta.env.PROD) {
       /There has been an Error with loading Google Maps API script, please check that you provided correct google API key/,
     ],
     integrations: [
-      new CaptureConsole(),
-      new Sentry.BrowserTracing({
-        routingInstrumentation: reactRouterV6Instrumentation(
-          React.useEffect,
-          useLocation,
-          useNavigationType,
-          createRoutesFromChildren,
-          matchRoutes
-        ),
+      captureConsoleIntegration(),
+      reactRouterV6BrowserTracingIntegration({
+        createRoutesFromChildren,
+        matchRoutes,
+        useEffect,
+        useLocation,
+        useNavigationType,
       }),
-      new HttpClient(),
+
+      httpClientIntegration(),
       new posthog.SentryIntegration(
         posthog,
         'nvoyy-group',
@@ -102,6 +103,7 @@ const App = (): JSX.Element => (
       options={options}
     >
       <TokenProvider>
+        {/* @ts-expect-error type react version issue*/}
         <Provider>
           <Store>
             <ApolloProvider>

@@ -10,7 +10,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -39,15 +39,13 @@ function convertToArrayOfStrings(onChangeValue: ValueType): string[] {
   if (!onChangeValue) return [];
   if (Array.isArray(onChangeValue)) {
     if (onChangeValue.every((item) => typeof item === 'string')) {
-      return onChangeValue as string[];
+      return onChangeValue;
     } else if (onChangeValue.every((item) => typeof item === 'number')) {
-      return (onChangeValue as number[]).map((item) => item.toString());
-    } else if ((onChangeValue[0] as LabeledValue).label === undefined) {
+      return onChangeValue.map((item) => item.toString());
+    } else if (onChangeValue[0].label === undefined) {
       return [];
     } else {
-      return (onChangeValue as LabeledValue[]).map((item) =>
-        item.value.toString()
-      );
+      return onChangeValue.map((item) => item.value.toString());
     }
   } else if (typeof onChangeValue === 'string') {
     return [onChangeValue];

@@ -2,7 +2,7 @@
 import type { SelectProps } from 'antd';
 
 import { Select, Spin, Typography } from 'antd';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useMemo, useRef, useState } from 'react';
 
 export interface DebounceSelectProps<ValueType = any>
@@ -32,6 +32,7 @@ const DebounceSelect = <
 >({
   debounceTimeout = 200,
   fetchOptions,
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   setValue,
   ...props
 }: DebounceSelectProps) => {

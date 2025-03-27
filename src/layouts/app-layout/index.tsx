@@ -58,7 +58,7 @@ const AppLayout = (): JSX.Element => {
   const email = currentUser?.email ?? '';
   const fullName = currentUser?.fullName ?? '';
   const id = currentUser?.id ?? '';
-  const onboarded = !currentUser?.newUser ?? true;
+  const onboarded = !currentUser?.newUser || true;
   const termsExpired = currentUser?.termsExpired ?? false;
   const forcePasswordReset = currentUser?.forcePasswordReset ?? false;
   const isSet = !!currentUser;
