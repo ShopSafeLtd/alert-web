@@ -36,6 +36,7 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
             facialDetection
             facialRecognition
             facialRedaction
+            allowTodoTemplateOverride
             restrictIncidentAccess
             goodsMode
             id

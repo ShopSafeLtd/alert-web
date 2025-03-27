@@ -17289,6 +17289,7 @@ export type Scheme = {
   actionsInScheme: Array<Action>;
   activeChecklists: Array<ActiveChecklist>;
   activityAssignToUser: Scalars['Boolean'];
+  allowTodoTemplateOverride: Scalars['Boolean'];
   approvalDueDays?: Maybe<Scalars['Int']>;
   articles: Array<Article>;
   autoApproveIncidents: Scalars['Boolean'];

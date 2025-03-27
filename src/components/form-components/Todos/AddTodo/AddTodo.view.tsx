@@ -1,14 +1,17 @@
 import type { QuestionGroupOnSchemeQuery } from '#/views/adminTodo/graphql/queries/__generated__/listTemplates.generated';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import { useGroupsContext } from '#/context/groups-context';
+import {
+  currentSchemeAtom,
+  isAdminAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import { UploadOutlined } from '@ant-design/icons';
 import {
   Button,
   Col,
-  DatePicker,
   Drawer,
   Form,
   Input,
@@ -19,7 +22,8 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import React from 'react';
+import { useAtomValue } from 'jotai/index';
+import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import type { FormData } from './useAddTodo';
@@ -56,9 +60,6 @@ interface Props {
   usersLoading: boolean;
 }
 
-const disabledDate: RangePickerProps['disabledDate'] = (current) =>
-  current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
-
 const AddTodo = ({
   addQuestion,
   adminUsersData,
@@ -86,6 +87,19 @@ const AddTodo = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const { groups, groupsLoading } = useGroupsContext();
+  const allowOverride =
+    useAtomValue(currentSchemeAtom)?.allowTodoTemplateOverride;
+  const isAdmin = useAtomValue(isAdminAtom);
+  const templateId = Form.useWatch('questionGroup', form);
+
+  const forceTemplateSelection = useMemo(
+    () => !allowOverride && !isAdmin && !templateId,
+    [templateId, allowOverride]
+  );
+  const disableTemplateFields = useMemo(
+    () => !allowOverride && Boolean(templateId),
+    [templateId, allowOverride]
+  );
 
   return (
     <>
@@ -95,31 +109,27 @@ const AddTodo = ({
         layout="vertical"
         onFinish={onSubmit}
       >
-        <Row gutter={16}>
-          <Col span={9}>
+        <Row justify="start">
+          <Col span={10}>
             <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Name',
-              })}
-              name="name"
+              label={
+                forceTemplateSelection
+                  ? intl.formatMessage({
+                      defaultMessage: 'Select an activity template',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'Use an activity template',
+                    })
+              }
+              name="questionGroup"
               rules={[
                 {
                   message: intl.formatMessage({
-                    defaultMessage: 'Please enter a name for the new to-do.',
+                    defaultMessage: 'You must select an activity template',
                   }),
-                  required: true,
+                  required: forceTemplateSelection,
                 },
               ]}
-            >
-              <Input disabled={saving} />
-            </Form.Item>
-          </Col>
-          <Col span={9}>
-            <Form.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Activity Template',
-              })}
-              name="questionGroup"
             >
               <Select
                 allowClear
@@ -134,6 +144,30 @@ const AddTodo = ({
                 placeholder={intl.formatMessage({
                   defaultMessage: 'No template selected',
                 })}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col flex={1}>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Name',
+              })}
+              name="name"
+              rules={[
+                {
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please enter a name for the new to-do.',
+                  }),
+                  required: true,
+                },
+              ]}
+            >
+              <Input
+                disabled={
+                  saving || disableTemplateFields || forceTemplateSelection
+                }
               />
             </Form.Item>
           </Col>
@@ -154,8 +188,9 @@ const AddTodo = ({
               ]}
             >
               <DatePicker
-                disabled={saving}
-                disabledDate={disabledDate}
+                disabled={
+                  saving || disableTemplateFields || forceTemplateSelection
+                }
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -179,7 +214,7 @@ const AddTodo = ({
               ]}
             >
               <Select
-                disabled={saving}
+                disabled={saving || forceTemplateSelection}
                 loading={usersLoading}
                 maxTagCount={3}
                 mode="multiple"
@@ -206,7 +241,7 @@ const AddTodo = ({
               ]}
             >
               <Select
-                disabled={saving}
+                disabled={saving || forceTemplateSelection}
                 loading={groupsLoading}
                 maxTagCount={3}
                 mode="multiple"
@@ -222,19 +257,10 @@ const AddTodo = ({
                 defaultMessage: 'Businesses',
               })}
               name="businesses"
-              rules={[
-                {
-                  message: intl.formatMessage({
-                    defaultMessage:
-                      'Please select one business for the activity.',
-                  }),
-                  required: !businessId,
-                },
-              ]}
             >
               <BusinessesSelect
                 allowClear
-                disabled={saving || !!businessId}
+                disabled={saving || forceTemplateSelection || !!businessId}
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Search for a business...',
                 })}
@@ -253,12 +279,19 @@ const AddTodo = ({
               })}
               name="description"
             >
-              <Input.TextArea disabled={saving} />
+              <Input.TextArea
+                disabled={
+                  saving || disableTemplateFields || forceTemplateSelection
+                }
+              />
             </Form.Item>
           </Col>
         </Row>
         {questions && questions.length > 0 ? (
-          <CustomQuestions disabled={saving} questions={questions} />
+          <CustomQuestions
+            disabled={saving || forceTemplateSelection}
+            questions={questions}
+          />
         ) : null}
         {/* <Row> */}
         {/*  <Col span={23}> */}
@@ -336,7 +369,11 @@ const AddTodo = ({
                       addonAfter={intl.formatMessage({
                         defaultMessage: 'mins',
                       })}
-                      disabled={saving}
+                      disabled={
+                        saving ||
+                        disableTemplateFields ||
+                        forceTemplateSelection
+                      }
                       min={0}
                     />
                   </Form.Item>
@@ -387,7 +424,10 @@ const AddTodo = ({
             listType="picture"
             style={{ display: 'flex' }}
           >
-            <Button icon={<UploadOutlined />}>
+            <Button
+              disabled={saving || forceTemplateSelection}
+              icon={<UploadOutlined />}
+            >
               {intl.formatMessage({
                 defaultMessage: 'Upload Document',
               })}
