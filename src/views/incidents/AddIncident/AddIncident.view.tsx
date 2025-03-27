@@ -11,7 +11,6 @@ import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
-import dayjs from 'dayjs';
 import { IncidentFormField } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -100,7 +99,7 @@ const AddIncident = ({
       <Form<FormData>
         form={form}
         initialValues={{
-          date: dayjs(),
+          date: new Date(),
           fullAddress: primaryAddress?.full,
           images: [],
           involvedTags: [],
