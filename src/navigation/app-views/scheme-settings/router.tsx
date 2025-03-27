@@ -1,6 +1,7 @@
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import SettingsSideMenu from '#/components/settings/SettingSideMenu/SettingsSideMenu.view';
 import Loading from '#/components/shared-components/AntD/Loading';
+import ActivityTemplatesView from '#/views/adminTodo/ActivityTemplates/ActivityTemplates.contianer';
 import SettingsHome from '#/views/settings/settings-home/SettingsHome.view';
 import { Col, Row } from 'antd';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
@@ -672,6 +673,19 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="manage-dashboard/*"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={{
+                    method: PermissionMethod.Read,
+                    model: PermissionModel.TaskSettings,
+                  }}
+                >
+                  <ActivityTemplatesView />
+                </PermissionCheckWrapper>
+              }
+              path="activity-settings"
             />
           </Routes>
         </Suspense>

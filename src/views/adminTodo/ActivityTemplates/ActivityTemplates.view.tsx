@@ -6,7 +6,17 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Drawer, Row, Table, Tooltip } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Popconfirm,
+  Row,
+  Table,
+  Tooltip,
+  Typography,
+} from 'antd';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -47,9 +57,13 @@ const ActivityTemplatesView = ({
 }: Props) => {
   const intl = useIntl();
   return (
-    <div className="list-view" style={{ paddingTop: 0 }}>
+    <div className="list-view" style={{ padding: 20 }}>
       <Row gutter={8} style={{ marginBottom: 15 }}>
-        <Col flex={1} />
+        <Col flex={1}>
+          <Typography.Title level={3}>
+            <FormattedMessage defaultMessage="Activity Templates" />
+          </Typography.Title>
+        </Col>
         <Col>
           <Button
             icon={
@@ -60,7 +74,6 @@ const ActivityTemplatesView = ({
               />
             }
             onClick={() => toggleAddTemplate()}
-            type="primary"
           >
             {intl.formatMessage({
               defaultMessage: 'New Template',
@@ -68,7 +81,11 @@ const ActivityTemplatesView = ({
           </Button>
         </Col>
       </Row>
-      <Card loading={loading}>
+      <Card
+        bodyStyle={{ overflow: 'hidden', padding: 0, paddingTop: 4 }}
+        loading={loading}
+        style={{ overflow: 'hidden' }}
+      >
         <Table
           columns={[
             {
@@ -126,7 +143,7 @@ const ActivityTemplatesView = ({
               dataIndex: 'actions',
               key: 'actions',
               render: (_, record) => (
-                <Row>
+                <Row gutter={8}>
                   <Col>
                     <Tooltip
                       title={intl.formatMessage({
@@ -139,7 +156,6 @@ const ActivityTemplatesView = ({
                           createActivity(record.id || null);
                         }}
                         size="small"
-                        style={{ marginRight: 5 }}
                       />
                     </Tooltip>
                   </Col>
@@ -155,24 +171,30 @@ const ActivityTemplatesView = ({
                           toggleEdit(record.id || null);
                         }}
                         size="small"
-                        style={{ marginRight: 5 }}
                       />
                     </Tooltip>
                   </Col>
                   <Col>
                     <Tooltip
                       title={intl.formatMessage({
-                        defaultMessage: 'Remove Question',
+                        defaultMessage: 'Delete Template',
                       })}
                     >
-                      <Button
-                        icon={<FontAwesomeIcon icon={faTrash} />}
-                        onClick={() => {
+                      <Popconfirm
+                        onConfirm={() => {
                           deleteQuestion(record.id);
                         }}
-                        size="small"
-                        type="primary"
-                      />
+                        overlayInnerStyle={{ padding: 14 }}
+                        title={intl.formatMessage({
+                          defaultMessage:
+                            'Are you sure you want to delete this template?',
+                        })}
+                      >
+                        <Button
+                          icon={<FontAwesomeIcon icon={faTrash} />}
+                          size="small"
+                        />
+                      </Popconfirm>
                     </Tooltip>
                   </Col>
                 </Row>
@@ -185,6 +207,7 @@ const ActivityTemplatesView = ({
           pagination={{
             hideOnSinglePage: true,
           }}
+          size="small"
         />
       </Card>
       <Drawer

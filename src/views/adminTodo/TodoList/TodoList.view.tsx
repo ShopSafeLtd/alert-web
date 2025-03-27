@@ -309,7 +309,7 @@ const AdminTodos = ({
                 defaultMessage: 'Activity & templates settings',
               })}
             >
-              <Link to="/app/settings/activity-settings">
+              <Link to="/app/scheme-settings/activity-settings">
                 <Button disabled={saving}>
                   <FontAwesomeIcon icon={faCog} size="lg" />
                 </Button>
