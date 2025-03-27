@@ -264,7 +264,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                       })}
                     >
                       <Radio.Group
-                        disabled={!editId}
+                        disabled={editId !== undefined}
                         onChange={(e) => {
                           if (e.target.value === 'scheduled') {
                             form.setFieldsValue({ workflowType: Model.Cron });
@@ -311,7 +311,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         })}
                       >
                         <Radio.Group
-                          disabled={!editId}
+                          disabled={editId !== undefined}
                           optionType="button"
                           options={[
                             {

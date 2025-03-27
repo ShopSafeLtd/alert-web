@@ -17,7 +17,7 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -170,7 +170,7 @@ const NotificationsDrawer = ({
                         className={classes.date}
                         type="secondary"
                       >
-                        {moment(item.createdAt).format('HH:mm DD/MM/YY')}
+                        {dayjs(item.createdAt).format('HH:mm DD/MM/YY')}
                       </Typography.Text>
                     </Col>
                   </Row>

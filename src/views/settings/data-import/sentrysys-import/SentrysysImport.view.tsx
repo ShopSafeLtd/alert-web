@@ -22,8 +22,8 @@ import {
   Typography,
   Upload,
 } from 'antd';
+import dayjs from 'dayjs';
 import { TagType } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 
 import type {
@@ -385,8 +385,8 @@ const DiscImport = ({
               'cliod05pz035epia74htgrlla',
             ],
             'Violent Crime': ['clggfn3u9000apif8q9ctg92y'],
-            excludeIncidentDate: moment().add(-1, 'year'),
-            excludeUserDate: moment().add(-3, 'month'),
+            excludeIncidentDate: dayjs().add(-1, 'year'),
+            excludeUserDate: dayjs().add(-3, 'month'),
             fallbackGroup: ['clt7471wg0agk8cp172ijr76w'],
             townCity: 'London',
           }}

@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props */
-import type { Moment } from 'moment';
+import type { Dayjs } from 'dayjs';
 import type {
   ArticleData,
   CrimeGroupData,
@@ -22,7 +22,7 @@ import {
   VehicleMessageCard,
 } from 'components/MessageInput/MessageCard';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
@@ -43,7 +43,7 @@ const useStyles = createUseStyles({
 interface DatedMessages {
   articles?: ArticleData[];
   content?: null | string | undefined;
-  createdAt?: Moment;
+  createdAt?: Dayjs;
   crimeGroups?: CrimeGroupData[];
   from?: {
     businesses: { fullName: string; id: string; name: string }[];
@@ -57,11 +57,11 @@ interface DatedMessages {
   vehicles?: VehicleData[];
 }
 
-const getMessageDate = (date?: Moment) => {
-  if (date?.week() === moment().week()) {
-    if (date.format('DD/MM/YY') === moment().add(-1, 'days').format('DD/MM/YY'))
+const getMessageDate = (date?: Dayjs) => {
+  if (date?.week() === dayjs().week()) {
+    if (date.format('DD/MM/YY') === dayjs().add(-1, 'days').format('DD/MM/YY'))
       return `Yesterday ${date?.format('HH:mm')}`;
-    if (date?.dayOfYear() === moment().dayOfYear()) return date.format('HH:mm');
+    if (date?.dayOfYear() === dayjs().dayOfYear()) return date.format('HH:mm');
     return date.format('dddd HH:mm');
   }
   return date?.format('DD/MM HH:mm');
@@ -250,7 +250,7 @@ const UpdateContent = ({
               </Col>
               <Col>
                 <Text style={{ fontSize: 13 }} type="secondary">
-                  {getMessageDate(moment(createdAt))}
+                  {getMessageDate(dayjs(createdAt))}
                 </Text>
               </Col>
             </Row>

@@ -15,13 +15,13 @@ import {
 } from '#/graphql/types';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Form } from 'antd';
+import dayjs from 'dayjs';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useDiscImportDataMutation } from 'graphql/imports/__generated__/disc-import.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
 import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -346,7 +346,7 @@ const useDiscImport = (): Return => {
       firstName: item[1],
       id: item[0],
       lastName: item[2],
-      lastSignedIn: moment(item[9]),
+      lastSignedIn: dayjs(item[9]),
       organisation: item[4],
       placeOfWork: item[5],
       premises: item[6],
@@ -751,9 +751,9 @@ const useDiscImport = (): Return => {
           build: calcBuild(offender.build),
           comments: offender.comments,
           dateOfBirth: offender.dateOfBirth
-            ? moment(offender.dateOfBirth)
+            ? dayjs(offender.dateOfBirth)
             : undefined,
-          deletionDate: moment(offender.databaseDeletionDate),
+          deletionDate: dayjs(offender.databaseDeletionDate),
           discId: offender.id,
           gender: calcGender(offender.gender),
           groups: [
@@ -957,7 +957,7 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
-          date: moment(incident.dateTime),
+          date: dayjs(incident.dateTime),
           description: incident.description
             ?.replace(/(<([^>]+)>)/gi, '')
             .replace('&nbsp;', ''),
@@ -1146,7 +1146,7 @@ const useDiscImport = (): Return => {
           recoveredValue: Number(incident.lossRecovered),
           street: incident.address.replace(values.townCity, '') || 'London',
           subject: '',
-          time: moment(incident.dateTime),
+          time: dayjs(incident.dateTime),
           townCity: values.townCity,
         });
       });
@@ -1246,7 +1246,7 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
-          date: moment(incident.dateTime),
+          date: dayjs(incident.dateTime),
           description: incident.description,
           discId: incident.id,
           groups: getIncidentGroups(incident, [], createdBy || ''),
@@ -1429,7 +1429,7 @@ const useDiscImport = (): Return => {
           recoveredValue: Number(incident.lossRecovered),
           street: incident.address || 'London',
           subject: '',
-          time: moment(incident.dateTime),
+          time: dayjs(incident.dateTime),
         });
       });
 
@@ -1597,7 +1597,7 @@ const useDiscImport = (): Return => {
           ...incident.involvedTypes,
         ].map((id) => ({ id })),
         // TODO check
-        date: moment(incident.date).toDate(),
+        date: dayjs(incident.date).toDate(),
         groups: incident.groups.map((id) => ({ id })),
         importId: incident.id,
         lostValue: incident.lostValue,
@@ -1607,7 +1607,7 @@ const useDiscImport = (): Return => {
         recoveredValue: incident.recoveredValue,
         street: incident.street,
         // TODO check
-        time: moment(incident.time).toDate(),
+        time: dayjs(incident.time).toDate(),
         townCity: '',
       })),
       images: images.map((image) => ({
@@ -1630,7 +1630,7 @@ const useDiscImport = (): Return => {
             ...incident.involvedTypes,
           ].map((id) => ({ id })),
           // TODO check
-          date: moment(incident.date).toDate(),
+          date: dayjs(incident.date).toDate(),
           description: incident.description,
           groups: incident.groups.map((id) => ({ id })),
           images: incident.images.map(({ id }) => ({ id })),
@@ -1644,7 +1644,7 @@ const useDiscImport = (): Return => {
           recoveredValue: incident.recoveredValue,
           street: incident.street,
           // TODO check
-          time: moment(incident.time).toDate(),
+          time: dayjs(incident.time).toDate(),
           townCity: incident.townCity,
         }))
         .slice(0, 1000),
@@ -1654,7 +1654,7 @@ const useDiscImport = (): Return => {
           build: offender.build,
           comment: offender.comments,
           dateOfBirth: offender.dateOfBirth
-            ? moment(offender.dateOfBirth).toDate()
+            ? dayjs(offender.dateOfBirth).toDate()
             : undefined,
           gender: offender.gender,
           groups: offender.groups.map((id) => ({ id })),
@@ -1726,7 +1726,7 @@ const useDiscImport = (): Return => {
               ...incident.involvedTypes,
             ].map((id) => ({ id })),
             // TODO check
-            date: moment(incident.date).toDate(),
+            date: dayjs(incident.date).toDate(),
             groups: incident.groups.map((id) => ({ id })),
             importId: incident.id,
             lostValue: incident.lostValue,
@@ -1736,7 +1736,7 @@ const useDiscImport = (): Return => {
             recoveredValue: incident.recoveredValue,
             street: incident.street,
             // TODO check
-            time: moment(incident.time).toDate(),
+            time: dayjs(incident.time).toDate(),
             townCity: '',
           })),
           images: images.map((image) => ({
@@ -1761,7 +1761,7 @@ const useDiscImport = (): Return => {
                 ...incident.involvedTypes,
               ].map((id) => ({ id })),
               // TODO check
-              date: moment(incident.date).toDate(),
+              date: dayjs(incident.date).toDate(),
               description: incident.description,
               groups: incident.groups.map((id) => ({ id })),
               images: incident.images.map(({ id }) => ({ id })),
@@ -1775,7 +1775,7 @@ const useDiscImport = (): Return => {
               recoveredValue: incident.recoveredValue,
               street: incident.street,
               // TODO check
-              time: moment(incident.time).toDate(),
+              time: dayjs(incident.time).toDate(),
               townCity: incident.townCity,
             }))
             .slice(0, 1000),
@@ -1785,7 +1785,7 @@ const useDiscImport = (): Return => {
               build: offender.build,
               comment: offender.comments,
               dateOfBirth: offender.dateOfBirth
-                ? moment(offender.dateOfBirth).toDate()
+                ? dayjs(offender.dateOfBirth).toDate()
                 : undefined,
               gender: offender.gender,
               groups: offender.groups.map((id) => ({ id })),

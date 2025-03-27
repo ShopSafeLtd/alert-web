@@ -56,8 +56,8 @@ import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness
 import LocatingCard from 'components/map/LocatingCard';
 import ActivityTable from 'components/tables/ActivityTable';
 import IncidentTable from 'components/tables/IncidentTable';
+import dayjs from 'dayjs';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -542,7 +542,7 @@ const ViewBusiness = ({
                     key: user.id,
                     lastLogin:
                       user.loginEvents && user.loginEvents.length > 0
-                        ? moment(user.loginEvents[0]?.loginTime || '').format(
+                        ? dayjs(user.loginEvents[0]?.loginTime || '').format(
                             'HH:mm DD/MM/YY'
                           )
                         : 'No LogIn Data',
@@ -754,7 +754,7 @@ const ViewBusiness = ({
                             style={{ fontSize: 12, marginBottom: 0 }}
                             type="secondary"
                           >
-                            {moment(action.createdAt).format('HH:mm DD/MM/YY')}
+                            {dayjs(action.createdAt).format('HH:mm DD/MM/YY')}
                           </Typography.Paragraph>
                         </Col>
                         <Col>

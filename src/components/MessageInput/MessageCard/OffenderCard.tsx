@@ -12,7 +12,7 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
@@ -113,7 +113,7 @@ const OffenderCard = ({
                 defaultMessage: 'Last Active',
               })}
             >
-              {FormatCalendar(offender.updatedAt || moment())}
+              {FormatCalendar(offender.updatedAt || dayjs())}
             </Descriptions.Item>
           </Descriptions>
         </Col>

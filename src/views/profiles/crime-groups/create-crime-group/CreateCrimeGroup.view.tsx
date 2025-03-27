@@ -13,8 +13,8 @@ import {
 } from 'antd';
 import AddExisitingOffender from 'components/form-components/offender/AddExistingOffender';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import dayjs from 'dayjs';
 import { Age, Build, Gender, Race } from 'graphql/types';
-import moment from 'moment';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils'; // Import the useIntl hook
@@ -137,7 +137,7 @@ const CreateCrimeGroup = ({
                       })}
                     </Text>
                     <Text type="secondary">
-                      {moment(offender.dateOfBirth).format('DD/MM/YYYY') ||
+                      {dayjs(offender.dateOfBirth).format('DD/MM/YYYY') ||
                         intl.formatMessage({
                           defaultMessage: 'Unknown',
                         })}

@@ -15,7 +15,7 @@ import {
   Select,
   Typography,
 } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
@@ -152,15 +152,12 @@ const IncidentFilter = ({
       form={form}
       initialValues={{
         createdAt: createdAtFilter
-          ? [
-              moment(createdAtFilter?.startDate),
-              moment(createdAtFilter?.endDate),
-            ]
+          ? [dayjs(createdAtFilter?.startDate), dayjs(createdAtFilter?.endDate)]
           : undefined,
         date: incidentDateFilter
           ? [
-              moment(incidentDateFilter?.startDate),
-              moment(incidentDateFilter?.endDate),
+              dayjs(incidentDateFilter?.startDate),
+              dayjs(incidentDateFilter?.endDate),
             ]
           : undefined,
       }}

@@ -10,8 +10,8 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Dropdown, Menu, Popover, Row } from 'antd';
+import dayjs from 'dayjs';
 import { UpdateType } from 'graphql/types';
-import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
@@ -230,7 +230,7 @@ const IntelSection = ({
                     <UpdateContent
                       articles={update.linkedArticles}
                       content={update.text}
-                      createdAt={moment(update.createdAt)}
+                      createdAt={dayjs(update.createdAt)}
                       crimeGroups={update.linkedCrimeGroups}
                       from={update.createdBy}
                       id={update.id}
@@ -249,7 +249,7 @@ const IntelSection = ({
                 <UpdateContent
                   articles={update.linkedArticles}
                   content={update.text}
-                  createdAt={moment(update.createdAt)}
+                  createdAt={dayjs(update.createdAt)}
                   crimeGroups={update.linkedCrimeGroups}
                   from={update.createdBy}
                   id={update.id}
@@ -327,7 +327,7 @@ const IntelSection = ({
                         <UpdateContent
                           articles={update.linkedArticles}
                           content={reply.text}
-                          createdAt={moment(reply.createdAt)}
+                          createdAt={dayjs(reply.createdAt)}
                           crimeGroups={update.linkedCrimeGroups}
                           from={reply.createdBy}
                           id={reply.id}
@@ -346,7 +346,7 @@ const IntelSection = ({
                     <UpdateContent
                       articles={update.linkedArticles}
                       content={reply.text}
-                      createdAt={moment(reply.createdAt)}
+                      createdAt={dayjs(reply.createdAt)}
                       crimeGroups={update.linkedCrimeGroups}
                       from={reply.createdBy}
                       id={reply.id}

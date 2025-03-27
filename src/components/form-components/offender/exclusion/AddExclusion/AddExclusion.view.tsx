@@ -1,4 +1,7 @@
-import React from 'react';
+import type { RangePickerProps } from 'antd/es/date-picker';
+import type { Dayjs } from 'dayjs';
+import type { BanData } from 'types/DataType';
+
 import {
   Button,
   Col,
@@ -9,13 +12,10 @@ import {
   Row,
   Select,
 } from 'antd';
-import type { Moment } from 'moment';
-
-import type { RangePickerProps } from 'antd/es/date-picker';
-import type { BanData } from 'types/DataType';
-import BanTypeValues from 'types/enums/ban-type';
-import { useIntl } from 'react-intl';
 import { BanType } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import BanTypeValues from 'types/enums/ban-type';
 
 // interface FormData {
 //   endDate: Date;
@@ -25,19 +25,19 @@ import { BanType } from 'graphql/types';
 // }
 
 interface Props {
-  onSubmit: (value: BanData) => void;
-  onClose: () => void;
-  saving: boolean;
-  setStartDate: (value: Moment | Date | null) => void;
   disabledDate: RangePickerProps['disabledDate'];
+  onClose: () => void;
+  onSubmit: (value: BanData) => void;
+  saving: boolean;
+  setStartDate: (value: Date | Dayjs | null) => void;
 }
 
 const AddExclusion = ({
-  onSubmit,
+  disabledDate,
   onClose,
+  onSubmit,
   saving,
   setStartDate,
-  disabledDate,
 }: Props): JSX.Element => {
   const [form] = Form.useForm<BanData>();
   const intl = useIntl();
@@ -49,23 +49,23 @@ const AddExclusion = ({
       <Row gutter={16}>
         <Col span={21}>
           <Form.Item
-            name="type"
             label={intl.formatMessage({ defaultMessage: 'Type' })}
+            name="type"
             tooltip={intl.formatMessage({
               defaultMessage: 'select a type for the outcome',
             })}
           >
-            <Select options={BanTypeValues} disabled={saving} />
+            <Select disabled={saving} options={BanTypeValues} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={21}>
           <Form.Item
-            name="description"
             label={intl.formatMessage({
               defaultMessage: 'Description',
             })}
+            name="description"
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>
@@ -76,12 +76,12 @@ const AddExclusion = ({
           <Row gutter={16}>
             <Col span={21}>
               <Form.Item
-                name="months"
                 label={intl.formatMessage({
                   defaultMessage: 'Duration (Weeks)',
                 })}
+                name="months"
               >
-                <InputNumber style={{ width: 120 }} disabled={saving} />
+                <InputNumber disabled={saving} style={{ width: 120 }} />
               </Form.Item>
             </Col>
           </Row>
@@ -92,12 +92,12 @@ const AddExclusion = ({
           <Row gutter={16}>
             <Col span={21}>
               <Form.Item
-                name="fineValue"
                 label={intl.formatMessage({
                   defaultMessage: 'Fine Value',
                 })}
+                name="fineValue"
               >
-                <InputNumber style={{ width: 120 }} disabled={saving} />
+                <InputNumber disabled={saving} style={{ width: 120 }} />
               </Form.Item>
             </Col>
           </Row>
@@ -106,12 +106,12 @@ const AddExclusion = ({
       {[
         BanType.Cbo,
         BanType.CommunityBan,
-        BanType.Cpw,
+        BanType.CourtData,
         BanType.Cpn,
+        BanType.Cpw,
+        BanType.Other,
         BanType.Pspo,
         BanType.Wip,
-        BanType.Other,
-        BanType.CourtData,
       ].includes(type) && (
         <Row gutter={16}>
           {[BanType.Cbo].includes(type) && (
@@ -119,12 +119,12 @@ const AddExclusion = ({
               <Row gutter={16}>
                 <Col span={21}>
                   <Form.Item
-                    name="months"
                     label={intl.formatMessage({
                       defaultMessage: 'Duration (Months)',
                     })}
+                    name="months"
                   >
-                    <InputNumber style={{ width: 120 }} disabled={saving} />
+                    <InputNumber disabled={saving} style={{ width: 120 }} />
                   </Form.Item>
                 </Col>
               </Row>
@@ -132,16 +132,16 @@ const AddExclusion = ({
           )}
           {[
             BanType.CommunityBan,
-            BanType.Cpw,
+            BanType.CourtData,
             BanType.Cpn,
+            BanType.Cpw,
+            BanType.Other,
             BanType.Pspo,
             BanType.Wip,
-            BanType.Other,
-            BanType.CourtData,
           ].includes(type) && (
             <Col span={11}>
               <Form.Item
-                name="startDate"
+                dependencies={['endDate']}
                 label={
                   BanType.CourtData === type
                     ? intl.formatMessage({
@@ -151,13 +151,13 @@ const AddExclusion = ({
                         defaultMessage: 'Start Date',
                       })
                 }
-                dependencies={['endDate']}
+                name="startDate"
                 rules={[
                   {
-                    required: type !== BanType.Other,
                     message: intl.formatMessage({
                       defaultMessage: 'Please select a start date',
                     }),
+                    required: type !== BanType.Other,
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
@@ -189,17 +189,17 @@ const AddExclusion = ({
           {type !== BanType.CourtData && (
             <Col span={11}>
               <Form.Item
-                name="endDate"
                 label={intl.formatMessage({
                   defaultMessage: 'End Date',
                 })}
+                name="endDate"
                 rules={[
                   {
-                    required: type !== BanType.Other,
                     message: intl.formatMessage({
                       defaultMessage:
                         'Please select a end date for the outcome.',
                     }),
+                    required: type !== BanType.Other,
                   },
                 ]}
               >
@@ -211,7 +211,7 @@ const AddExclusion = ({
       )}
 
       <Form.Item>
-        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+        <Row gutter={16} justify="end" style={{ marginTop: 30 }}>
           <Col>
             <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
@@ -219,10 +219,10 @@ const AddExclusion = ({
           </Col>
           <Col>
             <Button
-              type="primary"
-              htmlType="submit"
               disabled={saving}
+              htmlType="submit"
               loading={saving}
+              type="primary"
             >
               {intl.formatMessage({
                 defaultMessage: 'Add Outcome',

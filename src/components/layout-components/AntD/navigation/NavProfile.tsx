@@ -3,6 +3,7 @@ import type { AvailableLanguages } from 'lang';
 
 import { useSignOut } from '#/hooks/signOut';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasRolePermission from '#/utils/has-role-permission';
 import {
   faFileContract,
   faMoon,
@@ -12,6 +13,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { PermissionMethod, PermissionModel } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
@@ -230,6 +232,10 @@ export const NavProfile = () => {
                 </Row>
               </Link>
             ),
+            permission: {
+              method: PermissionMethod.Read,
+              model: PermissionModel.UserSettings,
+            },
           },
           {
             key: '4',
@@ -272,7 +278,11 @@ export const NavProfile = () => {
               </Row>
             ),
           },
-        ],
+        ].filter((item) =>
+          item.permission === undefined
+            ? true
+            : hasRolePermission({ permission: item.permission })
+        ),
       }}
       placement="topRight"
     >

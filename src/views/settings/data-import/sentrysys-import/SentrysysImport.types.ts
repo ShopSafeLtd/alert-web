@@ -1,5 +1,5 @@
+import type { Dayjs } from 'dayjs';
 import type { Build, Gender, Height, Race, Role } from 'graphql/types';
-import type { Moment } from 'moment';
 
 export interface Profile {
   adminViewOnly: string;
@@ -103,7 +103,7 @@ export interface NewBusiness {
 export interface NewOffender {
   alias: string[];
   build: Build;
-  dateOfBirth: Moment | undefined;
+  dateOfBirth: Dayjs | undefined;
   gender: Gender;
   groups: string[];
   height: Height;
@@ -131,7 +131,7 @@ export interface NewIncident {
   business: string | undefined;
   createdBy: string | undefined;
   crimeTypes: string[];
-  date: Moment;
+  date: Dayjs;
   description: string;
   groups: string[];
   id: string;
@@ -148,7 +148,7 @@ export interface NewIncident {
   policeReported: boolean;
   sentrysysId: string;
   subject: string;
-  time: Moment;
+  time: Dayjs;
   vehicles: string[];
 }
 
@@ -156,7 +156,7 @@ export interface HistoricIncident {
   business: string | undefined;
   createdBy: string | undefined;
   crimeTypes: string[];
-  date: Moment;
+  date: Dayjs;
   description: string;
   groups: string[];
   id: string;
@@ -171,7 +171,7 @@ export interface HistoricIncident {
   policeReported: boolean;
   sentrysysId: string;
   subject: string;
-  time: Moment;
+  time: Dayjs;
 }
 
 export interface GenerateData {
@@ -192,8 +192,8 @@ export interface GenerateData {
   criminalDamageGraffitiVandalism: string[];
   defaultGroup: string[] | undefined;
   drunkenDisorderlyBehaviour: string[];
-  excludeIncidentDate: Moment;
-  excludeUserDate: Moment;
+  excludeIncidentDate: Dayjs;
+  excludeUserDate: Dayjs;
   fallbackGroup: string[];
   fareEvasion: string[];
   galleries: {

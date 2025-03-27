@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
 import CSVReader from '#/components/CSVReader/CSVReader';
-import moment from 'moment/moment';
+import dayjs from 'dayjs';
+import React, { useRef } from 'react';
+
 import type { IntelOneCSVData } from './IntelOneCSV.types';
 
 interface Props {
@@ -36,24 +37,24 @@ const IntelOneCSV = ({ onChange }: Props) => {
         data
           .filter((_, i) => i > 0)
           .map((item) => ({
-            siteName: item[0],
-            reportDate: moment(item[1], 'DD/MM/YYYY HH:mm').toDate(),
-            reference: item[2],
-            type: item[4],
-            offenderName: item[5] && item[5] !== '' ? item[5]?.split(',') : [],
-            value: Number(item[6]),
+            colour: item[12],
             crimeRef: item[7],
             description: item[8],
-            registration: item[9],
+            group: item[13],
             make: item[10],
             model: item[11],
-            colour: item[12],
-            group: item[13],
+            offenderName: item[5] && item[5] !== '' ? item[5]?.split(',') : [],
+            reference: item[2],
+            registration: item[9],
+            reportDate: dayjs(item[1], 'DD/MM/YYYY HH:mm').toDate(),
+            siteName: item[0],
+            type: item[4],
+            value: Number(item[6]),
           }))
       );
   };
 
-  return <CSVReader ref={inputRef} onFileLoaded={onFileLoad} />;
+  return <CSVReader onFileLoaded={onFileLoad} ref={inputRef} />;
 };
 
 export default IntelOneCSV;

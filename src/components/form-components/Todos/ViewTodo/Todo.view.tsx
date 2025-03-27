@@ -17,7 +17,7 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -107,14 +107,14 @@ const TodoView = ({
             defaultMessage: 'Created At',
           })}
         >
-          {todo?.todo ? moment(todo.todo.createdAt).format('DD/MM/YY') : null}
+          {todo?.todo ? dayjs(todo.todo.createdAt).format('DD/MM/YY') : null}
         </Descriptions.Item>
         <Descriptions.Item
           label={intl.formatMessage({
             defaultMessage: 'Due Date',
           })}
         >
-          {todo?.todo ? moment(todo.todo.dueDate).format('DD/MM/YY') : null}
+          {todo?.todo ? dayjs(todo.todo.dueDate).format('DD/MM/YY') : null}
         </Descriptions.Item>
         <Descriptions.Item
           label={intl.formatMessage({
