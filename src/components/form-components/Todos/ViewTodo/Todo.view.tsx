@@ -68,19 +68,17 @@ const TodoView = ({
         ?.answer
     );
 
-    return (
-      {
-        answerType: question?.type,
-        label: question.questionFormatted,
-        options: question.optionsFormFormatted || [],
-        questionId: question.id,
-        required: false,
-        tagQuestionId: id,
-        value: todo?.todo?.answers?.find(
-          (answer) => answer?.taskQuestion?.id === id
-        )?.answer,
-      } || []
-    );
+    return {
+      answerType: question?.type,
+      label: question.questionFormatted,
+      options: question.optionsFormFormatted || [],
+      questionId: question.id,
+      required: false,
+      tagQuestionId: id,
+      value: todo?.todo?.answers?.find(
+        (answer) => answer?.taskQuestion?.id === id
+      )?.answer,
+    };
   }) as CustomQuestion[];
 
   return (

@@ -32,6 +32,7 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
   role: Role.User,
   scheme: {
     activityAssignToUser: false,
+    allowTodoTemplateOverride: true,
     autoPopulateDescription: false,
     connectedToSchemes: [],
     customTranslations: [],

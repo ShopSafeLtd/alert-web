@@ -1,5 +1,3 @@
-import type { ListData } from '#/views/adminTodo/TodoList/useTodoList';
-
 import {
   faPenToSquare,
   faPlus,
@@ -22,6 +20,17 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import ActivityTemplateForm from '../../../components/form-components/ActivityTemplate';
 import AddTodo from '../../../components/form-components/Todos/AddTodo';
+
+interface ListData {
+  defaultDueDays: number;
+  description: string;
+  id: string;
+  name: string;
+  questions: {
+    id: string;
+    question: string;
+  }[];
+}
 
 interface Props {
   activityTemplateForm: boolean;

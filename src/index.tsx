@@ -28,9 +28,10 @@ import { BrowserRouter, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-unresolved
 import '~/yet-another-react-lightbox/dist/styles.css';
 
-import App from './App';
-import './index.css';
+// import './index.css';
 import * as serviceWorker from './serviceWorker';
+
+const App = React.lazy(() => import('./App'));
 
 const themes = {
   dark: '/css/dark-theme.css',
@@ -38,6 +39,10 @@ const themes = {
 };
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+window.addEventListener('vite:preloadError', () => {
+  window.location.reload();
+});
 
 if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key');
@@ -150,7 +155,9 @@ ReactDOM.render(
           themeMap={themes}
         >
           <ClerkWithRouting>
-            <App />
+            <React.Suspense fallback={<LoadingScreen />}>
+              <App />
+            </React.Suspense>
           </ClerkWithRouting>
         </ThemeSwitcherProvider>
       </div>

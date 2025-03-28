@@ -9,9 +9,18 @@ import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-import type { ListData } from '../../../views/adminTodo/useActivities';
-
 const { useForm } = Form;
+
+interface ListData {
+  defaultDueDays: number;
+  description: string;
+  id: string;
+  name: string;
+  questions: {
+    id: string;
+    question: string;
+  }[];
+}
 
 export interface FormData {
   defaultDueDate: number;

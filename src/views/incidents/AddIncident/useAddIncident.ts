@@ -53,7 +53,7 @@ import {
   PermissionModel,
 } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -782,7 +782,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })) ?? [],
+                          : (data.groups?.map((id) => ({ id })) ?? []),
                     },
                     hair: offender.hair || null,
                     height: offender.height || null,
@@ -883,7 +883,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     connect:
                       groups && groups.length === 1
                         ? groups.map(({ value: id }) => ({ id }))
-                        : data.groups?.map((id) => ({ id })) ?? [],
+                        : (data.groups?.map((id) => ({ id })) ?? []),
                   },
                   localId: vehicle.id,
                   make: vehicle.make,
@@ -900,7 +900,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })) ?? [],
+                          : (data.groups?.map((id) => ({ id })) ?? []),
                     },
                     make: { set: vehicle.make },
                     model: { set: vehicle.model },
@@ -1028,7 +1028,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             groups:
               groups && groups.length === 1
                 ? groups.map(({ value: id }) => ({ id }))
-                : data.groups?.map((id) => ({ id })) ?? [],
+                : (data.groups?.map((id) => ({ id })) ?? []),
             images: getImages(),
             investigationId: investigationId || null,
             items: data.goods

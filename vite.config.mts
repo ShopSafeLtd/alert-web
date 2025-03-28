@@ -1,15 +1,18 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, type PluginOption } from 'vite';
 import React from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
-import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
-// import checker from 'vite-plugin-checker';
+// import removeConsole from 'vite-plugin-remove-console';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 // local host launch fix
 import dns from 'node:dns';
 
 import path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { analyzer } from 'vite-bundle-analyzer';
+import removeConsole from 'vite-plugin-remove-console';
+import compression from 'vite-plugin-compression2';
 
 dns.setDefaultResultOrder('verbatim');
 const pathResolve = (pathStr: string) => {
@@ -29,10 +32,13 @@ export default defineConfig((configEnv) => {
       }),
       envCompatible(),
       viteTsconfigPaths(),
-      svgrPlugin(),
-      // will remove console from prod builds, remove if testing is needed on live
-      // removeConsole(),
-      // must be last
+      mode === 'production' && removeConsole(),
+      compression(),
+      visualizer({ open: true }) as PluginOption,
+      mode !== 'production' &&
+        analyzer({
+          analyzerMode: 'static',
+        }),
       sentryVitePlugin({
         org: 'nvoyy-group',
         project: 'alert-web',
@@ -52,12 +58,54 @@ export default defineConfig((configEnv) => {
     build: {
       outDir: 'build',
       sourcemap: true,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              const knownVendors = new Set([
+                'react',
+                'react-dom',
+                'antd',
+                'apollo',
+                'lodash',
+                'mapbox-gl',
+                '@sentry',
+                '@deck.gl/core',
+                '@nivo/bar',
+                'tinymce',
+                'ag-grid-community',
+                'ag-grid-enterprise',
+                'ag-charts-enterprise',
+                'ag-charts-community',
+                'ag-charts-react',
+                'ag-grid-charts-enterprise',
+              ]);
+
+              const parts = id.split('node_modules/')[1].split('/');
+              const name = parts[0].startsWith('@')
+                ? `${parts[0]}/${parts[1]}`
+                : parts[0];
+
+              if (knownVendors.has(name)) {
+                return `vendor-${name}`;
+              }
+            }
+          },
+        },
+      },
+      assetsInlineLimit: 8192,
     },
     resolve: {
       alias: [
+        // {
+        //   find: 'react',
+        //   replacement: path.resolve(__dirname, 'node_modules/react'),
+        // },
+        // {
+        //   find: 'react-dom',
+        //   replacement: path.resolve(__dirname, 'node_modules/react-dom'),
+        // },
         { find: '@', replacement: path.resolve(__dirname, 'src') },
-        // fix less import by: @import ~
-        // https://github.com/vitejs/vite/issues/2185#issuecomment-784637827
         { find: /^~/, replacement: pathResolve('./node_modules') },
       ],
     },
