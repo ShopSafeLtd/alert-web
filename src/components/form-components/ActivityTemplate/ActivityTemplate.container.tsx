@@ -2,60 +2,70 @@ import React from 'react';
 
 import View from './ActivityTemplate.view';
 import useCreateActivityTemplate from './useCreateActivityTemplate';
-import type { ListData } from '../../../views/adminTodo/useActivities';
+
+interface ListData {
+  defaultDueDays: number;
+  description: string;
+  id: string;
+  name: string;
+  questions: {
+    id: string;
+    question: string;
+  }[];
+}
 
 interface Props {
-  onClose: () => void;
-  update: (item: ListData, type: 'create' | 'update' | 'delete') => void;
   id?: string;
   initData?: {
-    name: string;
+    defaultDueDays: number;
     description: string;
+    name: string;
     questions: {
       id: string;
       question: string;
     }[];
-    defaultDueDays: number;
   };
+  onClose: () => void;
+  update: (item: ListData, type: 'create' | 'delete' | 'update') => void;
 }
 
 const ActivityTemplateForm = ({
-  update,
-  onClose,
-  initData,
   id,
+  initData,
+  onClose,
+  update,
 }: Props): JSX.Element => {
   const {
+    addQuestion,
+    form,
     onSubmit,
     saving,
-    addQuestion,
-    setAddQuestion,
     selectedIds,
     selectedQuestions,
-    setSelectedQuestions,
+    setAddQuestion,
     setSelectedIds,
-    form,
+    setSelectedQuestions,
     updateQs,
   } = useCreateActivityTemplate({
-    onClose,
     id,
-    update,
     initData,
+    onClose,
+    update,
   });
 
   return (
     <View
-      form={form}
-      setSelectedIds={setSelectedIds}
       addQuestion={addQuestion}
-      setAddQuestion={setAddQuestion}
-      update={updateQs}
+      form={form}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      saving={saving}
       selectedIds={selectedIds}
       selectedQuestions={selectedQuestions}
+      setAddQuestion={setAddQuestion}
+      setSelectedIds={setSelectedIds}
       setSelectedQuestions={setSelectedQuestions}
-      onSubmit={onSubmit}
-      onClose={onClose}
-      saving={saving}
+      update={updateQs}
     />
   );
 };

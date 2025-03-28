@@ -12,7 +12,7 @@ import { Col, Row, Select, Spin, Typography } from 'antd';
 import { ListStockItemsDocument } from 'graphql/stock-item/__generated__/stock-items-import.generated';
 import { QueryMode } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useMemo, useRef, useState } from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { createUseStyles } from 'react-jss';

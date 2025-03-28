@@ -8,5 +8,11 @@
       }
     ]
   ],
-  "ignore": ["src/graphql/**/*.graphql", "src/graphql/**/generated.ts", "src/**/*.generated.ts","src/graphql/**/types.ts","src/**/!(*.generated).{ts,tsx}"]
+  "ignore": [
+    "src/graphql/**/*.graphql",
+    "src/graphql/**/generated.ts",
+    "src/**/*.generated.ts",
+    "src/graphql/**/types.ts",
+    "src/**/!(*.generated).{ts,tsx}"
+  ]
 }

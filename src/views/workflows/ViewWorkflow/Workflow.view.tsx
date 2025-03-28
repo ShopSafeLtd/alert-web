@@ -34,7 +34,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { useParams } from 'react-router-dom';
 
-import type { ListData } from '../../adminTodo/useActivities';
 import type {
   FormData,
   LabelValue,
@@ -46,6 +45,17 @@ import type {
 import ActivityTemplateForm from '../../../components/form-components/ActivityTemplate';
 import CreateQuestionContainer from '../../../components/form-components/createQuestion/CreateQuestion.container';
 import Loading from '../../../components/shared-components/AntD/Loading';
+
+interface ListData {
+  defaultDueDays: number;
+  description: string;
+  id: string;
+  name: string;
+  questions: {
+    id: string;
+    question: string;
+  }[];
+}
 
 interface WorkflowProps {
   activityTemplateForm: boolean;

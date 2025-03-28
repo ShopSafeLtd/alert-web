@@ -386,20 +386,18 @@ const OffenderProfile = ({
                       ]}
                       indexBy="month"
                       indexScale={{ round: true, type: 'band' }}
-                      keys={
-                        [
-                          ...new Set(
-                            offenderProfileData?.offender?.incidentTotals
-                              ?.map((item) => {
-                                if (item.data) {
-                                  return item.data.map(({ name }) => name);
-                                }
-                                return [];
-                              })
-                              .flat()
-                          ),
-                        ] || []
-                      }
+                      keys={[
+                        ...new Set(
+                          offenderProfileData?.offender?.incidentTotals
+                            ?.map((item) => {
+                              if (item.data) {
+                                return item.data.map(({ name }) => name);
+                              }
+                              return [];
+                            })
+                            .flat()
+                        ),
+                      ]}
                       labelSkipHeight={12}
                       labelSkipWidth={12}
                       labelTextColor={{

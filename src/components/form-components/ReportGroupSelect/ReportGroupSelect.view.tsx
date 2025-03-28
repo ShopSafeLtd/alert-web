@@ -6,7 +6,7 @@ import { useReportGroupsSelectQuery } from '#/components/form-components/ReportG
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { useAtomValue } from 'jotai/index';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 

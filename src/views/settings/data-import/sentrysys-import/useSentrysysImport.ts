@@ -18,6 +18,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useGoodsTypesQuery } from '#/views/settings/data-import/csv/data-import/graphql/queries/__generated__/goods-types.generated';
 import { Form } from 'antd';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { useListUsersQuery } from 'graphql/users/queries/__generated__/list-users.generated';
@@ -25,6 +26,7 @@ import update from 'immutability-helper';
 import { useAtomValue } from 'jotai/index';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+dayjs.extend(customParseFormat);
 
 import type {
   Business,
