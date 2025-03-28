@@ -4,7 +4,7 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 import { compression } from 'vite-plugin-compression2';
-import removeConsole from 'vite-plugin-remove-console';
+// import removeConsole from 'vite-plugin-remove-console';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 // local host launch fix
@@ -33,7 +33,7 @@ export default defineConfig((configEnv) => {
       envCompatible(),
       viteTsconfigPaths(),
       svgrPlugin(),
-      mode === 'production' && removeConsole(),
+      // mode === 'production' && removeConsole(),
       compression(),
       mode !== 'production' && (visualizer() as PluginOption),
       mode !== 'production' &&
@@ -131,14 +131,14 @@ export default defineConfig((configEnv) => {
     },
     resolve: {
       alias: [
-        {
-          find: 'react',
-          replacement: path.resolve(__dirname, 'node_modules/react'),
-        },
-        {
-          find: 'react-dom',
-          replacement: path.resolve(__dirname, 'node_modules/react-dom'),
-        },
+        // {
+        //   find: 'react',
+        //   replacement: path.resolve(__dirname, 'node_modules/react'),
+        // },
+        // {
+        //   find: 'react-dom',
+        //   replacement: path.resolve(__dirname, 'node_modules/react-dom'),
+        // },
         { find: '@', replacement: path.resolve(__dirname, 'src') },
         { find: /^~/, replacement: pathResolve('./node_modules') },
       ],
