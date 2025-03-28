@@ -33,7 +33,11 @@ export default defineConfig((configEnv) => {
       envCompatible(),
       viteTsconfigPaths(),
       mode === 'production' && removeConsole(),
-      compression(),
+      compression({
+        algorithm: 'gzip',
+        threshold: 1024,
+        deleteOriginalAssets: false,
+      }),
       visualizer({ open: true }) as PluginOption,
       mode !== 'production' &&
         analyzer({
@@ -58,6 +62,7 @@ export default defineConfig((configEnv) => {
     build: {
       outDir: 'build',
       sourcemap: true,
+      minify: 'esbuild',
       rollupOptions: {
         output: {
           manualChunks(id) {
@@ -91,9 +96,16 @@ export default defineConfig((configEnv) => {
               }
             }
           },
+          // Optimize chunk naming for better caching
+          chunkFileNames: 'assets/js/[name]-[hash].js',
+          entryFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
         },
       },
-      assetsInlineLimit: 8192,
+      assetsInlineLimit: 4096,
+      chunkSizeWarningLimit: 1000,
+      cssCodeSplit: true,
+      reportCompressedSize: false,
     },
     resolve: {
       alias: [
