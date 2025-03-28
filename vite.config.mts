@@ -12,6 +12,7 @@ import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { analyzer } from 'vite-bundle-analyzer';
 import removeConsole from 'vite-plugin-remove-console';
+import compression from 'vite-plugin-compression2';
 
 dns.setDefaultResultOrder('verbatim');
 const pathResolve = (pathStr: string) => {
@@ -37,6 +38,7 @@ export default defineConfig((configEnv) => {
         analyzer({
           analyzerMode: 'static',
         }),
+      compression(),
       sentryVitePlugin({
         org: 'nvoyy-group',
         project: 'alert-web',
@@ -56,36 +58,7 @@ export default defineConfig((configEnv) => {
     build: {
       outDir: 'build',
       sourcemap: true,
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: [
-            'console.log',
-            'console.info',
-            'console.debug',
-            'console.trace',
-          ],
-          passes: 2,
-          ecma: 2020,
-          module: true,
-          toplevel: true,
-          unsafe_arrows: true,
-          unsafe_methods: true,
-        },
-        mangle: {
-          properties: false,
-          toplevel: true,
-        },
-        format: {
-          comments: false,
-          ecma: 2020,
-        },
-      },
       chunkSizeWarningLimit: 1000,
-      reportCompressedSize: true,
-      cssCodeSplit: true,
       rollupOptions: {
         output: {
           manualChunks(id) {
