@@ -12,7 +12,6 @@ import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { analyzer } from 'vite-bundle-analyzer';
 import removeConsole from 'vite-plugin-remove-console';
-import compression from 'vite-plugin-compression2';
 
 dns.setDefaultResultOrder('verbatim');
 const pathResolve = (pathStr: string) => {
@@ -33,8 +32,7 @@ export default defineConfig((configEnv) => {
       envCompatible(),
       viteTsconfigPaths(),
       mode === 'production' && removeConsole(),
-      compression(),
-      mode !== 'production' && (visualizer() as PluginOption),
+      mode !== 'production' && (visualizer({ open: true }) as PluginOption),
       mode !== 'production' &&
         analyzer({
           analyzerMode: 'static',
@@ -58,32 +56,102 @@ export default defineConfig((configEnv) => {
     build: {
       outDir: 'build',
       sourcemap: true,
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: [
+            'console.log',
+            'console.info',
+            'console.debug',
+            'console.trace',
+          ],
+          passes: 2,
+          ecma: 2020,
+          module: true,
+          toplevel: true,
+          unsafe_arrows: true,
+          unsafe_methods: true,
+        },
+        mangle: {
+          properties: false,
+          toplevel: true,
+        },
+        format: {
+          comments: false,
+          ecma: 2020,
+        },
+      },
+      chunkSizeWarningLimit: 1000,
+      reportCompressedSize: true,
+      cssCodeSplit: true,
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              const knownVendors = new Set([
-                'react',
-                'react-dom',
-                'antd',
-                'apollo',
-                'lodash',
-                'mapbox-gl',
-                '@sentry',
-                '@deck.gl/core',
-                '@nivo/bar',
-                'tinymce',
-                'ag-charts-react',
-                'ag-charts-community',
-              ]);
+              // Core React chunk
+              if (
+                id.includes('react') ||
+                id.includes('react-dom') ||
+                id.includes('scheduler') ||
+                id.includes('@remix-run')
+              ) {
+                return 'vendor-react';
+              }
 
-              const parts = id.split('node_modules/')[1].split('/');
-              const name = parts[0].startsWith('@')
-                ? `${parts[0]}/${parts[1]}`
-                : parts[0];
+              // AG Grid related
+              if (id.includes('ag-grid')) {
+                return 'vendor-ag-grid';
+              }
 
-              if (knownVendors.has(name)) {
-                return `vendor-${name}`;
+              // AG Charts related
+              if (id.includes('ag-charts')) {
+                return 'vendor-ag-charts';
+              }
+
+              // Data visualization
+              if (
+                id.includes('@nivo') ||
+                id.includes('@deck.gl') ||
+                id.includes('mapbox-gl')
+              ) {
+                return 'vendor-dataviz';
+              }
+
+              // UI Components
+              if (id.includes('antd') || id.includes('@ant-design')) {
+                return 'vendor-antd';
+              }
+
+              // Apollo and GraphQL
+              if (id.includes('apollo') || id.includes('graphql')) {
+                return 'vendor-apollo';
+              }
+
+              // Utils
+              if (
+                id.includes('lodash') ||
+                id.includes('date-fns') ||
+                id.includes('moment')
+              ) {
+                return 'vendor-utils';
+              }
+
+              // Sentry
+              if (id.includes('@sentry')) {
+                return 'vendor-sentry';
+              }
+
+              // Editor
+              if (id.includes('tinymce')) {
+                return 'vendor-editor';
+              }
+
+              // Create a common chunk for smaller dependencies
+              const MIN_SIZE = 50000; // 50KB threshold
+              if (id.length > MIN_SIZE) {
+                return 'vendor-common';
               }
             }
           },

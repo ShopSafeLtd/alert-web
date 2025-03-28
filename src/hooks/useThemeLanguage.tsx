@@ -1,10 +1,23 @@
 import type { AvailableLanguages } from '#/lang';
 import type { Locale } from 'antd/lib/locale-provider';
 
-import AppLocale, { AvailableLanguagesConst } from '#/lang';
+import { AvailableLanguagesConst } from '#/lang';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useStoreActions, useStoreState } from '#/state';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
+// Import all Ant Design locales
+import antdDaDK from 'antd/es/locale/da_DK';
+import antdDeDE from 'antd/es/locale/de_DE';
+import antdEnUS from 'antd/es/locale/en_US';
+import antdEsES from 'antd/es/locale/es_ES';
+import antdFiFI from 'antd/es/locale/fi_FI';
+import antdFrFR from 'antd/es/locale/fr_FR';
+import antdItIT from 'antd/es/locale/it_IT';
+import antdNlBE from 'antd/es/locale/nl_BE';
+import antdNlNL from 'antd/es/locale/nl_NL';
+import antdPlPL from 'antd/es/locale/pl_PL';
+import antdPtPT from 'antd/es/locale/pt_PT';
+import antdSvSE from 'antd/es/locale/sv_SE';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
@@ -24,6 +37,85 @@ interface LocaleType {
   messages: { [p: string]: string };
 }
 
+interface TranslationCache {
+  [key: string]: LocaleType;
+}
+
+const translationCache: TranslationCache = {};
+
+// Map our language codes to Ant Design locales
+const antdLocaleMap: Record<string, Locale> = {
+  da: antdDaDK,
+  de: antdDeDE,
+  en: antdEnUS,
+  es: antdEsES,
+  fi: antdFiFI,
+  fr: antdFrFR,
+  it: antdItIT,
+  nl: antdNlNL,
+  pl: antdPlPL,
+  pt: antdPtPT,
+  rbe: antdNlBE,
+  sv: antdSvSE,
+};
+
+// Map our language codes to translation file names
+const translationFileMap: Record<string, string> = {
+  da: 'da_DK.json',
+  de: 'de_DE.json',
+  en: 'en_US.json',
+  es: 'es_ES.json',
+  fi: 'fi_FI.json',
+  fr: 'fr_FR.json',
+  it: 'it_IT.json',
+  nl: 'nl_NL.json',
+  pl: 'pl_PL.json',
+  pt: 'pt_PT.json',
+  rbe: 'nl_BE.json',
+  sv: 'sv_SE.json',
+};
+
+const loadTranslations = async (lang: string): Promise<LocaleType> => {
+  // Check cache first
+  if (translationCache[lang]) {
+    return translationCache[lang];
+  }
+
+  try {
+    const antd = antdLocaleMap[lang.toLowerCase()] || antdEnUS;
+    const fileName = translationFileMap[lang.toLowerCase()] || 'en_US.json';
+    const messages = (await fetch(`/translations/${fileName}`).then((res) =>
+      res.json()
+    )) as { [key: string]: string };
+
+    const locale = {
+      antd,
+      locale: lang,
+      messages,
+    };
+
+    // Cache the result
+    translationCache[lang] = locale;
+    return locale;
+  } catch (error) {
+    console.error(`Failed to load translations for ${lang}:`, error);
+    // Fallback to English if loading fails
+    const messages = (await fetch('/translations/en_US.json').then((res) =>
+      res.json()
+    )) as { [key: string]: string };
+
+    const fallbackLocale = {
+      antd: antdEnUS,
+      locale: 'en_US',
+      messages,
+    };
+
+    // Cache the fallback
+    translationCache['en_US'] = fallbackLocale;
+    return fallbackLocale;
+  }
+};
+
 export const useThemeLanguage = (): {
   currentAppLocale: LocaleType;
   messages: { [key: string]: string };
@@ -37,8 +129,8 @@ export const useThemeLanguage = (): {
     (navigator.language === 'nl-BE' ? 'rbe' : navigator.language.split('-')[0]);
 
   const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
-
   const initLang = localLang || lang || locale;
+
   useEffect(() => {
     if (initLang) {
       typedLocalStorage.set(LocalStorageKeys.lang, initLang);
@@ -50,54 +142,62 @@ export const useThemeLanguage = (): {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const t = localStorage.getItem('theme');
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
+
   if (t) {
     document.documentElement.setAttribute('style', `color-scheme: ${t}`);
   } else {
-    // get browser theme preference
     const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     localStorage.setItem('theme', darkMode ? 'dark' : 'light');
     switchTheme(darkMode ? 'dark' : 'light');
-    // set color-scheme: dark or light on the html element
     document.documentElement.setAttribute(
       'style',
       `color-scheme: ${darkMode ? 'dark' : 'light'}`
     );
   }
-  const currentAppLocale = AppLocale[initLang as AvailableLanguages];
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore. eslint-disable-next-line
+  const [currentAppLocale, setCurrentAppLocale] = useState<LocaleType>({
+    antd: {} as Locale,
+    locale: initLang,
+    messages: {},
+  });
+  const [messages, setMessages] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    const loadLocale = async () => {
+      try {
+        const localeI = await loadTranslations(initLang);
+        setCurrentAppLocale(localeI);
+        setMessages({
+          ...localeI.messages,
+          ...convertTranslationsToJSON(
+            customTranslations || [],
+            localeI.locale
+          ),
+        });
+      } catch (error) {
+        console.error('Failed to load locale:', error);
+      }
+    };
+
+    void loadLocale();
+  }, [initLang, customTranslations]);
+
   // eslint-disable-next-line unicorn/consistent-function-scoping
   function convertTranslationsToJSON(
     translations: Translations[],
     language: string
   ): { [key: string]: string } {
-    const json = {};
+    const json: { [key: string]: string } = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const translation of translations) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const id = Object.keys(translation)[0];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-      json[id] = translation[id][language];
+      if (translation[id] && translation[id][language]) {
+        json[id] = translation[id][language];
+      }
     }
 
     return json;
   }
-
-  const [messages, setMessages] = useState({
-    ...currentAppLocale.messages,
-    ...convertTranslationsToJSON(customTranslations || [], locale),
-  });
-  useEffect(() => {
-    setMessages({
-      ...currentAppLocale.messages,
-      ...convertTranslationsToJSON(customTranslations || [], locale),
-    });
-  }, [currentAppLocale.messages, customTranslations, locale]);
 
   return {
     currentAppLocale,
