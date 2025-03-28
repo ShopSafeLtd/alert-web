@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SelectProps } from 'antd';
-import { Typography, Select, Spin } from 'antd';
+
+import { Select, Spin, Typography } from 'antd';
+import { debounce } from 'lodash-es';
 import React, { useMemo, useRef, useState } from 'react';
-import debounce from 'lodash/debounce';
 
 export interface DebounceSelectProps<ValueType = any>
-  extends Omit<SelectProps<ValueType>, 'options' | 'children'> {
-  fetchOptions: (search: string) => Promise<ValueType[]>;
+  extends Omit<SelectProps<ValueType>, 'children' | 'options'> {
   debounceTimeout?: number;
+  fetchOptions: (search: string) => Promise<ValueType[]>;
   setValue?(args0: ValueType[]): void;
 }
 
@@ -25,14 +26,15 @@ const CopyDebounceSelect = <
     // label: React.ReactNode;
     label: string;
     location?: string;
-    value: string | number;
-  } = any
+    value: number | string;
+  } = any,
 >({
-  fetchOptions,
   debounceTimeout = 200,
+  fetchOptions,
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   setValue,
   ...props
-}: DebounceSelectProps) => {
+}: DebounceSelectProps): JSX.Element => {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<ValueType[]>([]);
   const fetchRef = useRef(0);
@@ -55,10 +57,10 @@ const CopyDebounceSelect = <
 
   return (
     <Select<ValueType>
-      labelInValue
       filterOption={false}
-      onSearch={debounceFetcher}
+      labelInValue
       notFoundContent={fetching ? <Spin size="small" /> : null}
+      onSearch={debounceFetcher}
       optionFilterProp="label"
       optionLabelProp="label"
       // options={options}
@@ -68,14 +70,14 @@ const CopyDebounceSelect = <
       {options.map((option) => (
         <Select.Option
           key={option.value}
-          value={option.value}
           label={option.label}
+          value={option.value}
         >
           <Typography.Text>{option.label}</Typography.Text>
           {option.location && (
             <Typography.Paragraph
-              type="secondary"
               style={{ fontSize: 13, margin: 0 }}
+              type="secondary"
             >
               {option.location}
             </Typography.Paragraph>

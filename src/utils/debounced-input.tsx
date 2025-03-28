@@ -3,7 +3,7 @@ import type { InputProps } from 'antd';
 import type { ChangeEvent } from 'react';
 
 import { Input } from 'antd';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useCallback } from 'react';
 
 /**

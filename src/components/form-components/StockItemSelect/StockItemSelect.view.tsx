@@ -8,7 +8,7 @@ import type {
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Col, Row, Select, Typography } from 'antd';
 import { useAtomValue } from 'jotai/index';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 

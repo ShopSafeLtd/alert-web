@@ -10,7 +10,7 @@ import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { Select } from 'antd';
 import { QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -35,31 +35,44 @@ interface Props {
   value?: ValueType;
 }
 
-function convertToArrayOfStrings(onChangeValue: ValueType): string[] {
-  if (!onChangeValue) return [];
-  if (Array.isArray(onChangeValue)) {
-    if (onChangeValue.every((item) => typeof item === 'string')) {
-      return onChangeValue as string[];
-    } else if (onChangeValue.every((item) => typeof item === 'number')) {
-      return (onChangeValue as number[]).map((item) => item.toString());
-    } else if ((onChangeValue[0] as LabeledValue).label === undefined) {
-      return [];
-    } else {
-      return (onChangeValue as LabeledValue[]).map((item) =>
-        item.value.toString()
-      );
-    }
-  } else if (typeof onChangeValue === 'string') {
-    return [onChangeValue];
-  } else if (typeof onChangeValue === 'number') {
-    return [onChangeValue.toString()];
-  } else if (onChangeValue.label === undefined) {
-    return [];
-  } else {
-    return [onChangeValue.value.toString()];
-  }
+function isLabeledValue(val: unknown): val is LabeledValue {
+  return (
+    typeof val === 'object' && val !== null && 'label' in val && 'value' in val
+  );
 }
+function convertToArrayOfStrings(value: ValueType): string[] {
+  if (value === null) return [];
 
+  if (Array.isArray(value)) {
+    if (value.length === 0) return [];
+
+    const first = value[0];
+
+    if (typeof first === 'string') {
+      return value as string[];
+    }
+
+    if (typeof first === 'number') {
+      return (value as number[]).map((v) => v.toString());
+    }
+
+    if (isLabeledValue(first)) {
+      return (value as LabeledValue[]).map((v) => v.value.toString());
+    }
+
+    return [];
+  }
+
+  if (typeof value === 'string' || typeof value === 'number') {
+    return [value.toString()];
+  }
+
+  if (isLabeledValue(value)) {
+    return [value.value.toString()];
+  }
+
+  return [];
+}
 // export const businessSelectValueFormatter = <T extends string | string[]>(
 //   value: ValueType,
 //   returnType: T

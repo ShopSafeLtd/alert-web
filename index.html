@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <link href="/favicon.svg" rel="icon" />
   <!--styles-insertion-point-->
-  <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" rel="stylesheet">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <meta content="#000000" name="theme-color" />
   <meta
@@ -23,6 +22,12 @@
 <script>
   window.global = window;
   var exports = {};
+</script>
+<script>
+  const mapboxGeocoderCSS = document.createElement('link');
+  mapboxGeocoderCSS.rel = 'stylesheet';
+  mapboxGeocoderCSS.href = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css';
+  document.head.appendChild(mapboxGeocoderCSS);
 </script>
 </body>
 </html>
