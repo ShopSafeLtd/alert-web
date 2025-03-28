@@ -57,32 +57,6 @@ export default defineConfig((configEnv) => {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            if (id.includes('node_modules')) {
-              const knownVendors = new Set([
-                'react',
-                'react-dom',
-                'antd',
-                'apollo',
-                'lodash',
-                'mapbox-gl',
-                '@sentry',
-                '@deck.gl/core',
-                '@nivo/bar',
-                'tinymce',
-                'ag-charts-react',
-                'ag-charts-community',
-              ]);
-
-              const parts = id.split('node_modules/')[1].split('/');
-              const name = parts[0].startsWith('@')
-                ? `${parts[0]}/${parts[1]}`
-                : parts[0];
-
-              if (knownVendors.has(name)) {
-                return `vendor-${name}`;
-              }
-            }
-
             // Split nested subdirectories within form-components into their own chunks
             const formComponentMatch = id.match(
               /\/components\/form-components\/([^/]+)\//
