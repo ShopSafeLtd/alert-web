@@ -1,9 +1,7 @@
 import { defineConfig, loadEnv, type PluginOption } from 'vite';
 import React from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
-import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
-import { compression } from 'vite-plugin-compression2';
 // import removeConsole from 'vite-plugin-remove-console';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
@@ -32,9 +30,6 @@ export default defineConfig((configEnv) => {
       }),
       envCompatible(),
       viteTsconfigPaths(),
-      svgrPlugin(),
-      // mode === 'production' && removeConsole(),
-      compression(),
       mode !== 'production' && (visualizer() as PluginOption),
       mode !== 'production' &&
         analyzer({
