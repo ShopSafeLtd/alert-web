@@ -11,6 +11,8 @@ import dns from 'node:dns';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { analyzer } from 'vite-bundle-analyzer';
+import removeConsole from 'vite-plugin-remove-console';
+import compression from 'vite-plugin-compression2';
 
 dns.setDefaultResultOrder('verbatim');
 const pathResolve = (pathStr: string) => {
@@ -30,6 +32,8 @@ export default defineConfig((configEnv) => {
       }),
       envCompatible(),
       viteTsconfigPaths(),
+      mode === 'production' && removeConsole(),
+      compression(),
       mode !== 'production' && (visualizer() as PluginOption),
       mode !== 'production' &&
         analyzer({
