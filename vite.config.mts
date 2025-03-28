@@ -34,7 +34,7 @@ export default defineConfig((configEnv) => {
       viteTsconfigPaths(),
       mode === 'production' && removeConsole(),
       compression(),
-      mode !== 'production' && (visualizer({ open: true }) as PluginOption),
+      visualizer({ open: true }) as PluginOption,
       mode !== 'production' &&
         analyzer({
           analyzerMode: 'static',
@@ -78,6 +78,7 @@ export default defineConfig((configEnv) => {
                 'ag-charts-enterprise',
                 'ag-charts-community',
                 'ag-charts-react',
+                'ag-grid-charts-enterprise',
               ]);
 
               const parts = id.split('node_modules/')[1].split('/');
