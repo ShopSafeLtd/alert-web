@@ -26,12 +26,14 @@ import type { CustomQuestion, Image, LocationData } from 'types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
 import { sessionIdAtom } from '#/hooks/useManageSession';
 import {
+  currentPermissionsAtom,
   currentSchemeAtom,
   currentSchemeBusinessesAtom,
   currentSchemeIdAtom,
   isAdminAtom,
 } from '#/providers/SchemeProvider/SchemeProvider';
 import { currentUserAtom } from '#/providers/UserProvider/UserProvider';
+import hasPermission from '#/utils/has-permission';
 import hasRolePermission from '#/utils/has-role-permission';
 import { useGenerateStatementBodyMutation } from '#/views/incidents/AddIncident/graphql/__generated__/generateStatementBody.generated';
 import { Form, Modal, notification } from 'antd';
@@ -255,6 +257,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const isAdmin = useAtomValue(isAdminAtom);
   const userId = useAtomValue(currentUserAtom)?.id ?? '';
   const businesses = useAtomValue(currentSchemeBusinessesAtom);
+  const permissions = useAtomValue(currentPermissionsAtom);
 
   const reportOnly =
     useAtomValue(currentSchemeAtom)?.reportOnly &&
@@ -696,11 +699,12 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         navigate('/app/incidents/add');
       } else if (
         restrictIncidentAccess &&
-        hasRolePermission({
+        hasPermission({
           permission: {
             method: PermissionMethod.Read,
             model: PermissionModel.Incidents,
           },
+          permissions,
         })
       ) {
         navigate('/app/dashboard');
@@ -782,7 +786,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : (data.groups?.map((id) => ({ id })) ?? []),
+                          : data.groups?.map((id) => ({ id })) ?? [],
                     },
                     hair: offender.hair || null,
                     height: offender.height || null,
@@ -883,7 +887,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     connect:
                       groups && groups.length === 1
                         ? groups.map(({ value: id }) => ({ id }))
-                        : (data.groups?.map((id) => ({ id })) ?? []),
+                        : data.groups?.map((id) => ({ id })) ?? [],
                   },
                   localId: vehicle.id,
                   make: vehicle.make,
@@ -900,7 +904,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       connect:
                         groups && groups.length === 1
                           ? groups.map(({ value: id }) => ({ id }))
-                          : (data.groups?.map((id) => ({ id })) ?? []),
+                          : data.groups?.map((id) => ({ id })) ?? [],
                     },
                     make: { set: vehicle.make },
                     model: { set: vehicle.model },
@@ -1028,7 +1032,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             groups:
               groups && groups.length === 1
                 ? groups.map(({ value: id }) => ({ id }))
-                : (data.groups?.map((id) => ({ id })) ?? []),
+                : data.groups?.map((id) => ({ id })) ?? [],
             images: getImages(),
             investigationId: investigationId || null,
             items: data.goods
