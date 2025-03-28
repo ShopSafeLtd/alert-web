@@ -57,42 +57,31 @@ export default defineConfig((configEnv) => {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            // Split nested subdirectories within form-components into their own chunks
-            const formComponentMatch = id.match(
-              /\/components\/form-components\/([^/]+)\//
-            );
-            if (formComponentMatch && formComponentMatch[1]) {
-              return `component-form-${formComponentMatch[1]}`;
-            }
+            if (id.includes('node_modules')) {
+              const knownVendors = new Set([
+                'react',
+                'react-dom',
+                'antd',
+                'apollo',
+                'lodash',
+                'mapbox-gl',
+                '@sentry',
+                '@deck.gl/core',
+                '@nivo/bar',
+                'tinymce',
+                'ag-charts-react',
+                'ag-charts-community',
+              ]);
 
-            // Split large component folders into separate chunks
-            const componentMatch = id.match(/\/components\/([^/]+)\//);
-            if (componentMatch && componentMatch[1]) {
-              return `component-${componentMatch[1]}`;
-            }
+              const parts = id.split('node_modules/')[1].split('/');
+              const name = parts[0].startsWith('@')
+                ? `${parts[0]}/${parts[1]}`
+                : parts[0];
 
-            // Split views into separate chunks
-            const viewMatch = id.match(/\/views\/([^/]+)\//);
-            if (viewMatch && viewMatch[1]) {
-              return `view-${viewMatch[1]}`;
+              if (knownVendors.has(name)) {
+                return `vendor-${name}`;
+              }
             }
-
-            // Split containers into separate chunks
-            const containerMatch = id.match(/\/containers\/([^/]+)\//);
-            if (containerMatch && containerMatch[1]) {
-              return `container-${containerMatch[1]}`;
-            }
-
-            // Split routes/pages into separate chunks
-            if (
-              id.includes('src/router') ||
-              id.includes('src/routes') ||
-              id.includes('src/pages')
-            ) {
-              return 'router';
-            }
-
-            return undefined;
           },
         },
       },
