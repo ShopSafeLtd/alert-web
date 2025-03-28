@@ -9,7 +9,7 @@ import type { TodoStatusInput } from 'graphql/types';
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import EditTodo from '#/components/form-components/Todos/EditTodo';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
-import hasRolePermission from '#/utils/has-role-permission';
+import hasPermission from '#/utils/has-permission';
 import {
   faArrowUpRightAndArrowDownLeftFromCenter,
   faCheckCircle,
@@ -584,7 +584,7 @@ const AdminTodos = ({
                               },
                             },
                           ].filter((item) =>
-                            hasRolePermission({ permission: item.permission })
+                            hasPermission({ permission: item.permission })
                           ),
                         }}
                       >
