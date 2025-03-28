@@ -33,12 +33,12 @@ export default defineConfig((configEnv) => {
       envCompatible(),
       viteTsconfigPaths(),
       mode === 'production' && removeConsole(),
+      compression(),
       mode !== 'production' && (visualizer({ open: true }) as PluginOption),
       mode !== 'production' &&
         analyzer({
           analyzerMode: 'static',
         }),
-      compression(),
       sentryVitePlugin({
         org: 'nvoyy-group',
         project: 'alert-web',
@@ -58,73 +58,35 @@ export default defineConfig((configEnv) => {
     build: {
       outDir: 'build',
       sourcemap: true,
-      chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              // Core React chunk
-              if (
-                id.includes('react') ||
-                id.includes('react-dom') ||
-                id.includes('scheduler') ||
-                id.includes('@remix-run')
-              ) {
-                return 'vendor-react';
-              }
+              const knownVendors = new Set([
+                'react',
+                'react-dom',
+                'antd',
+                'apollo',
+                'lodash',
+                'mapbox-gl',
+                '@sentry',
+                '@deck.gl/core',
+                '@nivo/bar',
+                'tinymce',
+                'ag-grid-community',
+                'ag-grid-enterprise',
+                'ag-charts-enterprise',
+                'ag-charts-community',
+                'ag-charts-react',
+              ]);
 
-              // AG Grid related
-              if (id.includes('ag-grid')) {
-                return 'vendor-ag-grid';
-              }
+              const parts = id.split('node_modules/')[1].split('/');
+              const name = parts[0].startsWith('@')
+                ? `${parts[0]}/${parts[1]}`
+                : parts[0];
 
-              // AG Charts related
-              if (id.includes('ag-charts')) {
-                return 'vendor-ag-charts';
-              }
-
-              // Data visualization
-              if (
-                id.includes('@nivo') ||
-                id.includes('@deck.gl') ||
-                id.includes('mapbox-gl')
-              ) {
-                return 'vendor-dataviz';
-              }
-
-              // UI Components
-              if (id.includes('antd') || id.includes('@ant-design')) {
-                return 'vendor-antd';
-              }
-
-              // Apollo and GraphQL
-              if (id.includes('apollo') || id.includes('graphql')) {
-                return 'vendor-apollo';
-              }
-
-              // Utils
-              if (
-                id.includes('lodash') ||
-                id.includes('date-fns') ||
-                id.includes('moment')
-              ) {
-                return 'vendor-utils';
-              }
-
-              // Sentry
-              if (id.includes('@sentry')) {
-                return 'vendor-sentry';
-              }
-
-              // Editor
-              if (id.includes('tinymce')) {
-                return 'vendor-editor';
-              }
-
-              // Create a common chunk for smaller dependencies
-              const MIN_SIZE = 50000; // 50KB threshold
-              if (id.length > MIN_SIZE) {
-                return 'vendor-common';
+              if (knownVendors.has(name)) {
+                return `vendor-${name}`;
               }
             }
           },
