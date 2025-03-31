@@ -61,7 +61,7 @@ export default defineConfig((configEnv) => {
     },
     build: {
       outDir: 'build',
-      sourcemap: true,
+      sourcemap: 'hidden',
       minify: 'esbuild',
       rollupOptions: {
         output: {
