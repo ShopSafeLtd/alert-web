@@ -28,7 +28,7 @@ import { BrowserRouter, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-unresolved
 import '~/yet-another-react-lightbox/dist/styles.css';
 
-// import './index.css';
+import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 const App = React.lazy(() => import('./App'));
