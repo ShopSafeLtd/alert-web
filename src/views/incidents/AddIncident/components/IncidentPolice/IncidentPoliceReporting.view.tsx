@@ -38,6 +38,7 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
   const policeMG11 = Form.useWatch('policeMG11', form);
   const reportToPolice = Form.useWatch('reportToPolice', form);
   const policeWitnessName = Form.useWatch('policeWitnessName', form);
+  const policeKnownBefore = Form.useWatch('policeKnownBefore', form);
   const policeWitnessAtTime = Form.useWatch('policeWitnessAtTime', form);
   const obstructed = Form.useWatch('policeObstructions', form) === 'true';
   return (
@@ -550,62 +551,67 @@ const IncidentPolice = ({ form, generatingStatement, saving }: Props) => {
                               <Input />
                             </Form.Item>
                           </Col>
-                          <Col>
-                            <Form.Item
-                              label={intl.formatMessage({
-                                defaultMessage:
-                                  'Do you know the subjects from before the incident?',
-                              })}
-                              name="policeKnownBefore"
-                              rules={[
-                                {
-                                  message: intl.formatMessage({
-                                    defaultMessage:
-                                      'Please answer this question.',
-                                  }),
-                                  required: true,
-                                },
-                              ]}
-                            >
-                              <Radio.Group
-                                disabled={saving}
-                                optionType="button"
-                                options={[
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Yes',
-                                    }),
-                                    value: true,
-                                  },
-                                  {
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'No',
-                                    }),
-                                    value: false,
-                                  },
-                                ]}
-                              />
-                            </Form.Item>
-                          </Col>
                         </Row>
-                        <Form.Item
-                          label={intl.formatMessage({
-                            defaultMessage:
-                              'Are there any reasons you would remember the subjects?',
-                          })}
-                          name="policeReasonRemember"
-                          rules={[
-                            {
-                              message: intl.formatMessage({
-                                defaultMessage: 'Please answer this question.',
-                              }),
-                              required: true,
-                            },
-                          ]}
-                        >
-                          <Input.TextArea />
-                        </Form.Item>
                       </>
+                    )}
+
+                    <Form.Item
+                      label={intl.formatMessage({
+                        defaultMessage:
+                          'Do you know the subjects from before the incident?',
+                      })}
+                      name="policeKnownBefore"
+                      rules={[
+                        {
+                          message: intl.formatMessage({
+                            defaultMessage: 'Please answer this question.',
+                          }),
+                          required: true,
+                        },
+                      ]}
+                    >
+                      <Radio.Group
+                        disabled={saving}
+                        optionType="button"
+                        options={[
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Not Known',
+                            }),
+                            value: 'NOT_KNOWN',
+                          },
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Known Personally',
+                            }),
+                            value: 'KNOWN_PERSONALLY',
+                          },
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Known From Previous Incidents',
+                            }),
+                            value: 'KNOWN_FROM_PREVIOUS_INCIDENTS',
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                    {policeKnownBefore !== 'NOT_KNOWN' && (
+                      <Form.Item
+                        label={intl.formatMessage({
+                          defaultMessage: 'How do you know the offender?',
+                        })}
+                        name="policeReasonRemember"
+                        rules={[
+                          {
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please answer this question.',
+                            }),
+                            required: true,
+                          },
+                        ]}
+                      >
+                        <Input.TextArea />
+                      </Form.Item>
                     )}
 
                     <Form.Item

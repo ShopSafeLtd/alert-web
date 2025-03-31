@@ -148,7 +148,7 @@ export interface FormData {
   policeInvolved?: boolean;
   policeItemsLocation?: string[];
   policeItemsMO?: string[];
-  policeKnownBefore?: boolean;
+  policeKnownBefore?: string;
   policeMG11: boolean;
   policeNo?: string;
   policeObstructions?: string;
@@ -1078,7 +1078,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             policeInvolved: data.policeInvolved,
             policeItemsLocation: data.policeItemsLocation,
             policeItemsMO: data.policeItemsMO,
-            policeKnownBefore: data.policeKnownBefore,
+            policeKnownBefore: data.policeKnownBefore !== 'NOT_KNOWN',
             policeMG11: data.policeMG11,
             policeNo: data.policeNo,
             policeObstructions: data.policeObstructions,
