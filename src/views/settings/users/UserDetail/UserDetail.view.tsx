@@ -445,9 +445,7 @@ const userDetail = ({
                 <Row gutter={16}>
                   {data?.user?.businesses.map(({ id, name }) => (
                     <Col key="business-redirect">
-                      <Link
-                        to={`/app/scheme-settings/businesses/view/${id || ''}`}
-                      >
+                      <Link to={`/app/businesses/view/${id || ''}`}>
                         {name}
                       </Link>
                     </Col>

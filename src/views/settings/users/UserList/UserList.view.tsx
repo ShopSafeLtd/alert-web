@@ -177,10 +177,7 @@ const UserList = ({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (_, record) =>
               record.businesses.map(({ id, name }) => (
-                <Link
-                  key={id}
-                  to={`/app/scheme-settings/businesses/view/${id}`}
-                >
+                <Link key={id} to={`/app/businesses/view/${id}`}>
                   <Tag color="red">{name}</Tag>
                 </Link>
               )),

@@ -156,9 +156,7 @@ const DemDeviceList = ({
             ) => record.business?.id === value,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (_, record) => (
-              <Link
-                to={`/app/scheme-settings/businesses/view/${record.business?.id}`}
-              >
+              <Link to={`/app/businesses/view/${record.business?.id}`}>
                 <Tag color="red">{record.business?.name}</Tag>
               </Link>
             ),
