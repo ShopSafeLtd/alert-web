@@ -35,7 +35,6 @@ export const defaultCurrentUserSchemeAtom: UserSchemeState = {
     allowTodoTemplateOverride: true,
     autoPopulateDescription: false,
     connectedToSchemes: [],
-    customTranslations: [],
     darkLogo: null,
     defaultPublicOffenderDOB: false,
     disableGalleryOnNative: false,

@@ -32,7 +32,6 @@ query currentUser(
     schemes(orderBy: $orderBy) {
       id
       scheme {
-        customTranslations
         logo {
           optimisedPersisted
         }

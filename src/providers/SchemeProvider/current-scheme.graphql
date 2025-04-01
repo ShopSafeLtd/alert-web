@@ -30,7 +30,6 @@ query CurrentSchemeProvider($where: UserSchemeWhereUniqueInput!) {
         scheme {
             activityAssignToUser
             autoPopulateDescription
-            customTranslations
             defaultPublicOffenderDOB
             disableGalleryOnNative
             facialDetection
