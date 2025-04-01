@@ -6,6 +6,7 @@ import type {
 import type { EditIncidentFeedQuery } from 'graphql/incidents/queries/__generated__/edit-incident-feed.generated';
 import type { IncidentPriority } from 'graphql/types';
 
+import { businessSelectValueFormatter } from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useApolloClient } from '@apollo/client';
@@ -201,26 +202,23 @@ const useEditIncidentFeed = ({ incidentId, onClose }: Props): Return => {
       });
     }
 
-    const businessId = (
-      typeof data.business === 'string'
-        ? data.business
-        : Array.isArray(data.business)
-          ? data.business[0]
-          : data.business?.value
-    ) as string | undefined;
+    const businessId = data.business
+      ? businessSelectValueFormatter(data.business || '', '')
+      : undefined;
 
-    if (
-      incidentData?.incident.business &&
-      businessId &&
-      incidentData?.incident.business.id !== businessId
-    ) {
+    const shouldUpdate =
+      (businessId !== incidentData?.incident.business?.id && businessId) ||
+      (incidentData?.incident.business?.id && !businessId);
+    if (shouldUpdate) {
       void updateIncidentBusiness({
         variables: {
           data: {
             business: {
-              connect: {
-                id: businessId,
-              },
+              connect: businessId
+                ? {
+                    id: businessId,
+                  }
+                : undefined,
               disconnect: true,
             },
           },
