@@ -3,6 +3,7 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   faAddressCard,
+  faAperture,
   faBolt,
   faBoot,
   faBuildings,
@@ -109,6 +110,24 @@ const navigationConfig: NavItem[] = [
     permission: [
       {
         model: PermissionModel.Automations,
+        method: PermissionMethod.Read,
+      },
+    ],
+    submenu: [],
+  },
+  {
+    key: 'vision',
+    path: `${APP_PREFIX_PATH}/vision`,
+    title: 'Vision',
+    icon: faAperture,
+    breadcrumb: true,
+    intl: defineMessage({
+      id: 'Vision',
+      defaultMessage: 'Vision',
+    }),
+    permission: [
+      {
+        model: PermissionModel.VisionAi,
         method: PermissionMethod.Read,
       },
     ],

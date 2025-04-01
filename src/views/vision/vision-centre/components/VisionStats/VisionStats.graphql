@@ -1,0 +1,6 @@
+query AiVisionStats {
+    aiVisionStats {
+        count
+        name
+    }
+}

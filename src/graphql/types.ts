@@ -68,6 +68,66 @@ export enum AiSuggestionType {
   TrendOffenderImpact = 'TREND_OFFENDER_IMPACT'
 }
 
+export type AiVisionCamera = {
+  __typename?: 'AIVisionCamera';
+  business: Business;
+  createdAt: Scalars['Date'];
+  groups: Array<Group>;
+  id: Scalars['ID'];
+  make?: Maybe<Scalars['String']>;
+  model?: Maybe<Scalars['String']>;
+  osVersion?: Maybe<Scalars['String']>;
+  serialNumber?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
+export type AiVisionEvent = {
+  __typename?: 'AIVisionEvent';
+  business: Business;
+  camera: AiVisionCamera;
+  createdAt: Scalars['Date'];
+  groups: Array<Group>;
+  id: Scalars['ID'];
+  match?: Maybe<AiVisionMatch>;
+  matchFound?: Maybe<Scalars['Boolean']>;
+  type?: Maybe<AiVisionEventType>;
+  updatedAt: Scalars['Date'];
+};
+
+export enum AiVisionEventType {
+  FaceDetected = 'FaceDetected'
+}
+
+export type AiVisionMatch = {
+  __typename?: 'AIVisionMatch';
+  business: Business;
+  camera: AiVisionCamera;
+  confidence: Scalars['Float'];
+  confidenceRating: AiVisionMatchConfidence;
+  createdAt: Scalars['Date'];
+  faceImage: Image;
+  groups: Array<Group>;
+  id: Scalars['ID'];
+  matchedFace: RekFace;
+  matchedOffender: Offender;
+  priority: AiVisionMatchPriority;
+  stillImage: Image;
+  updatedAt: Scalars['Date'];
+};
+
+export enum AiVisionMatchConfidence {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export enum AiVisionMatchPriority {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Normal = 'NORMAL'
+}
+
 export type Action = {
   __typename?: 'Action';
   Address?: Maybe<Address>;
@@ -992,6 +1052,41 @@ export type AiTemporalAnalysis = {
   patternPrediction: Scalars['String'];
   timePatterns: Scalars['String'];
   updatedAt: Scalars['Date'];
+};
+
+export type AiVisionCameraWhereInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+};
+
+export type AiVisionEventOrderByInput = {
+  createdAt?: InputMaybe<SortOrder>;
+};
+
+export type AiVisionEventWhereInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  cameraIds?: InputMaybe<Array<Scalars['String']>>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  matchFound?: InputMaybe<Scalars['Boolean']>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+};
+
+export type AiVisionMatchOrderByInput = {
+  createdAt?: InputMaybe<SortOrder>;
+};
+
+export type AiVisionMatchWhereInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  cameraIds?: InputMaybe<Array<Scalars['String']>>;
+  confidenceRating?: InputMaybe<Array<AiVisionMatchConfidence>>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderIds?: InputMaybe<Array<Scalars['String']>>;
+  priority?: InputMaybe<Array<AiVisionMatchPriority>>;
+  schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 export type Answer = {
@@ -3515,6 +3610,7 @@ export type CreateQuestionInput = {
   options?: InputMaybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   required?: Scalars['Boolean'];
+  roles?: InputMaybe<Array<Scalars['String']>>;
   tagId?: InputMaybe<Scalars['String']>;
   taskId?: InputMaybe<Scalars['String']>;
   tooltip?: InputMaybe<Scalars['String']>;
@@ -4384,6 +4480,7 @@ export type Dashboard = {
   defaultUser: Scalars['Boolean'];
   id: Scalars['String'];
   layout: Array<DashboardLayout>;
+  metadata?: Maybe<Scalars['JSON']>;
   name?: Maybe<Scalars['String']>;
   roles: Array<CustomRole>;
   runningBanner?: Maybe<Scalars['String']>;
@@ -4395,6 +4492,7 @@ export type DashboardCreateInput = {
   defaultAdmin: Scalars['Boolean'];
   defaultUser: Scalars['Boolean'];
   layout?: InputMaybe<DashboardTemplateInput>;
+  metadata?: InputMaybe<Scalars['JSON']>;
   name: Scalars['String'];
   roles?: ConnectOnlyArrayHelper;
   runningBanner: Scalars['String'];
@@ -4419,6 +4517,7 @@ export type DashboardLayout = {
   id: Scalars['String'];
   maxH?: Maybe<Scalars['Int']>;
   maxW?: Maybe<Scalars['Int']>;
+  metadata?: Maybe<Scalars['JSON']>;
   minH?: Maybe<Scalars['Int']>;
   minW?: Maybe<Scalars['Int']>;
   moved: Scalars['Boolean'];
@@ -4434,6 +4533,7 @@ export type DashboardLayoutCreateManyTemplateInput = {
   i: Scalars['String'];
   maxH?: InputMaybe<Scalars['Int']>;
   maxW?: InputMaybe<Scalars['Int']>;
+  metadata?: InputMaybe<Scalars['JSON']>;
   minH?: InputMaybe<Scalars['Int']>;
   minW?: InputMaybe<Scalars['Int']>;
   moved?: Scalars['Boolean'];
@@ -4492,6 +4592,7 @@ export type DashboardTemplateUpdateInput = {
   defaultAdmin?: InputMaybe<Scalars['Boolean']>;
   defaultUser?: InputMaybe<Scalars['Boolean']>;
   layout?: InputMaybe<DashboardLayoutUpdateManyWithoutTemplateNestedInput>;
+  metadata?: InputMaybe<Scalars['JSON']>;
   name?: InputMaybe<NullableSetStringHelper>;
   roles?: InputMaybe<NullableConnectArrayHelper>;
   runningBanner?: InputMaybe<NullableSetStringHelper>;
@@ -10733,6 +10834,7 @@ export enum Model {
   Remove = 'REMOVE',
   Scheme = 'SCHEME',
   Send = 'SEND',
+  SingleShoe = 'SINGLE_SHOE',
   Tag = 'TAG',
   Todo = 'TODO',
   Update = 'UPDATE',
@@ -12992,6 +13094,7 @@ export type Offender = {
   aiSummary?: Maybe<Scalars['String']>;
   aiTargetAnalysis?: Maybe<AiTargetAnalysis>;
   aiTemporalAnalysis?: Maybe<AiTemporalAnalysis>;
+  aiVisionDetections: Array<AiVisionMatch>;
   alias: Array<Scalars['String']>;
   approved?: Maybe<Scalars['Boolean']>;
   articleColumns: Array<ArticleColumn>;
@@ -14171,6 +14274,8 @@ export enum PermissionModel {
   Users = 'USERS',
   UserSettings = 'USER_SETTINGS',
   Vehicles = 'VEHICLES',
+  VisionAi = 'VISION_AI',
+  VisionAiSettings = 'VISION_AI_SETTINGS',
   Workflows = 'WORKFLOWS'
 }
 
@@ -14259,6 +14364,13 @@ export type Query = {
   adminDashboard: AdminDashboardData;
   aiSuggestion: AiSuggestion;
   aiSuggestions: QueryAiSuggestionsConnection;
+  aiVisionCamera: AiVisionCamera;
+  aiVisionCameras: QueryAiVisionCamerasConnection;
+  aiVisionEvent: AiVisionEvent;
+  aiVisionEvents: QueryAiVisionEventsConnection;
+  aiVisionMatch: AiVisionMatch;
+  aiVisionMatches: QueryAiVisionMatchesConnection;
+  aiVisionStats: Array<Count>;
   article: Article;
   articles: Array<Article>;
   auth0User: Auth0User;
@@ -14515,6 +14627,56 @@ export type QueryAiSuggestionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: AiSuggestionWhereInput;
+};
+
+
+export type QueryAiVisionCameraArgs = {
+  where: UniqueId;
+};
+
+
+export type QueryAiVisionCamerasArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: AiVisionCameraWhereInput;
+};
+
+
+export type QueryAiVisionEventArgs = {
+  where: UniqueId;
+};
+
+
+export type QueryAiVisionEventsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<AiVisionEventOrderByInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: AiVisionEventWhereInput;
+};
+
+
+export type QueryAiVisionMatchArgs = {
+  where: UniqueId;
+};
+
+
+export type QueryAiVisionMatchesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<AiVisionMatchOrderByInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: AiVisionMatchWhereInput;
 };
 
 
@@ -15807,6 +15969,45 @@ export type QueryAiSuggestionsConnectionEdge = {
   __typename?: 'QueryAiSuggestionsConnectionEdge';
   cursor: Scalars['String'];
   node: AiSuggestion;
+};
+
+export type QueryAiVisionCamerasConnection = {
+  __typename?: 'QueryAiVisionCamerasConnection';
+  edges: Array<QueryAiVisionCamerasConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryAiVisionCamerasConnectionEdge = {
+  __typename?: 'QueryAiVisionCamerasConnectionEdge';
+  cursor: Scalars['String'];
+  node: AiVisionCamera;
+};
+
+export type QueryAiVisionEventsConnection = {
+  __typename?: 'QueryAiVisionEventsConnection';
+  edges: Array<QueryAiVisionEventsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryAiVisionEventsConnectionEdge = {
+  __typename?: 'QueryAiVisionEventsConnectionEdge';
+  cursor: Scalars['String'];
+  node: AiVisionEvent;
+};
+
+export type QueryAiVisionMatchesConnection = {
+  __typename?: 'QueryAiVisionMatchesConnection';
+  edges: Array<QueryAiVisionMatchesConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryAiVisionMatchesConnectionEdge = {
+  __typename?: 'QueryAiVisionMatchesConnectionEdge';
+  cursor: Scalars['String'];
+  node: AiVisionMatch;
 };
 
 export type QueryBrandsConnection = {
@@ -20842,6 +21043,7 @@ export type UpdateQuestionOnTagInput = {
   origOptions?: InputMaybe<Array<Scalars['String']>>;
   origQuestion: Scalars['String'];
   questionId: Scalars['String'];
+  roles?: InputMaybe<Array<Scalars['String']>>;
   tag: TagQuestionOnQInput;
   tooltip?: InputMaybe<Scalars['String']>;
 };

@@ -1,0 +1,20 @@
+query aiVisionEvents($where: AiVisionEventWhereInput!, $orderBy: [AiVisionEventOrderByInput!], $take: Int) {
+    aiVisionEvents(where: $where, orderBy: $orderBy, take: $take) {
+        edges {
+            node {
+                id
+                business {
+                    id
+                    name
+                }
+                camera {
+                    id
+                    serialNumber
+                }
+                createdAt
+                matchFound
+                type
+            }
+        }
+    }
+}

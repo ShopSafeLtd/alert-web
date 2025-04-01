@@ -1,6 +1,7 @@
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import RouteWrapper from '#/navigation/utils/route-wrapper';
-import AiCentreView from '#/views/ai/ai-centre/AiCentre.view';
+import VisionCentre from '#/views/vision/vision-centre/VisionCentre.view';
+import VisionMatches from '#/views/vision/vision-matches/VisionMatches.view';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -20,13 +21,26 @@ const Suggestions = (): JSX.Element => {
             <PermissionCheckWrapper
               permission={{
                 method: PermissionMethod.Read,
-                model: PermissionModel.Automations,
+                model: PermissionModel.VisionAi,
               }}
             >
-              <AiCentreView />
+              <VisionCentre />
             </PermissionCheckWrapper>
           }
           index
+        />
+        <Route
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                method: PermissionMethod.Read,
+                model: PermissionModel.VisionAi,
+              }}
+            >
+              <VisionMatches />
+            </PermissionCheckWrapper>
+          }
+          path="all-matches"
         />
       </Routes>
     </RouteWrapper>

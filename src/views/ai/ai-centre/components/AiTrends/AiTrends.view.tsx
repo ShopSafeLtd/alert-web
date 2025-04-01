@@ -57,7 +57,7 @@ const AiTrends = () => {
       </Row>
 
       {data?.aiSuggestions.edges.map((item) => (
-        <Link to="/app/scheme-settings/businesses/view/cm7uivkzf002zitvy3y1x9ds5">
+        <Link to="/app/businesses/view/cm7uivkzf002zitvy3y1x9ds5">
           <Card
             bodyStyle={{
               cursor: 'pointer',

@@ -33,7 +33,7 @@ const BusinessSideList = ({
   const businessItems = data?.edges?.map(({ node: business }) => (
     <Link
       key={business.id}
-      to={`${to || '/app/scheme-settings/businesses/view/'}${business.id}`}
+      to={`${to || '/app/businesses/view/'}${business.id}`}
     >
       <div
         className={`${classes.offenderItem} ${

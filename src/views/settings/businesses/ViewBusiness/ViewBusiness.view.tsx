@@ -253,7 +253,7 @@ const ViewBusiness = ({
                         })}
                       >
                         <Link
-                          to={`/app/scheme-settings/businesses/view/${
+                          to={`/app/businesses/view/${
                             data?.business?.parent?.id || ''
                           }`}
                         >

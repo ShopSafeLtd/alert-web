@@ -1,0 +1,80 @@
+query AiVisionMatchDrawer($where: UniqueId!, $take: Int) {
+    aiVisionMatch(where: $where) {
+        id
+        faceImage {
+            id
+            url
+        }
+        stillImage {
+            id
+            url
+        }
+        priority
+        business {
+            id
+            name
+            locations {
+                id
+                geoLat
+                geoLng
+            }
+        }
+        camera {
+            id
+            make
+            model
+            serialNumber
+            osVersion
+        }
+        matchedOffender {
+            id
+            name
+            reference
+            images {
+                id
+                url
+            }
+            knownFor
+            targetedGoods
+            tags {
+                id
+                name
+            }
+            aiSummary
+            aiKeyObservations
+            aiImpactAssessment {
+                category
+                id
+            }
+            aiRiskAssessment {
+                id
+                escalationPotential
+                staffSafetyRisk
+                threatLevel
+            }
+            aiVisionDetections {
+                id
+                createdAt
+                business {
+                    id
+                    name
+                }
+                confidenceRating
+            }
+            incidents(take: $take) {
+                reference
+                id
+                subject
+                aiSummary
+                business {
+                    id
+                    name
+                }
+                createdAt
+            }
+        }
+        createdAt
+        confidenceRating
+        confidence
+    }
+}
