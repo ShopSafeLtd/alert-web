@@ -4384,6 +4384,7 @@ export type Dashboard = {
   defaultUser: Scalars['Boolean'];
   id: Scalars['String'];
   layout: Array<DashboardLayout>;
+  metadata?: Maybe<Scalars['JSON']>;
   name?: Maybe<Scalars['String']>;
   roles: Array<CustomRole>;
   runningBanner?: Maybe<Scalars['String']>;
@@ -4395,6 +4396,7 @@ export type DashboardCreateInput = {
   defaultAdmin: Scalars['Boolean'];
   defaultUser: Scalars['Boolean'];
   layout?: InputMaybe<DashboardTemplateInput>;
+  metadata?: InputMaybe<Scalars['JSON']>;
   name: Scalars['String'];
   roles?: ConnectOnlyArrayHelper;
   runningBanner: Scalars['String'];
@@ -4419,6 +4421,7 @@ export type DashboardLayout = {
   id: Scalars['String'];
   maxH?: Maybe<Scalars['Int']>;
   maxW?: Maybe<Scalars['Int']>;
+  metadata?: Maybe<Scalars['JSON']>;
   minH?: Maybe<Scalars['Int']>;
   minW?: Maybe<Scalars['Int']>;
   moved: Scalars['Boolean'];
@@ -4434,6 +4437,7 @@ export type DashboardLayoutCreateManyTemplateInput = {
   i: Scalars['String'];
   maxH?: InputMaybe<Scalars['Int']>;
   maxW?: InputMaybe<Scalars['Int']>;
+  metadata?: InputMaybe<Scalars['JSON']>;
   minH?: InputMaybe<Scalars['Int']>;
   minW?: InputMaybe<Scalars['Int']>;
   moved?: Scalars['Boolean'];
@@ -4492,6 +4496,7 @@ export type DashboardTemplateUpdateInput = {
   defaultAdmin?: InputMaybe<Scalars['Boolean']>;
   defaultUser?: InputMaybe<Scalars['Boolean']>;
   layout?: InputMaybe<DashboardLayoutUpdateManyWithoutTemplateNestedInput>;
+  metadata?: InputMaybe<Scalars['JSON']>;
   name?: InputMaybe<NullableSetStringHelper>;
   roles?: InputMaybe<NullableConnectArrayHelper>;
   runningBanner?: InputMaybe<NullableSetStringHelper>;
@@ -6659,7 +6664,7 @@ export type GenerateStatementData = {
   incidentType: Scalars['String'];
   involvedTags: Array<Scalars['String']>;
   items?: InputMaybe<Array<GenerateStatementItem>>;
-  knownSubjects?: InputMaybe<Scalars['Boolean']>;
+  knownSubjects?: InputMaybe<Scalars['String']>;
   obstructions?: InputMaybe<Scalars['String']>;
   offenders: Array<GenerateStatementOffender>;
   policeItemsLocation?: InputMaybe<Array<Scalars['String']>>;
