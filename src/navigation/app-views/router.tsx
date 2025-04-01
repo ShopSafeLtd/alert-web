@@ -30,6 +30,7 @@ const Checklists = lazy(() => import('./checklist/router'));
 const DashboardManagement = lazy(() => import('./dashboard-management/router'));
 const SingleShoeSystem = lazy(() => import('./singleShoeSystem/router'));
 const AiCentre = lazy(() => import('./suggestions/router'));
+const VisionCentre = lazy(() => import('./vision/router'));
 const Businesses = lazy(() => import('./businesses/router'));
 
 export const AppViews = (): JSX.Element => {
@@ -124,6 +125,7 @@ export const AppViews = (): JSX.Element => {
             key="businesses"
             path="businesses/*"
           />
+          <Route element={<VisionCentre />} key="vision" path="vision/*" />
         </Routes>
       )}
     </Suspense>

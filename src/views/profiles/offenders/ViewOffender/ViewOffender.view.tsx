@@ -22,6 +22,7 @@ import IncidentTable from '#/components/tables/IncidentTable';
 import useReportPrint from '#/utils/reportPrint/usePrintReports';
 import AiDetailsView from '#/views/profiles/offenders/ViewOffender/components/AiDetails.view';
 import OffenderAiDrawer from '#/views/profiles/offenders/ViewOffender/components/AiDrawer/AiDrawer.view';
+import OffenderVision from '#/views/profiles/offenders/ViewOffender/components/OffenderVision/OffenderVision.view';
 import {
   faBell,
   faBellSlash,
@@ -1665,6 +1666,15 @@ const ViewOffender = ({
                                 />
                               )}
                             </Card>
+                          </PermissionCheckWrapper>
+                          <PermissionCheckWrapper
+                            permission={{
+                              method: PermissionMethod.Read,
+                              model: PermissionModel.VisionAi,
+                            }}
+                            unauthorizedElement={<div />}
+                          >
+                            <OffenderVision offenderId={offenderId} />
                           </PermissionCheckWrapper>
                           {editRights && (
                             <Card loading={loading}>

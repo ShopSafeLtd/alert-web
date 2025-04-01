@@ -122,7 +122,7 @@ const IncidentDetails = ({ data, editRights, loading }: Props) => {
             >
               {editRights ? (
                 <Link
-                  to={`/app/scheme-settings/businesses/view/${
+                  to={`/app/businesses/view/${
                     data?.incident?.business?.id || ''
                   }`}
                 >

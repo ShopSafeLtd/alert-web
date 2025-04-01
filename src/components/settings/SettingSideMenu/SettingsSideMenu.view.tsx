@@ -31,16 +31,6 @@ const SettingsSideMenu = ({
     {
       permissions: {
         method: PermissionMethod.Read,
-        model: PermissionModel.Businesses,
-      },
-      title: intl.formatMessage({
-        defaultMessage: 'Businesses',
-      }),
-      to: '/app/scheme-settings/businesses',
-    },
-    {
-      permissions: {
-        method: PermissionMethod.Read,
         model: PermissionModel.Brands,
       },
       title: intl.formatMessage({
@@ -153,6 +143,16 @@ const SettingsSideMenu = ({
         defaultMessage: 'Workflows',
       }),
       to: '/app/scheme-settings/workflow',
+    },
+    {
+      permissions: {
+        method: PermissionMethod.Read,
+        model: PermissionModel.VisionAiSettings,
+      },
+      title: intl.formatMessage({
+        defaultMessage: 'Vision AI Settings',
+      }),
+      to: '/app/scheme-settings/vision-ai-settings',
     },
     {
       permissions: {

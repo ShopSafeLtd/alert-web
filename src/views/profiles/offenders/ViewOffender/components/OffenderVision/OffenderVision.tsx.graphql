@@ -1,0 +1,18 @@
+query OffenderVision($where: AiVisionMatchWhereInput!, $orderBy: [AiVisionMatchOrderByInput!], $take: Int) {
+    aiVisionMatches(where: $where, orderBy: $orderBy, take: $take) {
+        edges {
+            node {
+                id
+                priority
+                business {
+                    id
+                    name
+                }
+                confidenceRating
+                priority
+                createdAt
+            }
+        }
+        totalCount
+    }
+}

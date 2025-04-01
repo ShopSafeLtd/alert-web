@@ -1,6 +1,7 @@
 import type { IconDefinition } from '@fortawesome/pro-light-svg-icons';
 
 import {
+  faAperture,
   faBolt,
   faBoot,
   faBuilding,
@@ -509,6 +510,29 @@ export const roleItems: {
     ],
     title: <FormattedMessage defaultMessage="User Settings" />,
   },
+  {
+    description: (
+      <FormattedMessage defaultMessage="Vision monitors CCTV cameras and natches detected faces to you offender database, creating Alerts when a match is found." />
+    ),
+    disabled: true,
+    icon: faAperture,
+    key: PermissionModel.VisionAi,
+    methods: [
+      {
+        key: PermissionMethod.Read,
+        name: <FormattedMessage defaultMessage="View" />,
+      },
+      {
+        key: PermissionMethod.Edit,
+        name: <FormattedMessage defaultMessage="Edit" />,
+      },
+      {
+        key: PermissionMethod.Delete,
+        name: <FormattedMessage defaultMessage="Delete" />,
+      },
+    ],
+    title: <FormattedMessage defaultMessage="Vision" />,
+  },
 ];
 export const settings = [
   {
@@ -728,6 +752,17 @@ export const settings = [
           },
         ],
         title: <FormattedMessage defaultMessage="Workflows" />,
+      },
+      {
+        disabled: true,
+        key: PermissionModel.VisionAiSettings,
+        methods: [
+          {
+            key: PermissionMethod.Read,
+            name: <FormattedMessage defaultMessage="View" />,
+          },
+        ],
+        title: <FormattedMessage defaultMessage="Vision Settings" />,
       },
     ],
     description: (

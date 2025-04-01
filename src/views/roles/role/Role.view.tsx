@@ -390,7 +390,9 @@ const RoleView = ({
                                                 valuePropName="checked"
                                               >
                                                 <Switch
-                                                  disabled={loading}
+                                                  disabled={
+                                                    loading || child.disabled
+                                                  }
                                                   loading={loading}
                                                 />
                                               </Form.Item>
