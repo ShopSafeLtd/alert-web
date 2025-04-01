@@ -21,6 +21,31 @@ import antdSvSE from 'antd/es/locale/sv_SE';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
+export type CustomTranslationResponse =
+  | Record<string, Record<string, string>>[]
+  | null;
+
+export async function fetchCustomTranslation(
+  id: string
+): Promise<CustomTranslationResponse> {
+  const response = await fetch(`/api/custom-translation/${id}`, {
+    headers: {
+      // Include the Authorization header if token exists
+      Authorization: 'translation',
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch custom translation. Status: ${response.status}`
+    );
+  }
+
+  return response.json() as Promise<CustomTranslationResponse>;
+}
+
 export interface Translations {
   [key: string]: {
     [lang: string]: string;
@@ -136,9 +161,22 @@ export const useThemeLanguage = (): {
       typedLocalStorage.set(LocalStorageKeys.lang, initLang);
     }
   }, []);
+  const currentScheme = useAtomValue(currentSchemeAtom).id;
 
-  const customTranslations =
-    useAtomValue(currentSchemeAtom)?.customTranslations;
+  const [customTranslations, setCustomTranslations] =
+    useState<CustomTranslationResponse>(null);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const data = await fetchCustomTranslation(currentScheme);
+        setCustomTranslations(data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [currentScheme]);
+
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const t = localStorage.getItem('theme');
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
