@@ -449,15 +449,17 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
                 {
                   dataIndex: 'reference',
                   key: 'reference',
-                  render: (value: string) => (
+                  render: (value: string, item) => (
                     <Tooltip
                       title={intl.formatMessage({
                         defaultMessage: 'View Incident',
                       })}
                     >
-                      <Button size="small" type="link">
-                        {value}
-                      </Button>
+                      <Link to={`/app/incidents/view/${item.key}`}>
+                        <Button size="small" type="link">
+                          {value}
+                        </Button>
+                      </Link>
                     </Tooltip>
                   ),
                   title: intl.formatMessage({
@@ -501,6 +503,7 @@ const VisionMatchDrawer = ({ matchId, onClose, setMatchId }: Props) => {
                     aiSummary: incident.aiSummary,
                     business: incident.business?.name,
                     createdAt: incident.createdAt,
+                    key: incident.id,
                     reference: incident.reference,
                     subject: incident.subject,
                   })
