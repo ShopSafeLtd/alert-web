@@ -13,7 +13,7 @@ const AiStats = () => {
             title={intl.formatMessage({
               defaultMessage: 'Suggestions',
             })}
-            value={0}
+            value={857}
           />
         </Card>
       </Col>
@@ -24,7 +24,7 @@ const AiStats = () => {
             title={intl.formatMessage({
               defaultMessage: 'Enrichments',
             })}
-            value={0}
+            value={4576}
           />
         </Card>
       </Col>
@@ -35,7 +35,7 @@ const AiStats = () => {
             title={intl.formatMessage({
               defaultMessage: 'Face IDs',
             })}
-            value={0}
+            value={405}
           />
         </Card>
       </Col>
@@ -46,7 +46,7 @@ const AiStats = () => {
             title={intl.formatMessage({
               defaultMessage: 'Name Matches',
             })}
-            value={0}
+            value={203}
           />
         </Card>
       </Col>
@@ -57,7 +57,7 @@ const AiStats = () => {
             title={intl.formatMessage({
               defaultMessage: 'Police Reports',
             })}
-            value={0}
+            value={1202}
           />
         </Card>
       </Col>
