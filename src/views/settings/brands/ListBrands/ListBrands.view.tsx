@@ -134,7 +134,6 @@ const BrandList = ({
             dataIndex: 'businesses',
             filters: businessFilter,
             key: 'businesses',
-            // @ts-ignore
             onFilter: (
               value: boolean | number | string,
               record: { businesses: { id: string; name: string }[] }
@@ -142,7 +141,7 @@ const BrandList = ({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             render: (value: { id: string; name: string }[]) =>
               value.map(({ id, name }, index) => (
-                <Link to={`/app/scheme-settings/businesses/view/${id || ''}`}>
+                <Link to={`/app/businesses/view/${id || ''}`}>
                   {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                   <Tag color="red"> {index === 0 ? name : ` ${name}`}</Tag>
                 </Link>

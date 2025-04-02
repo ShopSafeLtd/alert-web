@@ -1,0 +1,16 @@
+query aiVisionCameras($where: AiVisionCameraWhereInput!) {
+    aiVisionCameras(where: $where) {
+        edges {
+            node {
+                id
+                business {
+                    id
+                    name
+                }
+                make
+                model
+                serialNumber
+            }
+        }
+    }
+}

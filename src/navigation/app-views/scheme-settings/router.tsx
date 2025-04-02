@@ -7,6 +7,7 @@ import { Col, Row } from 'antd';
 import { PermissionMethod, PermissionModel } from 'graphql/types';
 import React, { Suspense, lazy, useState } from 'react';
 import { Route, Routes } from 'react-router';
+import { Navigate } from 'react-router-dom';
 
 import CustomStockImport from '../../../views/settings/data-import/custom-stock-import/StockImport.container';
 
@@ -49,9 +50,6 @@ const RecycleBin = lazy(() => import('views/settings/recycled/Recycle'));
 const SchemeSharing = lazy(
   () => import('views/settings/schemes/SchemeSharing')
 );
-const ListBusinesses = lazy(
-  () => import('views/settings/businesses/ListBusinesses')
-);
 const ViewBusiness = lazy(
   () => import('views/settings/businesses/ViewBusiness')
 );
@@ -66,7 +64,6 @@ const CSVImport = lazy(
     import('views/settings/data-import/csv/data-import/ImportData.container')
 );
 const CustomGalleries = lazy(() => import('views/settings/customGallery'));
-const BrandList = lazy(() => import('#/views/settings/brands/ListBrands'));
 const CustomSchemeTerms = lazy(
   () =>
     import('../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer')
@@ -461,18 +458,7 @@ const SchemeSettings = (): JSX.Element => {
               path="recycle-bin/*"
             />
             <Route
-              element={
-                <PermissionCheckWrapper
-                  permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Businesses,
-                    },
-                  ]}
-                >
-                  <ListBusinesses />
-                </PermissionCheckWrapper>
-              }
+              element={<Navigate to="/app/businesses/*" />}
               path="businesses/*"
             />
             <Route
@@ -487,21 +473,6 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="businesses/view/:id"
-            />
-            <Route
-              element={
-                <PermissionCheckWrapper
-                  permission={[
-                    {
-                      method: PermissionMethod.Read,
-                      model: PermissionModel.Brands,
-                    },
-                  ]}
-                >
-                  <BrandList />
-                </PermissionCheckWrapper>
-              }
-              path="brands/*"
             />
             <Route
               element={

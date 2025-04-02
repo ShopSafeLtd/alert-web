@@ -167,9 +167,7 @@ const DemDeviceDetail = ({
             label={<FormattedMessage defaultMessage="Business" />}
             style={{ paddingBottom: 8 }}
           >
-            <Link
-              to={`/app/scheme-settings/businesses/view/${data?.demDevice.business.id}`}
-            >
+            <Link to={`/app/businesses/view/${data?.demDevice.business.id}`}>
               {data?.demDevice.business.name}
             </Link>
           </Descriptions.Item>
