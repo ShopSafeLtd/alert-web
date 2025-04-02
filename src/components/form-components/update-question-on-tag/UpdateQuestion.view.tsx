@@ -239,6 +239,10 @@ const UpdateQuestionView = ({
           name="dependentOn"
         >
           <Select
+            filterOption={(input, option) => {
+              const value = option?.label ?? '';
+              return value.toLowerCase().includes(input.toLowerCase());
+            }}
             onSelect={() => form.setFieldsValue({ dependentAnswer: '' })}
             options={tagQuestions.map((q) => ({
               label: q.question,
