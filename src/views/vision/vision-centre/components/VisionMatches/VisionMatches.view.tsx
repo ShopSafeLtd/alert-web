@@ -24,7 +24,7 @@ const VisionMatched = () => {
   const intl = useIntl();
 
   const { data, loading, refetch } = useAiVisionMatchesQuery({
-    pollInterval: 100_000,
+    pollInterval: 5000,
     variables: {
       orderBy: [
         {
