@@ -125,6 +125,7 @@ const AddQuestionView = ({
       case AnswerType.Time: {
         return <DatePicker.TimePicker />;
       }
+      case AnswerType.SelectSingle:
       case AnswerType.Select: {
         return (
           <Select
@@ -160,6 +161,10 @@ const AddQuestionView = ({
         >
           <Select
             allowClear
+            filterOption={(input, option) => {
+              const value = option?.label ?? '';
+              return value.toLowerCase().includes(input.toLowerCase());
+            }}
             onClear={() => {
               form.setFieldsValue({ question: '' });
             }}
@@ -180,6 +185,7 @@ const AddQuestionView = ({
               label: q.questionFormatted,
               value: q.id,
             }))}
+            showSearch
           />
         </Form.Item>
         <Form.Item

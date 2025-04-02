@@ -77,6 +77,7 @@ const UpdateQuestionView = ({
       case AnswerType.Time: {
         return <DatePicker.TimePicker />;
       }
+      case AnswerType.SelectSingle:
       case AnswerType.Select: {
         return (
           <Select
