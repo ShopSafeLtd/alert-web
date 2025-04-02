@@ -19,7 +19,6 @@ import { useInviteExistingUserMutation } from 'graphql/users/mutations/__generat
 import { useSearchUserQuery } from 'graphql/users/queries/__generated__/search-user.generated';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
-import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -225,10 +224,50 @@ const useAddUser = ({
         message: 'Successfully Invited!',
         placement: 'bottomRight',
       });
+      onClose();
     },
-    onError: () => {
+    onError: (error) => {
       setSaving(false);
-      errorNotification();
+      if (error.message === 'User already exists') {
+        notification.error({
+          description: 'A user with this email already exists',
+          message: 'Create User Failed',
+          placement: 'bottomRight',
+          style: {
+            zIndex: 10_000_000,
+          },
+        });
+        return;
+      }
+      if (
+        error.message ===
+        'phone_number must be a valid phone number according to E.164 international standard.'
+      ) {
+        form.scrollToField('mobileNumber');
+        notification.error({
+          description:
+            'Phone number must be a valid phone number according to E.164 international standard.',
+          message: 'Create User Failed',
+          placement: 'bottomRight',
+          style: {
+            zIndex: 10_000_000,
+          },
+        });
+        return;
+      }
+      notification.error({
+        description: error.message,
+        message: 'Create User Failed',
+        placement: 'bottomRight',
+        style: {
+          zIndex: 10_000_000,
+        },
+      });
+      // notification.error({
+      //   description: error,
+      //   message: <FormattedMessage defaultMessage="Something went wrong" />,
+      //   placement: 'bottomRight',
+      // });
     },
     update,
   });
@@ -241,10 +280,18 @@ const useAddUser = ({
         message: 'Successfully Invited!',
         placement: 'bottomRight',
       });
+      onClose();
     },
-    onError: () => {
+    onError: (error) => {
       setSaving(false);
-      errorNotification();
+      notification.error({
+        description: error.message,
+        message: 'Create/Edit User Failed',
+        placement: 'bottomRight',
+        style: {
+          zIndex: 10_000_000,
+        },
+      });
     },
     update: updateSearch,
   });
@@ -523,7 +570,6 @@ const useAddUser = ({
         },
       });
     }
-    onClose();
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
