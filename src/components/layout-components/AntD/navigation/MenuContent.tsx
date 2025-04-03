@@ -3,6 +3,7 @@ import type { NavItem } from 'configs/NavigationConfig';
 import type { Theme } from 'configs/ThemeConfig';
 import type { NavType } from 'state';
 
+import NavTranslations from '#/components/layout-components/AntD/navigation/NavTranslations';
 import {
   currentPermissionsAtom,
   settingSchemeAtom,
@@ -88,6 +89,7 @@ interface SideNavContentProps {
   onMobileNavToggle(value: boolean): void;
   routeInfo: NavItem;
   sideNavTheme: SideNavTheme;
+
   todos: number;
 }
 
@@ -285,6 +287,7 @@ const SideNavContent = ({
         </Menu>
       )}
       <NavScheme />
+      <NavTranslations />
       <Row style={{ width: '100%' }}>
         <Col span={12}>
           <NavProfile />
