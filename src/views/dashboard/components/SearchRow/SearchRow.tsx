@@ -1,3 +1,4 @@
+import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import CheckTags from '#/components/form-components/check-tags/CheckTags.view';
 import DebouncedInput from '#/utils/debounced-input';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
@@ -86,30 +87,43 @@ const SearchRow = () => {
             />
           </Tooltip>
         </Col>
-        <Col>
-          <Link to="/app/incidents/add">
-            <Button size="small" type="primary">
-              <FontAwesomeIcon
-                icon={faExclamationCircle}
-                style={{ marginRight: 10 }}
-              />
-              {intl.formatMessage({
-                defaultMessage: 'Add Incident',
-              })}
-            </Button>
-          </Link>
-        </Col>
-        <Col>
-          <Link to="/app/offenders/add">
-            <Button size="small" type="primary">
-              <FontAwesomeIcon icon={faUsers} style={{ marginRight: 10 }} />
-              {intl.formatMessage({
-                defaultMessage: 'Add Offender',
-              })}
-            </Button>
-          </Link>
-        </Col>
-
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Write,
+            model: PermissionModel.Incidents,
+          }}
+        >
+          <Col>
+            <Link to="/app/incidents/add">
+              <Button size="small" type="primary">
+                <FontAwesomeIcon
+                  icon={faExclamationCircle}
+                  style={{ marginRight: 10 }}
+                />
+                {intl.formatMessage({
+                  defaultMessage: 'Add Incident',
+                })}
+              </Button>
+            </Link>
+          </Col>
+        </PermissionCheckWrapper>
+        <PermissionCheckWrapper
+          permission={{
+            method: PermissionMethod.Write,
+            model: PermissionModel.Offenders,
+          }}
+        >
+          <Col>
+            <Link to="/app/offenders/add">
+              <Button size="small" type="primary">
+                <FontAwesomeIcon icon={faUsers} style={{ marginRight: 10 }} />
+                {intl.formatMessage({
+                  defaultMessage: 'Add Offender',
+                })}
+              </Button>
+            </Link>
+          </Col>
+        </PermissionCheckWrapper>
         {adminRights && (
           <Col>
             <Link to="/app/article/add">
