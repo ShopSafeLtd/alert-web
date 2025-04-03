@@ -58,9 +58,16 @@ const CreateQuestionView = ({
     if (answerType === AnswerType.Time) {
       return <TimePreview question={question} />;
     }
-    if (answerType === AnswerType.Select) {
+    if (
+      answerType === AnswerType.Select ||
+      answerType === AnswerType.SelectSingle
+    ) {
       return (
-        <SelectPreview options={opt.filter(Boolean)} question={question} />
+        <SelectPreview
+          options={opt.filter(Boolean)}
+          question={question}
+          single={answerType === AnswerType.SelectSingle}
+        />
       );
     }
     return <div />;
@@ -161,12 +168,19 @@ const CreateQuestionView = ({
                 }),
                 value: AnswerType.Select,
               },
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'Select Single',
+                }),
+                value: AnswerType.SelectSingle,
+              },
             ]}
           />
         </Form.Item>
       </Card>
 
-      {answerType === AnswerType.Select && (
+      {(answerType === AnswerType.Select ||
+        answerType === AnswerType.SelectSingle) && (
         <Card
           hidden={!!selectedId}
           style={{
@@ -182,7 +196,12 @@ const CreateQuestionView = ({
             rules={[
               {
                 validator: async (_, options) => {
-                  if (answerType !== AnswerType.Select || selectedId) return;
+                  if (
+                    (answerType !== AnswerType.Select &&
+                      answerType !== AnswerType.SelectSingle) ||
+                    selectedId
+                  )
+                    return;
                   if (!options || options.length < 2) {
                     return Promise.reject(
                       new Error(

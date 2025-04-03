@@ -860,7 +860,7 @@ export const LayoutToReadable: {
   {
     allowDuplicates: false,
     description: (
-      <FormattedMessage defaultMessage="Stacked bar graph component showing breackdown of incident types for the top 10 impacted business." />
+      <FormattedMessage defaultMessage="Stacked bar graph component showing breakdown of incident types for the top 10 impacted business." />
     ),
     i: 'businessCrimeTypeGraph',
     item: {

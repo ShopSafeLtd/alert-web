@@ -8,16 +8,22 @@ import { LocalStorageKeys, typedLocalStorage } from '#/utils';
 // Import all Ant Design locales
 import antdDaDK from 'antd/es/locale/da_DK';
 import antdDeDE from 'antd/es/locale/de_DE';
+import antdElGR from 'antd/es/locale/el_GR';
 import antdEnUS from 'antd/es/locale/en_US';
 import antdEsES from 'antd/es/locale/es_ES';
 import antdFiFI from 'antd/es/locale/fi_FI';
 import antdFrFR from 'antd/es/locale/fr_FR';
+import antdHuHU from 'antd/es/locale/hu_HU';
+import antdIdID from 'antd/es/locale/id_ID';
 import antdItIT from 'antd/es/locale/it_IT';
+import antdMsMY from 'antd/es/locale/ms_MY';
 import antdNlBE from 'antd/es/locale/nl_BE';
 import antdNlNL from 'antd/es/locale/nl_NL';
 import antdPlPL from 'antd/es/locale/pl_PL';
 import antdPtPT from 'antd/es/locale/pt_PT';
+import antdRoRO from 'antd/es/locale/ro_RO';
 import antdSvSE from 'antd/es/locale/sv_SE';
+import antdThTH from 'antd/es/locale/th_TH';
 import { useAtomValue } from 'jotai/index';
 import { useEffect, useState } from 'react';
 
@@ -72,32 +78,44 @@ const translationCache: TranslationCache = {};
 const antdLocaleMap: Record<string, Locale> = {
   da: antdDaDK,
   de: antdDeDE,
+  el: antdElGR,
   en: antdEnUS,
   es: antdEsES,
   fi: antdFiFI,
   fr: antdFrFR,
+  hu: antdHuHU,
+  id: antdIdID,
   it: antdItIT,
+  ms: antdMsMY,
   nl: antdNlNL,
   pl: antdPlPL,
   pt: antdPtPT,
   rbe: antdNlBE,
+  ro: antdRoRO,
   sv: antdSvSE,
+  th: antdThTH,
 };
 
 // Map our language codes to translation file names
 const translationFileMap: Record<string, string> = {
   da: 'da_DK.json',
   de: 'de_DE.json',
+  el: 'el_GR.json',
   en: 'en_US.json',
   es: 'es_ES.json',
   fi: 'fi_FI.json',
   fr: 'fr_FR.json',
+  hu: 'hu_HU.json',
+  id: 'id_ID.json',
   it: 'it_IT.json',
+  ms: 'ms_MY.json',
   nl: 'nl_NL.json',
   pl: 'pl_PL.json',
   pt: 'pt_PT.json',
   rbe: 'nl_BE.json',
+  ro: 'ro_RO.json',
   sv: 'sv_SE.json',
+  th: 'th_TH.json',
 };
 
 const loadTranslations = async (lang: string): Promise<LocaleType> => {
