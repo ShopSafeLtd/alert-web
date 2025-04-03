@@ -92,6 +92,7 @@ const SearchRow = () => {
             method: PermissionMethod.Write,
             model: PermissionModel.Incidents,
           }}
+          unauthorizedElement={<div />}
         >
           <Col>
             <Link to="/app/incidents/add">
@@ -112,6 +113,7 @@ const SearchRow = () => {
             method: PermissionMethod.Write,
             model: PermissionModel.Offenders,
           }}
+          unauthorizedElement={<div />}
         >
           <Col>
             <Link to="/app/offenders/add">
