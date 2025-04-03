@@ -22,6 +22,7 @@ const ViewDemGroup = lazy(
 const ViewDemDevice = lazy(
   () => import('views/settings/Dem/demDevices/DemDeviceDetail')
 );
+const BrandList = lazy(() => import('#/views/settings/brands/ListBrands'));
 
 const GroupList = lazy(() => import('views/settings/groups/GroupList'));
 const ViewGroup = lazy(() => import('views/settings/groups/GroupDetail'));
@@ -165,6 +166,21 @@ const SchemeSettings = (): JSX.Element => {
                 </PermissionCheckWrapper>
               }
               path="scheme-sharing"
+            />
+            <Route
+              element={
+                <PermissionCheckWrapper
+                  permission={[
+                    {
+                      method: PermissionMethod.Read,
+                      model: PermissionModel.Brands,
+                    },
+                  ]}
+                >
+                  <BrandList />
+                </PermissionCheckWrapper>
+              }
+              path="brands/*"
             />
             <Route
               element={

@@ -23,22 +23,15 @@ export type Scalars = {
 export type AiSuggestion = {
   __typename?: 'AISuggestion';
   createdAt: Scalars['Date'];
-  crimeGroup?: Maybe<CrimeGroup>;
   description?: Maybe<Scalars['String']>;
-  groups?: Maybe<Array<Scheme>>;
   id: Scalars['ID'];
-  incident?: Maybe<Array<Incident>>;
-  investigation?: Maybe<Investigation>;
-  message?: Maybe<Message>;
   metadata?: Maybe<Scalars['JSON']>;
   offenders?: Maybe<Array<Offender>>;
   reference?: Maybe<Scalars['Int']>;
   rekMatch?: Maybe<RekMatch>;
-  schemes?: Maybe<Array<Scheme>>;
   status?: Maybe<AiSuggestionStatus>;
   title: Scalars['String'];
   type?: Maybe<AiSuggestionType>;
-  update?: Maybe<Update>;
 };
 
 export enum AiSuggestionStatus {
@@ -130,46 +123,12 @@ export enum AiVisionMatchPriority {
 
 export type Action = {
   __typename?: 'Action';
-  Address?: Maybe<Address>;
-  Ban?: Maybe<Ban>;
-  Chat?: Maybe<Chat>;
-  Group?: Maybe<Group>;
-  addressId?: Maybe<Scalars['String']>;
-  article?: Maybe<Article>;
-  articleId?: Maybe<Scalars['String']>;
-  banId?: Maybe<Scalars['String']>;
-  business?: Maybe<Business>;
-  businessId?: Maybe<Scalars['String']>;
   byUser: User;
-  byUserId: Scalars['String'];
-  chatId?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
-  crimeGroup?: Maybe<CrimeGroup>;
-  crimeGroupId?: Maybe<Scalars['String']>;
   dataType: Model;
   description?: Maybe<Scalars['String']>;
-  groupId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  imageId?: Maybe<Scalars['String']>;
-  images?: Maybe<Image>;
-  inScheme?: Maybe<Scheme>;
-  inSchemeId?: Maybe<Scalars['String']>;
-  incident?: Maybe<Incident>;
-  incidentId?: Maybe<Scalars['String']>;
-  message?: Maybe<Message>;
-  messageId?: Maybe<Scalars['String']>;
-  offender?: Maybe<Offender>;
-  offenderId?: Maybe<Scalars['String']>;
   reason?: Maybe<Scalars['String']>;
-  scheme?: Maybe<Scheme>;
-  schemeId?: Maybe<Scalars['String']>;
-  tag?: Maybe<Tag>;
-  tagId?: Maybe<Scalars['String']>;
-  type: ActionType;
-  user?: Maybe<User>;
-  userId?: Maybe<Scalars['String']>;
-  vehicle?: Maybe<Vehicle>;
-  vehicleId?: Maybe<Scalars['String']>;
 };
 
 export type ActionListRelationFilter = {
@@ -369,26 +328,18 @@ export enum ActionableLevelEnum {
 export type ActiveChecklist = {
   __typename?: 'ActiveChecklist';
   business?: Maybe<Business>;
-  businessId?: Maybe<Scalars['String']>;
-  checklist: Checklist;
-  checklistId: Scalars['String'];
   checklistSection: Array<ActiveChecklistSections>;
   comments?: Maybe<Scalars['String']>;
   completedAt?: Maybe<Scalars['Date']>;
   completedBy?: Maybe<User>;
-  completedById?: Maybe<Scalars['String']>;
-  createdAt: Scalars['Date'];
   document?: Maybe<Document>;
   fields: Array<ActiveChecklistFields>;
   id: Scalars['ID'];
-  maxWeight: Scalars['Int'];
   name?: Maybe<Scalars['String']>;
   percentComplete: Scalars['Int'];
-  percentScore: Scalars['Int'];
   percentageScore: Scalars['String'];
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
-  totalWeight: Scalars['Int'];
   updatedAt: Scalars['Date'];
 };
 
@@ -414,13 +365,9 @@ export type ActiveChecklistAnswerInput = {
 
 export type ActiveChecklistFields = {
   __typename?: 'ActiveChecklistFields';
-  activeChecklist: ActiveChecklist;
-  activeChecklistId: Scalars['String'];
   answer?: Maybe<ChecklistAnswer>;
   answerTranslations: Array<Scalars['JSON']>;
   availableAnswers: Array<Scalars['JSON']>;
-  brandIds: Array<Scalars['String']>;
-  createdAt: Scalars['Date'];
   dependent?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   order: Scalars['Int'];
@@ -428,8 +375,6 @@ export type ActiveChecklistFields = {
   section: Scalars['Int'];
   subsection: Scalars['Int'];
   type: ChecklistAnswerType;
-  updatedAt: Scalars['Date'];
-  weight: Scalars['Int'];
 };
 
 export type ActiveChecklistFieldsListRelationFilter = {
@@ -569,15 +514,10 @@ export enum ActiveChecklistScalarFieldEnum {
 
 export type ActiveChecklistSections = {
   __typename?: 'ActiveChecklistSections';
-  activeChecklist: ActiveChecklist;
-  activeChecklistId: Scalars['String'];
   dependsOnWeight?: Maybe<DependWeight>;
-  id: Scalars['ID'];
-  maxWeight: Scalars['Int'];
   section: Scalars['Int'];
   sub: Scalars['Boolean'];
   subsection?: Maybe<Scalars['Int']>;
-  title?: Maybe<Scalars['String']>;
   titleLocaled: Scalars['String'];
   titleTranslations: Array<Scalars['JSON']>;
 };
@@ -680,27 +620,16 @@ export type Address = {
   __typename?: 'Address';
   alias?: Maybe<Scalars['String']>;
   building?: Maybe<Scalars['String']>;
-  business?: Maybe<Business>;
-  businessId?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
   county?: Maybe<Scalars['String']>;
-  createdAt: Scalars['Date'];
   full: Scalars['String'];
   geoLat?: Maybe<Scalars['Float']>;
   geoLng?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
-  incident?: Maybe<Incident>;
-  incidentId?: Maybe<Scalars['String']>;
-  offender?: Maybe<Offender>;
-  offenderId?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   premises?: Maybe<Scalars['String']>;
   primary?: Maybe<Scalars['Boolean']>;
   street?: Maybe<Scalars['String']>;
   townCity?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['Date'];
-  user?: Maybe<User>;
-  userId?: Maybe<Scalars['String']>;
 };
 
 export type AddressListRelationFilter = {
@@ -1092,18 +1021,10 @@ export type AiVisionMatchWhereInput = {
 export type Answer = {
   __typename?: 'Answer';
   answer: Scalars['String'];
-  createdAt: Scalars['Date'];
   id: Scalars['ID'];
-  incident?: Maybe<Incident>;
-  incidentId?: Maybe<Scalars['String']>;
-  tagId?: Maybe<Scalars['String']>;
   tagQuestion?: Maybe<TagQuestion>;
-  taskId?: Maybe<Scalars['String']>;
   taskQuestion?: Maybe<TaskQuestion>;
-  todo?: Maybe<Todo>;
-  todoId?: Maybe<Scalars['String']>;
   type: AnswerType;
-  updatedAt: Scalars['Date'];
 };
 
 export type AnswerCount = {
@@ -1207,9 +1128,6 @@ export type AnswerUpdateManyWithoutTodoNestedInput = {
 export type AnswerWeight = {
   __typename?: 'AnswerWeight';
   answer: Scalars['String'];
-  id: Scalars['ID'];
-  question: ChecklistQuestion;
-  questionId: Scalars['String'];
   weight: Scalars['Int'];
 };
 
@@ -1347,48 +1265,24 @@ export type ApproveIncidentData = {
 
 export type Article = {
   __typename?: 'Article';
-  actions: Array<Action>;
   completedAt?: Maybe<Scalars['Date']>;
   createdAt: Scalars['Date'];
   createdBy: User;
-  createdById: Scalars['String'];
   documents: Array<Document>;
-  feedItems: Array<FeedItem>;
-  frequency?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
-  hideWatermark: Scalars['Boolean'];
   id: Scalars['ID'];
   image?: Maybe<Image>;
-  imageId?: Maybe<Scalars['String']>;
   images: Array<Image>;
-  impressions: Array<Impression>;
-  notifications: Array<Notification>;
   previewImage?: Maybe<Scalars['String']>;
   previewText?: Maybe<Scalars['String']>;
   priority: ArticlePriority;
-  recurring: Scalars['Boolean'];
-  recycleDate: Scalars['Date'];
-  recycled: Scalars['Boolean'];
   rows: Array<ArticleRow>;
   schemes: Array<Scheme>;
-  start?: Maybe<Scalars['Date']>;
   status: CompleteStatus;
   tags: Array<Tag>;
   title: Scalars['String'];
   updatedAt: Scalars['Date'];
-  users: Array<User>;
   watermarkImage: Scalars['Boolean'];
-  when?: Maybe<When>;
-};
-
-
-export type ArticleActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ActionWhereInput>;
 };
 
 
@@ -1399,16 +1293,6 @@ export type ArticleDocumentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<DocumentWhereInput>;
-};
-
-
-export type ArticleFeedItemsArgs = {
-  cursor?: InputMaybe<FeedItemWhereUniqueInput>;
-  distinct?: InputMaybe<Array<FeedItemScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<FeedItemOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<FeedItemWhereInput>;
 };
 
 
@@ -1429,26 +1313,6 @@ export type ArticleImagesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
-};
-
-
-export type ArticleImpressionsArgs = {
-  cursor?: InputMaybe<ImpressionWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ImpressionScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ImpressionOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ImpressionWhereInput>;
-};
-
-
-export type ArticleNotificationsArgs = {
-  cursor?: InputMaybe<NotificationWhereUniqueInput>;
-  distinct?: InputMaybe<Array<NotificationScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<NotificationOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<NotificationWhereInput>;
 };
 
 
@@ -1481,41 +1345,11 @@ export type ArticleTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
-
-export type ArticleUsersArgs = {
-  cursor?: InputMaybe<UserWhereUniqueInput>;
-  distinct?: InputMaybe<Array<UserScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<UserWhereInput>;
-};
-
 export type ArticleColumn = {
   __typename?: 'ArticleColumn';
-  createdAt: Scalars['Date'];
-  id: Scalars['ID'];
-  images: Array<Image>;
   incidents: Array<Incident>;
   offenders: Array<Offender>;
-  position: Scalars['Int'];
-  reportData?: Maybe<Scalars['JSON']>;
-  row: ArticleRow;
-  rowId: Scalars['String'];
   text?: Maybe<Scalars['String']>;
-  type: ArticleSectionType;
-  updatedAt: Scalars['Date'];
-  width: Scalars['Int'];
-};
-
-
-export type ArticleColumnImagesArgs = {
-  cursor?: InputMaybe<ImageWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ImageScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ImageOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ImageWhereInput>;
 };
 
 
@@ -1667,13 +1501,7 @@ export enum ArticlePriority {
 
 export type ArticleRow = {
   __typename?: 'ArticleRow';
-  article: Article;
-  articleId: Scalars['String'];
   columns: Array<ArticleColumn>;
-  createdAt: Scalars['Date'];
-  id: Scalars['ID'];
-  position: Scalars['Int'];
-  updatedAt: Scalars['Date'];
 };
 
 
@@ -1843,14 +1671,6 @@ export type ArticleWhereUniqueInput = {
   users?: InputMaybe<UserListRelationFilter>;
   watermarkImage?: InputMaybe<BoolFilter>;
   when?: InputMaybe<EnumWhenNullableFilter>;
-};
-
-export type Auth0User = {
-  __typename?: 'Auth0User';
-  blocked: Scalars['String'];
-  lastLogin: Scalars['String'];
-  lastPasswordReset: Scalars['String'];
-  loginCount: Scalars['String'];
 };
 
 export type Ban = {
@@ -9627,16 +9447,22 @@ export type LanguageSchemesArgs = {
 export enum LanguageCode {
   Da = 'da',
   De = 'de',
+  El = 'el',
   En = 'en',
   Es = 'es',
   Fi = 'fi',
   Fr = 'fr',
+  Hu = 'hu',
+  Id = 'id',
   It = 'it',
+  Ms = 'ms',
   Nl = 'nl',
   Pl = 'pl',
   Pt = 'pt',
   Rbe = 'rbe',
-  Sv = 'sv'
+  Ro = 'ro',
+  Sv = 'sv',
+  Th = 'th'
 }
 
 export type LanguageListRelationFilter = {
@@ -14373,7 +14199,6 @@ export type Query = {
   aiVisionStats: Array<Count>;
   article: Article;
   articles: Array<Article>;
-  auth0User: Auth0User;
   availableQuestions: Array<Question>;
   availableTaskQuestions: Array<Question>;
   ban: Ban;
@@ -14690,11 +14515,6 @@ export type QueryArticlesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ArticleWhereInput>;
-};
-
-
-export type QueryAuth0UserArgs = {
-  id: Scalars['String'];
 };
 
 
@@ -19735,6 +19555,7 @@ export type TagQuestion = {
   priority: Scalars['Int'];
   question: Question;
   req: Scalars['Boolean'];
+  roles: Array<CustomRole>;
   tag: Tag;
   tooltip?: Maybe<Scalars['String']>;
   updatedAt: Scalars['Date'];
