@@ -541,8 +541,8 @@ const ViewBusiness = ({
                     groups: user.groups,
                     key: user.id,
                     lastLogin:
-                      user.loginEvents && user.loginEvents.length > 0
-                        ? dayjs(user.loginEvents[0]?.loginTime || '').format(
+                      user.sessions && user.sessions.length > 0
+                        ? dayjs(user.sessions[0]?.createdAt || '').format(
                             'HH:mm DD/MM/YY'
                           )
                         : 'No LogIn Data',

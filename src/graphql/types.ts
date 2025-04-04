@@ -22206,9 +22206,21 @@ export type UserSchemeOnUserInput = {
 };
 
 export type UserSchemeOnUserUpdateInput = {
+  bulletinEmails?: InputMaybe<SetBooleanHelper>;
+  bulletinPush?: InputMaybe<SetBooleanHelper>;
+  disabled?: InputMaybe<SetBooleanHelper>;
+  fullName?: InputMaybe<SetStringHelper>;
+  incidentEmail?: InputMaybe<SetBooleanHelper>;
+  incidentPush?: InputMaybe<SetBooleanHelper>;
+  messagePush?: InputMaybe<SetBooleanHelper>;
+  offenderEmail?: InputMaybe<SetBooleanHelper>;
+  offenderPush?: InputMaybe<SetBooleanHelper>;
   permissions?: InputMaybe<ConnectHelper>;
+  publicName?: InputMaybe<SetBooleanHelper>;
   reportToAllBusinesses?: InputMaybe<SetBooleanHelper>;
   role?: InputMaybe<EnumRoleFieldUpdateOperationsInput>;
+  subscribedIncidentOnly?: InputMaybe<SetBooleanHelper>;
+  subscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
 };
 
 export type UserSchemeOnUserUpdateInputEnvelope = {

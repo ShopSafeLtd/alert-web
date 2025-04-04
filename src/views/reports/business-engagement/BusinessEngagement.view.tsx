@@ -9,7 +9,8 @@ import { faFileDownload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Row, Table, Typography } from 'antd';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+import { CSVLink } from 'react-csv';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import type { SelectOptions } from './useBusinessEngagement';
 
@@ -45,6 +46,30 @@ const PerformanceReport = ({
   const logo = localStorage.getItem('logo');
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
+
+  const csvData = [
+    [
+      'Name',
+      'Incidents',
+      'Offenders',
+      'Updates',
+      'Messages',
+      'Logins',
+      'Users',
+    ],
+    ...(data?.businessContribution?.businessContributions?.map(
+      (business, i) => ({
+        fullName: business.name,
+        incidentsCreated: business.totalIncidents,
+        key: business.name + i.toString(),
+        logins: business.totalLogins,
+        messagesSent: business.totalMessages,
+        offendersCreated: business.totalOffenders,
+        updatesCreated: business.totalUpdates,
+        users: business.totalUsers,
+      })
+    ) || []),
+  ];
 
   return (
     <Row>
@@ -98,6 +123,13 @@ const PerformanceReport = ({
                 <DateSelect defaultRange="last30Days" onChange={setDateRange} />
               </Col>
               <Col flex={1} />
+              <Col>
+                <CSVLink data={csvData} filename="User Engagement">
+                  <Button>
+                    <FormattedMessage defaultMessage="Download CSV" />
+                  </Button>
+                </CSVLink>
+              </Col>
               <Col>
                 <Button onClick={handlePrint}>
                   <FontAwesomeIcon

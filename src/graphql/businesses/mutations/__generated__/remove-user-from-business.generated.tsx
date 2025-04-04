@@ -11,7 +11,7 @@ export type RemoveUserFromBusinessMutationVariables = Types.Exact<{
 }>;
 
 
-export type RemoveUserFromBusinessMutation = { __typename?: 'Mutation', removeUserFromBusiness: { __typename?: 'Business', id: string, name: string, users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, loginEvents: Array<{ __typename?: 'LoginEvent', loginTime: Date }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
+export type RemoveUserFromBusinessMutation = { __typename?: 'Mutation', removeUserFromBusiness: { __typename?: 'Business', id: string, name: string, users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
 
 
 export const RemoveUserFromBusinessDocument = gql`
@@ -24,9 +24,6 @@ export const RemoveUserFromBusinessDocument = gql`
       fullName
       status
       publicName
-      loginEvents {
-        loginTime
-      }
       groups(where: $groupWhere) {
         id
         name
