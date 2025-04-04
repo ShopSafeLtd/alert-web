@@ -143,6 +143,13 @@ const useViewBusiness = (): Return => {
   const { data: usersData } = useListBusinessUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      SessionWhereInput: {
+        scheme: {
+          id: {
+            equals: currentScheme,
+          },
+        },
+      },
       groupWhere: {
         scheme: {
           id: {
@@ -401,7 +408,10 @@ const useViewBusiness = (): Return => {
           ListBusinessUsersQueryVariables
         >({
           data: {
-            users: result.data?.removeUserFromBusiness.users,
+            users: result.data?.removeUserFromBusiness.users.map((user) => ({
+              ...user,
+              sessions: [],
+            })),
           },
           query: ListBusinessUsersDocument,
           variables: {
@@ -764,7 +774,7 @@ const useViewBusiness = (): Return => {
         __typename: 'Query',
         users: [
           ...existingData.users,
-          { ...res.createUserInDatabase, loginEvents: [] },
+          { ...res.createUserInDatabase, sessions: [] },
         ],
       },
       query: ListBusinessUsersDocument,
@@ -832,7 +842,7 @@ const useViewBusiness = (): Return => {
         __typename: 'Query',
         users: [
           ...existingData.users,
-          { ...res.inviteExistingUser, loginEvents: [] },
+          { ...res.inviteExistingUser, sessions: [] },
         ],
       },
       query: ListBusinessUsersDocument,
@@ -901,7 +911,13 @@ const useViewBusiness = (): Return => {
     store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
       data: {
         __typename: 'Query',
-        users: [...existingData.users, ...res.addUsersToBusiness.users],
+        users: [
+          ...existingData.users,
+          ...res.addUsersToBusiness.users.map((user) => ({
+            ...user,
+            sessions: [],
+          })),
+        ],
       },
       query: ListBusinessUsersDocument,
       variables: {

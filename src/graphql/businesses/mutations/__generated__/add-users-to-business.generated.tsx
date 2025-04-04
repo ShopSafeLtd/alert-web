@@ -11,7 +11,7 @@ export type AddUsersToBusinessMutationVariables = Types.Exact<{
 }>;
 
 
-export type AddUsersToBusinessMutation = { __typename?: 'Mutation', addUsersToBusiness: { __typename?: 'Business', id: string, name: string, users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, loginEvents: Array<{ __typename?: 'LoginEvent', loginTime: Date }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
+export type AddUsersToBusinessMutation = { __typename?: 'Mutation', addUsersToBusiness: { __typename?: 'Business', id: string, name: string, users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
 
 
 export const AddUsersToBusinessDocument = gql`
@@ -24,9 +24,6 @@ export const AddUsersToBusinessDocument = gql`
       fullName
       status
       publicName
-      loginEvents {
-        loginTime
-      }
       groups(where: $groupWhere) {
         id
         name

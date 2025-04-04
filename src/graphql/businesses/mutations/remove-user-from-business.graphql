@@ -16,9 +16,6 @@ mutation RemoveUserFromBusiness(
       fullName
       status
       publicName
-      loginEvents {
-        loginTime
-      }
       groups(where: $groupWhere) {
         id
         name
