@@ -385,13 +385,28 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               update: [
                 {
                   data: {
+                    bulletinEmails: { set: data.bulletinEmails },
+                    bulletinPush: { set: data.bulletinPush },
+                    fullName: { set: data.fullName },
+                    incidentEmail: { set: data.incidentEmail },
+                    incidentPush: { set: data.incidentPush },
+                    messagePush: { set: data.messagePush },
+                    offenderEmail: { set: data.offenderEmail },
+                    offenderPush: { set: data.offenderPush },
                     permissions: {
                       connect: {
                         id: foundRole.id,
                       },
                     },
+                    publicName: { set: data.publicName },
                     reportToAllBusinesses: { set: data.reportToAllBusinesses },
                     role: { set: foundRole.type },
+                    subscribedIncidentOnly: {
+                      set: data.subscribedIncidentOnly,
+                    },
+                    subscribedOffenderOnly: {
+                      set: data.subscribedOffenderOnly,
+                    },
                   },
                   where: {
                     id: userData?.user?.schemes[0].id,

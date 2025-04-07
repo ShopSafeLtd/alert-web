@@ -698,8 +698,15 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       } else if (reportOnly) {
         navigate('/app/incidents/add');
       } else if (
-        restrictIncidentAccess &&
-        hasPermission({
+        (restrictIncidentAccess &&
+          hasPermission({
+            permission: {
+              method: PermissionMethod.Read,
+              model: PermissionModel.Incidents,
+            },
+            permissions,
+          })) ||
+        !hasPermission({
           permission: {
             method: PermissionMethod.Read,
             model: PermissionModel.Incidents,

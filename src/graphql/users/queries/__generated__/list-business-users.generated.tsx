@@ -7,21 +7,22 @@ export type ListBusinessUsersQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.UserWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.UserOrderByWithRelationInput> | Types.UserOrderByWithRelationInput>;
   groupWhere?: Types.InputMaybe<Types.GroupWhereInput>;
+  SessionWhereInput?: Types.InputMaybe<Types.SessionWhereInput>;
 }>;
 
 
-export type ListBusinessUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, loginEvents: Array<{ __typename?: 'LoginEvent', loginTime: Date }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
+export type ListBusinessUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string, status?: Types.UserStatus | null, publicName: boolean, sessions: Array<{ __typename?: 'Session', createdAt: Date }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
 
 
 export const ListBusinessUsersDocument = gql`
-    query ListBusinessUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $groupWhere: GroupWhereInput) {
+    query ListBusinessUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $groupWhere: GroupWhereInput, $SessionWhereInput: SessionWhereInput) {
   users(where: $where, orderBy: $orderBy) {
     id
     fullName
     status
     publicName
-    loginEvents {
-      loginTime
+    sessions(take: 1, orderBy: {createdAt: desc}, where: $SessionWhereInput) {
+      createdAt
     }
     groups(where: $groupWhere) {
       id
