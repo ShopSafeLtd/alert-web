@@ -46,7 +46,6 @@ const PerformanceReport = ({
   const logo = localStorage.getItem('logo');
   const intl = useIntl();
   const [collapsed, setCollapsed] = useState(false);
-
   const csvData = [
     [
       'Name',
@@ -57,18 +56,15 @@ const PerformanceReport = ({
       'Logins',
       'Users',
     ],
-    ...(data?.businessContribution?.businessContributions?.map(
-      (business, i) => ({
-        fullName: business.name,
-        incidentsCreated: business.totalIncidents,
-        key: business.name + i.toString(),
-        logins: business.totalLogins,
-        messagesSent: business.totalMessages,
-        offendersCreated: business.totalOffenders,
-        updatesCreated: business.totalUpdates,
-        users: business.totalUsers,
-      })
-    ) || []),
+    ...(data?.businessContribution?.businessContributions?.map((business) => [
+      business.name,
+      business.totalIncidents,
+      business.totalOffenders,
+      business.totalUpdates,
+      business.totalMessages,
+      business.totalLogins,
+      business.totalUsers,
+    ]) || []),
   ];
 
   return (
