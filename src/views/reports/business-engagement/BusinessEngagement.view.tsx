@@ -120,7 +120,7 @@ const PerformanceReport = ({
               </Col>
               <Col flex={1} />
               <Col>
-                <CSVLink data={csvData} filename="User Engagement">
+                <CSVLink data={csvData} filename="Business Engagement">
                   <Button>
                     <FormattedMessage defaultMessage="Download CSV" />
                   </Button>
