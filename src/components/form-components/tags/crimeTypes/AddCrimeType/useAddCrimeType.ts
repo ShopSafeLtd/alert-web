@@ -103,7 +103,7 @@ const useAddCrimeType = ({
             ? { connect: { id: data.parentTagId } }
             : undefined,
           roles:
-            data.roles.length > 0
+            data.roles?.length > 0
               ? {
                   connect: data.roles.map((id) => ({
                     id,
