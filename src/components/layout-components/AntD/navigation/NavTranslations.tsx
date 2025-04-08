@@ -225,6 +225,7 @@ export const NavTranslations = () => {
       onOpenChange={handleVisibleChange}
       open={visible}
       placement="topRight"
+      trigger={['click']}
     >
       <div className={classes.notificationCol}>
         <Text ellipsis style={{ maxWidth: 120 }}>
