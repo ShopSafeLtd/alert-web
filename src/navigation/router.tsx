@@ -6,7 +6,7 @@ import Terms from '#/navigation/auth-views/components/Terms';
 import GenerateSignInRedirect from '#/utils/generate-sign-in-redirect';
 import DebugView from '#/views/Debug.view';
 import LoginView from '#/views/sign-in/Login.View';
-import { SignedIn, SignedOut } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, useClerk } from '@clerk/clerk-react';
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import { ConfigProvider } from 'antd';
 import theme from 'configs/ThemeConfig';
@@ -19,6 +19,8 @@ const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 const AppLayout = lazy(() => import('#/layouts/app-layout'));
 
 const Views = () => {
+  const clerk = useClerk();
+
   // check if current url is staging. If so, redirect to  https://app.shopsafealert.co.uk/ unless localstorage has been set with staging:true
   if (
     window?.location?.href?.includes('staging.shopsafealert') &&
@@ -40,7 +42,9 @@ const Views = () => {
     messages,
     theme: currentTheme,
   } = useThemeLanguage();
-
+  if (!clerk.loaded) {
+    return <LoadingScreen />;
+  }
   return (
     <div style={{ colorScheme: currentTheme }}>
       <IntlProvider

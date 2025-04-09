@@ -44,6 +44,11 @@ const options: Partial<PostHogConfig> = {
   api_host: 'https://app.shopsafe.io/ingest',
   disable_surveys: true,
   enable_recording_console_log: true,
+  rate_limiting: {
+    events_burst_limit: 10,
+    events_per_second: 5,
+  },
+  request_batching: true,
   secure_cookie: true,
   session_recording: {
     maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {
