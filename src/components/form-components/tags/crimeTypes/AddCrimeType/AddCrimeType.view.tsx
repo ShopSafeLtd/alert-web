@@ -37,6 +37,7 @@ const AddCrimeType = ({
   return (
     <Form
       initialValues={{
+        roles: [],
         schemes: [schemeId],
       }}
       layout="vertical"

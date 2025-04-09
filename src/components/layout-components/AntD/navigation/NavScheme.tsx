@@ -45,7 +45,10 @@ export const NavScheme = () => {
 
   const { setScheme } = useSchemeProvider();
 
-  const schemes = useAtomValue(userSchemesAtom);
+  const schemesO = useAtomValue(userSchemesAtom);
+  const schemes = [...schemesO].sort((a, b) =>
+    a.scheme.name.localeCompare(b.scheme.name)
+  );
   const activeScheme = useAtomValue(currentSchemeIdAtom);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const activeSchemeName = useAtomValue(currentSchemeAtom)?.name ?? '';
@@ -195,6 +198,7 @@ export const NavScheme = () => {
       onOpenChange={handleVisibleChange}
       open={visible || !!search}
       placement="topRight"
+      trigger={['click']}
     >
       <div className={classes.notificationCol}>
         <Text ellipsis style={{ maxWidth: 120 }}>

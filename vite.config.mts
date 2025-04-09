@@ -70,11 +70,9 @@ export default defineConfig((configEnv) => {
               const knownVendors = new Set([
                 'react',
                 'react-dom',
-                'antd',
                 'apollo',
                 'lodash',
                 'mapbox-gl',
-                '@sentry',
                 '@deck.gl/core',
                 '@nivo/bar',
                 'tinymce',
@@ -96,10 +94,10 @@ export default defineConfig((configEnv) => {
               }
             }
           },
-          // Optimize chunk naming for better caching
-          chunkFileNames: 'assets/js/[name]-[hash].js',
-          entryFileNames: 'assets/js/[name]-[hash].js',
-          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+          // // Optimize chunk naming for better caching
+          // chunkFileNames: 'assets/js/[name]-[hash].js',
+          // entryFileNames: 'assets/js/[name]-[hash].js',
+          // assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
         },
       },
       assetsInlineLimit: 4096,

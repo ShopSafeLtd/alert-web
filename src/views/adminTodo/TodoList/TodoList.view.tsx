@@ -8,7 +8,10 @@ import type { TodoStatusInput } from 'graphql/types';
 
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
 import EditTodo from '#/components/form-components/Todos/EditTodo';
-import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
+import {
+  currentPermissionsAtom,
+  currentSchemeAtom,
+} from '#/providers/SchemeProvider/SchemeProvider';
 import hasPermission from '#/utils/has-permission';
 import {
   faArrowUpRightAndArrowDownLeftFromCenter,
@@ -179,6 +182,7 @@ const AdminTodos = ({
   // const classes = useStyles();
   const intl = useIntl();
   const shouldOpen = useAtomValue(currentSchemeAtom)?.taskTimeTracking;
+  const permissions = useAtomValue(currentPermissionsAtom);
 
   const completeTodo = (value: boolean, id?: string) => {
     if (value && id) {
@@ -584,7 +588,10 @@ const AdminTodos = ({
                               },
                             },
                           ].filter((item) =>
-                            hasPermission({ permission: item.permission })
+                            hasPermission({
+                              permission: item.permission,
+                              permissions,
+                            })
                           ),
                         }}
                       >
