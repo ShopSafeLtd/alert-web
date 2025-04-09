@@ -4,6 +4,7 @@ import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import type { TagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import { faUpload } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,7 +12,6 @@ import {
   Button,
   Card,
   Col,
-  DatePicker,
   Drawer,
   Form,
   Input,

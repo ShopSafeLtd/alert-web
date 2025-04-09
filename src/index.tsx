@@ -1,11 +1,10 @@
 import type { AvailableLanguages } from '#/lang';
-import type { ClerkProp } from '@clerk/clerk-react';
 
+import App from '#/App';
 import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { AvailableLanguagesConst } from '#/lang';
 import { ThemeConfig } from '#/state';
 import { LocalStorageKeys, typedLocalStorage } from '#/utils';
-import { Clerk } from '@clerk/clerk-js';
 import { ClerkProvider } from '@clerk/clerk-react';
 import {
   daDK,
@@ -20,7 +19,7 @@ import {
   ptPT,
   svSE,
 } from '@clerk/localizations';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
@@ -30,8 +29,6 @@ import '~/yet-another-react-lightbox/dist/styles.css';
 
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-
-const App = React.lazy(() => import('./App'));
 
 const themes = {
   dark: '/css/dark-theme.css',
@@ -116,29 +113,53 @@ interface Props {
 
 const ClerkWithRouting = ({ children }: Props) => {
   const navigate = useNavigate();
-  const [clerk, setClerk] = useState<ClerkProp | null>(null);
-
-  useEffect(() => {
-    const initializeClerk = async () => {
-      const clerkInstance = new Clerk(PUBLISHABLE_KEY);
-      await clerkInstance.load();
-      setClerk(clerkInstance as unknown as ClerkProp);
-    };
-
-    void initializeClerk();
-  }, []);
-  if (!clerk) return <LoadingScreen />;
+  // const [clerk, setClerk] = useState<ClerkProp | null>(null);
+  //
+  // useEffect(() => {
+  //   const loadClerk = async () => {
+  //     const loadFromCDN = async () => {
+  //       const ClerkConstructor = new Clerk(PUBLISHABLE_KEY);
+  //       await ClerkConstructor.load();
+  //       return ClerkConstructor as unknown as ClerkProp;
+  //     };
+  //
+  //     const loadFromBundle = async () => {
+  //       const { Clerk: BundledClerk } = await import('@clerk/clerk-js');
+  //       const ClerkConstructor = new BundledClerk(PUBLISHABLE_KEY);
+  //       await ClerkConstructor.load();
+  //       return ClerkConstructor as unknown as ClerkProp;
+  //     };
+  //
+  //     try {
+  //       const clerkInstance = await loadFromCDN();
+  //       setClerk(clerkInstance);
+  //     } catch (error) {
+  //       console.warn(
+  //         'Failed to load Clerk from CDN, falling back to bundle:',
+  //         error
+  //       );
+  //       try {
+  //         const fallbackInstance = await loadFromBundle();
+  //         setClerk(fallbackInstance);
+  //       } catch (bundleError) {
+  //         console.error(
+  //           'Failed to load Clerk from both CDN and bundle:',
+  //           bundleError
+  //         );
+  //       }
+  //     }
+  //   };
+  //
+  //   void loadClerk();
+  // }, []);
+  //
+  // if (!clerk) return <LoadingScreen />;
   return (
     <ClerkProvider
-      Clerk={clerk}
-      clerkJSVersion={'^5.52.2'}
       localization={getLocal()}
       publishableKey={PUBLISHABLE_KEY}
       routerPush={(to) => navigate(to)}
       routerReplace={(to) => navigate(to, { replace: true })}
-      telemetry={{
-        debug: true,
-      }}
     >
       {children}
     </ClerkProvider>

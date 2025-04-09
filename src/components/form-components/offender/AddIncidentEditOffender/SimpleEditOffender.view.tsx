@@ -1,5 +1,6 @@
 import type { FormInstance } from 'antd';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import { currentSchemeAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   ageValues,
@@ -11,7 +12,6 @@ import { heightValues } from '#/types/enums/height';
 import {
   Button,
   Col,
-  DatePicker,
   Form,
   Input,
   Radio,

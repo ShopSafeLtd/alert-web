@@ -1,17 +1,8 @@
-import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Dayjs } from 'dayjs';
 import type { BanData } from 'types/DataType';
 
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-} from 'antd';
+import DatePicker from '#/components/util-components/DatePicker';
+import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import dayjs from 'dayjs';
 import { BanType } from 'graphql/types';
 import React from 'react';
@@ -20,7 +11,7 @@ import { BanTypeValues } from 'types';
 
 interface Props {
   banData: BanData | null;
-  disabledDate: RangePickerProps['disabledDate'];
+  disabledDate: (current: Date) => boolean;
   onClose: () => void;
   onSubmit: (value: BanData) => void;
   saving: boolean;
