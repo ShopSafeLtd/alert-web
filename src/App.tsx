@@ -1,8 +1,10 @@
 import type { CapturedNetworkRequest, PostHogConfig } from 'posthog-js';
 
+import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { TokenProvider } from '#/context/token-context';
 import SchemeProvider from '#/providers/SchemeProvider/SchemeProvider';
 import UserProvider from '#/providers/UserProvider/UserProvider';
+import { useClerk } from '@clerk/clerk-react';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
 import { reactRouterV6Instrumentation } from '@sentry/react';
@@ -44,6 +46,11 @@ const options: Partial<PostHogConfig> = {
   api_host: 'https://app.shopsafe.io/ingest',
   disable_surveys: true,
   enable_recording_console_log: true,
+  rate_limiting: {
+    events_burst_limit: 10,
+    events_per_second: 5,
+  },
+  request_batching: true,
   secure_cookie: true,
   session_recording: {
     maskCapturedNetworkRequestFn: (request: CapturedNetworkRequest) => {
@@ -95,29 +102,35 @@ if (import.meta.env.PROD) {
 
 export const PublicRoutes = ['/terms', '/debug', '/ext'];
 
-const App = (): JSX.Element => (
-  <div>
-    <PostHogProvider
-      apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
-      options={options}
-    >
-      <TokenProvider>
-        <Provider>
-          <Store>
-            <ApolloProvider>
-              <RouteWrapper title={undefined}>
-                <UserProvider>
-                  <SchemeProvider>
-                    <Views />
-                  </SchemeProvider>
-                </UserProvider>
-              </RouteWrapper>
-            </ApolloProvider>
-          </Store>
-        </Provider>
-      </TokenProvider>
-    </PostHogProvider>
-  </div>
-);
+const App = (): JSX.Element => {
+  const clerk = useClerk();
+  if (!clerk.loaded) {
+    return <LoadingScreen />;
+  }
+  return (
+    <div>
+      <PostHogProvider
+        apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+        options={options}
+      >
+        <TokenProvider>
+          <Provider>
+            <Store>
+              <ApolloProvider>
+                <RouteWrapper title={undefined}>
+                  <UserProvider>
+                    <SchemeProvider>
+                      <Views />
+                    </SchemeProvider>
+                  </UserProvider>
+                </RouteWrapper>
+              </ApolloProvider>
+            </Store>
+          </Provider>
+        </TokenProvider>
+      </PostHogProvider>
+    </div>
+  );
+};
 
 export default Sentry.withProfiler(App);
