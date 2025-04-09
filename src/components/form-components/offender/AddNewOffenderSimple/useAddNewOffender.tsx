@@ -51,6 +51,26 @@ import type { ImageValue } from '../../ImageSelect/ImageSelect.view';
 //   }[];
 // }
 
+const defaultOffenderSettings = {
+  age: true,
+  alias: true,
+  build: true,
+  comment: true,
+  createdAt: new Date(),
+  dateOfBirth: true,
+  dateOfBirthSource: true,
+  ethnicity: true,
+  gender: true,
+  hair: true,
+  height: true,
+  id: '',
+  idVerified: true,
+  images: true,
+  name: true,
+  peculiarities: true,
+  updatedAt: new Date(),
+};
+
 export interface FormData {
   addressAlias?: string;
   age: Age;
@@ -311,7 +331,9 @@ const useAddNewOffender = ({
 
     knowAddress,
     loading,
-    offenderSettings: businessData?.business.offenderSettings,
+    offenderSettings: loading
+      ? undefined
+      : businessData?.business?.offenderSettings || defaultOffenderSettings,
     onSubmit,
     saving,
 
