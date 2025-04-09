@@ -1,8 +1,10 @@
 import type { CapturedNetworkRequest, PostHogConfig } from 'posthog-js';
 
+import LoadingScreen from '#/components/layout-components/LoadingScreen';
 import { TokenProvider } from '#/context/token-context';
 import SchemeProvider from '#/providers/SchemeProvider/SchemeProvider';
 import UserProvider from '#/providers/UserProvider/UserProvider';
+import { useClerk } from '@clerk/clerk-react';
 import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import * as Sentry from '@sentry/react';
 import { reactRouterV6Instrumentation } from '@sentry/react';
@@ -100,29 +102,35 @@ if (import.meta.env.PROD) {
 
 export const PublicRoutes = ['/terms', '/debug', '/ext'];
 
-const App = (): JSX.Element => (
-  <div>
-    <PostHogProvider
-      apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
-      options={options}
-    >
-      <TokenProvider>
-        <Provider>
-          <Store>
-            <ApolloProvider>
-              <RouteWrapper title={undefined}>
-                <UserProvider>
-                  <SchemeProvider>
-                    <Views />
-                  </SchemeProvider>
-                </UserProvider>
-              </RouteWrapper>
-            </ApolloProvider>
-          </Store>
-        </Provider>
-      </TokenProvider>
-    </PostHogProvider>
-  </div>
-);
+const App = (): JSX.Element => {
+  const clerk = useClerk();
+  if (!clerk.loaded) {
+    return <LoadingScreen />;
+  }
+  return (
+    <div>
+      <PostHogProvider
+        apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+        options={options}
+      >
+        <TokenProvider>
+          <Provider>
+            <Store>
+              <ApolloProvider>
+                <RouteWrapper title={undefined}>
+                  <UserProvider>
+                    <SchemeProvider>
+                      <Views />
+                    </SchemeProvider>
+                  </UserProvider>
+                </RouteWrapper>
+              </ApolloProvider>
+            </Store>
+          </Provider>
+        </TokenProvider>
+      </PostHogProvider>
+    </div>
+  );
+};
 
 export default Sentry.withProfiler(App);
