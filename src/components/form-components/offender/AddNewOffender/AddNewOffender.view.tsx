@@ -4,6 +4,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 // import DebounceSelect from 'components/form-components/DebounceSelect';
 import UploadImage from '#/components/images/UploadImage.view';
+import DatePicker from '#/components/util-components/DatePicker';
 import {
   ageValues,
   buildValues,
@@ -14,7 +15,6 @@ import { heightValues } from '#/types/enums/height';
 import {
   Button,
   Col,
-  DatePicker,
   Form,
   Input,
   Radio,

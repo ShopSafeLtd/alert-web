@@ -9,6 +9,7 @@ import AddExclusion from '#/components/form-components/offender/exclusion/AddExc
 import EditExclusion from '#/components/form-components/offender/exclusion/EditExclusion';
 // import type { RangePickerProps } from 'antd/es/date-picker';
 import AddOffenderTag from '#/components/form-components/tags/offenderWarnings/AddOffenderWarning';
+import DatePicker from '#/components/util-components/DatePicker';
 import {
   ageValues,
   buildValues,
@@ -25,7 +26,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
-  DatePicker,
   Drawer,
   Empty,
   Form,

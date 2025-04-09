@@ -1,8 +1,15 @@
-import React from 'react';
+import type {
+  CustomGalleryData,
+  OffenderSettingsType,
+  TagData,
+} from 'types/DataType';
+
+import DatePicker from '#/components/util-components/DatePicker';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
   Col,
-  DatePicker,
   Drawer,
   Form,
   Input,
@@ -12,64 +19,58 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
-import { heightValues } from 'types/enums/height';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
-import type {
-  CustomGalleryData,
-  OffenderSettingsType,
-  TagData,
-} from 'types/DataType';
-import { useIntl } from 'react-intl';
 import { IdSource } from 'graphql/types';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
+import { heightValues } from 'types/enums/height';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface Props {
-  adminRights: boolean;
-  saving: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  customGalleries: { value: string; label: string }[];
-  customGalleriesLoading: boolean;
-  toggleAddOffenderTag: () => void;
-  ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  idVerified?: boolean;
-  toggleAddCustomGallery: () => void;
-  addOffenderTag: boolean;
-  updateNewOffenderTagData: (values: TagData) => void;
   addCustomGallery: boolean;
-  updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  addOffenderTag: boolean;
+  adminRights: boolean;
+  ageCheck: boolean;
+  customGalleries: { label: string; value: string }[];
+  customGalleriesLoading: boolean;
+  idVerified?: boolean;
+  offenderSettings: OffenderSettingsType;
   onSearchOffender: () => void;
   potentialOffenders: number;
+  saving: boolean;
+  setAgeCheck: (value: boolean) => void;
+  tags: { label: string; value: string }[];
+  tagsLoading: boolean;
+  toggleAddCustomGallery: () => void;
+  toggleAddOffenderTag: () => void;
   toggleViewPotentialOffenders: () => void;
-  offenderSettings: OffenderSettingsType;
+  updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  updateNewOffenderTagData: (values: TagData) => void;
 }
 
 const OffenderDetails = ({
-  tags,
-  tagsLoading,
+  addCustomGallery,
+  addOffenderTag,
   adminRights,
-  saving,
   ageCheck,
-  setAgeCheck,
-  toggleAddOffenderTag,
-  idVerified,
   customGalleries,
   customGalleriesLoading,
-  toggleAddCustomGallery,
-  addOffenderTag,
-  updateNewOffenderTagData,
-  addCustomGallery,
-  updateNewCustomGalleryData,
+  idVerified,
+  offenderSettings,
   onSearchOffender,
   potentialOffenders,
+  saving,
+  setAgeCheck,
+  tags,
+  tagsLoading,
+  toggleAddCustomGallery,
+  toggleAddOffenderTag,
   toggleViewPotentialOffenders,
-  offenderSettings,
+  updateNewCustomGalleryData,
+  updateNewOffenderTagData,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -78,7 +79,7 @@ const OffenderDetails = ({
       <Row align="middle" style={{ marginBottom: 30 }}>
         <Col>
           {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-          <Title style={{ marginBottom: 0 }} level={4}>
+          <Title level={4} style={{ marginBottom: 0 }}>
             1.
           </Title>
         </Col>
@@ -91,9 +92,9 @@ const OffenderDetails = ({
         </Col>
         <Col>
           <Paragraph
+            italic
             style={{ marginBottom: 1, marginLeft: 5 }}
             type="secondary"
-            italic
           >
             {intl.formatMessage({
               defaultMessage:
@@ -105,12 +106,12 @@ const OffenderDetails = ({
         {potentialOffenders > 0 && (
           <Col>
             <Button
-              disabled={saving || potentialOffenders === 0}
-              size="small"
               danger
-              type="ghost"
+              disabled={saving || potentialOffenders === 0}
               onClick={toggleViewPotentialOffenders}
+              size="small"
               style={{ marginLeft: 20 }}
+              type="ghost"
             >
               {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               {potentialOffenders}{' '}
@@ -125,10 +126,10 @@ const OffenderDetails = ({
         {offenderSettings.name && (
           <Col span={8}>
             <Form.Item
-              name="name"
               label={intl.formatMessage({
                 defaultMessage: 'Name',
               })}
+              name="name"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Enter the offenders name if you know it.',
               })}
@@ -140,10 +141,10 @@ const OffenderDetails = ({
         {offenderSettings.alias && (
           <Col span={8}>
             <Form.Item
-              name="alias"
               label={intl.formatMessage({
                 defaultMessage: 'Alias',
               })}
+              name="alias"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Add the alias of the offender if known.',
               })}
@@ -155,15 +156,15 @@ const OffenderDetails = ({
         {offenderSettings.gender && (
           <Col span={8}>
             <Form.Item
-              name="gender"
               label={intl.formatMessage({
                 defaultMessage: 'Sex',
               })}
+              name="gender"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select the gender of the offender if known.',
               })}
             >
-              <Select options={genderValues} disabled={saving} />
+              <Select disabled={saving} options={genderValues} />
             </Form.Item>
           </Col>
         )}
@@ -172,46 +173,46 @@ const OffenderDetails = ({
         {offenderSettings.build && (
           <Col span={8}>
             <Form.Item
-              name="build"
               label={intl.formatMessage({
                 defaultMessage: 'Build',
               })}
+              name="build"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select the build of the offender if known.',
               })}
             >
-              <Select options={buildValues} disabled={saving} />
+              <Select disabled={saving} options={buildValues} />
             </Form.Item>
           </Col>
         )}
         {offenderSettings.height && (
           <Col span={8}>
             <Form.Item
-              name="height"
               label={intl.formatMessage({
                 defaultMessage: 'Height',
               })}
+              name="height"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Select the height of the offender if known.',
               })}
             >
-              <Select options={heightValues} disabled={saving} />
+              <Select disabled={saving} options={heightValues} />
             </Form.Item>
           </Col>
         )}
         {offenderSettings.ethnicity && (
           <Col span={8}>
             <Form.Item
-              name="race"
               label={intl.formatMessage({
                 defaultMessage: 'Ethnicity',
               })}
+              name="race"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'Select the ethnicity of the offender if known.',
               })}
             >
-              <Select options={raceValues} disabled={saving} />
+              <Select disabled={saving} options={raceValues} />
             </Form.Item>
           </Col>
         )}
@@ -220,10 +221,10 @@ const OffenderDetails = ({
         <Row gutter={50}>
           <Col span={8}>
             <Form.Item
-              name="hair"
               label={intl.formatMessage({
                 defaultMessage: 'Hair',
               })}
+              name="hair"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'The style and colour of the offenders hair if known.',
@@ -238,27 +239,27 @@ const OffenderDetails = ({
       {adminRights && (
         <Row gutter={50}>
           <Col span={10}>
-            <Row gutter={5} align="middle">
+            <Row align="middle" gutter={5}>
               <Col flex={1}>
                 <Form.Item
-                  name="tags"
                   label={intl.formatMessage({
                     defaultMessage: 'Offender Warnings',
                   })}
+                  name="tags"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'select any warning labels that are relevant to this offender or add your own.',
                   })}
                 >
                   <Select
-                    loading={tagsLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={tagsLoading}
                     maxTagCount={3}
+                    mode="multiple"
                     optionFilterProp="label"
                   >
                     {tags.map((tag) => (
-                      <Select.Option value={tag.value} label={tag.label}>
+                      <Select.Option label={tag.label} value={tag.value}>
                         {tag.label}
                       </Select.Option>
                     ))}
@@ -268,11 +269,11 @@ const OffenderDetails = ({
               <Col>
                 <Button
                   disabled={saving}
-                  style={{ color: 'red', padding: 8 }}
-                  onClick={toggleAddOffenderTag}
                   icon={
                     <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                   }
+                  onClick={toggleAddOffenderTag}
+                  style={{ color: 'red', padding: 8 }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Label',
@@ -282,29 +283,29 @@ const OffenderDetails = ({
             </Row>
           </Col>
           <Col span={10}>
-            <Row gutter={5} align="middle">
+            <Row align="middle" gutter={5}>
               <Col flex={1}>
                 <Form.Item
-                  name="customGalleries"
                   label={intl.formatMessage({
                     defaultMessage: 'Custom Galleries',
                   })}
+                  name="customGalleries"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       'select any custom galleries that are relevant to this offender or add your own.',
                   })}
                 >
                   <Select
-                    loading={customGalleriesLoading}
                     disabled={saving}
-                    mode="multiple"
+                    loading={customGalleriesLoading}
                     maxTagCount={3}
+                    mode="multiple"
                     optionFilterProp="label"
                     // value={selectedItems}
                     // onChange={onSelectCustomGallery}
                   >
                     {customGalleries.map((el) => (
-                      <Select.Option value={el.value} label={el.label}>
+                      <Select.Option label={el.label} value={el.value}>
                         {el.label}
                       </Select.Option>
                     ))}
@@ -314,11 +315,11 @@ const OffenderDetails = ({
               <Col>
                 <Button
                   disabled={saving}
-                  style={{ color: 'red', padding: 8 }}
-                  onClick={toggleAddCustomGallery}
                   icon={
                     <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                   }
+                  onClick={toggleAddCustomGallery}
+                  style={{ color: 'red', padding: 8 }}
                 >
                   {intl.formatMessage({
                     defaultMessage: 'Add Custom Gallery',
@@ -334,10 +335,10 @@ const OffenderDetails = ({
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
-              name="peculiarities"
               label={intl.formatMessage({
                 defaultMessage: 'Characteristics',
               })}
+              name="peculiarities"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'Enter any distinctive features of the offender.',
@@ -352,10 +353,10 @@ const OffenderDetails = ({
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
-              name="comment"
               label={intl.formatMessage({
                 defaultMessage: 'Comment',
               })}
+              name="comment"
               tooltip={intl.formatMessage({
                 defaultMessage: 'Any other comments about this offender.',
               })}
@@ -369,19 +370,19 @@ const OffenderDetails = ({
         <Row gutter={50}>
           <Col>
             <Form.Item
-              name="ageCheck"
               label={intl.formatMessage({
                 defaultMessage: "Do you know the offender's date of birth?",
               })}
+              name="ageCheck"
             >
               <Switch
-                style={{ width: 70, marginLeft: 10 }}
                 checked={ageCheck}
                 checkedChildren="Yes"
-                unCheckedChildren="No"
                 onChange={() => {
                   setAgeCheck(!ageCheck);
                 }}
+                style={{ marginLeft: 10, width: 70 }}
+                unCheckedChildren="No"
               />
             </Form.Item>
           </Col>
@@ -390,37 +391,37 @@ const OffenderDetails = ({
             <>
               <Col>
                 <Form.Item
-                  name="dateOfBirth"
                   label={intl.formatMessage({
                     defaultMessage: 'Date of Birth',
                   })}
+                  name="dateOfBirth"
                   tooltip={intl.formatMessage({
                     defaultMessage:
                       "Enter the offender's date of birth if known.",
                   })}
                 >
                   <DatePicker
-                    style={{ width: 200 }}
                     disabled={saving}
                     disabledDate={(current) =>
                       current && current.valueOf() > Date.now()
                     }
+                    style={{ width: 200 }}
                   />
                 </Form.Item>
               </Col>
               {offenderSettings.dateOfBirthSource && (
                 <Col>
                   <Form.Item
-                    name="dateSource"
                     label={intl.formatMessage({
                       defaultMessage: 'Information Source',
                     })}
+                    name="dateSource"
                     tooltip={intl.formatMessage({
                       defaultMessage:
                         "Enter the information source of the offender's date of birth range of the offender .",
                     })}
                   >
-                    <Input.TextArea style={{ width: 300 }} disabled={saving} />
+                    <Input.TextArea disabled={saving} style={{ width: 300 }} />
                   </Form.Item>
                 </Col>
               )}
@@ -428,19 +429,19 @@ const OffenderDetails = ({
           ) : (
             <Col>
               <Form.Item
-                name="age"
                 label={intl.formatMessage({
                   defaultMessage: 'Age',
                 })}
+                name="age"
                 tooltip={intl.formatMessage({
                   defaultMessage:
                     'Select an estimated age range of the offender if known.',
                 })}
               >
                 <Select
-                  style={{ width: 200 }}
-                  options={ageValues}
                   disabled={saving}
+                  options={ageValues}
+                  style={{ width: 200 }}
                 />
               </Form.Item>
             </Col>
@@ -451,10 +452,10 @@ const OffenderDetails = ({
         <Row gutter={50}>
           <Col>
             <Form.Item
-              name="idVerified"
               label={intl.formatMessage({
                 defaultMessage: "Has the offender's ID been verified?",
               })}
+              name="idVerified"
               tooltip={intl.formatMessage({
                 defaultMessage:
                   'Have you confirmed the offenders ID using an accepted method?',
@@ -473,24 +474,23 @@ const OffenderDetails = ({
           {idVerified && (
             <Col>
               <Form.Item
-                name="idSource"
                 label={intl.formatMessage({
                   defaultMessage: 'ID Source',
                 })}
-                tooltip={intl.formatMessage({
-                  defaultMessage: 'How did you confirm the ID?',
-                })}
+                name="idSource"
                 rules={[
                   {
-                    required: true,
                     message: intl.formatMessage({
                       defaultMessage: 'Please enter the source of the ID.',
                     }),
+                    required: true,
                   },
                 ]}
+                tooltip={intl.formatMessage({
+                  defaultMessage: 'How did you confirm the ID?',
+                })}
               >
                 <Select
-                  style={{ width: 200 }}
                   disabled={saving}
                   options={[
                     {
@@ -536,6 +536,7 @@ const OffenderDetails = ({
                       value: IdSource.Passport,
                     },
                   ]}
+                  style={{ width: 200 }}
                 />
               </Form.Item>
             </Col>
@@ -543,17 +544,17 @@ const OffenderDetails = ({
         </Row>
       )}
       <Drawer
+        onClose={toggleAddOffenderTag}
+        open={addOffenderTag}
         title={intl.formatMessage({
           defaultMessage: 'Add Offender Warning',
         })}
-        open={addOffenderTag}
         width="400"
-        onClose={toggleAddOffenderTag}
       >
         {addOffenderTag ? (
           <AddOffenderTag
-            update={updateNewOffenderTagData}
             onClose={toggleAddOffenderTag}
+            update={updateNewOffenderTagData}
           />
         ) : (
           <div />
@@ -561,17 +562,17 @@ const OffenderDetails = ({
       </Drawer>
 
       <Drawer
+        onClose={toggleAddCustomGallery}
+        open={addCustomGallery}
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',
         })}
-        open={addCustomGallery}
         width="400"
-        onClose={toggleAddCustomGallery}
       >
         {addCustomGallery ? (
           <AddCustomGallery
-            update={updateNewCustomGalleryData}
             onClose={toggleAddCustomGallery}
+            update={updateNewCustomGalleryData}
           />
         ) : (
           <div />

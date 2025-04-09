@@ -1,6 +1,7 @@
 import type { Theme } from 'configs/ThemeConfig';
 import type { SchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 
+import DatePicker from '#/components/util-components/DatePicker';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { faImages } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +9,6 @@ import {
   Button,
   Card,
   Col,
-  DatePicker,
   Form,
   Input,
   Pagination,

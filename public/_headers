@@ -13,6 +13,3 @@
 
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
-
-/api/custom-translation/*
-    Cache-Control: public, max-age=3600

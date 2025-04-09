@@ -1,8 +1,8 @@
-import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Dayjs } from 'dayjs';
 import type { BanData } from 'types/DataType';
 
 import { useState } from 'react';
+
 // import { BanType } from 'graphql/generated';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 interface Return {
-  disabledDate: RangePickerProps['disabledDate'];
+  disabledDate: (current: Date) => boolean;
   onSubmit: (value: BanData) => void;
   saving: boolean;
   setStartDate: (value: Date | Dayjs | null) => void;
@@ -21,7 +21,7 @@ const useAddExclusion = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [startDate, setStartDate] = useState<Date | Dayjs | null>(null);
   // eslint-disable-next-line arrow-body-style
-  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+  const disabledDate = (current: Date) => {
     if (startDate && startDate?.valueOf() > Date.now()) {
       return current && current.valueOf() < startDate.valueOf();
     }

@@ -4,16 +4,8 @@ import type { DateType } from 'types/DataType';
 
 import CrimeTypesSelect from '#/components/form-components/CrimeTypesSelect/CrimeTypesSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Row,
-  Select,
-  Typography,
-} from 'antd';
+import DatePicker from '#/components/util-components/DatePicker';
+import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { Age, Build, Gender, Race } from 'graphql/types';
 import React from 'react';
