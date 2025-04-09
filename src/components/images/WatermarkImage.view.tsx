@@ -139,6 +139,7 @@ const WatermarkImage = ({
             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
             alt="lightbox"
             className={classes.standardImage}
+            loading="lazy"
             src={url || undefined}
           />
         )}
