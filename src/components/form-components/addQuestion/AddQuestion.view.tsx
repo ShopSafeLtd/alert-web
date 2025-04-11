@@ -2,6 +2,8 @@
 import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
 import type { FormInstance } from 'antd';
 
+import RoleSelect from '#/components/form-components/Roles/RoleSelect';
+import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import {
   Button,
   Card,
@@ -16,6 +18,7 @@ import {
   Select,
 } from 'antd';
 import { AnswerType } from 'graphql/types';
+import { useAtomValue } from 'jotai/index';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -63,6 +66,7 @@ const AddQuestionView = ({
   const selectedId = Form.useWatch('selectedId', form);
   const intl = useIntl();
   const dependentOn = Form.useWatch('dependentOn', form);
+  const currentSchemeId = useAtomValue(currentSchemeIdAtom);
 
   const generatePreview = () => {
     if (answerType === AnswerType.String) {
@@ -421,6 +425,17 @@ const AddQuestionView = ({
           <Input disabled={saving} />
         </Form.Item>
       </Card>
+      <Card loading={loading}>
+        <Form.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Roles',
+          })}
+          name="roles"
+        >
+          <RoleSelect multi schemeId={currentSchemeId} />
+        </Form.Item>
+      </Card>
+
       <Form.Item>
         <Row gutter={10} justify="end" style={{ marginTop: 10 }}>
           <Col>

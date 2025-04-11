@@ -1,5 +1,6 @@
 import type { AvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
 import type { FormInstance } from 'antd';
+import type { CreateQuestionInput } from 'graphql/types';
 
 import { useCreateOrAddQuestionMutation } from '#/components/form-components/addQuestion/graphql/__generated__/create-question.generated';
 import { useAvailableQuestionsQuery } from '#/components/form-components/addQuestion/graphql/__generated__/get-questions.generated';
@@ -36,6 +37,7 @@ export interface FormData {
   options: string[];
   question: string;
   required: boolean;
+  roles: string[];
   selectedId: string;
   tooltip: string;
   type: AnswerType;
@@ -68,6 +70,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     options: [],
     question: '',
     required: false,
+    roles: [],
     selectedId: '',
     tooltip: '',
     type: AnswerType.String,
@@ -121,7 +124,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
           : values.dependentAnswer.toLowerCase();
     }
 
-    const dataToSubmit = {
+    const dataToSubmit: CreateQuestionInput = {
       brands: values.dependentBrands ?? [],
       dependentAnswer: answerString ?? undefined,
       dependentOnQId: dependentOnTag?.questionId ?? undefined,
@@ -129,6 +132,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
       options: values.options,
       question: values.question,
       required: values.required,
+      roles: values.roles ?? [],
       tagId: id || '',
       tooltip: values.tooltip ?? undefined,
       type: values.type,

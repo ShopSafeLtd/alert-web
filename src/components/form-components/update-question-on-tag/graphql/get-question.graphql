@@ -7,6 +7,9 @@ query QuestionDetails($where: QuestionWhereUniqueInput!) {
     type
     options
     tags {
+      roles {
+        id
+      }
       id
       dependentBrands
       tooltip
