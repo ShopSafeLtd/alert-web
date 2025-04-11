@@ -11,6 +11,7 @@ import React, { createContext, useContext, useMemo } from 'react';
 interface GroupsContextT {
   groups: { label: string; value: string }[];
   groupsLoading: boolean;
+  refetch: () => void;
   schemeId: string;
 }
 
@@ -28,7 +29,11 @@ const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const schemeId = useAtomValue(currentSchemeIdAtom);
   const userId = useAtomValue(userIdAtom);
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+  const {
+    data: groupsData,
+    loading: groupsLoading,
+    refetch,
+  } = useSchemeGroupsQuery({
     fetchPolicy: 'cache-first',
     skip: !schemeId || !userId,
     variables: {
@@ -61,13 +66,17 @@ const GroupsProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     [groupsData]
   );
 
+  const refetchGroups = () => {
+    void refetch();
+  };
   const value = useMemo(
     () => ({
       groups,
       groupsLoading,
+      refetch: refetchGroups,
       schemeId,
     }),
-    [schemeId, groups, groupsLoading]
+    [schemeId, groups, groupsLoading, refetch]
   );
 
   return (

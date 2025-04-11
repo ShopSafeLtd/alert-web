@@ -22,7 +22,7 @@ import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
@@ -74,6 +74,7 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
   const client = useApolloClient();
   const currentScheme = useAtomValue(currentSchemeIdAtom);
   const intl = useIntl();
+
   const [form] = Form.useForm<OnSubmitValues>();
 
   const [saving, setSaving] = useState(false);
@@ -142,8 +143,10 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
     },
   });
 
-  const { groups, groupsLoading } = useGroupsContext();
-
+  const { groups, groupsLoading, refetch } = useGroupsContext();
+  useEffect(() => {
+    refetch();
+  }, []);
   const { data: brandsData, loading: brandsLoading } = useBrandsQuery({
     variables: {
       where: {
