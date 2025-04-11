@@ -11,7 +11,6 @@ import type { BusinessUpdateInput } from 'graphql/types';
 import type { LocationData, TagData } from 'types/DataType';
 
 import { BusinessesSideListDocument } from '#/components/businesses/BusinessSideList/graphql/queries/__generated__/sidelist.generated';
-import { useGroupsContext } from '#/context/groups-context';
 import { currentSchemeIdAtom } from '#/providers/SchemeProvider/SchemeProvider';
 import { useBrandsQuery } from '#/views/settings/brands/graphql/queries/__generated__/brands.generated';
 import { useApolloClient } from '@apollo/client';
@@ -19,10 +18,11 @@ import { Form, notification } from 'antd';
 import { useUpdateBusinessMutation } from 'graphql/businesses/mutations/__generated__/update-business.generated';
 import { useEditBusinessQuery } from 'graphql/businesses/queries/__generated__/edit-business.generated';
 import { SearchBusinessesDocument } from 'graphql/businesses/queries/__generated__/search-businesses.generated';
+import { useSchemeGroupsQuery } from 'graphql/groups/queries/__generated__/scheme-groups.generated';
 import { useTagsQuery } from 'graphql/tags/queries/__generated__/tags.generated';
 import { Model, QueryMode, SortOrder } from 'graphql/types';
 import { useAtomValue } from 'jotai/index';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
@@ -143,10 +143,28 @@ const useEditBusiness = ({ businessId, onClose }: Props): Return => {
     },
   });
 
-  const { groups, groupsLoading, refetch } = useGroupsContext();
-  useEffect(() => {
-    refetch();
-  }, []);
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+    fetchPolicy: 'cache-first',
+    variables: {
+      orderBy: {
+        name: SortOrder.Asc,
+      },
+      where: {
+        scheme: {
+          id: {
+            equals: currentScheme,
+          },
+        },
+      },
+    },
+  });
+
+  const groups =
+    groupsData?.groups.map((group) => ({
+      label: group.name,
+      value: group.id,
+    })) || [];
+
   const { data: brandsData, loading: brandsLoading } = useBrandsQuery({
     variables: {
       where: {
