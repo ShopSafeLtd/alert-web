@@ -471,7 +471,7 @@ const useWorkflowForm = (): Return => {
   useEffect(() => {
     if (modelSelected === Model.Todo) {
       setAvailableQuestions(taskQuestions);
-    } else {
+    } else if (modelSelected === Model.Incident) {
       setAvailableQuestions(questions);
     }
   }, [questions, modelSelected]);
@@ -544,7 +544,7 @@ const useWorkflowForm = (): Return => {
   useEffect(() => {
     if (
       editWorkflowData &&
-      questions.length > 0 &&
+      (questions.length > 0 || taskQuestions.length > 0) &&
       availableQuestions.length > 0 &&
       !initiated
     ) {
@@ -588,6 +588,7 @@ const useWorkflowForm = (): Return => {
   }, [
     editWorkflowData,
     questions,
+    taskQuestions,
     availableQuestions,
     selectedQuestions,
     initiated,
